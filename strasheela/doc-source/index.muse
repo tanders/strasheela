@@ -16,7 +16,9 @@ Strasheela is a highly expressive constraint-based music composition system.[2] 
 
 * News 
 
-  [[https://sourceforge.net/projects/strasheela/][Strasheela 0.8.3 released]] ([[Changes]])  (7 August 2007)
+  [[https://sourceforge.net/projects/strasheela/][Strasheela 0.9 released]] ([[Changes]])  (2 October 2007)
+
+  Strasheela 0.8.3 released ([[Changes]])  (7 August 2007)
 
   Strasheela's ongoing development is funded for the coming three years -- it is part of the responsibilities of my new research fellow position at the [[http://cmr.soc.plymouth.ac.uk/index.html][Interdisciplinary Centre for Computer Music Research]], [[http://www.plymouth.ac.uk/][University of Plymouth]] (7 August 2007) 
 
