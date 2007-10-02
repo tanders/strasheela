@@ -248,7 +248,7 @@ define
 	    self.pipe = {StartPipe XTerm
 			 ["-e" "echo closing this windows stops the OSC input into Strasheela!; "#MyCmd]}
 	 end
-	 thread self.oscs = {self parseAll($)} end
+	 thread self.oscs = {self ParseAll($)} end
 	 %% 
 	 self.responders = {NewDictionary}
 	 self.defaultResponderAddr = {NewName}
@@ -367,7 +367,7 @@ define
 
       /** %% Parses any textual output of OSC messages and bundles and returns it as a stream of values in the OSC format (see above). The arg prevLines is only for internal use (accumulation of lines).
       %%
-      %% NB: parseAll must be called in its own thread. 
+      %% NB: ParseAll must be called in its own thread. 
       %% */
       %% always process full messages or bundles
       %% if the first char is not &[ and there are no open bundles, the line is a message: parse line
@@ -377,10 +377,10 @@ define
       %%
       %% NOTE:
       %%
-      %% - in case of parse error, parseAll does not recover. However, a
+      %% - in case of parse error, ParseAll does not recover. However, a
       %% parse error should not occur...
       %%
-      meth parseAll($ prevLines:PrevLines<=nil)
+      meth ParseAll($ prevLines:PrevLines<=nil)
 	 Line = {self.dumpOSC getS($)}
       in
 	 %% case waits until Line is bound
@@ -401,25 +401,25 @@ define
 		    {self DecrCounter}
 		    if {self ExistsOpenBundle($)}
 		       %% its a nested bundle, we are not at the top-level yet
-		    then {self parseAll($ prevLines:Line|PrevLines)}
+		    then {self ParseAll($ prevLines:Line|PrevLines)}
 		    else % (possbily nested) bundle is complete
-		       {self ParseVS($ {LinesToVS Line|PrevLines})} | {self parseAll($ prevLines:nil)}
+		       {self ParseVS($ {LinesToVS Line|PrevLines})} | {self ParseAll($ prevLines:nil)}
 		    end
 		 else if {DoesStartBundle Line}
 		      then 
 			 {self IncrCounter}
-			 {self parseAll($ prevLines:Line|PrevLines)}
+			 {self ParseAll($ prevLines:Line|PrevLines)}
 		      else
-			 {self parseAll($ prevLines:Line|PrevLines)}
+			 {self ParseAll($ prevLines:Line|PrevLines)}
 		      end
 		 end
 	       %% we are at top-level (no open bundle)
 	    else if {DoesStartBundle Line}
 		 then
 		    {self IncrCounter}
-		    {self parseAll($ prevLines:Line|PrevLines)}
+		    {self ParseAll($ prevLines:Line|PrevLines)}
 		 else % Line is plain message, but it does not hurt appending the PrevLines
-		    {self ParseVS($ {LinesToVS Line|PrevLines})} | {self parseAll($ prevLines:nil)}
+		    {self ParseVS($ {LinesToVS Line|PrevLines})} | {self ParseAll($ prevLines:nil)}
 		 end
 	    end
 	 end	 
