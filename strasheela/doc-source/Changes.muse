@@ -3,7 +3,7 @@
 ; #author Torsten Anders
 
 
-* Changes in Version 0.8.4 (no date yet)
+* Changes in Version 0.9 (2 October 2007)
   
   - Added solvers for real-time constraint programming (see the documentation at [[../contributions/anders/Realtime/doc/index.html]], and examples at [[../contributions/anders/Realtime/examples]] and [[../contributions/anders/Realtime/testing]])
 
@@ -13,10 +13,18 @@
 
   - The installation process has been simplified for package creators (cf. the [[Installation#forPackageCreators][installation notes for package creators]])
 
+  - Refactored MIDI output
+
+  - Generalised Out.shell for arbitrary interactive commandline programs (examples in test file include the interactive ruby shell and the Steel Bank Common Lisp compiler)
+
+  - Fixed bug in example 01-AllIntervalSeries.oz for length \= 12
+
+  - Fixed bug in OzServer: compiler now waits for results before outputting anything
+
   - For further fixes see [[../CHANGELOG.txt]]
 
 
-* Changes in Version 0.8.3 (2007-8-5)
+* Changes in Version 0.8.3 (5 August 2007)
 
 ** Documentation Additions
 
@@ -69,7 +77,7 @@
 
 
 
-* Changes in Version 0.8.2 (2007-1-1)
+* Changes in Version 0.8.2 (1 January 2007)
 
   - Substantial extensions and debugging of the [[../contributions/anders/OzServer/doc/node1.html][OzServer]]
 
@@ -82,7 +90,7 @@
   - More fixes (for details see [[../CHANGELOG.txt][Strasheela/CHANGELOG.txt]], and the Strasheela subversion interface at http://strasheela.svn.sourceforge.net/viewvc/strasheela/)
 
 
-* Changes in Version 0.8.1 (2006-9-7)
+* Changes in Version 0.8.1 (7 September 2006)
 
   - Revised [[Installation][installation instructions]] (reacting to frequently asked questions..) and other documentation
 
@@ -101,7 +109,7 @@
   - Various other fixes (see [[../CHANGELOG.txt][Strasheela/CHANGELOG.txt]])
 
 
-* Changes in Version 0.8 (2006-06-05, initial release)
+* Changes in Version 0.8 (5 June 2006, initial release)
 
 No changes in the initial release ;-)
 
