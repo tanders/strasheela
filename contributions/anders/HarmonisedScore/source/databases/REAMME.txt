@@ -1,0 +1,10 @@
+
+for more chords and scales see 
+
+* the chord list in Scale ($SCALA_HOME/chordnam.par)
+
+* www.microtonal-synthesis.com/scales.html
+  -> partly, these scales are already integrated here
+
+* the interval list in Scale ($SCALA_HOME/intnam.par)
+

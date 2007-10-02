@@ -1,0 +1,262 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<html>
+ <head>
+  <title>Init</title>
+  <style>BODY {
+ background: url(page.gif) repeat-y white;
+}
+#slidemenubar, #slidemenubar2{
+ position:absolute;
+ left:-144px;
+ width:160px;
+ top:10px;
+ border:0px solid black;
+ font:bold 12px Verdana;
+ line-height:10px;
+}
+.margin {
+ position: absolute;
+ left: 10px;
+ width: 130px;
+}
+BODY, P, H1, H2, H3, A {
+ font-family: sans-serif;
+}
+PRE, CODE {
+ font-family: courier, monospace;
+}
+P {
+ text-align: justify;
+}
+H1     { color: #9B0000; }
+H2     { color: #FF9933; }
+H3, H4 { color: #881155; }
+CODE              { color: #663366; }
+.code CODE        { color: #000000; }
+SPAN.comment      { color: #B22222; }
+SPAN.keyword      { color: #A020F0; }
+SPAN.string       { color: #BC8F8F; }
+SPAN.functionname { color: #0000FF; }
+SPAN.type         { color: #228B22; }
+SPAN.variablename { color: #B8860B; }
+SPAN.reference    { color: #5F9EA0; }
+SPAN.builtin      { color: #DA70D6; }
+A:link {
+ color: #666666;
+}
+A:visited {
+ color: black;
+}
+A.pre { font-family: courier, monospace;
+ color: #228B22;
+}
+</style>
+ </head>
+<body>
+<script language="JavaScript1.2">
+if (document.all)
+document.write('<div id="slidemenubar2" style="left:-144" onMouseover="pull()" onMouseout="draw()">')
+</script>
+<layer id="slidemenubar" onMouseover="pull()" onMouseout="draw()">
+<table border="0" cellpadding="0" cellspacing="0" width="161"><tr><td bgcolor="#009cff" width="144"><a href="index.html">Index</a>
+</td><td rowspan="12" valign="top" width="16"><img src="menu.gif" width="16"></td></tr><tr><td bgcolor="#009cff" width="144"><a href="node1.html">Strasheela</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node2.html">Init</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node3.html">GUtils</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node4.html">LUtils</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node5.html">MUtils</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node6.html">Score</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node7.html">SMapping</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node8.html">SDistro</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node9.html">Out</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node10.html">Strasheela</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node11.html">Midi</a>
+</td></tr></table></layer>
+<script language="JavaScript1.2">
+function regenerate(){
+window.location.reload()
+}
+function regenerate2(){
+if (document.layers)
+setTimeout("window.onresize=regenerate",400)
+}
+window.onload=regenerate2
+if (document.all){
+document.write('</div>')
+themenu=document.all.slidemenubar2.style
+rightboundary=0
+leftboundary=-144
+}
+else{
+themenu=document.layers.slidemenubar
+rightboundary=144
+leftboundary=0
+}
+function pull(){
+if (window.drawit)
+clearInterval(drawit)
+pullit=setInterval("pullengine()",20)
+}
+function draw(){
+clearInterval(pullit)
+drawit=setInterval("drawengine()",50)
+}
+function pullengine(){
+if (document.all&&themenu.pixelLeft<rightboundary)
+themenu.pixelLeft+=5
+else if(document.layers&&themenu.left<rightboundary)
+themenu.left+=5
+else if (window.pullit)
+clearInterval(pullit)
+}
+function drawengine(){
+if (document.all&&themenu.pixelLeft>leftboundary)
+themenu.pixelLeft-=5
+else if(document.layers&&themenu.left>leftboundary)
+themenu.left-=5
+else if (window.drawit)
+clearInterval(drawit)
+}
+</script>
+
+<div style="margin-left:160px"><span class="string">
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> This functor allows to customise a few settings: change to stateful which can be adjusted in, e.g., .ozrc<BR>
+<BR>
+</span>
+</span>
+<h3>Functor</h3>
+<ul>Init ("<span class="string">/Users/t/oz/music/Strasheela/strasheela/source/Init.oz</span>")<br></ul>
+<h3>Require</h3>
+<code><ul><li>OS</li><li>Path at "<span class="string">x-ozlib://anders/tmp/Path/Path.ozf"
+</span></li></ul></code>
+<h3>Import</h3>
+<code><ul><li>Browser(browse:Browse)</li><li>Inspector(inspect:Inspect)</li><li>Pickle</li><li>Explorer</li><li>Error</li><li>Resolve</li><li><a href="node10.html">Strasheela</a> at "<span class="string">../Strasheela.ozf"
+</span></li><li><a href="node3.html">GUtils</a> at "<span class="string">GeneralUtils.ozf"
+</span></li><li><a href="node6.html">Score</a> at "<span class="string">ScoreCore.ozf"
+</span></li><li><a href="node9.html">Out</a> at "<span class="string">Output.ozf"
+</span></li><li>ScoreInspector at "<span class="string">x-ozlib://anders/strasheela/ScoreInspector/ScoreInspector.ozf"
+</span></li></ul></code>
+<h3>Export</h3>
+<code><ul><li>&lt;P/2:<a href="#entity38"><span class="functionname">GetStrasheelaEnv</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity39"><span class="functionname">PutStrasheelaEnv</span></a>&gt;
+</li><li>&lt;P/1:<a href="#entity40"><span class="functionname">GetFullStrasheelaEnv</span></a>&gt;
+</li><li>&lt;P/1:<a href="#entity41"><span class="functionname">SetFullStrasheelaEnv</span></a>&gt;
+</li><li>&lt;P/1:<a href="#entity42"><span class="functionname">SaveStrasheelaEnv</span></a>&gt;
+</li><li>&lt;P/1:<a href="#entity43"><span class="functionname">LoadStrasheelaEnv</span></a>&gt;
+</li><li>&lt;P/1:<a href="#entity44"><span class="functionname">GetBeatDuration</span></a>&gt;
+</li><li>&lt;P/1:<a href="#entity46"><span class="functionname">SetBeatDuration</span></a>&gt;
+</li><li>&lt;P/1:<a href="#entity45"><span class="functionname">GetTempo</span></a>&gt;
+</li><li>&lt;P/1:<a href="#entity47"><span class="functionname">SetTempo</span></a>&gt;
+</li><li>&lt;P/0:<a href="#entity48"><span class="functionname">AddExplorerOuts_Standard</span></a>&gt;
+</li><li>&lt;P/0:<a href="#entity49"><span class="functionname">AddExplorerOuts_Extended</span></a>&gt;
+</li></ul></code>
+<h3>Define</h3>
+
+<code>
+<a name="entity38">
+<span class="keyword">fun</span>{<span class="functionname">GetStrasheelaEnv</span> Key}<br>
+<span class="string"> Access the value of the Strasheela 'environment variable' Key. <BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity39">
+<span class="keyword">proc</span>{<span class="functionname">PutStrasheelaEnv</span> Key Value}<br>
+<span class="string"> Set the value of the Strasheela 'environment variable' Key to Value. These variables are used, e.g., by the various output format transformers. <BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity40">
+<span class="keyword">fun</span>{<span class="functionname">GetFullStrasheelaEnv</span> }<br>
+<span class="string"> Returns the full Strasheela environment as record. <BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity41">
+<span class="keyword">proc</span>{<span class="functionname">SetFullStrasheelaEnv</span> R}<br>
+<span class="string"> Overwrites the full Strasheela environment (R is a record).<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity42">
+<span class="keyword">proc</span>{<span class="functionname">SaveStrasheelaEnv</span> Path}<br>
+<span class="string"> Save the full Strasheela environment as a pickle at Path. <BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity43">
+<span class="keyword">proc</span>{<span class="functionname">LoadStrasheelaEnv</span> Path}<br>
+<span class="string"> Load the full Strasheela environment from a pickle saved at Path (this was before created with SaveStrasheelaEnv). <BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity44">
+<span class="keyword">fun</span>{<span class="functionname">GetBeatDuration</span> }<br>
+<span class="string"> Access the current beat duration in seconds (a float, defaults to 0.8).<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity46">
+<span class="keyword">proc</span>{<span class="functionname">SetBeatDuration</span> Dur}<br>
+<span class="string"> Set the beat duration in seconds to Dur which must be a float.<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity45">
+<span class="keyword">fun</span>{<span class="functionname">GetTempo</span> }<br>
+<span class="string"> Access the current tempo in beats per minute (a float, defaults to 75.0).<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity47">
+<span class="keyword">proc</span>{<span class="functionname">SetTempo</span> Tempo}<br>
+<span class="string"> Set the tempo in beats per minute which must be a float.<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity48">
+<span class="keyword">proc</span>{<span class="functionname">AddExplorerOuts_Standard</span> }<br>
+<span class="string"> Extends the Explorer menu Notes:Information Action by a few entries to output scores into various formats just by clicking the solution nodes in the Explorer.<BR>
+ This procedure adds standard output formats like Csound, Lilypond, and MIDI.<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity49">
+<span class="keyword">proc</span>{<span class="functionname">AddExplorerOuts_Extended</span> }<br>
+<span class="string"> Extends the Explorer menu Notes:Information Action by a few entries to output scores into various formats just by clicking the solution nodes in the Explorer. <BR>
+ This procedure complements the formats of AddExplorerOuts_Standard by further formats like ENP and Fomus.<BR>
+<BR>
+ This split into two procedures is only intended to avoid confusing new users with too many options. Anyway, the Explorer actions created by both procs are (hopefully) soon obsolete and replaced by a GUI settings dialog...<BR>
+<BR>
+</span>
+</code><br>
+<h3>End</h3>
+</div></body>
+</html>

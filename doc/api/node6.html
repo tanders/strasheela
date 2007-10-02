@@ -1,0 +1,1021 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<html>
+ <head>
+  <title>Score</title>
+  <style>BODY {
+ background: url(page.gif) repeat-y white;
+}
+#slidemenubar, #slidemenubar2{
+ position:absolute;
+ left:-144px;
+ width:160px;
+ top:10px;
+ border:0px solid black;
+ font:bold 12px Verdana;
+ line-height:10px;
+}
+.margin {
+ position: absolute;
+ left: 10px;
+ width: 130px;
+}
+BODY, P, H1, H2, H3, A {
+ font-family: sans-serif;
+}
+PRE, CODE {
+ font-family: courier, monospace;
+}
+P {
+ text-align: justify;
+}
+H1     { color: #9B0000; }
+H2     { color: #FF9933; }
+H3, H4 { color: #881155; }
+CODE              { color: #663366; }
+.code CODE        { color: #000000; }
+SPAN.comment      { color: #B22222; }
+SPAN.keyword      { color: #A020F0; }
+SPAN.string       { color: #BC8F8F; }
+SPAN.functionname { color: #0000FF; }
+SPAN.type         { color: #228B22; }
+SPAN.variablename { color: #B8860B; }
+SPAN.reference    { color: #5F9EA0; }
+SPAN.builtin      { color: #DA70D6; }
+A:link {
+ color: #666666;
+}
+A:visited {
+ color: black;
+}
+A.pre { font-family: courier, monospace;
+ color: #228B22;
+}
+</style>
+ </head>
+<body>
+<script language="JavaScript1.2">
+if (document.all)
+document.write('<div id="slidemenubar2" style="left:-144" onMouseover="pull()" onMouseout="draw()">')
+</script>
+<layer id="slidemenubar" onMouseover="pull()" onMouseout="draw()">
+<table border="0" cellpadding="0" cellspacing="0" width="161"><tr><td bgcolor="#009cff" width="144"><a href="index.html">Index</a>
+</td><td rowspan="12" valign="top" width="16"><img src="menu.gif" width="16"></td></tr><tr><td bgcolor="#009cff" width="144"><a href="node1.html">Strasheela</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node2.html">Init</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node3.html">GUtils</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node4.html">LUtils</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node5.html">MUtils</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node6.html">Score</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node7.html">SMapping</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node8.html">SDistro</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node9.html">Out</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node10.html">Strasheela</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node11.html">Midi</a>
+</td></tr></table></layer>
+<script language="JavaScript1.2">
+function regenerate(){
+window.location.reload()
+}
+function regenerate2(){
+if (document.layers)
+setTimeout("window.onresize=regenerate",400)
+}
+window.onload=regenerate2
+if (document.all){
+document.write('</div>')
+themenu=document.all.slidemenubar2.style
+rightboundary=0
+leftboundary=-144
+}
+else{
+themenu=document.layers.slidemenubar
+rightboundary=144
+leftboundary=0
+}
+function pull(){
+if (window.drawit)
+clearInterval(drawit)
+pullit=setInterval("pullengine()",20)
+}
+function draw(){
+clearInterval(pullit)
+drawit=setInterval("drawengine()",50)
+}
+function pullengine(){
+if (document.all&&themenu.pixelLeft<rightboundary)
+themenu.pixelLeft+=5
+else if(document.layers&&themenu.left<rightboundary)
+themenu.left+=5
+else if (window.pullit)
+clearInterval(pullit)
+}
+function drawengine(){
+if (document.all&&themenu.pixelLeft>leftboundary)
+themenu.pixelLeft-=5
+else if(document.layers&&themenu.left>leftboundary)
+themenu.left-=5
+else if (window.drawit)
+clearInterval(drawit)
+}
+</script>
+
+<div style="margin-left:160px"><span class="string">
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> The functor defines the core for a music score data structure of Strasheela.<BR>
+<BR>
+ Certain classes in the hierarchy are marked as [abstract class]. These classes should not be instantiated. Other classes are marked as [semi abstract class]. These classes are generic data types which may be instantiated. However, the user is encouraged to define more specific subclasses of these. Classes marked as [concrete class] may be freely instantiated, of course the user may define subclasses of them too.<BR>
+<BR>
+ Syntactic conventions:<BR>
+ If a method returns a value, the return value is the first argument.<BR>
+<BR>
+ Simple methods to access class attributes and for type checking are only documented here in a generic way.<BR>
+<BR>
+ <code>{New &lt;Class&gt; init(&lt;Arguments&gt;)}</code> is the constructor method for the class Class with certain initial arguments. In practice, New is hardly used and MakeScore is applied instead.<BR>
+ <code>{O is&lt;Class&gt;(?B)}</code> is a type checking method. Is the object O an instance of class Class (respectively of a subclass of Class) or not? B is bound to a boolean.<BR>
+ <code>{O get&lt;AttributeOrFeature&gt;(X)}</code> is an access method which binds X to the logic variable bound to AttributeOrFeature of object O. Special getter methods are defined for parameters and parameter values. <code>{O get&lt;ParameterName&gt;(X)}</code> returns the parameter value of ParameterName, <code>{O get&lt;ParameterName&gt;Parameter(X)}</code> (i.e. with a 'Parameter' after the actual parameter name) returns the parameter data object itself, and <code>{O get&lt;ParameterName&gt;Unit(X)}</code> returns the parameter data object unit.<BR>
+ <code>{O set&lt;AttributeOrFeature&gt;(X)}</code> is a writer method which binds the AttributeOrFeature of object O destructively to a fresh logic variable and initializes it with X.<BR>
+</span>
+</span>
+<h3>Functor</h3>
+<ul>Score ("<span class="string">/Users/t/oz/music/Strasheela/strasheela/source/ScoreCore.oz</span>")<br></ul>
+<h3>Import</h3>
+<code><ul><li>FD</li><li>FS</li><li>RecordC</li><li>Boot_Object at "<span class="string">x-oz://boot/Object"
+</span></li><li>Boot_Name at "<span class="string">x-oz://boot/Name"
+</span></li><li><a href="node2.html">Init</a> at "<span class="string">Init.ozf"
+</span></li><li><a href="node3.html">GUtils</a> at "<span class="string">GeneralUtils.ozf"
+</span></li><li><a href="node4.html">LUtils</a> at "<span class="string">ListUtils.ozf"
+</span></li><li><a href="node5.html">MUtils</a> at "<span class="string">MusicUtils.ozf"
+</span></li><li><a href="node7.html">ScoreMapping</a> at "<span class="string">ScoreMapping.ozf"
+</span></li><li><a href="node9.html">Out</a> at "<span class="string">Output.ozf"
+</span></li><li>Browser(browse:Browse)</li></ul></code>
+<h3>Export</h3>
+<code><ul><li>&lt;C:<a href="#entity212"><span class="type">ScoreObject</span></a>&gt;
+</li><li>&lt;C:<a href="#entity214"><span class="type">Parameter</span></a>&gt;
+</li><li>&lt;C:<a href="#entity215"><span class="type">TimeParameter</span></a>&gt;
+</li><li>&lt;C:<a href="#entity216"><span class="type">TimePoint</span></a>&gt;
+</li><li>&lt;C:<a href="#entity217"><span class="type">TimeInterval</span></a>&gt;
+</li><li>&lt;C:<a href="#entity218"><span class="type">Amplitude</span></a>&gt;
+</li><li>&lt;C:<a href="#entity219"><span class="type">Pitch</span></a>&gt;
+</li><li>&lt;C:<a href="#entity221"><span class="type">Item</span></a>&gt;
+</li><li>&lt;C:<a href="#entity222"><span class="type">Container</span></a>&gt;
+</li><li>&lt;C:<a href="#entity223"><span class="type">Modifier</span></a>&gt;
+</li><li>&lt;C:<a href="#entity224"><span class="type">Aspect</span></a>&gt;
+</li><li>&lt;C:<a href="#entity225"><span class="type">TemporalAspect</span></a>&gt;
+</li><li>&lt;C:<a href="#entity226"><span class="type">Sequential</span></a>&gt;
+</li><li>&lt;C:<a href="#entity227"><span class="type">Simultaneous</span></a>&gt;
+</li><li>&lt;C:<a href="#entity228"><span class="type">Element</span></a>&gt;
+</li><li>&lt;C:<a href="#entity229"><span class="type">AbstractElement</span></a>&gt;
+</li><li>&lt;C:<a href="#entity230"><span class="type">TemporalElement</span></a>&gt;
+</li><li>&lt;C:<a href="#entity231"><span class="type">Pause</span></a>&gt;
+</li><li>&lt;C:<a href="#entity232"><span class="type">Event</span></a>&gt;
+</li><li>&lt;C:<a href="#entity233"><span class="type">Note2</span></a>&gt;
+</li><li>&lt;C:<a href="#entity234"><span class="type">Note</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity235"><span class="functionname">IsScoreObject</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity236"><span class="functionname">IsTemporalItem</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity237"><span class="functionname">IsTemporalContainer</span></a>&gt;
+</li><li>&lt;P/3:<a href="#entity240"><span class="functionname">MakeScore</span></a>&gt;
+</li><li>&lt;P/3:<a href="#entity239"><span class="functionname">MakeScore2</span></a>&gt;
+</li><li>&lt;P/1:<a href="#entity238"><span class="functionname">InitScore</span></a>&gt;
+</li><li>make:&lt;P/3:<a href="#entity240"><span class="functionname">MakeScore</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity241"><span class="functionname">CopyScore</span></a>&gt;
+</li><li>&lt;P/4:<a href="#entity242"><span class="functionname">MakeContainer</span></a>&gt;
+</li><li>&lt;P/3:<a href="#entity243"><span class="functionname">MakeSim</span></a>&gt;
+</li><li>&lt;P/3:<a href="#entity244"><span class="functionname">MakeSeq</span></a>&gt;
+</li><li>&lt;P/4:<a href="#entity245"><span class="functionname">MakeClass</span></a>&gt;
+</li></ul></code>
+<h3>Define</h3>
+
+<a name="entity212">
+<p class="margin"><div align="right"><a href="class2.html">[class info]</a></div></p>
+<code>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> [abstract class] The most general data type for score data is a ScoreObject.<BR>
+<BR>
+ The feature label binds an atom naming the class. The attribute info can be used for arbitrary user information.<BR>
+<BR>
+</span>
+<span class="keyword">class</span> <span class="type">ScoreObject</span>&nbsp;<span class="keyword">from</span>&nbsp;<a href="#entity210">NonType</a>&nbsp;<a href="#entity211">Reflection</a>
+<br>&nbsp;&nbsp;&nbsp;<span class="keyword">feat</span>&nbsp;!ScoreObjectType&nbsp;label
+
+<ul><li><span class="functionname">init</span>(handle:H info:Info&nbsp;...)<br>
+</li><li><span class="functionname">isScoreObject</span>(B)<br>
+</li><li><span class="functionname">getID</span>(X)<br>
+</li><li><span class="functionname">getInfo</span>(X)<br>
+</li><li><span class="functionname">setAttribute</span>(A X)<br>
+</li><li><span class="functionname">addInfo</span>(X)<br>
+</li><li><span class="functionname">hasThisInfo</span>(B Info)<br>
+</li><li><span class="functionname">makePPrintRecord</span>(X Features Slots Excluded functions:Fns)<br>
+</li><li><span class="functionname">toPPrintRecord</span>(?X excluded:Excluded features:Features)<br>
+</li><li><span class="functionname">makeInitRecord</span>(X Attrs)<br>
+</li><li><span class="functionname">toInitRecord</span>($ exclude:Excluded)<br>
+</li><li><span class="functionname">getInitInfo</span>($ exclude:Excluded)<br>
+</li><li><span class="functionname">getInitClasses</span>(Classes)<br>
+</li><li><span class="functionname">getInitClassesVS</span>($)<br>
+</li><li><span class="functionname">toFullRecord</span>(X exclude:Exclude)<br>
+</li><li><span class="functionname">unify</span>(ScoreObject)<br>
+</li></ul>
+<span class="keyword">end</span>
+</code><br>
+
+<a name="entity210">
+<p class="margin"><div align="right"><a href="class3.html">[class info]</a></div></p>
+<code>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> [abstract class] An auxiliary top level class of the score data type hierarchy to inherit all typ-checking methods to all subclasses.<BR>
+<BR>
+</span>
+<span class="keyword">class</span> <span class="type">NonType</span>
+
+<ul><li><span class="functionname">isScoreObject</span>(B)<br>
+</li><li><span class="functionname">isParameter</span>(B)<br>
+</li><li><span class="functionname">isTimeMixin</span>(B)<br>
+</li><li><span class="functionname">isTimeParameter</span>(B)<br>
+</li><li><span class="functionname">isTimePoint</span>(B)<br>
+</li><li><span class="functionname">isTimeInterval</span>(B)<br>
+</li><li><span class="functionname">isAmplitude</span>(B)<br>
+</li><li><span class="functionname">isPitch</span>(B)<br>
+</li><li><span class="functionname">isItem</span>(B)<br>
+</li><li><span class="functionname">isContainer</span>(B)<br>
+</li><li><span class="functionname">isModifier</span>(B)<br>
+</li><li><span class="functionname">isAspect</span>(B)<br>
+</li><li><span class="functionname">isTemporalAspect</span>(B)<br>
+</li><li><span class="functionname">isSequential</span>(B)<br>
+</li><li><span class="functionname">isSimultaneous</span>(B)<br>
+</li><li><span class="functionname">isElement</span>(B)<br>
+</li><li><span class="functionname">isAbstractElement</span>(B)<br>
+</li><li><span class="functionname">isTemporalElement</span>(B)<br>
+</li><li><span class="functionname">isPause</span>(B)<br>
+</li><li><span class="functionname">isEvent</span>(B)<br>
+</li><li><span class="functionname">isNote</span>(B)<br>
+</li></ul>
+<span class="keyword">end</span>
+</code><br>
+
+<a name="entity211">
+<p class="margin"><div align="right"><a href="class4.html">[class info]</a></div></p>
+<code>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> [abstract class] Defines reflection capabilities for objects. Please note: this class uses undocumented Oz features, which are possibly not intended for end users ;-) <BR>
+<BR>
+</span>
+<span class="keyword">class</span> <span class="type">Reflection</span>
+
+<ul><li><span class="functionname">getClass</span>($)<br>
+</li><li><span class="functionname">getClassName</span>($)<br>
+</li><li><span class="functionname">getAttrNames</span>($)<br>
+</li><li><span class="functionname">getAttrSources</span>($)<br>
+</li><li><span class="functionname">getFeatNames</span>($)<br>
+</li><li><span class="functionname">getFeatures</span>($)<br>
+</li><li><span class="functionname">getFeatSources</span>($)<br>
+</li><li><span class="functionname">getMethNames</span>($)<br>
+</li><li><span class="functionname">getInitArgDefaults</span>($)<br>
+</li><li><span class="functionname">getInitArgSources</span>($)<br>
+</li><li><span class="functionname">getMethSources</span>($)<br>
+</li><li><span class="functionname">getAttr</span>($ A)<br>
+</li><li><span class="functionname">getFeat</span>($ F)<br>
+</li></ul>
+<span class="keyword">end</span>
+</code><br>
+
+<a name="entity214">
+<p class="margin"><div align="right"><a href="class5.html">[class info]</a></div></p>
+<code>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> [semi abstract class] Musical parameters are the basic magnitudes in a music representation; examples are the parameters duration, amplitude and pitch, which add information to a note. A parameter is represented by an own class (i.e. not just as a feature/attribute of a score item, as in most other composition environments) to allow the expression of additional information on the parameter besides the actual parameter value. For instance, a single numeric value for a pitch is ambitious, it could express a frequency, a MIDI-keynumber, MIDI-cents, a scale degree etc. Therefore, a parameter allows to specify the unit of measurement explicitly.<BR>
+ The parameter attributes value and 'unit' specify the parameter setting and the unit of measurement. The attribute item points to the score item the parameter belongs to.<BR>
+ PS: The attribute 'unit' is mainly used for output.<BR>
+<BR>
+</span>
+<span class="keyword">class</span> <span class="type">Parameter</span>&nbsp;<span class="keyword">from</span>&nbsp;<a href="#entity212">ScoreObject</a>
+<br>&nbsp;&nbsp;&nbsp;<span class="keyword">feat</span>&nbsp;label
+
+<ul><li><span class="functionname">init</span>(unit:Unit value:Value&nbsp;...)<br>
+</li><li><span class="functionname">isParameter</span>(B)<br>
+</li><li><span class="functionname">getItem</span>(X)<br>
+</li><li><span class="functionname">getValue</span>(X)<br>
+</li><li><span class="functionname">getUnit</span>(X)<br>
+</li><li><span class="functionname">initFD</span>(Spec)<br>
+</li><li><span class="functionname">initFS</span>(Spec)<br>
+</li><li><span class="functionname">toPPrintRecord</span>(?X excluded:Excluded features:Features)<br>
+</li></ul>
+<span class="keyword">end</span>
+</code><br>
+
+<a name="entity215">
+<p class="margin"><div align="right"><a href="class6.html">[class info]</a></div></p>
+<code>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"></span>
+<span class="keyword">class</span> <span class="type">TimeParameter</span>&nbsp;<span class="keyword">from</span>&nbsp;<a href="#entity214">Parameter</a>
+<br>&nbsp;&nbsp;&nbsp;<span class="keyword">feat</span>&nbsp;label
+
+<ul><li><span class="functionname">isTimeParameter</span>(B)<br>
+</li><li><span class="functionname">getValueInSeconds</span>(X)<br>
+</li><li><span class="functionname">getValueInBeats</span>(X)<br>
+</li></ul>
+<span class="keyword">end</span>
+</code><br>
+
+<a name="entity216">
+<p class="margin"><div align="right"><a href="class7.html">[class info]</a></div></p>
+<code>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> [concrete class] <BR>
+<BR>
+</span>
+<span class="keyword">class</span> <span class="type">TimePoint</span>&nbsp;<span class="keyword">from</span>&nbsp;<a href="#entity215">TimeParameter</a>
+<br>&nbsp;&nbsp;&nbsp;<span class="keyword">feat</span>&nbsp;label
+
+<ul><li><span class="functionname">isTimePoint</span>(B)<br>
+</li></ul>
+<span class="keyword">end</span>
+</code><br>
+
+<a name="entity217">
+<p class="margin"><div align="right"><a href="class8.html">[class info]</a></div></p>
+<code>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> [concrete class]<BR>
+<BR>
+</span>
+<span class="keyword">class</span> <span class="type">TimeInterval</span>&nbsp;<span class="keyword">from</span>&nbsp;<a href="#entity215">TimeParameter</a>
+<br>&nbsp;&nbsp;&nbsp;<span class="keyword">feat</span>&nbsp;label
+
+<ul><li><span class="functionname">isTimeInterval</span>(B)<br>
+</li></ul>
+<span class="keyword">end</span>
+</code><br>
+
+<a name="entity218">
+<p class="margin"><div align="right"><a href="class9.html">[class info]</a></div></p>
+<code>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> [concrete class]<BR>
+<BR>
+</span>
+<span class="keyword">class</span> <span class="type">Amplitude</span>&nbsp;<span class="keyword">from</span>&nbsp;<a href="#entity214">Parameter</a>
+<br>&nbsp;&nbsp;&nbsp;<span class="keyword">feat</span>&nbsp;label
+
+<ul><li><span class="functionname">isAmplitude</span>(B)<br>
+</li><li><span class="functionname">getValueInNormalized</span>(X)<br>
+</li><li><span class="functionname">getValueInVelocity</span>(X)<br>
+</li></ul>
+<span class="keyword">end</span>
+</code><br>
+
+<a name="entity219">
+<p class="margin"><div align="right"><a href="class10.html">[class info]</a></div></p>
+<code>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> [concrete class] <BR>
+<BR>
+</span>
+<span class="keyword">class</span> <span class="type">Pitch</span>&nbsp;<span class="keyword">from</span>&nbsp;<a href="#entity214">Parameter</a>
+<br>&nbsp;&nbsp;&nbsp;<span class="keyword">feat</span>&nbsp;label
+
+<ul><li><span class="functionname">isPitch</span>(B)<br>
+</li><li><span class="functionname">getValueInMidi</span>(X)<br>
+</li></ul>
+<span class="keyword">end</span>
+</code><br>
+
+<a name="entity221">
+<p class="margin"><div align="right"><a href="class11.html">[class info]</a></div></p>
+<code>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> [abstract class] An item is a generalization of score containers and elements. An item can be contained in one or more containers, the feature containers points to them.<BR>
+<BR>
+</span>
+<span class="keyword">class</span> <span class="type">Item</span>&nbsp;<span class="keyword">from</span>&nbsp;<a href="#entity212">ScoreObject</a>&nbsp;<span class="reference"><a href="node7.html#entity285">ScoreMapping.mappingMixin</a></span>
+<br>&nbsp;&nbsp;&nbsp;<span class="keyword">feat</span>&nbsp;label
+
+<ul><li><span class="functionname">init</span>(addParameters:AddParams containers:Containers&nbsp;...)<br>
+</li><li><span class="functionname">isItem</span>(B)<br>
+</li><li><span class="functionname">initDomains</span>(Spec)<br>
+</li><li><span class="functionname">closeScoreHierarchy</span>(mode:Mode)<br>
+</li><li><span class="functionname">closeExtendableLists</span>()<br>
+</li><li><span class="functionname">bilinkParameters</span>(Parameters)<br>
+</li><li><span class="functionname">getParameters</span>(X)<br>
+</li><li><span class="functionname">forAllParameters</span>(Proc)<br>
+</li><li><span class="functionname">mapParameters</span>(Xs Fn)<br>
+</li><li><span class="functionname">filterParameters</span>(Xs Fn)<br>
+</li><li><span class="functionname">findParameter</span>(X Test)<br>
+</li><li><span class="functionname">getContainers</span>(X)<br>
+</li><li><span class="functionname">forAllContainers</span>(Proc)<br>
+</li><li><span class="functionname">mapContainers</span>(Xs Fn)<br>
+</li><li><span class="functionname">filterContainers</span>(Xs Fn)<br>
+</li><li><span class="functionname">findContainer</span>(X Test)<br>
+</li><li><span class="functionname">getTemporalAspect</span>(X)<br>
+</li><li><span class="functionname">getTemporalContainer</span>($)<br>
+</li><li><span class="functionname">pmApply</span>(Xs PatternMatchingExpr P)<br>
+</li><li><span class="functionname">pmApply2</span>(Xs PatternMatchingExpr P ElseP)<br>
+</li><li><span class="functionname">pmApplyTemporalAspect</span>(PatternMatchingExpr P)<br>
+</li><li><span class="functionname">pmApplyTemporalAspect2</span>(PatternMatchingExpr P ElseP)<br>
+</li><li><span class="functionname">bilinkContainers</span>(Containers)<br>
+</li><li><span class="functionname">addContainer</span>(Container)<br>
+</li><li><span class="functionname">isTopLevel</span>(?B)<br>
+</li><li><span class="functionname">getTopLevels</span>(?Xs test:Test)<br>
+</li><li><span class="functionname">getTemporalToplevel</span>(Xs test:Test)<br>
+</li><li><span class="functionname">getPosition</span>(?Pos Container)<br>
+</li><li><span class="functionname">getPosRelatedItem</span>(?X N Container)<br>
+</li><li><span class="functionname">hasPosRelatedItem</span>(B N Container)<br>
+</li><li><span class="functionname">getPredecessor</span>(?X Container)<br>
+</li><li><span class="functionname">getSuccessor</span>(?X Container)<br>
+</li><li><span class="functionname">isFirstItem</span>(?B Container)<br>
+</li><li><span class="functionname">hasPredecessor</span>(?B Container)<br>
+</li><li><span class="functionname">isLastItem</span>(?B Container)<br>
+</li><li><span class="functionname">hasSuccessor</span>(?B Container)<br>
+</li><li><span class="functionname">isDet</span>(B)<br>
+</li><li><span class="functionname">wait</span>()<br>
+</li><li><span class="functionname">hasTemporalPredecessor</span>(B)<br>
+</li><li><span class="functionname">hasTemporalSuccessor</span>(B)<br>
+</li><li><span class="functionname">getTemporalPredecessor</span>(B)<br>
+</li><li><span class="functionname">getTemporalSuccessor</span>(B)<br>
+</li><li><span class="functionname">setAllParameterUnits</span>(ParameterAccessor Unit test:Test)<br>
+</li></ul>
+<span class="keyword">end</span>
+</code><br>
+
+<a name="entity222">
+<p class="margin"><div align="right"><a href="class12.html">[class info]</a></div></p>
+<code>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> [abstract class] A container contains one or more score items. A container is a generalization of a score aspect and a score modifier. The attribute items points to the items contained in a container. Because containers themself are items as well, a container can contain other containers to form a score hierarchy of containers and elements. However, a container must not contain itself.<BR>
+<BR>
+</span>
+<span class="keyword">class</span> <span class="type">Container</span>&nbsp;<span class="keyword">from</span>&nbsp;<a href="#entity221">Item</a>
+<br>&nbsp;&nbsp;&nbsp;<span class="keyword">feat</span>&nbsp;label
+
+<ul><li><span class="functionname">init</span>(items:Items&nbsp;...)<br>
+</li><li><span class="functionname">closeExtendableLists</span>()<br>
+</li><li><span class="functionname">isContainer</span>(B)<br>
+</li><li><span class="functionname">getItems</span>(X)<br>
+</li><li><span class="functionname">forAllItems</span>(Proc test:Test)<br>
+</li><li><span class="functionname">mapItems</span>(Xs Fn test:Test)<br>
+</li><li><span class="functionname">countItems</span>(N test:Test)<br>
+</li><li><span class="functionname">filterItems</span>(Xs Fn)<br>
+</li><li><span class="functionname">findItem</span>(X Test)<br>
+</li><li><span class="functionname">forNumericRangeTemporalAspect</span>(Decl P)<br>
+</li><li><span class="functionname">forNumericRangeTemporalAspect2</span>(Decl P ElseP)<br>
+</li><li><span class="functionname">wait</span>()<br>
+</li><li><span class="functionname">bilinkItems</span>(Items)<br>
+</li><li><span class="functionname">addItem</span>(Item)<br>
+</li><li><span class="functionname">toPPrintRecord</span>(?X excluded:Excluded features:Features)<br>
+</li><li><span class="functionname">getInitInfo</span>($ exclude:Excluded)<br>
+</li></ul>
+<span class="keyword">end</span>
+</code><br>
+
+<a name="entity223">
+<p class="margin"><div align="right"><a href="class13.html">[class info]</a></div></p>
+<code>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> [semi abstract class] A Modifier contains one or more items and modifies them [their meaning? / modifies them when the score is output?] in some way. Conventional examples for modifiers in common music notation are the repetition sign, staccato sign, trill sign etc., which modify the music they belong to. Subclasses of Modifier can define all these signs of common music notation. The attribute items points to the music the modifier belong to. <BR>
+<BR>
+ However, even the modification itself the modifier applies to music (i.e. the meaning of the modifier) can be expressed directly in an instance of the class Modifier. The actual modification is defined as a unary function. When the score is output, the function will be called with the value bound to the attribute items. That way, arbitrary modifications can be defined. Examples include modifications of contained temporal attributes or other parameters by envelopes: ritardando, crescendo etc.<BR>
+<BR>
+ The attribute modifier binds the modification function.<BR>
+<BR>
+ !! NB: currently, the score output functions (see ./Output.oz) ignore the Modifier which is therefore without effect!<BR>
+<BR>
+</span>
+<span class="keyword">class</span> <span class="type">Modifier</span>&nbsp;<span class="keyword">from</span>&nbsp;<a href="#entity222">Container</a>
+<br>&nbsp;&nbsp;&nbsp;<span class="keyword">feat</span>&nbsp;label
+
+<ul><li><span class="functionname">isModifier</span>(B)<br>
+</li><li><span class="functionname">getModifier</span>(X)<br>
+</li></ul>
+<span class="keyword">end</span>
+</code><br>
+
+<a name="entity224">
+<p class="margin"><div align="right"><a href="class14.html">[class info]</a></div></p>
+<code>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> [semi abstract class] An aspect contains one or more score items to group them and to provide additional information to its items. For instance, a sequential groups items and imposes them in a sequential order in time.<BR>
+<BR>
+</span>
+<span class="keyword">class</span> <span class="type">Aspect</span>&nbsp;<span class="keyword">from</span>&nbsp;<a href="#entity222">Container</a>
+<br>&nbsp;&nbsp;&nbsp;<span class="keyword">feat</span>&nbsp;label
+
+<ul><li><span class="functionname">isAspect</span>(B)<br>
+</li></ul>
+<span class="keyword">end</span>
+</code><br>
+
+<a name="entity225">
+<p class="margin"><div align="right"><a href="class15.html">[class info]</a></div></p>
+<code>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> [abstract class] A TemporalAspect is an aspect which contains timing related attributes and understands timing related methods. A TemporalAspect is a generalisation of a Sequential and a Simultaneous, which both impose timing information to the items they contain.<BR>
+ For a documentation of the time related attributes/parameters see doc of TimeMixin.<BR>
+<BR>
+</span>
+<span class="keyword">class</span> <span class="type">TemporalAspect</span>&nbsp;<span class="keyword">from</span>&nbsp;<a href="#entity224">Aspect</a>&nbsp;<a href="#entity213">TimeMixin</a>
+<br>&nbsp;&nbsp;&nbsp;<span class="keyword">feat</span>&nbsp;label
+
+<ul><li><span class="functionname">init</span>(duration:Duration endTime:EndTime offsetTime:OffsetTime startTime:StartTime timeUnit:TimeUnit&nbsp;...)<br>
+</li><li><span class="functionname">isTemporalAspect</span>(B)<br>
+</li><li><span class="functionname">isTimeMixin</span>(B)<br>
+</li><li><span class="functionname">getInitInfo</span>($ exclude:Excluded)<br>
+</li></ul>
+<span class="keyword">end</span>
+</code><br>
+
+<a name="entity213">
+<p class="margin"><div align="right"><a href="class16.html">[class info]</a></div></p>
+<code>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> [abstract class] The TimeMixin adds several timing attributes and methods to its subclasses.<BR>
+<BR>
+ The attributes startTime and endTime are absolute TimePoints. The attribute offsetTime is a relative TimeInterval to the startTime of the TemporalAspect an Item is contained in. The attribute duration is the TimeInterval difference of startTime and endTime.<BR>
+<BR>
+ The TimeUnit specifies what the numeric values for the TimeMixin attributes actually mean. The TimeUnit either specifies an absolute value (e.g. seconds) or a relative value (e.g. beats). The meaning of beat depends on the output definition, for instance, for the Lilypond output a beat is a quarter note. Currently, possible values are 'seconds' (or 'secs'), 'milliseconds' (or 'msecs'), 'beats', or beats(N), where  N means number of ticks (i.e. the integer range) within a beat. For example, if the TimeUnit = beats(4) and a beat corresponds to a quarter note, then a note of duration 1 corresponds to a sixteenth note. beats is equivalent with beats(1). The meaning of a beat for sound output can be specified by the tempo (see Init.setBeatDuration, Init.setTempo etc.)<BR>
+ NB: to avoid confusion, the time units of all temporal items in the score are unified when a Strasheela score is initialised.   <BR>
+ NB: A negative offsetTime value is not possible if the offsetTime is a FD integer (which presently is the only option). For the other temporal parameters, a negative value does not make sense anyway.<BR>
+*/<BR>
+<BR>
+</span>
+<span class="keyword">class</span> <span class="type">TimeMixin</span>
+<br>&nbsp;&nbsp;&nbsp;<span class="keyword">feat</span>&nbsp;label
+
+<ul><li><span class="functionname">initTiming</span>(duration:Duration endTime:EndTime offsetTime:OffsetTime startTime:StartTime timeUnit:TimeUnit)<br>
+</li><li><span class="functionname">constrainTiming</span>()<br>
+</li><li><span class="functionname">getStartTime</span>(X)<br>
+</li><li><span class="functionname">getEndTime</span>(X)<br>
+</li><li><span class="functionname">getDuration</span>(X)<br>
+</li><li><span class="functionname">getOffsetTime</span>(X)<br>
+</li><li><span class="functionname">getStartTimeInSeconds</span>(X)<br>
+</li><li><span class="functionname">getEndTimeInSeconds</span>(X)<br>
+</li><li><span class="functionname">getDurationInSeconds</span>(X)<br>
+</li><li><span class="functionname">getOffsetTimeInSeconds</span>(X)<br>
+</li><li><span class="functionname">getStartTimeInBeats</span>(X)<br>
+</li><li><span class="functionname">getEndTimeInBeats</span>(X)<br>
+</li><li><span class="functionname">getDurationInBeats</span>(X)<br>
+</li><li><span class="functionname">getOffsetTimeInBeats</span>(X)<br>
+</li><li><span class="functionname">getStartTimeParameter</span>(X)<br>
+</li><li><span class="functionname">getEndTimeParameter</span>(X)<br>
+</li><li><span class="functionname">getDurationParameter</span>(X)<br>
+</li><li><span class="functionname">getOffsetTimeParameter</span>(X)<br>
+</li><li><span class="functionname">getTimeUnit</span>(X)<br>
+</li><li><span class="functionname">hasAbsoluteTimeUnit</span>(B)<br>
+</li><li><span class="functionname">isSimultaneousItem</span>(?B X)<br>
+</li><li><span class="functionname">isSimultaneousItemR</span>(?B X)<br>
+</li><li><span class="functionname">isExactlySimultaneousItemR</span>(?B X)<br>
+</li><li><span class="functionname">getSimultaneousItems</span>(?Xs test:Test)<br>
+</li></ul>
+<span class="keyword">end</span>
+</code><br>
+
+<a name="entity226">
+<p class="margin"><div align="right"><a href="class17.html">[class info]</a></div></p>
+<code>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> [concrete class] A Sequential expresses that the items contained in it follow each other in a sequential manner in time. Usually, the parameter endTime of a proceeding item equals the parameter startTime of the following item. However, setting the parameter offsetTime of an item to a value greater zero causes a gap (i.e. a pause) before the item and a negative offsetTime causes an overlap with the proceeding item.<BR>
+ For a documentation of the time unit see doc of TimeMixin.<BR>
+ NB: A negative offsetTime value is not possible if the offsetTime is a FD integer (which presently is the only option).<BR>
+<BR>
+</span>
+<span class="keyword">class</span> <span class="type">Sequential</span>&nbsp;<span class="keyword">from</span>&nbsp;<a href="#entity225">TemporalAspect</a>
+<br>&nbsp;&nbsp;&nbsp;<span class="keyword">feat</span>&nbsp;label
+
+<ul><li><span class="functionname">isSequential</span>(B)<br>
+</li><li><span class="functionname">constrainTiming</span>()<br>
+</li></ul>
+<span class="keyword">end</span>
+</code><br>
+
+<a name="entity227">
+<p class="margin"><div align="right"><a href="class18.html">[class info]</a></div></p>
+<code>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> [concrete class] A Simultaneous expresses that the items contained in it start at the same time.  However, setting the parameter offsetTime of an item to a value greater zero causes this item to delay its startTime the amount of offsetTime.<BR>
+ For a documentation of the time unit see doc of TimeMixin.<BR>
+<BR>
+</span>
+<span class="keyword">class</span> <span class="type">Simultaneous</span>&nbsp;<span class="keyword">from</span>&nbsp;<a href="#entity225">TemporalAspect</a>
+<br>&nbsp;&nbsp;&nbsp;<span class="keyword">feat</span>&nbsp;label
+
+<ul><li><span class="functionname">isSimultaneous</span>(B)<br>
+</li><li><span class="functionname">constrainTiming</span>()<br>
+</li></ul>
+<span class="keyword">end</span>
+</code><br>
+
+<a name="entity228">
+<p class="margin"><div align="right"><a href="class19.html">[class info]</a></div></p>
+<code>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> [abstract class] An element is a score item which does not contain items. For instance, a note and a pause are both elements.<BR>
+<BR>
+</span>
+<span class="keyword">class</span> <span class="type">Element</span>&nbsp;<span class="keyword">from</span>&nbsp;<a href="#entity221">Item</a>
+<br>&nbsp;&nbsp;&nbsp;<span class="keyword">feat</span>&nbsp;label
+
+<ul><li><span class="functionname">isElement</span>(B)<br>
+</li><li><span class="functionname">toPPrintRecord</span>(?X excluded:Excluded features:Features)<br>
+</li></ul>
+<span class="keyword">end</span>
+</code><br>
+
+<a name="entity229">
+<p class="margin"><div align="right"><a href="class20.html">[class info]</a></div></p>
+<code>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> [semi abstract class] An AbstractElement is an element without timing information. For instance, an instrument definition for a sound synthesis language such as Csound could be represented by an instance of a subclass of AbstractElement.<BR>
+<BR>
+</span>
+<span class="keyword">class</span> <span class="type">AbstractElement</span>&nbsp;<span class="keyword">from</span>&nbsp;<a href="#entity228">Element</a>
+<br>&nbsp;&nbsp;&nbsp;<span class="keyword">feat</span>&nbsp;label
+
+<ul><li><span class="functionname">isAbstractElement</span>(B)<br>
+</li></ul>
+<span class="keyword">end</span>
+</code><br>
+
+<a name="entity230">
+<p class="margin"><div align="right"><a href="class21.html">[class info]</a></div></p>
+<code>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> [abstract class] A TemporalElement is an element with timing information. For instance, any action of a performer is a TemporalElement -- whether the action is heard or not. An unheard action can a change of the instrument (as muting it) is a TemporalElement, a heard action the performance of a note. <BR>
+<BR>
+</span>
+<span class="keyword">class</span> <span class="type">TemporalElement</span>&nbsp;<span class="keyword">from</span>&nbsp;<a href="#entity228">Element</a>&nbsp;<a href="#entity213">TimeMixin</a>
+<br>&nbsp;&nbsp;&nbsp;<span class="keyword">feat</span>&nbsp;label
+
+<ul><li><span class="functionname">init</span>(duration:Duration endTime:EndTime offsetTime:OffsetTime startTime:StartTime timeUnit:TimeUnit&nbsp;...)<br>
+</li><li><span class="functionname">isTemporalElement</span>(B)<br>
+</li><li><span class="functionname">isTimeMixin</span>(B)<br>
+</li><li><span class="functionname">getInitInfo</span>($ exclude:Excluded)<br>
+</li></ul>
+<span class="keyword">end</span>
+</code><br>
+
+<a name="entity231">
+<p class="margin"><div align="right"><a href="class22.html">[class info]</a></div></p>
+<code>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> [concrete class] A pause is a score element to produce silence of a given duration. It can, e.g., be used within a sequential to produce an offset between two items in the sequential. However, in such situation a pause could be replaced by the use of the parameter offsetTime of the item after the pause. Nevertheless, a pause in an explicite representation.<BR>
+ For a documentation of the time unit see doc of TimeMixin.<BR>
+<BR>
+</span>
+<span class="keyword">class</span> <span class="type">Pause</span>&nbsp;<span class="keyword">from</span>&nbsp;<a href="#entity230">TemporalElement</a>
+<br>&nbsp;&nbsp;&nbsp;<span class="keyword">feat</span>&nbsp;label
+
+<ul><li><span class="functionname">isPause</span>(B)<br>
+</li></ul>
+<span class="keyword">end</span>
+</code><br>
+
+<a name="entity232">
+<p class="margin"><div align="right"><a href="class23.html">[class info]</a></div></p>
+<code>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> [semi abstract class or concrete class?] An event is a score element which produces sound when the score is played. An event is a very general representation for something producing sound. For instance, a note played on a piano (with a specific pitch, loudness etc.), a hand clapping (no pitch, but maybe a specific loudness), or an arbitrary sound synthesis language event (possibly with dozends of parameters) are all representable be an event. <BR>
+ <BR>
+ To provide such generality, an event has the attribute parameters which points to a collection [better term?] of all parameters of the event. The parameters themself contain information about their purpose (e.g. parameters are of a certain class as pitch, or amplitude). However, as a convenience, certain parameters are additionally referenced by an extra feature  (e.g. all timing related parameters have their own feature, as startTime, offsetTime, endTime or duration). Subclasses of the event class may define additional features. Nevertheless, all parameters can be accessed via the parameters feature<BR>
+<BR>
+ An event always has the timing parameters startTime, duration, endTime, and offsetTime. However, additional parameters can be specified optionally (e.g. by the feature addParameters of the init method).<BR>
+ For a documentation of the time unit see doc of TimeMixin.<BR>
+<BR>
+</span>
+<span class="keyword">class</span> <span class="type">Event</span>&nbsp;<span class="keyword">from</span>&nbsp;<a href="#entity230">TemporalElement</a>
+<br>&nbsp;&nbsp;&nbsp;<span class="keyword">feat</span>&nbsp;label
+
+<ul><li><span class="functionname">isEvent</span>(B)<br>
+</li></ul>
+<span class="keyword">end</span>
+</code><br>
+
+<a name="entity233">
+<p class="margin"><div align="right"><a href="class24.html">[class info]</a></div></p>
+<code>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> [concrete class] A note is an score event with explicit attributes for the parameter pitch.<BR>
+ A note inherits various timing parameters from the event class. The full set of non-optional note parameters (i.e. parameters which are not only bound to the attribute parameters, but which have extra attributes) is startTime, duration, endTime, offsetTime}, and pitch. Additional parameters can be specified optionally (e.g. by the feature addParameters of the init method).<BR>
+<BR>
+</span>
+<span class="keyword">class</span> <span class="type">Note2</span>&nbsp;<span class="keyword">from</span>&nbsp;<a href="#entity232">Event</a>
+<br>&nbsp;&nbsp;&nbsp;<span class="keyword">feat</span>&nbsp;label
+
+<ul><li><span class="functionname">init</span>(pitch:P pitchUnit:PU&nbsp;...)<br>
+</li><li><span class="functionname">isNote</span>(B)<br>
+</li><li><span class="functionname">getPitch</span>(X)<br>
+</li><li><span class="functionname">getPitchInMidi</span>(X)<br>
+</li><li><span class="functionname">getPitchParameter</span>(X)<br>
+</li><li><span class="functionname">getPitchUnit</span>(X)<br>
+</li><li><span class="functionname">getInitInfo</span>($ exclude:Excluded)<br>
+</li></ul>
+<span class="keyword">end</span>
+</code><br>
+
+<a name="entity234">
+<p class="margin"><div align="right"><a href="class25.html">[class info]</a></div></p>
+<code>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> [concrete class] Extends class Note2 by parameter amplitude. These two classes exist because an amplitude is usually needed if a sound synthesis format is output but may not be needed if only a music notation format is output.<BR>
+<BR>
+</span>
+<span class="keyword">class</span> <span class="type">Note</span>&nbsp;<span class="keyword">from</span>&nbsp;<a href="#entity233">Note2</a>
+<br>&nbsp;&nbsp;&nbsp;<span class="keyword">feat</span>&nbsp;label
+
+<ul><li><span class="functionname">init</span>(amplitude:A amplitudeUnit:AU&nbsp;...)<br>
+</li><li><span class="functionname">isNote</span>(B)<br>
+</li><li><span class="functionname">getAmplitude</span>(X)<br>
+</li><li><span class="functionname">getAmplitudeInNormalized</span>(X)<br>
+</li><li><span class="functionname">getAmplitudeInVelocity</span>(X)<br>
+</li><li><span class="functionname">getAmplitudeParameter</span>(X)<br>
+</li><li><span class="functionname">getAmplitudeUnit</span>(X)<br>
+</li><li><span class="functionname">getInitInfo</span>($ exclude:Excluded)<br>
+</li></ul>
+<span class="keyword">end</span>
+</code><br>
+
+<code>
+<a name="entity235">
+<span class="keyword">fun</span>{<span class="functionname">IsScoreObject</span> X}<br>
+<span class="string"> Returns a boolean whether X is an Object with the class/superclass ScoreObject. <BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity236">
+<span class="keyword">fun</span>{<span class="functionname">IsTemporalItem</span> X}<br>
+<span class="string"> Returns a boolean whether X is an item which inherits from TimeMixin (i.e. X is either a TemporalElement or a TemporalAspect).<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity237">
+<span class="keyword">fun</span>{<span class="functionname">IsTemporalContainer</span> X}<br>
+<span class="string"> Returns a boolean whether X is a container which inherits from TimeMixin. This is an alias type check whether X is a TemporalAspect.<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity239">
+<span class="keyword">proc</span>{<span class="functionname">MakeScore2</span> ScoreSpec Constructors X}<br>
+<span class="string"> MakeScore2 is a variant of MakeScore with the same arguments and the same functionality. However, the implicit initialisation of MakeScore2 is unfinished, such that the returned score hierarchy can still be extended (use the method bilinkItems or bilinkContainers to combine multiple score hierarchy parts created with MakeScore2). After the extention of the score, the score must be fully initialised (using InitScore). See strasheela/testing/ScoreCore-test.oz for an example.<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity238">
+<span class="keyword">proc</span>{<span class="functionname">InitScore</span> X}<br>
+<span class="string"> InitScore is an auxilary procedure to finish the initialisation of score hierarchies created by MakeScore2 and combined by the method bilinkItems or bilinkContainers. Using InitScore directly on the result of MakeScore2 is the same as generating a score by MakeScore.<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity240">
+<span class="keyword">proc</span>{<span class="functionname">MakeScore</span> ScoreSpec Constructors X}<br>
+<span class="string"> MakeScore returns an object-oriented hierarchic score representation according to a record-based score representation in ScoreSpec. In general, MakeScore transforms (possibly nested) class init records into (nested) class instances with bi-directional links (e.g. links from the container to the contained item and vice-versa). The label of each init record specifies its class, e.g.,<BR>
+<code>{Score.makeScore note(startTime:0) unit}}</code><BR>
+<BR>
+ The argument Constructors allows to specify additional or alternative classes or arbitrary unary constructor functions. Constructors is a record with either the label unit or add, where the label unit means overwrite all defaults and add allows you to add classes/constructures to the defaults. Features of Constructors correspond to the labels of score object specifications in ScoreSpec. For example, the following expression returns an instance of the class MyNote.<BR>
+<code>{Score.makeScore note(startTime:0) unit(note:MyNote)}}</code><BR>
+<BR>
+ A nested score hierarchy is expressed by specifying further init record lists at the feature items or containers, e.g.,<BR>
+<code>{Score.makeScore seq(items:[note note] startTime:0) unit}}</code><BR>
+<BR>
+ Score objects can be marked with an id. Score graphs can be formulated by referring to the same score object with the same id multiple times <BR>
+      <code>{Score.makeScore sim(items:[note(containers:[aspect(id:1 info:test)]<BR>
+					     duration:1)<BR>
+					note(containers:[aspect(id:1)]<BR>
+					     duration:2)])<BR>
+	     unit}</code><BR>
+<BR>
+ To express a more complex graph, ScoreSpec can also be a list of nested init records with shared ids, e.g.,<BR>
+      <code>{Score.makeScore [aspect(id:1 info:bla)<BR>
+			      aspect(items:[note(info:x containers:[aspect(id:1)])<BR>
+					    note(info:y)])]<BR>
+	     unit}</code><BR>
+<BR>
+ However, references using ids must not be recursive (e.g. within the declaration of a container with an id must be not references to that id).<BR>
+<BR>
+ A recommended alternative to formulate score graphs is to use multiple MakeScore2 calls which are combined (using bilinkItems or bilinkContainers) and only then fully initialised using InitScore). <BR>
+<BR>
+ Internally, MakeScore uses the init method of each class and all arguments the respective init method understands are supported by MakeScore. However, MakeScore performs also additional initialisation. This initialisation includes establishing inter-class instance relations correctly, closing the score hierarchy (which binds the tails of all slots items, containers and parameters for all items to nil), initialising all parameter values to FD variables, imposing timing constraints on all time mixings, and unifying all time units.<BR>
+<BR>
+ An already instatiated score object (created with Score.makeScore2, i.e. with an unclosed hierarchy) can be specified at any place an score object record (label representing object class and features init method arguments) is possible.<BR>
+<BR>
+ It is strongly recommended to use MakeScore to create a score instead of using the init method of the score classes directly, because MakeScore encapulates all necessary low-level details of the score representation.<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity241">
+<span class="keyword">fun</span>{<span class="functionname">CopyScore</span> MyScore}
+</code><br>
+
+<code>
+<a name="entity242">
+<span class="keyword">proc</span>{<span class="functionname">MakeContainer</span> ContainerClass Items Args MyScore}<br>
+<span class="string"> Returns a container of ContainerClass containing Items. Args is a record of optional container init arguments.<BR>
+ A MakeContainer call may specify more container init-arguments than specified as default arguments.<BR>
+ The Items must still combinable with other score items, i.e. they must not be fully initialised (e.g. created by MakeScore2). Also the container returned by MakeContainer is  still combinable with other score items, i.e. in the end the score must be initialised by InitScore.<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity243">
+<span class="keyword">fun</span>{<span class="functionname">MakeSim</span> Items Args}
+</code><br>
+
+<code>
+<a name="entity244">
+<span class="keyword">fun</span>{<span class="functionname">MakeSeq</span> Items Args}
+</code><br>
+
+<code>
+<a name="entity245">
+<span class="keyword">fun</span>{<span class="functionname">MakeClass</span> Super FeatT Args}<br>
+<span class="string"> [!! ?? unfinished conceptually] Util for MakeScore. Transforms a short hand score representation with repeat signs into the full representation for MakeScore. A repeat sign (<code>#</code>) may appear after any ScoreSpec denoting an item using the form <code>ScoreSpec#N</code>.<BR>
+ Restriction:<BR>
+ Items are literally repeated. Therefore, items with ID are literally copied and all repeatitions result in 'unified' objects.<BR>
+ */<BR>
+       fun {ResolveRepeats ScoreSpec}<BR>
+ 	 {ResolveRepeatsAux ScoreSpec}.1<BR>
+       end<BR>
+    end<BR>
+<BR>
+<BR>
+/** %% MakeClass returns a subclass of the (score object) class Super. FeatT is a tuple with the additional subclass features, the label of FeatT defines the value at the feature 'label' of the new class. Args supports optional arguments, the defaults are:<BR>
+   unit(initRecord:init<BR>
+	init:proc {$ Self Args} skip end)<BR>
+ Args.initRecord specifies additional arguments for the init method of the class and optionally their default value. For instance, <code> init(x:1 y) </code> defines the two additional arguments x and y and the default value 1 for x.<BR>
+ Args.init defines a binary procedure which is called at the end of the initialisation of a class instance. The two arguments Self and Args are the initialised object and the record of initialisation arguments (i.e. for each Args feature either the specified default or the value handed the the init method).<BR>
+<BR>
+ NB: MakeClass allows only to define additional features (i.e. no attributes) [NB: this behaviour is inconsistent with other class definitions in Strasheela. Nonetheless, that way feature accessors are defined implicitly].<BR>
+<BR>
+ NB: Classes generated by MakeClass will not be documented automatically by ozh.<BR>
+<BR>
+ Example: define a note subclass with an additional parameter foo (init method arg foo defaults to 0):<BR>
+   {MakeClass Score.note<BR>
+    newNote(foo fooParameter)<BR>
+    unit(initRecord:newNote(foo:0)<BR>
+	 init:proc {$ Self Args}<BR>
+		 Self.fooParameter = {New Score.parameter init(value:Args.foo info:foo)}<BR>
+		 Self.foo = {Self.fooParameter getValue($)}<BR>
+		 {Self bilinkParameters([Self.fooParameter])}<BR>
+	      end)}<BR>
+<BR>
+</span>
+</code><br>
+<h3>End</h3>
+</div></body>
+</html>

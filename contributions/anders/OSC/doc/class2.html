@@ -1,0 +1,296 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<html>
+ <head>
+  <title>Class DumpOSC</title>
+  <style>BODY {
+ background: url(page.gif) repeat-y white;
+}
+#slidemenubar, #slidemenubar2{
+ position:absolute;
+ left:-144px;
+ width:160px;
+ top:10px;
+ border:0px solid black;
+ font:bold 12px Verdana;
+ line-height:10px;
+}
+.margin {
+ position: absolute;
+ left: 10px;
+ width: 130px;
+}
+BODY, P, H1, H2, H3, A {
+ font-family: sans-serif;
+}
+PRE, CODE {
+ font-family: courier, monospace;
+}
+P {
+ text-align: justify;
+}
+H1     { color: #9B0000; }
+H2     { color: #FF9933; }
+H3, H4 { color: #881155; }
+CODE              { color: #663366; }
+.code CODE        { color: #000000; }
+SPAN.comment      { color: #B22222; }
+SPAN.keyword      { color: #A020F0; }
+SPAN.string       { color: #BC8F8F; }
+SPAN.functionname { color: #0000FF; }
+SPAN.type         { color: #228B22; }
+SPAN.variablename { color: #B8860B; }
+SPAN.reference    { color: #5F9EA0; }
+SPAN.builtin      { color: #DA70D6; }
+A:link {
+ color: #666666;
+}
+A:visited {
+ color: black;
+}
+A.pre { font-family: courier, monospace;
+ color: #228B22;
+}
+</style>
+ </head>
+<body>
+<script language="JavaScript1.2">
+if (document.all)
+document.write('<div id="slidemenubar2" style="left:-144" onMouseover="pull()" onMouseout="draw()">')
+</script>
+<layer id="slidemenubar" onMouseover="pull()" onMouseout="draw()">
+<table border="0" cellpadding="0" cellspacing="0" width="161"><tr><td bgcolor="#009cff" width="144"><a href="index.html">Index</a>
+</td><td rowspan="4" valign="top" width="16"><img src="menu.gif" width="16"></td></tr><tr><td bgcolor="#009cff" width="144"><a href="node1.html">OSC</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node2.html">OSC_Scanner</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node3.html">OSC_Parser</a>
+</td></tr></table></layer>
+<script language="JavaScript1.2">
+function regenerate(){
+window.location.reload()
+}
+function regenerate2(){
+if (document.layers)
+setTimeout("window.onresize=regenerate",400)
+}
+window.onload=regenerate2
+if (document.all){
+document.write('</div>')
+themenu=document.all.slidemenubar2.style
+rightboundary=0
+leftboundary=-144
+}
+else{
+themenu=document.layers.slidemenubar
+rightboundary=144
+leftboundary=0
+}
+function pull(){
+if (window.drawit)
+clearInterval(drawit)
+pullit=setInterval("pullengine()",20)
+}
+function draw(){
+clearInterval(pullit)
+drawit=setInterval("drawengine()",50)
+}
+function pullengine(){
+if (document.all&&themenu.pixelLeft<rightboundary)
+themenu.pixelLeft+=5
+else if(document.layers&&themenu.left<rightboundary)
+themenu.left+=5
+else if (window.pullit)
+clearInterval(pullit)
+}
+function drawengine(){
+if (document.all&&themenu.pixelLeft>leftboundary)
+themenu.pixelLeft-=5
+else if(document.layers&&themenu.left>leftboundary)
+themenu.left-=5
+else if (window.drawit)
+clearInterval(drawit)
+}
+</script>
+
+<div style="margin-left:160px"><p align="right" class="margin"><div align="right">inheritance tree</div></p>
+<pre>
+ <a class="pre" href="node1.html#entity11">DumpOSC</a>
+</pre>
+<hr><p class="margin"><div align="right">class definition</div></p>
+<code>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> Implements an Oz interface to dumpOSC for receiving OSC packets at a given port. Ineternally, the textual output of dumpOSC is parsed into Oz values, and a stream of OSC messages in the format described above is provided.<BR>
+ Please note that dumpOSC is called in a terminal (xterm), and its output is send by netcat via a socket to Oz (on MacOS X, X11 is started if not already running). See above for an explanation. <BR>
+ Also, note that several clients can send to dumpOSC, but no information who sends is transmitted (e.g., no sender IP). If knowing the sender is important, just include your sender in your OSC messages :)<BR>
+<BR>
+</span>
+<span class="keyword">class</span> <span class="type">DumpOSC</span> (Inheritance-free)<br>
+&nbsp;&nbsp;&nbsp;<span class="keyword">feat</span>&nbsp;defaultResponderAddr&nbsp;dumpOSC&nbsp;myParser&nbsp;myScanner&nbsp;netcatPort&nbsp;oscs&nbsp;pipe&nbsp;responders
+<br>
+&nbsp;&nbsp;&nbsp;<span class="keyword">attr</span>&nbsp;bundleResponder&nbsp;counter
+<br>
+<ul><li><span class="functionname">DecrCounter</span>()<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> Decrement the brackets (i.e. bundles nesting) counter by 1.<BR>
+<BR>
+</span>
+</li><li><span class="functionname">ExistsOpenBundle</span>($)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"></span>
+</li><li><span class="functionname">IncrCounter</span>()<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> Increment the brackets (i.e. bundles nesting) counter by 1.<BR>
+<BR>
+</span>
+</li><li><span class="functionname">ParseVS</span>(Result VS)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> Transforms a VS of valid OSC messages (output of dumpOSC) into a list of values in the OSC format (see above).<BR>
+<BR>
+</span>
+</li><li><span class="functionname">ProcessResponders</span>()<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"></span>
+</li><li><span class="functionname">addResponder</span>(Address Proc)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> Installs a new responder for any OSC message with the address pattern Address (an atom). Whenever such a message is received, Proc (a binary procedure) is called. The first argument is a timetag (the timetag of the bundle in which the message was contained, or 1), and the second argument is the Message (in internal OSC format, that is a record whose label is the message address, see above for details).<BR>
+ In contrast to a SuperCollider OSCresponder, the sender address is not added, as the information about the sender is not provided by dumpOSC (if required, consider enclosing the address in the message). <BR>
+ Multiple responders can be installed for the same Address, in which case all their Procs will be applied to each matching message (last applied responder first).<BR>
+<BR>
+</span>
+</li><li><span class="functionname">close</span>()<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> Stop dumpOSC interface and close its ressources. <BR>
+<BR>
+</span>
+</li><li><span class="functionname">getOSCs</span>($)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> Returns a stream of OSC messages received by dumpOSC in the internal OSC format described above. Many receivers can call this method for accessing the OSC packages.  <BR>
+<BR>
+</span>
+</li><li><span class="functionname">init</span>(port:Port)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> Initialises dumpOSC interface to receive at port Port (defaults to 7777).<BR>
+<BR>
+</span>
+</li><li><span class="functionname">parseAll</span>($ prevLines:PrevLines)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> Parses any textual output of OSC messages and bundles and returns it as a stream of values in the OSC format (see above). The arg prevLines is only for internal use (accumulation of lines).<BR>
+<BR>
+ NB: parseAll must be called in its own thread. <BR>
+<BR>
+</span>
+</li><li><span class="functionname">removeResponder</span>(Address)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> Deinstalls all responders for Address.<BR>
+<BR>
+</span>
+</li><li><span class="functionname">setBundleResponder</span>(Proc)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> Installs a new bundle responder: The unary procedure proc will be called whenever a bundle (a list) is received, with the timetag as first list element. The timetag is obligatory, but it may be 1 (meaning now).<BR>
+ Please note that there is always only a single bundleResponder installed. Setting a new responder overwrites the old one.  <BR>
+<BR>
+</span>
+</li><li><span class="functionname">setDefaultResponder</span>(Proc)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> Installs a new responder like addResponder. However, this responder Proc is called always whenever no responder installed with addResponder matches.<BR>
+ Please note that there is always only a single default responder installed. Setting a new default responder overwrites the old one.  <BR>
+<BR>
+</span>
+</li><li><span class="functionname">setResponder</span>(Address Proc)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> Deinstalls all responders for Address and adds the new responder Proc. See addResponder for details.<BR>
+<BR>
+</span>
+</li></ul>
+<span class="keyword">end</span>
+</code>
+</div></body>
+</html>

@@ -1,0 +1,428 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<html>
+ <head>
+  <title>Rules</title>
+  <style>BODY {
+ background: url(page.gif) repeat-y white;
+}
+#slidemenubar, #slidemenubar2{
+ position:absolute;
+ left:-144px;
+ width:160px;
+ top:10px;
+ border:0px solid black;
+ font:bold 12px Verdana;
+ line-height:10px;
+}
+.margin {
+ position: absolute;
+ left: 10px;
+ width: 130px;
+}
+BODY, P, H1, H2, H3, A {
+ font-family: sans-serif;
+}
+PRE, CODE {
+ font-family: courier, monospace;
+}
+P {
+ text-align: justify;
+}
+H1     { color: #9B0000; }
+H2     { color: #FF9933; }
+H3, H4 { color: #881155; }
+CODE              { color: #663366; }
+.code CODE        { color: #000000; }
+SPAN.comment      { color: #B22222; }
+SPAN.keyword      { color: #A020F0; }
+SPAN.string       { color: #BC8F8F; }
+SPAN.functionname { color: #0000FF; }
+SPAN.type         { color: #228B22; }
+SPAN.variablename { color: #B8860B; }
+SPAN.reference    { color: #5F9EA0; }
+SPAN.builtin      { color: #DA70D6; }
+A:link {
+ color: #666666;
+}
+A:visited {
+ color: black;
+}
+A.pre { font-family: courier, monospace;
+ color: #228B22;
+}
+</style>
+ </head>
+<body>
+<script language="JavaScript1.2">
+if (document.all)
+document.write('<div id="slidemenubar2" style="left:-144" onMouseover="pull()" onMouseout="draw()">')
+</script>
+<layer id="slidemenubar" onMouseover="pull()" onMouseout="draw()">
+<table border="0" cellpadding="0" cellspacing="0" width="161"><tr><td bgcolor="#009cff" width="144"><a href="index.html">Index</a>
+</td><td rowspan="15" valign="top" width="16"><img src="menu.gif" width="16"></td></tr><tr><td bgcolor="#009cff" width="144"><a href="node1.html">HarmonisedScore</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node2.html">DB</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node3.html">Score</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node4.html">Rules</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node5.html">DBs</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node6.html">Default</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node7.html">Jazz</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node8.html">Partch</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node9.html">Johnston</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node10.html">Harrison</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node11.html">Chalmers</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node12.html">Catler</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node13.html">ArithmeticalSeriesChords</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node14.html">HS</a>
+</td></tr></table></layer>
+<script language="JavaScript1.2">
+function regenerate(){
+window.location.reload()
+}
+function regenerate2(){
+if (document.layers)
+setTimeout("window.onresize=regenerate",400)
+}
+window.onload=regenerate2
+if (document.all){
+document.write('</div>')
+themenu=document.all.slidemenubar2.style
+rightboundary=0
+leftboundary=-144
+}
+else{
+themenu=document.layers.slidemenubar
+rightboundary=144
+leftboundary=0
+}
+function pull(){
+if (window.drawit)
+clearInterval(drawit)
+pullit=setInterval("pullengine()",20)
+}
+function draw(){
+clearInterval(pullit)
+drawit=setInterval("drawengine()",50)
+}
+function pullengine(){
+if (document.all&&themenu.pixelLeft<rightboundary)
+themenu.pixelLeft+=5
+else if(document.layers&&themenu.left<rightboundary)
+themenu.left+=5
+else if (window.pullit)
+clearInterval(pullit)
+}
+function drawengine(){
+if (document.all&&themenu.pixelLeft>leftboundary)
+themenu.pixelLeft-=5
+else if(document.layers&&themenu.left>leftboundary)
+themenu.left-=5
+else if (window.drawit)
+clearInterval(drawit)
+}
+</script>
+
+<div style="margin-left:160px"><span class="string">
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> This functor defines several general rules/constraints (i) on chords and/or scales and (ii) melodic rules etc.<BR>
+<BR>
+<BR>
+<BR>
+ Background info to melodic rules: conventional non-harmonic note pitch conditions (according to Piston. Counterpoint, Norton, 1947) <BR>
+<BR>
+   - appoggiatura (Vorhalt?): stressed dissonance: step or skip (more common than step, adds emphasis) from any direction into dissonance, resolved in second below or above. Dissonance on strong beat (requires metric position). Dissonance can be further stressed by a note duration longer than following note.<BR>
+    Torsten added: 'likes' to resolve in semitone, specially if upwards (Mozart..)<BR>
+<BR>
+   - passing note (Durchgang): diatonic or chormatic progression continued in same direction. Passing note always weak rhythmical quality -- even when occuring on first beat of measure (!!). According to Piston, notes are analysed as either appoggiatura or passing only depending on their rhythmic weight.<BR>
+     Exceptionally are 'passing notes' without any directly preceeding notes (this note sounded in other voice). <BR>
+<BR>
+   - suspension (vorbereiteter Vorhalt?): in classic case, a (comparatively long) harmonic note is 'tied over' -- the harmony changes and turnes the 'tied over' note into a non-harmonic note. Usually/often, this dissonance longs at least a beat. Suspensions are resolved in stepwise motion (usually downwards, upwards more likely in case of leading notes  or chormatically raised notes). The suspension may resolved into next harmony (i.e. after the harmony it formed a dissonance in). The suspendend note is (in all cases?) longer than its successor.<BR>
+<BR>
+   - anticipation (Vorausnahme): dissonant note on easy beat preceeding the same consonant note pitch on strong beat (i.e. the harmony changed). The dissonant anticipation is shorter than its consonant successor.<BR>
+<BR>
+   - auxiliary (Nebennote): ornamental single note, leaving and returning to the same note by a second up or down. The harmony may meanwhile change.<BR>
+<BR>
+   - echappee/cambiata (Torsten: standardised case of ornamental resolution?): stepwise movement of melody 'ornamented' note between. Echappee: leaves first note by stepwise motion in opposite direction and 'resolves' by skip of third to destination. Cambiata: first note by skip of third in opposite direction and 'resolves' by step to destination. Echappee and cambiata are rhythmically weak.<BR>
+     Variants with more freedom: larger skip than third or all movements in same direction (quasi like passing note with skip). Combination to double auxiliary (or changing-tones): echappee and cambiata follow each other directly as two dissonances.  <BR>
+<BR>
+   - ornamental resolution: (i) multiple 'standard' dissonances directly following each other. E.g., appoggiatura directly followed by cambiata (i.e. with delayed resolution). (ii) arbitrary consonant chord note between 'standard' dissonance treatment. E.g., before passing note skip to some other chord note and (possibly) skip back to actual passing note. (iii) a group of interpolated tones (Piston recomments studying Bach 'Italian Concerto')<BR>
+<BR>
+<BR>
+ Problem with specific non-harmonic pitches, especially appoggiatura, in this context: how to 'motivate' non-harmonic pitches. E.g. in case of melody harmonisation, obviously harmonic pitches followed by a passing note could be understood as non-harmonic pitches which resolve into a harmonic pitch..<BR>
+<BR>
+<BR>
+</span>
+</span>
+<h3>Functor</h3>
+<ul>Rules ("<span class="string">/Users/t/oz/music/Strasheela/strasheela/contributions/anders/HarmonisedScore/source/Rules.oz</span>")<br></ul>
+<h3>Import</h3>
+<code><ul><li>FD</li><li>FS</li><li>Browser(browse:Browse)</li><li>Select at "<span class="string">x-ozlib://duchier/cp/Select.ozf"
+</span></li><li>GUtils at "<span class="string">x-ozlib://anders/strasheela/source/GeneralUtils.ozf"
+</span></li><li>SMapping at "<span class="string">x-ozlib://anders/strasheela/source/ScoreMapping.ozf"
+</span></li><li>Pattern at "<span class="string">x-ozlib://anders/strasheela/Pattern/Pattern.ozf"
+</span></li></ul></code>
+<h3>Export</h3>
+<code><ul><li>&lt;P/3:<a href="#entity150"><span class="functionname">GetFeature</span></a>&gt;
+</li><li>&lt;P/3:<a href="#entity151"><span class="functionname">UnequalParameter</span></a>&gt;
+</li><li>&lt;P/4:<a href="#entity152"><span class="functionname">UnequalParameterR</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity153"><span class="functionname">NeighboursWithUnequalParameter</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity154"><span class="functionname">Distinct</span></a>&gt;
+</li><li>&lt;P/3:<a href="#entity155"><span class="functionname">DistinctR</span></a>&gt;
+</li><li>&lt;P/1:<a href="#entity156"><span class="functionname">DistinctNeighbours</span></a>&gt;
+</li><li>&lt;P/1:<a href="#entity157"><span class="functionname">PairwiseDistinct</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity158"><span class="functionname">ButNDistinct</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity159"><span class="functionname">DistinctForN</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity160"><span class="functionname">CommonPCs</span></a>&gt;
+</li><li>&lt;P/3:<a href="#entity161"><span class="functionname">CommonPCsR</span></a>&gt;
+</li><li>&lt;P/1:<a href="#entity162"><span class="functionname">NeighboursWithCommonPCs</span></a>&gt;
+</li><li>&lt;P/4:<a href="#entity163"><span class="functionname">ParameterDistance</span></a>&gt;
+</li><li>&lt;P/5:<a href="#entity164"><span class="functionname">ParameterDistanceR</span></a>&gt;
+</li><li>&lt;P/3:<a href="#entity165"><span class="functionname">LimitParameterDistanceOfNeighbours</span></a>&gt;
+</li><li>&lt;P/3:<a href="#entity166"><span class="functionname">IsStep</span></a>&gt;
+</li><li>&lt;P/4:<a href="#entity167"><span class="functionname">IsStepR</span></a>&gt;
+</li><li>&lt;P/3:<a href="#entity168"><span class="functionname">ResolveStepwiseR</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity170"><span class="functionname">PassingNotePitches</span></a>&gt;
+</li><li>&lt;P/3:<a href="#entity171"><span class="functionname">PassingNotePitchesR</span></a>&gt;
+</li><li>&lt;P/3:<a href="#entity172"><span class="functionname">IsPassingNoteR</span></a>&gt;
+</li><li>&lt;P/3:<a href="#entity169"><span class="functionname">IsBetweenChordNotesR</span></a>&gt;
+</li><li>&lt;P/3:<a href="#entity173"><span class="functionname">IsAuxiliaryR</span></a>&gt;
+</li><li>&lt;P/3:<a href="#entity174"><span class="functionname">IsBetweenStepsR</span></a>&gt;
+</li></ul></code>
+<h3>Define</h3>
+
+<code>
+<a name="entity150">
+<span class="keyword">proc</span>{<span class="functionname">GetFeature</span> X Feat I}<br>
+<span class="string"> Constraints the chord/scale X: the arbitrary (user defined) chord/scale database feature value at Feat is accessed/constrained to I (a FD int or FS var, depending on the feature). For instance, if X is a chord and the chord database defines a numeric 'dissonanceDegree' for each chord in the database, <code> {GetFeature X 'dissonanceDegree' 2} </code> constraints the index of X to point to a chord spec in the database which has a dissonanceDegree of 2.<BR>
+ NB. GetFeature employs a selection constrain: multiple applications of GetFeature with the same Feat will accessed/constrain the same value I with multiple selection constraint propagators, which should be avoided..<BR>
+<BR>
+ !! NB: does not work for intervalDB, because there is no interval ADT which defines getDB and getIndex for interval.<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity151">
+<span class="keyword">proc</span>{<span class="functionname">UnequalParameter</span> X Y Fn}<br>
+<span class="string"> The chords/scales X and Y differ in the parameter/attribute accessed by Fn (a unary function or method). For instance, <code> {UnequalParameter X Y getIndex} </code> constrains the indices of X and Y to differ.<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity152">
+<span class="keyword">proc</span>{<span class="functionname">UnequalParameterR</span> X Y Fn B}<br>
+<span class="string"> Reified version of DistinctParameter: B=1 <-> chords/scales X and Y differ in the parameter/attribute accessed by Fn.<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity153">
+<span class="keyword">proc</span>{<span class="functionname">NeighboursWithUnequalParameter</span> Xs Fn}<br>
+<span class="string"> All successive chord/scale pairs in list Xs differ in the parameter/attribute accessed by Fn.<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity154">
+<span class="keyword">proc</span>{<span class="functionname">Distinct</span> X Y}<br>
+<span class="string"> The chords/scales X and Y have either different indices or different transpositions or both. <BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity155">
+<span class="keyword">proc</span>{<span class="functionname">DistinctR</span> X Y B}<br>
+<span class="string">  B=1 <-> The chords/scales X and Y have either different indices or different transpositions or both.<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity156">
+<span class="keyword">proc</span>{<span class="functionname">DistinctNeighbours</span> Xs}<br>
+<span class="string"> All successive chord/scale pairs in list Xs have either different indices or different transpositions or both.<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity157">
+<span class="keyword">proc</span>{<span class="functionname">PairwiseDistinct</span> Xs}<br>
+<span class="string"> All chords/scales in list Xs are pairwise distinct, i.e. they have either different indices or different transpositions or both.<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity158">
+<span class="keyword">proc</span>{<span class="functionname">ButNDistinct</span> Xs N}<br>
+<span class="string"> All but N (a FD int) chords/scales in list Xs are pairwise distinct, i.e. they have either different indices or different transpositions or both. That is, N=4 <-> four chords/scales are not unique in Xs (either all four are the same or two different chords/scales repeated).<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity159">
+<span class="keyword">proc</span>{<span class="functionname">DistinctForN</span> Xs N}<br>
+<span class="string"> Xs (a list of chords/scales) is split into sublists of length N: in each sublist, all chords/scales are pairwise distinct.<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity160">
+<span class="keyword">proc</span>{<span class="functionname">CommonPCs</span> X Y}<br>
+<span class="string"> Constraints the chords/scales X and Y to have at least 1 common pitch class.<BR>
+ NB: The constraint introduces auxilary variables which possibly remain undetermined in the solution. <BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity161">
+<span class="keyword">proc</span>{<span class="functionname">CommonPCsR</span> X Y B}<br>
+<span class="string"> Reified version of CommonPCs: B=1 <-> chords/scales X and Y have at least 1 common pitch class.<BR>
+ NB: The constraint introduces auxilary variables which possibly remain undetermined in the solution. <BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity162">
+<span class="keyword">proc</span>{<span class="functionname">NeighboursWithCommonPCs</span> Xs}<br>
+<span class="string"> Each successive chord/scale pair in list Xs has at least 1 common pitch class.<BR>
+ NB: The constraint introduces auxilary variables which possibly remain undetermined in the solution. <BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity163">
+<span class="keyword">proc</span>{<span class="functionname">ParameterDistance</span> X Y Fn I}<br>
+<span class="string"> Constraints the distance between the parameter/feature accessible with Fn of the chords/scales X and Y to I (a FD integer). For instance, if X and Y are chords and the chord database defines the numeric feature dissonanceDegree, the dissonanceDegree distance between X and Y is set to 1 by<BR>
+ <code> {ParameterDistance X Y fun {$ X} {GetFeature X dissonanceDegree} end 1} </code><BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity164">
+<span class="keyword">proc</span>{<span class="functionname">ParameterDistanceR</span> X Y Fn I B}<br>
+<span class="string"> Reified version of ParameterDistance.<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity165">
+<span class="keyword">proc</span>{<span class="functionname">LimitParameterDistanceOfNeighbours</span> Xs Fn Max}<br>
+<span class="string"> Limits the the distance between the parameter/feature accessible with Fn of the neigbouring chords/scales in Xs not to exceed Max (a FD integer, but in most cases an integer will do).<BR>
+<BR>
+ !! Better define LimitDistanceOfNeighbours as Pattern expecting list of FD ints..<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity166">
+<span class="keyword">proc</span>{<span class="functionname">IsStep</span> Pitch1 Pitch2 MaxStep}<br>
+<span class="string"> The interval between Pitch1 and Pitch2 is in [1, MaxStep].<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity167">
+<span class="keyword">proc</span>{<span class="functionname">IsStepR</span> Pitch1 Pitch2 MaxStep B}<br>
+<span class="string"> In case B=1, the interval between Pitch1 and Pitch2 is in [1, MaxStep]. B is implicitly declared an 0/1 integer. <BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity168">
+<span class="keyword">proc</span>{<span class="functionname">ResolveStepwiseR</span> Note Args B}<br>
+<span class="string"> Constraints the interval between the pitches of Note and its successor to be in [0, MaxStep]. MaxStep defaults to 2 and can be set as optional feature of Args. Per default, the successor note is the successor of Note in the sequence of items contained in the temporal aspect of Note (i.e. the sequence/list returned by {GetTemporalAspectItems Note}). This setting can be changed with the optional Args feature getXs (e.g. to a function which does return the list of items recursively contained in the temporal aspect of the temporal aspect Note. Such setting would apply ResolveStepwiseR even across container boundaries when Note is the last element in its temporal aspect).<BR>
+ In case Note has no successor, B=0.<BR>
+<BR>
+ BTW: ResolveStepwiseR defines a dissonance treatment simplification. Most of the conventional non-harmonic note pitch conditions identified by Piston (see above) are permitted: appoggiatura, passing note, suspension, anticipation, auxiliary, and cambiata. Only the echappee is excluded by ResolveStepwiseR.<BR>
+ Nevertheless, the simplification ResolveStepwiseR allows also cases which are not permitted by the conventional non-harmonic note pitch treatment (e.g. an appoggiatura on an easy beat, or a long anticipation which preceeds a short note on an easy beat).<BR>
+ Problem: if any note (even regardless of metric position) can be understood as appoggiatura, the implicit harmony is easily misread.<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity170">
+<span class="keyword">proc</span>{<span class="functionname">PassingNotePitches</span> [Pitch1 Pitch2 Pitch3] MaxStep}<br>
+<span class="string"> Constraints [Pitch1 Pitch2 Pitch3] such that Pitch2 forms a passing note pitch. The intervals between neighbouring pitches are in [1, MaxStep] (usually, MaxStep = PitchesPerOctave div 6) and the pitch sequence is either monotonically increasing or decreasing. All pitches are FD ints, MaxStep is int.<BR>
+ NB: for this rule, it is irrelevant whether any pitch is consonant, or dissonant and whether it is a chord pitch or not.<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity171">
+<span class="keyword">proc</span>{<span class="functionname">PassingNotePitchesR</span> [Pitch1 Pitch2 Pitch3] MaxStep B}<br>
+<span class="string"> Reified version of PassingNotes (see above).<BR>
+ NB: Introduces a FD int which may not be determined (in case B=0).<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity172">
+<span class="keyword">proc</span>{<span class="functionname">IsPassingNoteR</span> Note Args B}<br>
+<span class="string"> In case B=1, Note is a passing note between its predecessor and successor. Args is a record of optional arguments: maxStep (defaults to 2) and getXs, a unary function applied to Note returning the list of items in the melody including Note, defaults to the items in the temporal aspect of Note.<BR>
+ See also PassingNotePitches and PassingNotePitchesR above.<BR>
+ In case Note has no predecessor or successor, B=0.<BR>
+ BTW: IsPassingNoteR is a generic passing note definition which can be applied, e.g., to a melody across container boundaries (e.g. a melody consisting in motifs which consist in note sequences) by returning the list of notes in this melody from getXs.<BR>
+ NB: Predecessor and successor of Note must be notes as well!<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity169">
+<span class="keyword">proc</span>{<span class="functionname">IsBetweenChordNotesR</span> Note Args B}<br>
+<span class="string"> In case B=1, both the predecessor and successor of Note return 1 (i.e. true) for the method isInChord (which means that both notes are harmonic notes: their pitch class is included in the pitch classes of their repsective chord).  Args is a record with the optional argument getXs, a unary function applied to Note returning the list of items in the melody including Note, defaults to the items in the temporal aspect of Note.   <BR>
+ In case Note has no predecessor or successor, B=0. <BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity173">
+<span class="keyword">proc</span>{<span class="functionname">IsAuxiliaryR</span> Note Args B}<br>
+<span class="string"> In case B=1, both the predecessor and successor of Note have the same pitch and the pitch of Note is only a step away.<BR>
+ Args is a record with the optional argument maxStep (defaults to 2) and getXs (a unary function applied to Note returning the list of items in the melody including Note, defaults to the items in the temporal aspect of Note). See also ResolveStepwiseR for an explaination of Args.<BR>
+ In case Note has no predecessor or successor, B=0. <BR>
+ NB: Predecessor and successor of Note must be notes as well!<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity174">
+<span class="keyword">proc</span>{<span class="functionname">IsBetweenStepsR</span> Note Args B}<br>
+<span class="string"> In case B=1, both the pitches of the predecessor and successor are only a step away from Note's pitch.<BR>
+ Args is a record with the optional argument maxStep (defaults to 2) and getXs (a unary function applied to Note returning the list of items in the melody including Note, defaults to the items in the temporal aspect of Note). See also ResolveStepwiseR for an explaination of Args.<BR>
+ In case Note has no predecessor or successor, B=0.<BR>
+<BR>
+ BTW: This rule generalises passing note and auxiliary. Nevertheless, a further case is also permitted: pitch contour between three successive notes as for an auxiliary, but predecessor and successor have different pitches. For instance, in case maxStep=2, predecessor and successor differ by a semitone.<BR>
+ NB: Predecessor and successor of Note must be notes as well!<BR>
+<BR>
+</span>
+</code><br>
+<h3>End</h3>
+</div></body>
+</html>

@@ -1,0 +1,86 @@
+#title Todo for [Strasheela] Prototyper
+
+
+* !! Allow for 'subexamples' of lesson 
+
+Allow for multiple <oz title="bla">my code</oz> sections per lesson in XML file. So, I can pre-produce examples for playing around with various settings.  
+
+These can be selected via a dropdown list box just (above the code widget) in Tutorial/Prototyper application. 
+In case a lesson has only a single <oz>my code</oz> sections, then I just leave out the title and an empty entry in dropdown list box signals user that there are no other 'subexamples'.
+
+
+* !! Bug
+
+Lesson comment causes error when executed (empty statement wrapped in try catch ..)
+
+
+* !!?? Add more modes for execution 
+
+I may add stuff like 'browse buffer/region/line',  
+
+I may also make it settable in lesson def whether some example code is a statement (just execute) or an expression which is browsed. 
+
+E.g., I may specify  <oz mode="browse">my expression</oz>
+
+
+* ?? Extend List View of Examples to Tree View
+
+I already organise my lessons in subdirs. 
+
+Introducing the tree view would be more organised GUI, but it also becomes somewhat clumsy..
+
+see the Tree module in present dir...
+
+
+* ?? Explanation Windows is not only for Plain Text But Somehow Markup Text and Hyperlinks (for HTML doc...)
+
+I only need hyperlinks, and perhaps headlines. Nothing more! 
+
+see the Help module in the present dir...
+
+I can even link to HTML pages and show them in a browser!
+
+
+* ?? Shall Prototyper Compiler Reads OZRC?
+
+For example, if I want the OutputGUI save settings in the OZRC and I want to use the OutputGUI with the Prototyper, then I have to read the OZRC as well..
+
+
+* ?? Shall Prototyper Compiler be Reused 
+
+Shall Prototyper instantiate and use a single compiler instance? Currently, a compiler instance is recreated for every Prototyper code feed.
+
+Shall I use the OzServer Compiler?? Has full Oz environment, reads OZRC, and opens Panel. 
+ -> No, keep things separate (for possible code sharing later). Redoing this stuff is simple. Besides, OzServer has only socket interface...
+
+
+* ?? [Cleanup for sharing] Separate Prototyper App and the Content it reads 
+
+e.g., make content dir which the Prototyper reads an argument for the Prototyper creation
+
+
+
+-------------------------------------
+
+* Done 
+
+
+OK * Make it a Stand-Alone Program
+
+This allows users to start it without any knowledge of Oz nor emacs...
+
+Shall I then open Compiler Panel for Feedback??
+
+
+
+
+
+
+
+
+
+
+
+
+
+

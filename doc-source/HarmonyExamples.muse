@@ -1,0 +1,524 @@
+#title A Collection of of Harmonic Constraint Satisfaction Problems
+
+[[StrasheelaExamples][back]]
+
+<contents depth="2">
+
+
+This section presents several harmonic constraint satisfaction problems. Strasheela provides a [[../contributions/anders/HarmonisedScore/doc/index.html][harmony model]] which makes it relatively easy to define harmonic CSPs, because this model predefines the required building blocks. This section demonstrates this model with examples. These examples are often edited versions of each other -- in order to encourage you to create your own by further editing them ;-)
+
+
+* Forming Music which Expresses a Harmony
+
+The examples in this section demonstrate the use of Strasheela's harmony model for constraining note pitches in a score to follow pre-composed harmonic progressions. Additional constraints further shape the music, for example, constrain melody pitches to follow a specific contour. 
+ 
+
+#firstExample
+** Expressing a Single Chord
+
+
+The first example constrains all pitch classes of a sequence of notes to members of the chord D major. The actual pitches are chosen randomly by the search. In the music notation of this and all following examples, *the lowest staff is not sounding* but shows analytical information on the harmony (the chord root note and a textual description).
+
+
+  [[../doc/sound/harmony-ex01.mp3][../doc/sound/harmony-ex01.preview.png]]
+
+;  [[../doc/sound/harmony-ex01.mp3][mp3]] [[../doc/sound/harmony-ex01.mid][midi]]
+
+
+*** Setting the Harmony Database
+
+Strasheela's harmony model makes use of user-defined harmonic material such as chords, scales and intervals. The user specifies this material by filling 'databases' provided by the model. The following code fragment defines a chord database consisting of a single major chord. A chord database entry usually contains the features =pitchClasses= and =roots=. The example specifies the chord pitch classes =[0 4 7]= (denoting *c*, *e*, and *g*), the only possible root of this chord 0 (i.e. *c*), and a short description at the =comment= feature. Other chords may have multiple root pitch class candidates. For example, the diminished seventh chord =[0 3 6 9]= is very ambiguous and allows for the following four possible root pitch classes =[2 5 8 11]=, depending on the interpretation of the chord ([[http://www.amazon.com/gp/product/0520049446/qid=1149574943/sr=2-2/ref=pd_bbs_b_2_2/104-1993379-1061553?s=books&v=glance&n=283155][Schoenberg (1911)]] calls such chords *vagrant harmonies*). 
+
+<src lang="oz">
+  MajorChordSpec = chord(comment:'major'
+  		         pitchClasses:[0 4 7]
+		         roots:[0])
+  {HS.db.setDB unit(chordDB:chords(MajorChordSpec))}
+</src>
+
+A chord database consists of untransposed chord types. For example, a database may consist in the three chord types major chord, minor chord, and major seventh chord. The database chords can then be transposed in the CSP. For example, an instance of the major chord in the database can be transposed by 2 such that it becomes a D major chord (as in the music notation above).
+
+
+*** CSP Definition
+
+Following is the full implementation of the example above. The definition consists mainly of a specification of the music representation: a sequence of =N= notes with undetermined pitches running in parallel to a single chord (the notion of nested score objects and the function =LUtils.collectN= were introduced [[Example-FloridCounterpoint][before]]). The note sequence and the chord both start at time 0 (derived from the start time of their surrounding simultaneous container), and end at the same time (the end time of both objects is unified by setting it to the same variable =EndTime=). 
+The chord is determined to the first chord in the database above (index 1) and is transposed by 2, that is the chord is a D major chord with the pitch classes ={2, 6, 9}=. 
+
+#firstExampleCode
+<src lang="oz">
+  proc {MyScript HarmonisedScore}
+     N=12 EndTime
+  in
+     HarmonisedScore = {Score.makeScore
+		        sim(items:[seq(items:{LUtils.collectN N
+					      fun {$}
+					         note(duration:4
+						      pitch:{FD.int 60#72}
+						      amplitude:64)
+					      end}
+				       endTime:EndTime)
+				   chord(endTime:EndTime
+		                         index:1 	       
+				         transposition:2)]
+			    startTime:0
+			    timeUnit:beats(4))
+		        Aux.myCreators} 
+  end
+</src>
+
+The actual 'magic' of the example -- the established relation between the notes and the chord is hidded 'backstage' for simplicity: the note creator function -- which is part of =Aux.myCreators= -- constrains the pitch of each note it creates to express the harmony of the simultaneous chord object. This technique will be explained [[#noteToChordRelation][later]]. 
+The [[../doc/oz/harmony-ex01.oz][source]] of this first example is extensively documented. 
+
+
+*** Pitch Representation 
+
+This example (as well as the following examples) make use of an extended note object provided by the harmony model (see [[../contributions/anders/HarmonisedScore/doc/node3.html#entity88][HS.score.note]]). 
+This extended note object represents its pitch by three interdependent constrained variables: the note's =pitch= (in the following examples measured in MIDI keynumbers, 60 is middle *c*), =pitchClass= (0 denotes *c*), and =octave=. Strasheela's harmony model also introduces variables for a (scale) =degree= and =accidental=, but these variables are not used in the present examples for simplicity. Consequently, the music notation export has too little information to distinguish between enharmonic pitches (e.g. *c*-sharp and *d*-flat), and hence only sharp accidentals are used in the notation. Likewise, the notation export does not specify key signatures.
+
+
+
+** Monophony with Additional Pattern Constraints
+
+The following examples slightly variate the example before, by applying a few additional rules. 
+These rules restrict the melody to form specific melodic patterns -- while still expressing the underlying harmony. 
+The next example constrains the melody to form a continuously raising pitch succession. In addition, the melody must start with the chord root. 
+Besides, this example also changes the chord in the database and sets it to a minor chord with an added sixth (pitch classes {0, 3, 7, 9}). 
+
+  [[../doc/sound/harmony-ex02.mp3][../doc/sound/harmony-ex02.preview.png]]
+
+; [[../doc/sound/harmony-ex02.mp3][mp3]] 
+; [[../doc/sound/harmony-ex02.mid][midi]]
+  [[../doc/oz/harmony-ex02.oz][source]]
+
+
+
+The example differs only slightly from the [[#firstExampleCode][example above]]. The added bits are marked by comments. The feature =handle= (supported by the textual representation of every Strasheela score object) was already introduced in the [[Example-FloridCounterpoint][florid counterpoint example]]: this feature binds a variable (here =MyNoteSeq= and =MyChord=) to the corresponding score object instance. Two rules are applied to these two variables. 
+
+#increasingPitchesCode
+<src lang="oz">
+proc {MyScript HarmonisedScore}
+   N=8				
+   EndTime MyNoteSeq MyChord
+in
+   HarmonisedScore = {Score.makeScore
+		      sim(items:[seq(handle:MyNoteSeq  % bind seq object to MyNoteSeq
+				     items:{LUtils.collectN N
+					    fun {$}
+					       note(duration:4
+						    pitch:{FD.int 48#72}
+						    amplitude:64)
+					    end}
+				     endTime:EndTime)
+				 chord(handle:MyChord
+				       endTime:EndTime
+				       transposition:2)]
+			  startTime:0
+			  timeUnit:beats(4))
+		      Aux.myCreators}
+   %% pitch class of first note is chord root
+   {{Nth {MyNoteSeq getItems($)} 1} getPitchClass($)} = {MyChord getRoot($)}
+   %% constrain pitches of the note in NoteSeq to raise continuously 
+   {Pattern.increasing {MyNoteSeq mapItems($ getPitch)}}
+end
+</src>
+  
+The additional rules (the last two lines in the example) are explained in the following. Firstly, how is the pitch class of the first note set to the chord root? 
+The first melody pitch is accessed with the following expression (the method =getItems= returns all score objects directly contained a [[../doc/api/node6.html#entity186][sequential container]], a subclass of [[../doc/api/node6.html#entity182][container]])
+
+<src lang="oz">  
+{Nth {MyNoteSeq getItems($)} 1}
+</src>
+  
+The pitch class of this note is then accessed (with the method =getPitchClass=) and constrained to (i.e. unified with) the root of the chord.    
+
+The sequence of melody pitches is constrained to raise continuously in the following way. The pitch sequence of the melody is accessed with the method =mapItems=. =mapItems= is a higher-order method, that is it expects a function or a method as argument.
+
+<src lang="oz">
+{MyNoteSeq mapItems($ getPitch)}
+</src>
+
+
+The method =mapItems= applies the method =getPitch= to every score object -- i.e. every note -- directly contained in =MyNoteSeq= and returns the collected pitch variables. This pitch sequence is then constrained by the pattern constraint [[../contributions/anders/Pattern/doc/node1.html#entity11][Pattern.increasing]]. 
+
+
+These basic principles can be applied to constrain the shape of the melody in various ways. The next example constrains the pitch classes of the notes in =NoteSeq= to form a cycle pattern of length 4. Moreover, all pitches must be pairwise distinct. 
+
+  [[../doc/sound/harmony-ex03.mp3][../doc/sound/harmony-ex03.preview.png]]
+
+;  [[../doc/sound/harmony-ex03.mp3][mp3]] [[../doc/sound/harmony-ex03.mid][midi]] 
+  [[../doc/oz/harmony-ex03.oz][source]]
+
+This example replaces the two melody constraint code lines shown [[#increasingPitchesCode][above]] by the following two lines. [[../contributions/anders/Pattern/doc/node1.html#entity16][Pattern.cycle]] constrains the pitch classes to form a cycle pattern of length 4. [[http://www.mozart-oz.org/documentation/system/node22.html#section.fd.nonlinear][FD.distinct]] forces all pitches in the melody (in contrast to the pitch classes) to be pairwise distinct. 
+
+<src lang="oz">
+{Pattern.cycle {MyNoteSeq mapItems($ getPitchClass)} 4}
+{FD.distinct {MyNoteSeq mapItems($ getPitch)}}
+</src>
+
+Many more [[../contributions/anders/Pattern/doc/node1.html][pattern constrains]] could be used to constrain the melody pitches, pitch classes, or dependent variables. For example, the *intervals* between the melody pitches may be constrained to form a [[../contributions/anders/Pattern/doc/node1.html#entity17][rotation pattern]]. Alternatively, a pattern constraint could be applied to only a subsequence of the melody notes. For example, the first =N= note pitches may be constrained to increase, whereas the remaining note pitches may decrease.   
+
+Nevertheless, a melody consisting only of chord notes is a rather restricted case. Therefore, the next section explains how to introduce non-harmonic tones in a controlled way. 
+
+
+** Allowing for Non-Harmonic Tones 
+
+This example is very similar to the previous examples, but it allows for non-harmonic (or non-chord) tones as well (non-harmonic tones are marked by an 'x' above the note). However, non-harmonic tones are only allowed under specific circumstances. In this example, [[http://en.wikipedia.org/wiki/Nonchord_tone#Passing_tone][passing tones]] are the only non-harmonic tones permitted (chord tones can of course occur freely as before). 
+Moreover, non-harmonic tones must always be [[http://en.wikipedia.org/wiki/Diatonic][diatonic]] tones: even if melodic notes do not fit into their corresponding chord, they must nevertheless fit into a scale which is suitable for the chord.    
+The chord in this example is the plain D minor chord (i.e. the pitch classes {0, 3, 7}, transposed by 2). The scale is the D minor scale (i.e. the pitch classes {0, 2, 3, 5, 7, 8, 10}, also transposed by 2).
+In addition, the example constrains the melodic contour of the melody. The melody first raises and then falls. 
+
+
+  [[../doc/sound/harmony-ex04.mp3][../doc/sound/harmony-ex04.preview.png]]
+
+;  [[../doc/sound/harmony-ex04.mp3][mp3]] [[../doc/sound/harmony-ex04.mid][midi]] 
+  [[../doc/oz/harmony-ex04.oz][source]]
+
+
+The following example again variates only the pattern constraint applied to the pitch sequence of the melody. In this case, the melodic contour follows a cycle pattern. Here, the melodic contour is a sequence of directions of melodic intervals (i.e., whether the melodic interval is ascending, descending, or is unison). 
+
+  [[../doc/sound/harmony-ex05.mp3][../doc/sound/harmony-ex05.preview.png]]
+
+;  [[../doc/sound/harmony-ex05.mp3][mp3]] [[../doc/sound/harmony-ex05.mid][midi]] 
+  [[../doc/oz/harmony-ex05.oz][source]]
+
+
+#noteToScaleRelation
+*** Constraining the Relation of a Note to a Scale 
+
+The last two examples constrained every melody note to fit into a given scale. This section explains how this relation between notes and a scale is defined. First of all, the examples add a scale to their harmony database. A scale has a collection of (untransposed) scale pitch classes and a collection of (untransposed) root pitch class candidates. There is unusally only a single scale root candidate, nevertheless a scale database entry has the same format as a chord database entry for consistency. 
+
+<src lang="oz">
+{HS.db.setDB unit(chordDB:chords(chord(comment:'minor'
+				       pitchClasses:[0 3 7]
+				       roots:[0]))
+		  scaleDB:scales(scale(comment:'minor'
+				       pitchClasses:[0 2 3 5 7 8 10]
+				       roots:[0])))}
+</src>
+
+Next, the examples instantiate a scale object. Former examples instantiated chord objects as part of the temporal score. This approach is also valid for a scale object, but for the present examples it is more simple to instantiate this object `directly'. The =index= of the scale can be omitted and is derived implicitly (there is only a single scale in the database). The transposition is set to 2, that is the resulting scale represents the D minor scale. 
+
+<src lang="oz">
+D_Minor = {Score.makeScore2 scale(transposition:2)
+	   Aux.myCreators}
+</src>
+
+
+Finally, the examples extend the textual specification of the note objects in order to tell each note to which scale it belongs. In the present case, the note-scale relation is very simple. All notes are related to the same scale, this scale is already known in the CSP definition, and the pitch class of every note is a member of the scale's pitch class set.  
+However, there are cases where all this information may be missing in the CSP definition, where this information is constrained, and found out only during the search process. In order to allow for such cases, Strasheela's harmony model is highly programmable. 
+Therefore, the following note specification is relatively complex for a simple example like the present one. 
+Nevertheless, this complexity can be hided in case it is not needed. For example, the relation between notes and chords in the previous examples was defined in the same way (see [[#noteToChordRelation][below]]), but these examples didn't show this specification at all. Instead, these examples used some predefined and easy-to-use abstraction (here =Aux.myCreators=), which created this relation `backstage'. 
+
+We will now study the definition of the relation between a note and a scale in full detail.
+To each note specification, the arguments =getScales=, =isRelatedScale=, and =inScaleB= are added. The arguments =getScales= and =isRelatedScale= express which scale the note is related to, and =inScaleB= indicates whether the note's pitch class is a member of the scale's pitch class set (=inScaleB= is 1) or not (=inScaleB= is 0). 
+The arguments =getScales= and =isRelatedScale= expect first-class functions (i.e. procedures which return their last value). The function (given to) =getScales= returns a list of related scale candidates. The function =isRelatedScale= returns a boolean variable (i.e. a constrained variable with the domain {0, 1}) indicating whether or not a given scale candidate is indeed related to a given note. 
+In the note specification below, the function =getScales= simply returns a list which only contains the D minor scale defined above. The function =isRelatedScale= always returns true (i.e. 1). The argument =inScaleB= is set to 1, that is the note must be a diatonic note in the D minor scale. 
+
+<src lang="oz">
+note(duration: 4
+     pitch: {FD.int 60#72}
+     getScales: proc {$ MyNote MyScales} MyScales = [D_Minor] end
+     isRelatedScale: proc {$ MyNote MyScale B} B = 1 end	
+     inScaleB: 1
+     amplitude: 64)
+</src>
+
+
+**** Efficiency Remarks 
+
+A simpler note creation interface would only introduce a single function =getScale= instead of the two functions =getScales= and =isRelatedScale=. Strasheela introduces these two functions for efficiency reasons. Efficiency is an important concern, because a generic system like Strasheela effectively invites the user to define highly complex CSPs. If not defined cautiously, they quickly result in problems which can take a long time to solve (e.g. hours or even days). All CSP defined here, however, are solved reasonably fast (usually within a few milliseconds -- the longest time before a result is shown is taken by Lilypond ;-) ). 
+
+Strasheela's constraint programming model features constraint propagation, which reduces the domain of constrained variables by automatic deduction and that way considerably reduces the search space (see [[Publications][my thesis]] for details). However, constraint propagation first needs to know which variables are involved in the propagation process. The function =getScales= is purely deterministic, and constraint propagation between the parameters of the note and scales can not happen before =getScales= returned its list of scale candidates. In fact, =getScales= should best only depend on information already available in the CSP definition and should immediately return. Besides, the user should aim to keep the number of chord candidates low in order to keep the search space as small as possible.
+The function =isRelatedScale=, on the other hand, can *constrain* the relation between a note and a scale candidate. This function defines an arbitrary relation between a note object, a scale object, and a boolean variable. The constraints posted by =isRelatedScale= cause propagation.  
+In the example above, the function =getScales= returns a list with only a single scale candidate. Therefore, the function =isRelatedScale= is not really needed here -- it sets its boolean argument always to *true* (i.e. 1).  
+
+
+***[NB: the following sections are unfinished, please come back later]***
+
+
+#noteToChordRelation
+*** Constraining the Relation of a Note to a Chord
+
+; This is a opportunity to explain how the relation of a note to a chord
+
+
+; note's pitch class is possibly
+; not a chord note (was always 1
+; in previous examples)
+
+; note's pitch class is always in
+; MyScale (i.e. diatonic)
+
+; (i.e. rules returning
+; boolean variable, where 0 means false and 1
+; means true)
+
+
+; The relation of a note to a chord (implicitly defined by all examples so far with =Aux.myCreators=) is controlled in a similar way. 
+
+
+; The note creator in =Aux.myCreators= constrains the pitch of a note to express the harmony of the simultaneous chord object. This note creator expands the specification of each note of the example into the following, and then instantiates a note class provided by Strasheela's harmony model (=HS.score.note=) with this specification.  
+
+<src lang="oz">
+note(duration:4
+     pitch:{FD.int 60#72}
+     amplitude:64
+     inChordB:{FD.int 0#1}
+     getChords:proc {$ Self Chords}
+		  Chords = {Self getSimultaneousItems($ test:HS.score.isChord)}
+	       end
+     isRelatedChord:proc {$ Self Chord B} B=1 end)
+</src>
+
+; The note arguments =inChordB=, =getChords= and =isRelatedChord= demonstrate the high degree of programmability of the harmony model. The arguments =getChords= and =isRelatedChord= express which chord the note is related to, and =inChordB= indicates whether the note's pitch class is a member of the chord's pitch classes (=inChordB= is 1) or not (=inChordB= is 0). 
+
+
+; temporal structure is determined 
+
+; mean the following. 
+
+
+; The arguments =getChords=, =isRelatedChord=, and =inChordB= are explained in more detail in the documentation of the abstract class [[../contributions/anders/HarmonisedScore/doc/node3.html#entity84][HS.score.inChordMixinForNote]] -- which is a superclass of the class [[../contributions/anders/HarmonisedScore/doc/node3.html#entity88][HS.score.note]]. 
+
+
+**** Efficiency Remarks
+
+; Please note: function =getChords= returns immediately the simultaneous chord, because the rhythmical structure of the example is fully determined in the CSP definition. 
+; In the case that the rhythmical structure of the music is constrained as well, the execution of =getChords= will be delayed until the temporal position of both the note and the chord is determined (actually, things are even a bit more complex, but this explanation is sufficient to get some idea about what happens in the background). In case the rhythmical structure of the music is not known in the CSP definition, then it will be more efficient to define =getChords= in such a way that  
+
+; Compare the section about undetermined score contexts in my thesis 
+ 
+; Nevertheless, a small example (as the one [[#constrainRhythmicalStructure][below]]) even finds a solution for both the rhythmical and the harmonic structure in a reasonable amount of time with the approach presented here. 
+
+
+*** Allowing for Non-Harmonic Notes in a Controlled Way
+
+This subsection explain how the examples above restrict non-harmonic tones to only specific conditions such as passing tones. 
+
+
+; The note method nonChordPCConditions expects a
+; list of reified rules (i.e. rules returning
+; boolean variable, where 0 means false and 1
+; means true) which define allowed non-harmonic
+; note cases (see ../contributions/anders/HarmonisedScore/doc/class2.html).
+; Aux.isPassingNoteR is predefined for convenience.
+
+; If multiple non-chord tone conditions are given to =nonChordPCConditions=, then every non-chord tone must fulfil at least one of them.
+
+<src lang="oz">
+{MyNoteSeq
+ forAllItems(proc {$ MyNote}
+	       {MyNote nonChordPCConditions([Aux.isPassingNoteR])} 
+	     end)}
+</src>
+
+
+The passing note rule is already predefined for convenience (=Aux.isPassingNoteR= calls [[../contributions/anders/HarmonisedScore/doc/node4.html#entity146][HS.rules.isPassingNoteR]] from Strasheela's harmony model). Nevertheless, you can also define such non-chord conditions yourself. For example, the rule =ResolveStepwiseR= constrains that a non-chord tone is always resolved stepwise: the interval to its successor note is 2 at maximum. This rule is a generalisation of a passing tone and a [[http://en.wikipedia.org/wiki/Nonchord_tone#Neighbour_tone][neighbour tone]] (or auxiliary tone), where multiple non-chord tone can also follow each other. This rule also states that the first and last note in the melody must be chord tones. 
+
+<src lang="oz">
+proc {ResolveStepwiseR Note1 B}
+   MaxStep = 2
+   Container = {Note1 getTemporalAspect($)}
+in
+   if {Note1 isFirstItem($ Container)}
+      orelse {Not {Note1 hasSuccessor($ Container)}}
+      %% the first note and the last note must be chord tones
+   then B=0
+      %% the interval to the following note is MaxStep at maximum
+   else Note2 = {Note1 getSuccessor($ Container)} in
+      B = {FD.reified.distance
+	   {Note1 getPitch($)} {Note2 getPitch($)} '=<:' MaxStep}
+   end
+end
+</src>
+
+A non-chord condition constrains the boolean variable =B= to 1 (i.e. true) in case non-chord tones are permitted for the note argument (=Note1=), and to 0 in case only chord tones are valid. When the passing note rule is replaced by the rule =ResolveStepwiseR,= we get the following result. 
+
+  [[../doc/sound/harmony-ex04a.mp3][../doc/sound/harmony-ex04a.preview.png]]
+
+  [[../doc/oz/harmony-ex04.oz][source]]
+
+; A link to the full source of the examples can be found just under their score pitcures. 
+
+
+#constrainRhythmicalStructure
+** Constraining the Rhythmical Structure 
+
+All the examples shown here constrain only the pitch structure. Strasheela is not restricted to such CSPs (as was already shown in the [[Example-FloridCounterpoint][florid counterpoint]] example). The following example constrains the rhythmical structure and the pitch structure as well. 
+The example allows for various rhythmic note values, but all notes which are an eighth note or shorter *must* be non-harmonic notes and passing notes. In addition, the contour follows again a cycle pattern. 
+
+  [[../doc/sound/harmony-withRhythm1.mp3][../doc/sound/harmony-withRhythm1.preview.png]]
+
+  [[../doc/oz/harmony-withRhythm1.oz][source]]
+
+
+**** Efficiency Remarks 
+
+; This example keeps the same score object creators, i.e. the related chord of each note is the simultaneous chord.  
+
+; access is delayed until it is known which chord and note are simultaneous -- efficiency impaired
+
+; The  example also keeps the same search strategy (distribution strategy) as all the other examples defined here (see [[Publications][my thesis]] for details). 
+; For a complex polyphonic CSP which constrains the rhythmical structure and the pitch structure, however, a different [[#noteToChordRelation][relation between chords and notes]], and another search strategy might be more efficient. 
+
+
+** Multiple Voices
+
+
+
+simple case: four parallel voices. 
+three voices which express chord but without any further constraints
+and an additional long base note whose pitch class is constrained to chord root   
+
+;  [[../doc/sound/harmony-ex10.mp3][../doc/sound/harmony-ex10.preview.png]]
+  [[../doc/sound/harmony-ex10.mp3][../doc/sound/harmony-ex10.preview.png]]
+
+;  [[../doc/sound/harmony-ex10.mp3][mp3]] [[../doc/sound/harmony-ex10.mid][midi]] 
+  [[../doc/oz/harmony-ex10.oz][source]]
+
+
+constraining pitch classes of simultaneous notes to be different 
+
+
+;  [[../doc/sound/harmony-ex11.mp3][../doc/sound/harmony-ex11.preview.png]]
+  [[../doc/sound/harmony-ex11.mp3][../doc/sound/harmony-ex11.preview.png]]
+
+;  [[../doc/sound/harmony-ex11.mp3][mp3]] [[../doc/sound/harmony-ex11.mid][midi]] 
+  [[../doc/oz/harmony-ex11.oz][source]]
+
+
+
+
+** Expressing a Fixed Harmonic Progressions: a Simple Cadence 
+
+shown with multiple voices: then harmonic progression is more clear
+
+  [[../doc/sound/harmony-ex20.mp3][../doc/sound/harmony-ex20.preview.png]]
+
+;  [[../doc/sound/harmony-ex20.mp3][mp3]] [[../doc/sound/harmony-ex20.mid][midi]] 
+  [[../doc/oz/harmony-ex20.oz][source]]
+
+
+; *** ?? Messiaen Harmony 
+
+
+
+; *** Multiple Voices Forming a Canon 
+
+
+
+* Constraining the Harmony
+
+The following examples constrain the harmonic progression itself. 
+Please note that all techniques shown above can also be applied to examples where the harmony is searched for as well. 
+
+
+Setting the harmony database
+
+<src lang="oz">
+{HS.db.setDB unit(chordDB:chords(chord(comment:'maj'
+				       pitchClasses:[0 4 7]
+				       roots:[0])
+				 chord(comment:'min'
+				       pitchClasses:[0 3 7]
+				       roots:[0])))}
+</src>
+
+** Defining the Music Representation 
+
+<src lang="oz">
+sim(items:[seq(handle:MyVoice 
+	       items:{LUtils.collectN NoteNo
+		      fun {$}
+			 note(duration:NoteDur
+			      pitch:{FD.int 60#72}
+			      amplitude:64)
+		      end})
+	   %% chord indices and transpositions specified explicitly
+	   seq(handle:ChordSeq
+	       items:{LUtils.collectN ChordNo
+		      fun {$} chord(duration:ChordDur) end})]
+    startTime:0
+    timeUnit:beats(4))
+</src>
+
+** Defining a Simple Theory of Harmony 
+
+<src lang="oz">
+%% different root neighbours	
+{Pattern.for2Neighbours Chords
+ proc {$ Chord1 Chord2} {Chord1 getRoot($)} \=: {Chord2 getRoot($)} end}
+%% harmonic band
+{HS.rules.neighboursWithCommonPCs Chords}
+%% start and end with c
+0 = {Chords.1 getRoot($)} = {{List.last Chords} getRoot($)}
+</src>
+
+
+Contour follows cycle pattern  (the first three pitches are distinct) 
+
+  [[../doc/sound/harmony-ex30.mp3][../doc/sound/harmony-ex30.preview.png]]
+
+  [[../doc/oz/harmony-ex30.oz][source]]
+
+
+Only diatonic pitches in D-major (the key signature is missing..) -- again the contour follows cycle pattern.
+(the first three pitches are distinct)
+
+  [[../doc/sound/harmony-ex30b.mp3][../doc/sound/harmony-ex30b.preview.png]]
+
+  [[../doc/oz/harmony-ex30b.oz][source]]
+
+
+Multiple voices, allow for non-harmonic but diatonic pitches (again D-major) 
+
+  [[../doc/sound/harmony-ex31.mp3][../doc/sound/harmony-ex31.preview.png]]
+
+  [[../doc/oz/harmony-ex31.oz][source]]
+
+
+
+Transformation of the previous example into a 'canon': the exact pitches do not necessarily match, but the contour of the voices.
+
+**[TODO: refine CSP definition]**
+
+  [[../doc/sound/harmony-ex32.mp3][../doc/sound/harmony-ex32.preview.png]]
+
+  [[../doc/oz/harmony-ex31.oz][source]]
+
+
+; ** do modulation with scale objects 
+
+; ** Constraining Notes to Express a Constrained Harmony
+; *** No additional constraints 
+; *** Harmony constraints 
+; *** Pattern on pitches
+
+
+
+
+
+; * Final Remarks 
+
+; Strasheela's harmony model supports microtonal music as well, as demonstrated in the * [[Example-MicrotonalChordProgression][microtonal chord progression]] example. 
+
+; Moreover, a composite CSP consisting in several sub-CSP in order to express the musical form (as shown by the [[Example-HarmonisedLindenmayerSystem][harmonised lindenmayer-system]] example) can be constrained to express a harmony by the harmony model.
+
+
+[[StrasheelaExamples][back]]
+
+
+-----------------------
+
+**[TODO:]**
+
+  - Add example which uses note names (degree in C major scale) and accidentals. Show accidentals correctly in music notation output (then modify the subsection explaining notes pitch representation of all examples here ..)
+
+  - Add example which uses scale degrees and accidentals relative to the scale. 
+
+  - Add modulation example using 'overlapping' scale objects and chords relating to scales. In the (short) areas where two scale objects overlap, only diatonic chords with belong to both scales are permitted ([[http://www.amazon.com/gp/product/0520049446/qid=1149574943/sr=2-2/ref=pd_bbs_b_2_2/104-1993379-1061553?s=books&v=glance&n=283155][Schoenberg (1911)]] calls them neutral chords)
+
+
+; Extend Strasheela's harmony model by predefined note class with parameters for C major scale degrees + accidentals and other scale degrees + accidentals.. That's already work in progress but not finished yet..
+
+

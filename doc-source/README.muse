@@ -1,0 +1,119 @@
+#title  How is Strasheela Doc Created?
+#author Torsten Anders
+
+To make things easy and quick, the Strasheela documentation is created in two ways: (i) automatically from the Oz sources with ozh (http://www.mozart-oz.org/mogul/info/franzen/ozh.html) and (ii) manually with the emacs wiki mode Muse (http://www.mwolson.org/projects/MuseMode.html, http://www.emacswiki.org/cgi-bin/wiki/MuseMode).
+
+The first part is created by calling Strasheela/scripts/generate-all-doc.sh. The second part is created by publishing the Straseheela doc Muse project (C-c C-p in one of the files..).
+
+
+---------------------------------------------------------------
+
+* Muse setup
+
+Add the following to your .emacs file 
+
+<example>
+; load muse, e.g. 
+(add-to-list 'load-path "/path/to/muse/")	
+
+;; Load code
+(require 'muse-mode)
+(require 'muse-project)
+(require 'muse-wiki)
+(require 'muse-colors)
+; load publishing styles 
+(require 'muse-html)
+(require 'muse-latex)     
+(require 'muse-texinfo)
+(require 'muse-docbook)
+
+;; Muse configuration
+(setq muse-project-alist
+      '(("StrasheelaDoc"
+	 ("/path/to/Strasheela/doc-source/"
+          :default "index")
+	 (:base "html" :path "/path/to/Strasheela/doc/"))
+	))
+
+(setq muse-html-style-sheet "<link rel=\"stylesheet\" href=\"style.css\" type=\"text/css\" />")
+
+; (add-to-list 'muse-publish-markup-tags ("oz" t nil muse-publish-example-tag))
+
+(setq muse-html-header
+"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\">
+<html>
+  <head>
+    <title><lisp>(muse-publishing-directive \"title\")</lisp></title>
+    <meta name=\"generator\" content=\"muse.el\">
+    <meta http-equiv=\"<lisp>muse-html-meta-http-equiv</lisp>\"
+          content=\"<lisp>muse-html-meta-content-type</lisp>\">
+    <lisp>
+      (let ((maintainer (muse-style-element :maintainer)))
+        (when maintainer
+          (concat \"<link rev=\\\"made\\\" href=\\\"\" maintainer \"\\\">\")))
+    </lisp>
+    <lisp>muse-html-style-sheet</lisp>
+  </head>
+  <body>
+<div id=\"header\">
+  <ul class=\"nav\">
+    <li class=\"nav1\"><a href=\"index.html\">home</a></li>
+    <li class=\"navn\"><a href=\"https://sourceforge.net/projects/strasheela/\">download at sourceforge</a></li>
+    <li class=\"navn\"><a href=\"IndexOfPages.html\">site map</a></li>
+    <li class=\"navn\"><a href=\"contact.html\">contact</a></li>
+  </ul>
+  <div id=\"logo\">
+    <a href=\"http://sourceforge.net\"><img src=\"http://sflogo.sourceforge.net/sflogo.php?group_id=167225&amp;type=1\" width=\"88\" height=\"31\" border=\"0\" alt=\"SourceForge.net Logo\" /></a>
+  </div>
+</div>
+    <h1><lisp>(muse-publishing-directive \"title\")</lisp></h1>
+    <!-- Page published by Emacs Muse begins here -->
+")
+(setq muse-html-footer 
+"
+<!-- Page published by Emacs Muse ends here -->
+<!-- Footer -->
+<div id=\"footer\">
+<div id=\"author\">&copy; 
+<lisp>(let ((author (muse-publishing-directive \"author\")))
+  (if author author (user-full-name)))</lisp></div>
+<div id=\"date\">Last time edited: <lisp>(planner-today)</lisp></div>
+</div>
+  </body>
+</html>
+")
+</example>
+
+
+The CSS style sheet by Tobias Kunze which is used by the generated doc supports already a lot, e.g. keyword colouring in the form (see Common Music doc HTML files, http://commonmusic.sourceforge.net/doc/dict/)
+ <example><span class="special">define</span></example>
+ 
+ such keywords may even be links to their definition!
+
+
+ I also could define new tags for Muse, e.g., to produce syntax colouring, see Muse doc 
+muse.html#Markup-Tags
+
+ strasheela/doc-source/code/Fontifier.oz shows how I easily get fontification information for oz source code (and other code as well..)  
+
+
+Tag completion for Muse: http://lists.gnu.org/archive/html/emacs-wiki-discuss/2005-05/msg00010.html
+of course, it would be much better to define a single Oz tag, which allows for arbitrary Oz code. The code is then analysed and colourised etc as required (e.g. by some Oz application in the background)
+
+
+Tmp dummy =<oz>= tag definition which is later replaced by something which provides syntax colouring
+
+    =<oz>{Browse hiThere}</oz>=
+
+NB: The Muse setup above also defines an oz tag (but it seems not to work anymore..)
+
+    
+* Problems 
+
+Links to Strasheela reference doc depend on file names and #anchors created by ozh. These links and #anchors can break any time when the documentation is re-created from changed source!
+Better alternative: have ozh generate file names which are created by using the file names of the source file (and possibly classes) and #anchors created by using information in the source (e.g. proc names..)
+
+ - But this is for later, if I have much time and things really break
+ - When checking broken links then check only links into Strasheela reference
+ - **PROBLEM**: broken links will still often point to some valid file, but the wrong one
+

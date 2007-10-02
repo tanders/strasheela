@@ -1,0 +1,10 @@
+--- dumpOSC.c	2007-09-12 11:21:51.000000000 +0100
++++ dumpOSC-edit.c	2007-09-12 11:18:33.000000000 +0100
+@@ -346,6 +346,7 @@
+ 	    complain("This can't happen");
+ 	}
+ 	printf("]\n");
++	fflush(stdout);		// output bundles immediately
+     } else {
+ 	/* This is not a bundle message */
+ 

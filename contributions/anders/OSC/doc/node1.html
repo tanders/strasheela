@@ -1,0 +1,311 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<html>
+ <head>
+  <title>OSC</title>
+  <style>BODY {
+ background: url(page.gif) repeat-y white;
+}
+#slidemenubar, #slidemenubar2{
+ position:absolute;
+ left:-144px;
+ width:160px;
+ top:10px;
+ border:0px solid black;
+ font:bold 12px Verdana;
+ line-height:10px;
+}
+.margin {
+ position: absolute;
+ left: 10px;
+ width: 130px;
+}
+BODY, P, H1, H2, H3, A {
+ font-family: sans-serif;
+}
+PRE, CODE {
+ font-family: courier, monospace;
+}
+P {
+ text-align: justify;
+}
+H1     { color: #9B0000; }
+H2     { color: #FF9933; }
+H3, H4 { color: #881155; }
+CODE              { color: #663366; }
+.code CODE        { color: #000000; }
+SPAN.comment      { color: #B22222; }
+SPAN.keyword      { color: #A020F0; }
+SPAN.string       { color: #BC8F8F; }
+SPAN.functionname { color: #0000FF; }
+SPAN.type         { color: #228B22; }
+SPAN.variablename { color: #B8860B; }
+SPAN.reference    { color: #5F9EA0; }
+SPAN.builtin      { color: #DA70D6; }
+A:link {
+ color: #666666;
+}
+A:visited {
+ color: black;
+}
+A.pre { font-family: courier, monospace;
+ color: #228B22;
+}
+</style>
+ </head>
+<body>
+<script language="JavaScript1.2">
+if (document.all)
+document.write('<div id="slidemenubar2" style="left:-144" onMouseover="pull()" onMouseout="draw()">')
+</script>
+<layer id="slidemenubar" onMouseover="pull()" onMouseout="draw()">
+<table border="0" cellpadding="0" cellspacing="0" width="161"><tr><td bgcolor="#009cff" width="144"><a href="index.html">Index</a>
+</td><td rowspan="4" valign="top" width="16"><img src="menu.gif" width="16"></td></tr><tr><td bgcolor="#009cff" width="144"><a href="node1.html">OSC</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node2.html">OSC_Scanner</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node3.html">OSC_Parser</a>
+</td></tr></table></layer>
+<script language="JavaScript1.2">
+function regenerate(){
+window.location.reload()
+}
+function regenerate2(){
+if (document.layers)
+setTimeout("window.onresize=regenerate",400)
+}
+window.onload=regenerate2
+if (document.all){
+document.write('</div>')
+themenu=document.all.slidemenubar2.style
+rightboundary=0
+leftboundary=-144
+}
+else{
+themenu=document.layers.slidemenubar
+rightboundary=144
+leftboundary=0
+}
+function pull(){
+if (window.drawit)
+clearInterval(drawit)
+pullit=setInterval("pullengine()",20)
+}
+function draw(){
+clearInterval(pullit)
+drawit=setInterval("drawengine()",50)
+}
+function pullengine(){
+if (document.all&&themenu.pixelLeft<rightboundary)
+themenu.pixelLeft+=5
+else if(document.layers&&themenu.left<rightboundary)
+themenu.left+=5
+else if (window.pullit)
+clearInterval(pullit)
+}
+function drawengine(){
+if (document.all&&themenu.pixelLeft>leftboundary)
+themenu.pixelLeft-=5
+else if(document.layers&&themenu.left>leftboundary)
+themenu.left-=5
+else if (window.drawit)
+clearInterval(drawit)
+}
+</script>
+
+<div style="margin-left:160px"><span class="string">
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> This functor provides an interface to OpenSound Control (OSC), by using the UNIX programs sendOSC and dumpOSC: using these applications instead of a C/C++ library is less efficient, but more easy to implement ;-). See http://www.cnmat.berkeley.edu/OpenSoundControl/ for more details on OSC in general, and also for details about these two applications. <BR>
+<BR>
+ This functor provides a representation of OSC messages as Oz values in the following way. An OSC message is represented by an Oz tuple. The tuple label is the OSC Address Pattern (e.g., '/test'). 0 or more OSC Arguments are represented by the contained tuple values. OSC arguments can be Oz integers, floats and virtual strings. <BR>
+<BR>
+ An OSC bundle is represented by an Oz list. Optionally, the first element is the time tag, followed by 0 or more OSC bundle elements (i.e. OSC messages or other bundles). Timetags can be specified in different formats, but must always be a number. The send method of the class SendOSC supports the user-definable transformation of timetags into different formats. By default, the number of milliseconds elapsed since midnight UTC of January 1, 1970 is expected (i.e. UNIX time multiplied by 1000), but other formats are possible (e.g., a float measuring in beats, where the time 0.0 is some user-defined UNIX time). Timetags in received bundles are obligarory, but may be 1 (meaning 'now'). Bundles can be nested (as sendOSC and dumpOSC support nested bundles). However, for sending bundles please note that some applications with OSC support don't support nested bundles (e.g. SuperCollider's synthesis server scsynth).<BR>
+<BR>
+ The following examples show the textual OSC representation used by sendOSC and the Oz representation alongside: <BR>
+<BR>
+ sendOSC:<BR>
+<BR>
+ /address "test string" 3.14 -42<BR>
+ [<BR>
+ /voices/0/tp/timbre_index 0<BR>
+ /voices/0/tm/goto 0.0<BR>
+ ]<BR>
+<BR>
+ Oz:<BR>
+<BR>
+ '/address'("test string" 3.14 ~42)<BR>
+ ['/voices/0/tp/timbre_index'(0) '/voices/0/tm/goto'(0.0)]<BR>
+ [{OSC.timeNow} '/test'(foo bar)]<BR>
+<BR>
+ Please note that this interface is only available for UNIX systems (e.g., MacOS and Linux), because sendOSC and dumpOSC are UNIX applications. Moreover, the original dumpOSC delays the printout of bundles (when called in a pipe as this interface does) and it is recommended to apply the dumpOSC patch available at ../others/dumpOSC/dumpOSC-patch.diff (or simply replace the original file dumpOSC.c with the already patched dumpOSC.c in the same directory before compiling dumpOSC).<BR>
+<BR>
+ This interface calls dumpOSC in a terminal (xterm), and sends its output to Oz with netcat via a socket. Starting dumpOSC in a terminal is necessary, because for unkown reasons dumpOSC refuses to output anything when called by Oz directly in a pipe (for details, see postings in the mailing lists osc_dev@create.ucsb.edu, and users@mozart-oz.org, on the 7 Septermber 2007 and following days). This interface relies thus on the following applications, which must be installed, and should be specified in the Strasheela environment (if they are not in the PATH): sendOSC, dumpOSC, xterm, and netcat (nc). On most Unixes, xterm is already there. On MacOS, however, X11 must be installed in order to make xterm available, and the location of X11.app must be specified in the Strasheela environment. The respective Strasheela environment variables are sendOSC (its default value is 'sendOSC'), dumpOSC (default 'dumpOSC'), xterm (default 'xterm'), netcat (default 'nc'), and 'X11.app' (default '/Applications/Utilities/X11.app').  <BR>
+<BR>
+</span>
+</span>
+<h3>Functor</h3>
+<ul>OSC ("<span class="string">OSC.oz</span>")<br></ul>
+<h3>Import</h3>
+<code><ul><li>System</li><li>OS</li><li>Open</li><li>LUtils at "<span class="string">x-ozlib://anders/strasheela/source/ListUtils.ozf"
+</span></li><li>Init at "<span class="string">x-ozlib://anders/strasheela/source/Init.ozf"
+</span></li><li>Out at "<span class="string">x-ozlib://anders/strasheela/source/Output.ozf"
+</span></li><li><a href="node2.html">OSC_Scanner</a> at "<span class="string">source/OSC_Scanner.ozf"
+</span></li><li><a href="node3.html">OSC_Parser</a> at "<span class="string">source/OSC_Parser.ozf"
+</span></li></ul></code>
+<h3>Export</h3>
+<code><ul><li>&lt;C:<a href="#entity10"><span class="type">SendOSC</span></a>&gt;
+</li><li>&lt;C:<a href="#entity11"><span class="type">DumpOSC</span></a>&gt;
+</li><li>&lt;P/1:<a href="#entity12"><span class="functionname">TimeNow</span></a>&gt;
+</li><li>&lt;C:<a href="#entity19"><span class="type">Buffer</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity18"><span class="functionname">HexToDecimal1000</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity17"><span class="functionname">FormatHex</span></a>&gt;
+</li><li>ntpToUnixTime1000:&lt;P/2:<a href="#entity14"><span class="functionname">NTPToUnixTime1000</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity15"><span class="functionname">DecimalToHex_Int</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity16"><span class="functionname">DecimalToHex_Frac</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity13"><span class="functionname">FormatTimeTag</span></a>&gt;
+</li></ul></code>
+<h3>Define</h3>
+
+<a name="entity10">
+<p class="margin"><div align="right"><a href="class1.html">[class info]</a></div></p>
+<code>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> Implements Oz interface to the UNIX program sendOSC (using its interactive mode). <BR>
+<BR>
+</span>
+<span class="keyword">class</span> <span class="type">SendOSC</span>&nbsp;<span class="keyword">from</span>&nbsp;<span class="reference">Out.shell</span>
+
+<ul><li><span class="functionname">init</span>(host:H port:P)<br>
+</li><li><span class="functionname">send</span>(Packet timeTagFormatter:TTFormatter)<br>
+</li></ul>
+<span class="keyword">end</span>
+</code><br>
+
+<a name="entity11">
+<p class="margin"><div align="right"><a href="class2.html">[class info]</a></div></p>
+<code>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> Implements an Oz interface to dumpOSC for receiving OSC packets at a given port. Ineternally, the textual output of dumpOSC is parsed into Oz values, and a stream of OSC messages in the format described above is provided.<BR>
+ Please note that dumpOSC is called in a terminal (xterm), and its output is send by netcat via a socket to Oz (on MacOS X, X11 is started if not already running). See above for an explanation. <BR>
+ Also, note that several clients can send to dumpOSC, but no information who sends is transmitted (e.g., no sender IP). If knowing the sender is important, just include your sender in your OSC messages :)<BR>
+<BR>
+</span>
+<span class="keyword">class</span> <span class="type">DumpOSC</span>
+<br>&nbsp;&nbsp;&nbsp;<span class="keyword">feat</span>&nbsp;netcatPort&nbsp;pipe&nbsp;dumpOSC&nbsp;myScanner&nbsp;myParser&nbsp;oscs&nbsp;responders&nbsp;defaultResponderAddr
+
+<ul><li><span class="functionname">init</span>(port:Port)<br>
+</li><li><span class="functionname">close</span>()<br>
+</li><li><span class="functionname">getOSCs</span>($)<br>
+</li><li><span class="functionname">addResponder</span>(Address Proc)<br>
+</li><li><span class="functionname">setResponder</span>(Address Proc)<br>
+</li><li><span class="functionname">removeResponder</span>(Address)<br>
+</li><li><span class="functionname">setDefaultResponder</span>(Proc)<br>
+</li><li><span class="functionname">setBundleResponder</span>(Proc)<br>
+</li><li><span class="functionname">ProcessResponders</span>()<br>
+</li><li><span class="functionname">ParseVS</span>(Result VS)<br>
+</li><li><span class="functionname">IncrCounter</span>()<br>
+</li><li><span class="functionname">DecrCounter</span>()<br>
+</li><li><span class="functionname">ExistsOpenBundle</span>($)<br>
+</li><li><span class="functionname">parseAll</span>($ prevLines:PrevLines)<br>
+</li></ul>
+<span class="keyword">end</span>
+</code><br>
+
+<code>
+<a name="entity12">
+<span class="keyword">fun</span>{<span class="functionname">TimeNow</span> }<br>
+<span class="string"> Returns the milliseconds since midnight UTC of January 1, 1970, in other words UNIX time (see http://en.wikipedia.org/wiki/Unix_time) multiplied by 1000.<BR>
+ FIXME: presently, only plain seconds are output. Therefore, the returned value can be rather late already. For a more finegrained solution later, use e.g. gettimeofday (see http://www.penguin-soft.com/penguin/man/2/gettimeofday.html?manpath=/man/man2/gettimeofday.2.inc and http://developer.apple.com/documentation/Darwin/Reference/ManPages/man2/gettimeofday.2.html).<BR>
+<BR>
+</span>
+</code><br>
+
+<a name="entity19">
+<p class="margin"><div align="right"><a href="class3.html">[class info]</a></div></p>
+<code>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> This class defines a buffer for any incoming data (e.g., OSC packets): arriving data is collected with the method put, and all data collected so far retrieved with the method getAll.  <BR>
+<BR>
+</span>
+<span class="keyword">class</span> <span class="type">Buffer</span>
+
+<ul><li><span class="functionname">init</span>()<br>
+</li><li><span class="functionname">put</span>(X)<br>
+</li><li><span class="functionname">getAll</span>(Xs)<br>
+</li></ul>
+<span class="keyword">end</span>
+</code><br>
+
+<code>
+<a name="entity18">
+<span class="keyword">fun</span>{<span class="functionname">HexToDecimal1000</span> HexChars}<br>
+<span class="string"> Expects an hex number (string of exactly 16 ints/chars a-f, where the first 8 digits are greater 1 and the last 8 digits are less then 1, i.e. the last 8 digits are behind the dot) and returns the corresponding decimal integer times 1000.<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity17">
+<span class="keyword">fun</span>{<span class="functionname">FormatHex</span> Xs}<br>
+<span class="string"> Transforms a list of integers representing a hexadecimal number (as returned by DecimalToHex) into a VS in the usual format.<BR>
+ The dumpOSC output format is created: lowercase letters are used with (however, sendOSC also understands uppercase letters and leading 0x).<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity14">
+<span class="keyword">fun</span>{<span class="functionname">NTPToUnixTime1000</span> NTPTime1000}<br>
+<span class="string"> NTPTime1000 (an int: NTP time in msecs) transformed into UNIX time in msecs (an int).<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity15">
+<span class="keyword">fun</span>{<span class="functionname">DecimalToHex_Int</span> X}<br>
+<span class="string"> Outputs list of 'digits' for hexadecimal number of the decimal number X (an int).<BR>
+ NB: integers are used as figures: i.e. the decimal number 31 is represented as [1 15] instead of the usual 1F.<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity16">
+<span class="keyword">fun</span>{<span class="functionname">DecimalToHex_Frac</span> X}<br>
+<span class="string"> Convert the fractional part. X is in [999, 0] msecs, corresponding to [0.999, 0.0] secs. <BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity13">
+<span class="keyword">fun</span>{<span class="functionname">FormatTimeTag</span> UnixTime1000}<br>
+<span class="string"> Outputs an OSC time tag for the given UnixTime1000 as a hexadecimal number (a VS). UnixTime1000 (an integer) are the milliseconds since midnight UTC of January 1, 1970, in other words UNIX time multiplied by 1000.<BR>
+<BR>
+</span>
+</code><br>
+<h3>End</h3>
+</div></body>
+</html>

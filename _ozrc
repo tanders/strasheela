@@ -1,0 +1,117 @@
+%% -*- mode: oz -*-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%% For convenient Strasheela usage you may consider adding the content
+%% of this file to your Oz init file (e.g. ~/.ozrc) and edit it
+%% according needs.
+%%
+%% NB: Particular important settings are marked by 'EDIT THIS'
+%%
+
+%% Per default, compiler executes each piece of generated code in a separate thread without waiting for it to terminate before proceeding to the next query. Instead, I want to ensure all settings in OZRC are effective before any actual user call is executed. (threadedqueries is switch back 'on' at end of this OZRC). 
+\switch -threadedqueries
+
+/** %% ModuleLink is like Module.link except that multiple calls of ModuleLink share the same module manager (and don't create new managers as Module.link does). For instance, when ModuleLink links multiple functors which refer to a database functor, then all refer to the same database instance (linking with Module.link results into multiple database instances). 
+%% */
+declare
+local
+   ModMan = {New Module.manager init}
+in
+   fun {ModuleLink  UrlVs}
+      {Map UrlVs fun {$ Url} {ModMan link(url:Url $)} end}
+   end
+end
+
+
+%% (lazily) pre-load some Strasheela modules. Further modules (e.g. the contributions from the contributions folder) can be added similarily.
+[Strasheela] = {ModuleLink ['x-ozlib://anders/strasheela/Strasheela.ozf']}
+
+%% NB: certain var names are somewhat ambiguous (e.g. the name Init does not clearly express some relation to Strasheela, in contrast to, e.g., SDistro), yet these are the var names used for the functors in the documentation and the examples. Still, you can easily change these names for your application.
+Init = Strasheela.init
+GUtils = Strasheela.gUtils
+LUtils = Strasheela.lUtils
+MUtils = Strasheela.mUtils
+Score = Strasheela.score
+SMapping = Strasheela.sMapping
+SDistro = Strasheela.sDistro
+Out = Strasheela.out
+
+%% (lazily) pre-load some Strasheela contributions. 
+[CTT Pattern Motif HS Measure] =
+{ModuleLink ['x-ozlib://anders/strasheela/ConstrainTimingTree/ConstrainTimingTree.ozf'
+	     'x-ozlib://anders/strasheela/Pattern/Pattern.ozf'
+	     'x-ozlib://anders/strasheela/Motif/Motif.ozf'
+	     'x-ozlib://anders/strasheela/HarmonisedScore/HarmonisedScore.ozf'
+	     'x-ozlib://anders/strasheela/Measure/Measure.ozf'
+	    ]}
+
+
+%% EDIT THIS: 
+%%
+%% Uncomment this line if you installed the selection constraints as recommended in
+%% the installation instructions (required for some contributions)
+%%
+% [Select] = {ModuleLink ['x-ozlib://duchier/cp/Select.ozf']}
+
+
+%% Extend the Explorer menu Nodes:Information Action for easy score output
+% {Init.addExplorerOuts_Extended} % even more formats
+{Init.addExplorerOuts_Standard} % standard formats 
+
+%% Shadow the original Inspector with the ScoreInspector
+[Inspector] = {ModuleLink ['x-ozlib://anders/strasheela/ScoreInspector/ScoreInspector.ozf']}
+Inspect = Inspector.inspect
+
+
+%% EDIT THIS: 
+%%
+%% Set $PATH environment variable (e.g. to start applications like
+%% csound from within Strasheela). If you are on a UNIX box, do 'echo
+%% $PATH' on a command line (without the quotes of course) to get an
+%% idea what you should set here
+%%
+% {OS.putEnv 'PATH' '<my pathes>'}
+
+% EDIT THIS:
+% Uncomment this line, at least if you are on darwin mac osx
+% {OS.putEnv 'DYLD_LIBRARY_PATH' ''}
+% It affects the abbility of fomus (called by strasheela) to call lilypond.....
+
+%% EDIT THIS:
+%%
+%% Set environment variables according to your system (see
+%% Init.putStrasheelaEnv for more supported variables)
+%%
+{Init.putStrasheelaEnv tmpDir '/home/myself/tmp/'}
+{Init.putStrasheelaEnv defaultSScoDir {Init.getStrasheelaEnv tmpDir}}
+{Init.putStrasheelaEnv defaultLilypondDir {Init.getStrasheelaEnv tmpDir}}
+% {Init.putStrasheelaEnv pdfViewer 'acroread'} % 'xpdf'
+{Init.putStrasheelaEnv defaultSoundDir {Init.getStrasheelaEnv tmpDir}}
+{Init.putStrasheelaEnv defaultCsoundScoDir {Init.getStrasheelaEnv tmpDir}}
+% {Init.putStrasheelaEnv defaultCsoundOrcDir '/home/myself/csound/'}
+{Init.putStrasheelaEnv csound csound}
+{Init.putStrasheelaEnv defaultCsoundSoundExtension ".aiff"}
+{Init.putStrasheelaEnv defaultCsoundFlags ['-A' '-g']}
+% possibly the full path to the app must be specified here (depends on
+% 'PATH' environment variables)
+{Init.putStrasheelaEnv sndPlayer audacity} % sweep
+% {Init.putStrasheelaEnv cmdlineSndPlayer sndplay}
+{Init.putStrasheelaEnv defaultCSVDir {Init.getStrasheelaEnv tmpDir}}
+{Init.putStrasheelaEnv defaultMidiDir {Init.getStrasheelaEnv tmpDir}}
+{Init.putStrasheelaEnv defaultCSVFlags ['-v']}
+{Init.putStrasheelaEnv csvmidi csvmidi}
+{Init.putStrasheelaEnv midiPlayer kmid}
+%{Init.putStrasheelaEnv midiPlayer pmidi}
+%{Init.putStrasheelaEnv defaultMidiPlayerFlags ['-p 64:0']} % pmidi: MIDI output of my sound card..
+% {Init.putStrasheelaEnv defaultCommonMusicDir {Init.getStrasheelaEnv tmpDir}}
+
+%% This variable lists Strasheela functors together with the print representation of Oz variables which bind these functors (the format is the format of compiler environments). It is used for reflection purposes (e.g., to archive score objects in text files as Oz code which -- when executed -- recreates  the score objects. Please make sure that all functors you are using are listed here. You probably only need to change this setting once you introduced new Strasheela extensions 
+{Init.putStrasheelaEnv strasheelaFunctors env('Strasheela':Strasheela
+					      'HS':HS
+					      'Motif':Motif
+					      'Measure':Measure
+					      'CTT':CTT
+					      'Pattern':Pattern)}
+
+\switch +threadedqueries
+

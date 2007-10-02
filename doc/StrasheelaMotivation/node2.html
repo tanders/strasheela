@@ -1,0 +1,149 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<!--Converted with jLaTeX2HTML 2002-2-1 (1.70) JA patch-2.0
+patched version by:  Kenshi Muto, Debian Project.
+* modified by:  Shige TAKENO
+LaTeX2HTML 2002-2-1 (1.70),
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Wanted: A Generic Music Constraint System</TITLE>
+<META NAME="description" CONTENT="Wanted: A Generic Music Constraint System">
+<META NAME="keywords" CONTENT="StrasheelaMotivation">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+<META NAME="Generator" CONTENT="jLaTeX2HTML v2002-2-1 JA patch-2.0">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="StrasheelaMotivation.css">
+
+<LINK REL="next" HREF="node4.html">
+<LINK REL="previous" HREF="node1.html">
+<LINK REL="up" HREF="StrasheelaMotivation.html">
+<LINK REL="next" HREF="node3.html">
+</HEAD>
+
+<BODY >
+<!--Navigation Panel-->
+<A NAME="tex2html47"
+  HREF="node3.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next"
+ SRC="file:/usr/share/latex2html/icons/next.png"></A> 
+<A NAME="tex2html43"
+  HREF="StrasheelaMotivation.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up"
+ SRC="file:/usr/share/latex2html/icons/up.png"></A> 
+<A NAME="tex2html37"
+  HREF="node1.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous"
+ SRC="file:/usr/share/latex2html/icons/prev.png"></A>  
+<A NAME="tex2html45"
+  HREF="../index.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index"
+ SRC="file:/usr/share/latex2html/icons/index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html48"
+  HREF="node3.html">A Side Note: Relation</A>
+<B> Up:</B> <A NAME="tex2html44"
+  HREF="StrasheelaMotivation.html">Why Strasheela?</A>
+<B> Previous:</B> <A NAME="tex2html38"
+  HREF="node1.html">Constraint-Based Computer Aided Composition</A>
+ &nbsp; <B>  <A NAME="tex2html46"
+  HREF="../index.html">Index</A></B> 
+<BR>
+<BR>
+<!--End of Navigation Panel-->
+
+<H1><A NAME="SECTION00020000000000000000">
+Wanted: A Generic Music Constraint System</A>
+</H1>
+
+<P>
+A generic music constraint system makes the definition of <I>musical</I> CSPs more easy than it would be in a general constraint system. Therefore, musicians are interested in such a system.
+
+<P>
+At the same time, a generic music constraint system should not restrict its user to specific CSP classes. For instance, composers usually prefer to make compositional decisions themselves without being restricted by some tool such as a composition system what they can express musically. The user of an <I>ideal</I> generic music constraint system (in the sense of a most generic system) can formalise any music theory conceivable which can be stated by a set of rules. The system will create music which complies this theory. 
+
+<P>
+Such an ideal system allows to represent arbitrary aspects of the music by variables which can be undetermined and constrained in the problem definition. Example aspects which can be expressed by variables in such a system include the rhythmical structure of the music, its texture (e.g. the number of notes at any time), the pitch structure, instrumentation, or sound synthesis details (e.g. envelopes for various parameters).
+In an extreme case, the set of solutions for a single CSP contains any conceivable score. 
+<P>
+To allow for arbitrary musical CSPs, an ideal system provides access to arbitrary musical information required for the definition and application of compositional rules. 
+For example, traditional counterpoint rules require much information which can only be deduced from the information explicitly represented in the representation traditionally used for contrapuntal composition (i.e. common music notation). 
+For instance, a common contrapuntual rule permits dissonant note pitches in situations where a number of conditions is met which involve various musical aspects: a note may be dissonant in case it is a passing note on an easy beat and below a certain duration. This rule thus requires information on the harmonic aspect deduced from the pitches of simultaneous notes (whether a certain note is dissonant), information on the melodic aspect deduced from the pitches of notes in the same voice (whether this note is a passing note), information on the metric aspect deduced from the position of the note in a measure (whether this note is on an easy beat), and rhythmical information (the note's duration).
+
+<P>
+Existing generic music constraint systems, however, are designed to cover specific ranges of musical CSPs. These systems support the formalisation of certain music theory cases very well, but other theories are hard or even impossible to define. 
+For example, OMRC is designed solely for solving rhythmical CSPs, and Situation is best suited for harmonic CSPs. PWConstraints's subsystem score-PMC is designed to solve polyphonic CSPs, but score-PMC requires a fully determined rhythmical structure in the problem definition (i.e. only note pitches can be constrained).
+
+<P>
+Existing systems are programming systems and indeed allow a user to express a considerable number of musical CSPs: the user expresses a compositional task in the programming language used by the system. For example, most systems allow the user to freely define a compositional rule as a modular subprogram which makes use of arbitrarily complex expressions. 
+
+<P>
+Still, only certain aspects of a musical CSP can be programmed. Other aspects can not be changed or the system only offers a limited set of selectable options. 
+For example, the music representations of many existing systems predefine common musical concepts such as notes, pitches and durations which greatly simplifies the definition of many musical CSPs. However, the user has only limited influence on the form of this representation and in effect the representation is only well suited for a limited set of problems.
+
+<P>
+In particular, the representations of existing systems limit what explicit score information can be stored and what derived information can be accessed. For example, many systems provide a sequential music representation and primarily support deriving information from sets of score object which are positionally related (e.g. allow to access neighbouring notes or chords in a sequence). 
+Access to other derived information (e.g. whether a note is on an easy beat, or whether a note is dissonant with respect to the chord expressed by its surrounding notes in a polyphonic texture) is restricted - which clearly affects the set of CSPs which can be defined in these systems.   
+
+<P>
+In addition, the search strategy of existing systems is usually optimised for specific classes of musical CSPs. In effect, systems sometimes even purposefully restrict their users to CSPs which they can solve efficiently.
+For instance, score-PMC does not allow to constrain the temporal structure of music, because a determined temporal structure is required by the polyphonic music search approach of score-PMC to compute an efficient static search order [<A
+ HREF="node5.html#Laurson:PhD:1996">Laurson, 1996</A>]. Similarily, the search strategy of Situation (which performs a consistency enforcing technique to distinctly reduce the search space) is optimised for its specific music representation format [<A
+ HREF="node5.html#Rueda:1998">Rueda et&nbsp;al., 1998</A>].
+
+<P>
+The present research proposes a highly generic music constraint system. This system allows to define and solve musical CSPs which were virtually impossible in previous systems. 
+At the same time, this system performs reasonably efficient - even at problems which were hard to solve in previous systems due to their computational complexity (e.g. polyphonic CSPs in which both the rhythmical structure and the pitch structure is constrained).
+The design of the system is outlined in the subsequent Sec. <A HREF="node4.html#sec:intro:approach-taken">3</A>. 
+
+<P>
+<BR><HR>
+<!--Table of Child-Links-->
+<A NAME="CHILD_LINKS"><STRONG>Subsections</STRONG></A>
+
+<UL>
+<LI><A NAME="tex2html49"
+  HREF="node3.html">A Side Note: Relation to Learning-Based Approaches</A>
+</UL>
+<!--End of Table of Child-Links-->
+<HR>
+<!--Navigation Panel-->
+<A NAME="tex2html47"
+  HREF="node3.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next"
+ SRC="file:/usr/share/latex2html/icons/next.png"></A> 
+<A NAME="tex2html43"
+  HREF="StrasheelaMotivation.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up"
+ SRC="file:/usr/share/latex2html/icons/up.png"></A> 
+<A NAME="tex2html37"
+  HREF="node1.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous"
+ SRC="file:/usr/share/latex2html/icons/prev.png"></A>  
+<A NAME="tex2html45"
+  HREF="../index.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index"
+ SRC="file:/usr/share/latex2html/icons/index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html48"
+  HREF="node3.html">A Side Note: Relation</A>
+<B> Up:</B> <A NAME="tex2html44"
+  HREF="StrasheelaMotivation.html">Why Strasheela?</A>
+<B> Previous:</B> <A NAME="tex2html38"
+  HREF="node1.html">Constraint-Based Computer Aided Composition</A>
+ &nbsp; <B>  <A NAME="tex2html46"
+  HREF="../index.html">Index</A></B> 
+<!--End of Navigation Panel-->
+<ADDRESS>
+Torsten Anders
+2006-06-05
+</ADDRESS>
+</BODY>
+</HTML>

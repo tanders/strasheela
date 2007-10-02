@@ -1,0 +1,79 @@
+#title Strasheela Tutorial
+#author Torsten Anders
+
+[[http://www.torsten-anders.de][Torsten Anders]]
+
+<contents depth="1">
+
+This tutorial introduces some fundamental concepts of Strasheela by concrete examples. Strasheela is a highly generic computer aided composition system based on constraint programming. 
+
+
+; Strasheela is founded on a the multi-paradigm programming language [[http://www.mozart-oz.org][Oz]]. Oz supports several programming paradigms (programming models). In the context of Strasheela, these paradigms are of particular importance:
+
+;  - Functional programming (e.g. first-class functions/procedures, lexical scope, and a fully compositional syntax)
+
+;  - Logic programming and constraint programming (e.g. logic variables plus unification, constraints, and programmable search mechanisms)
+
+;  - Object-oriented programming (e.g. objects, and classes with multiple inheritance)
+
+
+; On top of Oz, Strasheela defines concepts required for a composition system. In particular, Strasheela provides three main facilities: 
+
+;   - An expressive symbolic music representation (supports storage of various explicit information, allows to deduce arbitrary derived information from the stored information, can be output to various formats, and is highly user extendable)
+
+;   - An expressive rule formalism 
+
+;   - Score search mechanisms 
+
+
+; The present text demonstrates how musical constraint satisfaction problems (CSP) are defined with these facilities and how the results are output to other formats (e.g. MIDI, Lilypond or Csound).  
+
+
+**Warning:** This tutorial is still work in progress. 
+
+
+
+* Interactive Tutorial 
+
+Strasheela provides an interactive tutorial for learning the basics of Oz and Strasheela. Just execute the application =InteractiveTutorial.exe= in =strasheela/contributions/anders/Tutorial/= at a command line. The application sometimes takes a few seconds to start up (it starts the Oz compiler in the background).
+
+    [[tutorial-atFullResolution][./graphics/tutorial-reduced.png]]
+
+This interactive tutorial supports the direct execution and editing of Oz and Strasheela examples. You don't need to first learn Emacs nor set up an Oz initialisation file -- you can directly start and try out Strasheela itself! The text of this tutorial is also provided in HTML format (see links below) in case you prefer reading the examples in a web-browser.   
+
+** [[01-Basics][Oz Basics]]
+
+** [[02-ConstraintProgramming][Constraint Programming in Oz]]
+
+** [[01-MusicRepresentation][The Strasheela Music Representation]]
+
+** [[02-MusicalCSPs][Musical Constraint Satisfaction Problems in Strasheela]]
+
+
+
+* First Steps with the Oz Programming Interface
+
+The interactive tutorial provides a means to easily test out provided examples. For developing Oz and Strasheela programs, however, the Oz Programming Interface (OPI) is more suitable. The OPI is a powerful environment for editing and executing Oz code, and for interacting with other development tools. Start the OPI by typing (at the commandline)
+
+  =oz=
+
+This opens an editor window with two frames. You can enter Oz source code in the top frame. For example, type the following:
+
+  ={Browse hello}=
+
+Select this line with the mouse. Then, go to the Oz menu and select =Feed Region= (there are other menu entries for feeding the source line in where the cursor is, a paragraph etc.). This feeds the selected code to the Oz compiler which executes it. It opens the Browser window, and the Browser displays =hello=. 
+
+  [[OPI-atFullResolution][./graphics/OPI-reduced.png]]
+
+Note the short-cuts shown after the menu entries. For example, =Feed Region= has the short-cut C-. C-r (meaning first the keys Control and '.' at the same time, and then Control plus 'r'), and =Feed Line= has the short-cut C-M-x (meaning Control-key plus Meta-key plus 'x', the Meta-key is usually the alt-key on your keyboard).
+
+You can also load and save Oz source files using the file menu. Don't get confused by its unconventional design. Create a new =*.oz= file by opening a not yet existing file. At the file menu select =Open File...,= and watch the lowest line of the OPI (the Minibuffer) where you are prompted to enter a file name. 
+
+  [[OPI2-atFullResolution][./graphics/OPI2-reduced.png]]
+  
+This little information -- together with the Oz menu provided by the OPI -- are already enough for doing Oz programming. If you want to learn more, extensive documentation exists for the [[http://www.mozart-oz.org/documentation/opi/index.html][OPI]] and for [[http://www.emacswiki.org/cgi-bin/wiki][Emacs]].  
+
+
+* [[IntroductoryReading][Further Introductory Reading]]
+
+

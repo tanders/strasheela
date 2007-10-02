@@ -1,0 +1,1637 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<html>
+ <head>
+  <title>Class Simultaneous</title>
+  <style>BODY {
+ background: url(page.gif) repeat-y white;
+}
+#slidemenubar, #slidemenubar2{
+ position:absolute;
+ left:-144px;
+ width:160px;
+ top:10px;
+ border:0px solid black;
+ font:bold 12px Verdana;
+ line-height:10px;
+}
+.margin {
+ position: absolute;
+ left: 10px;
+ width: 130px;
+}
+BODY, P, H1, H2, H3, A {
+ font-family: sans-serif;
+}
+PRE, CODE {
+ font-family: courier, monospace;
+}
+P {
+ text-align: justify;
+}
+H1     { color: #9B0000; }
+H2     { color: #FF9933; }
+H3, H4 { color: #881155; }
+CODE              { color: #663366; }
+.code CODE        { color: #000000; }
+SPAN.comment      { color: #B22222; }
+SPAN.keyword      { color: #A020F0; }
+SPAN.string       { color: #BC8F8F; }
+SPAN.functionname { color: #0000FF; }
+SPAN.type         { color: #228B22; }
+SPAN.variablename { color: #B8860B; }
+SPAN.reference    { color: #5F9EA0; }
+SPAN.builtin      { color: #DA70D6; }
+A:link {
+ color: #666666;
+}
+A:visited {
+ color: black;
+}
+A.pre { font-family: courier, monospace;
+ color: #228B22;
+}
+</style>
+ </head>
+<body>
+<script language="JavaScript1.2">
+if (document.all)
+document.write('<div id="slidemenubar2" style="left:-144" onMouseover="pull()" onMouseout="draw()">')
+</script>
+<layer id="slidemenubar" onMouseover="pull()" onMouseout="draw()">
+<table border="0" cellpadding="0" cellspacing="0" width="161"><tr><td bgcolor="#009cff" width="144"><a href="index.html">Index</a>
+</td><td rowspan="12" valign="top" width="16"><img src="menu.gif" width="16"></td></tr><tr><td bgcolor="#009cff" width="144"><a href="node1.html">Strasheela</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node2.html">Init</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node3.html">GUtils</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node4.html">LUtils</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node5.html">MUtils</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node6.html">Score</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node7.html">SMapping</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node8.html">SDistro</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node9.html">Out</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node10.html">Strasheela</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node11.html">Midi</a>
+</td></tr></table></layer>
+<script language="JavaScript1.2">
+function regenerate(){
+window.location.reload()
+}
+function regenerate2(){
+if (document.layers)
+setTimeout("window.onresize=regenerate",400)
+}
+window.onload=regenerate2
+if (document.all){
+document.write('</div>')
+themenu=document.all.slidemenubar2.style
+rightboundary=0
+leftboundary=-144
+}
+else{
+themenu=document.layers.slidemenubar
+rightboundary=144
+leftboundary=0
+}
+function pull(){
+if (window.drawit)
+clearInterval(drawit)
+pullit=setInterval("pullengine()",20)
+}
+function draw(){
+clearInterval(pullit)
+drawit=setInterval("drawengine()",50)
+}
+function pullengine(){
+if (document.all&&themenu.pixelLeft<rightboundary)
+themenu.pixelLeft+=5
+else if(document.layers&&themenu.left<rightboundary)
+themenu.left+=5
+else if (window.pullit)
+clearInterval(pullit)
+}
+function drawengine(){
+if (document.all&&themenu.pixelLeft>leftboundary)
+themenu.pixelLeft-=5
+else if(document.layers&&themenu.left>leftboundary)
+themenu.left-=5
+else if (window.drawit)
+clearInterval(drawit)
+}
+</script>
+
+<div style="margin-left:160px"><p align="right" class="margin"><div align="right">inheritance tree</div></p>
+<pre>
+ <a class="pre" href="node6.html#entity210">NonType</a> <a class="pre" href="node6.html#entity211">Reflection</a>         <a class="pre" href="node7.html#entity284">FlagsMixin</a>
+    |        |                  |
+    `-----+--'                  |
+          |                     |
+     <a class="pre" href="node6.html#entity212">ScoreObject</a>    <a class="pre" href="node7.html#entity285">ScoreMapping.mappingMixin</a>
+          |                     |
+          `-----------+---------'
+                      |
+                     <a class="pre" href="node6.html#entity221">Item</a>
+                      |
+                      `+
+                       |
+                   <a class="pre" href="node6.html#entity222">Container</a>
+                       |
+                      +'
+                      |
+                    <a class="pre" href="node6.html#entity224">Aspect</a>                    <a class="pre" href="node6.html#entity213">TimeMixin</a>
+                      |                           |
+                      `----+----------------------'
+                           |
+                     <a class="pre" href="node6.html#entity225">TemporalAspect</a>
+                           |
+                           |
+                           |
+                      <a class="pre" href="node6.html#entity227">Simultaneous</a>
+</pre>
+<hr><p class="margin"><div align="right">class definition</div></p>
+<code>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> [concrete class] A Simultaneous expresses that the items contained in it start at the same time.  However, setting the parameter offsetTime of an item to a value greater zero causes this item to delay its startTime the amount of offsetTime.<BR>
+ For a documentation of the time unit see doc of TimeMixin.<BR>
+<BR>
+</span>
+<span class="keyword">class</span> <span class="type">Simultaneous</span> (Inheritance-free)<br>
+&nbsp;&nbsp;&nbsp;<span class="keyword">prop</span>&nbsp;locking
+<br>
+&nbsp;&nbsp;&nbsp;<span class="keyword">feat</span>&nbsp;!ScoreObjectType&nbsp;label
+<br>
+&nbsp;&nbsp;&nbsp;<span class="keyword">attr</span>&nbsp;containers&nbsp;duration&nbsp;endTime&nbsp;flags&nbsp;id&nbsp;info&nbsp;items&nbsp;offsetTime&nbsp;parameters&nbsp;startTime
+<br>
+<ul><li><span class="functionname">addContainer</span>(Container)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> [aux method] Method adds Container to list of containers self is contained in. However, method does not establish bidirectional links. Method should not be called by user.<BR>
+<BR>
+</span>
+</li><li><span class="functionname">addFlag</span>(F)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> Adds an arbitrary flag F to self. A flag must be a literal. <BR>
+<BR>
+</span>
+</li><li><span class="functionname">addInfo</span>(X)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> [destructive method] Adds X to list in attribute info. The tail of the list at attribute info is the info specified at the init method which defaults to nil.<BR>
+<BR>
+</span>
+</li><li><span class="functionname">addItem</span>(Item)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> [aux method] Method adds Item to list of items contained in self. However, method does not establish bidirectional links. Method should not be called by user.<BR>
+<BR>
+</span>
+</li><li><span class="functionname">bilinkContainers</span>(Containers)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> Calling the method bilinkItems with Containers expresses that self is contained in all Containers. The method establishes bidirectional links between both self and all Containers. Method must not be called by user (only by class designer).<BR>
+<BR>
+</span>
+</li><li><span class="functionname">bilinkItems</span>(Items)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> Calling the method bilinkItems with Items expresses that Items are contained in the container itself. The method establishes bidirectional links between both self and all Items. Method must not be called by user (only by class designer).<BR>
+<BR>
+</span>
+</li><li><span class="functionname">bilinkParameters</span>(Parameters)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> [aux method] Method must not be called by user.<BR>
+ */<BR>
+ !! method removed<BR>
+       meth addParameters(Parameters)<BR>
+ 	 {@parameters addList(Parameters)}<BR>
+       end<BR>
+/** %% [aux method] Parameters and self are bidirectional linked. Method must not be called by user (only by class designer).<BR>
+<BR>
+</span>
+</li><li><span class="functionname">closeExtendableLists</span>()<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> [aux method]<BR>
+<BR>
+</span>
+</li><li><span class="functionname">closeScoreHierarchy</span>(mode:Mode)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> After instantiating and initialising score objects to form a score hierarchy, the hierarchy is still extendable (i.e. the user can add items to containers and containers to items). The method closeScoreHierarchy makes a score hierarchy unextendable, which is necessary to prevent various procedures/methods from blocking.<BR>
+<BR>
+</span>
+</li><li><span class="functionname">collect</span>(?Xs level:Level mode:Mode test:Test)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> The collect methods collects (possibly all) score objects in a list to make them accessible for, e.g., various list mapping functions. The method collects objects related to self (an item) by the value of the item attributes containers, parameters and the container attribute items. However, collect never collects self itself. The methods supports a few features to control the collecting. <BR>
+<BR>
+ If feature <code> mode </code> is set to <code> tree </code> (the default), collect recursively collects the score objects and subobjects contained in self (i.e. both the attributes items and parameters are traversed). If <code> mode </code> is set to <code> graph</code>, both objects contained in self and containers self is contained in are collected (i.e. all three attributes items, parameters, and containers are traversed).<BR>
+<BR>
+ If feature <code> level </code> is set to <code> all </code> (the default), collect collects score objects recursively into arbitrary depth. However, the depth can be controlled by specifying an integer value for <code> level</code>.<BR>
+<BR>
+ The feature <code> test </code> expects a unary function returning a boolean or an atom representing a boolean unary method understood by all objects in self. The method collect only collects score objects fulfilling the test function/method.<BR>
+<BR>
+ collect visits containers in depth-first fashion from left to right which affects the order of the objects in the returned list. E.g., collecting all events in a few nested sequentials in tree mode returns a list with all events ordered by start time.  <BR>
+<BR>
+</span>
+</li><li><span class="functionname">constrainTiming</span>()<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> [temp method ??] After full creation of score hierarchy, method must be called with every TimeMixin subclass instance in score to init the timing attributes/features <BR>
+<BR>
+</span>
+</li><li><span class="functionname">count</span>(?N level:Level mode:Mode test:Test)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> The method count counts a number of collected score objects. The method supports the features <code> mode</code>, <code> level</code>, and <code> test</code>. These features have the same meaning as in the method collect.<BR>
+<BR>
+</span>
+</li><li><span class="functionname">countItems</span>(N test:Test)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> N (an integer) is the number of all direct items in self which fulfill Test (a boolean function or method).<BR>
+<BR>
+</span>
+</li><li><span class="functionname">filter</span>(?Xs Fn level:Level mode:Mode)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> The method filter collects a number of score objects fulfilling Fn, a the unary function returning a boolean. The method supports the features <code> mode</code>, and <code> level</code>. These features have the same meaning as in the method collect.<BR>
+<BR>
+</span>
+</li><li><span class="functionname">filterContainers</span>(Xs Fn)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> Return a list of all direct containers of self for which Fn (unary function or method) returns true.<BR>
+<BR>
+</span>
+</li><li><span class="functionname">filterItems</span>(Xs Fn)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> Return a list of all direct items of self for which Fn (unary function or method) returns true.<BR>
+<BR>
+</span>
+</li><li><span class="functionname">filterParameters</span>(Xs Fn)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> Return a list of all direct parameters of self for which Fn (unary function or method) returns true.<BR>
+<BR>
+</span>
+</li><li><span class="functionname">find</span>(?Xs Fn level:Level mode:Mode)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> The method find returns the first score object in self fulfilling Fn, a the unary function returning a boolean. The method supports the features <code> mode</code>, and <code> level</code>. These features have the same meaning as in the method collect.<BR>
+<BR>
+</span>
+</li><li><span class="functionname">findContainer</span>(X Test)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> Returns the first direct container self is contained in which fulfils the boolean function or method Test.<BR>
+<BR>
+</span>
+</li><li><span class="functionname">findItem</span>(X Test)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> Returns the first direct item of self which fulfils the boolean function or method Test.<BR>
+<BR>
+</span>
+</li><li><span class="functionname">findParameter</span>(X Test)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> Returns the first direct parameter of self which fulfils the boolean function or method Test.<BR>
+<BR>
+</span>
+</li><li><span class="functionname">forAll</span>(Proc level:Level mode:Mode test:Test)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> The method forAll maps the procedure Proc to a number of collected score objects. Proc may also be an atom representing a method of no arguments and understood by all objects in self fulfilling Test. The method supports the features <code> mode</code>, <code> level</code>, and <code> test</code>. These features have the same meaning as in the method collect.<BR>
+<BR>
+</span>
+</li><li><span class="functionname">forAllContainers</span>(Proc)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> Applies Proc (unary procedure or method) on all direct containers in self.<BR>
+<BR>
+</span>
+</li><li><span class="functionname">forAllItems</span>(Proc test:Test)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> Applies Proc (unary procedure or method) on all direct items in self which fulfill Test (a boolean function or method).<BR>
+<BR>
+</span>
+</li><li><span class="functionname">forAllParameters</span>(Proc)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> Applies Proc (unary procedure or method) on all direct parameters in self.<BR>
+<BR>
+</span>
+</li><li><span class="functionname">forAllThreaded</span>(Proc level:Level mode:Mode test:Test)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> The method traverses all score objects in self (i.e. items and parameters) and applies unary procedure (or null-ary method) Proc on every object returning true for the unary function (or unary method) Test. However, the method does not effect the object self itself -- only the parameters and (if self is a container) items of self are effected recursively. Traversing happens concurrently -- the method does not suspend even if the result of getItems or getParameters is not yet fully determined.<BR>
+<BR>
+</span>
+</li><li><span class="functionname">forNumericRangeTemporalAspect</span>(Decl P)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> Applies unary procedure P to each item in self which index is expressed by Decl. Decl is a list which contains single index integers or index ranges of the form Min#Max (Min and Max are integers).<BR>
+ BTW: ForNumericRange corresponds roughly to rule application mechanism of Situation.<BR>
+<BR>
+ See also ScoreMapping.forNumericRange <BR>
+<BR>
+</span>
+</li><li><span class="functionname">forNumericRangeTemporalAspect2</span>(Decl P ElseP)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> Generalised variant of forNumericRangeTemporalAspect: to every item in self to which P is not applied, ElseP (a unary procedure) is applied instead.<BR>
+ See also ScoreMapping.forNumericRange2 <BR>
+<BR>
+</span>
+</li><li><span class="functionname">getAttr</span>($ A)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> Returns the value at attribute A.<BR>
+<BR>
+</span>
+</li><li><span class="functionname">getAttrNames</span>($)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> Returns a list of all attributes (atoms) defined for self. <BR>
+<BR>
+</span>
+</li><li><span class="functionname">getAttrSources</span>($)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> Alias for getAttrNames.<BR>
+ */<BR>
+       meth getAttributes($) {self getAttrNames($)} end<BR>
+/** %% Returns a record where the features are the attributes defined for self and the values are the classes which define these attributes. <BR>
+<BR>
+</span>
+</li><li><span class="functionname">getClass</span>($)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"></span>
+</li><li><span class="functionname">getClassName</span>($)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> Returns the print name of the class of self as specified in its definition. The name is an atom derived from a variable and thus starting with a capital letter, e.g., 'ScoreObject'.<BR>
+<BR>
+</span>
+</li><li><span class="functionname">getContainers</span>(X)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"></span>
+</li><li><span class="functionname">getDuration</span>(X)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"></span>
+</li><li><span class="functionname">getDurationInBeats</span>(X)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"></span>
+</li><li><span class="functionname">getDurationInSeconds</span>(X)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"></span>
+</li><li><span class="functionname">getDurationParameter</span>(X)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"></span>
+</li><li><span class="functionname">getEndTime</span>(X)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"></span>
+</li><li><span class="functionname">getEndTimeInBeats</span>(X)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"></span>
+</li><li><span class="functionname">getEndTimeInSeconds</span>(X)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"></span>
+</li><li><span class="functionname">getEndTimeParameter</span>(X)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"></span>
+</li><li><span class="functionname">getFeat</span>($ F)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> Returns the value at feature F.<BR>
+<BR>
+</span>
+</li><li><span class="functionname">getFeatNames</span>($)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> Returns a list of all features (atoms) defined for self. <BR>
+<BR>
+</span>
+</li><li><span class="functionname">getFeatSources</span>($)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> Returns a record where the features are the features defined for self and the values are the classes which define these features. <BR>
+<BR>
+</span>
+</li><li><span class="functionname">getFeatures</span>($)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> Alias for getFeatNames.<BR>
+<BR>
+</span>
+</li><li><span class="functionname">getID</span>(X)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"></span>
+</li><li><span class="functionname">getInfo</span>(X)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"></span>
+</li><li><span class="functionname">getInitArgDefaults</span>($)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> Alias for getMethNames.<BR>
+ */<BR>
+       meth getMethods($) {self getMethNames($)} end<BR>
+/* %% [TODO] Get the default arguments of the initialisation method... <BR>
+ */<BR>
+      meth getInitArgs($) <BR>
+      end<BR>
+/* %% Returns a record where the features are all supported arguments of the init method of self with their default as value (_ indicates that no default exist).<BR>
+ NB: this method relies on the correct implementation of the method getInitArgs for its class and all its superclasses. <BR>
+<BR>
+</span>
+</li><li><span class="functionname">getInitArgSources</span>($)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"></span>
+</li><li><span class="functionname">getInitClasses</span>(Classes)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> Collects all classes of the objects in self in the format expected by the second argument of Score.makeScore, i.e., a record of the form unit(label1:Class1 ... labelN:ClassN)<BR>
+<BR>
+</span>
+</li><li><span class="functionname">getInitClassesVS</span>($)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> Like getInitClasses, getInitClassesVS collects all classes of the objects in self in the format expected by the second argument of Score.makeScore. However, the result record is returned as a VS (e.g., for outputting into Oz source text files). The Strasheela classes are specified by accessing them in Strasheela functors (e.g., Strasheeala.score.note). The toplevel Strasheela functors are taken from {Init.getStrasheelaEnv strasheelaFunctors}.<BR>
+ NB: getInitClassesVS examines every class in these functors (and their subfunctors) and requires that whenever a class defines an init method, all init method arguments must be optional.<BR>
+<BR>
+</span>
+</li><li><span class="functionname">getInitInfo</span>($ exclude:Excluded)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"></span>
+</li><li><span class="functionname">getItems</span>(X)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"></span>
+</li><li><span class="functionname">getMethNames</span>($)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> Returns a list of all methods (atoms) defined for self. <BR>
+<BR>
+</span>
+</li><li><span class="functionname">getMethSources</span>($)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> Returns a record where the features are the methods defined for self and the values are the classes which define these methods. <BR>
+<BR>
+</span>
+</li><li><span class="functionname">getOffsetTime</span>(X)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"></span>
+</li><li><span class="functionname">getOffsetTimeInBeats</span>(X)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"></span>
+</li><li><span class="functionname">getOffsetTimeInSeconds</span>(X)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"></span>
+</li><li><span class="functionname">getOffsetTimeParameter</span>(X)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"></span>
+</li><li><span class="functionname">getParameters</span>(X)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"></span>
+</li><li><span class="functionname">getPosRelatedItem</span>(?X N Container)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string">Returns the item in Container which is the Nth in relation to self (i.e. self too is an item in Container). N may be a negative integer (returns an item before self) or a positive integer (returns an item after self). For example, {X positionOffset($ 1 C)} returns the item just after self in C.<BR>
+<BR>
+</span>
+</li><li><span class="functionname">getPosition</span>(?Pos Container)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> Returns the index of self in Container.<BR>
+<BR>
+</span>
+</li><li><span class="functionname">getPredecessor</span>(?X Container)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> Returns predecessor item of self in Container.<BR>
+<BR>
+</span>
+</li><li><span class="functionname">getSimultaneousItems</span>(?Xs test:Test)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> [Deterministic method] Returns list of score objects simultaneous to self and fulfilling the optional boolean function or method test. (method uses deterministic method isSimultaneousItem)<BR>
+ NB: getSimultaneousItems suspends until the rhythmic structure of the whole score self is contained in is fully determined.<BR>
+<BR>
+</span>
+</li><li><span class="functionname">getStartTime</span>(X)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"></span>
+</li><li><span class="functionname">getStartTimeInBeats</span>(X)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"></span>
+</li><li><span class="functionname">getStartTimeInSeconds</span>(X)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"></span>
+</li><li><span class="functionname">getStartTimeParameter</span>(X)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"></span>
+</li><li><span class="functionname">getSuccessor</span>(?X Container)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> Returns successor item of self in Container.<BR>
+<BR>
+</span>
+</li><li><span class="functionname">getTemporalAspect</span>(X)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> Returns the TemporalAspect self is contained in. A score object must be contained in only a single temporal aspect.  <BR>
+<BR>
+</span>
+</li><li><span class="functionname">getTemporalContainer</span>($)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> Alias for getTemporalAspect.<BR>
+<BR>
+</span>
+</li><li><span class="functionname">getTemporalPredecessor</span>(B)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> Returns the predecessor of object in its TemporalAspect. NB: method returns positional and not a temporal predecessor. <BR>
+ !!?? Rename to getPredecessorInTemporalAspect ?<BR>
+<BR>
+</span>
+</li><li><span class="functionname">getTemporalSuccessor</span>(B)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> Returns the successor of object in its TemporalAspect. NB: method returns positional and not a temporal successor. <BR>
+ !!?? Rename to getSuccessorInTemporalAspect ?<BR>
+<BR>
+</span>
+</li><li><span class="functionname">getTemporalToplevel</span>(Xs test:Test)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> Returns the first top level of self which is a temporal item <BR>
+ (cf. doc to getTopLevels).<BR>
+<BR>
+</span>
+</li><li><span class="functionname">getTimeUnit</span>(X)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"></span>
+</li><li><span class="functionname">getTopLevels</span>(?Xs test:Test)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> Returns list of all top level items in score hierarchy graph of self which fulfil the optional boolean function or method test.<BR>
+ NB: This method even collects top-levels which are not (indirect) container of self but only of some of its (indirect) contained items. <BR>
+<BR>
+</span>
+</li><li><span class="functionname">hasAbsoluteTimeUnit</span>(B)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> Returns true if the timeUnit is either seconds or milliseconds, and false otherwise. <BR>
+<BR>
+</span>
+</li><li><span class="functionname">hasFlag</span>(?B F)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> Tests whether self has flag F. Method returns a boolean. <BR>
+<BR>
+</span>
+</li><li><span class="functionname">hasPosRelatedItem</span>(B N Container)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> !! doc missing<BR>
+<BR>
+</span>
+</li><li><span class="functionname">hasPredecessor</span>(?B Container)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> Returns a boolean whether self has a predecessor in Container.<BR>
+<BR>
+</span>
+</li><li><span class="functionname">hasSuccessor</span>(?B Container)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> Returns a boolean whether self has a successor in Container.<BR>
+<BR>
+</span>
+</li><li><span class="functionname">hasTemporalPredecessor</span>(B)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"></span>
+</li><li><span class="functionname">hasTemporalSuccessor</span>(B)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> Checks whether object has a successor in its TemporalAspect. NB: method checks for a positional and not a temporal successor.<BR>
+ !!?? Rename to hasSuccessorInTemporalAspect ?<BR>
+<BR>
+</span>
+</li><li><span class="functionname">hasThisInfo</span>(B Info)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> Returns boolean whether the list at the attr info of self contains Info.<BR>
+<BR>
+</span>
+</li><li><span class="functionname">init</span>(duration:Duration endTime:EndTime offsetTime:OffsetTime startTime:StartTime timeUnit:TimeUnit&nbsp;...)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> The timing parameter units are specified by timeUnit.<BR>
+<BR>
+</span>
+</li><li><span class="functionname">initDomains</span>(Spec)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> Initialises all parameters of item to FD variables (if still free). This method is called by MakeScore. For item subclasses it should be overwritten as necessary. <BR>
+<BR>
+</span>
+</li><li><span class="functionname">initFlags</span>()<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> [aux method] Method must not be called by user. <BR>
+<BR>
+</span>
+</li><li><span class="functionname">initTiming</span>(duration:Duration endTime:EndTime offsetTime:OffsetTime startTime:StartTime timeUnit:TimeUnit)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string">[aux method] Method must not be called by user.<BR>
+<BR>
+</span>
+</li><li><span class="functionname">isAbstractElement</span>(B)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"></span>
+</li><li><span class="functionname">isAmplitude</span>(B)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"></span>
+</li><li><span class="functionname">isAspect</span>(B)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"></span>
+</li><li><span class="functionname">isContainer</span>(B)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"></span>
+</li><li><span class="functionname">isDet</span>(B)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> Are all parameter values determined? NB: isDet can return false simply because constraint propagation did not finish to determine some parameter. So, for a fully determined score you may want to delay this test by a few milliseconds.<BR>
+<BR>
+</span>
+</li><li><span class="functionname">isElement</span>(B)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"></span>
+</li><li><span class="functionname">isEvent</span>(B)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"></span>
+</li><li><span class="functionname">isExactlySimultaneousItemR</span>(?B X)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> [0/1 Constraint] Returns 0/1-integer whether self and X are exactly simultaneous in time (i.e. start and end at the same time).<BR>
+<BR>
+</span>
+</li><li><span class="functionname">isFirstItem</span>(?B Container)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> Returns a boolean whether self is the first item in Container.<BR>
+<BR>
+</span>
+</li><li><span class="functionname">isItem</span>(B)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"></span>
+</li><li><span class="functionname">isLastItem</span>(?B Container)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> Returns a boolean whether self is the last item in Container.<BR>
+<BR>
+</span>
+</li><li><span class="functionname">isModifier</span>(B)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"></span>
+</li><li><span class="functionname">isNote</span>(B)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"></span>
+</li><li><span class="functionname">isParameter</span>(B)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"></span>
+</li><li><span class="functionname">isPause</span>(B)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"></span>
+</li><li><span class="functionname">isPitch</span>(B)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"></span>
+</li><li><span class="functionname">isScoreObject</span>(B)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"></span>
+</li><li><span class="functionname">isSequential</span>(B)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"></span>
+</li><li><span class="functionname">isSimultaneous</span>(B)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"></span>
+</li><li><span class="functionname">isSimultaneousItem</span>(?B X)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> [Deterministic method] Returns boolean whether self and X are simultaneous in time. <BR>
+<BR>
+</span>
+</li><li><span class="functionname">isSimultaneousItemR</span>(?B X)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> [0/1 Constraint] Returns 0/1-integer whether self and X are simultaneous in time (i.e. somehow overlap in time).<BR>
+<BR>
+</span>
+</li><li><span class="functionname">isTemporalAspect</span>(B)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"></span>
+</li><li><span class="functionname">isTemporalElement</span>(B)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"></span>
+</li><li><span class="functionname">isTimeInterval</span>(B)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"></span>
+</li><li><span class="functionname">isTimeMixin</span>(B)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"></span>
+</li><li><span class="functionname">isTimeParameter</span>(B)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"></span>
+</li><li><span class="functionname">isTimePoint</span>(B)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"></span>
+</li><li><span class="functionname">isTopLevel</span>(?B)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> Returns boolean whether self is a top level item in the score hierarchy graph.<BR>
+<BR>
+</span>
+</li><li><span class="functionname">makeInitRecord</span>(X Attrs)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> [aux method for toInitRecord]: returns a record intended to facilitate the init method creation of an object for archive purposes. Attrs has the form [Key1#Accessor1#Default1 ...], keys are the record features of the init record, accessors the respective accessor for some object attributes (unary function or method), defaults are the respective attribute default values (the special default value noMatch matches nothing).<BR>
+</span>
+</li><li><span class="functionname">makePPrintRecord</span>(X Features Slots Excluded functions:Fns)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> [aux method for toPPrintRecord] Returns a record with the label of self (the value at the feature label of self) and the values of selected features/attributes of self at record labels. All atoms in the list Features which are member in the list Slots are features of the returned record. <BR>
+ Usually, the record feature is just bound to the value at the features/attributes of self. However, for certain features/attributes there are special access functions defined. The return value of these functions will be bound to the record features. These features and their functions are either given in a record to the optional method feature functions. Other features and their functions are predefined in the variable PPrintRecordFns.<BR>
+<BR>
+</span>
+</li><li><span class="functionname">map</span>(?Xs Fn level:Level mode:Mode test:Test)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> The method map maps the function Fn to a number of collected score objects and returns a list with all results. Fn may also be an atom representing a unary method understood by all objects in self fulfilling Test. The method supports the features <code> mode</code>, <code> level</code>, and <code> test</code>. These features have the same meaning as in the method collect.<BR>
+<BR>
+</span>
+</li><li><span class="functionname">mapContainers</span>(Xs Fn)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> Maps Fn (unary function or method) over all direct containers in self.<BR>
+<BR>
+</span>
+</li><li><span class="functionname">mapItems</span>(Xs Fn test:Test)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> Maps Fn (unary function or method) over all direct items in self which fulfill Test (a boolean function or method).<BR>
+<BR>
+</span>
+</li><li><span class="functionname">mapParameters</span>(Xs Fn)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> Maps Fn (unary function or method) over all direct parameters in self.<BR>
+<BR>
+</span>
+</li><li><span class="functionname">mappend</span>(?Xs Fn level:Level mode:Mode test:Test)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> The method map maps the function Fn (which must return a list) to a number of collected score objects and returns a list with all results appended. Fn may also be an atom representing a unary method understood by all objects in self fulfilling Test. The method supports the features <code> mode</code>, <code> level</code>, and <code> test</code>. These features have the same meaning as in the method collect.<BR>
+<BR>
+</span>
+</li><li><span class="functionname">pmApply</span>(Xs PatternMatchingExpr P)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> Apply unary procedure P (expecting a list) to the sublist from Xs (a list) matching PatternMatchingExpr (a list of atoms: a single 'x' and any number of 'o' in any order). PatternMatchingExpr expresses a sublist of Xs positionally related to self (an element of Xs). The atom 'x' in PatternMatchingExpr reprents self and one or more 'o' atoms around 'x' express predecessors or successors of self in Xs. For instance, <code>{Self patternMatchingApply([o o x] Xs P)</code> applies P to the list consisting in the two predecessors of Self in Xs and Self itself (in that order). <BR>
+ PatternMatchingApply reduces to skip in case there is no matching sublist in Xs (e.g. the PatternMatchingExpr = [o x] and self is already the first element in Xs).<BR>
+ An exeception is raised in case self is not contained in Xs or there is no 'x' in PatternMatchingExpr.<BR>
+<BR>
+ BTW: pmApply allows to easily apply rules across container bounderies. For instance, <code>local MyNotes={Flatten {MyMotifSeq mapItems($ getItems)}} in {ForAll MyNotes proc {$ N} {N pmApply(MyNotes [o x] MyRule)} end} end</code> applies MyRule to all neighbouring notes nested in a sequence of motifs.<BR>
+ See also ScoreMapping.patternMatchingApply.<BR>
+<BR>
+</span>
+</li><li><span class="functionname">pmApply2</span>(Xs PatternMatchingExpr P ElseP)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> Generalised variant of pmApply: in case no sublist in Xs matches PatternMatchingExpr, PatternMatchingApply2 does _not_ reduce to skip (as pmApply) but instead applies the null-ary procedure ElseP.<BR>
+ See also ScoreMapping.patternMatchingApply2.<BR>
+<BR>
+</span>
+</li><li><span class="functionname">pmApplyTemporalAspect</span>(PatternMatchingExpr P)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> Variant of pmApply: applies P to the sublist of the elements of the temporal aspect of self which match PatternMatchingExpr.<BR>
+<BR>
+</span>
+</li><li><span class="functionname">pmApplyTemporalAspect2</span>(PatternMatchingExpr P ElseP)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> Generalised variant of pmApplyTemporalAspect2: in case no sublist in Xs matches PatternMatchingExpr, PatternMatchingApply2 does _not_ reduce to skip (as pmApplyTemporalAspect2) but instead applies the null-ary procedure ElseP.<BR>
+<BR>
+</span>
+</li><li><span class="functionname">removeAllFlags</span>()<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> [aux method] Method should not be called by user (method removes all flags from self).  <BR>
+<BR>
+</span>
+</li><li><span class="functionname">removeFlag</span>(F)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> Removes flag F from self. <BR>
+<BR>
+</span>
+</li><li><span class="functionname">setAllParameterUnits</span>(ParameterAccessor Unit test:Test)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> For all score objects in self (including self itself) which fulfil Test (a function or method name), the method sets the parameter unit accessible by ParameterAccessor (a function or method name) to Unit. Test defaults to isItem.<BR>
+ NB: ParameterAccessor must return the parameter, not the parameter value (e.g. use getPitchParameter instead of getPitch)<BR>
+<BR>
+</span>
+</li><li><span class="functionname">setAttribute</span>(A X)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> [destructive method] Statefully sets attribute A to value X. The method is indented for editing a score after search, the search itself is indented to be fully stateless.<BR>
+<BR>
+</span>
+</li><li><span class="functionname">toFullRecord</span>(X exclude:Exclude)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> Outputs the whole score object tree as a record with the the object label as record label and with all the object attributes and object features as record features. All attributes/features containing score objects themself are called recursively, dictionaries and extendable lists (see LUtils) are transformed to records resp. lists.<BR>
+ The argument exclude allows to recursively exclude object attributes in the output.<BR>
+ !! Temp: The attributes 'item' and 'containers' are always excluded to avoid endless loops. Therefore, score graphs with items having more then a single container can not be shown.<BR>
+<BR>
+</span>
+</li><li><span class="functionname">toInitRecord</span>($ exclude:Excluded)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> Outputs the full init record for self which allows to re-create the score.<BR>
+ Excluded is a list of arguments (atoms) which must be excluded concurrently.<BR>
+<BR>
+ NB: toInitRecord depends on correct definitions of the method getInitInfo for all subclasses with specific inialisiation arguments.<BR>
+<BR>
+ NB: toInitRecord presently only works properly for tree-form score topologys (e.g. score graphs are not supported yet).<BR>
+ *<BR>
+</span>
+</li><li><span class="functionname">toPPrintRecord</span>(?X excluded:Excluded features:Features)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> Method returns a record with essential data of self. The method is intended to view self uncluttered. The method feature <code>features</code> allows to freely select a list of score object features/attributes to include. <BR>
+<BR>
+</span>
+</li><li><span class="functionname">unify</span>(ScoreObject)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> Effectively unifies self and ScoreObject. Stateful data (including class instances) can not be unified in Oz. So, unify transforms self and ScoreObject to records (using toFullRecord) and unifies those.<BR>
+ !! Temp: NB: toFullRecord (and thus unify) only works properly on score trees (see doc of toFullRecord).Besides, the score topology of both objects must be determined and equal. <BR>
+<BR>
+</span>
+</li><li><span class="functionname">wait</span>()<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> Wait until all parameter values of self and of its (directly and indirectly) contained items are determined. <BR>
+<BR>
+</span>
+</li></ul>
+<span class="keyword">end</span>
+</code>
+</div></body>
+</html>

@@ -1,0 +1,251 @@
+\begin{thebibliography}{}
+
+\bibitem[\protect\citeauthoryear{Abelson, Sussman, and Sussman}{Abelson
+  et~al.}{1985}]{AbelsonAndSussman:SICP:1985}
+Abelson, H., G.~J. Sussman, and J.~Sussman (1985).
+\newblock {\em {Structure and Interpretation of Computer Programs}}.
+\newblock MIT Press.
+
+\bibitem[\protect\citeauthoryear{Anders}{Anders}{2000}]{Anders:ICMC:2000}
+Anders, T. (2000).
+\newblock {Arno: Constraints Programming in Common Music}.
+\newblock In {\em Proceedings of the 2000 International Computer Music
+  Conference}.
+
+\bibitem[\protect\citeauthoryear{Anders}{Anders}{2002}]{Anders:ICMC:2002}
+Anders, T. (2002).
+\newblock {A wizard's aid: efficient music constraint programming with Oz}.
+\newblock In {\em Proceedings of the 2002 International Computer Music
+  Conference}.
+
+\bibitem[\protect\citeauthoryear{Assayag, Rueda, Laurson, Agon, and
+  Delerue}{Assayag et~al.}{1999}]{Assayag:1999}
+Assayag, G., C.~Rueda, M.~Laurson, C.~Agon, and O.~Delerue (1999).
+\newblock {Computer Assisted Composition at IRCAM: From PatchWork to Open
+  Music}.
+\newblock {\em Computer Music Journal\/}~{\em 23\/}(3).
+
+\bibitem[\protect\citeauthoryear{Baum}{Baum}{1900}]{Baum:WizardOfOz}
+Baum, L.~F. (1993, orig. 1900).
+\newblock {\em {The Wonderful Wizard of Oz}}.
+\newblock Wordsworth.
+
+\bibitem[\protect\citeauthoryear{Bonnet and Rueda}{Bonnet and
+  Rueda}{1999}]{Bonnet:Rueda:Situation:1999}
+Bonnet, A. and C.~Rueda (1999).
+\newblock {\em OpenMusic. Situation. version 3\/} (3rd ed.).
+\newblock Paris: IRCAM.
+
+\bibitem[\protect\citeauthoryear{Bratko}{Bratko}{2001}]{Bratko:Prolog:2001}
+Bratko, I. (2001).
+\newblock {\em Prolog. Programming for Artificial Intelligence}.
+\newblock Addison-Wesley.
+\newblock 3rd ed.
+
+\bibitem[\protect\citeauthoryear{Bresson, Agon, and Assayag}{Bresson
+  et~al.}{2005}]{Bresson:etAl:OpenMusic5:2005}
+Bresson, J., C.~Agon, and G.~Assayag (2005).
+\newblock {OpenMusic 5: A Cross-Platform Release of the Computer-Assisted
+  Composition Environment}.
+\newblock In {\em 10th Brazilian Symposium on Computer Music}, Belo Horizonte,
+  Brazil.
+
+\bibitem[\protect\citeauthoryear{Cheadle, Harvey, Sadler, Schimpf, Shen, and
+  Wallace}{Cheadle et~al.}{2003}]{CheadleEtAl:ECLiPSeIntro:2003}
+Cheadle, A.~M., W.~Harvey, A.~J. Sadler, J.~Schimpf, K.~Shen, and M.~G. Wallace
+  (2003).
+\newblock Eclipse: An introduction.
+\newblock Technical Report IC-PARC-03-1, IC-Parc, Imperial College London.
+
+\bibitem[\protect\citeauthoryear{Chemillier and Truchet}{Chemillier and
+  Truchet}{2001}]{Chemillier:Truchet:2001}
+Chemillier, M. and C.~Truchet (2001).
+\newblock {Two Musical CSPs}.
+\newblock In {\em {Seventh International Conference on Principles and Practice
+  of Constraint Programming, Musical Constraints Workshop}}, Paphos, Cyprus.
+
+\bibitem[\protect\citeauthoryear{Cope}{Cope}{1991}]{Cope:1991}
+Cope, D. (1991).
+\newblock {\em {Computers and Musical Style}}.
+\newblock Madison, WI: A-R Editions.
+
+\bibitem[\protect\citeauthoryear{Cope}{Cope}{1996}]{Cope:EMI:1996}
+Cope, D. (1996).
+\newblock {\em {Experiments in Musical Intelligence}}.
+\newblock Madison, WI: A-R Editions.
+
+\bibitem[\protect\citeauthoryear{Cope}{Cope}{2000}]{Cope:AlgorithmicComposer:2%
+000}
+Cope, D. (2000).
+\newblock {\em {The Algorithmic Composer}}.
+\newblock Madison, WI: A-R Editions.
+
+\bibitem[\protect\citeauthoryear{Courtot}{Courtot}{1990}]{Courtot:ICMC90}
+Courtot, F. (1990).
+\newblock {A Constraint Based Logic Program for Generating Polyphonies}.
+\newblock In {\em Proceedings of the International Computer Music Conference},
+  Glasgow.
+
+\bibitem[\protect\citeauthoryear{Dannenberg}{Dannenberg}{1989}]{Dannenberg:Sco%
+re:1989}
+Dannenberg, R.~B. (1989).
+\newblock {The Canon Score Language}.
+\newblock {\em Computer Music Journal\/}~{\em 13\/}(1).
+
+\bibitem[\protect\citeauthoryear{Desain}{Desain}{1990}]{Desain:90}
+Desain, P. (1990).
+\newblock {Lisp as a second language: functional aspects}.
+\newblock {\em {Perspectives of New Music}\/}~{\em 28\/}(1).
+
+\bibitem[\protect\citeauthoryear{Desain and Honing}{Desain and
+  Honing}{1997}]{Desain:Honing:CLOSe:1997}
+Desain, P. and H.~Honing (1997).
+\newblock {CLOSe to the edge? Advanced object oriented techniques in the
+  representation of musical knowledge}.
+\newblock {\em Journal of New Music Research\/}~{\em 2}.
+
+\bibitem[\protect\citeauthoryear{Harris, Smaill, and Wiggins}{Harris
+  et~al.}{1991}]{harris91representing}
+Harris, M., A.~Smaill, and G.~Wiggins (1991).
+\newblock Representing music symbolically.
+
+\bibitem[\protect\citeauthoryear{Kretz}{Kretz}{2003}]{Kretz:PRISMA01:2003}
+Kretz, J. (2003).
+\newblock {Continuous Gestures of Structured Material. Experiences in Computer
+  Aided Composition}.
+\newblock In {\em PRISMA 01}. Milano: EuresisEdizioni.
+
+\bibitem[\protect\citeauthoryear{Laurson}{Laurson}{1996}]{Laurson:PhD:1996}
+Laurson, M. (1996).
+\newblock {\em {PATCHWORK: A Visual Programming Language and some Musical
+  Applications}}.
+\newblock Ph.\ D. thesis, Sibelius Academy, Helsinki.
+
+\bibitem[\protect\citeauthoryear{Laurson and Kuuskankare}{Laurson and
+  Kuuskankare}{2001}]{Laurson:2001}
+Laurson, M. and M.~Kuuskankare (2001).
+\newblock {A Constraint Based Approach to Musical Textures and Instrumental
+  Writing}.
+\newblock In {\em {Seventh International Conference on Principles and Practice
+  of Constraint Programming, Musical Constraints Workshop}}, Paphos, Cyprus.
+
+\bibitem[\protect\citeauthoryear{Mitchell}{Mitchell}{1997}]{Mitchell:MachineLe%
+arning:1997}
+Mitchell, T.~M. (1997).
+\newblock {\em Machine Learning}.
+\newblock McGraw-Hill.
+
+\bibitem[\protect\citeauthoryear{Morales and Morales}{Morales and
+  Morales}{1995}]{Morales:Morales:LearningRules:1995}
+Morales, E. and R.~Morales (1995).
+\newblock {Learning Musical Rules}.
+\newblock In {\em Proceedings of the IJCAI-95 International Workshop on
+  Artificial Intelligence and Music, 14th International Joint Conference on
+  Artificial Intelligence (IJCAI-95)}, Montreal, Canada.
+
+\bibitem[\protect\citeauthoryear{Pachet and Roy}{Pachet and
+  Roy}{1995}]{Pachet:Roy:ConstraintsAndObjects:95}
+Pachet, F. and P.~Roy (1995).
+\newblock {Mixing Constraints and Objects: a Case Study in Automatic
+  Harmonization}.
+\newblock In I.~Graham, B.~Magnusson, and J.-M. Nerson (Eds.), {\em Proceedings
+  of {TOOLS}-Europe{'}95, Versailles, France}. Prentice-Hall, Hertfordshire,
+  UK.
+
+\bibitem[\protect\citeauthoryear{Pachet and Roy}{Pachet and
+  Roy}{2001}]{Pachet:Roy:2000}
+Pachet, F. and P.~Roy (2001).
+\newblock {Musical Harmonization with Constraints: A Survey}.
+\newblock {\em Constraints Journal\/}~{\em 6\/}(1).
+
+\bibitem[\protect\citeauthoryear{Pope}{Pope}{1991}]{Pope:OO:1991}
+Pope, S.~T. (Ed.) (1991).
+\newblock {\em {The Well-Tempered Object: Musical Applications of
+  Object-Oriented Software Technology}}.
+\newblock MIT Press.
+
+\bibitem[\protect\citeauthoryear{Pope}{Pope}{1992}]{Pope:SmOKe}
+Pope, S.~T. (1992).
+\newblock {The Smoke Music Representation, Description Language, and
+  Interchange Format}.
+\newblock In {\em ICMC 1992}.
+
+\bibitem[\protect\citeauthoryear{Rueda, Lindberg, Laurson, Block, and
+  Assayag}{Rueda et~al.}{1998}]{Rueda:1998}
+Rueda, C., M.~Lindberg, M.~Laurson, G.~Block, and G.~Assayag (1998).
+\newblock {Integrating Constraint Programming in Visual Musical Composition
+  Languages}.
+\newblock In {\em {ECAI 98 Workshop on Constraints for Artistic Applications}},
+  Brighton.
+
+\bibitem[\protect\citeauthoryear{Russell and Norvig}{Russell and
+  Norvig}{2002}]{RussellAndNorvig:AI}
+Russell, S.~J. and P.~Norvig (2002).
+\newblock {\em {Artificial Intelligence: A Modern Approach}\/} (2nd ed.).
+\newblock Prentice Hall.
+
+\bibitem[\protect\citeauthoryear{Sandred}{Sandred}{2000}]{Sandred:OMRC:2000}
+Sandred, O. (2000).
+\newblock {\em OMRC 1.1. A library for controlling rhythm by constraints\/}
+  (2nd ed.).
+\newblock Paris: IRCAM.
+
+\bibitem[\protect\citeauthoryear{Sandred}{Sandred}{2003}]{Sandred:PRISMA01:200%
+3}
+Sandred, O. (2003).
+\newblock {Searching for a Rhythmical Language}.
+\newblock In {\em PRISMA 01}. Milano: EuresisEdizioni.
+
+\bibitem[\protect\citeauthoryear{Schottstaedt}{Schottstaedt}{1989}]{Schottstae%
+dt:Counterpoint:1989}
+Schottstaedt, W. (1989).
+\newblock {Automatic Counterpoint}.
+\newblock In M.~V. Mathews and J.~R. Pierce (Eds.), {\em {Current Directions in
+  Computer Music Research}}. The MIT Press.
+
+\bibitem[\protect\citeauthoryear{Schulte}{Schulte}{2002}]{Schulte:Book:2002}
+Schulte, C. (2002).
+\newblock {\em Programming Constraint Services}, Volume 2302 of {\em Lecture
+  Notes in Artificial Intelligence}.
+\newblock Berlin, Germany: Springer-Verlag.
+
+\bibitem[\protect\citeauthoryear{SICS}{SICS}{}]{SICStus:Site}
+SICS.
+\newblock {SICStus Prolog}.
+\newblock \url{http://www.sics.se/isl/sicstuswww/site/index.html} (accessed 24
+  May 2006).
+
+\bibitem[\protect\citeauthoryear{Truchet}{Truchet}{}]{Truchet:OMBTTutorial}
+Truchet, C.
+\newblock {OMBacktrack Tutorial}.
+\newblock
+  \url{http://www.ircam.fr/equipes/repmus/OpenMusic/Documentation/OMUserDocume%
+ntation/DocFiles/Reference/backtrack tutorial/} (accessed 25 May 2006).
+
+\bibitem[\protect\citeauthoryear{Truchet, Agon, and Codognet}{Truchet
+  et~al.}{2001}]{Truchet:Chypre2001}
+Truchet, C., C.~Agon, and P.~Codognet (2001).
+\newblock {A Constraint Programming System for Music Composition, Preliminary
+  Results}.
+\newblock In {\em {Seventh International Conference on Principles and Practice
+  of Constraint Programming, Musical Constraints Workshop}}, Paphos, Cyprus.
+
+\bibitem[\protect\citeauthoryear{Truchet, Assayag, and Codognet}{Truchet
+  et~al.}{2003}]{Truchet:etAl:2003}
+Truchet, C., G.~Assayag, and P.~Codognet (2003).
+\newblock {OMClouds, a heuristic solver for musical constraints}.
+\newblock In {\em {MIC2003: The Fifth Metaheuristics International
+  Conference}}, Kyoto, Japan.
+
+\bibitem[\protect\citeauthoryear{van Roy and Haridi}{van Roy and
+  Haridi}{2004}]{Roy:OzBook}
+van Roy, P. and S.~Haridi (2004).
+\newblock {\em {Concepts, Techniques, and Models of Computer Programming}}.
+\newblock MIT Press.
+
+\bibitem[\protect\citeauthoryear{Wolkow}{Wolkow}{1939}]{Wolkow:Smaragdenstadt}
+Wolkow, A. (2005, Russian orig. 1939).
+\newblock {\em {Der Zauberer der Smaragdenstadt}}.
+\newblock Leiv Buchhandels- und Verlagsanstalt.
+
+\end{thebibliography}

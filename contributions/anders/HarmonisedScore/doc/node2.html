@@ -1,0 +1,314 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<html>
+ <head>
+  <title>DB</title>
+  <style>BODY {
+ background: url(page.gif) repeat-y white;
+}
+#slidemenubar, #slidemenubar2{
+ position:absolute;
+ left:-144px;
+ width:160px;
+ top:10px;
+ border:0px solid black;
+ font:bold 12px Verdana;
+ line-height:10px;
+}
+.margin {
+ position: absolute;
+ left: 10px;
+ width: 130px;
+}
+BODY, P, H1, H2, H3, A {
+ font-family: sans-serif;
+}
+PRE, CODE {
+ font-family: courier, monospace;
+}
+P {
+ text-align: justify;
+}
+H1     { color: #9B0000; }
+H2     { color: #FF9933; }
+H3, H4 { color: #881155; }
+CODE              { color: #663366; }
+.code CODE        { color: #000000; }
+SPAN.comment      { color: #B22222; }
+SPAN.keyword      { color: #A020F0; }
+SPAN.string       { color: #BC8F8F; }
+SPAN.functionname { color: #0000FF; }
+SPAN.type         { color: #228B22; }
+SPAN.variablename { color: #B8860B; }
+SPAN.reference    { color: #5F9EA0; }
+SPAN.builtin      { color: #DA70D6; }
+A:link {
+ color: #666666;
+}
+A:visited {
+ color: black;
+}
+A.pre { font-family: courier, monospace;
+ color: #228B22;
+}
+</style>
+ </head>
+<body>
+<script language="JavaScript1.2">
+if (document.all)
+document.write('<div id="slidemenubar2" style="left:-144" onMouseover="pull()" onMouseout="draw()">')
+</script>
+<layer id="slidemenubar" onMouseover="pull()" onMouseout="draw()">
+<table border="0" cellpadding="0" cellspacing="0" width="161"><tr><td bgcolor="#009cff" width="144"><a href="index.html">Index</a>
+</td><td rowspan="15" valign="top" width="16"><img src="menu.gif" width="16"></td></tr><tr><td bgcolor="#009cff" width="144"><a href="node1.html">HarmonisedScore</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node2.html">DB</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node3.html">Score</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node4.html">Rules</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node5.html">DBs</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node6.html">Default</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node7.html">Jazz</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node8.html">Partch</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node9.html">Johnston</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node10.html">Harrison</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node11.html">Chalmers</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node12.html">Catler</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node13.html">ArithmeticalSeriesChords</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node14.html">HS</a>
+</td></tr></table></layer>
+<script language="JavaScript1.2">
+function regenerate(){
+window.location.reload()
+}
+function regenerate2(){
+if (document.layers)
+setTimeout("window.onresize=regenerate",400)
+}
+window.onload=regenerate2
+if (document.all){
+document.write('</div>')
+themenu=document.all.slidemenubar2.style
+rightboundary=0
+leftboundary=-144
+}
+else{
+themenu=document.layers.slidemenubar
+rightboundary=144
+leftboundary=0
+}
+function pull(){
+if (window.drawit)
+clearInterval(drawit)
+pullit=setInterval("pullengine()",20)
+}
+function draw(){
+clearInterval(pullit)
+drawit=setInterval("drawengine()",50)
+}
+function pullengine(){
+if (document.all&&themenu.pixelLeft<rightboundary)
+themenu.pixelLeft+=5
+else if(document.layers&&themenu.left<rightboundary)
+themenu.left+=5
+else if (window.pullit)
+clearInterval(pullit)
+}
+function drawengine(){
+if (document.all&&themenu.pixelLeft>leftboundary)
+themenu.pixelLeft-=5
+else if(document.layers&&themenu.left>leftboundary)
+themenu.left-=5
+else if (window.drawit)
+clearInterval(drawit)
+}
+</script>
+
+<div style="margin-left:160px"><span class="string">
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> Functor defines data abstraction for a user-defined database of settings like chord and scale structures which are used by the contribution HarmonisedScore. See SetDB of further details. <BR>
+<BR>
+</span>
+</span>
+<h3>Functor</h3>
+<ul>DB ("<span class="string">/Users/t/oz/music/Strasheela/strasheela/contributions/anders/HarmonisedScore/source/Database.oz</span>")<br></ul>
+<h3>Import</h3>
+<code><ul><li>FD</li><li>FS</li><li>RecordC</li><li>Browser(browse:Browse)</li><li>LUtils at "<span class="string">x-ozlib://anders/strasheela/source/ListUtils.ozf"
+</span></li><li>MUtils at "<span class="string">x-ozlib://anders/strasheela/source/MusicUtils.ozf"
+</span></li><li><a href="node5.html">DBs</a> at "<span class="string">databases/Databases.ozf"
+</span></li></ul></code>
+<h3>Export</h3>
+<code><ul><li>&lt;P/1:<a href="#entity20"><span class="functionname">SetDB</span></a>&gt;
+</li><li>&lt;P/1:<a href="#entity21"><span class="functionname">GetEditChordDB</span></a>&gt;
+</li><li>&lt;P/1:<a href="#entity22"><span class="functionname">GetInternalChordDB</span></a>&gt;
+</li><li>&lt;P/1:<a href="#entity23"><span class="functionname">GetEditScaleDB</span></a>&gt;
+</li><li>&lt;P/1:<a href="#entity24"><span class="functionname">GetInternalScaleDB</span></a>&gt;
+</li><li>&lt;P/1:<a href="#entity25"><span class="functionname">GetEditIntervalDB</span></a>&gt;
+</li><li>&lt;P/1:<a href="#entity26"><span class="functionname">GetInternalIntervalDB</span></a>&gt;
+</li><li>&lt;P/1:<a href="#entity27"><span class="functionname">GetPitchesPerOctave</span></a>&gt;
+</li><li>&lt;P/1:<a href="#entity29"><span class="functionname">GetPitchUnit</span></a>&gt;
+</li><li>&lt;P/1:<a href="#entity28"><span class="functionname">GetAccidentalOffset</span></a>&gt;
+</li><li>&lt;P/1:<a href="#entity30"><span class="functionname">GetOctaveDomain</span></a>&gt;
+</li><li>&lt;P/1:<a href="#entity31"><span class="functionname">MakePitchClassFDInt</span></a>&gt;
+</li><li>&lt;P/1:<a href="#entity32"><span class="functionname">MakeOctaveFDInt</span></a>&gt;
+</li><li>&lt;P/1:<a href="#entity33"><span class="functionname">MakeAccidentalFDInt</span></a>&gt;
+</li><li>&lt;P/1:<a href="#entity34"><span class="functionname">MakeScaleDegreeFDInt</span></a>&gt;
+</li><li>&lt;P/1:<a href="#entity35"><span class="functionname">MakeChordDegreeFDInt</span></a>&gt;
+</li><li>&lt;P/3:<a href="#entity36"><span class="functionname">RatiosInDBEntryToPCs</span></a>&gt;
+</li><li>&lt;P/3:<a href="#entity37"><span class="functionname">Pc2Ratios</span></a>&gt;
+</li></ul></code>
+<h3>Define</h3>
+
+<code>
+<a name="entity20">
+<span class="keyword">proc</span>{<span class="functionname">SetDB</span> NewDB}<br>
+<span class="string"> Sets the database which is used by the music representation and rules of the HarmonisedScore contribution.<BR>
+ The syntax of the database is<BR>
+      &lt;DB&gt; ==:: unit([chordDB:&lt;PCGroupDB&gt;]<BR>
+		     [scaleDB:&lt;PCGroupDB&gt;]<BR>
+		     [intervalDB:&lt;IntervalDB&gt;]<BR>
+		     [pitchesPerOctave:&lt;PitchesPerOctave&gt;]<BR>
+		     [accidentalOffset:&lt;AccidentalOffset&gt;]<BR>
+		     [octaveDomain:&lt;OctaveDomain&gt;])<BR>
+      &lt;PCGroupDB&gt; ==:: unit(&lt;PCGroupEntry&gt;+)<BR>
+      &lt;PCGroupEntry&gt; ==:: unit(pitchClasses:&lt;IntList&gt;<BR>
+			       roots:&lt;IntList&gt;<BR>
+			       [&lt;FeatureValuePair&gt;*]<BR>
+			       [comment:&lt;Value&gt;])<BR>
+      &lt;IntervalDB&gt; ==:: unit([&lt;FeatureValuePair&gt;+]<BR>
+			     [comment:&lt;Value&gt;])<BR>
+      &lt;PitchesPerOctave&gt; ==:: &lt;Int&gt;<BR>
+      &lt;AccidentalOffset&gt; ==:: &lt;Int&gt;<BR>
+      &lt;OctaveDomain&gt; ==:: &lt;Int&gt;#&lt;Int&gt;<BR>
+      <BR>
+ All features of the whole DB and also of some sub-DBs (e.g. of the chordDB and scaleDB) are optional (as marked by square brackets).<BR>
+ NB: every DB feature missing in NewDB is set to a default value. <BR>
+<BR>
+ Temp doc: For further details read the doc of the aux accessors.<BR>
+ TODO: write a better doc..<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity21">
+<span class="keyword">fun</span>{<span class="functionname">GetEditChordDB</span> }
+</code><br>
+
+<code>
+<a name="entity22">
+<span class="keyword">fun</span>{<span class="functionname">GetInternalChordDB</span> }
+</code><br>
+
+<code>
+<a name="entity23">
+<span class="keyword">fun</span>{<span class="functionname">GetEditScaleDB</span> }
+</code><br>
+
+<code>
+<a name="entity24">
+<span class="keyword">fun</span>{<span class="functionname">GetInternalScaleDB</span> }
+</code><br>
+
+<code>
+<a name="entity25">
+<span class="keyword">fun</span>{<span class="functionname">GetEditIntervalDB</span> }
+</code><br>
+
+<code>
+<a name="entity26">
+<span class="keyword">fun</span>{<span class="functionname">GetInternalIntervalDB</span> }
+</code><br>
+
+<code>
+<a name="entity27">
+<span class="keyword">fun</span>{<span class="functionname">GetPitchesPerOctave</span> }
+</code><br>
+
+<code>
+<a name="entity29">
+<span class="keyword">fun</span>{<span class="functionname">GetPitchUnit</span> }
+</code><br>
+
+<code>
+<a name="entity28">
+<span class="keyword">fun</span>{<span class="functionname">GetAccidentalOffset</span> }
+</code><br>
+
+<code>
+<a name="entity30">
+<span class="keyword">fun</span>{<span class="functionname">GetOctaveDomain</span> }
+</code><br>
+
+<code>
+<a name="entity31">
+<span class="keyword">fun</span>{<span class="functionname">MakePitchClassFDInt</span> }<br>
+<span class="string"> Return a FD integer representing a pitch class (range defined by PitchesPerOctave).<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity32">
+<span class="keyword">fun</span>{<span class="functionname">MakeOctaveFDInt</span> }<br>
+<span class="string"> Return a FD integer representing an octave (range OctaveDomain).<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity33">
+<span class="keyword">fun</span>{<span class="functionname">MakeAccidentalFDInt</span> }<br>
+<span class="string"> Return a FD integer representing an accidental (range 0#AccidentalOffset*2). <BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity34">
+<span class="keyword">fun</span>{<span class="functionname">MakeScaleDegreeFDInt</span> }<br>
+<span class="string"> Returns a FD integer representing a scale degree (range 1#MaxScaleLength).<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity35">
+<span class="keyword">fun</span>{<span class="functionname">MakeChordDegreeFDInt</span> }<br>
+<span class="string"> Returns a FD integer representing a chord degree (range 1#MaxChordLength).<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity36">
+<span class="keyword">proc</span>{<span class="functionname">RatiosInDBEntryToPCs</span> MyDBEntry KeysPerOctave Out}<br>
+<span class="string"> Processes an entry for a HS database (e.g. for a chord database). HS depends on pitches as keynumbers and pitch classes (all represented by integers or FD ints), both depending on KeysPerOctave. RatiosInDBEntryToPCs, on the other hand, permits also ratios (floats or fractions specs) which are transformed and rounded to the nearest pitch class (a ratio representing an interval exceeding an octave is transformed into an interval within an octave). <BR>
+ MyDBEntry is a record with arbitrary features. Each feature value is either an interger, a list of integers, a ratio spec (either a float or a fraction spec in the form &lt;Int&gt;#&lt;Int&gt;), or a list of ratio specs. The output contains each integer/lists of integers unchanged but substitutes each ratio/list of ratios by the nearest pitch class interval (an integer), depending on KeysPerOctave (an integer).<BR>
+ Additionally, a comment feature in MyDBEntry with arbitrary value is permitted. The returned record has always a comment feature with a record as value. The explaination of the comment in the return value is a bit complicated and depends on MyDBEntry. For features in MyDBEntry with a ratio, collect in comment the ratio, its pitch class plus the error, for other features in Test keep the orig value. In case MyDBEntry contains a feature comment as well, this value is preserved: in case MyDBEntry.comment is a record as well, its features are added to the comment record of the result. However, in case MyDBEntry.comment contains a feature 'comment' with the same feature as a feature in MyDBEntry itself, then the feature of MyDBEntry.comment is preferred. See the test file for examples.<BR>
+<BR>
+ NB: in HS.db, an OctaveDomain is also specified as &lt;Int&gt;#&lt;Int&gt;, but must not be mixed up with a fraction spec.<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity37">
+<span class="keyword">fun</span>{<span class="functionname">Pc2Ratios</span> PC IntervalDB}<br>
+<span class="string"> Returns a list of all ratios which match PC (an int) in IntervalDB (given in its edit form) which was defined using ratios (e.g. {HS.dbs.partch.getIntervals {HS.db.getPitchesPerOctave}}).<BR>
+ A ratio consists in two integers and has the form Nom#Denom. If no entry in the database matches PC, nil is returned.<BR>
+<BR>
+ Two examples:<BR>
+   {PC2Ratios 9 {HS.dbs.partch.getIntervals 12}}<BR>
+   {PC2Ratios 53 {HS.dbs.partch.getIntervals 72}}<BR>
+<BR>
+ NB: Pc2Ratios is a deterministic function and no constraint.<BR>
+<BR>
+</span>
+</code><br>
+<h3>End</h3>
+</div></body>
+</html>

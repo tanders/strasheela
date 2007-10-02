@@ -1,0 +1,164 @@
+\documentclass{scrartcl} 
+
+\input{TorstenAnders-PhDThesis-header} 
+
+\begin{document}
+
+\title{Why Strasheela?}
+\author{Torsten Anders}
+\maketitle
+
+\begin{abstract}
+
+Strasheela is a highly generic constraint-based computer aided music composition system. The user of such a system expresses a music theory as a musical constraint satisfaction problem (CSP) and the computer generates music which follows this theory. A generic music constraint system makes the definition of musical CSPs more easy than it would be in a general constraint system. This text motivates such a system and briefly outlines the design of Strasheela.
+
+NB: This text is the introductory chapter of my PhD thesis (draft).   
+
+\end{abstract}
+
+
+\section{Constraint-Based Computer Aided Composition}
+
+Computational models of composition have long attracted musicians and computer scientists alike. Composers like to explore new compositional approaches in order to develop a distinct personal musical language. Music theorists can evaluate an hypothesis by means of a computational model. For computer scientists, modelling music is challenging because the complexity inherent in music calls for the most advanced computer science concepts.
+
+Notably rule-based approaches have alway stimulated interest.\footnote{In this text, the term `rule' (and `rule-based') primarily denotes the musical concept of a compositional rule. 
+In particular, this term does not implicitly refer to any specific programming technique (e.g. the term does not implicitly refer to a Prolog rule \citep{Bratko:Prolog:2001} or a condition-action rule \citep{RussellAndNorvig:AI}). 
+Instead, the text explains how the musical concept is realised as a programming concept in different systems.} 
+For centuries, compositional rules were an established device for expressing compositional knowledge (for example in music education). Many musicians thus feel comfortable with a computational model based on the notion of rules. For example, rule-based approaches attracted much attention among composers, because by defining rules composers can formalise virtually any explicitly available compositional knowledge as a task which the computer can solve automatically.
+
+Constraint programming has proven a particularly successful programming paradigm to realise ruled-based systems. Many compositional tasks have been addressed by constraint programming. Besides tasks inspired by traditional music theory such as the generation of harmonic progressions \citep{Pachet:Roy:2000} or counterpoint \citep{Schottstaedt:Counterpoint:1989,Laurson:PhD:1996}, examples include purely rhythmical tasks \citep{Sandred:PRISMA01:2003}, Ligeti-like textures \citep{Laurson:2001}, the modelling of non-European music \citep{Chemillier:Truchet:2001}, or instrumentation \citep{Laurson:2001}.
+% (Sec. [ref Ex. Sec in Survey II] introduced a number of example tasks). 
+
+
+The attraction of constraint programming is easily explained. Constraint programming allows to model complex problems a simple way. 
+A problem is stated by a set of \emph{variables} (unknowns) and \emph{constraints} (relations) between these variables. 
+For example, a compositional task is stated by (i) a music representation in which some musical aspects are unknown -- and therefore represented by variables -- and (ii) compositional rules which impose constraints on these variables. For instance, a chord can be expressed by an event list and the chord pitches can be variables. Some harmonic rules may specify how the chord pitches are related to each other. 
+In the terminology of constraint programming, the modelled problem or task is referred to as a \emph{constraint satisfaction problem} (CSP). 
+
+
+In a solution to a CSP, every variable has a value which is consistent with all its constraints.
+For example, the solution of a musical CSP is a fully determined music representation consistent with all constraints expressed by the rules.
+Existing constraint programming systems (abridged: constraint systems) can efficiently solve a CSP -- a fact which greatly contributed to the popularity of constraint programming.
+
+
+A musical CSP can always be defined `from scratch' in a general constraint system. For instance, such a CSP can be defined in a regular programming language with support for constraint programming such as the Prolog based systems ECLiPSe \citep{CheadleEtAl:ECLiPSeIntro:2003} or SICTus Prolog \citeauthorp{SICStus:Site}. However, subject-specific CSPs share a considerable amount of subject-specific knowledge: all musical CSPs require modelling of musical knowledge. For instance, concepts such as note, pitch, or voice are required in a large number of musical CSPs. 
+Whenever a musical CSP is defined `from scratch', all this knowledge must be modelled anew. What's more, any subject-specific optimisation of the search process must also be carried out again (if the chosen constraint system supports such optimisations at all).
+
+Therefore, a number of generic music constraint systems have been proposed. A \emph{generic music constraint system} predefines general musical knowledge and building-blocks shared by many musical CSPs and that way highly simplifies the definition of such problems. For example, such a system may provide a specific music representation, templates to simplify the definition of compositional rules, or mechanisms to conveniently control how a rule is applied to the score. Particular important systems are PWConstraints \citep{Laurson:PhD:1996}, and Situation \citep{Rueda:1998,Bonnet:Rueda:Situation:1999}. A pioneering system is Carla \citep{Courtot:ICMC90}. Further examples include the aggregation of the music representation MusES with the constraint constraint system BackTalk \citep{Pachet:Roy:ConstraintsAndObjects:95}, OMRC \citep{Sandred:OMRC:2000,Sandred:PRISMA01:2003}\footnote{OMRC is defined on top of OMCS, which in turn is a port of the PWConstraints subsystem PMC from its host composition system PatchWork \citep{Laurson:PhD:1996} to the descendant OpenMusic \citep{Assayag:1999}.}, Arno \citep{Anders:ICMC:2000}, OMBacktrack \citep{Truchet:OMBTTutorial}, and OMClouds \citep{Truchet:Chypre2001,Truchet:etAl:2003}.
+Already the number of existing systems demonstrates the high interest in music constraint programming. 
+
+The availability of generic music constraint systems makes music constraint programming accessible for a much larger user community. 
+Often, these systems are explicitly tailored for users without any technical background who want to focus on formalising and solving the specific musical tasks they are interested in. 
+A composer can apply such a system as an assistant in the composition process, a music theorist can use it as a testbed to evaluate a music theory, and a teacher can demonstrate the effect of different compositional rules to students.
+
+The constraint programming paradigm is well suited to the needs of computer aided composition.
+Composers often prefer a way of working which is situated somewhere in the middle between composing `by hand' and formalising the composition process such that it can be delegated to the computer. Constraint programming supports this way of working very well. For example, the composer can determine some aspects of the music (e.g. certain pitches) by hand and constrain other aspects by rules. Alternatively, the composer may specify the high-level structure (e.g. the formal structure) manually and let the computer fill in the details.
+Furthermore, composers usually do not first fully formalise certain aspects of the composition process before they start actually composing. Instead, the formalisation is often an integral aspect of the composition process itself. A compositional task defined by means of constraint programming can be shaped in a highly flexible way during the composition process by the adding, removing and changing of individual rules. 
+
+A number of well-established composers already made extensive use of constraint programming. These include Antoine Bonnet (e.g. for \emph{\'Epitaphe} for 8 brass instruments, 2 pianos, orchestra and electro-acoustics, 1992--1994, using Situation \citep{Bresson:etAl:OpenMusic5:2005}), Magnus Lindberg (\emph{Engine} for chamber orchestra, 1996, using PWConstraints \citep{Rueda:1998}), Georges Bloch (\emph{Palm Sax} for seven saxophones, using Situation \citep{Rueda:1998}), \"Orjan Sandred (\emph{Kalejdoskop} for clarinet, viola and piano, 1999, using OMRC, \citep{Sandred:PRISMA01:2003}), Jacopo Baboni Schilingi (\emph{Concubia nocte, in memoria di Luciano Berio} for soprano and live computer, 2003, using OMCS)\footnote{Personal communication at PRISMA (Pedagogia e Ricerca sui Sistemi Musicali Assistiti) meeting, January 2004 at Centro Tempo Reale in Florence}, and Johannes Kretz (\emph{second horizon} for piano and orchestra, 2002, using both OMRC and OMCS \citep{Kretz:PRISMA01:2003}).
+
+
+\section{Wanted: A Generic Music Constraint System}
+
+A generic music constraint system makes the definition of \emph{musical} CSPs more easy than it would be in a general constraint system. Therefore, musicians are interested in such a system.
+
+At the same time, a generic music constraint system should not restrict its user to specific CSP classes. For instance, composers usually prefer to make compositional decisions themselves without being restricted by some tool such as a composition system what they can express musically. The user of an \emph{ideal} generic music constraint system (in the sense of a most generic system) can formalise any music theory conceivable which can be stated by a set of rules. The system will create music which complies this theory. 
+
+Such an ideal system allows to represent arbitrary aspects of the music by variables which can be undetermined and constrained in the problem definition. % whose domain can contain arbitrary values.
+Example aspects which can be expressed by variables in such a system include the rhythmical structure of the music, its texture (e.g. the number of notes at any time), the pitch structure, instrumentation, or sound synthesis details (e.g. envelopes for various parameters).
+In an extreme case, the set of solutions for a single CSP contains any conceivable score. % For example, in the definition of this CSP virtually all musical aspects are represented by variables which are restricted by only few constraints.
+
+
+To allow for arbitrary musical CSPs, an ideal system provides access to arbitrary musical information required for the definition and application of compositional rules. 
+% (either explicitly represented in the music representation -- by determined value or variables -- or deduced from explicitly represented information) 
+For example, traditional counterpoint rules require much information which can only be deduced from the information explicitly represented in the representation traditionally used for contrapuntal composition (i.e. common music notation). 
+For instance, a common contrapuntual rule permits dissonant note pitches in situations where a number of conditions is met which involve various musical aspects: a note may be dissonant in case it is a passing note on an easy beat and below a certain duration. This rule thus requires information on the harmonic aspect deduced from the pitches of simultaneous notes (whether a certain note is dissonant), information on the melodic aspect deduced from the pitches of notes in the same voice (whether this note is a passing note), information on the metric aspect deduced from the position of the note in a measure (whether this note is on an easy beat), and rhythmical information (the note's duration).
+%% this _my_ rule formulation (i.e. not Jeppesen or something)
+
+Existing generic music constraint systems, however, are designed to cover specific ranges of musical CSPs. These systems support the formalisation of certain music theory cases very well, but other theories are hard or even impossible to define. 
+For example, OMRC is designed solely for solving rhythmical CSPs, and Situation is best suited for harmonic CSPs. PWConstraints's subsystem score-PMC is designed to solve polyphonic CSPs, but score-PMC requires a fully determined rhythmical structure in the problem definition (i.e. only note pitches can be constrained).
+
+Existing systems are programming systems and indeed allow a user to express a considerable number of musical CSPs: the user expresses a compositional task in the programming language used by the system. For example, most systems allow the user to freely define a compositional rule as a modular subprogram which makes use of arbitrarily complex expressions. 
+
+Still, only certain aspects of a musical CSP can be programmed. Other aspects can not be changed or the system only offers a limited set of selectable options. 
+For example, the music representations of many existing systems predefine common musical concepts such as notes, pitches and durations which greatly simplifies the definition of many musical CSPs. However, the user has only limited influence on the form of this representation and in effect the representation is only well suited for a limited set of problems.
+
+In particular, the representations of existing systems limit what explicit score information can be stored and what derived information can be accessed. For example, many systems provide a sequential music representation and primarily support deriving information from sets of score object which are positionally related (e.g. allow to access neighbouring notes or chords in a sequence). 
+Access to other derived information (e.g. whether a note is on an easy beat, or whether a note is dissonant with respect to the chord expressed by its surrounding notes in a polyphonic texture) is restricted -- which clearly affects the set of CSPs which can be defined in these systems.   
+
+In addition, the search strategy of existing systems is usually optimised for specific classes of musical CSPs. In effect, systems sometimes even purposefully restrict their users to CSPs which they can solve efficiently.
+For instance, score-PMC does not allow to constrain the temporal structure of music, because a determined temporal structure is required by the polyphonic music search approach of score-PMC to compute an efficient static search order \citep{Laurson:PhD:1996}. Similarily, the search strategy of Situation (which performs a consistency enforcing technique to distinctly reduce the search space) is optimised for its specific music representation format \citep{Rueda:1998}.
+
+The present research proposes a highly generic music constraint system. This system allows to define and solve musical CSPs which were virtually impossible in previous systems. 
+At the same time, this system performs reasonably efficient -- even at problems which were hard to solve in previous systems due to their computational complexity (e.g. polyphonic CSPs in which both the rhythmical structure and the pitch structure is constrained).
+% !!?? The new system can express what existing systems can express and additionally it allows to solve CSPs which could not be solved with the previous systems. 
+%% -> Problem: arbitrary var domains..
+The design of the system is outlined in the subsequent Sec. \vref{sec:intro:approach-taken}. 
+% A fully-working prototype has been implemented (using the multi-paradigm programming language Oz \citep{Smolka:OzModel:1995,Roy:OzBook}, which features state-of-the-art constraint programming facilities). 
+% and was applied for various musical CSP examples. 
+
+
+\subsection*{A Side Note: Relation to Learning-Based Approaches}
+
+Computational models of music composition also often apply an analysis or learning-based approach instead of a rule-based approach. For example, the work of \citet{Cope:1991,Cope:EMI:1996,Cope:AlgorithmicComposer:2000} gained particular interest, also because of the musical quality of his results. 
+
+Yet, such an approach is best suited to model an existing style of music for which a corpus of examples is available. Composers, however, are usually less interested in style replication but aim to develop their own distinct musical language. 
+The development of a tool for composers was the original motivation of the present research, which therefore prefers a rule-based approach. 
+
+When comparing a rule-based approach with an analysis or learning-based approach, the former expresses explicit musical knowledge (e.g. statements in first-order logic) whereas the musical knowledge for the latter approach is often implicit (e.g. as weights in an artificial neuronal network). 
+However, a learning-based approach can also lead to explicit musical knowledge. For example, \citep{Morales:Morales:LearningRules:1995} propose a system which automatically creates rules in first-order logic (horn clauses) given a musical example and rule templates. The textbook by \citet{Mitchell:MachineLearning:1997} introduces learning techniques including the learning of rules. 
+
+Rules won by learning can be used in a rule-based system like handwritten rules. Consequently, a generic rule-based system can also be of interest for the community using an analysis or learning-based approach to model music composition. 
+
+
+\section{The Approach Taken}
+\label{sec:intro:approach-taken}
+
+%% !! this section lists my original contributions in general terms
+
+   %% ?? introduce terms score context / rule scope
+
+The present research proposes to make music constraint systems more generic by making them more progammable. This proposal is exemplified in the design of the generic music constraint system Strasheela.\footnote{Strasheela is also the name of an amicable and stubby scarecrow in the children's novel \emph{The Wizard of the Emerald City} by Alexander Volkov \citep{Wolkow:Smaragdenstadt} in which the Russian author retells \emph{The Wonderful Wizard of Oz} by \citet{Baum:WizardOfOz}. The latter inspired the name for the programming language Oz \citep{Roy:OzBook}, which forms the foundation for the prototype of the Strasheela composition system. 
+
+The scarecrow's brain consists only in bran, pins and needles. Nevertheless, he is a brilliant logician and loves to multiply four figure numbers at night. Little is yet known about his interest in music, but Strasheela is reported to sometimes dance and sing with joy.} 
+When comparing Strasheela with previous systems, three important aspects in particular are made (more) programmable: the music representation, the rule application to the score, and the search strategy.
+
+%% !! add full references to the books by Alexandr Volkov and 
+
+
+Strasheela's music representation aims to conveniently provide any information required to express musical CSPs. To this end, the representation is highly extendable. Representation building blocks required for many CSPs are ready-made, but Strasheela additionally predefines building blocks which assist the user to extend the representation according needs. 
+
+%% allows to reproduce music representation of existing systems 
+
+Strasheela defines a novel music representation in the spirit of CHARM \citep{harris91representing}. Two principles have been adopted from CHARM. Like CHARM, Strasheela's representation is based on the notion of data abstraction \citep{AbelsonAndSussman:SICP:1985} and it allows for user-controlled hierarchic nesting of score objects. 
+
+Strasheela's representation complements these principles by other principles learned from the music representation literature, for example, selectable score parameter (music magnitude) representations \citep{Pope:SmOKe} (e.g. a pitch can be represented by a keynumber, cent or frequency value), bidirectional links between score objects to facilitate free traversing in the score hierarchy \citep{Laurson:PhD:1996}, temporal containers which organise their elements sequentially or simultaneously in time \citep{Dannenberg:Score:1989}, organisation of musical data types in an user-extendable class hierarchy \citep{Pope:OO:1991,Desain:Honing:CLOSe:1997}, and a highly generic data abstraction interface realised by higher-order functions \citep{Desain:90}. 
+
+It is essential for a generic music constraint system that the user freely controls which variables in the music representation are constrained by which compositional rule. Unlike many previous systems, Strasheela fully decouples the definition and application of a rule to make the rule application freely programmable.
+
+Strasheela proposes to encapsulate compositional rules in functions (actually proceduces) as first-class values \citep{AbelsonAndSussman:SICP:1985}. This approach allows to define rule application mechanisms as higher-order functions expecting rules (i.e. functions) as arguments. A number of rule application functions suited for many CSPs have been defined, which either reproduce rule application mechanisms of existing systems or constitute convenient novel application mechanisms. The user can easily define further such rule application functions according needs. % (for example, the Strasheela prototype provides a large set of functions which are only partly discussed in this thesis).
+
+
+Finally, a constraint system must be reasonable efficient to be useful in praxis. It makes a big difference whether a CSP takes seconds or hours to solve. 
+Strasheela is founded on a constraint programming model based on the notion of computation spaces \citep{Schulte:Book:2002}. This model makes the search process itself programmable at a high-level. 
+% For example, this model makes the decision making of the search process (the distribution strategy, the branching heuristics) user-programmable -- independent of the problem definition. 
+%
+% Different aspects of the search process are user-programmable as modular constraint services. Constraint service examples include constraint propagators (performing automatic deductions which reduce the search space without search), constraints distributors (branching heuristic, performing decisions during the search process which results in the search tree), and search engines (exploring the search tree for solutions). 
+% For this purpose, Strasheela's constraint solver uses propagate-and-search \citep{Roy:OzBook}, a state-of-the-art approach to search. This approach combines constraint propagation \citep{Dechter:CP:2003} [?? Dechter OK as ref here?] (i.e. automatic deduction which reduces the search space without search) with a programmable systematic search technique \citep{Schulte:Book:2002}. 
+The programmable constraint model allows the user, for example, to optimise the search process for CSPs with a particular structure (e.g. harmonic CSPs or polyphonic CSPs) by defining what decisions are made during search (the distribution strategy, the branching heuristics). For instance, the user can control in which order variables are visited in the search process -- depending on the information available at the time of the decision (dynamic variable ordering). These decisions have immense influence on the size of the search space, but previous systems did not allow the user to customise them.
+These optimisations are independent of the actual problem definition, which allows to easily test a CSP with different search strategies or to reuse proven strategies.
+
+A number of novel score distribution strategies have been defined for Strasheela which are suitable for a large range of musical CSPs. 
+In particular, Strasheela provides a score distribution strategy which allows to efficiently solve polyphonic CSPs in which both the rhythmical structure as well as other parameters (e.g. pitches) are unknown and constrained in the problem definition \citep{Anders:ICMC:2002}. Previous systems discouraged or even disabled the definition of such problems for efficiency reasons.
+% Further strategies can be defined by the user according needs.
+
+
+%\bibliography{/Users/t/Texte/PhD/bibtex/PhD/music-theorie,/Users/t/Texte/PhD/bibtex/PhD/music-CP,/Users/t/Texte/PhD/bibtex/PhD/algo-comp,/Users/t/Texte/PhD/bibtex/PhD/computer-music,/Users/t/Texte/PhD/bibtex/PhD/computer-science,/Users/t/Texte/PhD/bibtex/PhD/Oz,/Users/t/Texte/PhD/bibtex/PhD/AI,/Users/t/Texte/PhD/bibtex/PhD/CP,/Users/t/Texte/PhD/bibtex/PhD/score-representation,/Users/t/Texte/PhD/bibtex/PhD/music-AI,/Users/t/Texte/PhD/bibtex/PhD/further}
+
+\bibliography{/home/t/texte/PhD/bibtex/PhD/music-theorie,/home/t/texte/PhD/bibtex/PhD/music-CP,/home/t/texte/PhD/bibtex/PhD/algo-comp,/home/t/texte/PhD/bibtex/PhD/computer-music,/home/t/texte/PhD/bibtex/PhD/computer-science,/home/t/texte/PhD/bibtex/PhD/Oz,/home/t/texte/PhD/bibtex/PhD/AI,/home/t/texte/PhD/bibtex/PhD/CP,/home/t/texte/PhD/bibtex/PhD/score-representation,/home/t/texte/PhD/bibtex/PhD/music-AI,/home/t/texte/PhD/bibtex/PhD/further}
+
+% \printindex
+
+\end{document}
+
+

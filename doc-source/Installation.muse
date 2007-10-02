@@ -1,0 +1,117 @@
+#title Strasheela Installation 
+; #author Torsten Anders
+
+This page provides installation instructions for Strasheela, a constraint-based computer aided composition environment. To install Strasheela on either Linux, Windows, or MacOS X conduct the following installation steps.
+
+
+* Install Emacs 
+
+On Linux it is is probably already there. 
+
+The Emacs pre-installed by MacOS X is less suitable, due to its missing graphical interface. A highly recommended alternative is [[http://aquamacs.org/][Aquamacs]]. Alternatively, there are also the [[http://www.apple.com/downloads/macosx/unix_open_source/carbonemacspackage.html][Carbon Emacs Package]] and [[http://www.apple.com/downloads/macosx/unix_open_source/emacsonaqua.html][Emacs on Aqua]]. Note: Emacs on Aqua is only suitable for pre-10.4 Macs (based on Emacs version 20.7 instead of 21.* or 22.*). 
+
+For Windows, follow the instructions in the Mozart Installation Manual on [[http://www.mozart-oz.org/documentation/install/node1.html#label2][Obtaining and Installing GNU Emacs]]. The Emacs installer provided at the Mozart site is already dated, check out the [[http://www.gnu.org/software/emacs/windows/ntemacs.html][GNU Emacs FAQ For Windows]] for a more recent version: [[http://www.gnu.org/software/emacs/windows/faq2.html#getting-emacs][Where can I get precompiled versions?]].
+
+
+* Install Mozart 
+
+Simply get a package ready to install from the [[http://www.mozart-oz.org/download][Download Mozart]] page. In case of troubles or for compiling from source consult the Mozart [[http://www.mozart-oz.org/documentation/install/index.html][Installation Manual]]. Additional help can be found [[http://gforge.info.ucl.ac.be/plugins/wiki/index.php?FAQ&id=17&type=g][here]] (in particular for installing Mozart on Intel Macs). A usual Windows problem is that Mozart does not find Emacs if it has to be invoked with a different name (e.g., =runemacs.exe= as the Win-Emacs-Version recommended above). In that case, set the environment variable =OZEMACS= to the path of your Emacs application (e.g., =C:\Program Files\emacs-22.1\bin\runemacs.exe=) as described [[http://support.microsoft.com/default.aspx?scid=kb;en-us;310519][here]].  
+
+
+* Install Strasheela 
+
+On a UNIX-like system (i.e. Linux or MacOS), to compile and install Strasheela with all its extensions open a shell, move into =Strasheela/scripts=[1] and run
+
+    <example>./install-all.sh</example>
+
+In case you later somehow changed Strasheela[2] and want to update the installation then run (again in the folder =Strasheela/scripts=)
+
+    <example>./update-all.sh</example>
+
+
+An alternative method installs the core of Strasheela (in =Strasheela/source=) and each of its extensions (in =Strasheela/contributions=) separately. This method also works on MS Windows. It uses [[http://www.mozart-oz.org/documentation/mozart-ozmake/index.html][ozmake]], a tool for installing Mozart packages (the above mentioned scripts internally call ozmake as well).
+
+Open a shell (or a DOS promt) and move into the directory =Strasheela/contributions/tmp/Path/=. Then type
+
+    <example>ozmake --install</example> 
+
+On Windows, you may need to enter =ozmake.exe=. Alternatively, you may use drag and drop. For example, you may drag the ozmake application (which can be found in the =bin= directory of your Mozart installation) and drop it into the DOS promt in order to enter its full path. You can also enter the path of the directory with drag and drop. Then, move into the top-level Strasheela directory and call =ozmake= again. Continue likewise with all Strasheela constributions you want to install in =Strasheela/contributions/= (e.g., =Strasheela/contributions/anders/Pattern=).
+
+The steps above result only in a bare-bones Strasheela installation which is of limited practical use. The following installation steps bring Strasheela to life (e.g. they are essential for hearing Strasheela output). The examples provided with Strasheela assume that all the following installation steps have been conducted. 
+
+
+* Edit Oz Initialisation File
+
+You will usually want to load Strasheela automatically whenever you start Oz. For this purpose, please edit the Oz initialisation file. Strasheela provides the initialisation file template =Strasheela/_ozrc=, edit this template file according to your system.[3] A special template =Strasheela/_WindowsOZRC= is provided for Windows which demonstrates how Windows pathes are entered (this template still requires editing according to your system). 
+Several settings in the initialisation file templates depend on the software for which Strasheela supports an output format (see below).
+
+On Linux and MacOS X, you can save your initialisation file as =~/.ozrc= or =~/.oz/ozrc=. On Windows, it is easiest to set the environment variable =OZRC= to the path of your initialisation file. A description how to manage environment variables on MS Windows XP can be found [[http://support.microsoft.com/default.aspx?scid=kb;en-us;310519][here]]. 
+
+
+* Install the Software for which Strasheela Supports an Output Format
+
+Strasheela exports its scores into various formats, for instance, to produce sheet music or sound output. 
+
+A number of output formats are already predefined. Most formats are supported by all Strasheela platforms (e.g. Linux, MacOS X, and Windows). Because, output formats are relatively easy to define, further output formats will be added later (or can be defined by the user).
+
+  - MIDI output makes use of [[http://www.fourmilab.ch/webtools/midicsv/][csvmidi]]. 
+
+  - You need some platform specific MIDI file player for playback.
+
+  - For sheet music output, Strasheela employs [[http://www.lilypond.org][Lilypond]]. 
+
+  - Lilypond scores are displayed by a PDF or postscript viewer, which is probably already on your system. Otherwise install, for instance, [[http://www.cs.wisc.edu/~ghost/][ghostview]] or [[http://www.adobe.com/products/acrobat/readstep2.html][Acrobat Reader]].
+
+  - Further sheet music output formats (including Finale and Sibelius) are supported via the [[http://common-lisp.net/project/fomus/][Fomus]] output (Fomus presently only runs on UNIX). 
+   
+  - For sound output, Strasheela outputs the score format of some sound synthesis languages. Currently best supported is the [[http://www.csounds.com][Csound]] score format.
+
+  - The created sound is played by some sound player. This can be a command line application (e.g. =sndplay= on Linux) or some sound editor (e.g. [[http://audacity.sourceforge.net/][Audacity]]).
+   
+  - Furthermore, Strasheela supports outputting the music representation formats of some other algorithmic composition systems. Presently, [[http://commonmusic.sourceforge.net/doc/cm.html][Common Music]] and [[http://www2.siba.fi/PWGL/][PWGL]] (PWGL presently only runs on MacOS X and Windows) are supported.
+   
+  - Output to [[http://ccrma.stanford.edu/software/clm][CLM]] and [[http://www.audiosynth.com][SuperCollider]] is in development (currently, specific CLM instruments and a special SuperCollider score representation are supported). 
+   
+
+*  Install Oz Extensions 
+
+Some Strasheela extensions make use of Oz functionality which is not part of plain Oz itself. For instance, the following examples in the examples folder rely on [[http://www.mozart-oz.org/mogul/info/duchier/select.html][selection constraints]] (e.g. via Strasheela's harmony model): =04-AutomaticMelodyHarmonsation.oz=, =05-MicrotonalChordProgression.oz=, =07-Harmonised-L-system.oz=.
+
+;  - Install [[http://www.mozart-oz.org/mogul/info/duchier/select.html][selection constraints]]. 
+
+Please note that you need a C++ compiler in order to install these constraints. The GNU C++ compiler is usually already installed on Linux. On MacOS X, install Apple's developer tool Xcode (available either from your MacOS installation CDs, or from [[http://developer.apple.com/tools/xcode/][here]] if this online version is newer). On Windows, you may consider installing this compiler under [[http://www.cygwin.com/][Cygwin]]. You can install the selection constraints, for instance, by typing 
+
+  <example>ozmake --install --package=http://www.mozart-oz.org/mogul/populate/duchier/select/duchier-select__1.3.0__source__1.8.pkg</example>
+
+NB: Unfortunately, it has been found that on Mozart 1.3.2 =ozmake= hangs when invoking the GNU compiler on Windows.[4] 
+
+#forPackageCreators
+* Notes for Package Creators
+
+We highly welcome contributors of packages which simplify the Strasheela installation. For example, RPM files for SUSE Linux can be found [[http://packman.links2linux.de/package/strasheela/][here]] (thank you Toni!). 
+
+Strasheela tries to simplify the package creation process. The above-mentioned script =install-all= supports all options of [[http://www.mozart-oz.org/documentation/mozart-ozmake/index.html][ozmake]]. For exammple, you can specify an installation directory with the option =--prefix= (default =~/.oz=). The Strasheela functors are installed in =<PREFIX>/cache/x-ozlib= (most stuff goes into =/cache/x-ozlib/anders/strasheela/=, but there are additional folders created for user contributions). Mozart must find these installed files. For a 'global' installation, you may give the Mozart installation directory =$OZHOME= as prefix (recommended). Any other directory is possible as well, but then you must tell Mozart to search in this directory by setting the environment variable =$OZLOAD= to a suitable value. For example, if Mozart should first look into the user's home directory, then into some folder given as prefix to ozmake during the Strasheela installation, and finally into the Mozart installation folder you specify the following. 
+
+  <example>OZLOAD=cache=${HOME}/.oz/cache:cache=$(MYNEWCACHE):cache=$(OZHOME)/cache</example>
+
+Per default, Mozart first searches in the home directory, and then in the Mozart installation folder -- which means that the user can shadow files installed in the Mozart installation folder.
+
+Strasheela applications (e.g., the interactive =StrasheelaTutorial= and the =OzServer=) are per default installed in =<PREFIX>/bin=. This can be changed with the =install-all.sh= option =--bindir=. You may want to add this directory to the PATH environment variable. However, the applications =StrasheelaTutorial= and =OzServer= should always be started from the commandline (as feedback is given at =stdout= / =stderr=): if you want to add a menu entry for these applications, please run them in a terminal nevertheless. The Strasheela documentation (scattered across the Strasheela source files..) is not installed automatically. However, it can be extracted from the source with the script =extract-doc.sh= in Strasheela's =scripts= directory. 
+
+Strasheela provides output to various formats, and therefore relies on other applications. Please add dependencies to at least Csound, midicsv, Lilypond, a sound file player, a midi file player, and a pdf file viewer. Also, make sure that you edit the provided OZRC template file appropriatedly according to your target system, before you save it as Oz initialisation file. In particular, in this initialisation file set the Strasheela environment variables (using =Init.putStrasheelaEnv=, see the template) to the right values where output files will be stored, where you installed applications like Csound, midicsv, Lilypond, and the player/viewer for sound/midi/pdf files, and possibly their right flags. Make sure that you set the operating system environment variable =$OZRC= to point to the (edited) global initialisation file. If a user later wants to add private settings, she can change the value of =$OZRC= for her account.  
+
+In case of any questions concerning packaging Strasheela, please to not hestitate to ask via email (e.g., on the Strasheela mailing list).
+
+Have fun with Strasheela!
+
+[[http://www.torsten-anders.de][Torsten Anders]] 
+
+---------------------
+
+[1] The folder =Strasheela/= denotes the relative path of the Strasheela source on your system.
+
+[2] For example, you added your own extensions in the folder =Strasheela/contributions/yourName/yourContribution= together with a corresponding =makefile.oz= in that folder (cf. [[http://www.mozart-oz.org/documentation/mozart-ozmake/index.html][ozmake]], or simply copy and edit the =makefile.oz= of one of the already existing contributions).
+
+[3] You can load Strasheela manually as well by manually feeding the (edited) content of =_ozrc= to Oz.
+
+[4] See http://www.ps.uni-sb.de/pipermail/mozart-users/2006/015298.html. Nevertheless, the selection constraints have been installed successfully on Windows with earlier Mozart versions (cf. the installation of the [[http://sourcesup.cru.fr/xmg/][XMG - eXtensible MetaGrammar]]). 

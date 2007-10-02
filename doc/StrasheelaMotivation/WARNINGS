@@ -1,0 +1,37 @@
+No implementation found for style `scrartcl'
+No implementation found for style `fontenc'
+No implementation found for style `setspace'
+No implementation found for style `geometry'
+No implementation found for style `layouts'
+No implementation found for style `graphicx'
+No implementation found for style `ae'
+No implementation found for style `aecompl'
+No implementation found for style `fancybox'
+No implementation found for style `fancyvrb'
+No implementation found for style `booktabs'
+No implementation found for style `rotating'
+No implementation found for style `quotchap'
+No implementation found for style `syntax'
+No implementation found for style `placeins'
+No implementation found for style `url'
+No implementation found for style `hyperref'
+
+redefining command \comment 
+
+previous meaning of \comment will be lost
+
+redefining command \ 
+
+StrasheelaMotivation.tex is newer than StrasheelaMotivation.aux: Please rerun latex.
+
+Substitution of arg to newlabelxx delayed.
+
+*** wrap_cmd_ not defined, cannot wrap \ 
+
+? brace missing for \setlength
+
+? brace missing for \newedcommand
+
+? brace missing for \
+
+StrasheelaMotivation.tex is newer than StrasheelaMotivation.bbl: Please rerun latex and bibtex.

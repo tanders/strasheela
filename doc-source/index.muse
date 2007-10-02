@@ -1,0 +1,69 @@
+#title Strasheela
+
+#desc Strasheela is a constraint-based computer aided composition system. 
+
+; #author Torsten Anders
+
+[[http://www.torsten-anders.de][Torsten Anders]]
+
+       [[StrasheelaImageSource][./graphics/Stasheela.jpg]]
+
+       *Strasheela* by Leonid Vladimirsky[1]
+
+Strasheela is a highly expressive constraint-based music composition system.[2] The Strasheela user declaratively states a music theory and the computer generates music which complies with this theory. A theory is formulated as a constraint satisfaction problem (CSP) by a set of rules (constraints) applied to a music representation in which some aspects are expressed by variables (unknowns). Music constraint programming is style-independent and is well-suited for highly complex theories (e.g. a fully-fledged theory of harmony). User-interface is the programming language Oz. The results can be output into various formats including MIDI, Csound, and Lilypond. 
+
+<contents depth="1">
+
+* News 
+
+  [[https://sourceforge.net/projects/strasheela/][Strasheela 0.8.3 released]] ([[Changes]])  (7 August 2007)
+
+  Strasheela's ongoing development is funded for the coming three years -- it is part of the responsibilities of my new research fellow position at the [[http://cmr.soc.plymouth.ac.uk/index.html][Interdisciplinary Centre for Computer Music Research]], [[http://www.plymouth.ac.uk/][University of Plymouth]] (7 August 2007) 
+
+  [[OldNews][Old news]]
+
+* Background Information 
+
+  [[StrasheelaMotivation/index.html][Motivation]]
+
+;  **TODO:** Overview / Features
+
+;  [[Overview]]
+
+;  [[Features]]
+
+  [[Publications]]
+
+  [[OzDocumentation][Oz Documentation]]
+
+
+* Getting Started
+
+  [[https://sourceforge.net/projects/strasheela/][Download from Sourceforge]]
+
+  [[Installation]]
+
+;  **TODO** [[../examples/mini-tutorial.oz][Strasheela Tutorial]] -- midi tutorial in plain Oz code for now
+
+  [[StrasheelaTutorial][Strasheela Tutorial]] **(new)**
+
+  [[StrasheelaExamples][Strasheela Examples]]
+
+  [[http://strasheela.sourceforge.net/documents/TorstenAnders-PhDThesis.pdf][Monograph]] (pdf)
+
+  Subscribe to the [[https://lists.sourceforge.net/lists/listinfo/strasheela-users][Strasheela-users mailing list]]
+
+;  **TODO:** Get support at the mailing list
+
+
+* [[StrasheelaReference][Reference]]
+
+* [[Contributing]]
+
+------------
+
+[1] Illustration by Leonid Vladimirsky from: Alexandr M. Volkov (1939, revised in 1959). *The Wizard of the Emerald City*, Soviet Russia Publishers.  
+
+[2] Strasheela is also the name of an amicable and stubby scarecrow in the children's novel [[http://emeraldcity.ru/eng/books.htm#volshebnik][The Wizard of the Emerald City]] by Alexandr M. Volkov, in which the Russian author retells *The Wonderful Wizard of Oz* by L. Frank Baum. The latter inspired the name for the programming language Oz, which forms the foundation for the Strasheela composition system. 
+
+The scarecrow's brain consists only in bran, pins and needles. Nevertheless, he is a brilliant logician and loves to multiply four figure numbers at night. Little is yet known about his interest in music, but Strasheela is reported to sometimes dance and sing with joy.

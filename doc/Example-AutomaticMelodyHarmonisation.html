@@ -1,0 +1,149 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+  <head>
+    <title>Automatic Melody Harmonisation</title>
+    <meta name="generator" content="muse.el">
+    <meta http-equiv="Content-Type"
+          content="text/html; charset=iso-8859-1">
+    
+    <link rel="stylesheet" href="style.css" type="text/css" />
+  </head>
+  <body>
+<div id="header">
+  <ul class="nav">
+    <li class="nav1"><a href="index.html">home</a></li>
+    <li class="navn"><a href="https://sourceforge.net/projects/strasheela/">download at sourceforge</a></li>
+    <!-- <li class="navn"><a href="IndexOfPages.html">site map</a></li> -->
+    <li class="navn"><a href="contact.html">contact</a></li>
+  </ul>
+  <div id="logo">
+    <a href="http://sourceforge.net"><img src="http://sflogo.sourceforge.net/sflogo.php?group_id=167225&amp;type=1" width="88" height="31" border="0" alt="SourceForge.net Logo" /></a>
+  </div>
+</div>
+    <h1>Automatic Melody Harmonisation</h1>
+    <!-- Page published by Emacs Muse begins here -->
+<p><a href="StrasheelaExamples.html">back</a></p>
+
+<div class="contents">
+<dl>
+<dt>
+<a href="#sec1">The Constraint Satisfaction Problem</a>
+</dt>
+<dt>
+<a href="#sec2">Discussion</a>
+</dt>
+</dl>
+</div>
+
+
+<h2><a name="sec1" id="sec1"></a>
+The Constraint Satisfaction Problem</h2>
+
+<p class="first">This example creates a harmonisation for a given melody (e.g. a folk tune). Voicing is irrelevant in this CSP: only the chord symbols are searched for. For simplicity, this CSP defines relatively rigid basic conditions.</p>
+
+<ul>
+<li>Only the major, the minor, and the dominant seventh chord are permitted.</li>
+
+<li>All chords must be diatonic (in C major).</li>
+
+<li>The harmonic rhythm is fixed and all chords have the same duration (e.g. a whole note) &mdash; but chord repetitions are permitted.</li>
+
+<li>All melody note pitches must be chord pitches (i.e. each note's pitch class is an element of the set of pitch classes of its correspondent &mdash; namely simultaneous &mdash; chord). Exceptions are only allowed for notes which meet specific conditions. Supported exceptions are passing notes and auxiliary notes.</li>
+</ul>
+
+
+<p>The CSP borrows a few harmonic rules from <a href="http://www.amazon.com/gp/product/0520049446/qid=1149574943/sr=2-2/ref=pd_bbs_b_2_2/104-1993379-1061553?s=books&amp;v=glance&amp;n=283155">Schoenberg (1911)</a> in order to ensure musically reasonable solutions.</p>
+
+<ul>
+<li>The chord progression starts and ends with the same chord. This rule ensures that the model finds the tonic by itself (consequently, the melody must start and end with the tonic).</li>
+<li>A seventh chord must be resolved by a `fourth upwards the fundament' (e.g. V7 -&gt; I). Schoenberg introduces this progression as the simplest resolution form for seventh chords.</li>
+<li>All neighbouring chords share at least one common pitch class (this 'harmonic band' is an early form of Schoenberg's directions for producing favourable chord progressions<sup><a name="fnr.1" href="#fn.1">1</a></sup>).</li>
+</ul>
+
+<p>Shown are all solutions for the first phrase of the German folksong `Horch was kommt von draussen rein': only four harmonisations fulfil the rules of the CSP. For example, the second bar can not be harmonised with <em>Am</em>, because <em>Am</em> has no common pitch class with <em>G7</em>.
+An x on top of a note denotes a non-harmonic pitch.</p>
+
+
+<p>Solution 1</p>
+
+<blockquote>
+<p class="quoted"><img src="../examples/Output/04-AutomaticMelodyHarmonsation-sol1.preview.png" alt=""></p>
+</blockquote>
+
+<p>Solution 2</p>
+
+<blockquote>
+<p class="quoted"><img src="../examples/Output/04-AutomaticMelodyHarmonsation-sol2.preview.png" alt=""></p>
+</blockquote>
+
+<p>Solution 3</p>
+
+<blockquote>
+<p class="quoted"><img src="../examples/Output/04-AutomaticMelodyHarmonsation-sol3.preview.png" alt=""></p>
+</blockquote>
+
+<p>Solution 4</p>
+
+<blockquote>
+<p class="quoted"><img src="../examples/Output/04-AutomaticMelodyHarmonsation-sol4.preview.png" alt=""></p>
+</blockquote>
+
+
+
+
+<blockquote>
+<p class="quoted"><a href="../examples/04-AutomaticMelodyHarmonsation.oz">source</a></p>
+</blockquote>
+
+
+
+<h2><a name="sec2" id="sec2"></a>
+Discussion</h2>
+
+<p class="first">The example is kept simple for brevity. For example, only an early
+model of Schoenberg<sup><a name="fnr.1" href="#fn.1">1</a></sup> and only a few non-harmonic note cases
+are implemented. Therefore, this CSP works well for some melodies
+and less good for others. These are the primary limitations cause
+by the simplification.</p>
+
+<ul>
+<li>The melody must only use the diatonic pitches of C-major (i.e. the
+melody must not modulate). This can be addressed by defining a
+relation between Strasheela's chord and scale objects.</li>
+
+<li>The harmonic rhythm of the melody must fit the harmonic rhythm
+specified for the CSP (the harmonic rhythm of the melody can be
+slower as chord repetitions are permitted). This is easily fixed
+by making the chord durations variables, but doing so makes the
+search process more complex.</li>
+
+<li>The non-harmonic pitches of the melody must fit the cases
+defined. For instance, this CSP does not allow for repeated non-harmonic notes nor for suspensions. Nevertheless, the <a href="../examples/04-AutomaticMelodyHarmonsation.oz">source</a> explains
+how to extend the set of exceptions supported.</li>
+
+<li>The melody must start and end with the tonic.</li>
+
+<li>The resulting chord progression ignores the formal structure of
+a melody. For instance, no information on phrases or cadencing is
+given to the CSP, nor does the CSP attempt to retrieve such
+information by analysis.</li>
+</ul>
+
+
+<p><a href="StrasheelaExamples.html">back</a></p>
+
+<hr>
+
+<p class="footnote"><a name="fn.1" href="#fnr.1">1.</a> During the course of his theory of harmony, Schoenberg gradually refines his directions for the student by introducing more and more exceptions. This CSP, however, implements only rules from an early part of Schoenberg's book.</p>
+
+
+
+<!-- Page published by Emacs Muse ends here -->
+<!-- Footer -->
+<div id="footer">
+<div id="author">&copy; 
+Torsten Anders</div>
+<div id="date">Last time edited: 2007.08.04</div>
+</div>
+  </body>
+</html>

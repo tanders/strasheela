@@ -1,0 +1,162 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+  <head>
+    <title>Strasheela Reference Documentation</title>
+    <meta name="generator" content="muse.el">
+    <meta http-equiv="Content-Type"
+          content="text/html; charset=iso-8859-1">
+    
+    <link rel="stylesheet" href="style.css" type="text/css" />
+  </head>
+  <body>
+<div id="header">
+  <ul class="nav">
+    <li class="nav1"><a href="index.html">home</a></li>
+    <li class="navn"><a href="https://sourceforge.net/projects/strasheela/">download at sourceforge</a></li>
+    <!-- <li class="navn"><a href="IndexOfPages.html">site map</a></li> -->
+    <li class="navn"><a href="contact.html">contact</a></li>
+  </ul>
+  <div id="logo">
+    <a href="http://sourceforge.net"><img src="http://sflogo.sourceforge.net/sflogo.php?group_id=167225&amp;type=1" width="88" height="31" border="0" alt="SourceForge.net Logo" /></a>
+  </div>
+</div>
+    <h1>Strasheela Reference Documentation</h1>
+    <!-- Page published by Emacs Muse begins here -->
+
+
+
+
+<h2>The Strasheela Core</h2>
+
+<p class="first">These functors define the main user functionality of Strasheela.</p>
+
+<blockquote>
+<p class="quoted"><a href="../doc/api/node6.html">Score</a> &mdash; music representation</p>
+</blockquote>
+
+<blockquote>
+<p class="quoted"><a href="../doc/api/node8.html">SDistro</a> &mdash; score distribution strategies</p>
+</blockquote>
+
+<blockquote>
+<p class="quoted"><a href="../doc/api/node9.html">Out</a> &mdash; means for output into various formats</p>
+</blockquote>
+
+<blockquote>
+<p class="quoted"><a href="../doc/api/node11.html">Midi</a> &mdash; Midi output (a subfunctor of <a href="../doc/api/node9.html">Out</a>)</p>
+</blockquote>
+
+<blockquote>
+<p class="quoted"><a href="../doc/api/node2.html">Init</a> &mdash; customise settings (e.g. for output)</p>
+</blockquote>
+
+<blockquote>
+<p class="quoted"><a href="../doc/api/node1.html">Strasheela</a> &mdash; the top level functor (simply exports the rest of Strasheela)</p>
+</blockquote>
+
+
+<p>These functors provide additional functionality.</p>
+
+<blockquote>
+<p class="quoted"><a href="../doc/api/node3.html">GUtils</a> &mdash; general utilities</p>
+</blockquote>
+
+<blockquote>
+<p class="quoted"><a href="../doc/api/node4.html">LUtils</a> &mdash; list utilities</p>
+</blockquote>
+
+<blockquote>
+<p class="quoted"><a href="../doc/api/node5.html">MUtils</a> &mdash; utilities related to music or acoustics</p>
+</blockquote>
+
+<blockquote>
+<p class="quoted"><a href="../doc/api/node7.html">SMapping</a> &mdash; score traversal</p>
+</blockquote>
+
+
+
+
+
+<h2>Strasheela Extensions</h2>
+
+<p class="first">These extensions simplify the definition of specific musical CSP classes (e.g. style specific CSPs such as harmonic CSPs). Naturally, these extensions can be combined (e.g. to constrain patterns on harmonic relations).</p>
+
+<blockquote>
+<p class="quoted"><a href="../contributions/anders/Pattern/doc/node1.html">Pattern</a> &mdash; constraints on lists to express patterns in music</p>
+</blockquote>
+
+<blockquote>
+<p class="quoted"><a href="../contributions/anders/HarmonisedScore/doc/node1.html">HS (HarmonisedScore)</a> &mdash; constrainable harmony model</p>
+</blockquote>
+
+<blockquote>
+<p class="quoted"><a href="../contributions/anders/ConstrainTimingTree/doc/node1.html">CTT (ConstrainTimingTree)</a> &mdash; constrain the shape of a tree of temporal items</p>
+</blockquote>
+
+<blockquote>
+<p class="quoted"><a href="../contributions/anders/Motif/doc/node1.html">Motif</a> &mdash; constrainable motif model</p>
+</blockquote>
+
+<blockquote>
+<p class="quoted"><a href="../contributions/anders/Measure/doc/node1.html">Measure</a> &mdash; constrainable meter model</p>
+</blockquote>
+
+<blockquote>
+<p class="quoted"><a href="../contributions/anders/Realtime/doc/node1.html">RT (Realtime)</a> &mdash; solvers for real-time constraint programming</p>
+</blockquote>
+
+<blockquote>
+<p class="quoted"><a href="../contributions/anders/OSC/doc/node1.html">OSC</a> &mdash; an OpenSound Control interface</p>
+</blockquote>
+
+
+<p>These provide further extensions.</p>
+
+<blockquote>
+<p class="quoted"><a href="../contributions/anders/Memoize/doc/node1.html">Memo</a> &mdash; memoization of functions (e.g. useful for a modular CSP definition where some function always returns the same data structure with the same constrained variables when given the same input)</p>
+</blockquote>
+
+<blockquote>
+<p class="quoted"><a href="../contributions/anders/Fenv/doc/node1.html">Fenv (function envelope)</a> &mdash; envelopes by numeric functions</p>
+</blockquote>
+
+<blockquote>
+<p class="quoted"><a href="../contributions/anders/Gnuplot/doc/node1.html">Gnuplot</a> &mdash; an interface to <a href="http://www.gnuplot.info/">Gnuplot</a> for plotting numeric Oz data (e.g., <a href="../contributions/anders/Fenv/doc/node1.html">Fenv</a> data).</p>
+</blockquote>
+
+<blockquote>
+<p class="quoted"><a href="../contributions/anders/OzServer/doc/node1.html">OzServer</a> &mdash; run Strasheela as server in the background, started and 'remote-controlled' by any other application (e.g. a Lisp compiler)</p>
+</blockquote>
+
+<blockquote>
+<p class="quoted"><a href="../contributions/anders/ScoreInspector/doc/node1.html">ScoreInspector</a> &mdash; extension of the Oz <a href="http://www.mozart-oz.org/documentation/inspector/index.html">Inspector</a> for inspecting Stasheela score objects</p>
+</blockquote>
+
+<blockquote>
+<p class="quoted"><a href="../contributions/anders/SettingsGUI/doc/node1.html">SettingsGUI</a> &mdash; a GUI interface for setting Strasheela environment variables</p>
+</blockquote>
+
+<blockquote>
+<p class="quoted"><a href="../contributions/anders/Tutorial/doc/node1.html">Tutorial</a> &mdash; the tutorial application definition</p>
+</blockquote>
+
+
+
+
+
+
+<h2>How to Create User Extensions?</h2>
+
+<p class="first">An extensively documented extension template is provided at <a href="../contributions/ExtensionTemplate">../contributions/ExtensionTemplate</a>, which demonstrates how Strasheela extensions are created.</p>
+
+
+
+<!-- Page published by Emacs Muse ends here -->
+<!-- Footer -->
+<div id="footer">
+<div id="author">&copy; 
+Torsten Anders</div>
+<div id="date">Last time edited: 2007.09.20</div>
+</div>
+  </body>
+</html>

@@ -1,0 +1,142 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<!--Converted with jLaTeX2HTML 2002-2-1 (1.70) JA patch-2.0
+patched version by:  Kenshi Muto, Debian Project.
+* modified by:  Shige TAKENO
+LaTeX2HTML 2002-2-1 (1.70),
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>The Approach Taken</TITLE>
+<META NAME="description" CONTENT="The Approach Taken">
+<META NAME="keywords" CONTENT="StrasheelaMotivation">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+<META NAME="Generator" CONTENT="jLaTeX2HTML v2002-2-1 JA patch-2.0">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="StrasheelaMotivation.css">
+
+<LINK REL="next" HREF="node5.html">
+<LINK REL="previous" HREF="node2.html">
+<LINK REL="up" HREF="StrasheelaMotivation.html">
+<LINK REL="next" HREF="node5.html">
+</HEAD>
+
+<BODY >
+<!--Navigation Panel-->
+<A NAME="tex2html73"
+  HREF="node5.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next"
+ SRC="file:/usr/share/latex2html/icons/next.png"></A> 
+<A NAME="tex2html69"
+  HREF="StrasheelaMotivation.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up"
+ SRC="file:/usr/share/latex2html/icons/up.png"></A> 
+<A NAME="tex2html63"
+  HREF="node3.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous"
+ SRC="file:/usr/share/latex2html/icons/prev.png"></A>  
+<A NAME="tex2html71"
+  HREF="../index.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index"
+ SRC="file:/usr/share/latex2html/icons/index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html74"
+  HREF="node5.html">Bibliography</A>
+<B> Up:</B> <A NAME="tex2html70"
+  HREF="StrasheelaMotivation.html">Why Strasheela?</A>
+<B> Previous:</B> <A NAME="tex2html64"
+  HREF="node3.html">A Side Note: Relation</A>
+ &nbsp; <B>  <A NAME="tex2html72"
+  HREF="../index.html">Index</A></B> 
+<BR>
+<BR>
+<!--End of Navigation Panel-->
+
+<H1><A NAME="SECTION00030000000000000000"></A>
+<A NAME="sec:intro:approach-taken"></A>
+<BR>
+The Approach Taken
+</H1>
+
+<P>
+The present research proposes to make music constraint systems more generic by making them more progammable. This proposal is exemplified in the design of the generic music constraint system Strasheela.<A NAME="tex2html4"
+  HREF="footnode.html#foot253"><SUP>4</SUP></A> 
+When comparing Strasheela with previous systems, three important aspects in particular are made (more) programmable: the music representation, the rule application to the score, and the search strategy.
+
+<P>
+Strasheela's music representation aims to conveniently provide any information required to express musical CSPs. To this end, the representation is highly extendable. Representation building blocks required for many CSPs are ready-made, but Strasheela additionally predefines building blocks which assist the user to extend the representation according needs. 
+
+<P>
+Strasheela defines a novel music representation in the spirit of CHARM [<A
+ HREF="node5.html#harris91representing">Harris  et&nbsp;al., 1991</A>]. Two principles have been adopted from CHARM. Like CHARM, Strasheela's representation is based on the notion of data abstraction [<A
+ HREF="node5.html#AbelsonAndSussman:SICP:1985">Abelson  et&nbsp;al., 1985</A>] and it allows for user-controlled hierarchic nesting of score objects. 
+
+<P>
+Strasheela's representation complements these principles by other principles learned from the music representation literature, for example, selectable score parameter (music magnitude) representations [<A
+ HREF="node5.html#Pope:SmOKe">Pope, 1992</A>] (e.g. a pitch can be represented by a keynumber, cent or frequency value), bidirectional links between score objects to facilitate free traversing in the score hierarchy [<A
+ HREF="node5.html#Laurson:PhD:1996">Laurson, 1996</A>], temporal containers which organise their elements sequentially or simultaneously in time [<A
+ HREF="node5.html#Dannenberg:Score:1989">Dannenberg, 1989</A>], organisation of musical data types in an user-extendable class hierarchy [<A NAME="tex2html75"
+  HREF="node5.html#Desain:Honing:CLOSe:1997">Desain and  Honing, 1997</A>; <A NAME="tex2html76"
+  HREF="node5.html#Pope:OO:1991">Pope, 1991</A>], and a highly generic data abstraction interface realised by higher-order functions [<A
+ HREF="node5.html#Desain:90">Desain, 1990</A>]. 
+
+<P>
+It is essential for a generic music constraint system that the user freely controls which variables in the music representation are constrained by which compositional rule. Unlike many previous systems, Strasheela fully decouples the definition and application of a rule to make the rule application freely programmable.
+
+<P>
+Strasheela proposes to encapsulate compositional rules in functions (actually proceduces) as first-class values [<A
+ HREF="node5.html#AbelsonAndSussman:SICP:1985">Abelson  et&nbsp;al., 1985</A>]. This approach allows to define rule application mechanisms as higher-order functions expecting rules (i.e. functions) as arguments. A number of rule application functions suited for many CSPs have been defined, which either reproduce rule application mechanisms of existing systems or constitute convenient novel application mechanisms. The user can easily define further such rule application functions according needs. 
+<P>
+Finally, a constraint system must be reasonable efficient to be useful in praxis. It makes a big difference whether a CSP takes seconds or hours to solve. 
+Strasheela is founded on a constraint programming model based on the notion of computation spaces [<A
+ HREF="node5.html#Schulte:Book:2002">Schulte, 2002</A>]. This model makes the search process itself programmable at a high-level. 
+The programmable constraint model allows the user, for example, to optimise the search process for CSPs with a particular structure (e.g. harmonic CSPs or polyphonic CSPs) by defining what decisions are made during search (the distribution strategy, the branching heuristics). For instance, the user can control in which order variables are visited in the search process - depending on the information available at the time of the decision (dynamic variable ordering). These decisions have immense influence on the size of the search space, but previous systems did not allow the user to customise them.
+These optimisations are independent of the actual problem definition, which allows to easily test a CSP with different search strategies or to reuse proven strategies.
+
+<P>
+A number of novel score distribution strategies have been defined for Strasheela which are suitable for a large range of musical CSPs. 
+In particular, Strasheela provides a score distribution strategy which allows to efficiently solve polyphonic CSPs in which both the rhythmical structure as well as other parameters (e.g. pitches) are unknown and constrained in the problem definition [<A
+ HREF="node5.html#Anders:ICMC:2002">Anders, 2002</A>]. Previous systems discouraged or even disabled the definition of such problems for efficiency reasons.
+
+<P>
+<HR>
+<!--Navigation Panel-->
+<A NAME="tex2html73"
+  HREF="node5.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next"
+ SRC="file:/usr/share/latex2html/icons/next.png"></A> 
+<A NAME="tex2html69"
+  HREF="StrasheelaMotivation.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up"
+ SRC="file:/usr/share/latex2html/icons/up.png"></A> 
+<A NAME="tex2html63"
+  HREF="node3.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous"
+ SRC="file:/usr/share/latex2html/icons/prev.png"></A>  
+<A NAME="tex2html71"
+  HREF="../index.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index"
+ SRC="file:/usr/share/latex2html/icons/index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html74"
+  HREF="node5.html">Bibliography</A>
+<B> Up:</B> <A NAME="tex2html70"
+  HREF="StrasheelaMotivation.html">Why Strasheela?</A>
+<B> Previous:</B> <A NAME="tex2html64"
+  HREF="node3.html">A Side Note: Relation</A>
+ &nbsp; <B>  <A NAME="tex2html72"
+  HREF="../index.html">Index</A></B> 
+<!--End of Navigation Panel-->
+<ADDRESS>
+Torsten Anders
+2006-06-05
+</ADDRESS>
+</BODY>
+</HTML>

@@ -1,0 +1,1612 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+  <head>
+    <title>Oz Basics</title>
+    <meta name="generator" content="muse.el">
+    <meta http-equiv="Content-Type"
+          content="text/html; charset=iso-8859-1">
+    
+    <link rel="stylesheet" href="style.css" type="text/css" />
+  </head>
+  <body>
+<div id="header">
+  <ul class="nav">
+    <li class="nav1"><a href="index.html">home</a></li>
+    <li class="navn"><a href="https://sourceforge.net/projects/strasheela/">download at sourceforge</a></li>
+    <!-- <li class="navn"><a href="IndexOfPages.html">site map</a></li> -->
+    <li class="navn"><a href="contact.html">contact</a></li>
+  </ul>
+  <div id="logo">
+    <a href="http://sourceforge.net"><img src="http://sflogo.sourceforge.net/sflogo.php?group_id=167225&amp;type=1" width="88" height="31" border="0" alt="SourceForge.net Logo" /></a>
+  </div>
+</div>
+    <h1>Oz Basics</h1>
+    <!-- Page published by Emacs Muse begins here -->
+<div class="contents">
+<dl>
+<dt>
+<a href="#sec1">About this document</a>
+</dt>
+<dt>
+<a href="#sec2">Start here</a>
+</dt>
+<dt>
+<a href="#sec3">Comments</a>
+</dt>
+<dd>
+<dl>
+<dt>
+<a href="#sec4">Line comment</a>
+</dt>
+<dt>
+<a href="#sec5">Block comment</a>
+</dt>
+</dl>
+</dd>
+<dt>
+<a href="#sec6">Hello World!</a>
+</dt>
+<dd>
+<dl>
+<dt>
+<a href="#sec7">Browse</a>
+</dt>
+<dt>
+<a href="#sec8">Show</a>
+</dt>
+<dt>
+<a href="#sec9">Inspect</a>
+</dt>
+</dl>
+</dd>
+<dt>
+<a href="#sec10">Calculator</a>
+</dt>
+<dd>
+<dl>
+<dt>
+<a href="#sec11">Integer example 1</a>
+</dt>
+<dt>
+<a href="#sec12">Integer example 2</a>
+</dt>
+<dt>
+<a href="#sec13">Integer example 3</a>
+</dt>
+<dt>
+<a href="#sec14">Float example 1</a>
+</dt>
+<dt>
+<a href="#sec15">Float example 2</a>
+</dt>
+<dt>
+<a href="#sec16">Float example 3</a>
+</dt>
+</dl>
+</dd>
+<dt>
+<a href="#sec17">Variables</a>
+</dt>
+<dd>
+<dl>
+<dt>
+<a href="#sec18">Variable declaration</a>
+</dt>
+<dt>
+<a href="#sec19">Variable scope</a>
+</dt>
+<dt>
+<a href="#sec20">A variable can be unbound</a>
+</dt>
+</dl>
+</dd>
+<dt>
+<a href="#sec21">Prodecure and Function Application</a>
+</dt>
+<dd>
+<dl>
+<dt>
+<a href="#sec22">Applications</a>
+</dt>
+<dt>
+<a href="#sec23">Functions are procedures</a>
+</dt>
+<dt>
+<a href="#sec24">Procedures used like functions</a>
+</dt>
+</dl>
+</dd>
+<dt>
+<a href="#sec25">If</a>
+</dt>
+<dd>
+<dl>
+<dt>
+<a href="#sec26">With else clause</a>
+</dt>
+<dt>
+<a href="#sec27">Without else clause</a>
+</dt>
+<dt>
+<a href="#sec28">If as expression</a>
+</dt>
+</dl>
+</dd>
+<dt>
+<a href="#sec29">Procedure Definition</a>
+</dt>
+<dd>
+<dl>
+<dt>
+<a href="#sec30">Max procedure</a>
+</dt>
+<dt>
+<a href="#sec31">$ marks a return value</a>
+</dt>
+<dt>
+<a href="#sec32">Function call of procedure</a>
+</dt>
+</dl>
+</dd>
+<dt>
+<a href="#sec33">Function Definition</a>
+</dt>
+<dd>
+<dl>
+<dt>
+<a href="#sec34">Max function</a>
+</dt>
+<dt>
+<a href="#sec35">Recursion</a>
+</dt>
+</dl>
+</dd>
+<dt>
+<a href="#sec36">Atoms and Names</a>
+</dt>
+<dd>
+<dl>
+<dt>
+<a href="#sec37">Atoms</a>
+</dt>
+<dt>
+<a href="#sec38">Equality</a>
+</dt>
+<dt>
+<a href="#sec39">Names</a>
+</dt>
+</dl>
+</dd>
+<dt>
+<a href="#sec40">Compound Types</a>
+</dt>
+<dd>
+<dl>
+<dt>
+<a href="#sec41">Records (1)</a>
+</dt>
+<dt>
+<a href="#sec42">Records (2)</a>
+</dt>
+<dt>
+<a href="#sec43">Records (3)</a>
+</dt>
+<dt>
+<a href="#sec44">Accessing record fields</a>
+</dt>
+<dt>
+<a href="#sec45">Tuples (1)</a>
+</dt>
+<dt>
+<a href="#sec46">Tuples (2)</a>
+</dt>
+<dt>
+<a href="#sec47">Tuples (3)</a>
+</dt>
+<dt>
+<a href="#sec48">Lists (1)</a>
+</dt>
+<dt>
+<a href="#sec49">Lists (2)</a>
+</dt>
+<dt>
+<a href="#sec50">Lists (3)</a>
+</dt>
+<dt>
+<a href="#sec51">Lists (4)</a>
+</dt>
+<dt>
+<a href="#sec52">Pairs (1)</a>
+</dt>
+<dt>
+<a href="#sec53">Pairs (2)</a>
+</dt>
+<dt>
+<a href="#sec54">Strings (1)</a>
+</dt>
+<dt>
+<a href="#sec55">Strings (2)</a>
+</dt>
+<dt>
+<a href="#sec56">Virtual Strings</a>
+</dt>
+</dl>
+</dd>
+<dt>
+<a href="#sec57">Pattern Matching</a>
+</dt>
+<dd>
+<dl>
+<dt>
+<a href="#sec58">The case statement</a>
+</dt>
+<dt>
+<a href="#sec59">Implicit pattern matching</a>
+</dt>
+</dl>
+</dd>
+<dt>
+<a href="#sec60">Procedures over Compound Data</a>
+</dt>
+<dd>
+<dl>
+<dt>
+<a href="#sec61">HasFeature</a>
+</dt>
+<dt>
+<a href="#sec62">Arity</a>
+</dt>
+<dt>
+<a href="#sec63">Adjoin</a>
+</dt>
+<dt>
+<a href="#sec64">Nth</a>
+</dt>
+<dt>
+<a href="#sec65">Reverse</a>
+</dt>
+<dt>
+<a href="#sec66">Append</a>
+</dt>
+<dt>
+<a href="#sec67">User-defined procedures</a>
+</dt>
+</dl>
+</dd>
+<dt>
+<a href="#sec68">Unification</a>
+</dt>
+<dd>
+<dl>
+<dt>
+<a href="#sec69">Unifying two lists</a>
+</dt>
+<dt>
+<a href="#sec70">Recursive unification</a>
+</dt>
+</dl>
+</dd>
+<dt>
+<a href="#sec71">Class Method Application</a>
+</dt>
+<dd>
+<dl>
+<dt>
+<a href="#sec72">Method call</a>
+</dt>
+<dt>
+<a href="#sec73">Method arguments</a>
+</dt>
+</dl>
+</dd>
+<dt>
+<a href="#sec74">Higher-Order Programming</a>
+</dt>
+<dd>
+<dl>
+<dt>
+<a href="#sec75">Filter</a>
+</dt>
+<dt>
+<a href="#sec76">ForAll</a>
+</dt>
+<dt>
+<a href="#sec77">Map</a>
+</dt>
+<dt>
+<a href="#sec78">Anonymous procedure definition</a>
+</dt>
+<dt>
+<a href="#sec79">Sort (1)</a>
+</dt>
+<dt>
+<a href="#sec80">Sort (2)</a>
+</dt>
+<dt>
+<a href="#sec81">Defining higher-order procedures</a>
+</dt>
+</dl>
+</dd>
+<dt>
+<a href="#sec82">Concurrency</a>
+</dt>
+<dd>
+<dl>
+<dt>
+<a href="#sec83">Declarative concurrency</a>
+</dt>
+<dt>
+<a href="#sec84">Blocking computation</a>
+</dt>
+<dt>
+<a href="#sec85">'Signalling' a blocking computation</a>
+</dt>
+</dl>
+</dd>
+<dt>
+<a href="#sec86">Understanding error messages</a>
+</dt>
+<dd>
+<dl>
+<dt>
+<a href="#sec87">Parse error</a>
+</dt>
+<dt>
+<a href="#sec88">Static analysis error</a>
+</dt>
+<dt>
+<a href="#sec89">Binding analysis error</a>
+</dt>
+<dt>
+<a href="#sec90">Type error</a>
+</dt>
+<dt>
+<a href="#sec91">Failure</a>
+</dt>
+</dl>
+</dd>
+</dl>
+</div>
+
+
+<h2><a name="sec1" id="sec1"></a>
+About this document</h2>
+
+<p class="first">This file was automatically generated from the interactive Strasheela tutorial. Some aspects of the text only make sense in the original interactive tutorial application (e.g., buttons indicated to press, and positions specified on the screen), and not in this version of the text.</p>
+
+
+<h2><a name="sec2" id="sec2"></a>
+Start here</h2>
+
+<p class="first">This little tutorial demonstrates basics of the Oz programming language and Strasheela in an interactive way. It aims to show that learning Strasheela is not that hard after all. The tutorial presents little code snippets which you can execute and also edit directly, so you get a feeling what Oz and what Strasheela does. I hope that this tutorial flattens your learning curve (in particular if you already know another programming language). You should be ready to read and edit existing Strasheela examples and to write your own after going through this.</p>
+
+<p>Nevertheless, this tutorial is kept brief. The explanation of Oz focuses on aspects which are particularly important for Strasheela, and also Strasheela concepts are only outlined. Everything is explained very briefly to get you started quickly. In other words, it is not the intention of this tutorial to replace the extensive documentation already available on Oz, nor my thesis on Strasheela ;-)</p>
+
+<p>This tutorial is organised in examples (i.e. tiny lessons). After you started the interactive tutorial application, you can select the examples in the list at the top-left of this window (if you are reading the tutorial in your HTML browser, there is of course no such window). These examples are best studied in their order. Many examples consist in several sub-examples, accessible via the list at the lower-right (cf. the following example). For simplicity, I am calling also the sub-examples just 'examples'.</p>
+
+
+
+
+<h2><a name="sec3" id="sec3"></a>
+Comments</h2>
+
+<p class="first">Oz supports line comments and block comments. Please select the two examples shown at the right hand side below to see how these comments differ.</p>
+
+<p>Executing these examples does nothing, of course.</p>
+
+<h3><a name="sec4" id="sec4"></a>
+Line comment</h3>
+
+<pre class="src">
+<span style="color: #b22222;">% </span><span style="color: #b22222;">this is a line comment
+</span></pre>
+
+
+<h3><a name="sec5" id="sec5"></a>
+Block comment</h3>
+
+<pre class="src">
+<span style="color: #b22222;">/*</span><span style="color: #b22222;">
+this is a
+block
+comment
+*/</span>
+</pre>
+
+
+
+<h2><a name="sec6" id="sec6"></a>
+Hello World!</h2>
+
+<p class="first">The statement</p>
+
+<blockquote>
+<p class="quoted">{Browse something}</p>
+</blockquote>
+
+<p>shows something in the Oz Browser. Hit the [Run] button below to execute this example. Congratulations, you just executed your first Oz program! Try to change the browsed text and see what happens..</p>
+
+<p>The other examples (see right hand side below) demonstrate alternative ways to show something using Inspect and Show. A pair of curly braces {...} always expresses a function or procedure call.</p>
+
+<h3><a name="sec7" id="sec7"></a>
+Browse</h3>
+
+<pre class="src">
+{Browse <span style="color: #bc8f8f;">'Hello World!'</span>}
+</pre>
+
+
+<h3><a name="sec8" id="sec8"></a>
+Show</h3>
+
+<pre class="src">
+<span style="color: #b22222;">/* </span><span style="color: #b22222;">Show something at standard out (the commandline where you started
+this tutorial). */</span>
+
+{Show <span style="color: #bc8f8f;">'Hello World!'</span>}
+</pre>
+
+
+<h3><a name="sec9" id="sec9"></a>
+Inspect</h3>
+
+<pre class="src">
+<span style="color: #b22222;">/* </span><span style="color: #b22222;">The inspector shows sometimes more information than the Browser
+(depending on the inspected value). The inspector may be hidden behind
+this tutorial.. */</span>
+
+{Inspect <span style="color: #bc8f8f;">'Hello World!'</span>}
+</pre>
+
+
+
+<h2><a name="sec10" id="sec10"></a>
+Calculator</h2>
+
+<p class="first">This example executes simple numeric calculations and displays the result.</p>
+
+<blockquote>
+<p class="quoted">Try changing the calculation by using different numbers and freely combining the operators +, -, * , ~ (negation), div (integer division), mod (integer modulus) and / (float division). You may also use parenthesis to indicate precedence.</p>
+</blockquote>
+
+<blockquote>
+<p class="quoted">You can use integers (e.g. 3, 7) and floats (e.g. 1.0, 3.14). However, you can not directly mix integers and floats in a calculation (in that case, an error will be printed at the command line).</p>
+</blockquote>
+
+<h3><a name="sec11" id="sec11"></a>
+Integer example 1</h3>
+
+<pre class="src">
+{Browse 3<span style="color: #a020f0;">+</span>4}
+</pre>
+
+
+<h3><a name="sec12" id="sec12"></a>
+Integer example 2</h3>
+
+<pre class="src">
+<span style="color: #b22222;">%% </span><span style="color: #b22222;">~ is the negation sign
+</span>{Browse <span style="color: #a020f0;">~</span>7 <span style="color: #a020f0;">*</span> 5}
+</pre>
+
+
+<h3><a name="sec13" id="sec13"></a>
+Integer example 3</h3>
+
+<pre class="src">
+{Browse (4 <span style="color: #a020f0;">+</span> 2) <span style="color: #a020f0;">div</span> 2}
+</pre>
+
+
+<h3><a name="sec14" id="sec14"></a>
+Float example 1</h3>
+
+<pre class="src">
+{Browse 3<span style="color: #a020f0;">.</span>0 <span style="color: #a020f0;">/</span> <span style="color: #a020f0;">~</span>2<span style="color: #a020f0;">.</span>0}
+</pre>
+
+
+<h3><a name="sec15" id="sec15"></a>
+Float example 2</h3>
+
+<pre class="src">
+<span style="color: #b22222;">/* </span><span style="color: #b22222;">A float is converted into the closest integer with the function
+FloatToInt (in case two integers are equally close it rounds to the
+closest even integer). There is also a function IntToFloat. */</span>
+
+{Browse {FloatToInt 3<span style="color: #a020f0;">.</span>5}}
+</pre>
+
+
+<h3><a name="sec16" id="sec16"></a>
+Float example 3</h3>
+
+<pre class="src">
+<span style="color: #b22222;">%% </span><span style="color: #b22222;">many other numeric functions are available for floats, e.g., Exp, Log, Sin, Cos...
+</span>{Browse {Sqrt 9<span style="color: #a020f0;">.</span>0}}
+</pre>
+
+
+
+<h2><a name="sec17" id="sec17"></a>
+Variables</h2>
+
+<p class="first">The keyword local introduces a variable. Variables start with a capital letter in Oz.</p>
+
+<p>Please note: Oz variables are single assignment variables. After a variable was bound, it can not be changed anymore (mutable data is also supported by Oz, but not discussed in this tutorial; read about cells in the Oz documentation). In contrast to most other programming languages, however, a variable can be unbound or even partially bound. In other words, variables in Oz are 'logic variables'. This is discussed further in the lesson &quot;Unification&quot; below.</p>
+
+<p>BTW: global variables can be introduced with the keyword declare. However, global variables are intended for testing and are only supported in the Emacs-based Oz Programming Interface (OPI), but not in this tutorial application.</p>
+
+
+<h3><a name="sec18" id="sec18"></a>
+Variable declaration</h3>
+
+<pre class="src">
+<span style="color: #a020f0;">local</span>
+   X = 1 <span style="color: #a020f0;">+</span> 1
+   Y
+<span style="color: #a020f0;">in</span>
+   Y = 3
+   {Browse X<span style="color: #a020f0;">*</span>Y}
+<span style="color: #a020f0;">end</span>
+</pre>
+
+
+<h3><a name="sec19" id="sec19"></a>
+Variable scope</h3>
+
+<pre class="src">
+<span style="color: #b22222;">/* </span><span style="color: #b22222;">Local statements can be freely nested (like virtually everything in
+Oz). Oz supports static or lexical scope (i.e. a variable always
+refers to its nearest enclosing binding). */</span>
+
+<span style="color: #a020f0;">local</span>
+   X = 3
+<span style="color: #a020f0;">in</span>
+  <span style="color: #a020f0;">local</span>
+    <span style="color: #b22222;">%% </span><span style="color: #b22222;">shadows the outer X
+</span>    X = 4
+  <span style="color: #a020f0;">in</span>
+    {Browse X}
+  <span style="color: #a020f0;">end</span>
+  <span style="color: #b22222;">%% </span><span style="color: #b22222;">later, browse original X
+</span>  {Browse X}
+<span style="color: #a020f0;">end</span>
+</pre>
+
+
+<h3><a name="sec20" id="sec20"></a>
+A variable can be unbound</h3>
+
+<pre class="src">
+<span style="color: #b22222;">/* </span><span style="color: #b22222;">Watch the Browser: X is first unbound (_ is displayed). Only after
+3000 msec X is bound to 3. */</span>
+
+<span style="color: #a020f0;">local</span>
+   X
+<span style="color: #a020f0;">in</span>
+   {Browse X}
+   {Delay 3000}
+   X = 3
+<span style="color: #a020f0;">end</span>
+</pre>
+
+
+
+<h2><a name="sec21" id="sec21"></a>
+Prodecure and Function Application</h2>
+
+<p class="first">Curly braces {...} surround a function or a procedure call. A function always returns exactly one value, a procedure does not necessarily return anything. In the first example below, the function IsEven expects one integer as arguments and returns true or false. The procedure Browse has a single argument and no return value.</p>
+
+<p>However, every function is actually a procedure as well &mdash; with one argument more. For example, IsEven is actually a procedure with two arguments. This is shown by the second example, where IsEven binds the variable B. Please note the order of computations in this example. Firstly, B is browsed. Afterwards, IsEven binds B to false. However, Browse does indeed show the correct value of B. This demonstrates a vital feature of Oz: variables are be used to communicate information between different parts of a program &mdash; even if the information is not available yet. Browse can handle unknow information, but other parts of the program may wait (i.e. block) until the information is available.</p>
+
+
+<h3><a name="sec22" id="sec22"></a>
+Applications</h3>
+
+<pre class="src">
+<span style="color: #b22222;">%% </span><span style="color: #b22222;">call procedure Browse with the result of IsEven
+</span>{Browse
+ <span style="color: #b22222;">%% </span><span style="color: #b22222;">call function IsEven
+</span> {IsEven 3}}
+</pre>
+
+
+<h3><a name="sec23" id="sec23"></a>
+Functions are procedures</h3>
+
+<pre class="src">
+<span style="color: #a020f0;">local</span> B <span style="color: #a020f0;">in</span>
+   {Browse B}
+   {IsEven 4 B}
+<span style="color: #a020f0;">end</span>
+</pre>
+
+
+<h3><a name="sec24" id="sec24"></a>
+Procedures used like functions</h3>
+
+<pre class="src">
+<span style="color: #b22222;">/* </span><span style="color: #b22222;">For convenience, every procedure (e.g. Browse) can be used like a
+function which returns its last argument. */</span>
+
+<span style="color: #a020f0;">local</span> X = {Browse}
+<span style="color: #a020f0;">in</span>
+  X = 3
+<span style="color: #a020f0;">end</span>
+</pre>
+
+
+
+<h2><a name="sec25" id="sec25"></a>
+If</h2>
+
+<p class="first">Oz provides the usual if control structure.</p>
+
+<h3><a name="sec26" id="sec26"></a>
+With else clause</h3>
+
+<pre class="src">
+<span style="color: #b22222;">%% </span><span style="color: #b22222;">try changing 2 to 6...
+</span>
+<span style="color: #a020f0;">if</span> 2 <span style="color: #a020f0;">&lt;</span> 5 <span style="color: #a020f0;">then</span> {Browse less} <span style="color: #a020f0;">else</span> {Browse more} <span style="color: #a020f0;">end</span>
+</pre>
+
+
+<h3><a name="sec27" id="sec27"></a>
+Without else clause</h3>
+
+<pre class="src">
+<span style="color: #b22222;">/* </span><span style="color: #b22222;">The else clause is optional. This example does nothing. Try
+changing == to \=. The operations == and \= test equality and
+inequality of values. */</span>
+
+<span style="color: #a020f0;">if</span> this <span style="color: #a020f0;">==</span> that <span style="color: #a020f0;">then</span> {Browse hi} <span style="color: #a020f0;">end</span>
+</pre>
+
+
+<h3><a name="sec28" id="sec28"></a>
+If as expression</h3>
+
+<pre class="src">
+<span style="color: #b22222;">/* </span><span style="color: #b22222;">The if control structure can be used either as a statement which
+returns nothing (as the examples above), or as an expression returning
+a value. */</span>
+
+{Browse
+ <span style="color: #a020f0;">if</span> 2 <span style="color: #a020f0;">&lt;</span> 5 <span style="color: #a020f0;">then</span> less <span style="color: #a020f0;">else</span> more <span style="color: #a020f0;">end</span>}
+</pre>
+
+
+
+<h2><a name="sec29" id="sec29"></a>
+Procedure Definition</h2>
+
+<p class="first">A procedure definition wraps up (abstracts) some computation: a complex computation can then be executed simply by calling the procedure. In the example, the procedure Max gets two numbers as its first two arguments and binds its last argument to the greater number (&gt;= means 'greater or equal'.). Note that the curly braces in the definition surround the procedure name and its arguments like a procedure call.</p>
+
+<h3><a name="sec30" id="sec30"></a>
+Max procedure</h3>
+
+<pre class="src">
+<span style="color: #b22222;">/* </span><span style="color: #b22222;">NB: the variable X in the Max definition and the variable X outside
+are different variables (cf. variable scope above). */</span>
+
+<span style="color: #a020f0;">local</span>
+  <span style="color: #b22222;">%% </span><span style="color: #b22222;">procedure definition
+</span>  <span style="color: #a020f0;">proc</span><span style="color: #b8860b;"> </span>{<span style="color: #0000ff;">Max</span> X Y Z}
+     <span style="color: #a020f0;">if</span> X <span style="color: #a020f0;">&gt;=</span> Y <span style="color: #a020f0;">then</span> Z = X <span style="color: #a020f0;">else</span> Z = Y <span style="color: #a020f0;">end</span>
+  <span style="color: #a020f0;">end</span>
+  X
+<span style="color: #a020f0;">in</span>
+  <span style="color: #b22222;">%% </span><span style="color: #b22222;">procedure application
+</span>  {Max 4 3 X}
+  {Browse X}
+<span style="color: #a020f0;">end</span>
+</pre>
+
+
+<h3><a name="sec31" id="sec31"></a>
+$ marks a return value</h3>
+
+<pre class="src">
+<span style="color: #b22222;">/* </span><span style="color: #b22222;">Every procedure argument can be a return value. The $ (dollar sign)
+always marks a return value. This example is not yet very convincing,
+but procedures will encapsulate constraints in later examples... */</span>
+
+<span style="color: #a020f0;">local</span>
+   <span style="color: #a020f0;">proc</span><span style="color: #b8860b;"> </span>{<span style="color: #0000ff;">Max</span> X Y Z}
+      <span style="color: #a020f0;">if</span> X <span style="color: #a020f0;">&gt;=</span> Y <span style="color: #a020f0;">then</span> Z = X <span style="color: #a020f0;">else</span> Z = Y <span style="color: #a020f0;">end</span>
+   <span style="color: #a020f0;">end</span>
+   X = 4
+   Result
+<span style="color: #a020f0;">in</span>
+   <span style="color: #b22222;">%% </span><span style="color: #b22222;">Note the $
+</span>   X = {Max $ 3 Result}
+   {Browse Result}
+<span style="color: #a020f0;">end</span>
+</pre>
+
+
+<h3><a name="sec32" id="sec32"></a>
+Function call of procedure</h3>
+
+<pre class="src">
+<span style="color: #b22222;">%% </span><span style="color: #b22222;">Remember, every procedure can also be called like a function for convenience.
+</span>
+<span style="color: #a020f0;">local</span>
+  <span style="color: #a020f0;">proc</span><span style="color: #b8860b;"> </span>{<span style="color: #0000ff;">Max</span> X Y Z}
+     <span style="color: #a020f0;">if</span> X <span style="color: #a020f0;">&gt;=</span> Y <span style="color: #a020f0;">then</span> Z = X <span style="color: #a020f0;">else</span> Z = Y <span style="color: #a020f0;">end</span>
+  <span style="color: #a020f0;">end</span>
+<span style="color: #a020f0;">in</span>
+  {Browse {Max 4 3}}
+<span style="color: #a020f0;">end</span>
+</pre>
+
+
+
+<h2><a name="sec33" id="sec33"></a>
+Function Definition</h2>
+
+<p class="first">Oz offers a simplified notation (syntactic sugar) for a procedure definition which returns its last value: it can be defined as a function.</p>
+
+<h3><a name="sec34" id="sec34"></a>
+Max function</h3>
+
+<pre class="src">
+<span style="color: #b22222;">%% </span><span style="color: #b22222;">This Max function is equivalent to the Max procedure of the previous lesson.
+</span>
+<span style="color: #a020f0;">local</span>
+  <span style="color: #a020f0;">fun</span><span style="color: #b8860b;"> </span>{<span style="color: #0000ff;">Max</span> X Y}
+     <span style="color: #a020f0;">if</span> X <span style="color: #a020f0;">&gt;=</span> Y <span style="color: #a020f0;">then</span> X <span style="color: #a020f0;">else</span> Y <span style="color: #a020f0;">end</span>
+  <span style="color: #a020f0;">end</span>
+<span style="color: #a020f0;">in</span>
+  {Browse {Max 4 3}}
+<span style="color: #a020f0;">end</span>
+</pre>
+
+
+<h3><a name="sec35" id="sec35"></a>
+Recursion</h3>
+
+<pre class="src">
+<span style="color: #b22222;">/* </span><span style="color: #b22222;">Procedures and functions can call themselves (recursion). The
+function Factorial inplements the mathematical factorial concept. */</span>
+
+<span style="color: #a020f0;">local</span>
+   <span style="color: #a020f0;">fun</span><span style="color: #b8860b;"> </span>{<span style="color: #0000ff;">Factorial</span> N}
+      <span style="color: #a020f0;">if</span> N<span style="color: #a020f0;">==</span>0
+      <span style="color: #a020f0;">then</span> 1
+      <span style="color: #a020f0;">else</span> N <span style="color: #a020f0;">*</span> {Factorial N<span style="color: #a020f0;">-</span>1}
+      <span style="color: #a020f0;">end</span>
+   <span style="color: #a020f0;">end</span>
+<span style="color: #a020f0;">in</span>
+   <span style="color: #b22222;">%% </span><span style="color: #b22222;">10! = 3628800
+</span>   {Browse
+    {Factorial 10}}
+<span style="color: #a020f0;">end</span>
+</pre>
+
+
+
+<h2><a name="sec36" id="sec36"></a>
+Atoms and Names</h2>
+
+<p class="first">Oz provides a number of basic data types which have a specific textual representation in program code. We already saw numbers (i.e. integers and floats). Another type are symbols &mdash; atoms in Oz terminology. Text surrounded by quotes is an atom, for example 'hi there'. Alternatively, atoms can be written as single text tokens which do not start with a capital letter (so they are not confused with variables) and which are not any Oz keyword.</p>
+
+<p>We also already used the two boolean values (truth values) true and false. They look like atoms, but they are special (their type is name). Another often used value which looks like an atom is unit (also a name).</p>
+
+<h3><a name="sec37" id="sec37"></a>
+Atoms</h3>
+
+<pre class="src">
+<span style="color: #b22222;">%% </span><span style="color: #b22222;">Several atoms are inspected below. The inspector might be behind the tutorial.
+</span>
+{Inspect <span style="color: #bc8f8f;">'I am an atom'</span>}
+{Inspect iAmAnAtom}
+{Inspect test}
+{Inspect nil}
+<span style="color: #b22222;">%% </span><span style="color: #b22222;">if is an Oz keyword, but 'if' is an atom
+</span>{Inspect <span style="color: #bc8f8f;">'if'</span>}
+{Inspect <span style="color: #bc8f8f;">'=='</span>}
+</pre>
+
+
+<h3><a name="sec38" id="sec38"></a>
+Equality</h3>
+
+<pre class="src">
+{Inspect test <span style="color: #a020f0;">==</span> <span style="color: #bc8f8f;">'test'</span>}
+</pre>
+
+
+<h3><a name="sec39" id="sec39"></a>
+Names</h3>
+
+<pre class="src">
+<span style="color: #b22222;">%% </span><span style="color: #b22222;">The boolean values and unit are no atoms
+</span>
+{Inspect <span style="color: #a020f0;">true</span>}
+{Inspect <span style="color: #a020f0;">false</span>}
+{Inspect <span style="color: #a020f0;">unit</span>}
+
+<span style="color: #b22222;">%% </span><span style="color: #b22222;">The Inspector shows atoms and names in different colors
+</span>{Inspect <span style="color: #bc8f8f;">'I am an atom'</span>}
+</pre>
+
+
+
+<h2><a name="sec40" id="sec40"></a>
+Compound Types</h2>
+
+<p class="first">Besides the atomic types discussed before, Oz also provides compound data types. These includes records, tuples, lists, and strings. Please note that all these types are actually records (possibly nested records). However, Oz provides a convenient syntax for each of these types.</p>
+
+<h3><a name="sec41" id="sec41"></a>
+Records (1)</h3>
+
+<pre class="src">
+<span style="color: #b22222;">%% </span><span style="color: #b22222;">A record has a label and consists of feature-value pairs.
+</span>
+{Inspect label(feature1:value1 feature2:value2)}
+</pre>
+
+
+<h3><a name="sec42" id="sec42"></a>
+Records (2)</h3>
+
+<pre class="src">
+<span style="color: #b22222;">%% </span><span style="color: #b22222;">Records can be freely nested.
+</span>
+{Inspect test(1:hi 2:there x:<span style="color: #a020f0;">unit</span>(foo:bar))}
+</pre>
+
+
+<h3><a name="sec43" id="sec43"></a>
+Records (3)</h3>
+
+<pre class="src">
+<span style="color: #b22222;">/* </span><span style="color: #b22222;">Integer features can be omitted. The following example is identical to the previous. */</span>
+
+{Inspect test(hi there x:<span style="color: #a020f0;">unit</span>(foo:bar))}
+</pre>
+
+
+<h3><a name="sec44" id="sec44"></a>
+Accessing record fields</h3>
+
+<pre class="src">
+<span style="color: #b22222;">/* </span><span style="color: #b22222;">Record fields are accessed with the dot operator. R.X returns the
+value stored at feature X in record R. Records support constant-time
+access (i.e. the time the access takes is independent of the feature
+position). */</span>
+
+{Inspect test(x:hi y:there)<span style="color: #a020f0;">.</span>x}
+</pre>
+
+
+<h3><a name="sec45" id="sec45"></a>
+Tuples (1)</h3>
+
+<pre class="src">
+<span style="color: #b22222;">%% </span><span style="color: #b22222;">A tuple consists of a label and values.
+</span>
+{Inspect label(value1 value2 value3)}
+</pre>
+
+
+<h3><a name="sec46" id="sec46"></a>
+Tuples (2)</h3>
+
+<pre class="src">
+<span style="color: #b22222;">/* </span><span style="color: #b22222;">Actually, a tuple is a record which has only integer features in
+ascending order. These features can be ommitted. The two records below
+are equivalent. */</span>
+
+{Inspect <span style="color: #a020f0;">unit</span>(1:a 2:b 3:c) <span style="color: #a020f0;">==</span> <span style="color: #a020f0;">unit</span>(a b c)}
+</pre>
+
+
+<h3><a name="sec47" id="sec47"></a>
+Tuples (3)</h3>
+
+<pre class="src">
+<span style="color: #b22222;">%% </span><span style="color: #b22222;">An atom is an "empty" tuple.
+</span>
+{Inspect test() <span style="color: #a020f0;">==</span> test}
+</pre>
+
+
+<h3><a name="sec48" id="sec48"></a>
+Lists (1)</h3>
+
+<pre class="src">
+<span style="color: #b22222;">%% </span><span style="color: #b22222;">A list is a sequence of values.
+</span>
+{Browse [value1 value2 value3]}
+</pre>
+
+
+<h3><a name="sec49" id="sec49"></a>
+Lists (2)</h3>
+
+<pre class="src">
+<span style="color: #b22222;">/* </span><span style="color: #b22222;">A list can also be written using | (cf. cons in Lisp). nil is the
+empty list, which terminates every list. */</span>
+
+{Inspect a<span style="color: #a020f0;">|</span>b<span style="color: #a020f0;">|</span>c<span style="color: #a020f0;">|</span>nil}
+</pre>
+
+
+<h3><a name="sec50" id="sec50"></a>
+Lists (3)</h3>
+
+<pre class="src">
+<span style="color: #b22222;">%% </span><span style="color: #b22222;">Actually, a list is a nested tuple with the labels '|'.
+</span>
+{Inspect [a b c] <span style="color: #a020f0;">==</span> <span style="color: #bc8f8f;">'|'</span>(a <span style="color: #bc8f8f;">'|'</span>(b <span style="color: #bc8f8f;">'|'</span>(c nil)))}
+</pre>
+
+
+<h3><a name="sec51" id="sec51"></a>
+Lists (4)</h3>
+
+<pre class="src">
+<span style="color: #b22222;">/* </span><span style="color: #b22222;">Consequently, the first element of a list can be accessed under the
+feature 1, and the remaining list under the feature 2. */</span>
+
+{Inspect [a b c]<span style="color: #a020f0;">.</span>2}
+</pre>
+
+
+<h3><a name="sec52" id="sec52"></a>
+Pairs (1)</h3>
+
+<pre class="src">
+<span style="color: #b22222;">%% </span><span style="color: #b22222;">A pair is a convenient way of contatenating values.
+</span>
+{Inspect value1 <span style="color: #a020f0;">#</span> value2 <span style="color: #a020f0;">#</span> value3}
+</pre>
+
+
+<h3><a name="sec53" id="sec53"></a>
+Pairs (2)</h3>
+
+<pre class="src">
+<span style="color: #b22222;">%% </span><span style="color: #b22222;">Actually, a pair is a tuple with the lable '#'.
+</span>
+{Inspect a<span style="color: #a020f0;">#</span>b<span style="color: #a020f0;">#</span>c  <span style="color: #a020f0;">==</span> <span style="color: #bc8f8f;">'#'</span>(a b c)}
+</pre>
+
+
+<h3><a name="sec54" id="sec54"></a>
+Strings (1)</h3>
+
+<pre class="src">
+<span style="color: #b22222;">/* </span><span style="color: #b22222;">A string is a list of integers denoting characters (i.e. all list
+procedures can be used for strings). */</span>
+
+{Inspect <span style="color: #bc8f8f;">"test"</span> <span style="color: #a020f0;">==</span> [116 101 115 116]}
+</pre>
+
+
+<h3><a name="sec55" id="sec55"></a>
+Strings (2)</h3>
+
+<pre class="src">
+<span style="color: #b22222;">/* </span><span style="color: #b22222;">Although a string is just a list of integers, you can show strings
+as text in the Browser and the Inspector. However, you need to
+configure them for showing strings first. In the Inspector Preference
+settings (Options menu), select the tab Appearance and tick "Show
+Strings". You need to do these settings before you inspect a
+string. */</span>
+
+{Inspect <span style="color: #bc8f8f;">"This is a string!"</span>}
+</pre>
+
+
+<h3><a name="sec56" id="sec56"></a>
+Virtual Strings</h3>
+
+<pre class="src">
+<span style="color: #b22222;">/* </span><span style="color: #b22222;">A virtual string (VS) is a (possibly nested) concatenation of
+strings, atoms, and numbers. Many procedures expecting strings as
+arguments can also handle virtual strings for convenience. */</span>
+
+<span style="color: #a020f0;">local</span>
+  VS = <span style="color: #bc8f8f;">'my test '</span>
+<span style="color: #a020f0;">in</span>
+  {Inspect VS<span style="color: #a020f0;">#</span>3}
+<span style="color: #a020f0;">end</span>
+</pre>
+
+
+
+<h2><a name="sec57" id="sec57"></a>
+Pattern Matching</h2>
+
+<p class="first">Pattern matching is a convenient way to access the elements contained in records, lists etc. Pattern matching decomposes such compound data, declares new variables, and binds these variables to parts of the compound data.</p>
+
+
+<h3><a name="sec58" id="sec58"></a>
+The case statement</h3>
+
+<pre class="src">
+<span style="color: #b22222;">/* </span><span style="color: #b22222;">The primary pattern matching construct is the case statement. In
+the example below, case declares the two variables H and T and binds
+them to the head and tail of the list Xs. Finally, the H and T are
+inspected. Please note that the pattern-matching expression H|T is
+written with the usual list syntax using |. For better understanding
+pattern-matching, you may want to replace this expression with the
+list [A B C D] and then inspect one of the variables in this list. */</span>
+
+<span style="color: #a020f0;">local</span>
+   Xs = [1 2 3 4]
+<span style="color: #a020f0;">in</span>
+   <span style="color: #a020f0;">case</span> Xs <span style="color: #a020f0;">of</span> H <span style="color: #a020f0;">|</span> T
+   <span style="color: #a020f0;">then</span> {Inspect H} {Inspect T}
+   <span style="color: #a020f0;">end</span>
+<span style="color: #a020f0;">end</span>
+</pre>
+
+
+<h3><a name="sec59" id="sec59"></a>
+Implicit pattern matching</h3>
+
+<pre class="src">
+<span style="color: #b22222;">/* </span><span style="color: #b22222;">Some programming constructs in Oz -- for example the function
+definition -- also feature pattern matching (quasi an implicit case
+statement). The following function GetPitch expects a record as
+argument which must match the record note(pitch:Pitch ...). The
+variable Pitch is implicitly declared and bound to the value at the
+feature 'pitch' of the record given as argument to the
+function. Please note that the record in the header of the function
+GetPitch is not even complete but contains three dots (...) to
+indicate that further record features are possible. */</span>
+
+<span style="color: #a020f0;">local</span>
+   <span style="color: #a020f0;">fun</span><span style="color: #b8860b;"> </span>{<span style="color: #0000ff;">GetPitch</span> note(pitch:Pitch <span style="color: #a020f0;">...</span>)}
+      Pitch
+   <span style="color: #a020f0;">end</span>
+<span style="color: #a020f0;">in</span>
+   {Inspect {GetPitch note(duration:4 pitch:60)}}
+<span style="color: #a020f0;">end</span>
+</pre>
+
+
+
+<h2><a name="sec60" id="sec60"></a>
+Procedures over Compound Data</h2>
+
+<p class="first">Oz provides a rich set of procedures for processing these compound data such as lists and records. A few examples are shown here. More procedures are listed in the reference documentation at</p>
+
+<blockquote>
+<p class="quoted"><a href="http://www.mozart-oz.org/documentation/base/index.html">http://www.mozart-oz.org/documentation/base/index.html</a></p>
+</blockquote>
+
+
+<h3><a name="sec61" id="sec61"></a>
+HasFeature</h3>
+
+<pre class="src">
+<span style="color: #b22222;">%% </span><span style="color: #b22222;">Tests whether a record has a certain feature
+</span>
+{Inspect {HasFeature <span style="color: #a020f0;">unit</span>(x:1 y:2 z:3) y}}
+</pre>
+
+
+<h3><a name="sec62" id="sec62"></a>
+Arity</h3>
+
+<pre class="src">
+<span style="color: #b22222;">%% </span><span style="color: #b22222;">Return the features of a record as a list.
+</span>
+{Inspect {Arity <span style="color: #a020f0;">unit</span>(a b x:1 y:2 z:3)}}
+</pre>
+
+
+<h3><a name="sec63" id="sec63"></a>
+Adjoin</h3>
+
+<pre class="src">
+<span style="color: #b22222;">/* </span><span style="color: #b22222;">"Merge" two records. Note that features and label of the second
+record take precedence over the first. */</span>
+
+{Inspect {Adjoin <span style="color: #a020f0;">unit</span>(x:1 y:2 z:3) test(foo:hi bar:there z:<span style="color: #bc8f8f;">'overwrite!'</span>)}}
+</pre>
+
+
+<h3><a name="sec64" id="sec64"></a>
+Nth</h3>
+
+<pre class="src">
+<span style="color: #b22222;">%% </span><span style="color: #b22222;">Return the nth element of a list.
+</span>
+{Inspect {Nth [a b c d] 2}}
+</pre>
+
+
+<h3><a name="sec65" id="sec65"></a>
+Reverse</h3>
+
+<pre class="src">
+<span style="color: #b22222;">%% </span><span style="color: #b22222;">Reverse a list.
+</span>
+{Inspect {Reverse [a b c d]}}
+</pre>
+
+
+<h3><a name="sec66" id="sec66"></a>
+Append</h3>
+
+<pre class="src">
+<span style="color: #b22222;">%% </span><span style="color: #b22222;">Append two lists.
+</span>
+{Inspect {Append [a b] [x y]}}
+</pre>
+
+
+<h3><a name="sec67" id="sec67"></a>
+User-defined procedures</h3>
+
+<pre class="src">
+<span style="color: #b22222;">/* </span><span style="color: #b22222;">You can define procedures over lists and records as easily as
+numeric procedures. Following is the definition of the function
+Append. */</span>
+
+<span style="color: #a020f0;">local</span>
+  <span style="color: #a020f0;">fun</span><span style="color: #b8860b;"> </span>{<span style="color: #0000ff;">Append</span> Xs Ys}
+    <span style="color: #a020f0;">if</span> Xs <span style="color: #a020f0;">==</span> nil <span style="color: #a020f0;">then</span> Ys
+    <span style="color: #a020f0;">else</span> Xs<span style="color: #a020f0;">.</span>1 <span style="color: #a020f0;">|</span> {Append Xs<span style="color: #a020f0;">.</span>2 Ys}
+    <span style="color: #a020f0;">end</span>
+  <span style="color: #a020f0;">end</span>
+<span style="color: #a020f0;">in</span>
+  {Inspect {Append [a b] [x y]}}
+<span style="color: #a020f0;">end</span>
+</pre>
+
+
+
+<h2><a name="sec68" id="sec68"></a>
+Unification</h2>
+
+<p class="first">The operator = performs unification of two variables. The variables quasi share all the information they have about their values. A variable without a name (an anonymous variable) is written as an underscore ( _ ). Unification is a basic form of constraint programming (constraint programming is discussed further below).</p>
+
+
+<h3><a name="sec69" id="sec69"></a>
+Unifying two lists</h3>
+
+<pre class="src">
+<span style="color: #a020f0;">local</span>
+  X = [a _ _]
+  Y = [_ b _]
+<span style="color: #a020f0;">in</span>
+  X = Y          <span style="color: #b22222;">% </span><span style="color: #b22222;">unify X and Y
+</span>  {Inspect X}
+<span style="color: #a020f0;">end</span>
+</pre>
+
+
+<h3><a name="sec70" id="sec70"></a>
+Recursive unification</h3>
+
+<pre class="src">
+<span style="color: #b22222;">/* </span><span style="color: #b22222;">Unification also works recursively. The Inspector and the Browser
+show two different ways for representing that (the Inspector can be
+configured to show either way: options menu, structure tab, under
+representation, select between tree and relation mode). */</span>
+
+<span style="color: #a020f0;">local</span> X = <span style="color: #a020f0;">unit</span>(x:X) <span style="color: #a020f0;">in</span>
+  {Browse X}
+  {Inspect X}
+<span style="color: #a020f0;">end</span>
+</pre>
+
+
+
+<h2><a name="sec71" id="sec71"></a>
+Class Method Application</h2>
+
+<p class="first">Oz supports object-oriented programming. This programming paramdigm introduces the notion of objects which instantiate classes. An object (or class instance) is a datum which encapsulates its internal structure. A class specifies what data are contained in its instances and what methods these instances understands. A method (or message) is effectively a procedure which is defined for instances of specific classes only. For more details on object-oriented programming in general, please refer to other Oz documentation (e.g., the Oz Tutorial, Sec. 10).</p>
+
+<h3><a name="sec72" id="sec72"></a>
+Method call</h3>
+
+<pre class="src">
+<span style="color: #b22222;">/* </span><span style="color: #b22222;">The following example creates a graphical user interface
+button. You do not need to understand the code which creates the
+window itself (i.e., the call to QTk.build). For our purposes here,
+only this single line is important:
+
+  {Window show}
+
+Window is an object, and show is the name of the method understood by
+this object. This method results in showing the window with the
+button. Please note that the syntax of a method application differs
+clearly from the procedure application syntax shown before. If show
+would be a procedure instead, then we would write:
+
+  {Show Window}
+
+BTW: internally, objects are actually procedures which expect a single
+argument -- hence this syntax. When the object is send a message
+(i.e. the procedure is called with a specific argument) it processes
+the message according to its definition, and may even change its
+internal state. */</span>
+
+<span style="color: #a020f0;">local</span>
+   Window = {QTk<span style="color: #a020f0;">.</span>build lr(button(text:<span style="color: #bc8f8f;">"Hello world!"</span>
+                                 action:toplevel<span style="color: #a020f0;">#</span>close))}
+<span style="color: #a020f0;">in</span>
+   {Window show}
+<span style="color: #a020f0;">end</span>
+</pre>
+
+
+<h3><a name="sec73" id="sec73"></a>
+Method arguments</h3>
+
+<pre class="src">
+<span style="color: #b22222;">/* </span><span style="color: #b22222;">Class methods are actually records which can contain method
+arguments. For example, the following statement sends the following
+message to the object Window -- which sets increases the border around
+the buttom and sets the backgound of this border to the color blue.
+
+  {Window set(borderwidth:1.0#c background:blue)}
+
+In general, the record denoting a message can wrap multiple arguments,
+as in the following example where the method myMethod with two
+arguments is send to the class MyObject.
+
+   {MyObject myMethod(Arg1 Arg2 ..)}
+
+We will later see many more method application examples in the context
+of Strasheela's music representation. */</span>
+
+<span style="color: #a020f0;">local</span>
+   Window = {QTk<span style="color: #a020f0;">.</span>build lr(button(text:<span style="color: #bc8f8f;">"Hello world!"</span>
+                                 action:toplevel<span style="color: #a020f0;">#</span>close))}
+<span style="color: #a020f0;">in</span>
+   {Window show}
+   <span style="color: #b22222;">%% </span><span style="color: #b22222;">change to botton background color after 2000 msecs
+</span>   {Delay 2000}
+   {Window set(borderwidth:1<span style="color: #a020f0;">.</span>0<span style="color: #a020f0;">#</span>c
+               background:blue)}
+<span style="color: #a020f0;">end</span>
+</pre>
+
+
+
+<h2><a name="sec74" id="sec74"></a>
+Higher-Order Programming</h2>
+
+<p class="first">Oz procedures (and functions) are first-class values. This means that a procedure can be processed like any other value. For example, procedures can be given to other procedures as arguments. This means that we can have (and define ourselves!) operations where not only some value such as numbers or symbols are given as arguments but other operations as well. This leads to highly flexible programming technique called higher-order programming. Procedures expecting procedures as arguments are called higher-order procedures. This concept is demonstrated be several examples.</p>
+
+
+<h3><a name="sec75" id="sec75"></a>
+Filter</h3>
+
+<pre class="src">
+<span style="color: #b22222;">/* </span><span style="color: #b22222;">The function Filter expects a list and a test function, and returns
+only those elements for which the test function returns true.
+
+The function IsEven returns true for even integers and thus a list
+with only the even integers in [~3 ~2 ~1 0 1 2 3] is returned. Try
+replaying IsEven by IsOdd, IsNumber or IsNat (testing for natural
+numbers) to better understand this filtering (BTW: there is a bug in
+IsOdd concerning negative numbers). */</span>
+
+{Browse {Filter [<span style="color: #a020f0;">~</span> 4 <span style="color: #a020f0;">~</span>3 <span style="color: #a020f0;">~</span>2 <span style="color: #a020f0;">~</span>1 0 1 2 3] IsEven}}
+</pre>
+
+
+<h3><a name="sec76" id="sec76"></a>
+ForAll</h3>
+
+<pre class="src">
+<span style="color: #b22222;">/* </span><span style="color: #b22222;">The procedure ForAll applies a given procedure to any element of a
+list. In this example, the procedure Browse is applied to every list
+element. */</span>
+
+{ForAll [a b c d e f] Browse}
+</pre>
+
+
+<h3><a name="sec77" id="sec77"></a>
+Map</h3>
+
+<pre class="src">
+<span style="color: #b22222;">/* </span><span style="color: #b22222;">The function Map expects a list and a unary function (i.e. a
+function expecting a single value) as arguments. It applies the
+function to every list element, and returns the collected results in a
+list.
+
+The example defines and uses the function square in order to square
+all numbers in the list. You may want to change this function to
+understand that any function can be given to a higher-order function
+as an argument. For example, replace Square by a function Doouble,
+which doubles its argument. */</span>
+
+<span style="color: #a020f0;">local</span>
+  <span style="color: #a020f0;">fun</span><span style="color: #b8860b;"> </span>{<span style="color: #0000ff;">Square</span> X} X <span style="color: #a020f0;">*</span> X <span style="color: #a020f0;">end</span>
+<span style="color: #a020f0;">in</span>
+  {Browse {Map [1 2 3 4 5 6] Square}}
+<span style="color: #a020f0;">end</span>
+</pre>
+
+
+<h3><a name="sec78" id="sec78"></a>
+Anonymous procedure definition</h3>
+
+<pre class="src">
+<span style="color: #b22222;">/* </span><span style="color: #b22222;">Sometimes we need a function only once -- as the function Square in
+the previous example. In such cases we don't necessarily need to care
+about giving the function any name. Instead, we can define an
+anonymous function.
+
+This example restates the previous example by defining the Square
+function 'inline' without giving it any name. Please recall that $
+always denotes a return value. In this case, $ returns the function
+value itself. */</span>
+
+{Browse
+ {Map [1 2 3 4 5 6] <span style="color: #a020f0;">fun</span><span style="color: #b8860b;"> </span>{<span style="color: #0000ff;">$</span> X} X <span style="color: #a020f0;">*</span> X <span style="color: #a020f0;">end</span>}}
+</pre>
+
+
+<h3><a name="sec79" id="sec79"></a>
+Sort (1)</h3>
+
+<pre class="src">
+<span style="color: #b22222;">/* </span><span style="color: #b22222;">The function Sort expects a list and a binary function (i.e. a
+function expecting two values) as arguments. This binary function
+compares two values, and Sort sorts the list values according to this
+comparison. For example, the function in the example compares two
+numbers and returns true if the first number is smaller. Consequently,
+this example sorts the list elements in incending order. You may want
+to replace the &lt; by &gt; in the function definition to sort the
+numbers in decreasing order. */</span>
+
+{Browse {Sort [1 5 3 2 0 7] <span style="color: #a020f0;">fun</span><span style="color: #b8860b;"> </span>{<span style="color: #0000ff;">$</span> X Y}  X <span style="color: #a020f0;">&lt;</span> Y <span style="color: #a020f0;">end</span>}}
+</pre>
+
+
+<h3><a name="sec80" id="sec80"></a>
+Sort (2)</h3>
+
+<pre class="src">
+<span style="color: #b22222;">/* </span><span style="color: #b22222;">You can actually sort the list elements in any way you want using
+the Sort function. For example, you may place all even numbers at the
+beginning and all odd numbers at the end of the list and sort all even
+and odd numbers in incending order. This is done in the second
+(commented) Sort call. How does this sorting work? */</span>
+
+{Browse {Sort [1 5 3 2 0 7] <span style="color: #a020f0;">fun</span><span style="color: #b8860b;"> </span>{<span style="color: #0000ff;">$</span> X Y}
+                              <span style="color: #a020f0;">if</span> {IsEven X}
+                              <span style="color: #a020f0;">then</span>
+                                <span style="color: #a020f0;">if</span> {IsEven Y}
+                                <span style="color: #a020f0;">then</span> X <span style="color: #a020f0;">&lt;</span> Y
+                                <span style="color: #a020f0;">else</span> <span style="color: #a020f0;">true</span>
+                                <span style="color: #a020f0;">end</span>
+                              <span style="color: #a020f0;">else</span> <span style="color: #a020f0;">false</span>
+                              <span style="color: #a020f0;">end</span>
+                            <span style="color: #a020f0;">end</span>}}
+</pre>
+
+
+<h3><a name="sec81" id="sec81"></a>
+Defining higher-order procedures</h3>
+
+<pre class="src">
+<span style="color: #b22222;">/* </span><span style="color: #b22222;">Higher order procedures are defined like any other procedure: some
+arguments are simply procedures -- which are then usually applied in
+the definition. This example defines a higher-order function Find
+which expects a list Xs and a test function Fn: Find returns the first
+element in Xs for which Fn returns true.
+
+This example also demonstrates the pattern-matching case statement
+with multiple clauses operating on the list Xs. In case Xs is the
+empty list nil, then Find returns nil. Otherwise (multiple clauses are
+separated with the keyword []), Xs is matched with X|Xr, where X is
+bound to the first element of Xs and Xr to the list's tail or
+rest. The function Find then checks whether {Fn X} returns true. In
+that case, the searched for list element has been found and is
+returned. Otherwise, Find is called recursively with the rest of the
+list. */</span>
+
+<span style="color: #a020f0;">local</span>
+   <span style="color: #a020f0;">fun</span><span style="color: #b8860b;"> </span>{<span style="color: #0000ff;">Find</span> Xs Fn}
+      <span style="color: #a020f0;">case</span> Xs
+      <span style="color: #a020f0;">of</span> nil <span style="color: #a020f0;">then</span> nil
+      <span style="color: #a020f0;">[]</span> X<span style="color: #a020f0;">|</span>Xr
+      <span style="color: #a020f0;">then</span> <span style="color: #a020f0;">if</span> {Fn X} <span style="color: #a020f0;">then</span> X
+           <span style="color: #a020f0;">else</span> {Find Xr Fn}
+           <span style="color: #a020f0;">end</span>
+      <span style="color: #a020f0;">end</span>
+   <span style="color: #a020f0;">end</span>
+<span style="color: #a020f0;">in</span>
+   {Browse {Find  [1 2 3 4 5 6] IsEven}}
+<span style="color: #a020f0;">end</span>
+</pre>
+
+
+
+<h2><a name="sec82" id="sec82"></a>
+Concurrency</h2>
+
+<p class="first">Oz provides excellent support for concurrent programming, where computations run in parallel in multiple threads. We will only touch on this subject and discuss aspects relevant for Strasheela. In general, however, concurrent programming plays a major role in Oz programming.</p>
+
+<p>The computations in different threads can communicate with each other via variables. Multiple threads can use the same variable in a computation. If the value of a variable does not present enough information for performing a specific operation, then the thread simply blocks and waits for more information. In the example below, the addition X+3 can not be peformed as long as the value of X is unknown. As soon as more information about the variable value is available, the thread resumes its execution.</p>
+
+<p>This behaviour leads to a concurrent programming model which is highly declarative &mdash; and thus easy to program in. We will later see how this model simplifies the definition of complex musical constraint satisfaction problems (Oz' constraint programming model is based on concurrent programming).</p>
+
+<p>The downside of this concurrency model is that it can result in an unintended blocking of a program which is not explicitly signalled (e.g. no error message is shown when a program blocks, because this is a normal program behaviour). The second an third example below demonstrate a pragmatic way to deal with this downside.</p>
+
+<p>The examples demonstrates concurrent programming, but do not show a typical application (a typical application would be a program split in a server and one or more clients). In the context of Strasheela, we will seldomly write concurrent programs explicitly. Nevertheless, it is very important to know how concurrent programming works in Oz. Even if we are not explicitly writing a concurrent program, constraint programming in Oz always results in a concurrent program. Concurrent programming forms one of the foundations of Oz' constraint programming model, where each constraint (i.e. each propagator) is a concurrent agent running in its own thread.</p>
+
+
+<h3><a name="sec83" id="sec83"></a>
+Declarative concurrency</h3>
+
+<pre class="src">
+<span style="color: #b22222;">/* </span><span style="color: #b22222;">This example declares X and then browses 'hello' (just to show that
+the browser works in principle). However, the addition X+3 can not be
+executed immediately and blocks. Because this computation is executed
+in its own thread, the top-level thread continues regardless, and
+calls the procedure Delay, which waits for 3000 msecs. After that
+time, the top-level thread determines X to 4. This awakes the other
+thread: it can now compute X+3 and browse the sum. */</span>
+
+<span style="color: #a020f0;">local</span>
+  X
+<span style="color: #a020f0;">in</span>
+  {Browse hello}
+  <span style="color: #a020f0;">thread</span> {Browse X <span style="color: #a020f0;">+</span> 3} <span style="color: #a020f0;">end</span>
+  {Delay 3000}
+  X = 4
+<span style="color: #a020f0;">end</span>
+</pre>
+
+
+<h3><a name="sec84" id="sec84"></a>
+Blocking computation</h3>
+
+<pre class="src">
+<span style="color: #b22222;">/* </span><span style="color: #b22222;">This example demonstrates a buggy program which does not signal any
+error but simply does nothing. The example is very similar to the
+previous example, but does not place the blocking X+3 in its own
+thread. As a result, the whole program blocks at that point and never
+executes X = 4. */</span>
+
+<span style="color: #a020f0;">local</span>
+  X
+<span style="color: #a020f0;">in</span>
+  {Browse hello}
+  <span style="color: #b22222;">%% </span><span style="color: #b22222;">!! blocks
+</span>  {Browse X<span style="color: #a020f0;">+</span>3}
+  X = 4
+<span style="color: #a020f0;">end</span>
+</pre>
+
+
+<h3><a name="sec85" id="sec85"></a>
+'Signalling' a blocking computation</h3>
+
+<pre class="src">
+<span style="color: #b22222;">/* </span><span style="color: #b22222;">This example demonstrates a pragmatic approach which checks for
+blocking programs. The example ends with the statement {Browse
+endOfProgram}. A non-blocking program will alway execute this last
+line of code and show 'endOfProgram' in the Browser. However, a
+blocking program (as the present one) does not do that and thus
+indicates that it is blocking. Although this little trick does not
+tell us *where* the program blocks, the information *that* we wrote a
+blocking program can prove very helpful already. You may get a feel
+for this trick by changing the example so that the message
+'endOfProgram' is shown (e.g. comment the blocking statement out, or
+surrounding it with a 'thread .. end' statement). */</span>
+
+<span style="color: #a020f0;">local</span>
+  X
+<span style="color: #a020f0;">in</span>
+  {Browse hello}
+  <span style="color: #b22222;">%% </span><span style="color: #b22222;">!! blocks
+</span>  {Browse X<span style="color: #a020f0;">+</span>3}
+  X = 4
+<span style="color: #a020f0;">end</span>
+{Browse endOfProgram}
+</pre>
+
+
+
+<h2><a name="sec86" id="sec86"></a>
+Understanding error messages</h2>
+
+<p class="first">When we do program, we almost inevitably write bugs
+sometimes. Luckily, when confronted with specific problems in
+programs, compilers try to tell us about the problem (naturally, the
+real hard bugs are the ones no compiler complains about). All errors
+are actually raised exceptions (see the Tutorial of Oz, Sec. 5.10 for
+more details).</p>
+
+<p>The compiler is your friend, so this example introduces you to some
+typical Oz error messages ;-) During your programming sessions,
+carefully reading error messages can save you much time. In this
+tutorial, all these messages are shown at the shell (or in the DOS
+box) where you started the tutorial. The Oz Programming Interface
+(OPI) even supports moving to the code where the bug is likely to be
+located (see the Tutorial of Oz, Sec. 2.3.3).</p>
+
+<p>BTW: the error messages of this tutorial are slightly obscured
+unfortunately by some trick which keeps the tutorial application
+running even in the case of an error: there are always a few lines of
+other code before the actual error message. Also, the reported line
+number is not correct, because the tutorial application adds a few
+lines to each example (the resulting full example is shown just before
+the error message).</p>
+
+
+<h3><a name="sec87" id="sec87"></a>
+Parse error</h3>
+
+<pre class="src">
+<span style="color: #b22222;">%% </span><span style="color: #b22222;">The left curly brace does not match the right parenthesis
+</span>
+{Browse hello)
+</pre>
+
+
+<h3><a name="sec88" id="sec88"></a>
+Static analysis error</h3>
+
+<pre class="src">
+<span style="color: #b22222;">%% </span><span style="color: #b22222;">Browse expects only a single argument
+</span>
+{Browse hi there}
+</pre>
+
+
+<h3><a name="sec89" id="sec89"></a>
+Binding analysis error</h3>
+
+<pre class="src">
+<span style="color: #b22222;">%% </span><span style="color: #b22222;">Variable X is not declared
+</span>
+X = 3
+</pre>
+
+
+<h3><a name="sec90" id="sec90"></a>
+Type error</h3>
+
+<pre class="src">
+<span style="color: #b22222;">%% </span><span style="color: #b22222;">We can not add an integer and a float
+</span>
+{Browse 3 <span style="color: #a020f0;">+</span> 2<span style="color: #a020f0;">.</span>0}
+</pre>
+
+
+<h3><a name="sec91" id="sec91"></a>
+Failure</h3>
+
+<pre class="src">
+<span style="color: #b22222;">/* </span><span style="color: #b22222;">Inconsistent constraint programs result in a failure. Failures play
+an important role internally in a constraint solver searching for
+solutions to a constraint satisfaction problem. */</span>
+
+<span style="color: #a020f0;">local</span>
+   X = 3
+<span style="color: #a020f0;">in</span>
+   3 <span style="color: #a020f0;">+</span> 4 <span style="color: #a020f0;">=:</span> X
+<span style="color: #a020f0;">end</span>
+</pre>
+
+
+
+
+<!-- Page published by Emacs Muse ends here -->
+<!-- Footer -->
+<div id="footer">
+<div id="author">&copy; 
+Torsten Anders</div>
+<div id="date">Last time edited: 2007.08.07</div>
+</div>
+  </body>
+</html>

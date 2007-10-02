@@ -1,0 +1,294 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+  <head>
+    <title>Florid Counterpoint</title>
+    <meta name="generator" content="muse.el">
+    <meta http-equiv="Content-Type"
+          content="text/html; charset=iso-8859-1">
+    
+    <link rel="stylesheet" href="style.css" type="text/css" />
+  </head>
+  <body>
+<div id="header">
+  <ul class="nav">
+    <li class="nav1"><a href="index.html">home</a></li>
+    <li class="navn"><a href="https://sourceforge.net/projects/strasheela/">download at sourceforge</a></li>
+    <!-- <li class="navn"><a href="IndexOfPages.html">site map</a></li> -->
+    <li class="navn"><a href="contact.html">contact</a></li>
+  </ul>
+  <div id="logo">
+    <a href="http://sourceforge.net"><img src="http://sflogo.sourceforge.net/sflogo.php?group_id=167225&amp;type=1" width="88" height="31" border="0" alt="SourceForge.net Logo" /></a>
+  </div>
+</div>
+    <h1>Florid Counterpoint</h1>
+    <!-- Page published by Emacs Muse begins here -->
+<p><a href="StrasheelaExamples.html">back</a></p>
+
+<div class="contents">
+<dl>
+<dt>
+<a href="#sec1">Overview</a>
+</dt>
+<dt>
+<a href="#sec2">Music Representation</a>
+</dt>
+<dt>
+<a href="#sec3">Compositional Rules Overview</a>
+</dt>
+<dt>
+<a href="#sec4">Rule Definition and Application</a>
+</dt>
+</dl>
+</div>
+
+
+<h2><a name="sec1" id="sec1"></a>
+Overview</h2>
+
+<p class="first">This example demonstrates Strasheela's capabilities for solving polyphonic CSPs where both the pitch structure as well as the rhythmical structure is constrained by rules.
+Users of previous systems could not define and solve such complex CSPs (at least not in a reasonable amount of time), because such CSPs require suitable score search strategies not supported by these systems. For example, <a href="http://www2.siba.fi/PWGL/pwglconstraints.html">Score-PMC</a> &mdash; a pioneering system for polyphonic CSPs &mdash;  requires that the temporal structure of the music is fully determined in the problem definition.
+Strasheela has been designed with complex musical CSPs like florid counterpoint in mind. The Strasheela user can select (and even define) a search strategy suitable for her CSP. Polyphonic problems like the one below are solved in a few seconds &mdash; and thus in a reasonable amount of time for practical use &mdash; by Strasheela's <em>left-to-right distribution strategy</em> (explained in <a href="Publications.html">my thesis</a>).</p>
+
+<p>For simplicity, this example compiles rules from various sources instead of following a specific author closely.
+For example, some rules are variants from Fuxian rules introduced before, while other rules (in particular rhythmical rules) were inspired by <a href="http://www.amazon.de/exec/obidos/ASIN/3423301465/qid=1149574583/sr=8-2/ref=sr_8_xs_ap_i2_xgl/303-9886567-4113819">Motte (1981)</a>. Accordingly, the result does also not imitate a particular historical style (but neither does Fux, cf. <a href="http://books.google.de/books?hl=en&amp;lr=&amp;id=OcSVGkug58gC&amp;oi=fnd&amp;pg=RA1-PR21&amp;sig=uDDaLKT5_WsP-agqQttQqdJdbbo&amp;dq=jeppesen+counterpoint#PRA1-PA110&#44;M1">Jeppesen (1930)</a>).</p>
+
+
+
+<p>The example creates a two voice counterpoint. In the score, the analysis brackets point out that the first notes of each voice form a canon. An 'x' on top of a note denotes a passing note (the pause at the end was manually added to the output).</p>
+
+<blockquote>
+<p class="quoted"><a class="image-link" href="../examples/Output/03-FloridCounterpoint-Canon.mp3">
+<img src="../examples/Output/03-FloridCounterpoint-Canon.preview.png"></a></p>
+</blockquote>
+
+
+<blockquote>
+<p class="quoted"><a href="../examples/03-FloridCounterpoint-Canon.oz">source</a></p>
+</blockquote>
+
+<p>The rest of this section explains important aspects of the implementation of this example. The music representation is discussed, the compositional rules are explained, and two example rules are fully defined and applied to the music representation.</p>
+
+<h2><a name="sec2" id="sec2"></a>
+<a name="musicRepresentation" id="musicRepresentation"></a>Music Representation</h2>
+
+<p class="first">The music representation consists of two parallel voices &mdash;
+represented by a nesting of Strasheela score objects. Two sequential
+containers (expressing that the contained melody notes form a
+sequence) are nested in a simultaneous container (expressing that the
+sequential containers run in parallel). The score topology has thus
+the following form (<code>items</code> is the argument of a container listing the
+contained score objects).</p>
+
+<pre class="src">
+sim(items:[seq(items:[note1 <span style="color: #a020f0;">...</span> noteN])
+           seq(items:[note1 <span style="color: #a020f0;">...</span> noteN])])
+</pre>
+
+<p>Such a textual music representation specification is transformed into a nested score object (with an extensive <a href="http://mitpress.mit.edu/sicp/full-text/book/book-Z-H-13.html#%_chap_2">data abstraction</a> interface for accessing score information) by the function <a href="api/node6.html#entity200">Score.makeScore</a>. The following code snippet shows the music representation specification in full detail. Here, notes are created by the function <code>MakeNote</code>. <code>MakeNote</code> returns a note specification with individual variables at the parameters duration and pitch &mdash; in contrast to the Fuxian example, not only all note pitches but also all note durations are searched for.
+Functions are <a href="http://en.wikipedia.org/wiki/First-class_function">first-class objects</a> in Oz (e.g. a function can expect other functions as arguments).<sup><a name="fnr.1" href="#fn.1">1</a></sup> The function <a href="api/node4.html#entity95">LUtils.collectN</a> receives <code>MakeNote</code> as an argument, calls it multiple times, and returns the collected results.</p>
+
+<pre class="src">
+<span style="color: #a020f0;">fun</span><span style="color: #b8860b;"> </span>{<span style="color: #0000ff;">MakeNote</span> PitchDomain}
+  <span style="color: #b22222;">%% </span><span style="color: #b22222;">duration domain {eighth, quarter, halve note} -- depends on timeUnit set below
+</span>  note(duration: {FD<span style="color: #a020f0;">.</span>int [2 4 8]}
+       pitch: {FD<span style="color: #a020f0;">.</span>int 53<span style="color: #a020f0;">#</span>72}               <span style="color: #b22222;">% </span><span style="color: #b22222;">midi keynumbers in {53, ..., 72}
+</span>       amplitude: 80)
+<span style="color: #a020f0;">end</span>
+
+MyScore = {Score<span style="color: #a020f0;">.</span>makeScore
+           sim(items: [seq(handle:Voice1   <span style="color: #b22222;">% </span><span style="color: #b22222;">bind variable Voice1 to instance of seq
+</span>                           items: {LUtils<span style="color: #a020f0;">.</span>collectN 17 MakeNote}
+                           offsetTime:0
+                           <span style="color: #b22222;">%% </span><span style="color: #b22222;">Voice1 and Voice2 end at same EndTime
+</span>                           endTime:EndTime)
+                       seq(handle:Voice2
+                           items: {LUtils<span style="color: #a020f0;">.</span>collectN 15 MakeNote}
+                           <span style="color: #b22222;">%% </span><span style="color: #b22222;">Voice2 starts whole note later
+</span>                           offsetTime:16
+                           endTime:EndTime)]
+               startTime: 0
+               timeUnit:beats(4))  <span style="color: #b22222;">% </span><span style="color: #b22222;">a beat has length 4 (i.e. 1 denotes a sixteenth note)
+</span>           <span style="color: #a020f0;">unit</span>}
+</pre>
+
+<p>The two sequential containers are accessible via the variables <code>Voice1</code> and
+<code>Voice2</code> (due to the <code>handle</code> argument), whereas the surrounding simultaneous container is accessible via the variable <code>MyScore</code> (bound to the return value of <code>Score.makeScore</code>).
+The start time and end time of both voices is further
+restricted. <code>Voice1</code> begins a bar before <code>Voice2</code>. This is expressed
+by setting the offset time of these two sequential containers (and
+thus their start time with respect to their surrounding simultaneous
+container) to different values.  The offset of <code>Voice1</code> is 0 (i.e. it
+is starting with the score), and the offset of Voice2 is a semibreve
+(i.e. its start is delayed by a semibreve). In addition, both voices
+end at the same time (the end time of both sequential containers is
+unified by binding them to the same variable <code>EndTime</code>).</p>
+
+
+<h2><a name="sec3" id="sec3"></a>
+Compositional Rules Overview</h2>
+
+<p class="first">The example defines rules on various aspects of the music; it
+applies rhythmic rules, melodic rules, harmonic rules, voice-leading
+rules and rules on the formal structure. These rules are listed in the following.</p>
+
+<h4>Rhythmical Rules</h4>
+
+<ul>
+<li>Each voice must start and end with a halve note value (i.e. the longest duration in the example).</li>
+
+<li>Note durations may change only gradually across a voice: neighbouring
+note values are either of equal length or have a duration ratio of 1:2 at maximum.
+That is, a eighth note can be followed by a quarter note, but not by a halve note.</li>
+
+<li>The last note of each voice must start on a full bar.</li>
+</ul>
+
+
+<h4>Melodic Rules</h4>
+
+<ul>
+<li>Each note has a diatonic pitch in the C major scale.</li>
+
+<li>The first and last note of <code>Voice1</code> must start and end with the root <em>c</em>.</li>
+
+<li>The melodic interval between neighbouring pitches in a voice is
+limited to a minor third at maximum (i.e. less than in the Fuxian
+example).</li>
+
+<li>The maximum and minimum pitch in a phrase (its melodic peak and 'valley')
+occurs exactly once and it is not the first or last note of the
+phrase. In this example, a phrase is defined simply as half a
+melody.</li>
+
+<li>The pitch maxima and minima of phrases must differ.</li>
+</ul>
+
+<p>The rules constraining the melodic peak &mdash; inspired by Schoenberg &mdash;
+have great influence on the personally evaluated quality of the result
+but also on the combinatorial complexity of the CSP.</p>
+
+
+
+<h4>Harmonic Rules</h4>
+
+<ul>
+<li>Simultaneous notes must be consonant. The only exception permitted
+here are <a href="http://en.wikipedia.org/wiki/Passing_note#Passing_tone">passing tones</a>, where <code>Note1</code> is a passing tone (i.e. the
+intervals to its predecessor and successor are steps and both steps
+occur in the same direction) and the simultaneous <code>Note2</code> started more
+early than <code>Note1</code>, and this <code>Note2</code> is consonant to the predecessor of
+<code>Note1</code>.</li>
+</ul>
+
+
+
+<ul>
+<li>Open parallel fifths and octaves are not allowed. Still, hidden
+parallels are unaffected here &mdash; in contrast to the Fuxian
+example.</li>
+</ul>
+
+
+<h4>Formal Rule</h4>
+
+<ul>
+<li>Both voices form a canon in the fifth: the first <code>N</code> notes of both voices form (transposed) equivalents. In the case here, <code>N</code>=10.</li>
+</ul>
+
+
+
+
+<h2><a name="sec4" id="sec4"></a>
+Rule Definition and Application</h2>
+
+<p class="first">In the following, two rule implementations are shown as examples. A Strasheela rule is a procedure expecting arguments which are somehow constrained.</p>
+
+<p>The rule <code>InCMajor</code> constrains its argument <code>MyNote</code> to have a diatonic pitch in C major. Internally, this rule creates a new variable for the pitch class of <code>MyNote</code> (the pitch class is modulus 12 of the pitch of <code>MyNote</code>). The rule states that this pitch class is <em>not</em> an element of the set of pitch classes representing the 'black keys' on the piano, that is {1, 3, 6, 8, 10}. In conventional mathematics notation, the rule states the following.</p>
+
+<blockquote>
+<p class="quoted">let pitchClass = getPitch(myNote) mod 12</p>
+</blockquote>
+
+<blockquote>
+<p class="quoted">pitchClass not in {1, 3, 6, 8, 10}</p>
+</blockquote>
+
+
+<p>The following code fragment shows the implementation of this rule in Oz syntax. The rule expresses by an iteration that <code>PitchClass</code> is not a member of the set of black-key pitch classes. For every element in the list <code>[1 3 6 8 10]</code> it is stated that the <code>PitchClass</code> must be different. The iteration is defined by applying an anonymous first-class procedure (defined inline) to each element of the list.<sup><a name="fnr.2" href="#fn.2">2</a></sup> This approach is very similar to <a href="http://en.wikipedia.org/wiki/Map_&#40;higher-order_function&#41;">mapping</a> as known from functional programming, only no results are returned.</p>
+
+
+<pre class="src">
+<span style="color: #a020f0;">proc</span><span style="color: #b8860b;"> </span>{<span style="color: #0000ff;">InCMajor</span> MyNote}
+   PitchClass = {FD<span style="color: #a020f0;">.</span>modI {MyNote getPitch($)} 12}
+<span style="color: #a020f0;">in</span>
+   {List<span style="color: #a020f0;">.</span>forAll [1 3 6 8 10]
+    <span style="color: #a020f0;">proc</span><span style="color: #b8860b;"> </span>{<span style="color: #0000ff;">$</span> BlackKey} PitchClass <span style="color: #a020f0;">\=:</span> BlackKey <span style="color: #a020f0;">end</span>}
+<span style="color: #a020f0;">end</span>
+</pre>
+
+<p>The rule <code>IsCanon</code> constrains <code>Voice1</code> and <code>Voice2</code> to form a canon in the fifth. The rule loops in parallel through the first <code>CanonNo</code> notes of each voice. It constrains note pairs at the same position in their containing voice to equal durations and to pitches exactly 7 apart (i.e. a fifth measured in semitones).</p>
+
+<pre class="src">
+<span style="color: #a020f0;">proc</span><span style="color: #b8860b;"> </span>{<span style="color: #0000ff;">IsCanon</span> Voice1 Voice2}
+   CanonNo = 10
+<span style="color: #a020f0;">in</span>
+   <span style="color: #a020f0;">for</span>
+      Note1 <span style="color: #a020f0;">in</span> {List<span style="color: #a020f0;">.</span>take {Voice1 getItems($)} CanonNo}
+      Note2 <span style="color: #a020f0;">in</span> {List<span style="color: #a020f0;">.</span>take {Voice2 getItems($)} CanonNo}
+   <span style="color: #a020f0;">do</span>
+      {Note1 getDuration($)} <span style="color: #a020f0;">=:</span> {Note2 getDuration($)}
+      {Note1 getPitch($)} <span style="color: #a020f0;">+</span> 7 <span style="color: #a020f0;">=:</span> {Note2 getPitch($)}
+   <span style="color: #a020f0;">end</span>
+<span style="color: #a020f0;">end</span>
+</pre>
+
+
+<p>Strasheela supports various means for conveniently applying a rule to the score. The rule <code>IsCanon</code> is applied directly, because the definition of the music representation (see above) made its arguments already accessible via the variables <code>Voice1</code> and <code>Voice2</code>.</p>
+
+<pre class="src">
+{IsCanon Voice1 Voice2}
+</pre>
+
+<p>Other rules require the access of score object sets to which they are applied. <code>InCMajor</code> is applied to all notes in the score. The Strasheela score object method <code>forAll</code> applies a procedure to all objects for which a test returns true. The test can be a Boolean function, or the name of a Boolean method as in the example below. The method <code>isNote</code> returns <code>true</code> for a note object (and false for any other score object). Please note that the notes are not directly contained in <code>MyScore</code>. The method <code>forAll</code> traverses the full score hierarchy.</p>
+
+<pre class="src">
+{MyScore forAll(test: isNote
+                InCMajor)}
+</pre>
+
+<p>The present example uses only the style-independent <a href="StrasheelaReference.html">Strasheela core</a>, no Strasheela extension is applied. By contrast, the next examples (e.g. the <a href="Example-AutomaticMelodyHarmonisation.html">automatic melody harmonisation</a> and the <a href="HarmonyExamples.html">collection of of harmonic CSPs</a>) make use of Strasheela's harmony model extension in order to simplify their definition.</p>
+
+
+<p><a href="StrasheelaExamples.html">back</a></p>
+
+<hr>
+
+<p class="footnote"><a name="fn.1" href="#fnr.1">1.</a> A first-class function is sometimes also called a <em>lambda expression</em>.</p>
+
+<p class="footnote"><a name="fn.2" href="#fnr.2">2.</a> The Oz expression <code>$</code> denotes a return value. If it substitutes the name, for example, of a function, then the function itself is returned (see the <a href="http://www.mozart-oz.org/documentation/tutorial/node5.html#control.anonymous">Mozart tutorial</a>). Also, Strasheela score accessor methods make use of <code>$</code>, for example, {MyNote getPitch($)} returns the pitch of <code>MyNote</code>.</p>
+
+<hr>
+
+<p><strong>[TODO:]</strong></p>
+
+<p>Present a few variations of this example:</p>
+
+<ul>
+<li>Use different offsetTime values for Voice2 (e.g. second voice may start later, which allows for more freedom even if both voices form a canon)</li>
+
+<li>Allow for larger melodic intervals which are `resolved' by step in opposite direction</li>
+
+<li>Allow for more note duration values: add whole note and dotted note values. Constrain dotted notes to be followed by such a note value, that the accumulated duration of the dotted note and its successor forms a forms non-dotted note (cf. Josquin chapter in Motte..)</li>
+</ul>
+
+
+
+<!-- Page published by Emacs Muse ends here -->
+<!-- Footer -->
+<div id="footer">
+<div id="author">&copy; 
+Torsten Anders</div>
+<div id="date">Last time edited: 2007.08.04</div>
+</div>
+  </body>
+</html>

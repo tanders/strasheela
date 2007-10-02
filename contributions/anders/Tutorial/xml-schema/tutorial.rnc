@@ -1,0 +1,15 @@
+# A RELAX NG compact syntax pattern
+# for the Strasheela tutorial examples
+
+element examples {
+  attribute title { text },
+# ?? shall I allow [introductory] text in the examples element?
+  element example {
+    attribute title { text },
+    element info { text? },     
+    element oz { 
+      attribute title { text }?,
+      text? 
+    }+
+  }+
+}

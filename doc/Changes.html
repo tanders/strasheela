@@ -1,0 +1,159 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+  <head>
+    <title>Changes</title>
+    <meta name="generator" content="muse.el">
+    <meta http-equiv="Content-Type"
+          content="text/html; charset=iso-8859-1">
+    
+    <link rel="stylesheet" href="style.css" type="text/css" />
+  </head>
+  <body>
+<div id="header">
+  <ul class="nav">
+    <li class="nav1"><a href="index.html">home</a></li>
+    <li class="navn"><a href="https://sourceforge.net/projects/strasheela/">download at sourceforge</a></li>
+    <!-- <li class="navn"><a href="IndexOfPages.html">site map</a></li> -->
+    <li class="navn"><a href="contact.html">contact</a></li>
+  </ul>
+  <div id="logo">
+    <a href="http://sourceforge.net"><img src="http://sflogo.sourceforge.net/sflogo.php?group_id=167225&amp;type=1" width="88" height="31" border="0" alt="SourceForge.net Logo" /></a>
+  </div>
+</div>
+    <h1>Changes</h1>
+    <!-- Page published by Emacs Muse begins here -->
+
+
+
+<h2>Changes in Version 0.8.4 (no date yet)</h2>
+
+<ul>
+<li>Added solvers for real-time constraint programming (see the documentation at <a href="../contributions/anders/Realtime/doc/index.html">../contributions/anders/Realtime/doc/index.html</a>, and examples at <a href="../contributions/anders/Realtime/examples">../contributions/anders/Realtime/examples</a> and <a href="../contributions/anders/Realtime/testing">../contributions/anders/Realtime/testing</a>)</li>
+
+<li>Added an OpenSound Control interface (see the documentation at <a href="../contributions/anders/OSC/doc/index.html">../contributions/anders/OSC/doc/index.html</a>, and examples at <a href="../contributions/anders/OSC/examples">../contributions/anders/OSC/examples</a> and <a href="../contributions/anders/OSC/testing">../contributions/anders/OSC/testing</a>)</li>
+
+<li>Added example for multi-core CPU machines at <a href="../examples/Parallel-Search.oz">../examples/Parallel-Search.oz</a> (see the <a href="http://www.mozart-oz.org/documentation/system/node13.html">Oz documentation</a> for details on parallel search engines)</li>
+
+<li>The installation process has been simplified for package creators (cf. the <a href="Installation.html#forPackageCreators">installation notes for package creators</a>)</li>
+
+<li>For further fixes see <a href="../CHANGELOG.txt">../CHANGELOG.txt</a></li>
+</ul>
+
+
+
+<h2>Changes in Version 0.8.3 (2007-8-5)</h2>
+
+<h3>Documentation Additions</h3>
+
+<ul>
+<li><a href="StrasheelaTutorial.html">Interactive Oz/Strasheela tutorial</a>  (first version)</li>
+
+<li>Monograph on Strasheela meanwhile available for <a href="http://strasheela.sourceforge.net/documents/TorstenAnders-PhDThesis.pdf">download</a></li>
+
+<li>Extended documentation of <a href="StrasheelaExamples.html">Strasheela Examples</a></li>
+
+<li>Template for Strasheela extensions at <a href="../contributions/ExtensionTemplate">../contributions/ExtensionTemplate</a></li>
+</ul>
+
+
+
+<h3>Code Additions</h3>
+
+<ul>
+<li><a href="../contributions/anders/ScoreInspector/doc/node1.html">ScoreInspector</a></li>
+
+<li>Complete rewrite of <a href="../contributions/anders/Fenv/doc/node1.html">Fenv</a> (function envelope)</li>
+
+<li><a href="../contributions/anders/Gnuplot/doc/node1.html">Gnuplot interface</a></li>
+
+<li>Extended/refactored the <a href="../contributions/anders/Motif/doc/node1.html">Motif</a> contribution (e.g. new Motif.makeVariation considerable simplifies Motif definition, the set of test cases/examples is extended)</li>
+
+<li>Extended the <a href="../contributions/anders/HarmonisedScore/doc/node1.html">HS (HarmonisedScore)</a> contribution: added notion of degrees (e.g., scale degrees, but implicitly also enharmonic spelling): see, e.g., classes FullNote, EnharmonicNote, ScaleDegreeNote, ChordDegreeNote, and ScaleDegreeChord in functor <a href="../contributions/anders/HarmonisedScore/doc/node3.html">HS.score</a>.</li>
+
+<li><a href="../contributions/anders/SettingsGUI/doc/node1.html">SettingsGUI</a> (first version)</li>
+
+<li>Extensions of the core Strasheela music representation (e.g., Out.saveScore, Out.loadScore, Score.copyScore, methods to <a href="../doc/api/node6.html#entity172">Score.scoreObject</a>: unify, '==')</li>
+
+<li>Added reflection capabilities to score objects: all score objects inherit from class <a href="../doc/api/node6.html#entity217">Reflection</a> methods such as getClass, getClassName, getFeatures, getAttrNames etc.</li>
+</ul>
+
+
+
+
+<h3>Other Fixes</h3>
+
+<ul>
+<li>Important improvement of Strasheela initialisation (i.e., <a href="../_ozrc">../_ozrc</a>): please update your OZRC accordingly</li>
+
+<li>Fixed bug which prevented MIDI output (removed illegal empty line in CSV output...)</li>
+
+<li>Refactored transformation of score objects into the textual score format. Fixed some issues, and simplified the definition of new user classes</li>
+
+<li>Refactored Strasheela's error messaging</li>
+
+<li>Extended <a href="http://www.amazon.com/gp/product/030680106X/sr=8-3/qid=1149574638/ref=pd_bbs_3/104-1993379-1061553?%5Fencoding=UTF8">Partch</a> <a href="../contributions/anders/HarmonisedScore/doc/node8.html">harmony database</a> (e.g. added information to intervals)</li>
+
+<li>Fixed various documentation details in the reference</li>
+
+<li>Many fixes in Oz' Path functor</li>
+
+<li>Many, many other fixes, see <a href="../CHANGELOG.txt">Strasheela/CHANGELOG.txt</a> for details</li>
+</ul>
+
+
+
+
+
+<h2>Changes in Version 0.8.2 (2007-1-1)</h2>
+
+<ul>
+<li>Substantial extensions and debugging of the <a href="../contributions/anders/OzServer/doc/node1.html">OzServer</a></li>
+
+<li>Added a Lisp client for the OzServer which allows to call Strasheela from within Common Lisp and use the result of these calls in Lisp programs (see <a href="../contributions/anders/OzServer/clients/oz-server-lisp-client">../contributions/anders/OzServer/clients/oz-server-lisp-client</a>). For this purpose, the OzServer can transform results implicitly into Lisp syntax (see <a href="../doc/api/node9.html#entity339">Out.ozToLisp</a>). Tests are provided for SBCL on Linux and LispWorks on MacOS</li>
+
+<li>Lilypond output made ready for new <a href="http://lilypond.org">Lilypond</a> versions (temporary solution: just calling convert-ly first)</li>
+
+<li>Fixed Bug in MIDI output causing timing errors</li>
+
+<li>More fixes (for details see <a href="../CHANGELOG.txt">Strasheela/CHANGELOG.txt</a>, and the Strasheela subversion interface at <a href="http://strasheela.svn.sourceforge.net/viewvc/strasheela/">http://strasheela.svn.sourceforge.net/viewvc/strasheela/</a>)</li>
+</ul>
+
+
+
+<h2>Changes in Version 0.8.1 (2006-9-7)</h2>
+
+<ul>
+<li>Revised <a href="Installation.html">installation instructions</a> (reacting to frequently asked questions..) and other documentation</li>
+
+<li>Added support for further output formats: ENP (the format of <a href="http://www2.siba.fi/PWGL/">PWGL</a>), and <a href="http://common-lisp.net/project/fomus/">Fomus</a> &mdash; and that way export to Finale and Sibelius (thanks Kilian!)</li>
+
+<li>Added example <a href="../examples/07-Harmonised-L-system.oz">Harmonised-L-system</a>, and revised explanation in existing examples</li>
+
+<li>Added <code>handle</code> attribute to all score objects in textual Strasheela score (cf. the <code>handle</code> attribute in <a href="http://www.mozart-oz.org/documentation/mozart-stdlib/wp/qtk/html/index.html">QTk</a>)</li>
+
+<li>Added <a href="../contributions/anders/HarmonisedScore/doc/node3.html#entity89">HS.score.harmoniseScore</a>, a function to simplify the definition of harmonic CSPs</li>
+
+<li>Bugfix for <code>Out.playSound</code></li>
+
+<li>Debugged Common Music output</li>
+
+<li>Various other fixes (see <a href="../CHANGELOG.txt">Strasheela/CHANGELOG.txt</a>)</li>
+</ul>
+
+
+
+<h2>Changes in Version 0.8 (2006-06-05, initial release)</h2>
+
+<p class="first">No changes in the initial release ;-)</p>
+
+
+
+<!-- Page published by Emacs Muse ends here -->
+<!-- Footer -->
+<div id="footer">
+<div id="author">&copy; 
+Torsten Anders</div>
+<div id="date">Last time edited: 2007.09.20</div>
+</div>
+  </body>
+</html>

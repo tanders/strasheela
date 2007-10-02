@@ -1,0 +1,78 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+  <head>
+    <title>What is Strasheela? (by Torsten Anders)</title>
+    <meta name="generator" content="muse.el">
+    <meta http-equiv="Content-Type"
+          content="text/html; charset=iso-8859-1">
+    
+    <link rel="stylesheet" href="style.css" type="text/css" />
+  </head>
+  <body>
+<div id="header">
+  <ul class="nav">
+    <li class="nav1"><a href="index.html">home</a></li>
+    <li class="navn"><a href="https://sourceforge.net/projects/strasheela/">download at sourceforge</a></li>
+    <li class="navn"><a href="IndexOfPages.html">site map</a></li>
+    <li class="navn"><a href="contact.html">contact</a></li>
+  </ul>
+  <div id="logo">
+    <a href="http://sourceforge.net"><img src="http://sflogo.sourceforge.net/sflogo.php?group_id=167225&amp;type=1" width="88" height="31" border="0" alt="SourceForge.net Logo" /></a>
+  </div>
+</div>
+    <h1>What is Strasheela? (by Torsten Anders)</h1>
+    <!-- Page published by Emacs Muse begins here -->
+<h2>Why Constraint Programming for Music?</h2>
+
+<p class="first">Computational models of composition have long attracted musicians and computer scientists alike. Composers like to explore new compositional approaches in order to develop a distinct personal musical language. Music theorists can evaluate an hypothesis by means of a computational model. For computer scientists, modelling music is challenging because the complexity inherent in music calls for the most advanced computer science concepts.</p>
+
+<p>Notably rule-based approaches always stimulated interest.<sup><a name="fnr.1" href="#fn.1">1</a></sup> For centuries, compositional rules are an established device for expressing compositional knowledge (for example in music education). Many musicians thus feel comfortable with a computational model based on the notion of rules.</p>
+
+<p>Constraint programming has proven a particularly successful programming paradigm to realise ruled-based systems. Many compositional tasks have been addressed by constraint programming and are described in the literature. Besides tasks inspired by traditional music theory such as the generation of harmonic progressions or counterpoint, examples include dense Ligeti-like textures, modelling of non-European music, or instrumentation.</p>
+
+<p>The attraction of constraint programming is easy to explain. Constraint programming offers a simple way to model complex problems.
+A problem is stated by a set of <em>variables</em> (unknowns) and <em>constraints</em> (relations) between these variables.
+For example, a compositional task is stated by (i) a music representation in which some musical aspects are unknown &mdash; and therefore represented by variables &mdash; and (ii) compositional rules which impose constraints on these variables. For instance, a chord can be expressed by an event list and the chord pitches can be variables. Some harmonic rules may specify how the chord pitches are related to each other. At the same time, some melodic rules my restrict the same pitches as well.
+In the terminology of constraint programming, the modelled problem or task is referred to as a <em>constraint satisfaction problem</em> (CSP).</p>
+
+<p>In a solution to a CSP, every variable has a value which is consistent with all its constraints.
+For example the solution of a musical CSP is a fully determined music representation consistent with all constraints expressed by the rules.
+Existing constraint systems can efficiently solve a CSP &mdash; a fact which greatly contributed to the popularity of constraint programming.</p>
+
+<p>When compared with the approach of other general computer aided composition systems (e.g. <a href="http://commonmusic.sourceforge.net/doc/cm.html">Common Music</a>, <a href="http://recherche.ircam.fr/equipes/repmus/OpenMusic/">OpenMusic</a>), the constrained-based approach is thus more declarative.</p>
+
+
+
+<h2>Strasheela: A Generic Music Constraint System</h2>
+
+<p class="first">A generic music constraint system predefines concepts shared by many theories (e.g. duration, pitch, note, chord) and that way greatly simplifies the definition of musical CSPs. Strasheela implements such a generic music constraint system.</p>
+
+<p>Compared with existing music constraint systems (e.g. <a href="http://www2.siba.fi/soundingscore/pwconstraints.html">PWConstraints</a>, <a href="http://scholar.google.de/url?sa=U&amp;q=http://www.cs.vu.nl/~eliens/onderwijs/mm/imm/college/%40archive/ecai98/rueda.ps">OMSituation</a>, <a href="http://scholar.google.de/url?sa=U&amp;q=http://www-poleia.lip6.fr/~truchet/publis/mic03.ps.gz">OMClouds</a> and the combination <a href="http://scholar.google.de/url?sa=U&amp;q=http://www-poleia.lip6.fr/~fdp/MyPapers/BackTalk/contraintes-tools95.ps.Z">MusES plus Backtalk</a>), Strasheela is more generic, that is  Strasheela allows to define and solve a considerable larger set of musical CSPs or makes their definition clearly more modular and concise. Besides, existing generic music constraint systems are not released under an open source license (e.g. OMSituation and OMClouds are libraries of OpenMusic: OpenMusic itself is open-source but its libraries are not).</p>
+
+<p>Strasheela is more generic than existing music constraint systems primarily because Strasheela is more programmable and more extendable. The Strasheela user controls the information expressed by the music representation, programs how rules are applied to the music, and defines the decision-making conducted by the search process.</p>
+
+<p>Strasheela features an highly expressive symbolic music representation. The representation explicitly stores diverse information such as user-definable score object attributes (e.g. the pitch of a note or the duration of a voice) and a user-defined hierarchic nesting of score objects (e.g. a voice containing a sequence of notes). Any explicit information available in the score is accessible from any score object and can be used to obtain derived information (e.g. the interval between the pitches of two notes).
+Explicit and implicit score information can be expressed by variables. Such information is unknown in the CSP definition and can be constrained. A rich data abstraction interface allows convenient access to explicitly stored or derived information (e.g. higher-order interface functions allow to collect all objects in the score which fulfill a user-defined condition) and the user can incrementally extend this data abstraction (by class inheritance).</p>
+
+<p>Strasheela proposes a rule formalism which combines convenience and full user control to express which sets of variables in the music representation are constrained by a given rule. A Strasheela rule is a first-class function and a rule application mechanism is a higher-order function implementing an arbitrary traversal across the score to apply the rule to the score.</p>
+
+<p>Strasheela is founded on a constraint programming model based on the notion of computation spaces.
+This model makes the search process programmable at a high-level. Strasheela customises the space-based constraint model for music constraint programming by preserving its full programmability. The Strasheela user can optimise the search for a particular constraint satisfaction problem by programming the decision making process conducted during search (the distribution strategy) &mdash; independent of the problem definition. Special distribution strategies for efficiently solving musical CSPs including complex prolophonic problems are proposed.</p>
+
+<p>The user interface of Strasheela (and its implementation language) is the multi-paradigm programming language <a href="http://www.mozart-oz.org">Oz</a>.</p>
+
+<hr>
+
+<p class="footnote"><a name="fn.1" href="#fnr.1">1.</a> Here, the term `rule' primarily denotes the musical concept of a compositional rule, and does not implicitly refer to any specific programming technique (e.g. the term does not implicitly refer to a Prolog rule or a condition-action rule).</p>
+
+
+
+<!-- Page published by Emacs Muse ends here -->
+<!-- Footer -->
+<div id="footer">
+<div id="author">&copy; 
+Torsten Anders</div>
+<div id="date">Last time edited: 2007.02.13</div>
+</div>
+  </body>
+</html>

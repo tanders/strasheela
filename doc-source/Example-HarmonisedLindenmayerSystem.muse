@@ -1,0 +1,305 @@
+#title Harmonised Lindenmayer-System
+
+[[StrasheelaExamples][back]]
+
+<contents depth="2">
+
+This example shows how a CSP can be composed from sub-CSPs in order to control the global musical form. 
+The sub-CSPs in this example create simple musical *motifs*. Each sub-CSP controls musical features which distinguish a particular motif (e.g., its rhythm or its pitch contour). Other musical features are controlled by the global CSP (e.g., the harmonic structure of the music). 
+
+The example also demonstrates one way for combining constraint-based algorithmic composition with 'classical' deterministic algorithmic composition techniques. 
+Each motif specification is defined in a modular way. 
+The global form is defined using a specific symbol for each specific motif in the textual music representation. For example, the form can be a sequence of motif specifications as 
+
+  =[a b c b a]=
+
+
+This textual representation is created either `by hand' or algorithmically. As an example, a sequence of parmeterised motifs specifications is created with an Lindenmayer system  which is a popular algorithmic composition techniques. 
+
+In this example, the global form (i.e. the motif sequence) is always determined in the CSP definition. Although the global form can be created algorithmically, it is not possible to constrain it by compositional rules. Strasheela's [[../contributions/anders/Motif/doc/node1.html][motif model]], however, allows the user to *constrain* the identity and the variation of a motif. 
+
+
+* Musical Sections as Sub-CSPs 
+
+This section presents a few relatively simple motif definitions. The hope is that their simplicity encourages you to modify this example with your own motifs. Each motif here is musically rather simple, but clearly distinguished. It is either a monophonic note sequence or some more complex musical segment. Each motif fixes some musical aspects and constrains others (e.g. the number of notes in motif and the rhythmic structure is fixed in the following examples, and the pitch contour may be constrained). Each motif is always used in a harmonic context, and the pitches of the motif are implicitly constrained to express the underlying harmony.
+ 
+
+** A 'Free' Motif 
+
+This first motif example specifies the duration of the notes, but puts no constraints on the note pitches (only the pitch domain is restricted to two octaves around middle *c*). Nevertheless, the motif notes are 'automatically' constrained to express the underlying chord as shown [[HarmonyExamples#firstExample][before]]. This CSP uses a database of typical Jazz chords (e.g., the chord =chord(index:1 transposition:0)= expresses C7). Again, the lower staff is always not sounding but shows an harmonic analysis (chord roots plus description).
+The [[../examples/07-Harmonised-L-system.oz][source]] demonstrates how the solver is called with this CSP -- search for =MakeMyFreeMotif= in the code...
+
+<src lang="oz">
+{Score.makeScore
+ sim(items:[{MakeMyFreeMotif}
+	    chord(duration:4*4                  % motif note no * motif note duration
+		  index:1
+		  transposition:0)]
+     startTime:0
+     timeUnit:beats(16))                        % duration 16 is a quarter note 
+ Aux.myCreators}
+</src>
+
+[[../examples/Output/07-Harmonised-L-system-ex5.mp3][../examples/Output/07-Harmonised-L-system-ex5.preview.png]]
+
+
+The motif constructure =MakeMyFreeMotif= defines the motif quasi literally. Everything is fixed, only the note pitches are set to variables of the domain {48, ..., 72} (i.e. midi pitches two octaves around middle *c*). The function =Score.makeScore= has already been used in several examples before. [[../doc/api/node6.html#entity199][Score.makeScore2]] is a cousin which does not fully initialise the score, and that way allows for the combination of its result with other parts of the final score.   
+
+<src lang="oz">
+proc {MakeMyFreeMotif MyMotif}
+   MyMotif = {Score.makeScore2
+	      seq(info:freeMotif
+		  items:[%% duration 4 is a sixtienth, 
+		         %% pitch is measured in MIDI keynumbers 
+		         note(duration:4 pitch:{FD.int 48#72})
+			 note(duration:4 pitch:{FD.int 48#72})
+			 note(duration:4 pitch:{FD.int 48#72})
+			 note(duration:4 pitch:{FD.int 48#72})])
+	      Aux.myCreators}
+   %%  Arbitrary further constraints on MyMotif can be added here...
+end
+</src>
+
+
+** A Parameterised Free Motif 
+
+The following example variates the example =MakeMyFreeMotif= above by introducing additional user control via arguments to the new motif constructor =MakeMyFreeMotif2=. For example, the user may want to control the number of notes in the motif and the duration of each note: 
+
+<src lang="oz">
+{MakeMyFreeMotif2 unit(n:6
+                       noteDuration:8)}
+</src>
+
+[[../examples/Output/07-Harmonised-L-system-ex6.mp3][../examples/Output/07-Harmonised-L-system-ex6.preview.png]]
+
+
+All arguments are optional. For example, 
+
+<src lang="oz">
+{MakeMyFreeMotif2 unit}
+</src>
+
+creates the same output as 
+
+<src lang="oz">
+{MakeMyFreeMotif}
+</src>
+
+
+Following is the definition of =MakeMyFreeMotif2=. Support for optional arguments is defined uses Oz' [[http://www.mozart-oz.org/documentation/base/record.html#section.records.records][Adjoin]]: the variable =Settings= is bound to a record which adjoins the =Default= settings and the user-specified arguments in =Args= (features in =Args= take precedence over =Default=). =MakeMyFreeMotif2= is defined in such a way that it also 'forwards' arbitrary optional arguments to the constructor of the sequential container which =MakeMyFreeMotif2= returns. For example, =MakeMyFreeMotif2= handles the argument =startTime= or =endTime= properly.   
+
+<src lang="oz">
+proc {MakeMyFreeMotif2 Args MyMotif}
+   Default = unit(n:4
+		  noteDuration:4)
+   Settings = {Adjoin Default Args}
+in
+   MyMotif = {Score.makeScore2
+	      %% filtering out settings specific for MakeMyFreeMotif2 and 
+	      %% 'forward' all other arguments to the seq container
+	      {Adjoin {Record.subtractList Settings
+		       [n noteDuration isStartingWithChord]}
+	       seq(info:freeMotif
+		   items: {LUtils.collectN Settings.n
+			   fun {$}
+			      note(duration:Settings.noteDuration
+				   pitch:{FD.int 48#72})
+			   end})}
+	      Aux.myCreators}
+end
+</src>
+
+** Three Motifs: Run,  Chord Repetition and Arpeggio
+
+The next three motif definitions are only briefly mentioned here. Their full implementation can be found in the [[../examples/07-Harmonised-L-system.oz][source]].  
+The run motif creates a little run and allows for non-harmonic passing tones. 
+
+; The run over a chord is created as follows. The most important expression in this example is ={MakeRun unit}=. See the [[../examples/07-Harmonised-L-system.oz][source]] for the definition of =MakeRun= and how the solver is called with this CSP.
+
+[[../examples/Output/07-Harmonised-L-system-ex1.mp3][../examples/Output/07-Harmonised-L-system-ex1.preview.png]]
+
+The chord repetition motif repeats -- surprise -- a chord.  
+
+[[../examples/Output/07-Harmonised-L-system-ex2.mp3][../examples/Output/07-Harmonised-L-system-ex2.preview.png]]
+
+Finally, the arpeggio motif creates an arpeggio over a chord.
+
+[[../examples/Output/07-Harmonised-L-system-ex3.mp3][../examples/Output/07-Harmonised-L-system-ex3.preview.png]]
+
+The run motif, the chord repetition motif, and the arpeggio motif all support a few parameters. For example, the following code creates an arpeggio of 5 notes (argument =n=), which is ascending (argument =direction=). 
+
+<src lang="oz">
+{Score.makeScore
+ sim(items:[{MakeArpeggio unit(n:5                % No. of motif notes
+			       direction:'<:')}   % relation to predecessor
+	    chord(duration:5*8 % (motif n * motif note duration)
+		  index:1
+		  transposition:0)]
+     startTime:0
+     timeUnit:beats(16))
+ Aux.myCreators}
+</src>
+
+[[../examples/Output/07-Harmonised-L-system-ex3b.mp3][../examples/Output/07-Harmonised-L-system-ex3b.preview.png]]
+
+
+* Combining Musical Sections (Combining Sub-CSPs)
+
+** Music Representation
+
+The previous examples created the full music representation explicitly. In the following, a chord sequence is created implicitly in the background. For this purpose, the following examples replace the function =Score.makeScore= with =HarmoniseScore=. This function is defined in the example's [[../examples/07-Harmonised-L-system.oz][source]] and makes use of [[../contributions/anders/HarmonisedScore/doc/node3.html#entity89][HS.score.harmoniseScore]].
+
+=HarmoniseScore= expects the same arguments as =Score.makeScore=: a textually specified music representation and a specifications of the score object constructors to use. 
+Score object constructors can be any motif definition discussed above -- or your own motif definition. 
+
+The textually specified music representation uses the same representation principles as the examples before (e.g., see [[Example-FloridCounterpoint#musicRepresentation][Florid Counterpoint]]). In addition, this representation can now use symbolic motif names. For example, a sequence of motifs can be specified like the following example. We only need to map each symbol in the music representation to its own score object constructor. 
+
+<src lang="oz">
+seq(items:[arpeggio run arpeggio])
+</src>
+
+
+=HarmoniseScore= is defined in such a way that motifs can be marked to start simultaneously with a new chord in the chord sequence. However, the motif definitions in this example depends on the harmonic structure. Therefore, the first motif always *must* be marked that it starts with a new chord. The example below indicates that the constructor =MakeArpeggio= is used for the motif specification with the symbol =arpeggio=, and so forth. Motif specifications marked with the feature =isStartingWithChord= will start with a new chord in the chord sequence.
+
+<src lang="oz">
+{HarmoniseScore seq(items:[arpeggio(n:4
+				    direction:'<:'
+				    isStartingWithChord:unit)
+			   chordRepetition(isStartingWithChord:unit)
+			   chordRepetition(isStartingWithChord:unit)
+			   arpeggio(n:3
+				    direction:'>:'
+				    isStartingWithChord:unit)
+			   arpeggio(n:4
+				    direction:'>:'
+				    isStartingWithChord:unit)])
+ unit(arpeggio:MakeArpeggio
+      chordRepetition:MakeChordRepetition)}
+</src>
+
+[[../examples/Output/07-Harmonised-L-system-ex4.mp3][../examples/Output/07-Harmonised-L-system-ex4.preview.png]]
+
+
+(The score output was created automatically -- some future version with avoid the clashes of chord symbols)
+
+; TODO: add example with motifs running in parallel here
+
+
+** Harmonic Rules 
+
+The above example implicitly creates a harmonic progression. The chord database of all examples here (see [[HarmonyExamples]] for an explanation of the chord database concept) consists in seventh chords and related chords from Jazz harmony. There are a few harmonic rules:
+
+  - Neighbouring chords have different chord roots
+  - Neighbouring chords have common pitch classes (harmonic band)
+  - The chord progression starts and ends with the tonic
+
+Most motif notes express their underlying harmony. Exceptions are only the passing notes in the run motif. Such non-harmonic notes are marked with an x above the note head. Following is another motif sequence which uses a few more motifs.
+
+<src lang="oz">
+{HarmoniseScore seq(items:[run(isStartingWithChord:unit)
+			   chordRepetition(isStartingWithChord:unit)
+			   run(isStartingWithChord:unit)
+			   chordRepetition(isStartingWithChord:unit)
+			   chordRepetition(isStartingWithChord:unit)
+			   freeMotif(n:7
+				     noteDuration:4)
+			   arpeggio(n:6
+				    direction:'>:'
+				    isStartingWithChord:unit)])
+ unit(arpeggio:MakeArpeggio
+      chordRepetition:MakeChordRepetition
+      run:MakeRun
+      freeMotif:MakeMyFreeMotif2)}
+</src>
+
+[[../examples/Output/07-Harmonised-L-system-ex7.mp3][../examples/Output/07-Harmonised-L-system-ex7.preview.png]]
+
+
+* Algorithmic Creation of the Global Form
+
+The gobal musical form -- a motif sequence -- was manually created in the last examples. This section creates motif sequences by algorithmic means. A [[http://en.wikipedia.org/wiki/L-system][Lindenmayer system]] (L-system) is a formal grammar which can output self-similar fractals. L-systems are an established technique in algorithmic composition (cf. [[http://commonmusic.sourceforge.net/doc/cm.html][Common Music]]'s [[http://commonmusic.sourceforge.net/doc/dict/rewrite-cls.html][rewrite pattern]]). The example's [[../examples/07-Harmonised-L-system.oz][source]] defines the L-system generator =MyLSystemMotifs=. The following L-system definition implements an L-system example which is explained [[http://en.wikipedia.org/wiki/L-system#Example_1:_Algae][here]]. The example returns the 7th generation of an L-system with the two rules (a -> a b) and (b -> a).
+
+<src lang="oz">
+{MyLSystemMotifs unit(n:7                                 ; generation to output
+		      axiom: [b]                          ; starting sequence
+		      rules: unit(a: fun {$ R} [a b] end  ; transformation specifications 
+				  b: fun {$ R} [a] end))}
+</src>
+
+This definition results in the following symbol sequence.
+
+=[a b a a b a b a a b a a b]= 
+
+
+; In this example, the symbol sequence expresses a sequences of parameterised motif specifications: the motif parameters denote arguments for the motif creation. In the CSP, each motif symbol is transformed into a small sub-CSP (encapsulated in its own function) which creates the music representation for this motif and applies a few constraints. For instance, one motif symbol is =run=, which is transformed into a short run (a sequence of notes forming a short scale gesture). However, each sub-CSP is integrated into the top-level CSP which applies further constraints on the motifs. For example, the top-level CSP creates also a harmonic progression for the music and constraints the motifs to express its underlying harmony. 
+; The list of motif declarations is created by an L-system. The constructor of each motif is denoted by its label and this constructor expects a few additional motif parameters (e.g. the parameter =n= sets the number of motif notes). The L-system creates the motif labels and these attributes.
+; generate motif sec and show musical output of a few L-system generations 
+
+In this example, an L-system generates a sequence of motif specifications. These motif specifications then replace the manually created motif sequences used in the examples above. The L-system of the present example does not only generate a sequence of plain motifs, it also outputs parameters for these motifs (for parameterised L-systems see [[http://algorithmicbotany.org/papers/#abop][Prusinkiewicz and Lindenmayer (1990)]]). For example, it specifies which motifs start with a chord. 
+The default settings for =MyLSystemMotif= generate a sequence of specifications for the motifs defined above. The third generation of this L-system is generated with the following call. 
+
+<src lang="oz">
+{MyLSystemMotifs unit(n:3)}
+</src>
+
+
+This call outputs the following motif sequence.
+
+<src lang="oz">
+[arpeggio(direction:'>:'
+	  isStartingWithChord:unit
+	  n:4)
+ arpeggio(direction:'>:'
+	  n:2)
+ chordRepetition
+ arpeggio(direction:'>:'
+	  isStartingWithChord:unit
+	  n:3)
+ arpeggio(direction:'>:'
+	  n:2)
+ chordRepetition
+ run
+ arpeggio(direction:'>:'
+	  isStartingWithChord:unit
+	  n:2)
+ arpeggio(direction:'<:'
+	  n:2)
+ arpeggio(direction:'>:'
+	  isStartingWithChord:unit
+	  n:3)
+ arpeggio(direction:'>:'
+	  n:2)
+ chordRepetition]
+</src>
+
+This sequence results in the following musical example. 
+
+[[../examples/Output/07-Harmonised-L-system-ex8a.mp3][../examples/Output/07-Harmonised-L-system-ex8a.preview.png]] 
+
+(The rhythmic structure of this example does not fit into Lilyponds default 4/4 time...)
+
+The fourth generation -- ={MyLSystemMotifs unit(n:4)}= -- is already rather long. The resulting motif sequence specification is [[../examples/Output/07-Harmonised-L-system-ex9.oz][here]], the musical output is shown below. The notation of this example was edited to express the motivic structure more clearly. Note beamings mark the motifs created by the L-system. `Measures' mark the length of a chord created by the top-level CSP.
+
+[[../examples/Output/07-Harmonised-L-system.mp3][../examples/Output/07-Harmonised-L-system.png]]
+
+;  
+
+;  [[../examples/Output/07-Harmonised-L-system.mp3][mp3]] [[../examples/07-Harmonised-L-system.oz][full source]]
+; [[../examples/Output/07-Harmonised-L-system.mid][midi]]
+
+
+[[../examples/07-Harmonised-L-system.oz][full source]]
+
+[[StrasheelaExamples][back]]
+
+
+---------------
+
+**[TODO:]**
+
+  - Polyphonic setting (manually defined), where multiple motifs run in parallel in a simultaneous container (the code already supports it, but some example is missing)
+
+  - Variate the L-systen definition (i.e. use a different axiom and different rules)
+
+  - ?? How to use an L-system for creating some polyphonic setting? For example, I may run different variations in parallel, or create =offsetTime= parameter values for elements in a simultaneous container (the =offsetTime= would be relative to the start time of the predecessor score object) 
+

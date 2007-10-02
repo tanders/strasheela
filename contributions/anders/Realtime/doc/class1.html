@@ -1,0 +1,173 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<html>
+ <head>
+  <title>Class ScoreSearcherWithTimeout</title>
+  <style>BODY {
+ background: url(page.gif) repeat-y white;
+}
+#slidemenubar, #slidemenubar2{
+ position:absolute;
+ left:-144px;
+ width:160px;
+ top:10px;
+ border:0px solid black;
+ font:bold 12px Verdana;
+ line-height:10px;
+}
+.margin {
+ position: absolute;
+ left: 10px;
+ width: 130px;
+}
+BODY, P, H1, H2, H3, A {
+ font-family: sans-serif;
+}
+PRE, CODE {
+ font-family: courier, monospace;
+}
+P {
+ text-align: justify;
+}
+H1     { color: #9B0000; }
+H2     { color: #FF9933; }
+H3, H4 { color: #881155; }
+CODE              { color: #663366; }
+.code CODE        { color: #000000; }
+SPAN.comment      { color: #B22222; }
+SPAN.keyword      { color: #A020F0; }
+SPAN.string       { color: #BC8F8F; }
+SPAN.functionname { color: #0000FF; }
+SPAN.type         { color: #228B22; }
+SPAN.variablename { color: #B8860B; }
+SPAN.reference    { color: #5F9EA0; }
+SPAN.builtin      { color: #DA70D6; }
+A:link {
+ color: #666666;
+}
+A:visited {
+ color: black;
+}
+A.pre { font-family: courier, monospace;
+ color: #228B22;
+}
+</style>
+ </head>
+<body>
+<script language="JavaScript1.2">
+if (document.all)
+document.write('<div id="slidemenubar2" style="left:-144" onMouseover="pull()" onMouseout="draw()">')
+</script>
+<layer id="slidemenubar" onMouseover="pull()" onMouseout="draw()">
+<table border="0" cellpadding="0" cellspacing="0" width="161"><tr><td bgcolor="#009cff" width="144"><a href="index.html">Index</a>
+</td><td rowspan="2" valign="top" width="16"><img src="menu.gif" width="16"></td></tr><tr><td bgcolor="#009cff" width="144"><a href="node1.html">Realtime</a>
+</td></tr></table></layer>
+<script language="JavaScript1.2">
+function regenerate(){
+window.location.reload()
+}
+function regenerate2(){
+if (document.layers)
+setTimeout("window.onresize=regenerate",400)
+}
+window.onload=regenerate2
+if (document.all){
+document.write('</div>')
+themenu=document.all.slidemenubar2.style
+rightboundary=0
+leftboundary=-144
+}
+else{
+themenu=document.layers.slidemenubar
+rightboundary=144
+leftboundary=0
+}
+function pull(){
+if (window.drawit)
+clearInterval(drawit)
+pullit=setInterval("pullengine()",20)
+}
+function draw(){
+clearInterval(pullit)
+drawit=setInterval("drawengine()",50)
+}
+function pullengine(){
+if (document.all&&themenu.pixelLeft<rightboundary)
+themenu.pixelLeft+=5
+else if(document.layers&&themenu.left<rightboundary)
+themenu.left+=5
+else if (window.pullit)
+clearInterval(pullit)
+}
+function drawengine(){
+if (document.all&&themenu.pixelLeft>leftboundary)
+themenu.pixelLeft-=5
+else if(document.layers&&themenu.left>leftboundary)
+themenu.left-=5
+else if (window.drawit)
+clearInterval(drawit)
+}
+</script>
+
+<div style="margin-left:160px"><p align="right" class="margin"><div align="right">inheritance tree</div></p>
+<pre>
+ <a class="pre" href="node1.html#entity7">ScoreSearcherWithTimeout</a>
+</pre>
+<hr><p class="margin"><div align="right">class definition</div></p>
+<code>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> ScoreSearcherWithTimeout provides a 'meta-search object' with a timeout, specialised in searching for Strasheela score objects. Create a search object with the method init, and obtain new solutions with the method next. The next method supports a number of arguments. For example, input data (including real-time input) can be handed over and previous output is accessible. See ../testing/Realtime-test.oz for simple examples.<BR>
+<BR>
+</span>
+<span class="keyword">class</span> <span class="type">ScoreSearcherWithTimeout</span> (Inheritance-free)<br>
+&nbsp;&nbsp;&nbsp;<span class="keyword">feat</span>&nbsp;extendedScript&nbsp;initArgs&nbsp;inputLength&nbsp;outputLength
+<br>
+&nbsp;&nbsp;&nbsp;<span class="keyword">attr</span>&nbsp;inputScores&nbsp;outputScores
+<br>
+<ul><li><span class="functionname">init</span>(MyExtendedScript distroArgs:DArgs inputLength:InLength inputScores:InScores outputLength:OutLength outputScores:OutScores&nbsp;...)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> Initialises object. All arguments are optional.<BR>
+ MyExtendedScript is an extended script, i.e., a binary procedure (see ExtendedScriptToScript). The argument distroArgs expects a record which specifies score distribution arguments as expected by SDistro.makeSearchScript (default: unit). The arguments inputScores and outputScores allow to initialise the previous input or output (defaults to nil): setting these can ensure, e.g., that there is always a previous output and that way can slightly simplify the CSP definition. The arguments inputLength and outputLength (defaults to 1) allow to optimise the memory required. For example, if outputLength is set to 1, then only the direct predecessor solution is accessible in the script, but other solutions are also not stored (both arguments can also be set to 'all').<BR>
+ All arguments supported by the SearchWithTimeout argument Args (i.e., maxSearchTime, defaultSolution, and solver) are supported as well, see the documentation there for details.  <BR>
+<BR>
+</span>
+</li><li><span class="functionname">next</span>(Result inputScore:InScore&nbsp;...)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> Calls a solver supporting a timeout with the script MyExtendedScript and the score distribution args (all specified with the init method), and returns the solution Result (a score object).  All other arguments of the method next are optional.          <BR>
+ The script MyExtendedScript is given in a record Args all the arguments given to the method next (except Result) and also all arguments of the method init. That way, arbitrary script arguments can be handed over to MyExtendedScript simply as arguments to next. In addition, a few arguments are computed by next and always given to MyExtendedScript: next provides the script arguments inputScore, inputScores, and outputScores -- via these arguments, the script can access and impose constrains on its solution with respect to its previous input and output. The next argument inputScore expects a Strasheela score object (e.g., created from realtime input). next implicitly adds the arguments inputScores (a list of all previous input scores in reverse order -- the current input is not yet part of it), and outputScores (a list of all previous output in reverse order). <BR>
+ All arguments specified at init (and default init arguments) can be overwritten with arguments given to this method (except for the script itself). For example, a different distribution strategy can be specified by handing an argument distroArgs to next.<BR>
+<BR>
+</span>
+</li><li><span class="functionname">reset</span>()<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> Resets the inputScores and outputScores to nil.<BR>
+<BR>
+</span>
+</li></ul>
+<span class="keyword">end</span>
+</code>
+</div></body>
+</html>

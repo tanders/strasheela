@@ -1,0 +1,196 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<html>
+ <head>
+  <title>ScoreInspector</title>
+  <style>BODY {
+ background: url(page.gif) repeat-y white;
+}
+#slidemenubar, #slidemenubar2{
+ position:absolute;
+ left:-144px;
+ width:160px;
+ top:10px;
+ border:0px solid black;
+ font:bold 12px Verdana;
+ line-height:10px;
+}
+.margin {
+ position: absolute;
+ left: 10px;
+ width: 130px;
+}
+BODY, P, H1, H2, H3, A {
+ font-family: sans-serif;
+}
+PRE, CODE {
+ font-family: courier, monospace;
+}
+P {
+ text-align: justify;
+}
+H1     { color: #9B0000; }
+H2     { color: #FF9933; }
+H3, H4 { color: #881155; }
+CODE              { color: #663366; }
+.code CODE        { color: #000000; }
+SPAN.comment      { color: #B22222; }
+SPAN.keyword      { color: #A020F0; }
+SPAN.string       { color: #BC8F8F; }
+SPAN.functionname { color: #0000FF; }
+SPAN.type         { color: #228B22; }
+SPAN.variablename { color: #B8860B; }
+SPAN.reference    { color: #5F9EA0; }
+SPAN.builtin      { color: #DA70D6; }
+A:link {
+ color: #666666;
+}
+A:visited {
+ color: black;
+}
+A.pre { font-family: courier, monospace;
+ color: #228B22;
+}
+</style>
+ </head>
+<body>
+<script language="JavaScript1.2">
+if (document.all)
+document.write('<div id="slidemenubar2" style="left:-144" onMouseover="pull()" onMouseout="draw()">')
+</script>
+<layer id="slidemenubar" onMouseover="pull()" onMouseout="draw()">
+<table border="0" cellpadding="0" cellspacing="0" width="161"><tr><td bgcolor="#009cff" width="144"><a href="index.html">Index</a>
+</td><td rowspan="2" valign="top" width="16"><img src="menu.gif" width="16"></td></tr><tr><td bgcolor="#009cff" width="144"><a href="node1.html">ScoreInspector</a>
+</td></tr></table></layer>
+<script language="JavaScript1.2">
+function regenerate(){
+window.location.reload()
+}
+function regenerate2(){
+if (document.layers)
+setTimeout("window.onresize=regenerate",400)
+}
+window.onload=regenerate2
+if (document.all){
+document.write('</div>')
+themenu=document.all.slidemenubar2.style
+rightboundary=0
+leftboundary=-144
+}
+else{
+themenu=document.layers.slidemenubar
+rightboundary=144
+leftboundary=0
+}
+function pull(){
+if (window.drawit)
+clearInterval(drawit)
+pullit=setInterval("pullengine()",20)
+}
+function draw(){
+clearInterval(pullit)
+drawit=setInterval("drawengine()",50)
+}
+function pullengine(){
+if (document.all&&themenu.pixelLeft<rightboundary)
+themenu.pixelLeft+=5
+else if(document.layers&&themenu.left<rightboundary)
+themenu.left+=5
+else if (window.pullit)
+clearInterval(pullit)
+}
+function drawengine(){
+if (document.all&&themenu.pixelLeft>leftboundary)
+themenu.pixelLeft-=5
+else if(document.layers&&themenu.left>leftboundary)
+themenu.left-=5
+else if (window.drawit)
+clearInterval(drawit)
+}
+</script>
+
+<div style="margin-left:160px"><span class="string">
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> This functor configures the Oz Inspector for score inspection. It defines several Inspector score filterings/mappings for interactive score traversal and display and Inspector score actions, for example, for outputting a score.<BR>
+ <BR>
+ These Inspector mappings and actions are used in the common way. Score objects have a special context menu (right mouse click). See http://www.mozart-oz.org/documentation/inspector/node3.html#chapter.interactive for information on Inspector mappings and actions in general.<BR>
+<BR>
+ Please note, that when a score object is mapped, then its context menu changes to the menu of the shown mapping (e.g. a record) -- until you unmap the score object. So, if you want to inspect some details of a score object and at the same time use an Inspector action, for example, to play back the score object, you may want to display the same score object twice in two different Inspector widgets. For example, click  `Add new Widget'' from the Inspector menu and switch between widgets with the Tab-key (see http://www.mozart-oz.org/documentation/inspector/node2.html#chapter.basic). <BR>
+<BR>
+</span>
+</span>
+<h3>Functor</h3>
+<ul>ScoreInspector ("<span class="string">ScoreInspector.oz</span>")<br></ul>
+<h3>Import</h3>
+<code><ul><li>Inspector</li><li>Boot_Object at "<span class="string">x-oz://boot/Object"
+</span></li><li>Boot_Name at "<span class="string">x-oz://boot/Name"
+</span></li><li>GUtils at "<span class="string">x-ozlib://anders/strasheela/source/GeneralUtils.ozf"
+</span></li><li>Score at "<span class="string">x-ozlib://anders/strasheela/source/ScoreCore.ozf"
+</span></li></ul></code>
+<h3>Export</h3>
+<code><ul><li>&lt;P/0:<a href="#entity8"><span class="functionname">ConfigureActive</span></a>&gt;
+</li><li>&lt;P/0:<a href="#entity9"><span class="functionname">ConfigureAll</span></a>&gt;
+</li><li>&lt;P/1:<a href="#entity10"><span class="functionname">Inspect</span></a>&gt;
+</li><li>&lt;P/1:<a href="#entity11"><span class="functionname">InspectN</span></a>&gt;
+</li><li>&lt;P/0:<a href="#entity13"><span class="functionname">Close</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity12"><span class="functionname">Configure</span></a>&gt;
+</li><li>object:<span class="variablename">InspectorObject</span>
+</li><li>new:<span class="variablename">Inspector_New</span>
+</li></ul></code>
+<h3>Define</h3>
+
+<code>
+<a name="entity8">
+<span class="keyword">proc</span>{<span class="functionname">ConfigureActive</span> }<br>
+<span class="string"> Configure the active inspector instances (affects Inspector.inspect and changes setting of inspectorOptionsRange). <BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity9">
+<span class="keyword">proc</span>{<span class="functionname">ConfigureAll</span> }<br>
+<span class="string">  Configure all inspector instances, including instances created only later (affects Inspector.inspect and changes setting of inspectorOptionsRange).<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity10">
+<span class="keyword">proc</span>{<span class="functionname">Inspect</span> X}<br>
+<span class="string"> Inspect using the configured inspector (without touching the original inspector).  <BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity11">
+<span class="keyword">proc</span>{<span class="functionname">InspectN</span> X}<br>
+<span class="string"> InspectN using the configured inspector (without touching the original inspector). <BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity13">
+<span class="keyword">proc</span>{<span class="functionname">Close</span> }<br>
+<span class="string"> Closing the configured inspector, if any. <BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity12">
+<span class="keyword">proc</span>{<span class="functionname">Configure</span> Key Value}<br>
+<span class="string"> Configure the configured inspector (without touching the original inspector). <BR>
+<BR>
+</span>
+</code><br>
+<h3>End</h3>
+</div></body>
+</html>

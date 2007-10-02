@@ -1,0 +1,331 @@
+
+* Tasks
+
+** Realtime Communication
+
+*** Netcat
+
+Can I use netcat (or the orig nc, already on my Mac) for making SuperCollider talk to Oz via a socket (two way communication)? 
+
+Netcat is multi-platform (UNIX and Windows implementations available)
+
+**** Advantage
+
+  - no bothering with OSC, just communicate text strings 
+  
+
+**** Disadvantage
+
+  - I have to parse input at SC side 
+    -> I could just send SC code strings..
+  - less efficient than OSC communication: more data to transport over the net, and additional overhead of parsing/interpretation
+
+
+**** Examples
+
+For now, just at the commandline, later in SuperCollider 
+
+
+**** SuperCollider
+
+Use class Pipe 
+
+
+http://en.wikipedia.org/wiki/Netcat
+http://www.openbsd.org/cgi-bin/man.cgi?query=nc
+http://netcat.sourceforge.net/
+http://www.vulnwatch.org/netcat/
+
+** Design
+
+*** Decide: Realtime (and OSC) is contribution or belongs to core
+
+This is essential functionality, therefore I would like to make it part of the Strasheela core
+
+Problem if it becomes part of the core: compilation requires C compiler (for Gump, or possibly later for OSC C-library). This requires all users to install a C compiler when they install from source (which most do), in particular Mac and Windows users.
+  => People have to install so much stuff already anyway...
+
+**** Functors
+
+New functor Strasheela/source/Realtime.oz
+New functor Strasheela/source/Input.oz
+New functor Strasheela/source/OSC.oz (subfunctor of Input??)
+
+
+
+
+*** Realtime Searcher: test RT.scoreSearcherWithTimeout etc.
+
+**** TODO test script timeout with script where the score creation (or something else) before the actual search process takes too long
+
+**** TODO test script with score input (non-realtime first)
+
+**** TODO test script with previous input
+
+**** TODO hand over to script start time (depends on present time?)
+
+**** TODO hand over to script score fragments (e.g., harmonic structure?)
+
+**** TODO test with realtime output
+
+**** TODO test script with (realtime) input: OSC search scheduling input and music events input
+
+**** TODO do profiling and test whether memory usage increases as the number of input/output scores increases..
+
+***** TODO In case previous input/output score make a (big) difference memory-wise: add arg to RT.scoreSearcherWithTimeout for controlling how many input/output scores are shown (int or atom 'all') 
+
+Test with simple counterpoint example using Strasheela music representation and RT.scoreSearcherWithTimeout constantly collecting previous input and output scores 
+
+  - Overall CPU usage is very low, about 1% (MBP 2.2 GHz)
+  - RAM usage is constantly increasing, but the active size was also regularily reduced (seems no memory leak, but the example produces much garbarge -- I kind of did that purposefully to see whether such a declarative and inefficient programming style is feasable) 
+    -> check in Oz Panel: remains Active size = 0 (i.e., heap size after last garbage collection)
+  - After playing the example several minutes, time spend with GC was 0.29 sec, where copying was 0.05 sec and propagation was 0.01 sec. So, much more time was used for GC. However, GC happend unnoticed! It may get different when really much more memory needs cleanup. 
+    In that case, I could regularlily call the GC by hand just whenever I output something.
+
+  
+  
+** Optimisation 
+
+*** TODO Avoid score copying: main part of score data structure external of CSP
+
+Music representation stored outside of script/space. Communication between space and music representation happens *only* via a port and only 'plain' data is handed back into space (i.e., no objects with bidirectional links which would cause the whole music representation be 'imported' into the space).
+
+First test whether such an approach would make a big difference (it should -- try test file Compare-timeAndMemoryConsumption-StrasheelaScore-vs-plainLists.oz).
+
+I need abstractions which simplify CSP definition under these restricted conditions. E.g., some function which expects a query function to the representation and returns a result. Internally, this function would use a port. I would like to still be able to use handle object args: should argument to query function be a user-defined record with score objects? 
+
+Variables at both sides (inside and outside of script) are identified via a numeric ID. 
+
+Constrained application: asks music representation (outside) for IDs to variables, and then the constrains are applied to the variables with these IDs. Actually, I can possibly abstract away the IDs for most constraint applications. They will be higher order functions similar to the rule applicators I had before. In addition, I have to deal with the port to the music representation outside (via some abstraction?) and additionally to a tuple (?) with the variables (or some simple data structure containing the vars) inside. 
+
+What is script root variable? The tuple (?) with the variables (or some simple data structure containing the vars) plus the port to the music representation. Together, these two parts define all what is known about the score. 
+
+The definition of a distribution strategy must change considerably. I want to use information *outside* the space to decide which variable to distribute next. Rough idea: the tuple (?) with the vars (or data structure containing the vars) and the port to the music representation (or some abstraction) is given to some distributor, which I define from scratch. 
+
+I somehow need to synchronise the variable value information outside and inside of the script. Whenever I ask which variable to distribute next, the tuple of vars (or only their domain) is handed to the outside, so that the distribution strategy can make use of this information: each parameter in the music representation outside also knows its numeric ID which can be used to access the present value from the tuple in constant time. *However, how efficient is the transportation/transformation of all the variables to the outside?*  The distributor then does decide for a variable ID to distribute and a domain value, which are handed back into the space and then the distribution is carried out accordingly.  
+
+I could adapt the Strasheela parameter accessors (i.e. {MyParameter getValue($)}) such that they always make use of the tuple with the variables for accessing a parameter value. That way, the whole Strasheela interface would hardly change, and the correct parameter values are always used. Two issues: (1) for simplicity, I may sometimes want to use the music representation directly without an extra variable tuple, (2) the variable tuple must be accessible from all parameters and must be easily replacable (e.g., when used in a distribution strategy). Perhaps I better add some method {MyParameter getValue($ VariableTuple)} and leave the original untouched. But then I have to rewrite/add many other methods as well and this approach could also lead to severe misunderstanding (?)
+
+
+Problems: 
+
+  - all init methods which apply constrains must be refactored so that constraints are not applied to variables of the music representation, but can be applied to variables inside the space 
+
+  - all variables must be parameter values which have an ID an can be created inside the space, other variables are not possible any more. So, my FS variables must also be parameter values, a parameter must know whether it hosts a FD or FS variable etc.  
+
+
+---
+
+see thesis etc for more details / earlier ideas
+
+
+*** TODO Recomputation with randomisation
+
+
+
+* Design (Brain-storming..)
+
+** OSC format 
+
+*** SuperCollider OSC score
+
+In SuperCollider, each message is a list and a bundle is a list of lists
+
+How does SC represent the time tags? See Score class
+
+
+[
+[beat1, [OSCcmd1]],
+[beat2, [OSCcmd2], [OSCcmd3]],
+...
+[beat_n, [OSCcmdn]],
+[beatToEndNRT, [\c_set, 0, 0]] // finish
+]
+
+
+?? SC may use lists for messages, because the interpreter can generate this list from method/function args. 
+  => I can not do that in Oz, so I always have to use some explicit data structure
+
+
+*** Strasheela OSC score format
+
+**** OSC Messages
+
+An OSC message is represented by an Oz tuple
+The tuple label is the OSC Address Pattern (e.g., '/test').
+0 or more OSC Arguments are represented by contained tuple values. OSC arguments can be Oz integers, floats and virtual strings.
+
+---
+
+!!?? Like SC, I may also use a list: bundle and message are clearly distinguishable by type of first list element (atom/string vs float)
+
+Tuple has constant time access for elements, if I want to access specific elements.. But that is perhaps seldomly the case..
+
+What would be the advantage of a list over a tuple here??
+
+Advantage of tuple over record: requires less memory and is faster (access of records nearly as efficient as tuple access, but creating a _new_ record type, i.e., a record with new arity and label is more expensive) 
+
+I don't see any disadvantage of tuple to list, and I feel a tuple is the right thing here..
+
+--- 
+
+OLD IDEA
+
+An Oz tuple with the label message 
+The value at feature 1 is the OSC Address Pattern, followed by 0 or more arguments are the following features. 
+
+
+**** OSC Bundle
+
+An OSC bundle is represented by an Oz stream (i.e. it can be partially bound, and scheduling can be done potentially by sending bundle bondaries).
+The first element is the time tag (a float, measured in beats!), followed by 0 or more OSC bundle elements (i.e. OSC messages or other bundles). 
+  => I can easily omit the time tag (e.g., for mapping some process on all bundle elements) by doing MyBundle.2
+
+NB: when using messages and bundles with pattern matching, the bundle label matches '|' 
+
+
+!!?? When receiving hex time tags, their transformation into beats makes use of the current tempo (Strasheela env var) and an (explicitly specified?) start time for a score which corresponds to the beat 0.0 (an absolute time point, measured as UNIX time, i.e. in seconds since 1 Jan 1970 0:00, but as a float so that msecs can be specified).
+
+!!?? Similarily, when transforming an OSC score into OSC messages with hex time tags, the transformation makes use of the current tempo (Strasheela env var) and an absolute time point (format see above) represdenting the beat 0.0. 
+
+!!?? for internal processing, the timetag can be the hex representation as understood by sendOSC/dumpOSC (a VS -- clearly distinguishable from the beats float)
+
+!!?? the time tag 0.0 means immediately -- contradiction to spec just defined..
+ 
+
+	OLD: A time tag is always a relative start time added to some absolute start time (usually "now" ;-) ) at the time the 
+
+
+!!?? Times must be in ascending order? I can always sort it...
+
+
+  => it should be easy to write a Strasheela OSC Score to SC Score list 
+
+----
+
+OLD IDEA
+
+An Oz tuple with the label '#bundle' 
+The value at feature 1 is the time tag (a float, measured in beats!), followed by 0 or more OSC bundle elements at the following features. 
+  => for processing like mapping, I can 'cut off' the time tag with {Record.subtract MyBundle 1 $}
+  [MyList.2 is probably more efficient... I can still use it with pattern matching mixed with bundles when I check for label '|']
+
+------
+
+OLD IDEA
+
+An Oz record with the label bundle 
+!!?? The OSC bundle elements are stored at the integer features
+The optional timetag (a float, measured in seconds) is stored at the feature timeTag_seconds.
+  => can I access them easily, without including the timetag? 
+Alternative: all bundle elements are stored in a list under a single feature 
+The optional hex timetag (a VS) is stored at the feature timeTag_hex.
+!!?? Both time tags are exclusive?
+
+
+** Top-level user interface
+
+*** DONE Extended script 
+
+Notion of extended script: like 'normal script', it is user-defined and returns the solution. However, additional arguments are supported. These are given as a record with the following standard features:
+
+unit(inputScore:_
+     fullInputScore:_
+     previousOutputScore:_
+     ...)
+
+?? all these arguments are optional and more arguments can be provided
+
+Please note: the returned score object is [usually] created within the script for max flexibility on the using side. However, the score creation within the script can frely make use of the extended script arguments and in an extreme case, the full score object is given as an argument. (in that case, make sure that variables are local to script, e.g., hand over nullary function which returns that score)
+
+
+*** User input
+
+  - extended script definition	
+  - call to new [realtime solver]  
+  - call to scheduling mechanism
+
+**** Optional user input (these are args, and there are defaults for these)
+
+  - [definition] of additional arguments to script def (where do these go?)
+  - distribution strategy def
+  - realtime output def (default is OSC bundles to SC) [implementation with by-need synchronisation?]
+  - realtime input def (defaults to OSC from SC)
+  - transformation of input to score
+
+
+*** General design
+
+  - avoid a big monolitic application, but instead provide the building blocks and some easy to use template (cf.: script + solver call, not just a single proc.). Therefore, e.g., the solver is called explicitly.
+
+
+*** What is implicit / automatic?
+
+  - buffering of realtime input
+  - input score 'storage' 
+  - output score 'storage'
+  - ?? creation of args for extended script
+
+
+
+
+* Realtime computing and Mozart design
+
+For now, this is not an issue. I may read more about this when I run into problems using Mozart for realtime programming. Also, for a paper I may want to read a bit and cite something..
+
+
+*** see CTM, p. 252: Sec. 4.2.4 Thread scheduling
+
+Time slice duration in Mozart in controlled by operating system timer interrupts (fairly low frequency: 60-100 per second). ?? This results in the reported 10 msecs 'granularity' of Mozart realtime stuff.. 
+
+
+*** Questions: 
+
+  - Can I increase the priority of a Mozart process so that the operating system grants it precedence over other threads?
+
+  - Can I increae the 
+
+For example, for timing on Mac OS google for 
+
+    system timer interrupt "mac os x" 
+
+Where I started reading..
+
+   http://en.wikipedia.org/wiki/Task_scheduler
+
+   http://www.usenix.org/events/bsdcon02/full_papers/gerbarg/gerbarg_html/index.html
+
+
+* Ideas 
+
+** Seemingly immediate reaction in face of unavoidable latency
+
+Realtime Strasheela always needs some time for search, introducing some latency. For example, if Strasheela accompanies some musician (or transforms the musicians performance) it would always be late. For the public, it is nevertheless possible to perceive an immediate response.   
+
+We only need to introduce (at least) the latency granted for Strasheela to all musicans actions. Its a bit like a pneumatic organ, where the sound is produced only shortly after a key is pressed. 
+
+Technically, this can be done when sound is only produced 'electronically', that is  all the actions of the musican are transformed into some controller data for electronic instruments (e.g., implemented in SuperCollider). All these musicians actions can be delayed by an exact amount using timestamped OSC packets: just get the time when the action arrives and add the latency granted to Strasheela (e.g. 50 msecs). This data is send immediately to the instrument (which obeys the timestamps) and at the same time to Strasheela. Strasheela creates its output and keeps the timestamps, so when Strasheela's output is send to the instrument (which obeys the timestamps), it is performed at the same as the musicians output. Optionally, there is only Strasheela's output.. Nevertheless, it is still important to introduce a latency which is always the same, so that the musician can adapt to that latency.
+
+NB: musical input could also be generated by software like SuperCollider or Max / PD. In this case, introducing a latency for the output generated would not even be noticed.
+
+
+** Musical Examples 
+
+*** Harmonic responses
+
+Harmonic structure is specified before. Strasheela receives realtime input music. Whenever triggered, it responses to the input by following its contour, rhythmic structure etc., but playing it in the harmony fitting to the specified output time. 
+Extension: Usually, Strasheela response to the input recieved immediatedly before, but ocasionally some older input is responded instead. 
+
+
+*** Mutabor remake
+
+The musical input is re-tuned, much like Mutabor does. Simple case (which only needs some mapping, but no constraint programming): each keynumber is mapped to some frequency. More complex and interesting case: constraint programming is used to adapt the tuning according to the musical situation. For example, the harmony expressed by the the input is analysed. The harmony pitches would then be tuned according to the result of the analysis (e.g. a major or minor key could always be tuned just). Optionally not only taking into account keys currently pressed, but also keys pressed before for analysing a single chord (some other signal, e.g., a pedal whould be needed to signal chord changes). This would then even go beyond what Mutabor ever could do... Like Mutabor again, harmonic changes could be intonated correctly (e.g., a modulation would introduce commas).
+
+
+*** ?? Analyse harmony
+
+Strasheela analyses input and finds out a single harmony it expresses. Then, it outputs something else which fits into this harmony 
+   problem: the output is only created _after_ the input it finished, so this is too late for that harmony ;-) 
+
+
+

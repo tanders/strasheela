@@ -1,0 +1,137 @@
+#title List of Examples to Add to the Strasheela Prototyper
+
+
+Perhaps I shouldn't do the more complex examples here. Better really simple stuff like a tutorial. Also a bit like an interactive reference..
+
+
+* Oz 
+
+** Basics 
+
+Comments 
+
+first intro Browse: 'hello world!'  
+
+Simple Computations: pocket calculator
+
+Variables: local declaration 
+
+Procedure and Function Application 
+
+Function Definition
+
+Procedure Definition
+
+short hand for local ..
+
+Basic data types: integer, float, atom, record, tuple, list
+
+Access record fields 
+
+Control structures: if  
+
+Unification 
+
+Anonymous functions and procedures
+
+Higher-order programming
+
+Class method application
+
+..
+
+** Constraint Programming 
+
+Declaration of Constrained Variables
+
+Demonstration of Propagation
+
+A very Simple Constraint Script (more simple than all-interval series, e.g., two numbers are different and show all solutions)
+
+?? All-Interval Series
+
+Demo: Search Strategy is Programmable (show All-Interval Series with two different distro Strategies in Explorer) -- pointer into doc for details  
+
+
+-----------------------
+
+* Strasheela 
+** The Strasheela Music Representation 
+
+*** Creating Determined Score Objects 
+
+A single fully determined note 
+
+  first don't do output, just transform textual to score object and back..
+ 
+A sequence of a few fully determined notes 
+
+Output this sequence to Csound with full call..
+
+A sim of a few fully determined notes with offset times 
+
+A nested sim/seq with offset times and a more complex beats setting..
+
+
+*** Accessing Score Infomation 
+
+direct accessors (getPitch, getDuration, getItems, ..) -- point to reference 
+
+higher-order accessors (mapItems, collect, ..) -- point to reference 
+
+*** Undetermined Score Objects 
+
+A sequence of few notes with a simple constraints (a pattern like all pitches increasing, all pitches different, ...) pointer to pattern constraints 
+
+...
+
+** Defining and Applying Abstracted Rules 
+
+
+** ?? Deriving information which is variable (e.g. interval between two note pitches)
+
+  .. just some constraint  ...
+
+
+** Controlling the Output to Various Formats  
+
+*** Adapt Csound Output 
+
+*** Adapt Lily / Fomus Output 
+
+*** Adapt MIDI Output 
+
+
+** Pattern Constraints 
+
+** Score Distribution Strategies 
+
+show few examples of using existing
+
+refer to doc: thesis and 
+
+
+*** Using 
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+

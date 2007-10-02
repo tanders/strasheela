@@ -1,0 +1,78 @@
+#title Strasheela Reference Documentation
+; #author Torsten Anders
+
+; **NB: pathes below depend on ozh and can break!!**
+
+* The Strasheela Core 
+
+These functors define the main user functionality of Strasheela. 
+
+  [[../doc/api/node6.html][Score]] -- music representation 
+
+  [[../doc/api/node8.html][SDistro]] -- score distribution strategies 
+
+  [[../doc/api/node9.html][Out]] -- means for output into various formats
+
+  [[../doc/api/node11.html][Midi]] -- Midi output (a subfunctor of [[../doc/api/node9.html][Out]])
+
+  [[../doc/api/node2.html][Init]] -- customise settings (e.g. for output)
+
+  [[../doc/api/node1.html][Strasheela]] -- the top level functor (simply exports the rest of Strasheela)
+
+
+These functors provide additional functionality. 
+
+  [[../doc/api/node3.html][GUtils]] -- general utilities
+
+  [[../doc/api/node4.html][LUtils]] -- list utilities
+
+  [[../doc/api/node5.html][MUtils]] -- utilities related to music or acoustics
+
+  [[../doc/api/node7.html][SMapping]] -- score traversal 
+
+; [[../doc/api/node2.html][Midi]] -- 
+
+
+* Strasheela Extensions 
+
+These extensions simplify the definition of specific musical CSP classes (e.g. style specific CSPs such as harmonic CSPs). Naturally, these extensions can be combined (e.g. to constrain patterns on harmonic relations).
+
+  [[../contributions/anders/Pattern/doc/node1.html][Pattern]] -- constraints on lists to express patterns in music
+
+  [[../contributions/anders/HarmonisedScore/doc/node1.html][HS (HarmonisedScore)]] -- constrainable harmony model 
+
+  [[../contributions/anders/ConstrainTimingTree/doc/node1.html][CTT (ConstrainTimingTree)]] -- constrain the shape of a tree of temporal items
+
+  [[../contributions/anders/Motif/doc/node1.html][Motif]] -- constrainable motif model
+
+  [[../contributions/anders/Measure/doc/node1.html][Measure]] -- constrainable meter model
+
+  [[../contributions/anders/Realtime/doc/node1.html][RT (Realtime)]] -- solvers for real-time constraint programming
+
+  [[../contributions/anders/OSC/doc/node1.html][OSC]] -- an OpenSound Control interface
+
+
+These provide further extensions.
+  
+  [[../contributions/anders/Memoize/doc/node1.html][Memo]] -- memoization of functions (e.g. useful for a modular CSP definition where some function always returns the same data structure with the same constrained variables when given the same input)
+
+  [[../contributions/anders/Fenv/doc/node1.html][Fenv (function envelope)]] -- envelopes by numeric functions
+
+  [[../contributions/anders/Gnuplot/doc/node1.html][Gnuplot]] -- an interface to [[http://www.gnuplot.info/][Gnuplot]] for plotting numeric Oz data (e.g., [[../contributions/anders/Fenv/doc/node1.html][Fenv]] data).
+
+  [[../contributions/anders/OzServer/doc/node1.html][OzServer]] -- run Strasheela as server in the background, started and 'remote-controlled' by any other application (e.g. a Lisp compiler) 
+  
+  [[../contributions/anders/ScoreInspector/doc/node1.html][ScoreInspector]] -- extension of the Oz [[http://www.mozart-oz.org/documentation/inspector/index.html][Inspector]] for inspecting Stasheela score objects
+  
+  [[../contributions/anders/SettingsGUI/doc/node1.html][SettingsGUI]] -- a GUI interface for setting Strasheela environment variables
+  
+  [[../contributions/anders/Tutorial/doc/node1.html][Tutorial]] -- the tutorial application definition
+  
+
+; MultiDict        
+; MultiRecord  
+
+* How to Create User Extensions? 
+
+An extensively documented extension template is provided at [[../contributions/ExtensionTemplate]], which demonstrates how Strasheela extensions are created. 
+

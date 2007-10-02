@@ -1,0 +1,16 @@
+#title Rhythmical Patterns
+
+[[StrasheelaExamples][back]]
+
+This example finds an optimal solution for an over-constrained rhythmical CSP discussed by [[http://www.epos.uni-osnabrueck.de/music/templates/buch.php?id=48&page=/music/books/m/ma_nl004/pages/245.htm][Charlotte Truchet]] (as asynchronous rhythms). 
+
+
+;  [[../examples/Output/.mp3][../examples/Output/.preview.png]]
+
+;  [[../examples/Output/.mp3][mp3]] [[../examples/Output/.mid][midi]] 
+
+  [[../examples/06-RhythmicalPatterns-BestSolutionSearch.oz][source]]
+
+
+**NB**: the explanation for this example will soon be extended and musical output will be provided. Please come back later ;-) 
+

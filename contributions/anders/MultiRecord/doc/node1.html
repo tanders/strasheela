@@ -1,0 +1,223 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<html>
+ <head>
+  <title>MultiRecord</title>
+  <style>BODY {
+ background: url(page.gif) repeat-y white;
+}
+#slidemenubar, #slidemenubar2{
+ position:absolute;
+ left:-144px;
+ width:160px;
+ top:10px;
+ border:0px solid black;
+ font:bold 12px Verdana;
+ line-height:10px;
+}
+.margin {
+ position: absolute;
+ left: 10px;
+ width: 130px;
+}
+BODY, P, H1, H2, H3, A {
+ font-family: sans-serif;
+}
+PRE, CODE {
+ font-family: courier, monospace;
+}
+P {
+ text-align: justify;
+}
+H1     { color: #9B0000; }
+H2     { color: #FF9933; }
+H3, H4 { color: #881155; }
+CODE              { color: #663366; }
+.code CODE        { color: #000000; }
+SPAN.comment      { color: #B22222; }
+SPAN.keyword      { color: #A020F0; }
+SPAN.string       { color: #BC8F8F; }
+SPAN.functionname { color: #0000FF; }
+SPAN.type         { color: #228B22; }
+SPAN.variablename { color: #B8860B; }
+SPAN.reference    { color: #5F9EA0; }
+SPAN.builtin      { color: #DA70D6; }
+A:link {
+ color: #666666;
+}
+A:visited {
+ color: black;
+}
+A.pre { font-family: courier, monospace;
+ color: #228B22;
+}
+</style>
+ </head>
+<body>
+<script language="JavaScript1.2">
+if (document.all)
+document.write('<div id="slidemenubar2" style="left:-144" onMouseover="pull()" onMouseout="draw()">')
+</script>
+<layer id="slidemenubar" onMouseover="pull()" onMouseout="draw()">
+<table border="0" cellpadding="0" cellspacing="0" width="161"><tr><td bgcolor="#009cff" width="144"><a href="index.html">Index</a>
+</td><td rowspan="2" valign="top" width="16"><img src="menu.gif" width="16"></td></tr><tr><td bgcolor="#009cff" width="144"><a href="node1.html">MultiRecord</a>
+</td></tr></table></layer>
+<script language="JavaScript1.2">
+function regenerate(){
+window.location.reload()
+}
+function regenerate2(){
+if (document.layers)
+setTimeout("window.onresize=regenerate",400)
+}
+window.onload=regenerate2
+if (document.all){
+document.write('</div>')
+themenu=document.all.slidemenubar2.style
+rightboundary=0
+leftboundary=-144
+}
+else{
+themenu=document.layers.slidemenubar
+rightboundary=144
+leftboundary=0
+}
+function pull(){
+if (window.drawit)
+clearInterval(drawit)
+pullit=setInterval("pullengine()",20)
+}
+function draw(){
+clearInterval(pullit)
+drawit=setInterval("drawengine()",50)
+}
+function pullengine(){
+if (document.all&&themenu.pixelLeft<rightboundary)
+themenu.pixelLeft+=5
+else if(document.layers&&themenu.left<rightboundary)
+themenu.left+=5
+else if (window.pullit)
+clearInterval(pullit)
+}
+function drawengine(){
+if (document.all&&themenu.pixelLeft>leftboundary)
+themenu.pixelLeft-=5
+else if(document.layers&&themenu.left>leftboundary)
+themenu.left-=5
+else if (window.drawit)
+clearInterval(drawit)
+}
+</script>
+
+<div style="margin-left:160px"><span class="string">
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> This functor defines a multi-dimensional extendable record data structure (quasi a stateless dictionary, implemented by RecordC). The key to a value in a multi-dimensional record is a list Keys whose values are any combination of integers, atoms and names.<BR>
+ This is a stateless data structure (and can therefore be used, e.g., in a CSP such that it is defined globally and 'changed' in the CSP). There is only one stateful operation: Clear (changes binding of cell created by New).<BR>
+<BR>
+ NB: This implementation is not thread-save: checking whether a key is valid and putting a value at the key is not atomic. Using locks would limit the use of this data structure in a CSP..<BR>
+<BR>
+ NB: efficiency only linear time in worst case (depending on number of features of Rec), but thats the best I can do (currently, there is not RecordC.reflectHasFeature, only RecordC.reflectArity and thus the list of all currently stored keys must be searched in a tmp def of ReflectHasFeature defined here).<BR>
+<BR>
+</span>
+</span>
+<h3>Functor</h3>
+<ul>MultiRecord ("<span class="string">MultiRecord.oz</span>")<br></ul>
+<h3>Import</h3>
+<code><ul><li>RecordC</li><li>LUtils at "<span class="string">x-ozlib://anders/strasheela/source/ListUtils.ozf"
+</span></li></ul></code>
+<h3>Export</h3>
+<code><ul><li>new:&lt;P/1:<a href="#entity3"><span class="functionname">NewR</span></a>&gt;
+</li><li>&lt;P/1:<a href="#entity4"><span class="functionname">Clear</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity5"><span class="functionname">Is</span></a>&gt;
+</li><li>&lt;P/3:<a href="#entity7"><span class="functionname">ReflectHasFeat</span></a>&gt;
+</li><li>&lt;P/3:<a href="#entity6"><span class="functionname">Get</span></a>&gt;
+</li><li>&lt;P/4:<a href="#entity8"><span class="functionname">CondGet</span></a>&gt;
+</li><li>&lt;P/4:<a href="#entity10"><span class="functionname">CondGetPutting</span></a>&gt;
+</li><li>&lt;P/3:<a href="#entity9"><span class="functionname">Put</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity11"><span class="functionname">Entries</span></a>&gt;
+</li></ul></code>
+<h3>Define</h3>
+
+<code>
+<a name="entity3">
+<span class="keyword">proc</span>{<span class="functionname">NewR</span> X}<br>
+<span class="string"> Returns a new empty multi-dimensional record.<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity4">
+<span class="keyword">proc</span>{<span class="functionname">Clear</span> X}<br>
+<span class="string"> Completely empties the record X.<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity5">
+<span class="keyword">fun</span>{<span class="functionname">Is</span> X}<br>
+<span class="string"> Tests whether X is a multi-dimensional record.<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity7">
+<span class="keyword">fun</span>{<span class="functionname">ReflectHasFeat</span> Rec Keys}<br>
+<span class="string"> Tests whether Rec has the multi-dimensional feature Keys.<BR>
+ NB: no thread-save definition.<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity6">
+<span class="keyword">fun</span>{<span class="functionname">Get</span> Rec Keys}<br>
+<span class="string"> Returns the item in Rec at Keys.<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity8">
+<span class="keyword">fun</span>{<span class="functionname">CondGet</span> Rec Keys DefVal}<br>
+<span class="string"> Returns the item in Rec at Keys if Keys is valid, otherwise DefVal is retured.<BR>
+ NB: no thread-save definition.<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity10">
+<span class="keyword">fun</span>{<span class="functionname">CondGetPutting</span> Rec Keys Fn}<br>
+<span class="string"> Returns the item in Rec at Keys if Keys is valid, otherwise put result of nullary Fn at Keys and return that.<BR>
+ NB: no thread-save definition.<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity9">
+<span class="keyword">proc</span>{<span class="functionname">Put</span> Rec Keys X}<br>
+<span class="string"> Sets the item in Rec under Keys to X.<BR>
+ NB: no thread-save definition.<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity11">
+<span class="keyword">fun</span>{<span class="functionname">Entries</span> Rec}<br>
+<span class="string"> Returns the list of current entries of Rec. An entry is a pair Keys#X, where Keys is a list and X the corresponding item.<BR>
+<BR>
+</span>
+</code><br>
+<h3>End</h3>
+</div></body>
+</html>

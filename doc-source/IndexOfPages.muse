@@ -1,0 +1,7 @@
+#title Site Map: List of Strasheela Documentation Pages
+
+<markup><lisp>(muse-index-as-string t t)</lisp></markup>
+
+------------------------------------------------
+
+**NB**: This index lists only Strasheela documentation pages created with the Emacs wiki mode [[http://www.emacswiki.org/cgi-bin/wiki/MuseMode][Muse]]. The following pages are not listed in the index: the pages from the  [[StrasheelaMotivation/index.html][Motivation]] and all pages in the [[StrasheelaReference][Reference]]. 

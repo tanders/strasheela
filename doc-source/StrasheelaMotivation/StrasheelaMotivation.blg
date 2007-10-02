@@ -1,0 +1,64 @@
+This is BibTeX, Version 0.99c (Web2C 7.4.5)
+The top-level auxiliary file: StrasheelaMotivation.aux
+The style file: chicago.bst
+Database file #1: /home/t/texte/PhD/bibtex/PhD/music-theorie.bib
+Database file #2: /home/t/texte/PhD/bibtex/PhD/music-CP.bib
+Database file #3: /home/t/texte/PhD/bibtex/PhD/algo-comp.bib
+Database file #4: /home/t/texte/PhD/bibtex/PhD/computer-music.bib
+Database file #5: /home/t/texte/PhD/bibtex/PhD/computer-science.bib
+Database file #6: /home/t/texte/PhD/bibtex/PhD/Oz.bib
+Database file #7: /home/t/texte/PhD/bibtex/PhD/AI.bib
+Database file #8: /home/t/texte/PhD/bibtex/PhD/CP.bib
+Database file #9: /home/t/texte/PhD/bibtex/PhD/score-representation.bib
+Database file #10: /home/t/texte/PhD/bibtex/PhD/music-AI.bib
+Database file #11: /home/t/texte/PhD/bibtex/PhD/further.bib
+Warning--missing author in Pope:OO:1991
+Warning--page numbers missing in Assayag:1999
+Warning--page numbers missing in Dannenberg:Score:1989
+Warning--page numbers missing in Desain:90
+Warning--page numbers missing in Desain:Honing:CLOSe:1997
+Warning--page numbers missing in Pachet:Roy:2000
+Warning--empty year in SICStus:Site
+Warning--empty year in Truchet:OMBTTutorial
+You've used 39 entries,
+            2861 wiz_defined-function locations,
+            844 strings with 11404 characters,
+and the built_in function-call counts, 23068 in all, are:
+= -- 1808
+> -- 1667
+< -- 2
++ -- 467
+- -- 591
+* -- 1798
+:= -- 4453
+add.period$ -- 121
+call.type$ -- 39
+change.case$ -- 251
+chr.to.int$ -- 39
+cite$ -- 47
+duplicate$ -- 750
+empty$ -- 1499
+format.name$ -- 659
+if$ -- 4192
+int.to.chr$ -- 1
+int.to.str$ -- 0
+missing$ -- 43
+newline$ -- 198
+num.names$ -- 395
+pop$ -- 299
+preamble$ -- 1
+purify$ -- 500
+quote$ -- 0
+skip$ -- 707
+stack$ -- 0
+substring$ -- 780
+swap$ -- 200
+text.length$ -- 2
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 660
+warning$ -- 8
+while$ -- 360
+width$ -- 0
+write$ -- 531
+(There were 8 warnings)

@@ -1,0 +1,87 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+  <head>
+    <title>How to Create a Patch</title>
+    <meta name="generator" content="muse.el">
+    <meta http-equiv="Content-Type"
+          content="text/html; charset=iso-8859-1">
+    
+    <link rel="stylesheet" href="style.css" type="text/css" />
+  </head>
+  <body>
+<div id="header">
+  <ul class="nav">
+    <li class="nav1"><a href="index.html">home</a></li>
+    <li class="navn"><a href="https://sourceforge.net/projects/strasheela/">download at sourceforge</a></li>
+    <!-- <li class="navn"><a href="IndexOfPages.html">site map</a></li> -->
+    <li class="navn"><a href="contact.html">contact</a></li>
+  </ul>
+  <div id="logo">
+    <a href="http://sourceforge.net"><img src="http://sflogo.sourceforge.net/sflogo.php?group_id=167225&amp;type=1" width="88" height="31" border="0" alt="SourceForge.net Logo" /></a>
+  </div>
+</div>
+    <h1>How to Create a Patch</h1>
+    <!-- Page published by Emacs Muse begins here -->
+<p>Changes to Strasheela files are most suitably provided in the form of patches. Two approaches for creating a patch are explained here. The first approach uses Subversion (<code>svn</code>), the second uses <code>diff</code>. Subversion is more powerful (e.g., it can assure that you compare your changes to the very last version of Strasheela), whereas <code>diff</code> may be more simple to use. However, using Subversion is recommended.</p>
+
+
+<h3>Using Subversion</h3>
+
+<p class="first">First install the Subversion client software, for example, from <a href="http://subversion.tigris.org/project_packages.html">here</a> (on Linux, <code>svn</code> may already be installed). You then check out (i.e. download) the Strasheela repository with the following instruction (at the commandline). This will create a new directory <code>strasheela</code> into your current directory and copy the full Strasheela repository into it.</p>
+
+<blockquote>
+<p class="quoted"><code>svn co https://strasheela.svn.sourceforge.net/svnroot/strasheela strasheela</code></p>
+</blockquote>
+
+<p>You can now freely edit you newly created local copy. However, we discourage you from moving and deleting files (you may of course propose it on the <a href="https://lists.sourceforge.net/lists/listinfo/strasheela-devel">Strasheela-devel mailing list</a>). You can tell Subversion that you added a file (or directory) with the following command.</p>
+
+<blockquote>
+<p class="quoted"><code>svn add /path/to/the/added/file</code></p>
+</blockquote>
+
+<p>After you finished your changes, you are ready to create a patch. However, you should first update your local copy by integating all changes to the central repository since your checkout. Move into the toplevel Strasheela directory.</p>
+
+<blockquote>
+<p class="quoted"><code>cd /my/path/to/strasheela</code></p>
+</blockquote>
+
+<p>Then update your local copy.</p>
+
+<blockquote>
+<p class="quoted"><code>svn update</code></p>
+</blockquote>
+
+<p>You can now create the patch.</p>
+
+<blockquote>
+<p class="quoted"><code>svn diff &gt; myPatch.diff</code></p>
+</blockquote>
+
+<p>Please send your patch together with an explanation to the <a href="https://lists.sourceforge.net/lists/listinfo/strasheela-devel">Strasheela-devel mailing list</a>.</p>
+
+<p>NB: Subversion is a centralised revision control system. This means, that important features (e.g. commiting changes to the repository) are not available to you before you are registered as Strasheela developer at <a href="https://sourceforge.net/projects/strasheela/">https://sourceforge.net/projects/strasheela/</a>.</p>
+
+<p>BTW: There also exist graphical user interfaces for Subversion (e.g. <a href="http://tortoisesvn.tigris.org/">TortoiseSVN</a> for Windows.</p>
+
+
+<h3>Using diff</h3>
+
+<p><code>diff</code> is usually already available on Linux and MacOS. For Windows, it can be found <a href="http://gnuwin32.sourceforge.net/packages/diffutils.htm">here</a> (installing the setup program implicitly installs the dependencies). Enter the following command invocation at the commandline. Please replace <code>originalStrasheelaDirectory</code> with the path to an unchanged Strasheela directory of the <strong>latest release</strong> and <code>editedStrasheelaDirectory</code> with your edited version of this release.</p>
+
+<blockquote>
+<p class="quoted"><code>diff -ru originalStrasheelaDirectory editedStrasheelaDirectory &gt; myPatch.diff</code></p>
+</blockquote>
+
+<p>Please send your patch together with an explanation to the <a href="https://lists.sourceforge.net/lists/listinfo/strasheela-devel">Strasheela-devel mailing list</a>.</p>
+
+
+
+<!-- Page published by Emacs Muse ends here -->
+<!-- Footer -->
+<div id="footer">
+<div id="author">&copy; 
+Torsten Anders</div>
+<div id="date">Last time edited: 2007.08.04</div>
+</div>
+  </body>
+</html>

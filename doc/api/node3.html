@@ -1,0 +1,407 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<html>
+ <head>
+  <title>GUtils</title>
+  <style>BODY {
+ background: url(page.gif) repeat-y white;
+}
+#slidemenubar, #slidemenubar2{
+ position:absolute;
+ left:-144px;
+ width:160px;
+ top:10px;
+ border:0px solid black;
+ font:bold 12px Verdana;
+ line-height:10px;
+}
+.margin {
+ position: absolute;
+ left: 10px;
+ width: 130px;
+}
+BODY, P, H1, H2, H3, A {
+ font-family: sans-serif;
+}
+PRE, CODE {
+ font-family: courier, monospace;
+}
+P {
+ text-align: justify;
+}
+H1     { color: #9B0000; }
+H2     { color: #FF9933; }
+H3, H4 { color: #881155; }
+CODE              { color: #663366; }
+.code CODE        { color: #000000; }
+SPAN.comment      { color: #B22222; }
+SPAN.keyword      { color: #A020F0; }
+SPAN.string       { color: #BC8F8F; }
+SPAN.functionname { color: #0000FF; }
+SPAN.type         { color: #228B22; }
+SPAN.variablename { color: #B8860B; }
+SPAN.reference    { color: #5F9EA0; }
+SPAN.builtin      { color: #DA70D6; }
+A:link {
+ color: #666666;
+}
+A:visited {
+ color: black;
+}
+A.pre { font-family: courier, monospace;
+ color: #228B22;
+}
+</style>
+ </head>
+<body>
+<script language="JavaScript1.2">
+if (document.all)
+document.write('<div id="slidemenubar2" style="left:-144" onMouseover="pull()" onMouseout="draw()">')
+</script>
+<layer id="slidemenubar" onMouseover="pull()" onMouseout="draw()">
+<table border="0" cellpadding="0" cellspacing="0" width="161"><tr><td bgcolor="#009cff" width="144"><a href="index.html">Index</a>
+</td><td rowspan="12" valign="top" width="16"><img src="menu.gif" width="16"></td></tr><tr><td bgcolor="#009cff" width="144"><a href="node1.html">Strasheela</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node2.html">Init</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node3.html">GUtils</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node4.html">LUtils</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node5.html">MUtils</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node6.html">Score</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node7.html">SMapping</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node8.html">SDistro</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node9.html">Out</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node10.html">Strasheela</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node11.html">Midi</a>
+</td></tr></table></layer>
+<script language="JavaScript1.2">
+function regenerate(){
+window.location.reload()
+}
+function regenerate2(){
+if (document.layers)
+setTimeout("window.onresize=regenerate",400)
+}
+window.onload=regenerate2
+if (document.all){
+document.write('</div>')
+themenu=document.all.slidemenubar2.style
+rightboundary=0
+leftboundary=-144
+}
+else{
+themenu=document.layers.slidemenubar
+rightboundary=144
+leftboundary=0
+}
+function pull(){
+if (window.drawit)
+clearInterval(drawit)
+pullit=setInterval("pullengine()",20)
+}
+function draw(){
+clearInterval(pullit)
+drawit=setInterval("drawengine()",50)
+}
+function pullengine(){
+if (document.all&&themenu.pixelLeft<rightboundary)
+themenu.pixelLeft+=5
+else if(document.layers&&themenu.left<rightboundary)
+themenu.left+=5
+else if (window.pullit)
+clearInterval(pullit)
+}
+function drawengine(){
+if (document.all&&themenu.pixelLeft>leftboundary)
+themenu.pixelLeft-=5
+else if(document.layers&&themenu.left>leftboundary)
+themenu.left-=5
+else if (window.drawit)
+clearInterval(drawit)
+}
+</script>
+
+<div style="margin-left:160px"><span class="string">
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> This functor defines some general utilities<BR>
+<BR>
+</span>
+</span>
+<h3>Functor</h3>
+<ul>GUtils ("<span class="string">/Users/t/oz/music/Strasheela/strasheela/source/GeneralUtils.oz</span>")<br></ul>
+<h3>Import</h3>
+<code><ul><li>Module</li><li>OS</li><li>Combinator</li><li>Property</li><li>Tk</li><li>FS</li><li><a href="node4.html">LUtils</a> at "<span class="string">ListUtils.ozf"
+</span></li><li>Browser(browse:Browse)</li></ul></code>
+<h3>Export</h3>
+<code><ul><li><span class="variablename">Pi</span>
+</li><li>&lt;P/3:<a href="#entity71"><span class="functionname">XOr</span></a>&gt;
+</li><li>&lt;P/3:<a href="#entity72"><span class="functionname">Cases</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity73"><span class="functionname">IsFS</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity74"><span class="functionname">Identity</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity75"><span class="functionname">Random</span></a>&gt;
+</li><li>&lt;P/4:<a href="#entity76"><span class="functionname">RandIntoRange</span></a>&gt;
+</li><li>&lt;P/1:<a href="#entity77"><span class="functionname">MakeRandomGenerator</span></a>&gt;
+</li><li>&lt;P/3:<a href="#entity78"><span class="functionname">Log</span></a>&gt;
+</li><li>&lt;P/3:<a href="#entity79"><span class="functionname">Mod_Float</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity82"><span class="functionname">ToProc</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity83"><span class="functionname">ToFun</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity84"><span class="functionname">Procs2Proc</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity81"><span class="functionname">ApplySelected</span></a>&gt;
+</li><li>&lt;P/4:<a href="#entity80"><span class="functionname">EncodeRatio</span></a>&gt;
+</li><li>&lt;P/4:<a href="#entity87"><span class="functionname">SelectArg</span></a>&gt;
+</li><li>&lt;P/1:<a href="#entity88"><span class="functionname">TimeVString</span></a>&gt;
+</li><li>&lt;P/1:<a href="#entity89"><span class="functionname">GetCounterAndIncr</span></a>&gt;
+</li><li>&lt;P/0:<a href="#entity90"><span class="functionname">ResetCounter</span></a>&gt;
+</li><li>&lt;P/1:<a href="#entity85"><span class="functionname">UnarySkip</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity86"><span class="functionname">BinarySkip</span></a>&gt;
+</li><li>&lt;P/3:<a href="#entity91"><span class="functionname">TakeFeatures</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity92"><span class="functionname">ModuleLink</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity93"><span class="functionname">ModuleApply</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity94"><span class="functionname">TimeSpend</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity95"><span class="functionname">Assert</span></a>&gt;
+</li><li>&lt;P/1:<a href="#entity96"><span class="functionname">WarnGUI</span></a>&gt;
+</li><li>&lt;P/1:<a href="#entity97"><span class="functionname">InfoGUI</span></a>&gt;
+</li><li>&lt;P/1:<a href="#entity98"><span class="functionname">ErrorGUI</span></a>&gt;
+</li></ul></code>
+<h3>Define</h3>
+
+<code>
+<a name="entity71">
+<span class="keyword">fun</span>{<span class="functionname">XOr</span> B1 B2}<br>
+<span class="string"> Defines exclusive or: XOr returns true if only B1 or B2 are true. XOr returns false if B1 and B2 are both false or both true.<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity72">
+<span class="keyword">fun</span>{<span class="functionname">Cases</span> X Clauses}<br>
+<span class="string"> Cases defines a general conditional similar to an 'if then elseif ...' statement. X is some datum to process dependent on boolean tests. Clauses is a list of test and action functions/methods in the form [Test1#Process1 Test2#Process2 ...]. The first test returning true for X 'fires' its Process and Cases returns the result of {Process X}. If no test returns true for X Cases returns nil.<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity73">
+<span class="keyword">fun</span>{<span class="functionname">IsFS</span> X}<br>
+<span class="string"> IsFS returns true if X is a FS variable (determined or not) and false otherwise. This function is necessary, because the primitive Oz functions FS.var.is and FS.value.is behave differently for determined and undetermined FS variables.<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity74">
+<span class="keyword">fun</span>{<span class="functionname">Identity</span> X}<br>
+<span class="string"> The Identity function returns its argument.<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity75">
+<span class="keyword">fun</span>{<span class="functionname">Random</span> Max}<br>
+<span class="string"> Returns a random integer in interval [0, Max-1]. <BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity76">
+<span class="keyword">fun</span>{<span class="functionname">RandIntoRange</span> Rand Min Max}<br>
+<span class="string"> Expects a random integer generated by {OS.rand} and returns a random integer in Min - Max (Min and Max are integers).<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity77">
+<span class="keyword">fun</span>{<span class="functionname">MakeRandomGenerator</span> }<br>
+<span class="string"> Returns a nullary function which returns a random integer each time it is called.<BR>
+ The retured random number generator is intended to be used within a constraint search script: all random values are 'recorded' behind the scene and outside the script. Therefore, such a random generator can be used, e.g., within a distribution strategy definition to randomise the decision process and the resulting script can still apply recomputation (see SDistro.makeRandomDistributionValue).<BR>
+ NB: the random number generator returns always the same sequence of random numbers. To get a different sequence, MakeRandomGenerator itself must be re-evaluated (i.e. this definition does not provide different sequences -- simply take the source itself into your CSP..).<BR>
+ TODO: to overcome this limitation set the random seed: use {OS.srand +I}<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity78">
+<span class="keyword">fun</span>{<span class="functionname">Log</span> X Base}<br>
+<span class="string"> Returns the logarithm to the base Base of X. X and Base must be floats and a float is returned.<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity79">
+<span class="keyword">fun</span>{<span class="functionname">Mod_Float</span> X1 X2}<br>
+<span class="string"> Similar to the mod operation, but arguments and return value are floats.<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity82">
+<span class="keyword">proc</span>{<span class="functionname">ToProc</span> X Res}<br>
+<span class="string"> Function ToProc transforms a method to a procedure. The argument X represents the method and its interface. X may be an atom (representing a method with no argument), or a record (e.g. representing a method with multiple arguments). For convenience, X may also be a procedure, which will be returned unchanged.<BR>
+<BR>
+ The returned procedure expects one, two or three arguments. The first argument is always the object to which the method is passed. If X is an atom, this is the only argument. E.g. <code> {ToProc test}</code> returns the procedure <code> proc {$ O} {O test} end</code>.<BR>
+<BR>
+ If the returned procedure expects more than only one argument, the last argument of the procedure is always the value at feature 1 of the method record. In the score description language, the first method feature is usually defined as the return value of the method. If the method expects only that argument, the procedure returned expects two arguments. E.g. <code> {ToProc isTest(x)} </code> results in the procedure <code> proc {$ O Result} {O test(Result)} end</code>.<BR>
+<BR>
+ If the method defines multiple arguments, all other arguments are collected in a record in the second argument of the procedure. E.g. <code> {ToProc isTest(x test:x)} </code> results in the procedure <code> proc {$ O Args Result} {O test(Result test:Args.test)} end</code>.<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity83">
+<span class="keyword">proc</span>{<span class="functionname">ToFun</span> X Res}<br>
+<span class="string"> Transforms an atom -- representing the label of a unary method -- into a unary function which expects as argument the object the method shall be send to. For convenience, X may also be a procedure, which will be returned unchanged.<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity84">
+<span class="keyword">fun</span>{<span class="functionname">Procs2Proc</span> Procs}<br>
+<span class="string"> Returns a single unary procedure which applies all elements in Procs -- a list of unary procedures -- to its argument (example application: transforms a list of unary compositional rules into a single rule).<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity81">
+<span class="keyword">proc</span>{<span class="functionname">ApplySelected</span> Procs I}<br>
+<span class="string"> The Ith element in Procs is applied. Procs is list of null-ary procedures. I is a FD integer, the domain of I is implicitly reduced to 1#{Length Procs}.<BR>
+ This is quasi a selection constraint, however, there are no constraint propagators created by ApplySelected. Instead, ApplySelected uses the deep-guard combinator Combinator.'or' instead, i.e. a backtracking-free disjunction. ApplySelected suspends until a decision is made elsewhere (e.g. by determining I or by ruling out the cause of the application of all but one procedure in Procs).<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity80">
+<span class="keyword">proc</span>{<span class="functionname">EncodeRatio</span> X Y Factor Q}<br>
+<span class="string"> Q encodes X/Y by an integer as X/Y * Factor. Possible values for X/Y depend on Factor, e.g., 1/3 can not truely be represented if Factor=2. Factor should be an determined integer. For example, if Factor=12 then Q can represent 1/6 (Q=2), 1/4 (Q=3) etc.<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity87">
+<span class="keyword">fun</span>{<span class="functionname">SelectArg</span> Feature Spec Defaults}<br>
+<span class="string"> SelectArg is a tool, e.g., to define functions with quasi optional values. SelectArg returns the value at Feature in record Spec, if Spec has this feature. Otherwise the value at Feature in the record Defaults is returned. Defaults must have this record.<BR>
+ !! Often the buildin Adjoin is a better solution: {Adjoin Defaults Args} = EffectiveArgs<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity88">
+<span class="keyword">fun</span>{<span class="functionname">TimeVString</span> }<br>
+<span class="string"> Returns a VS of the current time in the form<BR>
+ 'hour:min, day-month-year'.<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity89">
+<span class="keyword">proc</span>{<span class="functionname">GetCounterAndIncr</span> X}<br>
+<span class="string"> Return an integer and as a side effect increment the integer for the next access.<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity90">
+<span class="keyword">proc</span>{<span class="functionname">ResetCounter</span> }<br>
+<span class="string"> Resets the counter for GetCounterAndIncr.<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity85">
+<span class="keyword">proc</span>{<span class="functionname">UnarySkip</span> X}
+</code><br>
+
+<code>
+<a name="entity86">
+<span class="keyword">proc</span>{<span class="functionname">BinarySkip</span> X Y}
+</code><br>
+
+<code>
+<a name="entity91">
+<span class="keyword">fun</span>{<span class="functionname">TakeFeatures</span> R MyFeats}<br>
+<span class="string"> Fun R (a record) and MyFeats (a list of symbols -- potential features in R). TakeFeatures returns a record which consists in all features and their values of MyFeats contained in R. <BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity92">
+<span class="keyword">fun</span>{<span class="functionname">ModuleLink</span> UrlVs}<br>
+<span class="string"> ModuleLink is like Module.link except that multiple calls of ModuleLink share the same module manager (and don't create new managers as Module.link does). For instance, when ModuleLink links multiple functors which refer to a stateful datum in some functor, then all refer to the same datum instance. By constrast, linking with Module.link results into multiple stateful datum instances.<BR>
+ !! On second though, ModuleLink seems to solve a non-existing problem. ModuleLink is an attempt to avoids problems in case some functor is linked more then once in the OPI. Actually, this should happen only in two cases: either you want to create two module instances (with independent stateful data) or you want to reload a functor (e.g. after compilation) without restarting the whole program. In both cases, Module.link does the right thing. So, why did I ever need ModuleLink???<BR>
+ -> A buffer with this ModuleLink can be re-fed multiple times without problems. A call to Module.link should not be re-fed... <BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity93">
+<span class="keyword">fun</span>{<span class="functionname">ModuleApply</span> UFs}<br>
+<span class="string"> ModuleApply is like Moduel.apply expect that it always uses the same module manager (cf. ModuleLink). <BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity94">
+<span class="keyword">fun</span>{<span class="functionname">TimeSpend</span> P}<br>
+<span class="string"> Returns the time (in msecs) the application of P (a null-ary procedure) took.<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity95">
+<span class="keyword">proc</span>{<span class="functionname">Assert</span> B MyException}<br>
+<span class="string"> If B is false, then MyException is raised.<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity96">
+<span class="keyword">proc</span>{<span class="functionname">WarnGUI</span> VS}<br>
+<span class="string"> Opens a warning dialog which displays VS.<BR>
+ NB: blocks, until OK buttom is pressed, and a surrounding thread does not help against this.<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity97">
+<span class="keyword">proc</span>{<span class="functionname">InfoGUI</span> VS}<br>
+<span class="string"> Opens a warning dialog which displays VS. <BR>
+ NB: blocks, until OK buttom is pressed, and a surrounding thread does not help against this.<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity98">
+<span class="keyword">proc</span>{<span class="functionname">ErrorGUI</span> VS}<br>
+<span class="string"> Opens an error dialog which displays VS. <BR>
+ NB: blocks, until OK buttom is pressed, and a surrounding thread does not help against this.<BR>
+<BR>
+</span>
+</code><br>
+<h3>End</h3>
+</div></body>
+</html>

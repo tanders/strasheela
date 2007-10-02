@@ -1,0 +1,130 @@
+
+?? Habe das ausprobiert (siehe ./KeepMusicRepresentationOutsideSpace.oz) ohne nennenswerten Erfolg bislang 
+%% .. on 7 march 2006 I got a reply by R. Collet on a question about this..%%
+
+   -> Was wird eigentlich kopiert, wenn ein Space geclont wird?
+
+   -> Warum gibt es diesen Performanceunterschied bei StrasheelaMusicRepresentation-vs-PlainList
+
+
+1 March 2006
+
+
+How to improve efficiency of Strasheela: how to reduce the memory requirements
+===============================================================================
+
+
+* Main idea: the definition of the CSP only contains the data required: the variables and propagators etc. All other data (i.e. the whole music representation -- which does not change during the search process, only the variables are determined) is stored outside of the script.
+
+
+* All actual variables of a CSP are stored in a tuple VariablesTuple. This tuple is local to a CSP script. All variables are accessible by a numeric index within the tuple. [does a variable need to know its index??]
+
+  - the variables are created within the script, but the information to create this variables should be created outside the script 
+  
+    + the info for the vars needs two specifications: the 'type' of the domain and the domain spec of the var: this info can be stored in a tuple (which is later used to create the vars by mapping)
+
+      unit(fd#dom(1#10) fd#dom([1 8#10 12]))
+
+
+    + when creating this var decl info, the number of vars which shall be included can already be reduced. E.g., all vars with only a single domain value (i.e. determined vars) could be excluded, as could be vars which may be irrelevant for the CSP (i.e. the amplitude of a note) 
+
+
+* A score in the Strasheela music representation becomes a ScoreSkeleton. The representation remains in principle as is, except for a lot of relatively little changes: 
+
+  - all variables are replaced by a data structure VariablePointer which contains a numeric index for its variable (and possibly further info such as the 'type' of the variable [e.g. FD or FS], and its initial domain)
+
+  - all former accessors to variables (e.g. {MyPitchParameter getValue($)}) are replaced by accessors which always expects a VariablesTuple as additional argument (e.g. {MyPitchParameter getValue($ VariablesTuple)})
+
+  - all methods which make use of these accessors (i.e. very many methods) must be redefined accordingly (e.g. {MyNote getPitch($ VariablesTuple)} or {MyNote getSimultaneousItems($ VariablesTuple test:Test)})
+
+
+
+* Consequently, the actual music representation always consists in two parts then: the VariablesTuple and the ScoreSkeleton. In a CSP solution, all variables in the VariablesTuple are determined, a partial solution / undetermined solution contains undetermined variables in the VariablesTuple.
+
+  -> These two information pieces allow to query the score as before (with slight syntactic changes, see above). 
+
+
+* Constraints are defines as before. Only the constraint application changes.  
+
+  Constraints are only actually applied in the script (or in procedures which are called in the script..). 
+
+  - All constraint applications are called by a 'wrapper' ApplyConstraint
+
+  {ApplyConstraint <Constraint> <ListOfVariablePointers> <VariablesTuple>}
+
+  ApplyConstraint expects a procedure, a list of VariablePointers (with the same length as the procedure arity) and the VariablesTuple. ApplyConstraint works well with all convenient higher-order rule application meachanisms, e.g.
+
+ 
+   {For2Neighbours MyPitches 
+    proc {$ Pitch1 Pitch2} {ApplyConstraint MyRule [Pitch1 Pitch2] VariablesTuple} end}
+
+
+   !! A rule which expects score objects is still applied as before, but inside the rule constraints to variables are applied by ApplyConstraint
+  
+
+  (ApplyConstraint can be defined easily with Procedure.apply)
+
+
+  - constraints / rules which create local variables can do so as before as long as the constraint/rule is only called within the script. To allow the application of contraints to such local variables, ApplyConstraint must be extended slightly: the list of VariablePointers may also contain constrained variables. The definition of ApplyConstraint checks and substitutes only VariablePointers and uses the actual variables as is, e.g.
+
+  {ApplyConstraint FD.lesseq [VarPointer ConstrainedVar] VariablesTuple}
+
+  
+
+    
+  
+
+
+* Some constraints applications are prepared outside the script in the initialisation process of the music representaiton (e.g. the 'wellformedness' constraints between temporal parametes). Still, these constraints are only prepared and not applied yet.
+
+  A prepared constraint application is a pair Constraint#ListOfVariablePointers. Examples: 
+  
+    - FD.lesseq#[Pitch1 Pitch2]
+
+    - Pattern.contour#[[Pitch1 Pitch2 .. Pitch6] [Dir1 .. Dir5]]
+
+
+
+  -> Wo werden prepared constraints gespeichert? In ExtendableList? ExtendableList auch global gespeichert und wird jeder init method uebergeben (d.h. )
+
+    
+      {Score.makeScore note(pitch:proc {$} {FD.int 60#72} end 
+       unit
+       PreparedConstraintsList)}
+
+
+   -> diese extendable list auch in script zugreifbar und wird dort abgearbeitet
+
+
+
+  [Constraint1#ListOfVariablePointers1 ... ConstraintN#ListOfVariablePointersN]
+
+
+  
+
+
+  * So far, the music representation applied some constraints during its initialisation (e.g. the 'wellformedness' constraints between temporal parametes). The optimised Strasheela provides the same convenience of constraints which are implicit in the music representation. These constraints are not applied directly but stored in a 
+
+
+
+
+
+* As before, a score distribution expects a list of parameters, but also the VariablesTuple. 
+  - Because these two information pieces allow to query the score as before, all distribution strategies already defined can be adapted  
+
+  - A distribution strategy order function decides for a specific parameter as before. Then, the variable index stored in the parameter is used to access the actual variable from the VariablesTuple which is then distributed by executing the value function etc.
+ 
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+ 
+-> how to redefine init method arguments which expect variables?
+
+     {Score.makeScore note(pitch:{FD.int 60#72} unit)}
+
+
+   -> das ist im Grunde eine Constraints application und muss entsprechend behandelt werden..
+

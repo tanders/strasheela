@@ -1,0 +1,357 @@
+
+%% !! tmp: more debug info
+%\setcounter{errorcontextlines}{\maxdimen}
+
+%\usepackage{babel}
+\usepackage[english]{babel} 
+\usepackage[T1]{fontenc}
+\usepackage[latin1]{inputenc}
+
+\newcommand{\comment}[1]{}
+
+\setlength\parskip{\medskipamount}
+\setlength\parindent{0pt}
+
+
+%% Zeilenabstand
+\usepackage{setspace}
+%\doublespacing
+%\setstretch{1.5}
+
+%% page margins as perscribed by QUB (does this already imply binding offset?)
+\usepackage[lmargin=4cm,rmargin=2.5cm]{geometry}
+%\usepackage[bindingoffset=1cm,lmargin=4cm,rmargin=2.5cm]{geometry}
+
+%% to print a page presenting current page layout for testing
+\usepackage{layouts}
+\newcommand\showpage{%
+  %\setlayoutscale{0.25}\setlabelfont{\tiny}%
+  \setlayoutscale{0.5}\setlabelfont{\tiny}%
+  \printheadingsfalse\printparametersfalse
+  \currentpage\pagedesign}
+
+%\usepackage{color}
+\usepackage{graphicx}
+
+\frenchspacing
+% almost europeen fonts (etwa T1)
+\usepackage{ae,aecompl}
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+%\usepackage{stmaryrd}
+
+%% changes all fonts (incl. math)
+%\usepackage{pxfonts}
+%\usepackage{txfonts}
+
+\usepackage{fancybox}           % for Bflushleft
+\usepackage{fancyvrb}
+%\DefineShortVerb{\+}
+%\usepackage{verbatim}
+%\newcommand{\code}[1]{\begin{Verbatim}#1\end{Verbatim}}
+
+% \usepackage{algorithmicx}
+
+\usepackage{booktabs}      
+
+%% for rotating floats (environments sidewaysfigure and sidewaystable)
+\usepackage{rotating}
+
+
+%%
+%% all copied and edited from clrscode.sty
+%%
+\newcommand{\TextHyphens}{\mathcode`\-=`\-\relax}
+%\newcommand{\id}[1]{\ensuremath{\mathop{\mathit{\TextHyphens#1}}\nolimits}}
+\newcommand{\id}[1]{\ensuremath{\mathit{\TextHyphens#1}}}
+% Command for typesetting subarray ranges.
+% \newcommand{\twodots}{\mathinner{\ldotp\ldotp}}
+
+
+\comment{
+%% fancy chapter heading with quote
+\usepackage[avantgarde]{quotchap} 
+\renewcommand\chapterheadstartvskip % quote and chap number on same level
+             {\vspace*{-5\baselineskip}}
+%% !! this changes all header fonts..
+%\usepackage{helvet} % select Helvetica for title and quote
+%\renewcommand\sectfont{\sffamily\bfseries}
+}
+
+%\usepackage{showkeys} % to debug references
+
+%% defines commands like \vref, see Latex Companion pp. 68 ff
+%% !! tmp comment and new def \vref to aviod rendering hassles
+%\usepackage{varioref} 
+\newcommand{\vref}[1]{\ref{#1}}
+
+%% for BNF
+\usepackage{syntax}
+\setlength{\grammarparsep}{5.0pt plus1.0pt minus1.0pt} % default: 8.0pt plus1.0pt minus1.0pt
+\setlength{\grammarindent}{10 em} % default: 2 em
+
+%% to change appearance of upcode ' in \tt (to avoid confusing ` and ')
+%\usepackage{upquote} 
+
+%\usepackage[numbers,square,sort]{natbib}
+\usepackage[authoryear,square]{natbib} % ,sort
+%\usepackage{chicago}
+\bibliographystyle{chicago}
+%\bibliographystyle{plainnat}
+\newcommand{\citeauthorp}[1]{[\citeauthor{#1}]}
+
+\usepackage{float}
+\floatstyle{boxed}
+%\newfloat{BNF}{htb}{bnf}
+\restylefloat{figure}
+\floatplacement{figure}{htb} % H
+
+
+%% defs \FloatBarrier, forcing float output before a certain point in the text
+\usepackage[below,above]{placeins} 
+
+%% I figure, listings package needs update to support Oz lang
+% \usepackage{listings}
+% \lstset{language=oz,
+% %frame=single,
+% numbers=left,numberstyle=\tiny,stepnumber=5, numbersep=5pt,
+% columns=flexible, % fixed, fullflexible, 
+% % basicstyle=\tt % no \bfseries for keywods
+% basicstyle=\small\sf, % no keyword highlighting
+% keywordstyle=\bfseries,
+% %identifierstyle=\bfseries, % almost everything is a var in Oz...
+% commentstyle=\emph,
+% showstringspaces=false}
+
+
+%\setcounter{tocdepth}{1}
+%\setcounter{tocdepth}{5}        % tmp 
+\setcounter{secnumdepth}{4}
+\setcounter{tocdepth}{2}
+%\setcounter{tocdepth}{3}
+% \setcounter{tocdepth}{1}
+
+% for pdftex only
+% \pdfinfo{ 
+%%   /Title (Constraint based computer assisted composition using the Oz programming model) 
+%   %/Creator (TeX) 
+%   %/Producer (pdfTeX 0.15a) 
+%   /Author (Torsten Anders) 
+%   %/CreationDate (D:19980212201000) 
+%   %/ModDate (D:19980212201000) 
+%   %/Subject (Example) 
+%   /Keywords (Computer Assisted Composition, Constraint Programming) }
+
+%% index creation
+%\usepackage{makeidx}
+%\makeindex
+
+
+%% line numbers (used for formulas)
+
+\comment{
+% Verhindern von "Schusterjungen" und "Hurenkindern"
+\clubpenalty = 10000
+\widowpenalty = 10000
+\displaywidowpenalty = 10000
+\tolerance=500 %Zeilenumbruch
+}
+
+
+%%
+%% customise description environment
+%%
+\renewcommand\descriptionlabel[1]%
+  {\hspace{\labelsep}\textsf{#1}:} %% sans serif
+%  {\hspace{\labelsep}\emph{#1}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+%%
+%% Torstens Defs
+%%
+
+%% '@' is usually a LaTeX special char. The commands \makeatletter and \makeatother are used to mark a block of code where it is to be treated as 'normal'.
+
+%\makeatletter
+
+\newcommand{\code}[1]{\texttt{#1}}
+
+\newcommand{\graphic}[3]
+{\begin{figure}
+    \centering
+    %% !!?? Give the correct figure height and width in cm
+    %% instead I am scaling the figure
+    \includegraphics[scale=#2]{#1} #3
+  \end{figure}}
+
+\newenvironment{unfinished}{\begin{quote} {\bf unfinished:\\} \ttfamily}{\end{quote}}
+
+
+%% 
+%% for pretty printing logic relations etc. (some of these definition may actually never be needed and could be removed)
+%%
+
+% \DeclareMathOperator{\fun}{fun}
+
+%% only within math mode: defines fun on single line
+%\newcommand{\AnonymousFun}[2]{\lambda \: #1 \mathrel{.} #2}
+%\newcommand{\AnonymousFun}[2]{\mathop{\lambda} #1 \mathrel{.} #2}
+%\newcommand{\AnonymousFun}[2]{\lambda \: (#1) \mathrel{.} #2}
+%\newcommand{\AnonymousFun}[2]{\fn \: (#1) \mapsto #2}
+%\newcommand{\AnonymousFun}[2]{\fun \: #1 \mapsto #2}
+% \newcommand{\AnonymousFun}[2]{\fun \: (#1) \mapsto #2}
+%\newcommand{\AnonymousFun}[2]{#1 \mapsto #2}
+
+%% only outside math mode
+\newcommand{\Comment}[1]{{\footnotesize\sffamily\slshape /* #1 \hfill */}} %% \\
+%\newcommand{\Comment}[1]{\ensuremath{text{\footnotesize\sffamily\slshape /* #1 \hfill */}}} %% \\
+%\newcommand{\Comment}[1]{\ensuremath{\mathsf{/* #1 \hfill */}}} %% \\
+
+%\newcommand{\MathComment}[1]{\mathrm{/* #1 \hfill */}} %% \\
+%\newcommand{\MathComment}[1]{\parbox[t]{\textwidth}{/* #1 \hfill */}} 
+%% optional arg is parbox width
+%\newcommand{\MathComment}[1]{\mbox{\parbox{\footnotesize\sffamily\slshape /* #1 \hfill */}}} 
+\newcommand{\MathComment}[2][\textwidth]{\parbox[t]{#1}{\footnotesize\sffamily\slshape /* #2 \hfill */}} 
+%\newcommand{\AndNl}{\hfill $\wedge$\\}
+\newcommand{\AndNl}{$\wedge$\\}
+%\newcommand{\Def}{\ensuremath{\stackrel{\id{def}}{=}}}
+\newcommand{\Def}{\ensuremath{\stackrel{\scriptscriptstyle\id{def}}{=}}}
+%\newcommand{\Def}{\ensuremath{\equiv}}
+%\newcommand{\Def}{\ensuremath{:=}} % spacing
+%\newcommand{\Def}{\ensuremath{\triangleq}}
+%\newcommand{\MyBox}[1]{\parbox[t]{\textwidth}{#1}}
+%% !! Hoehe 8pt abhaengig von Zeichengroesse!!
+%\newcommand{\MyBox}[1]{\raisebox{8pt-\height}{\shortstack[l]{#1}}}
+%\newcommand{\MyBox}[2]{\begin{Bflushleft}[t]#1#2\end{Bflushleft}}
+%% doc: usage requires '&' in each line
+\newcommand{\MyBox}[2]{\ensuremath{\begin{aligned}[t]#1#2\end{aligned}}}
+%% idea from L. Lamport (How to write a long formula)
+%% doc: usage does _not_ require '&' 
+% \newcommand{\MyBoxB}[2]{%
+%   \ensuremath{%
+%     \begin{array}[t]{@{}l@{\hspace*{.5em}}l@{}}
+%       & \begin{array}[t]{@{}l@{}}
+%         #1#2
+%       \end{array}
+%     \end{array}}}
+%\newcommand{\MyBox}[2]{\ensuremath{\begin{array}[t]{l}#1#2\end{array}}}
+%% \Apply{fun}{args}{following in last line} write fun call which allows nicely aligned line breaks in args 
+%% fun is implicitly in math mode
+%\newcommand{\Apply}[2]{$#1($ \parbox[t]{\textwidth}{#2$)$}}
+%\newcommand{\Apply}[3]{\ensuremath{#1\MyBox{(#2)}{#3}}}
+\newcommand{\Apply}[3]{\ensuremath{#1\MyBox{(#2)}{#3}}}
+%\newcommand{\Apply}[3]{\ensuremath{#1\MyBox{(#2}{#3)}}}
+%% \DefFun{fun(args)}{body}{following in last line}
+%% fun(name) is implicitly in math mode
+%\newcommand{\DefFun}[2]{\parbox[t]{\textwidth}{$#1 =$ \\ \Indent \parbox[t]{\textwidth}{#2}}}
+%\newcommand{\DefFun}[3]{\ensuremath{\MyBox{\id{#1} \Def \: \\ \Indent \MyBox{#2}{#3}}}}
+%\newcommand{\Defun}[3]{\ensuremath{\MyBox{&#1 \Def \: \\ &\Indent \MyBox{#2}{#3}}{}}}
+\newcommand{\Defun}[3]{\ensuremath{#1 \Def \MyBox{#2}{#3}{}}}
+\newcommand{\DefunB}[3]{\ensuremath{\MyBox{&#1 \Def \\&\Indent\MyBox{#2}{#3}{}}{}}}
+%% variant for \DefFun for completeness for fun defs on a single line
+%\newcommand{\DefunL}[2]{\ensuremath{\id{#1} \Def \:#2}}
+%% creates a list which allows nicely aligned line breaks
+%\newcommand{\List}[1]{$[$\parbox[t]{\textwidth}{#1}$]$}
+\newcommand{\List}[2]{\ensuremath{\MyBox{[#1]}{#2}}}
+%% creates a set which allows nicely aligned line breaks
+\newcommand{\Set}[2]{\ensuremath{\MyBox{\{#1\}}{#2}}}
+%% !! check amsmath for alternative formatting ways (skimmed doc: probably no easy better way..)
+\newcommand{\DefPredicate}[3]{
+  \begin{minipage}{\textwidth} 
+    $\forall \: #2 :$ {\itshape\bfseries #1}$(#2) \leftrightarrow$ \\
+    %% max breite ist breite der Seite, mit \\ umbruch moeglich
+    \Indent\begin{minipage}{\textwidth}  
+      #3
+    \end{minipage}
+  \end{minipage}
+  \vspace{2 ex}}
+% \newcommand{\Let}[2]{
+%   $\exists \: #1$ : \\
+%   \Indent\begin{minipage}{\textwidth}  
+%     #2
+%   \end{minipage}}
+%% from L. Lamport (How to write a long formula)
+\newcommand{\Let}[2]{%
+  \ensuremath{%
+    \begin{array}[t]{@{}l@{\hspace*{.5em}}l@{}}
+      {\bf let} & \begin{array}[t]{@{}l@{}}
+                    #1
+                  \end{array}\\
+      {\bf in} & #2
+    \end{array}}}
+%\newcommand{\Apply}[2]{$#1$(#2)}
+% \newcommand{\If}[2]{
+%   {\sffamily\bfseries if} $#1$ \\
+%   %% max breite ist breite der Seite, mit \\ umbruch moeglich
+%   \Indent\begin{minipage}{\textwidth}  
+%     {\sffamily\bfseries then} #2
+%   \end{minipage}}
+% \newcommand{\IfElse}[3]{
+%   {\sffamily\bfseries if} $#1$ \\
+%   %% max breite ist breite der Seite, mit \\ umbruch moeglich
+%   \Indent\begin{minipage}{\textwidth}  
+%      {\sffamily\bfseries then} #2 \\
+%      {\sffamily\bfseries else} #3
+%   \end{minipage}}
+%% in math mode (only functional use)
+\newcommand{\IfL}[3]{\ensuremath{\mathbf{if} \: #1 \: \mathbf{then} \: #2 \: \mathbf{else} \: #3}}
+\newcommand{\If}[3]{%
+  \ensuremath{%
+    \begin{array}[t]{@{}l@{\hspace*{.5em}}l@{}}
+      {\bf if} & #1\\
+      {\bf then} & #2\\
+      {\bf else} & #3\\
+    \end{array}}}
+% \newcommand{\ForAll}[2]{$\forall \: #1 $ : \\
+%   \Indent\begin{minipage}{\textwidth}  
+%     #2
+%   \end{minipage}} 
+%% unfinished def
+%\newcommand{\ForAll}[3]{\ensuremath{\MyBox{\forall \: #1 $ : \\ \MyBox{#2}{#3}}{}}
+%\newcommand{\Symbol}[1]{\mbox{\sf #1}}
+%\newcommand{\Sym}[1]{\mbox{\sf #1}} % alias for \Symbol
+\newcommand{\Indent}{\hspace*{2 ex}}
+\newcommand{\I}{\hspace*{2 ex}}
+%% in math mode
+\renewcommand{\And}{\ensuremath{\wedge}}
+\newcommand{\AllTrue}{\ensuremath{\mathop{\bigwedge}}}
+\newcommand{\Or}{\ensuremath{\vee}}
+\newcommand{\Impl}{\ensuremath{\Rightarrow}}
+\newcommand{\Equi}{\ensuremath{\Leftrightarrow}}
+%\renewcommand{\Not}{\ensuremath{\neg}}
+
+%\newcommand{\BooleanEq}{\stackrel{\mathrm{b}}{=}}
+%\newcommand{\UnifyEq}{\stackrel{\mathrm{u}}{=}}
+
+%% overwrite AMS colon def: simple punctuation sign
+\renewcommand{\colon}{\ensuremath{\mathpunct{:}}}
+
+
+%% fuer einen kl. Zeilenzwischenraum (in App. tables..)
+%\newcommand{\minivspace}{\vspace{0.3 em}}
+%% Zeilenumbruch mit etwas groesserem Zwischenraum danach
+% \newcommand{\skippingNl}{\vspace{0.3 em}\\}
+
+
+
+%\makeatother
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\hyphenation{Stra-shee-la}
+
+
+\usepackage{url}
+% must be the last package loaded
+% draft disables hyperref
+\usepackage{hyperref}
+
+
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: "TorstenAnders-PhDThesis"
+%%% End: 

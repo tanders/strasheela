@@ -1,0 +1,307 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<html>
+ <head>
+  <title>Measure</title>
+  <style>BODY {
+ background: url(page.gif) repeat-y white;
+}
+#slidemenubar, #slidemenubar2{
+ position:absolute;
+ left:-144px;
+ width:160px;
+ top:10px;
+ border:0px solid black;
+ font:bold 12px Verdana;
+ line-height:10px;
+}
+.margin {
+ position: absolute;
+ left: 10px;
+ width: 130px;
+}
+BODY, P, H1, H2, H3, A {
+ font-family: sans-serif;
+}
+PRE, CODE {
+ font-family: courier, monospace;
+}
+P {
+ text-align: justify;
+}
+H1     { color: #9B0000; }
+H2     { color: #FF9933; }
+H3, H4 { color: #881155; }
+CODE              { color: #663366; }
+.code CODE        { color: #000000; }
+SPAN.comment      { color: #B22222; }
+SPAN.keyword      { color: #A020F0; }
+SPAN.string       { color: #BC8F8F; }
+SPAN.functionname { color: #0000FF; }
+SPAN.type         { color: #228B22; }
+SPAN.variablename { color: #B8860B; }
+SPAN.reference    { color: #5F9EA0; }
+SPAN.builtin      { color: #DA70D6; }
+A:link {
+ color: #666666;
+}
+A:visited {
+ color: black;
+}
+A.pre { font-family: courier, monospace;
+ color: #228B22;
+}
+</style>
+ </head>
+<body>
+<script language="JavaScript1.2">
+if (document.all)
+document.write('<div id="slidemenubar2" style="left:-144" onMouseover="pull()" onMouseout="draw()">')
+</script>
+<layer id="slidemenubar" onMouseover="pull()" onMouseout="draw()">
+<table border="0" cellpadding="0" cellspacing="0" width="161"><tr><td bgcolor="#009cff" width="144"><a href="index.html">Index</a>
+</td><td rowspan="2" valign="top" width="16"><img src="menu.gif" width="16"></td></tr><tr><td bgcolor="#009cff" width="144"><a href="node1.html">Measure</a>
+</td></tr></table></layer>
+<script language="JavaScript1.2">
+function regenerate(){
+window.location.reload()
+}
+function regenerate2(){
+if (document.layers)
+setTimeout("window.onresize=regenerate",400)
+}
+window.onload=regenerate2
+if (document.all){
+document.write('</div>')
+themenu=document.all.slidemenubar2.style
+rightboundary=0
+leftboundary=-144
+}
+else{
+themenu=document.layers.slidemenubar
+rightboundary=144
+leftboundary=0
+}
+function pull(){
+if (window.drawit)
+clearInterval(drawit)
+pullit=setInterval("pullengine()",20)
+}
+function draw(){
+clearInterval(pullit)
+drawit=setInterval("drawengine()",50)
+}
+function pullengine(){
+if (document.all&&themenu.pixelLeft<rightboundary)
+themenu.pixelLeft+=5
+else if(document.layers&&themenu.left<rightboundary)
+themenu.left+=5
+else if (window.pullit)
+clearInterval(pullit)
+}
+function drawengine(){
+if (document.all&&themenu.pixelLeft>leftboundary)
+themenu.pixelLeft-=5
+else if(document.layers&&themenu.left>leftboundary)
+themenu.left-=5
+else if (window.drawit)
+clearInterval(drawit)
+}
+</script>
+
+<div style="margin-left:160px"><span class="string">
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"></span>
+</span>
+<h3>Functor</h3>
+<ul>Measure ("<span class="string">Measure.oz</span>")<br></ul>
+<h3>Import</h3>
+<code><ul><li>FD</li><li>FS</li><li>Browser(browse:Browse)</li><li>Score at "<span class="string">x-ozlib://anders/strasheela/source/ScoreCore.ozf"
+</span></li><li>Pattern at "<span class="string">x-ozlib://anders/strasheela/Pattern/Pattern.ozf"
+</span></li></ul></code>
+<h3>Export</h3>
+<code><ul><li>&lt;C:<a href="#entity7"><span class="type">Measure</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity8"><span class="functionname">IsMeasure</span></a>&gt;
+</li><li>&lt;C:<a href="#entity10"><span class="type">UniformMeasures</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity11"><span class="functionname">IsUniformMeasures</span></a>&gt;
+</li></ul></code>
+<h3>Define</h3>
+
+<a name="entity7">
+<p class="margin"><div align="right"><a href="class1.html">[class info]</a></div></p>
+<code>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> Measure is a silent timed element representing the meter of a score for the duration of the Measure. Measures are contained in a silent MeasureSeq/UniformMeasures and a MeasureSeq/UniformMeasures runs in parallel to the actual (i.e. sounding) score. That way, the metric structure is freely constrainable independent of other parameters and the hierarchic structure of the rest of the score. <BR>
+ The Measure parameters 'beatNumber' and 'beatDuration' represent the meter of the measure. For instance, in case the time unit of the score is beats(4) and 4 represents a quarter note (see doc Score.timeMixin) then the meter 3/8 is represented by beatNumber=3 and beatDuration=2. Usually, beatDuration will equal the number of ticks per beat defined in the time unit of the score (exceptions are needed in case the score contains measures with different beat durations).<BR>
+ The attribute 'beats' (a list of FD ints) represents the relative startTimes of the beats in the measure. For instance, in case beatNumber=3 and beatDuration=2 then beats=[0 2 4].<BR>
+ The attribute 'accents' (a list of FD ints) represents the relative startTimes of the strong beats in the measure. The strong beats depend on the beatNumber of the measure. The accent patterns in common praxis music are highly standardised (e.g. the meter 4/4 has strong beats on the first and the third beat). Nonetheless, Measure allows to freely define these accent patterns for each possible beatNumber value for each Measure at the optional init method argument 'accentIdxDB'. This argument expects a record (with only integer features) of lists of integers to specify an accent pattern for each beatNumber. For instance, the specification of the common praxis tripel and quadruple meter is unit(3:[1] 4:[1 3]).<BR>
+ The default of 'accentIdxDB' defines the usual common praxis accent patterns for single (1/2, 1/4, 1/8), duple (2/2, 2/4, 2/8), triple (3/2, 3/4, 3/8), and quadruple (4/2, 4/4, 4/8) meter, as well as compound duple (6/2, 6/4, 6/8), compound triple (9/4, 9/8), and compound quadruple (12/4, 12/8, 12/16) meter. The compound meters may also be used to express 'prolatione perfecta' for old music, while the non-coumpound meters express 'prolatione imperfecta'. For the quintuple meter (5/4 etc.), the accent pattern 3/4 + 2/4 is the default. <BR>
+  NB: the initialisation constraints for both beats and accents are delayed until beatNumber is determined (i.e. in a CSP the beatNumber of each beat is either predetermined or the distribution strategy should determine all beatNumbers before other parameter values which are related to the measure by constraints).<BR>
+<BR>
+</span>
+<span class="keyword">class</span> <span class="type">Measure</span>&nbsp;<span class="keyword">from</span>&nbsp;<span class="reference">Score.temporalElement</span>
+<br>&nbsp;&nbsp;&nbsp;<span class="keyword">feat</span>&nbsp;!MeasureType&nbsp;label
+
+<ul><li><span class="functionname">init</span>(accentIdxDB:AIs beatDuration:BeatDuration beatNumber:BeatNr&nbsp;...)<br>
+</li><li><span class="functionname">getBeatNumber</span>(X)<br>
+</li><li><span class="functionname">getBeatNumberParameter</span>(X)<br>
+</li><li><span class="functionname">getBeatDuration</span>(X)<br>
+</li><li><span class="functionname">getBeatDurationParameter</span>(X)<br>
+</li><li><span class="functionname">getBeats</span>(X)<br>
+</li><li><span class="functionname">getBeatsFS</span>(X)<br>
+</li><li><span class="functionname">getAccents</span>(X)<br>
+</li><li><span class="functionname">getAccentsFS</span>(X)<br>
+</li><li><span class="functionname">getInitInfo</span>($ exclude:Excluded)<br>
+</li></ul>
+<span class="keyword">end</span>
+</code><br>
+
+<code>
+<a name="entity8">
+<span class="keyword">fun</span>{<span class="functionname">IsMeasure</span> X}
+</code><br>
+
+<a name="entity10">
+<p class="margin"><div align="right"><a href="class2.html">[class info]</a></div></p>
+<code>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> B=1 <-> Time equals the start time of some measure in UniformMeasures.<BR>
+   */<BR>
+ 	 meth onMeasureStartR(Time B)<BR>
+ 	    {Pattern.disjAll<BR>
+ 	     {self mapItems($ proc {$ MyMeasure B} <BR>
+ 				 B = {FD.int 0#1}<BR>
+ 				 B =: ({MyMeasure getStartTime($)} =: Time)<BR>
+ 			      end)}<BR>
+ 	     B}<BR>
+ 	 end<BR>
+<BR>
+ 	 /** %% B=1 <-> Time equals some strong beat in of some measure in UniformMeasures.<BR>
+ NB: onAccentR blocks until all beatNumber of all Measures in self are determined.<BR>
+ */<BR>
+ !! failure if Time < some MyMeasure start <BR>
+ 	 meth onAccentR(Time B)<BR>
+ !!?? implicitly constraints/determines beatDuration of preceeding measure(s)<BR>
+ 	    {Pattern.disjAll<BR>
+ 	     {self mapItems($ proc {$ MyMeasure B}<BR>
+ 				 MeasureStart = {MyMeasure getStartTime($)}<BR>
+ 			      in<BR>
+ 				 B = {FD.int 0#1}<BR>
+ !!?? does FS.reified.include determine stuff too easily?<BR>
+ 				 B =: {FS.reified.include<BR>
+ 				       {TimeInMeasure Time MeasureStart}<BR>
+ 				       {MyMeasure getAccentsFS($)}}<BR>
+ 			      end)}<BR>
+ 	     B}<BR>
+ 	 end<BR>
+<BR>
+ 	 /** %% B=1 <-> Time equals some beat in of some measure in UniformMeasures.<BR>
+ NB: onBeatR blocks until all beatNumber of all Measures in self are determined.<BR>
+ */<BR>
+ !! failure if Time < some MyMeasure start <BR>
+ 	 meth onBeatR(Time B)<BR>
+ 	    {Pattern.disjAll<BR>
+ 	     {self mapItems($ proc {$ MyMeasure B}<BR>
+ 				 MeasureStart = {MyMeasure getStartTime($)}<BR>
+ 			      in<BR>
+ 				 B = {FD.int 0#1}<BR>
+ 				 B =: {FS.reified.include<BR>
+ 				       {TimeInMeasure Time MeasureStart}<BR>
+ 				       {MyMeasure getBeatsFS($)}}<BR>
+ 			      end)}<BR>
+ 	     B}<BR>
+ 	 end<BR>
+<BR>
+ Between Start and End starts a new measure<BR>
+       meth syncopatedR(Start End B)<BR>
+       end<BR>
+<BR>
+ !!?? why is this needed only to have the correct label?<BR>
+<BR>
+ !!?? info:nil could be left out<BR>
+<BR>
+ !!?? timeUnit is left out!<BR>
+ 	 meth toInitRecord(?X exclude:Excluded<=nil)<BR>
+ 	    X = {Adjoin<BR>
+ 		 Score.sequential, toInitRecord($ exclude:Excluded)<BR>
+ 		 {Record.subtractList<BR>
+ 		  {self makeInitRecord($ nil)}<BR>
+ 		  Excluded}}<BR>
+ 	 end<BR>
+<BR>
+       end<BR>
+    end<BR>
+    fun {IsMeasureSeq X}<BR>
+       {Object.is X} andthen {HasFeature X MeasureSeqType}<BR>
+    end <BR>
+<BR>
+<BR>
+<BR>
+    local<BR>
+ !! blocks until measure duration is determined<BR>
+       proc {TimeInMeasure Time MeasureDur ?RelTime}<BR>
+ 	 RelTime = {FD.decl}<BR>
+ 	 RelTime =: {FD.modI Time MeasureDur}<BR>
+       end<BR>
+    in<BR>
+<BR>
+/** %% UniformMeasures is silent timed element representing a constant meter of a score for the duration of the UniformMeasures. The parameter 'n' represents the number of measures. The parameter 'beatNumber' and 'beatDuration' represent the meter as in Measure. The further measure parameters and features (e.g. 'beats' and 'accents') are accessible by the same methods as in Measure. However, there is a difference between getDuration and getMeasureDuration: the first returns the duration of the whole  UniformMeasures the second the duration of a single measure.<BR>
+ The similar class MeasureSeq allows to represent a sequence of measures which differ in beatNumber or beatDuration. However, this makes the constraints for MeasureSeq less efficient then the constraints for UniformMeasures.<BR>
+<BR>
+ NB: The constraints defined for UniformMeasures required both BeatNr and BeatDuration to be determined.<BR>
+<BR>
+ See the Measures doc for more info.<BR>
+<BR>
+</span>
+<span class="keyword">class</span> <span class="type">UniformMeasures</span>&nbsp;<span class="keyword">from</span>&nbsp;<span class="reference">Score.temporalElement</span>
+<br>&nbsp;&nbsp;&nbsp;<span class="keyword">feat</span>&nbsp;!UniformMeasuresType&nbsp;label
+
+<ul><li><span class="functionname">init</span>(beatDuration:BeatDuration beatNumber:BeatNr n:N&nbsp;...)<br>
+</li><li><span class="functionname">getN</span>(X)<br>
+</li><li><span class="functionname">getNParameter</span>(X)<br>
+</li><li><span class="functionname">getBeatNumber</span>(X)<br>
+</li><li><span class="functionname">getBeatNumberParameter</span>(X)<br>
+</li><li><span class="functionname">getBeatDuration</span>(X)<br>
+</li><li><span class="functionname">getBeatDurationParameter</span>(X)<br>
+</li><li><span class="functionname">getBeats</span>(X)<br>
+</li><li><span class="functionname">getBeatsFS</span>(X)<br>
+</li><li><span class="functionname">getAccents</span>(X)<br>
+</li><li><span class="functionname">getAccentsFS</span>(X)<br>
+</li><li><span class="functionname">getMeasureDuration</span>(X)<br>
+</li><li><span class="functionname">getMeasureAt</span>(I Time)<br>
+</li><li><span class="functionname">onMeasureStartR</span>(B Time)<br>
+</li><li><span class="functionname">onMeasureStartDR</span>(B Time)<br>
+</li><li><span class="functionname">onAccentR</span>(B Time)<br>
+</li><li><span class="functionname">onAccentDR</span>(B Time)<br>
+</li><li><span class="functionname">onBeatR</span>(B Time)<br>
+</li><li><span class="functionname">onBeatDR</span>(B Time)<br>
+</li><li><span class="functionname">overlapsBarlineR</span>(B Start End)<br>
+</li><li><span class="functionname">getInitInfo</span>($ exclude:Excluded)<br>
+</li></ul>
+<span class="keyword">end</span>
+</code><br>
+
+<code>
+<a name="entity11">
+<span class="keyword">fun</span>{<span class="functionname">IsUniformMeasures</span> X}
+</code><br>
+<h3>End</h3>
+</div></body>
+</html>

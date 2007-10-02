@@ -1,0 +1,277 @@
+
+* Strasheela OSC interface design 
+
+
+*** OSC interface
+
+**** TODO [90%] interface to sendOSC and dumpOSC
+
+  - netcat => Oz via UDP
+
+  - Stasheela environment variables for all application pathes etc
+
+  - !!?? make SendOSC and DumpOSC more symmetric? one is instance of Out.shell and the other contains instance of socket
+    !!?? should I change SendOSC also just to contain an Out.shell??	    
+
+  - which commands etc shall be echoed at stdout?
+
+  - !!?? shall xterm window echo received OSC messages (i.e. print the dumpOSC output)?
+
+  - How shall I close sockets etc. BTW: the DumpOSC method close does not fully work (e.g., xterm window is not closed)
+  
+  - check for any other !! in source, indicating problems..
+
+  
+**** DONE Test interface: measure how it takes for a message around Oz -> OSC -> Oz
+
+**** DONE in SuperCollider: OSC processing template: input and output (including scheduling)
+
+**** TODO [50%] in Pd: OSC processing template: input and output (including scheduling)
+
+**** TODO Test interface + template: measure how it takes for a message around Oz -> OSC -> SC -> OSC -> Oz
+
+**** DONE Design data structure for OSC in Oz (cf. SC data..), with time stamps. record based? (see Strasheela OSC score format in this document)
+
+**** DONE OSC data structure <-> Strasheela score (user-controllable transformation)
+
+**** DONE parse dumpOSC output into Oz OSC data structure
+
+**** DONE Oz OSC data structure as input to sendOSC (with time stamps)
+
+
+**** TODO [70%] buffering of realtime OSC input and transformation into Strasheela score on demand
+
+Check parsing and processing of timetags
+
+Fix generation of timetags (only integer seconds processed now..)
+
+**** DONE Create proper contribution with makefile.oz etc
+
+**** TODO OSC sending (?) causes warning:
+
+Warning: float to int: truncated to signed 32 Bit
+
+**** TODO OSC interface documentation
+
+  - create documentation for functor and all exported classes/procs
+
+  - create example in *.muse file detailing how to setup and use interface (shall this go Examples in doc?)
+
+
+**** Gump Scanner/Parser TODO
+
+***** Scanner
+
+****** DONE Gump Scanner: hex number (for time tags)
+
+****** DONE Gump Scanner: !!?? make string quotes optional? NO!
+
+does dumpOSC alway surround strings by quotes?
+
+***** Parser
+
+****** DONE Gump Parser: hex number to some usable time tag
+
+Shall I use UNIX time, measured in floats for msecs?
+
+What are others using: SuperCollider or PD. 
+
+In SuperCollider, time is measured in beats, where 0 denotes the score start -- I would have no such 0 reference for realtime input... (or I specify that some specific OSC message marks the beginning of a score) 
+
+
+****** TODO Gump Parser: fix warning
+
+%******************** parser generator warning ******************
+%**
+%** parser specification contains useless items
+%**
+%** Useless rules:        1
+%** Useless nonterminals: 1
+%** in file "/Users/t/oz/music/Strasheela/strasheela/contributions/anders/OSC/OSC_Parser.ozg", line 2, column 0
+
+
+
+
+
+
+
+
+
+
+* Applications/Libraries for an Oz OSC interface 
+
+** Command line application
+
+*** sendOSC/dumpOSC
+
+Disadvantage: I don't get dumpOSC talk to Oz... 
+
+
+
+** Library implementations
+
+*** Ruby
+
+http://www.funaba.org/en/ruby.html#osc
+
+*** Python
+
+**** Liblo bindings
+
+http://das.nasophon.de/pyliblo/
+
+Also included are the utilities send_osc and dump_osc
+
+?? only for Linux? Is listed under linux audio 
+ 
+
+*** Perl
+
+**** Liblo bindings
+
+http://search.cpan.org/~njh/Net-LibLO-0.06/lib/Net/LibLO.pm 
+
+Same author as liblo maintainer
+
+***** Questions:
+
+****** How stable is this?
+
+Only tested on a few platforms and there have been fails in earlier versions
+http://cpantesters.perl.org/show/Net-LibLO.html
+
+
+******* KNOWN BUGS
+	 
+	 - Not all OSC types are supported
+	 - You cannot remove methods
+	 - Possible memory leaks when freeing Net::LibLO objects
+
+
+**** Net-OpenSoundControl-0.05
+
+http://search.cpan.org/~crenz/Net-OpenSoundControl-0.05/lib/Net/OpenSoundControl.pm
+http://search.cpan.org/~crenz/Net-OpenSoundControl-0.05/lib/Net/OpenSoundControl/Server.pm
+http://search.cpan.org/~crenz/Net-OpenSoundControl-0.05/lib/Net/OpenSoundControl/Client.pm
+
+***** Advantages:
+
+   - multi-platform (cf. http://testers.cpan.org/show/Net-OpenSoundControl.html)
+   - Looks like an easy to use interface to me -- even if I don't know Perl..
+
+
+***** Disadvantages:
+
+   - Using C-bindings (liblo) instead of a Perl implementation is very likely to be more efficient..
+   - Advantage over liblo bindings: I only have to understand this -- never need to look at doc of 'orig' library etc 
+
+
+
+***** Questions:
+
+Is this a complete OSC implementation? Seems to support bundles and time stamps.  
+... Server blocking and not-yet multithreaded, receiving messages via UDP.
+
+****** How stable is this?
+
+  - Passed tests: http://testers.cpan.org/show/Net-OpenSoundControl.html
+    What is tested??
+t/1-use..................ok
+t/2-tofrom...............ok
+t/3-encode_decode........ok
+t/4-bundles_timestamp....ok
+t/5-spec_msgs............ok
+t/pod-coverage...........skipped
+        all skipped: Test::Pod::Coverage 1.04 required for testing POD coverage
+t/pod....................skipped
+        all skipped: Test::Pod 1.14 required for testing POD
+All tests successful, 2 tests skipped.
+Files=7, Tests=25,  0 wallclock secs ( 0.24 cusr +  0.07 csys =  0.31 CPU)
+    http://www.nntp.perl.org/group/perl.cpan.testers/2007/08/msg583776.html
+
+****** Who uses this?
+
+Can send messages to scsynth, but no success for a synthdef yet..
+Provides Perl script example  
+http://www.create.ucsb.edu/pipermail/sc-users/2006-July/026714.html 
+
+reply: you don't send synthdefs through, you just send the file path to the scsyndef.
+http://www.create.ucsb.edu/pipermail/sc-users/2006-August/027214.html
+
+Discusses various CPAN Music Modules, including Net-OpenSoundControl (was named Audio::OSC??)  
+http://www.perl.com/pub/a/2004/08/31/livecode.html
+
+
+Note that these postings only discuss sending OSC (sendOSC works fine for me...)
+
+
+*** C/C++ Libraries
+
+
+**** liblo
+
+http://liblo.sourceforge.net/
+
+liblo is an implementation of the Open Sound Control protocol for POSIX systems, started by Steve Harris. liblo is written in C and works on many platforms including Linux, Mac OS X and Windows. It has support for all the OSC types, threaded servers, dispatching and timestamped delivery of bundles. It is released under the GNU General Public Licence.
+
+http://opensoundcontrol.org/node/79 
+Nicholas J Humfrey said (on osc_dev): "Liblo, the Lite OSC library, is
+an implementation of the Open Sound Control protocol for POSIX
+systems*. It is written in ANSI C99 and released under the GNU General
+Public Licence. It is designed to make developing OSC applictions as
+easy as possible."
+
+***** Advantage: plain C, multi-platform, design goal is easy of use
+
+***** Disadvantage
+
+!!?? liblo does not support timestamped bundles? TODO file lists as to-do: 
+
+  - Full bundle support [needs NTP, argh], find budle timestamp delivery
+    artimetic bug
+
+-> but the doc contains def of OSC TimeTag values (lo_timetag) and fun lo_send_timestamped
+   ?? does lo_send_timestamped define some internal scheduler
+   ... if liblo works reliable as a schedule, then that is fine with me as well..
+
+-> also, the function lo_bundle_new expects a timetag 
+
+!!! timing is buggy: 
+http://sourceforge.net/mailarchive/forum.php?thread_name=1157972566.614.75.camel%40chop.state51.co.uk&forum_name=liblo-devel
+
+
+**** oscpack
+
+http://www.audiomulch.com/~rossb/code/oscpack/
+
+Advantage: multi platform: win, mac, linux
+Disadvantage: hardcore C++
+
+
+**** libosc++
+
+http://libosc.rumori.de/
+
+Disadvantage: partial implementation of the OSC protocol. 
+
+
+**** OpenSound Control Kit
+
+http://www.cnmat.berkeley.edu/OpenSoundControl/Kit/
+
+Advantage: plain C
+Disadvantage: only Unix support
+
+http://opensoundcontrol.org/node/83 says:
+I would not recommend using the OSC-Kit, since the code is old and not very well supported, given that there are newer implementations.
+
+
+**** WOscLib
+
+http://wosclib.sourceforge.net/
+
+ WOscLib is a complete (server and client), easy to use OSC (OpenSound-Control) library, featuring Object Oriented (C++) design (modularity), platform-independence, type-safety (especially in OSC-methods), exception-handling and good documentation (doxygen). 
+
+
+
+

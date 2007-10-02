@@ -1,0 +1,17 @@
+#title Old Strasheela News
+
+  Monograph on Strasheela available for [[http://strasheela.sourceforge.net/documents/TorstenAnders-PhDThesis.pdf][download]]  (24 February 2007)
+
+  Extensively extended [[StrasheelaExamples][examples]] section (24 February 2007)    
+
+  Strasheela 0.8.2 RPMs for SUSE Linux are available at [[http://packman.links2linux.de/package/strasheela/19848][PackMan]] (3 January 2007, packaged by Toni Graffy)
+
+  [[https://sourceforge.net/projects/strasheela/][Strasheela 0.8.2 released]] ([[Changes]])  (1 January 2007)
+
+  [[https://sourceforge.net/projects/strasheela/][Strasheela 0.8.1 released]]  (7 September 2006)
+
+  [[https://sourceforge.net/mail/?group_id=167225][Strasheela mailing lists]] created (12 June 2006)
+
+  Added [[StrasheelaExamples][Strasheela Examples]] to this site (6 June 2006)
+
+  [[https://sourceforge.net/projects/strasheela/][Strasheela 0.8 released]] (5 June 2006)

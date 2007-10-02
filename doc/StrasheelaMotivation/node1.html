@@ -1,0 +1,169 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<!--Converted with jLaTeX2HTML 2002-2-1 (1.70) JA patch-2.0
+patched version by:  Kenshi Muto, Debian Project.
+* modified by:  Shige TAKENO
+LaTeX2HTML 2002-2-1 (1.70),
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Constraint-Based Computer Aided Composition</TITLE>
+<META NAME="description" CONTENT="Constraint-Based Computer Aided Composition">
+<META NAME="keywords" CONTENT="StrasheelaMotivation">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+<META NAME="Generator" CONTENT="jLaTeX2HTML v2002-2-1 JA patch-2.0">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="StrasheelaMotivation.css">
+
+<LINK REL="next" HREF="node2.html">
+<LINK REL="previous" HREF="StrasheelaMotivation.html">
+<LINK REL="up" HREF="StrasheelaMotivation.html">
+<LINK REL="next" HREF="node2.html">
+</HEAD>
+
+<BODY >
+<!--Navigation Panel-->
+<A NAME="tex2html27"
+  HREF="node2.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next"
+ SRC="file:/usr/share/latex2html/icons/next.png"></A> 
+<A NAME="tex2html23"
+  HREF="StrasheelaMotivation.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up"
+ SRC="file:/usr/share/latex2html/icons/up.png"></A> 
+<A NAME="tex2html17"
+  HREF="StrasheelaMotivation.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous"
+ SRC="file:/usr/share/latex2html/icons/prev.png"></A>  
+<A NAME="tex2html25"
+  HREF="../index.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index"
+ SRC="file:/usr/share/latex2html/icons/index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html28"
+  HREF="node2.html">Wanted: A Generic Music</A>
+<B> Up:</B> <A NAME="tex2html24"
+  HREF="StrasheelaMotivation.html">Why Strasheela?</A>
+<B> Previous:</B> <A NAME="tex2html18"
+  HREF="StrasheelaMotivation.html">Why Strasheela?</A>
+ &nbsp; <B>  <A NAME="tex2html26"
+  HREF="../index.html">Index</A></B> 
+<BR>
+<BR>
+<!--End of Navigation Panel-->
+
+<H1><A NAME="SECTION00010000000000000000">
+Constraint-Based Computer Aided Composition</A>
+</H1>
+
+<P>
+Computational models of composition have long attracted musicians and computer scientists alike. Composers like to explore new compositional approaches in order to develop a distinct personal musical language. Music theorists can evaluate an hypothesis by means of a computational model. For computer scientists, modelling music is challenging because the complexity inherent in music calls for the most advanced computer science concepts.
+
+<P>
+Notably rule-based approaches have alway stimulated interest.<A NAME="tex2html1"
+  HREF="footnode.html#foot251"><SUP>1</SUP></A> 
+For centuries, compositional rules were an established device for expressing compositional knowledge (for example in music education). Many musicians thus feel comfortable with a computational model based on the notion of rules. For example, rule-based approaches attracted much attention among composers, because by defining rules composers can formalise virtually any explicitly available compositional knowledge as a task which the computer can solve automatically.
+
+<P>
+Constraint programming has proven a particularly successful programming paradigm to realise ruled-based systems. Many compositional tasks have been addressed by constraint programming. Besides tasks inspired by traditional music theory such as the generation of harmonic progressions [<A
+ HREF="node5.html#Pachet:Roy:2000">Pachet and  Roy, 2001</A>] or counterpoint [<A NAME="tex2html29"
+  HREF="node5.html#Laurson:PhD:1996">Laurson, 1996</A>; <A NAME="tex2html30"
+  HREF="node5.html#Schottstaedt:Counterpoint:1989">Schottstaedt, 1989</A>], examples include purely rhythmical tasks [<A
+ HREF="node5.html#Sandred:PRISMA01:2003">Sandred, 2003</A>], Ligeti-like textures [<A
+ HREF="node5.html#Laurson:2001">Laurson and  Kuuskankare, 2001</A>], the modelling of non-European music [<A
+ HREF="node5.html#Chemillier:Truchet:2001">Chemillier and  Truchet, 2001</A>], or instrumentation [<A
+ HREF="node5.html#Laurson:2001">Laurson and  Kuuskankare, 2001</A>].
+
+<P>
+The attraction of constraint programming is easily explained. Constraint programming allows to model complex problems a simple way. 
+A problem is stated by a set of <I>variables</I> (unknowns) and <I>constraints</I> (relations) between these variables. 
+For example, a compositional task is stated by (i) a music representation in which some musical aspects are unknown - and therefore represented by variables - and (ii) compositional rules which impose constraints on these variables. For instance, a chord can be expressed by an event list and the chord pitches can be variables. Some harmonic rules may specify how the chord pitches are related to each other. 
+In the terminology of constraint programming, the modelled problem or task is referred to as a <I>constraint satisfaction problem</I> (CSP). 
+
+<P>
+In a solution to a CSP, every variable has a value which is consistent with all its constraints.
+For example, the solution of a musical CSP is a fully determined music representation consistent with all constraints expressed by the rules.
+Existing constraint programming systems (abridged: constraint systems) can efficiently solve a CSP - a fact which greatly contributed to the popularity of constraint programming.
+
+<P>
+A musical CSP can always be defined `from scratch' in a general constraint system. For instance, such a CSP can be defined in a regular programming language with support for constraint programming such as the Prolog based systems ECLiPSe [<A
+ HREF="node5.html#CheadleEtAl:ECLiPSeIntro:2003">Cheadle et&nbsp;al., 2003</A>] or SICTus Prolog [SICStus:Site]. However, subject-specific CSPs share a considerable amount of subject-specific knowledge: all musical CSPs require modelling of musical knowledge. For instance, concepts such as note, pitch, or voice are required in a large number of musical CSPs. 
+Whenever a musical CSP is defined `from scratch', all this knowledge must be modelled anew. What's more, any subject-specific optimisation of the search process must also be carried out again (if the chosen constraint system supports such optimisations at all).
+
+<P>
+Therefore, a number of generic music constraint systems have been proposed. A <I>generic music constraint system</I> predefines general musical knowledge and building-blocks shared by many musical CSPs and that way highly simplifies the definition of such problems. For example, such a system may provide a specific music representation, templates to simplify the definition of compositional rules, or mechanisms to conveniently control how a rule is applied to the score. Particular important systems are PWConstraints [<A
+ HREF="node5.html#Laurson:PhD:1996">Laurson, 1996</A>], and Situation [<A NAME="tex2html31"
+  HREF="node5.html#Bonnet:Rueda:Situation:1999">Bonnet and  Rueda, 1999</A>; <A NAME="tex2html32"
+  HREF="node5.html#Rueda:1998">Rueda et&nbsp;al., 1998</A>]. A pioneering system is Carla [<A
+ HREF="node5.html#Courtot:ICMC90">Courtot, 1990</A>]. Further examples include the aggregation of the music representation MusES with the constraint constraint system BackTalk [<A
+ HREF="node5.html#Pachet:Roy:ConstraintsAndObjects:95">Pachet and  Roy, 1995</A>], OMRC [<A NAME="tex2html33"
+  HREF="node5.html#Sandred:PRISMA01:2003">Sandred, 2003</A>,<A NAME="tex2html34"
+  HREF="node5.html#Sandred:OMRC:2000">2000</A>]<A NAME="tex2html2"
+  HREF="footnode.html#foot252"><SUP>2</SUP></A>, Arno [<A
+ HREF="node5.html#Anders:ICMC:2000">Anders, 2000</A>], OMBacktrack [<A
+ HREF="node5.html#Truchet:OMBTTutorial">Truchet, </A>], and OMClouds [<A NAME="tex2html35"
+  HREF="node5.html#Truchet:Chypre2001">Truchet  et&nbsp;al., 2001</A>,<A NAME="tex2html36"
+  HREF="node5.html#Truchet:etAl:2003">2003</A>].
+Already the number of existing systems demonstrates the high interest in music constraint programming. 
+
+<P>
+The availability of generic music constraint systems makes music constraint programming accessible for a much larger user community. 
+Often, these systems are explicitly tailored for users without any technical background who want to focus on formalising and solving the specific musical tasks they are interested in. 
+A composer can apply such a system as an assistant in the composition process, a music theorist can use it as a testbed to evaluate a music theory, and a teacher can demonstrate the effect of different compositional rules to students.
+
+<P>
+The constraint programming paradigm is well suited to the needs of computer aided composition.
+Composers often prefer a way of working which is situated somewhere in the middle between composing `by hand' and formalising the composition process such that it can be delegated to the computer. Constraint programming supports this way of working very well. For example, the composer can determine some aspects of the music (e.g. certain pitches) by hand and constrain other aspects by rules. Alternatively, the composer may specify the high-level structure (e.g. the formal structure) manually and let the computer fill in the details.
+Furthermore, composers usually do not first fully formalise certain aspects of the composition process before they start actually composing. Instead, the formalisation is often an integral aspect of the composition process itself. A compositional task defined by means of constraint programming can be shaped in a highly flexible way during the composition process by the adding, removing and changing of individual rules. 
+
+<P>
+A number of well-established composers already made extensive use of constraint programming. These include Antoine Bonnet (e.g. for <I>&#201;pitaphe</I> for 8 brass instruments, 2 pianos, orchestra and electro-acoustics, 1992-1994, using Situation [<A
+ HREF="node5.html#Bresson:etAl:OpenMusic5:2005">Bresson  et&nbsp;al., 2005</A>]), Magnus Lindberg (<I>Engine</I> for chamber orchestra, 1996, using PWConstraints [<A
+ HREF="node5.html#Rueda:1998">Rueda et&nbsp;al., 1998</A>]), Georges Bloch (<I>Palm Sax</I> for seven saxophones, using Situation [<A
+ HREF="node5.html#Rueda:1998">Rueda et&nbsp;al., 1998</A>]), &#214;rjan Sandred (<I>Kalejdoskop</I> for clarinet, viola and piano, 1999, using OMRC, [<A
+ HREF="node5.html#Sandred:PRISMA01:2003">Sandred, 2003</A>]), Jacopo Baboni Schilingi (<I>Concubia nocte, in memoria di Luciano Berio</I> for soprano and live computer, 2003, using OMCS)<A NAME="tex2html3"
+  HREF="footnode.html#foot187"><SUP>3</SUP></A>, and Johannes Kretz (<I>second horizon</I> for piano and orchestra, 2002, using both OMRC and OMCS [<A
+ HREF="node5.html#Kretz:PRISMA01:2003">Kretz, 2003</A>]).
+
+<P>
+<HR>
+<!--Navigation Panel-->
+<A NAME="tex2html27"
+  HREF="node2.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next"
+ SRC="file:/usr/share/latex2html/icons/next.png"></A> 
+<A NAME="tex2html23"
+  HREF="StrasheelaMotivation.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up"
+ SRC="file:/usr/share/latex2html/icons/up.png"></A> 
+<A NAME="tex2html17"
+  HREF="StrasheelaMotivation.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous"
+ SRC="file:/usr/share/latex2html/icons/prev.png"></A>  
+<A NAME="tex2html25"
+  HREF="../index.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index"
+ SRC="file:/usr/share/latex2html/icons/index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html28"
+  HREF="node2.html">Wanted: A Generic Music</A>
+<B> Up:</B> <A NAME="tex2html24"
+  HREF="StrasheelaMotivation.html">Why Strasheela?</A>
+<B> Previous:</B> <A NAME="tex2html18"
+  HREF="StrasheelaMotivation.html">Why Strasheela?</A>
+ &nbsp; <B>  <A NAME="tex2html26"
+  HREF="../index.html">Index</A></B> 
+<!--End of Navigation Panel-->
+<ADDRESS>
+Torsten Anders
+2006-06-05
+</ADDRESS>
+</BODY>
+</HTML>

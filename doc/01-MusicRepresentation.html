@@ -1,0 +1,1624 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+  <head>
+    <title>Strasheela's Music Representation</title>
+    <meta name="generator" content="muse.el">
+    <meta http-equiv="Content-Type"
+          content="text/html; charset=iso-8859-1">
+    
+    <link rel="stylesheet" href="style.css" type="text/css" />
+  </head>
+  <body>
+<div id="header">
+  <ul class="nav">
+    <li class="nav1"><a href="index.html">home</a></li>
+    <li class="navn"><a href="https://sourceforge.net/projects/strasheela/">download at sourceforge</a></li>
+    <!-- <li class="navn"><a href="IndexOfPages.html">site map</a></li> -->
+    <li class="navn"><a href="contact.html">contact</a></li>
+  </ul>
+  <div id="logo">
+    <a href="http://sourceforge.net"><img src="http://sflogo.sourceforge.net/sflogo.php?group_id=167225&amp;type=1" width="88" height="31" border="0" alt="SourceForge.net Logo" /></a>
+  </div>
+</div>
+    <h1>Strasheela's Music Representation</h1>
+    <!-- Page published by Emacs Muse begins here -->
+<div class="contents">
+<dl>
+<dt>
+<a href="#sec1">About this document</a>
+</dt>
+<dt>
+<a href="#sec2">&mdash; Strasheela's Music Representation</a>
+</dt>
+<dt>
+<a href="#sec3">Score Creation</a>
+</dt>
+<dd>
+<dl>
+<dt>
+<a href="#sec4">Inspect score object</a>
+</dt>
+</dl>
+</dd>
+<dt>
+<a href="#sec5">Sound Output</a>
+</dt>
+<dd>
+<dl>
+<dt>
+<a href="#sec6">Output Csound score file</a>
+</dt>
+<dt>
+<a href="#sec7">Output sound file</a>
+</dt>
+<dt>
+<a href="#sec8">Output sound file (file dialog)</a>
+</dt>
+</dl>
+</dd>
+<dt>
+<a href="#sec9">Sheet Music Output</a>
+</dt>
+<dd>
+<dl>
+<dt>
+<a href="#sec10">Output Lilypond</a>
+</dt>
+<dt>
+<a href="#sec11">Output MusicXML, via Fomus</a>
+</dt>
+</dl>
+</dd>
+<dt>
+<a href="#sec12">Specifying and Accessing Basic Score Object Information</a>
+</dt>
+<dd>
+<dl>
+<dt>
+<a href="#sec13">Setting/accessing a parameter value</a>
+</dt>
+<dt>
+<a href="#sec14">Default parameter values</a>
+</dt>
+<dt>
+<a href="#sec15">Type checking (1)</a>
+</dt>
+<dt>
+<a href="#sec16">Type checking (2)</a>
+</dt>
+<dt>
+<a href="#sec17">Identity test</a>
+</dt>
+<dt>
+<a href="#sec18">Info tags (1)</a>
+</dt>
+<dt>
+<a href="#sec19">Info tags (2)</a>
+</dt>
+<dt>
+<a href="#sec20">The handle argument</a>
+</dt>
+<dt>
+<a href="#sec21">Contained objects</a>
+</dt>
+<dt>
+<a href="#sec22">Positional information (1)</a>
+</dt>
+<dt>
+<a href="#sec23">Positional information (2)</a>
+</dt>
+<dt>
+<a href="#sec24">The temporal parameters</a>
+</dt>
+<dt>
+<a href="#sec25">The offsetTime parameter (1)</a>
+</dt>
+<dt>
+<a href="#sec26">The offsetTime parameter (2)</a>
+</dt>
+<dt>
+<a href="#sec27">Incrementally creating scores (1)</a>
+</dt>
+<dt>
+<a href="#sec28">Incrementally creating scores (2)</a>
+</dt>
+<dt>
+<a href="#sec29">Using extension classes</a>
+</dt>
+<dt>
+<a href="#sec30">Using creator functions</a>
+</dt>
+<dt>
+<a href="#sec31">Saving a score object as textual score</a>
+</dt>
+<dt>
+<a href="#sec32">Finding init Documentation</a>
+</dt>
+</dl>
+</dd>
+<dt>
+<a href="#sec33">Higher-Order Accessors</a>
+</dt>
+<dd>
+<dl>
+<dt>
+<a href="#sec34">filterItems</a>
+</dt>
+<dt>
+<a href="#sec35">findItem</a>
+</dt>
+<dt>
+<a href="#sec36">mapItems</a>
+</dt>
+<dt>
+<a href="#sec37">forAllItems</a>
+</dt>
+<dt>
+<a href="#sec38">countItems</a>
+</dt>
+</dl>
+</dd>
+<dt>
+<a href="#sec39">Higher-Order Accessors for Indirectly Contained Objects</a>
+</dt>
+<dd>
+<dl>
+<dt>
+<a href="#sec40">collect (1)</a>
+</dt>
+<dt>
+<a href="#sec41">collect (2)</a>
+</dt>
+<dt>
+<a href="#sec42">collect (3)</a>
+</dt>
+<dt>
+<a href="#sec43">collect (4)</a>
+</dt>
+<dt>
+<a href="#sec44">collect (5)</a>
+</dt>
+<dt>
+<a href="#sec45">map</a>
+</dt>
+<dt>
+<a href="#sec46">find</a>
+</dt>
+<dt>
+<a href="#sec47">Simultaneous items</a>
+</dt>
+<dt>
+<a href="#sec48">User-defined accessors</a>
+</dt>
+</dl>
+</dd>
+<dt>
+<a href="#sec49">Customising Output to Export Formats</a>
+</dt>
+</dl>
+</div>
+
+
+<h2><a name="sec1" id="sec1"></a>
+About this document</h2>
+
+<p class="first">This file was automatically generated from the interactive Strasheela tutorial. Some aspects of the text only make sense in the original interactive tutorial application (e.g., buttons indicated to press, and positions specified on the screen), and not in this version of the text.</p>
+
+
+<h2><a name="sec2" id="sec2"></a>
+&mdash; Strasheela's Music Representation</h2>
+
+<p class="first">The following examples introduce various aspects of Strasheela's music representation. The representation is then later used for defining musical constraint satisfaction problems.</p>
+
+
+
+
+
+<h2><a name="sec3" id="sec3"></a>
+Score Creation</h2>
+
+<p class="first">This example creates a Strasheela score, consisting of a single note. The score is specified textually, and this specification is then transformed into a score object instance. A textual representation, on the one hand, is conveniently entered and edited. A score object instance, on the other hand, has the advantage that many operations are already defined for it. For example, there are various operations available for accessing score information and for outputting a score into other formats (e.g. Csound or Lilypond). The textual score format and the interface of a score object (i.e. the operations it understands) are explained later.</p>
+
+<p>The created score object is shown by the Inspector. The Inspector shows &lt;O: Note&gt;, where the O says that this is an object, and Note is the name of its class. However, the Inspector also allows you to look 'inside' a score object via the object's context menu (typically right-mouseclick, but happens to be the middle-mouse key on my Mac...). Select 'Filter' -&gt; 'Show Textual Score'. This shows the score in the textual form as entered in the example. Note also that the background color behind the score changed to indicate that we are now 'looking into' something. You can 'go back' to the original view by the context menu entry 'unmap' (you have to right-click on the top-level label note).</p>
+
+<p>The Inspector also provides different views on the score via the other 'Filter' context menu entries. These provide more information on the internal structure of a score object. For example, 'Show Score Hierarchy Recursively' reveals that even a plain note is internally represented hiearchically: the note parameters (e.g. duration, pitch) are represented by their own objects.</p>
+
+
+<h3><a name="sec4" id="sec4"></a>
+Inspect score object</h3>
+
+<pre class="src">
+<span style="color: #b22222;">%% </span><span style="color: #b22222;">Inspector may be behind the tutorial...
+</span><span style="color: #a020f0;">local</span>
+   TextualScore = note(startTime:0
+                       duration:1000
+                       timeUnit:milliseconds
+                       pitch:60
+                       amplitude:64)
+   <span style="color: #b22222;">%% </span><span style="color: #b22222;">second argument to Score.makeScore explained later
+</span>   ScoreInstance = {Score<span style="color: #a020f0;">.</span>makeScore TextualScore <span style="color: #a020f0;">unit</span>}
+<span style="color: #a020f0;">in</span>
+   {Inspect ScoreInstance}
+<span style="color: #a020f0;">end</span>
+</pre>
+
+
+
+<h2><a name="sec5" id="sec5"></a>
+Sound Output</h2>
+
+<p class="first">This example creates a Strasheela score consisting of three notes. The first example saves a Csound score file (with the procedure Out.outputCsoundScore). The second and third examples additionally call Csound in the background and open the resulting sound file with an editor (with the procedure Out.renderAndPlayCsound). Note that these examples requires that you specified where Csound is installed on your system and what sound file editor you want to use (see 'Settings...' in the Tutorial menu).</p>
+
+<p>This example introduces Strasheela containers: three notes are contained in a simultaneous container (sim). This container expresses how the notes are temporally arranged. The startTime of notes in a simultaneous container is their offsetTime plus the startTime of the encapsulating simultaneous container (which is 0 here). Thus, in this example the first note starts at 0, the second at 500, and the third at 1500.</p>
+
+<p>The temporal structure of the score is specified in milliseconds, as the timeUnit argument of this container indicates. Please note that the timeUnit must be specified only once in a score. This setting is shared by all temporal score objects (i.e. the container and the notes).</p>
+
+<p>The examples demonstrate different ways to specify the output file(s). In the first two examples, the path is specified textually in two components: directory and file name (the extension .sco is added automatically). For example, the first example outputs the file &quot;/tmp/test.sco&quot;. You may change these settings by editing the arguments scoDir (the directory for the sco file), soundDir (the directory for the resulting sound file), and file (the file name without extension). Windows users will have to input a directory path like, for example, &quot;C:\\Dokumente und Einstellungen\\&quot; (German settings..). In the third example, the output file is specified with a file dialog for convenience. BTW: most directory arguments of output procedures (e.g., scoDir soundDir of Out.renderAndPlayCsound) can be omitted; their default value are directories set in the Strasheela environment (cf. the _ozrc file in the Strasheela directory for an example how to set these default directories).</p>
+
+<p>Please note that the shell (or Dos) where you started this tutorial provides feedback. It confirms the writing of the Csound score file, shows the call to Csound resulting from your settings etc. When you are using Strasheela from within the OPI, the Emacs buffer 'Oz Emulator' shows this information.</p>
+
+<p>Please have a look at the content of the resulting Csound score file (on UNIX, you may just uncomment the last line of the first example). You will notice that the Csound p-fields p2 and p3 (i.e. the second and third columns) correspond to the notes' offset time and duration, now measured in Csound beats (note the Csound tempo specification above, which can be changed with the procedure Init.setTempo, but defaults to 60.0). Moreover, p4 is the amplitude (measure as midi velocity value in the example and now normalised in 0-1) and p5 is the pitch (measured as midi keynumber). In strasheela/goodies/csound you will find a demo Csound orc file which works with these settings. This file is used in the second and third example.</p>
+
+<p>The example requires to wait with the Csound output until all score information not explicitly specified (e.g. the start time of the notes) is propagated in the background. Remember that Oz is a concurrent programming languages: propagation of such score information happens concurrently 'behind the scene'. The wait method blocks until all parameter values in the score are determined (we will not need it later in actual CSPs).</p>
+
+
+<h3><a name="sec6" id="sec6"></a>
+Output Csound score file</h3>
+
+<pre class="src">
+<span style="color: #a020f0;">local</span>
+   TextualScore = sim(items:[note(offsetTime:0
+                                  duration:1000
+                                  pitch:60
+                                  amplitude:64)
+                             note(offsetTime:500
+                                  duration:1000
+                                  pitch:62
+                                  amplitude:64)
+                             note(offsetTime:1500
+                                  duration:1000
+                                  pitch:64
+                                  amplitude:64)]
+                      startTime:0 timeUnit:milliseconds)
+   ScoreInstance = {Score<span style="color: #a020f0;">.</span>makeScore TextualScore <span style="color: #a020f0;">unit</span>}
+<span style="color: #a020f0;">in</span>
+   <span style="color: #b22222;">% </span><span style="color: #b22222;">wait until all score parameters are determined
+</span>   {ScoreInstance wait}
+   {Out<span style="color: #a020f0;">.</span>outputCsoundScore ScoreInstance
+    <span style="color: #a020f0;">unit</span>(scoDir:<span style="color: #bc8f8f;">"/tmp/"</span>
+         file:<span style="color: #bc8f8f;">"test"</span>)}
+   <span style="color: #b22222;">% </span><span style="color: #b22222;">UNIX: show content of resulting test.sco at terminal (uncomment next line)
+</span>   <span style="color: #b22222;">% </span><span style="color: #b22222;">{Out.exec 'cat' ["/tmp/test.sco"]}
+</span><span style="color: #a020f0;">end</span>
+</pre>
+
+
+<h3><a name="sec7" id="sec7"></a>
+Output sound file</h3>
+
+<pre class="src">
+<span style="color: #b22222;">%% </span><span style="color: #b22222;">NB: set Csound and sound file editor in 'Settings...' in the Tutorial menu
+</span><span style="color: #a020f0;">local</span>
+   TextualScore = sim(items:[note(offsetTime:0
+                                  duration:1000
+                                  pitch:60
+                                  amplitude:64)
+                             note(offsetTime:500
+                                  duration:1000
+                                  pitch:62
+                                  amplitude:64)
+                             note(offsetTime:1500
+                                  duration:1000
+                                  pitch:64
+                                  amplitude:64)]
+                      startTime:0
+                      timeUnit:milliseconds)
+   ScoreInstance = {Score<span style="color: #a020f0;">.</span>makeScore TextualScore <span style="color: #a020f0;">unit</span>}
+<span style="color: #a020f0;">in</span>
+   {Init<span style="color: #a020f0;">.</span>setTempo 80<span style="color: #a020f0;">.</span>0}
+   {ScoreInstance wait}
+   {Out<span style="color: #a020f0;">.</span>renderAndPlayCsound ScoreInstance
+    <span style="color: #a020f0;">unit</span>(file:<span style="color: #bc8f8f;">"test"</span>
+         scoDir:<span style="color: #bc8f8f;">"/tmp/"</span>
+         soundDir:<span style="color: #bc8f8f;">"/tmp/"</span>)}
+<span style="color: #a020f0;">end</span>
+</pre>
+
+
+<h3><a name="sec8" id="sec8"></a>
+Output sound file (file dialog)</h3>
+
+<pre class="src">
+<span style="color: #b22222;">%% </span><span style="color: #b22222;">Specify file with file dialog (full path without extension)
+</span><span style="color: #b22222;">%% </span><span style="color: #b22222;">NB: set Csound and sound file editor in 'Settings...' in the Tutorial menu
+</span><span style="color: #a020f0;">local</span>
+   TextualScore = sim(items:[note(offsetTime:0
+                                  duration:1000
+                                  pitch:60
+                                  amplitude:64)
+                             note(offsetTime:500
+                                  duration:1000
+                                  pitch:62
+                                  amplitude:64)
+                             note(offsetTime:1500
+                                  duration:1000
+                                  pitch:64
+                                  amplitude:64)]
+                      startTime:0
+                      timeUnit:milliseconds)
+   ScoreInstance = {Score<span style="color: #a020f0;">.</span>makeScore TextualScore <span style="color: #a020f0;">unit</span>}
+<span style="color: #a020f0;">in</span>
+   {Init<span style="color: #a020f0;">.</span>setTempo 40<span style="color: #a020f0;">.</span>0}
+   {ScoreInstance wait}
+   {Out<span style="color: #a020f0;">.</span>renderAndPlayCsound ScoreInstance
+    <span style="color: #a020f0;">unit</span>(file:{Tk<span style="color: #a020f0;">.</span>return tk_getSaveFile}
+         scoDir:nil soundDir:nil)}
+<span style="color: #a020f0;">end</span>
+</pre>
+
+
+
+<h2><a name="sec9" id="sec9"></a>
+Sheet Music Output</h2>
+
+<p class="first">This example creates a hierarchically nested score and outputs it to sheet music. The previous example presented the simultaneous container (sim), which arranges its contained score objects simultaneously in time. The present example introduces the sequential container (seq), which arranges its contained score objects sequentially in time. The example demonstrates that simultaneous and sequential containers can be arbitrarily nested.</p>
+
+<p>In the previous example, the timeUnit was set to milliseconds. Here, it is set to beats(4), which means that the duration 4 indicates a quarter-note (a beat) and consequently duration 1 is a sixteenth-note. In general, all musical parameters support some unit of measurement which indicates how the numeric parameter value is interpreted (in particular for output into export formats). For example, the pitchUnit defaults to (MIDI) 'keynumber', but can also be set to midicent, frequency, or et72 (i.e. equal temperament with 72 steps per octave). These various parameter units of measurements are supported, because Strasheela parameter values are (at least presently) always integers. Whereas the timeUnit must be set only once in the score, other units can be set individually for every score object. The timeUnit is handled differently, because Strasheela implicitly applies some constraints to all temporal parameters (e.g., the temporal structure in sequential and simultaneous containers is enforced by constraints), and these constraints require a consistent timeUnit for all parameters.</p>
+
+<p>The first example outputs the music to a PDF file (using Lilypond). The second example outputs to a MusicXML file (using Fomus), which can be opened, for example, by software like Finale and Sibelius. Fomus supports outputting into further formats and supports tweaking the MusicXML output specifically for Finale or Sibelius usage: just set the appropriate Fomus flag in the example below (see the Fomus documentation for the supported flags). Please note that for running these examples you must specify (via 'Settings...' menu entry) where Strasheela can find the applications lilypond, convert-ly (an application part of Lilypond), a PDF file viewer, and Fomus.</p>
+
+
+<h3><a name="sec10" id="sec10"></a>
+Output Lilypond</h3>
+
+<pre class="src">
+<span style="color: #a020f0;">local</span>
+   MyScore = {Score<span style="color: #a020f0;">.</span>makeScore
+              sim(items:[seq(items:[note(duration:2
+                                         pitch:64
+                                         amplitude:64)
+                                    note(duration:2
+                                         pitch:65
+                                         amplitude:64)
+                                    note(duration:4
+                                         pitch:67
+                                         amplitude:64)
+                                    note(duration:4
+                                         pitch:62
+                                         amplitude:64)])
+                         seq(items:[sim(items:[note(duration:8
+                                                    pitch:48
+                                                    amplitude:64)
+                                               note(duration:8
+                                                    pitch:55
+                                                    amplitude:64)])
+                                    sim(items:[note(duration:4
+                                                    pitch:50
+                                                    amplitude:64)
+                                               note(duration:4
+                                                    pitch:54
+                                                    amplitude:64)])])]
+                  startTime:0
+                  timeUnit:beats(4))
+              <span style="color: #a020f0;">unit</span>}
+<span style="color: #a020f0;">in</span>
+   {MyScore wait}
+   {Out<span style="color: #a020f0;">.</span>renderAndShowLilypond MyScore
+    <span style="color: #a020f0;">unit</span>(file:{Tk<span style="color: #a020f0;">.</span>return tk_getSaveFile}
+         dir:nil)}
+<span style="color: #a020f0;">end</span>
+</pre>
+
+
+<h3><a name="sec11" id="sec11"></a>
+Output MusicXML, via Fomus</h3>
+
+<pre class="src">
+<span style="color: #a020f0;">local</span>
+   MyScore = {Score<span style="color: #a020f0;">.</span>makeScore
+              sim(items:[seq(items:[note(duration:2
+                                         pitch:64
+                                         amplitude:64)
+                                    note(duration:2
+                                         pitch:65
+                                         amplitude:64)
+                                    note(duration:4
+                                         pitch:67
+                                         amplitude:64)
+                                    note(duration:4
+                                         pitch:62
+                                         amplitude:64)])
+                         seq(items:[sim(items:[note(duration:8
+                                                    pitch:48
+                                                    amplitude:64)
+                                               note(duration:8
+                                                    pitch:55
+                                                    amplitude:64)])
+                                    sim(items:[note(duration:4
+                                                    pitch:50
+                                                    amplitude:64)
+                                               note(duration:4
+                                                    pitch:54
+                                                    amplitude:64)])])]
+                  startTime:0
+                  timeUnit:beats(4))
+              <span style="color: #a020f0;">unit</span>}
+<span style="color: #a020f0;">in</span>
+   {MyScore wait}
+   {Out<span style="color: #a020f0;">.</span>renderFomus MyScore
+    <span style="color: #a020f0;">unit</span>(file:{Tk<span style="color: #a020f0;">.</span>return tk_getSaveFile}
+         dir:nil
+         flags:[<span style="color: #bc8f8f;">'-x'</span>])}
+<span style="color: #a020f0;">end</span>
+</pre>
+
+
+
+<h2><a name="sec12" id="sec12"></a>
+Specifying and Accessing Basic Score Object Information</h2>
+
+<p class="first">Various information about score objects can be stored and retrieved from Strasheela's music representation. This information is used for formulating music theory models. For example, a musical CSP may specify a score where all note pitch variables are initialised to certain domains, and neighbouring melodic notes are then accessed and constrained.</p>
+
+<p>The textual music representation allows for the convenient definition of complex scores, as already shown by the previous examples. The interface defined for Strasheela score objects, on the other hand, simplifies the access to score information. As shown before, the textual representation is transformed into a score object with the function Score.makeScore. Vice versa, a score object can be transformed into its textual representation (see below for an example). Using the textual representation and Score.makeScore is strongly recommended for creating Strasheela score objects, because it hides low-level details of the score object creation process.</p>
+
+<p>This example introduces the textual music representation format in more detail. In general, a textual score is a (often nested) Oz record. Record labels correspond with score classes, and record features are initialisation arguments for the class creation. This was already demonstrated in previous examples. In the following, specific aspects are introduced in more detail by examples. For additional information and examples of the textual representation please see the Score.makeScore reference documentation (strasheela/doc/api/node6.html#entity225) and and the Score.makeScore examples in strasheela/testing/ScoreCore-test.oz.</p>
+
+<p>The example also demonstrates the retrieval of various basic information. Basic information includes access to object parameter values (e.g. the pitch of a note), checking the type (class) of an object (e.g. checking whether object X is a note), checking the identity of two objects, and exploring the hierarchic structure of a score. Later examples will show how you can access more complex information.</p>
+
+<p>The naming of many methods and functions accessing basic information follows common conventions. Such convensions are briefly summarised here. The name of accessor methods usually start with 'get' as in getSomething (e.g., getDuration, getPitch, getContainers). Type-checking methods usually start with 'is' (e.g., isNote, isPause). Methods which check a has-a relation often start with 'has' (hasSuccessor, hasThisInfo). Converters start often with 'to' or contain 'to' in their name (e.g. toInitRecord, but also Int.toFloat). The name of many constructors starts with 'make' (Score.makeScore, Score.makeClass).</p>
+
+
+<h3><a name="sec13" id="sec13"></a>
+Setting/accessing a parameter value</h3>
+
+<pre class="src">
+<span style="color: #b22222;">/* </span><span style="color: #b22222;">A parameter value (e.g. the duration of a note, or of a
+simultaneous container) is usually specified in the textual score with
+the name of the parameter as a record feature (e.g. duration), and
+accessed with a method get&lt;MyParameter&gt; (e.g. getDuration). The
+following example initialises and accesses the duration of a
+simultaneous container. */</span>
+
+<span style="color: #a020f0;">local</span>
+  MySim = {Score<span style="color: #a020f0;">.</span>makeScore sim(duration:3) <span style="color: #a020f0;">unit</span>}
+<span style="color: #a020f0;">in</span>
+  {Inspect {MySim getDuration($)}}
+<span style="color: #a020f0;">end</span>
+</pre>
+
+
+<h3><a name="sec14" id="sec14"></a>
+Default parameter values</h3>
+
+<pre class="src">
+<span style="color: #b22222;">/* </span><span style="color: #b22222;">The textual music representation specifies initialisation arguments
+for score object to create (e.g., sets the pitch of a note, or the
+duration of a sequential container). Most of these initialisation
+arguments are optional, and Strasheela defines a default value for
+these initialisation arguments. For example, parameter values such as
+durations and pitches default to a constrained variable.
+
+This example creates a single note and specifies no initialisation
+arguments at all. You can inspect the note's parameters and their
+default values (mostly undetermined constrained variables). In the
+Inspector, use the note's context menu: 'Filter' -&gt; 'Show Score
+Hierarchy Recursively'.
+
+An undetermined parameter value is accessed the same way as a
+determined parameter. For example, a note's undetermined pitch is
+accessed with the method getPitch. Accessing undetermined parameter
+values is important for constraining these values. */</span>
+
+<span style="color: #a020f0;">local</span>
+   MyNote = {Score<span style="color: #a020f0;">.</span>makeScore note <span style="color: #a020f0;">unit</span>}
+<span style="color: #a020f0;">in</span>
+   {Inspect pitch <span style="color: #a020f0;">#</span> {MyNote getPitch($)}}
+   {Inspect note <span style="color: #a020f0;">#</span> MyNote}
+<span style="color: #a020f0;">end</span>
+</pre>
+
+
+<h3><a name="sec15" id="sec15"></a>
+Type checking (1)</h3>
+
+<pre class="src">
+<span style="color: #b22222;">/* </span><span style="color: #b22222;">The type (class) of Strasheela objects can be checked. Methods such
+as isNote or isPause return either true or false. This information can
+be useful, for example, to decide to which object a constraint is
+applied and which objects are skipped. */</span>
+
+<span style="color: #a020f0;">local</span>
+  MyNote = {Score<span style="color: #a020f0;">.</span>makeScore note <span style="color: #a020f0;">unit</span>}
+<span style="color: #a020f0;">in</span>
+  <span style="color: #b22222;">%% </span><span style="color: #b22222;">MyNote is a note but note a pause
+</span>  {Inspect isNote <span style="color: #a020f0;">#</span> {MyNote isNote($)}}
+  {Inspect isPause <span style="color: #a020f0;">#</span> {MyNote isPause($)}}
+<span style="color: #a020f0;">end</span>
+</pre>
+
+
+<h3><a name="sec16" id="sec16"></a>
+Type checking (2)</h3>
+
+<pre class="src">
+<span style="color: #b22222;">/* </span><span style="color: #b22222;">Strasheela defines a hierarchy of types (class hierarchy). For
+example, see strasheela/doc/api/class25.html for the superclasses of
+the note class. Consequently, an object returns true for the
+typechecker of its class and all its superclasses. This is useful, for
+example, for being able to apply a constraint to all notes and pauses
+but not to the containers these objects contained in (possibly deeply
+nested).
+
+Strasheela uses the following terminolody. Every Strasheela object is
+a ScoreObject. Strasheela distinguishes between Parameters (e.g. the
+pitch of a note), Elements (e.g. notes and pauses), and Containers
+(e.g. simultaneous and sequential containers). An umbrella term
+(superclass) for Elements and Containers is Items. For an even more
+fine-grained terminology please refer to the reference documentation.
+
+The list function Map was introduced in example "Higher-Order
+Programming". The function Record.map is the same as map, but for
+records. */</span>
+
+<span style="color: #a020f0;">local</span>
+  MyNote = {Score<span style="color: #a020f0;">.</span>makeScore note <span style="color: #a020f0;">unit</span>}
+  MyPause = {Score<span style="color: #a020f0;">.</span>makeScore pause <span style="color: #a020f0;">unit</span>}
+  MySim = {Score<span style="color: #a020f0;">.</span>makeScore sim <span style="color: #a020f0;">unit</span>}
+  MyObjects = <span style="color: #a020f0;">unit</span>(note:MyNote pause:MyPause sim:MySim)
+<span style="color: #a020f0;">in</span>
+  <span style="color: #b22222;">%% </span><span style="color: #b22222;">Both MyNote and MyPause are elements, and all three objects are items.
+</span>  {Inspect isElement <span style="color: #a020f0;">#</span> {Record<span style="color: #a020f0;">.</span>map MyObjects
+                        <span style="color: #a020f0;">fun</span><span style="color: #b8860b;"> </span>{<span style="color: #0000ff;">$</span> X} {X isElement($)} <span style="color: #a020f0;">end</span>}}
+  {Inspect isItem <span style="color: #a020f0;">#</span> {Record<span style="color: #a020f0;">.</span>map MyObjects
+                     <span style="color: #a020f0;">fun</span><span style="color: #b8860b;"> </span>{<span style="color: #0000ff;">$</span> X} {X isItem($)} <span style="color: #a020f0;">end</span>}}
+<span style="color: #a020f0;">end</span>
+</pre>
+
+
+<h3><a name="sec17" id="sec17"></a>
+Identity test</h3>
+
+<pre class="src">
+<span style="color: #b22222;">/* </span><span style="color: #b22222;">Sometimes we want to check the identity of score objects, for
+example, to prevent that constraints between identical objects are
+applied. The identity of score objects can be tested with the ==
+operator (and its opposite, the \= operator). Please note that the
+operator == checks for the identity of objects, not for their
+equality. */</span>
+
+<span style="color: #a020f0;">local</span>
+  Note1 = {Score<span style="color: #a020f0;">.</span>makeScore note <span style="color: #a020f0;">unit</span>}
+  Note2 = {Score<span style="color: #a020f0;">.</span>makeScore note <span style="color: #a020f0;">unit</span>}
+<span style="color: #a020f0;">in</span>
+  {Inspect identicalObjects <span style="color: #a020f0;">#</span> (Note1 <span style="color: #a020f0;">==</span> Note1)}
+  {Inspect differentObjects <span style="color: #a020f0;">#</span> (Note1 <span style="color: #a020f0;">==</span> Note2)}
+<span style="color: #a020f0;">end</span>
+</pre>
+
+
+<h3><a name="sec18" id="sec18"></a>
+Info tags (1)</h3>
+
+<pre class="src">
+<span style="color: #b22222;">/* </span><span style="color: #b22222;">It is often useful to add various additional information to certain
+score objects (e.g. for naming a container representing a voice, or
+for tagging notes with a specific purpose in the music). It is
+convenient to have a general info attribute for all such information,
+instead of defining some special attribute for each information tag
+which might occur.
+
+Information tags can be specified via the info argument for a score
+object. The method hasThisInfo returns true for a specific info tag,
+in the case the score object was tagged with it. */</span>
+
+<span style="color: #a020f0;">local</span>
+  MyNote = {Score<span style="color: #a020f0;">.</span>makeScore note(info:myTag) <span style="color: #a020f0;">unit</span>}
+<span style="color: #a020f0;">in</span>
+  {Inspect {MyNote hasThisInfo($ myTag)}}
+<span style="color: #a020f0;">end</span>
+</pre>
+
+
+<h3><a name="sec19" id="sec19"></a>
+Info tags (2)</h3>
+
+<pre class="src">
+<span style="color: #b22222;">/* </span><span style="color: #b22222;">A score object get be given multiple information tags at the info
+argument, and further info tags can be added later with the method
+addInfo. All these tags can be checked with the method hasThisInfo, as
+shown above. The method getInfo returns a list of all information tags
+of a given object. */</span>
+
+<span style="color: #a020f0;">local</span>
+  MyNote = {Score<span style="color: #a020f0;">.</span>makeScore note(info:[hi there]) <span style="color: #a020f0;">unit</span>}
+<span style="color: #a020f0;">in</span>
+  {MyNote addInfo(test)}
+  {Inspect {MyNote getInfo($)}}
+<span style="color: #a020f0;">end</span>
+</pre>
+
+
+<h3><a name="sec20" id="sec20"></a>
+The handle argument</h3>
+
+<pre class="src">
+<span style="color: #b22222;">/* </span><span style="color: #b22222;">The handle argument makes it easy to directly access some object
+within a nested score. The argument expects a variable. After score
+creation, this variable is bound to the score object to which the
+handle argument was given. In this example, the first and the second
+note in a sequential container are bound to the variables Note1 and
+Note2 using their handle argument (the method toInitRecord returns the
+textual representation of a score item). Watch the different note
+pitches to confirm them. Every score object in the textual
+representation supports the handle argument. */</span>
+
+<span style="color: #a020f0;">local</span>
+   Note1 Note2
+   MyScore = {Score<span style="color: #a020f0;">.</span>makeScore seq(items:[note(handle:Note1
+                                              duration:2
+                                              pitch:60
+                                              amplitude:64)
+                                         note(handle:Note2
+                                              duration:2
+                                              pitch:62
+                                              amplitude:64)
+                                         note(duration:4
+                                              pitch:64
+                                              amplitude:64)]
+                                  startTime:0
+                                  timeUnit:beats(4))
+              <span style="color: #a020f0;">unit</span>}
+<span style="color: #a020f0;">in</span>
+  {Inspect note1 <span style="color: #a020f0;">#</span> {Note1 toInitRecord($)}}
+  {Inspect note2 <span style="color: #a020f0;">#</span> {Note2 toInitRecord($)}}
+<span style="color: #a020f0;">end</span>
+</pre>
+
+
+<h3><a name="sec21" id="sec21"></a>
+Contained objects</h3>
+
+<pre class="src">
+<span style="color: #b22222;">/* </span><span style="color: #b22222;">The method getItems returns the items contained in a
+container. Similarily, the containers of an item are accessed with the
+method getContainers. This example makes again use of the handle
+argument (see above). */</span>
+
+<span style="color: #a020f0;">local</span>
+   MyNote
+   MyScore = {Score<span style="color: #a020f0;">.</span>makeScore seq(items:[note(duration:2
+                                              pitch:60
+                                              amplitude:64)
+                                         note(handle:MyNote
+                                              duration:2
+                                              pitch:62
+                                              amplitude:64)
+                                         note(duration:4
+                                              pitch:64
+                                              amplitude:64)]
+                                  startTime:0
+                                  timeUnit:beats(4))
+              <span style="color: #a020f0;">unit</span>}
+<span style="color: #a020f0;">in</span>
+  {Inspect items <span style="color: #a020f0;">#</span> {MyScore getItems($)}}
+  {Inspect containers <span style="color: #a020f0;">#</span> {MyNote getContainers($)}}
+<span style="color: #a020f0;">end</span>
+</pre>
+
+
+<h3><a name="sec22" id="sec22"></a>
+Positional information (1)</h3>
+
+<pre class="src">
+<span style="color: #b22222;">/* </span><span style="color: #b22222;">Sometimes it is useful to access positionally related
+information. For example, you may want to access the successor of a
+note in a voice in order to constrain the melodic interval between
+these two notes.
+
+A Strasheela item can be contained in multiple containers (e.g. a
+temporal container and a container expressing the motific or harmonic
+structure). See the documentation of Score.makeScore for details. This
+approach may be seldomly used because it is often too much restrictive
+(see my Thesis Sec. 5.4.3.3 for a discussion). Nevertheless, the
+access to positionally related information must take into account that
+a score object may be contained in multiple containers.
+
+Therefore, positional accessor methods expect a specification which
+container they must refers to. For example, the container may be given
+as an argument or a method tailored for a specific container type such
+as getTemporalSuccessor is used (an item can only be contained in a
+single temporal container at maximum). */</span>
+
+<span style="color: #a020f0;">local</span>
+   MyNote
+   TextualScore = sim(items:[note(duration:2
+                                  pitch:60
+                                  amplitude:64)
+                             note(handle:MyNote
+                                  duration:2
+                                  pitch:62
+                                  amplitude:64)
+                             note(duration:4
+                                  pitch:64
+                                  amplitude:64)]
+                      startTime:0
+                      timeUnit:beats(4))
+   <span style="color: #b22222;">%% </span><span style="color: #b22222;">container can be acccessed from MyNote with getTemporalContainer
+</span>   _<span style="color: #b22222;">/*</span><span style="color: #b22222;">Ignore container*/</span> = {Score<span style="color: #a020f0;">.</span>makeScore TextualScore <span style="color: #a020f0;">unit</span>}
+   MyContainer = {MyNote getTemporalContainer($)}
+<span style="color: #a020f0;">in</span>
+  {Inspect position <span style="color: #a020f0;">#</span> {MyNote getPosition($ MyContainer)}}
+  {Inspect successor <span style="color: #a020f0;">#</span> {{MyNote getSuccessor($ MyContainer)} toInitRecord($)}}
+<span style="color: #a020f0;">end</span>
+</pre>
+
+
+<h3><a name="sec23" id="sec23"></a>
+Positional information (2)</h3>
+
+<pre class="src">
+<span style="color: #b22222;">/* </span><span style="color: #b22222;">The hierarchy of temporal items must be a tree. Consequently, if
+you are interested in positional information from this hierarchy, then
+you do not need to specify a container. Instead, use specialised
+methods such as getTemporalSuccessor or getTemporalPredecessor. Please
+note that getTemporalSuccessor returns the positional successor in a
+TemporalContainer (not necessarily the temporal successor!). */</span>
+
+<span style="color: #a020f0;">local</span>
+   MyNote
+   TextualScore = sim(items:[note(duration:2
+                                  pitch:60
+                                  amplitude:64)
+                             note(handle:MyNote
+                                  duration:2
+                                  pitch:62
+                                  amplitude:64)
+                             note(duration:4
+                                  pitch:64
+                                  amplitude:64)]
+                      startTime:0
+                      timeUnit:beats(4))
+   _<span style="color: #b22222;">/*</span><span style="color: #b22222;">Ignore container*/</span> = {Score<span style="color: #a020f0;">.</span>makeScore TextualScore <span style="color: #a020f0;">unit</span>}
+<span style="color: #a020f0;">in</span>
+  {Inspect {{MyNote getTemporalSuccessor($)} toInitRecord($)}}
+<span style="color: #a020f0;">end</span>
+</pre>
+
+
+<h3><a name="sec24" id="sec24"></a>
+The temporal parameters</h3>
+
+<pre class="src">
+<span style="color: #b22222;">/* </span><span style="color: #b22222;">All temporal objects (e.g., notes, and temporal containers like the
+sequential and the simultaneous container) define the three temporal
+parameters startTime, duration and endTime (they also define a
+temporal parameter offsetTime, discussed below). Three parameters are
+initially constrained to the obvious relation.
+
+  StartTime + Duration = EndTime
+
+Consequently, you can choose which parameter(s) you want to specify
+during the initialisation, and all three parameters will always be
+consistent. You even can leave all three parameters unspecified (as we
+saw above), and can only further constrain their value and thus define
+a rhythmical CSP. The following example demonstrates this by
+specifying the startTime and the endTime of a note. You can examine
+all three parameters with the Inspector (Show Score Hierarchy
+Recursively). */</span>
+
+<span style="color: #a020f0;">local</span>
+   MyNote = {Score<span style="color: #a020f0;">.</span>makeScore note(startTime:2
+                                  endTime:5
+                                  timeUnit: beats)
+             <span style="color: #a020f0;">unit</span>}
+<span style="color: #a020f0;">in</span>
+   {Inspect MyNote}
+<span style="color: #a020f0;">end</span>
+</pre>
+
+
+<h3><a name="sec25" id="sec25"></a>
+The offsetTime parameter (1)</h3>
+
+<pre class="src">
+<span style="color: #b22222;">/* </span><span style="color: #b22222;">All temporal score objects (e.g., notes, simultaneous and
+sequential containers) support the parameter offsetTime. The meaning
+of this parameter depends on the class of the temporal container in
+which an object is contained in. For objects in a simultaneous
+container, the offsetTime delays the start of its contained objects
+with respect to the startTime of this container. The Csound example
+shown previously is reproduced here. */</span>
+
+<span style="color: #a020f0;">local</span>
+   TextualScore = sim(items:[note(offsetTime:0
+                                  duration:1000
+                                  pitch:60
+                                  amplitude:64)
+                             note(offsetTime:500
+                                  duration:1000
+                                  pitch:62
+                                  amplitude:64)
+                             note(offsetTime:2000
+                                  duration:1000
+                                  pitch:64
+                                  amplitude:64)]
+                      startTime:0
+                      timeUnit:milliseconds)
+   ScoreInstance = {Score<span style="color: #a020f0;">.</span>makeScore TextualScore <span style="color: #a020f0;">unit</span>}
+<span style="color: #a020f0;">in</span>
+   {Init<span style="color: #a020f0;">.</span>setTempo 40<span style="color: #a020f0;">.</span>0}
+   {ScoreInstance wait}
+   {Out<span style="color: #a020f0;">.</span>renderAndPlayCsound ScoreInstance
+    <span style="color: #a020f0;">unit</span>(file:{Tk<span style="color: #a020f0;">.</span>return tk_getSaveFile}
+         scoDir:nil soundDir:nil)}
+<span style="color: #a020f0;">end</span>
+</pre>
+
+
+<h3><a name="sec26" id="sec26"></a>
+The offsetTime parameter (2)</h3>
+
+<pre class="src">
+<span style="color: #b22222;">/* </span><span style="color: #b22222;">For objects in a sequential container, the offsetTime specifies a
+pause between the object and its preceeding score object in this
+container.
+
+he offsetTime parameter defaults to 0 (this is the only parameter in
+the Strasheela core which defaults to a determined value). Please note
+that (like all FD integers) the offsetTime can *not* be negative (i.e.,
+it can not be used for expressing an overlap of objects in a
+sequential container). */</span>
+
+<span style="color: #a020f0;">local</span>
+   TextualScore = seq(items:[note(duration:1000
+                                  pitch:60
+                                  amplitude:64)
+                             note(offsetTime:1500
+                                  duration:1000
+                                  pitch:62
+                                  amplitude:64)
+                             note(offsetTime:500
+                                  duration:1000
+                                  pitch:64
+                                  amplitude:64)]
+                      startTime:0
+                      timeUnit:milliseconds)
+   ScoreInstance = {Score<span style="color: #a020f0;">.</span>makeScore TextualScore <span style="color: #a020f0;">unit</span>}
+<span style="color: #a020f0;">in</span>
+   {Init<span style="color: #a020f0;">.</span>setTempo 40<span style="color: #a020f0;">.</span>0}
+   {ScoreInstance wait}
+   {Out<span style="color: #a020f0;">.</span>renderAndPlayCsound ScoreInstance
+    <span style="color: #a020f0;">unit</span>(file:{Tk<span style="color: #a020f0;">.</span>return tk_getSaveFile}
+         scoDir:nil soundDir:nil)}
+<span style="color: #a020f0;">end</span>
+</pre>
+
+
+<h3><a name="sec27" id="sec27"></a>
+Incrementally creating scores (1)</h3>
+
+<pre class="src">
+<span style="color: #b22222;">/* </span><span style="color: #b22222;">The function Score.makeScore creates a fully initialised score. The
+hierarchic structure of such a fully initialised score is fixed (at
+least for a CSP it should be regarded as fixed). Sometimes, however,
+it is convenient to create a score incrementally by creating parts
+independently and combining them later. One option is, that you simply
+create independent textual scores and combine them later. */</span>
+
+<span style="color: #a020f0;">local</span>
+   Voice1 = seq(info:voice1
+                items:[note(duration:4
+                            pitch:59
+                            amplitude:64)
+                       note(duration:4
+                            pitch:60
+                            amplitude:64)])
+   Voice2 = seq(info:voice2
+                items:[note(duration:4
+                            pitch:67
+                            amplitude:64)
+                       note(duration:4
+                            pitch:67
+                            amplitude:64)])
+   MyScore = {Score<span style="color: #a020f0;">.</span>makeScore
+              sim(items:[Voice1 Voice2]
+                  startTime:0
+                  timeUnit:beats(4))
+              <span style="color: #a020f0;">unit</span>}
+<span style="color: #a020f0;">in</span>
+   {Inspect {MyScore toInitRecord($)}}
+<span style="color: #a020f0;">end</span>
+</pre>
+
+
+<h3><a name="sec28" id="sec28"></a>
+Incrementally creating scores (2)</h3>
+
+<pre class="src">
+<span style="color: #b22222;">/* </span><span style="color: #b22222;">In certain cases, you want to create your score incrementally, but
+you need access to the score objects (i.e. not only their textual
+representation). You could use the approach shown in the previous
+example and additionally use the handle argument introduced
+before. With that approach, the score object is available after the
+full score is created. Another option is to use the function
+Score.makeScore2 instead of Score.makeScore. Score.makeScore2
+immediately outputs a score which is not yet fully initialised and can
+still be inserted in other Strasheela containers. Such partially
+initialised scores are later fully initialised simply by using these
+score objects within a call of Score.makeScore (or by explitictly
+calling it with the procedure Score.initScore). This example only
+reproduces the previous example with Score.makeScore2. A later example
+below will show a use of Score.makeScore2 which can not be reproduced
+with independent textual score objects nor with the handle
+argument. */</span>
+
+<span style="color: #a020f0;">local</span>
+   Voice1 = {Score<span style="color: #a020f0;">.</span>makeScore2 seq(info:voice1
+                                  items:[note(duration:4
+                                              pitch:59
+                                              amplitude:64)
+                                         note(duration:4
+                                              pitch:60
+                                              amplitude:64)])
+             <span style="color: #a020f0;">unit</span>}
+   Voice2 = {Score<span style="color: #a020f0;">.</span>makeScore2 seq(info:voice2
+                                  items:[note(duration:4
+                                              pitch:67
+                                              amplitude:64)
+                                         note(duration:67
+                                              pitch:55
+                                              amplitude:64)])
+             <span style="color: #a020f0;">unit</span>}
+   MyScore = {Score<span style="color: #a020f0;">.</span>makeScore
+              sim(items:[Voice1 Voice2]
+                  startTime:0
+                  timeUnit:beats(4))
+              <span style="color: #a020f0;">unit</span>}
+<span style="color: #a020f0;">in</span>
+   {Inspect {MyScore toInitRecord($)}}
+<span style="color: #a020f0;">end</span>
+</pre>
+
+
+<h3><a name="sec29" id="sec29"></a>
+Using extension classes</h3>
+
+<pre class="src">
+<span style="color: #b22222;">/* </span><span style="color: #b22222;">A Strasheela music representation created with Score.makeScore
+consists of objects, that is class instances. Per default,
+Score.makeScore uses the classes defined by the Strasheela core -- as
+did all examples so far.
+
+Strasheela extensions, however, often define their own classes which
+extend the classes of the Strasheela core. For example, Strasheela's
+harmony model -- an extension provided in the strasheela/contribtion
+folder -- provides the class HS.score.note (the harmony extention --
+i.e. its functor -- is usually bound to the variable HS). The class
+HS.score.note extends the standard note class Score.note by the notion
+of pitch classes (among many other things).
+
+This example shows how you can specify which classes Score.makeScore
+should use when creating a score. The clases are specified in the
+second argument of Score.makeScore (which so far was alway only
+unit). This argument expects a record whose features match the score
+object labels in the textual music representation, and whose values
+are the classes which should be used for objects with this label.
+
+Every Strasheela score class defines a method init, which is called
+internally when an instance of this class is created (cf. Strasheela's
+reference documentation for a init method definition of various
+classes). The feature/value-pairs of an object's textual
+representation correspond to these init method arguments. For example,
+the init method of the class HS.score.note expects the arguments of
+the standard note class Score.note (e.g., duration and pitch) with
+additional arguments (e.g., pitchClass). The textual representation
+output of this examples shows further arguments, which are irrelevant
+here. */</span>
+
+<span style="color: #a020f0;">local</span>
+   MyNote = {Score<span style="color: #a020f0;">.</span>makeScore note(startTime:0
+                                  duration:4
+                                  pitchClass:7
+                                  pitch:{FD<span style="color: #a020f0;">.</span>int 48<span style="color: #a020f0;">#</span>72})
+             <span style="color: #a020f0;">unit</span>(note:HS<span style="color: #a020f0;">.</span>score<span style="color: #a020f0;">.</span>note)}
+<span style="color: #a020f0;">in</span>
+   {Inspect {MyNote toInitRecord($)}}
+<span style="color: #a020f0;">end</span>
+</pre>
+
+
+<h3><a name="sec30" id="sec30"></a>
+Using creator functions</h3>
+
+<pre class="src">
+<span style="color: #b22222;">/* </span><span style="color: #b22222;">You can customise further the meaning of a textual music
+representation. Score object labels in the textual representation can
+also be mapped to creator functions via the second argument of
+Score.makeScore (instead of classes). Using this feature, a single
+score object in the textual music representation can express a complex
+subscore.
+
+In this example, the meaning of the textual score object with the
+label mySection is defined by the creator function MakeMySection. Such
+a function expects the record (namely the fully textual score object)
+and returns a score object (not fully initialised, i.e., created with
+Score.makeScore2 as described above). */</span>
+
+<span style="color: #a020f0;">local</span>
+   <span style="color: #a020f0;">fun</span><span style="color: #b8860b;"> </span>{<span style="color: #0000ff;">MakeMySection</span> Args}
+      {Score<span style="color: #a020f0;">.</span>makeScore2 seq(items:{LUtils<span style="color: #a020f0;">.</span>collectN Args<span style="color: #a020f0;">.</span>n
+                                   <span style="color: #a020f0;">fun</span><span style="color: #b8860b;"> </span>{<span style="color: #0000ff;">$</span>} note(duration:{FD<span style="color: #a020f0;">.</span>int 1<span style="color: #a020f0;">#</span>8}) <span style="color: #a020f0;">end</span>}
+                            duration:Args<span style="color: #a020f0;">.</span>dur)
+       <span style="color: #a020f0;">unit</span>}
+   <span style="color: #a020f0;">end</span>
+   MyScore = {Score<span style="color: #a020f0;">.</span>makeScore sim(items:[mySection(n:2 dur:4)
+                                        mySection(n:4 dur:4)]
+                                 startTime:0
+                                 timeUnit:beats)
+             <span style="color: #a020f0;">unit</span>(mySection:MakeMySection
+                  sim:Score<span style="color: #a020f0;">.</span>simultaneous)}
+<span style="color: #a020f0;">in</span>
+   {Inspect {MyScore toInitRecord($)}}
+<span style="color: #a020f0;">end</span>
+</pre>
+
+
+<h3><a name="sec31" id="sec31"></a>
+Saving a score object as textual score</h3>
+
+<pre class="src">
+<span style="color: #b22222;">/* </span><span style="color: #b22222;">A score object can be transformed 'back' into its textual
+representation, for example, to hand-edit the score directly. This
+works even for score objects which are not fully determined, as the
+example below demonstrates (its pitches are variables). The procedure
+Out.saveScore saves a given score object as Oz code into a text file,
+and the function Out.loadScore loads the (possibly edited) score from
+a file and returns a score object. */</span>
+
+<span style="color: #a020f0;">local</span>
+   MyScore = {Score<span style="color: #a020f0;">.</span>makeScore seq(items:[note(duration:2
+                                              pitch:{FD<span style="color: #a020f0;">.</span>int 60<span style="color: #a020f0;">#</span>67}
+                                              amplitude:64)
+                                         note(duration:1
+                                              pitch:{FD<span style="color: #a020f0;">.</span>int 60<span style="color: #a020f0;">#</span>67}
+                                              amplitude:64)
+                                         note(duration:3
+                                              pitch:{FD<span style="color: #a020f0;">.</span>int 60<span style="color: #a020f0;">#</span>67}
+                                              amplitude:64)]
+                                  startTime:0
+                                  timeUnit:beats)
+              <span style="color: #a020f0;">unit</span>}
+<span style="color: #a020f0;">in</span>
+   {Out<span style="color: #a020f0;">.</span>saveScore MyScore <span style="color: #a020f0;">unit</span>(file:{Tk<span style="color: #a020f0;">.</span>return tk_getSaveFile}
+                               <span style="color: #b22222;">%% </span><span style="color: #b22222;">use file name as given by GUI
+</span>                               dir:nil
+                               extension:nil)}
+<span style="color: #a020f0;">end</span>
+
+<span style="color: #b22222;">%% </span><span style="color: #b22222;">Look at the textual score to compare with the original
+</span>{Inspect
+ {Out<span style="color: #a020f0;">.</span>loadScore <span style="color: #a020f0;">unit</span>(file:{Tk<span style="color: #a020f0;">.</span>return tk_getOpenFile}
+                     dir:nil
+                     extension:nil)}}
+</pre>
+
+
+<h3><a name="sec32" id="sec32"></a>
+Finding init Documentation</h3>
+
+<pre class="src">
+<span style="color: #b22222;">/* </span><span style="color: #b22222;">The arguments of score objects in the textual score representation
+are the arguments for the init method of their class. So, the init
+method documentation also serves as documentation fo the textual score
+representation.
+
+However, many init method arguments are inherited from superclasses
+and it can be hard to find which superclass defines and documents
+them. In such a situation, you can ask the score object itself. The
+method getInitArgSources returns the classes which define an init
+arguments and the method getInitArgDefaults returns their default
+values (_ indicates no default value). */</span>
+
+<span style="color: #b22222;">% </span><span style="color: #b22222;">the values at the record features are the classes which define this argument
+</span>{Browse initArgs <span style="color: #a020f0;">#</span> {{Score<span style="color: #a020f0;">.</span>makeScore note <span style="color: #a020f0;">unit</span>} getInitArgSources($)}}
+
+{Browse initArgDefaults <span style="color: #a020f0;">#</span> {{Score<span style="color: #a020f0;">.</span>makeScore note <span style="color: #a020f0;">unit</span>} getInitArgDefaults($)}}
+</pre>
+
+
+
+<h2><a name="sec33" id="sec33"></a>
+Higher-Order Accessors</h2>
+
+<p class="first">Strasheela provides various means for accessing information about multiple score objects contained in a container. Many of these means are higher-order methods, that is, the user specifies the desired information with a method or function as argument (see the introduction to higher order programming previously in this tutorial).</p>
+
+<p>The example shows shows how a contained can be queried about its directly contained score items (all containers, notes and pauses belong to the superclass item &mdash; in contrast to score parameters). You will notice a consistent naming scheme of these methods. Their name usually end in 'Items' (as in mapItems).</p>
+
+
+<h3><a name="sec34" id="sec34"></a>
+filterItems</h3>
+
+<pre class="src">
+<span style="color: #b22222;">/* </span><span style="color: #b22222;">The method filterItems returns all items directly contained in a
+container for which a given unary function or method returns true. Try
+using a boolean method (e.g., isNote). */</span>
+
+<span style="color: #a020f0;">local</span>
+   MyScore = {Score<span style="color: #a020f0;">.</span>makeScore seq(items:[note(duration:2
+                                              pitch:60
+                                              amplitude:64)
+                                         note(duration:2
+                                              pitch:62
+                                              amplitude:64)
+                                         note(duration:4
+                                              pitch:64
+                                              amplitude:64)]
+                                  startTime:0
+                                  timeUnit:beats(4))
+              <span style="color: #a020f0;">unit</span>}
+<span style="color: #a020f0;">in</span>
+   {Inspect {MyScore filterItems($ <span style="color: #a020f0;">fun</span><span style="color: #b8860b;"> </span>{<span style="color: #0000ff;">$</span> MyNote}
+                                      {MyNote getDuration($)} <span style="color: #a020f0;">&lt;</span> 4
+                                   <span style="color: #a020f0;">end</span>)}}
+<span style="color: #a020f0;">end</span>
+</pre>
+
+
+<h3><a name="sec35" id="sec35"></a>
+findItem</h3>
+
+<pre class="src">
+<span style="color: #b22222;">/* </span><span style="color: #b22222;">The method findItem returns the first item for which a test (method
+or function) returns true. */</span>
+
+<span style="color: #a020f0;">local</span>
+   MyScore = {Score<span style="color: #a020f0;">.</span>makeScore seq(items:[note(duration:2
+                                              pitch:60
+                                              amplitude:64)
+                                         note(duration:2
+                                              pitch:62
+                                              amplitude:64)
+                                         note(duration:4
+                                              pitch:64
+                                              amplitude:64)]
+                                  startTime:0
+                                  timeUnit:beats(4))
+              <span style="color: #a020f0;">unit</span>}
+<span style="color: #a020f0;">in</span>
+   {Inspect {MyScore findItem($ <span style="color: #a020f0;">fun</span><span style="color: #b8860b;"> </span>{<span style="color: #0000ff;">$</span> MyNote}
+                                   {MyNote getDuration($)} <span style="color: #a020f0;">&lt;</span> 4
+                                 <span style="color: #a020f0;">end</span>)}}
+<span style="color: #a020f0;">end</span>
+</pre>
+
+
+<h3><a name="sec36" id="sec36"></a>
+mapItems</h3>
+
+<pre class="src">
+<span style="color: #b22222;">/* </span><span style="color: #b22222;">The method mapItems applies a unary function or method to every
+object which fulfills a test. Here, the pitchs of all notes in MyScore
+are collected with the method getPitch. Try and replace getPitch with
+another accessor method introduced before (e.g., getDuration). Also,
+try and replace the test (e.g., using isNote), or leave the test out
+altogether. */</span>
+
+<span style="color: #a020f0;">local</span>
+   MyScore = {Score<span style="color: #a020f0;">.</span>makeScore seq(items:[note(duration:2
+                                              pitch:60
+                                              amplitude:64)
+                                         note(duration:2
+                                              pitch:62
+                                              amplitude:64)
+                                         note(duration:4
+                                              pitch:64
+                                              amplitude:64)]
+                                  startTime:0
+                                  timeUnit:beats(4))
+              <span style="color: #a020f0;">unit</span>}
+<span style="color: #a020f0;">in</span>
+   {Inspect {MyScore mapItems($ getPitch
+                              test: <span style="color: #a020f0;">fun</span><span style="color: #b8860b;"> </span>{<span style="color: #0000ff;">$</span> MyNote}
+                                       {MyNote getDuration($)} <span style="color: #a020f0;">&lt;</span> 4
+                                     <span style="color: #a020f0;">end</span>)}}
+<span style="color: #a020f0;">end</span>
+
+</pre>
+
+
+<h3><a name="sec37" id="sec37"></a>
+forAllItems</h3>
+
+<pre class="src">
+<span style="color: #b22222;">/* </span><span style="color: #b22222;">The method forAllItems is very similar to mapItems. forAllItems
+applies a unary procedure or method to every object which fulfills a
+test -- in contrast to mapItems this procedure/method returns no value
+(cf. the Oz procedures Map and ForAll introduced before). */</span>
+
+<span style="color: #a020f0;">local</span>
+   MyScore = {Score<span style="color: #a020f0;">.</span>makeScore seq(items:[note(duration:2
+                                              pitch:60
+                                              amplitude:64)
+                                         pause(duration:2)
+                                         note(duration:4
+                                              pitch:64
+                                              amplitude:64)]
+                                  startTime:0
+                                  timeUnit:beats(4))
+              <span style="color: #a020f0;">unit</span>}
+<span style="color: #a020f0;">in</span>
+   {MyScore forAllItems(<span style="color: #a020f0;">proc</span><span style="color: #b8860b;"> </span>{<span style="color: #0000ff;">$</span> X} {Inspect X} <span style="color: #a020f0;">end</span>
+                        test: isNote)}
+<span style="color: #a020f0;">end</span>
+
+</pre>
+
+
+<h3><a name="sec38" id="sec38"></a>
+countItems</h3>
+
+<pre class="src">
+<span style="color: #b22222;">/* </span><span style="color: #b22222;">The method countItems returns the number of score objects directly
+contained in a container which fulfill a given test. This test can be
+a method or a function (try isNote, isPause or isItem instead). */</span>
+
+<span style="color: #a020f0;">local</span>
+   MyScore = {Score<span style="color: #a020f0;">.</span>makeScore seq(items:[note(duration:2
+                                              pitch:60
+                                              amplitude:64)
+                                         pause(duration:2)
+                                         note(duration:4
+                                              pitch:64
+                                              amplitude:64)]
+                                  startTime:0
+                                  timeUnit:beats(4))
+              <span style="color: #a020f0;">unit</span>}
+<span style="color: #a020f0;">in</span>
+   {Inspect {MyScore countItems($ test:<span style="color: #a020f0;">fun</span><span style="color: #b8860b;"> </span>{<span style="color: #0000ff;">$</span> X}
+                                         {X getDuration($)} <span style="color: #a020f0;">&lt;</span> 4
+                                       <span style="color: #a020f0;">end</span>)}}
+<span style="color: #a020f0;">end</span>
+</pre>
+
+
+
+<h2><a name="sec39" id="sec39"></a>
+Higher-Order Accessors for Indirectly Contained Objects</h2>
+
+<p class="first">The previous example discussed methods for accessing (information on) directly contained score objects. This examples shows methods which traverse the whole score hierarchy for accessing information. For example, the method collect returns a list of directly and indirectly contained score objects.</p>
+
+<p>These methods support a few additional arguments. You saw the argument test already in the example before. The argument 'level' expects an integer which limits the depth the method decends during its traversal (its default is all, i.e., full recursive traversal). The argument 'mode' specifies whether only the subtree below the given object is traversed (mode: tree) or whether the full score graph is traversed (mode: graph).</p>
+
+
+<h3><a name="sec40" id="sec40"></a>
+collect (1)</h3>
+
+<pre class="src">
+<span style="color: #b22222;">/* </span><span style="color: #b22222;">When no further arguments are specified, the method collect returns
+all objects directly or indirectly contained in MyScore, even the
+containers and parameters. It does not, however, include MyScore
+itself in the output. */</span>
+
+<span style="color: #a020f0;">local</span>
+   MyScore = {Score<span style="color: #a020f0;">.</span>makeScore
+              sim(items:[seq(items:[note(duration:1 pitch:60)
+                                    note(duration:2 pitch:60)])
+                         seq(items:[note(duration:2 pitch:64)
+                                    note(duration:1 pitch:64)])]
+                  startTime:0)
+              <span style="color: #a020f0;">unit</span>}
+<span style="color: #a020f0;">in</span>
+   {Inspect {MyScore collect($)}}
+<span style="color: #a020f0;">end</span>
+</pre>
+
+
+<h3><a name="sec41" id="sec41"></a>
+collect (2)</h3>
+
+<pre class="src">
+<span style="color: #b22222;">/* </span><span style="color: #b22222;">With the the argument test, you filter which objects are
+collected. Again, this argument expects either a boolean function or
+method. This example returns all notes whose duration is &gt; 1.*/</span>
+
+<span style="color: #a020f0;">local</span>
+   MyScore = {Score<span style="color: #a020f0;">.</span>makeScore
+              sim(items:[seq(items:[note(duration:1 pitch:60)
+                                    note(duration:2 pitch:60)])
+                         seq(items:[note(duration:2 pitch:64)
+                                    note(duration:1 pitch:64)])]
+                  startTime:0)
+              <span style="color: #a020f0;">unit</span>}
+<span style="color: #a020f0;">in</span>
+   {Inspect {MyScore collect($ test:<span style="color: #a020f0;">fun</span><span style="color: #b8860b;"> </span>{<span style="color: #0000ff;">$</span> X}
+                                       {X isNote($)} <span style="color: #a020f0;">andthen</span>
+                                       {X getDuration($)} <span style="color: #a020f0;">&gt;</span> 1
+                                    <span style="color: #a020f0;">end</span>)}}
+<span style="color: #a020f0;">end</span>
+</pre>
+
+
+<h3><a name="sec42" id="sec42"></a>
+collect (3)</h3>
+
+<pre class="src">
+<span style="color: #b22222;">/* </span><span style="color: #b22222;">This example also filters score objects with the test argument of
+collect. Here, all sequential objects in MyScore are contained. */</span>
+
+<span style="color: #a020f0;">local</span>
+   MyScore = {Score<span style="color: #a020f0;">.</span>makeScore
+              sim(items:[seq(items:[note(duration:1 pitch:60)
+                                    note(duration:2 pitch:60)])
+                         seq(items:[note(duration:2 pitch:64)
+                                    note(duration:1 pitch:64)])]
+                  startTime:0)
+              <span style="color: #a020f0;">unit</span>}
+<span style="color: #a020f0;">in</span>
+   {Inspect {MyScore collect($ test:isSequential)}}
+<span style="color: #a020f0;">end</span>
+</pre>
+
+
+<h3><a name="sec43" id="sec43"></a>
+collect (4)</h3>
+
+<pre class="src">
+<span style="color: #b22222;">/* </span><span style="color: #b22222;">This example collects all items (i.e. notes and containers)
+directly contained in MyScore (level 1). Try increasing the level to
+2. Please note that the level only specifies the nesting of items, but
+not parameters (i.e., there is no third nesting level in this
+example). Thus, if you also allow for parameters in the output (by
+removing the test isItem), then the parameters from the items of the
+levels specified are included. */</span>
+
+<span style="color: #a020f0;">local</span>
+   MyScore = {Score<span style="color: #a020f0;">.</span>makeScore
+              sim(items:[seq(items:[note(duration:1 pitch:60)
+                                    note(duration:2 pitch:60)])
+                         seq(items:[note(duration:2 pitch:64)
+                                    note(duration:1 pitch:64)])]
+                  startTime:0)
+              <span style="color: #a020f0;">unit</span>}
+<span style="color: #a020f0;">in</span>
+   {Inspect {MyScore collect($ level:1 test:isItem)}}
+<span style="color: #a020f0;">end</span>
+</pre>
+
+
+<h3><a name="sec44" id="sec44"></a>
+collect (5)</h3>
+
+<pre class="src">
+<span style="color: #b22222;">/* </span><span style="color: #b22222;">This example demonstrates the graph traversal of collect, which
+considers not only score items contained in a given container, but
+also containers in which a given item is contained in.
+
+This example collects all items in the score (argument test:isItem)
+which are either contained in the container MyItem or in which MyItem
+is contained (argument mode:graph). Please note, however, that MyItem
+itself is not included: as you already have access to it you can
+easily add it to the list returned (how?). MyItem is again bound with
+the handle argument, see above. */</span>
+
+<span style="color: #a020f0;">local</span>
+   MyItem
+   _ <span style="color: #b22222;">/* </span><span style="color: #b22222;">Ignore */</span> = {Score<span style="color: #a020f0;">.</span>makeScore
+                     sim(items:[seq(items:[note(duration:1 pitch:59)
+                                           note(duration:2 pitch:60)])
+                                seq(handle:MyItem
+                                    items:[note(duration:2 pitch:67)
+                                           note(duration:1 pitch:67)])]
+                         startTime:0)
+                     <span style="color: #a020f0;">unit</span>}
+<span style="color: #a020f0;">in</span>
+   {Inspect {MyItem collect($ mode:graph test:isItem)}}
+<span style="color: #a020f0;">end</span>
+</pre>
+
+
+<h3><a name="sec45" id="sec45"></a>
+map</h3>
+
+<pre class="src">
+<span style="color: #b22222;">/* </span><span style="color: #b22222;">The method map is like mapItems, but recursively traverses a score
+hierarchy. Like the method collect, it supports the arguments test,
+level, and mode. There also exists a method forAll, which corresponds
+to forAllItems but works with score hierarchies. */</span>
+
+<span style="color: #a020f0;">local</span>
+   MyScore = {Score<span style="color: #a020f0;">.</span>makeScore
+              sim(items:[seq(items:[note(duration:1 pitch:59)
+                                    note(duration:2 pitch:60)])
+                         seq(items:[note(duration:2 pitch:67)
+                                    note(duration:1 pitch:67)])]
+                  startTime:0)
+              <span style="color: #a020f0;">unit</span>}
+<span style="color: #a020f0;">in</span>
+   {Inspect {MyScore map($ getPitch test:isNote)}}
+<span style="color: #a020f0;">end</span>
+</pre>
+
+
+<h3><a name="sec46" id="sec46"></a>
+find</h3>
+
+<pre class="src">
+<span style="color: #b22222;">/* </span><span style="color: #b22222;">The method find is like the method findItems, but recursively
+traverses a score hierarchy. This example returns the first
+simultaneous object which directly contains only notes.
+
+Again, find also supports the arguments test, level, and
+mode. Moreover, there exists a method filter which corresponds to
+filterItems. */</span>
+
+<span style="color: #a020f0;">local</span>
+   MyScore = {Score<span style="color: #a020f0;">.</span>makeScore
+              sim(items:[seq(items:[note(duration:2
+                                         pitch:64
+                                         amplitude:64)
+                                    note(duration:2
+                                         pitch:65
+                                         amplitude:64)
+                                    note(duration:4
+                                         pitch:67
+                                         amplitude:64)
+                                    note(duration:4
+                                         pitch:62
+                                         amplitude:64)])
+                         seq(items:[sim(items:[note(duration:8
+                                                    pitch:48
+                                                    amplitude:64)
+                                               note(duration:8
+                                                    pitch:55
+                                                    amplitude:64)])
+                                    sim(items:[note(duration:4
+                                                    pitch:50
+                                                    amplitude:64)
+                                               note(duration:4
+                                                    pitch:54
+                                                    amplitude:64)])])]
+                  startTime:0
+                  timeUnit:beats(4))
+              <span style="color: #a020f0;">unit</span>}
+<span style="color: #a020f0;">in</span>
+   {Inspect {MyScore find($ <span style="color: #a020f0;">fun</span><span style="color: #b8860b;"> </span>{<span style="color: #0000ff;">$</span> X}
+                               {X isSimultaneous($)} <span style="color: #a020f0;">andthen</span>
+                               {All {X getItems($)}
+                                <span style="color: #a020f0;">fun</span><span style="color: #b8860b;"> </span>{<span style="color: #0000ff;">$</span> MyItem} {MyItem isNote($)} <span style="color: #a020f0;">end</span>}
+                            <span style="color: #a020f0;">end</span>)}}
+<span style="color: #a020f0;">end</span>
+</pre>
+
+
+<h3><a name="sec47" id="sec47"></a>
+Simultaneous items</h3>
+
+<pre class="src">
+<span style="color: #b22222;">/* </span><span style="color: #b22222;">The previous examples demonstrated various generic means for
+accessing information. In addition, Strasheela provides predefined
+accessors for more specific information. For example, the method
+getSimultaneousItems returns all score in the whole score items which
+are simultaneous to a given item (i.e. overlap in time). Like many
+methods shown before, getSimultaneousItems also supports an argument
+test.
+
+The score topology of this example is a simultaneous container,
+containing two sequential containers which in turn contain notes. Such
+a topology can express polyphony where multiple voices run in
+parallel. MyNote is the first note of the upper voice (accessed with
+the handle argument). Two notes of the lower voice sound simultaneous
+with MyNote, and these are returned by getSimultaneousItems (check
+their textual representation to confirm they are correct). The
+procedure Wait delays the inspecting until the notes are found. Try
+what happens if you use another function/method as test for
+getSimultaneousItems.  */</span>
+
+<span style="color: #a020f0;">local</span>
+   MyNote
+   _ <span style="color: #b22222;">/*</span><span style="color: #b22222;">IgnoreScore*/</span> = {Score<span style="color: #a020f0;">.</span>makeScore
+                        sim(items:[seq(items:[note(handle:MyNote
+                                                   duration:2 pitch:72)
+                                              note(duration:1 pitch:71)
+                                              note(duration:3 pitch:72)])
+                                   seq(items:[note(duration:1 pitch:60)
+                                              note(duration:2 pitch:62)
+                                              note(duration:3 pitch:64)])
+                                   ]
+                            startTime:0)
+                        <span style="color: #a020f0;">unit</span>}
+   Result = {MyNote getSimultaneousItems($ test:isNote)}
+<span style="color: #a020f0;">in</span>
+   {Wait Result}
+   {Inspect Result}
+<span style="color: #a020f0;">end</span>
+</pre>
+
+
+<h3><a name="sec48" id="sec48"></a>
+User-defined accessors</h3>
+
+<pre class="src">
+<span style="color: #b22222;">/* </span><span style="color: #b22222;">Strasheela provides access to various information, but chances are
+that some accessor for your particular requirements is not available
+yet. However, Strasheela makes it easy for you to define your own. As
+a demonstration, this example defines an accessor similar to
+getSimultaneousItems used in the previous example.
+
+This example accesses the relevant information using generic accessors
+such as the method filter. Moreover, it encapsulates our new accessors
+in functions, so the accessors are modular and can be easily reused
+later.
+
+More specifically, two functions are defined. The function
+IsSimultaneousItem expects two score items and checks whether their
+temporal position overlaps. The function GetSimultaneousNotes expects
+a single score item, retrieves its top-level temporal container and
+then filters out all score objects directly or indirectly contained
+within this container which meet a specific condition. The condition
+is a conjunction of three tests: (i) a selected object Y must not be
+the argument X given to GetSimultaneousNotes, (ii) Y must be a note,
+and (iii) the two objects X and Y must be simultaneous -- which is
+tested with the function IsSimultaneousItem defined before.
+
+Finally, the function IsSimultaneousItem is used in an example
+virtually idential to the previous example. */</span>
+
+<span style="color: #a020f0;">local</span>
+   <span style="color: #a020f0;">fun</span><span style="color: #b8860b;"> </span>{<span style="color: #0000ff;">IsSimultaneousItem</span> X Y}
+         StartX = {X getStartTime($)}
+         StartY = {Y getStartTime($)}
+         EndX = {X getEndTime($)}
+         EndY = {Y getEndTime($)}
+      <span style="color: #a020f0;">in</span>
+         (StartX <span style="color: #a020f0;">&lt;</span> EndY) <span style="color: #a020f0;">andthen</span> (StartY <span style="color: #a020f0;">&lt;</span> EndX)
+      <span style="color: #a020f0;">end</span>
+   <span style="color: #a020f0;">fun</span><span style="color: #b8860b;"> </span>{<span style="color: #0000ff;">GetSimultaneousNotes</span> X}
+      TopLevel = {X getTopLevels($ test:Score<span style="color: #a020f0;">.</span>isTemporalContainer)}<span style="color: #a020f0;">.</span>1
+   <span style="color: #a020f0;">in</span>
+      {TopLevel filter($ <span style="color: #a020f0;">fun</span><span style="color: #b8860b;"> </span>{<span style="color: #0000ff;">$</span> Y}
+                            <span style="color: #b22222;">%% </span><span style="color: #b22222;">thread because IsSimultaneousItem would block
+</span>                            <span style="color: #b22222;">%% </span><span style="color: #b22222;">when temporal params of X or Y are undetermined
+</span>                            <span style="color: #a020f0;">thread</span>
+                               Y <span style="color: #a020f0;">\=</span> X <span style="color: #a020f0;">andthen</span>
+                               {Y isNote($)} <span style="color: #a020f0;">andthen</span>
+                               {IsSimultaneousItem X Y}
+                            <span style="color: #a020f0;">end</span>
+                         <span style="color: #a020f0;">end</span>)}
+   <span style="color: #a020f0;">end</span>
+   MyNote
+   _ <span style="color: #b22222;">/*</span><span style="color: #b22222;">IgnoreScore*/</span> = {Score<span style="color: #a020f0;">.</span>makeScore
+                        sim(items:[seq(items:[note(handle:MyNote
+                                                   duration:2 pitch:72)
+                                              note(duration:1 pitch:71)
+                                              note(duration:3 pitch:72)])
+                                   seq(items:[note(duration:1 pitch:60)
+                                              note(duration:2 pitch:62)
+                                              note(duration:3 pitch:64)])
+                                   ]
+                            startTime:0)
+                        <span style="color: #a020f0;">unit</span>}   Result = {GetSimultaneousNotes MyNote}
+<span style="color: #a020f0;">in</span>
+   {Wait Result}
+   {Inspect Result}
+<span style="color: #a020f0;">end</span>
+</pre>
+
+
+
+<h2><a name="sec49" id="sec49"></a>
+Customising Output to Export Formats</h2>
+
+
+<p>Following soon..</p>
+
+
+
+<!-- Page published by Emacs Muse ends here -->
+<!-- Footer -->
+<div id="footer">
+<div id="author">&copy; 
+Torsten Anders</div>
+<div id="date">Last time edited: 2007.08.07</div>
+</div>
+  </body>
+</html>

@@ -1,0 +1,110 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+  <head>
+    <title>IntroMusicRepresentation</title>
+    <meta name="generator" content="muse.el">
+    <meta http-equiv="Content-Type"
+          content="text/html; charset=iso-8859-1">
+    
+    <link rel="stylesheet" href="style.css" type="text/css" />
+  </head>
+  <body>
+<div id="header">
+  <ul class="nav">
+    <li class="nav1"><a href="index.html">home</a></li>
+    <li class="navn"><a href="https://sourceforge.net/projects/strasheela/">download at sourceforge</a></li>
+    <li class="navn"><a href="contact.html">contact</a></li>
+  </ul>
+  <div id="logo">
+    <a href="http://sourceforge.net"><img src="http://sflogo.sourceforge.net/sflogo.php?group_id=167225&amp;type=1" width="88" height="31" border="0" alt="SourceForge.net Logo" /></a>
+  </div>
+</div>
+    <h1>IntroMusicRepresentation</h1>
+    <!-- Page published by Emacs Muse begins here -->
+<p>To represent more complex music than a scale we need a more expressive music representation.</p>
+
+<p>Generate a simple score and output it. <code>Score.makeScore</code> expects a
+literal score representation consisting of records and returns a
+score object. Each record in the literal score representation is an
+init method to create a score object (which optionally contains
+other score objects), i.e. score object attributes can be set by
+specifying init record features.</p>
+
+
+<pre class="example">
+declare
+MyScore = {Score.makeScore
+	   seq(items: [note(duration: 4
+			    pitch: 60
+			    amplitude: 80)
+		       note(duration: 4
+			    pitch: 64
+			    amplitude: 80)
+		       note(duration: 4
+			    pitch: 67
+			    amplitude: 80)]
+	       startTime:0
+	       %% duration 1 corresponds to 1/4 beats, i.e. duration
+	       %% one is a 1/16th note.
+	       timeUnit:beats(4))
+	   unit}
+</pre>
+
+<p>There are various ways to look at scores</p>
+
+<p>Look at the object without inspecting it.</p>
+
+<pre class="example">{Browse MyScore}</pre>
+
+
+<p>To inspect the score nesting and parameter values (see
+toPPrintRecord doc for additional args)
+{Browse {MyScore toPPrintRecord($)}}</p>
+
+<p>To see all score object attributes (see toFullRecord doc for
+additional args)
+{Browse {MyScore toFullRecord($)}}</p>
+
+<p>To transform the object back into an init record (e.g. for
+archiving purposes after a successful search).
+{Browse {MyScore toInitRecord($)}}</p>
+
+<p>To listing to the score (you need to have Csound and a sound file player installed and some Strasheela environment variables set correctly). See the doc for more arguments.
+{Out.renderAndPlayCsound MyScore unit}</p>
+
+<p>To view the score in common music notation (you need to have lilypond and a PDF viewer installed and some Strasheela environment variables set correctly). See the doc for more arguments.
+{Out.renderAndShowLilypond MyScore unit}</p>
+
+
+<p>Many unset score parameters are often implicitly bound to FD
+integers (for details on the init defaults see the class
+definitions in ScoreCore.oz). Such parameters can be searched for in a script.
+declare
+MyScore = {Score.makeScore</p>
+
+<center>
+<p class="quoted">seq(items: [note note note])
+unit}</p>
+</center>
+
+<p>{Browse {MyScore toPPrintRecord($)}}</p>
+
+
+<p>However, it is often sensible to set some parameters directly by
+hand. This is most often true for the startTime of the full score
+ &mdash; leaving the startTime unset would greatly increase the size of
+the search space without any further use.</p>
+
+<p>For output into various formats it is also necessary to set the
+timeUnit (the timeUnits of all objects are unified). See the doc of
+the class TimeParameter for details.</p>
+
+<!-- Page published by Emacs Muse ends here -->
+<!-- Footer -->
+<div id="footer">
+<div id="author">&copy; 
+Torsten Anders</div>
+<div id="date">Last time edited: 2006.09.05</div>
+</div>
+  </body>
+</html>

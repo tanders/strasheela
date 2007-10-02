@@ -1,0 +1,8 @@
+
+run latex/pdflatex and bibtex as usual to generate all aux files (e.g. for bibliography).
+
+run 
+
+ =latex2html -dir  StrasheelaMotivation=
+
+

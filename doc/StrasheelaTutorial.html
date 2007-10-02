@@ -1,0 +1,145 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+  <head>
+    <title>Strasheela Tutorial</title>
+    <meta name="generator" content="muse.el">
+    <meta http-equiv="Content-Type"
+          content="text/html; charset=iso-8859-1">
+    
+    <link rel="stylesheet" href="style.css" type="text/css" />
+  </head>
+  <body>
+<div id="header">
+  <ul class="nav">
+    <li class="nav1"><a href="index.html">home</a></li>
+    <li class="navn"><a href="https://sourceforge.net/projects/strasheela/">download at sourceforge</a></li>
+    <!-- <li class="navn"><a href="IndexOfPages.html">site map</a></li> -->
+    <li class="navn"><a href="contact.html">contact</a></li>
+  </ul>
+  <div id="logo">
+    <a href="http://sourceforge.net"><img src="http://sflogo.sourceforge.net/sflogo.php?group_id=167225&amp;type=1" width="88" height="31" border="0" alt="SourceForge.net Logo" /></a>
+  </div>
+</div>
+    <h1>Strasheela Tutorial</h1>
+    <!-- Page published by Emacs Muse begins here -->
+<p><a href="http://www.torsten-anders.de">Torsten Anders</a></p>
+
+<div class="contents">
+<dl>
+<dt>
+<a href="#sec1">Interactive Tutorial</a>
+</dt>
+<dt>
+<a href="#sec2">First Steps with the Oz Programming Interface</a>
+</dt>
+<dt>
+<a href="#sec3">Further Introductory Reading</a>
+</dt>
+</dl>
+</div>
+
+
+<p>This tutorial introduces some fundamental concepts of Strasheela by concrete examples. Strasheela is a highly generic computer aided composition system based on constraint programming.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<p><strong>Warning:</strong> This tutorial is still work in progress.</p>
+
+
+
+<h2><a name="sec1" id="sec1"></a>
+Interactive Tutorial</h2>
+
+<p class="first">Strasheela provides an interactive tutorial for learning the basics of Oz and Strasheela. Just execute the application <code>InteractiveTutorial.exe</code> in <code>strasheela/contributions/anders/Tutorial/</code> at a command line. The application sometimes takes a few seconds to start up (it starts the Oz compiler in the background).</p>
+
+<blockquote>
+<p class="quoted"><a class="image-link" href="tutorial-atFullResolution.html">
+<img src="./graphics/tutorial-reduced.png"></a></p>
+</blockquote>
+
+<p>This interactive tutorial supports the direct execution and editing of Oz and Strasheela examples. You don't need to first learn Emacs nor set up an Oz initialisation file &mdash; you can directly start and try out Strasheela itself! The text of this tutorial is also provided in HTML format (see links below) in case you prefer reading the examples in a web-browser.</p>
+
+<h3><a href="01-Basics.html">Oz Basics</a></h3>
+
+
+<h3><a href="02-ConstraintProgramming.html">Constraint Programming in Oz</a></h3>
+
+
+<h3><a href="01-MusicRepresentation.html">The Strasheela Music Representation</a></h3>
+
+
+<h3><a href="02-MusicalCSPs.html">Musical Constraint Satisfaction Problems in Strasheela</a></h3>
+
+
+
+
+
+<h2><a name="sec2" id="sec2"></a>
+First Steps with the Oz Programming Interface</h2>
+
+<p class="first">The interactive tutorial provides a means to easily test out provided examples. For developing Oz and Strasheela programs, however, the Oz Programming Interface (OPI) is more suitable. The OPI is a powerful environment for editing and executing Oz code, and for interacting with other development tools. Start the OPI by typing (at the commandline)</p>
+
+<blockquote>
+<p class="quoted"><code>oz</code></p>
+</blockquote>
+
+<p>This opens an editor window with two frames. You can enter Oz source code in the top frame. For example, type the following:</p>
+
+<blockquote>
+<p class="quoted"><code>{Browse hello}</code></p>
+</blockquote>
+
+<p>Select this line with the mouse. Then, go to the Oz menu and select <code>Feed Region</code> (there are other menu entries for feeding the source line in where the cursor is, a paragraph etc.). This feeds the selected code to the Oz compiler which executes it. It opens the Browser window, and the Browser displays <code>hello</code>.</p>
+
+<blockquote>
+<p class="quoted"><a class="image-link" href="OPI-atFullResolution.html">
+<img src="./graphics/OPI-reduced.png"></a></p>
+</blockquote>
+
+<p>Note the short-cuts shown after the menu entries. For example, <code>Feed Region</code> has the short-cut C-. C-r (meaning first the keys Control and '.' at the same time, and then Control plus 'r'), and <code>Feed Line</code> has the short-cut C-M-x (meaning Control-key plus Meta-key plus 'x', the Meta-key is usually the alt-key on your keyboard).</p>
+
+<p>You can also load and save Oz source files using the file menu. Don't get confused by its unconventional design. Create a new <code>*.oz</code> file by opening a not yet existing file. At the file menu select <code>Open File...,</code> and watch the lowest line of the OPI (the Minibuffer) where you are prompted to enter a file name.</p>
+
+<blockquote>
+<p class="quoted"><a class="image-link" href="OPI2-atFullResolution.html">
+<img src="./graphics/OPI2-reduced.png"></a></p>
+</blockquote>
+
+<p>This little information &mdash; together with the Oz menu provided by the OPI &mdash; are already enough for doing Oz programming. If you want to learn more, extensive documentation exists for the <a href="http://www.mozart-oz.org/documentation/opi/index.html">OPI</a> and for <a href="http://www.emacswiki.org/cgi-bin/wiki">Emacs</a>.</p>
+
+
+
+<h2><a name="sec3" id="sec3"></a>
+<a href="IntroductoryReading.html">Further Introductory Reading</a></h2>
+
+
+
+<!-- Page published by Emacs Muse ends here -->
+<!-- Footer -->
+<div id="footer">
+<div id="author">&copy; 
+Torsten Anders</div>
+<div id="date">Last time edited: 2007.08.04</div>
+</div>
+  </body>
+</html>

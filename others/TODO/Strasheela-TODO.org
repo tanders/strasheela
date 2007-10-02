@@ -1,0 +1,138 @@
+
+* Strasheela design
+
+** TODO MIDI input
+
+*** DONE Define intermediate Oz value MIDI format (the format used for MIDI output)
+
+See MidiOutput.oz doc for details.
+
+
+*** DONE Use Gump (http://www.mozart-oz.org/documentation/gump/index.html) to write parser CSV -> this intermediate MIDI format
+
+*** TODO Refactor MidiInput.oz, so that the imported intermediate Oz value MIDI format can be directly output again
+
+Make transposition example: Midifile -> CSV file -> Import with Gumpo parser -> Mapping where for every note on/off some pitch offset is added -> CSV output -> Midi file
+ 
+
+*** Transform MIDI clock time settings into another time format 
+
+using the number of clock pulses per quarter note given in header record. Shall I store this information extra somewhere so the transformation function (see below) can make use of it?
+
+*** Function for sorting into tracks and channels (by keeping the intermediate format, e.g., list of lists)
+
+Make the sorting condition higher-order 
+
+A nested list will then optionally be the input for the transformation into the Strasheela score format (each list and sublist will be turned into a simultaneous container)
+
+
+*** Function for grouping of note-on note-off records (by keeping the intermediate format, but notes are represented as pairs of records like NoteOn#NoteOff)
+
+*** Transformation (highly user-controllable: with clauses again): intermediate MIDI format -> Strasheela score (textual format)
+
+Standard: collect all events in single simultaneous container
+
+?? option: have top-level simultanous containers containing a sim container for the events of each channel
+
+Default: transform into existing Strasheela classes (like notes) and ignore information for which no Strasheela classes exist yet (like control data, key signature etc.).
+  
+Later, I could create new score classes for the rest of the MIDI information..
+
+Or could I per default have some generic Strasheela event, with MIDI type read in as info, and all the information entered as additional parameters (??)
+
+
+** TODO Oz Module.link / Module.apply: why did I need it
+
+See ~/oz/music/Strasheela/private/test/OtherFunctors/ModuleLinkingTest
+
+why did I ever need ModuleLink instead of Module.link?
+
+Could it be that the problem appeared only when a buffer which loaded some module was re-fed? 
+
+** TODO [#A] Redefine find method concurrently (don't use collect - returns as soon as some fitting object is found)
+
+** TODO OutGUI
+
+** TODO 1W Refactor harmony model
+
+e.g. use interval class + memoization
+
+
+** Multi-core  processing
+
+*** TODO [#C] Reread Oz distributed programming (van Roy)
+
+Play around with the possibilities: create multiple sites (on localhost simply for now) and communicate between them 
+
+*** DONE Test: multiple Oz sides are independent processes on the computer
+
+That is: test whether multiple processes can run on different CPUs
+
+*** DONE Simple CSP with parallel search
+
+Check whether multiple CPUs are used  
+
+
+*** TODO Simple Musical CSP with parallel search
+
+How does communication of data structure slow down the process?
+
+
+
+* Strasheela examples 
+
+** Inventio example
+
+*** TODO harmonic etc analysis of inventio 1
+
+*** TODO Inventio B: Fuege "BrainImage Data" in CSP ein
+
+?? As parameter or info for motif?
+
+Abstract applied constraint, so the effect is controllable
+
+* Strasheela documentation
+
+** Strasheela tutorial
+
+*** TODO Strasheela tutorial: finish music representation 'chapter'
+*** TODO Strasheela tutorial: do music constraint programming 'chapter'
+
+*** TODO Email Tobias Kunze: CM CSS verwendet...
+
+* Collecting new ideas
+
+** TODO Lesen XMG
+
+
+
+* General Oz todo
+
+** Oz Path
+
+*** TODO Oz Path: bug commits
+
+*** TODO Oz Path: doc update
+
+*** TODO Oz Path: test cases
+
+
+** ozh
+
+*** TODO ozh: update save file and anchor names 
+
+File names and anchor names should be generated from source entries (e.g., file names, class names) instead of generic names like node1.html or class1.html where links from elsewhere into the documentation get if files etc. are added to the source later
+
+*** TODO ozh: Formatting of documentation strings 
+
+The current implementation does not even preserve whitespace after a new line in doc strings. Consequently, the layout of code examples is destroyed.
+
+Even better would be, if some wiki layout is supported (optionally). Does there exist some easy wiki-layout -> HTML application (expecting wikified text snippets and returning corresponding HTML code snippets).   
+
+
+** Collozeum
+
+*** TODO Collozeum: make projects available at Mogul
+
+
+

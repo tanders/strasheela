@@ -1,0 +1,41 @@
+#title How to Create a Patch 
+
+Changes to Strasheela files are most suitably provided in the form of patches. Two approaches for creating a patch are explained here. The first approach uses Subversion (=svn=), the second uses =diff=. Subversion is more powerful (e.g., it can assure that you compare your changes to the very last version of Strasheela), whereas =diff= may be more simple to use. However, using Subversion is recommended. 
+
+
+** Using Subversion
+
+First install the Subversion client software, for example, from [[http://subversion.tigris.org/project_packages.html][here]] (on Linux, =svn= may already be installed). You then check out (i.e. download) the Strasheela repository with the following instruction (at the commandline). This will create a new directory =strasheela= into your current directory and copy the full Strasheela repository into it. 
+
+  =svn co https://strasheela.svn.sourceforge.net/svnroot/strasheela strasheela= 
+
+You can now freely edit you newly created local copy. However, we discourage you from moving and deleting files (you may of course propose it on the [[https://lists.sourceforge.net/lists/listinfo/strasheela-devel][Strasheela-devel mailing list]]). You can tell Subversion that you added a file (or directory) with the following command.
+
+  =svn add /path/to/the/added/file= 
+
+After you finished your changes, you are ready to create a patch. However, you should first update your local copy by integating all changes to the central repository since your checkout. Move into the toplevel Strasheela directory.
+
+  =cd /my/path/to/strasheela=
+
+Then update your local copy.
+
+  =svn update= 
+
+You can now create the patch.
+
+  =svn diff > myPatch.diff= 
+
+Please send your patch together with an explanation to the [[https://lists.sourceforge.net/lists/listinfo/strasheela-devel][Strasheela-devel mailing list]]. 
+
+NB: Subversion is a centralised revision control system. This means, that important features (e.g. commiting changes to the repository) are not available to you before you are registered as Strasheela developer at https://sourceforge.net/projects/strasheela/. 
+
+BTW: There also exist graphical user interfaces for Subversion (e.g. [[http://tortoisesvn.tigris.org/][TortoiseSVN]] for Windows. 
+
+** Using diff 
+
+=diff= is usually already available on Linux and MacOS. For Windows, it can be found [[http://gnuwin32.sourceforge.net/packages/diffutils.htm][here]] (installing the setup program implicitly installs the dependencies). Enter the following command invocation at the commandline. Please replace =originalStrasheelaDirectory= with the path to an unchanged Strasheela directory of the **latest release** and =editedStrasheelaDirectory= with your edited version of this release. 
+
+  =diff -ru originalStrasheelaDirectory editedStrasheelaDirectory > myPatch.diff=  
+
+Please send your patch together with an explanation to the [[https://lists.sourceforge.net/lists/listinfo/strasheela-devel][Strasheela-devel mailing list]]. 
+

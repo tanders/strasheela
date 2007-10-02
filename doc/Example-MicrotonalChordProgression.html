@@ -1,0 +1,197 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+  <head>
+    <title>Microtonal Chord Progression</title>
+    <meta name="generator" content="muse.el">
+    <meta http-equiv="Content-Type"
+          content="text/html; charset=iso-8859-1">
+    
+    <link rel="stylesheet" href="style.css" type="text/css" />
+  </head>
+  <body>
+<div id="header">
+  <ul class="nav">
+    <li class="nav1"><a href="index.html">home</a></li>
+    <li class="navn"><a href="https://sourceforge.net/projects/strasheela/">download at sourceforge</a></li>
+    <!-- <li class="navn"><a href="IndexOfPages.html">site map</a></li> -->
+    <li class="navn"><a href="contact.html">contact</a></li>
+  </ul>
+  <div id="logo">
+    <a href="http://sourceforge.net"><img src="http://sflogo.sourceforge.net/sflogo.php?group_id=167225&amp;type=1" width="88" height="31" border="0" alt="SourceForge.net Logo" /></a>
+  </div>
+</div>
+    <h1>Microtonal Chord Progression</h1>
+    <!-- Page published by Emacs Muse begins here -->
+<p><a href="StrasheelaExamples.html">back</a></p>
+
+<div class="contents">
+<dl>
+<dt>
+<a href="#sec1">Introduction</a>
+</dt>
+<dt>
+<a href="#sec2">Notation</a>
+</dt>
+<dt>
+<a href="#sec3">Prime Limit 5 Examples</a>
+</dt>
+<dt>
+<a href="#sec4">Prime Limit 7  Examples</a>
+</dt>
+<dt>
+<a href="#sec5">Prime Limit 11 Examples</a>
+</dt>
+</dl>
+</div>
+
+
+<h2><a name="sec1" id="sec1"></a>
+Introduction</h2>
+
+<p class="first">This example creates a homophonic chord progression in extended just intonation. The chords stem from <a href="http://tonalsoft.com/enc/t/tonality-diamond.aspx">tonality diamonds</a> presented by <a href="http://www.amazon.com/gp/product/030680106X/sr=8-3/qid=1149574638/ref=pd_bbs_3/104-1993379-1061553?%5Fencoding=UTF8">Partch (1974)</a>.
+For example, Partch's <a href="http://tonalsoft.com/enc/l/limit.aspx">limit</a>-5 diamond is constructed from the two chords [1/1, 5/4, 3/2] (i.e. the just intonated major triad [<em>c</em>, <em>e</em>, <em>g</em>]) and [1/1, 8/5, 4/3] (i.e. the just intonated minor triad [<em>c</em>, <em>a</em>-flat, <em>f</em>]). All other chords in the diamond (diagonally connected pitches) are transpositions of these two chords &mdash; the diamond is shown <a href="http://tonalsoft.com/enc/t/tonality-diamond.aspx">here</a>, an alternative representation of this information shown <a href="http://tonalsoft.com/enc/l/lattice.aspx">here</a>.</p>
+
+<p>This CSP is based on the two chords respectively which constitute the limit-5 to limit-11 tonality diamond. These chords can be transposed relatively freely. Solutions are not restricted to any scale (e.g. major and minor chords can be freely interchanged). In effect, this CSP allows for far more transpositions of these chords than Partch's tonality diamonds.</p>
+
+<p>A few rules restrict the progression. Several of these rules can be controlled by arguments to the CSP (this CSP has been defined as a <a href="http://www.mozart-oz.org/documentation/fdt/node24.html">parametrised script</a>).</p>
+
+<ul>
+<li>A chord is always set out by distinct pitch classes (i.e. no pitch doublings, a triad is set out by three notes only).</li>
+
+<li>The treatment of chord inversions is restricted: non-root positions require that the bass voice progresses step-wise. An argument controls the minimal number of root positions. For <a href="http://tonalsoft.com/enc/o/otonal.aspx">Otonalities</a>, the chord root is always 1/1. However, following the standard convention this CSP defines 4/3 as the root of <a href="http://tonalsoft.com/enc/u/utonal.aspx">Utonalities</a>: the root of F minor (i.e. [1/1, 8/5, 4/3]) is <em>f</em> (i.e. 4/3) and not <em>c</em> (which is 1/1).</li>
+
+<li>The first and the last chord in the progression are equal: the have the same chord type (same chord index in chord database, cf. explanation <a href="HarmonyExamples.html">here</a>) and the same transposition.</li>
+
+<li>All chords in the progression are pairwise distinct (except the first and the last).</li>
+
+<li>The maximum prime limit of the chord types is controlled by the chord database.</li>
+
+<li>The maximum prime limit of the chord roots is controlled by a CSP argument. Please note that the prime limit of chords and their transposition can be controlled independently. For example, a major chord (prime limit 5) might be transposed by a fifth (3/2, i.e. prime limit 3), or a harmonic seventh (7/4, i.e. prime limit 7).</li>
+
+<li>The maximum dissonance degree of the intervals between chord roots is controlled by an argument. The dissonance degree is deduced from Partch's one-footed bridge. For example, unison has the dissonance degree 0, the perfect fifth (3/2) and fourth (4/3) the dissonance degree 1, the major and minor third the dissonance degree 2, and so forth up to the dissonance degree 8 for the syntonic comma.</li>
+</ul>
+
+<p>The <a href="../examples/05-MicrotonalChordProgression.oz">full source</a> of the example explains further details of the CSP.</p>
+
+
+
+<h2><a name="sec2" id="sec2"></a>
+Notation</h2>
+
+<p class="first">The CSP is based on a tuning with 72 equal divisions of the octave (<a href="http://tonalsoft.com/enc/number/72edo.aspx">72-EDO</a>), which well approximates 11-limit just intonation. In the output examples below, these 72-EDO pitches are notated in common music notation plus the accidentals '+' and '-' above the staff. Each such sign marks the raising or lowering of a pitch by a 1/12-note. Below each note is given the ratio from Partch's 43-tone just intonation scale which is very close to this 72-EDO pitch (n/a is written in case a pitch is outside of Partch's scale).</p>
+
+<p>The last staff shows always an harmonic analysis (i.e. this staff is not sounding). Notated is the chord root (in common music notation) and the pitches of the chord as ratios. For better legibility, these ratios are expressed by the untransposed chord pitches from the tonality diamond plus a transposition factor. For example, 9/8 x [1/1, 8/5, 4/3] expresses the F minor chord [1/1, 8/5, 4/3] transposed by the major whole tone 9/8. Thus 9/8 x [1/1, 8/5, 4/3] is G minor, or [9/8, 9/5, 3/2]. The transposition factor is always the 1/1 of the transposed chord, that is the root for Otonalities and the fifth (3/2 of the transposed chord) for Utonalities.</p>
+
+<p>Please note: the music notation of the examples below shows a few problems which are caused by the relatively simple transformation from the primary pitch specification used by the CSP (namely 72-EDO) into music notation.</p>
+
+<ul>
+<li>Accidentals in the notation are simply deduced from pitch classes, and therefore there is no distinction between sharps and flats (only sharps are notated, i.e. C minor is written as [<em>c,</em> <em>d</em>#, <em>g</em>]!).</li>
+
+<li>Ratios are only derived from 72-EDO pitches by finding the most close pitch in Partch's 43-tone scale. As 72-EDO pitches are ambiguous, the wrong ratio is sometimes associated (e.g. the correct interpretation of an 72-EDO pitch might not be member of Partch's scale at all).</li>
+</ul>
+
+
+<p>The rest of this section presents various musical output of this example. These chord progressions differ considerably in their harmonic language. Different output is created by different arguments given to the CSP, which affect the rules applied to the music (see above).</p>
+
+
+
+<h2><a name="sec3" id="sec3"></a>
+Prime Limit 5 Examples</h2>
+
+<p class="first">The examples in this section share the prime limit 5 for their untransposed chord pitches. Only chords of Partch's 5-limit tonality diamond are used here, that is <code>[1/1, 5/4, 3/2]</code> and <code>[1/4, 8/5, 4/3]</code> (i.e. only major and minor chords are permitted).
+Other 5-limit chords are not supported. For example, there is no diminished triad, no augmented triad, nor a dominant seventh chord. However, the CSP can be easily extended for such chords by extending the chord database definition.</p>
+
+<p>The examples differ in the prime limit of the permitted chord transpositions (i.e. by what interval the root of the untransposed chord can be transposed). In the following example, the prime limit of chord roots is 3. Moreover, the dissonance degree of root intervals is restricted to fifths (3/2) and fourths (4/3) and only root inversion is permitted.</p>
+
+<p><a class="image-link" href="../examples/Output/05-MicrotonalChordProgression-ex1.mp3">
+<img src="../examples/Output/05-MicrotonalChordProgression-ex1.preview.png"></a></p>
+
+<p>The prime limit of chord roots is still 3, in the next example. However, it allows for non-root inversions. In that case, the bass must progress step-wise.</p>
+
+<p><a class="image-link" href="../examples/Output/05-MicrotonalChordProgression-ex2.mp3">
+<img src="../examples/Output/05-MicrotonalChordProgression-ex2.preview.png"></a></p>
+
+
+<p>The following example extends the prime limit of chord roots to 5, that is mediant-like progressions are permitted (e.g. 2nd to 3rd bar: F-major to Ab-major). Note the plus signs over the root notes: such progressions introduce a 'syntonic comma alteration' of the roots.</p>
+
+
+<p><a class="image-link" href="../examples/Output/05-MicrotonalChordProgression-ex3.mp3">
+<img src="../examples/Output/05-MicrotonalChordProgression-ex3.preview.png"></a></p>
+
+
+<p>The next example uses the same settings as before.</p>
+
+<p><a class="image-link" href="../examples/Output/05-MicrotonalChordProgression-ex4.mp3">
+<img src="../examples/Output/05-MicrotonalChordProgression-ex4.preview.png"></a></p>
+
+
+
+
+<h2><a name="sec4" id="sec4"></a>
+Prime Limit 7  Examples</h2>
+
+<p class="first">The prime limit for chord pitches is 7 in this section. Only these two chords are used: <code>[1/1, 5/4, 3/2, 7/4]</code> and <code>[1/1, 8/5, 4/3, 8/7]</code>. Again, the examples differ in the prime limit of the permitted chord transpositions.</p>
+
+
+<p>The prime limit of chord roots is 3 in this example, but step-wise root motion and non-root inversions are permitted.</p>
+
+<p><a class="image-link" href="../examples/Output/05-MicrotonalChordProgression-ex5.mp3">
+<img src="../examples/Output/05-MicrotonalChordProgression-ex5.preview.png"></a></p>
+
+
+<p>In the following example, the prime limit of chord roots is extended to 5. However, the interval between chord roots must be relatively consonant here, and no step-wise root motion is permitted any more. For example, no major whole second (9/8, 3-limit) nor minor diatonic semitone (16/15, 5-limit) is permitted.</p>
+
+<p><a class="image-link" href="../examples/Output/05-MicrotonalChordProgression-ex6.mp3">
+<img src="../examples/Output/05-MicrotonalChordProgression-ex6.preview.png"></a></p>
+
+
+<p>The next example allows for more dissonant chord root intervals and thus for step-wise root motion. Nevertheless, the prime limit of chord roots is still restricted to 5.</p>
+
+
+<p><a class="image-link" href="../examples/Output/05-MicrotonalChordProgression-ex7.mp3">
+<img src="../examples/Output/05-MicrotonalChordProgression-ex7.preview.png"></a></p>
+
+
+<p>The prime limit of chord roots is extended to 7 in the following example.</p>
+
+<p><a class="image-link" href="../examples/Output/05-MicrotonalChordProgression-ex8.mp3">
+<img src="../examples/Output/05-MicrotonalChordProgression-ex8.preview.png"></a></p>
+
+
+
+<h2><a name="sec5" id="sec5"></a>
+Prime Limit 11 Examples</h2>
+
+<p class="first">Finally, this section introduces 11-limit intonation. The first two examples make use of the following two chords of Partch's 11-limit tonality diamond: <code>[1/1, 9/8, 5/4, 11/8, 3/2, 7/4]</code> and <code>[1/1, 16/9, 8/5, 16/11, 4/3, 8/7]</code> (including un-Partchian transpositions of them..). The last example reverts to the 7-limit chord database of the section before.</p>
+
+<p>In this example, the prime limit of chord roots is 5, and chord root intervals are restricted to rather consonant intervals.</p>
+
+<p><a class="image-link" href="../examples/Output/05-MicrotonalChordProgression-ex9.mp3">
+<img src="../examples/Output/05-MicrotonalChordProgression-ex9.preview.png"></a></p>
+
+
+<p>The prime limit of chord roots is extended to 11 in the following example. In addition, more dissonant chord root intervals are permitted.</p>
+
+<p><a class="image-link" href="../examples/Output/05-MicrotonalChordProgression-ex10.mp3">
+<img src="../examples/Output/05-MicrotonalChordProgression-ex10.preview.png"></a></p>
+
+
+<p>Finally, this example reverts to the two limit-7 chords (see above). However, these can be transposed more freely (prime limit of chord roots is 11).</p>
+
+<p><a class="image-link" href="../examples/Output/05-MicrotonalChordProgression-ex11.mp3">
+<img src="../examples/Output/05-MicrotonalChordProgression-ex11.preview.png"></a></p>
+
+
+<p><a href="StrasheelaExamples.html">back</a></p>
+
+
+
+<!-- Page published by Emacs Muse ends here -->
+<!-- Footer -->
+<div id="footer">
+<div id="author">&copy; 
+Torsten Anders</div>
+<div id="date">Last time edited: 2007.08.04</div>
+</div>
+  </body>
+</html>

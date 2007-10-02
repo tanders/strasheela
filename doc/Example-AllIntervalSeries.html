@@ -1,0 +1,114 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+  <head>
+    <title>All-Interval Series</title>
+    <meta name="generator" content="muse.el">
+    <meta http-equiv="Content-Type"
+          content="text/html; charset=iso-8859-1">
+    
+    <link rel="stylesheet" href="style.css" type="text/css" />
+  </head>
+  <body>
+<div id="header">
+  <ul class="nav">
+    <li class="nav1"><a href="index.html">home</a></li>
+    <li class="navn"><a href="https://sourceforge.net/projects/strasheela/">download at sourceforge</a></li>
+    <!-- <li class="navn"><a href="IndexOfPages.html">site map</a></li> -->
+    <li class="navn"><a href="contact.html">contact</a></li>
+  </ul>
+  <div id="logo">
+    <a href="http://sourceforge.net"><img src="http://sflogo.sourceforge.net/sflogo.php?group_id=167225&amp;type=1" width="88" height="31" border="0" alt="SourceForge.net Logo" /></a>
+  </div>
+</div>
+    <h1>All-Interval Series</h1>
+    <!-- Page published by Emacs Muse begins here -->
+<p><a href="StrasheelaExamples.html">back</a></p>
+
+<div class="contents">
+<dl>
+<dt>
+<a href="#sec1">Overview</a>
+</dt>
+<dt>
+<a href="#sec2">Definition</a>
+</dt>
+</dl>
+</div>
+
+
+<h2><a name="sec1" id="sec1"></a>
+Overview</h2>
+
+<p class="first">This example defines an all-interval series &mdash; a CSP classics. The all-interval series concept stems from <a href="http://en.wikipedia.org/wiki/Serialism">serial music</a>. A <em>series</em> (or tone row) is a sequence of twelve tone names (pitch classes) of the chromatic scale, in which each pitch class occurs exactly once. In an <em>all-interval series</em>, also all eleven intervals between the twelve pitches are pairwise distinct (i.e. each interval occurs only once). These intervals are computed in such a way that they are <a href="http://en.wikipedia.org/wiki/Inversion_&#40;music&#41;#Inversional_equivalency">inversional equivalent</a>: complementary intervals such a fifth upwards and a fourth downwards count as the same interval (namely 7). Shown is one of the 3856 solutions known from the <a href="http://links.jstor.org/sici?sici=0022-2909&#40;197423&#41;18%3A2%3C364%3ATSOAS%3E2.0.CO%3B2-K">literature</a>.</p>
+
+<blockquote>
+<p class="quoted"><a class="image-link" href="../examples/Output/01-AllIntervalSeries.mp3">
+<img src="../examples/Output/01-AllIntervalSeries.preview.png"></a></p>
+</blockquote>
+
+<blockquote>
+<p class="quoted"><a href="../examples/01-AllIntervalSeries.oz">source</a></p>
+</blockquote>
+
+
+
+
+<h2><a name="sec2" id="sec2"></a>
+Definition</h2>
+
+<p class="first">The actual CSP definition is brief. <code>AllIntervalSeries</code> returns the all-interval series <code>Xs</code>, which is a list of pitch classes represented by finite domain (FD) integers. For convenience, also the list of intervals between the series pitches can be output (<code>Dxs</code>, also a list of FD integers). <code>AllIntervalSeries</code> expects the length of the series to generate as argument <code>L</code> (an integer).</p>
+
+<pre class="src">
+<span style="color: #a020f0;">proc</span><span style="color: #b8860b;"> </span>{<span style="color: #0000ff;">AllIntervalSeries</span> L ?Dxs ?Xs}
+   Xs = {FD<span style="color: #a020f0;">.</span>list L 0<span style="color: #a020f0;">#</span>L<span style="color: #a020f0;">-</span>1}              <span style="color: #b22222;">% </span><span style="color: #b22222;">Xs is list of L FD integers in {0, ..., L-1}
+</span>   Dxs = {FD<span style="color: #a020f0;">.</span>list L<span style="color: #a020f0;">-</span>1 1<span style="color: #a020f0;">#</span>L<span style="color: #a020f0;">-</span>1}
+   <span style="color: #b22222;">%% </span><span style="color: #b22222;">Loop constrains intervals: inversionalEquivalentInterval(X_i, X_i+1, Dx_i)
+</span>   <span style="color: #a020f0;">for</span> I <span style="color: #a020f0;">in</span> 1<span style="color: #a020f0;">..</span>L<span style="color: #a020f0;">-</span>1
+   <span style="color: #a020f0;">do</span>
+       X1 = {Nth Xs I}
+       X2 = {Nth Xs I<span style="color: #a020f0;">+</span>1}
+       Dx = {Nth Dxs I}
+    <span style="color: #a020f0;">in</span>
+       {InversionalEquivalentInterval X1 X2 Dx}
+   <span style="color: #a020f0;">end</span>
+   {FD<span style="color: #a020f0;">.</span>distinctD Xs}                   <span style="color: #b22222;">% </span><span style="color: #b22222;">no PC repetition
+</span>   {FD<span style="color: #a020f0;">.</span>distinctD Dxs}                  <span style="color: #b22222;">% </span><span style="color: #b22222;">no interval repetition
+</span>   <span style="color: #b22222;">%% </span><span style="color: #b22222;">add knowledge from the literature: first series note is 0 and last is L/2
+</span>   Xs<span style="color: #a020f0;">.</span>1 = 0
+   {List<span style="color: #a020f0;">.</span>last Xs} = L <span style="color: #a020f0;">div</span> 2
+   <span style="color: #b22222;">%% </span><span style="color: #b22222;">Search strategy: first fail distribution
+</span>   {FD<span style="color: #a020f0;">.</span>distribute ff Xs}
+<span style="color: #a020f0;">end</span>
+</pre>
+
+<p>The CSP first creates two lists of FD integers and unifies them with <code>Xs</code> and <code>Dxs</code>. Then, it constrains the relation between series pitch classes and their intervals with the constraint <code>InversionalEquivalentInterval</code> (see below). The elements in <code>Xs</code> and <code>Dxs</code> are constrained to be pairwise distinct. We know from the <a href="http://www.amazon.de/Zw%C3%B6lfton-Kontrapunkt-Studien-ED-4203-Ernst-Krenek/dp/3795724902/sr=8-1/qid=1170156812/ref=sr_1_1/028-6460302-9489368?ie=UTF8&amp;s=books">literature</a> that the first pitch class of an all-interval series is always 0 and that the last pitch class is the integer L/2. Finally, the CSP states a <a href="http://www.mozart-oz.org/documentation/fdt/node2.html#chapter.constraints">distribution strategy</a>.</p>
+
+<p>The CSP makes use of the user-defined constraint <code>InversionalEquivalentInterval</code>. <code>InversionalEquivalentInterval</code> constrains <code>Interval</code> to be an inversional equivalent interval between the two pitch classes <code>Pitch1</code> and <code>Pitch2</code>.</p>
+
+<pre class="src">
+<span style="color: #a020f0;">proc</span><span style="color: #b8860b;"> </span>{<span style="color: #0000ff;">InversionalEquivalentInterval</span> Pitch1 Pitch2 Interval}
+   Aux = {FD<span style="color: #a020f0;">.</span>decl}                       <span style="color: #b22222;">% </span><span style="color: #b22222;">create an auxiliary variable
+</span><span style="color: #a020f0;">in</span>
+   <span style="color: #b22222;">%% </span><span style="color: #b22222;">adding 12 has no effect for mod 12, but the FD int Aux must be positive
+</span>   Aux <span style="color: #a020f0;">=:</span> Pitch2<span style="color: #a020f0;">-</span>Pitch1<span style="color: #a020f0;">+</span>12
+   {FD<span style="color: #a020f0;">.</span>modI Aux 12 Interval}
+<span style="color: #a020f0;">end</span>
+</pre>
+
+<p>Because of its simplicity, this CSP does not require any Strasheela constructs. Strasheela was only used to output solutions, for example, into music notation.
+For more complex musical CSPs, however, Strasheela considerably helps to express score information, simplifies the score information access (e.g. in order to apply constraints to variables), and provides special score search strategies. The <a href="../examples/01-AllIntervalSeries.oz">full source of this example</a> is extensively documented. In addition to explaining the actual CSP itself, the source also discusses how Strasheela modules are loaded into Oz, how constraint solvers are called, how solutions are output into various output formats, and so forth.</p>
+
+
+<p><a href="StrasheelaExamples.html">back</a></p>
+
+
+
+<!-- Page published by Emacs Muse ends here -->
+<!-- Footer -->
+<div id="footer">
+<div id="author">&copy; 
+Torsten Anders</div>
+<div id="date">Last time edited: 2007.08.04</div>
+</div>
+  </body>
+</html>

@@ -1,0 +1,299 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<html>
+ <head>
+  <title>Motif</title>
+  <style>BODY {
+ background: url(page.gif) repeat-y white;
+}
+#slidemenubar, #slidemenubar2{
+ position:absolute;
+ left:-144px;
+ width:160px;
+ top:10px;
+ border:0px solid black;
+ font:bold 12px Verdana;
+ line-height:10px;
+}
+.margin {
+ position: absolute;
+ left: 10px;
+ width: 130px;
+}
+BODY, P, H1, H2, H3, A {
+ font-family: sans-serif;
+}
+PRE, CODE {
+ font-family: courier, monospace;
+}
+P {
+ text-align: justify;
+}
+H1     { color: #9B0000; }
+H2     { color: #FF9933; }
+H3, H4 { color: #881155; }
+CODE              { color: #663366; }
+.code CODE        { color: #000000; }
+SPAN.comment      { color: #B22222; }
+SPAN.keyword      { color: #A020F0; }
+SPAN.string       { color: #BC8F8F; }
+SPAN.functionname { color: #0000FF; }
+SPAN.type         { color: #228B22; }
+SPAN.variablename { color: #B8860B; }
+SPAN.reference    { color: #5F9EA0; }
+SPAN.builtin      { color: #DA70D6; }
+A:link {
+ color: #666666;
+}
+A:visited {
+ color: black;
+}
+A.pre { font-family: courier, monospace;
+ color: #228B22;
+}
+</style>
+ </head>
+<body>
+<script language="JavaScript1.2">
+if (document.all)
+document.write('<div id="slidemenubar2" style="left:-144" onMouseover="pull()" onMouseout="draw()">')
+</script>
+<layer id="slidemenubar" onMouseover="pull()" onMouseout="draw()">
+<table border="0" cellpadding="0" cellspacing="0" width="161"><tr><td bgcolor="#009cff" width="144"><a href="index.html">Index</a>
+</td><td rowspan="2" valign="top" width="16"><img src="menu.gif" width="16"></td></tr><tr><td bgcolor="#009cff" width="144"><a href="node1.html">Motif</a>
+</td></tr></table></layer>
+<script language="JavaScript1.2">
+function regenerate(){
+window.location.reload()
+}
+function regenerate2(){
+if (document.layers)
+setTimeout("window.onresize=regenerate",400)
+}
+window.onload=regenerate2
+if (document.all){
+document.write('</div>')
+themenu=document.all.slidemenubar2.style
+rightboundary=0
+leftboundary=-144
+}
+else{
+themenu=document.layers.slidemenubar
+rightboundary=144
+leftboundary=0
+}
+function pull(){
+if (window.drawit)
+clearInterval(drawit)
+pullit=setInterval("pullengine()",20)
+}
+function draw(){
+clearInterval(pullit)
+drawit=setInterval("drawengine()",50)
+}
+function pullengine(){
+if (document.all&&themenu.pixelLeft<rightboundary)
+themenu.pixelLeft+=5
+else if(document.layers&&themenu.left<rightboundary)
+themenu.left+=5
+else if (window.pullit)
+clearInterval(pullit)
+}
+function drawengine(){
+if (document.all&&themenu.pixelLeft>leftboundary)
+themenu.pixelLeft-=5
+else if(document.layers&&themenu.left>leftboundary)
+themenu.left-=5
+else if (window.drawit)
+clearInterval(drawit)
+}
+</script>
+
+<div style="margin-left:160px"><span class="string">
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> This Strasheela contribution defines means to constrain formal relations in music. The constribution adds generic means to define motif domains and to impose constraints on motifs. <BR>
+<BR>
+ The general Motif data structure MotifMixin (which is used later in this functor to extend Score.simultaneous and Score.sequential) defines two parameters: 'motifIdentity' and 'motifVariation' (parameter values are FD integers). The parameter value 'motifIdentity' decides for a specific motif out of an user-defined motif database, a list of records with user-defined motif features (a 'motifIdentity' value N denotes the Nth value in the motif database). For example, a possible motif database entry defines absolute note durations and the pitch contour of the motif (the contour defines the sequence of directions of intervals, see Pattern.contour and Pattern.direction for details).<BR>
+<BR>
+motif(durations:[2 2 2 8] pitchContour:[1 1 0] comment:beethovensFifth)<BR>
+<BR>
+ The parameter value 'motifVariation' decides for a specific binary procedure out of a user-defined procedure database, a list of binary procedures (a 'motifVariation' value N denotes the Nth value in the procedure database). The procedure represented by 'motifVariation' constrains the motif score instance in a user defined way -- usually dependent on the motif database entry represented by 'motifIdentity'. Procedure arguments are a motif instance and an 0/1-integer. The 0/1-integer denotes whether or not the motif score instance fulfills the constraint imposed by the procedure (see Mozart/Oz doc for details on 0/1-constraints and reified constraints). For instance, one possible 'motifVariation' procedure may apply a motif database entry in the above-mentioned format by constraining the motif note durations and pitchContour according to the durations and pitchContour specified in the database entry represented by 'motifIdentity'. However, another 'motifVariation' procedure may constraints the motif pitches to follow the inverse of the pitchContour defined by the database entry.<BR>
+<BR>
+ The domain of motifs thus depends on three user-controlled dimensions: (a) the set of entries in the motif database, (b) the set of 'motifVariation' procedures, and (c) the ambiguity implicit in the motif definition (e.g. constraining only the pitch contour allows many motif variants with the same 'motifIdentity' and 'motifVariation'). Each of theses dimensions can be freely constrained. For instance, in a succession of several motifs the 'motifIdentity' and 'motifVariation' may be constrained to follow some pattern and the pitches of the motif notes constrained to follows some motif contour may be further constrained to follow some harmonic progression.<BR>
+<BR>
+ However, the formalisation of motific relations proposed here is even more general. Entries in the motif database may be undetermined in the definition of the constraint satisfaction problem (CSP). For instance, the user may constrain a set of motif score instances to be the same motif (e.g. all motif indices are equal), but the actual shape of the motif is undetermined in the CSP and may depend, e.g., on contrapunctual motif combinations (e.g. the shape of a fugue subject and counter-subject may only be found during search).<BR>
+<BR>
+ Furthermore, the number of notes in a score motif instance may be constrained by the decision, e.g., for a certain 'motifIdentity'. This is archived by some 'trick': notes of duration 0 can be considered non-existent. All entries in the motif database and all motifs in the score instance may actually have the same number of notes. However, in some motif database entries the duration of some notes is set to 0 which effectively reduces the note number of these motifs. The note number of any motif in the score instance may be virtually reduced by constraining certain note durations to 0.<BR>
+ However, for efficiency reasons a CSP involving the note duration 0 as an option should eliminate symmetries (for details see www.mozart-oz.org/documentation/fdt/node53.html). Notes with duration 0 must only occur at a certain position in motif (e.g. the motif end). If the duration of a note equals 0 the pitch of the note is arbitrary and should be determined as well to reduce the size of the search space (e.g. (duration = 0) -> (pitch = 0)).<BR>
+ See the contribution ConstrainTimingTree for further details.<BR>
+<BR>
+ To model free, non-motific sections between motific sections, a specific 'motifVariation' procedure may be defined which does not apply any constraints on the motif score instance (or constrains only the number of notes by setting note durations to 0). In the CSP, a decision for this 'motifVariation' means a decision for a non-motific section. To eliminate symmetries, the 'motifVariation' procedure should also determine the 'motifIdentity'. <BR>
+<BR>
+ The data structure defined in this Strasheela contribution may also serve to define higher-level formal relations (e.g. variated repetitions of motif sequences). Instead of a motif containing notes, a 'higher-level motif' containes motifs. A 'Higher-level motif' constrains the contained submotif in the same way a motif constraints contained notes by deciding for the parameters 'motifIdentity' and 'motifVariation' and thus deciding for an entry in the motif database and an entry in the database of procedures. For example, the user may want to constrain the sequence of motifs contained in a 'higher-level motif' by applying a pattern constraint on submotif indices, or a pattern constraint on the sequence of the maximum pitches of each motif.<BR>
+ To control for which level a specific entry in either database is used (e.g. only for motifs of notes or only for 'higher-level motifs'), the user may reduce the domain of 'motifIdentity' and 'motifVariation' according to their motif instance level.<BR>
+<BR>
+ Of course, arbitrary parameters can be constrained in a motif. For instance, to model pauses before or between motif notes, the note offsetTimes may be constrained.<BR>
+<BR>
+<BR>
+</span>
+</span>
+<h3>Functor</h3>
+<ul>Motif ("<span class="string">Motif.oz</span>")<br></ul>
+<h3>Import</h3>
+<code><ul><li>FD</li><li>Combinator</li><li>Browser(browse:Browse)</li><li>GUtils at "<span class="string">x-ozlib://anders/strasheela/source/GeneralUtils.ozf"
+</span></li><li>Score at "<span class="string">x-ozlib://anders/strasheela/source/ScoreCore.ozf"
+</span></li><li>Pattern at "<span class="string">x-ozlib://anders/strasheela/Pattern/Pattern.ozf"
+</span></li></ul></code>
+<h3>Export</h3>
+<code><ul><li>&lt;C:<a href="#entity7"><span class="type">Database</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity8"><span class="functionname">IsDatabase</span></a>&gt;
+</li><li>&lt;C:<a href="#entity9"><span class="type">MotifMixin</span></a>&gt;
+</li><li>&lt;C:<a href="#entity13"><span class="type">Sequential</span></a>&gt;
+</li><li>&lt;C:<a href="#entity15"><span class="type">Simultaneous</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity10"><span class="functionname">IsMotif</span></a>&gt;
+</li><li>&lt;P/3:<a href="#entity11"><span class="functionname">IsInMotif</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity16"><span class="functionname">MakeVariation</span></a>&gt;
+</li></ul></code>
+<h3>Define</h3>
+
+<a name="entity7">
+<p class="margin"><div align="right"><a href="class1.html">[class info]</a></div></p>
+<code>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> [concrete class] a data abstraction which encapsulates the two databases in the two attributes motifDescriptionDB and motifVariationDB. An instance of this class is required by <code>MotifMixin, initMotifMixin</code>.<BR>
+ A motif database is a list of arbitrary values. Example:<BR>
+   [motif(pitchContour:[1 1 0] comment:beethovensFifth)<BR>
+    motif(pitchContour:[2 0 1] comment:test)]<BR>
+ The format of all motif entries should be uniform. The motif database is used by the procedures defined in the motif constraints database.<BR>
+ NB: In case the motif database gets determined only during search, it is important that all variables have only local scope in the constraint script and consequently the database instance as well is local in the constraint script.<BR>
+ The motif constraint database is a list of binary procedures. The first motifVariation argument is always the constrained motif and the second argument is a 0/1-integer which states whether the constraint is applied or not (arbitrary constraints can be turned into reified constraints with the help of Combinator.'reify'). <BR>
+<BR>
+</span>
+<span class="keyword">class</span> <span class="type">Database</span>
+<br>&nbsp;&nbsp;&nbsp;<span class="keyword">feat</span>&nbsp;!DatabaseType
+
+<ul><li><span class="functionname">init</span>(motifDescriptionDB:MDs motifVariationDB:MVs)<br>
+</li><li><span class="functionname">getMotifDescriptionDB</span>(X)<br>
+</li><li><span class="functionname">getMotifVariationDB</span>(X)<br>
+</li></ul>
+<span class="keyword">end</span>
+</code><br>
+
+<code>
+<a name="entity8">
+<span class="keyword">fun</span>{<span class="functionname">IsDatabase</span> X}
+</code><br>
+
+<a name="entity9">
+<p class="margin"><div align="right"><a href="class2.html">[class info]</a></div></p>
+<code>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"></span>
+<span class="keyword">class</span> <span class="type">MotifMixin</span>
+<br>&nbsp;&nbsp;&nbsp;<span class="keyword">feat</span>&nbsp;!MotifType
+
+<ul><li><span class="functionname">initMotifMixin</span>(database:DB motifIdentity:MI motifVariation:MV)<br>
+</li><li><span class="functionname">getMotifIdentity</span>(X)<br>
+</li><li><span class="functionname">getMotifIdentityParameter</span>(X)<br>
+</li><li><span class="functionname">getMotifVariation</span>(X)<br>
+</li><li><span class="functionname">getMotifVariationParameter</span>(X)<br>
+</li><li><span class="functionname">getDB</span>(X)<br>
+</li><li><span class="functionname">getMotifDescriptionDB</span>(X)<br>
+</li><li><span class="functionname">getMotifVariationDB</span>(X)<br>
+</li></ul>
+<span class="keyword">end</span>
+</code><br>
+
+<a name="entity13">
+<p class="margin"><div align="right"><a href="class3.html">[class info]</a></div></p>
+<code>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"></span>
+<span class="keyword">class</span> <span class="type">Sequential</span>&nbsp;<span class="keyword">from</span>&nbsp;<span class="reference">Score.sequential</span>&nbsp;<a href="#entity9">MotifMixin</a>
+<br>&nbsp;&nbsp;&nbsp;<span class="keyword">feat</span>&nbsp;label
+
+<ul><li><span class="functionname">init</span>(...)<br>
+</li><li><span class="functionname">getInitInfo</span>($ exclude:Excluded)<br>
+</li></ul>
+<span class="keyword">end</span>
+</code><br>
+
+<a name="entity15">
+<p class="margin"><div align="right"><a href="class4.html">[class info]</a></div></p>
+<code>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"></span>
+<span class="keyword">class</span> <span class="type">Simultaneous</span>&nbsp;<span class="keyword">from</span>&nbsp;<span class="reference">Score.simultaneous</span>&nbsp;<a href="#entity9">MotifMixin</a>
+<br>&nbsp;&nbsp;&nbsp;<span class="keyword">feat</span>&nbsp;simMotif
+
+<ul><li><span class="functionname">init</span>(...)<br>
+</li><li><span class="functionname">getInitInfo</span>($ exclude:Excluded)<br>
+</li></ul>
+<span class="keyword">end</span>
+</code><br>
+
+<code>
+<a name="entity10">
+<span class="keyword">fun</span>{<span class="functionname">IsMotif</span> X}
+</code><br>
+
+<code>
+<a name="entity11">
+<span class="keyword">fun</span>{<span class="functionname">IsInMotif</span> X Test}<br>
+<span class="string"> Some container of X is a motif.<BR>
+ */<BR>
+    fun {IsInMotif X}<BR>
+       {Some {X getContainers($)} IsMotif} <BR>
+    end<BR>
+<BR>
+/** %% Is X contained in a motif and Test is true? Test is a boolean binary function fun {$ X MyMotif} <body> end.<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity16">
+<span class="keyword">fun</span>{<span class="functionname">MakeVariation</span> Decl}<br>
+<span class="string"> MakeVariation simplifies the definition of a motif variation procedure, while at the same time also somewhat restricting the description format given to the MotifDescriptionDB. MakeVariation expects a declarations and returns a variation procedure (expecting a motif instance and a 0/1-variable). Decl is a record, where each record feature is also a feature in the MotifDescriptionDB. Each record field value is an accessor function or method expecting a motif instance and returning a list of FD integers which corresponds with this feature (this returned list is unified with the database list at the corresponding feature). <BR>
+ The required motif description format (given to the MotifDescriptionDB) is as follows. Each motif description is a record with descriptive record features (e.g. durations, pitches, pitchContour). The values at these features are lists of FD integers. Entries in the MotifDescriptionDB must be uniform: they have the same features, and lists at the same MotifDescriptionDB feature have the same length.<BR>
+ Exception: MotifDescriptionDB entries may omit features altogether (i.e. entries can effectively differ in the set of features), but in case a feature is present then its value must be a list with same length as in other entries at this feature.<BR>
+ Exception: Decl can omit features, i.e. different variation functions can constrain different sets of features.<BR>
+<BR>
+ See Motif/testing/Motif-test.oz for usage examples.<BR>
+<BR>
+ NB: there can be undetermined FD ints in the solution in case motif specs in MotifDescriptionDB may differ in their set of features. <BR>
+<BR>
+</span>
+</code><br>
+<h3>End</h3>
+</div></body>
+</html>

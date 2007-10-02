@@ -1,0 +1,28 @@
+#title Contributing to Strasheela 
+
+; <contents depth="1">
+
+The Strasheela project cordially welcomes contributors. You can support the Strasheela development in several ways. There are many things to do, and only some of them require programming... Also, we are most happy supporting you in helping us ;-) It goes without saying that all contributions will be recognised (e.g., by putting your name in list of [[Changes]] for the release integrating the contribution). 
+
+
+* Sharing Examples
+
+Please post your example with an explanation at the  [[https://lists.sourceforge.net/lists/listinfo/strasheela-users][Strasheela-users mailing list]]. Examples will be added to the [[StrasheelaExamples][Strasheela Examples]] list (referencing you as author).
+
+
+* Reporting Bugs 
+
+Please report bugs using the [[https://sourceforge.net/tracker/?group_id=167225&atid=842098][Strasheela bug tracker]]. You need to [[https://sourceforge.net/account/newuser_emailverify.php][create an account at Sourceforge.net]] first (very little hassle, only an email address required). Alternatively, you may also report bugs at the [[https://lists.sourceforge.net/lists/listinfo/strasheela-users][Strasheela-users mailing list]], but we prefer the use of the bug tracker. 
+
+
+* Contributing Strasheela Packages
+
+See the [[Installation#forPackageCreators][installation notes for package creators]].
+
+
+* [[ImprovingTheDocumentation][Extending and Improving the Documentation]]
+
+* [[ContributingCode][Contributing Source Code]] 
+ 
+* [[HowToCreateAPatch][How to Create a Patch]] 
+

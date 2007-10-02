@@ -1,0 +1,373 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<html>
+ <head>
+  <title>Class Note</title>
+  <style>BODY {
+ background: url(page.gif) repeat-y white;
+}
+#slidemenubar, #slidemenubar2{
+ position:absolute;
+ left:-144px;
+ width:160px;
+ top:10px;
+ border:0px solid black;
+ font:bold 12px Verdana;
+ line-height:10px;
+}
+.margin {
+ position: absolute;
+ left: 10px;
+ width: 130px;
+}
+BODY, P, H1, H2, H3, A {
+ font-family: sans-serif;
+}
+PRE, CODE {
+ font-family: courier, monospace;
+}
+P {
+ text-align: justify;
+}
+H1     { color: #9B0000; }
+H2     { color: #FF9933; }
+H3, H4 { color: #881155; }
+CODE              { color: #663366; }
+.code CODE        { color: #000000; }
+SPAN.comment      { color: #B22222; }
+SPAN.keyword      { color: #A020F0; }
+SPAN.string       { color: #BC8F8F; }
+SPAN.functionname { color: #0000FF; }
+SPAN.type         { color: #228B22; }
+SPAN.variablename { color: #B8860B; }
+SPAN.reference    { color: #5F9EA0; }
+SPAN.builtin      { color: #DA70D6; }
+A:link {
+ color: #666666;
+}
+A:visited {
+ color: black;
+}
+A.pre { font-family: courier, monospace;
+ color: #228B22;
+}
+</style>
+ </head>
+<body>
+<script language="JavaScript1.2">
+if (document.all)
+document.write('<div id="slidemenubar2" style="left:-144" onMouseover="pull()" onMouseout="draw()">')
+</script>
+<layer id="slidemenubar" onMouseover="pull()" onMouseout="draw()">
+<table border="0" cellpadding="0" cellspacing="0" width="161"><tr><td bgcolor="#009cff" width="144"><a href="index.html">Index</a>
+</td><td rowspan="15" valign="top" width="16"><img src="menu.gif" width="16"></td></tr><tr><td bgcolor="#009cff" width="144"><a href="node1.html">HarmonisedScore</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node2.html">DB</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node3.html">Score</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node4.html">Rules</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node5.html">DBs</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node6.html">Default</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node7.html">Jazz</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node8.html">Partch</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node9.html">Johnston</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node10.html">Harrison</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node11.html">Chalmers</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node12.html">Catler</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node13.html">ArithmeticalSeriesChords</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node14.html">HS</a>
+</td></tr></table></layer>
+<script language="JavaScript1.2">
+function regenerate(){
+window.location.reload()
+}
+function regenerate2(){
+if (document.layers)
+setTimeout("window.onresize=regenerate",400)
+}
+window.onload=regenerate2
+if (document.all){
+document.write('</div>')
+themenu=document.all.slidemenubar2.style
+rightboundary=0
+leftboundary=-144
+}
+else{
+themenu=document.layers.slidemenubar
+rightboundary=144
+leftboundary=0
+}
+function pull(){
+if (window.drawit)
+clearInterval(drawit)
+pullit=setInterval("pullengine()",20)
+}
+function draw(){
+clearInterval(pullit)
+drawit=setInterval("drawengine()",50)
+}
+function pullengine(){
+if (document.all&&themenu.pixelLeft<rightboundary)
+themenu.pixelLeft+=5
+else if(document.layers&&themenu.left<rightboundary)
+themenu.left+=5
+else if (window.pullit)
+clearInterval(pullit)
+}
+function drawengine(){
+if (document.all&&themenu.pixelLeft>leftboundary)
+themenu.pixelLeft-=5
+else if(document.layers&&themenu.left>leftboundary)
+themenu.left-=5
+else if (window.drawit)
+clearInterval(drawit)
+}
+</script>
+
+<div style="margin-left:160px"><p align="right" class="margin"><div align="right">inheritance tree</div></p>
+<pre>
+ Score.note <a class="pre" href="node3.html#entity92">PitchClassMixin</a>
+     |             |
+     `--------+----'
+              |
+            <a class="pre" href="node3.html#entity99">Note2</a>           <a class="pre" href="node3.html#entity93">InChordMixinForNote</a> <a class="pre" href="node3.html#entity94">InScaleMixinForNote</a>
+              |                      |                   |
+              `------------------+---'-------------------'
+                                 |
+                                <a class="pre" href="node3.html#entity100">Note</a>
+</pre>
+<hr><p class="margin"><div align="right">class definition</div></p>
+<code>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> [concrete class] Note is an extension of the class Score.note defined by the Strasheela core. Whereas Score.note is style-neutral, Note is designed for harmonic CSPs.<BR>
+ All extensions of Score.note are defined by the three mixins PitchClassMixin, InChordMixinForNote and InScaleMixinForNote: see the documentation of these classes for further details. <BR>
+<BR>
+</span>
+<span class="keyword">class</span> <span class="type">Note</span> (Inheritance-free)<br>
+&nbsp;&nbsp;&nbsp;<span class="keyword">attr</span>&nbsp;chords&nbsp;inChordB&nbsp;inScaleB&nbsp;octave&nbsp;pitchClass&nbsp;relatedChordBs&nbsp;relatedScaleBs&nbsp;scales
+<br>
+<ul><li><span class="functionname">getChords</span>(X)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> Returns the list of candidate chord objects, i.e. the value returned by the proc set via the getChords init argument. <BR>
+<BR>
+</span>
+</li><li><span class="functionname">getInChordB</span>(X)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"></span>
+</li><li><span class="functionname">getInChordBParameter</span>(X)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"></span>
+</li><li><span class="functionname">getInScaleB</span>(X)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"></span>
+</li><li><span class="functionname">getInScaleBParameter</span>(X)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"></span>
+</li><li><span class="functionname">getInitInfo</span>($ exclude:Excluded)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"><BR>
+ NB: the procedures given as init arguments to InChordMixinForNote and InScaleMixinForNote  are lost when the score is transformed to a literal/textual representation (and thus their implicit constraints).<BR>
+<BR>
+</span>
+</li><li><span class="functionname">getOctave</span>(X)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"></span>
+</li><li><span class="functionname">getOctaveParameter</span>(X)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"></span>
+</li><li><span class="functionname">getPitchClass</span>(X)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"></span>
+</li><li><span class="functionname">getPitchClassParameter</span>(X)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"></span>
+</li><li><span class="functionname">getRelatedChordBs</span>(X)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> Returns a list of 0/1-integers returned by {Map {<getChords>} <isRelatedChord>}. <getChords> and <isRelatedChord> are the functions given to initInChordMixinForNote.<BR>
+<BR>
+</span>
+</li><li><span class="functionname">getRelatedScaleBs</span>(X)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> Returns a list of 0/1-integers returned by {Map {<getScales>} <isRelatedScale>}. <getScales> and <isRelatedScale> are the functions given to initInScaleMixinForNote.<BR>
+<BR>
+</span>
+</li><li><span class="functionname">getScales</span>(X)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> Returns the list of candidate scale objects, i.e. the value returned by the proc set via the getScale init argument. <BR>
+<BR>
+</span>
+</li><li><span class="functionname">init</span>(...)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> optional Arguments:<BR>
+ arguments of Score.note: duration (FD int), endTime (FD int), offsetTime (FD int), startTime (FD int), pitch (FD int), amplitude (FD int) amplitudeUnit (atom), ... <BR>
+ Please note that pitchUnit is not supported (it is set implicitly by the pitches per octave setting).<BR>
+ Note supports the following additional arguments: <BR>
+ octave (FD int), pitchClass (FD int), <BR>
+		 inChordB (0/1 int), getChords (proc {$ Self Chords} ... end), isRelatedChord (proc {$ Self Chord B} ... end), inScaleB (0/1 int), getScales (proc {$ Self Scales} ... end), isRelatedScale (proc {$ Self Chord B} ... end)<BR>
+<BR>
+</span>
+</li><li><span class="functionname">initInChordMixinForNote</span>(...)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"></span>
+</li><li><span class="functionname">initInScaleMixinForNote</span>(...)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"></span>
+</li><li><span class="functionname">initPitchClassMixin</span>(octave:Oct pitchClass:PC)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"></span>
+</li><li><span class="functionname">isInChord</span>(B)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> Returns an 0/1-int which states whether or not the pitch class of self is included in the pitch classes of its related chord. This definition is an alias for getInChordB.<BR>
+<BR>
+</span>
+</li><li><span class="functionname">isInScale</span>(B)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> see doc isInChord<BR>
+<BR>
+</span>
+</li><li><span class="functionname">nonChordPCConditions</span>(Conditions)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> Defines and applies a 'meta-rule' which conveniently defines a number of conditions which effect self dependent on the value of {self isInChord($)}. Conditions is a list of binary procs expecting self and an 0/1-int (declared within the proc). These conditions form alternative constraints on self. A typical condition example would be a boolean constraint whether self is a passing note, another whether self is a suspension.<BR>
+ If none of the given conditions is true, then self must be 'in' the chord (i.e. 1={self isInChord($)}). Similarily, if self is not in the chord, at least one of the conditions must be true. However, the opposite is not necessarily true: if one or more conditions are the case then self may or may not be in the chord and also if self is in the chord then one or more conditions still may or may not be true.<BR>
+ For instance, this meta-rule never constraints a note to necessarily be a non-chord note. You may however easily do this, e.g, by constraining {self isInChord($)}=0 directly -- which would have the consequence that one of Conditions must be true. <BR>
+<BR>
+</span>
+</li><li><span class="functionname">nonScalePCConditions</span>(Conditions)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> see doc nonChordPCConditions<BR>
+<BR>
+</span>
+</li></ul>
+<span class="keyword">end</span>
+</code>
+</div></body>
+</html>

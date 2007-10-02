@@ -1,0 +1,350 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+  <head>
+    <title>Musical Constraint Satisfaction Problems in Strasheela</title>
+    <meta name="generator" content="muse.el">
+    <meta http-equiv="Content-Type"
+          content="text/html; charset=iso-8859-1">
+    
+    <link rel="stylesheet" href="style.css" type="text/css" />
+  </head>
+  <body>
+<div id="header">
+  <ul class="nav">
+    <li class="nav1"><a href="index.html">home</a></li>
+    <li class="navn"><a href="https://sourceforge.net/projects/strasheela/">download at sourceforge</a></li>
+    <!-- <li class="navn"><a href="IndexOfPages.html">site map</a></li> -->
+    <li class="navn"><a href="contact.html">contact</a></li>
+  </ul>
+  <div id="logo">
+    <a href="http://sourceforge.net"><img src="http://sflogo.sourceforge.net/sflogo.php?group_id=167225&amp;type=1" width="88" height="31" border="0" alt="SourceForge.net Logo" /></a>
+  </div>
+</div>
+    <h1>Musical Constraint Satisfaction Problems in Strasheela</h1>
+    <!-- Page published by Emacs Muse begins here -->
+<div class="contents">
+<dl>
+<dt>
+<a href="#sec1">About this document</a>
+</dt>
+<dt>
+<a href="#sec2">&mdash; Music Constraint Programming</a>
+</dt>
+<dt>
+<a href="#sec3">A Dummy Example</a>
+</dt>
+<dd>
+<dl>
+<dt>
+<a href="#sec4">With comments</a>
+</dt>
+<dt>
+<a href="#sec5">Without comments</a>
+</dt>
+</dl>
+</dd>
+<dt>
+<a href="#sec6">A Real Example</a>
+</dt>
+<dt>
+<a href="#sec7">Score Distribution Strategies</a>
+</dt>
+<dt>
+<a href="#sec8">Structuring complex CSPs</a>
+</dt>
+<dt>
+<a href="#sec9">Rule Applicators</a>
+</dt>
+<dt>
+<a href="#sec10">Deriving Information as Variable</a>
+</dt>
+<dt>
+<a href="#sec11">?? Pattern Constraints</a>
+</dt>
+<dt>
+<a href="#sec12">Constraining Inaccessible Score Contexts</a>
+</dt>
+<dt>
+<a href="#sec13">Modelling Soft Constraints</a>
+</dt>
+<dt>
+<a href="#sec14">More Information</a>
+</dt>
+</dl>
+</div>
+
+
+<h2><a name="sec1" id="sec1"></a>
+About this document</h2>
+
+<p class="first">This file was automatically generated from the interactive Strasheela tutorial. Some aspects of the text only make sense in the original interactive tutorial application (e.g., buttons indicated to press, and positions specified on the screen), and not in this version of the text.</p>
+
+
+<h2><a name="sec2" id="sec2"></a>
+&mdash; Music Constraint Programming</h2>
+
+<p class="first">The following examples introduce music constraint programming with Strasheela.</p>
+
+<p><em>Please note that this part of the tutorial is still unfinished!</em></p>
+
+
+
+
+
+<h2><a name="sec3" id="sec3"></a>
+A Dummy Example</h2>
+
+<p class="first">This example is extremely simple: you could easily create its result without constraint programming. Nevertheless, because it is so simple this example helps you do understand the basic structure of a typical Strasheela example.</p>
+
+<p>The constraint script for this example is a unary procedure (as was explained above in the example &quot;A Simple Script&quot;). The single argument of a Strasheela constraint script is the solution score. The script creates the solution score MyScore, consisting of a sequence container with three notes, where the domain of each notes pitch is the set {60, ..., 72} (i.e., the pitches of the octave above middle c &mdash; the pitchUnit is its default keynumber). Then the example applies the constraint that in every pair of two neighbouring notes, the pitch of the later note is higher.</p>
+
+<p>This script is handed to a constraint solver. For convenience, Strasheela provides custom constraint solvers which resemble the standard Oz solvers, but which add special support for searching for Strasheela scores. The solver of this example is SDistro.searchOne. Like the standard solver SearchOne, SearchOne searches for a single solution, which is retured in a list. In contrast to SearchOne, however, SDistro.searchOne expects two arguments. The first argument is the script and the second argument is a specification of the search strategy (distribution strategy) to use. Here, this specification is just unit, that is, the default settings are used.</p>
+
+<h3><a name="sec4" id="sec4"></a>
+With comments</h3>
+
+<pre class="src">
+<span style="color: #b22222;">/* </span><span style="color: #b22222;">This first version of the example comes with extensive inline comments. */</span>
+
+<span style="color: #a020f0;">local</span>
+   MyScore =
+   <span style="color: #b22222;">%% </span><span style="color: #b22222;">SDistro.searchOne is the constraint solver
+</span>   {SDistro<span style="color: #a020f0;">.</span>searchOne
+    <span style="color: #b22222;">%% </span><span style="color: #b22222;">the constraint script: a procedure returning a score object
+</span>    <span style="color: #a020f0;">proc</span><span style="color: #b8860b;"> </span>{<span style="color: #0000ff;">$</span> MyScore}
+       <span style="color: #b22222;">%% </span><span style="color: #b22222;">Create score object: three notes in sequence
+</span>       MyScore = {Score<span style="color: #a020f0;">.</span>makeScore
+                  seq(items:[note(duration:4
+                                  pitch:{FD<span style="color: #a020f0;">.</span>int 60<span style="color: #a020f0;">#</span>72}
+                                  amplitude:64)
+                             note(duration:4SDistro<span style="color: #a020f0;">.</span>searchOne
+                                  pitch:{FD<span style="color: #a020f0;">.</span>int 60<span style="color: #a020f0;">#</span>72}
+                                  amplitude:64)
+                             note(duration:4
+                                  pitch:{FD<span style="color: #a020f0;">.</span>int 60<span style="color: #a020f0;">#</span>72}
+                                  amplitude:64)]
+                      startTime:0
+                      timeUnit:beats(4))
+                  <span style="color: #a020f0;">unit</span>}
+       <span style="color: #b22222;">%% </span><span style="color: #b22222;">Constraint application: note pitches are increasing
+</span>       <span style="color: #b22222;">%%</span><span style="color: #b22222;">
+</span>       <span style="color: #b22222;">%% </span><span style="color: #b22222;">The higher-order procedure Pattern.for2Neighbours expects a
+</span>       <span style="color: #b22222;">%% </span><span style="color: #b22222;">list, and applies a binary procedure to every pair of
+</span>       <span style="color: #b22222;">%% </span><span style="color: #b22222;">neighbouring list elements (there exists also a procedure
+</span>       <span style="color: #b22222;">%% </span><span style="color: #b22222;">Pattern.forNeighbours of N neigbouring elements, and
+</span>       <span style="color: #b22222;">%% </span><span style="color: #b22222;">Pattern.map2Neighbours which expects a function and collects
+</span>       <span style="color: #b22222;">%% </span><span style="color: #b22222;">the results in a list).
+</span>       {Pattern<span style="color: #a020f0;">.</span>for2Neighbours {MyScore getItems($)}
+        <span style="color: #a020f0;">proc</span><span style="color: #b8860b;"> </span>{<span style="color: #0000ff;">$</span> Note1 Note2}
+           {Note1 getPitch($)} <span style="color: #a020f0;">&lt;:</span> {Note2 getPitch($)}
+        <span style="color: #a020f0;">end</span>}
+    <span style="color: #a020f0;">end</span>
+    <span style="color: #b22222;">%% </span><span style="color: #b22222;">The distribution strategy specification, now outside the
+</span>    <span style="color: #b22222;">%% </span><span style="color: #b22222;">constraint script. unit means the default distribution
+</span>    <span style="color: #b22222;">%% </span><span style="color: #b22222;">strategy.
+</span>    <span style="color: #a020f0;">unit</span>
+    <span style="color: #b22222;">%% </span><span style="color: #b22222;">The solver SDistro.searchOne returns a list with the first
+</span>    <span style="color: #b22222;">%% </span><span style="color: #b22222;">solution, we take this solution with .1
+</span>   }<span style="color: #a020f0;">.</span>1
+<span style="color: #a020f0;">in</span>
+   <span style="color: #b22222;">%% </span><span style="color: #b22222;">Output solution object to Csound score and call Csound
+</span>   {Out<span style="color: #a020f0;">.</span>renderAndPlayCsound MyScore
+    <span style="color: #a020f0;">unit</span>(file:{Tk<span style="color: #a020f0;">.</span>return tk_getSaveFile}
+         scoDir:nil soundDir:nil)}
+<span style="color: #a020f0;">end</span>
+</pre>
+
+
+<h3><a name="sec5" id="sec5"></a>
+Without comments</h3>
+
+<pre class="src">
+<span style="color: #b22222;">/* </span><span style="color: #b22222;">This example is essentially the same as the previous one, but more
+terse. All comments are stripped out, and the notes in the score are
+not all explicitly noted. Instead, a list with all pitch variables is
+created: FD.list returns a list of FD integers (try changing the
+number of notes and the pitch variable domains..). This list is then
+transformed into note declarations using Map (Map was explained in the
+example "Higher-Order Programming"). */</span>
+
+<span style="color: #a020f0;">local</span>
+   Sol = {SDistro<span style="color: #a020f0;">.</span>searchOne
+          <span style="color: #a020f0;">proc</span><span style="color: #b8860b;"> </span>{<span style="color: #0000ff;">$</span> MyScore}
+             Pitches = {FD<span style="color: #a020f0;">.</span>list 3 60<span style="color: #a020f0;">#</span>72}
+          <span style="color: #a020f0;">in</span>
+             MyScore = {Score<span style="color: #a020f0;">.</span>makeScore
+                        seq(items:{Map Pitches
+                                   <span style="color: #a020f0;">fun</span><span style="color: #b8860b;"> </span>{<span style="color: #0000ff;">$</span> Pitch}
+                                      note(duration:4
+                                           pitch:Pitch
+                                           amplitude:64)
+                                   <span style="color: #a020f0;">end</span>}
+                            startTime:0
+                            timeUnit:beats(4))
+                        <span style="color: #a020f0;">unit</span>}
+             {Pattern<span style="color: #a020f0;">.</span>for2Neighbours Pitches
+              <span style="color: #a020f0;">proc</span><span style="color: #b8860b;"> </span>{<span style="color: #0000ff;">$</span> P1 P2} P1 <span style="color: #a020f0;">&lt;:</span> P2 <span style="color: #a020f0;">end</span>}
+          <span style="color: #a020f0;">end</span>
+          <span style="color: #a020f0;">unit</span>}<span style="color: #a020f0;">.</span>1
+<span style="color: #a020f0;">in</span>
+   {Out<span style="color: #a020f0;">.</span>renderAndPlayCsound Sol
+    <span style="color: #a020f0;">unit</span>(file:{Tk<span style="color: #a020f0;">.</span>return tk_getSaveFile}
+         scoDir:nil soundDir:nil)}
+<span style="color: #a020f0;">end</span>
+
+</pre>
+
+
+
+<h2><a name="sec6" id="sec6"></a>
+A Real Example</h2>
+
+<p class="first">[Note: unfinished]</p>
+
+<p>The Explorer has been extended for outputting Strasheela scores into various formats.</p>
+
+<p>Do settings for different program path names as explained before</p>
+
+<p>Note for developer: output dir is always default (ie. /tmp) and this can not be changed in settings GUI yet</p>
+
+
+
+
+<pre class="src">
+{SDistro<span style="color: #a020f0;">.</span>exploreOne
+ <span style="color: #a020f0;">proc</span><span style="color: #b8860b;"> </span>{<span style="color: #0000ff;">$</span> MyScore}
+    NoteNo = 11
+    Pitches = {FD<span style="color: #a020f0;">.</span>list NoteNo 55<span style="color: #a020f0;">#</span>79}
+    MaxPitch = {Pattern<span style="color: #a020f0;">.</span>max Pitches}
+    MinPitch = {Pattern<span style="color: #a020f0;">.</span>min Pitches}
+ <span style="color: #a020f0;">in</span>
+    <span style="color: #b22222;">%% </span><span style="color: #b22222;">create score: NoteNo notes in sequence
+</span>    MyScore = {Score<span style="color: #a020f0;">.</span>makeScore
+               seq(items:{Map Pitches
+                          <span style="color: #a020f0;">fun</span><span style="color: #b8860b;"> </span>{<span style="color: #0000ff;">$</span> Pitch}
+                             note(duration:2
+                                  pitch:Pitch
+                                  amplitude:64)
+                          <span style="color: #a020f0;">end</span>}
+                   startTime:0
+                   timeUnit:beats(4))
+               <span style="color: #a020f0;">unit</span>}
+    <span style="color: #b22222;">%% </span><span style="color: #b22222;">Interval between max and min pitch is major seventh
+</span>    {FD<span style="color: #a020f0;">.</span>distance MaxPitch MinPitch <span style="color: #bc8f8f;">'=:'</span> 11}
+    <span style="color: #b22222;">%% </span><span style="color: #b22222;">Melodic intervals are minor/major second, minor/major third, or tritone
+</span>    <span style="color: #a020f0;">for</span> Pitch1 <span style="color: #a020f0;">in</span> Pitches
+       Pitch2 <span style="color: #a020f0;">in</span> Pitches<span style="color: #a020f0;">.</span>2
+    <span style="color: #a020f0;">do</span>
+       Interval = {FD<span style="color: #a020f0;">.</span>int [1 2 3 4 6]}
+    <span style="color: #a020f0;">in</span>
+       {FD<span style="color: #a020f0;">.</span>distance Pitch1 Pitch2 <span style="color: #bc8f8f;">'=:'</span> Interval}
+    <span style="color: #a020f0;">end</span>
+    <span style="color: #b22222;">%% </span><span style="color: #b22222;">neither the first nor the last pitch are the max or min
+</span>    Pitches<span style="color: #a020f0;">.</span>1 <span style="color: #a020f0;">\=:</span> MaxPitch
+    Pitches<span style="color: #a020f0;">.</span>1 <span style="color: #a020f0;">\=:</span> MinPitch
+    {List<span style="color: #a020f0;">.</span>last Pitches} <span style="color: #a020f0;">\=:</span> MaxPitch
+    {List<span style="color: #a020f0;">.</span>last Pitches} <span style="color: #a020f0;">\=:</span> MinPitch
+ <span style="color: #a020f0;">end</span>
+ <span style="color: #a020f0;">unit</span>(value:random)}
+</pre>
+
+
+<h2><a name="sec7" id="sec7"></a>
+Score Distribution Strategies</h2>
+
+<p class="first">Show how to use various predefined score distribution strategies.</p>
+
+<p>One of Strasheela's major strength is that it allows you to define your own score distribution strategies &mdash; optimised for your specific musical CSP. Although the definition of score distribution strategies is beyond this tutorial, it is already discussed in detail in the thesis &quot;Composing Music by Composing Rules: Design and Usage of a Generic Music Constraint System&quot;, Chap. 7 (<a href="http://strasheela.sourceforge.net/documents/TorstenAnders-PhDThesis.pdf">http://strasheela.sourceforge.net/documents/TorstenAnders-PhDThesis.pdf</a>). This chapter also points to further relevant Oz documentation.</p>
+
+
+
+
+
+<h2><a name="sec8" id="sec8"></a>
+Structuring complex CSPs</h2>
+
+<p class="first">Decomposing a CSP into modular definitions which create parts of the score and define compositional rules.</p>
+
+
+
+
+
+<h2><a name="sec9" id="sec9"></a>
+Rule Applicators</h2>
+
+<p class="first">Defining and Applying Abstracted Rules ..</p>
+
+
+
+
+
+<h2><a name="sec10" id="sec10"></a>
+Deriving Information as Variable</h2>
+
+<p class="first">Creating variables on the fly..</p>
+
+<p>Also show Memoization?</p>
+
+
+
+
+
+<h2><a name="sec11" id="sec11"></a>
+?? Pattern Constraints</h2>
+
+
+
+
+
+
+<h2><a name="sec12" id="sec12"></a>
+Constraining Inaccessible Score Contexts</h2>
+
+<p class="first">two ways: delayed constraint application and reified constraint</p>
+
+<p>third way: redefine your CSP</p>
+
+
+
+
+
+<h2><a name="sec13" id="sec13"></a>
+Modelling Soft Constraints</h2>
+
+
+
+
+
+
+<h2><a name="sec14" id="sec14"></a>
+More Information</h2>
+
+<p class="first">This tutorial provided an overview of important Strasheela concepts and demonstrated them with many examples. It concludes with references to further Strasheela documentation.</p>
+
+<p>The fundamental concepts and the design of Strasheela is detailed in my thesis &quot;Composing Music by Composing Rules: Design and Usage of a Generic Music Constraint System&quot; (<a href="http://strasheela.sourceforge.net/documents/TorstenAnders-PhDThesis.pdf">http://strasheela.sourceforge.net/documents/TorstenAnders-PhDThesis.pdf</a>). This text also compares Strasheela carefully with other similar systems.</p>
+
+<p>The examples in this tutorial are all rather short and explain only specific matters. More elaborated examples can be found at strasheela/doc/<a href="StrasheelaExamples.html">StrasheelaExamples</a>.html.</p>
+
+<p>This tutorial gave an overview of various Strasheela functionality. The Strasheela reference documentation at strasheela/doc/<a href="StrasheelaReference.html">StrasheelaReference</a>.html (hopefully) explains every Strasheela construct (procedure, class, ...) in detail. In addition, the usage of most Strasheela constructs is also demonstrated in several test cases in Strasheela's test files. The test files for the Strasheela core are situated in strasheela/testing/.</p>
+
+<p>The reference documentation and test files for various Strasheela extensions are (usually) found in the directory of the respective extension. The writing of such an extension is demonstrated in a contribution template at strasheela/contributions/ExtensionTemplate/. This template also explains how to write your own Strasheela classes in strasheela/contributions/ExtensionTemplate/source/ClassDefinitionDemo.oz</p>
+
+<p>In case you have specific questions, please consider contacting the strasheela-users mailing list (<a href="https://lists.sourceforge.net/lists/listinfo/strasheela-users">https://lists.sourceforge.net/lists/listinfo/strasheela-users</a>).</p>
+
+<p>Finally, if all else fails, the Strasheela source itself can serve as documentation. I really tried to make the code readable for other users as well...</p>
+
+<p>Have fun with Strasheela!</p>
+
+<p>Torsten Anders</p>
+
+
+
+<!-- Page published by Emacs Muse ends here -->
+<!-- Footer -->
+<div id="footer">
+<div id="author">&copy; 
+Torsten Anders</div>
+<div id="date">Last time edited: 2007.08.07</div>
+</div>
+  </body>
+</html>

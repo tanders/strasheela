@@ -1,0 +1,107 @@
+
+#title Changes 
+; #author Torsten Anders
+
+
+* Changes in Version 0.8.4 (no date yet)
+  
+  - Added solvers for real-time constraint programming (see the documentation at [[../contributions/anders/Realtime/doc/index.html]], and examples at [[../contributions/anders/Realtime/examples]] and [[../contributions/anders/Realtime/testing]])
+
+  - Added an OpenSound Control interface (see the documentation at [[../contributions/anders/OSC/doc/index.html]], and examples at [[../contributions/anders/OSC/examples]] and [[../contributions/anders/OSC/testing]])
+
+  - Added example for multi-core CPU machines at [[../examples/Parallel-Search.oz]] (see the [[http://www.mozart-oz.org/documentation/system/node13.html][Oz documentation]] for details on parallel search engines)
+
+  - The installation process has been simplified for package creators (cf. the [[Installation#forPackageCreators][installation notes for package creators]])
+
+  - For further fixes see [[../CHANGELOG.txt]]
+
+
+* Changes in Version 0.8.3 (2007-8-5)
+
+** Documentation Additions
+
+  - [[StrasheelaTutorial][Interactive Oz/Strasheela tutorial]]  (first version)
+
+  - Monograph on Strasheela meanwhile available for [[http://strasheela.sourceforge.net/documents/TorstenAnders-PhDThesis.pdf][download]] 
+
+  - Extended documentation of [[StrasheelaExamples][Strasheela Examples]]
+
+  - Template for Strasheela extensions at [[../contributions/ExtensionTemplate]]
+
+
+** Code Additions 
+
+  - [[../contributions/anders/ScoreInspector/doc/node1.html][ScoreInspector]]
+
+  - Complete rewrite of [[../contributions/anders/Fenv/doc/node1.html][Fenv]] (function envelope)
+
+  - [[../contributions/anders/Gnuplot/doc/node1.html][Gnuplot interface]]
+
+  - Extended/refactored the [[../contributions/anders/Motif/doc/node1.html][Motif]] contribution (e.g. new Motif.makeVariation considerable simplifies Motif definition, the set of test cases/examples is extended)
+
+  - Extended the [[../contributions/anders/HarmonisedScore/doc/node1.html][HS (HarmonisedScore)]] contribution: added notion of degrees (e.g., scale degrees, but implicitly also enharmonic spelling): see, e.g., classes FullNote, EnharmonicNote, ScaleDegreeNote, ChordDegreeNote, and ScaleDegreeChord in functor [[../contributions/anders/HarmonisedScore/doc/node3.html][HS.score]].
+
+  - [[../contributions/anders/SettingsGUI/doc/node1.html][SettingsGUI]] (first version)
+
+  - Extensions of the core Strasheela music representation (e.g., Out.saveScore, Out.loadScore, Score.copyScore, methods to [[../doc/api/node6.html#entity172][Score.scoreObject]]: unify, '==')
+
+  - Added reflection capabilities to score objects: all score objects inherit from class [[../doc/api/node6.html#entity217][Reflection]] methods such as getClass, getClassName, getFeatures, getAttrNames etc.
+
+
+
+** Other Fixes 
+
+  - Important improvement of Strasheela initialisation (i.e., [[../_ozrc]]): please update your OZRC accordingly
+
+  - Fixed bug which prevented MIDI output (removed illegal empty line in CSV output...)
+
+  - Refactored transformation of score objects into the textual score format. Fixed some issues, and simplified the definition of new user classes
+
+  - Refactored Strasheela's error messaging
+
+  - Extended [[http://www.amazon.com/gp/product/030680106X/sr=8-3/qid=1149574638/ref=pd_bbs_3/104-1993379-1061553?%5Fencoding=UTF8][Partch]] [[../contributions/anders/HarmonisedScore/doc/node8.html][harmony database]] (e.g. added information to intervals)
+
+  - Fixed various documentation details in the reference 
+  
+  - Many fixes in Oz' Path functor
+
+  - Many, many other fixes, see [[../CHANGELOG.txt][Strasheela/CHANGELOG.txt]] for details
+
+
+
+* Changes in Version 0.8.2 (2007-1-1)
+
+  - Substantial extensions and debugging of the [[../contributions/anders/OzServer/doc/node1.html][OzServer]]
+
+  - Added a Lisp client for the OzServer which allows to call Strasheela from within Common Lisp and use the result of these calls in Lisp programs (see [[../contributions/anders/OzServer/clients/oz-server-lisp-client]]). For this purpose, the OzServer can transform results implicitly into Lisp syntax (see [[../doc/api/node9.html#entity339][Out.ozToLisp]]). Tests are provided for SBCL on Linux and LispWorks on MacOS
+
+  - Lilypond output made ready for new [[http://lilypond.org][Lilypond]] versions (temporary solution: just calling convert-ly first)
+
+  - Fixed Bug in MIDI output causing timing errors 
+
+  - More fixes (for details see [[../CHANGELOG.txt][Strasheela/CHANGELOG.txt]], and the Strasheela subversion interface at http://strasheela.svn.sourceforge.net/viewvc/strasheela/)
+
+
+* Changes in Version 0.8.1 (2006-9-7)
+
+  - Revised [[Installation][installation instructions]] (reacting to frequently asked questions..) and other documentation
+
+  - Added support for further output formats: ENP (the format of [[http://www2.siba.fi/PWGL/][PWGL]]), and [[http://common-lisp.net/project/fomus/][Fomus]] -- and that way export to Finale and Sibelius (thanks Kilian!)
+ 
+  - Added example [[../examples/07-Harmonised-L-system.oz][Harmonised-L-system]], and revised explanation in existing examples
+
+  - Added =handle= attribute to all score objects in textual Strasheela score (cf. the =handle= attribute in [[http://www.mozart-oz.org/documentation/mozart-stdlib/wp/qtk/html/index.html][QTk]])
+
+  - Added [[../contributions/anders/HarmonisedScore/doc/node3.html#entity89][HS.score.harmoniseScore]], a function to simplify the definition of harmonic CSPs
+
+  - Bugfix for =Out.playSound= 
+
+  - Debugged Common Music output
+
+  - Various other fixes (see [[../CHANGELOG.txt][Strasheela/CHANGELOG.txt]])
+
+
+* Changes in Version 0.8 (2006-06-05, initial release)
+
+No changes in the initial release ;-)
+

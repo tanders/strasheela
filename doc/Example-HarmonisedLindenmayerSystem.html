@@ -1,0 +1,406 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+  <head>
+    <title>Harmonised Lindenmayer-System</title>
+    <meta name="generator" content="muse.el">
+    <meta http-equiv="Content-Type"
+          content="text/html; charset=iso-8859-1">
+    
+    <link rel="stylesheet" href="style.css" type="text/css" />
+  </head>
+  <body>
+<div id="header">
+  <ul class="nav">
+    <li class="nav1"><a href="index.html">home</a></li>
+    <li class="navn"><a href="https://sourceforge.net/projects/strasheela/">download at sourceforge</a></li>
+    <!-- <li class="navn"><a href="IndexOfPages.html">site map</a></li> -->
+    <li class="navn"><a href="contact.html">contact</a></li>
+  </ul>
+  <div id="logo">
+    <a href="http://sourceforge.net"><img src="http://sflogo.sourceforge.net/sflogo.php?group_id=167225&amp;type=1" width="88" height="31" border="0" alt="SourceForge.net Logo" /></a>
+  </div>
+</div>
+    <h1>Harmonised Lindenmayer-System</h1>
+    <!-- Page published by Emacs Muse begins here -->
+<p><a href="StrasheelaExamples.html">back</a></p>
+
+<div class="contents">
+<dl>
+<dt>
+<a href="#sec1">Musical Sections as Sub-CSPs</a>
+</dt>
+<dd>
+<dl>
+<dt>
+<a href="#sec2">A 'Free' Motif</a>
+</dt>
+<dt>
+<a href="#sec3">A Parameterised Free Motif</a>
+</dt>
+<dt>
+<a href="#sec4">Three Motifs: Run,  Chord Repetition and Arpeggio</a>
+</dt>
+</dl>
+</dd>
+<dt>
+<a href="#sec5">Combining Musical Sections (Combining Sub-CSPs)</a>
+</dt>
+<dd>
+<dl>
+<dt>
+<a href="#sec6">Music Representation</a>
+</dt>
+<dt>
+<a href="#sec7">Harmonic Rules</a>
+</dt>
+</dl>
+</dd>
+<dt>
+<a href="#sec8">Algorithmic Creation of the Global Form</a>
+</dt>
+</dl>
+</div>
+
+
+<p>This example shows how a CSP can be composed from sub-CSPs in order to control the global musical form.
+The sub-CSPs in this example create simple musical <em>motifs</em>. Each sub-CSP controls musical features which distinguish a particular motif (e.g., its rhythm or its pitch contour). Other musical features are controlled by the global CSP (e.g., the harmonic structure of the music).</p>
+
+<p>The example also demonstrates one way for combining constraint-based algorithmic composition with 'classical' deterministic algorithmic composition techniques.
+Each motif specification is defined in a modular way.
+The global form is defined using a specific symbol for each specific motif in the textual music representation. For example, the form can be a sequence of motif specifications as</p>
+
+<blockquote>
+<p class="quoted"><code>[a b c b a]</code></p>
+</blockquote>
+
+
+<p>This textual representation is created either `by hand' or algorithmically. As an example, a sequence of parmeterised motifs specifications is created with an Lindenmayer system  which is a popular algorithmic composition techniques.</p>
+
+<p>In this example, the global form (i.e. the motif sequence) is always determined in the CSP definition. Although the global form can be created algorithmically, it is not possible to constrain it by compositional rules. Strasheela's <a href="../contributions/anders/Motif/doc/node1.html">motif model</a>, however, allows the user to <em>constrain</em> the identity and the variation of a motif.</p>
+
+
+<h2><a name="sec1" id="sec1"></a>
+Musical Sections as Sub-CSPs</h2>
+
+<p class="first">This section presents a few relatively simple motif definitions. The hope is that their simplicity encourages you to modify this example with your own motifs. Each motif here is musically rather simple, but clearly distinguished. It is either a monophonic note sequence or some more complex musical segment. Each motif fixes some musical aspects and constrains others (e.g. the number of notes in motif and the rhythmic structure is fixed in the following examples, and the pitch contour may be constrained). Each motif is always used in a harmonic context, and the pitches of the motif are implicitly constrained to express the underlying harmony.</p>
+
+
+<h3><a name="sec2" id="sec2"></a>
+A 'Free' Motif</h3>
+
+<p class="first">This first motif example specifies the duration of the notes, but puts no constraints on the note pitches (only the pitch domain is restricted to two octaves around middle <em>c</em>). Nevertheless, the motif notes are 'automatically' constrained to express the underlying chord as shown <a href="HarmonyExamples.html#firstExample">before</a>. This CSP uses a database of typical Jazz chords (e.g., the chord <code>chord(index:1 transposition:0)</code> expresses C7). Again, the lower staff is always not sounding but shows an harmonic analysis (chord roots plus description).
+The <a href="../examples/07-Harmonised-L-system.oz">source</a> demonstrates how the solver is called with this CSP &mdash; search for <code>MakeMyFreeMotif</code> in the code...</p>
+
+<pre class="src">
+{Score<span style="color: #a020f0;">.</span>makeScore
+ sim(items:[{MakeMyFreeMotif}
+            chord(duration:4<span style="color: #a020f0;">*</span>4                  <span style="color: #b22222;">% </span><span style="color: #b22222;">motif note no * motif note duration
+</span>                  index:1
+                  transposition:0)]
+     startTime:0
+     timeUnit:beats(16))                        <span style="color: #b22222;">% </span><span style="color: #b22222;">duration 16 is a quarter note
+</span> Aux<span style="color: #a020f0;">.</span>myCreators}
+</pre>
+
+<p><a class="image-link" href="../examples/Output/07-Harmonised-L-system-ex5.mp3">
+<img src="../examples/Output/07-Harmonised-L-system-ex5.preview.png"></a></p>
+
+
+<p>The motif constructure <code>MakeMyFreeMotif</code> defines the motif quasi literally. Everything is fixed, only the note pitches are set to variables of the domain {48, ..., 72} (i.e. midi pitches two octaves around middle <em>c</em>). The function <code>Score.makeScore</code> has already been used in several examples before. <a href="../doc/api/node6.html#entity199">Score.makeScore2</a> is a cousin which does not fully initialise the score, and that way allows for the combination of its result with other parts of the final score.</p>
+
+<pre class="src">
+<span style="color: #a020f0;">proc</span><span style="color: #b8860b;"> </span>{<span style="color: #0000ff;">MakeMyFreeMotif</span> MyMotif}
+   MyMotif = {Score<span style="color: #a020f0;">.</span>makeScore2
+              seq(info:freeMotif
+                  items:[<span style="color: #b22222;">%% </span><span style="color: #b22222;">duration 4 is a sixtienth,
+</span>                         <span style="color: #b22222;">%% </span><span style="color: #b22222;">pitch is measured in MIDI keynumbers
+</span>                         note(duration:4 pitch:{FD<span style="color: #a020f0;">.</span>int 48<span style="color: #a020f0;">#</span>72})
+                         note(duration:4 pitch:{FD<span style="color: #a020f0;">.</span>int 48<span style="color: #a020f0;">#</span>72})
+                         note(duration:4 pitch:{FD<span style="color: #a020f0;">.</span>int 48<span style="color: #a020f0;">#</span>72})
+                         note(duration:4 pitch:{FD<span style="color: #a020f0;">.</span>int 48<span style="color: #a020f0;">#</span>72})])
+              Aux<span style="color: #a020f0;">.</span>myCreators}
+   <span style="color: #b22222;">%%  </span><span style="color: #b22222;">Arbitrary further constraints on MyMotif can be added here...
+</span><span style="color: #a020f0;">end</span>
+</pre>
+
+
+
+<h3><a name="sec3" id="sec3"></a>
+A Parameterised Free Motif</h3>
+
+<p class="first">The following example variates the example <code>MakeMyFreeMotif</code> above by introducing additional user control via arguments to the new motif constructor <code>MakeMyFreeMotif2</code>. For example, the user may want to control the number of notes in the motif and the duration of each note:</p>
+
+<pre class="src">
+{MakeMyFreeMotif2 <span style="color: #a020f0;">unit</span>(n:6
+                       noteDuration:8)}
+</pre>
+
+<p><a class="image-link" href="../examples/Output/07-Harmonised-L-system-ex6.mp3">
+<img src="../examples/Output/07-Harmonised-L-system-ex6.preview.png"></a></p>
+
+
+<p>All arguments are optional. For example,</p>
+
+<pre class="src">
+{MakeMyFreeMotif2 <span style="color: #a020f0;">unit</span>}
+</pre>
+
+<p>creates the same output as</p>
+
+<pre class="src">
+{MakeMyFreeMotif}
+</pre>
+
+
+<p>Following is the definition of <code>MakeMyFreeMotif2</code>. Support for optional arguments is defined uses Oz' <a href="http://www.mozart-oz.org/documentation/base/record.html#section.records.records">Adjoin</a>: the variable <code>Settings</code> is bound to a record which adjoins the <code>Default</code> settings and the user-specified arguments in <code>Args</code> (features in <code>Args</code> take precedence over <code>Default</code>). <code>MakeMyFreeMotif2</code> is defined in such a way that it also 'forwards' arbitrary optional arguments to the constructor of the sequential container which <code>MakeMyFreeMotif2</code> returns. For example, <code>MakeMyFreeMotif2</code> handles the argument <code>startTime</code> or <code>endTime</code> properly.</p>
+
+<pre class="src">
+<span style="color: #a020f0;">proc</span><span style="color: #b8860b;"> </span>{<span style="color: #0000ff;">MakeMyFreeMotif2</span> Args MyMotif}
+   Default = <span style="color: #a020f0;">unit</span>(n:4
+                  noteDuration:4)
+   Settings = {Adjoin Default Args}
+<span style="color: #a020f0;">in</span>
+   MyMotif = {Score<span style="color: #a020f0;">.</span>makeScore2
+              <span style="color: #b22222;">%% </span><span style="color: #b22222;">filtering out settings specific for MakeMyFreeMotif2 and
+</span>              <span style="color: #b22222;">%% </span><span style="color: #b22222;">'forward' all other arguments to the seq container
+</span>              {Adjoin {Record<span style="color: #a020f0;">.</span>subtractList Settings
+                       [n noteDuration isStartingWithChord]}
+               seq(info:freeMotif
+                   items: {LUtils<span style="color: #a020f0;">.</span>collectN Settings<span style="color: #a020f0;">.</span>n
+                           <span style="color: #a020f0;">fun</span><span style="color: #b8860b;"> </span>{<span style="color: #0000ff;">$</span>}
+                              note(duration:Settings<span style="color: #a020f0;">.</span>noteDuration
+                                   pitch:{FD<span style="color: #a020f0;">.</span>int 48<span style="color: #a020f0;">#</span>72})
+                           <span style="color: #a020f0;">end</span>})}
+              Aux<span style="color: #a020f0;">.</span>myCreators}
+<span style="color: #a020f0;">end</span>
+</pre>
+
+
+<h3><a name="sec4" id="sec4"></a>
+Three Motifs: Run,  Chord Repetition and Arpeggio</h3>
+
+<p class="first">The next three motif definitions are only briefly mentioned here. Their full implementation can be found in the <a href="../examples/07-Harmonised-L-system.oz">source</a>.
+The run motif creates a little run and allows for non-harmonic passing tones.</p>
+
+
+
+<p><a class="image-link" href="../examples/Output/07-Harmonised-L-system-ex1.mp3">
+<img src="../examples/Output/07-Harmonised-L-system-ex1.preview.png"></a></p>
+
+<p>The chord repetition motif repeats &mdash; surprise &mdash; a chord.</p>
+
+<p><a class="image-link" href="../examples/Output/07-Harmonised-L-system-ex2.mp3">
+<img src="../examples/Output/07-Harmonised-L-system-ex2.preview.png"></a></p>
+
+<p>Finally, the arpeggio motif creates an arpeggio over a chord.</p>
+
+<p><a class="image-link" href="../examples/Output/07-Harmonised-L-system-ex3.mp3">
+<img src="../examples/Output/07-Harmonised-L-system-ex3.preview.png"></a></p>
+
+<p>The run motif, the chord repetition motif, and the arpeggio motif all support a few parameters. For example, the following code creates an arpeggio of 5 notes (argument <code>n</code>), which is ascending (argument <code>direction</code>).</p>
+
+<pre class="src">
+{Score<span style="color: #a020f0;">.</span>makeScore
+ sim(items:[{MakeArpeggio <span style="color: #a020f0;">unit</span>(n:5                <span style="color: #b22222;">% </span><span style="color: #b22222;">No. of motif notes
+</span>                               direction:<span style="color: #bc8f8f;">'&lt;:'</span>)}   <span style="color: #b22222;">% </span><span style="color: #b22222;">relation to predecessor
+</span>            chord(duration:5<span style="color: #a020f0;">*</span>8 <span style="color: #b22222;">% </span><span style="color: #b22222;">(motif n * motif note duration)
+</span>                  index:1
+                  transposition:0)]
+     startTime:0
+     timeUnit:beats(16))
+ Aux<span style="color: #a020f0;">.</span>myCreators}
+</pre>
+
+<p><a class="image-link" href="../examples/Output/07-Harmonised-L-system-ex3b.mp3">
+<img src="../examples/Output/07-Harmonised-L-system-ex3b.preview.png"></a></p>
+
+
+
+
+<h2><a name="sec5" id="sec5"></a>
+Combining Musical Sections (Combining Sub-CSPs)</h2>
+
+<h3><a name="sec6" id="sec6"></a>
+Music Representation</h3>
+
+<p class="first">The previous examples created the full music representation explicitly. In the following, a chord sequence is created implicitly in the background. For this purpose, the following examples replace the function <code>Score.makeScore</code> with <code>HarmoniseScore</code>. This function is defined in the example's <a href="../examples/07-Harmonised-L-system.oz">source</a> and makes use of <a href="../contributions/anders/HarmonisedScore/doc/node3.html#entity89">HS.score.harmoniseScore</a>.</p>
+
+<p><code>HarmoniseScore</code> expects the same arguments as <code>Score.makeScore</code>: a textually specified music representation and a specifications of the score object constructors to use.
+Score object constructors can be any motif definition discussed above &mdash; or your own motif definition.</p>
+
+<p>The textually specified music representation uses the same representation principles as the examples before (e.g., see <a href="Example-FloridCounterpoint.html#musicRepresentation">Florid Counterpoint</a>). In addition, this representation can now use symbolic motif names. For example, a sequence of motifs can be specified like the following example. We only need to map each symbol in the music representation to its own score object constructor.</p>
+
+<pre class="src">
+seq(items:[arpeggio run arpeggio])
+</pre>
+
+
+<p><code>HarmoniseScore</code> is defined in such a way that motifs can be marked to start simultaneously with a new chord in the chord sequence. However, the motif definitions in this example depends on the harmonic structure. Therefore, the first motif always <em>must</em> be marked that it starts with a new chord. The example below indicates that the constructor <code>MakeArpeggio</code> is used for the motif specification with the symbol <code>arpeggio</code>, and so forth. Motif specifications marked with the feature <code>isStartingWithChord</code> will start with a new chord in the chord sequence.</p>
+
+<pre class="src">
+{HarmoniseScore seq(items:[arpeggio(n:4
+                                    direction:<span style="color: #bc8f8f;">'&lt;:'</span>
+                                    isStartingWithChord:<span style="color: #a020f0;">unit</span>)
+                           chordRepetition(isStartingWithChord:<span style="color: #a020f0;">unit</span>)
+                           chordRepetition(isStartingWithChord:<span style="color: #a020f0;">unit</span>)
+                           arpeggio(n:3
+                                    direction:<span style="color: #bc8f8f;">'&gt;:'</span>
+                                    isStartingWithChord:<span style="color: #a020f0;">unit</span>)
+                           arpeggio(n:4
+                                    direction:<span style="color: #bc8f8f;">'&gt;:'</span>
+                                    isStartingWithChord:<span style="color: #a020f0;">unit</span>)])
+ <span style="color: #a020f0;">unit</span>(arpeggio:MakeArpeggio
+      chordRepetition:MakeChordRepetition)}
+</pre>
+
+<p><a class="image-link" href="../examples/Output/07-Harmonised-L-system-ex4.mp3">
+<img src="../examples/Output/07-Harmonised-L-system-ex4.preview.png"></a></p>
+
+
+<p>(The score output was created automatically &mdash; some future version with avoid the clashes of chord symbols)</p>
+
+
+
+
+
+<h3><a name="sec7" id="sec7"></a>
+Harmonic Rules</h3>
+
+<p class="first">The above example implicitly creates a harmonic progression. The chord database of all examples here (see <a href="HarmonyExamples.html">HarmonyExamples</a> for an explanation of the chord database concept) consists in seventh chords and related chords from Jazz harmony. There are a few harmonic rules:</p>
+
+<ul>
+<li>Neighbouring chords have different chord roots</li>
+<li>Neighbouring chords have common pitch classes (harmonic band)</li>
+<li>The chord progression starts and ends with the tonic</li>
+</ul>
+
+<p>Most motif notes express their underlying harmony. Exceptions are only the passing notes in the run motif. Such non-harmonic notes are marked with an x above the note head. Following is another motif sequence which uses a few more motifs.</p>
+
+<pre class="src">
+{HarmoniseScore seq(items:[run(isStartingWithChord:<span style="color: #a020f0;">unit</span>)
+                           chordRepetition(isStartingWithChord:<span style="color: #a020f0;">unit</span>)
+                           run(isStartingWithChord:<span style="color: #a020f0;">unit</span>)
+                           chordRepetition(isStartingWithChord:<span style="color: #a020f0;">unit</span>)
+                           chordRepetition(isStartingWithChord:<span style="color: #a020f0;">unit</span>)
+                           freeMotif(n:7
+                                     noteDuration:4)
+                           arpeggio(n:6
+                                    direction:<span style="color: #bc8f8f;">'&gt;:'</span>
+                                    isStartingWithChord:<span style="color: #a020f0;">unit</span>)])
+ <span style="color: #a020f0;">unit</span>(arpeggio:MakeArpeggio
+      chordRepetition:MakeChordRepetition
+      run:MakeRun
+      freeMotif:MakeMyFreeMotif2)}
+</pre>
+
+<p><a class="image-link" href="../examples/Output/07-Harmonised-L-system-ex7.mp3">
+<img src="../examples/Output/07-Harmonised-L-system-ex7.preview.png"></a></p>
+
+
+
+
+<h2><a name="sec8" id="sec8"></a>
+Algorithmic Creation of the Global Form</h2>
+
+<p class="first">The gobal musical form &mdash; a motif sequence &mdash; was manually created in the last examples. This section creates motif sequences by algorithmic means. A <a href="http://en.wikipedia.org/wiki/L-system">Lindenmayer system</a> (L-system) is a formal grammar which can output self-similar fractals. L-systems are an established technique in algorithmic composition (cf. <a href="http://commonmusic.sourceforge.net/doc/cm.html">Common Music</a>'s <a href="http://commonmusic.sourceforge.net/doc/dict/rewrite-cls.html">rewrite pattern</a>). The example's <a href="../examples/07-Harmonised-L-system.oz">source</a> defines the L-system generator <code>MyLSystemMotifs</code>. The following L-system definition implements an L-system example which is explained <a href="http://en.wikipedia.org/wiki/L-system#Example_1:_Algae">here</a>. The example returns the 7th generation of an L-system with the two rules (a -&gt; a b) and (b -&gt; a).</p>
+
+<pre class="src">
+{MyLSystemMotifs <span style="color: #a020f0;">unit</span>(n:7                                 ; generation to output
+                      axiom: [b]                          ; starting sequence
+                      rules: <span style="color: #a020f0;">unit</span>(a: <span style="color: #a020f0;">fun</span><span style="color: #b8860b;"> </span>{<span style="color: #0000ff;">$</span> R} [a b] <span style="color: #a020f0;">end</span>  ; transformation specifications
+                                  b: <span style="color: #a020f0;">fun</span><span style="color: #b8860b;"> </span>{<span style="color: #0000ff;">$</span> R} [a] <span style="color: #a020f0;">end</span>))}
+</pre>
+
+<p>This definition results in the following symbol sequence.</p>
+
+<p><code>[a b a a b a b a a b a a b]</code></p>
+
+
+
+
+
+
+<p>In this example, an L-system generates a sequence of motif specifications. These motif specifications then replace the manually created motif sequences used in the examples above. The L-system of the present example does not only generate a sequence of plain motifs, it also outputs parameters for these motifs (for parameterised L-systems see <a href="http://algorithmicbotany.org/papers/#abop">Prusinkiewicz and Lindenmayer (1990)</a>). For example, it specifies which motifs start with a chord.
+The default settings for <code>MyLSystemMotif</code> generate a sequence of specifications for the motifs defined above. The third generation of this L-system is generated with the following call.</p>
+
+<pre class="src">
+{MyLSystemMotifs <span style="color: #a020f0;">unit</span>(n:3)}
+</pre>
+
+
+<p>This call outputs the following motif sequence.</p>
+
+<pre class="src">
+[arpeggio(direction:<span style="color: #bc8f8f;">'&gt;:'</span>
+          isStartingWithChord:<span style="color: #a020f0;">unit</span>
+          n:4)
+ arpeggio(direction:<span style="color: #bc8f8f;">'&gt;:'</span>
+          n:2)
+ chordRepetition
+ arpeggio(direction:<span style="color: #bc8f8f;">'&gt;:'</span>
+          isStartingWithChord:<span style="color: #a020f0;">unit</span>
+          n:3)
+ arpeggio(direction:<span style="color: #bc8f8f;">'&gt;:'</span>
+          n:2)
+ chordRepetition
+ run
+ arpeggio(direction:<span style="color: #bc8f8f;">'&gt;:'</span>
+          isStartingWithChord:<span style="color: #a020f0;">unit</span>
+          n:2)
+ arpeggio(direction:<span style="color: #bc8f8f;">'&lt;:'</span>
+          n:2)
+ arpeggio(direction:<span style="color: #bc8f8f;">'&gt;:'</span>
+          isStartingWithChord:<span style="color: #a020f0;">unit</span>
+          n:3)
+ arpeggio(direction:<span style="color: #bc8f8f;">'&gt;:'</span>
+          n:2)
+ chordRepetition]
+</pre>
+
+<p>This sequence results in the following musical example.</p>
+
+<p><a class="image-link" href="../examples/Output/07-Harmonised-L-system-ex8a.mp3">
+<img src="../examples/Output/07-Harmonised-L-system-ex8a.preview.png"></a></p>
+
+<p>(The rhythmic structure of this example does not fit into Lilyponds default 4/4 time...)</p>
+
+<p>The fourth generation &mdash; 
+<code>{MyLSystemMotifs unit(n:4)}</code> &mdash; is already rather long. The resulting motif sequence specification is <a href="../examples/Output/07-Harmonised-L-system-ex9.oz">here</a>, the musical output is shown below. The notation of this example was edited to express the motivic structure more clearly. Note beamings mark the motifs created by the L-system. `Measures' mark the length of a chord created by the top-level CSP.</p>
+
+<p><a class="image-link" href="../examples/Output/07-Harmonised-L-system.mp3">
+<img src="../examples/Output/07-Harmonised-L-system.png"></a></p>
+
+
+
+
+
+
+
+<p><a href="../examples/07-Harmonised-L-system.oz">full source</a></p>
+
+<p><a href="StrasheelaExamples.html">back</a></p>
+
+
+<hr>
+
+<p><strong>[TODO:]</strong></p>
+
+<ul>
+<li>Polyphonic setting (manually defined), where multiple motifs run in parallel in a simultaneous container (the code already supports it, but some example is missing)</li>
+
+<li>Variate the L-systen definition (i.e. use a different axiom and different rules)</li>
+
+<li>?? How to use an L-system for creating some polyphonic setting? For example, I may run different variations in parallel, or create <code>offsetTime</code> parameter values for elements in a simultaneous container (the <code>offsetTime</code> would be relative to the start time of the predecessor score object)</li>
+</ul>
+
+
+
+<!-- Page published by Emacs Muse ends here -->
+<!-- Footer -->
+<div id="footer">
+<div id="author">&copy; 
+Torsten Anders</div>
+<div id="date">Last time edited: 2007.08.04</div>
+</div>
+  </body>
+</html>

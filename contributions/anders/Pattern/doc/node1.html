@@ -1,0 +1,1027 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<html>
+ <head>
+  <title>Pattern</title>
+  <style>BODY {
+ background: url(page.gif) repeat-y white;
+}
+#slidemenubar, #slidemenubar2{
+ position:absolute;
+ left:-144px;
+ width:160px;
+ top:10px;
+ border:0px solid black;
+ font:bold 12px Verdana;
+ line-height:10px;
+}
+.margin {
+ position: absolute;
+ left: 10px;
+ width: 130px;
+}
+BODY, P, H1, H2, H3, A {
+ font-family: sans-serif;
+}
+PRE, CODE {
+ font-family: courier, monospace;
+}
+P {
+ text-align: justify;
+}
+H1     { color: #9B0000; }
+H2     { color: #FF9933; }
+H3, H4 { color: #881155; }
+CODE              { color: #663366; }
+.code CODE        { color: #000000; }
+SPAN.comment      { color: #B22222; }
+SPAN.keyword      { color: #A020F0; }
+SPAN.string       { color: #BC8F8F; }
+SPAN.functionname { color: #0000FF; }
+SPAN.type         { color: #228B22; }
+SPAN.variablename { color: #B8860B; }
+SPAN.reference    { color: #5F9EA0; }
+SPAN.builtin      { color: #DA70D6; }
+A:link {
+ color: #666666;
+}
+A:visited {
+ color: black;
+}
+A.pre { font-family: courier, monospace;
+ color: #228B22;
+}
+</style>
+ </head>
+<body>
+<script language="JavaScript1.2">
+if (document.all)
+document.write('<div id="slidemenubar2" style="left:-144" onMouseover="pull()" onMouseout="draw()">')
+</script>
+<layer id="slidemenubar" onMouseover="pull()" onMouseout="draw()">
+<table border="0" cellpadding="0" cellspacing="0" width="161"><tr><td bgcolor="#009cff" width="144"><a href="index.html">Index</a>
+</td><td rowspan="2" valign="top" width="16"><img src="menu.gif" width="16"></td></tr><tr><td bgcolor="#009cff" width="144"><a href="node1.html">Pattern</a>
+</td></tr></table></layer>
+<script language="JavaScript1.2">
+function regenerate(){
+window.location.reload()
+}
+function regenerate2(){
+if (document.layers)
+setTimeout("window.onresize=regenerate",400)
+}
+window.onload=regenerate2
+if (document.all){
+document.write('</div>')
+themenu=document.all.slidemenubar2.style
+rightboundary=0
+leftboundary=-144
+}
+else{
+themenu=document.layers.slidemenubar
+rightboundary=144
+leftboundary=0
+}
+function pull(){
+if (window.drawit)
+clearInterval(drawit)
+pullit=setInterval("pullengine()",20)
+}
+function draw(){
+clearInterval(pullit)
+drawit=setInterval("drawengine()",50)
+}
+function pullengine(){
+if (document.all&&themenu.pixelLeft<rightboundary)
+themenu.pixelLeft+=5
+else if(document.layers&&themenu.left<rightboundary)
+themenu.left+=5
+else if (window.pullit)
+clearInterval(pullit)
+}
+function drawengine(){
+if (document.all&&themenu.pixelLeft>leftboundary)
+themenu.pixelLeft-=5
+else if(document.layers&&themenu.left>leftboundary)
+themenu.left-=5
+else if (window.drawit)
+clearInterval(drawit)
+}
+</script>
+
+<div style="margin-left:160px"><span class="string">
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> This functor defines constraints on lists which help to express pattern in music. To combine multiple patterns to motifs see the contribution Motifs.<BR>
+<BR>
+</span>
+</span>
+<h3>Functor</h3>
+<ul>Pattern ("<span class="string">Pattern.oz</span>")<br></ul>
+<h3>Import</h3>
+<code><ul><li>FD</li><li>FS</li><li>Combinator</li><li>Select(fd) at "<span class="string">x-ozlib://duchier/cp/Select.ozf"
+</span></li><li>GUtils at "<span class="string">x-ozlib://anders/strasheela/source/GeneralUtils.ozf"
+</span></li><li>LUtils at "<span class="string">x-ozlib://anders/strasheela/source/ListUtils.ozf"
+</span></li><li>Browser(browse:Browse)</li></ul></code>
+<h3>Export</h3>
+<code><ul><li>&lt;P/2:<a href="#entity8"><span class="functionname">PlainPattern</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity9"><span class="functionname">PlainPattern2</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity10"><span class="functionname">Continuous</span></a>&gt;
+</li><li>&lt;P/1:<a href="#entity13"><span class="functionname">AllEqual</span></a>&gt;
+</li><li>&lt;P/1:<a href="#entity11"><span class="functionname">Increasing</span></a>&gt;
+</li><li>&lt;P/1:<a href="#entity12"><span class="functionname">Decreasing</span></a>&gt;
+</li><li>&lt;P/3:<a href="#entity14"><span class="functionname">InInterval</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity16"><span class="functionname">Cycle</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity15"><span class="functionname">Cycle2</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity17"><span class="functionname">Rotation</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity89"><span class="functionname">Heap</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity21"><span class="functionname">Random</span></a>&gt;
+</li><li>&lt;P/3:<a href="#entity18"><span class="functionname">Palindrome</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity19"><span class="functionname">Line</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity20"><span class="functionname">Accumulation</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity22"><span class="functionname">ArithmeticSeries</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity23"><span class="functionname">GeometricSeries</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity24"><span class="functionname">Max</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity25"><span class="functionname">Min</span></a>&gt;
+</li><li>&lt;P/3:<a href="#entity26"><span class="functionname">ArithmeticMean</span></a>&gt;
+</li><li>&lt;P/3:<a href="#entity27"><span class="functionname">Range</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity28"><span class="functionname">MarkovChain</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity29"><span class="functionname">MarkovChain_1</span></a>&gt;
+</li><li>&lt;P/4:<a href="#entity90"><span class="functionname">MakeLSystem</span></a>&gt;
+</li><li>&lt;P/4:<a href="#entity91"><span class="functionname">MakeLSystem2</span></a>&gt;
+</li><li>&lt;P/1:<a href="#entity93"><span class="functionname">OneOverFNoise</span></a>&gt;
+</li><li>&lt;P/3:<a href="#entity92"><span class="functionname">OneOverFNoiseDeterm</span></a>&gt;
+</li><li>&lt;P/3:<a href="#entity57"><span class="functionname">MapTail</span></a>&gt;
+</li><li>&lt;P/3:<a href="#entity58"><span class="functionname">MapTailInd</span></a>&gt;
+</li><li>&lt;P/4:<a href="#entity59"><span class="functionname">MapTailN</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity60"><span class="functionname">ForTail</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity61"><span class="functionname">ForTailInd</span></a>&gt;
+</li><li>&lt;P/3:<a href="#entity62"><span class="functionname">ForTailN</span></a>&gt;
+</li><li>&lt;P/4:<a href="#entity64"><span class="functionname">MapNeighbours</span></a>&gt;
+</li><li>&lt;P/4:<a href="#entity65"><span class="functionname">MapNeighboursInd</span></a>&gt;
+</li><li>&lt;P/3:<a href="#entity66"><span class="functionname">ForNeighbours</span></a>&gt;
+</li><li>&lt;P/3:<a href="#entity67"><span class="functionname">ForNeighboursInd</span></a>&gt;
+</li><li>&lt;P/3:<a href="#entity68"><span class="functionname">Map2Neighbours</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity69"><span class="functionname">For2Neighbours</span></a>&gt;
+</li><li>&lt;P/3:<a href="#entity70"><span class="functionname">ApplyToRange</span></a>&gt;
+</li><li>&lt;P/3:<a href="#entity71"><span class="functionname">ForRanges</span></a>&gt;
+</li><li>&lt;P/4:<a href="#entity72"><span class="functionname">MapRanges</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity73"><span class="functionname">ParallelForAll</span></a>&gt;
+</li><li>&lt;P/3:<a href="#entity74"><span class="functionname">ParallelMap</span></a>&gt;
+</li><li>&lt;P/3:<a href="#entity75"><span class="functionname">ForCartesianProduct</span></a>&gt;
+</li><li>&lt;P/4:<a href="#entity76"><span class="functionname">MapCartesianProduct</span></a>&gt;
+</li><li>&lt;P/3:<a href="#entity63"><span class="functionname">Sublists</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity77"><span class="functionname">ForPairwise</span></a>&gt;
+</li><li>&lt;P/3:<a href="#entity78"><span class="functionname">MapPairwise</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity79"><span class="functionname">ForSublists</span></a>&gt;
+</li><li>&lt;P/3:<a href="#entity80"><span class="functionname">MapSublists</span></a>&gt;
+</li><li>&lt;P/3:<a href="#entity81"><span class="functionname">CollectPM</span></a>&gt;
+</li><li>&lt;P/3:<a href="#entity82"><span class="functionname">ForPM</span></a>&gt;
+</li><li>&lt;P/4:<a href="#entity83"><span class="functionname">MapPM</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity84"><span class="functionname">Zip</span></a>&gt;
+</li><li>&lt;P/4:<a href="#entity85"><span class="functionname">TransformDisj</span></a>&gt;
+</li><li>&lt;P/3:<a href="#entity86"><span class="functionname">SelectList</span></a>&gt;
+</li><li>&lt;P/3:<a href="#entity87"><span class="functionname">SelectMultiple</span></a>&gt;
+</li><li>&lt;P/3:<a href="#entity88"><span class="functionname">ApplyToN</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity30"><span class="functionname">HowManyDistinct</span></a>&gt;
+</li><li>&lt;P/4:<a href="#entity31"><span class="functionname">HowManyAs</span></a>&gt;
+</li><li>&lt;P/3:<a href="#entity32"><span class="functionname">HowMany</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity33"><span class="functionname">Once</span></a>&gt;
+</li><li>&lt;P/3:<a href="#entity34"><span class="functionname">ForN</span></a>&gt;
+</li><li>&lt;P/4:<a href="#entity35"><span class="functionname">ForPercent</span></a>&gt;
+</li><li>&lt;P/3:<a href="#entity37"><span class="functionname">NDifferences</span></a>&gt;
+</li><li>&lt;P/4:<a href="#entity36"><span class="functionname">ForNEither</span></a>&gt;
+</li><li>&lt;P/1:<a href="#entity38"><span class="functionname">AllTrue</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity39"><span class="functionname">AllTrueR</span></a>&gt;
+</li><li>&lt;P/1:<a href="#entity40"><span class="functionname">OneTrue</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity41"><span class="functionname">OneTrueR</span></a>&gt;
+</li><li>&lt;P/1:<a href="#entity42"><span class="functionname">SomeTrue</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity43"><span class="functionname">SomeTrueR</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity44"><span class="functionname">HowManyTrue</span></a>&gt;
+</li><li>&lt;P/3:<a href="#entity45"><span class="functionname">HowManyTrueR</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity46"><span class="functionname">WhichTrue</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity48"><span class="functionname">SymbolToDirection</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity49"><span class="functionname">DirectionToSymbol</span></a>&gt;
+</li><li>&lt;P/3:<a href="#entity50"><span class="functionname">Direction</span></a>&gt;
+</li><li>&lt;P/4:<a href="#entity51"><span class="functionname">DirectionR</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity52"><span class="functionname">Contour</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity53"><span class="functionname">InverseContour</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity54"><span class="functionname">ContourMatrix</span></a>&gt;
+</li><li>&lt;P/4:<a href="#entity47"><span class="functionname">DirectionChangeR</span></a>&gt;
+</li><li>&lt;P/3:<a href="#entity55"><span class="functionname">FdInts</span></a>&gt;
+</li><li>&lt;P/3:<a href="#entity56"><span class="functionname">FdRanges</span></a>&gt;
+</li><li>&lt;P/3:<a href="#entity94"><span class="functionname">MkUniqueSeq</span></a>&gt;
+</li><li>&lt;P/3:<a href="#entity95"><span class="functionname">MkUniqueIntervalSeq</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity96"><span class="functionname">ConjAll</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity97"><span class="functionname">DisjAll</span></a>&gt;
+</li><li>&lt;P/1:<a href="#entity98"><span class="functionname">ZerosOnlyAtEnd</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity99"><span class="functionname">RelevantLength</span></a>&gt;
+</li></ul></code>
+<h3>Define</h3>
+
+<code>
+<a name="entity8">
+<span class="keyword">proc</span>{<span class="functionname">PlainPattern</span> Xs Proc}<br>
+<span class="string"> PlainPattern constraints Xs to a plain pattern (ie. no nesting or combination of patterns). The pattern is specified by the procedere Proc given to PlainPattern. Proc constraints a single pattern item and is called recursively. Proc expects two arguments: the current item and its predecessor in the list (i.e. Proc is called for all items except the with which has no predecessor).<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity9">
+<span class="keyword">proc</span>{<span class="functionname">PlainPattern2</span> Xs Proc}<br>
+<span class="string"> PlainPattern2 constraints Xs to a plain pattern (ie. no nesting or combination of patterns) and is a variant of PlainPattern which adds additional control. The pattern is specified by the procedere Proc given to PlainPattern2. Proc constraints a single pattern item and is called recursively. Proc expects three arguments: the current item, a list with all previous pattern items in reverse order -- last is first), the number of generations processed so far (i.e. Proc is called for all items in Xs.<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity10">
+<span class="keyword">proc</span>{<span class="functionname">Continuous</span> Xs A}<br>
+<span class="string"> Constrain all elements in Xs to fulfill the relation: Predecessor A X. For instance, if A is '>:' then the relation Predecessor >: X  constraints all elements in Xs to decrease.<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity13">
+<span class="keyword">proc</span>{<span class="functionname">AllEqual</span> Xs}<br>
+<span class="string"> Constrain all elements in the Xs to be equal.<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity11">
+<span class="keyword">proc</span>{<span class="functionname">Increasing</span> Xs}<br>
+<span class="string"> Constrain all elements in Xs to be greater then their predecessor in Xs.<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity12">
+<span class="keyword">proc</span>{<span class="functionname">Decreasing</span> Xs}<br>
+<span class="string"> Constrain all elements in Xs to be less then their predecessor in Xs.<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity14">
+<span class="keyword">proc</span>{<span class="functionname">InInterval</span> Xs Min Max}<br>
+<span class="string"> Constraints all elements in Xs to fall in interval [Min, Max], including.<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity16">
+<span class="keyword">proc</span>{<span class="functionname">Cycle</span> Xs L}<br>
+<span class="string"> Unifies every element in Xs with its Lth predecessor.<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity15">
+<span class="keyword">proc</span>{<span class="functionname">Cycle2</span> Xs Ys}<br>
+<span class="string"> Constrains all elements in the list Xs (FD variables) to form a cycle pattern of the (shorter) list Ys (FD variables). I.e. Xs enumerates the elementes of Ys in sequential order and loops back to the first element of Ys after the last element has been reached.<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity17">
+<span class="keyword">proc</span>{<span class="functionname">Rotation</span> Xs Ys}<br>
+<span class="string"> Constrains all elements in the list Xs (FD variables) to form a rotation pattern of the (shorter) list Ys (FD variables).<BR>
+ ?? unfinished doc: I probably should just do an example...<BR>
+ !! TODO: additional args/control, see CM<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity89">
+<span class="keyword">proc</span>{<span class="functionname">Heap</span> Xs Ys}
+</code><br>
+
+<code>
+<a name="entity21">
+<span class="keyword">proc</span>{<span class="functionname">Random</span> Xs Ys}<br>
+<span class="string"> Constraints the domain of each element in Xs to contain only the elements of Ys.<BR>
+ !! Only a random distribution enforces a random ordering here.<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity18">
+<span class="keyword">proc</span>{<span class="functionname">Palindrome</span> Xs Ys Elide}<br>
+<span class="string"> Constrains all elements in the list Xs (FD variables) to form a palindrome pattern of the (shorter) list Ys (FD variables).<BR>
+ Elide (true | first | last | unit) allows to specify which elements in the pattern are not directly repeated when the pattern reverses direction.<BR>
+ ?? unfinished doc: I probably should just do an example...<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity19">
+<span class="keyword">proc</span>{<span class="functionname">Line</span> Xs Ys}<br>
+<span class="string">Constrains all elements in the list Xs (FD variables) to form a cycle pattern of the (shorter) list Ys (FD variables). I.e. Xs enumerates the elements of Ys in sequential order and sticks on the last element once it has been reached.<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity20">
+<span class="keyword">proc</span>{<span class="functionname">Accumulation</span> Xs Ys}
+</code><br>
+
+<code>
+<a name="entity22">
+<span class="keyword">proc</span>{<span class="functionname">ArithmeticSeries</span> Xs Difference}<br>
+<span class="string"> Constrains all elements in the list/stream Xs (FD variables) to form an arithmetic series, with the difference Difference (a FD variable) between the series members.<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity23">
+<span class="keyword">proc</span>{<span class="functionname">GeometricSeries</span> Xs Quotient}<br>
+<span class="string"> Constrains all elements in the list/stream Xs (FD variables) to form an geometric series, with the quotient Quotient (a FD variable) between the series members.<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity24">
+<span class="keyword">proc</span>{<span class="functionname">Max</span> Xs Y}<br>
+<span class="string"> Y is constrained to be the maximum element in Xs. Xs is a list of FD integers and Y is (implicitely declared) a FD integer. <BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity25">
+<span class="keyword">proc</span>{<span class="functionname">Min</span> Xs Y}<br>
+<span class="string"> Y is constrained to be the minimum element in Xs. Xs is a list of FD integers and Y is (implicitely declared) a FD integer. <BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity26">
+<span class="keyword">proc</span>{<span class="functionname">ArithmeticMean</span> Xs EncodedMean Quotient}<br>
+<span class="string"> Constrains EncodedMean/Quotient (two FD int) to be the arithmetic means of ArithmeticMean (a list of FD ints). Encoding the means by the expression EncodedMean/Quotient allows to represent means which are ratios by FD ints. In the following example, the means is constrained to 1.5<BR>
+   <code>{ArithmeticMean Xs 15 10}</code><BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity27">
+<span class="keyword">proc</span>{<span class="functionname">Range</span> Xs A Y}<br>
+<span class="string"> Y (a FD int) is the distance between the maximum and the minimum value in Xs (a list of FD ints). A is a relation such as '=:' etc.<BR>
+ NB: this rule poses the Max and Min pattern on Xs. <BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity28">
+<span class="keyword">proc</span>{<span class="functionname">MarkovChain</span> Xs Decl}<br>
+<span class="string"> Constraints Xs (a list of FD ints) to form an nth-order markov chain according to Decl. A Decl clause takes any number of predecessors into account and specifies a single successor. Decl is a list of list pairs in the form <code>PredecessorSeq#PossibleSucessors</code>: after the occurance of PredecessorSeq in a sublist of Xs follows a value in PossibleSucessors. For example, the first order markov chain <code>{MarkovChain_1 Xs unit([1]#[2 3] [2]#[1] [3]#[2])}</code> causes any 1 in Xs to be followed by either 2 or 3 and any 2 by 1 etc.<BR>
+ The list in PredecessorSeq can be of any length to specify any markov chain order. However, in all clauses the length should be equal.<BR>
+ Additionally, the declaration can use the wildcard symbol 'x' which matches every FD int. For example, the clause <code>[x 1]#[2]</code> states that 1 is followed by 2.<BR>
+ NB: The list of declarations in Decl specifies a number of disjunctions without any implicit 'otherwise' clause. An inappropriate Decl can cause no solution.<BR>
+ Markov chains of order N pose constraints only on sublists of length N: a clauses <code>[x x 1]#[2]</code> does not simply constrain 1 to be followed by 2 but does constrain 1 with two predecessors be followed by 2. Workaround: append some aux FD ints in front of the list and remove them later again (this workaround is not automatically integrated in MarkovChain to avoid any undesired side effects -- its no foolproof trick and the user should thus be aware of it).<BR>
+ NB: MarkovChain only specifies that certain elements follow each other. In opposite to the [usual / common] definition of a markov chain, however, MarkovChain does NOT constrain the probability of certain successors.<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity29">
+<span class="keyword">proc</span>{<span class="functionname">MarkovChain_1</span> Xs Decl}<br>
+<span class="string"> Constraints Xs (a list of FD ints) to form a first order markov chain according to Decl. Decl is a record with only integers as features and lists of integers as fields. MarkovChain_1 poses the constraints that each element in Xs with the value of the Decl feature XVal is followed by an element whose value is one of the elements in the field of XVal. <BR>
+ For example, <code>{MarkovChain_1 Xs unit(1:[2 3] 2:[1] 3:[2])}</code> causes any 1 in Xs to be followed by either 2 or 3 and any 2 by 1 etc.<BR>
+ NB: MarkovChain_1 only specifies that certain elements follow each other. In opposite to the [usual / common] definition of a markov chain, however, MarkovChain_1 does NOT constrain the probability of certain successors.<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity90">
+<span class="keyword">fun</span>{<span class="functionname">MakeLSystem</span> Start N Rules}<br>
+<span class="string"> Returns a list of determined values sorted according to an L-system. Start is the first pattern period (a list) and N is number of periods (an integer). Rules is unary fun, arg is the last pattern value and output is the next period (a list). Rules can be defined, e.g., by a case expression.  <BR>
+ NB: MakeLSystem works best with determined values and is thus no pattern rule which constraints values in a list as most other definitions in this functor. Nevertheless, symbols of the L-system can be replaced by variables (e.g. using LUtils.replace). See ./testing/Pattern-test.oz for examples.<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity91">
+<span class="keyword">fun</span>{<span class="functionname">MakeLSystem2</span> Start N Rules}<br>
+<span class="string"> Returns a list of determined values sorted according to an L-system. Similar to MakeLSystem, however MakeLSystem2 allows the definition of context sensitive L-systems, systems which look not only at single values, but also at predecessors and/or successors (in the former period/generation). Rules is function of three arguments:  whole pattern so far in reverse order (i.e. a list with direct predecessor first), the current value and the succeeding values (list). Rules may, e.g., define an if or a case statement and can freely access all its arguments (e.g. to define the current element is x and the butfirst is y). The first arg of Rules is list with all predecessors of X in proceeding generation (and in reverse order) including earlier generations. This arg is nil in the vedry first iteration. The third arg of Rules is list with successors of X in proceeding generation (normal order) excluding later generations. This arg is nil at any end of a period. <BR>
+ NB: MakeLSystem works best with determined values and is thus no pattern rule which constraints values in a list as most other definitions in this functor. Nevertheless, symbols of the L-system can be replaced by variables (e.g. using LUtils.replace). See ./testing/Pattern-test.oz for examples.<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity93">
+<span class="keyword">proc</span>{<span class="functionname">OneOverFNoise</span> Xs}<br>
+<span class="string"> Constraints a list of FD integers to random values according to 1/f noise (i.e. x_n = (x_{n-1} + x_{n-1}^2) mod 1). All Xs are in the domain 0#Max.<BR>
+ This constraint is quasi deterministic -- determining a single variable determines the whole list only by constraint propagation.<BR>
+ !! Currently, Max is fixed to 100<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity92">
+<span class="keyword">proc</span>{<span class="functionname">OneOverFNoiseDeterm</span> L Start Xs}<br>
+<span class="string"> Returns a list of determistically created floats according to 1/f noise (i.e. x_n = (x_{n-1} + x_{n-1}^2) mod 1). L is the length of the list and Start is the first list value.<BR>
+ spectrum: 1/f noise falls -3dB per octave.<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity57">
+<span class="keyword">fun</span>{<span class="functionname">MapTail</span> Xs Fn}<br>
+<span class="string"> Collects the results of applying the unary function Fn (expecting a list) to Xs and recursively to the tail of each list Fn was applied to.<BR>
+ For instance, <code>{MapTail [1 2 3 4] fun {$ Xs} Xs end}</code> returns <code>[[1 2 3 4] [2 3 4] [3 4] [4]]</code>.<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity58">
+<span class="keyword">fun</span>{<span class="functionname">MapTailInd</span> Xs Fn}<br>
+<span class="string"> Similar to MapTail, but Fn is a binary function expecting the index as first argument.<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity59">
+<span class="keyword">fun</span>{<span class="functionname">MapTailN</span> Xs N Fn}<br>
+<span class="string"> Similar to MapTail, but Fn is only applied to the first N lists.<BR>
+ In case N > {Length Xs}, an exception is raised.<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity60">
+<span class="keyword">proc</span>{<span class="functionname">ForTail</span> Xs P}<br>
+<span class="string"> Applies the unary procedure P (expecting a list) to Xs and recursively to the tail of each list P was applied to.<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity61">
+<span class="keyword">proc</span>{<span class="functionname">ForTailInd</span> Xs P}<br>
+<span class="string"> Similar to ForTail, but P is a binary procedure expecting the index as first argument.<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity62">
+<span class="keyword">proc</span>{<span class="functionname">ForTailN</span> Xs N P}<br>
+<span class="string"> Similar to ForTail, but P is only applied to the first N lists.<BR>
+ In case N > {Length Xs}, an exception is raised.<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity64">
+<span class="keyword">fun</span>{<span class="functionname">MapNeighbours</span> Xs N Fn}<br>
+<span class="string"> Traverses through list Xs by mapping the unary function Fn (expecting a list) on each list of N (an int > 0) neighboring elements in Xs. The length of returned list is by N-1 shorter then Xs. <BR>
+ For instance, <code>{MapNeighbours [1 2 3 4 5] 3 fun {$ Xs} Xs end}</code> returns <code>[[1 2 3] [2 3 4] [3 4 5]]</code>.<BR>
+ NB: MapNeighbours returns nil for N > {Length Xs}<BR>
+ BTW: this pattern substitutes the most common pattern matching rule application mechanism of PWConstraints.<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity65">
+<span class="keyword">fun</span>{<span class="functionname">MapNeighboursInd</span> Xs N Fn}<br>
+<span class="string"> Similar to MapNeighbours, but Fn is a binary function expecting the index as first argument.<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity66">
+<span class="keyword">proc</span>{<span class="functionname">ForNeighbours</span> Xs N P}<br>
+<span class="string"> Similar to MapNeighbours, but P is a unary procedure applied to each list of N neighboring elements in Xs without a return value.<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity67">
+<span class="keyword">proc</span>{<span class="functionname">ForNeighboursInd</span> Xs N P}<br>
+<span class="string"> Similar to ForNeighbours, but P is a binary procedure expecting the index as first argument.<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity68">
+<span class="keyword">fun</span>{<span class="functionname">Map2Neighbours</span> Xs Fn}<br>
+<span class="string"> Traverses through Xs by mapping the binary function Fn on neighboring elements in Xs. The length of returned list is by one shorter then Xs.<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity69">
+<span class="keyword">proc</span>{<span class="functionname">For2Neighbours</span> Xs Proc}<br>
+<span class="string"> Traverses through Xs by applying the binary procedure Proc on neighboring elements in Xs.<BR>
+ {For2Neighbours [1 2 3] P} -> {P 1 2} {P 2 3}<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity70">
+<span class="keyword">proc</span>{<span class="functionname">ApplyToRange</span> Xs Start#End P}<br>
+<span class="string"> Applys P (a unary proc expecting a list) to the sublist of Xs (a list) that consists in the Start-th (and int) to the End-th (and int) elements (including).<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity71">
+<span class="keyword">proc</span>{<span class="functionname">ForRanges</span> Xs Ranges P}<br>
+<span class="string"> Applies P (a unary proc expecting a list) to each sublist of Xs (a list) that is declared by a range in Ranges. Ranges is a list consisting in integers and/or pairs of the form Start#End (two integers). <BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity72">
+<span class="keyword">fun</span>{<span class="functionname">MapRanges</span> Xs Ranges Fn}<br>
+<span class="string"> Collects the results of applying Fn (a unary function expecting a list) to each sublist of Xs (a list) that is declared by a range in Ranges. Ranges is a list consisting in integers and/or pairs of the form Start#End (two integers). <BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity73">
+<span class="keyword">proc</span>{<span class="functionname">ParallelForAll</span> Xss Proc}<br>
+<span class="string"> Traverses all lists in Xss in parallel and sequentially applies the unary procedure Proc (which expects a list as arg) on all first list elements, all second list elements etc. All sublists in Xss must be of same length.<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity74">
+<span class="keyword">proc</span>{<span class="functionname">ParallelMap</span> Xss Fn Ys}<br>
+<span class="string"> Traverses all lists in Xss in parallel and sequentially applies the unary function Fn (which expects a list as arg) on all first list elements, all second list elements etc. The results of Fn are bound sequentially to the elements in Ys. All sublists in Xss and Ys must be of same length.<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity75">
+<span class="keyword">proc</span>{<span class="functionname">ForCartesianProduct</span> Xs Ys P}<br>
+<span class="string"> Applies the binary procedure P on all possible combinations of Xs and Ys. The order of applications is [{P X1 Y1} {P X1 Y2} ... {P X1 Yn} {P X2 Y1} ... {P Xn Yn}].<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity76">
+<span class="keyword">proc</span>{<span class="functionname">MapCartesianProduct</span> Xs Ys Fn Zs}<br>
+<span class="string"> Collects in Zs the result of applying the binary function Fn on all possible combinations of Xs and Ys. The order in Zs is [{Fn X1 Y1} {Fn X1 Y2} ... {Fn X1 Yn} {Fn X2 Y1} ... {Fn Xn Yn}].<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity63">
+<span class="keyword">fun</span>{<span class="functionname">Sublists</span> Xs N}<br>
+<span class="string"> Chop Xs into overlapping subsequences of length N. For example, {Sublists [a b c d] 2} results in [[a b] [b c] [c d]].<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity77">
+<span class="keyword">proc</span>{<span class="functionname">ForPairwise</span> Xs P}<br>
+<span class="string"> Applies the binary function P on all pairwise combinations of Xs, i.e. {P Xs1 Xs2} .. {P Xs1 XsN} {P Xs2 Xs3} .. {P XsN-1 XsN}.<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity78">
+<span class="keyword">fun</span>{<span class="functionname">MapPairwise</span> Xs Fn}<br>
+<span class="string"> Collects the result of applying the binary function Fn on all pairwise combinations of Xs, i.e. [{Fn Xs1 Xs2} .. {Fn Xs1 XsN} {Fn Xs2 Xs3} .. {Fn XsN-1 XsN}].<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity79">
+<span class="keyword">proc</span>{<span class="functionname">ForSublists</span> Xs P}<br>
+<span class="string"> Applies P (a unary procedure expecting a list) to any sublist in Xs (i.e. any list of succeeding elements in Xs).<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity80">
+<span class="keyword">fun</span>{<span class="functionname">MapSublists</span> Xs Fn}<br>
+<span class="string"> Applies Fn (a unary function expecting a list) to any sublist in Xs (i.e. any list of succeeding elements in Xs) and returns all collected results in a list.<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity81">
+<span class="keyword">fun</span>{<span class="functionname">CollectPM</span> Xs PatternExpr}<br>
+<span class="string"> Implements a pattern matching language very similar to the pattern matching language of PMC from PWConstraints.<BR>
+ CollectPM returns in a list any list of elements from Xs (a list) which match the PatternExpr (a list of pattern symbols).<BR>
+ The pattern matching language of CollectPM introduces three symbols: '*' is a place-holder matching 0 or more elements, '?' is a place-holder matching exactly one element and 'x' represents a pattern matching 'variable' (see Anders PhD thesis: Sec on PMC in survey II). For example, the PatternExpr [? * x x] matches any pair of subsequent elements of Xs except for the first pair: {CollectPM [a b c d] [? * x x]} returns [[b c] [c d]].<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity82">
+<span class="keyword">proc</span>{<span class="functionname">ForPM</span> Xs PatternExpr P}<br>
+<span class="string"> Applies P (a unary procedure expecting a list) on all lists of elements from Xs (a list) which match the pattern matching expression PatternExpr (a list of pattern symbols). See CollectPM for details.<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity83">
+<span class="keyword">fun</span>{<span class="functionname">MapPM</span> Xs PatternExpr Fn}<br>
+<span class="string"> Applies Fn (a unary function expecting a list) on all lists of elements from Xs (a list) which match the pattern matching expression PatternExpr (a list of pattern symbols) and returns the results in a list. See CollectPM for details.<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity84">
+<span class="keyword">proc</span>{<span class="functionname">Zip</span> Xss Ys}<br>
+<span class="string"> 'Zips' the sublists of Xss together in Ys by sequentially alternating between the sublists in Xss. E.g. {Zip [[1 2 3] [10 12 14]]} returns [1 10 2 12 3 14].<BR>
+ NB: there is also List.zip which does something different. <BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity85">
+<span class="keyword">proc</span>{<span class="functionname">TransformDisj</span> Xs Fns I Ys}<br>
+<span class="string"> Ys is some transformation of Xs. Fns is a list of binary procedures (both arguments are lists) which represent possible transformations. I (an argument which may be interesting as an output) is an index into Fns, a decision for I is equivalent with a decision for a certain transformation function. The domain of I is implicitly constrained to 1#{Length Fns}. <BR>
+ The length of the two arguments of each Fn must correspond with the lengths of Xs and Ys for a success. A mismatch causes the respective Fn to be ruled out in the disjuction.<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity86">
+<span class="keyword">proc</span>{<span class="functionname">SelectList</span> Xss I Ys}<br>
+<span class="string"> Out of a list of lists of FD ints in Xss the Ith (a FD int) list Ys is selected (a list of FD ints). All lists in Xss and Ys must be of the same length.<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity87">
+<span class="keyword">proc</span>{<span class="functionname">SelectMultiple</span> Xs Is Ys}<br>
+<span class="string"> Is (a list of FD ints) are the indices into Xs (a list of FD ints) at whose positions the values are Ys (a list of FD ints).<BR>
+ Is and Ys are of equal length, Xs will often be longer than Ys.<BR>
+ NB: Is are always increasing to reduce symmetries (i.e. multiple solutions with the same Xs).<BR>
+<BR>
+ BTW: usage example: constrain only specific elements in Xs (i.e. Ys) by a pattern and constrain also the position of the elements to select (e.g. see examples/increasingTendency.oz).<BR>
+ Or: constrain that at the Is values in Xs the direction changes (access predecessor and successor of each Y, e.g., by {Select.fd Xs I-1 Y}).<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity88">
+<span class="keyword">proc</span>{<span class="functionname">ApplyToN</span> Xs N P}<br>
+<span class="string"> Applies P (a procedure expecting a list) to a sublist of N (an integer) elements out of Xs (a list of FD ints). Note that the sublist does not need to consist in neighbouring elements of Xs (but sublist elements are in the same order as in Xs). <BR>
+ NB: Is and Ys is not necessaily fully determined. However, not determining these values also avoids fully exploring multiple symmetric solutions (i.e. solutions with equal Xs).<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity30">
+<span class="keyword">proc</span>{<span class="functionname">HowManyDistinct</span> Xs N}<br>
+<span class="string"> N elements in Xs are pairwise distinct. Xs is a list of FD integers, N is a FD integer.<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity31">
+<span class="keyword">proc</span>{<span class="functionname">HowManyAs</span> Xs Val A N}<br>
+<span class="string"> N elements in Xs are 'as' Val, i.e. either equal, or greater etc. A states the relation of the N elements to Val (A is one of '=:', '>:', '>=:', '<:', '=<:', '\\=:').<BR>
+ Xs is a list of FD integers, Val and N are FD integers.<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity32">
+<span class="keyword">proc</span>{<span class="functionname">HowMany</span> X Xs N}<br>
+<span class="string"> X {FD int} occures N (FD int) times in Xs (list of FD ints).<BR>
+ NB: weak propagation! In particular, there is NO propagation on X (except that it is explicitly limited to the union of all values in Xs).<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity33">
+<span class="keyword">proc</span>{<span class="functionname">Once</span> X Xs}<br>
+<span class="string"> X {FD int} occures only once in Xs (list of FD ints).<BR>
+ NB: weak propagation! In particular, there is NO propagation on X (except that it is explicitly limited to the union of all values in Xs).<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity34">
+<span class="keyword">proc</span>{<span class="functionname">ForN</span> Xs Fn N}<br>
+<span class="string"> B=1 <-> X = Y<BR>
+ <BR>
+   proc {UnifyR X Y B}<BR>
+      B = {Combinator.'reify' proc {$} X = Y end} <BR>
+   end<BR>
+   /** %% X (any unifiable value) occures N (FD int) times in Xs (list of unifiable values).<BR>
+ <BR>
+   proc {HowMany2 X Xs N}<BR>
+      {FD.sum {Map Xs<BR>
+	       proc {$ Y B}<BR>
+		  B = {UnifyR X Y}<BR>
+	       end}<BR>
+       '=:' N}<BR>
+   end<BR>
+   */<BR>
+<BR>
+<BR>
+/** %% Constraint Fn (a unary function returning an 0/1 int) holds for N elements in Xs. N is a FD integer.<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity35">
+<span class="keyword">proc</span>{<span class="functionname">ForPercent</span> Xs Fn Min Max}<br>
+<span class="string"> Constraint Fn (a unary function returning an 0/1 int) holds for between Min and Max percent. Min and Max are (determined) integers.<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity37">
+<span class="keyword">proc</span>{<span class="functionname">NDifferences</span> Xs Ys N}<br>
+<span class="string"> Xs and Ys are similar lists of the same length, but N elements differ. Xs and Ys are lists of FD integers, N is a FD integer.<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity36">
+<span class="keyword">proc</span>{<span class="functionname">ForNEither</span> Xs Fn1 Fn2 N}<br>
+<span class="string"> N elements of Xs hold the constraint Fn1, the rest holds Fn2.  Fn1 and Fn2 are unary functions returning an 0/1 int, N is a FD integer.<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity38">
+<span class="keyword">proc</span>{<span class="functionname">AllTrue</span> Bs}<br>
+<span class="string"> Bs is a list of 0/1 integers (not implicitly declared). All elements in Bs are true (i.e. all elements are 1).<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity39">
+<span class="keyword">proc</span>{<span class="functionname">AllTrueR</span> Bs B}<br>
+<span class="string"> Reified version of AllTrue.<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity40">
+<span class="keyword">proc</span>{<span class="functionname">OneTrue</span> Bs}<br>
+<span class="string"> Bs is a list of 0/1 integers (not implicitly declared). Exactly on element in Bs is true (i.e. one element is 1 and the rest is 0).<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity41">
+<span class="keyword">proc</span>{<span class="functionname">OneTrueR</span> Bs B}<br>
+<span class="string"> Reified version of OneTrue.<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity42">
+<span class="keyword">proc</span>{<span class="functionname">SomeTrue</span> Bs}<br>
+<span class="string"> Bs is a list of 0/1 integers (not implicitly declared). At least one element in Bs is true (i.e. one element is 1 and the rest is 0).<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity43">
+<span class="keyword">proc</span>{<span class="functionname">SomeTrueR</span> Bs B}<br>
+<span class="string"> Reified version of SomeTrue.<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity44">
+<span class="keyword">proc</span>{<span class="functionname">HowManyTrue</span> Bs N}<br>
+<span class="string"> Bs is a list of 0/1 integers (not implicitly declared) and N is a FD int: N elements in Bs are true (i.e. 1).<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity45">
+<span class="keyword">proc</span>{<span class="functionname">HowManyTrueR</span> Bs N B}<br>
+<span class="string"> Reified version of HowManyTrue.<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity46">
+<span class="keyword">proc</span>{<span class="functionname">WhichTrue</span> Bs I}<br>
+<span class="string"> WhichTrue constraints the Ith element in Bs to be true. Bs is a list of 0/1 integers and  I is a FD int. Only a single element of Bs is true (i.e. 1).<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity48">
+<span class="keyword">fun</span>{<span class="functionname">SymbolToDirection</span> Symbol}<br>
+<span class="string"> Transforms one of the three direction symbols '-', '=' and '+' to the corresponding integer from 0, 1, or 2 representing a direction as used by constraints such as Direction and Contour. <BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity49">
+<span class="keyword">fun</span>{<span class="functionname">DirectionToSymbol</span> Direction}<br>
+<span class="string"> Transforms one of the integers 0, 1, and 2 representing a direction to the corresponding symbol from '-', '=' and '+'.<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity50">
+<span class="keyword">proc</span>{<span class="functionname">Direction</span> X1 X2 Dir}
+</code><br>
+
+<code>
+<a name="entity51">
+<span class="keyword">proc</span>{<span class="functionname">DirectionR</span> X1 X2 Dir B}<br>
+<span class="string"> DirectionR is the reified version of Direction. B=1 <-> 'Dir represents the direction between X1 and X2'. An interval 'upwards' (the predecessor is smaller than the successor) is represented by 2, an 'horizontal' interval (the predecessor and the successor are equal) is represented by 1, and an interval 'downwards' by 0.<BR>
+ X1, X2, and Dir are all FD integers. Dir is explicitly constrained to be in 0#2.<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity52">
+<span class="keyword">proc</span>{<span class="functionname">Contour</span> Xs Dirs}<br>
+<span class="string"> Dirs is constrained to the contour of Xs: each element in Dirs represents the direction of an interval between two neighbouring elements in Xs. An interval 'upwards' (the predecessor is smaller than the successor) is represented by 2, an 'horizontal' interval (the predecessor and the successor are equal) is represented by 1, and an interval 'downwards' by 0. <BR>
+ Xs and Dirs are both lists of FD integers. The list Xs is one element longer than the list Dirs. <BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity53">
+<span class="keyword">proc</span>{<span class="functionname">InverseContour</span> Xs Ys}<br>
+<span class="string"> Xs and Ys are both contours of equal length (i.e. both lists of FD ints with domain 0#2). Ys is the inversion of Xs (and vice versa). <BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity54">
+<span class="keyword">proc</span>{<span class="functionname">ContourMatrix</span> Xs Dirs}<br>
+<span class="string"> ContourMatrix is a constraint similar in concept to Contour, but is more precise (and computationally more expensive). Dirs (FD list, implicitly created) is constrained to the contour matrix of Xs (FD list), unfolded into a list. Each element in Dirs represents the direction of an interval between two elements in Xs, i.e. {Direction {Nth Xs Pos_I} {Nth Xs Pos_J}}. Dir collects the results of Pos_I#Pos_J in the order [1#2 1#3 .. 1#N 2#3 .. 2#N .. N-1#N].<BR>
+ In Dirs, an interval 'upwards' is represented by 2, an 'horizontal' interval is represented by 1, and an interval 'downwards' by 0. <BR>
+<BR>
+ ?? This concept stems from [R. Morris, 1987].<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity47">
+<span class="keyword">proc</span>{<span class="functionname">DirectionChangeR</span> X Y Z B}<br>
+<span class="string"> Returns 0/1-int in B whether Y is either the maximum or the minimum in [X, Y, Z]. X, Y, Z and B are FD integers. NB: Y must either be greater or smaller than both X and Z (i.e. the values 1 1 2 represent not a direction change). <BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity55">
+<span class="keyword">proc</span>{<span class="functionname">FdInts</span> Xs Mins Maxs}<br>
+<span class="string"> Constraints the domain bounderies of the elements in Xs (FD integers). Mins specifies the mininum and and Max the maximum domain value for each element in Xs.<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity56">
+<span class="keyword">proc</span>{<span class="functionname">FdRanges</span> Xs Mids Ranges}<br>
+<span class="string"> Constraints the domain bounderies of the elements in Xs (FD integers). Mids specifies the middle domain value and Ranges the width between the minimum and maximum domain value for each element in Xs.<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity94">
+<span class="keyword">fun</span>{<span class="functionname">MkUniqueSeq</span> MaxN MaxDeviation}<br>
+<span class="string"> Returns a unary procedure which constraints its argument (a list of FD ints). The returned procedure is applied to multiple FD integer lists; the procedure pairwise 'unifies' the FD integers of each list. MaxDeviation (an integer) determines how far each constrained interval may differ from its restriction.<BR>
+ This pattern can, e.g., be used to define a canon. <BR>
+ Please note: MkUniqueSeq must be called within the constraint script, otherwise the rule blocks.<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity95">
+<span class="keyword">fun</span>{<span class="functionname">MkUniqueIntervalSeq</span> MaxN MaxDeviation}<br>
+<span class="string"> Returns a unary procedure which constraints its argument (a list of FD ints). The returned procedure is applied to multiple FD integer lists; the procedure 'unifies' the interval sequence between the FD integers of each list. MaxDeviation (an integer) determines how far each constrained interval may differ from its restriction.<BR>
+ This pattern can, e.g., be used to define a canon with a free transposition.<BR>
+ Please note: MkUniquePitchSeqFn must be called within the constraint script, otherwise the rule blocks.<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity96">
+<span class="keyword">proc</span>{<span class="functionname">ConjAll</span> Xs B}<br>
+<span class="string"> B is constrained to 1 in case the sum of all elements in Xs equals the length of Xs and B is 0 otherwise. This is a shorthand for multiple nested FD.conj<BR>
+ !! All elements in Xs must be 0#1 integers (i.e. no more than 1), as this constraint computes simply the sum.<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity97">
+<span class="keyword">proc</span>{<span class="functionname">DisjAll</span> Xs B}<br>
+<span class="string"> B is constrained to 1 in case  the sum of all elements in Xs is >= 1 and B is 0 otherwise. This is a shorthand for multiple nested FD.disj.<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity98">
+<span class="keyword">proc</span>{<span class="functionname">ZerosOnlyAtEnd</span> Xs}<br>
+<span class="string"> Proc has two arguments and constraints two neighboring cycle periods (I can do transposition this way, but I can not change the cycle length)<BR>
+ SelectFn has two arguments, Xs (needed?) and N (the period number) and returns a list of FD vars specifying the period. ConstraintProc has three arguments, a list containing the predecessor period, a list containing the current period and the current period number. The proc constraints the period.<BR>
+ */<BR>
+    proc {VariatedCycle Xs Ys SelectFn ConstraintProc}<BR>
+<BR>
+    end<BR>
+<BR>
+<BR>
+/** %% Constrains Xs (list of FD ints) such that any zeros only occur at the end of Xs.<BR>
+ Possible usage: when constraining the 'length' of a list, 'non existing' list elements are encoded by zeros. This constraint avoids symmeries in such a CSP: 'non-existing' list elements occur at the end of the list.<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity99">
+<span class="keyword">proc</span>{<span class="functionname">RelevantLength</span> Xs N}<br>
+<span class="string"> Constrains N (a FD int, implicitly declared) to the position of the first occurence of a zero in Xs (list of FD ints).<BR>
+ Possible usage: when constraining the 'length' of a list, 'non existing' list elements are encoded by zeros. This constraint returns the effectiv length of the list.<BR>
+ This pattern rule implies the semantics of ZerosOnlyAtEnd.<BR>
+<BR>
+</span>
+</code><br>
+<h3>End</h3>
+</div></body>
+</html>
