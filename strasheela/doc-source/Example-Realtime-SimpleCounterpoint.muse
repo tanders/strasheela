@@ -14,7 +14,7 @@
 
 This example demonstrates how Strasheela can be used in realtime. In this example, [[http://supercollider.sourceforge.net/][SuperCollider]] algorithmically generates a single voice using Supercollider patterns. The notes of this voice are send to Strasheela via [[http://www.cnmat.berkeley.edu/OpenSoundControl/][OpenSound Control]] (OSC). Strasheela considers this voice the cantus firmus and creates a fitting counterpoint for it in realtime. Strasheela sends the counterpoint back to Supercollider (again via OSC), and Supercollider plays both voices synchronously (with a small latency). 
 
-The example implements a very simple variant of first species counterpoint. The counterpoint is homophonic to the cantus firmus. However, in this example the cantus firmus is rhythmically relatively free within the boundaries of a tripel meter (a random pattern chooses between different tripel meter sequences). The pitches of the cantus firmus are created with a random walk, restricted to the pitches in C major. The CSP implements the following rules for the second voice.
+The example implements a very simple variant of first species counterpoint. The counterpoint is homophonic to the cantus firmus. However, in this example the cantus firmus is rhythmically free. The CSP implements the following rules for the second voice.
 
   - Harmonic rule: simultaneous notes must be consonant (perfect or imperfect consonance).
 
@@ -246,7 +246,7 @@ This section finally shows the most interesting part of the example: how a const
 
 The structure of the following script definition is very similar to the scripts of non-realtime CSPs shown by other examples before. New is only the second script argument =Args=, which is a record providing the script with multiple CSP parameters. We may call a script with two arguments -- its solution (here =NewNote=) and a record of script parameters -- an 'extended script'.
 
-MyScript accesses two arguments from Args: the note which is simultaneous to =NewNote= and the melodic predecessor of =NewNote=. The simultaneous note is the note coming from Supercollider: the OSC responder hands this note to the scripts argument =Args.inputScore= (see below). The melodic predecessor note is the solution of the previous call of the CSP. Previous solutions (and previous input) are collected automatically by the solver and made available in reverse order at the scripts argument =Args.outputScores=.
+MyScript accesses two arguments from Args: the note which is simultaneous to =NewNote= and the melodic predecessor of =NewNote=. The simultaneous note is the note coming from Supercollider: the OSC responder hands this note to the scripts argument =Args.inputScore= (see below). The melodic predecessor note is the solution of the previous call of the CSP. Previous solutions (and previous input) are collected automatically by the solver and are made available in reverse order at the scripts argument =Args.outputScores= (respectively =Args.inputScores=).
 
 <src lang="oz">
 proc {MyScript NewNote Args}
