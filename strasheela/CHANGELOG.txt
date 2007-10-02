@@ -1,4 +1,677 @@
 ------------------------------------------------------------------------
+r546 | t-anders | 2007-10-02 19:23:58 +0100 (Tue, 02 Oct 2007) | 2 lines
+Changed paths:
+   M /trunk/strasheela/scripts/release-strasheela.sh
+
+Changed release process (now, only files in SVN repository are included in release and releases are tagged)
+
+------------------------------------------------------------------------
+r545 | t-anders | 2007-10-02 18:37:48 +0100 (Tue, 02 Oct 2007) | 2 lines
+Changed paths:
+   M /trunk/strasheela/doc/Example-Realtime-SimpleCounterpoint.html
+
+Updated doc
+
+------------------------------------------------------------------------
+r544 | t-anders | 2007-10-02 18:37:17 +0100 (Tue, 02 Oct 2007) | 2 lines
+Changed paths:
+   M /trunk/strasheela/doc/Changes.html
+   M /trunk/strasheela/doc-source/Changes.muse
+
+Extended list of changes
+
+------------------------------------------------------------------------
+r543 | t-anders | 2007-10-02 18:34:51 +0100 (Tue, 02 Oct 2007) | 2 lines
+Changed paths:
+   M /trunk/strasheela/doc/Installation.html
+   M /trunk/strasheela/doc-source/Installation.muse
+
+minor edit (mentioned OZ_SEARCH_LOAD)
+
+------------------------------------------------------------------------
+r542 | t-anders | 2007-10-02 18:19:36 +0100 (Tue, 02 Oct 2007) | 1 line
+Changed paths:
+   A /tags/release-0.9-test (from /trunk:541)
+
+Taggging the 0.9-test release of Strasheela.
+------------------------------------------------------------------------
+r541 | t-anders | 2007-10-02 16:47:44 +0100 (Tue, 02 Oct 2007) | 2 lines
+Changed paths:
+   A /trunk/strasheela/doc/sound/harmony-ex01.mid
+   A /trunk/strasheela/doc/sound/harmony-ex02.mid
+   A /trunk/strasheela/doc/sound/harmony-ex03.mid
+   A /trunk/strasheela/doc/sound/harmony-ex04.mid
+   A /trunk/strasheela/doc/sound/harmony-ex04a.mid
+   A /trunk/strasheela/doc/sound/harmony-ex05.mid
+   A /trunk/strasheela/doc/sound/harmony-ex10.mid
+   A /trunk/strasheela/doc/sound/harmony-ex11.mid
+   A /trunk/strasheela/doc/sound/harmony-ex20.mid
+   A /trunk/strasheela/doc/sound/harmony-ex30.mid
+   A /trunk/strasheela/doc/sound/harmony-ex30b.mid
+   A /trunk/strasheela/doc/sound/harmony-ex31.mid
+   A /trunk/strasheela/doc/sound/harmony-ex32.mid
+   A /trunk/strasheela/doc/sound/harmony-withRhythm1.mid
+
+After inconsistency of repository, update some MIDI files...
+
+------------------------------------------------------------------------
+r540 | t-anders | 2007-10-02 16:46:16 +0100 (Tue, 02 Oct 2007) | 2 lines
+Changed paths:
+   D /trunk/strasheela/doc/sound/harmony-ex02.mid
+   D /trunk/strasheela/doc/sound/harmony-ex03.mid
+   D /trunk/strasheela/doc/sound/harmony-ex04.mid
+   D /trunk/strasheela/doc/sound/harmony-ex04a.mid
+   D /trunk/strasheela/doc/sound/harmony-ex05.mid
+   D /trunk/strasheela/doc/sound/harmony-ex10.mid
+   D /trunk/strasheela/doc/sound/harmony-ex11.mid
+   D /trunk/strasheela/doc/sound/harmony-ex20.mid
+   D /trunk/strasheela/doc/sound/harmony-ex30.mid
+   D /trunk/strasheela/doc/sound/harmony-ex30b.mid
+   D /trunk/strasheela/doc/sound/harmony-ex31.mid
+   D /trunk/strasheela/doc/sound/harmony-ex32.mid
+   D /trunk/strasheela/doc/sound/harmony-withRhythm1.mid
+
+After inconsistency of repository, update some MIDI files...
+
+------------------------------------------------------------------------
+r539 | t-anders | 2007-10-02 16:44:05 +0100 (Tue, 02 Oct 2007) | 2 lines
+Changed paths:
+   D /trunk/strasheela/doc/sound/harmony-ex01.mid
+
+After inconsistency of repository, update some MIDI files...
+
+------------------------------------------------------------------------
+r538 | t-anders | 2007-10-02 15:41:04 +0100 (Tue, 02 Oct 2007) | 2 lines
+Changed paths:
+   A /trunk/strasheela/doc/sound/harmony-ex01.ly
+   A /trunk/strasheela/doc/sound/harmony-ex01.mid
+   A /trunk/strasheela/doc/sound/harmony-ex01.mp3
+   A /trunk/strasheela/doc/sound/harmony-ex02.ly
+   A /trunk/strasheela/doc/sound/harmony-ex02.mid
+   A /trunk/strasheela/doc/sound/harmony-ex02.mp3
+   A /trunk/strasheela/doc/sound/harmony-ex03.ly
+   A /trunk/strasheela/doc/sound/harmony-ex03.mid
+   A /trunk/strasheela/doc/sound/harmony-ex03.mp3
+   A /trunk/strasheela/doc/sound/harmony-ex04.ly
+   A /trunk/strasheela/doc/sound/harmony-ex04.mid
+   A /trunk/strasheela/doc/sound/harmony-ex04.mp3
+   A /trunk/strasheela/doc/sound/harmony-ex04a.ly
+   A /trunk/strasheela/doc/sound/harmony-ex04a.mid
+   A /trunk/strasheela/doc/sound/harmony-ex04a.mp3
+   A /trunk/strasheela/doc/sound/harmony-ex05.ly
+   A /trunk/strasheela/doc/sound/harmony-ex05.mid
+   A /trunk/strasheela/doc/sound/harmony-ex05.mp3
+   A /trunk/strasheela/doc/sound/harmony-ex10.ly
+   A /trunk/strasheela/doc/sound/harmony-ex10.mid
+   A /trunk/strasheela/doc/sound/harmony-ex10.mp3
+   A /trunk/strasheela/doc/sound/harmony-ex11.ly
+   A /trunk/strasheela/doc/sound/harmony-ex11.mid
+   A /trunk/strasheela/doc/sound/harmony-ex11.mp3
+   A /trunk/strasheela/doc/sound/harmony-ex20.ly
+   A /trunk/strasheela/doc/sound/harmony-ex20.mid
+   A /trunk/strasheela/doc/sound/harmony-ex20.mp3
+   A /trunk/strasheela/doc/sound/harmony-ex30.ly
+   A /trunk/strasheela/doc/sound/harmony-ex30.mid
+   A /trunk/strasheela/doc/sound/harmony-ex30.mp3
+   A /trunk/strasheela/doc/sound/harmony-ex30b.ly
+   A /trunk/strasheela/doc/sound/harmony-ex30b.mid
+   A /trunk/strasheela/doc/sound/harmony-ex30b.mp3
+   A /trunk/strasheela/doc/sound/harmony-ex31.ly
+   A /trunk/strasheela/doc/sound/harmony-ex31.mid
+   A /trunk/strasheela/doc/sound/harmony-ex31.mp3
+   A /trunk/strasheela/doc/sound/harmony-ex32.ly
+   A /trunk/strasheela/doc/sound/harmony-ex32.mid
+   A /trunk/strasheela/doc/sound/harmony-ex32.mp3
+   A /trunk/strasheela/doc/sound/harmony-withRhythm1.ly
+   A /trunk/strasheela/doc/sound/harmony-withRhythm1.mid
+   A /trunk/strasheela/doc/sound/harmony-withRhythm1.mp3
+   A /trunk/strasheela/doc/sound/realtime-counterpoint-excerpt.mp3
+   A /trunk/strasheela/examples/AuxDefs/old
+   A /trunk/strasheela/examples/Output/01-AllIntervalSeries.mid
+   A /trunk/strasheela/examples/Output/01-AllIntervalSeries.mp3
+   A /trunk/strasheela/examples/Output/02-Fuxian-firstSpecies-Counterpoint.mid
+   A /trunk/strasheela/examples/Output/02-Fuxian-firstSpecies-Counterpoint.mp3
+   A /trunk/strasheela/examples/Output/03-FloridCounterpoint-Canon.mid
+   A /trunk/strasheela/examples/Output/03-FloridCounterpoint-Canon.mp3
+   A /trunk/strasheela/examples/Output/05-MicrotonalChordProgression-ex1.mp3
+   A /trunk/strasheela/examples/Output/05-MicrotonalChordProgression-ex10.mp3
+   A /trunk/strasheela/examples/Output/05-MicrotonalChordProgression-ex11.mp3
+   A /trunk/strasheela/examples/Output/05-MicrotonalChordProgression-ex2.mp3
+   A /trunk/strasheela/examples/Output/05-MicrotonalChordProgression-ex3.mp3
+   A /trunk/strasheela/examples/Output/05-MicrotonalChordProgression-ex4.mp3
+   A /trunk/strasheela/examples/Output/05-MicrotonalChordProgression-ex5.mp3
+   A /trunk/strasheela/examples/Output/05-MicrotonalChordProgression-ex6.mp3
+   A /trunk/strasheela/examples/Output/05-MicrotonalChordProgression-ex7.mp3
+   A /trunk/strasheela/examples/Output/05-MicrotonalChordProgression-ex8.mp3
+   A /trunk/strasheela/examples/Output/05-MicrotonalChordProgression-ex9.mp3
+   A /trunk/strasheela/examples/Output/07-Harmonised-L-system-ex1.mp3
+   A /trunk/strasheela/examples/Output/07-Harmonised-L-system-ex2.mp3
+   A /trunk/strasheela/examples/Output/07-Harmonised-L-system-ex3.mp3
+   A /trunk/strasheela/examples/Output/07-Harmonised-L-system-ex3b.mp3
+   A /trunk/strasheela/examples/Output/07-Harmonised-L-system-ex4.mp3
+   A /trunk/strasheela/examples/Output/07-Harmonised-L-system-ex5.mp3
+   A /trunk/strasheela/examples/Output/07-Harmonised-L-system-ex6.mp3
+   A /trunk/strasheela/examples/Output/07-Harmonised-L-system-ex7.mp3
+   A /trunk/strasheela/examples/Output/07-Harmonised-L-system-ex8.mp3
+   A /trunk/strasheela/examples/Output/07-Harmonised-L-system-ex8a.mp3
+   A /trunk/strasheela/examples/Output/07-Harmonised-L-system.mp3
+
+Added soundfiles etc to repository
+
+------------------------------------------------------------------------
+r537 | t-anders | 2007-10-02 13:50:29 +0100 (Tue, 02 Oct 2007) | 2 lines
+Changed paths:
+   M /trunk/strasheela/doc/01-Basics.html
+   M /trunk/strasheela/doc/01-MusicRepresentation.html
+   M /trunk/strasheela/doc/02-ConstraintProgramming.html
+   M /trunk/strasheela/doc/02-MusicalCSPs.html
+   M /trunk/strasheela/doc/Changes.html
+   M /trunk/strasheela/doc/Contributing.html
+   M /trunk/strasheela/doc/ContributingCode.html
+   M /trunk/strasheela/doc/Example-AllIntervalSeries.html
+   M /trunk/strasheela/doc/Example-AutomaticMelodyHarmonisation.html
+   M /trunk/strasheela/doc/Example-FloridCounterpoint.html
+   M /trunk/strasheela/doc/Example-FuxianFirstSpeciesCounterpoint.html
+   M /trunk/strasheela/doc/Example-HarmonisedLindenmayerSystem.html
+   M /trunk/strasheela/doc/Example-MicrotonalChordProgression.html
+   M /trunk/strasheela/doc/Example-Realtime-SimpleCounterpoint.html
+   M /trunk/strasheela/doc/Example-RhythmicalPatterns.html
+   M /trunk/strasheela/doc/HarmonyExamples.html
+   M /trunk/strasheela/doc/HowToCreateAPatch.html
+   M /trunk/strasheela/doc/ImprovingTheDocumentation.html
+   M /trunk/strasheela/doc/IndexOfPages.html
+   M /trunk/strasheela/doc/Installation.html
+   M /trunk/strasheela/doc/IntroductoryReading.html
+   M /trunk/strasheela/doc/OPI-atFullResolution.html
+   M /trunk/strasheela/doc/OPI2-atFullResolution.html
+   M /trunk/strasheela/doc/OldNews.html
+   M /trunk/strasheela/doc/OzDocumentation.html
+   M /trunk/strasheela/doc/Publications.html
+   M /trunk/strasheela/doc/README.html
+   M /trunk/strasheela/doc/StrasheelaExamples.html
+   M /trunk/strasheela/doc/StrasheelaImageSource.html
+   M /trunk/strasheela/doc/StrasheelaReference.html
+   M /trunk/strasheela/doc/StrasheelaTutorial.html
+   M /trunk/strasheela/doc/contact.html
+   M /trunk/strasheela/doc/index.html
+   M /trunk/strasheela/doc/tutorial-atFullResolution.html
+
+Updated doc
+
+------------------------------------------------------------------------
+r536 | t-anders | 2007-10-02 13:49:05 +0100 (Tue, 02 Oct 2007) | 2 lines
+Changed paths:
+   M /trunk/strasheela/doc-source/Example-Realtime-SimpleCounterpoint.muse
+
+Minor edits
+
+------------------------------------------------------------------------
+r535 | t-anders | 2007-10-02 13:48:42 +0100 (Tue, 02 Oct 2007) | 2 lines
+Changed paths:
+   M /trunk/strasheela/contributions/anders/OSC/OSC.oz
+
+Fix: made method parseAll private (changed into ParseAll)
+
+------------------------------------------------------------------------
+r534 | t-anders | 2007-10-02 13:26:53 +0100 (Tue, 02 Oct 2007) | 2 lines
+Changed paths:
+   D /trunk/CHANGELOG.txt
+   D /trunk/Issues.txt
+   D /trunk/README.txt
+   D /trunk/Strasheela.oz
+   D /trunk/_WindowsOZRC
+   D /trunk/_ozrc
+   D /trunk/contributions
+   D /trunk/doc
+   D /trunk/doc-source
+   D /trunk/examples
+   D /trunk/goodies
+   D /trunk/gpl.text
+   D /trunk/makefile.oz
+   D /trunk/others
+   D /trunk/scripts
+   D /trunk/source
+   A /trunk/strasheela/CHANGELOG.txt (from /trunk/CHANGELOG.txt:532)
+   A /trunk/strasheela/Issues.txt (from /trunk/Issues.txt:532)
+   A /trunk/strasheela/README.txt (from /trunk/README.txt:532)
+   A /trunk/strasheela/Strasheela.oz (from /trunk/Strasheela.oz:532)
+   A /trunk/strasheela/_WindowsOZRC (from /trunk/_WindowsOZRC:532)
+   A /trunk/strasheela/_ozrc (from /trunk/_ozrc:532)
+   A /trunk/strasheela/contributions (from /trunk/contributions:532)
+   A /trunk/strasheela/doc (from /trunk/doc:532)
+   A /trunk/strasheela/doc-source (from /trunk/doc-source:532)
+   A /trunk/strasheela/examples (from /trunk/examples:532)
+   A /trunk/strasheela/goodies (from /trunk/goodies:532)
+   A /trunk/strasheela/gpl.text (from /trunk/gpl.text:532)
+   A /trunk/strasheela/makefile.oz (from /trunk/makefile.oz:532)
+   A /trunk/strasheela/others (from /trunk/others:532)
+   A /trunk/strasheela/scripts (from /trunk/scripts:532)
+   A /trunk/strasheela/source (from /trunk/source:532)
+   A /trunk/strasheela/testing (from /trunk/testing:532)
+   D /trunk/testing
+
+Moved all in trunk into new top-level dir
+
+------------------------------------------------------------------------
+r533 | t-anders | 2007-10-02 13:23:18 +0100 (Tue, 02 Oct 2007) | 2 lines
+Changed paths:
+   A /trunk/strasheela
+
+Add new root directory
+
+------------------------------------------------------------------------
+r532 | t-anders | 2007-10-02 13:19:51 +0100 (Tue, 02 Oct 2007) | 2 lines
+Changed paths:
+   D /CHANGELOG.txt
+   D /Issues.txt
+   D /README.txt
+   D /Strasheela.oz
+   D /_WindowsOZRC
+   D /_ozrc
+   D /contributions
+   D /doc
+   D /doc-source
+   D /examples
+   D /goodies
+   D /gpl.text
+   D /makefile.oz
+   D /others
+   D /scripts
+   D /source
+   D /testing
+   A /trunk/CHANGELOG.txt (from /CHANGELOG.txt:529)
+   A /trunk/Issues.txt (from /Issues.txt:528)
+   A /trunk/README.txt (from /README.txt:528)
+   A /trunk/Strasheela.oz (from /Strasheela.oz:528)
+   A /trunk/_WindowsOZRC (from /_WindowsOZRC:528)
+   A /trunk/_ozrc (from /_ozrc:528)
+   A /trunk/contributions (from /contributions:528)
+   A /trunk/doc (from /doc:528)
+   A /trunk/doc-source (from /doc-source:528)
+   A /trunk/examples (from /examples:528)
+   A /trunk/goodies (from /goodies:528)
+   A /trunk/gpl.text (from /gpl.text:528)
+   A /trunk/makefile.oz (from /makefile.oz:528)
+   A /trunk/others (from /others:528)
+   A /trunk/scripts (from /scripts:528)
+   A /trunk/source (from /source:528)
+   A /trunk/testing (from /testing:528)
+
+Move working copy to trunk folder
+
+------------------------------------------------------------------------
+r531 | t-anders | 2007-10-02 13:08:20 +0100 (Tue, 02 Oct 2007) | 2 lines
+Changed paths:
+   A /trunk
+
+emptied dir after faulty file move attempt
+
+------------------------------------------------------------------------
+r530 | t-anders | 2007-10-02 13:07:27 +0100 (Tue, 02 Oct 2007) | 2 lines
+Changed paths:
+   D /trunk
+
+emptied dir after faulty file move attempt
+
+------------------------------------------------------------------------
+r529 | t-anders | 2007-10-02 12:36:31 +0100 (Tue, 02 Oct 2007) | 2 lines
+Changed paths:
+   A /CHANGELOG.txt
+
+Added changelog
+
+------------------------------------------------------------------------
+r528 | t-anders | 2007-10-02 12:35:58 +0100 (Tue, 02 Oct 2007) | 2 lines
+Changed paths:
+   A /branches
+   A /tags
+   A /trunk
+
+Change dir structure to dirs /trunk /branches and /tags
+
+------------------------------------------------------------------------
+r527 | t-anders | 2007-10-02 12:34:45 +0100 (Tue, 02 Oct 2007) | 2 lines
+Changed paths:
+   M /scripts/release-strasheela.sh
+
+Added comment (on problem with files not added to SVN repository which will be included in realease)
+
+------------------------------------------------------------------------
+r526 | t-anders | 2007-10-02 12:33:47 +0100 (Tue, 02 Oct 2007) | 2 lines
+Changed paths:
+   M /scripts/extract-doc.sh
+
+Extended script to also include all folders "examples" and "testings" in contributions in the extracted documentation
+
+------------------------------------------------------------------------
+r525 | t-anders | 2007-10-02 12:32:44 +0100 (Tue, 02 Oct 2007) | 2 lines
+Changed paths:
+   M /contributions/anders/OSC/doc/class2.html
+   M /contributions/anders/OSC/doc/class3.html
+   M /contributions/anders/OSC/doc/node1.html
+   M /contributions/anders/Realtime/doc/class1.html
+   M /contributions/anders/Realtime/doc/node1.html
+
+Update doc
+
+------------------------------------------------------------------------
+r524 | t-anders | 2007-10-02 12:13:58 +0100 (Tue, 02 Oct 2007) | 2 lines
+Changed paths:
+   A /doc/api/class30.html
+
+Add to doc
+
+------------------------------------------------------------------------
+r523 | t-anders | 2007-10-01 19:15:02 +0100 (Mon, 01 Oct 2007) | 2 lines
+Changed paths:
+   M /doc/Example-Realtime-SimpleCounterpoint.html
+   M /doc-source/Example-Realtime-SimpleCounterpoint.muse
+
+Fixed a bug in the example, cleaned up code indentation, added a sound example and some comments.
+
+------------------------------------------------------------------------
+r522 | t-anders | 2007-10-01 18:28:08 +0100 (Mon, 01 Oct 2007) | 2 lines
+Changed paths:
+   A /doc/Example-Realtime-SimpleCounterpoint.html
+   A /doc-source/Example-Realtime-SimpleCounterpoint.muse
+
+Added example Realtime-SimpleCounterpoint, quasi a tutorial: extensive documentation
+
+------------------------------------------------------------------------
+r521 | t-anders | 2007-10-01 18:26:39 +0100 (Mon, 01 Oct 2007) | 3 lines
+Changed paths:
+   M /contributions/anders/Realtime/examples/Simple-Counterpoint.sc
+
+Various changes. For example, note start times are now bundle timetags (not 2 msg args), scheduling does scsynth (instead of sclang), various doc improvements, cleanup (old tests removed) etc. 
+Example should now be finished
+
+------------------------------------------------------------------------
+r520 | t-anders | 2007-10-01 18:24:58 +0100 (Mon, 01 Oct 2007) | 3 lines
+Changed paths:
+   M /contributions/anders/Realtime/examples/Simple-Counterpoint.oz
+
+Various changes. For example, note start times are now bundle timetags (not 2 msg args), example defined in single "block" (no solver call in comments), default output score is nil, and some rule application tests whether previous sol was nil, various doc improvements etc. 
+Example should now be finished
+
+------------------------------------------------------------------------
+r519 | t-anders | 2007-10-01 18:20:55 +0100 (Mon, 01 Oct 2007) | 2 lines
+Changed paths:
+   M /contributions/anders/OSC/examples/OzAndSuperCollider/OzAndSuperCollider.sc
+
+Added test
+
+------------------------------------------------------------------------
+r518 | t-anders | 2007-10-01 18:20:11 +0100 (Mon, 01 Oct 2007) | 2 lines
+Changed paths:
+   M /contributions/anders/OSC/examples/OzAndSuperCollider/OzAndSuperCollider.oz
+
+Fix examples: all OSC responders now expects two args (timetag is new)
+
+------------------------------------------------------------------------
+r517 | t-anders | 2007-10-01 18:18:28 +0100 (Mon, 01 Oct 2007) | 2 lines
+Changed paths:
+   M /contributions/anders/OSC/OSC.oz
+
+Fixed bug: default OSC responder now expects two args (timetag is new)
+
+------------------------------------------------------------------------
+r516 | t-anders | 2007-09-28 20:21:23 +0100 (Fri, 28 Sep 2007) | 2 lines
+Changed paths:
+   M /contributions/anders/OSC/testing/OSC-test.oz
+
+Updated all responders to receive timetag, added tests for OSC.formatTimeTag (including msec values)
+
+------------------------------------------------------------------------
+r515 | t-anders | 2007-09-28 20:20:25 +0100 (Fri, 28 Sep 2007) | 2 lines
+Changed paths:
+   M /contributions/anders/OSC/OSC.oz
+
+FormatTimeTag now supports msecs (not only secs) -- puh! Also, all OSC responders now always receive a timetag. Additionally, doc updated.
+
+------------------------------------------------------------------------
+r514 | t-anders | 2007-09-28 17:44:12 +0100 (Fri, 28 Sep 2007) | 2 lines
+Changed paths:
+   M /contributions/anders/Realtime/examples/Simple-Counterpoint.sc
+
+Scheduling now done by scsynth, not sclang (using s.makeBundle), SynthDef "Strasheela-playback" now with panning (make voices slightly better distinguishable), etc.
+
+------------------------------------------------------------------------
+r513 | t-anders | 2007-09-28 17:41:32 +0100 (Fri, 28 Sep 2007) | 2 lines
+Changed paths:
+   M /contributions/anders/Realtime/examples/Simple-Counterpoint.oz
+
+Various minor changes: e.g. made example re-feedable without restarting Oz, extended comments...
+
+------------------------------------------------------------------------
+r512 | t-anders | 2007-09-28 17:39:23 +0100 (Fri, 28 Sep 2007) | 2 lines
+Changed paths:
+   M /contributions/anders/OSC/examples/OzAndSuperCollider/OzAndSuperCollider.oz
+   M /contributions/anders/OSC/examples/OzAndSuperCollider/OzAndSuperCollider.sc
+
+Minor changes for testing of timing (bundle timetag etc)
+
+------------------------------------------------------------------------
+r511 | t-anders | 2007-09-28 17:38:13 +0100 (Fri, 28 Sep 2007) | 2 lines
+Changed paths:
+   M /contributions/anders/Realtime/testing/Realtime-test.oz
+
+Add test with user-defined solver DepthFirstExploration
+
+------------------------------------------------------------------------
+r510 | t-anders | 2007-09-28 17:37:33 +0100 (Fri, 28 Sep 2007) | 2 lines
+Changed paths:
+   M /doc/StrasheelaExamples.html
+   M /doc-source/StrasheelaExamples.muse
+
+Added example Example-Realtime-SimpleCounterpoint
+
+------------------------------------------------------------------------
+r509 | t-anders | 2007-09-28 17:36:53 +0100 (Fri, 28 Sep 2007) | 2 lines
+Changed paths:
+   M /contributions/anders/Realtime/Realtime.oz
+
+Add ScoreSearcherWithTimeout feats and init args inputLength, outputLength for memory optimisation
+
+------------------------------------------------------------------------
+r508 | t-anders | 2007-09-28 17:35:25 +0100 (Fri, 28 Sep 2007) | 2 lines
+Changed paths:
+   M /contributions/anders/OSC/OSC.oz
+
+Add DumpOsc method setResponder
+
+------------------------------------------------------------------------
+r507 | t-anders | 2007-09-27 20:43:12 +0100 (Thu, 27 Sep 2007) | 2 lines
+Changed paths:
+   M /contributions/anders/Realtime/Realtime.oz
+
+Added variant core code for solver with timeout which is more easy to explain in a paper..
+
+------------------------------------------------------------------------
+r506 | t-anders | 2007-09-27 16:04:19 +0100 (Thu, 27 Sep 2007) | 2 lines
+Changed paths:
+   M /contributions/anders/Realtime/examples/Simple-Counterpoint.oz
+
+Various minor modifications of example: e.g., added comment, reduced note loudness (for polyphony..), reduced max search time
+
+------------------------------------------------------------------------
+r505 | t-anders | 2007-09-27 16:03:38 +0100 (Thu, 27 Sep 2007) | 2 lines
+Changed paths:
+   M /contributions/anders/Realtime/examples/Simple-Counterpoint.sc
+
+Various minor modifications of example: e.g., extended SynthDef, reduced latency, reduced note loudness (for polyphony..), changed var names
+
+------------------------------------------------------------------------
+r504 | t-anders | 2007-09-27 16:00:40 +0100 (Thu, 27 Sep 2007) | 2 lines
+Changed paths:
+   M /contributions/anders/Realtime/others/TODO/Realtime.org
+
+Add memory usage comments
+
+------------------------------------------------------------------------
+r503 | t-anders | 2007-09-27 15:59:50 +0100 (Thu, 27 Sep 2007) | 2 lines
+Changed paths:
+   M /contributions/anders/Realtime/testing/Realtime-test.oz
+
+Minor fix: added default score solution to some RT.searchWithTimeout example
+
+------------------------------------------------------------------------
+r502 | t-anders | 2007-09-27 15:59:07 +0100 (Thu, 27 Sep 2007) | 2 lines
+Changed paths:
+   M /contributions/anders/Realtime/Realtime.oz
+
+RT.searchWithTimeout: only two instead of three threads needed. Added lock to make sure both threads can not each each other
+
+------------------------------------------------------------------------
+r501 | t-anders | 2007-09-23 21:35:09 +0100 (Sun, 23 Sep 2007) | 2 lines
+Changed paths:
+   M /contributions/anders/OSC/examples/OzAndSuperCollider/OzAndSuperCollider.sc
+
+insignificant changes
+
+------------------------------------------------------------------------
+r500 | t-anders | 2007-09-23 21:34:16 +0100 (Sun, 23 Sep 2007) | 2 lines
+Changed paths:
+   M /contributions/anders/OSC/examples/OzAndSuperCollider/OzAndSuperCollider.oz
+
+Fixed after ozmake use: Module.apply to ModuleLink
+
+------------------------------------------------------------------------
+r499 | t-anders | 2007-09-23 21:30:20 +0100 (Sun, 23 Sep 2007) | 2 lines
+Changed paths:
+   M /contributions/anders/OSC/testing/OSC-test.oz
+
+Added comment
+
+------------------------------------------------------------------------
+r498 | t-anders | 2007-09-23 21:29:34 +0100 (Sun, 23 Sep 2007) | 2 lines
+Changed paths:
+   M /contributions/anders/Realtime/examples/Simple-RealTimeOut.oz
+   M /contributions/anders/Realtime/examples/Simple-RealTimeOut.sc
+
+Updated comments after fixing Heb bug
+
+------------------------------------------------------------------------
+r497 | t-anders | 2007-09-23 21:27:49 +0100 (Sun, 23 Sep 2007) | 2 lines
+Changed paths:
+   M /contributions/anders/Realtime/examples/Simple-Counterpoint.oz
+   M /contributions/anders/Realtime/examples/Simple-Counterpoint.sc
+
+Added realtime counterpoint example
+
+------------------------------------------------------------------------
+r496 | t-anders | 2007-09-21 19:42:59 +0100 (Fri, 21 Sep 2007) | 2 lines
+Changed paths:
+   M /contributions/anders/OSC/doc/class1.html
+   M /contributions/anders/OSC/doc/class2.html
+   M /contributions/anders/OSC/doc/class3.html
+   M /contributions/anders/OSC/doc/index.html
+   M /contributions/anders/OSC/doc/node1.html
+   M /contributions/anders/OSC/doc/node2.html
+   M /contributions/anders/OSC/doc/node3.html
+
+Updated doc
+
+------------------------------------------------------------------------
+r495 | t-anders | 2007-09-21 19:42:34 +0100 (Fri, 21 Sep 2007) | 2 lines
+Changed paths:
+   M /contributions/anders/OSC/source/OSC_Parser.oz
+
+Tricked ozh: load OSC.ozf from x-ozlib, so ozh will not load that functor again
+
+------------------------------------------------------------------------
+r494 | t-anders | 2007-09-21 19:41:54 +0100 (Fri, 21 Sep 2007) | 2 lines
+Changed paths:
+   M /contributions/anders/OSC/OSC.oz
+
+Removed old commented def HexToDecimal
+
+------------------------------------------------------------------------
+r493 | t-anders | 2007-09-21 19:34:15 +0100 (Fri, 21 Sep 2007) | 2 lines
+Changed paths:
+   M /doc/Changes.html
+   M /doc-source/Changes.muse
+
+Extended change notes: added remarks on Realtime and OSC
+
+------------------------------------------------------------------------
+r492 | t-anders | 2007-09-21 19:33:34 +0100 (Fri, 21 Sep 2007) | 2 lines
+Changed paths:
+   M /doc/StrasheelaReference.html
+
+Added new functors Realtime and OSC to reference toc
+
+------------------------------------------------------------------------
+r491 | t-anders | 2007-09-21 19:33:09 +0100 (Fri, 21 Sep 2007) | 2 lines
+Changed paths:
+   M /doc-source/StrasheelaReference.muse
+
+Added new functors Realtime and OSC to reference toc
+
+------------------------------------------------------------------------
+r490 | t-anders | 2007-09-21 19:32:27 +0100 (Fri, 21 Sep 2007) | 2 lines
+Changed paths:
+   M /contributions/anders/Realtime/examples/Simple-RealTimeOut.sc
+
+After hex bug fix, I could now greatly decrease the latency :) Also, fixed example for the fact the time tags are now integers measured in msecs
+
+------------------------------------------------------------------------
+r489 | t-anders | 2007-09-21 19:31:19 +0100 (Fri, 21 Sep 2007) | 2 lines
+Changed paths:
+   M /contributions/anders/Realtime/examples/Simple-RealTimeOut.oz
+
+Fixed example for the fact the time tags are now integers measured in msecs
+
+------------------------------------------------------------------------
+r488 | t-anders | 2007-09-21 19:30:14 +0100 (Fri, 21 Sep 2007) | 2 lines
+Changed paths:
+   M /contributions/anders/Realtime/examples/Simple-Counterpoint.oz
+
+Insignificant change
+
+------------------------------------------------------------------------
+r487 | t-anders | 2007-09-21 19:29:42 +0100 (Fri, 21 Sep 2007) | 2 lines
+Changed paths:
+   M /contributions/anders/OSC/testing/OSC-test.oz
+
+Fixed examples/tests for the fact the time tags are now integers measured in msecs
+
+------------------------------------------------------------------------
+r486 | t-anders | 2007-09-21 19:13:50 +0100 (Fri, 21 Sep 2007) | 2 lines
+Changed paths:
+   M /contributions/anders/OSC/OSC.oz
+
+Fixed very nasty time tag bug: instead of hex digit e, digit d was produced. :-P
+
+------------------------------------------------------------------------
+r485 | t-anders | 2007-09-21 16:34:45 +0100 (Fri, 21 Sep 2007) | 2 lines
+Changed paths:
+   M /contributions/anders/OSC/source/OSC_Parser.oz
+   M /contributions/anders/OSC/testing/OSC-test.oz
+
+Change default time tag representation from UNIX time float to UNIX time msecs as integer
+
+------------------------------------------------------------------------
+r484 | t-anders | 2007-09-21 16:34:25 +0100 (Fri, 21 Sep 2007) | 2 lines
+Changed paths:
+   M /contributions/anders/OSC/OSC.oz
+
+Change default time tag representation from UNIX time float to UNIX time msecs as integer
+
+------------------------------------------------------------------------
+r483 | t-anders | 2007-09-21 14:37:34 +0100 (Fri, 21 Sep 2007) | 2 lines
+Changed paths:
+   M /contributions/anders/OSC/OSC.oz
+
+Edited doc
+
+------------------------------------------------------------------------
+r482 | t-anders | 2007-09-21 14:00:53 +0100 (Fri, 21 Sep 2007) | 2 lines
+Changed paths:
+   A /contributions/anders/Realtime/examples/Simple-RealTimeOut.sc
+
+Added supercollider part of example
+
+------------------------------------------------------------------------
 r481 | t-anders | 2007-09-20 18:59:05 +0100 (Thu, 20 Sep 2007) | 2 lines
 Changed paths:
    M /contributions/anders/Realtime/Realtime.oz
