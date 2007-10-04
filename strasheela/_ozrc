@@ -82,7 +82,7 @@ Inspect = Inspector.inspect
 %% Set environment variables according to your system (see
 %% Init.putStrasheelaEnv for more supported variables)
 %%
-{Init.putStrasheelaEnv tmpDir '/home/myself/tmp/'}
+{Init.putStrasheelaEnv tmpDir '/tmp/'}
 {Init.putStrasheelaEnv defaultSScoDir {Init.getStrasheelaEnv tmpDir}}
 {Init.putStrasheelaEnv defaultLilypondDir {Init.getStrasheelaEnv tmpDir}}
 % {Init.putStrasheelaEnv pdfViewer 'acroread'} % 'xpdf'
