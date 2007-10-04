@@ -57,7 +57,7 @@ export
    GetBeatDuration SetBeatDuration GetTempo SetTempo
    AddExplorerOuts_Standard AddExplorerOuts_Extended
 %   StrasheelaDir
-%   StrasheelaSourceDir StrasheelaInstallDir
+   StrasheelaSourceDir StrasheelaInstallDir
    
 define
 
