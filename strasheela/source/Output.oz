@@ -856,7 +856,7 @@ define
 % 	  {Pipe read(list:$ size:all)}}
 %       %{Pipe flush}		% wait until csound is finished
 % 	 {Pipe close}      
-      {Exec MySpecs.csound {Append Flags ["-o" SoundPath OrcPath ScoPath]}}
+      {Exec MySpecs.csound {Append Flags ['-o' SoundPath OrcPath ScoPath]}}
    end
 
    /** % Creates a csound score of all (determined) events in MyScore, and renders the score. See the documentation of OutputCsoundScore, CallCsound, and PlaySound for arguments in Spec (the PlaySound argument extension is substituted by the argument soundExtension).
@@ -877,7 +877,7 @@ define
 
      /** % Creates a csound score of all (determined) events in MyScore, renders the score and plays the resulting sound. See the documentation of OutputCsoundScore, CallCsound, and PlaySound for arguments in Spec (the PlaySound argument extension is substituted by the argument soundExtension).
    %% */
-   proc {RenderAndPlayCsound MyScore Spec}	 
+   proc {RenderAndPlayCsound MyScore Spec}
       Defaults = unit(test:fun {$ X}
 			      {X isEvent($)} andthen {X isDet($)}
 			   end
@@ -888,6 +888,7 @@ define
       if Events \= nil then
 	 {RenderCsound MyScore MySpec}
 	 {PlaySound {Adjoin MySpec unit(extension: MySpec.soundExtension)}}
+      else {System.showInfo "Warning: no events in Csound score. Are events fully determined?"}
       end
    end
 
