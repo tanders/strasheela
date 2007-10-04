@@ -360,6 +360,8 @@ Note2I1 = {Out.makeEvent2CsoundFn 1
 % end
 
 
+
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%
 %% Shell
@@ -1229,6 +1231,7 @@ MyScore = {Score.makeScore
       timeUnit:beats(4))
   unit}
  unit}
+
 
 
 
