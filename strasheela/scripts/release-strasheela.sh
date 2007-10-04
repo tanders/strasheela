@@ -17,7 +17,7 @@ svn -v log > trunk/strasheela/CHANGELOG.txt
 #
 # create tag file in SVN repository
 #
-VERSION=0.9-test
+VERSION=0.9
 
 svn copy https://strasheela.svn.sourceforge.net/svnroot/strasheela/trunk \
          https://strasheela.svn.sourceforge.net/svnroot/strasheela/tags/release-$VERSION \
@@ -27,19 +27,34 @@ svn copy https://strasheela.svn.sourceforge.net/svnroot/strasheela/trunk \
 #
 # download this release (only files in repository are then in release..)
 #
-cd ~/oz/music/Strasheela/releases/ # move into release dir 
+cd ~/oz/music/Strasheela/releases/ # move into top-level release dir 
 svn co https://strasheela.svn.sourceforge.net/svnroot/strasheela/tags/release-$VERSION strasheela-$VERSION
 
 
 #
 # archive and compress the release into a tgz file
 #
-cd strasheela-$VERSION
+cd ~/oz/music/Strasheela/releases/strasheela-$VERSION
 # create tar, only of the essential files -- excluding all soundfiles etc. (take VERSION as argument)
 tar -cvzf - `find strasheela -type f \! \( -name "*.wav" -o -name "*.aiff" -o -name "*.mp3" -o -name "*.mid" -o -name "*.midi" -o -name "*.ly" \) -print | sed /.svn/d` > strasheela-$VERSION.tar.gz
 # create tar of all the files in the repository (take VERSION as argument)
 tar -cvzf - `find strasheela -type f -print | sed /.svn/d` > strasheela-withSounds-$VERSION.tar.gz
 
+
+#
+# uploading files to sourceforge.net
+#
+cd /Users/t/oz/music/Strasheela/releases/strasheela-$VERSION
+ls
+
+ftp upload.sourceforge.net
+
+user: anonymous
+password: torsten.anders@plymouth.ac.uk
+
+cd /incoming
+put strasheela-withSounds-$VERSION.tar.gz
+put strasheela-$VERSION.tar.gz
 
 
 
