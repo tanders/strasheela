@@ -82,6 +82,7 @@ Inspect = Inspector.inspect
 {Init.putStrasheelaEnv csound "C:\\Program Files\\Csound\\bin\\csound.exe"}
 {Init.putStrasheelaEnv defaultSoundDir {Init.getStrasheelaEnv tmpDir}}
 {Init.putStrasheelaEnv defaultCsoundScoDir {Init.getStrasheelaEnv tmpDir}}
+% {Init.putStrasheelaEnv defaultCsoundOrcDir "C:\\myDir"}
 {Init.putStrasheelaEnv defaultCsoundSoundExtension ".aiff"}
 {Init.putStrasheelaEnv defaultCsoundFlags ['-A' '-g']}
 {Init.putStrasheelaEnv sndPlayer "C:\\Program Files\\Audacity\\audacity.exe"}
