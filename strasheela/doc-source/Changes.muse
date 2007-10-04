@@ -3,6 +3,11 @@
 ; #author Torsten Anders
 
 
+* Changes in Version 0.9.1 (no date yet)
+
+  - Finished music representation chap in Tutorial: added explanation for user-defined export procedures.
+
+
 * Changes in Version 0.9 (2 October 2007)
   
   - Added solvers for real-time constraint programming (see the documentation at [[../contributions/anders/Realtime/doc/index.html]], and examples at [[../contributions/anders/Realtime/examples]] and [[../contributions/anders/Realtime/testing]])
