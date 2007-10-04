@@ -1082,11 +1082,12 @@ define
 	 if {Not {IsDet Unit}}
 	 then {GUtils.warnGUI 'pitch unit unbound'}
 	 end
-	 %% !! remove redundancy for e.g. midi or keynumber
+	 %% !!?? remove redundancy for e.g. midi or keynumber
 	 X = case Unit
 	     of midi then Value
 	     [] keynumber then Value
-	     [] et72 then Value / 6.0
+	     [] et72 then Value / 6.0 % * 12.0 / 72.0
+	     [] et31 then Value * 12.0 / 31.0 
 	     [] midicent then Value / 100.0
 	     [] midic then Value / 100.0
 	     [] frequency then {MUtils.freqToKeynum Value 12.0}
@@ -1095,7 +1096,9 @@ define
 	     else
 		{Exception.raiseError
 		 strasheela(illParameterUnit Unit self
-			    "Supported units are midi, keynumber, et72, midicent (or midic), frequency (or freq), and hz.")}
+			    "Supported units are midi, keynumber, et31, et72, midicent (or midic), frequency (or freq), and hz."
+			    % "Unsupported pitch unit."
+			   )}
 		unit		% never returned
 	     end
       end
