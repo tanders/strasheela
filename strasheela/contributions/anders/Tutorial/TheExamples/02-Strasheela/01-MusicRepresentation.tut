@@ -95,7 +95,7 @@ in
          soundDir:"/tmp/")}
 end</oz>
 <oz title="Output sound file (file dialog)">%% Specify file with file dialog (full path without extension)
-%% NB: set Csound and sound file editor in 'Settings...' in the Tutorial menu
+%% NB: set Csound and sound file editor (or just a player) in 'Settings...' in the Tutorial menu
 local
    TextualScore = sim(items:[note(offsetTime:0
                                   duration:1000
@@ -1135,11 +1135,285 @@ end</oz>
 
 
 <example title="Customising Output to Export Formats">
-<info>
-Following soon.. 
+<info>Strasheela's music representation has been designed to make the definition of new output formats and the extension of existing formats relatively simple without necessarily touching the original Strasheela code. This example demonstrates the definition of Csound and Liliput output for a different temperament. The temperament is expressed in the score by a new pitch unit et31, denoting 31-tone equal-temperament. For more information on this interesting temperament visit http://www.tonalsoft.com/enc/number/31edo.aspx. 
+
+Please note that the output for these examples again requires the correct settings for Csound, a sound file editor, lilypond, convert-ly (an application part of Lilypond), and a PDF file viewer (via 'Settings...' menu entry).
+
 </info>
-<oz>
+<oz  title="Output Csound Score">/* This example defines Csound score file format export from
+scratch. The 31-tone equal-temperament pitch value is transformed into
+a MIDI pitch float in the Csound score. This definition is simplified
+by procedures predefined in Strasheela such as Out.scoreToEvents and
+Out.writeToFile (see the Strasheela reference for more details on
+these procedures). A test demonstrates this definition. */
+
+local 
+   %% Returns true if X is a note whose pitch unit is et31
+   fun {IsEt31Note X}
+      {X isNote($)} andthen 
+      {X getPitchUnit($)} == et31
+   end
+
+   %% Transforms MyScore into a list of VS in Csound note syntax
+   fun {ScoreToCsoundNotes MyScore}
+      %% Out.scoreToEvents expects a list of clauses
+      %% Test#Transformation: when the function Test matches, then the
+      %% function Transformation is called with the matching score
+      %% object.
+      {Out.scoreToEvents MyScore
+       [%% transform note with pitch unit et31 into Csound note of the
+	%% format [i1 StartTime Duration Amplitude Pitch], where
+	%% Amplitude is in the interval [0,1] and Pitch is a MIDI
+	%% number float. This format corresponds with the default
+	%% Csound orc provided by Strasheela.
+	IsEt31Note#fun {$ MyNote}
+		      [{Out.listToVS
+			[i1
+			 {MyNote getStartTimeInSeconds($)}
+			 {MyNote getDurationInSeconds($)}
+			 %% transform MIDI velocity into interval [0,1] 
+			 {IntToFloat {MyNote getAmplitude($)}} / 128.0
+			 %% transform et31 to MIDI float
+			 {IntToFloat {MyNote getPitch($)}} * 12.0 / 31.0]
+			" "}]
+		   end
+	%% raise error for every other event in MyScore
+	isScoreObject#fun {$ X} raise unsupported(X) end end]
+       %% only output fully determined events with a duration > 0, ignore
+       %% everything else
+       unit(test:fun {$ X}
+		    {X isEvent($)} andthen {X isDet($)} andthen
+		    ({X getDuration($)} > 0)
+		 end)}
+   end
+
+   %% Output MyScore as Csound score file at Path 
+   proc {OutputCsoundEt31 MyScore Path}
+      Extension = ".sco" in
+      {Out.writeToFile {Out.listToVS {ScoreToCsoundNotes MyScore}
+			"\n"}
+       Path#Extension}
+   end
+
+   %% A testscore: a simple cadence C-min, F-min, G-maj, C-min
+   %% pitch notation: 31 * Octave  + ET 31 pitch class 
+   MyScore = {Score.makeScore
+	      sim(items:[seq(items:[note(duration: 4
+					 pitch:31*5 + 18
+					 pitchUnit:et31
+					 amplitude:64) % MIDI velo
+				    note(duration: 4
+					 pitch:31*5 + 21
+					 pitchUnit:et31
+					 amplitude:64)
+				    note(duration: 4
+					 pitch:31*5 + 18
+					 pitchUnit:et31
+					 amplitude:64)
+				    note(duration: 4
+					 pitch:31*5 + 18
+					 pitchUnit:et31
+					 amplitude:64)])
+			 seq(items:[note(duration: 4
+					 pitch:31*5 + 8
+					 pitchUnit:et31
+					 amplitude:64)
+				    note(duration: 4
+					 pitch:31*5 + 13
+					 pitchUnit:et31
+					 amplitude:64)
+				    note(duration: 4
+					 pitch:31*5 + 5
+					 pitchUnit:et31
+					 amplitude:64)
+				    note(duration: 4
+					 pitch:31*5 + 8
+					 pitchUnit:et31
+					 amplitude:64)])
+			 seq(items:[note(duration: 4
+					 pitch:31*5 + 0
+					 pitchUnit:et31
+					 amplitude:64)
+				    note(duration: 4
+					 pitch:31*5 + 0
+					 pitchUnit:et31
+					 amplitude:64)
+				    note(duration: 4
+					 pitch:31*4 + 28
+					 pitchUnit:et31
+					 amplitude:64)
+				    note(duration: 4
+					 pitch:31*5 + 0
+					 pitchUnit:et31
+					 amplitude:64)])]
+		  startTime:0
+		  timeUnit:beats(4))
+	      unit}
+   Path = {Tk.return tk_getSaveFile}
+in
+   {MyScore wait}
+   %% output Csound score file to Path
+   {OutputCsoundEt31 MyScore Path}
+   {Out.callCsound unit(file:Path
+			%% use Path as is
+			scoDir:nil
+			soundDir:nil)}
+   {Out.playSound unit(file:Path
+		       %% use Path as is
+		       scoDir:nil
+		       soundDir:nil)}
+end
 </oz>
+<oz  title="Output Lilypond">/* This example extends Strasheela's lilypond export to support
+31-tone equal temperament. The pitch notation uses a mapping from et31
+pitch classes to notated pitches as shown at
+http://www.tonalsoft.com/enc/number/31edo.aspx. Please note that the
+notation of this temperament correctly supports enharmonic notation
+(in contrast to Strasheela's default Lilypond output which only
+supports sharps). Moreover, interval transpositions in this
+temperament result in the correct enharmonic spelling up to two sharps
+and flats. Again, a test demonstrates this definition (only flats are
+used in the test for simplicity). */
+
+local
+   fun {IsEt31Note X}
+      {X isNote($)} andthen 
+      {X getPitchUnit($)} == et31
+   end
+
+   %% This 31-tone equal temperament pitch class mapping follows
+   %% http://www.tonalsoft.com/enc/number/31edo.aspx
+   LilyEt31PCs = pcs(c deses cis des cisis
+		     d eses 'dis' es disis
+		     e fes eis
+		     f geses fis ges fisis
+		     g aeses gis aes gisis
+		     a beses ais bes aisis
+		     b ces bis)
+   LilyOctaves = octs(",,,," ",,," ",," "," "" "'" "''" "'''" "''''")
+   %% Transform a Pitch (an int) into the corresponding Lily code (a VS)
+   fun {ET31PitchToLily MyPitch}
+      PC = {Int.'mod' MyPitch 31} + 1
+      Oct = {Int.'div' MyPitch 31} + 1
+   in
+      LilyEt31PCs.PC # LilyOctaves.Oct
+   end
+
+   %% Expects a Strasheela note object and returns the corresponding
+   %% Lilypond code (a VS). For simplicity, this transformation does not
+   %% support any expessions (e.g. fingering marks, or articulation
+   %% marks).
+   fun {NoteEt31ToLily MyNote}
+      Rhythms = {Out.lilyMakeRhythms {MyNote getDurationParameter($)}}
+   in
+      %% if MyNote is shorter than 64th then skip it (Out.lilyMakeRhythms
+      %% then returns nil)
+      if Rhythms == nil
+      then ''
+      else  
+	 Pitch = {ET31PitchToLily {MyNote getPitch($)}}
+	 FirstNote = Pitch#Rhythms.1
+      in
+	 %% handle tied notes
+	 if {Length Rhythms} == 1
+	    %% no tied notes
+	 then FirstNote
+	    %% all values in Rhythm.2 are tied to predecessor
+	 else FirstNote#{Out.listToVS {Map Rhythms.2
+				       fun {$ R} " ~ "#Pitch#R end}
+			 " "}
+	 end
+      end
+   end
+
+   %% A testscore: a simple cadence C-min, F-min, G-maj, C-min
+   %% pitch notation: 31 * Octave  + ET 31 pitch class 
+   MyScore = {Score.makeScore
+	      sim(items:[seq(items:[note(duration: 4
+					 pitch:31*5 + 18
+					 pitchUnit:et31
+					 amplitude:64)
+				    note(duration: 4
+					 pitch:31*5 + 21
+					 pitchUnit:et31
+					 amplitude:64)
+				    note(duration: 4
+					 pitch:31*5 + 18
+					 pitchUnit:et31
+					 amplitude:64)
+				    note(duration: 4
+					 pitch:31*5 + 18
+					 pitchUnit:et31
+					 amplitude:64)])
+			 seq(items:[note(duration: 4
+					 pitch:31*5 + 8
+					 pitchUnit:et31
+					 amplitude:64)
+				    note(duration: 4
+					 pitch:31*5 + 13
+					 pitchUnit:et31
+					 amplitude:64)
+				    note(duration: 4
+					 pitch:31*5 + 5
+					 pitchUnit:et31
+					 amplitude:64)
+				    note(duration: 4
+					 pitch:31*5 + 8
+					 pitchUnit:et31
+					 amplitude:64)])
+			 seq(items:[note(duration: 4
+					 pitch:31*5 + 0
+					 pitchUnit:et31
+					 amplitude:64)
+				    note(duration: 4
+					 pitch:31*5 + 0
+					 pitchUnit:et31
+					 amplitude:64)
+				    note(duration: 4
+					 pitch:31*4 + 28
+					 pitchUnit:et31
+					 amplitude:64)
+				    note(duration: 4
+					 pitch:31*5 + 0
+					 pitchUnit:et31
+					 amplitude:64)])]
+		  startTime:0
+		  timeUnit:beats(4)
+		 )
+	      unit}
+in 
+   {MyScore wait}
+
+   %% Strasheela's standard Lilypond output procedure
+   %% Out.renderAndShowLilypond provides an argument clauses which
+   %% expects a list of clauses Test#Transformation. When the function
+   %% Test matches an object, then the function Transformation is called
+   %% with the matching score object to generate Lilypond
+   %% code. Otherwise, the score object is processed by the default
+   %% clauses of Out.renderAndShowLilypond.
+   {Out.renderAndShowLilypond MyScore
+    unit(file:"test"
+	 clauses:[IsEt31Note#NoteEt31ToLily])}
+end
+</oz>
+
+<!-- <oz> -->
+<!-- %% Add entry to Explorer menu -->
+<!-- proc {RenderLilypond_et31 I X} -->
+<!--    if {Score.isScoreObject X} -->
+<!--    then  -->
+<!--       FileName = out#{GUtils.getCounterAndIncr} -->
+<!--    in -->
+<!--       {Out.renderAndShowLilypond X -->
+<!--        unit(file: FileName#'-'#I -->
+<!-- 	    clauses:[IsEt31Note#NoteEt31ToLily])} -->
+<!--    end -->
+<!-- end -->
+<!-- {Explorer.object -->
+<!--  add(information RenderLilypond_et31 -->
+<!--      label: 'to Lilypond (pitch unit et31)')} -->
+<!-- </oz> -->
+
 </example>
 
 
