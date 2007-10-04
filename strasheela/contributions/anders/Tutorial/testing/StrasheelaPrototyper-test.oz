@@ -4,8 +4,7 @@ declare
 
 {SPrototyper.startPrototyper}
 
-{SPrototyper.outputMuse Init.strasheelaDir#"/doc-source/"}
-
+{SPrototyper.outputMuse Init.strasheelaSourceDir#"/doc-source/"}
 
 %%
 %% the following calls work only when the respective procs are exported..
