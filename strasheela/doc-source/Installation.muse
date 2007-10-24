@@ -17,12 +17,20 @@ For Windows, follow the instructions in the Mozart Installation Manual on [[http
 
 Simply get a package ready to install from the [[http://www.mozart-oz.org/download][Download Mozart]] page. In case of troubles or for compiling from source consult the Mozart [[http://www.mozart-oz.org/documentation/install/index.html][Installation Manual]]. Additional help can be found [[http://gforge.info.ucl.ac.be/plugins/wiki/index.php?FAQ&id=17&type=g][here]] (in particular for installing Mozart on Intel Macs). A usual Windows problem is that Mozart does not find Emacs if it has to be invoked with a different name (e.g., =runemacs.exe= as the Win-Emacs-Version recommended above). In that case, set the environment variable =OZEMACS= to the path of your Emacs application (e.g., =C:\Program Files\emacs-22.1\bin\runemacs.exe=) as described [[http://support.microsoft.com/default.aspx?scid=kb;en-us;310519][here]].  
 
+After successfully installing Mozart, you may want to test the installation. At a commandline (a terminal or a DOS box) type =oz=. This starts the Oz Programming Interface (OPI), which runs inside Emacs. The initial window is split in two text buffers (=Oz= and =*Oz Compiler*=). In the upper buffer type the following.
+
+   ={Browse hello}= 
+
+Select this text line with the mouse, then go to the Oz menu and select 'Feed Region'. This feeds the selected code to the system (i.e. executes it): it opens a window called Oz Browser which shows 'hello'. 
+
 
 * Install Strasheela 
 
-On a UNIX-like system (i.e. Linux or MacOS), to compile and install Strasheela with all its extensions open a shell, move into =Strasheela/scripts=[1] and run
+On a UNIX-like system (i.e. Linux or MacOS), for compiling and installing Strasheela with all its extensions open a shell, move into =Strasheela/scripts=[1] and run
 
     <example>./install-all.sh</example>
+
+This script outputs a number of warnings, most of them of the form =binding analysis warning: local variable Browse used only once=. You can savely ignore all these warnings (I left them in as it slightly simplifies debugging for me..).
 
 In case you later somehow changed Strasheela[2] and want to update the installation then run (again in the folder =Strasheela/scripts=)
 
@@ -92,15 +100,38 @@ We highly welcome contributors of packages which simplify the Strasheela install
 
 Strasheela tries to simplify the package creation process. The above-mentioned script =install-all= supports all options of [[http://www.mozart-oz.org/documentation/mozart-ozmake/index.html][ozmake]]. For exammple, you can specify an installation directory with the option =--prefix= (default =~/.oz=). The Strasheela functors are installed in =<PREFIX>/cache/x-ozlib= (most stuff goes into =/cache/x-ozlib/anders/strasheela/=, but there are additional folders created for user contributions). Mozart must find these installed files. For a 'global' installation, you may give the Mozart installation directory =$OZHOME= as prefix (recommended). Any other directory is possible as well, but then you must tell Mozart to search in this directory by setting the environment variable =$OZLOAD= (or =OZ_SEARCH_LOAD=) to a suitable value. For example, if Mozart should first look into the user's home directory, then into some folder given as prefix to ozmake during the Strasheela installation, and finally into the Mozart installation folder you specify the following. 
 
-  <example>OZLOAD=cache=${HOME}/.oz/cache:cache=$(MYNEWCACHE):cache=$(OZHOME)/cache</example>
+<src lang="sh">
+OZLOAD=cache=${HOME}/.oz/cache:cache=$(MYNEWCACHE):cache=$(OZHOME)/cache
+</src>
 
 Per default, Mozart first searches in the home directory, and then in the Mozart installation folder -- which means that the user can shadow files installed in the Mozart installation folder.
 
-Strasheela applications (e.g., the interactive =StrasheelaTutorial= and the =OzServer=) are per default installed in =<PREFIX>/bin=. This can be changed with the =install-all.sh= option =--bindir=. You may want to add this directory to the PATH environment variable. However, the applications =StrasheelaTutorial= and =OzServer= should always be started from the commandline (as feedback is given at =stdout= / =stderr=): if you want to add a menu entry for these applications, please run them in a terminal nevertheless. The Strasheela documentation (scattered across the Strasheela source files..) is not installed automatically. However, it can be extracted from the source with the script =extract-doc.sh= in Strasheela's =scripts= directory. 
+Strasheela applications (e.g., the interactive =StrasheelaTutorial= and the =OzServer=) are per default installed in =<PREFIX>/bin=. This can be changed with the =install-all.sh= option =--bindir=. You may want to add this directory to the PATH environment variable. However, these applications should always be started from the commandline (as feedback is given at =stdout= / =stderr=): if you want to add a menu entry for the =StrasheelaTutorial=, please run them in a terminal nevertheless. BTW: =OzServer= on the other hand usually requires commandline parameters (e.g., a port number) and is therefore less suited for a menu entry. 
 
-Strasheela provides output to various formats, and therefore relies on other applications. Please add dependencies to at least Csound, midicsv, Lilypond, a sound file player, a midi file player, and a pdf file viewer. Also, make sure that you edit the provided OZRC template file appropriatedly according to your target system, before you save it as Oz initialisation file. In particular, in this initialisation file set the Strasheela environment variables (using =Init.putStrasheelaEnv=, see the template) to the right values where output files will be stored, where you installed applications like Csound, midicsv, Lilypond, and the player/viewer for sound/midi/pdf files, and possibly their right flags. Make sure that you set the operating system environment variable =$OZRC= to point to the (edited) global initialisation file. If a user later wants to add private settings, she can change the value of =$OZRC= for her account.  
+; this is temporary (until Path fixes are in new Mozart version)
+In case you are building your package in a [[http://en.wikipedia.org/wiki/Chroot][chroot]] (e.g., to model some specific target system which differs from your running system), then some additional configuration is necessary. The =ozmake= calls by the script =install-all.sh= must find the compiled =*.ozf= files during the installation process. So, for the build process please specify your build root for Mozart via the environment variable =$OZLOAD= (see above), for example, as following (thanks to Toni Graffy for pointing this out).
+
+<src lang="sh">
+export INSTALLDIR=/usr/local  # your installation prefix 
+export BUILDROOT=/var/tmp/strasheela # your build root
+export PATH=$INSTALLDIR/mozart/bin:$PATH # adding the mozart executables
+export OZHOME=$INSTALLDIR/mozart 
+# NB: include BUILDROOT in OZLOAD 
+export OZLOAD=cache=${BUILDROOT}$OZHOME/cache:cache=$OZHOME/cache
+scripts/install-all.sh \
+        --prefix=${BUILDROOT}${INSTALLDIR}/mozart \
+        --bindir=${BUILDROOT}${INSTALLDIR}/mozart/bin
+</src>
+
+; BUILDROOT=/var/tmp/strasheela
+
+The Strasheela documentation (scattered across the Strasheela source files..) is not installed automatically. However, it can be extracted from the source with the script =extract-doc.sh= in Strasheela's =scripts= directory. 
+
+Strasheela provides output to various formats, and therefore relies on other applications. Please add dependencies to Csound, midicsv, Lilypond, a sound file player, a midi file player, and a pdf file viewer. Also, make sure that you edit the provided OZRC template file appropriatedly according to your target system, before you save it as Oz initialisation file. In particular, in this initialisation file set the Strasheela environment variables (using =Init.putStrasheelaEnv=, see the template) to the right values where output files will be stored, where you installed applications like Csound, midicsv, Lilypond, and the player/viewer for sound/midi/pdf files, and possibly their right flags. Make sure that you set the operating system environment variable =$OZRC= to point to the (edited) global initialisation file. If a user later wants to add private settings, she can change the value of =$OZRC= for her account.  
 
 In case of any questions concerning packaging Strasheela, please to not hestitate to ask via email (e.g., on the Strasheela mailing list).
+
+If you report your Strasheela package, then I am most happy to announce it at the Strasheela website (together with acknowledgments of course).
 
 Have fun with Strasheela!
 
