@@ -1,7 +1,14 @@
 
+* Strasheela installation
+
+** TODO [#A] Create test program (executable) which tests a few core Strasheela functionalities and reports results at stdout to the user
+
+** TODO [#C] ?? Define Oz GUI application for creating an OZRC file: pathes for applications and directories are then specified in a GUI
+
+
 * Strasheela design
 
-** TODO MIDI input
+** TODO [#A] MIDI input
 
 *** DONE Define intermediate Oz value MIDI format (the format used for MIDI output)
 
@@ -10,10 +17,12 @@ See MidiOutput.oz doc for details.
 
 *** DONE Use Gump (http://www.mozart-oz.org/documentation/gump/index.html) to write parser CSV -> this intermediate MIDI format
 
-*** TODO Refactor MidiInput.oz, so that the imported intermediate Oz value MIDI format can be directly output again
+*** [60%] Refactor MidiInput.oz, so that the imported intermediate Oz value MIDI format can be directly output again
 
 Make transposition example: Midifile -> CSV file -> Import with Gumpo parser -> Mapping where for every note on/off some pitch offset is added -> CSV output -> Midi file
  
+Is this done already?
+
 
 *** Transform MIDI clock time settings into another time format 
 
@@ -49,13 +58,54 @@ why did I ever need ModuleLink instead of Module.link?
 
 Could it be that the problem appeared only when a buffer which loaded some module was re-fed? 
 
-** TODO [#A] Redefine find method concurrently (don't use collect - returns as soon as some fitting object is found)
+** DONE [#A] Redefine find method concurrently (don't use collect - returns as soon as some fitting object is found)
+
+... I found a better approach using filter + reified constraints as boolean tests
+
 
 ** TODO OutGUI
 
-** TODO 1W Refactor harmony model
+** TODO [#A] 1W Refactor harmony model
 
-e.g. use interval class + memoization
+*** Harmony model: Databases as arg for object creation
+
+Presently there is only a global chord, scale etc database 
+
+I should keep a global database as an option, because this is most suitable for most CSP. Additionally, it should be possible to give the databases to score objects (chords, scales, ..) as optional init argument -- the init arg defaults to the global database.
+
+This refactoring requires that all database accessors expect a score object (chord, scale ..) or its database as argument. 
+Possibly, I leave the old database accessors and setters as is (i.e. without additional object/database arg) for compatibility of the old examples. 
+In that case, I need to define new additional accessors which expect the object/database arg, and the doc of both the new and the old accessors/setters must make these two options using databases very clear.
+
+
+*** Harmony model: Interval as score object
+  
+Explicit interval score object. Creation uses memoization for two given pitches.
+
+?? Should I introduce further additional score objects like pitch and degree ??
+
+Test interval class with memoization
+
+*** Harmony model: Clean up doc
+
+
+** TODO [#A] Extend meter model
+
+  - extend meter model for changing meter
+
+  - test constraining metric structure with sim meter: for accessing potentially inaccessible context sim meter use delaying constraints: filter and test with a reified constraint together with an equality test
+
+{ForAll {MyScore filter($ fun {$ X}
+			     {IsMeasure X} andthen
+			     {MyNote isSimultaneousItemR($ X)} == 1
+			  end)}
+ MyConstraint}
+
+
+   - !!?? there was some idea of "Orjan which I wanted to incorporate to Strasheela and for which I needed this delayed constraints approach..? 
+     Was it harmony rule depending on metric structure? For example, no non-chord tones on strong beat
+
+   - Optional: lilypond output for metric structure
 
 
 ** Multi-core  processing
@@ -73,19 +123,160 @@ That is: test whether multiple processes can run on different CPUs
 Check whether multiple CPUs are used  
 
 
-*** TODO Simple Musical CSP with parallel search
+*** DONE Simple Musical CSP with parallel search
 
 How does communication of data structure slow down the process?
 
 
+** TODO Update Lilypond output
+
+Lilypond export outputs only rather old version. Meanwhile, Lilypond handles nested scores (quasi sim/seq containers) better than old version, but behaviour of old version is pertained when using Lily's conversion script. So, I should update my Lily output to a more Lily syntax version
+
+
+** TODO NonmensuralENP->MensuralENP as Lisp def
+
+see Strasheela/private/WorkInProgress/NonmensuralENP->mensuralENP 
+
+
+** TODO add a score transformation with allows to restructure a Strasheela score hierarchy in a highle generic wasy (e.g. for outputting the fixed hierarchies of ENP-notation, Lilypond, MIDI...)
+
+   - it would be great if in a transformed and more flat representation the info on the previous hierarchic representation is still retained (e.g. added to item info: 'begin(<marker>)' and 'end(<marker>)'). When the more flat representation is then output (e.g. to lilypond, ENP-notation or MIDI), these markers could be used to somehow retain the old nesting in the output format (e.g. to draw analysis brackets in Lilypond or ENP, or as text events in MIDI out). When the output music is edited, it could later perhaps be loaded into Strasheela again and the old hierarchy could be restored??
+
+
+** Refactoring 
+
+*** TODO Concurrent method filter (filterThreaded) which does return stream instead of list: as soon as enough information is available on specific score object to fulfull given test function, add it to stream. Close stream as soon as it is known that no further elements will be added.
+
+A method filterThreaded would further improve the application of delayed constraints where filtering tests used reified constraints 
+
+E.g., I could use a method filterThreaded for a better definition of getSimultaneousItems
+
+*** TODO [#C] refactor output means: they are inconsistend, perhaps not general enough etc.
+
+  - output of 'non-existing' timed items (e.g. notes of duration 0) -- skip
+
+  - !!?? make MakeEvent2CsoundFn more general: Idea Spec is either some
+     method (e.g. an accessor) or some unary function which gets
+     object as arg.
+
+  - refactor Lilypond output to use the (still to program) score transformation with allows to restructure a Strasheela score hierarchy
+
+*** TODO [#C] Output to lilypond etc: make extension for outputting specific score information (more) reusable
+
+E.g. for outputting information such as meter, key, motif boundaries... 
+
+
+*** TODO [#C] !!?? Some means to define rules in a more modular/generic way -- currently, e.g., more complex counterpoint rules, can not be used in other CSP as they rely on the specific score representation (e.g. extensions to Note)
+
+  -> Better solution: use memoization instead of extending the music representation ad hoc
+  ?? What did I mean by this idea ...
+
+
+*** TODO [#C] toInitRecord: further cleanup
+
+
+**** toInitRecord: what to do with init args which get procedures or classes (e.g. classes of harmony model)?
+
+     %% I must exclude procedures and classes as init argument if I export into text files.
+     %% Moreover, these will probably not work for pickling: can I pickle a proc which references an object??
+     %%
+     %% ?? when do I need procedures and classes as init argument: if I what to recreate a CSP (e.g. after hand-editing results). I probably don't need these args for score objects which are fully determined and are only archived..
+
+
+**** Add correct cases to toInitRecord defs for classes such as HS.score.note etc which expect procedures as init args. I may filter out these args with excluded..
+
+**** use output of toInitRecord together with init classes for saving of score instances into pickles
+     
+  ?? also output into text file with specified classes: I can introduce a "dictionary" which maps classes to their textual representation...
+    
+   -> this todo item is probably outdated already: cf. Out.saveScore
+
+*** TODO [#C] Music representation consistency: so far, I used class attributes for object parameters etc. However, for the quick definition of subclasses with Score.makeClass I introduced stateless class features for additional parameters etc. This is neither consistent in the class usage (use of different accessors like {X getA} and Y.b) nor does it allow for later score editors..
+
+*** TODO [#C] ?? remove toPPrintRecord and replace it with highly generic toFullRecord?
+    sorted mainly already?
+    OLD: toPPrintRecord: output graph mode using IDs similar to input of MakeScore
+
+*** TODO [#C] ?? add textual representation of parameters: currently, parameters are not supported my Score.makeScore
+
+    should I add parameter support at all? Score.makeScore _does_ work on note-level. I would only need to create single params, e.g., for item init arg addParameters
+
+
+
+** Efficiency
+
+
+*** TODO [#A] Refactor Strasheela distribution: recomputable support for random distribution
+
+See also ./Refactor-ScoreDistribution.oz
+
+*** TODO [#A] check out performance with adaptive recomputation
+
+  Adaptive recomputation is highly recommended by Schulte, so I should possibly do this before investigating other approaches to improve efficiency
+     
+  -> for this I most of all need a nicely working 'select random value' distribution which can be recomputed
+
+
+*** TODO [#A] Does score outside script/space save memory. If so, define abstractions/templates for having the score outside the script
+
+See ../../testing/zy_Efficiency/KeepMusicRepresentationOutsideComputationalSpace.oz 
+
+**** Measure how the different approaches differ in the amout of memory (and time) comsumed by copying.
+
+ Approaches:
+
+  - !! Measure total amount of memory and time required by search (e.g. put each script in an application of its own, call plain solver and measure time and memory with UNIX tools such as time and ...)
+    -> which UNIX tool measures memory consumption of a call?
+
+  - !!?? Measure with Oz profiler:
+    problem: the memory/time comsumption of copying seems not to show if I just compile CSP with profiling information.
+    Alternative option: temporarily, compile whole Mozart with profiling and check memory consumption of space copying proc (results will be very hard to read in this case!) 
+
+
+****  _if_ I found out that memory reduction can be significantly reduced by defining the music representation outside the script/space, then I have to develop abstractions/templates for the following cases (it will be more complex than having the score inside the script, but it shouldn't be too hard..).
+
+
+  - distribution strategies
+  - implicit constraints
+  - expressive rule applications 
+
+
+**** split Strasheela in two parts: the part to define CSPs and the part to solve them. The solver part uses a very [speichersparende] representation based on records instead of classes and objects (i.e. I need to define/port the data abstraction interface required for distribution strategies). 
+
+     -> I did some profiling to better understand this issue (see Strasheela/texting/profiling.oz)
+     
+       - Memory requirement of Strasheela mainly caused by elaborated data structure: there is so much explicitly represented. A more efficient data representation for the search would dump all information not required by the CSP: this is a very difficult task!!
+
+         -> BTW: the memory difference between a record-based and an OOP based data structure appears to be neclegtable
+
+
+***** The Solver 'the server'
+     
+      - The solver expects a CSP spec which specifies the music representation (with a unique ID for each variable) and a list of constraints which specify which variables are constrained by which constraint (aux variables also supported by the constraint spec).
+      Also distribution strategy defined by spec.
+
+      - This solver then creates the search script from the CSP spec 
+     
+      - This solver is much more efficient than current Strasheela: much less copying because much smaller data structure
+
+      - The solver would be even more efficient if it could apply batch recomputation: wait for Geoz..
+  
+***** The second part of Strasheela (the 'client') defines the CSP specs: the present Strasheela could be modified to do this. It is even possible, that the present Strasheela could be modified such that it either does the search directly itself or alternatively creates this CSP spec (this option could be useful for prototyping and also helps to keep the present application a running program ..).
+
+     - The CSP def part of Strasheela could/would mirror _every_ propagator defined by Oz. All constraints in a Strasheela program would be replaced my its Strasheela substitute. With a global switch (init variable/cell?) the user could decide whether the Strasheela constraint substitutes either just apply the orig Oz constraint or otherwise 'record' this constraint call for the CSP spec by denoting the name of the constraint and the unique IDs of all its argument vars 
+
+       !! -> How to access the ID when the constraint gets the variable directly?? I would need to rewrite all Strasheela programs such that every Strasheela constraint substitute always expects parameter objects instead of variables!
+
+***** Instead with this Strasheela 'client', other CAC applications could also create CSP specs and call the Strasheela 'server' (e.g. PWGL)
+
 
 * Strasheela examples 
 
-** Inventio example
+** TODO Inventio example
 
-*** TODO harmonic etc analysis of inventio 1
+*** harmonic etc analysis of inventio 1
 
-*** TODO Inventio B: Fuege "BrainImage Data" in CSP ein
+*** Inventio B: Fuege "BrainImage Data" in CSP ein
 
 ?? As parameter or info for motif?
 
@@ -95,8 +286,8 @@ Abstract applied constraint, so the effect is controllable
 
 ** Strasheela tutorial
 
-*** TODO Strasheela tutorial: finish music representation 'chapter'
-*** TODO Strasheela tutorial: do music constraint programming 'chapter'
+*** DONE Strasheela tutorial: finish music representation 'chapter'
+*** TODO [#A] Strasheela tutorial: do music constraint programming 'chapter'
 
 *** TODO Email Tobias Kunze: CM CSS verwendet...
 
