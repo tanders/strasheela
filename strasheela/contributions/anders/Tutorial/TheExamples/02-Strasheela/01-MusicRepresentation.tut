@@ -1135,7 +1135,7 @@ end</oz>
 
 
 <example title="Customising Output to Export Formats">
-<info>Strasheela's music representation has been designed to make the definition of new output formats and the extension of existing formats relatively simple without necessarily touching the original Strasheela code. This example demonstrates the definition of Csound and Liliput output for a different temperament. The temperament is expressed in the score by a new pitch unit et31, denoting 31-tone equal-temperament. For more information on this interesting temperament visit http://www.tonalsoft.com/enc/number/31edo.aspx. 
+<info>Strasheela's music representation has been designed to make the definition of new output formats and the extension of existing formats relatively simple without necessarily touching the original Strasheela code. This example demonstrates the definition of Csound and Liliput output for a different temperament. The temperament is expressed in the score by a new pitch unit et31, denoting 31-tone equal-temperament. For more information on this interesting temperament visit http://www.tonalsoft.com/enc/number/31edo.aspx or http://en.wikipedia.org/wiki/31_equal_temperament. 
 
 Please note that the output for these examples again requires the correct settings for Csound, a sound file editor, lilypond, convert-ly (an application part of Lilypond), and a PDF file viewer (via 'Settings...' menu entry).
 
