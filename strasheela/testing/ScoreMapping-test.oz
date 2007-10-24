@@ -5,7 +5,6 @@ declare
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
 %%
 %% Important testing
 %% mapping etc.
@@ -93,8 +92,9 @@ fun {GetInfo X} {X getInfo($)} end
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
+%%
 %% order of items returned by collect etc.
+%%
 
 declare
 MyScore = {Score.makeScore
@@ -102,10 +102,12 @@ MyScore = {Score.makeScore
 		      fun {$}
 			 seq(items:{LUtils.collectN 3
 				    fun {$}
-				       note(offsetTime:0
-					    amplitude:1
+				       note(% offsetTime:0
 					    duration:1
-					    pitch:60)
+					    %% undetermined pitch and amp
+					    % pitch:60
+					    % amplitude:1
+					   )
 				    end}
 			     offsetTime:0)
 		      end}
@@ -408,4 +410,8 @@ proc {$ X} {Browse elseCase#X} end}
 %% else case
 {SMapping.patternMatchingApply2 a [a b c d e] [o x o] proc {$ Xs} {Browse Xs} end
  proc {$} {Browse elseCase} end}
+
+
+
+
 
