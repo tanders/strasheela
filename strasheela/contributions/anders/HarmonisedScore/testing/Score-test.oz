@@ -1087,3 +1087,22 @@ MyChord = {Score.makeScore chord
 
 {Browse {MyChord toInitRecord($)}}
 
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%% Interval
+%%
+
+%%
+%% NOTE: buggy and debugging unfinished., possibly even implementation unfinished..
+%%
+
+declare
+MyInterval = {New HS.score.interval init(distance:7 direction:2)}
+
+{Score.initScore MyInterval}
+
+%% no textual score representation
+{Inspect MyInterval}
+
