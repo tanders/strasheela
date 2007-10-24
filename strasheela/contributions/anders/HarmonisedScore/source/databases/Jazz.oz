@@ -12,6 +12,7 @@ import
    
 export
    Vierklaenge
+   tetrads: Vierklaenge
    Scales
    PitchesPerOctave
    AccidentalOffset
