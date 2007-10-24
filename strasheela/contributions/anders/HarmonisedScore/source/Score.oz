@@ -23,7 +23,9 @@
 %%
 %% * !! doc for Chord class and other classes
 %%
-%% * !! add class interval. Add creator with memoization, e.g., given two Strasheela notes.   
+%% * !! add class interval. Add creator with memoization, e.g., given two Strasheela notes.
+%%
+%% * ?? refactor accidental representation with two parameters: direction and amount (this is only for convenience: adds no expressiveness and degrades performance)
 %%
 %% * refactor: much code doublication in InChordMixinForNote, InScaleMixinForNote 
 %%
@@ -107,6 +109,7 @@ functor
 import
    FD FS Combinator
    Browser(browse:Browse) % temp for debugging
+   Inspector(inspect:Inspect) % temp for debugging
    Select at 'x-ozlib://duchier/cp/Select.ozf'
    GUtils at 'x-ozlib://anders/strasheela/source/GeneralUtils.ozf'
    LUtils at 'x-ozlib://anders/strasheela/source/ListUtils.ozf'
@@ -135,6 +138,9 @@ export
    TransposeDegree
    AbsoluteToOffsetAccidental OffsetToAbsoluteAccidental
    PcSetToSequence
+
+   Interval
+   IsInterval
    
    InChordMixinForNote InScaleMixinForNote
    PitchClassMixin
@@ -163,6 +169,7 @@ export
 prepare
    %% Name for type checking of chord class. Defined in 'prepare' to
    %% avoid re-evaluation.
+   IntervalType = {Name.new}
    PitchClassType = {Name.new}
    PitchClassCollectionType = {Name.new}
    ChordType = {Name.new}
@@ -384,6 +391,186 @@ define
       {Append Trailing Leading}
 %      end
    end
+   
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%
+%%% def of interval
+%%%
+
+   %%
+   %% What do I need:
+   %%
+   %%  - An interval which is limited to the intervals expressed by
+   %%  the interval database
+   %%
+   %%  - Convenient access to interval properties: direction, pitch
+   %%  class component, octave compenent, scale/chord degree component
+   %%  (for scale/chord degree interval subclasses)
+   %%
+   %%    ?? I may not constrain and store all of these properties
+   %%    directly, by generate them when needed and memoize them (key
+   %%    is scale's ID)
+   %%
+   %%  - Access to interval properties defined in DB (e.g. dissonance
+   %%  degree)
+   %%
+   %%  - A convenient means to compute the interval between two notes
+   %%  (incl enharmonic, and scale/chord degree notes)
+   %%
+   %%    ?? Defined either as proc or as method of classes note,
+   %%    chord, scale etc
+   %%
+   %%    ?? an interval is always the interval between notes. For
+   %%    expressing the interval between, e.g., two chord notes, first
+   %%    express these chord notes, e.g., as chord degree note objects
+   %%    and then create the interval between them (this limits the
+   %%    number of special interval cases/creators I would other need
+   %%    to define).
+   %%
+   %%
+   %% NB: an interval is (usually) not explicitly represented in the
+   %% score (in contrast to notes, scales, chords).
+   %%
+   %%
+   
+%   proc {TransposeNotes }
+%   end
+   
+   %% pitch class interval (?? corresponds to PitchClassCollection, PitchClassMixin)
+
+   local
+      /** %% Initialise domains of Interval params and relate them.
+      %% */
+      proc {InitConstraints Self}
+	 thread % don't block init if some information is still missing	    
+	    MyDB = {Self getDB($)}
+	 in
+	    %% TODO: check accessor correctness
+	    Interval = MyDB.interval
+	    %% init/restrict domains
+	    {Self getDistance($)} = {FD.decl}
+	    {Self getDirection($)} = {FD.int 0#2}
+	    {Self getPitchClass($)} = {DB.makePitchClassFDInt}
+	    {Self getOctave($)} = {DB.makeOctaveFDInt}
+	    %%
+	    %% constrains
+	    %%
+	    %% restricts distance domain to (OctaveDomainMin * PitchesPerOctave) # (OctaveDomainMax * PitchesPerOctave + PitchesPerOctave-1) 
+	    {PitchClassToPitch {Self getPitchClass($)}#{Self getOctave($)}
+	     {Self getDistance($)}}
+	    %% distance 0 <=> direction =  
+	    {FD.equi ({Self getDistance($)} =: 0)
+	     ({Self getDirection($)} =: 1)
+	     1}
+	    %%
+	    %% constrain all dbFeatures of Self to their value dependent
+	    %% on the Self index in the Db
+	    {Record.forAllInd {Self getDBFeatures($)}
+	     proc {$ Feat Val}
+		%% implicitly sets Val to FD int or FS
+		Val = {Rules.getFeature Self Feat}
+	     end}
+	 end
+      end
+   in
+      /** %% NOTE: imlementation unfinished.
+      %%
+      %% The direction is represented as an FD int where 0 means downwards, 1 means unison, and 2 means upwards (cf. the direction-related definitions in the Pattern contribution).
+      %%
+      %% Please note that only only interval values defined in the interval database are permitted as distance values. For example, if you use an Interval object to express the interval between two specific notes and your interval DB does not specify an interval 7 (a fifth if PitchesPerOctave=12), then the interval between the two note pitches is implicitly constrained not to be a fifth.
+      %%
+      %% NB: The class Interval inherits from Score.abstractElement, but not Score.temporalElement (i.e. an interval does not have associated temporal information such as a start time and can thus not be output, e.g., in a Lilypond score -- in contrast to instances of the calsses Chord and Scale).
+      %% */
+      class Interval from Score.abstractElement
+	 feat label:interval
+	    !IntervalType:unit
+	 attr
+	    distance direction pitchClass octave  % all param with FD int
+	    dbFeatures		     % record of constrained vars (FD or FS). Features of the record are symbols in init arg dbFeatures
+	 meth init(distance:Dist<=_ direction:Dir<=_
+		   octave:Oct<=_ pitchClass:PC<=_
+		   dbFeatures:DBFeats<=nil % arg list of symbols
+		  ) = M
+	    @dbFeatures = {Record.make unit DBFeats}
+	    @distance = {New Score.parameter init(value:Dist info:distance)}
+	    @direction = {New Score.parameter init(value:Dir info:direction)}
+	    @octave = {New Score.parameter init(value:Oct info:octave)}
+	    @pitchClass = {New PitchClass
+			   init(value:PC info:pitchClass
+				'unit':{DB.getPitchUnit})}
+	    %
+	    {Inspect self}
+	    %% BUG: this line blocks
+	    {self bilinkParameters([@distance @direction @octave @pitchClass])} 
+%	    {self bilinkParameters([@distance])} 
+	    {Browse ok}
+	    %% implicit constrains
+	    {InitConstraints self}
+	 end
+	 meth getDistance($)
+	    {@distance getValue($)}
+	 end
+	 meth getDistanceParameter($)
+	    @distance
+	 end
+	 meth getDirection($)
+	    {@direction getValue($)}
+	 end
+	 meth getDirectionParameter($)
+	    @direction
+	 end
+	 meth getPitchClass($)
+	    {@pitchClass getValue($)}
+	 end
+	 meth getPitchClassParameter($)
+	    @pitchClass
+	 end
+	 meth getOctave($)
+	    {@octave getValue($)}
+	 end
+	 meth getOctaveParameter($)
+	    @octave
+	 end
+
+	 
+	 /** %% The interval database is defined by DB.setDB. getDB returns the internal representation of this database (see the DB.setDB for more details).
+	 %% */
+	 meth getDB(?X)
+	    X={DB.getInternalIntervalDB}
+	 end
+	 /** %% Returns a record with the additional features defined in the database and 'announced' to self with the init argument dbFeatures.
+	 %% */
+	 meth getDBFeatures(?X)
+	    X = @dbFeatures
+	 end
+	 /** %% Returns the value (FD int or FS) of the additional feature Feat.
+	 %% */
+	 meth getDBFeature(?X Feat)
+	    X = @dbFeatures.Feat
+	 end
+	 
+	 %%
+	 %% NOTE: an interval object is usually not explicitly
+	 %% contained in a score object, and thus will not be output
+	 %% when a score is stored in some format.
+	 meth getInitInfo($ exclude:Excluded)	 
+	    unit(superclass:Score.abstractElement
+		 args:[distance#getDistance#noMatch
+		       direction#getDirection#{FD.int 0#2}
+		       pitchClass#getPitchClass#{DB.makePitchClassFDInt}
+		       octave#getOctave#{DB.makeOctaveFDInt}
+		      ])
+	 end
+      end
+   end
+   fun {IsInterval X}
+      {Object.is X} andthen {HasFeature X IntervalType}
+   end
+   
+   %% mixin: scale degree interval (?? correspond to InScaleMixinForChord, ScaleDegreeMixinForNote)
+
+   %% mixin: chord degree interval (?? correspond to ScaleDegreeMixinForChord, ChordDegreeMixinForNote)
    
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -910,9 +1097,9 @@ define
 	 meth initScaleDegreeMixinForChord(rootDegree:Degree<=_
 					   rootAccidental:Accidental<=_) = M
 	    @rootDegree = {New Score.parameter init(value:Degree
-							 info:rootDegree)}
+						    info:rootDegree)}
 	    @rootAccidental = {New Score.parameter init(value:Accidental
-							     info:rootAccidental)}
+							info:rootAccidental)}
 	    {self bilinkParameters([@rootDegree @rootAccidental])}
 	    %% implicit constrains
 	    {InitConstrain self}
@@ -1809,7 +1996,7 @@ define
 	 Note, {Record.subtractList M ScaleDegreeMixinFeats}
 	 ScaleDegreeMixinForNote, {Adjoin {GUtils.takeFeatures M
 					   ScaleDegreeMixinFeats}
-					  %% replace label
+				   %% replace label
 				   initScaleDegreeMixinForNote}
       end
       
@@ -1832,7 +2019,7 @@ define
 	 Note, {Record.subtractList M ChordDegreeMixinFeats}
 	 ChordDegreeMixinForNote, {Adjoin {GUtils.takeFeatures M
 					   ChordDegreeMixinFeats}
-					  %% replace label
+				   %% replace label
 				   initChordDegreeMixinForNote}
       end
       
