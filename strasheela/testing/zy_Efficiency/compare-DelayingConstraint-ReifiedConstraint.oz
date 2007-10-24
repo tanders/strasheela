@@ -1,22 +1,68 @@
 
+/*
 %%
-%% there are situations in which some contexts of a score item are
+%% There are situations in which some contexts of a score item are
 %% undetermined before search. For instance, if the timing structure
 %% of a score shall be found during the search process, the
 %% simultaneous items of most score items are undetermined and can
-%% therefore not be accessed and constraint as shown above.
+%% therefore not be accessed directly and constrained. See thesis "
+%% Composing Music by Composing Rules", Sec. 6.3 "Constraining
+%% Inaccessible Score Contexts" for a discussion of this matter.
 %%
-%% Is delaying of constraints in a thread or reified a better solution
-%% for this?
-%%
+%% The thesis suggests two solutions (besides reformulating the
+%% problem): delayed rule application and using logical connectives
+%% such as FD.impl. The thesis argues that using logical connectives
+%% is more expressive. For example, the following FOL expression
+%% constrains "both ways": if the two notes are not simultaneous they
+%% are constrained not to be consonant, and if they are not consonant
+%% they are constrained not to be simultaneous.
 
+isSimultaneous(note1, note2) -> isConsonant(note1, note2) 
+
+%% However, the thesis did not carefully compare the performance of
+%% the two approaches using either delayed constraints or logical
+%% connectives.
 %%
-%% !! this test is not very meaningful because in the delayed version the application of the constraints is delayed until the whole timing tree is determined! It would be a slightly more fair test to first fully determine the timing structure
+%% I meanwhile realised that a suitable test when delaying constraints
+%% is a reified constraint together with an equality test. For
+%% example: find all notes simultaneous to MyNote and apply some
+%% constraint to them.
+
+{ForAll {MyScore filter($ fun {$ X}
+			     {X isNote($)} andthen
+			     X \= MyNote andthen % ignore Note
+			     {MyNote isSimultaneousItemR($ X)} == 1
+			  end)}
+ MyConstraint}
+
+%% With this construct, the score context "notes simultaneous to
+%% MyNote" is returned as soon as the score contains enough
+%% information to isolate this context. Before that, the accessor
+%% simply blocks, which makes it easy to simply apply constraints to
+%% the score context. The constraint application is then delayed until
+%% enough information is available -- but not any longer.
+%%
+%% This example defines two variants of a CSP: a canon where the
+%% rhythmical structure is undetermined in the problem definition. The
+%% two top-level definitions are SimpleCanonReified and
+%% SimpleCanonDelayed. Both definitions are idential except for two
+%% different harmony constraints constraining the context of
+%% simultaneous notes. SimpleCanonReified uses the rule
+%% NoDissonanceReified whereas SimpleCanonDelayed uses the rule
+%% NoDissonanceDelayed.
+%% 
+%% The performance in both cases is very similar (using left-to-right
+%% distribution strategy). In some quick test the delayed constraint
+%% application case seems to be slightly faster in this example, but
+%% this needs more exact measurements.
+%%
+%% Moreover, in this specific case, all variables are determined in
+%% this case, whereas there are undetermined variables left in the
+%% case using FD.impl: in rule NoDissonanceReified, the variable
+%% Consonance is not determined for non-simultaneous notes.
 %%
 %%
-%% when distribution strategy determines timing structure first, the performance of both approaches are similar
-%%
-%%
+*/
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -102,12 +148,17 @@ local
        end}
    end
    %% harmony: only consonants 
-   proc {NoDissonanceDelayed Note1}
+   proc {NoDissonanceDelayed Note1 MyScore}
       thread 
 	 Pitch1 = {Note1 getPitch($)}
-	 %% !! this only returns after the whole timing structure is determined, ie. all deterministic tests returned a boolean
-	 SimPitches = {Map {Note1 getSimultaneousItems($ test:isNote)}
-		       fun {$ Note} {Note getPitch($)} end}
+	 %% returns immediately after enough is known about temporal
+	 %% structure to know which notes are simultaneous
+	 SimNotes = {MyScore filter($ fun {$ X}
+					 {X isNote($)} andthen
+					 X \= Note1 andthen % ignore Note1
+					 {Note1 isSimultaneousItemR($ X)} == 1
+				      end)}
+	 SimPitches = {Map SimNotes fun {$ Note} {Note getPitch($)} end}
       in
 	 % {Browse {Length SimPitches}}
 	 {ForAll SimPitches
@@ -118,17 +169,13 @@ local
 	  end}
       end
    end
-   fun {GetVoice MyScore ScoreName}
-      {MyScore find($ fun {$ X} {X hasThisInfo($ ScoreName)} end)}
-   end
 in
    proc {SimpleCanonReified MyScore}
       EndTime Voice1 Voice2
    in
       MyScore =
       {Score.makeScore
-       sim(items: [seq(info:voice1
-		       items: {LUtils.collectN 30
+       sim(items: [seq(items: {LUtils.collectN 30
 			       fun {$}
 				  note(duration: {FD.int Durations}
 				       offsetTime: 0
@@ -136,9 +183,10 @@ in
 				       pitch: {FD.int 53#67}
 				       amplitude: 80)
 			       end}
-		       offsetTime:0 endTime:EndTime)
-		   seq(info:voice2
-		       items: {LUtils.collectN 25
+		       offsetTime:0
+		       endTime:EndTime
+		       handle:Voice1)
+		   seq(items: {LUtils.collectN 25
 			       fun {$}
 				  note(duration: {FD.int Durations}
 				       offsetTime: 0
@@ -147,11 +195,10 @@ in
 				       amplitude: 80)
 			       end}
 		       offsetTime:{List.last Durations}*2
-		       endTime:EndTime)]
+		       endTime:EndTime
+		       handle:Voice2)]
 	   startTime: 0 offsetTime:0)
        unit}
-      Voice1 = {GetVoice MyScore voice1}
-      Voice2 = {GetVoice MyScore voice2}
       %%
       %% Apply compositional rules:
       %%
@@ -168,7 +215,7 @@ in
 		     proc {$ Note}
 			{StartAndEndWithFundamental Note}
 			{NoDissonanceReified Note Voice2}
-			%{NoDissonanceDelayed Note}
+			% {NoDissonanceDelayed Note MyScore}
 		     end)}
       %% The first 12 notes of each voice form a canon in a fifth
       %% (can be an abstracted rule as well)
@@ -198,8 +245,7 @@ in
    in
       MyScore =
       {Score.makeScore
-       sim(items: [seq(info:voice1
-		       items: {LUtils.collectN 30
+       sim(items: [seq(items: {LUtils.collectN 30
 			       fun {$}
 				  note(duration: {FD.int Durations}
 				       offsetTime: 0
@@ -207,9 +253,10 @@ in
 				       pitch: {FD.int 53#67}
 				       amplitude: 80)
 			       end}
-		       offsetTime:0 endTime:EndTime)
-		   seq(info:voice2
-		       items: {LUtils.collectN 25
+		       offsetTime:0
+		       endTime:EndTime
+		       handle:Voice1)
+		   seq(items: {LUtils.collectN 25
 			       fun {$}
 				  note(duration: {FD.int Durations}
 				       offsetTime: 0
@@ -218,11 +265,10 @@ in
 				       amplitude: 80)
 			       end}
 		       offsetTime:{List.last Durations}*2
-		       endTime:EndTime)]
+		       endTime:EndTime
+		       handle:Voice2)]
 	   startTime: 0 offsetTime:0)
        unit}
-      Voice1 = {GetVoice MyScore voice1}
-      Voice2 = {GetVoice MyScore voice2}
       %%
       %% Apply compositional rules:
       %%
@@ -239,7 +285,7 @@ in
 		     proc {$ Note}
 			{StartAndEndWithFundamental Note}
 			%{NoDissonanceReified Note Voice2}
-			{NoDissonanceDelayed Note}
+			{NoDissonanceDelayed Note MyScore}
 		     end)}
       %% The first 12 notes of each voice form a canon in a fifth
       %% (can be an abstracted rule as well)
@@ -253,8 +299,8 @@ in
       %% search strategy (i.e. distribution strategy)
       {FD.distribute
        {SDistro.makeFDDistribution
-	unit(%order:startTime
-	     order:timeParams
+	unit(order:startTime
+	     % order:timeParams
 	     %value:random
 	     value:min
 	    )}
@@ -266,8 +312,12 @@ in
    end
 end
 
+/*
 
 {ExploreOne SimpleCanonReified}
 
 
 {ExploreOne SimpleCanonDelayed}
+
+*/
+
