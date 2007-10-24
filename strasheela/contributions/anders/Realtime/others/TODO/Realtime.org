@@ -58,21 +58,21 @@ New functor Strasheela/source/OSC.oz (subfunctor of Input??)
 
 **** TODO test script timeout with script where the score creation (or something else) before the actual search process takes too long
 
-**** TODO test script with score input (non-realtime first)
+**** DONE test script with score input (non-realtime first)
 
-**** TODO test script with previous input
+**** DONE test script with previous input
 
-**** TODO hand over to script start time (depends on present time?)
+**** DONE hand over to script start time (depends on present time?)
 
-**** TODO hand over to script score fragments (e.g., harmonic structure?)
+**** TODO hand over to script score fragments controlling larger scale form (e.g., harmonic structure?)
 
-**** TODO test with realtime output
+**** DONE test with realtime output
 
-**** TODO test script with (realtime) input: OSC search scheduling input and music events input
+**** DONE test script with (realtime) input: OSC search scheduling input and music events input
 
-**** TODO do profiling and test whether memory usage increases as the number of input/output scores increases..
+**** DONE do profiling and test whether memory usage increases as the number of input/output scores increases..
 
-***** TODO In case previous input/output score make a (big) difference memory-wise: add arg to RT.scoreSearcherWithTimeout for controlling how many input/output scores are shown (int or atom 'all') 
+***** DONE In case previous input/output score make a (big) difference memory-wise: add arg to RT.scoreSearcherWithTimeout for controlling how many input/output scores are shown (int or atom 'all')
 
 Test with simple counterpoint example using Strasheela music representation and RT.scoreSearcherWithTimeout constantly collecting previous input and output scores 
 
