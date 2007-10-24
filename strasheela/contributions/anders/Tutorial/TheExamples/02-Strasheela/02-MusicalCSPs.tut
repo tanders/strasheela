@@ -212,6 +212,105 @@ third way: redefine your CSP
 </example>
 
 
+<example title="Reified Constraints as Boolean Test">
+  <info> Test: find simultaneous notes. Problem: temporal structure is only partially determined. 
+  </info>
+  <oz title="Using plain test">    
+%% Using the plain boolean test isSimultaneousItem (i.e., a method returning either true or false) blocks until the temporal structure is fully determined
+
+local
+Note1
+MyScore = {Score.makeScore
+	   sim(items:[seq(items:[note(duration:2)
+				 note(duration:1 handle:Note1)
+				 note])
+		      seq(items:[note(duration:1)
+				 note(duration:2)
+				 note])
+		      seq(items:[note
+				 note
+				 note])]
+	       startTime:0
+	       timeUnit:beats(4))
+	   unit}
+in
+%% blocks
+{Browse {MyScore filter($ fun {$ X}
+			     {X isNote($)} andthen
+			     X \= Note1 andthen % ignore Note1
+			     {Note1 isSimultaneousItem($ X)}
+			  end)}}
+end
+  </oz>
+  <oz title="">
+%% Wrong approach: first testing whether items are determined before using isSimultaneousItem does not block, but notes which are potentially simultaneous are ignored
+
+local
+Note1 
+MyScore = {Score.makeScore
+	   sim(items:[seq(items:[note(duration:2)
+				 note(duration:1 handle:Note1)
+				 note])
+		      seq(items:[note(duration:1)
+				 note(duration:2)
+				 note])
+		      seq(items:[note
+				 note
+				 note])]
+	       startTime:0
+	       timeUnit:beats(4))
+	   unit}
+in
+{Browse {MyScore filter($ fun {$ X}
+			     {X isNote($)} andthen
+			     X \= Note1 andthen % ignore Note1
+			     {IsDet {X getStartTime($)}} andthen 
+			     {IsDet {X getEndTime($)}} andthen 
+			     {Note1 isSimultaneousItem($ X)}
+			  end)}}
+end
+     
+  </oz>
+  <oz title="">    
+%% Suitable approach: using reified constraint together with an equality check as a boolean test
+
+local
+Note1 Note2 Seq1
+MyScore = {Score.makeScore
+	   sim(items:[seq(items:[note(duration:2)
+				 note(duration:1 handle:Note1)
+				 note])
+		      seq(items:[note(duration:1)
+				 note(duration:2)
+				 note])
+		      seq(items:[note(handle:Note2)
+				 note
+				 note]
+			 handle:Seq1)]
+	       startTime:0
+	       timeUnit:beats(4))
+	   unit}
+in
+%% blocks until all potentially simultaneous notes are determined or
+%% are known to be not simultaneous
+{Browse {MyScore filter($ fun {$ X}
+			     {X isNote($)} andthen
+			     X \= Note1 andthen % ignore Note1
+			     {Note1 isSimultaneousItemR($ X)} == 1
+			  end)}}
+%% wait for three seconds
+{Delay 3000}
+%%
+%% Two cases: either there are sim notes in third voice or not
+{Note2 getDuration($)} = 4
+% {Seq1 getDuration($)} = 1
+end
+  </oz>
+</example>
+
+
+
+
 <example title="More Information">
   <info>This tutorial provided an overview of important Strasheela concepts and demonstrated them with many examples. It concludes with references to further Strasheela documentation. 
 
