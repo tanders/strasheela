@@ -43,12 +43,15 @@ in
 		   {Voice2 mapItems($ getStartTimeParameter)}]
      Append}}
 end 
+fun {SearchScriptWithScore} {Search.base.one ScriptWithScore} end
 
 %% time: 2.89 secs
 %% 1#stat(b:0 c:0 depth:1 f:0 s:1 start:201)
-%% ScriptWithScore heap: 3757k
-%% MakeVoice heap: 1870k  
+%% ScriptWithScore heap: 3757k (two calls)
+%% MakeVoice heap: 1870k  (for calls)
 {ExploreOne ScriptWithScore}
+
+
 
 
 declare
@@ -78,11 +81,12 @@ in
    {FD.distribute ff
     {LUtils.accum [Durs1 Durs2 Starts1 Starts2] Append}}
 end
+fun {SearchPlainScript} {Search.base.one PlainScript} end
 
 %% time: 500ms
 %% 1#stat(b:0 c:0 depth:1 f:0 s:1 start:201)
-%% PlainScript heap: 66k 
-%% ConstrainStarts heap: 6560b
+%% PlainScript heap: 66k (2 calls)
+%% ConstrainStarts heap: 6560b (4 calls)
 {ExploreOne PlainScript}
 
 
