@@ -4,22 +4,25 @@
 
 *** OSC interface
 
-**** TODO [90%] interface to sendOSC and dumpOSC
+**** DONE interface to sendOSC and dumpOSC
 
-  - netcat => Oz via UDP
+  - OK netcat => Oz via UDP
 
-  - Stasheela environment variables for all application pathes etc
+  - OK Stasheela environment variables for all application pathes etc
 
-  - !!?? make SendOSC and DumpOSC more symmetric? one is instance of Out.shell and the other contains instance of socket
-    !!?? should I change SendOSC also just to contain an Out.shell??	    
 
-  - which commands etc shall be echoed at stdout?
-
-  - !!?? shall xterm window echo received OSC messages (i.e. print the dumpOSC output)?
+**** TODO Debugging etc
 
   - How shall I close sockets etc. BTW: the DumpOSC method close does not fully work (e.g., xterm window is not closed)
   
   - check for any other !! in source, indicating problems..
+
+  - !!?? make SendOSC and DumpOSC more symmetric? one is instance of Out.shell and the other contains instance of socket
+    !!?? should I change SendOSC also just to contain an Out.shell??	    
+
+  - !!?? shall xterm window echo received OSC messages (i.e. print the dumpOSC output)?
+
+  - which commands etc shall be echoed at stdout?
 
   
 **** DONE Test interface: measure how it takes for a message around Oz -> OSC -> Oz
@@ -39,7 +42,7 @@
 **** DONE Oz OSC data structure as input to sendOSC (with time stamps)
 
 
-**** TODO [70%] buffering of realtime OSC input and transformation into Strasheela score on demand
+**** DONE buffering of realtime OSC input and transformation into Strasheela score on demand
 
 Check parsing and processing of timetags
 
@@ -47,11 +50,11 @@ Fix generation of timetags (only integer seconds processed now..)
 
 **** DONE Create proper contribution with makefile.oz etc
 
-**** TODO OSC sending (?) causes warning:
+**** DONE OSC sending (?) causes warning:
 
 Warning: float to int: truncated to signed 32 Bit
 
-**** TODO OSC interface documentation
+**** DONE OSC interface documentation
 
   - create documentation for functor and all exported classes/procs
 
