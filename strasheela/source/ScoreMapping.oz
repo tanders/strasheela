@@ -213,18 +213,19 @@ define
       /** %% [abstract class] A mixin class for various traversing and mapping methods on the whole score hierarchy.
       */
       class MappingMixin from FlagsMixin
-	    /** %% The collect methods collects (possibly all) score objects in a list to make them accessible for, e.g., various list mapping functions. The method collects objects related to self (an item) by the value of the item attributes containers, parameters and the container attribute items. However, collect never collects self itself. The methods supports a few features to control the collecting. 
-	    %%
-	    %% If feature <code> mode </code> is set to <code> tree </code> (the default), collect recursively collects the score objects and subobjects contained in self (i.e. both the attributes items and parameters are traversed). If <code> mode </code> is set to <code> graph</code>, both objects contained in self and containers self is contained in are collected (i.e. all three attributes items, parameters, and containers are traversed).
-	    %%
-	    %% If feature <code> level </code> is set to <code> all </code> (the default), collect collects score objects recursively into arbitrary depth. However, the depth can be controlled by specifying an integer value for <code> level</code>.
-	    %%
-	    %% The feature <code> test </code> expects a unary function returning a boolean or an atom representing a boolean unary method understood by all objects in self. The method collect only collects score objects fulfilling the test function/method.
-	    %%
-	    %% collect visits containers in depth-first fashion from left to right which affects the order of the objects in the returned list. E.g., collecting all events in a few nested sequentials in tree mode returns a list with all events ordered by start time.  
-	    %%*/
-	    %% @1=?Xs			 
-% ?? why does result of collect not include self: self can easily be added, but removing self requires traversing full result list. 
+	 /** %% The collect methods collects (possibly all) score objects in a list to make them accessible for, e.g., various list mapping functions. The method collects objects related to self (an item) by the value of the item attributes containers, parameters and the container attribute items. However, collect never collects self itself (self can easily be added, but removing self requires traversing the full result list). The methods supports a few features to control the collecting. 
+	 %%
+	 %% If feature <code> mode </code> is set to <code> tree </code> (the default), collect recursively collects the score objects and subobjects contained in self (i.e. both the attributes items and parameters are traversed). If <code> mode </code> is set to <code> graph</code>, both objects contained in self and containers self is contained in are collected (i.e. all three attributes items, parameters, and containers are traversed).
+	 %%
+	 %% If feature <code> level </code> is set to <code> all </code> (the default), collect collects score objects recursively into arbitrary depth. However, the depth can be controlled by specifying an integer value for <code> level</code>.
+	 %%
+	 %% The feature <code> test </code> expects a unary function returning a boolean or an atom representing a boolean unary method understood by all objects in self. The method collect only collects score objects fulfilling the test function/method.
+	 %%
+	 %% collect visits containers in depth-first fashion from left to right which affects the order of the objects in the returned list. E.g., collecting all events in a few nested sequentials in tree mode returns a list with all events ordered by start time.
+	 %%
+	 %% NB: collect blocks if self is not fully initialised (e.g. created by Score.makeScore2) or if Test blocks at some object in self (e.g. because the object is only partially determined).
+	 %%*/
+	 %% @1=?Xs	
 	 meth collect(?Xs mode:Mode<=tree level:Level<=all
 		      test:Test<=fun {$ X} true end)
 	    Flag = {Name.new}
@@ -241,6 +242,8 @@ define
 		  %% ..., but collect params of self
 		  {Filter {self getParameters($)} TestFn} 
 		  {CollectAux self Mode Level TestFn Flag}}
+	    %% BUG: only unflags object in result Xs, but not other flagged items.. (instead, I would need to fully traverse hierarchic structure again).
+	    %% Trick for reducing flags: only flag at all if Mode==graph.
 	    {UnFlagAll 
 	     %% params are never flagged 
 	     self | {Filter Xs fun {$ X} {Not {X isParameter($)}} end} 
@@ -256,14 +259,15 @@ define
 	 end
 	 /** %% The method traverses all score objects in self (i.e. items and parameters) and applies unary procedure (or null-ary method) Proc on every object returning true for the unary function (or unary method) Test. However, the method does not effect the object self itself -- only the parameters and (if self is a container) items of self are effected recursively. Traversing happens concurrently -- the method does not suspend even if the result of getItems or getParameters is not yet fully determined.
 	 %% */
-	 %% !! shall I do more fine grained 'threadening' (e.g. not only processing of all parameters/items of an item/container in an own thread, but instead the processing of each object in a thread) ?? shall the degree of threadening be user-controllable 
+	 %% !! shall I do more fine grained 'threadening' (e.g. not only processing of all parameters/items of an item/container in an own thread, but instead the processing of each object in a thread) ?? shall the degree of threadening be user-controllable
+	 %% I can do the process of each object in a thread by defining a thread in Proc
 	 meth forAllThreaded(Proc mode:Mode<=tree level:Level<=all
 			     test:Test<=fun {$ X} true end)
 	    Proc1 = {GUtils.toProc Proc}
 	    Test1 = {GUtils.toFun Test}
 	    Flag = {Name.new}
 	 in
-	    %% !! code doubling (see ProcessThreaded) to avoind
+	    %% !! code doubling (see ProcessThreaded) to avoid
 	    %% processing self (if necessary, self can easily
 	    %% processed directly)
 	    thread 		% process self parameters
@@ -272,6 +276,9 @@ define
 	    end
 	    {self addFlag(Flag)}
 	    {ForAllThreadedAux self Proc1 Test1 Mode Level Flag}
+	    %% BUG: Flags are never removed from objects? Trick: only
+	    %% flag at all if Mode==graph.  see method collect for
+	    %% more discussion..
 	 end
 	 /** %% The method map maps the function Fn to a number of collected score objects and returns a list with all results. Fn may also be an atom representing a unary method understood by all objects in self fulfilling Test. The method supports the features <code> mode</code>, <code> level</code>, and <code> test</code>. These features have the same meaning as in the method collect.
 	 %*/
@@ -298,25 +305,87 @@ define
 	 end
 	 /** %% The method filter collects a number of score objects fulfilling Fn, a the unary function returning a boolean. The method supports the features <code> mode</code>, and <code> level</code>. These features have the same meaning as in the method collect.
 	 %*/
+	 %% NB: filter must traverse all objects, therefore using collect in the definition is OK.
 	 %% ?? order of args
 	 %% @1=?Xs
 	 meth filter(?Xs Fn mode:Mode<=tree level:Level<=all)
 	    Xs = {self collect($ mode:Mode level:Level test:Fn)}
 	 end
 	 /** %% The method find returns the first score object in self fulfilling Fn, a the unary function returning a boolean. The method supports the features <code> mode</code>, and <code> level</code>. These features have the same meaning as in the method collect.
+	 %%
+	 %% NB: this implementation is inefficient (first collects all score objects).
 	 %*/
 	 %% ?? order of args
 	 %% @1=?Xs
 	 %%
-	 %% !! implementation highly inefficient: I first collect all...
-	 meth find(?Xs Fn mode:Mode<=tree level:Level<=all)
+	 %% !! implementation inefficient: I first collect all...
+	 meth find(?X Fn mode:Mode<=tree level:Level<=all)
 	    Temp = {self collect($ mode:Mode level:Level test:Fn)}
 	 in
 	    if Temp==nil
-	    then Xs = nil
-	    else Xs = Temp.1
+	    then X = nil
+	    else X = Temp.1
 	    end
 	 end
+
+	 /*
+	 %% The method findThreaded was intended as better means
+	 %% accessing score contexts undetermined in the problem
+	 %% definition for delayed constraint application. Meanwhile,
+	 %% I realised that plain filtering with a more suitable test
+	 %% is a better approach. The more suitable test is a reified
+	 %% constraint together with an equality test, for example,
+	 
+	 {ForAll {MyScore filter($ fun {$ X}
+			     {X isNote($)} andthen
+			     X \= MyNote andthen % ignore Note
+			     {MyNote isSimultaneousItemR($ X)} == 1
+			  end)}
+	  MyConstraint}
+
+	 %% Because this approach is far better than using
+	 %% findThreaded I just remove the definition of findThreaded
+	 %% in order to avoid confusion. I just keep the definition
+	 %% in a comment just in case..
+	 %%
+	 %%
+	 %% The method find returns the first score object in self for which Fn -- a unary function returning a boolean -- returns true. The search is conducted concurrently: the result score object naturally must be determined enough that Fn does not block on it, but other objects in the score can even be partially bound only and cause Fn to block.
+	 %% If Fn would return true for multiple objects in self, it is undetermined which object is returned. 
+	 %% The method supports the features <code>mode</code>, <code>level</code>, and  <code>test</code>. These features have the same meaning as in the method collect.
+	 %% 
+	 meth findThreaded(?X Fn mode:Mode<=tree level:Level<=all test:Test<=fun {$ X} true end)
+	    ObjectFound
+	    MyLock = {NewLock}
+	    %% As soon as ObjectFound is bound and if DontKillMe is unbound, then
+	    %% KillIfFound terminates MyThread.
+	    proc {KillIfFound MyThread DontKillMe}
+	       thread
+		  {Wait ObjectFound}
+		  if {Not {IsDet DontKillMe}}
+		  then {Thread.terminate MyThread}
+		  end
+	       end
+	    end
+	 in
+	    {self forAllThreaded(proc {$ Y}
+				    thread DontKillMe in
+				       {KillIfFound {Thread.this} DontKillMe}
+				       if {Fn Y} % may block
+				       then
+					  lock MyLock then
+					     DontKillMe = unit
+					     %% kills all other "spawned" procs
+					     ObjectFound = unit
+					     %% bind result
+					     X = Y
+					  end
+				       end
+				    end
+				 end
+				 mode:Mode level:Level test:Test)}
+	 end
+	 */
+	 
 	 %% ?? method name
 	 %% ?? order of args
 	 %% @2=?Xs
