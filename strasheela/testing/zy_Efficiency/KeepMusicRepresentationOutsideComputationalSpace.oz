@@ -1,15 +1,391 @@
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%
-%% NB: retry this with strict separation of outside music representation and script: only communication via port (?) and no object may pass boundary (bidirectional links would otherwise make the whole music representation part of script). Only plain data without links to score objects may pass boundary: numbers, atoms, records..
+%% This example/test contains a simple CSP (all-distance series) which
+%% in defined in different ways to compare memory consumption. The
+%% fear is that in a standard Strasheela CSP the score is always
+%% copied when a space is copied resulting in much higher memory
+%% consumption and some more run time comsumption.
 %%
-%% Besides, the code below does not use a secure means to create a boundary such as a port! E.g., cf. Schulte thesis p. 40 "Sending Messages Across Spaces"
-%% 
+%% The CSP is defined in an inefficient way (using FD.distrinct
+%% instead of FD.distinctD) in order to create a larger search
+%% tree. The example creates >70000 spaces with a tree depth of 38.
+%%
+%% MyScriptWithScore is a "normal" Strasheela script where the score
+%% is defined in the script. MyScriptWithVarPointers is the same CSP,
+%% but the score is defined outside the script. All variables are of
+%% course within the script, and the matching between variables and
+%% score parameters happens via a new data structure VarPointer, which
+%% replaces the variables in the score parameters and introduces an
+%% index to match the variable and its
+%% parameter. MyScriptWithVarPointersAndPort is a script which
+%% additionally introduces a port as a boundary for the communication
+%% between spaces (i.e. the script) and the top-level space (defs
+%% outside the script). Finally, MyScriptPlain is a comparison CSP
+%% without defining a Strasheela score. However, this script is no
+%% really fair comparison as it defines less variables and less
+%% constrains (e.g. all temporal variables and constrains are
+%% omitted.).
 %%
 
 %%
-%% It seems to work: profiling the CSP which defines the score outside the script/space and the one with the data structure inside exhibit a large difference in the amount of heap needed
+%% NOTE: reread http://lists.gforge.info.ucl.ac.be/pipermail/mozart-users/2003/004139.html and its thread
 %%
-%% Yet, by far most of the memory is in fact consumed by the propagators. It is thus questionable whether this proposal is worth the effort 
+
+/*
+
+%%
+%% General test first: create a space with a score object and copy
+%% it. Measure the amount of memory needed by the different cases.
+%%
+%% USAGE
+%%
+%%  1 - First start Oz profiler 
+%%  2 - then feed top-level defs
+%%  3 - reset the profiler, feed an example case, updata the profiler
+%%  4 - repeat 3 ...
+%%
+
+%% cf. Schulte. Programming Constraint Services, Example 13.4, 
+%% http://lists.gforge.info.ucl.ac.be/pipermail/mozart-users/2002/003003.html
+%% and http://lists.gforge.info.ucl.ac.be/pipermail/mozart-users/2002/003006.html
+
+%% top-level defs
+declare
+N = 100
+fun {MakeScore}
+   {Score.makeScore
+    seq(items: {LUtils.collectN N
+		fun {$}
+		   note(duration: 4
+			pitch:60
+			amplitude: 80)
+		end}
+	startTime: 0
+	timeUnit:beats(4))
+    unit}
+end
+
+{Inspect {MakeScore}}
+
+
+%% Memory usage of a single MakeScore call (it seems the difference
+%% between the heap shown for MakeScore and the total heap is caused
+%% by threads created implicitly, e.g., in ScoreMapping.oz)
+%%
+%% MakeScore 664k, total 845k 
+{MakeScore _}
+
+
+%% My usual case: a score object created _inside_ space. Then this
+%% space a copied 1000 times. Much more memory is required than a
+%% single MakeScore call, although not 1000 times as much (its about
+%% 1000 times as much, strange. Actually, copying the space 1 times
+%% takes 44k -- much less than creating the score).
+%%
+%% NOTE: data is copied!
+%%
+%% 87M total heap (86M ForProc) 
+declare
+S = {Space.new proc {$ X}
+		   X={Score.makeScore
+		      seq(items: {LUtils.collectN N
+				  fun {$}
+				     note(duration: 4
+					  pitch:60
+					  amplitude: 80)
+				  end}
+			  startTime: 0
+			  timeUnit:beats(4))
+		      unit}
+		end}
+Clones = {List.make 1000}
+for C in Clones do C = {Space.clone S} end
+
+
+%% Example very similar to my usual scripts, but score is created by a
+%% function defined at top-level. Again, the space is copied 1000
+%% times.
+%%
+%% NOTE: data is copied!
+%%
+%% Heap total: 87M (86M ForProc, 664k MakeScore [1 call of MakeScore])
+declare
+S = {Space.new proc {$ X} X={MakeScore} end}
+Clones = {List.make 1000}
+for C in Clones do C = {Space.clone S} end
+
+
+%% In this example, the score is _outside_ the space. I can not use this case directly for music CSPs, because I must not have variables outside the space. However, it seems I don't necessarily need a port. Can I directly process Data in the space?
+%%
+%% I can not write a global data structure from a space, but I can do call a function defined globally, by sending a message via a port.
+%%
+%% NOTE: data is NOT copied! 
+%%
+%% heap total 997k (664m MakeScore, 21k ForProc)
+declare
+Data = {MakeScore}
+S = {Space.new proc {$ X} X=Data end}
+Clones = {List.make 1000}
+for C in Clones do C = {Space.clone S} end
+
+
+%% Control case: create a space which contains and copies a single
+%% undetermined var. This is similar to the case without copying above
+%% (ForProc even needs more memory, why?).
+%%
+%% heap total 233k, 87k ForProc
+declare
+Data = _
+S = {Space.new proc {$ X} X=Data end}
+Clones = {List.make 1000}
+for C in Clones do C = {Space.clone S} end
+
+
+*/
+
+
+/*
+
+
+%%
+%% USAGE
+%%
+%% - Start Oz profiler 
+%% - Feed buffer
+%% - Call solvers (just below) such as {Browse {Search_MyScriptWithScore}}
+%% - Update profiler report (update buttom)
+%%
+
+
+%%
+%% Solver calls and results
+%%
+
+%%
+%% It appears there is virtually no difference in the memory
+%% consumption whether I am using the Strasheela music representation
+%% or just two plain lists. So, it appears it is totally fine to have
+%% the music representation inside the script/space with all the
+%% convenience this provides..
+%%
+
+
+
+%% heap: 101M
+{Browse {Search_MyScriptWithVarPointers}}
+
+{Explorer.one MyScriptWithVarPointers}
+
+%% heap: 101M 
+{Browse {Search_MyScriptWithVarPointersAndPort}}
+
+{Explorer.one MyScriptWithVarPointersAndPort}
+
+
+%% heap: 103M 
+{Browse {Search_MyScriptWithScore}}
+
+{Explorer.one MyScriptWithScore}
+
+
+%% heap: 101M
+{Browse {Search_MyScriptPlain}}
+
+% stat(b:0 c:70801 depth:38 f:70796 s:1 start:1)
+{Explorer.one MyScriptPlain}
+
+%%
+%% Yes, once a variable is determined in a space S (e.g., a determined
+%% FD int or a variable binding a score) then this variable value is
+%% not copied when S is cloned (and hence requires no additional
+%% memory): child spaces of S can see the value. For details see
+%% Schulte. Programming Constraint Services, Sec. 13.2.3 and 13.5.2.
+%% Schulte recommends to situate large data in a script's "top-level"
+%% space by encapsulating it in a procedure. I already do this in a
+%% way using the proc Score.makeScore, but I should compare what
+%% difference it makes to create the full score in a proc outside.
+%%
+%% Also see http://lists.gforge.info.ucl.ac.be/pipermail/mozart-users/2002/002998.html and follow-up posts.
+%% Situated data: stateful data structures, free (?) variables, procedues and names. Cloning a situated entity means: if the entity is local the space being cloned, a clone is created. Otherwise, the entity is not cloned (see http://lists.gforge.info.ucl.ac.be/pipermail/mozart-users/2002/003005.html). So, a score object is situated as it is a stateful data structure.
+%% If a situated datum has been copied during cloning, is it then again local in the cloned child space and will thus again be copied when then child is cloned?  
+%%
+%% Ergo, the biggest issue I felt I have with Strasheela simply does
+%% not exist :)
+%%
+
+*/
+
+
+/*
+
+%% see
+%% http://lists.gforge.info.ucl.ac.be/pipermail/mozart-users/2002/002998.html
+%% and follow-up postings.
+%%
+%% It seems that the issue described in the post is meanwhile solved:
+%% I can not see a difference in the cases with data in script and
+%% data encapsulated in proc. According to Schulte Programming
+%% Constraint Services, 13.5.2. (Example 13.4) there should be a
+%% difference.
+%%
+%% !! However, having the large datastructure _outside_ the script
+%% makes indeed a big difference memory-wise.
+
+%%
+%% TODO: check the same with a musical CSP where the score is
+%% outside. I can not have variables outside the script... 
+%%
+%%
+
+declare
+proc {Script1 Root}
+   %% add or take data here to see memory footprint change
+   StaticData = {List.number 1 1000000 1}
+in
+   %% Unless I use StaticData, the compiler outsmarts me.
+   Root={FD.list {List.nth StaticData 100} [1#1000]}
+   {FD.distribute naive Root}
+   %% I don't reach a solution so the search engine does not destroy the search tree
+%   {Wait _}
+end
+fun {MakeData}
+   {List.number 1 1000000 1}
+end
+proc {Script2 Root}
+   StaticData = {MakeData}
+in
+   %% Unless I use StaticData, the compiler outsmarts me.
+   Root={FD.list {List.nth StaticData 100} [1#1000]}
+   {FD.distribute naive Root}
+   %% I don't reach a solution so the search engine does not destroy the search tree
+%   {Wait _}
+end   
+Toplevel_StaticData = {MakeData}
+proc {Script3 Root}
+   %% Unless I use StaticData, the compiler outsmarts me.
+   Root={FD.list {List.nth Toplevel_StaticData 100} [1#1000]}
+   {FD.distribute naive Root}
+   %% I don't reach a solution so the search engine does not destroy the search tree
+%   {Wait _}
+end   
+
+
+%% total heap: 8248k  
+{Search.base.one Script1 _}
+
+%% total heap: 8244k 
+{Search.base.one Script2 _}
+
+%% total heap: 430k
+{Search.base.one Script3 _}
+
+
+*/
+
+
+
+%%
+%%
+%% As far as I understand it, MyScriptWithScore should consume much
+%% more memory than MyScriptWithVarPointersAndPort and the least
+%% memory should be consumed by MyScriptPlain.  However, it is hard to
+%% see any significant differences between these cases. Possibly, I
+%% don't measure correctly.
+%%
+%%
+%% NOTE: how can I find out whether copying a space does copy a score object within (and not just its variables) and thus cause increased memory consumption which I should avoid. In an ideal world, only computational entities involved in speculative computation are copied (e.g. constraint variables or clauses in a choice statement). So, determined data (e.g., determined variables) are not copied. Is Oz perhaps that ideal already??
+%%
+%%  - carefully proofread/rethink examples below
+%%
+%%  - check different settings for MyScriptWithScore and MyScriptPlain:
+%%
+%%    - Check memory consumption of search caller function, but also
+%%    the total memory consumption.
+%%
+%%    - Script variants with determined solution (i.e. a single space)
+%%    should considerably differ in their memory consumption (added
+%%    memory consumption of score object)
+%%
+%%    - The memory consumption difference between a search resulting
+%%    in two spaces and a search resulting in a single space should be
+%%    equal and very small for MyScriptWithScore and MyScriptPlain: if
+%%    no score was copied then only the copying of a single variable
+%%    is the memory difference.
+%%
+%%    - ?? Check memory consumption using Explorer instead of
+%%    Search.base.one: it probably needs more memory anyway (e.g. for
+%%    Tk), but are the differences above the same. Otherwise, the
+%%    search implemented by the Explorer differs -- unlikely, as it
+%%    very probably uses the same space primitives.
+%%
+%%
+%%  - Double-check your findings using the space primitives (create a
+%%  local child space _within_ its parent space): how much memory does
+%%  copying a space containing a score object cost?  Compare: what
+%%  does it cost memory-wise with no undetermined variable, with a
+%%  single undetermined variable, and with two undetermined
+%%  variables. Compare with the findings above..
+%%
+%%  - Look at the other example reporting a different efficiency
+%%  (time-wise..) for using a score or just a plain list.
+%%
+%%  - Test whether using logic programming instead of constraint
+%%  programming (using choice with different score objects) changes
+%%  matters.
+%%
+%%
+%%
+%%  Reading Schulte. PCS, p. 31: iin nested spaces "only determined
+%%  toplevel variables are visible in a local space, non-determined
+%%  variables are ruled out". Non-speculative computations (e.g., I/O)
+%%  are only allowed at top-level.
+%%
+%%  Reading CMT, e.g., p. 764: a space contains a thread store, a
+%%  constraint store and a mutable store. So, there can be speculative
+%%  computations involving state (i.e. a local mutable
+%%  store). Question: is the mutable store a copy of its parent
+%%  space's mutable store from which it is cloned, even if no
+%%  speculative computations on stateful values are
+%%  involved. Similarily, does the constaint store copy values which
+%%  are determined and so no speculative computations can happen on
+%%  them?
+%%
+%%  CMT, p. 764f: a variable belongs to exactly one space. However,
+%%  child spaces can see the variable and can introduce new
+%%  bindings (basic constraints). When a child space introduced a new variable binding,
+%%  itself and its child spaces can see it.
+%%
+%%  CMT, p. 769: Space.clone creates an exact copy of a given space:
+%%  this seems to imply that all stores are fully copied... Is this
+%%  so?
+%%
+%%
+%% TODO: measure how the examples differ in the amout of memory (and time) comsumed by copying.
+%%
+%% Approaches:
+%%
+%%  - !! Measure total amount of memory and time required by search (e.g. put each script in an application of its own, call plain solver and measure time and memory with UNIX tools such as time and ...)
+%%    -> which UNIX tool measures memory consumption of a call?
+%%
+%%    I want the max amount of memory taken by a program during its runtime
+%%    ?? vmmap (heap, leaks)
+%%
+%%    /Developer/Applications/Performance\ Tools/MallocDebug.app/ -- seems to work only for application bundles
+%%    
+%%
+%%  - !!?? Measure with Oz profiler:
+%%    problem: the memory/time comsumption of copying seems not to show if I just compile CSP with profiling information.
+%%    Alternative option: temporarily, compile whole Mozart with profiling and check memory consumption of space copying proc (results will be very hard to read in this case!) 
+%%
+
+
+%%
+%% TODO: _if_ I found out that memory reduction can be significantly reduced by defining the music representation outside the script/space, then I have to develop abstractions/templates for the following cases (it will be more complex than having the score inside the script, but it shouldn't be too hard..). 
+%%
+%%  - distribution strategies
+%%  - implicit constraints
+%%  - expressive rule applications 
 %%
 %%
 
@@ -42,8 +418,9 @@ end
 fun {IsVarPointer X}
    {Object.is X} andthen {HasFeature X VarPointerType}
 end
-/** %% Processes a list of VarPointers: returns a list with variable declarations and determines the indices of the VarPointers (corresponds to the position of the variable decl in the returned list).
+/** %% Processes a list of VarPointers: returns a list with variable declarations of the VarPointers in the form Domain#dom(InitDomain). As a side-effect, it also determines the indices of the VarPointers (corresponds to the position of the variable decl in the returned list).
 %% */
+%% NB: if indices must be unique, then this function must either be called only once, or an IndexOffset must be given as additional arg
 fun {MakeVarDecls VarPointers}
    {List.mapInd VarPointers
     fun {$ I VarPointer}
@@ -51,7 +428,7 @@ fun {MakeVarDecls VarPointers}
        (VarPointer.domain)#dom(VarPointer.initDomain)
     end}
 end
-/** %% Expects a variable declaration in the form Domain#dom(InitDomain) and returns a constrained variable of this domain and 'init domain' or basic constraint.
+/** %% Expects a variable declaration in the form Domain#dom(InitDomain) and returns a kinded variable with the domain InitDomain.
 %% For example {MakeVariable fd#dom(1#10)} results in {FD.int 1#10}. 
 %% */
 fun {MakeVariable Domain#dom(InitDomain)}
@@ -86,8 +463,6 @@ in
 end
 
 
-
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%
 %% Test all-distance series with var pointers (below orig without)
@@ -96,21 +471,20 @@ end
 %% Do test CSP without implicit temporal constraints: all-interval series where notes are contained in plain container. 
 %% Intervals are represented by plain list of vars
 
-declare
 %% put this later in surround fun returning the script and expecting N as arg
 N = 12
 N1 = N-1
 MyExternalScore = {Score.makeScore
-	   seq(items: {LUtils.collectN N
-		       fun {$}
-			  note(duration: 4
-			       pitch:{New VarPointer
-				      init(domain:fd initDomain:60#60+N1)}
-			       amplitude: 80)
-		       end}
-	       startTime: 0
-	       timeUnit:beats(4))
-	   unit}
+		   seq(items: {LUtils.collectN N
+			       fun {$}
+				  note(duration: 4
+				       pitch:{New VarPointer
+					      init(domain:fd initDomain:60#60+N1)}
+				       amplitude: 80)
+			       end}
+		       startTime: 0
+		       timeUnit:beats(4))
+		   unit}
 VarPointers = {MyExternalScore map($ fun {$ X} {X getPitch($)} end test:isNote)}
 VarDecls = {MakeVarDecls VarPointers}
 
@@ -118,7 +492,6 @@ VarDecls = {MakeVarDecls VarPointers}
 %% !! start profiler here, the evaluate the two scripts
 
 
-declare
 %% !!?? unsufficient boundary: I do stuff like {MyExternalScore getItems($)} within script, so the whole score ends up in script because of the bidirectional links! 
 proc {MyScriptWithVarPointers VarTuple}
    Intervals = {FD.list N1 1#N1}
@@ -134,15 +507,76 @@ in
 	[{Note1 getPitch($)} {Note2 getPitch($)} '=:' Interval]
 	VarTuple}
     end}   
-   {FD.distinctD {Map {MyExternalScore mapItems($ getPitch)}
+   {FD.distinct {Map {MyExternalScore mapItems($ getPitch)}
 		  fun {$ X} {PointerToVar X VarTuple} end}}
-   {FD.distinctD Intervals}	
+   {FD.distinct Intervals}	
    %% Specify search strategy
    {FD.distribute ff VarTuple}
 end
+fun {Search_MyScriptWithVarPointers} {Search.base.one MyScriptWithVarPointers} end
 
 
-declare
+%% Port interface (from Schulte, Porgramming Constraint Services, p. 24)
+local
+   /** %% Applies binary procedure {P X Y} to every pair X#Y in the pair stream XYs.  
+   %% */
+   proc {Serve XYs P} 
+      if XYs\=nil
+      then XYr X Y in 
+	 XYs = (X#Y) | XYr
+	 {P X Y}
+	 {Serve XYr P} 
+      end 
+   end
+in
+   /** %% Establishes a communication via a port. Expects a binary procedure with the interface {P X Y} and returns a binary procedure with the same interface. The returned procedure is a cousin of SendRecv and can be used to send a message via a port and receive an answer. The user-defined P processes all received messages. 
+   %% */
+   proc {NewService P ServiceP} 
+      XYs
+      Po = {NewPort XYs}
+   in  
+      thread {Serve XYs P} end 
+      proc {ServiceP X Y} {Port.sendRecv Po X Y} end 
+   end 
+end
+/** %% Defines communication channel between spaces and outside music representation. Usage: send over a binay procedure expecting the external score as argument and returning a result without a reference to the score. Quasi send this result back (no actual back sending, jsut unification..).
+%% */
+MySendRecv = {NewService proc {$ M Y}			    
+			    Y = case M of getPitches
+				then {MyExternalScore mapItems($ getPitch)}
+				end
+			 end}
+%% It seems I must not send procedures across space boundaries, causes Error: Space: Situatedness violation  
+% MySendRecv = {NewService proc {$ P Y} Y = {P MyExternalScore} end}
+%%
+%%
+%% In this variant, MyExternalScore is never referenced directly. Instead, all communication happens via a port.
+proc {MyScriptWithVarPointersAndPort VarTuple}
+   Intervals = {FD.list N1 1#N1}
+   PitchVarPointers = {MySendRecv getPitches}
+   % PitchVarPointers = {MySendRecv fun {$ MyScore} {MyScore mapItems($ getPitch)} end}
+   Pitches
+in
+   VarTuple = {MakeVarTuple VarDecls}
+   Pitches = {Map PitchVarPointers
+	      fun {$ X} {PointerToVar X VarTuple} end}
+   for
+      Pitch1 in {List.take Pitches N1} % butlast of Pitches
+      Pitch2 in Pitches.2		    % tail of Pitches
+      Interval in Intervals
+   do
+      {FD.distance Pitch1 Pitch2 '=:' Interval}
+   end      
+   {FD.distinct Pitches}		% no pitch class repetition
+   {FD.distinct Intervals}		% no (abs) interval repetition
+   %% Specify search strategy
+   %% NOTE: How can I score distribution strategy??
+   {FD.distribute ff VarTuple}
+end
+fun {Search_MyScriptWithVarPointersAndPort} {Search.base.one MyScriptWithVarPointersAndPort} end
+
+
+
 proc {MyScriptWithScore Pitches}
    Intervals MyScore
 in
@@ -167,18 +601,17 @@ in
    do
       {FD.distance Pitch1 Pitch2 '=:' Interval}
    end      
-   {FD.distinctD Pitches}		% no pitch class repetition
-   {FD.distinctD Intervals}		% no (abs) interval repetition
+   {FD.distinct Pitches}		% no pitch class repetition
+   {FD.distinct Intervals}		% no (abs) interval repetition
    %% Specify search strategy
    {FD.distribute ff Pitches}
 end
+fun {Search_MyScriptWithScore} {Search.base.one MyScriptWithScore} end
 
 
 
-declare
 proc {MyScriptPlain Pitches}
    Intervals
-   Pitches
 in
    %% explicit param units (for output): all timing param units are
    %% unified with each other.
@@ -191,314 +624,11 @@ in
    do
       {FD.distance Pitch1 Pitch2 '=:' Interval}
    end      
-   {FD.distinctD Pitches}		% no pitch class repetition
-   {FD.distinctD Intervals}		% no (abs) interval repetition
+   {FD.distinct Pitches}		% no pitch class repetition
+   {FD.distinct Intervals}		% no (abs) interval repetition
    %% Specify search strategy
    {FD.distribute ff Pitches}
 end
-
-
-
-
-/*
-
-%% first solution: heap: 5088b
-%% second solution: heap: 5088b ??
-%% emulator.e after second solution: 37.9M
-{Explorer.one MyScriptWithVarPointers}
-
-%% first solution: heap: 189k (more memory required by MyScriptWithScore than fdp_distance: 10k)
-%% second solution: heap: 189k (fdp_distance: 10M)
-%% emulator.e after second solution: 43.4M / 37.9M
-{Explorer.one MyScriptWithScore}
-
-%% first solution: heap: 1696b
-%% second solution: heap: 1696b ??
-%% emulator.e after second solution: 38.4M
-{Explorer.one MyScriptPlain}
-
-*/
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%
-%% Second CSP: two sequences of N notes (start/duration pairs). Both sequences start at the same time. All note start times (except the two first) are different.
-%%
-%% This very simple rhythmical problem is formulated three times, once with with a
-%% Strasheela score inside the script, once outside, and once with a plain list representation. The second
-%% is much faster (because copying is more cheap??)
-%%
-%%
-
-
-declare
-fun {MakeVoice N}
-   {Score.makeScore2 seq(items: {LUtils.collectN N 
-				 fun {$} 
-				    note(duration: {FD.int 1#8} 
-					 pitch: 60%{FD.int 60#72} 
-					 amplitude: 80) 
-				 end}
-			 info:voice)
-    unit}
-end
-proc {ScriptWithScoreDataInside MyScore} 
-   N = 100
-   Voice1 Voice2
-in
-   Voice1 = {MakeVoice N}
-   Voice2 = {MakeVoice N}	     
-   MyScore = {Score.makeScore 
-	      sim(items: [Voice1 Voice2] 
-		  startTime: 0 
-		  timeUnit:beats(4)) 
-	      unit}
-   {FD.distinctB {Append
-		  {Voice1 mapItems($ getStartTime)}.2
-		  {Voice2 mapItems($ getStartTime)}.2}}
-   %% search strategy 
-   {FD.distribute 
-    {SDistro.makeFDDistribution unit(order:size value:min)}
-    {LUtils.accum [{Voice1 mapItems($ getDurationParameter)}
-		   {Voice2 mapItems($ getDurationParameter)}
-		   {Voice1 mapItems($ getStartTimeParameter)}
-		   {Voice2 mapItems($ getStartTimeParameter)}]
-     Append}}
-end 
-
-
-
-
-/*
-
-{{Score.makeScore
-  container(items: {LUtils.collectN 3
-		    fun {$}
-		       element(addParameters:[{New Score.parameter init(info:startTime)}
-					      {New Score.parameter init(info:duration)}])
-		    end})
-  unit(container:Score.container
-       element:Score.element)}
- toInitRecord($)}
-
-*/
-
-/*
-%% unfinished
-declare
-fun {MakeVoice2 N}
-   {Score.makeScore2
-    container(items: {LUtils.collectN N
-		      fun {$}
-			 element(addParameters:[{New Score.parameter
-						 init(value:{FD.int 1#FD.sup}
-						      info:startTime)}
-						{New Score.parameter
-						 init(value:{FD.int 1#8}
-						      info:duration)}])
-		      end}
-	      info:voice)
-    unit(container:Score.container
-	 element:Score.element)}
-end
-fun {GetStartTimePar X}
-   {LUtils.find {X getParameters($)}
-    fun {$ Par} {Par hasThisInfo($ startTime)} end}
-end
-fun {GetDurationPar X}
-   {LUtils.find {X getParameters($)}
-    fun {$ Par} {Par hasThisInfo($ duration)} end}
-end
-fun {GetStartTime X}
-   {{GetStartTimePar X} getValue($)}
-end
-fun {GetDuration X}
-   {{GetDurationPar X} getValue($)}
-end
-proc {ConstraintTiming X Y}
-   {GetStartTime X} + {GetDuration X} =: {GetStartTime Y}
-end
-proc {ScriptWithScoreDataInside2 MyScore} 
-   N = 100
-   Voice1 Voice2
-in
-   Voice1 = {MakeVoice2 N}
-   Voice2 = {MakeVoice2 N}	     
-   MyScore = {Score.makeScore
-	      container(items: [Voice1 Voice2]) 
-	      unit(container:Score.container)}
-   %% usually implicit timing constraints 
-   {Pattern.for2Neighbours {Voice1 getItems($)} ConstraintTiming}
-   {Pattern.for2Neighbours {Voice2 getItems($)} ConstraintTiming}
-   %% !! these constraints cause fail!
-   {GetStartTime {Voice1 getItems($)}.1} = 0 
-   {GetStartTime {Voice2 getItems($)}.1} = 0
-   %% actual constraint
-   {FD.distinctB {Append
-		  {Voice1 mapItems($ GetStartTime)}.2
-		  {Voice2 mapItems($ GetStartTime)}.2}}
-   %% search strategy 
-   {FD.distribute 
-    {SDistro.makeFDDistribution unit(order:size value:min)}
-    {LUtils.accum [{Voice1 mapItems($ GetDurationPar)}
-		   {Voice2 mapItems($ GetDurationPar)}
-		   {Voice1 mapItems($ GetStartTimePar)}
-		   {Voice2 mapItems($ GetStartTimePar)}]
-     Append}}
-end 
-
-*/
-
-
-declare
-proc {ConstrainStarts Starts Durs}
-   for
-      S1 in {LUtils.butLast Starts}
-      S2 in Starts.2
-      D1 in {LUtils.butLast Durs}
-   do
-      S1 + D1 =: S2
-   end
-end
-proc {PlainScript Sol}   
-   N = 100
-   Durs1 = {FD.list N 1#8}
-   Durs2 = {FD.list N 1#8}
-   Starts1 = {FD.list N 0#FD.sup}
-   Starts2 = {FD.list N 0#FD.sup}
-in
-   Sol = {LUtils.matTrans [Durs1 Starts1]}#{LUtils.matTrans [Durs2 Starts2]}
-   Starts1.1 = 0
-   Starts2.1 = 0
-   {ConstrainStarts Starts1 Durs1}
-   {ConstrainStarts Starts2 Durs2}
-   {FD.distinctB {Append Starts1.2 Starts2.2}}
-   %% search strategy
-   {FD.distribute ff
-    {LUtils.accum [Durs1 Durs2 Starts1 Starts2] Append}}
-end
-
-
-/*
-
-
-%% time: 2.89 secs
-%% 1#stat(b:0 c:0 depth:1 f:0 s:1 start:201)
-%% ScriptWithScore heap: 3757k
-%% MakeVoice heap: 1870k  
-{ExploreOne ScriptWithScoreDataInside}
-
-%% time: 3.14
-%% 1#stat(b:0 c:0 depth:1 f:0 s:1 start:401)
-{ExploreOne ScriptWithScoreDataInside2}
-
-
-{ExploreOne ScriptWithScoreDataOutside}
-
-
-%% time: 500ms
-%% 1#stat(b:0 c:0 depth:1 f:0 s:1 start:201)
-%% PlainScript heap: 66k 
-%% ConstrainStarts heap: 6560b
-{ExploreOne PlainScript}
-
-
-*/
-
-
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-
- 
-/* %% testing the data structure 
-
-declare
-VarPointers VarDecls VarTuple
-
-%% create a few var pointers for testing
-VarPointers = [{New VarPointer init(domain:fd initDomain:1#10)}
-	       {New VarPointer init(domain:fd initDomain:2#10)}
-	       {New VarPointer init(domain:fd initDomain:3#10)}
-	       {New VarPointer init(domain:fd initDomain:4#10)}]
-
-
-%% test type checking
-{IsVarPointer VarPointers.1}
-{IsVarPointer bla}
-
-
-%% Given a list of varpointers create corresponding variable declarations. As a side effect, this operation determines the indices of the varpointers.
-%% !! This operation should still be performed OUTSIDE the script, so the list of actually required variables can be reduced (e.g. the script may only constrain the note pitches and leave all other note parameters out..) 
-VarDecls = {MakeVarDecls VarPointers}
-
-
-%% !! the variables are always created INSIDE the script
-VarTuple = {MakeVarTuple VarDecls}
-
-
-%% apply constraint to first two VarPointers: this is correctly reflected by vars i VarTuple
-
-{ApplyToVars proc {$ X Y} X <: Y end
- [{Nth VarPointers 2} {Nth VarPointers 1}]
- VarTuple}
-
-*/
-
-
-
-/*
-
-%% start profiler only here (check heap usage of these procs)
-
-declare
-SpaceWithVarPointers = {Space.new MyScriptWithVarPointers}
-SpaceWithScore = {Space.new MyScriptWithScore}
-proc {CloneSpaceWithVarPointers _}
-  _ = {Space.clone SpaceWithVarPointers}
-end
-proc {CloneSpaceWithScore _}
-  _ = {Space.clone SpaceWithScore}
-end
-proc {MakeMyScore _}
-   _ = {Score.makeScore
-	seq(items: {LUtils.collectN N
-		    fun {$}
-		       note(duration: 4
-			    pitch: {FD.int 60#60+N1}
-			    amplitude: 80)
-		    end}
-	    startTime: 0
-	    timeUnit:beats(4))
-	unit}
-end
-
-
-{For 1 100 1 CloneSpaceWithVarPointers} %% needs 224k
-
-{For 1 100 1 CloneSpaceWithScore} %% needs 256k
-
-{For 1 100 1 MakeMyScore} %% needs 8390k
-
-*/
-
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-
-%%
-%% Result: it seems that the idea to keep the data of the music representaiton outside of the script (i.e. space) does not make any significant difference to the memory needs
-%%
-%% astonishingly, creating the music representation needs much more memory than cloning the space with a CSP 'containing' the music representation. How clever is the cloning of the space done: does it only clone the variables of the problem, i.e. the constraint store, propagators etc.?? 
-%%
-%% 
-%% .. on 7 march 2006 I got a reply by R. Collet: Re: What is actually copied when a space is cloned? on a question about this..
-%%
-
-%%
-%% I may communicate over space boundaries (via a port? See Text of Christina p. 40), but I can not communicate chunks (??) -- see email by R. Collet: Re: memoization + search script, 4. Mai 2006 12:53:05 MESZ
-%% I.e. I can wrap data into procedures??
-%%
+fun {Search_MyScriptPlain} {Search.base.one MyScriptPlain} end
 
 
