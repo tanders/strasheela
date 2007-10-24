@@ -1,7 +1,7 @@
 
 The concepts of Strasheela are described in the following publications. 
 
-  Torsten Anders (2007). A Model of Musical Motifs. In *Conference of Mathematics and Computation of Music 2007*. Berlin, Germany.  
+  Torsten Anders (2007). A Model of Musical Motifs. In *International Conference Mathematics and Computation in Music*. Berlin, Germany.
 
   Torsten Anders (2007). [[http://strasheela.sourceforge.net/documents/TorstenAnders-PhDThesis.pdf][Composing Music by Composing Rules: Design and Usage of a Generic Music Constraint System]]. PhD thesis, Queen's University, Belfast. 
 
