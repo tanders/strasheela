@@ -1090,6 +1090,7 @@ define
 	     [] et31 then Value * 12.0 / 31.0 
 	     [] midicent then Value / 100.0
 	     [] midic then Value / 100.0
+	     [] millimidicent then Value / 10000.0
 	     [] frequency then {MUtils.freqToKeynum Value 12.0}
 	     [] freq then {MUtils.freqToKeynum Value 12.0}
 	     [] hz then {MUtils.freqToKeynum Value 12.0}
