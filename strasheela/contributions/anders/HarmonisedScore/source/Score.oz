@@ -115,7 +115,7 @@ import
    LUtils at 'x-ozlib://anders/strasheela/source/ListUtils.ozf'
    MUtils at 'x-ozlib://anders/strasheela/source/MusicUtils.ozf'
    Score at 'x-ozlib://anders/strasheela/source/ScoreCore.ozf'
-%   Pattern at 'x-ozlib://anders/strasheela/Pattern/Pattern.ozf'
+   Pattern at 'x-ozlib://anders/strasheela/Pattern/Pattern.ozf'
    CTT at 'x-ozlib://anders/strasheela/ConstrainTimingTree/ConstrainTimingTree.ozf'
    DB at 'Database.ozf'
    Rules at 'Rules.ozf'
@@ -141,6 +141,7 @@ export
 
    Interval
    IsInterval
+   NoteInterval TransposeNote
    
    InChordMixinForNote InScaleMixinForNote
    PitchClassMixin
@@ -442,11 +443,9 @@ define
    %%
    %%
    
-%   proc {TransposeNotes }
-%   end
+   %% ?? mixin: scale degree interval (?? correspond to InScaleMixinForChord, ScaleDegreeMixinForNote)
+   %% ?? mixin: chord degree interval (?? correspond to ScaleDegreeMixinForChord, ChordDegreeMixinForNote)
    
-   %% pitch class interval (?? corresponds to PitchClassCollection, PitchClassMixin)
-
    local
       /** %% Initialise domains of Interval params and relate them.
       %% */
@@ -495,11 +494,11 @@ define
       %%
       %% TODO:
       %%
+      %% - test with recomputation
       %% - example (in harmonic CSP examples file?)
-      %% - proc/method expecting 2 notes and returning interval object
       %% - add scale/chord degree
       %% - in the init method, I can currently only specify dbFeature "features" (e.g. dissonanceDegree), but not their value
-      %%  -> If I change this for class Interval, I should also change it for class PitchClassCollection 
+      %%    -> If I change this for class Interval, I should also change it for class PitchClassCollection 
       %%
       %%
       class Interval from Score.abstractElement
@@ -591,11 +590,43 @@ define
    fun {IsInterval X}
       {Object.is X} andthen {HasFeature X IntervalType}
    end
-   
-   %% mixin: scale degree interval (?? correspond to InScaleMixinForChord, ScaleDegreeMixinForNote)
 
-   %% mixin: chord degree interval (?? correspond to ScaleDegreeMixinForChord, ChordDegreeMixinForNote)
-   
+   /** %% Expects two note objects and returns the interval between the two notes. If the Note1 is higher than Note2, the intervals direction is downwards (i.e. 0).
+   %% Additional interval features can be specified with the optional argument dbFeatures (as Args feature). 
+   %% The notes are instances of the class Score.note2 or any of its subclasses (including the note classes defined in this functor).
+   %% */
+   %%
+   %% TODO:
+   %%
+   %% - what about subclasses of Interval (e.g. for intervals with scale degree parameter)
+   %%   ?? possibly, I add suitable methods to the note classes of this functor and add to the doc of this function a comment about this limitation and point to these methods
+   %%
+   fun {NoteInterval Note1 Note2 Args}
+      Defaults = unit(dbFeatures:nil)
+      As = {Adjoin Defaults Args}
+      MyInterval = {New Interval init(dbFeatures:As.dbFeatures)}
+   in
+      {Score.initScore MyInterval} % close parameter etc. extendable lists
+      {TransposeNote Note1 MyInterval Note2}
+      MyInterval
+   end
+
+   /** %% Constrains the relation that the pitch of Note1 transposed by MyInterval reaches the pitch of Note2.
+   %% The notes are instances of the class Score.note2 or any of its subclasses (including the note classes defined in this functor), MyInterval is an instance of the class Interval (or its subclasses).
+   %% Please note that MyInterval (like the notes) should be fully initialised (e.g., otherwise inspecting interval internals does not work properly).
+   %% */
+   %%
+   %% TODO:
+   %%
+   %% - I probably need an additional constraint for scale degree notes and an interval with scale degree support.
+   %%   ?? possibly, I add suitable methods to the note classes of this functor and add to the doc of this function a comment about this limitation and point to these methods
+   %%
+   proc {TransposeNote Note1 MyInterval Note2}
+      {FD.distance {Note1 getPitch($)} {Note2 getPitch($)} '=:'
+       {MyInterval getDistance($)}}
+      {Pattern.direction {Note1 getPitch($)} {Note2 getPitch($)}
+       {MyInterval getDirection($)}}
+   end
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%
