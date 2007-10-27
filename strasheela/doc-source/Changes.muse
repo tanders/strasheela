@@ -5,12 +5,15 @@
 
 * Changes in Version 0.9.1 (no date yet)
 
+  - Added class Interval to the harmony model, see <doc>.
+    example in .. and tests in .. 
+
   - Finished music representation chap in Tutorial: added explanation for user-defined export procedures.
 
   - I realised a more suitable approach for delayed constraint application in order to constrain score contexts which are inaccessible in the problem definition. See thesis [[http://strasheela.sourceforge.net/documents/TorstenAnders-PhDThesis.pdf][Composing Music by Composing Rules]], Sec. 6.3 "Constraining Inaccessible Score Contexts" for a discussion of this matter, and the example [[../testing/zy_Efficiency/compare-DelayingConstraint-ReifiedConstraint.oz][here]] for a demonstration of the new approach.
 
-
   - For further fixes see [[../CHANGELOG.txt]]
+
 
 * Changes in Version 0.9 (2 October 2007)
   
