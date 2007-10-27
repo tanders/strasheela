@@ -50,7 +50,8 @@ define
       I = {NewCell 0}
    in
       /** %% A memo-function created by Memoize recognises values by their ID. In case this ID is a free variable, it is determined to a unique integer.
-      %% SetMinId sets the minimum ID. This allows to avaid conflicts of automatically created IDs with IDs created by hand. The default min ID is 0.
+      %% SetMinId sets the minimum ID. This allows to avoid conflicts of automatically created IDs with IDs created by hand. The default min ID is 0.
+      %% Please note that SetMinID should only be called once before calling any memoized function (otherwise ID conflicts may happen and multiple objects may be assigned the same ID). If it is called multiple times, the new setting is ignored in case it is less than the next automatic ID in order to avoid conflicts.
       %% */
       proc {SetMinID Min}
 	 if Min > @I
@@ -76,21 +77,19 @@ define
    
    ClearPs = {NewCell nil}
 
-   /** %% Expects a unary function Fn (expecting a list of values and returning a value) and returns the corresponding memoized function MemoFn (ie. a function which caches the result for specific arguments and returns this pre-computed value again when called with the same arguments instead of computing the value again, see 'Norvig. Paradigms of Aritificial Intelligence Programming, 1992' for details).
-   %% Function attributes must be values for which a key can be computed. The function returning this key can be set by SetGetID.
+   /** %% Expects a unary function Fn (expecting a list of values and returning a value) and returns the corresponding memoized function MemoFn (ie. a function which caches the result for specific arguments and returns this pre-computed value again when called with the same arguments instead of computing the value again, see 'Norvig. Paradigms of Aritificial Intelligence Programming, 1992' for details). 
    %%
-   %% NB: The definition of the original function is not changed (in contrast to the Lisp implementation of Norvig) and thus recursive functions are not well memoized. Only the top-level call of the recursive function would get memoized but internally the function would call the original unmemoized version.
+   %% The identity of the memoized function arguments is checked with a function GetID. This function can be set with SetGetID, and must return a unique key (a name, atom or an integer) for every unique function argument. Also, the memoized function arguments must be values for which their unique key can be computed. GetID defaults to fun {$ X} {X getID($)} end, that is, per default a memoized function must expect a list of score objects with a unique determined ID or a free ID.
+   %% In case the ID retured by GetID is a free variable, then this variable is set to a unique integer. The minimum integer ID can be specified with SetMinID.
    %%
-   %% NB: Memoize itself (and clearing the cache of a memoized function) performs a stateful operation. Still, calling the memo-function (and caching results) is stateless. Thus, memo-functions can be used freely in CSP, even if they are defined in the top-level space.
+   %% The definition of the original function is not changed (in contrast to the Lisp implementation of Norvig) and thus recursive functions are not well memoized. Only the top-level call of the recursive function would get memoized but internally the function would call the original unmemoized version.
    %%
-   %% NB: Memoize determines the ID of any value given as argument to a memo-function to an integer (as long as that ID is not already determined). The minimal ID can be set by SetMinID.
+   %% Memoize itself (and clearing the cache of a memoized function) performs a stateful operation. Still, calling the memo-function (and caching results) is stateless. Thus, memo-functions can be used freely in CSP, even if they are defined in the top-level space.
    %%
-   %% NB: Memo-functions are not thread save. In case the result for a particular set of arguments is not yet cached and the function is called with the same args (args with the same keys) in parallel, the cache will be set twice (in case of inconsistent values, an exception will be raised).
-   %% Similarily, setting the ID of a value is not thread-save either.
+   %% Memo-functions are not thread save. In case the result for a particular set of arguments is not yet cached and the function is called with the same args (args with the same keys) in parallel, the cache will be set twice (in case of inconsistent values, an exception will be raised). Similarily, setting the ID of a value is not thread-save either.
+   %% These operations could be made thread-save by locking multiple sub-operations. However, locks in a top-level space must not be 'entered' by statements in other spaces (i.e. during search). 
    %%
-   %% Reason: these operations could be made thread-save by locking multiple sub-operations. Problem: locks in a top-level space not not be 'entered' by statements in other spaces (i.e. during search). 
-   %%
-   %% NB: Efficiency of memo-functions lookup is only linear time (!) depending on the number of results already cached (i.e. not constant time as perhaps expected, because currently there is no constant time RecordC.reflectHasFeature).
+   %% Efficiency of memo-functions lookup is only linear time (!) and depends on the number of results already cached (i.e. lookup is not performed in constant time as perhaps expected, because currently there exissts no constant time implementation of RecordC.reflectHasFeature).
    %% */
    proc {Memoize Fn MemoFn}
       Table = {MRecord.new}
