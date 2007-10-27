@@ -1100,32 +1100,15 @@ MyChord = {Score.makeScore chord
 %% Interval
 %%
 
-
-%%
-%% TODO:
-%%
-%% - in the init method, I can currently only specify dbFeature "features" (e.g. dissonanceDegree), but not their value
-%%  -> If I change this for class Interval, I should also change it for class PitchClassCollection 
-%%  
-%%
-
-
-%%
-%% NOTE: buggy and debugging unfinished., possibly even implementation unfinished..
-%%
-
 declare
 MyInterval = {New HS.score.interval init(distance:7 direction:2)}
 {Score.initScore MyInterval}
 
-
+%% check, e.g., score hierarchy recursively
 {Inspect MyInterval}
 
-{MyInterval getIndex($)}
-
 %% test check..
-{HS.db.getInternalIntervalDB}
-{MyInterval getDB($)}
+{Browse {MyInterval getDB($)}}
 
 
 declare
@@ -1140,18 +1123,71 @@ MyInterval = {New HS.score.interval init(distance:{FD.int 6#7} direction:2
 
 
 
-%%
-%% tmp:
-%%
-
-%% OK
 declare
-MyChord = {New HS.score.chord init(index:{FD.int 1#2} transposition:0
-				   %% feat in default interval DB..
-				   dbFeatures:[dissonanceDegree])}
-{Score.initScore MyChord}
+MyInterval = {New HS.score.interval init}
+{Score.initScore MyInterval}
 
-%% OK: constrained var 2#3
-{MyChord getDBFeatures($)}
+%% check, e.g., score hierarchy recursively
+{Inspect MyInterval}
 
-{MyChord getDB($)}
+
+
+%%
+%% NoteInterval
+%%
+
+declare
+Note1 = {Score.makeScore note unit}
+Note2 = {Score.makeScore note unit}
+MyInterval = {HS.score.noteInterval Note1 Note2
+	      unit(dbFeatures:[dissonanceDegree])}
+
+%% check score hierarchy recursively..
+{Inspect MyInterval}
+{Inspect {MyInterval getDBFeature($ dissonanceDegree)}}
+{Inspect Note1}
+{Inspect Note2}
+
+{Note1 getPitch($)} = 47
+
+{MyInterval getOctave($)} = 2
+
+{MyInterval getDirection($)} = 2
+
+{MyInterval getDBFeature($ dissonanceDegree)} = 3
+
+{MyInterval getPitchClass($)} = 4
+
+%% -> Note2 pitch is 75
+
+
+%%
+%% TransposeNote (without fully initialising the interval!) 
+%%
+declare
+Note1 = {Score.makeScore note unit}
+Note2 = {Score.makeScore note unit}
+MyInterval = {New HS.score.interval init(dbFeatures:[dissonanceDegree])}
+{Score.initScore MyInterval}
+
+{HS.score.transposeNote Note1 MyInterval Note2}
+
+%% check score hierarchy recursively..
+{Inspect MyInterval}  
+{Inspect {MyInterval getDBFeature($ dissonanceDegree)}}
+{Inspect Note1}
+{Inspect Note2}
+
+{Note1 getPitch($)} = 47
+
+{MyInterval getOctave($)} = 2
+
+{MyInterval getDirection($)} = 2
+
+{MyInterval getDBFeature($ dissonanceDegree)} = 3
+
+{MyInterval getPitchClass($)} = 4
+
+%% -> Note2 pitch is 75
+
+
