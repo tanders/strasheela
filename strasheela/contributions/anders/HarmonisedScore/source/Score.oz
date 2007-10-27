@@ -109,7 +109,7 @@ functor
 import
    FD FS Combinator
    Browser(browse:Browse) % temp for debugging
-   Inspector(inspect:Inspect) % temp for debugging
+%   Inspector(inspect:Inspect) % temp for debugging
    Select at 'x-ozlib://duchier/cp/Select.ozf'
    GUtils at 'x-ozlib://anders/strasheela/source/GeneralUtils.ozf'
    LUtils at 'x-ozlib://anders/strasheela/source/ListUtils.ozf'
@@ -131,7 +131,7 @@ import
    
 export
 
-   PitchClassToPitch % PitchClassToPitchD
+   PitchClassToPitch PitchClassToPitch2 % PitchClassToPitchD
 %   IntervalPCToInterval
    TransposePC
    DegreeToPC CMajorDegreeToPC
@@ -182,7 +182,7 @@ define
 %%% relations between different pitch representations
 %%%
    
-   /** %% Defines the relation between an absolute pitch number Pitch (FD int) and its PitchClass (FD int) plus Octave component (FD int). Middle c has octave 4, according to conventions (cf. http://en.wikipedia.org/wiki/Scientific_pitch_notation). So, octave 0 corresponds to Midi pitch 12, and Midi pitch 127 falls in octave 9.
+   /** %% Defines the relation between an absolute pitch number Pitch (FD int) and its PitchClass (FD int) plus Octave component (FD int). Middle c has octave 4, according to conventions (cf. http://en.wikipedia.org/wiki/Scientific_pitch_notation). So (for PitchesPerOctave=12), 0ctave=0 corresponds to Midi pitch 12, and Midi pitch 127 falls in octave 9.
    %% The domain of PitchClass is implicitly restricted to 0#{DB.getPitchesPerOctave}.
    %% */
    proc {PitchClassToPitch PitchClass#Octave Pitch}
@@ -190,6 +190,14 @@ define
       Pitch =: PitchClass + (Octave + 1)*{DB.getPitchesPerOctave}
    end
 
+   /** %% Same as PitchClassToPitch. However, Middle c has octave 5 so that if Pitch = PitchClass, Octave = 0. This is in contrast to PitchClassToPitch, where Pitch is always >= PitchesPerOctave and this always Pitch > PitchClass (even if Octave = 0). PitchClassToPitch2 is thus used with intervals, whereas PitchClassToPitch is used with pitches.
+   %% */
+   proc {PitchClassToPitch2 PitchClass#Octave Pitch}
+      PitchClass :: 0#{DB.getPitchesPerOctave}
+      Pitch =: PitchClass + Octave*{DB.getPitchesPerOctave}
+   end
+
+   
 %    /** %% Defines the relation between an absolute Interval (FD int) and its equivalent IntervalPC (FD int) plus Octave component (FD int). This constraint is very similar to PitchClassToPitch, but the octave component has a different meaning. In this constraint (Octave = 0) <=> (PC = Interval)
 %    %% The domain of redundant is implicitly restricted to 0#{DB.getPitchesPerOctave}
 %    %% */
@@ -445,10 +453,10 @@ define
       proc {InitConstraints Self}
 	 thread % don't block init if some information is still missing	    
 	    MyDB = {Self getDB($)}
+	    PCs = MyDB.interval  % tuple of (FD) ints 
 	 in
-	    %% TODO: check accessor correctness
-	    Interval = MyDB.interval
 	    %% init/restrict domains
+	    {Self getIndex($)} = {FD.int 1#{Width PCs}} %% !!?? 
 	    {Self getDistance($)} = {FD.decl}
 	    {Self getDirection($)} = {FD.int 0#2}
 	    {Self getPitchClass($)} = {DB.makePitchClassFDInt}
@@ -456,14 +464,14 @@ define
 	    %%
 	    %% constrains
 	    %%
+	    {Self getPitchClass($)} = {Select.fd PCs {Self getIndex($)}}
 	    %% restricts distance domain to (OctaveDomainMin * PitchesPerOctave) # (OctaveDomainMax * PitchesPerOctave + PitchesPerOctave-1) 
-	    {PitchClassToPitch {Self getPitchClass($)}#{Self getOctave($)}
+	    {PitchClassToPitch2 {Self getPitchClass($)}#{Self getOctave($)}
 	     {Self getDistance($)}}
-	    %% distance 0 <=> direction =  
+	    %% unison: distance 0 <=> direction = (i.e. neither + nor -)  
 	    {FD.equi ({Self getDistance($)} =: 0)
 	     ({Self getDirection($)} =: 1)
 	     1}
-	    %%
 	    %% constrain all dbFeatures of Self to their value dependent
 	    %% on the Self index in the Db
 	    {Record.forAllInd {Self getDBFeatures($)}
@@ -482,31 +490,44 @@ define
       %%
       %% NB: The class Interval inherits from Score.abstractElement, but not Score.temporalElement (i.e. an interval does not have associated temporal information such as a start time and can thus not be output, e.g., in a Lilypond score -- in contrast to instances of the calsses Chord and Scale).
       %% */
+      %%
+      %% TODO:
+      %%
+      %% - doc
+      %% - example (in harmonic CSP examples file?)
+      %% - proc/method expecting 2 notes and returning interval object
+      %% - add scale/chord degree
+      %%
+      %%
       class Interval from Score.abstractElement
 	 feat label:interval
 	    !IntervalType:unit
 	 attr
-	    distance direction pitchClass octave  % all param with FD int
+	    index distance direction pitchClass octave  % all param with FD int
 	    dbFeatures		     % record of constrained vars (FD or FS). Features of the record are symbols in init arg dbFeatures
-	 meth init(distance:Dist<=_ direction:Dir<=_
+	 meth init(index:Index<=_ distance:Dist<=_ direction:Dir<=_
 		   octave:Oct<=_ pitchClass:PC<=_
 		   dbFeatures:DBFeats<=nil % arg list of symbols
-		  ) = M
-	    @dbFeatures = {Record.make unit DBFeats}
+		   ...) = M
+	    Score.abstractElement, {Record.subtractList M
+				   [distance direction octave pitchClass dbFeatures]} 
+	    @index = {New Score.parameter init(value:Index info:index)}
 	    @distance = {New Score.parameter init(value:Dist info:distance)}
 	    @direction = {New Score.parameter init(value:Dir info:direction)}
 	    @octave = {New Score.parameter init(value:Oct info:octave)}
 	    @pitchClass = {New PitchClass
 			   init(value:PC info:pitchClass
 				'unit':{DB.getPitchUnit})}
-	    %
-	    {Inspect self}
-	    %% BUG: this line blocks
-	    {self bilinkParameters([@distance @direction @octave @pitchClass])} 
-%	    {self bilinkParameters([@distance])} 
-	    {Browse ok}
+	    @dbFeatures = {Record.make unit DBFeats}
+	    {self bilinkParameters([@index @distance @direction @octave @pitchClass])} 
 	    %% implicit constrains
 	    {InitConstraints self}
+	 end
+	 meth getIndex(?X)
+	    X = {@index getValue($)}
+	 end
+	 meth getIndexParameter(?X)
+	    X = @index
 	 end
 	 meth getDistance($)
 	    {@distance getValue($)}
@@ -556,7 +577,8 @@ define
 	 %% when a score is stored in some format.
 	 meth getInitInfo($ exclude:Excluded)	 
 	    unit(superclass:Score.abstractElement
-		 args:[distance#getDistance#noMatch
+		 args:[index#getIndex#noMatch
+		       distance#getDistance#noMatch
 		       direction#getDirection#{FD.int 0#2}
 		       pitchClass#getPitchClass#{DB.makePitchClassFDInt}
 		       octave#getOctave#{DB.makeOctaveFDInt}
