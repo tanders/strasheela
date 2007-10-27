@@ -482,21 +482,24 @@ define
 	 end
       end
    in
-      /** %% NOTE: imlementation unfinished.
+      /** %% The class Interval is a data structure for representing the interval between the pitches of two note objects. Various information on the interval is provided including the absolute pitch distance, its direction, its pitch class, and the fitting value of various additional features defined in the interval database (e.g. its dissonance degree). Like the other classes of Strasheela's harmony model, the interval class supports microtonal music based on freely defined equidistant subdivisions of the octave (e.g. et72 or even measured in cent, set in the DB as pitchesPerOctave).
+      %% The class Interval defines the following parameters. The distance is the absolute distance between two pitches (e.g. 13 is a minor ninth for PitchesPerOctave=12). The parameter direction denotes the direction of the interval: 'upwards' is represented by 2, unison by 1, and an interval 'downwards' by 0 (cf. Pattern.direction). The parameter pitchClass expresses the interval's pitch class, and the parameter octave the number of octaves added to the pitch class to reach the interval's distance (e.g. if the distance is 13, then the pitchClass is 1 and the octave is 1). Finally, the parameter index is the position of the interval's pitch class in the respective interval database (i.e. this parameter corresponds to the index parameter of the classes Chord and Scale).
+      %% The class Interval allows to access and constrain further interval-specific properties. Besides the compulsary interval database feature interval, the user can define arbitrary further attributes in each database entry (see DB.setDB). For example, the default interval database includes the feature dissonanceDegree.
+      %% The init argument dbFeatures allows to accociates self with further FD/FS variables. These variables are constrained to the values at the respective feature of an database entry at the position of self's index. The database features to be used are 'announced' by the init method argument dbFeatures, which expects a list of atoms denoting the database features to include.
+      %% Let us assume that the database defines the feature dissonanceDegree for each interval in the database. This feature is 'announced' to self with the init argument init(dbFeatures:[dissonanceDegree] ...). The dissonance degree of self is then accessible -- and further constrainable -- by {self getDBFeature($ dissonanceDegree)}.
       %%
-      %% The direction is represented as an FD int where 0 means downwards, 1 means unison, and 2 means upwards (cf. the direction-related definitions in the Pattern contribution).
+      %% Please note that only only interval values defined in the interval database are permitted as pitch class values. For example, if you use an Interval object to express the interval between two specific notes and your interval DB does not specify an interval 7 (a fifth if PitchesPerOctave=12), then the interval between the two note pitches is implicitly constrained not to be a fifth.
       %%
-      %% Please note that only only interval values defined in the interval database are permitted as distance values. For example, if you use an Interval object to express the interval between two specific notes and your interval DB does not specify an interval 7 (a fifth if PitchesPerOctave=12), then the interval between the two note pitches is implicitly constrained not to be a fifth.
-      %%
-      %% NB: The class Interval inherits from Score.abstractElement, but not Score.temporalElement (i.e. an interval does not have associated temporal information such as a start time and can thus not be output, e.g., in a Lilypond score -- in contrast to instances of the calsses Chord and Scale).
+      %% NB: The class Interval inherits from Score.abstractElement -- in contrast to the classes Chord and Scale which inherit (indirectly) from Score.temporalElement. Consequently, an interval does _not_ have associated temporal information such as a start time and can thus not be output, for example, in a Lilypond score -- in contrast to instances of the classes Chord and Scale).
       %% */
       %%
       %% TODO:
       %%
-      %% - doc
       %% - example (in harmonic CSP examples file?)
       %% - proc/method expecting 2 notes and returning interval object
       %% - add scale/chord degree
+      %% - in the init method, I can currently only specify dbFeature "features" (e.g. dissonanceDegree), but not their value
+      %%  -> If I change this for class Interval, I should also change it for class PitchClassCollection 
       %%
       %%
       class Interval from Score.abstractElement
@@ -553,7 +556,6 @@ define
 	 meth getOctaveParameter($)
 	    @octave
 	 end
-
 	 
 	 /** %% The interval database is defined by DB.setDB. getDB returns the internal representation of this database (see the DB.setDB for more details).
 	 %% */
@@ -667,8 +669,8 @@ define
    in 
       /** %% [abstract class] Represents a collection of pitch classes (absolute pitches without octave component) which is a transposed version of a pitch class collection from a user-defined database (see ./Database.oz respectively DB). Example subclasses of PitchClassCollection include analytical score objects such as Scale or Chord. The design of PitchClassCollection aims to be highly generic: PitchClassCollection is intended to allow the user to define her/his own theory of harmony based on user defined databases of chords and scales; PitchClassCollection even supports microtonal music based on freely defined equidistant subdivisions of the octave (e.g. et72 or even measured in cent, set in the DB as pitchesPerOctave).
       %% PitchClassCollection defines four parameters (index, transposition, root, untransposedRoot) whose value is a FD integer, and two attributes which are FS (pitchClasses, untransposedPitchClasses). The index is the position of the respective chord/scale in the chord/scale database, transposition denotes how much self is transposed with respect to the database entry, pitchClasses is the set of transposed pitch classes and root is the transposed root pitch class (untransposed roots are defined in the database). untransposedPitchClasses and untransposedRoot are the untransposed pitchClasses and the untransposed root, i.e. the actual pitch classes in the database entry. Except for index, all parameters/attributes denote pitch classes, that is absolute pitches without an octave component. What the actual value of a pitch class means depends on the pitches per octave setting in the database. Consequently, the pitchUnit of all pitch classes is implicitly set accordingly depending on DB.getPitchesPerOctave.
-      %% Besides the compulsary chord/scale database features pitchClasses and roots, the user can define arbitrary further attributes in each database entry (see DB.setDB). Examples include dissonanceDegree, resemblanceWithTradition, clearnessOfColour etc. The attribute dbFeatures allows to accociates self with further FD/FS variables. These variables are constrained to the values at the respective feature of an database entry at the position of self's index. The database features to be used are 'announced' by the init method argument dbFeatures, which expects a list of atoms denoting the database features to include.
-      %% For instance, in case the database defines the feature dissonanceDegree for each entry in the database. This feature is 'announced' to self with the init argument init(dbFeatures:[dissonanceDegree] ...). The dissonance degree of self is then accessible -- and further constrainable -- by {self getDBFeature($ dissonanceDegree)}.
+      %% The class PitchClassCollection allows to access and constrain further chord/scale-specific properties. Besides the compulsary chord/scale database features pitchClasses and roots, the user can define arbitrary further attributes in each database entry (see DB.setDB). Examples include dissonanceDegree, resemblanceWithTradition, clearnessOfColour etc. The init argument dbFeatures allows to accociates self with further FD/FS variables. These variables are constrained to the values at the respective feature of an database entry at the position of self's index. The database features to be used are 'announced' by the init method argument dbFeatures, which expects a list of atoms denoting the database features to include.
+      %% Let us assume that the database defines the feature dissonanceDegree for each entry in the database. This feature is 'announced' to self with the init argument init(dbFeatures:[dissonanceDegree] ...). The dissonance degree of self is then accessible -- and further constrainable -- by {self getDBFeature($ dissonanceDegree)}.
       %%
       %% NB: In case the database defines only chord/scale entries with single roots, only the parameters index and transposition are necessary to distribute because once index and transposition are determined, all other parameters/attributes are determined as well. Therefore, the distribution strategy may filter out all root and untransposedRoot parameters for efficiency (their info slot contains root or untransposedRoot). However, in case one or more chords/scales in the DB define mutiple possible roots then the root _or_ the untransposedRoot must be distributed explicitly (but one of them is sufficient). 
       %%
