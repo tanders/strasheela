@@ -494,7 +494,6 @@ define
       %%
       %% TODO:
       %%
-      %% - test with recomputation
       %% - example (in harmonic CSP examples file?)
       %% - add scale/chord degree
       %% - in the init method, I can currently only specify dbFeature "features" (e.g. dissonanceDegree), but not their value

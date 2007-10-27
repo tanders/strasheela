@@ -120,11 +120,11 @@ clearInterval(drawit)
 
 <div style="margin-left:160px"><p align="right" class="margin"><div align="right">inheritance tree</div></p>
 <pre>
-  <a class="pre" href="node7.html#entity284">FlagsMixin</a>
+  <a class="pre" href="node7.html#entity288">FlagsMixin</a>
       |
       |
       |
- <a class="pre" href="node7.html#entity285">MappingMixin</a>
+ <a class="pre" href="node7.html#entity289">MappingMixin</a>
 </pre>
 <hr><p class="margin"><div align="right">class definition</div></p>
 <code>
@@ -159,7 +159,7 @@ clearInterval(drawit)
 
 
 </tr></table>
-<span class="string"> The collect methods collects (possibly all) score objects in a list to make them accessible for, e.g., various list mapping functions. The method collects objects related to self (an item) by the value of the item attributes containers, parameters and the container attribute items. However, collect never collects self itself. The methods supports a few features to control the collecting. <BR>
+<span class="string"> The collect methods collects (possibly all) score objects in a list to make them accessible for, e.g., various list mapping functions. The method collects objects related to self (an item) by the value of the item attributes containers, parameters and the container attribute items. However, collect never collects self itself (self can easily be added, but removing self requires traversing the full result list). The methods supports a few features to control the collecting. <BR>
 <BR>
  If feature <code> mode </code> is set to <code> tree </code> (the default), collect recursively collects the score objects and subobjects contained in self (i.e. both the attributes items and parameters are traversed). If <code> mode </code> is set to <code> graph</code>, both objects contained in self and containers self is contained in are collected (i.e. all three attributes items, parameters, and containers are traversed).<BR>
 <BR>
@@ -167,7 +167,9 @@ clearInterval(drawit)
 <BR>
  The feature <code> test </code> expects a unary function returning a boolean or an atom representing a boolean unary method understood by all objects in self. The method collect only collects score objects fulfilling the test function/method.<BR>
 <BR>
- collect visits containers in depth-first fashion from left to right which affects the order of the objects in the returned list. E.g., collecting all events in a few nested sequentials in tree mode returns a list with all events ordered by start time.  <BR>
+ collect visits containers in depth-first fashion from left to right which affects the order of the objects in the returned list. E.g., collecting all events in a few nested sequentials in tree mode returns a list with all events ordered by start time.<BR>
+<BR>
+ NB: collect blocks if self is not fully initialised (e.g. created by Score.makeScore2) or if Test blocks at some object in self (e.g. because the object is only partially determined).<BR>
 <BR>
 </span>
 </li><li><span class="functionname">count</span>(?N level:Level mode:Mode test:Test)<br>
@@ -201,6 +203,8 @@ clearInterval(drawit)
 
 </tr></table>
 <span class="string"> The method find returns the first score object in self fulfilling Fn, a the unary function returning a boolean. The method supports the features <code> mode</code>, and <code> level</code>. These features have the same meaning as in the method collect.<BR>
+<BR>
+ NB: this implementation is inefficient (first collects all score objects).<BR>
 <BR>
 </span>
 </li><li><span class="functionname">forAll</span>(Proc level:Level mode:Mode test:Test)<br>

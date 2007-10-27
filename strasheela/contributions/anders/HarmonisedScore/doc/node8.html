@@ -132,20 +132,20 @@ clearInterval(drawit)
 <span class="string"></span>
 </span>
 <h3>Functor</h3>
-<ul>Partch ("<span class="string">/Users/t/oz/music/Strasheela/strasheela/contributions/anders/HarmonisedScore/source/databases/Partch.oz</span>")<br></ul>
+<ul>Partch ("<span class="string">/Users/t/oz/music/Strasheela/strasheela/trunk/strasheela/contributions/anders/HarmonisedScore/source/databases/Partch.oz</span>")<br></ul>
 <h3>Import</h3>
 <code><ul><li><a href="node14.html">HS</a> at "<span class="string">../../HarmonisedScore.ozf"
 </span></li></ul></code>
 <h3>Export</h3>
-<code><ul><li>&lt;P/2:<a href="#entity253"><span class="functionname">GetIntervals</span></a>&gt;
-</li><li>&lt;P/2:<a href="#entity250"><span class="functionname">Get11LimitDiamondChords</span></a>&gt;
-</li><li>&lt;P/2:<a href="#entity251"><span class="functionname">Get7LimitDiamondChords</span></a>&gt;
-</li><li>&lt;P/2:<a href="#entity252"><span class="functionname">Get5LimitDiamondChords</span></a>&gt;
+<code><ul><li>&lt;P/2:<a href="#entity266"><span class="functionname">GetIntervals</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity263"><span class="functionname">Get11LimitDiamondChords</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity264"><span class="functionname">Get7LimitDiamondChords</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity265"><span class="functionname">Get5LimitDiamondChords</span></a>&gt;
 </li></ul></code>
 <h3>Define</h3>
 
 <code>
-<a name="entity253">
+<a name="entity266">
 <span class="keyword">fun</span>{<span class="functionname">GetIntervals</span> KeysPerOctave}<br>
 <span class="string"> Returns a database with the Partch intervals. For usage in HS, the intervals are rounded to the nearest pitch class interval depending on KeysPerOctave (an int).<BR>
 <BR>
@@ -153,7 +153,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity250">
+<a name="entity263">
 <span class="keyword">fun</span>{<span class="functionname">Get11LimitDiamondChords</span> KeysPerOctave}<br>
 <span class="string"> Returns a database with the two chords which constitute the 11-limit tonality diamond. All other <code>6*6-2=34</code> chords of this diamond are transpositions of these two by the proportions of the other.<BR>
  For usage in HS, each chord's pitchclasses and root are rounded to the nearest pitch class depending on KeysPerOctave (an int).<BR>
@@ -164,12 +164,12 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity251">
+<a name="entity264">
 <span class="keyword">fun</span>{<span class="functionname">Get7LimitDiamondChords</span> KeysPerOctave}
 </code><br>
 
 <code>
-<a name="entity252">
+<a name="entity265">
 <span class="keyword">fun</span>{<span class="functionname">Get5LimitDiamondChords</span> KeysPerOctave}
 </code><br>
 <h3>End</h3>

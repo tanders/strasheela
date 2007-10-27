@@ -1,7 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
 <html>
  <head>
-  <title>Class ChordDegreeMixinForNote</title>
+  <title>Class ScaleDegreeMixinForNote</title>
   <style>BODY {
  background: url(page.gif) repeat-y white;
 }
@@ -123,7 +123,7 @@ clearInterval(drawit)
 
 <div style="margin-left:160px"><p align="right" class="margin"><div align="right">inheritance tree</div></p>
 <pre>
- <a class="pre" href="node3.html#entity97">ChordDegreeMixinForNote</a>
+ <a class="pre" href="node3.html#entity103">ScaleDegreeMixinForNote</a>
 </pre>
 <hr><p class="margin"><div align="right">class definition</div></p>
 <code>
@@ -134,15 +134,16 @@ clearInterval(drawit)
 
 
 </tr></table>
-<span class="string"> [abstract class] ChordDegreeMixinForNote corresponds to ScaleDegreeMixinForNote, but constrains the relation of the note with respect to a related chord instead of a scale. All parameter names etc. are idential, only 'scale' is always replaced by 'chord'. See ScaleDegreeMixinForNote for details.<BR>
- NB: Chord accidentals can be large (even larger than scale accidentals): in case of non-chord tones (InChordB=0), the neares chord tones can be many semitones away (or whatever the setting of PitchesPerOctave is). Therefore, set AccidentalOffset sufficiently high. <BR>
- NB: Like ScaleDegreeMixinForNote, the constrains posted by ChordDegreeMixinForNote are only effective after the related chord is known and determined. <BR>
+<span class="string"> [abstract class] ScaleDegreeMixinForNote extends the pitch representation of the class Note (HS.score.note). Whereas Note provides a pitch class representation, ScaleDegreeMixinForNote extends this Note class by support for scale degrees. This mixin defines the two parameters scaleDegree and scaleAccidental. scaleDegree denotes the degree of the note's pitch in the scale the note is related to. scaleAccidental denotes an accidental for scaleDegree in that scale, encoded as described in the doc for DegreeToPC. The relation between pitchClass, scaleDegree and scaleAccidental is constrained. <BR>
+ ScaleDegreeMixinForNote is defined as a mixin to make it more easy to combine this mixin with other extensions to the class Note. ScaleDegreeMixinForNote is designed to extend the class Note, because this mixin depends on the note mixin InScaleMixinForNote (HS.score.inScaleMixinForNote).<BR>
+ NB: Scale accidentals can be large: in case of non-diatonic tones (InScaleB=0), the neares diatonic tones can be several semitones away (or whatever the setting of PitchesPerOctave is). Therefore, set AccidentalOffset sufficiently high. <BR>
+ NB: the parameters scaleDegree and scaleAccidental are only constrained in their relation to the parameter pitchClass _after_ the related scale is known and fully determined.<BR>
 <BR>
 </span>
-<span class="keyword">class</span> <span class="type">ChordDegreeMixinForNote</span> (Inheritance-free)<br>
-&nbsp;&nbsp;&nbsp;<span class="keyword">attr</span>&nbsp;chordAccidental&nbsp;chordDegree
+<span class="keyword">class</span> <span class="type">ScaleDegreeMixinForNote</span> (Inheritance-free)<br>
+&nbsp;&nbsp;&nbsp;<span class="keyword">attr</span>&nbsp;scaleAccidental&nbsp;scaleDegree
 <br>
-<ul><li><span class="functionname">getChordAccidental</span>($)<br>
+<ul><li><span class="functionname">getScaleAccidental</span>($)<br>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
 
@@ -151,7 +152,7 @@ clearInterval(drawit)
 
 </tr></table>
 <span class="string"></span>
-</li><li><span class="functionname">getChordAccidentalParameter</span>($)<br>
+</li><li><span class="functionname">getScaleAccidentalParameter</span>($)<br>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
 
@@ -160,7 +161,7 @@ clearInterval(drawit)
 
 </tr></table>
 <span class="string"></span>
-</li><li><span class="functionname">getChordDegree</span>($)<br>
+</li><li><span class="functionname">getScaleDegree</span>($)<br>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
 
@@ -169,7 +170,7 @@ clearInterval(drawit)
 
 </tr></table>
 <span class="string"></span>
-</li><li><span class="functionname">getChordDegreeParameter</span>($)<br>
+</li><li><span class="functionname">getScaleDegreeParameter</span>($)<br>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
 
@@ -178,7 +179,7 @@ clearInterval(drawit)
 
 </tr></table>
 <span class="string"></span>
-</li><li><span class="functionname">initChordDegreeMixinForNote</span>(chordAccidental:Accidental chordDegree:Degree)<br>
+</li><li><span class="functionname">initScaleDegreeMixinForNote</span>(scaleAccidental:Accidental scaleDegree:Degree)<br>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
 

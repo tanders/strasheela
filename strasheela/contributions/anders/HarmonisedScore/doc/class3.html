@@ -1,7 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
 <html>
  <head>
-  <title>Class PitchClassMixin</title>
+  <title>Class InScaleMixinForNote</title>
   <style>BODY {
  background: url(page.gif) repeat-y white;
 }
@@ -123,7 +123,7 @@ clearInterval(drawit)
 
 <div style="margin-left:160px"><p align="right" class="margin"><div align="right">inheritance tree</div></p>
 <pre>
- <a class="pre" href="node3.html#entity92">PitchClassMixin</a>
+ <a class="pre" href="node3.html#entity101">InScaleMixinForNote</a>
 </pre>
 <hr><p class="margin"><div align="right">class definition</div></p>
 <code>
@@ -134,15 +134,13 @@ clearInterval(drawit)
 
 
 </tr></table>
-<span class="string"> [abstract class] PitchClassMixin defines a complementary pitch representation to extend the standard Strasheela Note class (as defined in ScoreCore.oz). In the standard class, on the one hand, the pitch is represented by a single parameter whose meaning depends on the pitch unit (possible units are, e.g., 'frequency' or 'pitch'). The present mixin for the note class, on the other hand, defines two additional parameters to represent pitch in an alternative way: pitchClass and octave. The mixin also constrains the obvious relation between these three parameters (with the help of PitchClassToPitch, see there).<BR>
- As a consequence, the possible pitch units for the parameter pitch is more limited (e.g. 'frequency' is not valid anymore). However, arbitrary equidistant microtonal divisions of the octave are still possible. The pitches per octave are set globally (with DB.setPitchesPerOctave), and the pitch unit of all note parameters pitch and pitch class are set implicitly. This means that the term 'pitch class' has a broader meaning here than it has in dodecaphonic music analysis: only in case there are 12 pitches per octave the term 'pitch class' has Forte's meaning. <BR>
- PitchClassMixin is defined as a mixin to the class Score.note to make it more easy to combine this mixin with other extensions to the note class. In Oz, multiple superclasses must not have a common class as their superclasses. Therefore, multiple note subclasses can not be directly combined, but multiple mixins for the note class can.. <BR>
+<span class="string"> [abstract class] Mixin class for a note class with pitchClass parameter. Allows to conveniently define relations between self (i.e. a note) and a scale. This mixin defines for a related scale what InChordMixinForNote defines for a related chord -- see doc there for details.<BR>
 <BR>
 </span>
-<span class="keyword">class</span> <span class="type">PitchClassMixin</span> (Inheritance-free)<br>
-&nbsp;&nbsp;&nbsp;<span class="keyword">attr</span>&nbsp;octave&nbsp;pitchClass
+<span class="keyword">class</span> <span class="type">InScaleMixinForNote</span> (Inheritance-free)<br>
+&nbsp;&nbsp;&nbsp;<span class="keyword">attr</span>&nbsp;inScaleB&nbsp;relatedScaleBs&nbsp;scales
 <br>
-<ul><li><span class="functionname">getOctave</span>(X)<br>
+<ul><li><span class="functionname">getInScaleB</span>(X)<br>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
 
@@ -151,7 +149,7 @@ clearInterval(drawit)
 
 </tr></table>
 <span class="string"></span>
-</li><li><span class="functionname">getOctaveParameter</span>(X)<br>
+</li><li><span class="functionname">getInScaleBParameter</span>(X)<br>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
 
@@ -160,7 +158,29 @@ clearInterval(drawit)
 
 </tr></table>
 <span class="string"></span>
-</li><li><span class="functionname">getPitchClass</span>(X)<br>
+</li><li><span class="functionname">getRelatedScaleBs</span>(X)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> Returns a list of 0/1-integers returned by {Map {<getScales>} <isRelatedScale>}. <getScales> and <isRelatedScale> are the functions given to initInScaleMixinForNote.<BR>
+<BR>
+</span>
+</li><li><span class="functionname">getScales</span>(X)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> Returns the list of candidate scale objects, i.e. the value returned by the proc set via the getScale init argument. <BR>
+<BR>
+</span>
+</li><li><span class="functionname">initInScaleMixinForNote</span>(...)<br>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
 
@@ -169,7 +189,7 @@ clearInterval(drawit)
 
 </tr></table>
 <span class="string"></span>
-</li><li><span class="functionname">getPitchClassParameter</span>(X)<br>
+</li><li><span class="functionname">isInScale</span>(B)<br>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
 
@@ -177,8 +197,10 @@ clearInterval(drawit)
 
 
 </tr></table>
-<span class="string"></span>
-</li><li><span class="functionname">initPitchClassMixin</span>(octave:Oct pitchClass:PC)<br>
+<span class="string"> see doc isInChord<BR>
+<BR>
+</span>
+</li><li><span class="functionname">nonScalePCConditions</span>(Conditions)<br>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
 
@@ -186,7 +208,9 @@ clearInterval(drawit)
 
 
 </tr></table>
-<span class="string"></span>
+<span class="string"> see doc nonChordPCConditions<BR>
+<BR>
+</span>
 </li></ul>
 <span class="keyword">end</span>
 </code>

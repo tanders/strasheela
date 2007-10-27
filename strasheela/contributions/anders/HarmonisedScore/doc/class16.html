@@ -1,7 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
 <html>
  <head>
-  <title>Class InScaleMixinForChord</title>
+  <title>Class Scale</title>
   <style>BODY {
  background: url(page.gif) repeat-y white;
 }
@@ -123,7 +123,15 @@ clearInterval(drawit)
 
 <div style="margin-left:160px"><p align="right" class="margin"><div align="right">inheritance tree</div></p>
 <pre>
- <a class="pre" href="node3.html#entity86">InScaleMixinForChord</a>
+ Score.temporalElement
+           |
+           |
+           |
+  <a class="pre" href="node3.html#entity87">PitchClassCollection</a>
+           |
+           |
+           |
+         <a class="pre" href="node3.html#entity91">Scale</a>
 </pre>
 <hr><p class="margin"><div align="right">class definition</div></p>
 <code>
@@ -134,17 +142,16 @@ clearInterval(drawit)
 
 
 </tr></table>
-<span class="string"> [abstract class] Mixin class, indented to extend the Chord class (a class with attribute pitchClasses). InScaleMixinForChord has much similarity with class InChordMixinForNote respectively InScaleMixinForNote -- see doc there for details (this documentation only explains the differences to InChordMixinForNote).<BR>
- Compared with InChordMixinForNote/InScaleMixinForNote, the present class InScaleMixinForChord defines the additional attribute 'chordPCsInScale' (a FS). The set chordPCsInScale includes all chord pitch classes which are also pitch classes of the scale related to the chord. inScaleB = 1 (i.e. true), in case _all_ chord pitch classes are also pitch classes of the related scale.<BR>
- Nevertheless, the FS chordPCsInScale can be useful to apply further constraints which control the relation between the chord and the related scale even in case inScaleB=0 (i.e. some chord pitch class is no scale pitch class). For instance, degreeToPC could be used to access a specific pitch class of chord (e.g. its third). By constraining a neutral accidental and by constraining that this pitch class is included in chordPCsInScale, the user constraints, e.g., a diatonic third of the chord. [note: this is not so easy, cf. def. of ScaleDegreeMixinForChord which does something related for the chord's root]<BR>
- <BR>
- NB: Contrary to InChordMixinForNote, InScaleMixinForChord does (currently?) not simplify the definition of CSPs involving 'non-existing' notes. Thus, instead of, e.g., setting InScaleB=1 you define something like, {FD.impl {CTT.isExisting MyChord} {MyChord isInChordR($)}}.<BR>
+<span class="string"> Scale represents an analytical scale, i.e. a scale which is silent when the score is played but is used to constrain notes simultaneous with the scale. For example, Scale instances can be used to express a modulation.<BR>
+ For further information see doc of PitchClassCollection.<BR>
 <BR>
 </span>
-<span class="keyword">class</span> <span class="type">InScaleMixinForChord</span> (Inheritance-free)<br>
-&nbsp;&nbsp;&nbsp;<span class="keyword">attr</span>&nbsp;chordPCsInScale&nbsp;inScaleB&nbsp;relatedScaleBs&nbsp;scales
+<span class="keyword">class</span> <span class="type">Scale</span> (Inheritance-free)<br>
+&nbsp;&nbsp;&nbsp;<span class="keyword">feat</span>&nbsp;!PitchClassCollectionType&nbsp;!ScaleType&nbsp;label
 <br>
-<ul><li><span class="functionname">getChordPCsInScale</span>(X)<br>
+&nbsp;&nbsp;&nbsp;<span class="keyword">attr</span>&nbsp;dbFeatures&nbsp;index&nbsp;pitchClasses&nbsp;root&nbsp;transposition&nbsp;untransposedPitchClasses&nbsp;untransposedRoot
+<br>
+<ul><li><span class="functionname">degreeToPC</span>(Degree Accidental PC)<br>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
 
@@ -153,7 +160,7 @@ clearInterval(drawit)
 
 </tr></table>
 <span class="string"></span>
-</li><li><span class="functionname">getInScaleB</span>(X)<br>
+</li><li><span class="functionname">getDB</span>(X)<br>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
 
@@ -161,28 +168,10 @@ clearInterval(drawit)
 
 
 </tr></table>
-<span class="string"></span>
-</li><li><span class="functionname">getInScaleBParameter</span>(X)<br>
-
-<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
-
-
-
-
-</tr></table>
-<span class="string"></span>
-</li><li><span class="functionname">getRelatedScaleBs</span>(X)<br>
-
-<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
-
-
-
-
-</tr></table>
-<span class="string"> Returns a list of 0/1-integers returned by {Map {<getScales>} <isRelatedScale>}. <getScales> and <isRelatedScale> are the functions given to initInScaleMixinForNote.<BR>
+<span class="string"> The chord database is defined by DB.setDB. getDB returns the internal representation of this database (see the DB.setDB for more details).<BR>
 <BR>
 </span>
-</li><li><span class="functionname">getScales</span>(X)<br>
+</li><li><span class="functionname">getDBFeature</span>(X Feat)<br>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
 
@@ -190,10 +179,21 @@ clearInterval(drawit)
 
 
 </tr></table>
-<span class="string"> Returns the list of candidate scale objects, i.e. the value returned by the proc set via the getScales init argument. <BR>
+<span class="string"> Returns the value (FD int or FS) of the additional feature Feat.<BR>
 <BR>
 </span>
-</li><li><span class="functionname">initInScaleMixinForChord</span>(...)<br>
+</li><li><span class="functionname">getDBFeatures</span>(X)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> Returns a record with the additional features defined in the database and 'announced' to self with the init argument dbFeatures.<BR>
+<BR>
+</span>
+</li><li><span class="functionname">getIndex</span>(X)<br>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
 
@@ -202,7 +202,7 @@ clearInterval(drawit)
 
 </tr></table>
 <span class="string"></span>
-</li><li><span class="functionname">isInScale</span>(B)<br>
+</li><li><span class="functionname">getIndexParameter</span>(X)<br>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
 
@@ -210,9 +210,106 @@ clearInterval(drawit)
 
 
 </tr></table>
-<span class="string"> see doc InChordMixinForNote, isInChord <BR>
-<BR>
-</span>
+<span class="string"></span>
+</li><li><span class="functionname">getInitInfo</span>($ exclude:Excluded)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"></span>
+</li><li><span class="functionname">getPitchClasses</span>(X)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"></span>
+</li><li><span class="functionname">getRoot</span>(X)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"></span>
+</li><li><span class="functionname">getRootParameter</span>(X)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"></span>
+</li><li><span class="functionname">getTransposition</span>(X)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"></span>
+</li><li><span class="functionname">getTranspositionParameter</span>(X)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"></span>
+</li><li><span class="functionname">getUntransposedPitchClasses</span>(X)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"></span>
+</li><li><span class="functionname">getUntransposedRoot</span>(X)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"></span>
+</li><li><span class="functionname">getUntransposedRootParameter</span>(X)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"></span>
+</li><li><span class="functionname">init</span>(dbFeatures:DBFeats index:Index pitchClasses:PitchClasses root:Root transposition:Trans untransposedPitchClasses:UntransposedPitchClasses untransposedRoot:UntranspRoot&nbsp;...)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"></span>
+</li><li><span class="functionname">toPPrintRecord</span>(X excluded:Excluded features:Features)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"></span>
 </li></ul>
 <span class="keyword">end</span>
 </code>

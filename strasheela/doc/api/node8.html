@@ -131,28 +131,28 @@ clearInterval(drawit)
 </span>
 </span>
 <h3>Functor</h3>
-<ul>SDistro ("<span class="string">/Users/t/oz/music/Strasheela/strasheela/source/ScoreDistribution.oz</span>")<br></ul>
+<ul>SDistro ("<span class="string">/Users/t/oz/music/Strasheela/strasheela/trunk/strasheela/source/ScoreDistribution.oz</span>")<br></ul>
 <h3>Import</h3>
 <code><ul><li>FD</li><li>Search</li><li>Explorer</li><li><a href="node3.html">GUtils</a> at "<span class="string">GeneralUtils.ozf"
 </span></li><li><a href="node4.html">LUtils</a> at "<span class="string">ListUtils.ozf"
 </span></li></ul></code>
 <h3>Export</h3>
-<code><ul><li>&lt;P/2:<a href="#entity312"><span class="functionname">MakeFDDistribution</span></a>&gt;
-</li><li>&lt;P/3:<a href="#entity313"><span class="functionname">MakeSearchScript</span></a>&gt;
-</li><li>&lt;P/3:<a href="#entity314"><span class="functionname">SearchOne</span></a>&gt;
-</li><li>&lt;P/3:<a href="#entity315"><span class="functionname">SearchAll</span></a>&gt;
-</li><li>&lt;P/4:<a href="#entity316"><span class="functionname">SearchBest</span></a>&gt;
-</li><li>&lt;P/2:<a href="#entity317"><span class="functionname">ExploreOne</span></a>&gt;
-</li><li>&lt;P/2:<a href="#entity318"><span class="functionname">ExploreAll</span></a>&gt;
-</li><li>&lt;P/3:<a href="#entity319"><span class="functionname">ExploreBest</span></a>&gt;
-</li><li>&lt;P/2:<a href="#entity320"><span class="functionname">MakeRandomDistributionValue</span></a>&gt;
-</li><li>&lt;P/3:<a href="#entity322"><span class="functionname">MakeSetPreferredOrder</span></a>&gt;
-</li><li>&lt;P/2:<a href="#entity321"><span class="functionname">MakeSetPreferredOrder2</span></a>&gt;
+<code><ul><li>&lt;P/2:<a href="#entity316"><span class="functionname">MakeFDDistribution</span></a>&gt;
+</li><li>&lt;P/3:<a href="#entity317"><span class="functionname">MakeSearchScript</span></a>&gt;
+</li><li>&lt;P/3:<a href="#entity318"><span class="functionname">SearchOne</span></a>&gt;
+</li><li>&lt;P/3:<a href="#entity319"><span class="functionname">SearchAll</span></a>&gt;
+</li><li>&lt;P/4:<a href="#entity320"><span class="functionname">SearchBest</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity321"><span class="functionname">ExploreOne</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity322"><span class="functionname">ExploreAll</span></a>&gt;
+</li><li>&lt;P/3:<a href="#entity323"><span class="functionname">ExploreBest</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity324"><span class="functionname">MakeRandomDistributionValue</span></a>&gt;
+</li><li>&lt;P/3:<a href="#entity326"><span class="functionname">MakeSetPreferredOrder</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity325"><span class="functionname">MakeSetPreferredOrder2</span></a>&gt;
 </li></ul></code>
 <h3>Define</h3>
 
 <code>
-<a name="entity312">
+<a name="entity316">
 <span class="keyword">fun</span>{<span class="functionname">MakeFDDistribution</span> Spec}<br>
 <span class="string"> Function returns a specification of a distribution strategy (i.e. an argument for FD.distribute) for parameter score objects. The reader is asked to first read the documentation for FD.distribute.<BR>
 <BR>
@@ -180,7 +180,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity313">
+<a name="entity317">
 <span class="keyword">fun</span>{<span class="functionname">MakeSearchScript</span> ScoreScript Args}<br>
 <span class="string"> Returns a search script (a unary procedure) whose solution is a score.  ScoreScript is a unary proc expressing whole search problem involving a score as its solution, however without specifying any distribution strategy. Args is a record specifying the score distribution strategy with the usual features for a distribution strategy (filter, order, select, value, and procedure) and the additional feature test. The distribution strategy features have the same meaning and usage as in MakeFDDistribution. The feature test expects a unary boolean function: all score parameters fulfilling the test are distributed. Test defaults to the following (NB: for this case, the offsetTime of temporal items must be determined).<BR>
    fun {Test X}<BR>
@@ -192,7 +192,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity314">
+<a name="entity318">
 <span class="keyword">fun</span>{<span class="functionname">SearchOne</span> ScoreScript Args}<br>
 <span class="string"> Calls Search.base.one with a script created by MakeSearchScript. The meaning of the arguments ScoreScript and Args are the same as for MakeSearchScript.<BR>
 <BR>
@@ -200,7 +200,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity315">
+<a name="entity319">
 <span class="keyword">fun</span>{<span class="functionname">SearchAll</span> ScoreScript Args}<br>
 <span class="string"> Calls Search.base.all with a script created by MakeSearchScript. The meaning of the arguments ScoreScript and Args are the same as for MakeSearchScript.<BR>
 <BR>
@@ -208,7 +208,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity316">
+<a name="entity320">
 <span class="keyword">fun</span>{<span class="functionname">SearchBest</span> ScoreScript OrderP Args}<br>
 <span class="string"> Calls Search.base.best with a script created by MakeSearchScript. The meaning of the arguments ScoreScript and Args are the same as for MakeSearchScript. Best solution is performed with respect to OrderP (a binary procedure). <BR>
 <BR>
@@ -216,7 +216,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity317">
+<a name="entity321">
 <span class="keyword">proc</span>{<span class="functionname">ExploreOne</span> ScoreScript Args}<br>
 <span class="string"> Calls Explorer.one with a script created by MakeSearchScript. The meaning of the arguments are the same as for MakeSearchScript.<BR>
 <BR>
@@ -224,7 +224,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity318">
+<a name="entity322">
 <span class="keyword">proc</span>{<span class="functionname">ExploreAll</span> ScoreScript Args}<br>
 <span class="string"> Calls Explorer.all with a script created by MakeSearchScript. The meaning of the arguments are the same as for MakeSearchScript.<BR>
 <BR>
@@ -232,7 +232,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity319">
+<a name="entity323">
 <span class="keyword">proc</span>{<span class="functionname">ExploreBest</span> ScoreScript OrderP Args}<br>
 <span class="string"> Calls Explorer.best with a script created by MakeSearchScript. The meaning of the arguments ScoreScript and Args are the same as for MakeSearchScript. Best solution is performed with respect to OrderP (a binary procedure). <BR>
 <BR>
@@ -240,7 +240,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity320">
+<a name="entity324">
 <span class="keyword">fun</span>{<span class="functionname">MakeRandomDistributionValue</span> RandGen}<br>
 <span class="string"> Defines a means for a 'random distribution', i.e., for a FD distribution strategy which randomly decides for a domain value of a variable in a deterministic (i.e. recomputable) way. <BR>
  MakeRandomDistributionValue returns a binary procedure for the argument 'value' of FD.distribute. The argument RandGen is a nullary function generated by GUtils.makeRandomGenerator.<BR>
@@ -249,7 +249,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity322">
+<a name="entity326">
 <span class="keyword">fun</span>{<span class="functionname">MakeSetPreferredOrder</span> Tests IfEqual}<br>
 <span class="string"> Returns a score distribution strategy 'order' procedure. Tests is a list of unary boolean funcs which expect a parameter. The distribution 'prefers' parameters for which a test with smaller index in Tests returns true. IfEqual is a binary boolean function which 'decides' in case for two parameters with equal 'test index'.<BR>
  More general Variation of MakeSetPreferredOrder2. Which strategy variant is more efficient depends on the problem.. <BR>
@@ -258,7 +258,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity321">
+<a name="entity325">
 <span class="keyword">fun</span>{<span class="functionname">MakeSetPreferredOrder2</span> Tests}<br>
 <span class="string"> Returns a score distribution strategy 'order' procedure. Tests is a list of unary boolean funcs which expect a parameter. The distribution 'prefers' parameters for which a test with smaller index in Tests returns true. In case of two parameters with equal 'test index' the strategy decides for the first param.<BR>
 <BR>

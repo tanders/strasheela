@@ -1,7 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
 <html>
  <head>
-  <title>Class Chord</title>
+  <title>Class PitchClassCollection</title>
   <style>BODY {
  background: url(page.gif) repeat-y white;
 }
@@ -127,11 +127,7 @@ clearInterval(drawit)
            |
            |
            |
-  <a class="pre" href="node3.html#entity80">PitchClassCollection</a>
-           |
-           |
-           |
-         <a class="pre" href="node3.html#entity82">Chord</a>
+  <a class="pre" href="node3.html#entity87">PitchClassCollection</a>
 </pre>
 <hr><p class="margin"><div align="right">class definition</div></p>
 <code>
@@ -142,12 +138,18 @@ clearInterval(drawit)
 
 
 </tr></table>
-<span class="string"> Chord represents an analytical chord, i.e. a chord which is silent when the score is played but is used to constrain notes simultaneous with the chord. For example, Chord instances can be used to express a roman numeral or functional analysis of the music.<BR>
- For further information see doc of PitchClassCollection.<BR>
+<span class="string"> [abstract class] Represents a collection of pitch classes (absolute pitches without octave component) which is a transposed version of a pitch class collection from a user-defined database (see ./Database.oz respectively DB). Example subclasses of PitchClassCollection include analytical score objects such as Scale or Chord. The design of PitchClassCollection aims to be highly generic: PitchClassCollection is intended to allow the user to define her/his own theory of harmony based on user defined databases of chords and scales; PitchClassCollection even supports microtonal music based on freely defined equidistant subdivisions of the octave (e.g. et72 or even measured in cent, set in the DB as pitchesPerOctave).<BR>
+ PitchClassCollection defines four parameters (index, transposition, root, untransposedRoot) whose value is a FD integer, and two attributes which are FS (pitchClasses, untransposedPitchClasses). The index is the position of the respective chord/scale in the chord/scale database, transposition denotes how much self is transposed with respect to the database entry, pitchClasses is the set of transposed pitch classes and root is the transposed root pitch class (untransposed roots are defined in the database). untransposedPitchClasses and untransposedRoot are the untransposed pitchClasses and the untransposed root, i.e. the actual pitch classes in the database entry. Except for index, all parameters/attributes denote pitch classes, that is absolute pitches without an octave component. What the actual value of a pitch class means depends on the pitches per octave setting in the database. Consequently, the pitchUnit of all pitch classes is implicitly set accordingly depending on DB.getPitchesPerOctave.<BR>
+ The class PitchClassCollection allows to access and constrain further chord/scale-specific properties. Besides the compulsary chord/scale database features pitchClasses and roots, the user can define arbitrary further attributes in each database entry (see DB.setDB). Examples include dissonanceDegree, resemblanceWithTradition, clearnessOfColour etc. The init argument dbFeatures allows to accociates self with further FD/FS variables. These variables are constrained to the values at the respective feature of an database entry at the position of self's index. The database features to be used are 'announced' by the init method argument dbFeatures, which expects a list of atoms denoting the database features to include.<BR>
+ Let us assume that the database defines the feature dissonanceDegree for each entry in the database. This feature is 'announced' to self with the init argument init(dbFeatures:[dissonanceDegree] ...). The dissonance degree of self is then accessible -- and further constrainable -- by {self getDBFeature($ dissonanceDegree)}.<BR>
+<BR>
+ NB: In case the database defines only chord/scale entries with single roots, only the parameters index and transposition are necessary to distribute because once index and transposition are determined, all other parameters/attributes are determined as well. Therefore, the distribution strategy may filter out all root and untransposedRoot parameters for efficiency (their info slot contains root or untransposedRoot). However, in case one or more chords/scales in the DB define mutiple possible roots then the root _or_ the untransposedRoot must be distributed explicitly (but one of them is sufficient). <BR>
+<BR>
+ BTW: The actual chord/scale database is accessible by the method getDB (see there).<BR>
 <BR>
 </span>
-<span class="keyword">class</span> <span class="type">Chord</span> (Inheritance-free)<br>
-&nbsp;&nbsp;&nbsp;<span class="keyword">feat</span>&nbsp;!ChordType&nbsp;!PitchClassCollectionType&nbsp;label
+<span class="keyword">class</span> <span class="type">PitchClassCollection</span> (Inheritance-free)<br>
+&nbsp;&nbsp;&nbsp;<span class="keyword">feat</span>&nbsp;!PitchClassCollectionType&nbsp;label
 <br>
 &nbsp;&nbsp;&nbsp;<span class="keyword">attr</span>&nbsp;dbFeatures&nbsp;index&nbsp;pitchClasses&nbsp;root&nbsp;transposition&nbsp;untransposedPitchClasses&nbsp;untransposedRoot
 <br>
@@ -168,7 +170,7 @@ clearInterval(drawit)
 
 
 </tr></table>
-<span class="string"> The chord database is defined by DB.setDB. getDB returns the internal representation of this database (see the DB.setDB for more details).<BR>
+<span class="string"> dummy method for documentation -- redefined in subclasses.<BR>
 <BR>
 </span>
 </li><li><span class="functionname">getDBFeature</span>(X Feat)<br>

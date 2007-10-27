@@ -1,7 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
 <html>
  <head>
-  <title>Class ScaleDegreeMixinForNote</title>
+  <title>Class EnharmonicSpellingMixinForNote</title>
   <style>BODY {
  background: url(page.gif) repeat-y white;
 }
@@ -123,7 +123,7 @@ clearInterval(drawit)
 
 <div style="margin-left:160px"><p align="right" class="margin"><div align="right">inheritance tree</div></p>
 <pre>
- <a class="pre" href="node3.html#entity96">ScaleDegreeMixinForNote</a>
+ <a class="pre" href="node3.html#entity102">EnharmonicSpellingMixinForNote</a>
 </pre>
 <hr><p class="margin"><div align="right">class definition</div></p>
 <code>
@@ -134,16 +134,16 @@ clearInterval(drawit)
 
 
 </tr></table>
-<span class="string"> [abstract class] ScaleDegreeMixinForNote extends the pitch representation of the class Note (HS.score.note). Whereas Note provides a pitch class representation, ScaleDegreeMixinForNote extends this Note class by support for scale degrees. This mixin defines the two parameters scaleDegree and scaleAccidental. scaleDegree denotes the degree of the note's pitch in the scale the note is related to. scaleAccidental denotes an accidental for scaleDegree in that scale, encoded as described in the doc for DegreeToPC. The relation between pitchClass, scaleDegree and scaleAccidental is constrained. <BR>
- ScaleDegreeMixinForNote is defined as a mixin to make it more easy to combine this mixin with other extensions to the class Note. ScaleDegreeMixinForNote is designed to extend the class Note, because this mixin depends on the note mixin InScaleMixinForNote (HS.score.inScaleMixinForNote).<BR>
- NB: Scale accidentals can be large: in case of non-diatonic tones (InScaleB=0), the neares diatonic tones can be several semitones away (or whatever the setting of PitchesPerOctave is). Therefore, set AccidentalOffset sufficiently high. <BR>
- NB: the parameters scaleDegree and scaleAccidental are only constrained in their relation to the parameter pitchClass _after_ the related scale is known and fully determined.<BR>
+<span class="string"> [abstract class] CMajorDegreeMixin extends the class Note2 (HS.score.note2) by support for (numerically represented!) enharmonic spelling. This mixin defines the two parameters cMajorDegree and cMajorAccidental. cMajorDegree denotes the degree of the note's pitch in C major, which also indicates its note name (i.e. c=0, d=1, ..., b=7). cMajorAccidental denotes an accidental for cMajorDegree in C major, encoded as described in the doc for DegreeToPC. The relation between pitchClass, cMajorDegree and cMajorAccidental is constrained. <BR>
+ NB: This Mixin is defined as an extension for the class Note2: EnharmonicSpellingMixin relies on the parameter pitchClass as defined in Note2. Nevertheless, EnharmonicSpellingMixinForNote is defined as a mixin to make it more easy to combine this mixin with other extensions to the note class.<BR>
+ NB: cMajorAccidental defaults to {DB.makeAccidentalFDInt} -- which leaves cMajorDegree at its full domain even if the note pitch is determined (at least for an AccidentalOffset >= 2). Even reducing the domain of cMajorAccidental to correspond to {b , natural, #} still does not determine cMajorDegree, but usually leaves two domain values.<BR>
+ ??!! shall I reduce the domain of the cMajorAccidental default to {HS.score.absoluteToOffsetAccidental ~1}#{HS.score.absoluteToOffsetAccidental 1}<BR>
 <BR>
 </span>
-<span class="keyword">class</span> <span class="type">ScaleDegreeMixinForNote</span> (Inheritance-free)<br>
-&nbsp;&nbsp;&nbsp;<span class="keyword">attr</span>&nbsp;scaleAccidental&nbsp;scaleDegree
+<span class="keyword">class</span> <span class="type">EnharmonicSpellingMixinForNote</span> (Inheritance-free)<br>
+&nbsp;&nbsp;&nbsp;<span class="keyword">attr</span>&nbsp;cMajorAccidental&nbsp;cMajorDegree
 <br>
-<ul><li><span class="functionname">getScaleAccidental</span>($)<br>
+<ul><li><span class="functionname">getCMajorAccidental</span>(X)<br>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
 
@@ -152,7 +152,7 @@ clearInterval(drawit)
 
 </tr></table>
 <span class="string"></span>
-</li><li><span class="functionname">getScaleAccidentalParameter</span>($)<br>
+</li><li><span class="functionname">getCMajorAccidentalParameter</span>(X)<br>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
 
@@ -161,7 +161,7 @@ clearInterval(drawit)
 
 </tr></table>
 <span class="string"></span>
-</li><li><span class="functionname">getScaleDegree</span>($)<br>
+</li><li><span class="functionname">getCMajorDegree</span>(X)<br>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
 
@@ -170,7 +170,7 @@ clearInterval(drawit)
 
 </tr></table>
 <span class="string"></span>
-</li><li><span class="functionname">getScaleDegreeParameter</span>($)<br>
+</li><li><span class="functionname">getCMajorDegreeParameter</span>(X)<br>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
 
@@ -179,7 +179,7 @@ clearInterval(drawit)
 
 </tr></table>
 <span class="string"></span>
-</li><li><span class="functionname">initScaleDegreeMixinForNote</span>(scaleAccidental:Accidental scaleDegree:Degree)<br>
+</li><li><span class="functionname">initEnharmonicSpellingMixinForNote</span>(cMajorAccidental:Accidental cMajorDegree:Degree)<br>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
 

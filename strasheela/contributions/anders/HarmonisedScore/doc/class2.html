@@ -1,7 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
 <html>
  <head>
-  <title>Class InScaleMixinForNote</title>
+  <title>Class InChordMixinForNote</title>
   <style>BODY {
  background: url(page.gif) repeat-y white;
 }
@@ -123,7 +123,7 @@ clearInterval(drawit)
 
 <div style="margin-left:160px"><p align="right" class="margin"><div align="right">inheritance tree</div></p>
 <pre>
- <a class="pre" href="node3.html#entity94">InScaleMixinForNote</a>
+ <a class="pre" href="node3.html#entity100">InChordMixinForNote</a>
 </pre>
 <hr><p class="margin"><div align="right">class definition</div></p>
 <code>
@@ -134,13 +134,32 @@ clearInterval(drawit)
 
 
 </tr></table>
-<span class="string"> [abstract class] Mixin class for a note class with pitchClass parameter. Allows to conveniently define relations between self (i.e. a note) and a scale. This mixin defines for a related scale what InChordMixinForNote defines for a related chord -- see doc there for details.<BR>
+<span class="string"> [abstract class] Mixin class for a note class with pitchClass parameter. Allows to conveniently define relations between self (i.e. a note) and a chord. The parameter inChordB (value is a 0/1 int) states whether the pitch class (a FD int) of self is included in the pitch classes (a FS) of the chord to which self is related.<BR>
+ Which chord actually self is related to, this is defined by the required init arguments getChords and isRelatedChord. Both arguments expect a procedure. getChords expects a unary function which expects self and returns a list of chord candidates to which self may be related (e.g. all chords in the piece). However, self is related to exactly one chord. Therefore, if the function at getChords returns a list with exactly one chord, then the related chord is determined. For example, in case the rhythmic structure of the music is determined in the CSP, the function at getChords may return the chord simultaneous with self: <code> proc {$ Self} {Self getSimultaneousItems($ test:IsChord)}.1 end </code>. In any case, the user should aim to keep the number of related chord candidates low to minimise propagators.<BR>
+ In case of multiple related chord candidates (i.e. the related chord is not determined in the CSP definition, e.g., because the rhythmic structure of the music is undetermined in the problem definition), the procedure at isRelatedChord defines which of the candidates the actual related chord is. This ternary procedure expects self, a chord, and an 0/1-int (the 0/1-int is declared within the proc). For the related chord, the 0/1-int is 1 (and 0 otherwise). For example, to relate self to its simultaneous chord this proc may be defined <code> proc {$ Self Chord B} {Self isSimultaneousItemR(B Chord)} end </code>.  However, as mentioned before only exactly one chord may be related to self (this is an implicit constraint in the class def -- intendent to enhance propagation -- which causes the search to fail otherwise).<BR>
+ In case a single note shall optionally be related to multiple chords (e.g. to express a suspension) consider to represent this single note with multiple note objects. The representation of the note may even explicitly represent tied notes: an additional 0/1-int parameter could state whether a note is tied, e.g., to its predecessor with the implied constraint that their pitches equal.<BR>
+ Additional constraints may be enforced on self dependent on the value of the parameter inChordB, see the method nonChordNoteConditions for details.<BR>
+ NB: To simplify the definition of CSPs involving 'non-existing' notes (i.e. notes of duration 0, see contribution CTT), the value of inChordB is irrelevant for the pitch class of 'non-existing' notes. <BR>
+ NB: isRelatedChord defaults to <code> proc {$ Self Chord B} B=1 end </code>, which is suitable in case the related chord is already determined in the CSP definition (i.e. getChords returns 1 chord). However, in case the related chord is _not_ determined in the CSP definition (i.e. getChords returns multiple chord candidates) then isRelatedChord must be specified (i.e. the default is unsuitable for multiple chords).<BR>
+ NB: In case the related chord is _not_ determined in the CSP definition (i.e. getChords returns multiple chord candidates), this relation should be determined as early as possible to support propagation. That is, the 0/1 ints returned by isRelatedChord for each chord candidate returned by getChords should be determined as early as possibel. However, these 0/1 ints can not be distributed (they are no parameters). Instead, the respective constraint defined by isRelatedChord should be 'determined' otherwise. E.g., in case isRelatedChord is defined as <code> proc {$ Self Chord B} {Self isSimultaneousItemR(B Chord)} end </code> then determining the timing structure should be 'preferred' by the distribution strategy.<BR>
+ NB: the procedures given as init arguments are lost when the score is transformed to a literal/textual representation (and thus their implicit constraints).<BR>
 <BR>
 </span>
-<span class="keyword">class</span> <span class="type">InScaleMixinForNote</span> (Inheritance-free)<br>
-&nbsp;&nbsp;&nbsp;<span class="keyword">attr</span>&nbsp;inScaleB&nbsp;relatedScaleBs&nbsp;scales
+<span class="keyword">class</span> <span class="type">InChordMixinForNote</span> (Inheritance-free)<br>
+&nbsp;&nbsp;&nbsp;<span class="keyword">attr</span>&nbsp;chords&nbsp;inChordB&nbsp;relatedChordBs
 <br>
-<ul><li><span class="functionname">getInScaleB</span>(X)<br>
+<ul><li><span class="functionname">getChords</span>(X)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> Returns the list of candidate chord objects, i.e. the value returned by the proc set via the getChords init argument. <BR>
+<BR>
+</span>
+</li><li><span class="functionname">getInChordB</span>(X)<br>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
 
@@ -149,7 +168,7 @@ clearInterval(drawit)
 
 </tr></table>
 <span class="string"></span>
-</li><li><span class="functionname">getInScaleBParameter</span>(X)<br>
+</li><li><span class="functionname">getInChordBParameter</span>(X)<br>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
 
@@ -158,7 +177,7 @@ clearInterval(drawit)
 
 </tr></table>
 <span class="string"></span>
-</li><li><span class="functionname">getRelatedScaleBs</span>(X)<br>
+</li><li><span class="functionname">getRelatedChordBs</span>(X)<br>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
 
@@ -166,21 +185,10 @@ clearInterval(drawit)
 
 
 </tr></table>
-<span class="string"> Returns a list of 0/1-integers returned by {Map {<getScales>} <isRelatedScale>}. <getScales> and <isRelatedScale> are the functions given to initInScaleMixinForNote.<BR>
+<span class="string"> Returns a list of 0/1-integers returned by {Map {<getChords>} <isRelatedChord>}. <getChords> and <isRelatedChord> are the functions given to initInChordMixinForNote.<BR>
 <BR>
 </span>
-</li><li><span class="functionname">getScales</span>(X)<br>
-
-<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
-
-
-
-
-</tr></table>
-<span class="string"> Returns the list of candidate scale objects, i.e. the value returned by the proc set via the getScale init argument. <BR>
-<BR>
-</span>
-</li><li><span class="functionname">initInScaleMixinForNote</span>(...)<br>
+</li><li><span class="functionname">initInChordMixinForNote</span>(...)<br>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
 
@@ -189,7 +197,7 @@ clearInterval(drawit)
 
 </tr></table>
 <span class="string"></span>
-</li><li><span class="functionname">isInScale</span>(B)<br>
+</li><li><span class="functionname">isInChord</span>(B)<br>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
 
@@ -197,10 +205,10 @@ clearInterval(drawit)
 
 
 </tr></table>
-<span class="string"> see doc isInChord<BR>
+<span class="string"> Returns an 0/1-int which states whether or not the pitch class of self is included in the pitch classes of its related chord. This definition is an alias for getInChordB.<BR>
 <BR>
 </span>
-</li><li><span class="functionname">nonScalePCConditions</span>(Conditions)<br>
+</li><li><span class="functionname">nonChordPCConditions</span>(Conditions)<br>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
 
@@ -208,7 +216,9 @@ clearInterval(drawit)
 
 
 </tr></table>
-<span class="string"> see doc nonChordPCConditions<BR>
+<span class="string"> Defines and applies a 'meta-rule' which conveniently defines a number of conditions which effect self dependent on the value of {self isInChord($)}. Conditions is a list of binary procs expecting self and an 0/1-int (declared within the proc). These conditions form alternative constraints on self. A typical condition example would be a boolean constraint whether self is a passing note, another whether self is a suspension.<BR>
+ If none of the given conditions is true, then self must be 'in' the chord (i.e. 1={self isInChord($)}). Similarily, if self is not in the chord, at least one of the conditions must be true. However, the opposite is not necessarily true: if one or more conditions are the case then self may or may not be in the chord and also if self is in the chord then one or more conditions still may or may not be true.<BR>
+ For instance, this meta-rule never constraints a note to necessarily be a non-chord note. You may however easily do this, e.g, by constraining {self isInChord($)}=0 directly -- which would have the consequence that one of Conditions must be true. <BR>
 <BR>
 </span>
 </li></ul>

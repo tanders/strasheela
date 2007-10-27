@@ -136,68 +136,82 @@ clearInterval(drawit)
 </span>
 </span>
 <h3>Functor</h3>
-<ul>Score ("<span class="string">/Users/t/oz/music/Strasheela/strasheela/contributions/anders/HarmonisedScore/source/Score.oz</span>")<br></ul>
+<ul>Score ("<span class="string">/Users/t/oz/music/Strasheela/strasheela/trunk/strasheela/contributions/anders/HarmonisedScore/source/Score.oz</span>")<br></ul>
 <h3>Import</h3>
 <code><ul><li>FD</li><li>FS</li><li>Combinator</li><li>Browser(browse:Browse)</li><li>Select at "<span class="string">x-ozlib://duchier/cp/Select.ozf"
 </span></li><li>GUtils at "<span class="string">x-ozlib://anders/strasheela/source/GeneralUtils.ozf"
 </span></li><li>LUtils at "<span class="string">x-ozlib://anders/strasheela/source/ListUtils.ozf"
 </span></li><li>MUtils at "<span class="string">x-ozlib://anders/strasheela/source/MusicUtils.ozf"
 </span></li><li>Score at "<span class="string">x-ozlib://anders/strasheela/source/ScoreCore.ozf"
+</span></li><li>Pattern at "<span class="string">x-ozlib://anders/strasheela/Pattern/Pattern.ozf"
 </span></li><li>CTT at "<span class="string">x-ozlib://anders/strasheela/ConstrainTimingTree/ConstrainTimingTree.ozf"
 </span></li><li><a href="node2.html">DB</a> at "<span class="string">Database.ozf"
 </span></li><li><a href="node4.html">Rules</a> at "<span class="string">Rules.ozf"
 </span></li></ul></code>
 <h3>Export</h3>
-<code><ul><li>&lt;P/2:<a href="#entity68"><span class="functionname">PitchClassToPitch</span></a>&gt;
-</li><li>&lt;P/3:<a href="#entity69"><span class="functionname">TransposePC</span></a>&gt;
-</li><li>&lt;P/3:<a href="#entity70"><span class="functionname">DegreeToPC</span></a>&gt;
-</li><li>&lt;P/2:<a href="#entity71"><span class="functionname">CMajorDegreeToPC</span></a>&gt;
-</li><li>&lt;P/4:<a href="#entity72"><span class="functionname">TransposeDegree</span></a>&gt;
-</li><li>&lt;P/2:<a href="#entity73"><span class="functionname">AbsoluteToOffsetAccidental</span></a>&gt;
-</li><li>&lt;P/2:<a href="#entity74"><span class="functionname">OffsetToAbsoluteAccidental</span></a>&gt;
-</li><li>&lt;P/3:<a href="#entity75"><span class="functionname">PcSetToSequence</span></a>&gt;
-</li><li>&lt;C:<a href="#entity93"><span class="type">InChordMixinForNote</span></a>&gt;
-</li><li>&lt;C:<a href="#entity94"><span class="type">InScaleMixinForNote</span></a>&gt;
-</li><li>&lt;C:<a href="#entity92"><span class="type">PitchClassMixin</span></a>&gt;
-</li><li>&lt;C:<a href="#entity95"><span class="type">EnharmonicSpellingMixinForNote</span></a>&gt;
-</li><li>&lt;C:<a href="#entity96"><span class="type">ScaleDegreeMixinForNote</span></a>&gt;
-</li><li>&lt;C:<a href="#entity97"><span class="type">ChordDegreeMixinForNote</span></a>&gt;
-</li><li>&lt;C:<a href="#entity100"><span class="type">Note</span></a>&gt;
-</li><li>&lt;C:<a href="#entity99"><span class="type">Note2</span></a>&gt;
-</li><li>&lt;C:<a href="#entity101"><span class="type">FullNote</span></a>&gt;
-</li><li>&lt;C:<a href="#entity102"><span class="type">EnharmonicNote</span></a>&gt;
-</li><li>&lt;C:<a href="#entity103"><span class="type">ScaleDegreeNote</span></a>&gt;
-</li><li>&lt;C:<a href="#entity104"><span class="type">ChordDegreeNote</span></a>&gt;
-</li><li>&lt;C:<a href="#entity80"><span class="type">PitchClassCollection</span></a>&gt;
-</li><li>&lt;P/2:<a href="#entity81"><span class="functionname">IsPitchClassCollection</span></a>&gt;
-</li><li>&lt;C:<a href="#entity82"><span class="type">Chord</span></a>&gt;
-</li><li>&lt;P/2:<a href="#entity83"><span class="functionname">IsChord</span></a>&gt;
-</li><li>&lt;C:<a href="#entity84"><span class="type">Scale</span></a>&gt;
-</li><li>&lt;P/2:<a href="#entity85"><span class="functionname">IsScale</span></a>&gt;
-</li><li>&lt;C:<a href="#entity86"><span class="type">InScaleMixinForChord</span></a>&gt;
-</li><li>&lt;C:<a href="#entity87"><span class="type">DiatonicChord</span></a>&gt;
-</li><li>&lt;C:<a href="#entity88"><span class="type">ScaleDegreeMixinForChord</span></a>&gt;
-</li><li>&lt;C:<a href="#entity89"><span class="type">ScaleDegreeChord</span></a>&gt;
-</li><li>&lt;C:<a href="#entity90"><span class="type">ChordStartMixin</span></a>&gt;
-</li><li>&lt;P/2:<a href="#entity91"><span class="functionname">StartChordWithMarker</span></a>&gt;
-</li><li>&lt;C:<a href="#entity77"><span class="type">PitchClass</span></a>&gt;
-</li><li>&lt;P/2:<a href="#entity78"><span class="functionname">IsPitchClass</span></a>&gt;
-</li><li>&lt;P/5:<a href="#entity105"><span class="functionname">HarmoniseScore</span></a>&gt;
-</li><li>&lt;P/5:<a href="#entity106"><span class="functionname">HarmoniseScore2</span></a>&gt;
+<code><ul><li>&lt;P/2:<a href="#entity69"><span class="functionname">PitchClassToPitch</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity70"><span class="functionname">PitchClassToPitch2</span></a>&gt;
+</li><li>&lt;P/3:<a href="#entity71"><span class="functionname">TransposePC</span></a>&gt;
+</li><li>&lt;P/3:<a href="#entity72"><span class="functionname">DegreeToPC</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity73"><span class="functionname">CMajorDegreeToPC</span></a>&gt;
+</li><li>&lt;P/4:<a href="#entity74"><span class="functionname">TransposeDegree</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity75"><span class="functionname">AbsoluteToOffsetAccidental</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity76"><span class="functionname">OffsetToAbsoluteAccidental</span></a>&gt;
+</li><li>&lt;P/3:<a href="#entity77"><span class="functionname">PcSetToSequence</span></a>&gt;
+</li><li>&lt;C:<a href="#entity79"><span class="type">Interval</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity80"><span class="functionname">IsInterval</span></a>&gt;
+</li><li>&lt;P/4:<a href="#entity81"><span class="functionname">NoteInterval</span></a>&gt;
+</li><li>&lt;P/3:<a href="#entity82"><span class="functionname">TransposeNote</span></a>&gt;
+</li><li>&lt;C:<a href="#entity100"><span class="type">InChordMixinForNote</span></a>&gt;
+</li><li>&lt;C:<a href="#entity101"><span class="type">InScaleMixinForNote</span></a>&gt;
+</li><li>&lt;C:<a href="#entity99"><span class="type">PitchClassMixin</span></a>&gt;
+</li><li>&lt;C:<a href="#entity102"><span class="type">EnharmonicSpellingMixinForNote</span></a>&gt;
+</li><li>&lt;C:<a href="#entity103"><span class="type">ScaleDegreeMixinForNote</span></a>&gt;
+</li><li>&lt;C:<a href="#entity104"><span class="type">ChordDegreeMixinForNote</span></a>&gt;
+</li><li>&lt;C:<a href="#entity107"><span class="type">Note</span></a>&gt;
+</li><li>&lt;C:<a href="#entity106"><span class="type">Note2</span></a>&gt;
+</li><li>&lt;C:<a href="#entity108"><span class="type">FullNote</span></a>&gt;
+</li><li>&lt;C:<a href="#entity109"><span class="type">EnharmonicNote</span></a>&gt;
+</li><li>&lt;C:<a href="#entity110"><span class="type">ScaleDegreeNote</span></a>&gt;
+</li><li>&lt;C:<a href="#entity111"><span class="type">ChordDegreeNote</span></a>&gt;
+</li><li>&lt;C:<a href="#entity87"><span class="type">PitchClassCollection</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity88"><span class="functionname">IsPitchClassCollection</span></a>&gt;
+</li><li>&lt;C:<a href="#entity89"><span class="type">Chord</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity90"><span class="functionname">IsChord</span></a>&gt;
+</li><li>&lt;C:<a href="#entity91"><span class="type">Scale</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity92"><span class="functionname">IsScale</span></a>&gt;
+</li><li>&lt;C:<a href="#entity93"><span class="type">InScaleMixinForChord</span></a>&gt;
+</li><li>&lt;C:<a href="#entity94"><span class="type">DiatonicChord</span></a>&gt;
+</li><li>&lt;C:<a href="#entity95"><span class="type">ScaleDegreeMixinForChord</span></a>&gt;
+</li><li>&lt;C:<a href="#entity96"><span class="type">ScaleDegreeChord</span></a>&gt;
+</li><li>&lt;C:<a href="#entity97"><span class="type">ChordStartMixin</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity98"><span class="functionname">StartChordWithMarker</span></a>&gt;
+</li><li>&lt;C:<a href="#entity84"><span class="type">PitchClass</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity85"><span class="functionname">IsPitchClass</span></a>&gt;
+</li><li>&lt;P/5:<a href="#entity112"><span class="functionname">HarmoniseScore</span></a>&gt;
+</li><li>&lt;P/5:<a href="#entity113"><span class="functionname">HarmoniseScore2</span></a>&gt;
 </li></ul></code>
 <h3>Define</h3>
 
 <code>
-<a name="entity68">
+<a name="entity69">
 <span class="keyword">proc</span>{<span class="functionname">PitchClassToPitch</span> PitchClass#Octave Pitch}<br>
-<span class="string"> Defines the relation between an absolute pitch number Pitch (FD int) and its PitchClass (FD int) plus Octave component (FD int). Middle c has octave 4, according to conventions (cf. http://en.wikipedia.org/wiki/Scientific_pitch_notation). So, octave 0 corresponds to Midi pitch 12, and Midi pitch 127 falls in octave 9.<BR>
+<span class="string"> Defines the relation between an absolute pitch number Pitch (FD int) and its PitchClass (FD int) plus Octave component (FD int). Middle c has octave 4, according to conventions (cf. http://en.wikipedia.org/wiki/Scientific_pitch_notation). So (for PitchesPerOctave=12), 0ctave=0 corresponds to Midi pitch 12, and Midi pitch 127 falls in octave 9.<BR>
  The domain of PitchClass is implicitly restricted to 0#{DB.getPitchesPerOctave}.<BR>
 <BR>
 </span>
 </code><br>
 
 <code>
-<a name="entity69">
+<a name="entity70">
+<span class="keyword">proc</span>{<span class="functionname">PitchClassToPitch2</span> PitchClass#Octave Pitch}<br>
+<span class="string"> Same as PitchClassToPitch. However, Middle c has octave 5 so that if Pitch = PitchClass, Octave = 0. This is in contrast to PitchClassToPitch, where Pitch is always >= PitchesPerOctave and this always Pitch > PitchClass (even if Octave = 0). PitchClassToPitch2 is thus used with intervals, whereas PitchClassToPitch is used with pitches.<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity71">
 <span class="keyword">proc</span>{<span class="functionname">TransposePC</span> UnTranspPC TranspositionPC TranspPC}<br>
 <span class="string"> Defines the relation between an absolute Interval (FD int) and its equivalent IntervalPC (FD int) plus Octave component (FD int). This constraint is very similar to PitchClassToPitch, but the octave component has a different meaning. In this constraint (Octave = 0) <=> (PC = Interval)<BR>
  The domain of redundant is implicitly restricted to 0#{DB.getPitchesPerOctave}<BR>
@@ -228,7 +242,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity70">
+<a name="entity72">
 <span class="keyword">proc</span>{<span class="functionname">DegreeToPC</span> CollectionPCs Degree#Accidental PC}<br>
 <span class="string"> Defines the relation between two pitch representations without octave component: the pitch class PC (FD int) and the compound representation consisting in Degree (FD int) and Accidental (FD int) -- depending on CollectionPCs (vector of FD ints).<BR>
  The Degree denotes quasi an index into CollectionPCs, e.g., the pitches of a scale: if Accidental denotes a neutral (i.e. {AbsoluteToOffsetAccidental 0}), PC is the pitch class in CollectionPCs at position Degree. However, the Accidental can alternate (increase or decrease) PC to a 'chromatic' pitch class not necessarily contained in CollectionPCs.<BR>
@@ -247,7 +261,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity71">
+<a name="entity73">
 <span class="keyword">proc</span>{<span class="functionname">CMajorDegreeToPC</span> Degree#Accidental PC}<br>
 <span class="string"> Constrains the relation between the FD ints Degree, Accidental, and PC with respect to the C major scale. The closest approximation of the just C major scale [1/1 9/8 5/4 4/3 3/2 5/3 15/8] within the present setting of PitchesPerOctave is considered. See DegreeToPC for details.<BR>
 <BR>
@@ -255,7 +269,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity72">
+<a name="entity74">
 <span class="keyword">proc</span>{<span class="functionname">TransposeDegree</span> CollectionPCs UntransposedDegree#UntransposedPC TranspositionDegree#TranspositionPC TransposedDegree#TransposedPC}<br>
 <span class="string"> Constrains the transposition of the degree-represented pitch UntransposedDegree#UntransposedPC by TranspositionDegree#TranspositionPC to reach the degree-represented pitch TransposedDegree#TransposedPC. The transposition interval is specified by a combination of a degree distance (e.g. 5 to represent a fifth) plus the pitch class of this interval (BTW: a similar representation is also used in MusES for an enharmonic representation).<BR>
  For example, in case CollectionPCs is C major: II# + fifth = VI# (i.e. d# + fifth = a#)<BR>
@@ -283,7 +297,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity73">
+<a name="entity75">
 <span class="keyword">fun</span>{<span class="functionname">AbsoluteToOffsetAccidental</span> X}<br>
 <span class="string"> Converts a determined and possibly negative 'absolute accidental' (int) into a non-negative 'offset accidental' (int) used in CSPs. The absolute accidental 0 always denotes no pitch inflection of a scale degree (or noteName), negative values denote a 'decreasing' and positive an 'increasing' chromatic accidental. <BR>
  For common praxis, where DB.getAccidentalOffset returns 2, 'absolute accidentals' are encoded like bb=~2, b=~1, neutral=0, #=1, x=2 and 'offset accidentals' as bb=0, b=1, neutral=2, #=3, x=4.<BR>
@@ -292,7 +306,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity74">
+<a name="entity76">
 <span class="keyword">fun</span>{<span class="functionname">OffsetToAbsoluteAccidental</span> X}<br>
 <span class="string"> Converts a determined 'offset accidental' (int) used in CSPs into a possibly negative 'absolute accidental' (int). The absolute accidental 0 always denotes no pitch inflection of a scale degree (or noteName), negative values denote a 'decreasing' and positive an 'increasing' accidental. <BR>
  For common praxis, where DB.getAccidentalOffset returns 2, 'absolute accidentals' are encoded like bb=~2, b=~1, neutral=0, #=1, x=2 and 'offset accidentals' as bb=0, b=1, neutral=2, #=3, x=4.<BR>
@@ -301,7 +315,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity75">
+<a name="entity77">
 <span class="keyword">fun</span>{<span class="functionname">PcSetToSequence</span> PCFS Root}<br>
 <span class="string"> Expects a set of pitch classes from a scale or chord (PCFS, a determined FS) and a Root (an determined FD) and returns a list of ints in ascending order starting with the root (if root is present in PCFS).<BR>
  PCSetToSequence is useful for creating an ordered PC collection to constrain the degree of some PC (e.g., with DegreeToPC). For example, the PC set of the E major scale is {1, 3, 4, 6, 8, 9, 11} and the root is 4. PCSetToSequence returns the ordered sequence [4 6 8 9 11 1 3].<BR>
@@ -312,8 +326,76 @@ clearInterval(drawit)
 </span>
 </code><br>
 
-<a name="entity93">
+<a name="entity79">
 <p class="margin"><div align="right"><a href="class1.html">[class info]</a></div></p>
+<code>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> The class Interval is a data structure for representing the interval between the pitches of two note objects. Various information on the interval is provided including the absolute pitch distance, its direction, its pitch class, and the fitting value of various additional features defined in the interval database (e.g. its dissonance degree). Like the other classes of Strasheela's harmony model, the interval class supports microtonal music based on freely defined equidistant subdivisions of the octave (e.g. et72 or even measured in cent, set in the DB as pitchesPerOctave).<BR>
+ The class Interval defines the following parameters. The distance is the absolute distance between two pitches (e.g. 13 is a minor ninth for PitchesPerOctave=12). The parameter direction denotes the direction of the interval: 'upwards' is represented by 2, unison by 1, and an interval 'downwards' by 0 (cf. Pattern.direction). The parameter pitchClass expresses the interval's pitch class, and the parameter octave the number of octaves added to the pitch class to reach the interval's distance (e.g. if the distance is 13, then the pitchClass is 1 and the octave is 1). Finally, the parameter index is the position of the interval's pitch class in the respective interval database (i.e. this parameter corresponds to the index parameter of the classes Chord and Scale).<BR>
+ The class Interval allows to access and constrain further interval-specific properties. Besides the compulsary interval database feature interval, the user can define arbitrary further attributes in each database entry (see DB.setDB). For example, the default interval database includes the feature dissonanceDegree.<BR>
+ The init argument dbFeatures allows to accociates self with further FD/FS variables. These variables are constrained to the values at the respective feature of an database entry at the position of self's index. The database features to be used are 'announced' by the init method argument dbFeatures, which expects a list of atoms denoting the database features to include.<BR>
+ Let us assume that the database defines the feature dissonanceDegree for each interval in the database. This feature is 'announced' to self with the init argument init(dbFeatures:[dissonanceDegree] ...). The dissonance degree of self is then accessible -- and further constrainable -- by {self getDBFeature($ dissonanceDegree)}.<BR>
+<BR>
+ Please note that only only interval values defined in the interval database are permitted as pitch class values. For example, if you use an Interval object to express the interval between two specific notes and your interval DB does not specify an interval 7 (a fifth if PitchesPerOctave=12), then the interval between the two note pitches is implicitly constrained not to be a fifth.<BR>
+<BR>
+ NB: The class Interval inherits from Score.abstractElement -- in contrast to the classes Chord and Scale which inherit (indirectly) from Score.temporalElement. Consequently, an interval does _not_ have associated temporal information such as a start time and can thus not be output, for example, in a Lilypond score -- in contrast to instances of the classes Chord and Scale).<BR>
+<BR>
+</span>
+<span class="keyword">class</span> <span class="type">Interval</span>&nbsp;<span class="keyword">from</span>&nbsp;<span class="reference">Score.abstractElement</span>
+<br>&nbsp;&nbsp;&nbsp;<span class="keyword">feat</span>&nbsp;label&nbsp;!IntervalType
+
+<ul><li><span class="functionname">init</span>(dbFeatures:DBFeats direction:Dir distance:Dist index:Index octave:Oct pitchClass:PC&nbsp;...)<br>
+</li><li><span class="functionname">getIndex</span>(X)<br>
+</li><li><span class="functionname">getIndexParameter</span>(X)<br>
+</li><li><span class="functionname">getDistance</span>($)<br>
+</li><li><span class="functionname">getDistanceParameter</span>($)<br>
+</li><li><span class="functionname">getDirection</span>($)<br>
+</li><li><span class="functionname">getDirectionParameter</span>($)<br>
+</li><li><span class="functionname">getPitchClass</span>($)<br>
+</li><li><span class="functionname">getPitchClassParameter</span>($)<br>
+</li><li><span class="functionname">getOctave</span>($)<br>
+</li><li><span class="functionname">getOctaveParameter</span>($)<br>
+</li><li><span class="functionname">getDB</span>(X)<br>
+</li><li><span class="functionname">getDBFeatures</span>(X)<br>
+</li><li><span class="functionname">getDBFeature</span>(X Feat)<br>
+</li><li><span class="functionname">getInitInfo</span>($ exclude:Excluded)<br>
+</li></ul>
+<span class="keyword">end</span>
+</code><br>
+
+<code>
+<a name="entity80">
+<span class="keyword">fun</span>{<span class="functionname">IsInterval</span> X}
+</code><br>
+
+<code>
+<a name="entity81">
+<span class="keyword">fun</span>{<span class="functionname">NoteInterval</span> Note1 Note2 Args}<br>
+<span class="string"> Expects two note objects and returns the interval between the two notes. If the Note1 is higher than Note2, the intervals direction is downwards (i.e. 0).<BR>
+ Additional interval features can be specified with the optional argument dbFeatures (as Args feature). <BR>
+ The notes are instances of the class Score.note2 or any of its subclasses (including the note classes defined in this functor).<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity82">
+<span class="keyword">proc</span>{<span class="functionname">TransposeNote</span> Note1 MyInterval Note2}<br>
+<span class="string"> Constrains the relation that the pitch of Note1 transposed by MyInterval reaches the pitch of Note2.<BR>
+ The notes are instances of the class Score.note2 or any of its subclasses (including the note classes defined in this functor), MyInterval is an instance of the class Interval (or its subclasses).<BR>
+ Please note that MyInterval (like the notes) should be fully initialised (e.g., otherwise inspecting interval internals does not work properly).<BR>
+<BR>
+</span>
+</code><br>
+
+<a name="entity100">
+<p class="margin"><div align="right"><a href="class2.html">[class info]</a></div></p>
 <code>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
@@ -346,8 +428,8 @@ clearInterval(drawit)
 <span class="keyword">end</span>
 </code><br>
 
-<a name="entity94">
-<p class="margin"><div align="right"><a href="class2.html">[class info]</a></div></p>
+<a name="entity101">
+<p class="margin"><div align="right"><a href="class3.html">[class info]</a></div></p>
 <code>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
@@ -372,8 +454,8 @@ clearInterval(drawit)
 <span class="keyword">end</span>
 </code><br>
 
-<a name="entity92">
-<p class="margin"><div align="right"><a href="class3.html">[class info]</a></div></p>
+<a name="entity99">
+<p class="margin"><div align="right"><a href="class4.html">[class info]</a></div></p>
 <code>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
@@ -398,8 +480,8 @@ clearInterval(drawit)
 <span class="keyword">end</span>
 </code><br>
 
-<a name="entity95">
-<p class="margin"><div align="right"><a href="class4.html">[class info]</a></div></p>
+<a name="entity102">
+<p class="margin"><div align="right"><a href="class5.html">[class info]</a></div></p>
 <code>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
@@ -425,8 +507,8 @@ clearInterval(drawit)
 <span class="keyword">end</span>
 </code><br>
 
-<a name="entity96">
-<p class="margin"><div align="right"><a href="class5.html">[class info]</a></div></p>
+<a name="entity103">
+<p class="margin"><div align="right"><a href="class6.html">[class info]</a></div></p>
 <code>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
@@ -452,8 +534,8 @@ clearInterval(drawit)
 <span class="keyword">end</span>
 </code><br>
 
-<a name="entity97">
-<p class="margin"><div align="right"><a href="class6.html">[class info]</a></div></p>
+<a name="entity104">
+<p class="margin"><div align="right"><a href="class7.html">[class info]</a></div></p>
 <code>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
@@ -478,8 +560,8 @@ clearInterval(drawit)
 <span class="keyword">end</span>
 </code><br>
 
-<a name="entity100">
-<p class="margin"><div align="right"><a href="class7.html">[class info]</a></div></p>
+<a name="entity107">
+<p class="margin"><div align="right"><a href="class8.html">[class info]</a></div></p>
 <code>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
@@ -492,7 +574,7 @@ clearInterval(drawit)
  All extensions of Score.note are defined by the three mixins PitchClassMixin, InChordMixinForNote and InScaleMixinForNote: see the documentation of these classes for further details. <BR>
 <BR>
 </span>
-<span class="keyword">class</span> <span class="type">Note</span>&nbsp;<span class="keyword">from</span>&nbsp;<a href="#entity99">Note2</a>&nbsp;<a href="#entity93">InChordMixinForNote</a>&nbsp;<a href="#entity94">InScaleMixinForNote</a>
+<span class="keyword">class</span> <span class="type">Note</span>&nbsp;<span class="keyword">from</span>&nbsp;<a href="#entity106">Note2</a>&nbsp;<a href="#entity100">InChordMixinForNote</a>&nbsp;<a href="#entity101">InScaleMixinForNote</a>
 
 <ul><li><span class="functionname">init</span>(...)<br>
 </li><li><span class="functionname">getInitInfo</span>($ exclude:Excluded)<br>
@@ -500,8 +582,8 @@ clearInterval(drawit)
 <span class="keyword">end</span>
 </code><br>
 
-<a name="entity99">
-<p class="margin"><div align="right"><a href="class8.html">[class info]</a></div></p>
+<a name="entity106">
+<p class="margin"><div align="right"><a href="class9.html">[class info]</a></div></p>
 <code>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
@@ -514,7 +596,7 @@ clearInterval(drawit)
  For further details, see the doc for PitchClassMixin.<BR>
 <BR>
 </span>
-<span class="keyword">class</span> <span class="type">Note2</span>&nbsp;<span class="keyword">from</span>&nbsp;<span class="reference">Score.note</span>&nbsp;<a href="#entity92">PitchClassMixin</a>
+<span class="keyword">class</span> <span class="type">Note2</span>&nbsp;<span class="keyword">from</span>&nbsp;<span class="reference">Score.note</span>&nbsp;<a href="#entity99">PitchClassMixin</a>
 
 <ul><li><span class="functionname">init</span>(octave:Oct pitchClass:PC&nbsp;...)<br>
 </li><li><span class="functionname">getInitInfo</span>($ exclude:Excluded)<br>
@@ -522,8 +604,8 @@ clearInterval(drawit)
 <span class="keyword">end</span>
 </code><br>
 
-<a name="entity101">
-<p class="margin"><div align="right"><a href="class9.html">[class info]</a></div></p>
+<a name="entity108">
+<p class="margin"><div align="right"><a href="class10.html">[class info]</a></div></p>
 <code>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
@@ -535,7 +617,7 @@ clearInterval(drawit)
 <span class="string"> [concrete class] The class FullNote extends the class Note (HS.score.note) by a representation for its scale degree and an enharmonic notation. These extensions are defined by the mixin classes EnharmonicSpellingMixinForNote and ScaleDegreeMixinForNote. See their documentation for details. <BR>
 <BR>
 </span>
-<span class="keyword">class</span> <span class="type">FullNote</span>&nbsp;<span class="keyword">from</span>&nbsp;<a href="#entity100">Note</a>&nbsp;<a href="#entity95">EnharmonicSpellingMixinForNote</a>&nbsp;<a href="#entity96">ScaleDegreeMixinForNote</a>&nbsp;<a href="#entity97">ChordDegreeMixinForNote</a>
+<span class="keyword">class</span> <span class="type">FullNote</span>&nbsp;<span class="keyword">from</span>&nbsp;<a href="#entity107">Note</a>&nbsp;<a href="#entity102">EnharmonicSpellingMixinForNote</a>&nbsp;<a href="#entity103">ScaleDegreeMixinForNote</a>&nbsp;<a href="#entity104">ChordDegreeMixinForNote</a>
 <br>&nbsp;&nbsp;&nbsp;<span class="keyword">feat</span>&nbsp;label
 
 <ul><li><span class="functionname">init</span>(...)<br>
@@ -544,8 +626,8 @@ clearInterval(drawit)
 <span class="keyword">end</span>
 </code><br>
 
-<a name="entity102">
-<p class="margin"><div align="right"><a href="class10.html">[class info]</a></div></p>
+<a name="entity109">
+<p class="margin"><div align="right"><a href="class11.html">[class info]</a></div></p>
 <code>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
@@ -557,7 +639,7 @@ clearInterval(drawit)
 <span class="string"> [concrete class] The class EnharmonicNote extends the class Note (HS.score.note) by a representation for an enharmonic notation. This extension is defined by the mixin class EnharmonicSpellingMixinForNote. See its documentation for details.<BR>
 <BR>
 </span>
-<span class="keyword">class</span> <span class="type">EnharmonicNote</span>&nbsp;<span class="keyword">from</span>&nbsp;<a href="#entity100">Note</a>&nbsp;<a href="#entity95">EnharmonicSpellingMixinForNote</a>
+<span class="keyword">class</span> <span class="type">EnharmonicNote</span>&nbsp;<span class="keyword">from</span>&nbsp;<a href="#entity107">Note</a>&nbsp;<a href="#entity102">EnharmonicSpellingMixinForNote</a>
 <br>&nbsp;&nbsp;&nbsp;<span class="keyword">feat</span>&nbsp;label
 
 <ul><li><span class="functionname">init</span>(...)<br>
@@ -566,8 +648,8 @@ clearInterval(drawit)
 <span class="keyword">end</span>
 </code><br>
 
-<a name="entity103">
-<p class="margin"><div align="right"><a href="class11.html">[class info]</a></div></p>
+<a name="entity110">
+<p class="margin"><div align="right"><a href="class12.html">[class info]</a></div></p>
 <code>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
@@ -579,7 +661,7 @@ clearInterval(drawit)
 <span class="string"> [concrete class] The class ScaleDegreeNote extends the class Note (HS.score.note) by a representation for its scale degree. This extension is defined by the mixin class ScaleDegreeMixinForNote. See its documentation for details. <BR>
 <BR>
 </span>
-<span class="keyword">class</span> <span class="type">ScaleDegreeNote</span>&nbsp;<span class="keyword">from</span>&nbsp;<a href="#entity100">Note</a>&nbsp;<a href="#entity96">ScaleDegreeMixinForNote</a>
+<span class="keyword">class</span> <span class="type">ScaleDegreeNote</span>&nbsp;<span class="keyword">from</span>&nbsp;<a href="#entity107">Note</a>&nbsp;<a href="#entity103">ScaleDegreeMixinForNote</a>
 <br>&nbsp;&nbsp;&nbsp;<span class="keyword">feat</span>&nbsp;label
 
 <ul><li><span class="functionname">init</span>(...)<br>
@@ -588,8 +670,8 @@ clearInterval(drawit)
 <span class="keyword">end</span>
 </code><br>
 
-<a name="entity104">
-<p class="margin"><div align="right"><a href="class12.html">[class info]</a></div></p>
+<a name="entity111">
+<p class="margin"><div align="right"><a href="class13.html">[class info]</a></div></p>
 <code>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
@@ -601,7 +683,7 @@ clearInterval(drawit)
 <span class="string"> [concrete class] The class ChordDegreeNote extends the class Note (HS.score.note) by a representation for its chord degree. This extension is defined by the mixin class ChordDegreeMixinForNote. See its documentation for details. <BR>
 <BR>
 </span>
-<span class="keyword">class</span> <span class="type">ChordDegreeNote</span>&nbsp;<span class="keyword">from</span>&nbsp;<a href="#entity100">Note</a>&nbsp;<a href="#entity97">ChordDegreeMixinForNote</a>
+<span class="keyword">class</span> <span class="type">ChordDegreeNote</span>&nbsp;<span class="keyword">from</span>&nbsp;<a href="#entity107">Note</a>&nbsp;<a href="#entity104">ChordDegreeMixinForNote</a>
 <br>&nbsp;&nbsp;&nbsp;<span class="keyword">feat</span>&nbsp;label
 
 <ul><li><span class="functionname">init</span>(...)<br>
@@ -610,8 +692,8 @@ clearInterval(drawit)
 <span class="keyword">end</span>
 </code><br>
 
-<a name="entity80">
-<p class="margin"><div align="right"><a href="class13.html">[class info]</a></div></p>
+<a name="entity87">
+<p class="margin"><div align="right"><a href="class14.html">[class info]</a></div></p>
 <code>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
@@ -622,8 +704,8 @@ clearInterval(drawit)
 </tr></table>
 <span class="string"> [abstract class] Represents a collection of pitch classes (absolute pitches without octave component) which is a transposed version of a pitch class collection from a user-defined database (see ./Database.oz respectively DB). Example subclasses of PitchClassCollection include analytical score objects such as Scale or Chord. The design of PitchClassCollection aims to be highly generic: PitchClassCollection is intended to allow the user to define her/his own theory of harmony based on user defined databases of chords and scales; PitchClassCollection even supports microtonal music based on freely defined equidistant subdivisions of the octave (e.g. et72 or even measured in cent, set in the DB as pitchesPerOctave).<BR>
  PitchClassCollection defines four parameters (index, transposition, root, untransposedRoot) whose value is a FD integer, and two attributes which are FS (pitchClasses, untransposedPitchClasses). The index is the position of the respective chord/scale in the chord/scale database, transposition denotes how much self is transposed with respect to the database entry, pitchClasses is the set of transposed pitch classes and root is the transposed root pitch class (untransposed roots are defined in the database). untransposedPitchClasses and untransposedRoot are the untransposed pitchClasses and the untransposed root, i.e. the actual pitch classes in the database entry. Except for index, all parameters/attributes denote pitch classes, that is absolute pitches without an octave component. What the actual value of a pitch class means depends on the pitches per octave setting in the database. Consequently, the pitchUnit of all pitch classes is implicitly set accordingly depending on DB.getPitchesPerOctave.<BR>
- Besides the compulsary chord/scale database features pitchClasses and roots, the user can define arbitrary further attributes in each database entry (see DB.setDB). Examples include dissonanceDegree, resemblanceWithTradition, clearnessOfColour etc. The attribute dbFeatures allows to accociates self with further FD/FS variables. These variables are constrained to the values at the respective feature of an database entry at the position of self's index. The database features to be used are 'announced' by the init method argument dbFeatures, which expects a list of atoms denoting the database features to include.<BR>
- For instance, in case the database defines the feature dissonanceDegree for each entry in the database. This feature is 'announced' to self with the init argument init(dbFeatures:[dissonanceDegree] ...). The dissonance degree of self is then accessible -- and further constrainable -- by {self getDBFeature($ dissonanceDegree)}.<BR>
+ The class PitchClassCollection allows to access and constrain further chord/scale-specific properties. Besides the compulsary chord/scale database features pitchClasses and roots, the user can define arbitrary further attributes in each database entry (see DB.setDB). Examples include dissonanceDegree, resemblanceWithTradition, clearnessOfColour etc. The init argument dbFeatures allows to accociates self with further FD/FS variables. These variables are constrained to the values at the respective feature of an database entry at the position of self's index. The database features to be used are 'announced' by the init method argument dbFeatures, which expects a list of atoms denoting the database features to include.<BR>
+ Let us assume that the database defines the feature dissonanceDegree for each entry in the database. This feature is 'announced' to self with the init argument init(dbFeatures:[dissonanceDegree] ...). The dissonance degree of self is then accessible -- and further constrainable -- by {self getDBFeature($ dissonanceDegree)}.<BR>
 <BR>
  NB: In case the database defines only chord/scale entries with single roots, only the parameters index and transposition are necessary to distribute because once index and transposition are determined, all other parameters/attributes are determined as well. Therefore, the distribution strategy may filter out all root and untransposedRoot parameters for efficiency (their info slot contains root or untransposedRoot). However, in case one or more chords/scales in the DB define mutiple possible roots then the root _or_ the untransposedRoot must be distributed explicitly (but one of them is sufficient). <BR>
 <BR>
@@ -655,12 +737,12 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity81">
+<a name="entity88">
 <span class="keyword">fun</span>{<span class="functionname">IsPitchClassCollection</span> X}
 </code><br>
 
-<a name="entity82">
-<p class="margin"><div align="right"><a href="class14.html">[class info]</a></div></p>
+<a name="entity89">
+<p class="margin"><div align="right"><a href="class15.html">[class info]</a></div></p>
 <code>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
@@ -673,7 +755,7 @@ clearInterval(drawit)
  For further information see doc of PitchClassCollection.<BR>
 <BR>
 </span>
-<span class="keyword">class</span> <span class="type">Chord</span>&nbsp;<span class="keyword">from</span>&nbsp;<a href="#entity80">PitchClassCollection</a>
+<span class="keyword">class</span> <span class="type">Chord</span>&nbsp;<span class="keyword">from</span>&nbsp;<a href="#entity87">PitchClassCollection</a>
 <br>&nbsp;&nbsp;&nbsp;<span class="keyword">feat</span>&nbsp;!ChordType&nbsp;label
 
 <ul><li><span class="functionname">getDB</span>(X)<br>
@@ -682,12 +764,12 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity83">
+<a name="entity90">
 <span class="keyword">fun</span>{<span class="functionname">IsChord</span> X}
 </code><br>
 
-<a name="entity84">
-<p class="margin"><div align="right"><a href="class15.html">[class info]</a></div></p>
+<a name="entity91">
+<p class="margin"><div align="right"><a href="class16.html">[class info]</a></div></p>
 <code>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
@@ -700,7 +782,7 @@ clearInterval(drawit)
  For further information see doc of PitchClassCollection.<BR>
 <BR>
 </span>
-<span class="keyword">class</span> <span class="type">Scale</span>&nbsp;<span class="keyword">from</span>&nbsp;<a href="#entity80">PitchClassCollection</a>
+<span class="keyword">class</span> <span class="type">Scale</span>&nbsp;<span class="keyword">from</span>&nbsp;<a href="#entity87">PitchClassCollection</a>
 <br>&nbsp;&nbsp;&nbsp;<span class="keyword">feat</span>&nbsp;!ScaleType&nbsp;label
 
 <ul><li><span class="functionname">getDB</span>(X)<br>
@@ -709,12 +791,12 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity85">
+<a name="entity92">
 <span class="keyword">fun</span>{<span class="functionname">IsScale</span> X}
 </code><br>
 
-<a name="entity86">
-<p class="margin"><div align="right"><a href="class16.html">[class info]</a></div></p>
+<a name="entity93">
+<p class="margin"><div align="right"><a href="class17.html">[class info]</a></div></p>
 <code>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
@@ -743,8 +825,8 @@ clearInterval(drawit)
 <span class="keyword">end</span>
 </code><br>
 
-<a name="entity87">
-<p class="margin"><div align="right"><a href="class17.html">[class info]</a></div></p>
+<a name="entity94">
+<p class="margin"><div align="right"><a href="class18.html">[class info]</a></div></p>
 <code>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
@@ -757,7 +839,7 @@ clearInterval(drawit)
  See doc for Chord and InScaleMixinForChord for further details.<BR>
 <BR>
 </span>
-<span class="keyword">class</span> <span class="type">DiatonicChord</span>&nbsp;<span class="keyword">from</span>&nbsp;<a href="#entity82">Chord</a>&nbsp;<a href="#entity86">InScaleMixinForChord</a>
+<span class="keyword">class</span> <span class="type">DiatonicChord</span>&nbsp;<span class="keyword">from</span>&nbsp;<a href="#entity89">Chord</a>&nbsp;<a href="#entity93">InScaleMixinForChord</a>
 <br>&nbsp;&nbsp;&nbsp;<span class="keyword">feat</span>&nbsp;label
 
 <ul><li><span class="functionname">init</span>(...)<br>
@@ -766,8 +848,8 @@ clearInterval(drawit)
 <span class="keyword">end</span>
 </code><br>
 
-<a name="entity88">
-<p class="margin"><div align="right"><a href="class18.html">[class info]</a></div></p>
+<a name="entity95">
+<p class="margin"><div align="right"><a href="class19.html">[class info]</a></div></p>
 <code>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
@@ -792,8 +874,8 @@ clearInterval(drawit)
 <span class="keyword">end</span>
 </code><br>
 
-<a name="entity89">
-<p class="margin"><div align="right"><a href="class19.html">[class info]</a></div></p>
+<a name="entity96">
+<p class="margin"><div align="right"><a href="class20.html">[class info]</a></div></p>
 <code>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
@@ -805,7 +887,7 @@ clearInterval(drawit)
 <span class="string"> [concrete class] ScaleDegreeChord is a chord related to a scale (see DiatonicChord) whose root is additionally expressed in terms of a scale degree with respect to that scale. See the doc of the superclasses DiatonicChord and ScaleDegreeMixinForChord for details.<BR>
 <BR>
 </span>
-<span class="keyword">class</span> <span class="type">ScaleDegreeChord</span>&nbsp;<span class="keyword">from</span>&nbsp;<a href="#entity87">DiatonicChord</a>&nbsp;<a href="#entity88">ScaleDegreeMixinForChord</a>
+<span class="keyword">class</span> <span class="type">ScaleDegreeChord</span>&nbsp;<span class="keyword">from</span>&nbsp;<a href="#entity94">DiatonicChord</a>&nbsp;<a href="#entity95">ScaleDegreeMixinForChord</a>
 <br>&nbsp;&nbsp;&nbsp;<span class="keyword">feat</span>&nbsp;label
 
 <ul><li><span class="functionname">init</span>(...)<br>
@@ -814,8 +896,8 @@ clearInterval(drawit)
 <span class="keyword">end</span>
 </code><br>
 
-<a name="entity90">
-<p class="margin"><div align="right"><a href="class20.html">[class info]</a></div></p>
+<a name="entity97">
+<p class="margin"><div align="right"><a href="class21.html">[class info]</a></div></p>
 <code>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
@@ -839,7 +921,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity91">
+<a name="entity98">
 <span class="keyword">proc</span>{<span class="functionname">StartChordWithMarker</span> MyChord Items}<br>
 <span class="string"> Constrains startTime of MyChord to equal the startTime of some single temporal item in Items for which isStartingWithChord=1.<BR>
 <BR>
@@ -848,8 +930,8 @@ clearInterval(drawit)
 </span>
 </code><br>
 
-<a name="entity77">
-<p class="margin"><div align="right"><a href="class21.html">[class info]</a></div></p>
+<a name="entity84">
+<p class="margin"><div align="right"><a href="class22.html">[class info]</a></div></p>
 <code>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
@@ -871,12 +953,12 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity78">
+<a name="entity85">
 <span class="keyword">fun</span>{<span class="functionname">IsPitchClass</span> X}
 </code><br>
 
 <code>
-<a name="entity105">
+<a name="entity112">
 <span class="keyword">proc</span>{<span class="functionname">HarmoniseScore</span> ActualScore ItemsStartingWithChord Creators ChordSeq HarmonisedScore}<br>
 <span class="string"> HarmoniseScore simplifies the definition of harmonic CSPs, typically their top-level definition. HarmoniseScore constrains the pitches of the notes contained in a given score (ActualScore) to follow a harmonic progression. HarmoniseScore's arguments are arranged in the following score topology <BR>
       <BR>
@@ -899,7 +981,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity106">
+<a name="entity113">
 <span class="keyword">proc</span>{<span class="functionname">HarmoniseScore2</span> ActualScore ItemsStartingWithChord Creators ChordSeq HarmonisedScore}<br>
 <span class="string"> HarmoniseScore2 is idential to HarmoniseScore, except that HarmoniseScore2 does <em>not</em> initialise ActualScore, ChordSeq, nor HarmonisedScore. Instead, the HarmonisedScore must be explicitly initialised after calling HarmoniseScore (cf. the difference between Score.makeScore and Score.makeScore2).<BR>
 <BR>

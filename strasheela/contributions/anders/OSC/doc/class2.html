@@ -164,6 +164,19 @@ clearInterval(drawit)
 <span class="string"> Increment the brackets (i.e. bundles nesting) counter by 1.<BR>
 <BR>
 </span>
+</li><li><span class="functionname">ParseAll</span>($ prevLines:PrevLines)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> Parses any textual output of OSC messages and bundles and returns it as a stream of values in the OSC format (see above). The arg prevLines is only for internal use (accumulation of lines).<BR>
+<BR>
+ NB: ParseAll must be called in its own thread. <BR>
+<BR>
+</span>
 </li><li><span class="functionname">ParseVS</span>(Result VS)<br>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
@@ -228,19 +241,6 @@ clearInterval(drawit)
 
 </tr></table>
 <span class="string"> Initialises dumpOSC interface to receive at port Port (defaults to 7777).<BR>
-<BR>
-</span>
-</li><li><span class="functionname">parseAll</span>($ prevLines:PrevLines)<br>
-
-<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
-
-
-
-
-</tr></table>
-<span class="string"> Parses any textual output of OSC messages and bundles and returns it as a stream of values in the OSC format (see above). The arg prevLines is only for internal use (accumulation of lines).<BR>
-<BR>
- NB: parseAll must be called in its own thread. <BR>
 <BR>
 </span>
 </li><li><span class="functionname">removeResponder</span>(Address)<br>
