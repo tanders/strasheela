@@ -33,8 +33,11 @@ Pitch = 60
 %% -> PitchClass=0, Octave=5
 
 %% test 2
-Pitch = 1
+Pitch = 13
 %% -> PitchClass=1, Octave=0
+
+%% NB: Pitch always >= PitchesPerOctave
+%% use HS.score.pitchClassToPitch2 for smaller pitches 
 
 %%%%%
 
@@ -76,6 +79,9 @@ Octave = 0
 Interval = 14
 % Octave = 1
 % IntervalPC = 2
+
+
+
 
 
 %% % % % % % % % % % % % % %
@@ -1094,15 +1100,58 @@ MyChord = {Score.makeScore chord
 %% Interval
 %%
 
+
+%%
+%% TODO:
+%%
+%% - in the init method, I can currently only specify dbFeature "features" (e.g. dissonanceDegree), but not their value
+%%  -> If I change this for class Interval, I should also change it for class PitchClassCollection 
+%%  
+%%
+
+
 %%
 %% NOTE: buggy and debugging unfinished., possibly even implementation unfinished..
 %%
 
 declare
 MyInterval = {New HS.score.interval init(distance:7 direction:2)}
-
 {Score.initScore MyInterval}
 
-%% no textual score representation
+
 {Inspect MyInterval}
 
+{MyInterval getIndex($)}
+
+%% test check..
+{HS.db.getInternalIntervalDB}
+{MyInterval getDB($)}
+
+
+declare
+MyInterval = {New HS.score.interval init(distance:{FD.int 6#7} direction:2
+					 %% feat in default interval DB..
+					 dbFeatures:[dissonanceDegree])}
+{Score.initScore MyInterval}
+
+{MyInterval getDBFeatures($)}
+
+{MyInterval getDBFeature($ dissonanceDegree)}
+
+
+
+%%
+%% tmp:
+%%
+
+%% OK
+declare
+MyChord = {New HS.score.chord init(index:{FD.int 1#2} transposition:0
+				   %% feat in default interval DB..
+				   dbFeatures:[dissonanceDegree])}
+{Score.initScore MyChord}
+
+%% OK: constrained var 2#3
+{MyChord getDBFeatures($)}
+
+{MyChord getDB($)}
