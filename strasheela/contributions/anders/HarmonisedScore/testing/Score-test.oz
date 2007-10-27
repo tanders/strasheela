@@ -1191,3 +1191,31 @@ MyInterval = {New HS.score.interval init(dbFeatures:[dissonanceDegree])}
 %% -> Note2 pitch is 75
 
 
+%%
+%% use memoization
+%% 
+
+declare
+[Memo] = {ModuleLink ['x-ozlib://anders/strasheela/Memoize/Memoize.ozf']}
+%%
+%% define memo function
+NoteInterval_M = {Memo.memoize fun {$ [Note1 Note2]}
+				  {HS.score.noteInterval Note1 Note2 unit}
+			       end}
+Note1 = {Score.makeScore note unit}
+Note2 = {Score.makeScore note unit}
+Interval1 = {NoteInterval_M [Note1 Note2]}
+Interval2 = {NoteInterval_M [Note1 Note2]}
+
+%% check: OK
+{Browse Interval1 == Interval2}
+
+%% check score hierarchy recursively..
+{Inspect Interval1}
+{Inspect Interval2}
+
+%% check whether changing Interval1 does 'change' Interval2 (i.e. whether both are identical). Of course, I must change something which can not be propagated..
+{Interval1 addInfo(hello)}
+
+%% .. now re-inspect: OK
+
