@@ -25,6 +25,8 @@
 %%
 %% * !! add class interval. Add creator with memoization, e.g., given two Strasheela notes.
 %%
+%% * add enharmonically correct Lilypond output for enharmonic notes
+%%
 %% * ?? refactor accidental representation with two parameters: direction and amount (this is only for convenience: adds no expressiveness and degrades performance)
 %%
 %% * refactor: much code doublication in InChordMixinForNote, InScaleMixinForNote 
@@ -275,6 +277,8 @@ define
    end
 
    /** %% Constrains the relation between the FD ints Degree, Accidental, and PC with respect to the C major scale. The closest approximation of the just C major scale [1/1 9/8 5/4 4/3 3/2 5/3 15/8] within the present setting of PitchesPerOctave is considered. See DegreeToPC for details.
+   %%
+   %% NOTE: somewhat simplified definition: all pitches with accidentals are understood as deviations of the just C-major scale (e.g., e-flat is a "diminished" e-natural).
    %% */
    %% !!?? How to decide for sharp or flat accidentals? I must apply additional constraints on the Degree, e.g., the chord database is defined in degrees with accidentals and not only pitch classes, and this chord information is propagated to note degrees.. 
    proc {CMajorDegreeToPC Degree#Accidental PC}
@@ -590,7 +594,7 @@ define
       {Object.is X} andthen {HasFeature X IntervalType}
    end
 
-   /** %% Expects two note objects and returns the interval between the two notes. If the Note1 is higher than Note2, the intervals direction is downwards (i.e. 0).
+   /** %% Expects two note objects and returns the interval between the two notes. If the Note1 is higher than Note2, then the intervals direction is downwards (i.e. 0).
    %% Additional interval features can be specified with the optional argument dbFeatures (as Args feature). 
    %% The notes are instances of the class Score.note2 or any of its subclasses (including the note classes defined in this functor).
    %% */
@@ -626,6 +630,51 @@ define
       {Pattern.direction {Note1 getPitch($)} {Note2 getPitch($)}
        {MyInterval getDirection($)}}
    end
+
+   %%
+   %% TODO: unfinished defs ScaleDegreeMixinForInterval / ChordDegreeMixinForInterval
+   %%
+
+%    local
+%       /** %% Initialise domains of Interval params and relate them.
+%       %% */
+%       proc {InitConstraints Self}
+%       end
+%    in
+%       /** %% The class ScaleDegreeMixinForInterval introduces the notion of scale degree distances as intervals between notes with a scale degree parameter (i.e. a subclass of ScaleDegreeMixinForNote). For example, in case the reference scale is C-major the scale degree distance 5 denotes a fifth.  
+%       %% */
+%       %%
+%       %% ?? What are the scale degree distances with neutral accidental?
+%       %%
+%       %% - CASE 1: intervals between scale degrees are degree distances with neutral accidental
+%       %%   Problem: equal pitch distances result in different degree distances and vice versa. 
+%       %% For example, in C-major the tritone interval between the two pitch classes f and b is 4 scale degrees with neutral accidental (both pitches are scale pitches), and the just fourth interval between f and b-flat is 4 with b accidental (the scale degree b is flattened).
+
+%       %%
+%       %% - CASE 2: distances between the scale's root and some scale degree are degree distances with neutral accidental
+%       %%   Problem: the interval between scale degree notes without accidental (e.g. in C-major the tritone interval between the two pitch classes f and b) result in degree distances with an accidental (distance 4 with accidental #). In other words: if I constrain the interval accidental to neutral, some intervals between scale degrees are disallowed.     
+%       %%   ?? is this a problem: this is actually desirable, e.g., to disallow any diminished or augmented interval, even if it is an interval between scale degrees.
+%       %%   Problem is that I can not distinguish between just vs. diminished/augmented intervals and minor vs. major intervals.
+%       %%   -> this is impossible to distinguish with interval representation using notion of degree + accidental, but if I introduce a more specific representation (e.g. additional parameters) then generalising the interval for arbitrary PitchesPerOctave and for chord degree distances gets hard. 
+%       %%
+%       %% - CASE 3: scale degree distances with neutral accidental are specifically marked in the interval database or the scale database
+%       %%   ?? problem remains: I can not distinguish between just vs. diminished/augmented intervals and minor vs. major intervals 
+%       %%
+%       class ScaleDegreeMixinForInterval
+%       end
+%    end
+
+   
+%    local
+%       /** %% Initialise domains of Interval params and relate them.
+%       %% */
+%       proc {InitConstraints Self}
+%       end
+%    in
+%       class ChordDegreeMixinForInterval
+%       end
+%    end
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%
@@ -1677,10 +1726,13 @@ define
 	 end
       end
    in
-      /** %% [abstract class] CMajorDegreeMixin extends the class Note2 (HS.score.note2) by support for (numerically represented!) enharmonic spelling. This mixin defines the two parameters cMajorDegree and cMajorAccidental. cMajorDegree denotes the degree of the note's pitch in C major, which also indicates its note name (i.e. c=0, d=1, ..., b=7). cMajorAccidental denotes an accidental for cMajorDegree in C major, encoded as described in the doc for DegreeToPC. The relation between pitchClass, cMajorDegree and cMajorAccidental is constrained. 
+      /** %% [abstract class] EnharmonicSpellingMixinForNote extends the class Note2 (HS.score.note2) by support for (numerically represented!) enharmonic spelling. This mixin defines the two parameters cMajorDegree and cMajorAccidental. cMajorDegree denotes the degree of the note's pitch in C major, which also indicates its note name (i.e. c=0, d=1, ..., b=7). cMajorAccidental denotes an accidental for cMajorDegree in C major, encoded as described in the doc for DegreeToPC. The relation between pitchClass, cMajorDegree and cMajorAccidental is constrained. 
       %% NB: This Mixin is defined as an extension for the class Note2: EnharmonicSpellingMixin relies on the parameter pitchClass as defined in Note2. Nevertheless, EnharmonicSpellingMixinForNote is defined as a mixin to make it more easy to combine this mixin with other extensions to the note class.
       %% NB: cMajorAccidental defaults to {DB.makeAccidentalFDInt} -- which leaves cMajorDegree at its full domain even if the note pitch is determined (at least for an AccidentalOffset >= 2). Even reducing the domain of cMajorAccidental to correspond to {b , natural, #} still does not determine cMajorDegree, but usually leaves two domain values.
       %% ??!! shall I reduce the domain of the cMajorAccidental default to {HS.score.absoluteToOffsetAccidental ~1}#{HS.score.absoluteToOffsetAccidental 1}
+      %%
+      %% NOTE: Problem: This class presently uses the constraint CMajorDegreeToPC to defined enharmonic spelling. This poses no problem for PitchesPerOctave=12, but can result in undesired enharmonic spelling for microtonal music. In CMajorDegreeToPC, the "white piano keys" are (approximations of) the justly tuned C-Major scale (as in the notation of Ben Johnston). An alternative enharmonic spelling tunes the "white keys" (and beyond) as approximations of the sequence of fifth (e.g. 72 EDO). Again an alternative is a tuning "mixing" fifths and thirds in the definition of the "white keys" and beyond (as meantone tunings). Besides, all the approaches sketched above are simplications: all pitches with accidentals are understood as deviations some "white key" (e.g., e-flat is a "diminished" e-natural).
+      %% Shall I make the constraint used to derived the enharmonic spelling user-controllable? I should then also change the parameter names.. Or I just defined an alternative mixin instead :)
       %% */
       %%
       %% NB: The classes EnharmonicSpellingMixin and ScaleDegreeMixin are virtually idential, only the scale to which the degree/accidental relates is different. Nevertheless, two independent mixins are required, because I want to have a note class inheriting from both mixins, and I need different names for the parameters etc.  
@@ -1911,6 +1963,16 @@ define
 		    octave#getOctave#{DB.makeOctaveFDInt}
 		    %%chordStartMarker#getChordStartMarker#0
 		   ])
+      end
+
+      /** %% Expects a note object MyNote and returns the interval between self and MyNote. If the self is higher than MyNote, then the intervals direction is downwards (i.e. 0). Additional interval features can be specified with the optional argument dbFeatures (default nil).
+      %% */
+      meth noteInterval($ MyNote dbFeatures:DBFeats<=nil)	 
+	 MyInterval = {New Interval init(dbFeatures:DBFeats)}
+      in
+	 {Score.initScore MyInterval} % close parameter etc. extendable lists
+	 {TransposeNote self MyInterval MyNote}
+	 MyInterval
       end
    end
 
