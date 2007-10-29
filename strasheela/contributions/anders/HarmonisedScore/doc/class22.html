@@ -1,0 +1,199 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<html>
+ <head>
+  <title>Class PitchClass</title>
+  <style>BODY {
+ background: url(page.gif) repeat-y white;
+}
+#slidemenubar, #slidemenubar2{
+ position:absolute;
+ left:-144px;
+ width:160px;
+ top:10px;
+ border:0px solid black;
+ font:bold 12px Verdana;
+ line-height:10px;
+}
+.margin {
+ position: absolute;
+ left: 10px;
+ width: 130px;
+}
+BODY, P, H1, H2, H3, A {
+ font-family: sans-serif;
+}
+PRE, CODE {
+ font-family: courier, monospace;
+}
+P {
+ text-align: justify;
+}
+H1     { color: #9B0000; }
+H2     { color: #FF9933; }
+H3, H4 { color: #881155; }
+CODE              { color: #663366; }
+.code CODE        { color: #000000; }
+SPAN.comment      { color: #B22222; }
+SPAN.keyword      { color: #A020F0; }
+SPAN.string       { color: #BC8F8F; }
+SPAN.functionname { color: #0000FF; }
+SPAN.type         { color: #228B22; }
+SPAN.variablename { color: #B8860B; }
+SPAN.reference    { color: #5F9EA0; }
+SPAN.builtin      { color: #DA70D6; }
+A:link {
+ color: #666666;
+}
+A:visited {
+ color: black;
+}
+A.pre { font-family: courier, monospace;
+ color: #228B22;
+}
+</style>
+ </head>
+<body>
+<script language="JavaScript1.2">
+if (document.all)
+document.write('<div id="slidemenubar2" style="left:-144" onMouseover="pull()" onMouseout="draw()">')
+</script>
+<layer id="slidemenubar" onMouseover="pull()" onMouseout="draw()">
+<table border="0" cellpadding="0" cellspacing="0" width="161"><tr><td bgcolor="#009cff" width="144"><a href="index.html">Index</a>
+</td><td rowspan="15" valign="top" width="16"><img src="menu.gif" width="16"></td></tr><tr><td bgcolor="#009cff" width="144"><a href="node1.html">HarmonisedScore</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node2.html">DB</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node3.html">Score</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node4.html">Rules</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node5.html">DBs</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node6.html">Default</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node7.html">Jazz</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node8.html">Partch</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node9.html">Johnston</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node10.html">Harrison</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node11.html">Chalmers</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node12.html">Catler</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node13.html">ArithmeticalSeriesChords</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node14.html">HS</a>
+</td></tr></table></layer>
+<script language="JavaScript1.2">
+function regenerate(){
+window.location.reload()
+}
+function regenerate2(){
+if (document.layers)
+setTimeout("window.onresize=regenerate",400)
+}
+window.onload=regenerate2
+if (document.all){
+document.write('</div>')
+themenu=document.all.slidemenubar2.style
+rightboundary=0
+leftboundary=-144
+}
+else{
+themenu=document.layers.slidemenubar
+rightboundary=144
+leftboundary=0
+}
+function pull(){
+if (window.drawit)
+clearInterval(drawit)
+pullit=setInterval("pullengine()",20)
+}
+function draw(){
+clearInterval(pullit)
+drawit=setInterval("drawengine()",50)
+}
+function pullengine(){
+if (document.all&&themenu.pixelLeft<rightboundary)
+themenu.pixelLeft+=5
+else if(document.layers&&themenu.left<rightboundary)
+themenu.left+=5
+else if (window.pullit)
+clearInterval(pullit)
+}
+function drawengine(){
+if (document.all&&themenu.pixelLeft>leftboundary)
+themenu.pixelLeft-=5
+else if(document.layers&&themenu.left>leftboundary)
+themenu.left-=5
+else if (window.drawit)
+clearInterval(drawit)
+}
+</script>
+
+<div style="margin-left:160px"><p align="right" class="margin"><div align="right">inheritance tree</div></p>
+<pre>
+ Score.pitch
+      |
+      |
+      |
+  <a class="pre" href="node3.html#entity84">PitchClass</a>
+</pre>
+<hr><p class="margin"><div align="right">class definition</div></p>
+<code>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> Initialise domains of Interval params and relate them.<BR>
+ */<BR>
+       proc {InitConstraints Self}<BR>
+       end<BR>
+    in<BR>
+       /** %% The class ScaleDegreeMixinForInterval introduces the notion of scale degree distances as intervals between notes with a scale degree parameter (i.e. a subclass of ScaleDegreeMixinForNote). For example, in case the reference scale is C-major the scale degree distance 5 denotes a fifth.  <BR>
+ */<BR>
+<BR>
+ ?? What are the scale degree distances with neutral accidental?<BR>
+<BR>
+ - CASE 1: intervals between scale degrees are degree distances with neutral accidental<BR>
+   Problem: equal pitch distances result in different degree distances and vice versa. <BR>
+ For example, in C-major the tritone interval between the two pitch classes f and b is 4 scale degrees with neutral accidental (both pitches are scale pitches), and the just fourth interval between f and b-flat is 4 with b accidental (the scale degree b is flattened).<BR>
+<BR>
+<BR>
+ - CASE 2: distances between the scale's root and some scale degree are degree distances with neutral accidental<BR>
+   Problem: the interval between scale degree notes without accidental (e.g. in C-major the tritone interval between the two pitch classes f and b) result in degree distances with an accidental (distance 4 with accidental #). In other words: if I constrain the interval accidental to neutral, some intervals between scale degrees are disallowed.     <BR>
+   ?? is this a problem: this is actually desirable, e.g., to disallow any diminished or augmented interval, even if it is an interval between scale degrees.<BR>
+   Problem is that I can not distinguish between just vs. diminished/augmented intervals and minor vs. major intervals.<BR>
+   -> this is impossible to distinguish with interval representation using notion of degree + accidental, but if I introduce a more specific representation (e.g. additional parameters) then generalising the interval for arbitrary PitchesPerOctave and for chord degree distances gets hard. <BR>
+<BR>
+ - CASE 3: scale degree distances with neutral accidental are specifically marked in the interval database or the scale database<BR>
+   ?? problem remains: I can not distinguish between just vs. diminished/augmented intervals and minor vs. major intervals <BR>
+<BR>
+       class ScaleDegreeMixinForInterval<BR>
+       end<BR>
+    end<BR>
+<BR>
+<BR>
+    local<BR>
+       /** %% Initialise domains of Interval params and relate them.<BR>
+ */<BR>
+       proc {InitConstraints Self}<BR>
+       end<BR>
+    in<BR>
+       class ChordDegreeMixinForInterval<BR>
+       end<BR>
+    end<BR>
+<BR>
+<BR>
+<BR>
+<BR>
+ def of chord and scale etc<BR>
+<BR>
+<BR>
+/** %% [concrete class] PitchClass defined as a subclass from Score.pitch to inherit, e.g., getValueInMidi for other pitch units (e.g. cent). Consequently, a pitch class returns true for isPitch -- which may sometimes be undesired (e.g. for a concise/efficient distribution strategy definition).<BR>
+ BTW: PitchClass is only applied for pitch class parameters and not for pitch class sets (as defined, e.g., by Chord or Scale).<BR>
+ !! Problem: are the translations of Score.pitch into various units (e.g. freq) really what I am after for pitch classes?<BR>
+<BR>
+</span>
+<span class="keyword">class</span> <span class="type">PitchClass</span> (Inheritance-free)<br>
+&nbsp;&nbsp;&nbsp;<span class="keyword">feat</span>&nbsp;!PitchClassType&nbsp;label
+<br>
+<br>
+<ul></ul>
+<span class="keyword">end</span>
+</code>
+</div></body>
+</html>
