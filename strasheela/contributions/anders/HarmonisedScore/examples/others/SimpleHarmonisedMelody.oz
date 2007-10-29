@@ -1,12 +1,9 @@
 
-%%
-%% !!?? I guess this is obsolete..
-%%
 
-declare
-[HS Pattern]
-= {ModuleLink ['x-ozlib://anders/strasheela/HarmonisedScore/HarmonisedScore.ozf'
-		'x-ozlib://anders/strasheela/Pattern/Pattern.ozf']}
+% declare
+% [HS Pattern]
+%  = {ModuleLink ['x-ozlib://anders/strasheela/HarmonisedScore/HarmonisedScore.ozf'
+% 		  'x-ozlib://anders/strasheela/Pattern/Pattern.ozf']}
 
 
 %% add relations/constraints between scale, chord and note
@@ -45,12 +42,12 @@ declare
     %% representation: list elements of form unit(pre post int)
     NeighbouringNotes = {Pattern.map2Neighbours Notes
 			 fun {$ Note1 Note2}
-			    Int = {FD.decl}
+			    I = {FD.decl}
 			 in
-			    Int = {FD.distance {Note1 getPitch($)} {Note2 getPitch($)} '=:'}
+			    I = {FD.distance {Note1 getPitch($)} {Note2 getPitch($)} '=:'}
 			    unit(pre:Note1
 				 post:Note2
-				 int:Int)
+				 int:I)
 			 end}
     %% First and last note in sim chord
     {ForAll [Notes.1 {List.last Notes}]
@@ -80,7 +77,7 @@ declare
     %% exactly 2 intervals are jumps up to octave, the rest are steps.
     %% At a jump, both notes are in sim chord
     {Pattern.forN NeighbouringNotes
-     proc {$ unit(pre:Note1 post:Note2 int:Int) ?B}
+     proc {$ unit(pre:Note1 post:Note2 int:I) ?B}
 	%% linking: sim (predetermined rhythm)
 	%%
 	%% !!?? temp: chord/scale is sim to _first_ note of interval (i.e. both notes are constrained to first chord/scale only)
@@ -89,13 +86,13 @@ declare
     in
 	%B = {FD.decl}
 	%% in case of jump
-	B = {FD.conj (Int >=: 3) (Int <: 13)}
+	B = {FD.conj (I >=: 3) (I <: 13)}
 	{FD.impl B
 	 {FD.conj {FS.reified.include {Note1 getPitchClass($)} SimChordPCs}
 	  {FS.reified.include {Note2 getPitchClass($)} SimChordPCs}}
 	 1}
 	%% in case of step
-	{FD.nega B} = {FD.conj (Int >: 0) (Int <: 3)}
+	{FD.nega B} = {FD.conj (I >: 0) (I <: 3)}
      end
      2}
     %% exactly 3 direction changes happen in NotePitches, the local

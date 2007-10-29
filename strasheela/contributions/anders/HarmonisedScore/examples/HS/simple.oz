@@ -1,5 +1,6 @@
 
-%% To link the functor with auxiliary definition of this file: within OPI (i.e. emacs) start Oz from within this buffer (e.g. by C-. r). This sets the current working directory to the directory of the buffer.  
+%% To link the functor with auxiliary definition of this file: within OPI (i.e. emacs) start Oz from within this buffer (e.g. by C-. r). This sets the current working directory to the directory of the buffer.
+%% 
 declare
 [Aux] = {ModuleLink [{OS.getCWD}#'/ExampleAuxDefs.ozf']}
 

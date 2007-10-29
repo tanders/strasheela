@@ -13,7 +13,7 @@ declare
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%
-%% single motif over harmonised score
+%% single motif over harmonised score (see ../../testing for more examples)
 %% 
 
 {SDistro.exploreOne
