@@ -265,6 +265,8 @@ clearInterval(drawit)
 <span class="keyword">proc</span>{<span class="functionname">CMajorDegreeToPC</span> Degree#Accidental PC}<br>
 <span class="string"> Constrains the relation between the FD ints Degree, Accidental, and PC with respect to the C major scale. The closest approximation of the just C major scale [1/1 9/8 5/4 4/3 3/2 5/3 15/8] within the present setting of PitchesPerOctave is considered. See DegreeToPC for details.<BR>
 <BR>
+ NOTE: somewhat simplified definition: all pitches with accidentals are understood as deviations of the just C-major scale (e.g., e-flat is a "diminished" e-natural).<BR>
+<BR>
 </span>
 </code><br>
 
@@ -377,7 +379,7 @@ clearInterval(drawit)
 <code>
 <a name="entity81">
 <span class="keyword">fun</span>{<span class="functionname">NoteInterval</span> Note1 Note2 Args}<br>
-<span class="string"> Expects two note objects and returns the interval between the two notes. If the Note1 is higher than Note2, the intervals direction is downwards (i.e. 0).<BR>
+<span class="string"> Expects two note objects and returns the interval between the two notes. If the Note1 is higher than Note2, then the intervals direction is downwards (i.e. 0).<BR>
  Additional interval features can be specified with the optional argument dbFeatures (as Args feature). <BR>
  The notes are instances of the class Score.note2 or any of its subclasses (including the note classes defined in this functor).<BR>
 <BR>
@@ -490,10 +492,13 @@ clearInterval(drawit)
 
 
 </tr></table>
-<span class="string"> [abstract class] CMajorDegreeMixin extends the class Note2 (HS.score.note2) by support for (numerically represented!) enharmonic spelling. This mixin defines the two parameters cMajorDegree and cMajorAccidental. cMajorDegree denotes the degree of the note's pitch in C major, which also indicates its note name (i.e. c=0, d=1, ..., b=7). cMajorAccidental denotes an accidental for cMajorDegree in C major, encoded as described in the doc for DegreeToPC. The relation between pitchClass, cMajorDegree and cMajorAccidental is constrained. <BR>
+<span class="string"> [abstract class] EnharmonicSpellingMixinForNote extends the class Note2 (HS.score.note2) by support for (numerically represented!) enharmonic spelling. This mixin defines the two parameters cMajorDegree and cMajorAccidental. cMajorDegree denotes the degree of the note's pitch in C major, which also indicates its note name (i.e. c=0, d=1, ..., b=7). cMajorAccidental denotes an accidental for cMajorDegree in C major, encoded as described in the doc for DegreeToPC. The relation between pitchClass, cMajorDegree and cMajorAccidental is constrained. <BR>
  NB: This Mixin is defined as an extension for the class Note2: EnharmonicSpellingMixin relies on the parameter pitchClass as defined in Note2. Nevertheless, EnharmonicSpellingMixinForNote is defined as a mixin to make it more easy to combine this mixin with other extensions to the note class.<BR>
  NB: cMajorAccidental defaults to {DB.makeAccidentalFDInt} -- which leaves cMajorDegree at its full domain even if the note pitch is determined (at least for an AccidentalOffset >= 2). Even reducing the domain of cMajorAccidental to correspond to {b , natural, #} still does not determine cMajorDegree, but usually leaves two domain values.<BR>
  ??!! shall I reduce the domain of the cMajorAccidental default to {HS.score.absoluteToOffsetAccidental ~1}#{HS.score.absoluteToOffsetAccidental 1}<BR>
+<BR>
+ NOTE: Problem: This class presently uses the constraint CMajorDegreeToPC to defined enharmonic spelling. This poses no problem for PitchesPerOctave=12, but can result in undesired enharmonic spelling for microtonal music. In CMajorDegreeToPC, the "white piano keys" are (approximations of) the justly tuned C-Major scale (as in the notation of Ben Johnston). An alternative enharmonic spelling tunes the "white keys" (and beyond) as approximations of the sequence of fifth (e.g. 72 EDO). Again an alternative is a tuning "mixing" fifths and thirds in the definition of the "white keys" and beyond (as meantone tunings). Besides, all the approaches sketched above are simplications: all pitches with accidentals are understood as deviations some "white key" (e.g., e-flat is a "diminished" e-natural).<BR>
+ Shall I make the constraint used to derived the enharmonic spelling user-controllable? I should then also change the parameter names.. Or I just defined an alternative mixin instead :)<BR>
 <BR>
 </span>
 <span class="keyword">class</span> <span class="type">EnharmonicSpellingMixinForNote</span>
@@ -600,6 +605,7 @@ clearInterval(drawit)
 
 <ul><li><span class="functionname">init</span>(octave:Oct pitchClass:PC&nbsp;...)<br>
 </li><li><span class="functionname">getInitInfo</span>($ exclude:Excluded)<br>
+</li><li><span class="functionname">noteInterval</span>($ MyNote dbFeatures:DBFeats)<br>
 </li></ul>
 <span class="keyword">end</span>
 </code><br>
@@ -940,7 +946,52 @@ clearInterval(drawit)
 
 
 </tr></table>
-<span class="string"> [concrete class] PitchClass defined as a subclass from Score.pitch to inherit, e.g., getValueInMidi for other pitch units (e.g. cent). Consequently, a pitch class returns true for isPitch -- which may sometimes be undesired (e.g. for a concise/efficient distribution strategy definition).<BR>
+<span class="string"> Initialise domains of Interval params and relate them.<BR>
+ */<BR>
+       proc {InitConstraints Self}<BR>
+       end<BR>
+    in<BR>
+       /** %% The class ScaleDegreeMixinForInterval introduces the notion of scale degree distances as intervals between notes with a scale degree parameter (i.e. a subclass of ScaleDegreeMixinForNote). For example, in case the reference scale is C-major the scale degree distance 5 denotes a fifth.  <BR>
+ */<BR>
+<BR>
+ ?? What are the scale degree distances with neutral accidental?<BR>
+<BR>
+ - CASE 1: intervals between scale degrees are degree distances with neutral accidental<BR>
+   Problem: equal pitch distances result in different degree distances and vice versa. <BR>
+ For example, in C-major the tritone interval between the two pitch classes f and b is 4 scale degrees with neutral accidental (both pitches are scale pitches), and the just fourth interval between f and b-flat is 4 with b accidental (the scale degree b is flattened).<BR>
+<BR>
+<BR>
+ - CASE 2: distances between the scale's root and some scale degree are degree distances with neutral accidental<BR>
+   Problem: the interval between scale degree notes without accidental (e.g. in C-major the tritone interval between the two pitch classes f and b) result in degree distances with an accidental (distance 4 with accidental #). In other words: if I constrain the interval accidental to neutral, some intervals between scale degrees are disallowed.     <BR>
+   ?? is this a problem: this is actually desirable, e.g., to disallow any diminished or augmented interval, even if it is an interval between scale degrees.<BR>
+   Problem is that I can not distinguish between just vs. diminished/augmented intervals and minor vs. major intervals.<BR>
+   -> this is impossible to distinguish with interval representation using notion of degree + accidental, but if I introduce a more specific representation (e.g. additional parameters) then generalising the interval for arbitrary PitchesPerOctave and for chord degree distances gets hard. <BR>
+<BR>
+ - CASE 3: scale degree distances with neutral accidental are specifically marked in the interval database or the scale database<BR>
+   ?? problem remains: I can not distinguish between just vs. diminished/augmented intervals and minor vs. major intervals <BR>
+<BR>
+       class ScaleDegreeMixinForInterval<BR>
+       end<BR>
+    end<BR>
+<BR>
+<BR>
+    local<BR>
+       /** %% Initialise domains of Interval params and relate them.<BR>
+ */<BR>
+       proc {InitConstraints Self}<BR>
+       end<BR>
+    in<BR>
+       class ChordDegreeMixinForInterval<BR>
+       end<BR>
+    end<BR>
+<BR>
+<BR>
+<BR>
+<BR>
+ def of chord and scale etc<BR>
+<BR>
+<BR>
+/** %% [concrete class] PitchClass defined as a subclass from Score.pitch to inherit, e.g., getValueInMidi for other pitch units (e.g. cent). Consequently, a pitch class returns true for isPitch -- which may sometimes be undesired (e.g. for a concise/efficient distribution strategy definition).<BR>
  BTW: PitchClass is only applied for pitch class parameters and not for pitch class sets (as defined, e.g., by Chord or Scale).<BR>
  !! Problem: are the translations of Score.pitch into various units (e.g. freq) really what I am after for pitch classes?<BR>
 <BR>
