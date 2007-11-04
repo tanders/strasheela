@@ -1,6 +1,6 @@
 
 %%% *************************************************************
-%%% Copyright (C) 2005 Torsten Anders (www.torsten-anders.de) 
+%%% Copyright (C) 2005-2007 Torsten Anders (www.torsten-anders.de) 
 %%% This program is free software; you can redistribute it and/or
 %%% modify it under the terms of the GNU General Public License
 %%% as published by the Free Software Foundation; either version 2
@@ -11,9 +11,13 @@
 %%% GNU General Public License for more details.
 %%% *************************************************************
 
-/** %% This functor provides many constrains and score objects which facilitate the definition of a theory of harmony.
+/** %% This functor provides many constrains and score classes which facilitate the definition of a theory of harmony. For example, this functor defines constraints between pitches, pitch classes and degrees on the one hand, and classes such as Interval, Chord, Scale, and an extended Note class on the other hand.
 %%
-%% NB: the classes in this functor can be combined with the Strasheela contribution ConstrainTimingTree (CTT). Consequently, many class definitions in this functor enforce their constrains only after they know that the score object in question "exisits" (i.e. its duration > 0). Therefore, the distribution strategy should usually determine the duration of a score object early on in the search process. 
+%% The functor defines most class extensions as mixins, so they can be combined with other classes (e.g., you can extend your own extension of the Note class provided by the Strasheela core with the mixin PitchClassMixin). In addition, the functor also uses these mixins in class definitions (e.g., the class Note2 inherits from both the core class Score.note and PitchClassMixin). The functor defines many class variants combining the mixins. This makes it possible to somewhat reduce the memory requirement of your score by using the class with exactly the features required. However, you may consider defining your CSP with the most extensive classes first (e.g., using FullNote, ScaleDegreeChord, and Scale), and optimise later only when required. 
+%%
+%% This harmony model is designed to cooperate with other Strasheela extensions. For example, it can be used together with the motif or the meter model. 
+%%
+%% Moreover, the classes can be used in a score whose hierarchic structure is constrained with the contribution ConstrainTimingTree (CTT). Consequently, many class definitions in this functor enforce their constrains only after they know that the score object in question "exisits" (i.e. its duration > 0). Therefore, the distribution strategy should usually determine the duration of a score object early on in the search process. 
 %% */
 
 %%
@@ -185,7 +189,7 @@ define
 %%% relations between different pitch representations
 %%%
    
-   /** %% Defines the relation between an absolute pitch number Pitch (FD int) and its PitchClass (FD int) plus Octave component (FD int). Middle c has octave 4, according to conventions (cf. http://en.wikipedia.org/wiki/Scientific_pitch_notation). So (for PitchesPerOctave=12), 0ctave=0 corresponds to Midi pitch 12, and Midi pitch 127 falls in octave 9.
+   /** %% Defines the relation between an absolute pitch number Pitch (FD int) and its PitchClass (FD int) plus Octave component (FD int). Middle c has octave 4, according to conventions (cf. http://en.wikipedia.org/wiki/Scientific_pitch_notation). So (for PitchesPerOctave=12), octave=0 corresponds to Midi pitch 12, and Midi pitch 127 falls in octave 9.
    %% The domain of PitchClass is implicitly restricted to 0#{DB.getPitchesPerOctave}.
    %% */
    proc {PitchClassToPitch PitchClass#Octave Pitch}
@@ -193,22 +197,13 @@ define
       Pitch =: PitchClass + (Octave + 1)*{DB.getPitchesPerOctave}
    end
 
-   /** %% Same as PitchClassToPitch. However, Middle c has octave 5 so that if Pitch = PitchClass, Octave = 0. This is in contrast to PitchClassToPitch, where Pitch is always >= PitchesPerOctave and this always Pitch > PitchClass (even if Octave = 0). PitchClassToPitch2 is thus used with intervals, whereas PitchClassToPitch is used with pitches.
+   /** %% Same as PitchClassToPitch. However, Middle c has octave 5 so that if Pitch = PitchClass, Octave = 0. This is in contrast to PitchClassToPitch, where Pitch is always >= PitchesPerOctave and thus always Pitch > PitchClass (even if Octave = 0). PitchClassToPitch2 is used with intervals, whereas PitchClassToPitch is used with pitches.
+   %% The domain of PitchClass is implicitly restricted to 0#{DB.getPitchesPerOctave}.
    %% */
    proc {PitchClassToPitch2 PitchClass#Octave Pitch}
       PitchClass :: 0#{DB.getPitchesPerOctave}
       Pitch =: PitchClass + Octave*{DB.getPitchesPerOctave}
    end
-
-   
-%    /** %% Defines the relation between an absolute Interval (FD int) and its equivalent IntervalPC (FD int) plus Octave component (FD int). This constraint is very similar to PitchClassToPitch, but the octave component has a different meaning. In this constraint (Octave = 0) <=> (PC = Interval)
-%    %% The domain of redundant is implicitly restricted to 0#{DB.getPitchesPerOctave}
-%    %% */
-%    proc {IntervalPCToInterval IntervalPC#Octave Interval}
-%       IntervalPC :: 0#{DB.getPitchesPerOctave}
-%       Interval =: IntervalPC + Octave*{DB.getPitchesPerOctave}
-%    end
-
    
 %    %% Defines the relation between an absolute pitch number Pitch (FD int) and its PitchClass (FD int) plus Octave component (FD int).
 %    %% Does domain propagation, which can be very expensive.
@@ -276,9 +271,10 @@ define
       {Select.fd CollectionPCs Degree CollectionPC}
    end
 
-   /** %% Constrains the relation between the FD ints Degree, Accidental, and PC with respect to the C major scale. The closest approximation of the just C major scale [1/1 9/8 5/4 4/3 3/2 5/3 15/8] within the present setting of PitchesPerOctave is considered. See DegreeToPC for details.
+   /** %% Constrains the relation between the FD ints Degree, Accidental, and PC with respect to the just C-major scale. The closest approximation of the just C-major scale [1/1 9/8 5/4 4/3 3/2 5/3 15/8] within the present setting of PitchesPerOctave is considered.
+   %% CMajorDegreeToPC is the same as DegreeToPC, but with a predefined CollectionPCs (the just C-major scale). See DegreeToPC for further details.
    %%
-   %% NOTE: somewhat simplified definition: all pitches with accidentals are understood as deviations of the just C-major scale (e.g., e-flat is a "diminished" e-natural).
+   %% NOTE: this constraint is used to derive an enharmonic notation, even for PitchesPerOctave \= 12. However, this constraint presents only one possible interpretation of the "white piano keys", namely as just C-major scale degrees. All pitches with accidentals are understood as deviations of the just C-major scale. Other interpretations of the "white piano keys" are possible (e.g., a chain of fifths in Phythagorean tuning). For different PitchesPerOctave (e.g., if PitchesPerOctave=1200), different interpretations (i.e. different CollectionPCs used as a reference) will result in different accidentals or even different degrees for a given pitch class. 
    %% */
    %% !!?? How to decide for sharp or flat accidentals? I must apply additional constraints on the Degree, e.g., the chord database is defined in degrees with accidentals and not only pitch classes, and this chord information is propagated to note degrees.. 
    proc {CMajorDegreeToPC Degree#Accidental PC}
@@ -386,8 +382,7 @@ define
    /** %% Expects a set of pitch classes from a scale or chord (PCFS, a determined FS) and a Root (an determined FD) and returns a list of ints in ascending order starting with the root (if root is present in PCFS).
    %% PCSetToSequence is useful for creating an ordered PC collection to constrain the degree of some PC (e.g., with DegreeToPC). For example, the PC set of the E major scale is {1, 3, 4, 6, 8, 9, 11} and the root is 4. PCSetToSequence returns the ordered sequence [4 6 8 9 11 1 3].
    %%
-   %% NB: implementation is limited to determined PCFS and Root.
-   %% NB: PcSetToSequence blocks until its arguments are determined.
+   %% NB: PcSetToSequence blocks until its arguments PCFS and Root are determined.
    %% */
    fun {PcSetToSequence PCFS Root}
 %      thread % in case args are not determined
@@ -636,13 +631,13 @@ define
    %%
 
 %    local
-%       /** %% Initialise domains of Interval params and relate them.
-%       %% */
+%       %% Initialise domains of Interval params and relate them.
+%       %% 
 %       proc {InitConstraints Self}
 %       end
 %    in
-%       /** %% The class ScaleDegreeMixinForInterval introduces the notion of scale degree distances as intervals between notes with a scale degree parameter (i.e. a subclass of ScaleDegreeMixinForNote). For example, in case the reference scale is C-major the scale degree distance 5 denotes a fifth.  
-%       %% */
+%       %% The class ScaleDegreeMixinForInterval introduces the notion of scale degree distances as intervals between notes with a scale degree parameter (i.e. a subclass of ScaleDegreeMixinForNote). For example, in case the reference scale is C-major the scale degree distance 5 denotes a fifth.  
+%       %% 
 %       %%
 %       %% ?? What are the scale degree distances with neutral accidental?
 %       %%
@@ -666,8 +661,8 @@ define
 
    
 %    local
-%       /** %% Initialise domains of Interval params and relate them.
-%       %% */
+%       %% Initialise domains of Interval params and relate them.
+%       %% 
 %       proc {InitConstraints Self}
 %       end
 %    in
