@@ -129,9 +129,11 @@ clearInterval(drawit)
 
 
 </tr></table>
-<span class="string"> This functor provides many constrains and score objects which facilitate the definition of a theory of harmony.<BR>
+<span class="string"> This functor provides many constrains and score classes which facilitate the definition of a theory of harmony. For example, this functor defines constraints between pitches, pitch classes and degrees on the one hand, and classes such as Interval, Chord, Scale, and an extended Note class on the other hand.<BR>
 <BR>
- NB: the classes in this functor can be combined with the Strasheela contribution ConstrainTimingTree (CTT). Consequently, many class definitions in this functor enforce their constrains only after they know that the score object in question "exisits" (i.e. its duration > 0). Therefore, the distribution strategy should usually determine the duration of a score object early on in the search process. <BR>
+ This harmony model is designed to cooperate with other Strasheela extensions. For example, it can be used together with the motif or the meter model. <BR>
+<BR>
+ Moreover, the classes can be used in a score whose hierarchic structure is constrained with the contribution ConstrainTimingTree (CTT). Consequently, many class definitions in this functor enforce their constrains only after they know that the score object in question "exisits" (i.e. its duration > 0). Therefore, the distribution strategy should usually determine the duration of a score object early on in the search process. <BR>
 <BR>
 </span>
 </span>
@@ -196,7 +198,7 @@ clearInterval(drawit)
 <code>
 <a name="entity69">
 <span class="keyword">proc</span>{<span class="functionname">PitchClassToPitch</span> PitchClass#Octave Pitch}<br>
-<span class="string"> Defines the relation between an absolute pitch number Pitch (FD int) and its PitchClass (FD int) plus Octave component (FD int). Middle c has octave 4, according to conventions (cf. http://en.wikipedia.org/wiki/Scientific_pitch_notation). So (for PitchesPerOctave=12), 0ctave=0 corresponds to Midi pitch 12, and Midi pitch 127 falls in octave 9.<BR>
+<span class="string"> Defines the relation between an absolute pitch number Pitch (FD int) and its PitchClass (FD int) plus Octave component (FD int). Middle c has octave 4, according to conventions (cf. http://en.wikipedia.org/wiki/Scientific_pitch_notation). So (for PitchesPerOctave=12), octave=0 corresponds to Midi pitch 12, and Midi pitch 127 falls in octave 9.<BR>
  The domain of PitchClass is implicitly restricted to 0#{DB.getPitchesPerOctave}.<BR>
 <BR>
 </span>
@@ -205,7 +207,8 @@ clearInterval(drawit)
 <code>
 <a name="entity70">
 <span class="keyword">proc</span>{<span class="functionname">PitchClassToPitch2</span> PitchClass#Octave Pitch}<br>
-<span class="string"> Same as PitchClassToPitch. However, Middle c has octave 5 so that if Pitch = PitchClass, Octave = 0. This is in contrast to PitchClassToPitch, where Pitch is always >= PitchesPerOctave and this always Pitch > PitchClass (even if Octave = 0). PitchClassToPitch2 is thus used with intervals, whereas PitchClassToPitch is used with pitches.<BR>
+<span class="string"> Same as PitchClassToPitch. However, Middle c has octave 5 so that if Pitch = PitchClass, Octave = 0. This is in contrast to PitchClassToPitch, where Pitch is always >= PitchesPerOctave and thus always Pitch > PitchClass (even if Octave = 0). PitchClassToPitch2 is used with intervals, whereas PitchClassToPitch is used with pitches.<BR>
+ The domain of PitchClass is implicitly restricted to 0#{DB.getPitchesPerOctave}.<BR>
 <BR>
 </span>
 </code><br>
@@ -213,27 +216,7 @@ clearInterval(drawit)
 <code>
 <a name="entity71">
 <span class="keyword">proc</span>{<span class="functionname">TransposePC</span> UnTranspPC TranspositionPC TranspPC}<br>
-<span class="string"> Defines the relation between an absolute Interval (FD int) and its equivalent IntervalPC (FD int) plus Octave component (FD int). This constraint is very similar to PitchClassToPitch, but the octave component has a different meaning. In this constraint (Octave = 0) <=> (PC = Interval)<BR>
- The domain of redundant is implicitly restricted to 0#{DB.getPitchesPerOctave}<BR>
- */<BR>
-    proc {IntervalPCToInterval IntervalPC#Octave Interval}<BR>
-       IntervalPC :: 0#{DB.getPitchesPerOctave}<BR>
-       Interval =: IntervalPC + Octave*{DB.getPitchesPerOctave}<BR>
-    end<BR>
-<BR>
-<BR>
- Defines the relation between an absolute pitch number Pitch (FD int) and its PitchClass (FD int) plus Octave component (FD int).<BR>
- Does domain propagation, which can be very expensive.<BR>
- <BR>
-    proc {PitchClassToPitchD PitchClass#Octave Pitch}<BR>
-       OctAux = FD.decl<BR>
-    in<BR>
-       {FD.timesD Octave {DB.getPitchesPerOctave} OctAux} <BR>
-       {FD.plusD PitchClass OctAux Pitch}<BR>
-    end<BR>
-<BR>
-<BR>
-/** %% Transposes the pitch class UnTranspPC by the interval TranspositionPC such that the resulting pitch TranspPC is still a pitch class, that is a pitch without an octave component. A pitch class is a FD int with the domain 0#(PitchesPerOctave-1). <BR>
+<span class="string"> Transposes the pitch class UnTranspPC by the interval TranspositionPC such that the resulting pitch TranspPC is still a pitch class, that is a pitch without an octave component. A pitch class is a FD int with the domain 0#(PitchesPerOctave-1). <BR>
  What the actual value of a pitch class means depends on DB.getPitchesPerOctave (see also termonology explanation in the top-level functor).<BR>
  NB: The transposition interval is limited to a PC (i.e. the domain 0#(PitchesPerOctave-1)) to improve propagation. To transpose by a larger interval, constrain the relation of the (larger) Transposition and TranspositionPC by {PitchClassToPitch TranspositionPC#_ Transposition}.<BR>
   All PC arguments are implicitly declared to FD ints with the domain 0#(PitchesPerOctave-1).<BR>
@@ -263,9 +246,10 @@ clearInterval(drawit)
 <code>
 <a name="entity73">
 <span class="keyword">proc</span>{<span class="functionname">CMajorDegreeToPC</span> Degree#Accidental PC}<br>
-<span class="string"> Constrains the relation between the FD ints Degree, Accidental, and PC with respect to the C major scale. The closest approximation of the just C major scale [1/1 9/8 5/4 4/3 3/2 5/3 15/8] within the present setting of PitchesPerOctave is considered. See DegreeToPC for details.<BR>
+<span class="string"> Constrains the relation between the FD ints Degree, Accidental, and PC with respect to the just C-major scale. The closest approximation of the just C-major scale [1/1 9/8 5/4 4/3 3/2 5/3 15/8] within the present setting of PitchesPerOctave is considered.<BR>
+ CMajorDegreeToPC is the same as DegreeToPC, but with a predefined CollectionPCs (the just C-major scale). See DegreeToPC for further details.<BR>
 <BR>
- NOTE: somewhat simplified definition: all pitches with accidentals are understood as deviations of the just C-major scale (e.g., e-flat is a "diminished" e-natural).<BR>
+ NOTE: this constraint is used to derive an enharmonic notation, even for PitchesPerOctave \= 12. However, this constraint presents only one possible interpretation of the "white piano keys", namely as just C-major scale degrees. All pitches with accidentals are understood as deviations of the just C-major scale. Other interpretations of the "white piano keys" are possible (e.g., a chain of fifths in Phythagorean tuning). For different PitchesPerOctave (e.g., if PitchesPerOctave=1200), different interpretations (i.e. different CollectionPCs used as a reference) will result in different accidentals or even different degrees for a given pitch class. <BR>
 <BR>
 </span>
 </code><br>
@@ -946,52 +930,7 @@ clearInterval(drawit)
 
 
 </tr></table>
-<span class="string"> Initialise domains of Interval params and relate them.<BR>
- */<BR>
-       proc {InitConstraints Self}<BR>
-       end<BR>
-    in<BR>
-       /** %% The class ScaleDegreeMixinForInterval introduces the notion of scale degree distances as intervals between notes with a scale degree parameter (i.e. a subclass of ScaleDegreeMixinForNote). For example, in case the reference scale is C-major the scale degree distance 5 denotes a fifth.  <BR>
- */<BR>
-<BR>
- ?? What are the scale degree distances with neutral accidental?<BR>
-<BR>
- - CASE 1: intervals between scale degrees are degree distances with neutral accidental<BR>
-   Problem: equal pitch distances result in different degree distances and vice versa. <BR>
- For example, in C-major the tritone interval between the two pitch classes f and b is 4 scale degrees with neutral accidental (both pitches are scale pitches), and the just fourth interval between f and b-flat is 4 with b accidental (the scale degree b is flattened).<BR>
-<BR>
-<BR>
- - CASE 2: distances between the scale's root and some scale degree are degree distances with neutral accidental<BR>
-   Problem: the interval between scale degree notes without accidental (e.g. in C-major the tritone interval between the two pitch classes f and b) result in degree distances with an accidental (distance 4 with accidental #). In other words: if I constrain the interval accidental to neutral, some intervals between scale degrees are disallowed.     <BR>
-   ?? is this a problem: this is actually desirable, e.g., to disallow any diminished or augmented interval, even if it is an interval between scale degrees.<BR>
-   Problem is that I can not distinguish between just vs. diminished/augmented intervals and minor vs. major intervals.<BR>
-   -> this is impossible to distinguish with interval representation using notion of degree + accidental, but if I introduce a more specific representation (e.g. additional parameters) then generalising the interval for arbitrary PitchesPerOctave and for chord degree distances gets hard. <BR>
-<BR>
- - CASE 3: scale degree distances with neutral accidental are specifically marked in the interval database or the scale database<BR>
-   ?? problem remains: I can not distinguish between just vs. diminished/augmented intervals and minor vs. major intervals <BR>
-<BR>
-       class ScaleDegreeMixinForInterval<BR>
-       end<BR>
-    end<BR>
-<BR>
-<BR>
-    local<BR>
-       /** %% Initialise domains of Interval params and relate them.<BR>
- */<BR>
-       proc {InitConstraints Self}<BR>
-       end<BR>
-    in<BR>
-       class ChordDegreeMixinForInterval<BR>
-       end<BR>
-    end<BR>
-<BR>
-<BR>
-<BR>
-<BR>
- def of chord and scale etc<BR>
-<BR>
-<BR>
-/** %% [concrete class] PitchClass defined as a subclass from Score.pitch to inherit, e.g., getValueInMidi for other pitch units (e.g. cent). Consequently, a pitch class returns true for isPitch -- which may sometimes be undesired (e.g. for a concise/efficient distribution strategy definition).<BR>
+<span class="string"> [concrete class] PitchClass defined as a subclass from Score.pitch to inherit, e.g., getValueInMidi for other pitch units (e.g. cent). Consequently, a pitch class returns true for isPitch -- which may sometimes be undesired (e.g. for a concise/efficient distribution strategy definition).<BR>
  BTW: PitchClass is only applied for pitch class parameters and not for pitch class sets (as defined, e.g., by Chord or Scale).<BR>
  !! Problem: are the translations of Score.pitch into various units (e.g. freq) really what I am after for pitch classes?<BR>
 <BR>

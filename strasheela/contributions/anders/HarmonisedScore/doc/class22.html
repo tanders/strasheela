@@ -138,52 +138,7 @@ clearInterval(drawit)
 
 
 </tr></table>
-<span class="string"> Initialise domains of Interval params and relate them.<BR>
- */<BR>
-       proc {InitConstraints Self}<BR>
-       end<BR>
-    in<BR>
-       /** %% The class ScaleDegreeMixinForInterval introduces the notion of scale degree distances as intervals between notes with a scale degree parameter (i.e. a subclass of ScaleDegreeMixinForNote). For example, in case the reference scale is C-major the scale degree distance 5 denotes a fifth.  <BR>
- */<BR>
-<BR>
- ?? What are the scale degree distances with neutral accidental?<BR>
-<BR>
- - CASE 1: intervals between scale degrees are degree distances with neutral accidental<BR>
-   Problem: equal pitch distances result in different degree distances and vice versa. <BR>
- For example, in C-major the tritone interval between the two pitch classes f and b is 4 scale degrees with neutral accidental (both pitches are scale pitches), and the just fourth interval between f and b-flat is 4 with b accidental (the scale degree b is flattened).<BR>
-<BR>
-<BR>
- - CASE 2: distances between the scale's root and some scale degree are degree distances with neutral accidental<BR>
-   Problem: the interval between scale degree notes without accidental (e.g. in C-major the tritone interval between the two pitch classes f and b) result in degree distances with an accidental (distance 4 with accidental #). In other words: if I constrain the interval accidental to neutral, some intervals between scale degrees are disallowed.     <BR>
-   ?? is this a problem: this is actually desirable, e.g., to disallow any diminished or augmented interval, even if it is an interval between scale degrees.<BR>
-   Problem is that I can not distinguish between just vs. diminished/augmented intervals and minor vs. major intervals.<BR>
-   -> this is impossible to distinguish with interval representation using notion of degree + accidental, but if I introduce a more specific representation (e.g. additional parameters) then generalising the interval for arbitrary PitchesPerOctave and for chord degree distances gets hard. <BR>
-<BR>
- - CASE 3: scale degree distances with neutral accidental are specifically marked in the interval database or the scale database<BR>
-   ?? problem remains: I can not distinguish between just vs. diminished/augmented intervals and minor vs. major intervals <BR>
-<BR>
-       class ScaleDegreeMixinForInterval<BR>
-       end<BR>
-    end<BR>
-<BR>
-<BR>
-    local<BR>
-       /** %% Initialise domains of Interval params and relate them.<BR>
- */<BR>
-       proc {InitConstraints Self}<BR>
-       end<BR>
-    in<BR>
-       class ChordDegreeMixinForInterval<BR>
-       end<BR>
-    end<BR>
-<BR>
-<BR>
-<BR>
-<BR>
- def of chord and scale etc<BR>
-<BR>
-<BR>
-/** %% [concrete class] PitchClass defined as a subclass from Score.pitch to inherit, e.g., getValueInMidi for other pitch units (e.g. cent). Consequently, a pitch class returns true for isPitch -- which may sometimes be undesired (e.g. for a concise/efficient distribution strategy definition).<BR>
+<span class="string"> [concrete class] PitchClass defined as a subclass from Score.pitch to inherit, e.g., getValueInMidi for other pitch units (e.g. cent). Consequently, a pitch class returns true for isPitch -- which may sometimes be undesired (e.g. for a concise/efficient distribution strategy definition).<BR>
  BTW: PitchClass is only applied for pitch class parameters and not for pitch class sets (as defined, e.g., by Chord or Scale).<BR>
  !! Problem: are the translations of Score.pitch into various units (e.g. freq) really what I am after for pitch classes?<BR>
 <BR>
