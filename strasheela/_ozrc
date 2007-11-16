@@ -63,14 +63,16 @@ Out = Strasheela.out
 Inspect = Inspector.inspect
 
 
-%% EDIT THIS: 
+%% In case Mozart does not find your applications, you may set the
+%% $PATH environment variable (e.g. to start applications like csound
+%% from within Strasheela). If you are on a UNIX box, do 'echo $PATH'
+%% on a command line (without the quotes of course) to get an idea
+%% what you should set here.
 %%
-%% Set $PATH environment variable (e.g. to start applications like
-%% csound from within Strasheela). If you are on a UNIX box, do 'echo
-%% $PATH' on a command line (without the quotes of course) to get an
-%% idea what you should set here
+%% Note: this was necessary in earier Mozart versions, but is
+%% seemingly not required any more.
 %%
-% {OS.putEnv 'PATH' '<my pathes>'}
+% {OS.putEnv 'PATH' '<put your pather here>'}
 
 % EDIT THIS:
 % Uncomment this line, at least if you are on darwin mac osx
