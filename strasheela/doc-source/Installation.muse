@@ -52,8 +52,9 @@ The steps above result only in a bare-bones Strasheela installation which is of 
 
 You will usually want to load Strasheela automatically whenever you start Oz. For this purpose, please edit the Oz initialisation file. Strasheela provides the initialisation file template =Strasheela/_ozrc=, edit this template file according to your system.[3] A special template =Strasheela/_WindowsOZRC= is provided for Windows which demonstrates how Windows pathes are entered (this template still requires editing according to your system). 
 Several settings in the initialisation file templates depend on the software for which Strasheela supports an output format (see below).
+Please leave all paths starting with =x-ozlib://= untouched. These are platform-independent paths, which don't require any changes. Also, you better don't change any code, unless you know what you are doing :) 
 
-On Linux and MacOS X, you can save your initialisation file as =~/.ozrc= or =~/.oz/ozrc=. On Windows, it is easiest to set the environment variable =OZRC= to the path of your initialisation file. A description how to manage environment variables on MS Windows XP can be found [[http://support.microsoft.com/default.aspx?scid=kb;en-us;310519][here]]. 
+On Linux and MacOS X, you can save your initialisation file as =~/.ozrc= or =~/.oz/ozrc= (for Mac users unfamiliar with UNIX conventions: =~= indicates your home directory, e.g., /Users/yourself). On Windows, it is easiest to set the environment variable =OZRC= to the path of your initialisation file. A description how to manage environment variables on MS Windows XP can be found [[http://support.microsoft.com/default.aspx?scid=kb;en-us;310519][here]]. 
 
 
 * Install the Software for which Strasheela Supports an Output Format
