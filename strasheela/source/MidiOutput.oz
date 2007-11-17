@@ -27,7 +27,7 @@
 %%
 %% An intermediate format is used for the transformation process: on the Oz side, each record in the CSV representation is represented by an Oz record with label csv and the features track, time, and type. For exammple
 
-csv(track:1 time:0 type:"Start_track")
+csv(track:1 time:0 type:'Start_track')
 
 %% Additionally, a record may have feature parameters with a list of type-specific parameters, as in the following example (the note on parameters are [Channel Note Velocity]). 
 
@@ -35,11 +35,11 @@ csv(track:2 time:0 type:'Note_on_c' parameters:[1 79 81])
 
 % or this exammple (the controller parameters are [Channel ControlNum Value])
 
-csv(track:2 time:0 type:"Control_c" parameters:[1 7 64])
+csv(track:2 time:0 type:'Control_c' parameters:[1 7 64])
 
 %% The feature values track and time and integers (see above). Type is a virtual string corresponding to a type in the CSV file format specification (see the end of http://www.fourmilab.ch/webtools/midicsv/). The parameters are a list of values permitted in a virtual string and follow the CSV specification. For example, a title record has the format (note the explicit double quotes, according to the CSV spec).
 
-csv(track:1 time:0 type:"Title_t" parameters:["\"This is my Title\""])
+csv(track:1 time:0 type:'Title_t' parameters:['\"This is my Title\"'])
 
 %% An CSV score is represented internally by a list of these records.
 
@@ -77,7 +77,7 @@ export
    
    MakeCSVScore
    ScoreToEvents_Midi
-   OutputCSVScore CSVScoreToVS
+   OutputCSVScore OutputCSVScore2 CSVScoreToVS
 %   render: RenderMidiFile
    RenderMidiFile
    
@@ -131,23 +131,23 @@ define
 
    %% [aux fun]
    fun {MakeTrackStart Track}
-      csv(track:Track time:0 type:"Start_track")
+      csv(track:Track time:0 type:'Start_track')
    end
 
    %% [aux fun]
    fun {MakeTrackEnd Track Time}
-      csv(track:Track time:Time type:"End_track ")
+      csv(track:Track time:Time type:'End_track')
    end
    /** %% [aux fun] The first record of a CSV MIDI file is always the Header record. The Track and Time fields are always zero.
    %% */
    fun {MakeFileStart Format NTracks}
-      csv(track:0 time:0 type:"Header"
+      csv(track:0 time:0 type:'Header'
 	  parameters:[Format NTracks {GetDivision}])
    end
    /** %% [aux fun] The last record in a CSV MIDI file is always an End_of_file record. Its Track and Time fields are always zero.
    %% */
    fun {MakeFileEnd}
-      csv(track:0 time:0 type:"End_of_file")
+      csv(track:0 time:0 type:'End_of_file')
    end
 
 
@@ -156,7 +156,7 @@ define
    fun {MakeTrack Events TrackNo}
       if Events == nil
       then 
-	 [{MakeTrackStart TrackNo} {MakeTitle TrackNo 0 "empty track"} {MakeTrackEnd TrackNo 0}]
+	 [{MakeTrackStart TrackNo} {MakeTitle TrackNo 0 'empty track'} {MakeTrackEnd TrackNo 0}]
       else 
 	 /** %% Events in the CSV file within a track are sorted by time.
 	 %% */
@@ -187,7 +187,22 @@ define
       %% start with track 1: track 0 is only Header and End_of_file,
       %% created implicitly in MakeCSVScore
       %%
-      %% !! problem: if MakeTracks is called with events with track 0 (or even less), it causes an infinite loop
+      %% If MakeTracks is called with events with track 0 (or even less), it causes an infinite loop. Therefore, this loop checks for those events (less efficient than without, but more secure).
+      {ForAll Events proc {$ X}
+			if X.track == 0
+			then {Exception.raiseError
+			      strasheela(failedRequirement
+					 X
+					 "Track number must not be 0.")}
+			end
+			%% !! only works when type is atom
+			if X.type == 'Start_track' orelse X.type == 'End_track' 
+			then {Exception.raiseError
+			      strasheela(failedRequirement
+					 X
+					 "Track type must not be header.")}
+			end
+		     end}
       %%
       %% don't count empty tracks..
       UnfilteredTracks = {Aux Events 1}
@@ -225,7 +240,7 @@ define
 
    /** %% Expects a list of CSV records (e.g., each created by one of the low-level MIDI event creators such as MakeNoteOn etc.) and returns a full CSVScore in the internal CSV format described above.
    %% MakeCSVScore sorts the input events first by the track number, then by time. Also, it sorrounds all tracks by track start and end events, and surrounds the full score by a file header and end of file event. 
-   %% NB: In Events, the track number of all events must be >= 1. 
+   %% NB: In Events, the track number of all events must be >= 1. This means, the direct result of an import from a CSV file can not be used, because it already includes this header events.  
    %% */
    %%
    fun {MakeCSVScore Events}
@@ -258,16 +273,24 @@ define
 	csvExtension:".csv")
    %% */
    proc {OutputCSVScore Events Spec}
+      {OutputCSVScore2 {MakeCSVScore Events} Spec}
+   end
+
+   /** %% Outputs a CSV file. OutputCSVScore2 expects Events, a list of CSV records representing a full CSV score, including file and track header and end events. OutputCSVScore2 differs from OutputCSVScore in that OutputCSVScore adds those track header and end events. Spec has the following defaults.
+   unit(file:"test"
+	csvDir:{Init.getStrasheelaEnv defaultCSVDir}
+	csvExtension:".csv")
+   %% */
+   proc {OutputCSVScore2 Events Spec}
       Defaults = unit(file:"test"
 		      csvDir:{Init.getStrasheelaEnv defaultCSVDir}
 		      csvExtension:".csv")
       Args = {Adjoin Defaults Spec}
    in
-      {Out.writeToFile
-       {CSVScoreToVS {MakeCSVScore Events}}
+      {Out.writeToFile {CSVScoreToVS Events}
        Args.csvDir#Args.file#Args.csvExtension}
    end
-
+   
    /** %% Transforms a CSV file into a Midi file (by calling midicsv). The Spec defaults are the following.
    unit(file:"test"
 	csvDir:{Init.getStrasheelaEnv defaultCSVDir}
@@ -308,8 +331,9 @@ define
       %%
       fun {TimeLessThan Event1 Event2} Event1.time < Event2.time end
       %% returns pair NoteOnEvent#NoteOffEvent or nil
-      fun {IsNoteOn X} X.type == "Note_on_c" end 
-      fun {IsNoteOff X} X.type == "Note_off_c" end 
+      %% NOTE: type coule be string instead of atom
+      fun {IsNoteOn X} X.type == 'Note_on_c' end 
+      fun {IsNoteOff X} X.type == 'Note_off_c' end 
       fun {GetNoteEvents Events}
 	 NoteOn = {LUtils.find Events IsNoteOn}
       in
@@ -551,80 +575,80 @@ define
    /** %% Function returns a CSV event spec. The Text (an atom) specifies the title of the track or sequence. The first Title meta-event in a type 0 MIDI file, or in the first track of a type 1 file gives the name of the work. Subsequent Title meta-events in other tracks give the names of those tracks.
    %% */
    fun {MakeTitle Track Time Text}
-      csv(track:Track time:Time type:"Title_t" parameters:["\""#Text#"\""])
+      csv(track:Track time:Time type:'Title_t' parameters:['\"'#Text#'\"'])
    end
 
    /** %% Function returns a CSV event spec. The Text specifies copyright information for the sequence. This is usually placed at time 0 of the first track in the sequence.
    %% */
    fun {MakeCopyright Track Time Text}
-      csv(track:Track time:Time type:"Copyright_t" parameters:["\""#Text#"\""])
+      csv(track:Track time:Time type:'Copyright_t' parameters:['\"'#Text#'\"'])
    end
 
    /** %% Function returns a CSV event spec. The Text names the instrument intended to play the contents of this track, This is usually placed at time 0 of the track. Note that this meta-event is simply a description; MIDI synthesisers are not required (and rarely if ever) respond to it. This meta-event is particularly useful in sequences prepared for synthesisers which do not conform to the General MIDI patch set, as it documents the intended instrument for the track when the sequence is used on a synthesiser with a different patch set.
    %% */
    fun {MakeInstrumentName Track Time Text}
-      csv(track:Track time:Time type:"Instrument_name_t" parameters:["\""#Text#"\""])
+      csv(track:Track time:Time type:'Instrument_name_t' parameters:['\"'#Text#'\"'])
    end
 
    /** %% Function returns a CSV event spec. The Text marks a point in the sequence which occurs at the given Time, for example '"Third Movement"'.
    %% */
    fun {MakeMarker Track Time Text}
-      csv(track:Track time:Time type:"Marker_t" parameters:["\""#Text#"\""])
+      csv(track:Track time:Time type:'Marker_t' parameters:['\"'#Text#'\"'])
    end
 
    /** %% Function returns a CSV event spec. The Text identifies synchronisation point which occurs at the specified Time, for example, "Door slams".
    %% */
    fun {MakeCuePoint Track Time Text}
-      csv(track:Track time:Time type:"Cue_point_t" parameters:["\""#Text#"\""])
+      csv(track:Track time:Time type:'Cue_point_t' parameters:['\"'#Text#'\"'])
    end
 
    /** %% Function returns a CSV event spec. The Text gives a lyric intended to be sung at the given Time. Lyrics are often broken down into separate syllables to time-align them more precisely with the sequence.
    %% */
    fun {MakeLyric Track Time Text}
-      csv(track:Track time:Time type:"Lyric_t" parameters:["\""#Text#"\""])
+      csv(track:Track time:Time type:'Lyric_t' parameters:['\"'#Text#'\"'])
    end
 
    /** %% Function returns a CSV event spec. This meta-event supplies an arbitrary Text string tagged to its Track at Time. It can be used for textual information which doesn't fall into one of the more specific categories given above.
    %% */
    fun {MakeText Track Time Text}
-      csv(track:Track time:Time type:"Text_t" parameters:["\""#Text#"\""])
+      csv(track:Track time:Time type:'Text_t' parameters:['\"'#Text#'\"'])
    end
 
    /** %% Function returns a CSV event spec. This meta-event specifies a sequence Number between 0 and 65535, used to arrange multiple tracks in a type 2 MIDI file, or to identify the sequence in which a collection of type 0 or 1 MIDI files should be played.
    %% The SequenceNumber meta-event should occur at the start of the track (at Time zero, implicitly set). 
    %% */
    fun {MakeSequenceNumber Track Number}
-      csv(track:Track time:0 type:"Sequence_number" parameters:[Number])
+      csv(track:Track time:0 type:'Sequence_number' parameters:[Number])
    end
 
    /** %% Function returns a CSV event spec. This meta-event specifies that subsequent events in the Track should be sent to MIDI port (bus) Number, between 0 and 255. This meta-event usually appears at the start of a track with Time zero, but may appear within a track should the need arise to change the port while the track is being played.
    %% */
    fun {MakeMidiPort Track Time Number}
-      csv(track:Track time:Time type:"MIDI_port" parameters:[Number])
+      csv(track:Track time:Time type:'MIDI_port' parameters:[Number])
    end
 
    /** %% Function returns a CSV event spec. This meta-event specifies the MIDI channel that subsequent meta-events and system exclusive events pertain to. The channel Number specifies a MIDI channel from 0 to 15. In fact, the Number may be as large as 255, but the consequences of specifying a channel number greater than 15 are undefined.
    %% */
    fun {MakeChannelPrefix Track Time Number}
-      csv(track:Track time:Time type:"Channel_prefix" parameters:[Number])
+      csv(track:Track time:Time type:'Channel_prefix' parameters:[Number])
    end
 
    /** %% Function returns a CSV event spec. The time signature (Num/Denom), metronome click rate, and number of 32nd notes per MIDI quarter note (24 MIDI clock times) are given by the numeric arguments. Num gives the numerator of the time signature as specified on sheet music. Denom specifies the denominator as a negative power of two, for example 2 for a quarter note, 3 for an eighth note, etc. Click gives the number of MIDI clocks per metronome click, and NotesQ the number of 32nd notes in the nominal MIDI quarter note time of 24 clocks (8 for the default MIDI quarter note definition).
    %% */
    fun {MakeTimeSignature Track Time Num Denom Click NotesQ}
-      csv(track:Track time:Time type:"Time_signature" parameters:[Num Denom Click NotesQ])
+      csv(track:Track time:Time type:'Time_signature' parameters:[Num Denom Click NotesQ])
    end
 
    /** %% Function returns a CSV event spec. The key signature is specified by the numeric Key value, which is 0 for the key of C, a positive value for each sharp above C, or a negative value for each flat below C, thus in the inclusive range -7 to 7. The MajorOrMinor argument is an atom which will be major for a major key and minor for a minor key.
    %% */
    fun {MakeKeySignature Track Time Key MajorOrMinor}
-      csv(track:Track time:Time type:"Key_signature" parameters:[Key '"'#MajorOrMinor#'"'])
+      csv(track:Track time:Time type:'Key_signature' parameters:[Key '"'#MajorOrMinor#'"'])
    end
 
    /** %% Function returns a CSV event spec. The tempo is specified as the Number of microseconds per quarter note, between 1 and 16777215. A value of 500000 corresponds to 120 quarter notes ("beats") per minute. To convert beats per minute to a Tempo value, take the quotient from dividing 60,000,000 by the beats per minute.
    %% */
    fun {MakeTempo Track Time Number}
-      csv(track:Track time:Time type:"Tempo" parameters:[Number])
+      csv(track:Track time:Time type:'Tempo' parameters:[Number])
    end
    /* %% Transforms BeatsPerMinute (an Int) into a tempo spec (an Int) for MakeTempo.
    %% */
@@ -636,7 +660,7 @@ define
    /** %% Function returns a CSV event spec. This meta-event, which must occur at the start of a track (with a zero Time, implicitly set), specifies the SMPTE time code at which it should start playing. The FracFrame field gives the fractional frame time (0 to 99).
    %% */
    fun {MakeSMPTEOffset Track Hour Minute Second Frame FracFrame}
-      csv(track:Track time:0 type:"SMPTE_offset" parameters:[Hour Minute Second Frame FracFrame])
+      csv(track:Track time:0 type:'SMPTE_offset' parameters:[Hour Minute Second Frame FracFrame])
    end
 
 
@@ -644,7 +668,7 @@ define
    %% The Length can be any value between 0 and (2^28)-1, specifying the number of Data bytes (between 0 and 255) which follow. Sequencer_specific records may be very long; programs which process MIDI CSV files should be careful to protect against buffer overflows and truncation of these records. 
    %% */
    fun {MakeSequencerSpecific Track Time Parameters}
-      csv(track:Track time:Time type:"Sequencer_specific" parameters:Parameters)
+      csv(track:Track time:Time type:'Sequencer_specific' parameters:Parameters)
    end
 
 
@@ -652,7 +676,7 @@ define
    %% Type gives the numeric meta-event type code, Length the number of data bytes in the meta-event, which can be any value between 0 and 228-1, followed by the Data bytes. Since meta-events include their own length, it is possible to parse them even if their type and meaning are unknown. csvmidi will reconstruct unknown meta-events with the same type code and content as in the original MIDI file.
    %% */
    fun {MakeUnknownMetaEvent Track Time Parameters}
-      csv(track:Track time:Time type:"Unknown_meta_event" parameters:Parameters)
+      csv(track:Track time:Time type:'Unknown_meta_event' parameters:Parameters)
    end
 
 
@@ -665,45 +689,45 @@ define
    %% A note on event with velocity zero is equivalent to a note off.
    %% */
    fun {MakeNoteOn Track Time Channel Note Velocity}
-      csv(track:Track time:Time type:"Note_on_c" parameters:[Channel Note Velocity])
+      csv(track:Track time:Time type:'Note_on_c' parameters:[Channel Note Velocity])
    end
 
    /** %% Function returns a CSV event spec. Creates an event at Time to stop playing the specified Note on the given Channel. The Velocity should be zero, but you never know what you'll find in a MIDI file.
    %% */
    fun {MakeNoteOff Track Time Channel Note Velocity}
-      csv(track:Track time:Time type:"Note_off_c" parameters:[Channel Note Velocity])
+      csv(track:Track time:Time type:'Note_off_c' parameters:[Channel Note Velocity])
    end
 
    /** %% Function returns a CSV event spec. The pitch bend Value is a 14 bit unsigned integer and hence must be in the inclusive range from 0 to 16383.
    %% */
    fun {MakePitchBend Track Time Channel Value}
-      csv(track:Track time:Time type:"Pitch_bend_c" parameters:[Channel Value])
+      csv(track:Track time:Time type:'Pitch_bend_c' parameters:[Channel Value])
    end
 
    /** %% Function returns a CSV event spec. Set the controller ControlNum (an int in 0-127) on the given Channel to the specified Value (an int in 0-127). The assignment of ControlNum values to effects differs from instrument to instrument. The General MIDI specification defines the meaning of controllers 1 (modulation), 7 (volume), 10 (pan), 11 (expression), and 64 (sustain), but not all instruments and patches respond to these controllers. Instruments which support those capabilities usually assign reverberation to controller 91 and chorus to controller 93.
    %% */
    fun {MakeCC Track Time Channel ControlNum Value}
-      csv(track:Track time:Time type:"Control_c" parameters:[Channel ControlNum Value])
+      csv(track:Track time:Time type:'Control_c' parameters:[Channel ControlNum Value])
    end
 
    /** %% Function returns a CSV event spec. Switch the specified Channel (0-15) to program (patch) ProgramNum (0-127). The program or patch selects which instrument and associated settings that channel will emulate. The General MIDI specification provides a standard set of instruments, but synthesisers are free to implement other sets of instruments and many permit the user to create custom patches and assign them to program numbers. 
    %% Apparently due to instrument manufacturers' skepticism about musicians' ability to cope with the number zero, many instruments number patches from 1 to 128 rather than the 0 to 127 used within MIDI files. When interpreting ProgramNum values, note that they may be one less than the patch numbers given in an instrument's documentation.
    %% */
    fun {MakeProgramChange Track Time Channel ProgramNum}
-      csv(track:Track time:Time type:"Program_c" parameters:[Channel ProgramNum])
+      csv(track:Track time:Time type:'Program_c' parameters:[Channel ProgramNum])
    end
 
 
    /** %% Function returns a CSV event spec. When a key is held down after being pressed, some synthesisers send the pressure, repeatedly if it varies, until the key is released, but do not distinguish pressure on different keys played simultaneously and held down. This is referred to as ``monophonic'' or ``channel'' aftertouch (the latter indicating it applies to the Channel as a whole, not individual note numbers on that channel). The pressure Value (0 to 127) is typically taken to apply to the last note played, but instruments are not guaranteed to behave in this manner.
    %% */
    fun {MakeChannelAftertouch Track Time Channel Value}
-      csv(track:Track time:Time type:"Channel_aftertouch_c" parameters:[Channel Value])
+      csv(track:Track time:Time type:'Channel_aftertouch_c' parameters:[Channel Value])
    end
 
    /** %% Function returns a CSV event spec. Polyphonic synthesisers (those capable of playing multiple notes simultaneously on a single channel), often provide independent aftertouch for each note. This event specifies the aftertouch pressure Value (0 to 127) for the specified Note on the given Channel.
    %% */
    fun {MakePolyAftertouch Track Time Channel Note Value}
-      csv(track:Track time:Time type:"Poly_aftertouch_c" parameters:[Channel Note Value])
+      csv(track:Track time:Time type:'Poly_aftertouch_c' parameters:[Channel Note Value])
    end
 
 
@@ -716,14 +740,14 @@ define
    %% The Length bytes of Data (0 to 255) are sent at the specified Time to the MIDI channel defined by the most recent Channel_prefix event on the Track, as a System Exclusive message. Note that Length can be any value between 0 and 228-1. Programs which process MIDI CSV files should be careful to protect against buffer overflows and truncation of these records.
    %% */
    fun {MakeSystemExclusive Track Time Parameters}
-      csv(track:Track time:Time type:"System_exclusive" parameters:Parameters)
+      csv(track:Track time:Time type:'System_exclusive' parameters:Parameters)
    end
 
    /** %% Function returns a CSV event spec. System Exclusive events permit storing vendor-specific information to be transmitted to that vendor's products. Parameters is a list of the form [Length Data ...].
    %% The Length bytes of Data (0 to 255) are sent at the specified Time to the MIDI channel defined by the most recent Channel_prefix event on the Track. The Data bytes are simply blasted out to the MIDI bus without any prefix. This message is used by MIDI devices which break up long system exclusive message into small packets, spaced out in time to avoid overdriving their modest microcontrollers. Note that Length can be any value between 0 and 228-1. Programs which process MIDI CSV files should be careful to protect against buffer overflows and truncation of these records.
    %% */
    fun {MakeSystemExclusivePacket Track Time Parameters}
-      csv(track:Track time:Time type:"System_exclusive_packet" parameters:Parameters)
+      csv(track:Track time:Time type:'System_exclusive_packet' parameters:Parameters)
    end
 
 
