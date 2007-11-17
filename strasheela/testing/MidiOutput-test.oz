@@ -112,8 +112,9 @@ MyScore = {Score.make seq(items:[note(pitch:60
 			  {Out.midi.makeNoteOn 3 3840 1 72 81}
 			  {Out.midi.makeNoteOff 3 4800 1 72 0}]
  unit(file:'test2'
-      dir:{Init.getStrasheelaEnv defaultCSVDir}
+      csvDir:{Init.getStrasheelaEnv defaultCSVDir}
       extension:'.csv')}
+
  
 {Out.midi.renderMidiFile unit(csvFile:'test2'
 			      file:'test2'
