@@ -2,10 +2,13 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%
 %% For convenient Strasheela usage you may consider adding the content
-%% of this file to your Oz init file (set the OZRC environment
-%% variable to this file) and edit it according needs.
+%% of this file to your Oz init file (e.g. ~/.ozrc) and edit it
+%% according needs.
 %%
-%% NB: Particular important settings are marked by 'EDIT THIS'
+%% NOTE: Particular important settings are marked by 'EDIT THIS'.
+%% Don't change any paths starting with x-ozlib:// as these paths are
+%% platform independent. Also, don't change any actual program code,
+%% if you don't really know what you are doing :)
 %%
 
 %% Per default, compiler executes each piece of generated code in a separate thread without waiting for it to terminate before proceeding to the next query. Instead, I want to ensure all settings in OZRC are effective before any actual user call is executed. (threadedqueries is switch back 'on' at end of this OZRC). 
@@ -36,58 +39,84 @@ SMapping = Strasheela.sMapping
 SDistro = Strasheela.sDistro
 Out = Strasheela.out
 
-%% (lazily) pre-load some Strasheela contributions. 
-[CTT Pattern Motif HS Measure] =
-{ModuleLink ['x-ozlib://anders/strasheela/ConstrainTimingTree/ConstrainTimingTree.ozf'
-	     'x-ozlib://anders/strasheela/Pattern/Pattern.ozf'
-	     'x-ozlib://anders/strasheela/Motif/Motif.ozf'
-	     'x-ozlib://anders/strasheela/HarmonisedScore/HarmonisedScore.ozf'
-	     'x-ozlib://anders/strasheela/Measure/Measure.ozf'
-	    ]}
 
-
-%% EDIT THIS: 
+%% The following setting was necessary for earlier Mozart versions. 
+%% In case Mozart does not find your applications, you may set the
+%% $PATH environment variable (e.g. to start applications like csound
+%% from within Strasheela). If you are on a UNIX box, do 'echo $PATH'
+%% on a command line (without the quotes of course) to get an idea
+%% what you should set here.
 %%
-%% Uncomment the line below if you installed the selection constraints as recommended in the installation instructions (required for some contributions).
-%% NB Unfortunately, it has been found that on Mozart 1.3.2 ozmake hangs when invoking the GNU compiler on Windows (see installation instructions)
-%%
-% [Select] = {ModuleLink ['x-ozlib://duchier/cp/Select.ozf']}
+% {OS.putEnv 'PATH' '<put your pather here>'}
 
 
-%% Extend the Explorer menu Nodes:Information Action for easy score output
-% {Init.addExplorerOuts_Extended} % even more formats
-{Init.addExplorerOuts_Standard} % standard formats 
-
-%% Shadow the original Inspector with the ScoreInspector
-[Inspector] = {ModuleLink ['x-ozlib://anders/strasheela/ScoreInspector/ScoreInspector.ozf']}
-Inspect = Inspector.inspect
-
+% EDIT THIS:
+% Uncomment this line, if you are on darwin MacOS X and want to output via fomus
+% {OS.putEnv 'DYLD_LIBRARY_PATH' ''}
+% It affects the abbility of fomus (called by strasheela) to call lilypond.....
 
 %% EDIT THIS:
 %%
 %% Set environment variables according to your system (see
-%% Init.putStrasheelaEnv for more supported variables)
+%% Init.putStrasheelaEnv and strasheela/source/Init.oz for more
+%% supported variables). Init.putStrasheelaEnv expects two arguments: 
+%% {Init.putStrasheelaEnv EnvVar Value}
 %%
-{Init.putStrasheelaEnv tmpDir "C:\\Documents and Settings\\Me\\My Documents\\sound\\tmp\\"}
-{Init.putStrasheelaEnv defaultCSVDir {Init.getStrasheelaEnv tmpDir}}
-{Init.putStrasheelaEnv defaultMidiDir {Init.getStrasheelaEnv tmpDir}}
-{Init.putStrasheelaEnv defaultCSVFlags ['-v']}
-{Init.putStrasheelaEnv csvmidi "C:\\Program Files\\midicsv-1.0\\Csvmidi.exe"}
-{Init.putStrasheelaEnv midiPlayer "C:\\Program Files\\Windows Media Player\\wmplayer.exe"}
+%% The following statements set a number of output directories. It is
+%% sufficient to adjust only the first line: replace /tmp/ by your
+%% default output directory of choice. In the following lines, the
+%% output for various formats is already set to this
+%% directory. Alternatively, you may also specify different
+%% directories for different formats.
+%% NOTE: IMPORTANT SETTING: EDIT ""C:\\Documents and Settings\\Me\\My Documents\\sound\\tmp\\"" TO A DIRECTORY OF YOUR CHOICE.
+{Init.putStrasheelaEnv tmpDir "C:\\Documents and Settings\\Me\\My Documents\\sound\\tmp\\"} % default general output dir
 {Init.putStrasheelaEnv defaultSScoDir {Init.getStrasheelaEnv tmpDir}}
 {Init.putStrasheelaEnv defaultLilypondDir {Init.getStrasheelaEnv tmpDir}}
+{Init.putStrasheelaEnv defaultSoundDir {Init.getStrasheelaEnv tmpDir}}
+{Init.putStrasheelaEnv defaultCsoundScoDir {Init.getStrasheelaEnv tmpDir}}
+{Init.putStrasheelaEnv defaultCSVDir {Init.getStrasheelaEnv tmpDir}}
+{Init.putStrasheelaEnv defaultMidiDir {Init.getStrasheelaEnv tmpDir}}
+% {Init.putStrasheelaEnv defaultCsoundOrcDir '/home/myself/csound/'}
+% {Init.putStrasheelaEnv defaultCommonMusicDir {Init.getStrasheelaEnv tmpDir}}
+%%
+%%
+%% The following statements set the executables for various
+%% applications called by Strasheela. If these applications are in
+%% your PATH environment variable, the present settings (which only
+%% specify the applications name) should be sufficient. Alternatively,
+%% you can also enter the full path to the application to use.
+%%
+%% Naturally, Strasheela can only use applications which are installed
+%% on your system. For example, you may want to use a different midi
+%% player, or pdf file viewer.
+%% The following settings are the default installation directories for the applications in question. Edit them according to your system.
+{Init.putStrasheelaEnv csvmidi "C:\\Program Files\\midicsv-1.0\\Csvmidi.exe"}
+{Init.putStrasheelaEnv midiPlayer "C:\\Program Files\\Windows Media Player\\wmplayer.exe"}
+{Init.putStrasheelaEnv csound "C:\\Program Files\\Csound\\bin\\csound.exe"}
+{Init.putStrasheelaEnv sndPlayer "C:\\Program Files\\Audacity\\audacity.exe"} % sweep
+% {Init.putStrasheelaEnv cmdlineSndPlayer sndplay}
 {Init.putStrasheelaEnv lilypond "C:\\Program Files\\LilyPond\\usr\\bin\\lilypond.exe"}
 {Init.putStrasheelaEnv 'convert-ly' "C:\\Program Files\\LilyPond\\usr\\bin\\convert-ly.py"}
 {Init.putStrasheelaEnv pdfViewer "C:\\Program Files\\Adobe\\Acrobat 7.0\\Reader\\AcroRd32.exe"} 
-{Init.putStrasheelaEnv csound "C:\\Program Files\\Csound\\bin\\csound.exe"}
-{Init.putStrasheelaEnv defaultSoundDir {Init.getStrasheelaEnv tmpDir}}
-{Init.putStrasheelaEnv defaultCsoundScoDir {Init.getStrasheelaEnv tmpDir}}
-% {Init.putStrasheelaEnv defaultCsoundOrcDir "C:\\myDir"}
-{Init.putStrasheelaEnv defaultCsoundSoundExtension ".aiff"}
+%%
+%% The following statements set the default flags and similar settings
+%% for the applications. You can usually leave these settings
+%% untouched.
 {Init.putStrasheelaEnv defaultCsoundFlags ['-A' '-g']}
-{Init.putStrasheelaEnv sndPlayer "C:\\Program Files\\Audacity\\audacity.exe"}
+{Init.putStrasheelaEnv defaultCsoundSoundExtension ".aiff"}
 %% setting a Csound enviroment variable..
 {OS.putEnv 'OPCODEDIR64' "C:\\Program Files\\Csound\\plugins64"}
+{Init.putStrasheelaEnv defaultCSVFlags ['-v']}
+%{Init.putStrasheelaEnv defaultMidiPlayerFlags ['-p 64:0']} % pmidi: MIDI output of my sound card..
+
+
+%% EDIT THIS: 
+%%
+%% Uncomment this line if you installed the selection constraints as recommended in
+%% the installation instructions (required for some contributions)
+%%
+% [Select] = {ModuleLink ['x-ozlib://duchier/cp/Select.ozf']}
+
 
 
 %% This variable lists Strasheela functors together with the print representation of Oz variables which bind these functors (the format is the format of compiler environments). It is used for reflection purposes (e.g., to archive score objects in text files as Oz code which -- when executed -- recreates  the score objects. Please make sure that all functors you are using are listed here. You probably only need to change this setting once you introduced new Strasheela extensions 
@@ -98,6 +127,23 @@ Inspect = Inspector.inspect
 					      'CTT':CTT
 					      'Pattern':Pattern)}
 
-\switch +threadedqueries
+%% (lazily) pre-load some Strasheela contributions. 
+[CTT Pattern Motif HS Measure] =
+{ModuleLink ['x-ozlib://anders/strasheela/ConstrainTimingTree/ConstrainTimingTree.ozf'
+	     'x-ozlib://anders/strasheela/Pattern/Pattern.ozf'
+	     'x-ozlib://anders/strasheela/Motif/Motif.ozf'
+	     'x-ozlib://anders/strasheela/HarmonisedScore/HarmonisedScore.ozf'
+	     'x-ozlib://anders/strasheela/Measure/Measure.ozf'
+	    ]}
 
+%% Extend the Explorer menu Nodes:Information Action for easy score output
+{Init.addExplorerOuts_Standard} % standard formats 
+% {Init.addExplorerOuts_Extended} % even more formats
+
+%% Shadow the original Inspector with the ScoreInspector
+[Inspector] = {ModuleLink ['x-ozlib://anders/strasheela/ScoreInspector/ScoreInspector.ozf']}
+Inspect = Inspector.inspect
+
+
+\switch +threadedqueries
 
