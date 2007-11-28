@@ -68,7 +68,17 @@
 <a href="#sec13">Modelling Soft Constraints</a>
 </dt>
 <dt>
-<a href="#sec14">More Information</a>
+<a href="#sec14">Reified Constraints as Boolean Test</a>
+</dt>
+<dd>
+<dl>
+<dt>
+<a href="#sec15">Using plain test</a>
+</dt>
+</dl>
+</dd>
+<dt>
+<a href="#sec16">More Information</a>
 </dt>
 </dl>
 </div>
@@ -317,6 +327,119 @@ Modelling Soft Constraints</h2>
 
 
 <h2><a name="sec14" id="sec14"></a>
+Reified Constraints as Boolean Test</h2>
+
+<blockquote>
+<p class="quoted">Test: find simultaneous notes. Problem: temporal structure is only partially determined.</p>
+</blockquote>
+
+
+<h3><a name="sec15" id="sec15"></a>
+Using plain test</h3>
+
+<pre class="src">
+
+<span style="color: #b22222;">%% </span><span style="color: #b22222;">Using the plain boolean test isSimultaneousItem (i.e., a method returning either true or false) blocks until the temporal structure is fully determined
+</span>
+<span style="color: #a020f0;">local</span>
+Note1
+MyScore = {Score<span style="color: #a020f0;">.</span>makeScore
+           sim(items:[seq(items:[note(duration:2)
+                                 note(duration:1 handle:Note1)
+                                 note])
+                      seq(items:[note(duration:1)
+                                 note(duration:2)
+                                 note])
+                      seq(items:[note
+                                 note
+                                 note])]
+               startTime:0
+               timeUnit:beats(4))
+           <span style="color: #a020f0;">unit</span>}
+<span style="color: #a020f0;">in</span>
+<span style="color: #b22222;">%% </span><span style="color: #b22222;">blocks
+</span>{Browse {MyScore filter($ <span style="color: #a020f0;">fun</span><span style="color: #b8860b;"> </span>{<span style="color: #0000ff;">$</span> X}
+                             {X isNote($)} <span style="color: #a020f0;">andthen</span>
+                             X <span style="color: #a020f0;">\=</span> Note1 <span style="color: #a020f0;">andthen</span> <span style="color: #b22222;">% </span><span style="color: #b22222;">ignore Note1
+</span>                             {Note1 isSimultaneousItem($ X)}
+                          <span style="color: #a020f0;">end</span>)}}
+<span style="color: #a020f0;">end</span>
+
+</pre>
+
+<h3><pre class="src"></h3>
+
+<span style="color: #b22222;">%% </span><span style="color: #b22222;">Wrong approach: first testing whether items are determined before using isSimultaneousItem does not block, but notes which are potentially simultaneous are ignored
+</span>
+<span style="color: #a020f0;">local</span>
+Note1
+MyScore = {Score<span style="color: #a020f0;">.</span>makeScore
+           sim(items:[seq(items:[note(duration:2)
+                                 note(duration:1 handle:Note1)
+                                 note])
+                      seq(items:[note(duration:1)
+                                 note(duration:2)
+                                 note])
+                      seq(items:[note
+                                 note
+                                 note])]
+               startTime:0
+               timeUnit:beats(4))
+           <span style="color: #a020f0;">unit</span>}
+<span style="color: #a020f0;">in</span>
+{Browse {MyScore filter($ <span style="color: #a020f0;">fun</span><span style="color: #b8860b;"> </span>{<span style="color: #0000ff;">$</span> X}
+                             {X isNote($)} <span style="color: #a020f0;">andthen</span>
+                             X <span style="color: #a020f0;">\=</span> Note1 <span style="color: #a020f0;">andthen</span> <span style="color: #b22222;">% </span><span style="color: #b22222;">ignore Note1
+</span>                             {IsDet {X getStartTime($)}} <span style="color: #a020f0;">andthen</span>
+                             {IsDet {X getEndTime($)}} <span style="color: #a020f0;">andthen</span>
+                             {Note1 isSimultaneousItem($ X)}
+                          <span style="color: #a020f0;">end</span>)}}
+<span style="color: #a020f0;">end</span>
+
+
+</pre>
+
+<h3><pre class="src"></h3>
+
+<span style="color: #b22222;">%% </span><span style="color: #b22222;">Suitable approach: using reified constraint together with an equality check as a boolean test
+</span>
+<span style="color: #a020f0;">local</span>
+Note1 Note2 Seq1
+MyScore = {Score<span style="color: #a020f0;">.</span>makeScore
+           sim(items:[seq(items:[note(duration:2)
+                                 note(duration:1 handle:Note1)
+                                 note])
+                      seq(items:[note(duration:1)
+                                 note(duration:2)
+                                 note])
+                      seq(items:[note(handle:Note2)
+                                 note
+                                 note]
+                         handle:Seq1)]
+               startTime:0
+               timeUnit:beats(4))
+           <span style="color: #a020f0;">unit</span>}
+<span style="color: #a020f0;">in</span>
+<span style="color: #b22222;">%% </span><span style="color: #b22222;">blocks until all potentially simultaneous notes are determined or
+</span><span style="color: #b22222;">%% </span><span style="color: #b22222;">are known to be not simultaneous
+</span>{Browse {MyScore filter($ <span style="color: #a020f0;">fun</span><span style="color: #b8860b;"> </span>{<span style="color: #0000ff;">$</span> X}
+                             {X isNote($)} <span style="color: #a020f0;">andthen</span>
+                             X <span style="color: #a020f0;">\=</span> Note1 <span style="color: #a020f0;">andthen</span> <span style="color: #b22222;">% </span><span style="color: #b22222;">ignore Note1
+</span>                             {Note1 isSimultaneousItemR($ X)} <span style="color: #a020f0;">==</span> 1
+                          <span style="color: #a020f0;">end</span>)}}
+<span style="color: #b22222;">%% </span><span style="color: #b22222;">wait for three seconds
+</span>{Delay 3000}
+<span style="color: #b22222;">%%</span><span style="color: #b22222;">
+</span><span style="color: #b22222;">%% </span><span style="color: #b22222;">Two cases: either there are sim notes in third voice or not
+</span>{Note2 getDuration($)} = 4
+<span style="color: #b22222;">% </span><span style="color: #b22222;">{Seq1 getDuration($)} = 1
+</span><span style="color: #a020f0;">end</span>
+
+</pre>
+
+
+
+<h2><a name="sec16" id="sec16"></a>
 More Information</h2>
 
 <p class="first">This tutorial provided an overview of important Strasheela concepts and demonstrated them with many examples. It concludes with references to further Strasheela documentation.</p>
@@ -344,7 +467,7 @@ More Information</h2>
 <div id="footer">
 <div id="author">&copy; 
 Torsten Anders</div>
-<div id="date">Last time edited: 2007.10.04</div>
+<div id="date">Last time edited: 2007.11.28</div>
 </div>
   </body>
 </html>
