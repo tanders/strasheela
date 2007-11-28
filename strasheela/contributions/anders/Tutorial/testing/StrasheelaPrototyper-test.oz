@@ -4,6 +4,7 @@ declare
 
 {SPrototyper.startPrototyper}
 
+%% NB: first recompile Strasheela! 
 {SPrototyper.outputMuse Init.strasheelaSourceDir#"/doc-source/"}
 
 %%
