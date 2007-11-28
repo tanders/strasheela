@@ -97,9 +97,10 @@ ozmake --install
 <h2>Edit Oz Initialisation File</h2>
 
 <p class="first">You will usually want to load Strasheela automatically whenever you start Oz. For this purpose, please edit the Oz initialisation file. Strasheela provides the initialisation file template <code>Strasheela/_ozrc</code>, edit this template file according to your system.<sup><a class="footref" name="fnr.3" href="#fn.3">3</a></sup> A special template <code>Strasheela/_WindowsOZRC</code> is provided for Windows which demonstrates how Windows pathes are entered (this template still requires editing according to your system).
-Several settings in the initialisation file templates depend on the software for which Strasheela supports an output format (see below).</p>
+Several settings in the initialisation file templates depend on the software for which Strasheela supports an output format (see below).
+Please leave all paths starting with <code>x-ozlib://</code> untouched. These are platform-independent paths, which don't require any changes. Also, you better don't change any code, unless you know what you are doing :)</p>
 
-<p>On Linux and MacOS X, you can save your initialisation file as <code>~/.ozrc</code> or <code>~/.oz/ozrc</code>. On Windows, it is easiest to set the environment variable <code>OZRC</code> to the path of your initialisation file. A description how to manage environment variables on MS Windows XP can be found <a href="http://support.microsoft.com/default.aspx?scid=kb;en-us;310519">here</a>.</p>
+<p>On Linux and MacOS X, you can save your initialisation file as <code>~/.ozrc</code> or <code>~/.oz/ozrc</code> (for Mac users unfamiliar with UNIX conventions: <code>~</code> indicates your home directory, e.g., /Users/yourself). On Windows, it is easiest to set the environment variable <code>OZRC</code> to the path of your initialisation file. A description how to manage environment variables on MS Windows XP can be found <a href="http://support.microsoft.com/default.aspx?scid=kb;en-us;310519">here</a>.</p>
 
 
 
@@ -209,7 +210,7 @@ scripts/install-all.sh <span style="color: #bc8f8f;">\</span>
 <div id="footer">
 <div id="author">&copy; 
 Torsten Anders</div>
-<div id="date">Last time edited: 2007.10.22</div>
+<div id="date">Last time edited: 2007.11.28</div>
 </div>
   </body>
 </html>
