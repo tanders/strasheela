@@ -10,6 +10,8 @@
 
   - Finished the music representation chapter of the Tutorial: added an explanation for user-defined export procedures.
 
+  - Graham Percival proof-read parts of the tutorial (thanks!) 
+
   - I realised a more suitable approach for delayed constraint application in order to constrain score contexts which are inaccessible in the problem definition. See thesis [[http://strasheela.sourceforge.net/documents/TorstenAnders-PhDThesis.pdf][Composing Music by Composing Rules]], Sec. 6.3 "Constraining Inaccessible Score Contexts" for a discussion of this matter, and the example [[../testing/zy_Efficiency/compare-DelayingConstraint-ReifiedConstraint.oz][here]] for a demonstration of the new approach.
 
   - Extended the installation documentation (e.g. documentation of the init file templates).
