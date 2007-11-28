@@ -101,7 +101,7 @@
 </dl>
 </dd>
 <dt>
-<a href="#sec21">Prodecure and Function Application</a>
+<a href="#sec21">Procedure and Function Application</a>
 </dt>
 <dd>
 <dl>
@@ -531,9 +531,9 @@ Float example 3</h3>
 <h2><a name="sec17" id="sec17"></a>
 Variables</h2>
 
-<p class="first">The keyword local introduces a variable. Variables start with a capital letter in Oz.</p>
+<p class="first">The keyword local introduces a variable. Warning: variables must start with a capital letter in Oz.</p>
 
-<p>Please note: Oz variables are single assignment variables. After a variable was bound, it can not be changed anymore (mutable data is also supported by Oz, but not discussed in this tutorial; read about cells in the Oz documentation). In contrast to most other programming languages, however, a variable can be unbound or even partially bound. In other words, variables in Oz are 'logic variables'. This is discussed further in the lesson &quot;Unification&quot; below.</p>
+<p>Please note: Oz variables are single assignment variables. After a variable is bound, it can not be changed anymore (mutable data is also supported by Oz, but not discussed in this tutorial; read about cells in the Oz documentation). In contrast to most other programming languages, however, a variable can be unbound or even partially bound. In other words, variables in Oz are 'logic variables'. This is discussed further in the lesson &quot;Unification&quot; below.</p>
 
 <p>BTW: global variables can be introduced with the keyword declare. However, global variables are intended for testing and are only supported in the Emacs-based Oz Programming Interface (OPI), but not in this tutorial application.</p>
 
@@ -594,11 +594,11 @@ A variable can be unbound</h3>
 
 
 <h2><a name="sec21" id="sec21"></a>
-Prodecure and Function Application</h2>
+Procedure and Function Application</h2>
 
 <p class="first">Curly braces {...} surround a function or a procedure call. A function always returns exactly one value, a procedure does not necessarily return anything. In the first example below, the function IsEven expects one integer as arguments and returns true or false. The procedure Browse has a single argument and no return value.</p>
 
-<p>However, every function is actually a procedure as well &mdash; with one argument more. For example, IsEven is actually a procedure with two arguments. This is shown by the second example, where IsEven binds the variable B. Please note the order of computations in this example. Firstly, B is browsed. Afterwards, IsEven binds B to false. However, Browse does indeed show the correct value of B. This demonstrates a vital feature of Oz: variables are be used to communicate information between different parts of a program &mdash; even if the information is not available yet. Browse can handle unknow information, but other parts of the program may wait (i.e. block) until the information is available.</p>
+<p>However, every function is actually a procedure as well &mdash; with one argument more. For example, IsEven is actually a procedure with two arguments. This is shown by the second example, where IsEven binds the variable B. Please note the order of computations in this example. Firstly, B is browsed. Afterwards, IsEven binds B to false. However, Browse does indeed show the correct value of B. This demonstrates a vital feature of Oz: variables are be used to communicate information between different parts of a program &mdash; even if the information is not available yet. Browse can handle unknown information, but other parts of the program may wait (i.e. block) until the information is available.</p>
 
 
 <h3><a name="sec22" id="sec22"></a>
@@ -641,7 +641,7 @@ function which returns its last argument. */</span>
 <h2><a name="sec25" id="sec25"></a>
 If</h2>
 
-<p class="first">Oz provides the usual if control structure.</p>
+<p class="first">Oz provides the usual if control structure. Note that unlike many programming languages, parenthesis () are not required around the condition.</p>
 
 <h3><a name="sec26" id="sec26"></a>
 With else clause</h3>
@@ -770,7 +770,7 @@ Recursion</h3>
 
 <pre class="src">
 <span style="color: #b22222;">/* </span><span style="color: #b22222;">Procedures and functions can call themselves (recursion). The
-function Factorial inplements the mathematical factorial concept. */</span>
+function Factorial implements the mathematical factorial concept. */</span>
 
 <span style="color: #a020f0;">local</span>
    <span style="color: #a020f0;">fun</span><span style="color: #b8860b;"> </span>{<span style="color: #0000ff;">Factorial</span> N}
@@ -898,7 +898,7 @@ Tuples (2)</h3>
 
 <pre class="src">
 <span style="color: #b22222;">/* </span><span style="color: #b22222;">Actually, a tuple is a record which has only integer features in
-ascending order. These features can be ommitted. The two records below
+ascending order. These features can be omitted. The two records below
 are equivalent. */</span>
 
 {Inspect <span style="color: #a020f0;">unit</span>(1:a 2:b 3:c) <span style="color: #a020f0;">==</span> <span style="color: #a020f0;">unit</span>(a b c)}
@@ -961,7 +961,7 @@ feature 1, and the remaining list under the feature 2. */</span>
 Pairs (1)</h3>
 
 <pre class="src">
-<span style="color: #b22222;">%% </span><span style="color: #b22222;">A pair is a convenient way of contatenating values.
+<span style="color: #b22222;">%% </span><span style="color: #b22222;">A pair is a convenient way of concatenating values.
 </span>
 {Inspect value1 <span style="color: #a020f0;">#</span> value2 <span style="color: #a020f0;">#</span> value3}
 </pre>
@@ -971,7 +971,7 @@ Pairs (1)</h3>
 Pairs (2)</h3>
 
 <pre class="src">
-<span style="color: #b22222;">%% </span><span style="color: #b22222;">Actually, a pair is a tuple with the lable '#'.
+<span style="color: #b22222;">%% </span><span style="color: #b22222;">Actually, a pair is a tuple with the label '#'.
 </span>
 {Inspect a<span style="color: #a020f0;">#</span>b<span style="color: #a020f0;">#</span>c  <span style="color: #a020f0;">==</span> <span style="color: #bc8f8f;">'#'</span>(a b c)}
 </pre>
@@ -1205,7 +1205,7 @@ representation, select between tree and relation mode). */</span>
 <h2><a name="sec71" id="sec71"></a>
 Class Method Application</h2>
 
-<p class="first">Oz supports object-oriented programming. This programming paramdigm introduces the notion of objects which instantiate classes. An object (or class instance) is a datum which encapsulates its internal structure. A class specifies what data are contained in its instances and what methods these instances understands. A method (or message) is effectively a procedure which is defined for instances of specific classes only. For more details on object-oriented programming in general, please refer to other Oz documentation (e.g., the Oz Tutorial, Sec. 10).</p>
+<p class="first">Oz supports object-oriented programming. This programming paradigm introduces the notion of objects which instantiate classes. An object (or class instance) is a datum which encapsulates its internal structure. A class specifies what data are contained in its instances and what methods these instances understands. A method (or message) is effectively a procedure which is defined for instances of specific classes only. For more details on object-oriented programming in general, please refer to other Oz documentation (e.g., the Oz Tutorial, Sec. 10).</p>
 
 <h3><a name="sec72" id="sec72"></a>
 Method call</h3>
@@ -1248,7 +1248,7 @@ Method arguments</h3>
 <span style="color: #b22222;">/* </span><span style="color: #b22222;">Class methods are actually records which can contain method
 arguments. For example, the following statement sends the following
 message to the object Window -- which sets increases the border around
-the buttom and sets the backgound of this border to the color blue.
+the button and sets the background of this border to the color blue.
 
   {Window set(borderwidth:1.0#c background:blue)}
 
@@ -1266,7 +1266,7 @@ of Strasheela's music representation. */</span>
                                  action:toplevel<span style="color: #a020f0;">#</span>close))}
 <span style="color: #a020f0;">in</span>
    {Window show}
-   <span style="color: #b22222;">%% </span><span style="color: #b22222;">change to botton background color after 2000 msecs
+   <span style="color: #b22222;">%% </span><span style="color: #b22222;">change to button background color after 2000 msecs
 </span>   {Delay 2000}
    {Window set(borderwidth:1<span style="color: #a020f0;">.</span>0<span style="color: #a020f0;">#</span>c
                background:blue)}
@@ -1322,7 +1322,7 @@ list.
 The example defines and uses the function square in order to square
 all numbers in the list. You may want to change this function to
 understand that any function can be given to a higher-order function
-as an argument. For example, replace Square by a function Doouble,
+as an argument. For example, replace Square by a function Double,
 which doubles its argument. */</span>
 
 <span style="color: #a020f0;">local</span>
@@ -1361,7 +1361,7 @@ function expecting two values) as arguments. This binary function
 compares two values, and Sort sorts the list values according to this
 comparison. For example, the function in the example compares two
 numbers and returns true if the first number is smaller. Consequently,
-this example sorts the list elements in incending order. You may want
+this example sorts the list elements in ascending order. You may want
 to replace the &lt; by &gt; in the function definition to sort the
 numbers in decreasing order. */</span>
 
@@ -1376,7 +1376,7 @@ Sort (2)</h3>
 <span style="color: #b22222;">/* </span><span style="color: #b22222;">You can actually sort the list elements in any way you want using
 the Sort function. For example, you may place all even numbers at the
 beginning and all odd numbers at the end of the list and sort all even
-and odd numbers in incending order. This is done in the second
+and odd numbers in ascending order. This is done in the second
 (commented) Sort call. How does this sorting work? */</span>
 
 {Browse {Sort [1 5 3 2 0 7] <span style="color: #a020f0;">fun</span><span style="color: #b8860b;"> </span>{<span style="color: #0000ff;">$</span> X Y}
@@ -1434,7 +1434,7 @@ Concurrency</h2>
 
 <p class="first">Oz provides excellent support for concurrent programming, where computations run in parallel in multiple threads. We will only touch on this subject and discuss aspects relevant for Strasheela. In general, however, concurrent programming plays a major role in Oz programming.</p>
 
-<p>The computations in different threads can communicate with each other via variables. Multiple threads can use the same variable in a computation. If the value of a variable does not present enough information for performing a specific operation, then the thread simply blocks and waits for more information. In the example below, the addition X+3 can not be peformed as long as the value of X is unknown. As soon as more information about the variable value is available, the thread resumes its execution.</p>
+<p>The computations in different threads can communicate with each other via variables. Multiple threads can use the same variable in a computation. If the value of a variable does not present enough information for performing a specific operation, then the thread simply blocks and waits for more information. In the example below, the addition X+3 can not be performed as long as the value of X is unknown. As soon as more information about the variable value is available, the thread resumes its execution.</p>
 
 <p>This behaviour leads to a concurrent programming model which is highly declarative &mdash; and thus easy to program in. We will later see how this model simplifies the definition of complex musical constraint satisfaction problems (Oz' constraint programming model is based on concurrent programming).</p>
 
@@ -1493,7 +1493,7 @@ executes X = 4. */</span>
 <pre class="src">
 <span style="color: #b22222;">/* </span><span style="color: #b22222;">This example demonstrates a pragmatic approach which checks for
 blocking programs. The example ends with the statement {Browse
-endOfProgram}. A non-blocking program will alway execute this last
+endOfProgram}. A non-blocking program will always execute this last
 line of code and show 'endOfProgram' in the Browser. However, a
 blocking program (as the present one) does not do that and thus
 indicates that it is blocking. Although this little trick does not
@@ -1606,7 +1606,7 @@ solutions to a constraint satisfaction problem. */</span>
 <div id="footer">
 <div id="author">&copy; 
 Torsten Anders</div>
-<div id="date">Last time edited: 2007.10.04</div>
+<div id="date">Last time edited: 2007.11.28</div>
 </div>
   </body>
 </html>

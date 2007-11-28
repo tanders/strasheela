@@ -125,9 +125,9 @@ closest even integer). There is also a function IntToFloat. */
 
 * Variables
 
-The keyword local introduces a variable. Variables start with a capital letter in Oz.
+The keyword local introduces a variable. Warning: variables must start with a capital letter in Oz.
 
-Please note: Oz variables are single assignment variables. After a variable was bound, it can not be changed anymore (mutable data is also supported by Oz, but not discussed in this tutorial; read about cells in the Oz documentation). In contrast to most other programming languages, however, a variable can be unbound or even partially bound. In other words, variables in Oz are 'logic variables'. This is discussed further in the lesson "Unification" below.  
+Please note: Oz variables are single assignment variables. After a variable is bound, it can not be changed anymore (mutable data is also supported by Oz, but not discussed in this tutorial; read about cells in the Oz documentation). In contrast to most other programming languages, however, a variable can be unbound or even partially bound. In other words, variables in Oz are 'logic variables'. This is discussed further in the lesson "Unification" below. 
 
 BTW: global variables can be introduced with the keyword declare. However, global variables are intended for testing and are only supported in the Emacs-based Oz Programming Interface (OPI), but not in this tutorial application.
   
@@ -180,11 +180,11 @@ in
 end
 </src>
 
-* Prodecure and Function Application
+* Procedure and Function Application
 
 Curly braces {...} surround a function or a procedure call. A function always returns exactly one value, a procedure does not necessarily return anything. In the first example below, the function IsEven expects one integer as arguments and returns true or false. The procedure Browse has a single argument and no return value.   
 
-However, every function is actually a procedure as well -- with one argument more. For example, IsEven is actually a procedure with two arguments. This is shown by the second example, where IsEven binds the variable B. Please note the order of computations in this example. Firstly, B is browsed. Afterwards, IsEven binds B to false. However, Browse does indeed show the correct value of B. This demonstrates a vital feature of Oz: variables are be used to communicate information between different parts of a program -- even if the information is not available yet. Browse can handle unknow information, but other parts of the program may wait (i.e. block) until the information is available.  
+However, every function is actually a procedure as well -- with one argument more. For example, IsEven is actually a procedure with two arguments. This is shown by the second example, where IsEven binds the variable B. Please note the order of computations in this example. Firstly, B is browsed. Afterwards, IsEven binds B to false. However, Browse does indeed show the correct value of B. This demonstrates a vital feature of Oz: variables are be used to communicate information between different parts of a program -- even if the information is not available yet. Browse can handle unknown information, but other parts of the program may wait (i.e. block) until the information is available.  
   
 
 ** Applications
@@ -219,7 +219,7 @@ end
 
 * If
 
-Oz provides the usual if control structure.
+Oz provides the usual if control structure. Note that unlike many programming languages, parenthesis () are not required around the condition.
 
 ** With else clause
 
@@ -329,7 +329,7 @@ end
 
 <src lang="oz">
 /* Procedures and functions can call themselves (recursion). The
-function Factorial inplements the mathematical factorial concept. */
+function Factorial implements the mathematical factorial concept. */
 
 local
    fun {Factorial N}
@@ -435,7 +435,7 @@ position). */
 
 <src lang="oz">
 /* Actually, a tuple is a record which has only integer features in
-ascending order. These features can be ommitted. The two records below
+ascending order. These features can be omitted. The two records below
 are equivalent. */
 
 {Inspect unit(1:a 2:b 3:c) == unit(a b c)}
@@ -486,7 +486,7 @@ feature 1, and the remaining list under the feature 2. */
 ** Pairs (1)
 
 <src lang="oz">
-%% A pair is a convenient way of contatenating values. 
+%% A pair is a convenient way of concatenating values. 
 
 {Inspect value1 # value2 # value3}
 </src>
@@ -494,7 +494,7 @@ feature 1, and the remaining list under the feature 2. */
 ** Pairs (2)
 
 <src lang="oz">
-%% Actually, a pair is a tuple with the lable '#'.
+%% Actually, a pair is a tuple with the label '#'.
 
 {Inspect a#b#c  == '#'(a b c)}
 </src>
@@ -689,7 +689,7 @@ end
 
 * Class Method Application
 
-Oz supports object-oriented programming. This programming paramdigm introduces the notion of objects which instantiate classes. An object (or class instance) is a datum which encapsulates its internal structure. A class specifies what data are contained in its instances and what methods these instances understands. A method (or message) is effectively a procedure which is defined for instances of specific classes only. For more details on object-oriented programming in general, please refer to other Oz documentation (e.g., the Oz Tutorial, Sec. 10).
+Oz supports object-oriented programming. This programming paradigm introduces the notion of objects which instantiate classes. An object (or class instance) is a datum which encapsulates its internal structure. A class specifies what data are contained in its instances and what methods these instances understands. A method (or message) is effectively a procedure which is defined for instances of specific classes only. For more details on object-oriented programming in general, please refer to other Oz documentation (e.g., the Oz Tutorial, Sec. 10).
 
 ** Method call
 
@@ -729,7 +729,7 @@ end
 /* Class methods are actually records which can contain method
 arguments. For example, the following statement sends the following
 message to the object Window -- which sets increases the border around
-the buttom and sets the backgound of this border to the color blue.
+the button and sets the background of this border to the color blue.
 
   {Window set(borderwidth:1.0#c background:blue)}
 
@@ -747,7 +747,7 @@ local
 				 action:toplevel#close))}
 in
    {Window show}
-   %% change to botton background color after 2000 msecs
+   %% change to button background color after 2000 msecs
    {Delay 2000}
    {Window set(borderwidth:1.0#c 
                background:blue)}
@@ -795,7 +795,7 @@ list.
 The example defines and uses the function square in order to square
 all numbers in the list. You may want to change this function to
 understand that any function can be given to a higher-order function
-as an argument. For example, replace Square by a function Doouble,
+as an argument. For example, replace Square by a function Double,
 which doubles its argument. */
 
 local
@@ -830,7 +830,7 @@ function expecting two values) as arguments. This binary function
 compares two values, and Sort sorts the list values according to this
 comparison. For example, the function in the example compares two
 numbers and returns true if the first number is smaller. Consequently,
-this example sorts the list elements in incending order. You may want
+this example sorts the list elements in ascending order. You may want
 to replace the < by > in the function definition to sort the
 numbers in decreasing order. */
 
@@ -843,7 +843,7 @@ numbers in decreasing order. */
 /* You can actually sort the list elements in any way you want using
 the Sort function. For example, you may place all even numbers at the
 beginning and all odd numbers at the end of the list and sort all even
-and odd numbers in incending order. This is done in the second
+and odd numbers in ascending order. This is done in the second
 (commented) Sort call. How does this sorting work? */
 
 {Browse {Sort [1 5 3 2 0 7] fun {$ X Y} 
@@ -896,7 +896,7 @@ end
 
 Oz provides excellent support for concurrent programming, where computations run in parallel in multiple threads. We will only touch on this subject and discuss aspects relevant for Strasheela. In general, however, concurrent programming plays a major role in Oz programming. 
 
-The computations in different threads can communicate with each other via variables. Multiple threads can use the same variable in a computation. If the value of a variable does not present enough information for performing a specific operation, then the thread simply blocks and waits for more information. In the example below, the addition X+3 can not be peformed as long as the value of X is unknown. As soon as more information about the variable value is available, the thread resumes its execution. 
+The computations in different threads can communicate with each other via variables. Multiple threads can use the same variable in a computation. If the value of a variable does not present enough information for performing a specific operation, then the thread simply blocks and waits for more information. In the example below, the addition X+3 can not be performed as long as the value of X is unknown. As soon as more information about the variable value is available, the thread resumes its execution. 
   
 This behaviour leads to a concurrent programming model which is highly declarative -- and thus easy to program in. We will later see how this model simplifies the definition of complex musical constraint satisfaction problems (Oz' constraint programming model is based on concurrent programming).
 
@@ -950,7 +950,7 @@ end
 <src lang="oz">
 /* This example demonstrates a pragmatic approach which checks for
 blocking programs. The example ends with the statement {Browse
-endOfProgram}. A non-blocking program will alway execute this last
+endOfProgram}. A non-blocking program will always execute this last
 line of code and show 'endOfProgram' in the Browser. However, a
 blocking program (as the present one) does not do that and thus
 indicates that it is blocking. Although this little trick does not
