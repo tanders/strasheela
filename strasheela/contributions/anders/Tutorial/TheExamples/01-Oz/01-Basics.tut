@@ -68,10 +68,13 @@ You can use integers (e.g. 3, 7) and floats (e.g. 1.0, 3.14). However, you can n
 {Browse ~7 * 5}</oz>
   <oz title="Integer example 3">{Browse (4 + 2) div 2}</oz>
   <oz title="Float example 1">{Browse 3.0 / ~2.0}</oz>
-<oz title="Float example 2">/* A float is converted into the closest integer with the function FloatToInt (in case two integers are equally close it rounds to the closest even integer). There is also a function IntToFloat. */
+<oz title="Float example 2">/* A float is converted into the closest integer
+with the function FloatToInt (in case two integers are equally close it rounds
+to the closest even integer). There is also a function IntToFloat. */
 
 {Browse {FloatToInt 3.5}}</oz>
-  <oz title="Float example 3">%% many other numeric functions are available for floats, e.g., Exp, Log, Sin, Cos...
+  <oz title="Float example 3">%% many other numeric functions are available for floats,
+%% e.g., Exp, Log, Sin, Cos...
 {Browse {Sqrt 9.0}}</oz>
 </example>
 
@@ -91,7 +94,9 @@ in
    Y = 3
    {Browse X*Y}
 end</oz>
-<oz title="Variable scope">/* Local statements can be freely nested (like virtually everything in Oz). Oz supports static or lexical scope (i.e. a variable always refers to its nearest enclosing binding). */
+<oz title="Variable scope">/* Local statements can be freely nested (like
+virtually everything in Oz). Oz supports static or lexical scope (i.e. a
+variable always refers to its nearest enclosing binding). */
 
 local
    X = 3
@@ -105,8 +110,8 @@ in
   %% later, browse original X 
   {Browse X}
 end</oz>
-<oz title="A variable can be unbound">/* Watch the Browser: X is first unbound (_ is displayed). Only after
-3000 msec X is bound to 3. */
+<oz title="A variable can be unbound">/* Watch the Browser: X is first unbound (_ is displayed).
+X is bound to 3 after 3000 msec. */
 
 local
    X 
@@ -116,6 +121,40 @@ in
    X = 3
 end</oz>
   
+</example>
+
+<example title="If">
+<info>Oz provides the usual if control structure. Note that unlike many programming languages, parenthesis () are not required around the condition.
+
+The general format is:
+
+if expression then
+    something
+else
+    somethingelse
+end
+
+(the `else' clause is optional.  Oz is white-space insensitive, so `if' statements are often placed on a single line.)
+
+The `if' control structure can be used as an expression which returns a value.
+</info>
+<oz title="if ... end">%% This example does nothing, but try changing == to \=.
+%% The operations == and \= test equality and inequality of values.
+
+if this == that then
+    {Browse hi}
+end</oz>
+<oz title="if ... else ... end">%% try changing 2 to 6... 
+
+if 2 &lt; 5 then
+    {Browse less}
+else
+    {Browse more}
+end</oz>
+<oz title="if as an expression">%% This `if' returns a value.
+
+{Browse 
+ if 2 &lt; 5 then less else more end}</oz>
 </example>
 
 
@@ -141,24 +180,6 @@ in
 end</oz>
 </example>
 
-
-<example title="If">
-<info>Oz provides the usual if control structure. Note that unlike many programming languages, parenthesis () are not required around the condition.</info>
-<oz title="With else clause">%% try changing 2 to 6... 
-
-if 2 &lt; 5 then {Browse less} else {Browse more} end</oz>
-<oz title="Without else clause">/* The else clause is optional. This example does nothing. Try
-changing == to \=. The operations == and \= test equality and
-inequality of values. */
-
-if this == that then {Browse hi} end</oz>
-<oz title="If as expression">/* The if control structure can be used either as a statement which
-returns nothing (as the examples above), or as an expression returning
-a value. */
-
-{Browse 
- if 2 &lt; 5 then less else more end}</oz>
-</example>
 
 <example title="Procedure Definition">
 <info>A procedure definition wraps up (abstracts) some computation: a complex computation can then be executed simply by calling the procedure. In the example, the procedure Max gets two numbers as its first two arguments and binds its last argument to the greater number (>= means 'greater or equal'.). Note that the curly braces in the definition surround the procedure name and its arguments like a procedure call.</info>
