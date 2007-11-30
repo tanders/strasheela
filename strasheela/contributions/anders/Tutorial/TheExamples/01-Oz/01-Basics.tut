@@ -158,16 +158,29 @@ end</oz>
 </example>
 
 
-<example title="Procedure and Function Application">
-  <info>Curly braces {...} surround a function or a procedure call. A function always returns exactly one value, while a procedure does not necessarily return anything. In the first example below, the function IsEven expects one integer as arguments and returns true or false. The procedure Browse has a single argument and no return value.   
+<example title="Procedure and Functions">
+  <info>Curly braces {...} surround a function or a procedure call.
 
-However, every function is actually a procedure as well -- with one argument more. For example, IsEven is actually a procedure with two arguments. This is shown by the second example, where IsEven binds the variable B. Please note the order of computations in this example. Firstly, B is browsed. Afterwards, IsEven binds B to false. However, Browse does indeed show the correct value of B. This demonstrates a vital feature of Oz: variables are be used to communicate information between different parts of a program -- even if the information is not available yet. Browse can handle unknown information, but other parts of the program may wait (i.e. block) until the information is available.  
+In Oz, functions are a special kind of procedure -- they are procedures which always returns exactly one value.  Procedures do not necessarily return anything.
+
+However, every function may be called like a procedure, by adding one additional argument.  This additional argument will store the result of the function.
   </info>
-  <oz title="Applications">%% call procedure Browse with the result of IsEven
+  <oz title="Usage">%% call procedure Browse with the result of function IsEven
+%% IsEven expects one integer as an argument, and returns true or false.
+%% Browse expects one argument (any variable type), and returns nothing.
+
 {Browse
  %% call function IsEven
  {IsEven 3}}</oz>
-  <oz title="Functions are procedures">local B in
+  <oz title="Functions are procedures">/* Here we treat IsEven as a procedure with two arguments.
+IsEven binds the variable B.  Please note the order of computations in this
+example. Firstly, B is browsed. Then IsEven binds B to false. However, Browse
+does indeed show the correct value of B.
+
+This demonstrates a vital feature of Oz: variables are be used to communicate information between different parts of a program -- even if the information is not available yet. Browse can handle unknown information, but other parts of the program may wait (i.e. block) until the information is available.
+*/
+
+local B in
    {Browse B} 		
    {IsEven 4 B}
 end</oz>
