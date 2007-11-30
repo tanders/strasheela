@@ -5,9 +5,9 @@
 <example title="Start here">
   <info>This interactive tutorial demonstrates the basics of the Oz programming language and Strasheela.  By presenting small code snippets which can be easily executed and edited, we hope to simply the process of learning about Oz/Strasheela.  After this tutorial, you should be ready to read and edit existing Strasheela examples, as well as creating your own Strasheela programs.
 
-Nevertheless, this tutorial is kept brief. The explanation of Oz focuses on aspects which are particularly important for Strasheela, and also Strasheela concepts are only outlined. Everything is explained very briefly to get you started quickly. In other words, it is not the intention of this tutorial to replace the extensive documentation already available on Oz, nor my thesis on Strasheela ;-)
+Nevertheless, this tutorial is kept brief.  The explanation of Oz focuses on aspects which are particularly important for Strasheela, and also Strasheela concepts are only outlined.  Everything is explained very briefly to get you started quickly.  In other words, it is not the intention of this tutorial to replace the extensive documentation already available on Oz, nor my thesis on Strasheela ;-)
 
-This tutorial is organised in small lessons. After you started the interactive tutorial application, you can select the examples in the list at the top-left of this window. Many lessons consist of several sub-examples, accesible via the list in the bottom-right corner. These examples are best studied in their order.
+This tutorial is organised in small lessons.  After you started the interactive tutorial application, you can select the examples in the list at the top-left of this window.  Many lessons consist of several sub-examples, accesible via the list in the bottom-right corner.  These examples are best studied in their order.
 
 (if you are reading the tutorial in your HTML browser, of course there are no lists of lessons and examples)
 </info>
@@ -16,7 +16,7 @@ This tutorial is organised in small lessons. After you started the interactive t
 
 
 <example title="Comments">
-  <info>Oz supports line comments and block comments. There are two examples in the bottom-right list:
+  <info>Oz supports line comments and block comments.  There are two examples in the bottom-right list:
   Line comment
   Block comment
 
@@ -37,7 +37,7 @@ comment
 
   {Browse something} 
 
-shows 'something' in the Oz Browser. Hit the [Run] button below to execute this example. Congratulations, you just executed your first Oz program! Try changing the 'Hello World!' text and see what happens.
+shows 'something' in the Oz Browser.  Hit the [Run] button below to execute this example.  Congratulations, you just executed your first Oz program! Try changing the 'Hello World!' text and see what happens.
 
 The other examples demonstrate alternative ways to output information.
   Browse: opens a Browse window
@@ -51,7 +51,7 @@ this tutorial). */
 
 {Show 'Hello World!'}</oz>
 <oz title="Inspect">/* The inspector shows sometimes more information than the Browser
-(depending on the inspected value). The inspector may be hidden behind
+(depending on the inspected value).  The inspector may be hidden behind
 this tutorial.. */
 
 {Inspect 'Hello World!'}</oz>
@@ -60,9 +60,9 @@ this tutorial.. */
 <example title="Calculator">
   <info>This example executes simple numeric calculations and displays the result. 
   
-Try changing the calculation by using different numbers and freely combining the operators +, -, * , ~ (negation), div (integer division), mod (integer modulus) and / (float division). You may also use parenthesis to indicate precedence.
+Try changing the calculation by using different numbers and freely combining the operators +, -, * , ~ (negation), div (integer division), mod (integer modulus) and / (float division).  You may also use parenthesis to indicate precedence.
   
-You can use integers (e.g. 3, 7) and floats (e.g. 1.0, 3.14). However, you can not directly mix integers and floats in a calculation (in that case, an error will be printed at the command line).</info>
+You can use integers (e.g. 3, 7) and floats (e.g. 1.0, 3.14).  However, you can not directly mix integers and floats in a calculation (in that case, an error will be printed at the command line).</info>
   <oz title="Integer example 1">{Browse 3+4}</oz>
   <oz title="Integer example 2">%% ~ is the negation sign
 {Browse ~7 * 5}</oz>
@@ -70,7 +70,7 @@ You can use integers (e.g. 3, 7) and floats (e.g. 1.0, 3.14). However, you can n
   <oz title="Float example 1">{Browse 3.0 / ~2.0}</oz>
 <oz title="Float example 2">/* A float is converted into the closest integer
 with the function FloatToInt (in case two integers are equally close it rounds
-to the closest even integer). There is also a function IntToFloat. */
+to the closest even integer).  There is also a function IntToFloat. */
 
 {Browse {FloatToInt 3.5}}</oz>
   <oz title="Float example 3">%% many other numeric functions are available for floats,
@@ -79,13 +79,13 @@ to the closest even integer). There is also a function IntToFloat. */
 </example>
 
 <example title="Variables">
-  <info>The keyword local introduces a variable. WARNING: variables must start with a capital letter in Oz.
+  <info>The keyword local introduces a variable.  WARNING: variables must start with a capital letter in Oz.
 
-Please note that Oz variables are single assignment variables. After a variable is bound, it cannot be changed anymore (mutable data is also supported by Oz, but not discussed in this tutorial; read about cells in the Oz documentation).
+Please note that Oz variables are single assignment variables.  After a variable is bound, it cannot be changed anymore (mutable data is also supported by Oz, but not discussed in this tutorial; read about cells in the Oz documentation).
 
-However, in contrast to most other constraint programming languages, a variable can be unbound or even partially bound. In other words, variables in Oz are 'logic variables'. This is discussed further in the lesson "Unification" below. 
+However, in contrast to most other constraint programming languages, a variable can be unbound or even partially bound.  In other words, variables in Oz are 'logic variables'.  This is discussed further in the lesson "Unification" below. 
 
-Global variables can be introduced with the keyword 'declare'. However, global variables are intended for testing and are only supported in the Emacs-based Oz Programming Interface (OPI), not in this tutorial application.
+Global variables can be introduced with the keyword 'declare'.  However, global variables are intended for testing and are only supported in the Emacs-based Oz Programming Interface (OPI), not in this tutorial application.
   </info>
   <oz title="Variable declaration">local
    X = 1 + 1
@@ -95,7 +95,7 @@ in
    {Browse X*Y}
 end</oz>
 <oz title="Variable scope">/* Local statements can be freely nested (like
-virtually everything in Oz). Oz supports static or lexical scope (i.e. a
+virtually everything in Oz).  Oz supports static or lexical scope (i.e. a
 variable always refers to its nearest enclosing binding). */
 
 local
@@ -124,7 +124,7 @@ end</oz>
 </example>
 
 <example title="If">
-<info>Oz provides the usual if control structure. Note that unlike many programming languages, parenthesis () are not required around the condition.
+<info>Oz provides the usual if control structure.  Note that unlike many programming languages, parenthesis () are not required around the condition.
 
 The general format is:
 
@@ -174,17 +174,17 @@ However, every function may be called like a procedure, by adding one additional
  {IsEven 3}}</oz>
   <oz title="Functions are procedures">/* Here we treat IsEven as a procedure with two arguments.
 IsEven binds the variable B.  Please note the order of computations in this
-example. Firstly, B is browsed. Then IsEven binds B to false. However, Browse
+example.  Firstly, B is browsed.  Then IsEven binds B to false.  However, Browse
 does indeed show the correct value of B.
 
-This demonstrates a vital feature of Oz: variables are be used to communicate information between different parts of a program -- even if the information is not available yet. Browse can handle unknown information, but other parts of the program may wait (i.e. block) until the information is available.
+This demonstrates a vital feature of Oz: variables are be used to communicate information between different parts of a program -- even if the information is not available yet.  Browse can handle unknown information, but other parts of the program may wait (i.e. block) until the information is available.
 */
 
 local B in
    {Browse B} 		
    {IsEven 4 B}
 end</oz>
-<oz title="Procedures used like functions">/* For convenience, every procedure (e.g. Browse) can be used like a
+<oz title="Procedures used like functions">/* For convenience, every procedure (e.g.  Browse) can be used like a
 function which returns its last argument. */
 
 local X = {Browse}
@@ -195,7 +195,7 @@ end</oz>
 
 
 <example title="Procedure Definition">
-<info>A procedure definition wraps up (abstracts) some computation: a complex computation can then be executed simply by calling the procedure. In the example, the procedure Max gets two numbers as its first two arguments and binds its last argument to the greater number (>= means 'greater or equal'.). Note that the curly braces in the definition surround the procedure name and its arguments like a procedure call.</info>
+<info>A procedure definition wraps up (abstracts) some computation: a complex computation can then be executed simply by calling the procedure.  In the example, the procedure Max gets two numbers as its first two arguments and binds its last argument to the greater number (>= means 'greater or equal'.).  Note that the curly braces in the definition surround the procedure name and its arguments like a procedure call.</info>
 <oz title="Max procedure">/* NB: the variable X in the Max definition and the variable X outside
 are different variables (cf. variable scope above). */
 
@@ -210,8 +210,8 @@ in
   {Max 4 3 X}
   {Browse X}
 end</oz>
-<oz title="$ marks a return value">/* Every procedure argument can be a return value. The $ (dollar sign)
-always marks a return value. This example is not yet very convincing,
+<oz title="$ marks a return value">/* Every procedure argument can be a return value.  The $ (dollar sign)
+always marks a return value.  This example is not yet very convincing,
 but procedures will encapsulate constraints in later examples... */
 
 local
@@ -248,7 +248,7 @@ local
 in
   {Browse {Max 4 3}}
 end</oz>
-<oz title="Recursion">/* Procedures and functions can call themselves (recursion). The
+<oz title="Recursion">/* Procedures and functions can call themselves (recursion).  The
 function Factorial implements the mathematical factorial concept. */
 
 local
@@ -267,10 +267,13 @@ end</oz>
 
 
 <example title="Atoms and Names">
-  <info>Oz provides a number of basic data types which have a specific textual representation in program code. We already saw numbers (i.e. integers and floats). Another type are symbols -- atoms in Oz terminology. Text surrounded by quotes is an atom, for example 'hi there'. Alternatively, atoms can be written as single text tokens which do not start with a capital letter (so they are not confused with variables) and which are not any Oz keyword.  
+  <info>Oz provides a number of basic data types which have a specific textual representation in source code.  We have already seen numbers (i.e. integers and floats).  Another type are characters -- in Oz terminology, these are called `atoms'.
 
-We also already used the two boolean values (truth values) true and false. They look like atoms, but they are special (their type is name). Another often used value which looks like an atom is unit (also a name).</info>
-  <oz title="Atoms">%% Several atoms are inspected below. The inspector might be behind the tutorial.
+The safest way to create an atom is to surround it in single quotes: 'hi there'..  Atoms may also be written as text (without spaces) as long as they do not start with a capital letter (those are variables) and the text is not an Oz keyword.  For simplicity, we recommend using 'single quotes'.  ;)
+
+There are a few things which look like atoms, but are a different variable type: Name.  The boolean values true and false are both Names (specifically, the Bool subtype).  Another often used value which looks like an atom is unit (also a name).  We shall discuss units later.</info>
+  <oz title="Atoms">%% Several atoms are inspected below. (Remember that the inspector window
+%% might open behind the tutorial!)
 
 {Inspect 'I am an atom'}
 {Inspect iAmAnAtom}
@@ -292,18 +295,18 @@ We also already used the two boolean values (truth values) true and false. They 
 
 
 <example title="Compound Types">
-  <info>Besides the atomic types discussed before, Oz also provides compound data types. These includes records, tuples, lists, and strings. Please note that all these types are actually records (possibly nested records). However, Oz provides a convenient syntax for each of these types.</info>
+  <info>Besides the atomic types discussed before, Oz also provides compound data types.  These includes records, tuples, lists, and strings.  Please note that all these types are actually records (possibly nested records).  However, Oz provides a convenient syntax for each of these types.</info>
   <oz title="Records (1)">%% A record has a label and consists of feature-value pairs.
 
 {Inspect label(feature1:value1 feature2:value2)}</oz>
   <oz title="Records (2)">%% Records can be freely nested. 
   
 {Inspect test(1:hi 2:there x:unit(foo:bar))}</oz>
-  <oz title="Records (3)">/* Integer features can be omitted. The following example is identical to the previous. */
+  <oz title="Records (3)">/* Integer features can be omitted.  The following example is identical to the previous. */
 
 {Inspect test(hi there x:unit(foo:bar))}</oz>
-<oz title="Accessing record fields">/* Record fields are accessed with the dot operator. R.X returns the
-value stored at feature X in record R. Records support constant-time
+<oz title="Accessing record fields">/* Record fields are accessed with the dot operator.  R.X returns the
+value stored at feature X in record R.  Records support constant-time
 access (i.e. the time the access takes is independent of the feature
 position). */
 
@@ -312,7 +315,7 @@ position). */
 
 {Inspect label(value1 value2 value3)}</oz>
 <oz title="Tuples (2)">/* Actually, a tuple is a record which has only integer features in
-ascending order. These features can be omitted. The two records below
+ascending order.  These features can be omitted.  The two records below
 are equivalent. */
 
 {Inspect unit(1:a 2:b 3:c) == unit(a b c)}</oz>
@@ -344,15 +347,15 @@ procedures can be used for strings). */
 
 {Inspect "test" == [116 101 115 116]}</oz>
 <oz title="Strings (2)">/* Although a string is just a list of integers, you can show strings
-as text in the Browser and the Inspector. However, you need to
-configure them for showing strings first. In the Inspector Preference
+as text in the Browser and the Inspector.  However, you need to
+configure them for showing strings first.  In the Inspector Preference
 settings (Options menu), select the tab Appearance and tick "Show
-Strings". You need to do these settings before you inspect a
+Strings".  You need to do these settings before you inspect a
 string. */
 
 {Inspect "This is a string!"}</oz>
 <oz title="Virtual Strings">/* A virtual string (VS) is a (possibly nested) concatenation of
-strings, atoms, and numbers. Many procedures expecting strings as
+strings, atoms, and numbers.  Many procedures expecting strings as
 arguments can also handle virtual strings for convenience. */
   
 local 
@@ -363,13 +366,13 @@ end</oz>
 </example>
 
 <example title="Pattern Matching">
-<info>Pattern matching is a convenient way to access the elements contained in records, lists etc. Pattern matching decomposes such compound data, declares new variables, and binds these variables to parts of the compound data.  
+<info>Pattern matching is a convenient way to access the elements contained in records, lists etc.  Pattern matching decomposes such compound data, declares new variables, and binds these variables to parts of the compound data.  
 </info>
-<oz title="The case statement">/* The primary pattern matching construct is the case statement. In
+<oz title="The case statement">/* The primary pattern matching construct is the case statement.  In
 the example below, case declares the two variables H and T and binds
-them to the head and tail of the list Xs. Finally, the H and T are
-inspected. Please note that the pattern-matching expression H|T is
-written with the usual list syntax using |. For better understanding
+them to the head and tail of the list Xs.  Finally, the H and T are
+inspected.  Please note that the pattern-matching expression H|T is
+written with the usual list syntax using |.  For better understanding
 pattern-matching, you may want to replace this expression with the
 list [A B C D] and then inspect one of the variables in this list. */
 
@@ -382,11 +385,11 @@ in
 end</oz>
 <oz title="Implicit pattern matching">/* Some programming constructs in Oz -- for example the function
 definition -- also feature pattern matching (quasi an implicit case
-statement). The following function GetPitch expects a record as
-argument which must match the record note(pitch:Pitch ...). The
+statement).  The following function GetPitch expects a record as
+argument which must match the record note(pitch:Pitch ...).  The
 variable Pitch is implicitly declared and bound to the value at the
 feature 'pitch' of the record given as argument to the
-function. Please note that the record in the header of the function
+function.  Please note that the record in the header of the function
 GetPitch is not even complete but contains three dots (...) to
 indicate that further record features are possible. */
 
@@ -400,7 +403,7 @@ end</oz>
 </example>
 
 <example title="Procedures over Compound Data">
-<info>Oz provides a rich set of procedures for processing these compound data such as lists and records. A few examples are shown here. More procedures are listed in the reference documentation at
+<info>Oz provides a rich set of procedures for processing these compound data such as lists and records.  A few examples are shown here.  More procedures are listed in the reference documentation at
 
    http://www.mozart-oz.org/documentation/base/index.html
 </info>
@@ -410,7 +413,7 @@ end</oz>
 <oz title="Arity">%% Return the features of a record as a list.
 
 {Inspect {Arity unit(a b x:1 y:2 z:3)}}</oz>
-<oz title="Adjoin">/* "Merge" two records. Note that features and label of the second
+<oz title="Adjoin">/* "Merge" two records.  Note that features and label of the second
 record take precedence over the first. */
 
 {Inspect {Adjoin unit(x:1 y:2 z:3) test(foo:hi bar:there z:'overwrite!')}}</oz>
@@ -424,7 +427,7 @@ record take precedence over the first. */
 
 {Inspect {Append [a b] [x y]}}</oz>
 <oz title="User-defined procedures">/* You can define procedures over lists and records as easily as
-numeric procedures. Following is the definition of the function
+numeric procedures.  Following is the definition of the function
 Append. */
 
 local
@@ -440,7 +443,7 @@ end</oz>
 
 
 <example title="Unification">
-<info>The operator = performs unification of two variables. The variables quasi share all the information they have about their values. A variable without a name (an anonymous variable) is written as an underscore ( _ ). Unification is a basic form of constraint programming (constraint programming is discussed further below).
+<info>The operator = performs unification of two variables.  The variables quasi share all the information they have about their values.  A variable without a name (an anonymous variable) is written as an underscore ( _ ).  Unification is a basic form of constraint programming (constraint programming is discussed further below).
 </info>
 <oz title="Unifying two lists">local 
   X = [a _ _] 
@@ -449,7 +452,7 @@ in
   X = Y          % unify X and Y
   {Inspect X}
 end</oz>
-<oz title="Recursive unification">/* Unification also works recursively. The Inspector and the Browser
+<oz title="Recursive unification">/* Unification also works recursively.  The Inspector and the Browser
 show two different ways for representing that (the Inspector can be
 configured to show either way: options menu, structure tab, under
 representation, select between tree and relation mode). */
@@ -462,24 +465,24 @@ end</oz>
 
 
 <example title="Class Method Application">
-<info>Oz supports object-oriented programming. This programming paradigm introduces the notion of objects which instantiate classes. An object (or class instance) is a datum which encapsulates its internal structure. A class specifies what data are contained in its instances and what methods these instances understands. A method (or message) is effectively a procedure which is defined for instances of specific classes only. For more details on object-oriented programming in general, please refer to other Oz documentation (e.g., the Oz Tutorial, Sec. 10).</info>
+<info>Oz supports object-oriented programming.  This programming paradigm introduces the notion of objects which instantiate classes.  An object (or class instance) is a datum which encapsulates its internal structure.  A class specifies what data are contained in its instances and what methods these instances understands.  A method (or message) is effectively a procedure which is defined for instances of specific classes only.  For more details on object-oriented programming in general, please refer to other Oz documentation (e.g., the Oz Tutorial, Sec. 10).</info>
 <oz title="Method call">/* The following example creates a graphical user interface
-button. You do not need to understand the code which creates the
-window itself (i.e., the call to QTk.build). For our purposes here,
+button.  You do not need to understand the code which creates the
+window itself (i.e., the call to QTk.build).  For our purposes here,
 only this single line is important:
 
   {Window show}
 
 Window is an object, and show is the name of the method understood by
-this object. This method results in showing the window with the
-button. Please note that the syntax of a method application differs
-clearly from the procedure application syntax shown before. If show
+this object.  This method results in showing the window with the
+button.  Please note that the syntax of a method application differs
+clearly from the procedure application syntax shown before.  If show
 would be a procedure instead, then we would write:
 
   {Show Window}
 
 BTW: internally, objects are actually procedures which expect a single
-argument -- hence this syntax. When the object is send a message
+argument -- hence this syntax.  When the object is send a message
 (i.e. the procedure is called with a specific argument) it processes
 the message according to its definition, and may even change its
 internal state. */
@@ -491,7 +494,7 @@ in
    {Window show}
 end</oz>
 <oz title="Method arguments">/* Class methods are actually records which can contain method
-arguments. For example, the following statement sends the following
+arguments.  For example, the following statement sends the following
 message to the object Window -- which sets increases the border around
 the button and sets the background of this border to the color blue.
 
@@ -519,32 +522,32 @@ end</oz>
 </example>
 
 <example title="Higher-Order Programming">
-<info>Oz procedures (and functions) are first-class values. This means that a procedure can be processed like any other value. For example, procedures can be given to other procedures as arguments. This means that we can have (and define ourselves!) operations where not only some value such as numbers or symbols are given as arguments but other operations as well. This leads to highly flexible programming technique called higher-order programming. Procedures expecting procedures as arguments are called higher-order procedures. This concept is demonstrated be several examples. 
+<info>Oz procedures (and functions) are first-class values.  This means that a procedure can be processed like any other value.  For example, procedures can be given to other procedures as arguments.  This means that we can have (and define ourselves!) operations where not only some value such as numbers or symbols are given as arguments but other operations as well.  This leads to highly flexible programming technique called higher-order programming.  Procedures expecting procedures as arguments are called higher-order procedures.  This concept is demonstrated be several examples. 
 </info>
 <oz title="Filter">/* The function Filter expects a list and a test function, and returns
 only those elements for which the test function returns true.
 
 The function IsEven returns true for even integers and thus a list
-with only the even integers in [~3 ~2 ~1 0 1 2 3] is returned. Try
+with only the even integers in [~3 ~2 ~1 0 1 2 3] is returned.  Try
 replaying IsEven by IsOdd, IsNumber or IsNat (testing for natural
 numbers) to better understand this filtering (BTW: there is a bug in
 IsOdd concerning negative numbers). */
 
 {Browse {Filter [~ 4 ~3 ~2 ~1 0 1 2 3] IsEven}}</oz>
 <oz title="ForAll">/* The procedure ForAll applies a given procedure to any element of a
-list. In this example, the procedure Browse is applied to every list
+list.  In this example, the procedure Browse is applied to every list
 element. */
 
 {ForAll [a b c d e f] Browse}</oz>
 <oz title="Map">/* The function Map expects a list and a unary function (i.e. a
-function expecting a single value) as arguments. It applies the
+function expecting a single value) as arguments.  It applies the
 function to every list element, and returns the collected results in a
 list.
 
 The example defines and uses the function square in order to square
-all numbers in the list. You may want to change this function to
+all numbers in the list.  You may want to change this function to
 understand that any function can be given to a higher-order function
-as an argument. For example, replace Square by a function Double,
+as an argument.  For example, replace Square by a function Double,
 which doubles its argument. */
 
 local
@@ -553,33 +556,33 @@ in
   {Browse {Map [1 2 3 4 5 6] Square}}
 end</oz>
 <oz title="Anonymous procedure definition">/* Sometimes we need a function only once -- as the function Square in
-the previous example. In such cases we don't necessarily need to care
-about giving the function any name. Instead, we can define an
+the previous example.  In such cases we don't necessarily need to care
+about giving the function any name.  Instead, we can define an
 anonymous function.
 
 This example restates the previous example by defining the Square
-function 'inline' without giving it any name. Please recall that $
-always denotes a return value. In this case, $ returns the function
+function 'inline' without giving it any name.  Please recall that $
+always denotes a return value.  In this case, $ returns the function
 value itself. */
 
 {Browse 
  {Map [1 2 3 4 5 6] fun {$ X} X * X end}}</oz>
 <oz title="Sort (1)">/* The function Sort expects a list and a binary function (i.e. a
-function expecting two values) as arguments. This binary function
+function expecting two values) as arguments.  This binary function
 compares two values, and Sort sorts the list values according to this
-comparison. For example, the function in the example compares two
-numbers and returns true if the first number is smaller. Consequently,
-this example sorts the list elements in ascending order. You may want
+comparison.  For example, the function in the example compares two
+numbers and returns true if the first number is smaller.  Consequently,
+this example sorts the list elements in ascending order.  You may want
 to replace the &lt; by &gt; in the function definition to sort the
 numbers in decreasing order. */
 
 {Browse {Sort [1 5 3 2 0 7] fun {$ X Y}  X &lt; Y end}}</oz>
 
 <oz title="Sort (2)">/* You can actually sort the list elements in any way you want using
-the Sort function. For example, you may place all even numbers at the
+the Sort function.  For example, you may place all even numbers at the
 beginning and all odd numbers at the end of the list and sort all even
-and odd numbers in ascending order. This is done in the second
-(commented) Sort call. How does this sorting work? */
+and odd numbers in ascending order.  This is done in the second
+(commented) Sort call.  How does this sorting work? */
 
 {Browse {Sort [1 5 3 2 0 7] fun {$ X Y} 
                               if {IsEven X} 
@@ -594,18 +597,18 @@ and odd numbers in ascending order. This is done in the second
 
 <oz title="Defining higher-order procedures">/* Higher order procedures are defined like any other procedure: some
 arguments are simply procedures -- which are then usually applied in
-the definition. This example defines a higher-order function Find
+the definition.  This example defines a higher-order function Find
 which expects a list Xs and a test function Fn: Find returns the first
 element in Xs for which Fn returns true.
 
 This example also demonstrates the pattern-matching case statement
-with multiple clauses operating on the list Xs. In case Xs is the
-empty list nil, then Find returns nil. Otherwise (multiple clauses are
+with multiple clauses operating on the list Xs.  In case Xs is the
+empty list nil, then Find returns nil.  Otherwise (multiple clauses are
 separated with the keyword []), Xs is matched with X|Xr, where X is
 bound to the first element of Xs and Xr to the list's tail or
-rest. The function Find then checks whether {Fn X} returns true. In
+rest.  The function Find then checks whether {Fn X} returns true.  In
 that case, the searched for list element has been found and is
-returned. Otherwise, Find is called recursively with the rest of the
+returned.  Otherwise, Find is called recursively with the rest of the
 list. */
 
 local
@@ -627,22 +630,22 @@ end</oz>
 
 
 <example title="Concurrency">
-<info>Oz provides excellent support for concurrent programming, where computations run in parallel in multiple threads. We will only touch on this subject and discuss aspects relevant for Strasheela. In general, however, concurrent programming plays a major role in Oz programming. 
+<info>Oz provides excellent support for concurrent programming, where computations run in parallel in multiple threads.  We will only touch on this subject and discuss aspects relevant for Strasheela.  In general, however, concurrent programming plays a major role in Oz programming. 
 
-The computations in different threads can communicate with each other via variables. Multiple threads can use the same variable in a computation. If the value of a variable does not present enough information for performing a specific operation, then the thread simply blocks and waits for more information. In the example below, the addition X+3 can not be performed as long as the value of X is unknown. As soon as more information about the variable value is available, the thread resumes its execution. 
+The computations in different threads can communicate with each other via variables.  Multiple threads can use the same variable in a computation.  If the value of a variable does not present enough information for performing a specific operation, then the thread simply blocks and waits for more information.  In the example below, the addition X+3 can not be performed as long as the value of X is unknown.  As soon as more information about the variable value is available, the thread resumes its execution. 
   
-This behaviour leads to a concurrent programming model which is highly declarative -- and thus easy to program in. We will later see how this model simplifies the definition of complex musical constraint satisfaction problems (Oz' constraint programming model is based on concurrent programming).
+This behaviour leads to a concurrent programming model which is highly declarative -- and thus easy to program in.  We will later see how this model simplifies the definition of complex musical constraint satisfaction problems (Oz' constraint programming model is based on concurrent programming).
 
-The downside of this concurrency model is that it can result in an unintended blocking of a program which is not explicitly signalled (e.g. no error message is shown when a program blocks, because this is a normal program behaviour). The second and third example below demonstrate a pragmatic way to deal with this downside. 
+The downside of this concurrency model is that it can result in an unintended blocking of a program which is not explicitly signalled (e.g. no error message is shown when a program blocks, because this is a normal program behaviour).  The second and third example below demonstrate a pragmatic way to deal with this downside. 
 
-The examples demonstrates concurrent programming, but do not show a typical application (a typical application would be a program split in a server and one or more clients). In the context of Strasheela, we will seldomly write concurrent programs explicitly. Nevertheless, it is very important to know how concurrent programming works in Oz. Even if we are not explicitly writing a concurrent program, constraint programming in Oz always results in a concurrent program. Concurrent programming forms one of the foundations of Oz' constraint programming model, where each constraint (i.e. each propagator) is a concurrent agent running in its own thread.
+The examples demonstrates concurrent programming, but do not show a typical application (a typical application would be a program split in a server and one or more clients).  In the context of Strasheela, we will seldomly write concurrent programs explicitly.  Nevertheless, it is very important to know how concurrent programming works in Oz.  Even if we are not explicitly writing a concurrent program, constraint programming in Oz always results in a concurrent program.  Concurrent programming forms one of the foundations of Oz' constraint programming model, where each constraint (i.e. each propagator) is a concurrent agent running in its own thread.
 </info>
 <oz title="Declarative concurrency">/* This example declares X and then browses 'hello' (just to show that
-the browser works in principle). However, the addition X+3 can not be
-executed immediately and blocks. Because this computation is executed
+the browser works in principle).  However, the addition X+3 can not be
+executed immediately and blocks.  Because this computation is executed
 in its own thread, the top-level thread continues regardless, and
-calls the procedure Delay, which waits for 3000 msecs. After that
-time, the top-level thread determines X to 4. This awakes the other
+calls the procedure Delay, which waits for 3000 msecs.  After that
+time, the top-level thread determines X to 4.  This awakes the other
 thread: it can now compute X+3 and browse the sum. */
 
 local
@@ -654,9 +657,9 @@ in
   X = 4
 end</oz>
 <oz title="Blocking computation">/* This example demonstrates a buggy program which does not signal any
-error but simply does nothing. The example is very similar to the
+error but simply does nothing.  The example is very similar to the
 previous example, but does not place the blocking X+3 in its own
-thread. As a result, the whole program blocks at that point and never
+thread.  As a result, the whole program blocks at that point and never
 executes X = 4. */
 
 local
@@ -668,13 +671,13 @@ in
   X = 4
 end</oz>
 <oz title="'Signalling' a blocking computation">/* This example demonstrates a pragmatic approach which checks for
-blocking programs. The example ends with the statement {Browse
-endOfProgram}. A non-blocking program will always execute this last
-line of code and show 'endOfProgram' in the Browser. However, a
+blocking programs.  The example ends with the statement {Browse
+endOfProgram}.  A non-blocking program will always execute this last
+line of code and show 'endOfProgram' in the Browser.  However, a
 blocking program (as the present one) does not do that and thus
-indicates that it is blocking. Although this little trick does not
+indicates that it is blocking.  Although this little trick does not
 tell us *where* the program blocks, the information *that* we wrote a
-blocking program can prove very helpful already. You may get a feel
+blocking program can prove very helpful already.  You may get a feel
 for this trick by changing the example so that the message
 'endOfProgram' is shown (e.g. comment the blocking statement out, or
 surrounding it with a 'thread .. end' statement). */
@@ -693,24 +696,24 @@ end
 
 <example title="Understanding error messages">
 <info>When we do program, we almost inevitably write bugs
-sometimes. Luckily, when confronted with specific problems in
+sometimes.  Luckily, when confronted with specific problems in
 programs, compilers try to tell us about the problem (naturally, the
-real hard bugs are the ones no compiler complains about). All errors
+real hard bugs are the ones no compiler complains about).  All errors
 are actually raised exceptions (see the Tutorial of Oz, Sec. 5.10 for
 more details).
 
 The compiler is your friend, so this example introduces you to some
 typical Oz error messages ;-) During your programming sessions,
-carefully reading error messages can save you much time. In this
+carefully reading error messages can save you much time.  In this
 tutorial, all these messages are shown at the shell (or in the DOS
-box) where you started the tutorial. The Oz Programming Interface
+box) where you started the tutorial.  The Oz Programming Interface
 (OPI) even supports moving to the code where the bug is likely to be
 located (see the Tutorial of Oz, Sec. 2.3.3).
 
 BTW: the error messages of this tutorial are slightly obscured
 unfortunately by some trick which keeps the tutorial application
 running even in the case of an error: there are always a few lines of
-other code before the actual error message. Also, the reported line
+other code before the actual error message.  Also, the reported line
 number is not correct, because the tutorial application adds a few
 lines to each example (the resulting full example is shown just before
 the error message).
@@ -727,7 +730,7 @@ X = 3</oz>
 <oz title="Type error">%% We can not add an integer and a float 
 
 {Browse 3 + 2.0}</oz>
-<oz title="Failure">/* Inconsistent constraint programs result in a failure. Failures play
+<oz title="Failure">/* Inconsistent constraint programs result in a failure.  Failures play
 an important role internally in a constraint solver searching for
 solutions to a constraint satisfaction problem. */
 
