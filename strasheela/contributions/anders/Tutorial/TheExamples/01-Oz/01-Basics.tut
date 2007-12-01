@@ -389,7 +389,11 @@ The primary pattern matching construct is the case statement, but some programmi
 <oz title="Case statements (1)"> /* In the example below, case declares the two variables H and T and
 binds them to the head and tail of the list Xs.  Finally, the H and T are
 inspected.  Please note that the pattern-matching expression H|T is written
-with the usual list syntax using |. */
+with the usual list syntax using | (the cons-operation). 
+
+This approach can be used to pattern match lists of arbitrary length,
+except empty lists (i.e. nil). Try to change the definition of Xs to a
+list of a different length and watch how the value of T changes. */
 
 local
    Xs = [1 2 3 4]
@@ -398,15 +402,32 @@ in
    then {Inspect H} {Inspect T}
    end
 end</oz>
-<oz title="Case statements (2)">/* This example has two changes compared to the previous
-example: we replaced the list with [a b c d], and added a third variable M. */
+<oz title="Case statements (2)">/* The previous example matched the head and the tail of a
+list. Instead, we can also match individual list elements (or the
+elements of other data structures, such as records or tuples). Note
+that in this example changing the length of the lists results in an
+error. */
 
 local
-   Xs = [a b c d]
+   Xs = [1 2 3 4]
 in
-   case Xs of H | M | T
-   then {Inspect H} {Inspect M} {Inspect T}
+   case Xs of [A B C D]
+   then {Inspect A} {Inspect B} {Inspect C} {Inspect D}
    end
+end</oz>
+<oz title="Multiple case clauses">/* Having only a single clause to match against (as in the previous
+examples), can be too restrictive. This example presents a typical
+case expression matching a list, which checks whether Xs is either a
+non-empty list, or an empty list, or some other value. You may want to
+play around with the value of Xs to try out these different
+clauses. */
+
+local Xs = [1 2 3 4]
+in
+   case Xs of  H|T then {Inspect nonEmptyList}
+      [] nil then {Inspect emptyList}
+      else {Inspect differentValue}
+   end 
 end</oz>
 <oz title="Implicit pattern matching">/* The following function GetPitch expects a record as
 argument which must match the record note(pitch:Pitch ...).  The
