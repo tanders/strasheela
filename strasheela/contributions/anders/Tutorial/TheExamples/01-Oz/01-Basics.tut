@@ -481,7 +481,12 @@ end</oz>
 
 
 <example title="Class Method Application">
-<info>Oz supports object-oriented programming.  This programming paradigm introduces the notion of objects which instantiate classes.  An object (or class instance) is a datum which encapsulates its internal structure.  A class specifies what data are contained in its instances and what methods these instances understands.  A method (or message) is effectively a procedure which is defined for instances of specific classes only.  For more details on object-oriented programming in general, please refer to other Oz documentation (e.g., the Oz Tutorial, Sec. 10).</info>
+<info>Oz supports object-oriented programming.  This programming paradigm introduces the notion of objects which instantiate classes.  An object (or class instance) is a datum which encapsulates its internal structure.  A class specifies what data are contained in its instances and what methods these instances understands.  A method (or message) is effectively a procedure which is defined for instances of specific classes only.
+
+For more details on object-oriented programming in general, please refer to other Oz documentation:
+    http://www.mozart-oz.org/documentation/tutorial/node10.html
+
+Internally, objects are actually procedures which expect a single argument -- hence this syntax.  When the object is sent a message (i.e. the procedure is called with a specific argument) it processes the message according to its definition.  This method definition may change its internal state, as we expect from typical objects.</info>
 <oz title="Method call">/* The following example creates a graphical user interface
 button.  You do not need to understand the code which creates the
 window itself (i.e., the call to QTk.build).  For our purposes here,
@@ -489,19 +494,14 @@ only this single line is important:
 
   {Window show}
 
-Window is an object, and show is the name of the method understood by
-this object.  This method results in showing the window with the
-button.  Please note that the syntax of a method application differs
-clearly from the procedure application syntax shown before.  If show
-would be a procedure instead, then we would write:
+`Window' is an object, and `show' is the name of the method understood by
+this object.  This method results in showing the window with the button.
+
+Please note that the syntax of a method differs clearly from the procedure
+syntax shown before.  If `show' was a procedure, then we would write:
 
   {Show Window}
-
-BTW: internally, objects are actually procedures which expect a single
-argument -- hence this syntax.  When the object is send a message
-(i.e. the procedure is called with a specific argument) it processes
-the message according to its definition, and may even change its
-internal state. */
+*/
 
 local
    Window = {QTk.build lr(button(text:"Hello world!" 
@@ -511,7 +511,7 @@ in
 end</oz>
 <oz title="Method arguments">/* Class methods are actually records which can contain method
 arguments.  For example, the following statement sends the following
-message to the object Window -- which sets increases the border around
+message to the object Window.  This changes the width of the border around
 the button and sets the background of this border to the color blue.
 
   {Window set(borderwidth:1.0#c background:blue)}
@@ -530,24 +530,27 @@ local
 				 action:toplevel#close))}
 in
    {Window show}
-   %% change to button background color after 2000 msecs
-   {Delay 2000}
+   %% change to button background color after 1000 msecs
+   {Delay 1000}
    {Window set(borderwidth:1.0#c 
                background:blue)}
 end</oz>
 </example>
 
 <example title="Higher-Order Programming">
-<info>Oz procedures (and functions) are first-class values.  This means that a procedure can be processed like any other value.  For example, procedures can be given to other procedures as arguments.  This means that we can have (and define ourselves!) operations where not only some value such as numbers or symbols are given as arguments but other operations as well.  This leads to highly flexible programming technique called higher-order programming.  Procedures expecting procedures as arguments are called higher-order procedures.  This concept is demonstrated be several examples. 
-</info>
+<info>Oz procedures (and functions) are first-class values.  This means that a procedure can be processed like any other value.  For example, procedures can be given to other procedures as arguments.
+
+This leads to highly flexible programming technique called higher-order programming.  Procedures expecting procedures as arguments are called higher-order procedures.  This concept is demonstrated be several examples.</info>
 <oz title="Filter">/* The function Filter expects a list and a test function, and returns
 only those elements for which the test function returns true.
 
 The function IsEven returns true for even integers and thus a list
 with only the even integers in [~3 ~2 ~1 0 1 2 3] is returned.  Try
 replaying IsEven by IsOdd, IsNumber or IsNat (testing for natural
-numbers) to better understand this filtering (BTW: there is a bug in
-IsOdd concerning negative numbers). */
+numbers) to better understand this filtering.
+
+(BTW: there is a bug in IsOdd concerning negative numbers)
+*/
 
 {Browse {Filter [~ 4 ~3 ~2 ~1 0 1 2 3] IsEven}}</oz>
 <oz title="ForAll">/* The procedure ForAll applies a given procedure to any element of a
