@@ -173,7 +173,7 @@ More specifically, a function is a procedure whose last argument -- the return v
 
 {Browse
  %% call function IsEven
- {IsEven 3}}</oz>
+unit{IsEven 3}}</oz>
   <oz title="Functions are procedures">/* Here we treat IsEven as a procedure with two arguments.
 IsEven binds the variable B.  Please note the order of computations in this
 example.  Firstly, B is browsed.  Then IsEven binds B to false.  However, Browse
@@ -291,7 +291,13 @@ There are a few things which look like atoms, but are a different variable type:
 {Inspect 'if'}
 {Inspect '=='}</oz>
   <oz title="Equality">{Inspect test == 'test'}</oz>
-  <oz title="Names">%% The boolean values and unit are no atoms
+  <oz title="Names">/* The values `true', `false' and `unit' are values which are similar
+to atoms, but which play a special role (note that the quotes don't
+belong to the values here). Obviously, `true' and `false' are the
+common boolean values. Oz provides the value `unit' for the computer
+science concept of the unit type (a value which is intended to express
+no further information). For example, `unit' is often used wherever a
+token is needed whose value is not important. */
 
 {Inspect true}
 {Inspect false}
@@ -299,10 +305,6 @@ There are a few things which look like atoms, but are a different variable type:
 
 %% The Inspector shows atoms and names in different colors
 {Inspect 'I am an atom'}</oz>
-  <oz title="Units">% the `unit' keyword does...
-
-% TODO
-</oz>
 </example>
 
 
