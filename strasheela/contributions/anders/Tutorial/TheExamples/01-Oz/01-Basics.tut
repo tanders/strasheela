@@ -159,11 +159,13 @@ end</oz>
 
 
 <example title="Procedure and Functions">
-  <info>Curly braces {...} surround a function or a procedure call.
+  <info>Procedures and functions are the standard means for expressing some computation(s). Examples range from numeric computations, to computations involving the operating system. For example, we saw a number of numeric operations expressed by the common infix notation above. However, under the hood all these operations are actually procedures. 
 
-In Oz, functions are a special kind of procedure -- they are procedures which always returns exactly one value.  Procedures do not necessarily return anything.
+Please note that curly braces {...} surround a function or a procedure call. This syntax for procedure/function application is rather unusual when compared with other programming languages, but it is also unambiguous. 
 
-However, every function may be called like a procedure, by adding one additional argument.  This additional argument will store the result of the function.
+In Oz, procedures are the fundamental concept. Functions are just a syntactic variant of procedures, added for convenience. The main difference between functions and procedures is, that functions are procedures which always returns exactly one value.  Procedures do not necessarily return anything.
+
+More specifically, a function is a procedure whose last argument -- the return value -- is expressed implicitly. Consequently, every function may be called like a procedure by adding this return value explicitly. Vice versa, any procedure can also be called like a function which returns its omitted last argument. 
   </info>
   <oz title="Usage">%% call procedure Browse with the result of function IsEven
 %% IsEven expects one integer as an argument, and returns true or false.
@@ -177,15 +179,19 @@ IsEven binds the variable B.  Please note the order of computations in this
 example.  Firstly, B is browsed.  Then IsEven binds B to false.  However, Browse
 does indeed show the correct value of B.
 
-This demonstrates a vital feature of Oz: variables are be used to communicate information between different parts of a program -- even if the information is not available yet.  Browse can handle unknown information, but other parts of the program may wait (i.e. block) until the information is available.
-*/
+This demonstrates a vital feature of Oz: variables are be used to
+communicate information between different parts of a program -- even
+if the information is not available yet.  Browse can handle unknown
+information, but other parts of the program may wait (i.e. block)
+until the information is available.  */
 
 local B in
    {Browse B} 		
    {IsEven 4 B}
 end</oz>
-<oz title="Procedures used like functions">/* For convenience, every procedure (e.g.  Browse) can be used like a
-function which returns its last argument. */
+<oz title="Procedures used like functions">/* Because functions are just a syntactic variant of procedures, every
+procedure (e.g.  Browse) can also be used like a function which
+returns its last argument. */
 
 local X = {Browse}
 in
@@ -195,7 +201,7 @@ end</oz>
 
 
 <example title="Procedure Definition">
-<info>A procedure definition wraps up (abstracts) some computation: a complex computation can then be executed simply by calling the procedure.  In the example, the procedure Max gets two numbers as its first two arguments and binds its last argument to the greater number (>= means 'greater or equal'.).  Note that the curly braces in the definition surround the procedure name and its arguments like a procedure call.</info>
+<info>A procedure definition wraps up (abstracts) some computation: a complex computation can then be executed simply by calling the procedure.  In the example, the procedure Max gets two numbers as its first two arguments and binds its last argument to the greater number (>= means 'greater or equal').  Note that the curly braces in the definition surround the procedure name and its arguments like a procedure call.</info>
 <oz title="Max procedure">/* NB: the variable X in the Max definition and the variable X outside
 are different variables (cf. variable scope above). */
 
