@@ -267,11 +267,13 @@ end</oz>
 
 
 <example title="Atoms and Names">
-  <info>Oz provides a number of basic data types which have a specific textual representation in source code.  We have already seen numbers (i.e. integers and floats).  Another type are characters -- in Oz terminology, these are called `atoms'.
+  <info>Oz provides a number of basic data types which have a specific textual representation in source code.  We have already seen numbers (i.e. integers and floats).  Here we shall discuss two other data types: Atoms and Names.
 
+Atom:
 The safest way to create an atom is to surround it in single quotes: 'hi there'..  Atoms may also be written as text (without spaces) as long as they do not start with a capital letter (those are variables) and the text is not an Oz keyword.  For simplicity, we recommend using 'single quotes'.  ;)
 
-There are a few things which look like atoms, but are a different variable type: Name.  The boolean values true and false are both Names (specifically, the Bool subtype).  Another often used value which looks like an atom is unit (also a name).  We shall discuss units later.</info>
+Name:
+There are a few things which look like atoms, but are a different variable type: Name.  The boolean values true and false are both Names (specifically, the Bool subtype).  Another often used value which looks like an atom is unit (also a name).</info>
   <oz title="Atoms">%% Several atoms are inspected below. (Remember that the inspector window
 %% might open behind the tutorial!)
 
@@ -291,11 +293,17 @@ There are a few things which look like atoms, but are a different variable type:
 
 %% The Inspector shows atoms and names in different colors
 {Inspect 'I am an atom'}</oz>
+  <oz title="Units">% the `unit' keyword does...
+
+% TODO
+</oz>
 </example>
 
 
 <example title="Compound Types">
-  <info>Besides the atomic types discussed before, Oz also provides compound data types.  These includes records, tuples, lists, and strings.  Please note that all these types are actually records (possibly nested records).  However, Oz provides a convenient syntax for each of these types.</info>
+  <info>Besides the atomic types discussed before, Oz also provides compound data types: records, tuples, lists, and strings.
+
+Internally, all of these data types are actually records (just like all functions are actually procedures).  Tuples, lists, and strings just provide a different syntax for interacting with records.</info>
   <oz title="Records (1)">%% A record has a label and consists of feature-value pairs.
 
 {Inspect label(feature1:value1 feature2:value2)}</oz>
