@@ -126,17 +126,17 @@ end</oz>
 <example title="If">
 <info>Oz provides the usual if control structure.  Note that unlike many programming languages, parenthesis () are not required around the condition.
 
-The general format is:
+The general format is (&lt;expression&gt; stands for an arbitrary expression):
 
-if expression then
-    something
+if &lt;expression&gt; then
+    &lt;something&gt;
 else
-    somethingelse
+    &lt;somethingelse&gt;
 end
 
-(the `else' clause is optional.  Oz is white-space insensitive, so `if' statements are often placed on a single line.)
+The `else' clause is optional.  Oz is white-space insensitive, so `if' statements can be placed on a single line.
 
-The `if' control structure can be used as an expression which returns a value.
+Please note that the `if' control structure can also be used as an expression which returns a value from the `then' or `else' clause.
 </info>
 <oz title="if ... end">%% This example does nothing, but try changing == to \=.
 %% The operations == and \= test equality and inequality of values.
