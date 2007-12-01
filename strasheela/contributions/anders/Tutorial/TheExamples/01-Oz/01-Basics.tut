@@ -375,14 +375,13 @@ end</oz>
 
 <example title="Pattern Matching">
 <info>Pattern matching is a convenient way to access the elements contained in records, lists etc.  Pattern matching decomposes such compound data, declares new variables, and binds these variables to parts of the compound data.  
+
+The primary pattern matching construct is the case statement, but some programming constructs (for example, functions) allow pattern matching via an implicit case statement.
 </info>
-<oz title="The case statement">/* The primary pattern matching construct is the case statement.  In
-the example below, case declares the two variables H and T and binds
-them to the head and tail of the list Xs.  Finally, the H and T are
-inspected.  Please note that the pattern-matching expression H|T is
-written with the usual list syntax using |.  For better understanding
-pattern-matching, you may want to replace this expression with the
-list [A B C D] and then inspect one of the variables in this list. */
+<oz title="Case statements (1)"> /* In the example below, case declares the two variables H and T and
+binds them to the head and tail of the list Xs.  Finally, the H and T are
+inspected.  Please note that the pattern-matching expression H|T is written
+with the usual list syntax using |. */
 
 local
    Xs = [1 2 3 4]
@@ -391,13 +390,22 @@ in
    then {Inspect H} {Inspect T}
    end
 end</oz>
-<oz title="Implicit pattern matching">/* Some programming constructs in Oz -- for example the function
-definition -- also feature pattern matching (quasi an implicit case
-statement).  The following function GetPitch expects a record as
+<oz title="Case statements (2)">/* This example has two changes compared to the previous
+example: we replaced the list with [a b c d], and added a third variable M. */
+
+local
+   Xs = [a b c d]
+in
+   case Xs of H | M | T
+   then {Inspect H} {Inspect M} {Inspect T}
+   end
+end</oz>
+<oz title="Implicit pattern matching">/* The following function GetPitch expects a record as
 argument which must match the record note(pitch:Pitch ...).  The
 variable Pitch is implicitly declared and bound to the value at the
-feature 'pitch' of the record given as argument to the
-function.  Please note that the record in the header of the function
+feature 'pitch' of the record given as argument to the function.
+
+Please note that the record in the header of the function
 GetPitch is not even complete but contains three dots (...) to
 indicate that further record features are possible. */
 
