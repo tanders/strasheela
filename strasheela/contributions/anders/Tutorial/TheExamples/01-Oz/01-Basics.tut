@@ -173,7 +173,7 @@ More specifically, a function is a procedure whose last argument -- the return v
 
 {Browse
  %% call function IsEven
-unit{IsEven 3}}</oz>
+ {IsEven 3}}</oz>
   <oz title="Functions are procedures">/* Here we treat IsEven as a procedure with two arguments.
 IsEven binds the variable B.  Please note the order of computations in this
 example.  Firstly, B is browsed.  Then IsEven binds B to false.  However, Browse
