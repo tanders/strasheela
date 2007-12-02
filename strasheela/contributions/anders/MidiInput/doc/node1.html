@@ -1,0 +1,185 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<html>
+ <head>
+  <title>MidiInput</title>
+  <style>BODY {
+ background: url(page.gif) repeat-y white;
+}
+#slidemenubar, #slidemenubar2{
+ position:absolute;
+ left:-144px;
+ width:160px;
+ top:10px;
+ border:0px solid black;
+ font:bold 12px Verdana;
+ line-height:10px;
+}
+.margin {
+ position: absolute;
+ left: 10px;
+ width: 130px;
+}
+BODY, P, H1, H2, H3, A {
+ font-family: sans-serif;
+}
+PRE, CODE {
+ font-family: courier, monospace;
+}
+P {
+ text-align: justify;
+}
+H1     { color: #9B0000; }
+H2     { color: #FF9933; }
+H3, H4 { color: #881155; }
+CODE              { color: #663366; }
+.code CODE        { color: #000000; }
+SPAN.comment      { color: #B22222; }
+SPAN.keyword      { color: #A020F0; }
+SPAN.string       { color: #BC8F8F; }
+SPAN.functionname { color: #0000FF; }
+SPAN.type         { color: #228B22; }
+SPAN.variablename { color: #B8860B; }
+SPAN.reference    { color: #5F9EA0; }
+SPAN.builtin      { color: #DA70D6; }
+A:link {
+ color: #666666;
+}
+A:visited {
+ color: black;
+}
+A.pre { font-family: courier, monospace;
+ color: #228B22;
+}
+</style>
+ </head>
+<body>
+<script language="JavaScript1.2">
+if (document.all)
+document.write('<div id="slidemenubar2" style="left:-144" onMouseover="pull()" onMouseout="draw()">')
+</script>
+<layer id="slidemenubar" onMouseover="pull()" onMouseout="draw()">
+<table border="0" cellpadding="0" cellspacing="0" width="161"><tr><td bgcolor="#009cff" width="144"><a href="index.html">Index</a>
+</td><td rowspan="5" valign="top" width="16"><img src="menu.gif" width="16"></td></tr><tr><td bgcolor="#009cff" width="144"><a href="node1.html">MidiInput</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node2.html">MyParser</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node3.html">CSV_Scanner</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node4.html">CSV_Parser</a>
+</td></tr></table></layer>
+<script language="JavaScript1.2">
+function regenerate(){
+window.location.reload()
+}
+function regenerate2(){
+if (document.layers)
+setTimeout("window.onresize=regenerate",400)
+}
+window.onload=regenerate2
+if (document.all){
+document.write('</div>')
+themenu=document.all.slidemenubar2.style
+rightboundary=0
+leftboundary=-144
+}
+else{
+themenu=document.layers.slidemenubar
+rightboundary=144
+leftboundary=0
+}
+function pull(){
+if (window.drawit)
+clearInterval(drawit)
+pullit=setInterval("pullengine()",20)
+}
+function draw(){
+clearInterval(pullit)
+drawit=setInterval("drawengine()",50)
+}
+function pullengine(){
+if (document.all&&themenu.pixelLeft<rightboundary)
+themenu.pixelLeft+=5
+else if(document.layers&&themenu.left<rightboundary)
+themenu.left+=5
+else if (window.pullit)
+clearInterval(pullit)
+}
+function drawengine(){
+if (document.all&&themenu.pixelLeft>leftboundary)
+themenu.pixelLeft-=5
+else if(document.layers&&themenu.left>leftboundary)
+themenu.left-=5
+else if (window.drawit)
+clearInterval(drawit)
+}
+</script>
+
+<div style="margin-left:160px"><span class="string">
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> This functor defines MIDI import for Strasheela. Similar to the MIDI output functor, this functor relies on midicsv (see http://www.fourmilab.ch/webtools/midicsv/). A MIDI file is transformed into a text file with midicsv with RenderCSVFile. This text file is rendered into a list of Oz values (MIDI events) with RenderCSVFile. The format of this event list is exactly the same as the format supported and documented by the  MIDI output functor. <BR>
+<BR>
+ Oz programs may use this list of MIDI events directly. Alternatively, it can be transformed into a Strasheela score using EventsToNestedEvents and NestedEventsToScore. Examples for both approaches are provided in the test file (../testing/MidiInput-test.oz).<BR>
+<BR>
+ This functor is provided as a contribution (i.e. not as part of the Strasheela core), because its compilation requires a C++ compiler, which is not necessarily available on all systems (especially not on Windows).<BR>
+<BR>
+</span>
+</span>
+<h3>Functor</h3>
+<ul>MidiInput ("<span class="string">MidiInput.oz</span>")<br></ul>
+<h3>Import</h3>
+<code><ul><li>RecordC</li><li>GUtils at "<span class="string">x-ozlib://anders/strasheela/source/GeneralUtils.ozf"
+</span></li><li>LUtils at "<span class="string">x-ozlib://anders/strasheela/source/ListUtils.ozf"
+</span></li><li>Out at "<span class="string">x-ozlib://anders/strasheela/source/Output.ozf"
+</span></li><li>Pattern at "<span class="string">x-ozlib://anders/strasheela/Pattern/Pattern.ozf"
+</span></li><li><a href="node2.html">MyParser</a> at "<span class="string">source/ParserWrapper.ozf"
+</span></li></ul></code>
+<h3>Export</h3>
+<code><ul><li><span class="variablename">ParseCSVFile</span>
+</li><li><span class="variablename">RenderCSVFile</span>
+</li><li>&lt;P/2:<a href="#entity9"><span class="functionname">PairNoteEvents</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity10"><span class="functionname">EventsToNestedEvents</span></a>&gt;
+</li><li>&lt;P/3:<a href="#entity11"><span class="functionname">NestedEventsToScore</span></a>&gt;
+</li></ul></code>
+<h3>Define</h3>
+
+<code>
+<a name="entity9">
+<span class="keyword">fun</span>{<span class="functionname">PairNoteEvents</span> Events}<br>
+<span class="string"> Expects a list of CSV Events. All note-on events and their corresponding note-off events are grouped into matching pairs NoteOn#NoteOff. All other events are passed unaltered.<BR>
+ PairNoteEvents finds for every note-on event the first following note-off event with the same pitch. Note that in case there is no corresponding note-off event, the returned note pair is NoteOn#nil.<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity10">
+<span class="keyword">fun</span>{<span class="functionname">EventsToNestedEvents</span> Events}<br>
+<span class="string"> Expects a list of CSV events and returns a nested record. The top-level record (label tracks) sorts the events by their track number. The features of this record are the different track numbers, and their values are a list of records which (nested) contain only events of that track number. These records and the second nesting level (label channels) sort events by channel numbers. The features of the record are the different channel numbers and their values are lists of events of that channel. Events without channel number are placed at the record feature nil. Finally, note events are grouped into pairs NoteOn#NoteOff.<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity11">
+<span class="keyword">fun</span>{<span class="functionname">NestedEventsToScore</span> NestedEvents Args}<br>
+<span class="string"> Expects a nested CSV event list as returned by EventsToNestedEvents, and returns a textual Strasheela score. The optional arg clauses (in Args) expects a list of Test#Process pairs, where Test is a boolean function and Process is a transformation function. Test expects an element in the hierarchy of the result of EventsToNestedEvents, and if it returns true then Process expects this element as argument and returns a transformation (a textual Strasheela score object). If it returns nil, then the next clause is tried. When process returns nil, then its output is omitted from the result. Note that the score transformation happens from the inside to the outside, i.e., when  a container datum is transformed its elements are transformed already. <BR>
+ The default clauses (see source) result in a hierarchic score whose elements are the MIDI notes (i.e., all other MIDI events are skipped by default). Support for additional MIDI events is added simply by adding further Test#Process clauses. The score topology follows the hierarchic nesting returned by EventsToNestedEvents (see below). Whether the channel container is a simultaneous container or a sequential container depends on whether the notes in the container overlap in time (in that case a sim is created, a seq otherwise).<BR>
+      <BR>
+      sim(info:score<BR>
+	  items:[sim(info:track<BR>
+		     items:[seq(info:channel<BR>
+				items:[Note1 Note2 ..])<BR>
+			    ...])<BR>
+		 ...])<BR>
+<BR>
+ <BR>
+<BR>
+<BR>
+</span>
+</code><br>
+<h3>End</h3>
+</div></body>
+</html>
