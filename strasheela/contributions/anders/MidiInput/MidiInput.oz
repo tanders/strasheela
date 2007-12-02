@@ -46,7 +46,7 @@ define
 %%%%
    
    /** %% Expects a list of CSV Events. All note-on events and their corresponding note-off events are grouped into matching pairs NoteOn#NoteOff. All other events are passed unaltered.
-   %% PairNoteEvents finds for every note-on event the first following note-off event with the same pitch. Note that in case there is no corresponding note-off event, the returned note pair is NoteOn#nil.
+   %% PairNoteEvents finds for every note-on event the first following note-off event with the same pitch and channel. Note that in case there is no corresponding note-off event, the returned note pair is NoteOn#nil. 
    %% */
    fun {PairNoteEvents Events}
       {Filter			% removes nils
@@ -55,7 +55,8 @@ define
 	   if {Out.midi.isNoteOn H}
 	   then H # {LUtils.find T fun {$ X}
 				      {Out.midi.isNoteOff X}
-				      andthen {GetPitch H} == {GetPitch X} 
+				      andthen {GetPitch H} == {GetPitch X}
+				      andthen {GetChannel H} == {Get Channel X}
 				   end}
 	   elseif {Out.midi.isNoteOff H}
 	   then unit			% remove later
