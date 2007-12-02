@@ -25,7 +25,7 @@
 %%
 %% Information on internals  
 %%
-%% An intermediate format is used for the transformation process: on the Oz side, each record in the CSV representation is represented by an Oz record with label csv and the features track, time, and type. For exammple
+%% An intermediate format is used for the transformation process: on the Oz side, each record in the CSV representation is represented by an Oz record with label csv and the features track (an int), time (an int), and type (an atom). For exammple
 
 csv(track:1 time:0 type:'Start_track')
 
@@ -85,8 +85,11 @@ export
    MakeNoteOn MakeNoteOff MakePitchBend MakeCC MakeProgramChange MakeChannelAftertouch MakePolyAftertouch
    MakeSystemExclusive MakeSystemExclusivePacket
 
+   IsCSVEvent HasType IsNoteOn IsNoteOff
+   HasChannel
+
 %   MakeMidiNote
-   BeatsToTicks
+   BeatsToTicks TicksToBeats
 
    MidiNoteMixin IsMidiNoteMixin MidiNote
 
@@ -331,10 +334,7 @@ define
       %%
       fun {TimeLessThan Event1 Event2} Event1.time < Event2.time end
       %% returns pair NoteOnEvent#NoteOffEvent or nil
-      %% NOTE: type coule be string instead of atom
-      fun {IsNoteOn X} X.type == 'Note_on_c' end 
-      fun {IsNoteOff X} X.type == 'Note_off_c' end 
-      fun {GetNoteEvents Events}
+      fun {GetNoteEvent Events}
 	 NoteOn = {LUtils.find Events IsNoteOn}
       in
 	 if NoteOn \= nil
@@ -380,7 +380,7 @@ define
    in
       {Record.forAllInd EventListsT
        proc {$ I Events1}
-	  NoteEvents1 = {GetNoteEvents Events1}
+	  NoteEvents1 = {GetNoteEvent Events1}
        in
 	  if NoteEvents1 \= nil
 	  then
@@ -401,7 +401,7 @@ define
 		if {GetStart Events2} > End1
 		then {Break} 
 		else
-		   NoteEvents2 = {GetNoteEvents Events2}
+		   NoteEvents2 = {GetNoteEvent Events2}
 		in
 		   if NoteEvents2 \= nil andthen
 		      {GetChannel NoteEvents2} == Channel1 andthen 
@@ -751,6 +751,28 @@ define
    end
 
 
+   %%
+   %% 'Type' checking  
+   %%
+
+   /** %% Returns true if X is a CSV event.
+   %% */
+   fun {IsCSVEvent X} {IsRecord X} andthen {Label X} == csv end
+   /** %% Returns true if X is an CSV event of the given Type (an atom). X must be a CSV event.
+   %% */
+   fun {HasType X Type} X.type == Type end
+   /** %% Returns true if X is an event of type 'Note_on_c'.
+   %% */
+   fun {IsNoteOn X} X.type == 'Note_on_c' end 
+   /** %% Returns true if X is an event of type 'Note_off_c'.
+   %% */
+   fun {IsNoteOff X} X.type == 'Note_off_c' end
+   /** %% Returns true if events of the type X belongs to provide a channel as parameter.
+   %% */
+   fun {HasChannel X}
+      {Member X.type
+      ['Note_on_c' 'Note_off_c' 'Pitch_bend_c' 'Control_c' 'Program_c' 'Channel_aftertouch_c' 'Poly_aftertouch_c']}
+   end
    
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -784,7 +806,18 @@ define
       {FloatToInt BeatsFloat * {IntToFloat {GetDivision}}}
    end
 
+   /** %% Transforms a temporal value in MIDI ticks (int or float) into the equivalent beats (int). The division is set by SetDivision.
+   %% */
+   fun {TicksToBeats Ticks}
+      TicksFloat = if {IsInt Ticks}
+		   then {IntToFloat Ticks}
+		   else Ticks
+		   end
+   in
+      {FloatToInt TicksFloat / {IntToFloat {GetDivision}}}   
+   end
 
+   
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%
 %%% Extend music representation 
