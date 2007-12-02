@@ -94,8 +94,9 @@ define
 				    else sim(info:score
 					     %% track elements already transformed
 					     items:Items
-					     startTime:0
-					     timeUnit:beats)
+					     %startTime:0
+					     %timeUnit:beats
+					    )
 				    end
 				 end
 			       %% single track case
