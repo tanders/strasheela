@@ -310,6 +310,15 @@ Abstract applied constraint, so the effect is controllable
 
 ** ozh
 
+*** TODO ozh: add SGML doc
+
+the orig documentation source files for creating, e.g., the HTML doc are still missing in our branch
+
+*** TODO ?? ozh: add TODO list to wiki
+
+  - better file names for resulting HTML files, and better anchor names (make them persistent): see below
+  - better/more flexible layout of doc strings (see below) 
+  
 *** TODO ozh: update save file and anchor names 
 
 File names and anchor names should be generated from source entries (e.g., file names, class names) instead of generic names like node1.html or class1.html where links from elsewhere into the documentation get if files etc. are added to the source later
@@ -325,5 +334,5 @@ Even better would be, if some wiki layout is supported (optionally). Does there 
 
 *** TODO Collozeum: make projects available at Mogul
 
-
+*** TODO ozcurl/ozjs TODO: add ozmake makefile
 
