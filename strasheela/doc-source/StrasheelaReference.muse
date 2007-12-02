@@ -49,7 +49,10 @@ These extensions simplify the definition of specific musical CSP classes (e.g. s
 
   [[../contributions/anders/Realtime/doc/node1.html][RT (Realtime)]] -- solvers for real-time constraint programming
 
+  [[../contributions/anders/MidiInput/doc/node1.html][MidiIn]] -- MIDI file import 
+
   [[../contributions/anders/OSC/doc/node1.html][OSC]] -- an OpenSound Control interface
+
 
 
 These provide further extensions.
