@@ -43,7 +43,16 @@ InCSVs = {MidiIn.parseCSVFile 'Test.csv'}
 NoteEvents = {Filter InCSVs
 	      fun {$ X} {Out.midi.isNoteOn X} orelse {Out.midi.isNoteOff X} end}
 %%
-{Browse {MidiIn.nestedEventsToScore {MidiIn.eventsToNestedEvents NoteEvents} unit}}
+ScoreDecl = {MidiIn.nestedEventsToScore {MidiIn.eventsToNestedEvents NoteEvents} unit}
+ChannelSeq = ScoreDecl.items.1.items.1
+
+{Browse ScoreDecl}
+{Browse ChannelSeq}
+
+{Inspect {Score.makeScore {Adjoin ChannelSeq
+			   seq(startTime:0
+			       timeUnit:beats(4))}
+	  add(note:Out.midi.midiNote)}}
 
 
 %%
@@ -56,8 +65,27 @@ declare
 			   midiDir:{OS.getCWD}#"/"
 			   csvDir:{OS.getCWD}#"/")}
 InCSVs = {MidiIn.parseCSVFile 'bach.csv'}
-{Out.midi.setDivision {List.last InCSVs.1.parameters}}
-{Browse {MidiIn.nestedEventsToScore {MidiIn.eventsToNestedEvents InCSVs} unit}}
+%% set to division of 360 ticks by hand, because that is the actual
+%% duration of the notes in the MIDI file (division in file is 480,
+%% but that would result in some notes of duration 0)
+{Out.midi.setDivision 360}
+ScoreDecl = {MidiIn.nestedEventsToScore {MidiIn.eventsToNestedEvents InCSVs} unit}
+ChannelSeq = ScoreDecl.items.1.items.1
+
+{Browse ScoreDecl}
+{Browse ChannelSeq}
+
+declare
+MyScore = {Score.makeScore {Adjoin ChannelSeq
+			    seq(startTime:0
+				timeUnit:beats(4))}
+	   add(note:Out.midi.midiNote)}
+
+{Out.renderAndPlayCsound MyScore
+ unit}
+
+{Out.renderAndShowLilypond MyScore
+ unit}
 
 
 
