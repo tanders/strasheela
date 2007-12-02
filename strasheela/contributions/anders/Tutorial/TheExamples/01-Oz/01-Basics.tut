@@ -14,6 +14,30 @@ This tutorial is organised in small lessons.  After you started the interactive 
   <oz></oz>
 </example>
 
+<example title="How to read this tutorial">
+  <info>We use a few conventions to present information in this tutorial:
+  &lt;expression&gt;: this refers to an arbitrary expression
+  &lt;statement&gt;: this refers to an arbitrary expression
+  [keyword]: refers to a specific command in Oz (or Strasheela)
+
+In all cases, you should remove the &lt;&gt; or [] when writing actual source code.  Never remove {}, since these are an essential part of the Oz syntax.
+
+
+TODO this is just to see what the docs look like; will be removed.
+
+The general format is:
+
+if &lt;expression&gt; then
+    &lt;something&gt;
+else
+    &lt;somethingelse&gt;
+end
+
+The [else] clause is optional.  Oz is white-space insensitive, so [if] statements can be placed on a single line.  Special `word' test.
+
+</info>
+  <oz></oz>
+</example>
 
 <example title="Comments">
   <info>Oz supports line comments and block comments.  There are two examples in the bottom-right list:
