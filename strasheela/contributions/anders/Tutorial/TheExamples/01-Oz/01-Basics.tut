@@ -19,8 +19,11 @@ This tutorial is organised in small lessons.  After you started the interactive 
   &lt;expression&gt;: this refers to an arbitrary expression
   &lt;statement&gt;: this refers to an arbitrary expression
   [keyword]: refers to a specific command in Oz (or Strasheela)
+  WARNING: explains a particularly confusing part of the Oz language.
 
-In all cases, you should remove the &lt;&gt; or [] when writing actual source code.  Never remove {}, since these are an essential part of the Oz syntax.
+In all cases, you should remove the &lt;&gt; or [] when writing actual source code.
+
+WARNING: never remove {}, since these are an essential part of the Oz syntax.
 
 
 TODO this is just to see what the docs look like; will be removed.
@@ -68,7 +71,7 @@ The other examples demonstrate alternative ways to output information.
   Show: outputs text to standard out
   Inspect: opens an Inspect window
 
-The pair of curly braces {...} is necessary; they always expresses a function or procedure call.</info>
+WARNING: the pair of curly braces {...} is necessary; they always expresses a function or procedure call.</info>
   <oz title="Browse">{Browse 'Hello World!'}</oz>
 <oz title="Show">/* Show something at standard out (the commandline where you started
 this tutorial). */
@@ -150,17 +153,17 @@ end</oz>
 <example title="If">
 <info>Oz provides the usual if control structure.  Note that unlike many programming languages, parenthesis () are not required around the condition.
 
-The general format is (&lt;expression&gt; stands for an arbitrary expression):
+The general format is:
 
-if &lt;expression&gt; then
-    &lt;something&gt;
-else
-    &lt;somethingelse&gt;
-end
+  if &lt;expression&gt; then
+      &lt;statement1&gt;
+  else
+      &lt;statement2&gt;
+  end
 
-The `else' clause is optional.  Oz is white-space insensitive, so `if' statements can be placed on a single line.
+The [else] clause is optional.  Oz is white-space insensitive, so [if] statements can be placed on a single line.
 
-Please note that the `if' control structure can also be used as an expression which returns a value from the `then' or `else' clause.
+Please note that the [if] control structure can also be used as an expression which returns a value from the [then] or [else] clause.
 </info>
 <oz title="if ... end">%% This example does nothing, but try changing == to \=.
 %% The operations == and \= test equality and inequality of values.
@@ -183,13 +186,13 @@ end</oz>
 
 
 <example title="Procedure and Functions">
-  <info>Procedures and functions are the standard means for expressing some computation(s). Examples range from numeric computations, to computations involving the operating system. For example, we saw a number of numeric operations expressed by the common infix notation above. However, under the hood all these operations are actually procedures. 
+  <info>Procedures and functions are the standard means for expressing a collection of commands.  Examples range from numeric computations to commands involving the operating system.  For example, we have already seen a number of numeric operations expressed by the common infix notation.
 
-Please note that curly braces {...} surround a function or a procedure call. This syntax for procedure/function application is rather unusual when compared with other programming languages, but it is also unambiguous. 
+WARNING: curly braces {...} must surround a function or a procedure call.  This syntax for procedure/function application is rather unusual when compared with other programming languages, but it is also unambiguous. 
 
-In Oz, procedures are the fundamental concept. Functions are just a syntactic variant of procedures, added for convenience. The main difference between functions and procedures is, that functions are procedures which always returns exactly one value.  Procedures do not necessarily return anything.
+In Oz, procedures are the fundamental concept.  Functions are just a syntactic variant of procedures, added for convenience.  The main difference between functions and procedures is that functions are procedures which always returns exactly one value.  Procedures do not necessarily return anything.
 
-More specifically, a function is a procedure whose last argument -- the return value -- is expressed implicitly. Consequently, every function may be called like a procedure by adding this return value explicitly. Vice versa, any procedure can also be called like a function which returns its omitted last argument. 
+More specifically, a function is a procedure whose last argument -- the return value -- is expressed implicitly.  Every function may be called like a procedure by adding this return value explicitly.  In addition, any procedure can also be called as a function which returns its omitted last argument. 
   </info>
   <oz title="Usage">%% call procedure Browse with the result of function IsEven
 %% IsEven expects one integer as an argument, and returns true or false.
