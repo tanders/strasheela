@@ -131,6 +131,8 @@ clearInterval(drawit)
 </tr></table>
 <span class="string"> This functor provides many constrains and score classes which facilitate the definition of a theory of harmony. For example, this functor defines constraints between pitches, pitch classes and degrees on the one hand, and classes such as Interval, Chord, Scale, and an extended Note class on the other hand.<BR>
 <BR>
+ The functor defines most class extensions as mixins, so they can be combined with other classes (e.g., you can extend your own extension of the Note class provided by the Strasheela core with the mixin PitchClassMixin). In addition, the functor also uses these mixins in class definitions (e.g., the class Note2 inherits from both the core class Score.note and PitchClassMixin). The functor defines many class variants combining the mixins. This makes it possible to somewhat reduce the memory requirement of your score by using the class with exactly the features required. However, you may consider defining your CSP with the most extensive classes first (e.g., using FullNote, ScaleDegreeChord, and Scale), and optimise later only when required. <BR>
+<BR>
  This harmony model is designed to cooperate with other Strasheela extensions. For example, it can be used together with the motif or the meter model. <BR>
 <BR>
  Moreover, the classes can be used in a score whose hierarchic structure is constrained with the contribution ConstrainTimingTree (CTT). Consequently, many class definitions in this functor enforce their constrains only after they know that the score object in question "exisits" (i.e. its duration > 0). Therefore, the distribution strategy should usually determine the duration of a score object early on in the search process. <BR>
@@ -306,8 +308,7 @@ clearInterval(drawit)
 <span class="string"> Expects a set of pitch classes from a scale or chord (PCFS, a determined FS) and a Root (an determined FD) and returns a list of ints in ascending order starting with the root (if root is present in PCFS).<BR>
  PCSetToSequence is useful for creating an ordered PC collection to constrain the degree of some PC (e.g., with DegreeToPC). For example, the PC set of the E major scale is {1, 3, 4, 6, 8, 9, 11} and the root is 4. PCSetToSequence returns the ordered sequence [4 6 8 9 11 1 3].<BR>
 <BR>
- NB: implementation is limited to determined PCFS and Root.<BR>
- NB: PcSetToSequence blocks until its arguments are determined.<BR>
+ NB: PcSetToSequence blocks until its arguments PCFS and Root are determined.<BR>
 <BR>
 </span>
 </code><br>
