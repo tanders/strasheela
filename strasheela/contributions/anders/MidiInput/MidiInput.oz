@@ -69,7 +69,7 @@ define
    /** %% Expects a list of CSV events and returns a nested record. The top-level record (label tracks) sorts the events by their track number. The features of this record are the different track numbers, and their values are a list of records which (nested) contain only events of that track number. These records and the second nesting level (label channels) sort events by channel numbers. The features of the record are the different channel numbers and their values are lists of events of that channel. Events without channel number are placed at the record feature nil. Finally, note events are grouped into pairs NoteOn#NoteOff.
    %% */
    %% I don't directly transform the event list into a nested Strasheela score object, so that the user can control how this transformation process is done (e.g., which objects are transformed, and into what score objects).
-   %% NOTE: can I make the nesting controllable -- currently there always result three levels of nested contains, which may be too much (e.g., I seldomly need tracks put in their own container and sometimes even different containers for channels may be too much)
+   %% To decide: shall I make the nesting controllable -- currently there always result three levels of nested contains, which may be too much (e.g., I seldomly need tracks put in their own container and sometimes even different containers for channels may be too much). However, the advantage of this fixed nesting is that I can rely on it. And if I only need some subcontainers, I can always extract them from the result
    fun {EventsToNestedEvents Events}
       {Record.map
        %% sort into sublists by track
@@ -157,7 +157,6 @@ define
       %%
       %% */
       %% BTW: clauses provide implcit test: if no clause matches, the event is skipped
-      %% NOTE: currently, empty containers can happen (e.g., extra track record for header events results in empty container) -- avoid that
       %%
       %% TODO
       %%
@@ -169,17 +168,18 @@ define
 	 As = {Adjoin Defaults Args}
 	 fun {FilterOutNils R} {Record.filter R fun {$ X} X \= nil end} end
       in
-	 %% NOTE: can I change the definition into a recursive variant which can handle arbitrary nesting?
+	 %% NB: NestedEventsToScore ignores some information in the input: the feature-names of the nested records
+	 %% To decide: shall I change the definition into a recursive variant which can handle arbitrary nesting? Hm, do I really need that -- instead I may simply process the result and extract some nested records
 	 %%
 	 %% I know that NestedEvents is a record of records of events
 	 {GUtils.cases
 	  {FilterOutNils
-	   {Record.mapInd NestedEvents
-	    fun {$ I TrackEvents} % NOTE: arg I ignored 
+	   {Record.map NestedEvents
+	    fun {$ TrackEvents} 
 	       {GUtils.cases
 		{FilterOutNils
-		 {Record.mapInd TrackEvents
-		  fun {$ J ChanEvents} % NOTE: J ignored
+		 {Record.map TrackEvents
+		  fun {$ ChanEvents} 
 		     %% filter out events for which no clause matched
 		     %% (in which case GUtils.cases returns nil)
 		     {GUtils.cases
