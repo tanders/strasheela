@@ -31,7 +31,7 @@ local
 		  seq(items:[note(duration:4
 				  pitch:{FD.int 60#72}
 				  amplitude:64)
-			     note(duration:4SDistro.searchOne
+			     note(duration:4
 				  pitch:{FD.int 60#72}
 				  amplitude:64)
 			     note(duration:4
