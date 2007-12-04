@@ -16,27 +16,36 @@ This tutorial is organised in small lessons.  After you started the interactive 
 
 <example title="How to read this tutorial">
   <info>We use a few conventions to present information in this tutorial:
-  &lt;expression&gt;: this refers to an arbitrary expression
-  &lt;statement&gt;: this refers to an arbitrary expression
-  [keyword]: refers to a specific command in Oz (or Strasheela)
+  &lt;expression&gt;: this refers to an arbitrary expression; remove the &lt;angle brackets&gt; when writing your own code.
+  `command': this refers to a command or statment in the Oz language; remove the `single quotes' when writing your own code.
+  {something}: this is not a documentation convention at all; the {curly braces} are an essential part of the Oz syntax.  Do not remove these!
   WARNING: explains a particularly confusing part of the Oz language.
+  BACKGROUND: these are generic concepts in Computer Science; if the list contains unfamiliar terms, please consult the reading list below.
 
-In all cases, you should remove the &lt;&gt; or [] when writing actual source code.
+For explanations about general concepts, see:
+- van Roy and Haridi (maybe?  when it's published?)
+- wikipedia (maybe?  -I'd rather find a better resource, though)
+- The Oz documentation:
+    http://www.mozart-oz.org/home/doc/
 
-WARNING: never remove {}, since these are an essential part of the Oz syntax.
+
 
 
 TODO this is just to see what the docs look like; will be removed.
 
-The general format is:
+We use a few conventions to present information in this tutorial:
 
-if &lt;expression&gt; then
-    &lt;something&gt;
-else
-    &lt;somethingelse&gt;
-end
+  &lt;expression&gt;: this refers to an arbitrary expression (remove the &lt;&gt;)
 
-The [else] clause is optional.  Oz is white-space insensitive, so [if] statements can be placed on a single line.  Special `word' test.
+  `command': this refers to a command or statment in the Oz language.
+
+  {something}: this is not a documentation convention at all; the {curly braces} are an essential part of the Oz syntax.  Do not remove these!
+
+  WARNING: explains a particularly confusing part of the Oz language.
+
+  BACKGROUND: these are generic concepts in Computer Science; if the list contains unfamiliar terms, please consult the reading list below.
+
+end list.
 
 </info>
   <oz></oz>
