@@ -5,7 +5,9 @@ makefile(
 		'main.oz'
 	]
 
-	author: 'My Name'
+	uri: 'x-ozlib://gperciva/app-basic'
+	mogul: 'mogul:/gperciva/app-basic'
+ 	author: 'My Name'
 )
 
 
