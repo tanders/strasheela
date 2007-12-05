@@ -16,11 +16,11 @@ This tutorial is organised in small lessons.  After you started the interactive 
 
 <example title="How to read this tutorial">
   <info>We use a few conventions to present information in this tutorial:
-  &lt;expression&gt;: this refers to an arbitrary expression; remove the &lt;angle brackets&gt; when writing your own code.
-  `command': this refers to a command or statment in the Oz language; remove the `single quotes' when writing your own code.
-  {something}: this is not a documentation convention at all; the {curly braces} are an essential part of the Oz syntax.  Do not remove these!
-  WARNING: explains a particularly confusing part of the Oz language.
-  BACKGROUND: these are generic concepts in Computer Science; if the list contains unfamiliar terms, please consult the reading list below.
+  - &lt;expression&gt;: this refers to an arbitrary expression; remove the &lt;angle brackets&gt; when writing your own code.
+  - `command': this refers to a command or statment in the Oz language; remove the `single quotes' when writing your own code.
+  - {something}: this is not a documentation convention at all; the {curly braces} are an essential part of the Oz syntax.  Do not remove these!
+  - WARNING: explains a particularly confusing part of the Oz language.
+  - BACKGROUND: these are generic concepts in Computer Science; if the list contains unfamiliar terms, please consult the reading list below.
 
 For explanations about general concepts, see:
 - van Roy and Haridi (maybe?  when it's published?)
