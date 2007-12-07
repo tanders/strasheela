@@ -56,7 +56,7 @@ define
 	   then H # {LUtils.find T fun {$ X}
 				      {Out.midi.isNoteOff X}
 				      andthen {GetPitch H} == {GetPitch X}
-				      andthen {GetChannel H} == {Get Channel X}
+				      andthen {GetChannel H} == {GetChannel X}
 				   end}
 	   elseif {Out.midi.isNoteOff H}
 	   then unit			% remove later
