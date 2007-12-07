@@ -16,17 +16,30 @@ This tutorial is organised in small lessons.  After you started the interactive 
 
 <example title="How to read this tutorial">
   <info>We use a few conventions to present information in this tutorial:
-  - &lt;expression&gt;: this refers to an arbitrary expression; remove the &lt;angle brackets&gt; when writing your own code.
-  - `command': this refers to a command or statment in the Oz language; remove the `single quotes' when writing your own code.
-  - {something}: this is not a documentation convention at all; the {curly braces} are an essential part of the Oz syntax.  Do not remove these!
+
+  - `command': in the running text, code in the Oz language is enclosed in `single quotes'; remove them when writing your own code.
+  - For explaining syntax, we use the Extended Backus–Naur form (EBNF, http://en.wikipedia.org/wiki/Extended_Backus%E2%80%93Naur_form). Non-terminal symbols are surrounded by angle brackets as  &lt;x&gt;, literal terminals are surrounded by single quotes as `&lt;x&gt;', alternatives are separated by a bar as $&lt;x&gt; | &lt;y&gt;$, and optional items are surrounded by brackets as $[ &lt;x&gt; ]$. The ellipsis (...) specifies an incomplete EBNF rule, e.g., that at the end of the rule further alternatives are omitted. The suffix * (Kleene star) means that the preceding item is repeated zero or more times whereas the suffix + means that the preceding item is repeated at least once. Multiple symbols can be grouped by round parenthesis to specify a suffix for the whole group.
+    For example, the `if' statement has the following syntax in Oz 
+
+  `if' &lt;expression&gt; `then'
+      &lt;statement1&gt;
+  [ `else'
+      &lt;statement2&gt; ]
+  `end'
+
+    When writing your own code, you remove the syntax markers, as in the following example: 
+
+  if X=Y then ok end
+
+  - Naturally, the actual code examples use Oz syntax, which we will explain as we move along. 
   - WARNING: explains a particularly confusing part of the Oz language.
   - BACKGROUND: these are generic concepts in Computer Science; if the list contains unfamiliar terms, please consult the reading list below.
 
+
 For explanations about general concepts, see:
-- van Roy and Haridi (maybe?  when it's published?)
-- wikipedia (maybe?  -I'd rather find a better resource, though)
-- The Oz documentation:
-    http://www.mozart-oz.org/home/doc/
+- van Roy and Haridi (2004). Concepts, Techniques, and Models of Computer Programming. MIT Press. http://www.info.ucl.ac.be/~pvr/book.html
+- The Oz documentation: http://www.mozart-oz.org/documentation/
+- Wikipedia (maybe?  -I'd rather find a better resource, though)
 
 
 
@@ -46,6 +59,7 @@ We use a few conventions to present information in this tutorial:
   BACKGROUND: these are generic concepts in Computer Science; if the list contains unfamiliar terms, please consult the reading list below.
 
 end list.
+
 
 </info>
   <oz></oz>
@@ -195,7 +209,7 @@ end</oz>
 
 
 <example title="Procedure and Functions">
-  <info>Procedures and functions are the standard means for expressing a collection of commands.  Examples range from numeric computations to commands involving the operating system.  For example, we have already seen a number of numeric operations expressed by the common infix notation.
+  <info>Procedures and functions are the standard means for expressing a collection of computations in a single entity.  Examples range from numeric computations to commands involving the operating system.  For example, we have already seen a number of numeric operations expressed by the common infix notation.
 
 WARNING: curly braces {...} must surround a function or a procedure call.  This syntax for procedure/function application is rather unusual when compared with other programming languages, but it is also unambiguous. 
 
