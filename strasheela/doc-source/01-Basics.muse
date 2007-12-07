@@ -22,27 +22,50 @@ This tutorial is organised in small lessons.  After you started the interactive 
 * How to read this tutorial
 
 We use a few conventions to present information in this tutorial:
-  <expression>: this refers to an arbitrary expression
-  <statement>: this refers to an arbitrary expression
-  [keyword]: refers to a specific command in Oz (or Strasheela)
-  WARNING: explains a particularly confusing part of the Oz language.
 
-In all cases, you should remove the <> or [] when writing actual source code.
+  - `command': in the running text, code in the Oz language is enclosed in `single quotes'; remove them when writing your own code.
+  - For explaining syntax, we use the Extended Backus–Naur form (EBNF, http://en.wikipedia.org/wiki/Extended_Backus%E2%80%93Naur_form). Non-terminal symbols are surrounded by angle brackets as  <x>, literal terminals are surrounded by single quotes as `<x>', alternatives are separated by a bar as $<x> | <y>$, and optional items are surrounded by brackets as $[ <x> ]$. The ellipsis (...) specifies an incomplete EBNF rule, e.g., that at the end of the rule further alternatives are omitted. The suffix * (Kleene star) means that the preceding item is repeated zero or more times whereas the suffix + means that the preceding item is repeated at least once. Multiple symbols can be grouped by round parenthesis to specify a suffix for the whole group.
+    For example, the `if' statement has the following syntax in Oz 
 
-WARNING: never remove {}, since these are an essential part of the Oz syntax.
+  `if' <expression> `then'
+      <statement1>
+  [ `else'
+      <statement2> ]
+  `end'
+
+    When writing your own code, you remove the syntax markers, as in the following example: 
+
+  if X=Y then ok end
+
+  - Naturally, the actual code examples use Oz syntax, which we will explain as we move along. 
+  - WARNING: explains a particularly confusing part of the Oz language.
+  - BACKGROUND: these are generic concepts in Computer Science; if the list contains unfamiliar terms, please consult the reading list below.
+
+
+For explanations about general concepts, see:
+- van Roy and Haridi (2004). Concepts, Techniques, and Models of Computer Programming. MIT Press. http://www.info.ucl.ac.be/~pvr/book.html
+- The Oz documentation: http://www.mozart-oz.org/documentation/
+- Wikipedia (maybe?  -I'd rather find a better resource, though)
+
+
 
 
 TODO this is just to see what the docs look like; will be removed.
 
-The general format is:
+We use a few conventions to present information in this tutorial:
 
-if <expression> then
-    <something>
-else
-    <somethingelse>
-end
+  <expression>: this refers to an arbitrary expression (remove the <>)
 
-The [else] clause is optional.  Oz is white-space insensitive, so [if] statements can be placed on a single line.  Special `word' test.
+  `command': this refers to a command or statment in the Oz language.
+
+  {something}: this is not a documentation convention at all; the {curly braces} are an essential part of the Oz syntax.  Do not remove these!
+
+  WARNING: explains a particularly confusing part of the Oz language.
+
+  BACKGROUND: these are generic concepts in Computer Science; if the list contains unfamiliar terms, please consult the reading list below.
+
+end list.
+
 
 
 
@@ -275,7 +298,7 @@ end
 
 * Procedure and Functions
 
-Procedures and functions are the standard means for expressing a collection of commands.  Examples range from numeric computations to commands involving the operating system.  For example, we have already seen a number of numeric operations expressed by the common infix notation.
+Procedures and functions are the standard means for expressing a collection of computations in a single entity.  Examples range from numeric computations to commands involving the operating system.  For example, we have already seen a number of numeric operations expressed by the common infix notation.
 
 WARNING: curly braces {...} must surround a function or a procedure call.  This syntax for procedure/function application is rather unusual when compared with other programming languages, but it is also unambiguous. 
 

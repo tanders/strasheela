@@ -4,7 +4,7 @@
     <title>Oz Basics</title>
     <meta name="generator" content="muse.el">
     <meta http-equiv="Content-Type"
-          content="text/html; charset=iso-8859-1">
+          content="text/html; charset=utf-8">
     
     <link rel="stylesheet" href="style.css" type="text/css" />
   </head>
@@ -402,32 +402,76 @@ Start here</h2>
 <h2><a name="sec3" id="sec3"></a>
 How to read this tutorial</h2>
 
-<p class="first">We use a few conventions to present information in this tutorial:
+<p class="first">We use a few conventions to present information in this tutorial:</p>
+
+<ul>
+<li>`command': in the running text, code in the Oz language is enclosed in `single quotes'; remove them when writing your own code.</li>
+
+<table class="muse-table" border="2" cellpadding="5">
+  <tbody>
+    <tr>
+      <td><li>For explaining syntax, we use the Extended Backus–Naur form (EBNF, <a href="http://en.wikipedia.org/wiki/Extended_Backus%E2%80%93Naur_form">http://en.wikipedia.org/wiki/Extended_Backus%E2%80%93Naur_form</a>). Non-terminal symbols are surrounded by angle brackets as  &lt;x&gt;, literal terminals are surrounded by single quotes as `&lt;x&gt;', alternatives are separated by a bar as $&lt;x&gt;</td>
+      <td>&lt;y&gt;$, and optional items are surrounded by brackets as $[ &lt;x&gt; ]$. The ellipsis (...) specifies an incomplete EBNF rule, e.g., that at the end of the rule further alternatives are omitted. The suffix * (Kleene star) means that the preceding item is repeated zero or more times whereas the suffix + means that the preceding item is repeated at least once. Multiple symbols can be grouped by round parenthesis to specify a suffix for the whole group.</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>For example, the `if' statement has the following syntax in Oz</p>
+
 <blockquote>
-<p class="quoted">&lt;expression&gt;: this refers to an arbitrary expression
-&lt;statement&gt;: this refers to an arbitrary expression
-[keyword]: refers to a specific command in Oz (or Strasheela)
-WARNING: explains a particularly confusing part of the Oz language.</p>
+<p class="quoted">`if' &lt;expression&gt; `then'
+&lt;statement1&gt;
+[ `else'
+&lt;statement2&gt; ]
+`end'</p>
 </blockquote>
 
-<p>In all cases, you should remove the &lt;&gt; or [] when writing actual source code.</p>
+<p>When writing your own code, you remove the syntax markers, as in the following example:</p>
 
-<p>WARNING: never remove {}, since these are an essential part of the Oz syntax.</p>
+<blockquote>
+<p class="quoted">if X=Y then ok end</p>
+</blockquote></li>
+
+<li>Naturally, the actual code examples use Oz syntax, which we will explain as we move along.</li>
+<li>WARNING: explains a particularly confusing part of the Oz language.</li>
+<li>BACKGROUND: these are generic concepts in Computer Science; if the list contains unfamiliar terms, please consult the reading list below.</li>
+</ul>
+
+
+<p>For explanations about general concepts, see:
+- van Roy and Haridi (2004). Concepts, Techniques, and Models of Computer Programming. MIT Press. <a href="http://www.info.ucl.ac.be/~pvr/book.html">http://www.info.ucl.ac.be/~pvr/book.html</a>
+- The Oz documentation: <a href="http://www.mozart-oz.org/documentation/">http://www.mozart-oz.org/documentation/</a>
+- Wikipedia (maybe?  -I'd rather find a better resource, though)</p>
+
+
 
 
 <p>TODO this is just to see what the docs look like; will be removed.</p>
 
-<p>The general format is:</p>
+<p>We use a few conventions to present information in this tutorial:</p>
 
-<p>if &lt;expression&gt; then
 <blockquote>
-<p class="quoted">&lt;something&gt;
-else
-&lt;somethingelse&gt;
-end</p>
+<p class="quoted">&lt;expression&gt;: this refers to an arbitrary expression (remove the &lt;&gt;)</p>
 </blockquote>
 
-<p>The [else] clause is optional.  Oz is white-space insensitive, so [if] statements can be placed on a single line.  Special `word' test.</p>
+<blockquote>
+<p class="quoted">`command': this refers to a command or statment in the Oz language.</p>
+</blockquote>
+
+<blockquote>
+<p class="quoted">{something}: this is not a documentation convention at all; the {curly braces} are an essential part of the Oz syntax.  Do not remove these!</p>
+</blockquote>
+
+<blockquote>
+<p class="quoted">WARNING: explains a particularly confusing part of the Oz language.</p>
+</blockquote>
+
+<blockquote>
+<p class="quoted">BACKGROUND: these are generic concepts in Computer Science; if the list contains unfamiliar terms, please consult the reading list below.</p>
+</blockquote>
+
+<p>end list.</p>
+
 
 
 
@@ -714,7 +758,7 @@ if as an expression</h3>
 <h2><a name="sec26" id="sec26"></a>
 Procedure and Functions</h2>
 
-<p class="first">Procedures and functions are the standard means for expressing a collection of commands.  Examples range from numeric computations to commands involving the operating system.  For example, we have already seen a number of numeric operations expressed by the common infix notation.</p>
+<p class="first">Procedures and functions are the standard means for expressing a collection of computations in a single entity.  Examples range from numeric computations to commands involving the operating system.  For example, we have already seen a number of numeric operations expressed by the common infix notation.</p>
 
 <p>WARNING: curly braces {...} must surround a function or a procedure call.  This syntax for procedure/function application is rather unusual when compared with other programming languages, but it is also unambiguous.</p>
 
@@ -1763,7 +1807,7 @@ solutions to a constraint satisfaction problem. */</span>
 <div id="footer">
 <div id="author">&copy; 
 Torsten Anders</div>
-<div id="date">Last time edited: 2007.12.02</div>
+<div id="date">Last time edited: 2007.12.07</div>
 </div>
   </body>
 </html>
