@@ -40,6 +40,8 @@ Strasheela is a highly expressive constraint-based music composition system.[2] 
 
   [[OzDocumentation][Oz Documentation]]
 
+  [[http://strasheela.sourceforge.net/documents/TorstenAnders-PhDThesis.pdf][Strasheela Monograph]] (pdf)
+
 
 * Getting Started
 
@@ -49,20 +51,24 @@ Strasheela is a highly expressive constraint-based music composition system.[2] 
 
 ;  **TODO** [[../examples/mini-tutorial.oz][Strasheela Tutorial]] -- midi tutorial in plain Oz code for now
 
-  [[StrasheelaTutorial][Strasheela Tutorial]] **(new)**
+
+* Documentation
+
+  [[StrasheelaTutorial][Strasheela Tutorial]] 
 
   [[StrasheelaExamples][Strasheela Examples]]
 
-  [[http://strasheela.sourceforge.net/documents/TorstenAnders-PhDThesis.pdf][Monograph]] (pdf)
-
-  Subscribe to the [[https://lists.sourceforge.net/lists/listinfo/strasheela-users][Strasheela-users mailing list]]
-
-;  **TODO:** Get support at the mailing list
+  [[StrasheelaReference][Reference]]
 
 
-* [[StrasheelaReference][Reference]]
+* Community
 
-* [[Contributing]]
+  [[https://lists.sourceforge.net/lists/listinfo/strasheela-users][Strasheela-users mailing list]]
+
+  [[https://lists.sourceforge.net/lists/listinfo/strasheela-devel][Strasheela-developers mailing list]]
+
+  [[Contributing]]
+
 
 ------------
 
