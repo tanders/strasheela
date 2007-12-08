@@ -97,13 +97,15 @@ to the closest even integer).  There is also a function IntToFloat. */
 </example>
 
 <example title="Variables">
-  <info>The keyword local introduces a variable.  WARNING: variables must start with a capital letter in Oz.
+  <info>The keyword `local' introduces a variable.
 
-Please note that Oz variables are single assignment variables.  After a variable is bound, it cannot be changed anymore (mutable data is also supported by Oz, but not discussed in this tutorial; read about cells in the Oz documentation).
+WARNING: variables must start with a capital letter in Oz.
 
-However, in contrast to most other constraint programming languages, a variable can be unbound or even partially bound.  In other words, variables in Oz are 'logic variables'.  This is discussed further in the lesson "Unification" below. 
+WARNING: Please note that Oz variables are single assignment variables.  After a variable is assigned a value (in Oz, this is called `bound'), it cannot be changed anymore.  Mutable data is also supported by Oz, but not discussed in this tutorial; read about cells in the Oz documentation).
 
-Global variables can be introduced with the keyword 'declare'.  However, global variables are intended for testing and are only supported in the Emacs-based Oz Programming Interface (OPI), not in this tutorial application.
+However, in contrast to most other constraint programming languages, a variable can be unbound or even partially bound.  In other words, variables in Oz are 'logic variables'.  This is discussed further in the lesson "Unification".
+
+Global variables can be introduced with the keyword 'declare'.  However, global variables are intended for testing and are not supported in this tutorial application.
   </info>
   <oz title="Variable declaration">local
    X = 1 + 1
