@@ -18,48 +18,17 @@ This tutorial is organised in small lessons.  After you started the interactive 
   <info>We use a few conventions to present information in this tutorial:
 
   - `command': in the running text, code in the Oz language is enclosed in `single quotes'; remove them when writing your own code.
-  - For explaining syntax, we use the Extended Backus–Naur form (EBNF, http://en.wikipedia.org/wiki/Extended_Backus%E2%80%93Naur_form). Non-terminal symbols are surrounded by angle brackets as  &lt;x&gt;, literal terminals are surrounded by single quotes as `&lt;x&gt;', alternatives are separated by a bar as $&lt;x&gt; | &lt;y&gt;$, and optional items are surrounded by brackets as $[ &lt;x&gt; ]$. The ellipsis (...) specifies an incomplete EBNF rule, e.g., that at the end of the rule further alternatives are omitted. The suffix * (Kleene star) means that the preceding item is repeated zero or more times whereas the suffix + means that the preceding item is repeated at least once. Multiple symbols can be grouped by round parenthesis to specify a suffix for the whole group.
-    For example, the `if' statement has the following syntax in Oz 
-
-  `if' &lt;expression&gt; `then'
-      &lt;statement1&gt;
-  [ `else'
-      &lt;statement2&gt; ]
-  `end'
-
-    When writing your own code, you remove the syntax markers, as in the following example: 
-
-  if X=Y then ok end
-
-  - Naturally, the actual code examples use Oz syntax, which we will explain as we move along. 
+  - {...}: the {curly braces} denote a procedure in Oz; you should never remove them when writing your own code.
   - WARNING: explains a particularly confusing part of the Oz language.
   - BACKGROUND: these are generic concepts in Computer Science; if the list contains unfamiliar terms, please consult the reading list below.
 
 
 For explanations about general concepts, see:
-- van Roy and Haridi (2004). Concepts, Techniques, and Models of Computer Programming. MIT Press. http://www.info.ucl.ac.be/~pvr/book.html
-- The Oz documentation: http://www.mozart-oz.org/documentation/
-- Wikipedia (maybe?  -I'd rather find a better resource, though)
-
-
-
-
-TODO this is just to see what the docs look like; will be removed.
-
-We use a few conventions to present information in this tutorial:
-
-  &lt;expression&gt;: this refers to an arbitrary expression (remove the &lt;&gt;)
-
-  `command': this refers to a command or statment in the Oz language.
-
-  {something}: this is not a documentation convention at all; the {curly braces} are an essential part of the Oz syntax.  Do not remove these!
-
-  WARNING: explains a particularly confusing part of the Oz language.
-
-  BACKGROUND: these are generic concepts in Computer Science; if the list contains unfamiliar terms, please consult the reading list below.
-
-end list.
-
+  - van Roy and Haridi (2004). Concepts, Techniques, and Models of Computer Programming. MIT Press.
+      http://www.info.ucl.ac.be/~pvr/book.html
+  - The Oz documentation:
+      http://www.mozart-oz.org/documentation/
+  - Wikipedia (maybe?  -I'd rather find a better resource, though)
 
 </info>
   <oz></oz>
@@ -93,8 +62,7 @@ The other examples demonstrate alternative ways to output information.
   Browse: opens a Browse window
   Show: outputs text to standard out
   Inspect: opens an Inspect window
-
-WARNING: the pair of curly braces {...} is necessary; they always expresses a function or procedure call.</info>
+</info>
   <oz title="Browse">{Browse 'Hello World!'}</oz>
 <oz title="Show">/* Show something at standard out (the commandline where you started
 this tutorial). */
@@ -174,37 +142,27 @@ end</oz>
 </example>
 
 <example title="If">
-<info>Oz provides the usual if control structure.  Note that unlike many programming languages, parenthesis () are not required around the condition.
+<info>Oz provides the usual if control structure.  Note that unlike many programming languages, parenthesis () are not required around the condition, althought they may make the code easier to read.
 
-The general format is:
-
-  if &lt;expression&gt; then
-      &lt;statement1&gt;
-  else
-      &lt;statement2&gt;
-  end
-
-The [else] clause is optional.  Oz is white-space insensitive, so [if] statements can be placed on a single line.
-
-Please note that the [if] control structure can also be used as an expression which returns a value from the [then] or [else] clause.
+Please note that the `if' control structure can also be used as an expression which returns a value from the `then' or `else' clause.
 </info>
-<oz title="if ... end">%% This example does nothing, but try changing == to \=.
-%% The operations == and \= test equality and inequality of values.
-
-if this == that then
-    {Browse hi}
-end</oz>
 <oz title="if ... else ... end">%% try changing 2 to 6... 
 
-if 2 &lt; 5 then
+if (2 &lt; 5) then
     {Browse less}
 else
     {Browse more}
 end</oz>
+<oz title="if ... end">%% This example does nothing, but try changing == to \=.
+%% The operations == and \= test equality and inequality of values.
+
+if (this == that) then
+    {Browse hi}
+end</oz>
 <oz title="if as an expression">%% This `if' returns a value.
 
 {Browse 
- if 2 &lt; 5 then less else more end}</oz>
+ if (2 &lt; 5) then less else more end}</oz>
 </example>
 
 
