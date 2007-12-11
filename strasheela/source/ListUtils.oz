@@ -220,6 +220,7 @@ define
 
    /** %% Splits Xs at all occurences of Y. Split returns a list of sublists between (possibly multiple) Y and skips Y itself.
    %% NB: String.tokens does the same..
+   %% NB: if last element of list is Y, then it is simply omitted.
    %% */
    fun {Split Xs Y}
       Pos = {Position Y Xs}
@@ -227,13 +228,15 @@ define
       if Pos==nil
       then if Xs==nil then nil else [Xs] end
       else 
-	 XsHead = {List.take Xs Pos-1}
-	 XsTail = {List.drop Xs Pos}
-      in
-	 XsHead | {Split XsTail Y}
+	 XsHead XsTail in
+	 {List.takeDrop Xs Pos-1 XsHead XsTail}
+	 XsHead | {Split XsTail.2 Y}
       end
    end
 
+
+
+   
    /** %% Returns the sublist of Xs that consists in the Start-th to End-th elements (including). If End > {Length Xs}, sublist returns a sublist up to the last element of Xs.
    %% */
    fun {Sublist Xs Start End}
