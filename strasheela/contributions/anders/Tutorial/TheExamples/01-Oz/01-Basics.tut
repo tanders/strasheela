@@ -58,7 +58,7 @@ Hit the [Run] button in the bottom-left corner to execute this example.  The oth
 
 Oz supports line comments and block comments.  Please select each example to see how these comments differ.
 
-(Executing these examples does nothing, of course!)</info>
+(Executing these comment-examples does nothing, of course!)</info>
   <oz title="Browse">{Browse 'Hello World!'}</oz>
 <oz title="Show">/* Show something at standard out (the commandline where you started
 this tutorial). */
@@ -99,11 +99,11 @@ to the closest even integer).  There is also a function IntToFloat. */
 </example>
 
 <example title="Variables">
-  <info>All variables in Oz must start with a capital letter.  They may be introduced with the keyword `local'.
+  <info>All variables in Oz must start with a capital letter.  They must be declared first, for example, with the keyword `local'.
 
 Global variables can be introduced with the keyword 'declare'.  However, global variables are intended for testing and are not supported in this tutorial application.
 
-WARNING: Oz variables are single assignment variables.  If you do not have experience with functional languages, we highly recommend reading the background example!  Variables may be bound to a value, or may be left unbound or even partially bound (for compound data types such as lists).
+WARNING: Oz variables are single assignment variables.  If you do not have experience with functional or logic programming languages, we highly recommend reading the background example!  Variables may be bound to a value, or may be left unbound or even partially bound (for compound data types such as lists). However, their value can never be changed! 
 
 Rewritable data storage is also supported by Oz; they are called Cells.</info>
   <oz title="Variable declaration">local
@@ -144,40 +144,45 @@ WARNING: The syntax for reading and writing to cells is different than
 the syntax for variables.
 */
 local
-  C = {NewCell 0}
+  C = {NewCell 0}  % create new cell with initial value 0 
   V
 in
-  {Browse @C}
+  {Browse @C}      % browse cell value
   {Delay 2000}
-  C := 5
-  {Browse @C}
+  C := 5           % change cell value to 0 (stateful operation)
+  {Browse @C}      
   V = @C
   {Browse V}
 end
 </oz>
 <oz title="BACKGROUND">/*
-Terms: logic variable, bound variables, unbound variables, local
-variables, global variables.
+TODO Torsten: revise terminology
 
-In most programming languages, variables may be read and written
-at will.  This often confuses new programmers, since variables in
-math do not operate this way -- once the value of a variable is
-set, it stays set.
+Terms: single assignment, logic variable, bound/determined variables,
+unbound/free variables, local variables, global variables.
 
-In Oz, variables operate like math variables.  Assigning a value
+In mainstream programming languages, variables may be read and written
+at will. Actually, a better term for them may be "mutables".  This often
+confuses new programmers, since variables in math do not operate this
+way -- once the value of a variable is set, it stays set.
+
+In Oz, variables operate more like math variables. Assigning a value
 to a variable is called "binding"; once a variable is "bound", it
-cannot be changed.  Variables are "unbound" (have no value) by
-default, and compound variables (such as lists) may be "partially
-bound" (ie some elements may be bound, while others are unbound).
+cannot be changed.  Variables are "free" (have no value) by default,
+and compound variables (such as lists) may be "partially bound" (ie
+some elements may be bound, while others are unbound).
 
 
-Reading: van Roy and Haridi, chapter 1.
+Reading: 
+
+  - van Roy and Haridi, Chap. 1-2 (in particular Sec. 1.2, and 2.2).
+  - Oz Tutorial, Chap. 3, introduction
 */
 </oz>
 </example>
 
 <example title="If">
-<info>Oz provides the usual if control structure.  Note that unlike many programming languages, parenthesis () are not required around the condition, althought they may make the code easier to read.
+<info>Oz provides the usual `if' control structure.  Note that unlike many programming languages, parenthesis () are not required around the condition, althought they may make the code easier to read.
 
 Please note that the `if' control structure can also be used as an expression which returns a value from the `then' or `else' clause.
 </info>
@@ -188,13 +193,14 @@ if (2 &lt; 5) then
 else
     {Browse more}
 end</oz>
-<oz title="if ... end">%% This example does nothing, but try changing == to \=.
-%% The operations == and \= test equality and inequality of values.
+<oz title="if ... end">/* The `else' clause is optional. This example does nothing, but try
+changing `==' to `\=.' The operations `==' and `\=' test equality and
+inequality of values. */
 
 if (this == that) then
     {Browse hi}
 end</oz>
-<oz title="if as an expression">%% This `if' returns a value.
+<oz title="if as an expression">%% This `if' returns a value, which is browsed.
 
 {Browse 
  if (2 &lt; 5) then less else more end}</oz>
