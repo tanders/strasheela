@@ -2,7 +2,7 @@
 
 <examples title="Oz Basics">
 
-<example title="-- Oz fundamentals">
+<example title="-- Oz Basics">
   <info>This chapter covers fundamental concepts in Oz.
   </info>
   <oz>
@@ -142,7 +142,13 @@ in
    {Delay 3000}
    X = 3
 end</oz>
-  
+<oz title="BACKGROUND">/*
+Terms: logic variable, bound variables, unbound variables, local
+variables, global variables.
+
+Reading: van Roy and Haridi, chapter 1.  TODO check?
+*/
+</oz>
 </example>
 
 <example title="If">
@@ -209,11 +215,13 @@ local X = {Browse}
 in
   X = 3
 end</oz>
-</example>
 
 
-<example title="Procedure Definition">
-<info>A procedure definition wraps up (abstracts) some computation: a complex computation can then be executed simply by calling the procedure.  In the example, the procedure Max gets two numbers as its first two arguments and binds its last argument to the greater number (>= means 'greater or equal').  Note that the curly braces in the definition surround the procedure name and its arguments like a procedure call.</info>
+<oz title="-next">
+/*
+A procedure definition wraps up (abstracts) some computation: a complex computation can then be executed simply by calling the procedure.  In the example, the procedure Max gets two numbers as its first two arguments and binds its last argument to the greater number (>= means 'greater or equal').  Note that the curly braces in the definition surround the procedure name and its arguments like a procedure call.
+*/
+</oz>
 <oz title="Max procedure">/* NB: the variable X in the Max definition and the variable X outside
 are different variables (cf. variable scope above). */
 
@@ -252,11 +260,12 @@ local
 in
   {Browse {Max 4 3}}
 end</oz>
-</example>
 
-
-<example title="Function Definition">
-  <info>Oz offers a simplified notation (syntactic sugar) for a procedure definition which returns its last value: it can be defined as a function.</info>
+<oz title="--next">
+Oz offers a simplified notation (syntactic sugar) for a procedure
+definition which returns its last value: it can be defined as a
+function.
+</oz>
 <oz title="Max function">%% This Max function is equivalent to the Max procedure of the previous lesson.
 
 local
@@ -281,6 +290,20 @@ in
    {Browse
     {Factorial 10}}
 end</oz>
+<oz title="BACKGROUND">/*
+Terms: procedure, function.
+
+Procedures and functions are the standard means for expressing a
+collection of computations in a single entity.  Examples range
+from numeric computations to commands involving the operating
+system.  For example, we have already seen a number of numeric
+operations expressed by the common infix notation.
+
+A procedure definition wraps up (abstracts) some computation: a
+complex computation can then be executed simply by calling the
+procedure.
+*/
+</oz>
 </example>
 
 
@@ -318,7 +341,6 @@ token is needed whose value is not important. */
 %% The Inspector shows atoms and names in different colors
 {Inspect 'I am an atom'}</oz>
 </example>
-
 
 <example title="Compound Types">
   <info>Besides the atomic types discussed before, Oz also provides compound data types: records, tuples, lists, and strings.
@@ -391,6 +413,59 @@ local
 in
   {Inspect VS#3}
 end</oz>
+</example>
+
+<example title="Understanding error messages">
+<info>When we do program, we almost inevitably write bugs
+sometimes.  Luckily, when confronted with specific problems in
+programs, compilers try to tell us about the problem (naturally, the
+real hard bugs are the ones no compiler complains about).  All errors
+are actually raised exceptions (see the Tutorial of Oz, Sec. 5.10 for
+more details).
+
+The compiler is your friend, so this example introduces you to some
+typical Oz error messages ;-) During your programming sessions,
+carefully reading error messages can save you much time.  In this
+tutorial, all these messages are shown at the shell (or in the DOS
+box) where you started the tutorial.  The Oz Programming Interface
+(OPI) even supports moving to the code where the bug is likely to be
+located (see the Tutorial of Oz, Sec. 2.3.3).
+
+BTW: the error messages of this tutorial are slightly obscured
+unfortunately by some trick which keeps the tutorial application
+running even in the case of an error: there are always a few lines of
+other code before the actual error message.  Also, the reported line
+number is not correct, because the tutorial application adds a few
+lines to each example (the resulting full example is shown just before
+the error message).
+</info>
+<oz title="Parse error">%% The left curly brace does not match the right parenthesis
+
+{Browse hello)</oz>
+<oz title="Static analysis error">%% Browse expects only a single argument
+
+{Browse hi there}</oz>
+<oz title="Binding analysis error">%% Variable X is not declared 
+
+X = 3</oz>
+<oz title="Type error">%% We can not add an integer and a float 
+
+{Browse 3 + 2.0}</oz>
+<oz title="Failure">/* Inconsistent constraint programs result in a failure.  Failures play
+an important role internally in a constraint solver searching for
+solutions to a constraint satisfaction problem. */
+
+local
+   X = 3
+in
+   3 + 4 =: X
+end</oz>
+</example>
+
+
+<example title="-- Basics (2) TODO name">
+<info>This chapter covers more basic info about Oz.</info>
+<oz></oz>
 </example>
 
 <example title="Pattern Matching">
@@ -753,52 +828,5 @@ end
 {Browse endOfProgram}</oz>
 </example>
 
-
-<example title="Understanding error messages">
-<info>When we do program, we almost inevitably write bugs
-sometimes.  Luckily, when confronted with specific problems in
-programs, compilers try to tell us about the problem (naturally, the
-real hard bugs are the ones no compiler complains about).  All errors
-are actually raised exceptions (see the Tutorial of Oz, Sec. 5.10 for
-more details).
-
-The compiler is your friend, so this example introduces you to some
-typical Oz error messages ;-) During your programming sessions,
-carefully reading error messages can save you much time.  In this
-tutorial, all these messages are shown at the shell (or in the DOS
-box) where you started the tutorial.  The Oz Programming Interface
-(OPI) even supports moving to the code where the bug is likely to be
-located (see the Tutorial of Oz, Sec. 2.3.3).
-
-BTW: the error messages of this tutorial are slightly obscured
-unfortunately by some trick which keeps the tutorial application
-running even in the case of an error: there are always a few lines of
-other code before the actual error message.  Also, the reported line
-number is not correct, because the tutorial application adds a few
-lines to each example (the resulting full example is shown just before
-the error message).
-</info>
-<oz title="Parse error">%% The left curly brace does not match the right parenthesis
-
-{Browse hello)</oz>
-<oz title="Static analysis error">%% Browse expects only a single argument
-
-{Browse hi there}</oz>
-<oz title="Binding analysis error">%% Variable X is not declared 
-
-X = 3</oz>
-<oz title="Type error">%% We can not add an integer and a float 
-
-{Browse 3 + 2.0}</oz>
-<oz title="Failure">/* Inconsistent constraint programs result in a failure.  Failures play
-an important role internally in a constraint solver searching for
-solutions to a constraint satisfaction problem. */
-
-local
-   X = 3
-in
-   3 + 4 =: X
-end</oz>
-</example>
 
 </examples> 
