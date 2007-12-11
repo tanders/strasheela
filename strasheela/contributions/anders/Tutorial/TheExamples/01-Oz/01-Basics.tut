@@ -2,67 +2,63 @@
 
 <examples title="Oz Basics">
 
-<example title="Start here">
-  <info>This interactive tutorial demonstrates the basics of the Oz programming language and Strasheela.  By presenting small code snippets which can be easily executed and edited, we hope to simply the process of learning about Oz/Strasheela.  After this tutorial, you should be ready to read and edit existing Strasheela examples, as well as creating your own Strasheela programs.
+<example title="-- Oz fundamentals">
+  <info>This chapter covers fundamental concepts in Oz.
+  </info>
+  <oz>
+  </oz>
+</example>
 
-Nevertheless, this tutorial is kept brief.  The explanation of Oz focuses on aspects which are particularly important for Strasheela, and also Strasheela concepts are only outlined.  Everything is explained very briefly to get you started quickly.  In other words, it is not the intention of this tutorial to replace the extensive documentation already available on Oz, nor my thesis on Strasheela ;-)
+<example title="This tutorial">
+  <info>This interactive tutorial demonstrates the basics of the Oz programming language and Strasheela.  By presenting small code snippets which can be easily executed and edited, we hope to simply the process of learning about Oz/Strasheela.
+
+Nevertheless, this tutorial is kept brief.  The explanation of Oz focuses on aspects which are particularly important for Strasheela, and even Strasheela concepts are only briefly outlined.  In other words, it is not the intention of this tutorial to replace the extensive documentation already available on Oz, nor my thesis on Strasheela ;-)
 
 This tutorial is organised in small lessons.  After you started the interactive tutorial application, you can select the examples in the list at the top-left of this window.  Many lessons consist of several sub-examples, accesible via the list in the bottom-right corner.  These examples are best studied in their order.
 
 (if you are reading the tutorial in your HTML browser, of course there are no lists of lessons and examples)
 </info>
-  <oz></oz>
-</example>
+<oz title="Conventions">/*
+We use a few conventions to present information in this tutorial:
 
-<example title="How to read this tutorial">
-  <info>We use a few conventions to present information in this tutorial:
-
-  - `command': in the running text, code in the Oz language is enclosed in `single quotes'; remove them when writing your own code.
-  - {...}: the {curly braces} denote a procedure in Oz; you should never remove them when writing your own code.
+  - `command': in the running text, code in the Oz language is enclosed
+      in `single quotes'; remove them when writing your own code.
+  - {...}: the {curly braces} denote a procedure in Oz; you should never
+      remove them when writing your own code.
   - WARNING: explains a particularly confusing part of the Oz language.
-  - BACKGROUND: these are generic concepts in Computer Science; if the list contains unfamiliar terms, please consult the reading list below.
-
-
+  - BACKGROUND: these examples give brief explanations of generic
+      concepts in Computer Science; please see them if the lesson contains
+      unfamiliar terms.
+*/
+</oz>
+<oz title="BACKGROUND">/*
 For explanations about general concepts, see:
-  - van Roy and Haridi (2004). Concepts, Techniques, and Models of Computer Programming. MIT Press.
+
+  - van Roy and Haridi (2004). Concepts, Techniques, and Models of
+      Computer Programming. MIT Press.
       http://www.info.ucl.ac.be/~pvr/book.html
   - The Oz documentation:
       http://www.mozart-oz.org/documentation/
-  - Wikipedia (maybe?  -I'd rather find a better resource, though)
-
-</info>
-  <oz></oz>
+  - Wikipedia (maybe?  -I'd rather find a better resource, though) TODO
+*/
+</oz>
 </example>
 
-<example title="Comments">
-  <info>Oz supports line comments and block comments.  There are two examples in the bottom-right list:
-  Line comment
-  Block comment
+<example title="Hello World and Comments">
+  <info>By convention, the first steps in any programming langauge is to output the text "Hello World!".  This tutorial obeys this rule.  :)
 
-Please select each example to see how these comments differ.
+Hit the [Run] button in the bottom-left corner to execute this example.  The other examples demonstrate alternative ways to output information:
+
+  - Browse: opens a Browse window
+  - Show: outputs text to standard out
+  - Inspect: opens an Inspect window
+
+(the Browse and Inspect windows might be hidden behind this window)
+
+
+Oz supports line comments and block comments.  Please select each example to see how these comments differ.
 
 (Executing these examples does nothing, of course!)</info>
-  <oz title="Line comment">% this is a line comment</oz>
-  <oz title="Block comment">/*
-this is a
-block
-comment
-*/</oz>
-</example>
-
-
-<example title="Hello World!">
-  <info>The statement 
-
-  {Browse something} 
-
-shows 'something' in the Oz Browser.  Hit the [Run] button below to execute this example.  Congratulations, you just executed your first Oz program! Try changing the 'Hello World!' text and see what happens.
-
-The other examples demonstrate alternative ways to output information.
-  Browse: opens a Browse window
-  Show: outputs text to standard out
-  Inspect: opens an Inspect window
-</info>
   <oz title="Browse">{Browse 'Hello World!'}</oz>
 <oz title="Show">/* Show something at standard out (the commandline where you started
 this tutorial). */
@@ -73,6 +69,12 @@ this tutorial). */
 this tutorial.. */
 
 {Inspect 'Hello World!'}</oz>
+  <oz title="Line comment">% this is a line comment</oz>
+  <oz title="Block comment">/*
+this is a
+block
+comment
+*/</oz>
 </example>
 
 <example title="Calculator">
