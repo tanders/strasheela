@@ -4,7 +4,7 @@
     <title>Oz Basics</title>
     <meta name="generator" content="muse.el">
     <meta http-equiv="Content-Type"
-          content="text/html; charset=utf-8">
+          content="text/html; charset=iso-8859-1">
     
     <link rel="stylesheet" href="style.css" type="text/css" />
   </head>
@@ -28,349 +28,356 @@
 <a href="#sec1">About this document</a>
 </dt>
 <dt>
-<a href="#sec2">Start here</a>
+<a href="#sec2">&mdash; Oz Basics</a>
 </dt>
 <dt>
-<a href="#sec3">How to read this tutorial</a>
-</dt>
-<dt>
-<a href="#sec4">Comments</a>
+<a href="#sec3">This tutorial</a>
 </dt>
 <dd>
 <dl>
 <dt>
-<a href="#sec5">Line comment</a>
+<a href="#sec4">Conventions</a>
 </dt>
 <dt>
-<a href="#sec6">Block comment</a>
+<a href="#sec5">BACKGROUND</a>
 </dt>
 </dl>
 </dd>
 <dt>
-<a href="#sec7">Hello World!</a>
+<a href="#sec6">Hello World and Comments</a>
 </dt>
 <dd>
 <dl>
 <dt>
-<a href="#sec8">Browse</a>
+<a href="#sec7">Browse</a>
 </dt>
 <dt>
-<a href="#sec9">Show</a>
+<a href="#sec8">Show</a>
 </dt>
 <dt>
-<a href="#sec10">Inspect</a>
+<a href="#sec9">Inspect</a>
+</dt>
+<dt>
+<a href="#sec10">Line comment</a>
+</dt>
+<dt>
+<a href="#sec11">Block comment</a>
 </dt>
 </dl>
 </dd>
 <dt>
-<a href="#sec11">Calculator</a>
+<a href="#sec12">Calculator</a>
 </dt>
 <dd>
 <dl>
 <dt>
-<a href="#sec12">Integer example 1</a>
+<a href="#sec13">Integer example 1</a>
 </dt>
 <dt>
-<a href="#sec13">Integer example 2</a>
+<a href="#sec14">Integer example 2</a>
 </dt>
 <dt>
-<a href="#sec14">Integer example 3</a>
+<a href="#sec15">Integer example 3</a>
 </dt>
 <dt>
-<a href="#sec15">Float example 1</a>
+<a href="#sec16">Float example 1</a>
 </dt>
 <dt>
-<a href="#sec16">Float example 2</a>
+<a href="#sec17">Float example 2</a>
 </dt>
 <dt>
-<a href="#sec17">Float example 3</a>
+<a href="#sec18">Float example 3</a>
 </dt>
 </dl>
 </dd>
 <dt>
-<a href="#sec18">Variables</a>
+<a href="#sec19">Variables</a>
 </dt>
 <dd>
 <dl>
 <dt>
-<a href="#sec19">Variable declaration</a>
+<a href="#sec20">Variable declaration</a>
 </dt>
 <dt>
-<a href="#sec20">Variable scope</a>
+<a href="#sec21">Variable scope</a>
 </dt>
 <dt>
-<a href="#sec21">A variable can be unbound</a>
+<a href="#sec22">A variable can be unbound</a>
+</dt>
+<dt>
+<a href="#sec23">Cells</a>
+</dt>
+<dt>
+<a href="#sec24">BACKGROUND</a>
 </dt>
 </dl>
 </dd>
 <dt>
-<a href="#sec22">If</a>
+<a href="#sec25">If</a>
 </dt>
 <dd>
 <dl>
 <dt>
-<a href="#sec23">if ... end</a>
+<a href="#sec26">if ... else ... end</a>
 </dt>
 <dt>
-<a href="#sec24">if ... else ... end</a>
+<a href="#sec27">if ... end</a>
 </dt>
 <dt>
-<a href="#sec25">if as an expression</a>
+<a href="#sec28">if as an expression</a>
 </dt>
 </dl>
 </dd>
 <dt>
-<a href="#sec26">Procedure and Functions</a>
+<a href="#sec29">Procedure and Functions</a>
 </dt>
 <dd>
 <dl>
 <dt>
-<a href="#sec27">Usage</a>
+<a href="#sec30">Usage</a>
 </dt>
 <dt>
-<a href="#sec28">Functions are procedures</a>
+<a href="#sec31">Functions are procedures</a>
 </dt>
 <dt>
-<a href="#sec29">Procedures used like functions</a>
+<a href="#sec32">Procedures used like functions</a>
+</dt>
+<dt>
+<a href="#sec33">-next</a>
+</dt>
+<dt>
+<a href="#sec34">Max procedure</a>
+</dt>
+<dt>
+<a href="#sec35">$ marks a return value</a>
+</dt>
+<dt>
+<a href="#sec36">Function call of procedure</a>
+</dt>
+<dt>
+<a href="#sec37">&mdash;next</a>
+</dt>
+<dt>
+<a href="#sec38">Max function</a>
+</dt>
+<dt>
+<a href="#sec39">Recursion</a>
+</dt>
+<dt>
+<a href="#sec40">BACKGROUND</a>
 </dt>
 </dl>
 </dd>
 <dt>
-<a href="#sec30">Procedure Definition</a>
+<a href="#sec41">Atoms and Names</a>
 </dt>
 <dd>
 <dl>
 <dt>
-<a href="#sec31">Max procedure</a>
+<a href="#sec42">Atoms</a>
 </dt>
 <dt>
-<a href="#sec32">$ marks a return value</a>
+<a href="#sec43">Equality</a>
 </dt>
 <dt>
-<a href="#sec33">Function call of procedure</a>
+<a href="#sec44">Names</a>
 </dt>
 </dl>
 </dd>
 <dt>
-<a href="#sec34">Function Definition</a>
+<a href="#sec45">Compound Types</a>
 </dt>
 <dd>
 <dl>
 <dt>
-<a href="#sec35">Max function</a>
+<a href="#sec46">Records (1)</a>
 </dt>
 <dt>
-<a href="#sec36">Recursion</a>
+<a href="#sec47">Records (2)</a>
+</dt>
+<dt>
+<a href="#sec48">Records (3)</a>
+</dt>
+<dt>
+<a href="#sec49">Accessing record fields</a>
+</dt>
+<dt>
+<a href="#sec50">Tuples (1)</a>
+</dt>
+<dt>
+<a href="#sec51">Tuples (2)</a>
+</dt>
+<dt>
+<a href="#sec52">Tuples (3)</a>
+</dt>
+<dt>
+<a href="#sec53">Lists (1)</a>
+</dt>
+<dt>
+<a href="#sec54">Lists (2)</a>
+</dt>
+<dt>
+<a href="#sec55">Lists (3)</a>
+</dt>
+<dt>
+<a href="#sec56">Lists (4)</a>
+</dt>
+<dt>
+<a href="#sec57">Pairs (1)</a>
+</dt>
+<dt>
+<a href="#sec58">Pairs (2)</a>
+</dt>
+<dt>
+<a href="#sec59">Strings (1)</a>
+</dt>
+<dt>
+<a href="#sec60">Strings (2)</a>
+</dt>
+<dt>
+<a href="#sec61">Virtual Strings</a>
 </dt>
 </dl>
 </dd>
 <dt>
-<a href="#sec37">Atoms and Names</a>
+<a href="#sec62">Understanding error messages</a>
 </dt>
 <dd>
 <dl>
 <dt>
-<a href="#sec38">Atoms</a>
+<a href="#sec63">Parse error</a>
 </dt>
 <dt>
-<a href="#sec39">Equality</a>
+<a href="#sec64">Static analysis error</a>
 </dt>
 <dt>
-<a href="#sec40">Names</a>
+<a href="#sec65">Binding analysis error</a>
+</dt>
+<dt>
+<a href="#sec66">Type error</a>
+</dt>
+<dt>
+<a href="#sec67">Failure</a>
 </dt>
 </dl>
 </dd>
 <dt>
-<a href="#sec41">Compound Types</a>
+<a href="#sec68">&mdash; Basics (2) TODO name</a>
+</dt>
+<dt>
+<a href="#sec69">Pattern Matching</a>
 </dt>
 <dd>
 <dl>
 <dt>
-<a href="#sec42">Records (1)</a>
+<a href="#sec70">Case statements (1)</a>
 </dt>
 <dt>
-<a href="#sec43">Records (2)</a>
+<a href="#sec71">Case statements (2)</a>
 </dt>
 <dt>
-<a href="#sec44">Records (3)</a>
+<a href="#sec72">Multiple case clauses</a>
 </dt>
 <dt>
-<a href="#sec45">Accessing record fields</a>
-</dt>
-<dt>
-<a href="#sec46">Tuples (1)</a>
-</dt>
-<dt>
-<a href="#sec47">Tuples (2)</a>
-</dt>
-<dt>
-<a href="#sec48">Tuples (3)</a>
-</dt>
-<dt>
-<a href="#sec49">Lists (1)</a>
-</dt>
-<dt>
-<a href="#sec50">Lists (2)</a>
-</dt>
-<dt>
-<a href="#sec51">Lists (3)</a>
-</dt>
-<dt>
-<a href="#sec52">Lists (4)</a>
-</dt>
-<dt>
-<a href="#sec53">Pairs (1)</a>
-</dt>
-<dt>
-<a href="#sec54">Pairs (2)</a>
-</dt>
-<dt>
-<a href="#sec55">Strings (1)</a>
-</dt>
-<dt>
-<a href="#sec56">Strings (2)</a>
-</dt>
-<dt>
-<a href="#sec57">Virtual Strings</a>
+<a href="#sec73">Implicit pattern matching</a>
 </dt>
 </dl>
 </dd>
 <dt>
-<a href="#sec58">Pattern Matching</a>
+<a href="#sec74">Procedures over Compound Data</a>
 </dt>
 <dd>
 <dl>
 <dt>
-<a href="#sec59">Case statements (1)</a>
+<a href="#sec75">HasFeature</a>
 </dt>
 <dt>
-<a href="#sec60">Case statements (2)</a>
+<a href="#sec76">Arity</a>
 </dt>
 <dt>
-<a href="#sec61">Multiple case clauses</a>
+<a href="#sec77">Adjoin</a>
 </dt>
 <dt>
-<a href="#sec62">Implicit pattern matching</a>
+<a href="#sec78">Nth</a>
+</dt>
+<dt>
+<a href="#sec79">Reverse</a>
+</dt>
+<dt>
+<a href="#sec80">Append</a>
+</dt>
+<dt>
+<a href="#sec81">User-defined procedures</a>
 </dt>
 </dl>
 </dd>
 <dt>
-<a href="#sec63">Procedures over Compound Data</a>
+<a href="#sec82">Unification</a>
 </dt>
 <dd>
 <dl>
 <dt>
-<a href="#sec64">HasFeature</a>
+<a href="#sec83">Unifying two lists</a>
 </dt>
 <dt>
-<a href="#sec65">Arity</a>
-</dt>
-<dt>
-<a href="#sec66">Adjoin</a>
-</dt>
-<dt>
-<a href="#sec67">Nth</a>
-</dt>
-<dt>
-<a href="#sec68">Reverse</a>
-</dt>
-<dt>
-<a href="#sec69">Append</a>
-</dt>
-<dt>
-<a href="#sec70">User-defined procedures</a>
+<a href="#sec84">Recursive unification</a>
 </dt>
 </dl>
 </dd>
 <dt>
-<a href="#sec71">Unification</a>
+<a href="#sec85">Class Method Application</a>
 </dt>
 <dd>
 <dl>
 <dt>
-<a href="#sec72">Unifying two lists</a>
+<a href="#sec86">Method call</a>
 </dt>
 <dt>
-<a href="#sec73">Recursive unification</a>
+<a href="#sec87">Method arguments</a>
 </dt>
 </dl>
 </dd>
 <dt>
-<a href="#sec74">Class Method Application</a>
+<a href="#sec88">Higher-Order Programming</a>
 </dt>
 <dd>
 <dl>
 <dt>
-<a href="#sec75">Method call</a>
+<a href="#sec89">Filter</a>
 </dt>
 <dt>
-<a href="#sec76">Method arguments</a>
+<a href="#sec90">ForAll</a>
+</dt>
+<dt>
+<a href="#sec91">Map</a>
+</dt>
+<dt>
+<a href="#sec92">Anonymous procedure definition</a>
+</dt>
+<dt>
+<a href="#sec93">Sort (1)</a>
+</dt>
+<dt>
+<a href="#sec94">Sort (2)</a>
+</dt>
+<dt>
+<a href="#sec95">Defining higher-order procedures</a>
 </dt>
 </dl>
 </dd>
 <dt>
-<a href="#sec77">Higher-Order Programming</a>
+<a href="#sec96">Concurrency</a>
 </dt>
 <dd>
 <dl>
 <dt>
-<a href="#sec78">Filter</a>
+<a href="#sec97">Declarative concurrency</a>
 </dt>
 <dt>
-<a href="#sec79">ForAll</a>
+<a href="#sec98">Blocking computation</a>
 </dt>
 <dt>
-<a href="#sec80">Map</a>
-</dt>
-<dt>
-<a href="#sec81">Anonymous procedure definition</a>
-</dt>
-<dt>
-<a href="#sec82">Sort (1)</a>
-</dt>
-<dt>
-<a href="#sec83">Sort (2)</a>
-</dt>
-<dt>
-<a href="#sec84">Defining higher-order procedures</a>
-</dt>
-</dl>
-</dd>
-<dt>
-<a href="#sec85">Concurrency</a>
-</dt>
-<dd>
-<dl>
-<dt>
-<a href="#sec86">Declarative concurrency</a>
-</dt>
-<dt>
-<a href="#sec87">Blocking computation</a>
-</dt>
-<dt>
-<a href="#sec88">'Signalling' a blocking computation</a>
-</dt>
-</dl>
-</dd>
-<dt>
-<a href="#sec89">Understanding error messages</a>
-</dt>
-<dd>
-<dl>
-<dt>
-<a href="#sec90">Parse error</a>
-</dt>
-<dt>
-<a href="#sec91">Static analysis error</a>
-</dt>
-<dt>
-<a href="#sec92">Binding analysis error</a>
-</dt>
-<dt>
-<a href="#sec93">Type error</a>
-</dt>
-<dt>
-<a href="#sec94">Failure</a>
+<a href="#sec99">'Signalling' a blocking computation</a>
 </dt>
 </dl>
 </dd>
@@ -385,113 +392,117 @@ About this document</h2>
 
 
 <h2><a name="sec2" id="sec2"></a>
-Start here</h2>
+&mdash; Oz Basics</h2>
 
-<p class="first">This interactive tutorial demonstrates the basics of the Oz programming language and Strasheela.  By presenting small code snippets which can be easily executed and edited, we hope to simply the process of learning about Oz/Strasheela.  After this tutorial, you should be ready to read and edit existing Strasheela examples, as well as creating your own Strasheela programs.</p>
-
-<p>Nevertheless, this tutorial is kept brief.  The explanation of Oz focuses on aspects which are particularly important for Strasheela, and also Strasheela concepts are only outlined.  Everything is explained very briefly to get you started quickly.  In other words, it is not the intention of this tutorial to replace the extensive documentation already available on Oz, nor my thesis on Strasheela ;-)</p>
-
-<p>This tutorial is organised in small lessons.  After you started the interactive tutorial application, you can select the examples in the list at the top-left of this window.  Many lessons consist of several sub-examples, accesible via the list in the bottom-right corner.  These examples are best studied in their order.</p>
-
-<p>(if you are reading the tutorial in your HTML browser, of course there are no lists of lessons and examples)</p>
+<p class="first">This chapter covers fundamental concepts in Oz.</p>
 
 
 
 
 
 <h2><a name="sec3" id="sec3"></a>
-How to read this tutorial</h2>
+This tutorial</h2>
 
-<p class="first">We use a few conventions to present information in this tutorial:</p>
+<p class="first">This interactive tutorial demonstrates the basics of the Oz programming language and Strasheela.  By presenting small code snippets which can be easily executed and edited, we hope to simply the process of learning about Oz/Strasheela.</p>
 
-<ul>
-<li>`command': in the running text, code in the Oz language is enclosed in `single quotes'; remove them when writing your own code.</li>
+<p>Nevertheless, this tutorial is kept brief.  The explanation of Oz focuses on aspects which are particularly important for Strasheela, and even Strasheela concepts are only briefly outlined.  In other words, it is not the intention of this tutorial to replace the extensive documentation already available on Oz, nor my thesis on Strasheela ;-)</p>
 
-<table class="muse-table" border="2" cellpadding="5">
-  <tbody>
-    <tr>
-      <td><li>For explaining syntax, we use the Extended Backus–Naur form (EBNF, <a href="http://en.wikipedia.org/wiki/Extended_Backus%E2%80%93Naur_form">http://en.wikipedia.org/wiki/Extended_Backus%E2%80%93Naur_form</a>). Non-terminal symbols are surrounded by angle brackets as  &lt;x&gt;, literal terminals are surrounded by single quotes as `&lt;x&gt;', alternatives are separated by a bar as $&lt;x&gt;</td>
-      <td>&lt;y&gt;$, and optional items are surrounded by brackets as $[ &lt;x&gt; ]$. The ellipsis (...) specifies an incomplete EBNF rule, e.g., that at the end of the rule further alternatives are omitted. The suffix * (Kleene star) means that the preceding item is repeated zero or more times whereas the suffix + means that the preceding item is repeated at least once. Multiple symbols can be grouped by round parenthesis to specify a suffix for the whole group.</td>
-    </tr>
-  </tbody>
-</table>
+<p>This tutorial is organised in small lessons.  After you started the interactive tutorial application, you can select the examples in the list at the top-left of this window.  Many lessons consist of several sub-examples, accesible via the list in the bottom-right corner.  These examples are best studied in their order.</p>
 
-<p>For example, the `if' statement has the following syntax in Oz</p>
-
-<blockquote>
-<p class="quoted">`if' &lt;expression&gt; `then'
-&lt;statement1&gt;
-[ `else'
-&lt;statement2&gt; ]
-`end'</p>
-</blockquote>
-
-<p>When writing your own code, you remove the syntax markers, as in the following example:</p>
-
-<blockquote>
-<p class="quoted">if X=Y then ok end</p>
-</blockquote></li>
-
-<li>Naturally, the actual code examples use Oz syntax, which we will explain as we move along.</li>
-<li>WARNING: explains a particularly confusing part of the Oz language.</li>
-<li>BACKGROUND: these are generic concepts in Computer Science; if the list contains unfamiliar terms, please consult the reading list below.</li>
-</ul>
+<p>(if you are reading the tutorial in your HTML browser, of course there are no lists of lessons and examples)</p>
 
 
-<p>For explanations about general concepts, see:
-- van Roy and Haridi (2004). Concepts, Techniques, and Models of Computer Programming. MIT Press. <a href="http://www.info.ucl.ac.be/~pvr/book.html">http://www.info.ucl.ac.be/~pvr/book.html</a>
-- The Oz documentation: <a href="http://www.mozart-oz.org/documentation/">http://www.mozart-oz.org/documentation/</a>
-- Wikipedia (maybe?  -I'd rather find a better resource, though)</p>
+<h3><a name="sec4" id="sec4"></a>
+Conventions</h3>
 
+<pre class="src">
+<span style="color: #b22222;">/*</span><span style="color: #b22222;">
+We use a few conventions to present information in this tutorial:
 
+  - `command': in the running text, code in the Oz language is enclosed
+      in `single quotes'; remove them when writing your own code.
+  - {...}: the {curly braces} denote a procedure in Oz; you should never
+      remove them when writing your own code.
+  - </span><span style="color: #ff0000; font-weight: bold;">WARNING:</span><span style="color: #b22222;"> explains a particularly confusing part of the Oz language.
+  - BACKGROUND: these examples give brief explanations of generic
+      concepts in Computer Science; please see them if the lesson contains
+      unfamiliar terms.
+*/</span>
 
+</pre>
 
-<p>TODO this is just to see what the docs look like; will be removed.</p>
-
-<p>We use a few conventions to present information in this tutorial:</p>
-
-<blockquote>
-<p class="quoted">&lt;expression&gt;: this refers to an arbitrary expression (remove the &lt;&gt;)</p>
-</blockquote>
-
-<blockquote>
-<p class="quoted">`command': this refers to a command or statment in the Oz language.</p>
-</blockquote>
-
-<blockquote>
-<p class="quoted">{something}: this is not a documentation convention at all; the {curly braces} are an essential part of the Oz syntax.  Do not remove these!</p>
-</blockquote>
-
-<blockquote>
-<p class="quoted">WARNING: explains a particularly confusing part of the Oz language.</p>
-</blockquote>
-
-<blockquote>
-<p class="quoted">BACKGROUND: these are generic concepts in Computer Science; if the list contains unfamiliar terms, please consult the reading list below.</p>
-</blockquote>
-
-<p>end list.</p>
-
-
-
-
-
-
-
-<h2><a name="sec4" id="sec4"></a>
-Comments</h2>
-
-<p class="first">Oz supports line comments and block comments.  There are two examples in the bottom-right list:
-<blockquote>
-<p class="quoted">Line comment
-Block comment</p>
-</blockquote>
-
-<p>Please select each example to see how these comments differ.</p>
-
-<p>(Executing these examples does nothing, of course!)</p>
 
 <h3><a name="sec5" id="sec5"></a>
+BACKGROUND</h3>
+
+<pre class="src">
+<span style="color: #b22222;">/*</span><span style="color: #b22222;">
+For explanations about general concepts, see:
+
+  - van Roy and Haridi (2004). Concepts, Techniques, and Models of
+      Computer Programming. MIT Press.
+      http://www.info.ucl.ac.be/~pvr/book.html
+  - The Oz documentation:
+      http://www.mozart-oz.org/documentation/
+  - Wikipedia (maybe?  -I'd rather find a better resource, though) TODO
+*/</span>
+
+</pre>
+
+
+
+<h2><a name="sec6" id="sec6"></a>
+Hello World and Comments</h2>
+
+<p class="first">By convention, the first steps in any programming langauge is to output the text &quot;Hello World!&quot;.  This tutorial obeys this rule.  :)</p>
+
+<p>Hit the [Run] button in the bottom-left corner to execute this example.  The other examples demonstrate alternative ways to output information:</p>
+
+<ul>
+<li>Browse: opens a Browse window</li>
+<li>Show: outputs text to standard out</li>
+<li>Inspect: opens an Inspect window</li>
+</ul>
+
+<p>(the Browse and Inspect windows might be hidden behind this window)</p>
+
+
+<p>Oz supports line comments and block comments.  Please select each example to see how these comments differ.</p>
+
+<p>(Executing these comment-examples does nothing, of course!)</p>
+
+<h3><a name="sec7" id="sec7"></a>
+Browse</h3>
+
+<pre class="src">
+{Browse <span style="color: #bc8f8f;">'Hello World!'</span>}
+</pre>
+
+
+<h3><a name="sec8" id="sec8"></a>
+Show</h3>
+
+<pre class="src">
+<span style="color: #b22222;">/* </span><span style="color: #b22222;">Show something at standard out (the commandline where you started
+this tutorial). */</span>
+
+{Show <span style="color: #bc8f8f;">'Hello World!'</span>}
+</pre>
+
+
+<h3><a name="sec9" id="sec9"></a>
+Inspect</h3>
+
+<pre class="src">
+<span style="color: #b22222;">/* </span><span style="color: #b22222;">The inspector shows sometimes more information than the Browser
+(depending on the inspected value).  The inspector may be hidden behind
+this tutorial.. */</span>
+
+{Inspect <span style="color: #bc8f8f;">'Hello World!'</span>}
+</pre>
+
+
+<h3><a name="sec10" id="sec10"></a>
 Line comment</h3>
 
 <pre class="src">
@@ -499,7 +510,7 @@ Line comment</h3>
 </span></pre>
 
 
-<h3><a name="sec6" id="sec6"></a>
+<h3><a name="sec11" id="sec11"></a>
 Block comment</h3>
 
 <pre class="src">
@@ -512,59 +523,7 @@ comment
 
 
 
-<h2><a name="sec7" id="sec7"></a>
-Hello World!</h2>
-
-<p class="first">The statement</p>
-
-<blockquote>
-<p class="quoted">{Browse something}</p>
-</blockquote>
-
-<p>shows 'something' in the Oz Browser.  Hit the [Run] button below to execute this example.  Congratulations, you just executed your first Oz program! Try changing the 'Hello World!' text and see what happens.</p>
-
-<p>The other examples demonstrate alternative ways to output information.
-<blockquote>
-<p class="quoted">Browse: opens a Browse window
-Show: outputs text to standard out
-Inspect: opens an Inspect window</p>
-</blockquote>
-
-<p>WARNING: the pair of curly braces {...} is necessary; they always expresses a function or procedure call.</p>
-
-<h3><a name="sec8" id="sec8"></a>
-Browse</h3>
-
-<pre class="src">
-{Browse <span style="color: #bc8f8f;">'Hello World!'</span>}
-</pre>
-
-
-<h3><a name="sec9" id="sec9"></a>
-Show</h3>
-
-<pre class="src">
-<span style="color: #b22222;">/* </span><span style="color: #b22222;">Show something at standard out (the commandline where you started
-this tutorial). */</span>
-
-{Show <span style="color: #bc8f8f;">'Hello World!'</span>}
-</pre>
-
-
-<h3><a name="sec10" id="sec10"></a>
-Inspect</h3>
-
-<pre class="src">
-<span style="color: #b22222;">/* </span><span style="color: #b22222;">The inspector shows sometimes more information than the Browser
-(depending on the inspected value).  The inspector may be hidden behind
-this tutorial.. */</span>
-
-{Inspect <span style="color: #bc8f8f;">'Hello World!'</span>}
-</pre>
-
-
-
-<h2><a name="sec11" id="sec11"></a>
+<h2><a name="sec12" id="sec12"></a>
 Calculator</h2>
 
 <p class="first">This example executes simple numeric calculations and displays the result.</p>
@@ -573,7 +532,7 @@ Calculator</h2>
 
 <p>You can use integers (e.g. 3, 7) and floats (e.g. 1.0, 3.14).  However, you can not directly mix integers and floats in a calculation (in that case, an error will be printed at the command line).</p>
 
-<h3><a name="sec12" id="sec12"></a>
+<h3><a name="sec13" id="sec13"></a>
 Integer example 1</h3>
 
 <pre class="src">
@@ -581,7 +540,7 @@ Integer example 1</h3>
 </pre>
 
 
-<h3><a name="sec13" id="sec13"></a>
+<h3><a name="sec14" id="sec14"></a>
 Integer example 2</h3>
 
 <pre class="src">
@@ -590,7 +549,7 @@ Integer example 2</h3>
 </pre>
 
 
-<h3><a name="sec14" id="sec14"></a>
+<h3><a name="sec15" id="sec15"></a>
 Integer example 3</h3>
 
 <pre class="src">
@@ -598,7 +557,7 @@ Integer example 3</h3>
 </pre>
 
 
-<h3><a name="sec15" id="sec15"></a>
+<h3><a name="sec16" id="sec16"></a>
 Float example 1</h3>
 
 <pre class="src">
@@ -606,7 +565,7 @@ Float example 1</h3>
 </pre>
 
 
-<h3><a name="sec16" id="sec16"></a>
+<h3><a name="sec17" id="sec17"></a>
 Float example 2</h3>
 
 <pre class="src">
@@ -618,7 +577,7 @@ to the closest even integer).  There is also a function IntToFloat. */</span>
 </pre>
 
 
-<h3><a name="sec17" id="sec17"></a>
+<h3><a name="sec18" id="sec18"></a>
 Float example 3</h3>
 
 <pre class="src">
@@ -629,19 +588,18 @@ Float example 3</h3>
 
 
 
-<h2><a name="sec18" id="sec18"></a>
+<h2><a name="sec19" id="sec19"></a>
 Variables</h2>
 
-<p class="first">The keyword local introduces a variable.  WARNING: variables must start with a capital letter in Oz.</p>
+<p class="first">All variables in Oz must start with a capital letter.  They must be declared first, for example, with the keyword `local'.</p>
 
-<p>Please note that Oz variables are single assignment variables.  After a variable is bound, it cannot be changed anymore (mutable data is also supported by Oz, but not discussed in this tutorial; read about cells in the Oz documentation).</p>
+<p>Global variables can be introduced with the keyword 'declare'.  However, global variables are intended for testing and are not supported in this tutorial application.</p>
 
-<p>However, in contrast to most other constraint programming languages, a variable can be unbound or even partially bound.  In other words, variables in Oz are 'logic variables'.  This is discussed further in the lesson &quot;Unification&quot; below.</p>
+<p>WARNING: Oz variables are single assignment variables.  If you do not have experience with functional or logic programming languages, we highly recommend reading the background example!  Variables may be bound to a value, or may be left unbound or even partially bound (for compound data types such as lists). However, their value can never be changed!</p>
 
-<p>Global variables can be introduced with the keyword 'declare'.  However, global variables are intended for testing and are only supported in the Emacs-based Oz Programming Interface (OPI), not in this tutorial application.</p>
+<p>Rewritable data storage is also supported by Oz; they are called Cells.</p>
 
-
-<h3><a name="sec19" id="sec19"></a>
+<h3><a name="sec20" id="sec20"></a>
 Variable declaration</h3>
 
 <pre class="src">
@@ -655,7 +613,7 @@ Variable declaration</h3>
 </pre>
 
 
-<h3><a name="sec20" id="sec20"></a>
+<h3><a name="sec21" id="sec21"></a>
 Variable scope</h3>
 
 <pre class="src">
@@ -678,64 +636,93 @@ variable always refers to its nearest enclosing binding). */</span>
 </pre>
 
 
-<h3><a name="sec21" id="sec21"></a>
+<h3><a name="sec22" id="sec22"></a>
 A variable can be unbound</h3>
 
 <pre class="src">
 <span style="color: #b22222;">/* </span><span style="color: #b22222;">Watch the Browser: X is first unbound (_ is displayed).
-X is bound to 3 after 3000 msec. */</span>
+X is bound to 3 after 2000 msec. */</span>
 
 <span style="color: #a020f0;">local</span>
    X
 <span style="color: #a020f0;">in</span>
    {Browse X}
-   {Delay 3000}
+   {Delay 2000}
    X = 3
 <span style="color: #a020f0;">end</span>
 </pre>
 
 
-
-<h2><a name="sec22" id="sec22"></a>
-If</h2>
-
-<p class="first">Oz provides the usual if control structure.  Note that unlike many programming languages, parenthesis () are not required around the condition.</p>
-
-<p>The general format is:</p>
-
-<blockquote>
-<p class="quoted">if &lt;expression&gt; then
-&lt;statement1&gt;
-else
-&lt;statement2&gt;
-end</p>
-</blockquote>
-
-<p>The [else] clause is optional.  Oz is white-space insensitive, so [if] statements can be placed on a single line.</p>
-
-<p>Please note that the [if] control structure can also be used as an expression which returns a value from the [then] or [else] clause.</p>
-
-
 <h3><a name="sec23" id="sec23"></a>
-if ... end</h3>
+Cells</h3>
 
 <pre class="src">
-<span style="color: #b22222;">%% </span><span style="color: #b22222;">This example does nothing, but try changing == to \=.
-</span><span style="color: #b22222;">%% </span><span style="color: #b22222;">The operations == and \= test equality and inequality of values.
-</span>
-<span style="color: #a020f0;">if</span> this <span style="color: #a020f0;">==</span> that <span style="color: #a020f0;">then</span>
-    {Browse hi}
+<span style="color: #b22222;">/* </span><span style="color: #b22222;">Cells provide rewritable memory for values.
+</span><span style="color: #ff0000; font-weight: bold;">WARNING:</span><span style="color: #b22222;"> The syntax for reading and writing to cells is different than
+the syntax for variables.
+*/</span>
+<span style="color: #a020f0;">local</span>
+  C = {NewCell 0}  <span style="color: #b22222;">% </span><span style="color: #b22222;">create new cell with initial value 0
+</span>  V
+<span style="color: #a020f0;">in</span>
+  {Browse <span style="color: #a020f0;">@</span>C}      <span style="color: #b22222;">% </span><span style="color: #b22222;">browse cell value
+</span>  {Delay 2000}
+  C <span style="color: #a020f0;">:=</span> 5           <span style="color: #b22222;">% </span><span style="color: #b22222;">change cell value to 0 (stateful operation)
+</span>  {Browse <span style="color: #a020f0;">@</span>C}
+  V = <span style="color: #a020f0;">@</span>C
+  {Browse V}
 <span style="color: #a020f0;">end</span>
+
 </pre>
 
 
 <h3><a name="sec24" id="sec24"></a>
+BACKGROUND</h3>
+
+<pre class="src">
+<span style="color: #b22222;">/*</span><span style="color: #b22222;">
+TODO Torsten: revise terminology
+
+Terms: single assignment, logic variable, bound/determined variables,
+unbound/free variables, local variables, global variables.
+
+In mainstream programming languages, variables may be read and written
+at will. Actually, a better term for them may be "mutables".  This often
+confuses new programmers, since variables in math do not operate this
+way -- once the value of a variable is set, it stays set.
+
+In Oz, variables operate more like math variables. Assigning a value
+to a variable is called "binding"; once a variable is "bound", it
+cannot be changed.  Variables are "free" (have no value) by default,
+and compound variables (such as lists) may be "partially bound" (ie
+some elements may be bound, while others are unbound).
+
+
+Reading:
+
+  - van Roy and Haridi, Chap. 1-2 (in particular Sec. 1.2, and 2.2).
+  - Oz Tutorial, Chap. 3, introduction
+*/</span>
+
+</pre>
+
+
+
+<h2><a name="sec25" id="sec25"></a>
+If</h2>
+
+<p class="first">Oz provides the usual `if' control structure.  Note that unlike many programming languages, parenthesis () are not required around the condition, althought they may make the code easier to read.</p>
+
+<p>Please note that the `if' control structure can also be used as an expression which returns a value from the `then' or `else' clause.</p>
+
+
+<h3><a name="sec26" id="sec26"></a>
 if ... else ... end</h3>
 
 <pre class="src">
 <span style="color: #b22222;">%% </span><span style="color: #b22222;">try changing 2 to 6...
 </span>
-<span style="color: #a020f0;">if</span> 2 <span style="color: #a020f0;">&lt;</span> 5 <span style="color: #a020f0;">then</span>
+<span style="color: #a020f0;">if</span> (2 <span style="color: #a020f0;">&lt;</span> 5) <span style="color: #a020f0;">then</span>
     {Browse less}
 <span style="color: #a020f0;">else</span>
     {Browse more}
@@ -743,19 +730,33 @@ if ... else ... end</h3>
 </pre>
 
 
-<h3><a name="sec25" id="sec25"></a>
+<h3><a name="sec27" id="sec27"></a>
+if ... end</h3>
+
+<pre class="src">
+<span style="color: #b22222;">/* </span><span style="color: #b22222;">The `else' clause is optional. This example does nothing, but try
+changing `==' to `\=.' The operations `==' and `\=' test equality and
+inequality of values. */</span>
+
+<span style="color: #a020f0;">if</span> (this <span style="color: #a020f0;">==</span> that) <span style="color: #a020f0;">then</span>
+    {Browse hi}
+<span style="color: #a020f0;">end</span>
+</pre>
+
+
+<h3><a name="sec28" id="sec28"></a>
 if as an expression</h3>
 
 <pre class="src">
-<span style="color: #b22222;">%% </span><span style="color: #b22222;">This `if' returns a value.
+<span style="color: #b22222;">%% </span><span style="color: #b22222;">This `if' returns a value, which is browsed.
 </span>
 {Browse
- <span style="color: #a020f0;">if</span> 2 <span style="color: #a020f0;">&lt;</span> 5 <span style="color: #a020f0;">then</span> less <span style="color: #a020f0;">else</span> more <span style="color: #a020f0;">end</span>}
+ <span style="color: #a020f0;">if</span> (2 <span style="color: #a020f0;">&lt;</span> 5) <span style="color: #a020f0;">then</span> less <span style="color: #a020f0;">else</span> more <span style="color: #a020f0;">end</span>}
 </pre>
 
 
 
-<h2><a name="sec26" id="sec26"></a>
+<h2><a name="sec29" id="sec29"></a>
 Procedure and Functions</h2>
 
 <p class="first">Procedures and functions are the standard means for expressing a collection of computations in a single entity.  Examples range from numeric computations to commands involving the operating system.  For example, we have already seen a number of numeric operations expressed by the common infix notation.</p>
@@ -767,7 +768,7 @@ Procedure and Functions</h2>
 <p>More specifically, a function is a procedure whose last argument &mdash; the return value &mdash; is expressed implicitly.  Every function may be called like a procedure by adding this return value explicitly.  In addition, any procedure can also be called as a function which returns its omitted last argument.</p>
 
 
-<h3><a name="sec27" id="sec27"></a>
+<h3><a name="sec30" id="sec30"></a>
 Usage</h3>
 
 <pre class="src">
@@ -781,7 +782,7 @@ Usage</h3>
 </pre>
 
 
-<h3><a name="sec28" id="sec28"></a>
+<h3><a name="sec31" id="sec31"></a>
 Functions are procedures</h3>
 
 <pre class="src">
@@ -803,7 +804,7 @@ until the information is available.  */</span>
 </pre>
 
 
-<h3><a name="sec29" id="sec29"></a>
+<h3><a name="sec32" id="sec32"></a>
 Procedures used like functions</h3>
 
 <pre class="src">
@@ -818,13 +819,19 @@ returns its last argument. */</span>
 </pre>
 
 
+<h3><a name="sec33" id="sec33"></a>
+-next</h3>
 
-<h2><a name="sec30" id="sec30"></a>
-Procedure Definition</h2>
+<pre class="src">
 
-<p class="first">A procedure definition wraps up (abstracts) some computation: a complex computation can then be executed simply by calling the procedure.  In the example, the procedure Max gets two numbers as its first two arguments and binds its last argument to the greater number (&gt;= means 'greater or equal').  Note that the curly braces in the definition surround the procedure name and its arguments like a procedure call.</p>
+<span style="color: #b22222;">/*</span><span style="color: #b22222;">
+A procedure definition wraps up (abstracts) some computation: a complex computation can then be executed simply by calling the procedure.  In the example, the procedure Max gets two numbers as its first two arguments and binds its last argument to the greater number (&gt;= means 'greater or equal').  Note that the curly braces in the definition surround the procedure name and its arguments like a procedure call.
+*/</span>
 
-<h3><a name="sec31" id="sec31"></a>
+</pre>
+
+
+<h3><a name="sec34" id="sec34"></a>
 Max procedure</h3>
 
 <pre class="src">
@@ -845,7 +852,7 @@ are different variables (cf. variable scope above). */</span>
 </pre>
 
 
-<h3><a name="sec32" id="sec32"></a>
+<h3><a name="sec35" id="sec35"></a>
 $ marks a return value</h3>
 
 <pre class="src">
@@ -867,7 +874,7 @@ but procedures will encapsulate constraints in later examples... */</span>
 </pre>
 
 
-<h3><a name="sec33" id="sec33"></a>
+<h3><a name="sec36" id="sec36"></a>
 Function call of procedure</h3>
 
 <pre class="src">
@@ -883,13 +890,19 @@ Function call of procedure</h3>
 </pre>
 
 
+<h3><a name="sec37" id="sec37"></a>
+&mdash;next</h3>
 
-<h2><a name="sec34" id="sec34"></a>
-Function Definition</h2>
+<pre class="src">
 
-<p class="first">Oz offers a simplified notation (syntactic sugar) for a procedure definition which returns its last value: it can be defined as a function.</p>
+Oz offers a simplified notation (syntactic sugar) <span style="color: #a020f0;">for</span> a procedure
+definition which returns its last value: it can be defined as a
+function<span style="color: #a020f0;">.</span>
 
-<h3><a name="sec35" id="sec35"></a>
+</pre>
+
+
+<h3><a name="sec38" id="sec38"></a>
 Max function</h3>
 
 <pre class="src">
@@ -905,7 +918,7 @@ Max function</h3>
 </pre>
 
 
-<h3><a name="sec36" id="sec36"></a>
+<h3><a name="sec39" id="sec39"></a>
 Recursion</h3>
 
 <pre class="src">
@@ -927,8 +940,29 @@ function Factorial implements the mathematical factorial concept. */</span>
 </pre>
 
 
+<h3><a name="sec40" id="sec40"></a>
+BACKGROUND</h3>
 
-<h2><a name="sec37" id="sec37"></a>
+<pre class="src">
+<span style="color: #b22222;">/*</span><span style="color: #b22222;">
+Terms: procedure, function.
+
+Procedures and functions are the standard means for expressing a
+collection of computations in a single entity.  Examples range
+from numeric computations to commands involving the operating
+system.  For example, we have already seen a number of numeric
+operations expressed by the common infix notation.
+
+A procedure definition wraps up (abstracts) some computation: a
+complex computation can then be executed simply by calling the
+procedure.
+*/</span>
+
+</pre>
+
+
+
+<h2><a name="sec41" id="sec41"></a>
 Atoms and Names</h2>
 
 <p class="first">Oz provides a number of basic data types which have a specific textual representation in source code.  We have already seen numbers (i.e. integers and floats).  Here we shall discuss two other data types: Atoms and Names.</p>
@@ -939,7 +973,7 @@ The safest way to create an atom is to surround it in single quotes: 'hi there'.
 <p>Name:
 There are a few things which look like atoms, but are a different variable type: Name.  The boolean values true and false are both Names (specifically, the Bool subtype).  Another often used value which looks like an atom is unit (also a name).</p>
 
-<h3><a name="sec38" id="sec38"></a>
+<h3><a name="sec42" id="sec42"></a>
 Atoms</h3>
 
 <pre class="src">
@@ -956,7 +990,7 @@ Atoms</h3>
 </pre>
 
 
-<h3><a name="sec39" id="sec39"></a>
+<h3><a name="sec43" id="sec43"></a>
 Equality</h3>
 
 <pre class="src">
@@ -964,7 +998,7 @@ Equality</h3>
 </pre>
 
 
-<h3><a name="sec40" id="sec40"></a>
+<h3><a name="sec44" id="sec44"></a>
 Names</h3>
 
 <pre class="src">
@@ -986,14 +1020,14 @@ token is needed whose value is not important. */</span>
 
 
 
-<h2><a name="sec41" id="sec41"></a>
+<h2><a name="sec45" id="sec45"></a>
 Compound Types</h2>
 
 <p class="first">Besides the atomic types discussed before, Oz also provides compound data types: records, tuples, lists, and strings.</p>
 
 <p>Internally, all of these data types are actually records (just like all functions are actually procedures).  Tuples, lists, and strings just provide a different syntax for interacting with records.</p>
 
-<h3><a name="sec42" id="sec42"></a>
+<h3><a name="sec46" id="sec46"></a>
 Records (1)</h3>
 
 <pre class="src">
@@ -1003,7 +1037,7 @@ Records (1)</h3>
 </pre>
 
 
-<h3><a name="sec43" id="sec43"></a>
+<h3><a name="sec47" id="sec47"></a>
 Records (2)</h3>
 
 <pre class="src">
@@ -1013,7 +1047,7 @@ Records (2)</h3>
 </pre>
 
 
-<h3><a name="sec44" id="sec44"></a>
+<h3><a name="sec48" id="sec48"></a>
 Records (3)</h3>
 
 <pre class="src">
@@ -1023,7 +1057,7 @@ Records (3)</h3>
 </pre>
 
 
-<h3><a name="sec45" id="sec45"></a>
+<h3><a name="sec49" id="sec49"></a>
 Accessing record fields</h3>
 
 <pre class="src">
@@ -1036,7 +1070,7 @@ position). */</span>
 </pre>
 
 
-<h3><a name="sec46" id="sec46"></a>
+<h3><a name="sec50" id="sec50"></a>
 Tuples (1)</h3>
 
 <pre class="src">
@@ -1046,7 +1080,7 @@ Tuples (1)</h3>
 </pre>
 
 
-<h3><a name="sec47" id="sec47"></a>
+<h3><a name="sec51" id="sec51"></a>
 Tuples (2)</h3>
 
 <pre class="src">
@@ -1058,7 +1092,7 @@ are equivalent. */</span>
 </pre>
 
 
-<h3><a name="sec48" id="sec48"></a>
+<h3><a name="sec52" id="sec52"></a>
 Tuples (3)</h3>
 
 <pre class="src">
@@ -1068,7 +1102,7 @@ Tuples (3)</h3>
 </pre>
 
 
-<h3><a name="sec49" id="sec49"></a>
+<h3><a name="sec53" id="sec53"></a>
 Lists (1)</h3>
 
 <pre class="src">
@@ -1078,7 +1112,7 @@ Lists (1)</h3>
 </pre>
 
 
-<h3><a name="sec50" id="sec50"></a>
+<h3><a name="sec54" id="sec54"></a>
 Lists (2)</h3>
 
 <pre class="src">
@@ -1089,7 +1123,7 @@ empty list, which terminates every list. */</span>
 </pre>
 
 
-<h3><a name="sec51" id="sec51"></a>
+<h3><a name="sec55" id="sec55"></a>
 Lists (3)</h3>
 
 <pre class="src">
@@ -1099,7 +1133,7 @@ Lists (3)</h3>
 </pre>
 
 
-<h3><a name="sec52" id="sec52"></a>
+<h3><a name="sec56" id="sec56"></a>
 Lists (4)</h3>
 
 <pre class="src">
@@ -1110,7 +1144,7 @@ feature 1, and the remaining list under the feature 2. */</span>
 </pre>
 
 
-<h3><a name="sec53" id="sec53"></a>
+<h3><a name="sec57" id="sec57"></a>
 Pairs (1)</h3>
 
 <pre class="src">
@@ -1120,7 +1154,7 @@ Pairs (1)</h3>
 </pre>
 
 
-<h3><a name="sec54" id="sec54"></a>
+<h3><a name="sec58" id="sec58"></a>
 Pairs (2)</h3>
 
 <pre class="src">
@@ -1130,7 +1164,7 @@ Pairs (2)</h3>
 </pre>
 
 
-<h3><a name="sec55" id="sec55"></a>
+<h3><a name="sec59" id="sec59"></a>
 Strings (1)</h3>
 
 <pre class="src">
@@ -1141,7 +1175,7 @@ procedures can be used for strings). */</span>
 </pre>
 
 
-<h3><a name="sec56" id="sec56"></a>
+<h3><a name="sec60" id="sec60"></a>
 Strings (2)</h3>
 
 <pre class="src">
@@ -1156,7 +1190,7 @@ string. */</span>
 </pre>
 
 
-<h3><a name="sec57" id="sec57"></a>
+<h3><a name="sec61" id="sec61"></a>
 Virtual Strings</h3>
 
 <pre class="src">
@@ -1173,7 +1207,99 @@ arguments can also handle virtual strings for convenience. */</span>
 
 
 
-<h2><a name="sec58" id="sec58"></a>
+<h2><a name="sec62" id="sec62"></a>
+Understanding error messages</h2>
+
+<p class="first">When we do program, we almost inevitably write bugs
+sometimes.  Luckily, when confronted with specific problems in
+programs, compilers try to tell us about the problem (naturally, the
+real hard bugs are the ones no compiler complains about).  All errors
+are actually raised exceptions (see the Tutorial of Oz, Sec. 5.10 for
+more details).</p>
+
+<p>The compiler is your friend, so this example introduces you to some
+typical Oz error messages ;-) During your programming sessions,
+carefully reading error messages can save you much time.  In this
+tutorial, all these messages are shown at the shell (or in the DOS
+box) where you started the tutorial.  The Oz Programming Interface
+(OPI) even supports moving to the code where the bug is likely to be
+located (see the Tutorial of Oz, Sec. 2.3.3).</p>
+
+<p>BTW: the error messages of this tutorial are slightly obscured
+unfortunately by some trick which keeps the tutorial application
+running even in the case of an error: there are always a few lines of
+other code before the actual error message.  Also, the reported line
+number is not correct, because the tutorial application adds a few
+lines to each example (the resulting full example is shown just before
+the error message).</p>
+
+
+<h3><a name="sec63" id="sec63"></a>
+Parse error</h3>
+
+<pre class="src">
+<span style="color: #b22222;">%% </span><span style="color: #b22222;">The left curly brace does not match the right parenthesis
+</span>
+{Browse hello)
+</pre>
+
+
+<h3><a name="sec64" id="sec64"></a>
+Static analysis error</h3>
+
+<pre class="src">
+<span style="color: #b22222;">%% </span><span style="color: #b22222;">Browse expects only a single argument
+</span>
+{Browse hi there}
+</pre>
+
+
+<h3><a name="sec65" id="sec65"></a>
+Binding analysis error</h3>
+
+<pre class="src">
+<span style="color: #b22222;">%% </span><span style="color: #b22222;">Variable X is not declared
+</span>
+X = 3
+</pre>
+
+
+<h3><a name="sec66" id="sec66"></a>
+Type error</h3>
+
+<pre class="src">
+<span style="color: #b22222;">%% </span><span style="color: #b22222;">We can not add an integer and a float
+</span>
+{Browse 3 <span style="color: #a020f0;">+</span> 2<span style="color: #a020f0;">.</span>0}
+</pre>
+
+
+<h3><a name="sec67" id="sec67"></a>
+Failure</h3>
+
+<pre class="src">
+<span style="color: #b22222;">/* </span><span style="color: #b22222;">Inconsistent constraint programs result in a failure.  Failures play
+an important role internally in a constraint solver searching for
+solutions to a constraint satisfaction problem. */</span>
+
+<span style="color: #a020f0;">local</span>
+   X = 3
+<span style="color: #a020f0;">in</span>
+   3 <span style="color: #a020f0;">+</span> 4 <span style="color: #a020f0;">=:</span> X
+<span style="color: #a020f0;">end</span>
+</pre>
+
+
+
+<h2><a name="sec68" id="sec68"></a>
+&mdash; Basics (2) TODO name</h2>
+
+<p class="first">This chapter covers more basic info about Oz.</p>
+
+
+
+
+<h2><a name="sec69" id="sec69"></a>
 Pattern Matching</h2>
 
 <p class="first">Pattern matching is a convenient way to access the elements contained in records, lists etc.  Pattern matching decomposes such compound data, declares new variables, and binds these variables to parts of the compound data.</p>
@@ -1181,7 +1307,7 @@ Pattern Matching</h2>
 <p>The primary pattern matching construct is the case statement, but some programming constructs (for example, functions) allow pattern matching via an implicit case statement.</p>
 
 
-<h3><a name="sec59" id="sec59"></a>
+<h3><a name="sec70" id="sec70"></a>
 Case statements (1)</h3>
 
 <pre class="src">
@@ -1204,7 +1330,7 @@ list of a different length and watch how the value of T changes. */</span>
 </pre>
 
 
-<h3><a name="sec60" id="sec60"></a>
+<h3><a name="sec71" id="sec71"></a>
 Case statements (2)</h3>
 
 <pre class="src">
@@ -1224,7 +1350,7 @@ error. */</span>
 </pre>
 
 
-<h3><a name="sec61" id="sec61"></a>
+<h3><a name="sec72" id="sec72"></a>
 Multiple case clauses</h3>
 
 <pre class="src">
@@ -1245,7 +1371,7 @@ clauses. */</span>
 </pre>
 
 
-<h3><a name="sec62" id="sec62"></a>
+<h3><a name="sec73" id="sec73"></a>
 Implicit pattern matching</h3>
 
 <pre class="src">
@@ -1269,7 +1395,7 @@ indicate that further record features are possible. */</span>
 
 
 
-<h2><a name="sec63" id="sec63"></a>
+<h2><a name="sec74" id="sec74"></a>
 Procedures over Compound Data</h2>
 
 <p class="first">Oz provides a rich set of procedures for processing these compound data such as lists and records.  A few examples are shown here.  More procedures are listed in the reference documentation at</p>
@@ -1279,7 +1405,7 @@ Procedures over Compound Data</h2>
 </blockquote>
 
 
-<h3><a name="sec64" id="sec64"></a>
+<h3><a name="sec75" id="sec75"></a>
 HasFeature</h3>
 
 <pre class="src">
@@ -1289,7 +1415,7 @@ HasFeature</h3>
 </pre>
 
 
-<h3><a name="sec65" id="sec65"></a>
+<h3><a name="sec76" id="sec76"></a>
 Arity</h3>
 
 <pre class="src">
@@ -1299,7 +1425,7 @@ Arity</h3>
 </pre>
 
 
-<h3><a name="sec66" id="sec66"></a>
+<h3><a name="sec77" id="sec77"></a>
 Adjoin</h3>
 
 <pre class="src">
@@ -1310,7 +1436,7 @@ record take precedence over the first. */</span>
 </pre>
 
 
-<h3><a name="sec67" id="sec67"></a>
+<h3><a name="sec78" id="sec78"></a>
 Nth</h3>
 
 <pre class="src">
@@ -1320,7 +1446,7 @@ Nth</h3>
 </pre>
 
 
-<h3><a name="sec68" id="sec68"></a>
+<h3><a name="sec79" id="sec79"></a>
 Reverse</h3>
 
 <pre class="src">
@@ -1330,7 +1456,7 @@ Reverse</h3>
 </pre>
 
 
-<h3><a name="sec69" id="sec69"></a>
+<h3><a name="sec80" id="sec80"></a>
 Append</h3>
 
 <pre class="src">
@@ -1340,7 +1466,7 @@ Append</h3>
 </pre>
 
 
-<h3><a name="sec70" id="sec70"></a>
+<h3><a name="sec81" id="sec81"></a>
 User-defined procedures</h3>
 
 <pre class="src">
@@ -1361,13 +1487,13 @@ Append. */</span>
 
 
 
-<h2><a name="sec71" id="sec71"></a>
+<h2><a name="sec82" id="sec82"></a>
 Unification</h2>
 
 <p class="first">The operator = performs unification of two variables.  The variables quasi share all the information they have about their values.  A variable without a name (an anonymous variable) is written as an underscore ( _ ).  Unification is a basic form of constraint programming (constraint programming is discussed further below).</p>
 
 
-<h3><a name="sec72" id="sec72"></a>
+<h3><a name="sec83" id="sec83"></a>
 Unifying two lists</h3>
 
 <pre class="src">
@@ -1381,7 +1507,7 @@ Unifying two lists</h3>
 </pre>
 
 
-<h3><a name="sec73" id="sec73"></a>
+<h3><a name="sec84" id="sec84"></a>
 Recursive unification</h3>
 
 <pre class="src">
@@ -1398,7 +1524,7 @@ representation, select between tree and relation mode). */</span>
 
 
 
-<h2><a name="sec74" id="sec74"></a>
+<h2><a name="sec85" id="sec85"></a>
 Class Method Application</h2>
 
 <p class="first">Oz supports object-oriented programming.  This programming paradigm introduces the notion of objects which instantiate classes.  An object (or class instance) is a datum which encapsulates its internal structure.  A class specifies what data are contained in its instances and what methods these instances understands.  A method (or message) is effectively a procedure which is defined for instances of specific classes only.</p>
@@ -1410,7 +1536,7 @@ Class Method Application</h2>
 
 <p>Internally, objects are actually procedures which expect a single argument &mdash; hence this syntax.  When the object is sent a message (i.e. the procedure is called with a specific argument) it processes the message according to its definition.  This method definition may change its internal state, as we expect from typical objects.</p>
 
-<h3><a name="sec75" id="sec75"></a>
+<h3><a name="sec86" id="sec86"></a>
 Method call</h3>
 
 <pre class="src">
@@ -1439,7 +1565,7 @@ syntax shown before.  If `show' was a procedure, then we would write:
 </pre>
 
 
-<h3><a name="sec76" id="sec76"></a>
+<h3><a name="sec87" id="sec87"></a>
 Method arguments</h3>
 
 <pre class="src">
@@ -1473,14 +1599,14 @@ of Strasheela's music representation. */</span>
 
 
 
-<h2><a name="sec77" id="sec77"></a>
+<h2><a name="sec88" id="sec88"></a>
 Higher-Order Programming</h2>
 
 <p class="first">Oz procedures (and functions) are first-class values.  This means that a procedure can be processed like any other value.  For example, procedures can be given to other procedures as arguments.</p>
 
 <p>This leads to highly flexible programming technique called higher-order programming.  Procedures expecting procedures as arguments are called higher-order procedures.  This concept is demonstrated be several examples.</p>
 
-<h3><a name="sec78" id="sec78"></a>
+<h3><a name="sec89" id="sec89"></a>
 Filter</h3>
 
 <pre class="src">
@@ -1499,7 +1625,7 @@ numbers) to better understand this filtering.
 </pre>
 
 
-<h3><a name="sec79" id="sec79"></a>
+<h3><a name="sec90" id="sec90"></a>
 ForAll</h3>
 
 <pre class="src">
@@ -1511,7 +1637,7 @@ element. */</span>
 </pre>
 
 
-<h3><a name="sec80" id="sec80"></a>
+<h3><a name="sec91" id="sec91"></a>
 Map</h3>
 
 <pre class="src">
@@ -1534,7 +1660,7 @@ which doubles its argument. */</span>
 </pre>
 
 
-<h3><a name="sec81" id="sec81"></a>
+<h3><a name="sec92" id="sec92"></a>
 Anonymous procedure definition</h3>
 
 <pre class="src">
@@ -1553,7 +1679,7 @@ value itself. */</span>
 </pre>
 
 
-<h3><a name="sec82" id="sec82"></a>
+<h3><a name="sec93" id="sec93"></a>
 Sort (1)</h3>
 
 <pre class="src">
@@ -1570,7 +1696,7 @@ numbers in decreasing order. */</span>
 </pre>
 
 
-<h3><a name="sec83" id="sec83"></a>
+<h3><a name="sec94" id="sec94"></a>
 Sort (2)</h3>
 
 <pre class="src">
@@ -1593,7 +1719,7 @@ and odd numbers in ascending order.  This is done in the second
 </pre>
 
 
-<h3><a name="sec84" id="sec84"></a>
+<h3><a name="sec95" id="sec95"></a>
 Defining higher-order procedures</h3>
 
 <pre class="src">
@@ -1630,7 +1756,7 @@ list. */</span>
 
 
 
-<h2><a name="sec85" id="sec85"></a>
+<h2><a name="sec96" id="sec96"></a>
 Concurrency</h2>
 
 <p class="first">Oz provides excellent support for concurrent programming, where computations run in parallel in multiple threads.  We will only touch on this subject and discuss aspects relevant for Strasheela.  In general, however, concurrent programming plays a major role in Oz programming.</p>
@@ -1644,7 +1770,7 @@ Concurrency</h2>
 <p>The examples demonstrates concurrent programming, but do not show a typical application (a typical application would be a program split in a server and one or more clients).  In the context of Strasheela, we will seldomly write concurrent programs explicitly.  Nevertheless, it is very important to know how concurrent programming works in Oz.  Even if we are not explicitly writing a concurrent program, constraint programming in Oz always results in a concurrent program.  Concurrent programming forms one of the foundations of Oz' constraint programming model, where each constraint (i.e. each propagator) is a concurrent agent running in its own thread.</p>
 
 
-<h3><a name="sec86" id="sec86"></a>
+<h3><a name="sec97" id="sec97"></a>
 Declarative concurrency</h3>
 
 <pre class="src">
@@ -1667,7 +1793,7 @@ thread: it can now compute X+3 and browse the sum. */</span>
 </pre>
 
 
-<h3><a name="sec87" id="sec87"></a>
+<h3><a name="sec98" id="sec98"></a>
 Blocking computation</h3>
 
 <pre class="src">
@@ -1688,7 +1814,7 @@ executes X = 4. */</span>
 </pre>
 
 
-<h3><a name="sec88" id="sec88"></a>
+<h3><a name="sec99" id="sec99"></a>
 'Signalling' a blocking computation</h3>
 
 <pre class="src">
@@ -1717,97 +1843,13 @@ surrounding it with a 'thread .. end' statement). */</span>
 
 
 
-<h2><a name="sec89" id="sec89"></a>
-Understanding error messages</h2>
-
-<p class="first">When we do program, we almost inevitably write bugs
-sometimes.  Luckily, when confronted with specific problems in
-programs, compilers try to tell us about the problem (naturally, the
-real hard bugs are the ones no compiler complains about).  All errors
-are actually raised exceptions (see the Tutorial of Oz, Sec. 5.10 for
-more details).</p>
-
-<p>The compiler is your friend, so this example introduces you to some
-typical Oz error messages ;-) During your programming sessions,
-carefully reading error messages can save you much time.  In this
-tutorial, all these messages are shown at the shell (or in the DOS
-box) where you started the tutorial.  The Oz Programming Interface
-(OPI) even supports moving to the code where the bug is likely to be
-located (see the Tutorial of Oz, Sec. 2.3.3).</p>
-
-<p>BTW: the error messages of this tutorial are slightly obscured
-unfortunately by some trick which keeps the tutorial application
-running even in the case of an error: there are always a few lines of
-other code before the actual error message.  Also, the reported line
-number is not correct, because the tutorial application adds a few
-lines to each example (the resulting full example is shown just before
-the error message).</p>
-
-
-<h3><a name="sec90" id="sec90"></a>
-Parse error</h3>
-
-<pre class="src">
-<span style="color: #b22222;">%% </span><span style="color: #b22222;">The left curly brace does not match the right parenthesis
-</span>
-{Browse hello)
-</pre>
-
-
-<h3><a name="sec91" id="sec91"></a>
-Static analysis error</h3>
-
-<pre class="src">
-<span style="color: #b22222;">%% </span><span style="color: #b22222;">Browse expects only a single argument
-</span>
-{Browse hi there}
-</pre>
-
-
-<h3><a name="sec92" id="sec92"></a>
-Binding analysis error</h3>
-
-<pre class="src">
-<span style="color: #b22222;">%% </span><span style="color: #b22222;">Variable X is not declared
-</span>
-X = 3
-</pre>
-
-
-<h3><a name="sec93" id="sec93"></a>
-Type error</h3>
-
-<pre class="src">
-<span style="color: #b22222;">%% </span><span style="color: #b22222;">We can not add an integer and a float
-</span>
-{Browse 3 <span style="color: #a020f0;">+</span> 2<span style="color: #a020f0;">.</span>0}
-</pre>
-
-
-<h3><a name="sec94" id="sec94"></a>
-Failure</h3>
-
-<pre class="src">
-<span style="color: #b22222;">/* </span><span style="color: #b22222;">Inconsistent constraint programs result in a failure.  Failures play
-an important role internally in a constraint solver searching for
-solutions to a constraint satisfaction problem. */</span>
-
-<span style="color: #a020f0;">local</span>
-   X = 3
-<span style="color: #a020f0;">in</span>
-   3 <span style="color: #a020f0;">+</span> 4 <span style="color: #a020f0;">=:</span> X
-<span style="color: #a020f0;">end</span>
-</pre>
-
-
-
 
 <!-- Page published by Emacs Muse ends here -->
 <!-- Footer -->
 <div id="footer">
 <div id="author">&copy; 
 Torsten Anders</div>
-<div id="date">Last time edited: 2007.12.07</div>
+<div id="date">Last time edited: 2007.12.11</div>
 </div>
   </body>
 </html>

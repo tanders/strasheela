@@ -6,111 +6,74 @@
 
 This file was automatically generated from the interactive Strasheela tutorial. Some aspects of the text only make sense in the original interactive tutorial application (e.g., buttons indicated to press, and positions specified on the screen), and not in this version of the text.
 
-* Start here
+* -- Oz Basics
 
-This interactive tutorial demonstrates the basics of the Oz programming language and Strasheela.  By presenting small code snippets which can be easily executed and edited, we hope to simply the process of learning about Oz/Strasheela.  After this tutorial, you should be ready to read and edit existing Strasheela examples, as well as creating your own Strasheela programs.
+This chapter covers fundamental concepts in Oz.
+  
 
-Nevertheless, this tutorial is kept brief.  The explanation of Oz focuses on aspects which are particularly important for Strasheela, and also Strasheela concepts are only outlined.  Everything is explained very briefly to get you started quickly.  In other words, it is not the intention of this tutorial to replace the extensive documentation already available on Oz, nor my thesis on Strasheela ;-)
+
+
+* This tutorial
+
+This interactive tutorial demonstrates the basics of the Oz programming language and Strasheela.  By presenting small code snippets which can be easily executed and edited, we hope to simply the process of learning about Oz/Strasheela.
+
+Nevertheless, this tutorial is kept brief.  The explanation of Oz focuses on aspects which are particularly important for Strasheela, and even Strasheela concepts are only briefly outlined.  In other words, it is not the intention of this tutorial to replace the extensive documentation already available on Oz, nor my thesis on Strasheela ;-)
 
 This tutorial is organised in small lessons.  After you started the interactive tutorial application, you can select the examples in the list at the top-left of this window.  Many lessons consist of several sub-examples, accesible via the list in the bottom-right corner.  These examples are best studied in their order.
 
 (if you are reading the tutorial in your HTML browser, of course there are no lists of lessons and examples)
 
 
-
-
-* How to read this tutorial
-
-We use a few conventions to present information in this tutorial:
-
-  - `command': in the running text, code in the Oz language is enclosed in `single quotes'; remove them when writing your own code.
-  - For explaining syntax, we use the Extended Backus–Naur form (EBNF, http://en.wikipedia.org/wiki/Extended_Backus%E2%80%93Naur_form). Non-terminal symbols are surrounded by angle brackets as  <x>, literal terminals are surrounded by single quotes as `<x>', alternatives are separated by a bar as $<x> | <y>$, and optional items are surrounded by brackets as $[ <x> ]$. The ellipsis (...) specifies an incomplete EBNF rule, e.g., that at the end of the rule further alternatives are omitted. The suffix * (Kleene star) means that the preceding item is repeated zero or more times whereas the suffix + means that the preceding item is repeated at least once. Multiple symbols can be grouped by round parenthesis to specify a suffix for the whole group.
-    For example, the `if' statement has the following syntax in Oz 
-
-  `if' <expression> `then'
-      <statement1>
-  [ `else'
-      <statement2> ]
-  `end'
-
-    When writing your own code, you remove the syntax markers, as in the following example: 
-
-  if X=Y then ok end
-
-  - Naturally, the actual code examples use Oz syntax, which we will explain as we move along. 
-  - WARNING: explains a particularly confusing part of the Oz language.
-  - BACKGROUND: these are generic concepts in Computer Science; if the list contains unfamiliar terms, please consult the reading list below.
-
-
-For explanations about general concepts, see:
-- van Roy and Haridi (2004). Concepts, Techniques, and Models of Computer Programming. MIT Press. http://www.info.ucl.ac.be/~pvr/book.html
-- The Oz documentation: http://www.mozart-oz.org/documentation/
-- Wikipedia (maybe?  -I'd rather find a better resource, though)
-
-
-
-
-TODO this is just to see what the docs look like; will be removed.
-
-We use a few conventions to present information in this tutorial:
-
-  <expression>: this refers to an arbitrary expression (remove the <>)
-
-  `command': this refers to a command or statment in the Oz language.
-
-  {something}: this is not a documentation convention at all; the {curly braces} are an essential part of the Oz syntax.  Do not remove these!
-
-  WARNING: explains a particularly confusing part of the Oz language.
-
-  BACKGROUND: these are generic concepts in Computer Science; if the list contains unfamiliar terms, please consult the reading list below.
-
-end list.
-
-
-
-
-
-
-* Comments
-
-Oz supports line comments and block comments.  There are two examples in the bottom-right list:
-  Line comment
-  Block comment
-
-Please select each example to see how these comments differ.
-
-(Executing these examples does nothing, of course!)
-
-** Line comment
-
-<src lang="oz">
-% this is a line comment
-</src>
-
-** Block comment
+** Conventions
 
 <src lang="oz">
 /*
-this is a
-block
-comment
+We use a few conventions to present information in this tutorial:
+
+  - `command': in the running text, code in the Oz language is enclosed
+      in `single quotes'; remove them when writing your own code.
+  - {...}: the {curly braces} denote a procedure in Oz; you should never
+      remove them when writing your own code.
+  - WARNING: explains a particularly confusing part of the Oz language.
+  - BACKGROUND: these examples give brief explanations of generic
+      concepts in Computer Science; please see them if the lesson contains
+      unfamiliar terms.
 */
+
 </src>
 
-* Hello World!
+** BACKGROUND
 
-The statement 
+<src lang="oz">
+/*
+For explanations about general concepts, see:
 
-  {Browse something} 
+  - van Roy and Haridi (2004). Concepts, Techniques, and Models of
+      Computer Programming. MIT Press.
+      http://www.info.ucl.ac.be/~pvr/book.html
+  - The Oz documentation:
+      http://www.mozart-oz.org/documentation/
+  - Wikipedia (maybe?  -I'd rather find a better resource, though) TODO
+*/
 
-shows 'something' in the Oz Browser.  Hit the [Run] button below to execute this example.  Congratulations, you just executed your first Oz program! Try changing the 'Hello World!' text and see what happens.
+</src>
 
-The other examples demonstrate alternative ways to output information.
-  Browse: opens a Browse window
-  Show: outputs text to standard out
-  Inspect: opens an Inspect window
+* Hello World and Comments
 
-WARNING: the pair of curly braces {...} is necessary; they always expresses a function or procedure call.
+By convention, the first steps in any programming langauge is to output the text "Hello World!".  This tutorial obeys this rule.  :)
+
+Hit the [Run] button in the bottom-left corner to execute this example.  The other examples demonstrate alternative ways to output information:
+
+  - Browse: opens a Browse window
+  - Show: outputs text to standard out
+  - Inspect: opens an Inspect window
+
+(the Browse and Inspect windows might be hidden behind this window)
+
+
+Oz supports line comments and block comments.  Please select each example to see how these comments differ.
+
+(Executing these comment-examples does nothing, of course!)
 
 ** Browse
 
@@ -135,6 +98,22 @@ this tutorial). */
 this tutorial.. */
 
 {Inspect 'Hello World!'}
+</src>
+
+** Line comment
+
+<src lang="oz">
+% this is a line comment
+</src>
+
+** Block comment
+
+<src lang="oz">
+/*
+this is a
+block
+comment
+*/
 </src>
 
 * Calculator
@@ -190,14 +169,13 @@ to the closest even integer).  There is also a function IntToFloat. */
 
 * Variables
 
-The keyword local introduces a variable.  WARNING: variables must start with a capital letter in Oz.
+All variables in Oz must start with a capital letter.  They must be declared first, for example, with the keyword `local'.
 
-Please note that Oz variables are single assignment variables.  After a variable is bound, it cannot be changed anymore (mutable data is also supported by Oz, but not discussed in this tutorial; read about cells in the Oz documentation).
+Global variables can be introduced with the keyword 'declare'.  However, global variables are intended for testing and are not supported in this tutorial application.
 
-However, in contrast to most other constraint programming languages, a variable can be unbound or even partially bound.  In other words, variables in Oz are 'logic variables'.  This is discussed further in the lesson "Unification" below. 
+WARNING: Oz variables are single assignment variables.  If you do not have experience with functional or logic programming languages, we highly recommend reading the background example!  Variables may be bound to a value, or may be left unbound or even partially bound (for compound data types such as lists). However, their value can never be changed! 
 
-Global variables can be introduced with the keyword 'declare'.  However, global variables are intended for testing and are only supported in the Emacs-based Oz Programming Interface (OPI), not in this tutorial application.
-  
+Rewritable data storage is also supported by Oz; they are called Cells.
 
 ** Variable declaration
 
@@ -236,64 +214,105 @@ end
 
 <src lang="oz">
 /* Watch the Browser: X is first unbound (_ is displayed).
-X is bound to 3 after 3000 msec. */
+X is bound to 3 after 2000 msec. */
 
 local
    X 
 in
    {Browse X}
-   {Delay 3000}
+   {Delay 2000}
    X = 3
 end
 </src>
 
-* If
-
-Oz provides the usual if control structure.  Note that unlike many programming languages, parenthesis () are not required around the condition.
-
-The general format is:
-
-  if <expression> then
-      <statement1>
-  else
-      <statement2>
-  end
-
-The [else] clause is optional.  Oz is white-space insensitive, so [if] statements can be placed on a single line.
-
-Please note that the [if] control structure can also be used as an expression which returns a value from the [then] or [else] clause.
-
-
-** if ... end
+** Cells
 
 <src lang="oz">
-%% This example does nothing, but try changing == to \=.
-%% The operations == and \= test equality and inequality of values.
-
-if this == that then
-    {Browse hi}
+/* Cells provide rewritable memory for values.
+WARNING: The syntax for reading and writing to cells is different than
+the syntax for variables.
+*/
+local
+  C = {NewCell 0}  % create new cell with initial value 0 
+  V
+in
+  {Browse @C}      % browse cell value
+  {Delay 2000}
+  C := 5           % change cell value to 0 (stateful operation)
+  {Browse @C}      
+  V = @C
+  {Browse V}
 end
+
 </src>
+
+** BACKGROUND
+
+<src lang="oz">
+/*
+TODO Torsten: revise terminology
+
+Terms: single assignment, logic variable, bound/determined variables,
+unbound/free variables, local variables, global variables.
+
+In mainstream programming languages, variables may be read and written
+at will. Actually, a better term for them may be "mutables".  This often
+confuses new programmers, since variables in math do not operate this
+way -- once the value of a variable is set, it stays set.
+
+In Oz, variables operate more like math variables. Assigning a value
+to a variable is called "binding"; once a variable is "bound", it
+cannot be changed.  Variables are "free" (have no value) by default,
+and compound variables (such as lists) may be "partially bound" (ie
+some elements may be bound, while others are unbound).
+
+
+Reading: 
+
+  - van Roy and Haridi, Chap. 1-2 (in particular Sec. 1.2, and 2.2).
+  - Oz Tutorial, Chap. 3, introduction
+*/
+
+</src>
+
+* If
+
+Oz provides the usual `if' control structure.  Note that unlike many programming languages, parenthesis () are not required around the condition, althought they may make the code easier to read.
+
+Please note that the `if' control structure can also be used as an expression which returns a value from the `then' or `else' clause.
+
 
 ** if ... else ... end
 
 <src lang="oz">
 %% try changing 2 to 6... 
 
-if 2 < 5 then
+if (2 < 5) then
     {Browse less}
 else
     {Browse more}
 end
 </src>
 
+** if ... end
+
+<src lang="oz">
+/* The `else' clause is optional. This example does nothing, but try
+changing `==' to `\=.' The operations `==' and `\=' test equality and
+inequality of values. */
+
+if (this == that) then
+    {Browse hi}
+end
+</src>
+
 ** if as an expression
 
 <src lang="oz">
-%% This `if' returns a value.
+%% This `if' returns a value, which is browsed.
 
 {Browse 
- if 2 < 5 then less else more end}
+ if (2 < 5) then less else more end}
 </src>
 
 * Procedure and Functions
@@ -352,9 +371,15 @@ in
 end
 </src>
 
-* Procedure Definition
+** -next
 
+<src lang="oz">
+
+/*
 A procedure definition wraps up (abstracts) some computation: a complex computation can then be executed simply by calling the procedure.  In the example, the procedure Max gets two numbers as its first two arguments and binds its last argument to the greater number (>= means 'greater or equal').  Note that the curly braces in the definition surround the procedure name and its arguments like a procedure call.
+*/
+
+</src>
 
 ** Max procedure
 
@@ -409,9 +434,15 @@ in
 end
 </src>
 
-* Function Definition
+** --next
 
-Oz offers a simplified notation (syntactic sugar) for a procedure definition which returns its last value: it can be defined as a function.
+<src lang="oz">
+
+Oz offers a simplified notation (syntactic sugar) for a procedure
+definition which returns its last value: it can be defined as a
+function.
+
+</src>
 
 ** Max function
 
@@ -445,6 +476,25 @@ in
    {Browse
     {Factorial 10}}
 end
+</src>
+
+** BACKGROUND
+
+<src lang="oz">
+/*
+Terms: procedure, function.
+
+Procedures and functions are the standard means for expressing a
+collection of computations in a single entity.  Examples range
+from numeric computations to commands involving the operating
+system.  For example, we have already seen a number of numeric
+operations expressed by the common infix notation.
+
+A procedure definition wraps up (abstracts) some computation: a
+complex computation can then be executed simply by calling the
+procedure.
+*/
+
 </src>
 
 * Atoms and Names
@@ -649,6 +699,84 @@ in
   {Inspect VS#3}
 end
 </src>
+
+* Understanding error messages
+
+When we do program, we almost inevitably write bugs
+sometimes.  Luckily, when confronted with specific problems in
+programs, compilers try to tell us about the problem (naturally, the
+real hard bugs are the ones no compiler complains about).  All errors
+are actually raised exceptions (see the Tutorial of Oz, Sec. 5.10 for
+more details).
+
+The compiler is your friend, so this example introduces you to some
+typical Oz error messages ;-) During your programming sessions,
+carefully reading error messages can save you much time.  In this
+tutorial, all these messages are shown at the shell (or in the DOS
+box) where you started the tutorial.  The Oz Programming Interface
+(OPI) even supports moving to the code where the bug is likely to be
+located (see the Tutorial of Oz, Sec. 2.3.3).
+
+BTW: the error messages of this tutorial are slightly obscured
+unfortunately by some trick which keeps the tutorial application
+running even in the case of an error: there are always a few lines of
+other code before the actual error message.  Also, the reported line
+number is not correct, because the tutorial application adds a few
+lines to each example (the resulting full example is shown just before
+the error message).
+
+
+** Parse error
+
+<src lang="oz">
+%% The left curly brace does not match the right parenthesis
+
+{Browse hello)
+</src>
+
+** Static analysis error
+
+<src lang="oz">
+%% Browse expects only a single argument
+
+{Browse hi there}
+</src>
+
+** Binding analysis error
+
+<src lang="oz">
+%% Variable X is not declared 
+
+X = 3
+</src>
+
+** Type error
+
+<src lang="oz">
+%% We can not add an integer and a float 
+
+{Browse 3 + 2.0}
+</src>
+
+** Failure
+
+<src lang="oz">
+/* Inconsistent constraint programs result in a failure.  Failures play
+an important role internally in a constraint solver searching for
+solutions to a constraint satisfaction problem. */
+
+local
+   X = 3
+in
+   3 + 4 =: X
+end
+</src>
+
+* -- Basics (2) TODO name
+
+This chapter covers more basic info about Oz.
+
+
 
 * Pattern Matching
 
@@ -1126,76 +1254,4 @@ in
   X = 4
 end
 {Browse endOfProgram}
-</src>
-
-* Understanding error messages
-
-When we do program, we almost inevitably write bugs
-sometimes.  Luckily, when confronted with specific problems in
-programs, compilers try to tell us about the problem (naturally, the
-real hard bugs are the ones no compiler complains about).  All errors
-are actually raised exceptions (see the Tutorial of Oz, Sec. 5.10 for
-more details).
-
-The compiler is your friend, so this example introduces you to some
-typical Oz error messages ;-) During your programming sessions,
-carefully reading error messages can save you much time.  In this
-tutorial, all these messages are shown at the shell (or in the DOS
-box) where you started the tutorial.  The Oz Programming Interface
-(OPI) even supports moving to the code where the bug is likely to be
-located (see the Tutorial of Oz, Sec. 2.3.3).
-
-BTW: the error messages of this tutorial are slightly obscured
-unfortunately by some trick which keeps the tutorial application
-running even in the case of an error: there are always a few lines of
-other code before the actual error message.  Also, the reported line
-number is not correct, because the tutorial application adds a few
-lines to each example (the resulting full example is shown just before
-the error message).
-
-
-** Parse error
-
-<src lang="oz">
-%% The left curly brace does not match the right parenthesis
-
-{Browse hello)
-</src>
-
-** Static analysis error
-
-<src lang="oz">
-%% Browse expects only a single argument
-
-{Browse hi there}
-</src>
-
-** Binding analysis error
-
-<src lang="oz">
-%% Variable X is not declared 
-
-X = 3
-</src>
-
-** Type error
-
-<src lang="oz">
-%% We can not add an integer and a float 
-
-{Browse 3 + 2.0}
-</src>
-
-** Failure
-
-<src lang="oz">
-/* Inconsistent constraint programs result in a failure.  Failures play
-an important role internally in a constraint solver searching for
-solutions to a constraint satisfaction problem. */
-
-local
-   X = 3
-in
-   3 + 4 =: X
-end
 </src>
