@@ -103,9 +103,9 @@ to the closest even integer).  There is also a function IntToFloat. */
 
 Global variables can be introduced with the keyword 'declare'.  However, global variables are intended for testing and are not supported in this tutorial application.
 
-WARNING: Oz variables are single assignment variables.  If you do not have experience with functional or logic programming languages, we highly recommend reading the background example!  Variables may be bound to a value, or may be left unbound or even partially bound (for compound data types such as lists). However, their value can never be changed! 
+WARNING: Oz variables are single assignment variables.  If you do not have experience with functional or logic programming languages, we highly recommend reading the background example!  Variables may be bound to a value, or may be left unbound or even partially bound (for compound data types such as lists).  However, their value can never be changed! 
 
-Rewritable data storage is also supported by Oz; they are called Cells.</info>
+Rewritable data storage is also supported by Oz; the simplest form are called Cells.  Other types of stateful data include arrays, directories, and objects, but we shall not cover them in this tutorial.</info>
   <oz title="Variable declaration">local
    X = 1 + 1
    Y
