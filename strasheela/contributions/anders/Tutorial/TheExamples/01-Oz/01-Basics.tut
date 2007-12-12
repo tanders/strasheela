@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<examples title="Oz Basics">
+<examples title="Oz Introduction">
 
-<example title="-- Oz Basics">
+<example title="-- Oz Introduction">
   <info>This chapter covers fundamental concepts in Oz.
   </info>
   <oz>
   </oz>
 </example>
 
-<example title="This tutorial">
+<example title="This Tutorial">
   <info>This interactive tutorial demonstrates the basics of the Oz programming language and Strasheela.  By presenting small code snippets which can be easily executed and edited, we hope to simply the process of learning about Oz/Strasheela.
 
 Nevertheless, this tutorial is kept brief.  The explanation of Oz focuses on aspects which are particularly important for Strasheela, and even Strasheela concepts are only briefly outlined.  In other words, it is not the intention of this tutorial to replace the extensive documentation already available on Oz, nor my thesis on Strasheela ;-)
@@ -446,7 +446,7 @@ in
 end</oz>
 </example>
 
-<example title="Understanding error messages">
+<example title="Error messages">
 <info>When we do program, we almost inevitably write bugs
 sometimes.  Luckily, when confronted with specific problems in
 programs, compilers try to tell us about the problem (naturally, the
@@ -494,7 +494,7 @@ end</oz>
 </example>
 
 
-<example title="-- Basics (2) TODO name">
+<example title="-- Oz Basics">
 <info>This chapter covers more basic info about Oz.</info>
 <oz></oz>
 </example>
