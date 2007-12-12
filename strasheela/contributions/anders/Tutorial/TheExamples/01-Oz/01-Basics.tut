@@ -114,8 +114,8 @@ in
    {Browse X*Y}
 end</oz>
 <oz title="Variable scope">/* Local statements can be freely nested (like
-virtually everything in Oz).  Oz supports static or lexical scope (i.e. a
-variable always refers to its nearest enclosing binding). */
+virtually everything in Oz).  Oz supports static or lexical scope
+(i.e. a variable always refers to its nearest enclosing binding). */
 
 local
    X = 3
@@ -216,13 +216,69 @@ In Oz, procedures are the fundamental concept.  Functions are just a syntactic v
 
 More specifically, a function is a procedure whose last argument -- the return value -- is expressed implicitly.  Every function may be called like a procedure by adding this return value explicitly.  In addition, any procedure can also be called as a function which returns its omitted last argument. 
   </info>
-  <oz title="Usage">%% call procedure Browse with the result of function IsEven
-%% IsEven expects one integer as an argument, and returns true or false.
-%% Browse expects one argument (any variable type), and returns nothing.
+
+  <oz title="Usage">/* Procedure `Browse' is called with the result of function `IsEven'.
+`IsEven' expects one integer as an argument, and returns true or false.
+`Browse' expects one argument (any variable type), and returns nothing.
+*/
 
 {Browse
- %% call function IsEven
- {IsEven 3}}</oz>
+ {IsEven 3}
+}</oz>
+
+<oz title="Defining Max: procedure">/* The procedure Max gets two numbers as its first two arguments and
+binds its last argument to the greater number.
+
+WARNING: the variable X in the Max definition and the variable X
+outside are different variables (cf.  variable scope above).
+*/
+
+local
+  %% procedure definition
+  proc {Max X Y Z}
+     if X >= Y then Z = X else Z = Y end 
+  end 
+  X
+in
+  %% procedure application
+  {Max 4 3 X}
+  {Browse X}
+end</oz>
+<oz title="Defining Max: function">/* As mentioned above, a function in Oz is a procedure which returns
+its last value.  Functions are just "syntactic sugar", added for
+programming convenience.
+
+This Max function is equivalent to the Max procedure of the previous example.
+*/
+
+local
+  %% function definition
+  fun {Max X Y}
+     if X >= Y then X else Y end 
+  end
+  X
+in
+  %% function application
+  X = {Max 4 3}
+  {Browse X}
+end</oz>
+
+<oz title="$ marks a return value">/* Every procedure argument can be a return value.  The $ (dollar sign)
+always marks a return value.  This example is not yet very convincing,
+but procedures will encapsulate constraints in later examples... */
+
+local
+   proc {Max X Y Z}
+      if X >= Y then Z = X else Z = Y end 
+   end 
+   X = 4
+   Result
+in
+   %% Note the $
+   X = {Max $ 3 Result}
+   {Browse Result}   
+end</oz>
+
   <oz title="Functions are procedures">/* Here we treat IsEven as a procedure with two arguments.
 IsEven binds the variable B.  Please note the order of computations in this
 example.  Firstly, B is browsed.  Then IsEven binds B to false.  However, Browse
@@ -248,40 +304,6 @@ in
 end</oz>
 
 
-<oz title="-next">
-/*
-A procedure definition wraps up (abstracts) some computation: a complex computation can then be executed simply by calling the procedure.  In the example, the procedure Max gets two numbers as its first two arguments and binds its last argument to the greater number (>= means 'greater or equal').  Note that the curly braces in the definition surround the procedure name and its arguments like a procedure call.
-*/
-</oz>
-<oz title="Max procedure">/* NB: the variable X in the Max definition and the variable X outside
-are different variables (cf. variable scope above). */
-
-local
-  %% procedure definition
-  proc {Max X Y Z}
-     if X >= Y then Z = X else Z = Y end 
-  end 
-  X
-in
-  %% procedure application
-  {Max 4 3 X}
-  {Browse X}
-end</oz>
-<oz title="$ marks a return value">/* Every procedure argument can be a return value.  The $ (dollar sign)
-always marks a return value.  This example is not yet very convincing,
-but procedures will encapsulate constraints in later examples... */
-
-local
-   proc {Max X Y Z}
-      if X >= Y then Z = X else Z = Y end 
-   end 
-   X = 4
-   Result
-in
-   %% Note the $
-   X = {Max $ 3 Result}
-   {Browse Result}   
-end</oz>
 <oz title="Function call of procedure">%% Remember, every procedure can also be called like a function for convenience.
 
 local
@@ -292,20 +314,6 @@ in
   {Browse {Max 4 3}}
 end</oz>
 
-<oz title="--next">
-Oz offers a simplified notation (syntactic sugar) for a procedure
-definition which returns its last value: it can be defined as a
-function.
-</oz>
-<oz title="Max function">%% This Max function is equivalent to the Max procedure of the previous lesson.
-
-local
-  fun {Max X Y}
-     if X >= Y then X else Y end 
-  end
-in
-  {Browse {Max 4 3}}
-end</oz>
 <oz title="Recursion">/* Procedures and functions can call themselves (recursion).  The
 function Factorial implements the mathematical factorial concept. */
 
