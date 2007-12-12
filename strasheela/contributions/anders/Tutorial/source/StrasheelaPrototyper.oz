@@ -127,10 +127,11 @@ define
 %   ExamplesDir = {Path.make CWD#"/../TheExamples/"}
 
    %% List of XML files with the examples. When extending, also add new files to makefile.oz! 
-   MyExamples = {Map ['x-ozlib://anders/strasheela/Tutorial/TheExamples/01-Oz/01-Basics.tut'
-		      'x-ozlib://anders/strasheela/Tutorial/TheExamples/01-Oz/02-ConstraintProgramming.tut'
-		      'x-ozlib://anders/strasheela/Tutorial/TheExamples/02-Strasheela/01-MusicRepresentation.tut'
-		      'x-ozlib://anders/strasheela/Tutorial/TheExamples/02-Strasheela/02-MusicalCSPs.tut']
+   MyExamples = {Map ['x-ozlib://anders/strasheela/Tutorial/TheExamples/01-Oz/Basics-1.tut'
+		      'x-ozlib://anders/strasheela/Tutorial/TheExamples/01-Oz/Basics-2.tut'
+		      'x-ozlib://anders/strasheela/Tutorial/TheExamples/01-Oz/ConstraintProgramming.tut'
+		      'x-ozlib://anders/strasheela/Tutorial/TheExamples/02-Strasheela/MusicRepresentation.tut'
+		      'x-ozlib://anders/strasheela/Tutorial/TheExamples/02-Strasheela/MusicalCSPs.tut']
 		 fun {$ URI}
 		    {Path.make {Resolve.localize URI}.1}
 		 end}
