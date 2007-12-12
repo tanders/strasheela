@@ -1,0 +1,721 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+  <head>
+    <title>More Oz Basics</title>
+    <meta name="generator" content="muse.el">
+    <meta http-equiv="Content-Type"
+          content="text/html; charset=iso-8859-1">
+    
+    <link rel="stylesheet" href="style.css" type="text/css" />
+  </head>
+  <body>
+<div id="header">
+  <ul class="nav">
+    <li class="nav1"><a href="index.html">home</a></li>
+    <li class="navn"><a href="https://sourceforge.net/projects/strasheela/">download at sourceforge</a></li>
+    <!-- <li class="navn"><a href="IndexOfPages.html">site map</a></li> -->
+    <li class="navn"><a href="contact.html">contact</a></li>
+  </ul>
+  <div id="logo">
+    <a href="http://sourceforge.net"><img src="http://sflogo.sourceforge.net/sflogo.php?group_id=167225&amp;type=1" width="88" height="31" border="0" alt="SourceForge.net Logo" /></a>
+  </div>
+</div>
+    <h1>More Oz Basics</h1>
+    <!-- Page published by Emacs Muse begins here -->
+<div class="contents">
+<dl>
+<dt>
+<a href="#sec1">About this document</a>
+</dt>
+<dt>
+<a href="#sec2">&mdash; More Oz Basics</a>
+</dt>
+<dt>
+<a href="#sec3">Pattern Matching</a>
+</dt>
+<dd>
+<dl>
+<dt>
+<a href="#sec4">Case statements (1)</a>
+</dt>
+<dt>
+<a href="#sec5">Case statements (2)</a>
+</dt>
+<dt>
+<a href="#sec6">Multiple case clauses</a>
+</dt>
+<dt>
+<a href="#sec7">Implicit pattern matching</a>
+</dt>
+</dl>
+</dd>
+<dt>
+<a href="#sec8">Procedures over Compound Data</a>
+</dt>
+<dd>
+<dl>
+<dt>
+<a href="#sec9">HasFeature</a>
+</dt>
+<dt>
+<a href="#sec10">Arity</a>
+</dt>
+<dt>
+<a href="#sec11">Adjoin</a>
+</dt>
+<dt>
+<a href="#sec12">Nth</a>
+</dt>
+<dt>
+<a href="#sec13">Reverse</a>
+</dt>
+<dt>
+<a href="#sec14">Append</a>
+</dt>
+<dt>
+<a href="#sec15">User-defined procedures</a>
+</dt>
+</dl>
+</dd>
+<dt>
+<a href="#sec16">Unification</a>
+</dt>
+<dd>
+<dl>
+<dt>
+<a href="#sec17">Unifying two lists</a>
+</dt>
+<dt>
+<a href="#sec18">Recursive unification</a>
+</dt>
+</dl>
+</dd>
+<dt>
+<a href="#sec19">Class Method Application</a>
+</dt>
+<dd>
+<dl>
+<dt>
+<a href="#sec20">Method call</a>
+</dt>
+<dt>
+<a href="#sec21">Method arguments</a>
+</dt>
+</dl>
+</dd>
+<dt>
+<a href="#sec22">Higher-Order Programming</a>
+</dt>
+<dd>
+<dl>
+<dt>
+<a href="#sec23">Filter</a>
+</dt>
+<dt>
+<a href="#sec24">ForAll</a>
+</dt>
+<dt>
+<a href="#sec25">Map</a>
+</dt>
+<dt>
+<a href="#sec26">Anonymous procedure definition</a>
+</dt>
+<dt>
+<a href="#sec27">Sort (1)</a>
+</dt>
+<dt>
+<a href="#sec28">Sort (2)</a>
+</dt>
+<dt>
+<a href="#sec29">Defining higher-order procedures</a>
+</dt>
+</dl>
+</dd>
+<dt>
+<a href="#sec30">Concurrency</a>
+</dt>
+<dd>
+<dl>
+<dt>
+<a href="#sec31">Declarative concurrency</a>
+</dt>
+<dt>
+<a href="#sec32">Blocking computation</a>
+</dt>
+<dt>
+<a href="#sec33">'Signalling' a blocking computation</a>
+</dt>
+</dl>
+</dd>
+</dl>
+</div>
+
+
+<h2><a name="sec1" id="sec1"></a>
+About this document</h2>
+
+<p class="first">This file was automatically generated from the interactive Strasheela tutorial. Some aspects of the text only make sense in the original interactive tutorial application (e.g., buttons indicated to press, and positions specified on the screen), and not in this version of the text.</p>
+
+
+<h2><a name="sec2" id="sec2"></a>
+&mdash; More Oz Basics</h2>
+
+<p class="first">This chapter covers more basic info about Oz.</p>
+
+
+
+
+<h2><a name="sec3" id="sec3"></a>
+Pattern Matching</h2>
+
+<p class="first">Pattern matching is a convenient way to access the elements contained in records, lists etc.  Pattern matching decomposes such compound data, declares new variables, and binds these variables to parts of the compound data.</p>
+
+<p>The primary pattern matching construct is the case statement, but some programming constructs (for example, functions) allow pattern matching via an implicit case statement.</p>
+
+
+<h3><a name="sec4" id="sec4"></a>
+Case statements (1)</h3>
+
+<pre class="src">
+ <span style="color: #b22222;">/* </span><span style="color: #b22222;">In the example below, case declares the two variables H and T and
+binds them to the head and tail of the list Xs.  Finally, the H and T are
+inspected.  Please note that the pattern-matching expression H|T is written
+with the usual list syntax using | (the cons-operation).
+
+This approach can be used to pattern match lists of arbitrary length,
+except empty lists (i.e. nil). Try to change the definition of Xs to a
+list of a different length and watch how the value of T changes. */</span>
+
+<span style="color: #a020f0;">local</span>
+   Xs = [1 2 3 4]
+<span style="color: #a020f0;">in</span>
+   <span style="color: #a020f0;">case</span> Xs <span style="color: #a020f0;">of</span> H <span style="color: #a020f0;">|</span> T
+   <span style="color: #a020f0;">then</span> {Inspect H} {Inspect T}
+   <span style="color: #a020f0;">end</span>
+<span style="color: #a020f0;">end</span>
+</pre>
+
+
+<h3><a name="sec5" id="sec5"></a>
+Case statements (2)</h3>
+
+<pre class="src">
+<span style="color: #b22222;">/* </span><span style="color: #b22222;">The previous example matched the head and the tail of a
+list. Instead, we can also match individual list elements (or the
+elements of other data structures, such as records or tuples). Note
+that in this example changing the length of the lists results in an
+error. */</span>
+
+<span style="color: #a020f0;">local</span>
+   Xs = [1 2 3 4]
+<span style="color: #a020f0;">in</span>
+   <span style="color: #a020f0;">case</span> Xs <span style="color: #a020f0;">of</span> [A B C D]
+   <span style="color: #a020f0;">then</span> {Inspect A} {Inspect B} {Inspect C} {Inspect D}
+   <span style="color: #a020f0;">end</span>
+<span style="color: #a020f0;">end</span>
+</pre>
+
+
+<h3><a name="sec6" id="sec6"></a>
+Multiple case clauses</h3>
+
+<pre class="src">
+<span style="color: #b22222;">/* </span><span style="color: #b22222;">Having only a single clause to match against (as in the previous
+examples), can be too restrictive. This example presents a typical
+case expression matching a list, which checks whether Xs is either a
+non-empty list, or an empty list, or some other value. You may want to
+play around with the value of Xs to try out these different
+clauses. */</span>
+
+<span style="color: #a020f0;">local</span> Xs = [1 2 3 4]
+<span style="color: #a020f0;">in</span>
+   <span style="color: #a020f0;">case</span> Xs <span style="color: #a020f0;">of</span>  H<span style="color: #a020f0;">|</span>T <span style="color: #a020f0;">then</span> {Inspect nonEmptyList}
+      <span style="color: #a020f0;">[]</span> nil <span style="color: #a020f0;">then</span> {Inspect emptyList}
+      <span style="color: #a020f0;">else</span> {Inspect differentValue}
+   <span style="color: #a020f0;">end</span>
+<span style="color: #a020f0;">end</span>
+</pre>
+
+
+<h3><a name="sec7" id="sec7"></a>
+Implicit pattern matching</h3>
+
+<pre class="src">
+<span style="color: #b22222;">/* </span><span style="color: #b22222;">The following function GetPitch expects a record as
+argument which must match the record note(pitch:Pitch ...).  The
+variable Pitch is implicitly declared and bound to the value at the
+feature 'pitch' of the record given as argument to the function.
+
+Please note that the record in the header of the function
+GetPitch is not even complete but contains three dots (...) to
+indicate that further record features are possible. */</span>
+
+<span style="color: #a020f0;">local</span>
+   <span style="color: #a020f0;">fun</span><span style="color: #b8860b;"> </span>{<span style="color: #0000ff;">GetPitch</span> note(pitch:Pitch <span style="color: #a020f0;">...</span>)}
+      Pitch
+   <span style="color: #a020f0;">end</span>
+<span style="color: #a020f0;">in</span>
+   {Inspect {GetPitch note(duration:4 pitch:60)}}
+<span style="color: #a020f0;">end</span>
+</pre>
+
+
+
+<h2><a name="sec8" id="sec8"></a>
+Procedures over Compound Data</h2>
+
+<p class="first">Oz provides a rich set of procedures for processing these compound data such as lists and records.  A few examples are shown here.  More procedures are listed in the reference documentation at</p>
+
+<blockquote>
+<p class="quoted"><a href="http://www.mozart-oz.org/documentation/base/index.html">http://www.mozart-oz.org/documentation/base/index.html</a></p>
+</blockquote>
+
+
+<h3><a name="sec9" id="sec9"></a>
+HasFeature</h3>
+
+<pre class="src">
+<span style="color: #b22222;">%% </span><span style="color: #b22222;">Tests whether a record has a certain feature
+</span>
+{Inspect {HasFeature <span style="color: #a020f0;">unit</span>(x:1 y:2 z:3) y}}
+</pre>
+
+
+<h3><a name="sec10" id="sec10"></a>
+Arity</h3>
+
+<pre class="src">
+<span style="color: #b22222;">%% </span><span style="color: #b22222;">Return the features of a record as a list.
+</span>
+{Inspect {Arity <span style="color: #a020f0;">unit</span>(a b x:1 y:2 z:3)}}
+</pre>
+
+
+<h3><a name="sec11" id="sec11"></a>
+Adjoin</h3>
+
+<pre class="src">
+<span style="color: #b22222;">/* </span><span style="color: #b22222;">"Merge" two records.  Note that features and label of the second
+record take precedence over the first. */</span>
+
+{Inspect {Adjoin <span style="color: #a020f0;">unit</span>(x:1 y:2 z:3) test(foo:hi bar:there z:<span style="color: #bc8f8f;">'overwrite!'</span>)}}
+</pre>
+
+
+<h3><a name="sec12" id="sec12"></a>
+Nth</h3>
+
+<pre class="src">
+<span style="color: #b22222;">%% </span><span style="color: #b22222;">Return the nth element of a list.
+</span>
+{Inspect {Nth [a b c d] 2}}
+</pre>
+
+
+<h3><a name="sec13" id="sec13"></a>
+Reverse</h3>
+
+<pre class="src">
+<span style="color: #b22222;">%% </span><span style="color: #b22222;">Reverse a list.
+</span>
+{Inspect {Reverse [a b c d]}}
+</pre>
+
+
+<h3><a name="sec14" id="sec14"></a>
+Append</h3>
+
+<pre class="src">
+<span style="color: #b22222;">%% </span><span style="color: #b22222;">Append two lists.
+</span>
+{Inspect {Append [a b] [x y]}}
+</pre>
+
+
+<h3><a name="sec15" id="sec15"></a>
+User-defined procedures</h3>
+
+<pre class="src">
+<span style="color: #b22222;">/* </span><span style="color: #b22222;">You can define procedures over lists and records as easily as
+numeric procedures.  Following is the definition of the function
+Append. */</span>
+
+<span style="color: #a020f0;">local</span>
+  <span style="color: #a020f0;">fun</span><span style="color: #b8860b;"> </span>{<span style="color: #0000ff;">Append</span> Xs Ys}
+    <span style="color: #a020f0;">if</span> Xs <span style="color: #a020f0;">==</span> nil <span style="color: #a020f0;">then</span> Ys
+    <span style="color: #a020f0;">else</span> Xs<span style="color: #a020f0;">.</span>1 <span style="color: #a020f0;">|</span> {Append Xs<span style="color: #a020f0;">.</span>2 Ys}
+    <span style="color: #a020f0;">end</span>
+  <span style="color: #a020f0;">end</span>
+<span style="color: #a020f0;">in</span>
+  {Inspect {Append [a b] [x y]}}
+<span style="color: #a020f0;">end</span>
+</pre>
+
+
+
+<h2><a name="sec16" id="sec16"></a>
+Unification</h2>
+
+<p class="first">The operator = performs unification of two variables.  The variables quasi share all the information they have about their values.  A variable without a name (an anonymous variable) is written as an underscore ( _ ).  Unification is a basic form of constraint programming (constraint programming is discussed further below).</p>
+
+
+<h3><a name="sec17" id="sec17"></a>
+Unifying two lists</h3>
+
+<pre class="src">
+<span style="color: #a020f0;">local</span>
+  X = [a _ _]
+  Y = [_ b _]
+<span style="color: #a020f0;">in</span>
+  X = Y          <span style="color: #b22222;">% </span><span style="color: #b22222;">unify X and Y
+</span>  {Inspect X}
+<span style="color: #a020f0;">end</span>
+</pre>
+
+
+<h3><a name="sec18" id="sec18"></a>
+Recursive unification</h3>
+
+<pre class="src">
+<span style="color: #b22222;">/* </span><span style="color: #b22222;">Unification also works recursively.  The Inspector and the Browser
+show two different ways for representing that (the Inspector can be
+configured to show either way: options menu, structure tab, under
+representation, select between tree and relation mode). */</span>
+
+<span style="color: #a020f0;">local</span> X = <span style="color: #a020f0;">unit</span>(x:X) <span style="color: #a020f0;">in</span>
+  {Browse X}
+  {Inspect X}
+<span style="color: #a020f0;">end</span>
+</pre>
+
+
+
+<h2><a name="sec19" id="sec19"></a>
+Class Method Application</h2>
+
+<p class="first">Oz supports object-oriented programming.  This programming paradigm introduces the notion of objects which instantiate classes.  An object (or class instance) is a datum which encapsulates its internal structure.  A class specifies what data are contained in its instances and what methods these instances understands.  A method (or message) is effectively a procedure which is defined for instances of specific classes only.</p>
+
+<p>For more details on object-oriented programming in general, please refer to other Oz documentation:
+<blockquote>
+<p class="quoted"><a href="http://www.mozart-oz.org/documentation/tutorial/node10.html">http://www.mozart-oz.org/documentation/tutorial/node10.html</a></p>
+</blockquote>
+
+<p>Internally, objects are actually procedures which expect a single argument &mdash; hence this syntax.  When the object is sent a message (i.e. the procedure is called with a specific argument) it processes the message according to its definition.  This method definition may change its internal state, as we expect from typical objects.</p>
+
+<h3><a name="sec20" id="sec20"></a>
+Method call</h3>
+
+<pre class="src">
+<span style="color: #b22222;">/* </span><span style="color: #b22222;">The following example creates a graphical user interface
+button.  You do not need to understand the code which creates the
+window itself (i.e., the call to QTk.build).  For our purposes here,
+only this single line is important:
+
+  {Window show}
+
+`Window' is an object, and `show' is the name of the method understood by
+this object.  This method results in showing the window with the button.
+
+Please note that the syntax of a method differs clearly from the procedure
+syntax shown before.  If `show' was a procedure, then we would write:
+
+  {Show Window}
+*/</span>
+
+<span style="color: #a020f0;">local</span>
+   Window = {QTk<span style="color: #a020f0;">.</span>build lr(button(text:<span style="color: #bc8f8f;">"Hello world!"</span>
+                                 action:toplevel<span style="color: #a020f0;">#</span>close))}
+<span style="color: #a020f0;">in</span>
+   {Window show}
+<span style="color: #a020f0;">end</span>
+</pre>
+
+
+<h3><a name="sec21" id="sec21"></a>
+Method arguments</h3>
+
+<pre class="src">
+<span style="color: #b22222;">/* </span><span style="color: #b22222;">Class methods are actually records which can contain method
+arguments.  For example, the following statement sends the following
+message to the object Window.  This changes the width of the border around
+the button and sets the background of this border to the color blue.
+
+  {Window set(borderwidth:1.0#c background:blue)}
+
+In general, the record denoting a message can wrap multiple arguments,
+as in the following example where the method myMethod with two
+arguments is send to the class MyObject.
+
+   {MyObject myMethod(Arg1 Arg2 ..)}
+
+We will later see many more method application examples in the context
+of Strasheela's music representation. */</span>
+
+<span style="color: #a020f0;">local</span>
+   Window = {QTk<span style="color: #a020f0;">.</span>build lr(button(text:<span style="color: #bc8f8f;">"Hello world!"</span>
+                                 action:toplevel<span style="color: #a020f0;">#</span>close))}
+<span style="color: #a020f0;">in</span>
+   {Window show}
+   <span style="color: #b22222;">%% </span><span style="color: #b22222;">change to button background color after 1000 msecs
+</span>   {Delay 1000}
+   {Window set(borderwidth:1<span style="color: #a020f0;">.</span>0<span style="color: #a020f0;">#</span>c
+               background:blue)}
+<span style="color: #a020f0;">end</span>
+</pre>
+
+
+
+<h2><a name="sec22" id="sec22"></a>
+Higher-Order Programming</h2>
+
+<p class="first">Oz procedures (and functions) are first-class values.  This means that a procedure can be processed like any other value.  For example, procedures can be given to other procedures as arguments.</p>
+
+<p>This leads to highly flexible programming technique called higher-order programming.  Procedures expecting procedures as arguments are called higher-order procedures.  This concept is demonstrated be several examples.</p>
+
+<h3><a name="sec23" id="sec23"></a>
+Filter</h3>
+
+<pre class="src">
+<span style="color: #b22222;">/* </span><span style="color: #b22222;">The function Filter expects a list and a test function, and returns
+only those elements for which the test function returns true.
+
+The function IsEven returns true for even integers and thus a list
+with only the even integers in [~3 ~2 ~1 0 1 2 3] is returned.  Try
+replaying IsEven by IsOdd, IsNumber or IsNat (testing for natural
+numbers) to better understand this filtering.
+
+(BTW: there is a bug in IsOdd concerning negative numbers)
+*/</span>
+
+{Browse {Filter [<span style="color: #a020f0;">~</span> 4 <span style="color: #a020f0;">~</span>3 <span style="color: #a020f0;">~</span>2 <span style="color: #a020f0;">~</span>1 0 1 2 3] IsEven}}
+</pre>
+
+
+<h3><a name="sec24" id="sec24"></a>
+ForAll</h3>
+
+<pre class="src">
+<span style="color: #b22222;">/* </span><span style="color: #b22222;">The procedure ForAll applies a given procedure to any element of a
+list.  In this example, the procedure Browse is applied to every list
+element. */</span>
+
+{ForAll [a b c d e f] Browse}
+</pre>
+
+
+<h3><a name="sec25" id="sec25"></a>
+Map</h3>
+
+<pre class="src">
+<span style="color: #b22222;">/* </span><span style="color: #b22222;">The function Map expects a list and a unary function (i.e. a
+function expecting a single value) as arguments.  It applies the
+function to every list element, and returns the collected results in a
+list.
+
+The example defines and uses the function square in order to square
+all numbers in the list.  You may want to change this function to
+understand that any function can be given to a higher-order function
+as an argument.  For example, replace Square by a function Double,
+which doubles its argument. */</span>
+
+<span style="color: #a020f0;">local</span>
+  <span style="color: #a020f0;">fun</span><span style="color: #b8860b;"> </span>{<span style="color: #0000ff;">Square</span> X} X <span style="color: #a020f0;">*</span> X <span style="color: #a020f0;">end</span>
+<span style="color: #a020f0;">in</span>
+  {Browse {Map [1 2 3 4 5 6] Square}}
+<span style="color: #a020f0;">end</span>
+</pre>
+
+
+<h3><a name="sec26" id="sec26"></a>
+Anonymous procedure definition</h3>
+
+<pre class="src">
+<span style="color: #b22222;">/* </span><span style="color: #b22222;">Sometimes we need a function only once -- as the function Square in
+the previous example.  In such cases we don't necessarily need to care
+about giving the function any name.  Instead, we can define an
+anonymous function.
+
+This example restates the previous example by defining the Square
+function 'inline' without giving it any name.  Please recall that $
+always denotes a return value.  In this case, $ returns the function
+value itself. */</span>
+
+{Browse
+ {Map [1 2 3 4 5 6] <span style="color: #a020f0;">fun</span><span style="color: #b8860b;"> </span>{<span style="color: #0000ff;">$</span> X} X <span style="color: #a020f0;">*</span> X <span style="color: #a020f0;">end</span>}}
+</pre>
+
+
+<h3><a name="sec27" id="sec27"></a>
+Sort (1)</h3>
+
+<pre class="src">
+<span style="color: #b22222;">/* </span><span style="color: #b22222;">The function Sort expects a list and a binary function (i.e. a
+function expecting two values) as arguments.  This binary function
+compares two values, and Sort sorts the list values according to this
+comparison.  For example, the function in the example compares two
+numbers and returns true if the first number is smaller.  Consequently,
+this example sorts the list elements in ascending order.  You may want
+to replace the &lt; by &gt; in the function definition to sort the
+numbers in decreasing order. */</span>
+
+{Browse {Sort [1 5 3 2 0 7] <span style="color: #a020f0;">fun</span><span style="color: #b8860b;"> </span>{<span style="color: #0000ff;">$</span> X Y}  X <span style="color: #a020f0;">&lt;</span> Y <span style="color: #a020f0;">end</span>}}
+</pre>
+
+
+<h3><a name="sec28" id="sec28"></a>
+Sort (2)</h3>
+
+<pre class="src">
+<span style="color: #b22222;">/* </span><span style="color: #b22222;">You can actually sort the list elements in any way you want using
+the Sort function.  For example, you may place all even numbers at the
+beginning and all odd numbers at the end of the list and sort all even
+and odd numbers in ascending order.  This is done in the second
+(commented) Sort call.  How does this sorting work? */</span>
+
+{Browse {Sort [1 5 3 2 0 7] <span style="color: #a020f0;">fun</span><span style="color: #b8860b;"> </span>{<span style="color: #0000ff;">$</span> X Y}
+                              <span style="color: #a020f0;">if</span> {IsEven X}
+                              <span style="color: #a020f0;">then</span>
+                                <span style="color: #a020f0;">if</span> {IsEven Y}
+                                <span style="color: #a020f0;">then</span> X <span style="color: #a020f0;">&lt;</span> Y
+                                <span style="color: #a020f0;">else</span> <span style="color: #a020f0;">true</span>
+                                <span style="color: #a020f0;">end</span>
+                              <span style="color: #a020f0;">else</span> <span style="color: #a020f0;">false</span>
+                              <span style="color: #a020f0;">end</span>
+                            <span style="color: #a020f0;">end</span>}}
+</pre>
+
+
+<h3><a name="sec29" id="sec29"></a>
+Defining higher-order procedures</h3>
+
+<pre class="src">
+<span style="color: #b22222;">/* </span><span style="color: #b22222;">Higher order procedures are defined like any other procedure: some
+arguments are simply procedures -- which are then usually applied in
+the definition.  This example defines a higher-order function Find
+which expects a list Xs and a test function Fn: Find returns the first
+element in Xs for which Fn returns true.
+
+This example also demonstrates the pattern-matching case statement
+with multiple clauses operating on the list Xs.  In case Xs is the
+empty list nil, then Find returns nil.  Otherwise (multiple clauses are
+separated with the keyword []), Xs is matched with X|Xr, where X is
+bound to the first element of Xs and Xr to the list's tail or
+rest.  The function Find then checks whether {Fn X} returns true.  In
+that case, the searched for list element has been found and is
+returned.  Otherwise, Find is called recursively with the rest of the
+list. */</span>
+
+<span style="color: #a020f0;">local</span>
+   <span style="color: #a020f0;">fun</span><span style="color: #b8860b;"> </span>{<span style="color: #0000ff;">Find</span> Xs Fn}
+      <span style="color: #a020f0;">case</span> Xs
+      <span style="color: #a020f0;">of</span> nil <span style="color: #a020f0;">then</span> nil
+      <span style="color: #a020f0;">[]</span> X<span style="color: #a020f0;">|</span>Xr
+      <span style="color: #a020f0;">then</span> <span style="color: #a020f0;">if</span> {Fn X} <span style="color: #a020f0;">then</span> X
+           <span style="color: #a020f0;">else</span> {Find Xr Fn}
+           <span style="color: #a020f0;">end</span>
+      <span style="color: #a020f0;">end</span>
+   <span style="color: #a020f0;">end</span>
+<span style="color: #a020f0;">in</span>
+   {Browse {Find  [1 2 3 4 5 6] IsEven}}
+<span style="color: #a020f0;">end</span>
+</pre>
+
+
+
+<h2><a name="sec30" id="sec30"></a>
+Concurrency</h2>
+
+<p class="first">Oz provides excellent support for concurrent programming, where computations run in parallel in multiple threads.  We will only touch on this subject and discuss aspects relevant for Strasheela.  In general, however, concurrent programming plays a major role in Oz programming.</p>
+
+<p>The computations in different threads can communicate with each other via variables.  Multiple threads can use the same variable in a computation.  If the value of a variable does not present enough information for performing a specific operation, then the thread simply blocks and waits for more information.  In the example below, the addition X+3 can not be performed as long as the value of X is unknown.  As soon as more information about the variable value is available, the thread resumes its execution.</p>
+
+<p>This behaviour leads to a concurrent programming model which is highly declarative &mdash; and thus easy to program in.  We will later see how this model simplifies the definition of complex musical constraint satisfaction problems (Oz' constraint programming model is based on concurrent programming).</p>
+
+<p>The downside of this concurrency model is that it can result in an unintended blocking of a program which is not explicitly signalled (e.g. no error message is shown when a program blocks, because this is a normal program behaviour).  The second and third example below demonstrate a pragmatic way to deal with this downside.</p>
+
+<p>The examples demonstrates concurrent programming, but do not show a typical application (a typical application would be a program split in a server and one or more clients).  In the context of Strasheela, we will seldomly write concurrent programs explicitly.  Nevertheless, it is very important to know how concurrent programming works in Oz.  Even if we are not explicitly writing a concurrent program, constraint programming in Oz always results in a concurrent program.  Concurrent programming forms one of the foundations of Oz' constraint programming model, where each constraint (i.e. each propagator) is a concurrent agent running in its own thread.</p>
+
+
+<h3><a name="sec31" id="sec31"></a>
+Declarative concurrency</h3>
+
+<pre class="src">
+<span style="color: #b22222;">/* </span><span style="color: #b22222;">This example declares X and then browses 'hello' (just to show that
+the browser works in principle).  However, the addition X+3 can not be
+executed immediately and blocks.  Because this computation is executed
+in its own thread, the top-level thread continues regardless, and
+calls the procedure Delay, which waits for 3000 msecs.  After that
+time, the top-level thread determines X to 4.  This awakes the other
+thread: it can now compute X+3 and browse the sum. */</span>
+
+<span style="color: #a020f0;">local</span>
+  X
+<span style="color: #a020f0;">in</span>
+  {Browse hello}
+  <span style="color: #a020f0;">thread</span> {Browse X <span style="color: #a020f0;">+</span> 3} <span style="color: #a020f0;">end</span>
+  {Delay 3000}
+  X = 4
+<span style="color: #a020f0;">end</span>
+</pre>
+
+
+<h3><a name="sec32" id="sec32"></a>
+Blocking computation</h3>
+
+<pre class="src">
+<span style="color: #b22222;">/* </span><span style="color: #b22222;">This example demonstrates a buggy program which does not signal any
+error but simply does nothing.  The example is very similar to the
+previous example, but does not place the blocking X+3 in its own
+thread.  As a result, the whole program blocks at that point and never
+executes X = 4. */</span>
+
+<span style="color: #a020f0;">local</span>
+  X
+<span style="color: #a020f0;">in</span>
+  {Browse hello}
+  <span style="color: #b22222;">%% </span><span style="color: #b22222;">!! blocks
+</span>  {Browse X<span style="color: #a020f0;">+</span>3}
+  X = 4
+<span style="color: #a020f0;">end</span>
+</pre>
+
+
+<h3><a name="sec33" id="sec33"></a>
+'Signalling' a blocking computation</h3>
+
+<pre class="src">
+<span style="color: #b22222;">/* </span><span style="color: #b22222;">This example demonstrates a pragmatic approach which checks for
+blocking programs.  The example ends with the statement {Browse
+endOfProgram}.  A non-blocking program will always execute this last
+line of code and show 'endOfProgram' in the Browser.  However, a
+blocking program (as the present one) does not do that and thus
+indicates that it is blocking.  Although this little trick does not
+tell us *where* the program blocks, the information *that* we wrote a
+blocking program can prove very helpful already.  You may get a feel
+for this trick by changing the example so that the message
+'endOfProgram' is shown (e.g. comment the blocking statement out, or
+surrounding it with a 'thread .. end' statement). */</span>
+
+<span style="color: #a020f0;">local</span>
+  X
+<span style="color: #a020f0;">in</span>
+  {Browse hello}
+  <span style="color: #b22222;">%% </span><span style="color: #b22222;">!! blocks
+</span>  {Browse X<span style="color: #a020f0;">+</span>3}
+  X = 4
+<span style="color: #a020f0;">end</span>
+{Browse endOfProgram}
+</pre>
+
+
+
+
+<!-- Page published by Emacs Muse ends here -->
+<!-- Footer -->
+<div id="footer">
+<div id="author">&copy; 
+Torsten Anders</div>
+<div id="date">Last time edited: 2007.12.12</div>
+</div>
+  </body>
+</html>
