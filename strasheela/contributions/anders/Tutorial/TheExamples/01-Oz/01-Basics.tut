@@ -263,9 +263,40 @@ in
   {Browse X}
 end</oz>
 
+  <oz title="Functions are procedures">/* Here we treat `IsEven' as a procedure with two arguments.
+`IsEven' binds the variable B.  Please note the order of computations in this
+example:
+  1.  B is browsed.
+  2.  IsEven binds B to false.
+
+However, `Browse' does indeed show the correct value of B.
+
+This demonstrates a vital feature of Oz: variables are be used to
+communicate information between different parts of a program -- even
+if the information is not available yet.  Browse can handle unknown
+information, but other parts of the program may wait (i.e. block)
+until the information is available.
+*/
+
+local B in
+   {Browse B} 		
+   {IsEven 4 B}
+end</oz>
+<oz title="Procedures as functions">%% Remember, every procedure can also be called like a function for convenience.
+
+local
+  proc {Max X Y Z}
+     if X >= Y then Z = X else Z = Y end 
+  end
+in
+  {Browse {Max 4 3}}
+end</oz>
+
 <oz title="$ marks a return value">/* Every procedure argument can be a return value.  The $ (dollar sign)
 always marks a return value.  This example is not yet very convincing,
-but procedures will encapsulate constraints in later examples... */
+but procedures will encapsulate constraints in later examples...
+TODO:  what's happening here?  -gp
+*/
 
 local
    proc {Max X Y Z}
@@ -279,40 +310,6 @@ in
    {Browse Result}   
 end</oz>
 
-  <oz title="Functions are procedures">/* Here we treat IsEven as a procedure with two arguments.
-IsEven binds the variable B.  Please note the order of computations in this
-example.  Firstly, B is browsed.  Then IsEven binds B to false.  However, Browse
-does indeed show the correct value of B.
-
-This demonstrates a vital feature of Oz: variables are be used to
-communicate information between different parts of a program -- even
-if the information is not available yet.  Browse can handle unknown
-information, but other parts of the program may wait (i.e. block)
-until the information is available.  */
-
-local B in
-   {Browse B} 		
-   {IsEven 4 B}
-end</oz>
-<oz title="Procedures used like functions">/* Because functions are just a syntactic variant of procedures, every
-procedure (e.g.  Browse) can also be used like a function which
-returns its last argument. */
-
-local X = {Browse}
-in
-  X = 3
-end</oz>
-
-
-<oz title="Function call of procedure">%% Remember, every procedure can also be called like a function for convenience.
-
-local
-  proc {Max X Y Z}
-     if X >= Y then Z = X else Z = Y end 
-  end
-in
-  {Browse {Max 4 3}}
-end</oz>
 
 <oz title="Recursion">/* Procedures and functions can call themselves (recursion).  The
 function Factorial implements the mathematical factorial concept. */
@@ -320,8 +317,9 @@ function Factorial implements the mathematical factorial concept. */
 local
    fun {Factorial N}
       if N==0
-      then 1
-      else N * {Factorial N-1}
+        then 1
+      else
+        N * {Factorial N-1}
       end
    end
 in
