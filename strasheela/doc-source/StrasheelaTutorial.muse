@@ -41,13 +41,15 @@ Strasheela provides an interactive tutorial for learning the basics of Oz and St
 
 This interactive tutorial supports the direct execution and editing of Oz and Strasheela examples. You don't need to first learn Emacs nor set up an Oz initialisation file -- you can directly start and try out Strasheela itself! The text of this tutorial is also provided in HTML format (see links below) in case you prefer reading the examples in a web-browser.   
 
-** [[01-Basics][Oz Basics]]
+** [[Basics-1][First Steps in Oz]]
 
-** [[02-ConstraintProgramming][Constraint Programming in Oz]]
+** [[Basics-2][More Oz Basics]]
 
-** [[01-MusicRepresentation][The Strasheela Music Representation]]
+** [[ConstraintProgramming][Constraint Programming in Oz]]
 
-** [[02-MusicalCSPs][Musical Constraint Satisfaction Problems in Strasheela]]
+** [[MusicRepresentation][The Strasheela Music Representation]]
+
+** [[MusicalCSPs][Musical Constraint Satisfaction Problems in Strasheela]]
 
 
 
