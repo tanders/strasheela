@@ -16,7 +16,7 @@ Strasheela is a highly expressive constraint-based music composition system.[2] 
 
 * News 
 
-  We welcome Graham Percival, who recently joined the Strasheela team as a documentation writer. Graham already worked on the documentation of [[http://lilypond.org][Lilypond]] and [[http://marsyas.sness.net][Marsyas]].
+  We welcome Graham Percival, who recently joined the Strasheela team as a documentation writer. Graham already worked on the documentation of [[http://lilypond.org][Lilypond]] and [[http://marsyas.sness.net][Marsyas]] (13 December 2007)
 
   [[http://packman.links2linux.de/package/strasheela/][SuSE Linux RPM packages available for Strasheela 0.9 (thanks Toni!)]] (3 October 2007)
 

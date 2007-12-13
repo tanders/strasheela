@@ -18,6 +18,8 @@
 
   - Extended the installation documentation (e.g. documentation of the init file templates).
 
+  - Fixed bug in Score.copyScore (which did not create variable copies before) 
+
   - For further fixes see [[../CHANGELOG.txt]]
 
 
