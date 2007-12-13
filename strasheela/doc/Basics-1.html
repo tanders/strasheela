@@ -290,14 +290,14 @@ Conventions</h3>
 <span style="color: #b22222;">/*</span><span style="color: #b22222;">
 We use a few conventions to present information in this tutorial:
 
-  - `command': in the running text, code in the Oz language is enclosed
-      in `single quotes'; remove them when writing your own code.
+  - =command=: in the running text, code in the Oz language is formatted
+    =like this=; remove them when writing your own code.
   - {...}: the {curly braces} denote a procedure in Oz; you should never
-      remove them when writing your own code.
+    remove them when writing your own code.
   - </span><span style="color: #ff0000; font-weight: bold;">WARNING:</span><span style="color: #b22222;"> explains a particularly confusing part of the Oz language.
   - BACKGROUND: these examples give brief explanations of generic
-      concepts in Computer Science; please see them if the lesson contains
-      unfamiliar terms.
+    concepts in Computer Science; please see them if the lesson contains
+    unfamiliar terms.
 */</span>
 
 </pre>
@@ -462,7 +462,7 @@ Float example 3</h3>
 <h2><a name="sec19" id="sec19"></a>
 Variables</h2>
 
-<p class="first">All variables in Oz must start with a capital letter.  They must be declared first, for example, with the keyword `local'.</p>
+<p class="first">All variables in Oz must start with a capital letter.  They must be declared first, for example, with the keyword <code>local</code>.</p>
 
 <p>Global variables can be introduced with the keyword 'declare'.  However, global variables are intended for testing and are not supported in this tutorial application.</p>
 
@@ -582,9 +582,9 @@ Reading:
 <h2><a name="sec25" id="sec25"></a>
 If</h2>
 
-<p class="first">Oz provides the usual `if' control structure.  Note that unlike many programming languages, parenthesis () are not required around the condition, althought they may make the code easier to read.</p>
+<p class="first">Oz provides the usual <code>if</code> control structure.  Note that unlike many programming languages, parenthesis () are not required around the condition, althought they may make the code easier to read.</p>
 
-<p>Please note that the `if' control structure can also be used as an expression which returns a value from the `then' or `else' clause.</p>
+<p>Please note that the <code>if</code> control structure can also be used as an expression which returns a value from the <code>then</code> or <code>else</code> clause.</p>
 
 
 <h3><a name="sec26" id="sec26"></a>
@@ -605,7 +605,9 @@ if ... else ... end</h3>
 if ... end</h3>
 
 <pre class="src">
-<span style="color: #b22222;">/* </span><span style="color: #b22222;">The `else' clause is optional. This example does nothing, but try
+
+<span style="color: #b22222;">%% </span><span style="color: #ff0000; font-weight: bold;">NOTE:</span><span style="color: #b22222;"> the =test= formatting has no effect inside the Oz-tag!
+</span><span style="color: #b22222;">/* </span><span style="color: #b22222;">The `else' clause is optional. This example does nothing, but try
 changing `==' to `\=.' The operations `==' and `\=' test equality and
 inequality of values. */</span>
 
@@ -1150,7 +1152,7 @@ solutions to a constraint satisfaction problem. */</span>
 <div id="footer">
 <div id="author">&copy; 
 Torsten Anders</div>
-<div id="date">Last time edited: 2007.12.12</div>
+<div id="date">Last time edited: 2007.12.13</div>
 </div>
   </body>
 </html>
