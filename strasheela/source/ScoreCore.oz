@@ -60,7 +60,8 @@ import
    %Ozcar % temp for debugging
 export
    % classes: 
-   ScoreObject Parameter TimeParameter TimePoint TimeInterval Amplitude Pitch 
+   ScoreObject Parameter TimeParameter TimePoint TimeInterval Amplitude Pitch
+   LeaveUninitialisedParameterMixin IsLeaveUninitialisedParameter
    Item Container Modifier Aspect TemporalAspect Sequential Simultaneous 
    Element AbstractElement TemporalElement Pause Event Note2 Note
    % funcs/procs
@@ -75,6 +76,8 @@ prepare
    /** marker of score object type checking */
    %% Defined in 'prepare' to avoid re-evaluation.
    ScoreObjectType = {Name.new}
+   LeaveUninitialisedParameterMixinType = {Name.new}
+   
 define
    %
    % aux definitions 
@@ -921,7 +924,7 @@ define
 %      end
       /** % Bind the parameter value to a FD variable */
       meth initFD(Spec<=0#FD.sup)
-	 if {IsFree @value}
+	 if {IsFree @value} andthen {Not {IsLeaveUninitialisedParameter self}}
 	 then @value :: Spec
 	 end
       end
@@ -950,6 +953,17 @@ define
 %       end
    end
 
+   /** %% Free parameter values are by default turned into FD ints during the score initialisation (with InitScore). In contrast, parameters which inherit from this mixin are left untouched (i.e. if their value is a free variable, it remains free during initialisation). This can be useful, for example, if parameter values are potentially non-integers (e.g., floats).  
+   %% */
+   class LeaveUninitialisedParameterMixin
+      feat !LeaveUninitialisedParameterMixinType:unit
+   end
+   /** %% Returns true if X inherits from LeaveUninitialisedParameterMixin (or is an instance of LeaveUninitialisedParameterMixin), and false otherwise. 
+   %% */
+   fun {IsLeaveUninitialisedParameter X}
+      {Object.is X} andthen {HasFeature X LeaveUninitialisedParameterMixinType}
+   end
+
    class TimeParameter from Parameter
       feat label: timeParameter
       meth isTimeParameter(?B) B=true end
@@ -957,26 +971,36 @@ define
       %% */
       meth getValueInSeconds(?X)
 	 Unit = {self getUnit($)}
-	 Value = {IntToFloat {self getValue($)}}
       in
-	 %% !! IsDet does not wait for binding -- quasi side effect. But most
+	 %% NOTE: IsDet does not wait for binding -- quasi side effect. But most
 	 %% often this is called for output and timeUnit is sometimes
 	 %% forgotten by user...
 	 if {Not {IsDet Unit}}
-	 then {Browse 'warn: timeUnit unbound'}
+	 then {GUtils.warnGUI "timeUnit unbound"}
 	 end
+	 %% parameter value is float
+	 %% NOTE: inefficient to always check there two cases first,
+	 %% as they are particualy rare
 	 X = case Unit
-	     of seconds then Value
-	     [] secs then Value
-	     [] milliseconds then Value / 1000.0
-	     [] msecs then Value / 1000.0
-	     [] beats then Value * {Init.getBeatDuration}
-	     [] beats(N) then Value * {Init.getBeatDuration} / {IntToFloat N}
+	     of secsF then {self getValue($)} 
+	     [] msecsF then {self getValue($)} / 1000.0
 	     else
-		{Exception.raiseError
-		 strasheela(illParameterUnit Unit self
-			    "Supported units are seconds (or secs), millisecond (or msecs), beats, and beats(N) (where N is an integer).")}
-		unit		% never returned
+		%% parameter value is integer
+		Value = {IntToFloat {self getValue($)}}
+	     in
+		case Unit
+		of seconds then Value
+		[] secs then Value
+		[] milliseconds then Value / 1000.0
+		[] msecs then Value / 1000.0
+		[] beats then Value * {Init.getBeatDuration}
+		[] beats(N) then Value * {Init.getBeatDuration} / {IntToFloat N}
+		else
+		   {Exception.raiseError
+		    strasheela(illParameterUnit Unit self
+			       "Supported units are seconds (or secs), millisecond (or msecs), beats, and beats(N) (where N is an integer).")}
+		   unit		% never returned
+		end
 	     end
       end
       /** %% Returns the parameter value translated to a float representing beats. The translation uses the parameter unit which must be bound (otherwise the method suspends). Supported units are (represented by these atoms): seconds/secs, milliseconds/msecs, and beats. The unit specification beats(N) means the parameter value of N is a single beat. N must be an integer and defaults to 1. The translation between seconds and beats uses Init.getBeatDuration.
