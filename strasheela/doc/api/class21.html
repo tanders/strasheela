@@ -1,7 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
 <html>
  <head>
-  <title>Class TemporalElement</title>
+  <title>Class AbstractElement</title>
   <style>BODY {
  background: url(page.gif) repeat-y white;
 }
@@ -120,23 +120,23 @@ clearInterval(drawit)
 
 <div style="margin-left:160px"><p align="right" class="margin"><div align="right">inheritance tree</div></p>
 <pre>
- <a class="pre" href="node6.html#entity214">NonType</a> <a class="pre" href="node6.html#entity215">Reflection</a>         <a class="pre" href="node7.html#entity288">FlagsMixin</a>
+ <a class="pre" href="node6.html#entity214">NonType</a> <a class="pre" href="node6.html#entity215">Reflection</a>         <a class="pre" href="node7.html#entity292">FlagsMixin</a>
     |        |                  |
     `-----+--'                  |
           |                     |
-     <a class="pre" href="node6.html#entity216">ScoreObject</a>    <a class="pre" href="node7.html#entity289">ScoreMapping.mappingMixin</a>
+     <a class="pre" href="node6.html#entity216">ScoreObject</a>    <a class="pre" href="node7.html#entity293">ScoreMapping.mappingMixin</a>
           |                     |
           `-----------+---------'
                       |
-                     <a class="pre" href="node6.html#entity225">Item</a>
+                     <a class="pre" href="node6.html#entity227">Item</a>
                       |
                       `+
                        |
-                    <a class="pre" href="node6.html#entity232">Element</a>                   <a class="pre" href="node6.html#entity217">TimeMixin</a>
-                       |                          |
-                       `----+---------------------'
-                            |
-                     <a class="pre" href="node6.html#entity234">TemporalElement</a>
+                    <a class="pre" href="node6.html#entity234">Element</a>
+                       |
+                       |
+                       |
+                <a class="pre" href="node6.html#entity235">AbstractElement</a>
 </pre>
 <hr><p class="margin"><div align="right">class definition</div></p>
 <code>
@@ -147,15 +147,15 @@ clearInterval(drawit)
 
 
 </tr></table>
-<span class="string"> [abstract class] A TemporalElement is an element with timing information. For instance, any action of a performer is a TemporalElement -- whether the action is heard or not. An unheard action can a change of the instrument (as muting it) is a TemporalElement, a heard action the performance of a note. <BR>
+<span class="string"> [semi abstract class] An AbstractElement is an element without timing information. For instance, an instrument definition for a sound synthesis language such as Csound could be represented by an instance of a subclass of AbstractElement.<BR>
 <BR>
 </span>
-<span class="keyword">class</span> <span class="type">TemporalElement</span> (Inheritance-free)<br>
+<span class="keyword">class</span> <span class="type">AbstractElement</span> (Inheritance-free)<br>
 &nbsp;&nbsp;&nbsp;<span class="keyword">prop</span>&nbsp;locking
 <br>
 &nbsp;&nbsp;&nbsp;<span class="keyword">feat</span>&nbsp;!ScoreObjectType&nbsp;label
 <br>
-&nbsp;&nbsp;&nbsp;<span class="keyword">attr</span>&nbsp;containers&nbsp;duration&nbsp;endTime&nbsp;flags&nbsp;id&nbsp;info&nbsp;offsetTime&nbsp;parameters&nbsp;startTime
+&nbsp;&nbsp;&nbsp;<span class="keyword">attr</span>&nbsp;containers&nbsp;flags&nbsp;id&nbsp;info&nbsp;parameters
 <br>
 <ul><li><span class="functionname">addContainer</span>(Container)<br>
 
@@ -259,17 +259,6 @@ clearInterval(drawit)
  collect visits containers in depth-first fashion from left to right which affects the order of the objects in the returned list. E.g., collecting all events in a few nested sequentials in tree mode returns a list with all events ordered by start time.<BR>
 <BR>
  NB: collect blocks if self is not fully initialised (e.g. created by Score.makeScore2) or if Test blocks at some object in self (e.g. because the object is only partially determined).<BR>
-<BR>
-</span>
-</li><li><span class="functionname">constrainTiming</span>()<br>
-
-<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
-
-
-
-
-</tr></table>
-<span class="string"> After full creation of score hierarchy, method must be called with every TimeMixin subclass instance in score to init the timing attributes/features <BR>
 <BR>
 </span>
 </li><li><span class="functionname">count</span>(?N level:Level mode:Mode test:Test)<br>
@@ -460,78 +449,6 @@ clearInterval(drawit)
 
 </tr></table>
 <span class="string"></span>
-</li><li><span class="functionname">getDuration</span>(X)<br>
-
-<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
-
-
-
-
-</tr></table>
-<span class="string"></span>
-</li><li><span class="functionname">getDurationInBeats</span>(X)<br>
-
-<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
-
-
-
-
-</tr></table>
-<span class="string"></span>
-</li><li><span class="functionname">getDurationInSeconds</span>(X)<br>
-
-<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
-
-
-
-
-</tr></table>
-<span class="string"></span>
-</li><li><span class="functionname">getDurationParameter</span>(X)<br>
-
-<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
-
-
-
-
-</tr></table>
-<span class="string"></span>
-</li><li><span class="functionname">getEndTime</span>(X)<br>
-
-<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
-
-
-
-
-</tr></table>
-<span class="string"></span>
-</li><li><span class="functionname">getEndTimeInBeats</span>(X)<br>
-
-<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
-
-
-
-
-</tr></table>
-<span class="string"></span>
-</li><li><span class="functionname">getEndTimeInSeconds</span>(X)<br>
-
-<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
-
-
-
-
-</tr></table>
-<span class="string"></span>
-</li><li><span class="functionname">getEndTimeParameter</span>(X)<br>
-
-<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
-
-
-
-
-</tr></table>
-<span class="string"></span>
 </li><li><span class="functionname">getFeat</span>($ F)<br>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
@@ -653,7 +570,25 @@ clearInterval(drawit)
 
 
 </tr></table>
-<span class="string"></span>
+<span class="string"> Returns information required to reconstruct the init method. Every newly defined ScoreObject subclass which introduces new init arguments should define its own getInitInfo. This documentation therefore explains also implementational details for this method.<BR>
+<BR>
+ The returned information hase the following form:<BR>
+      <BR>
+      unit(superclass:Super<BR>
+	   args:[Argument1#Accessor1#Default1<BR>
+		 ...<BR>
+		 ArgumentN#AccessorN#DefaultN])<BR>
+      <BR>
+ Super is a single superclass of self which defines/inherits a method getInitInfo extending the present method definition (can be nil in case of no superclass). Argument is an init method argument (an atom), Accessor is a unary accessor function or method returning the value of the object corresponding with Argument, and Default is the default value or 'noMatch' if no default value was given. Excluded is the same arg as for toInitRecord: this argument is only required if getInitInfo recuresively calls toInitRecord. A typical getInitInfo definition follows<BR>
+<BR>
+<BR>
+      meth getInitInfo($ exclude:Excluded)<BR>
+	 unit(superclass:MySuperClass<BR>
+	      args:[myParameter#getMyParameter#noMatch])<BR>
+      end<BR>
+      <BR>
+<BR>
+</span>
 </li><li><span class="functionname">getMethNames</span>($)<br>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
@@ -676,42 +611,6 @@ clearInterval(drawit)
 <span class="string"> Returns a record where the features are the methods defined for self and the values are the classes which define these methods. <BR>
 <BR>
 </span>
-</li><li><span class="functionname">getOffsetTime</span>(X)<br>
-
-<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
-
-
-
-
-</tr></table>
-<span class="string"></span>
-</li><li><span class="functionname">getOffsetTimeInBeats</span>(X)<br>
-
-<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
-
-
-
-
-</tr></table>
-<span class="string"></span>
-</li><li><span class="functionname">getOffsetTimeInSeconds</span>(X)<br>
-
-<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
-
-
-
-
-</tr></table>
-<span class="string"></span>
-</li><li><span class="functionname">getOffsetTimeParameter</span>(X)<br>
-
-<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
-
-
-
-
-</tr></table>
-<span class="string"></span>
 </li><li><span class="functionname">getParameters</span>(X)<br>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
@@ -754,54 +653,6 @@ clearInterval(drawit)
 <span class="string"> Returns predecessor item of self in Container.<BR>
 <BR>
 </span>
-</li><li><span class="functionname">getSimultaneousItems</span>(?Xs test:Test)<br>
-
-<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
-
-
-
-
-</tr></table>
-<span class="string"> [Deterministic method] Returns list of score objects simultaneous to self and fulfilling the optional boolean function or method test. (method uses deterministic method isSimultaneousItem)<BR>
- NB: getSimultaneousItems suspends until the rhythmic structure of the whole score self is contained in is fully determined.<BR>
-<BR>
-</span>
-</li><li><span class="functionname">getStartTime</span>(X)<br>
-
-<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
-
-
-
-
-</tr></table>
-<span class="string"></span>
-</li><li><span class="functionname">getStartTimeInBeats</span>(X)<br>
-
-<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
-
-
-
-
-</tr></table>
-<span class="string"></span>
-</li><li><span class="functionname">getStartTimeInSeconds</span>(X)<br>
-
-<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
-
-
-
-
-</tr></table>
-<span class="string"></span>
-</li><li><span class="functionname">getStartTimeParameter</span>(X)<br>
-
-<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
-
-
-
-
-</tr></table>
-<span class="string"></span>
 </li><li><span class="functionname">getSuccessor</span>(?X Container)<br>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
@@ -871,15 +722,6 @@ clearInterval(drawit)
  (cf. doc to getTopLevels).<BR>
 <BR>
 </span>
-</li><li><span class="functionname">getTimeUnit</span>(X)<br>
-
-<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
-
-
-
-
-</tr></table>
-<span class="string"></span>
 </li><li><span class="functionname">getTopLevels</span>(?Xs test:Test)<br>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
@@ -890,17 +732,6 @@ clearInterval(drawit)
 </tr></table>
 <span class="string"> Returns list of all top level items in score hierarchy graph of self which fulfil the optional boolean function or method test.<BR>
  NB: This method even collects top-levels which are not (indirect) container of self but only of some of its (indirect) contained items. <BR>
-<BR>
-</span>
-</li><li><span class="functionname">hasAbsoluteTimeUnit</span>(B)<br>
-
-<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
-
-
-
-
-</tr></table>
-<span class="string"> Returns true if the timeUnit is either seconds or milliseconds, and false otherwise. <BR>
 <BR>
 </span>
 </li><li><span class="functionname">hasFlag</span>(?B F)<br>
@@ -979,7 +810,7 @@ clearInterval(drawit)
 <span class="string"> Returns boolean whether the list at the attr info of self contains Info.<BR>
 <BR>
 </span>
-</li><li><span class="functionname">init</span>(duration:Duration endTime:EndTime offsetTime:OffsetTime startTime:StartTime timeUnit:TimeUnit&nbsp;...)<br>
+</li><li><span class="functionname">init</span>(addParameters:AddParams containers:Containers&nbsp;...)<br>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
 
@@ -987,7 +818,10 @@ clearInterval(drawit)
 
 
 </tr></table>
-<span class="string">The timing parameter units are specified by timeUnit.<BR>
+<span class="string"> The optional parameter containers expects a list of containers the item instance is contained in. (Additionally, containers can be given by calling the method bilinkContainers.)<BR>
+<BR>
+ NB: the init args containers and addParameters are yet not supported by methods like toInitRecord.<BR>
+<BR>
 </span>
 </li><li><span class="functionname">initDomains</span>(Spec)<br>
 
@@ -1009,17 +843,6 @@ clearInterval(drawit)
 
 </tr></table>
 <span class="string"> [aux method] Method must not be called by user. <BR>
-<BR>
-</span>
-</li><li><span class="functionname">initTiming</span>(duration:Duration endTime:EndTime offsetTime:OffsetTime startTime:StartTime timeUnit:TimeUnit)<br>
-
-<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
-
-
-
-
-</tr></table>
-<span class="string">[aux method] Method must not be called by user.<BR>
 <BR>
 </span>
 </li><li><span class="functionname">isAbstractElement</span>(B)<br>
@@ -1087,17 +910,6 @@ clearInterval(drawit)
 
 </tr></table>
 <span class="string"></span>
-</li><li><span class="functionname">isExactlySimultaneousItemR</span>(?B X)<br>
-
-<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
-
-
-
-
-</tr></table>
-<span class="string"> [0/1 Constraint] Returns 0/1-integer whether self and X are exactly simultaneous in time (i.e. start and end at the same time).<BR>
-<BR>
-</span>
 </li><li><span class="functionname">isFirstItem</span>(?B Container)<br>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
@@ -1201,28 +1013,6 @@ clearInterval(drawit)
 
 </tr></table>
 <span class="string"></span>
-</li><li><span class="functionname">isSimultaneousItem</span>(?B X)<br>
-
-<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
-
-
-
-
-</tr></table>
-<span class="string"> [Deterministic method] Returns boolean whether self and X are simultaneous in time. <BR>
-<BR>
-</span>
-</li><li><span class="functionname">isSimultaneousItemR</span>(?B X)<br>
-
-<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
-
-
-
-
-</tr></table>
-<span class="string"> [0/1 Constraint] Returns 0/1-integer whether self and X are simultaneous in time (i.e. somehow overlap in time).<BR>
-<BR>
-</span>
 </li><li><span class="functionname">isTemporalAspect</span>(B)<br>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
@@ -1501,7 +1291,7 @@ clearInterval(drawit)
  !! Temp: NB: toFullRecord (and thus unify) only works properly on score trees (see doc of toFullRecord).Besides, the score topology of both objects must be determined and equal. <BR>
 <BR>
 </span>
-</li><li><span class="functionname">wait</span>()<br>
+</li><li><span class="functionname">wait</span>(unless:Unless)<br>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
 
@@ -1509,7 +1299,7 @@ clearInterval(drawit)
 
 
 </tr></table>
-<span class="string"> Wait until all parameter values of self are determined. <BR>
+<span class="string"> Wait until all parameter values of self are determined. The only exception are parameters for which the optional arg Unless -- a boolean unary function -- returns true (per default, Unless always returns false).<BR>
 <BR>
 </span>
 </li></ul>

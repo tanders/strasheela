@@ -1,7 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
 <html>
  <head>
-  <title>Class MidiNoteMixin</title>
+  <title>Class Shell</title>
   <style>BODY {
  background: url(page.gif) repeat-y white;
 }
@@ -120,7 +120,11 @@ clearInterval(drawit)
 
 <div style="margin-left:160px"><p align="right" class="margin"><div align="right">inheritance tree</div></p>
 <pre>
- <a class="pre" href="node11.html#entity593">MidiNoteMixin</a>
+ Open.pipe Open.text
+     |         |
+     `----+----'
+          |
+        <a class="pre" href="node9.html#entity465">Shell</a>
 </pre>
 <hr><p class="margin"><div align="right">class definition</div></p>
 <code>
@@ -131,16 +135,13 @@ clearInterval(drawit)
 
 
 </tr></table>
-<span class="string"> Defines a mixin to extend the Score.note class (or any of its subclasses) to a full MIDI note class.<BR>
- MidiNoteMixin defines the additional attribute channel.<BR>
+<span class="string"> Provides an interface to interactive commandline programs like a shell or an interpreter. Start interactive program with the method init (see below), close it with the method close.<BR>
+ More specialised classes (e.g. an interface to Common Lisp) may be obtained by subclasses..<BR>
 <BR>
 </span>
-<span class="keyword">class</span> <span class="type">MidiNoteMixin</span> (Inheritance-free)<br>
-&nbsp;&nbsp;&nbsp;<span class="keyword">feat</span>&nbsp;!MidiNoteMixinType&nbsp;label
+<span class="keyword">class</span> <span class="type">Shell</span> (Inheritance-free)<br>
 <br>
-&nbsp;&nbsp;&nbsp;<span class="keyword">attr</span>&nbsp;channel
-<br>
-<ul><li><span class="functionname">getChannel</span>(X)<br>
+<ul><li><span class="functionname">cmd</span>(Cmd)<br>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
 
@@ -148,8 +149,11 @@ clearInterval(drawit)
 
 
 </tr></table>
-<span class="string"></span>
-</li><li><span class="functionname">getChannelParameter</span>(X)<br>
+<span class="string"> Feed Cmd (a VS) to the interactive program. Use one of the output/show methods to retrieve results.<BR>
+ Please note that the output/show methods are exclusive (i.e., once some result is output one way, it is output again.). <BR>
+<BR>
+</span>
+</li><li><span class="functionname">init</span>(args:Args cmd:Cmd)<br>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
 
@@ -157,8 +161,10 @@ clearInterval(drawit)
 
 
 </tr></table>
-<span class="string"></span>
-</li><li><span class="functionname">getMidiNoteMixinAttributes</span>(X)<br>
+<span class="string"> Start interactive program Cmd (VS) with Args (list of VSs). The default is the shell "sh" with args ["-s"] for reading from standard input. See the test file for examples for other interactive commands (e.g., the interactive ruby shell or a Common Lisp compiler). <BR>
+<BR>
+</span>
+</li><li><span class="functionname">outputLine</span>($)<br>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
 
@@ -166,8 +172,10 @@ clearInterval(drawit)
 
 
 </tr></table>
-<span class="string"></span>
-</li><li><span class="functionname">initMidiNote</span>(channel:Chan)<br>
+<span class="string"> Return the next line (a string) of any result. In case the shell has died, nil is returned.<BR>
+<BR>
+</span>
+</li><li><span class="functionname">showAll</span>()<br>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
 
@@ -175,7 +183,9 @@ clearInterval(drawit)
 
 
 </tr></table>
-<span class="string"></span>
+<span class="string"> Show any results and output of each command fed to the shell at stdout. <BR>
+<BR>
+</span>
 </li></ul>
 <span class="keyword">end</span>
 </code>

@@ -1,7 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
 <html>
  <head>
-  <title>Class Note2</title>
+  <title>Class Event</title>
   <style>BODY {
  background: url(page.gif) repeat-y white;
 }
@@ -120,31 +120,27 @@ clearInterval(drawit)
 
 <div style="margin-left:160px"><p align="right" class="margin"><div align="right">inheritance tree</div></p>
 <pre>
- <a class="pre" href="node6.html#entity214">NonType</a> <a class="pre" href="node6.html#entity215">Reflection</a>         <a class="pre" href="node7.html#entity288">FlagsMixin</a>
+ <a class="pre" href="node6.html#entity214">NonType</a> <a class="pre" href="node6.html#entity215">Reflection</a>         <a class="pre" href="node7.html#entity292">FlagsMixin</a>
     |        |                  |
     `-----+--'                  |
           |                     |
-     <a class="pre" href="node6.html#entity216">ScoreObject</a>    <a class="pre" href="node7.html#entity289">ScoreMapping.mappingMixin</a>
+     <a class="pre" href="node6.html#entity216">ScoreObject</a>    <a class="pre" href="node7.html#entity293">ScoreMapping.mappingMixin</a>
           |                     |
           `-----------+---------'
                       |
-                     <a class="pre" href="node6.html#entity225">Item</a>
+                     <a class="pre" href="node6.html#entity227">Item</a>
                       |
                       `+
                        |
-                    <a class="pre" href="node6.html#entity232">Element</a>                   <a class="pre" href="node6.html#entity217">TimeMixin</a>
+                    <a class="pre" href="node6.html#entity234">Element</a>                   <a class="pre" href="node6.html#entity217">TimeMixin</a>
                        |                          |
                        `----+---------------------'
                             |
-                     <a class="pre" href="node6.html#entity234">TemporalElement</a>
+                     <a class="pre" href="node6.html#entity236">TemporalElement</a>
                             |
                             |
                             |
-                          <a class="pre" href="node6.html#entity236">Event</a>
-                            |
-                            |
-                            |
-                          <a class="pre" href="node6.html#entity237">Note2</a>
+                          <a class="pre" href="node6.html#entity238">Event</a>
 </pre>
 <hr><p class="margin"><div align="right">class definition</div></p>
 <code>
@@ -155,16 +151,20 @@ clearInterval(drawit)
 
 
 </tr></table>
-<span class="string"> [concrete class] A note is an score event with explicit attributes for the parameter pitch.<BR>
- A note inherits various timing parameters from the event class. The full set of non-optional note parameters (i.e. parameters which are not only bound to the attribute parameters, but which have extra attributes) is startTime, duration, endTime, offsetTime}, and pitch. Additional parameters can be specified optionally (e.g. by the feature addParameters of the init method).<BR>
+<span class="string"> [semi abstract class or concrete class?] An event is a score element which produces sound when the score is played. An event is a very general representation for something producing sound. For instance, a note played on a piano (with a specific pitch, loudness etc.), a hand clapping (no pitch, but maybe a specific loudness), or an arbitrary sound synthesis language event (possibly with dozends of parameters) are all representable be an event. <BR>
+ <BR>
+ To provide such generality, an event has the attribute parameters which points to a collection [better term?] of all parameters of the event. The parameters themself contain information about their purpose (e.g. parameters are of a certain class as pitch, or amplitude). However, as a convenience, certain parameters are additionally referenced by an extra feature  (e.g. all timing related parameters have their own feature, as startTime, offsetTime, endTime or duration). Subclasses of the event class may define additional features. Nevertheless, all parameters can be accessed via the parameters feature<BR>
+<BR>
+ An event always has the timing parameters startTime, duration, endTime, and offsetTime. However, additional parameters can be specified optionally (e.g. by the feature addParameters of the init method).<BR>
+ For a documentation of the time unit see doc of TimeMixin.<BR>
 <BR>
 </span>
-<span class="keyword">class</span> <span class="type">Note2</span> (Inheritance-free)<br>
+<span class="keyword">class</span> <span class="type">Event</span> (Inheritance-free)<br>
 &nbsp;&nbsp;&nbsp;<span class="keyword">prop</span>&nbsp;locking
 <br>
 &nbsp;&nbsp;&nbsp;<span class="keyword">feat</span>&nbsp;!ScoreObjectType&nbsp;label
 <br>
-&nbsp;&nbsp;&nbsp;<span class="keyword">attr</span>&nbsp;containers&nbsp;duration&nbsp;endTime&nbsp;flags&nbsp;id&nbsp;info&nbsp;offsetTime&nbsp;parameters&nbsp;pitch&nbsp;startTime
+&nbsp;&nbsp;&nbsp;<span class="keyword">attr</span>&nbsp;containers&nbsp;duration&nbsp;endTime&nbsp;flags&nbsp;id&nbsp;info&nbsp;offsetTime&nbsp;parameters&nbsp;startTime
 <br>
 <ul><li><span class="functionname">addContainer</span>(Container)<br>
 
@@ -730,42 +730,6 @@ clearInterval(drawit)
 
 </tr></table>
 <span class="string"></span>
-</li><li><span class="functionname">getPitch</span>(X)<br>
-
-<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
-
-
-
-
-</tr></table>
-<span class="string"></span>
-</li><li><span class="functionname">getPitchInMidi</span>(X)<br>
-
-<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
-
-
-
-
-</tr></table>
-<span class="string"></span>
-</li><li><span class="functionname">getPitchParameter</span>(X)<br>
-
-<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
-
-
-
-
-</tr></table>
-<span class="string"></span>
-</li><li><span class="functionname">getPitchUnit</span>(X)<br>
-
-<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
-
-
-
-
-</tr></table>
-<span class="string"></span>
 </li><li><span class="functionname">getPosRelatedItem</span>(?X N Container)<br>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
@@ -1024,7 +988,7 @@ clearInterval(drawit)
 <span class="string"> Returns boolean whether the list at the attr info of self contains Info.<BR>
 <BR>
 </span>
-</li><li><span class="functionname">init</span>(pitch:P pitchUnit:PU&nbsp;...)<br>
+</li><li><span class="functionname">init</span>(duration:Duration endTime:EndTime offsetTime:OffsetTime startTime:StartTime timeUnit:TimeUnit&nbsp;...)<br>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
 
@@ -1032,8 +996,7 @@ clearInterval(drawit)
 
 
 </tr></table>
-<span class="string"> The parameter unit of pitch is specified by pitchUnit (default keynumber). <BR>
-<BR>
+<span class="string">The timing parameter units are specified by timeUnit.<BR>
 </span>
 </li><li><span class="functionname">initDomains</span>(Spec)<br>
 
@@ -1547,7 +1510,7 @@ clearInterval(drawit)
  !! Temp: NB: toFullRecord (and thus unify) only works properly on score trees (see doc of toFullRecord).Besides, the score topology of both objects must be determined and equal. <BR>
 <BR>
 </span>
-</li><li><span class="functionname">wait</span>()<br>
+</li><li><span class="functionname">wait</span>(unless:Unless)<br>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
 
@@ -1555,7 +1518,7 @@ clearInterval(drawit)
 
 
 </tr></table>
-<span class="string"> Wait until all parameter values of self are determined. <BR>
+<span class="string"> Wait until all parameter values of self are determined. The only exception are parameters for which the optional arg Unless -- a boolean unary function -- returns true (per default, Unless always returns false).<BR>
 <BR>
 </span>
 </li></ul>

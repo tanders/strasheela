@@ -1,7 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
 <html>
  <head>
-  <title>Class Simultaneous</title>
+  <title>Class Sequential</title>
   <style>BODY {
  background: url(page.gif) repeat-y white;
 }
@@ -120,31 +120,31 @@ clearInterval(drawit)
 
 <div style="margin-left:160px"><p align="right" class="margin"><div align="right">inheritance tree</div></p>
 <pre>
- <a class="pre" href="node6.html#entity214">NonType</a> <a class="pre" href="node6.html#entity215">Reflection</a>         <a class="pre" href="node7.html#entity288">FlagsMixin</a>
+ <a class="pre" href="node6.html#entity214">NonType</a> <a class="pre" href="node6.html#entity215">Reflection</a>         <a class="pre" href="node7.html#entity292">FlagsMixin</a>
     |        |                  |
     `-----+--'                  |
           |                     |
-     <a class="pre" href="node6.html#entity216">ScoreObject</a>    <a class="pre" href="node7.html#entity289">ScoreMapping.mappingMixin</a>
+     <a class="pre" href="node6.html#entity216">ScoreObject</a>    <a class="pre" href="node7.html#entity293">ScoreMapping.mappingMixin</a>
           |                     |
           `-----------+---------'
                       |
-                     <a class="pre" href="node6.html#entity225">Item</a>
+                     <a class="pre" href="node6.html#entity227">Item</a>
                       |
                       `+
                        |
-                   <a class="pre" href="node6.html#entity226">Container</a>
+                   <a class="pre" href="node6.html#entity228">Container</a>
                        |
                       +'
                       |
-                    <a class="pre" href="node6.html#entity228">Aspect</a>                    <a class="pre" href="node6.html#entity217">TimeMixin</a>
+                    <a class="pre" href="node6.html#entity230">Aspect</a>                    <a class="pre" href="node6.html#entity217">TimeMixin</a>
                       |                           |
                       `----+----------------------'
                            |
-                     <a class="pre" href="node6.html#entity229">TemporalAspect</a>
+                     <a class="pre" href="node6.html#entity231">TemporalAspect</a>
                            |
                            |
                            |
-                      <a class="pre" href="node6.html#entity231">Simultaneous</a>
+                       <a class="pre" href="node6.html#entity232">Sequential</a>
 </pre>
 <hr><p class="margin"><div align="right">class definition</div></p>
 <code>
@@ -155,11 +155,12 @@ clearInterval(drawit)
 
 
 </tr></table>
-<span class="string"> [concrete class] A Simultaneous expresses that the items contained in it start at the same time.  However, setting the parameter offsetTime of an item to a value greater zero causes this item to delay its startTime the amount of offsetTime.<BR>
+<span class="string"> [concrete class] A Sequential expresses that the items contained in it follow each other in a sequential manner in time. Usually, the parameter endTime of a proceeding item equals the parameter startTime of the following item. However, setting the parameter offsetTime of an item to a value greater zero causes a gap (i.e. a pause) before the item and a negative offsetTime causes an overlap with the proceeding item.<BR>
  For a documentation of the time unit see doc of TimeMixin.<BR>
+ NB: A negative offsetTime value is not possible if the offsetTime is a FD integer (which presently is the only option).<BR>
 <BR>
 </span>
-<span class="keyword">class</span> <span class="type">Simultaneous</span> (Inheritance-free)<br>
+<span class="keyword">class</span> <span class="type">Sequential</span> (Inheritance-free)<br>
 &nbsp;&nbsp;&nbsp;<span class="keyword">prop</span>&nbsp;locking
 <br>
 &nbsp;&nbsp;&nbsp;<span class="keyword">feat</span>&nbsp;!ScoreObjectType&nbsp;label
@@ -300,7 +301,7 @@ clearInterval(drawit)
 
 
 </tr></table>
-<span class="string"> [temp method ??] After full creation of score hierarchy, method must be called with every TimeMixin subclass instance in score to init the timing attributes/features <BR>
+<span class="string"> After full creation of score hierarchy, method must be called with every TimeMixin subclass instance in score to init the timing attributes/features <BR>
 <BR>
 </span>
 </li><li><span class="functionname">count</span>(?N level:Level mode:Mode test:Test)<br>
@@ -1623,7 +1624,7 @@ clearInterval(drawit)
  !! Temp: NB: toFullRecord (and thus unify) only works properly on score trees (see doc of toFullRecord).Besides, the score topology of both objects must be determined and equal. <BR>
 <BR>
 </span>
-</li><li><span class="functionname">wait</span>()<br>
+</li><li><span class="functionname">wait</span>(unless:Unless)<br>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
 
@@ -1631,7 +1632,7 @@ clearInterval(drawit)
 
 
 </tr></table>
-<span class="string"> Wait until all parameter values of self and of its (directly and indirectly) contained items are determined. <BR>
+<span class="string"> Wait until all parameter values of self and of its (directly and indirectly) contained items are determined. The only exception are parameters for which the optional arg Unless -- a boolean unary function -- returns true (per default, Unless always returns false).<BR>
 <BR>
 </span>
 </li></ul>

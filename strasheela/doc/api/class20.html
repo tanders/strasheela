@@ -1,7 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
 <html>
  <head>
-  <title>Class AbstractElement</title>
+  <title>Class Element</title>
   <style>BODY {
  background: url(page.gif) repeat-y white;
 }
@@ -120,23 +120,19 @@ clearInterval(drawit)
 
 <div style="margin-left:160px"><p align="right" class="margin"><div align="right">inheritance tree</div></p>
 <pre>
- <a class="pre" href="node6.html#entity214">NonType</a> <a class="pre" href="node6.html#entity215">Reflection</a>         <a class="pre" href="node7.html#entity288">FlagsMixin</a>
+ <a class="pre" href="node6.html#entity214">NonType</a> <a class="pre" href="node6.html#entity215">Reflection</a>         <a class="pre" href="node7.html#entity292">FlagsMixin</a>
     |        |                  |
     `-----+--'                  |
           |                     |
-     <a class="pre" href="node6.html#entity216">ScoreObject</a>    <a class="pre" href="node7.html#entity289">ScoreMapping.mappingMixin</a>
+     <a class="pre" href="node6.html#entity216">ScoreObject</a>    <a class="pre" href="node7.html#entity293">ScoreMapping.mappingMixin</a>
           |                     |
           `-----------+---------'
                       |
-                     <a class="pre" href="node6.html#entity225">Item</a>
+                     <a class="pre" href="node6.html#entity227">Item</a>
                       |
                       `+
                        |
-                    <a class="pre" href="node6.html#entity232">Element</a>
-                       |
-                       |
-                       |
-                <a class="pre" href="node6.html#entity233">AbstractElement</a>
+                    <a class="pre" href="node6.html#entity234">Element</a>
 </pre>
 <hr><p class="margin"><div align="right">class definition</div></p>
 <code>
@@ -147,10 +143,10 @@ clearInterval(drawit)
 
 
 </tr></table>
-<span class="string"> [semi abstract class] An AbstractElement is an element without timing information. For instance, an instrument definition for a sound synthesis language such as Csound could be represented by an instance of a subclass of AbstractElement.<BR>
+<span class="string"> [abstract class] An element is a score item which does not contain items. For instance, a note and a pause are both elements.<BR>
 <BR>
 </span>
-<span class="keyword">class</span> <span class="type">AbstractElement</span> (Inheritance-free)<br>
+<span class="keyword">class</span> <span class="type">Element</span> (Inheritance-free)<br>
 &nbsp;&nbsp;&nbsp;<span class="keyword">prop</span>&nbsp;locking
 <br>
 &nbsp;&nbsp;&nbsp;<span class="keyword">feat</span>&nbsp;!ScoreObjectType&nbsp;label
@@ -1291,7 +1287,7 @@ clearInterval(drawit)
  !! Temp: NB: toFullRecord (and thus unify) only works properly on score trees (see doc of toFullRecord).Besides, the score topology of both objects must be determined and equal. <BR>
 <BR>
 </span>
-</li><li><span class="functionname">wait</span>()<br>
+</li><li><span class="functionname">wait</span>(unless:Unless)<br>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
 
@@ -1299,7 +1295,7 @@ clearInterval(drawit)
 
 
 </tr></table>
-<span class="string"> Wait until all parameter values of self are determined. <BR>
+<span class="string"> Wait until all parameter values of self are determined. The only exception are parameters for which the optional arg Unless -- a boolean unary function -- returns true (per default, Unless always returns false).<BR>
 <BR>
 </span>
 </li></ul>

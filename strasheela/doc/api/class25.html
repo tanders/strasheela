@@ -1,7 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
 <html>
  <head>
-  <title>Class Note</title>
+  <title>Class Note2</title>
   <style>BODY {
  background: url(page.gif) repeat-y white;
 }
@@ -120,35 +120,31 @@ clearInterval(drawit)
 
 <div style="margin-left:160px"><p align="right" class="margin"><div align="right">inheritance tree</div></p>
 <pre>
- <a class="pre" href="node6.html#entity214">NonType</a> <a class="pre" href="node6.html#entity215">Reflection</a>         <a class="pre" href="node7.html#entity288">FlagsMixin</a>
+ <a class="pre" href="node6.html#entity214">NonType</a> <a class="pre" href="node6.html#entity215">Reflection</a>         <a class="pre" href="node7.html#entity292">FlagsMixin</a>
     |        |                  |
     `-----+--'                  |
           |                     |
-     <a class="pre" href="node6.html#entity216">ScoreObject</a>    <a class="pre" href="node7.html#entity289">ScoreMapping.mappingMixin</a>
+     <a class="pre" href="node6.html#entity216">ScoreObject</a>    <a class="pre" href="node7.html#entity293">ScoreMapping.mappingMixin</a>
           |                     |
           `-----------+---------'
                       |
-                     <a class="pre" href="node6.html#entity225">Item</a>
+                     <a class="pre" href="node6.html#entity227">Item</a>
                       |
                       `+
                        |
-                    <a class="pre" href="node6.html#entity232">Element</a>                   <a class="pre" href="node6.html#entity217">TimeMixin</a>
+                    <a class="pre" href="node6.html#entity234">Element</a>                   <a class="pre" href="node6.html#entity217">TimeMixin</a>
                        |                          |
                        `----+---------------------'
                             |
-                     <a class="pre" href="node6.html#entity234">TemporalElement</a>
+                     <a class="pre" href="node6.html#entity236">TemporalElement</a>
                             |
                             |
                             |
-                          <a class="pre" href="node6.html#entity236">Event</a>
+                          <a class="pre" href="node6.html#entity238">Event</a>
                             |
                             |
                             |
-                          <a class="pre" href="node6.html#entity237">Note2</a>
-                            |
-                           +'
-                           |
-                          <a class="pre" href="node6.html#entity238">Note</a>
+                          <a class="pre" href="node6.html#entity239">Note2</a>
 </pre>
 <hr><p class="margin"><div align="right">class definition</div></p>
 <code>
@@ -159,15 +155,16 @@ clearInterval(drawit)
 
 
 </tr></table>
-<span class="string"> [concrete class] Extends class Note2 by parameter amplitude. These two classes exist because an amplitude is usually needed if a sound synthesis format is output but may not be needed if only a music notation format is output.<BR>
+<span class="string"> [concrete class] A note is an score event with explicit attributes for the parameter pitch.<BR>
+ A note inherits various timing parameters from the event class. The full set of non-optional note parameters (i.e. parameters which are not only bound to the attribute parameters, but which have extra attributes) is startTime, duration, endTime, offsetTime}, and pitch. Additional parameters can be specified optionally (e.g. by the feature addParameters of the init method).<BR>
 <BR>
 </span>
-<span class="keyword">class</span> <span class="type">Note</span> (Inheritance-free)<br>
+<span class="keyword">class</span> <span class="type">Note2</span> (Inheritance-free)<br>
 &nbsp;&nbsp;&nbsp;<span class="keyword">prop</span>&nbsp;locking
 <br>
 &nbsp;&nbsp;&nbsp;<span class="keyword">feat</span>&nbsp;!ScoreObjectType&nbsp;label
 <br>
-&nbsp;&nbsp;&nbsp;<span class="keyword">attr</span>&nbsp;amplitude&nbsp;containers&nbsp;duration&nbsp;endTime&nbsp;flags&nbsp;id&nbsp;info&nbsp;offsetTime&nbsp;parameters&nbsp;pitch&nbsp;startTime
+&nbsp;&nbsp;&nbsp;<span class="keyword">attr</span>&nbsp;containers&nbsp;duration&nbsp;endTime&nbsp;flags&nbsp;id&nbsp;info&nbsp;offsetTime&nbsp;parameters&nbsp;pitch&nbsp;startTime
 <br>
 <ul><li><span class="functionname">addContainer</span>(Container)<br>
 
@@ -407,51 +404,6 @@ clearInterval(drawit)
 <span class="string"> The method traverses all score objects in self (i.e. items and parameters) and applies unary procedure (or null-ary method) Proc on every object returning true for the unary function (or unary method) Test. However, the method does not effect the object self itself -- only the parameters and (if self is a container) items of self are effected recursively. Traversing happens concurrently -- the method does not suspend even if the result of getItems or getParameters is not yet fully determined.<BR>
 <BR>
 </span>
-</li><li><span class="functionname">getAmplitude</span>(X)<br>
-
-<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
-
-
-
-
-</tr></table>
-<span class="string"></span>
-</li><li><span class="functionname">getAmplitudeInNormalized</span>(X)<br>
-
-<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
-
-
-
-
-</tr></table>
-<span class="string"></span>
-</li><li><span class="functionname">getAmplitudeInVelocity</span>(X)<br>
-
-<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
-
-
-
-
-</tr></table>
-<span class="string"></span>
-</li><li><span class="functionname">getAmplitudeParameter</span>(X)<br>
-
-<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
-
-
-
-
-</tr></table>
-<span class="string"></span>
-</li><li><span class="functionname">getAmplitudeUnit</span>(X)<br>
-
-<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
-
-
-
-
-</tr></table>
-<span class="string"></span>
 </li><li><span class="functionname">getAttr</span>($ A)<br>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
@@ -1072,7 +1024,7 @@ clearInterval(drawit)
 <span class="string"> Returns boolean whether the list at the attr info of self contains Info.<BR>
 <BR>
 </span>
-</li><li><span class="functionname">init</span>(amplitude:A amplitudeUnit:AU&nbsp;...)<br>
+</li><li><span class="functionname">init</span>(pitch:P pitchUnit:PU&nbsp;...)<br>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
 
@@ -1080,7 +1032,9 @@ clearInterval(drawit)
 
 
 </tr></table>
-<span class="string"></span>
+<span class="string"> The parameter unit of pitch is specified by pitchUnit (default keynumber). <BR>
+<BR>
+</span>
 </li><li><span class="functionname">initDomains</span>(Spec)<br>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
@@ -1593,7 +1547,7 @@ clearInterval(drawit)
  !! Temp: NB: toFullRecord (and thus unify) only works properly on score trees (see doc of toFullRecord).Besides, the score topology of both objects must be determined and equal. <BR>
 <BR>
 </span>
-</li><li><span class="functionname">wait</span>()<br>
+</li><li><span class="functionname">wait</span>(unless:Unless)<br>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
 
@@ -1601,7 +1555,7 @@ clearInterval(drawit)
 
 
 </tr></table>
-<span class="string"> Wait until all parameter values of self are determined. <BR>
+<span class="string"> Wait until all parameter values of self are determined. The only exception are parameters for which the optional arg Unless -- a boolean unary function -- returns true (per default, Unless always returns false).<BR>
 <BR>
 </span>
 </li></ul>

@@ -1,7 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
 <html>
  <head>
-  <title>Class Pause</title>
+  <title>Class TemporalElement</title>
   <style>BODY {
  background: url(page.gif) repeat-y white;
 }
@@ -120,27 +120,23 @@ clearInterval(drawit)
 
 <div style="margin-left:160px"><p align="right" class="margin"><div align="right">inheritance tree</div></p>
 <pre>
- <a class="pre" href="node6.html#entity214">NonType</a> <a class="pre" href="node6.html#entity215">Reflection</a>         <a class="pre" href="node7.html#entity288">FlagsMixin</a>
+ <a class="pre" href="node6.html#entity214">NonType</a> <a class="pre" href="node6.html#entity215">Reflection</a>         <a class="pre" href="node7.html#entity292">FlagsMixin</a>
     |        |                  |
     `-----+--'                  |
           |                     |
-     <a class="pre" href="node6.html#entity216">ScoreObject</a>    <a class="pre" href="node7.html#entity289">ScoreMapping.mappingMixin</a>
+     <a class="pre" href="node6.html#entity216">ScoreObject</a>    <a class="pre" href="node7.html#entity293">ScoreMapping.mappingMixin</a>
           |                     |
           `-----------+---------'
                       |
-                     <a class="pre" href="node6.html#entity225">Item</a>
+                     <a class="pre" href="node6.html#entity227">Item</a>
                       |
                       `+
                        |
-                    <a class="pre" href="node6.html#entity232">Element</a>                   <a class="pre" href="node6.html#entity217">TimeMixin</a>
+                    <a class="pre" href="node6.html#entity234">Element</a>                   <a class="pre" href="node6.html#entity217">TimeMixin</a>
                        |                          |
                        `----+---------------------'
                             |
-                     <a class="pre" href="node6.html#entity234">TemporalElement</a>
-                            |
-                            |
-                            |
-                          <a class="pre" href="node6.html#entity235">Pause</a>
+                     <a class="pre" href="node6.html#entity236">TemporalElement</a>
 </pre>
 <hr><p class="margin"><div align="right">class definition</div></p>
 <code>
@@ -151,11 +147,10 @@ clearInterval(drawit)
 
 
 </tr></table>
-<span class="string"> [concrete class] A pause is a score element to produce silence of a given duration. It can, e.g., be used within a sequential to produce an offset between two items in the sequential. However, in such situation a pause could be replaced by the use of the parameter offsetTime of the item after the pause. Nevertheless, a pause in an explicite representation.<BR>
- For a documentation of the time unit see doc of TimeMixin.<BR>
+<span class="string"> [abstract class] A TemporalElement is an element with timing information. For instance, any action of a performer is a TemporalElement -- whether the action is heard or not. An unheard action can a change of the instrument (as muting it) is a TemporalElement, a heard action the performance of a note. <BR>
 <BR>
 </span>
-<span class="keyword">class</span> <span class="type">Pause</span> (Inheritance-free)<br>
+<span class="keyword">class</span> <span class="type">TemporalElement</span> (Inheritance-free)<br>
 &nbsp;&nbsp;&nbsp;<span class="keyword">prop</span>&nbsp;locking
 <br>
 &nbsp;&nbsp;&nbsp;<span class="keyword">feat</span>&nbsp;!ScoreObjectType&nbsp;label
@@ -1506,7 +1501,7 @@ clearInterval(drawit)
  !! Temp: NB: toFullRecord (and thus unify) only works properly on score trees (see doc of toFullRecord).Besides, the score topology of both objects must be determined and equal. <BR>
 <BR>
 </span>
-</li><li><span class="functionname">wait</span>()<br>
+</li><li><span class="functionname">wait</span>(unless:Unless)<br>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
 
@@ -1514,7 +1509,7 @@ clearInterval(drawit)
 
 
 </tr></table>
-<span class="string"> Wait until all parameter values of self are determined. <BR>
+<span class="string"> Wait until all parameter values of self are determined. The only exception are parameters for which the optional arg Unless -- a boolean unary function -- returns true (per default, Unless always returns false).<BR>
 <BR>
 </span>
 </li></ul>

@@ -1,7 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
 <html>
  <head>
-  <title>Class Container</title>
+  <title>Class Item</title>
   <style>BODY {
  background: url(page.gif) repeat-y white;
 }
@@ -120,19 +120,15 @@ clearInterval(drawit)
 
 <div style="margin-left:160px"><p align="right" class="margin"><div align="right">inheritance tree</div></p>
 <pre>
- <a class="pre" href="node6.html#entity214">NonType</a> <a class="pre" href="node6.html#entity215">Reflection</a>         <a class="pre" href="node7.html#entity288">FlagsMixin</a>
+ <a class="pre" href="node6.html#entity214">NonType</a> <a class="pre" href="node6.html#entity215">Reflection</a>         <a class="pre" href="node7.html#entity292">FlagsMixin</a>
     |        |                  |
     `-----+--'                  |
           |                     |
-     <a class="pre" href="node6.html#entity216">ScoreObject</a>    <a class="pre" href="node7.html#entity289">ScoreMapping.mappingMixin</a>
+     <a class="pre" href="node6.html#entity216">ScoreObject</a>    <a class="pre" href="node7.html#entity293">ScoreMapping.mappingMixin</a>
           |                     |
           `-----------+---------'
                       |
-                     <a class="pre" href="node6.html#entity225">Item</a>
-                      |
-                      `+
-                       |
-                   <a class="pre" href="node6.html#entity226">Container</a>
+                     <a class="pre" href="node6.html#entity227">Item</a>
 </pre>
 <hr><p class="margin"><div align="right">class definition</div></p>
 <code>
@@ -143,15 +139,15 @@ clearInterval(drawit)
 
 
 </tr></table>
-<span class="string"> [abstract class] A container contains one or more score items. A container is a generalization of a score aspect and a score modifier. The attribute items points to the items contained in a container. Because containers themself are items as well, a container can contain other containers to form a score hierarchy of containers and elements. However, a container must not contain itself.<BR>
+<span class="string"> [abstract class] An item is a generalization of score containers and elements. An item can be contained in one or more containers, the feature containers points to them.<BR>
 <BR>
 </span>
-<span class="keyword">class</span> <span class="type">Container</span> (Inheritance-free)<br>
+<span class="keyword">class</span> <span class="type">Item</span> (Inheritance-free)<br>
 &nbsp;&nbsp;&nbsp;<span class="keyword">prop</span>&nbsp;locking
 <br>
 &nbsp;&nbsp;&nbsp;<span class="keyword">feat</span>&nbsp;!ScoreObjectType&nbsp;label
 <br>
-&nbsp;&nbsp;&nbsp;<span class="keyword">attr</span>&nbsp;containers&nbsp;flags&nbsp;id&nbsp;info&nbsp;items&nbsp;parameters
+&nbsp;&nbsp;&nbsp;<span class="keyword">attr</span>&nbsp;containers&nbsp;flags&nbsp;id&nbsp;info&nbsp;parameters
 <br>
 <ul><li><span class="functionname">addContainer</span>(Container)<br>
 
@@ -186,17 +182,6 @@ clearInterval(drawit)
 <span class="string"> [destructive method] Adds X to list in attribute info. The tail of the list at attribute info is the info specified at the init method which defaults to nil.<BR>
 <BR>
 </span>
-</li><li><span class="functionname">addItem</span>(Item)<br>
-
-<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
-
-
-
-
-</tr></table>
-<span class="string"> [aux method] Method adds Item to list of items contained in self. However, method does not establish bidirectional links. Method should not be called by user.<BR>
-<BR>
-</span>
 </li><li><span class="functionname">bilinkContainers</span>(Containers)<br>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
@@ -206,17 +191,6 @@ clearInterval(drawit)
 
 </tr></table>
 <span class="string"> Calling the method bilinkItems with Containers expresses that self is contained in all Containers. The method establishes bidirectional links between both self and all Containers. Method must not be called by user (only by class designer).<BR>
-<BR>
-</span>
-</li><li><span class="functionname">bilinkItems</span>(Items)<br>
-
-<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
-
-
-
-
-</tr></table>
-<span class="string"> Calling the method bilinkItems with Items expresses that Items are contained in the container itself. The method establishes bidirectional links between both self and all Items. Method must not be called by user (only by class designer).<BR>
 <BR>
 </span>
 </li><li><span class="functionname">bilinkParameters</span>(Parameters)<br>
@@ -290,17 +264,6 @@ clearInterval(drawit)
 <span class="string"> The method count counts a number of collected score objects. The method supports the features <code> mode</code>, <code> level</code>, and <code> test</code>. These features have the same meaning as in the method collect.<BR>
 <BR>
 </span>
-</li><li><span class="functionname">countItems</span>(N test:Test)<br>
-
-<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
-
-
-
-
-</tr></table>
-<span class="string"> N (an integer) is the number of all direct items in self which fulfill Test (a boolean function or method).<BR>
-<BR>
-</span>
 </li><li><span class="functionname">filter</span>(?Xs Fn level:Level mode:Mode)<br>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
@@ -321,17 +284,6 @@ clearInterval(drawit)
 
 </tr></table>
 <span class="string"> Return a list of all direct containers of self for which Fn (unary function or method) returns true.<BR>
-<BR>
-</span>
-</li><li><span class="functionname">filterItems</span>(Xs Fn)<br>
-
-<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
-
-
-
-
-</tr></table>
-<span class="string"> Return a list of all direct items of self for which Fn (unary function or method) returns true.<BR>
 <BR>
 </span>
 </li><li><span class="functionname">filterParameters</span>(Xs Fn)<br>
@@ -369,17 +321,6 @@ clearInterval(drawit)
 <span class="string"> Returns the first direct container self is contained in which fulfils the boolean function or method Test.<BR>
 <BR>
 </span>
-</li><li><span class="functionname">findItem</span>(X Test)<br>
-
-<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
-
-
-
-
-</tr></table>
-<span class="string"> Returns the first direct item of self which fulfils the boolean function or method Test.<BR>
-<BR>
-</span>
 </li><li><span class="functionname">findParameter</span>(X Test)<br>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
@@ -413,17 +354,6 @@ clearInterval(drawit)
 <span class="string"> Applies Proc (unary procedure or method) on all direct containers in self.<BR>
 <BR>
 </span>
-</li><li><span class="functionname">forAllItems</span>(Proc test:Test)<br>
-
-<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
-
-
-
-
-</tr></table>
-<span class="string"> Applies Proc (unary procedure or method) on all direct items in self which fulfill Test (a boolean function or method).<BR>
-<BR>
-</span>
 </li><li><span class="functionname">forAllParameters</span>(Proc)<br>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
@@ -444,32 +374,6 @@ clearInterval(drawit)
 
 </tr></table>
 <span class="string"> The method traverses all score objects in self (i.e. items and parameters) and applies unary procedure (or null-ary method) Proc on every object returning true for the unary function (or unary method) Test. However, the method does not effect the object self itself -- only the parameters and (if self is a container) items of self are effected recursively. Traversing happens concurrently -- the method does not suspend even if the result of getItems or getParameters is not yet fully determined.<BR>
-<BR>
-</span>
-</li><li><span class="functionname">forNumericRangeTemporalAspect</span>(Decl P)<br>
-
-<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
-
-
-
-
-</tr></table>
-<span class="string"> Applies unary procedure P to each item in self which index is expressed by Decl. Decl is a list which contains single index integers or index ranges of the form Min#Max (Min and Max are integers).<BR>
- BTW: ForNumericRange corresponds roughly to rule application mechanism of Situation.<BR>
-<BR>
- See also ScoreMapping.forNumericRange <BR>
-<BR>
-</span>
-</li><li><span class="functionname">forNumericRangeTemporalAspect2</span>(Decl P ElseP)<br>
-
-<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
-
-
-
-
-</tr></table>
-<span class="string"> Generalised variant of forNumericRangeTemporalAspect: to every item in self to which P is not applied, ElseP (a unary procedure) is applied instead.<BR>
- See also ScoreMapping.forNumericRange2 <BR>
 <BR>
 </span>
 </li><li><span class="functionname">getAttr</span>($ A)<br>
@@ -658,16 +562,25 @@ clearInterval(drawit)
 
 
 </tr></table>
-<span class="string"></span>
-</li><li><span class="functionname">getItems</span>(X)<br>
-
-<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
-
-
-
-
-</tr></table>
-<span class="string"></span>
+<span class="string"> Returns information required to reconstruct the init method. Every newly defined ScoreObject subclass which introduces new init arguments should define its own getInitInfo. This documentation therefore explains also implementational details for this method.<BR>
+<BR>
+ The returned information hase the following form:<BR>
+      <BR>
+      unit(superclass:Super<BR>
+	   args:[Argument1#Accessor1#Default1<BR>
+		 ...<BR>
+		 ArgumentN#AccessorN#DefaultN])<BR>
+      <BR>
+ Super is a single superclass of self which defines/inherits a method getInitInfo extending the present method definition (can be nil in case of no superclass). Argument is an init method argument (an atom), Accessor is a unary accessor function or method returning the value of the object corresponding with Argument, and Default is the default value or 'noMatch' if no default value was given. Excluded is the same arg as for toInitRecord: this argument is only required if getInitInfo recuresively calls toInitRecord. A typical getInitInfo definition follows<BR>
+<BR>
+<BR>
+      meth getInitInfo($ exclude:Excluded)<BR>
+	 unit(superclass:MySuperClass<BR>
+	      args:[myParameter#getMyParameter#noMatch])<BR>
+      end<BR>
+      <BR>
+<BR>
+</span>
 </li><li><span class="functionname">getMethNames</span>($)<br>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
@@ -889,7 +802,7 @@ clearInterval(drawit)
 <span class="string"> Returns boolean whether the list at the attr info of self contains Info.<BR>
 <BR>
 </span>
-</li><li><span class="functionname">init</span>(items:Items&nbsp;...)<br>
+</li><li><span class="functionname">init</span>(addParameters:AddParams containers:Containers&nbsp;...)<br>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
 
@@ -897,7 +810,9 @@ clearInterval(drawit)
 
 
 </tr></table>
-<span class="string"> The optional parameter items expects a list of items which are contained in the container instance. (Additionally, items can be given by calling the method bilinkItems.)<BR>
+<span class="string"> The optional parameter containers expects a list of containers the item instance is contained in. (Additionally, containers can be given by calling the method bilinkContainers.)<BR>
+<BR>
+ NB: the init args containers and addParameters are yet not supported by methods like toInitRecord.<BR>
 <BR>
 </span>
 </li><li><span class="functionname">initDomains</span>(Spec)<br>
@@ -1199,17 +1114,6 @@ clearInterval(drawit)
 <span class="string"> Maps Fn (unary function or method) over all direct containers in self.<BR>
 <BR>
 </span>
-</li><li><span class="functionname">mapItems</span>(Xs Fn test:Test)<br>
-
-<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
-
-
-
-
-</tr></table>
-<span class="string"> Maps Fn (unary function or method) over all direct items in self which fulfill Test (a boolean function or method).<BR>
-<BR>
-</span>
 </li><li><span class="functionname">mapParameters</span>(Xs Fn)<br>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
@@ -1379,7 +1283,7 @@ clearInterval(drawit)
  !! Temp: NB: toFullRecord (and thus unify) only works properly on score trees (see doc of toFullRecord).Besides, the score topology of both objects must be determined and equal. <BR>
 <BR>
 </span>
-</li><li><span class="functionname">wait</span>()<br>
+</li><li><span class="functionname">wait</span>(unless:Unless)<br>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
 
@@ -1387,7 +1291,7 @@ clearInterval(drawit)
 
 
 </tr></table>
-<span class="string"> Wait until all parameter values of self and of its (directly and indirectly) contained items are determined. <BR>
+<span class="string"> Wait until all parameter values of self are determined. The only exception are parameters for which the optional arg Unless -- a boolean unary function -- returns true (per default, Unless always returns false).<BR>
 <BR>
 </span>
 </li></ul>

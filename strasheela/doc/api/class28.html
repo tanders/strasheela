@@ -1,7 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
 <html>
  <head>
-  <title>Class Shell</title>
+  <title>Class FlagsMixin</title>
   <style>BODY {
  background: url(page.gif) repeat-y white;
 }
@@ -120,11 +120,7 @@ clearInterval(drawit)
 
 <div style="margin-left:160px"><p align="right" class="margin"><div align="right">inheritance tree</div></p>
 <pre>
- Open.pipe Open.text
-     |         |
-     `----+----'
-          |
-        <a class="pre" href="node9.html#entity461">Shell</a>
+ <a class="pre" href="node7.html#entity292">FlagsMixin</a>
 </pre>
 <hr><p class="margin"><div align="right">class definition</div></p>
 <code>
@@ -135,13 +131,13 @@ clearInterval(drawit)
 
 
 </tr></table>
-<span class="string"> Provides an interface to interactive commandline programs like a shell or an interpreter. Start interactive program with the method init (see below), close it with the method close.<BR>
- More specialised classes (e.g. an interface to Common Lisp) may be obtained by subclasses..<BR>
+<span class="string"> [auxiliary class] adds flag support to all score objects. <BR>
 <BR>
 </span>
-<span class="keyword">class</span> <span class="type">Shell</span> (Inheritance-free)<br>
+<span class="keyword">class</span> <span class="type">FlagsMixin</span> (Inheritance-free)<br>
+&nbsp;&nbsp;&nbsp;<span class="keyword">attr</span>&nbsp;flags
 <br>
-<ul><li><span class="functionname">cmd</span>(Cmd)<br>
+<ul><li><span class="functionname">addFlag</span>(F)<br>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
 
@@ -149,11 +145,10 @@ clearInterval(drawit)
 
 
 </tr></table>
-<span class="string"> Feed Cmd (a VS) to the interactive program. Use one of the output/show methods to retrieve results.<BR>
- Please note that the output/show methods are exclusive (i.e., once some result is output one way, it is output again.). <BR>
+<span class="string"> Adds an arbitrary flag F to self. A flag must be a literal. <BR>
 <BR>
 </span>
-</li><li><span class="functionname">init</span>(args:Args cmd:Cmd)<br>
+</li><li><span class="functionname">hasFlag</span>(?B F)<br>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
 
@@ -161,10 +156,10 @@ clearInterval(drawit)
 
 
 </tr></table>
-<span class="string"> Start interactive program Cmd (VS) with Args (list of VSs). The default is the shell "sh" with args ["-s"] for reading from standard input. See the test file for examples for other interactive commands (e.g., the interactive ruby shell or a Common Lisp compiler). <BR>
+<span class="string"> Tests whether self has flag F. Method returns a boolean. <BR>
 <BR>
 </span>
-</li><li><span class="functionname">outputLine</span>($)<br>
+</li><li><span class="functionname">initFlags</span>()<br>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
 
@@ -172,10 +167,10 @@ clearInterval(drawit)
 
 
 </tr></table>
-<span class="string"> Return the next line (a string) of any result. In case the shell has died, nil is returned.<BR>
+<span class="string"> [aux method] Method must not be called by user. <BR>
 <BR>
 </span>
-</li><li><span class="functionname">showAll</span>()<br>
+</li><li><span class="functionname">removeAllFlags</span>()<br>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
 
@@ -183,7 +178,18 @@ clearInterval(drawit)
 
 
 </tr></table>
-<span class="string"> Show any results and output of each command fed to the shell at stdout. <BR>
+<span class="string"> [aux method] Method should not be called by user (method removes all flags from self).  <BR>
+<BR>
+</span>
+</li><li><span class="functionname">removeFlag</span>(F)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> Removes flag F from self. <BR>
 <BR>
 </span>
 </li></ul>

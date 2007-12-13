@@ -1,7 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
 <html>
  <head>
-  <title>Class Aspect</title>
+  <title>Class Modifier</title>
   <style>BODY {
  background: url(page.gif) repeat-y white;
 }
@@ -120,23 +120,23 @@ clearInterval(drawit)
 
 <div style="margin-left:160px"><p align="right" class="margin"><div align="right">inheritance tree</div></p>
 <pre>
- <a class="pre" href="node6.html#entity214">NonType</a> <a class="pre" href="node6.html#entity215">Reflection</a>         <a class="pre" href="node7.html#entity288">FlagsMixin</a>
+ <a class="pre" href="node6.html#entity214">NonType</a> <a class="pre" href="node6.html#entity215">Reflection</a>         <a class="pre" href="node7.html#entity292">FlagsMixin</a>
     |        |                  |
     `-----+--'                  |
           |                     |
-     <a class="pre" href="node6.html#entity216">ScoreObject</a>    <a class="pre" href="node7.html#entity289">ScoreMapping.mappingMixin</a>
+     <a class="pre" href="node6.html#entity216">ScoreObject</a>    <a class="pre" href="node7.html#entity293">ScoreMapping.mappingMixin</a>
           |                     |
           `-----------+---------'
                       |
-                     <a class="pre" href="node6.html#entity225">Item</a>
+                     <a class="pre" href="node6.html#entity227">Item</a>
                       |
                       `+
                        |
-                   <a class="pre" href="node6.html#entity226">Container</a>
+                   <a class="pre" href="node6.html#entity228">Container</a>
                        |
                       +'
                       |
-                    <a class="pre" href="node6.html#entity228">Aspect</a>
+                   <a class="pre" href="node6.html#entity229">Modifier</a>
 </pre>
 <hr><p class="margin"><div align="right">class definition</div></p>
 <code>
@@ -147,15 +147,21 @@ clearInterval(drawit)
 
 
 </tr></table>
-<span class="string"> [semi abstract class] An aspect contains one or more score items to group them and to provide additional information to its items. For instance, a sequential groups items and imposes them in a sequential order in time.<BR>
+<span class="string"> [semi abstract class] A Modifier contains one or more items and modifies them [their meaning? / modifies them when the score is output?] in some way. Conventional examples for modifiers in common music notation are the repetition sign, staccato sign, trill sign etc., which modify the music they belong to. Subclasses of Modifier can define all these signs of common music notation. The attribute items points to the music the modifier belong to. <BR>
+<BR>
+ However, even the modification itself the modifier applies to music (i.e. the meaning of the modifier) can be expressed directly in an instance of the class Modifier. The actual modification is defined as a unary function. When the score is output, the function will be called with the value bound to the attribute items. That way, arbitrary modifications can be defined. Examples include modifications of contained temporal attributes or other parameters by envelopes: ritardando, crescendo etc.<BR>
+<BR>
+ The attribute modifier binds the modification function.<BR>
+<BR>
+ !! NB: currently, the score output functions (see ./Output.oz) ignore the Modifier which is therefore without effect!<BR>
 <BR>
 </span>
-<span class="keyword">class</span> <span class="type">Aspect</span> (Inheritance-free)<br>
+<span class="keyword">class</span> <span class="type">Modifier</span> (Inheritance-free)<br>
 &nbsp;&nbsp;&nbsp;<span class="keyword">prop</span>&nbsp;locking
 <br>
 &nbsp;&nbsp;&nbsp;<span class="keyword">feat</span>&nbsp;!ScoreObjectType&nbsp;label
 <br>
-&nbsp;&nbsp;&nbsp;<span class="keyword">attr</span>&nbsp;containers&nbsp;flags&nbsp;id&nbsp;info&nbsp;items&nbsp;parameters
+&nbsp;&nbsp;&nbsp;<span class="keyword">attr</span>&nbsp;containers&nbsp;flags&nbsp;id&nbsp;info&nbsp;items&nbsp;modifier&nbsp;parameters
 <br>
 <ul><li><span class="functionname">addContainer</span>(Container)<br>
 
@@ -694,6 +700,15 @@ clearInterval(drawit)
 <span class="string"> Returns a record where the features are the methods defined for self and the values are the classes which define these methods. <BR>
 <BR>
 </span>
+</li><li><span class="functionname">getModifier</span>(X)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"></span>
 </li><li><span class="functionname">getParameters</span>(X)<br>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
@@ -1383,7 +1398,7 @@ clearInterval(drawit)
  !! Temp: NB: toFullRecord (and thus unify) only works properly on score trees (see doc of toFullRecord).Besides, the score topology of both objects must be determined and equal. <BR>
 <BR>
 </span>
-</li><li><span class="functionname">wait</span>()<br>
+</li><li><span class="functionname">wait</span>(unless:Unless)<br>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
 
@@ -1391,7 +1406,7 @@ clearInterval(drawit)
 
 
 </tr></table>
-<span class="string"> Wait until all parameter values of self and of its (directly and indirectly) contained items are determined. <BR>
+<span class="string"> Wait until all parameter values of self and of its (directly and indirectly) contained items are determined. The only exception are parameters for which the optional arg Unless -- a boolean unary function -- returns true (per default, Unless always returns false).<BR>
 <BR>
 </span>
 </li></ul>
