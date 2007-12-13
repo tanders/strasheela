@@ -976,7 +976,7 @@ define
 	 %% often this is called for output and timeUnit is sometimes
 	 %% forgotten by user...
 	 if {Not {IsDet Unit}}
-	 then {GUtils.warnGUI "timeUnit unbound"}
+	 then {GUtils.warnGUI "unit of temporal parameter(s) unbound -- computation blocks!"}
 	 end
 	 %% parameter value is float
 	 %% NOTE: inefficient to always check there two cases first,
@@ -1426,11 +1426,15 @@ define
 	 B = {All {self getParameters($)}
 	      fun {$ X} {IsDet {X getValue($)}} end}
       end
-      /** %% Wait until all parameter values of self are determined. 
+      /** %% Wait until all parameter values of self are determined. The only exception are parameters for which the optional arg Unless -- a boolean unary function -- returns true (per default, Unless always returns false).
       %% */
-      meth wait
+      meth wait(unless:Unless<=fun {$ _} false end)
 	 {ForAll {self getParameters($)}
-	  proc {$ X} {Wait {X getValue($)}} end}
+	  proc {$ X}
+	     if {Not {Unless X}}
+	     then {Wait {X getValue($)}}
+	     end
+	  end}
       end
 
       meth hasTemporalPredecessor(?B)
@@ -1568,12 +1572,16 @@ define
 	  Decl P ElseP}
       end
       
-      /** %% Wait until all parameter values of self and of its (directly and indirectly) contained items are determined. 
+      /** %% Wait until all parameter values of self and of its (directly and indirectly) contained items are determined. The only exception are parameters for which the optional arg Unless -- a boolean unary function -- returns true (per default, Unless always returns false).
       %% */
-      meth wait
+      meth wait(unless:Unless<=fun {$ _} false end)
 	 {ForAll {self getParameters($)}
-	  proc {$ X} {Wait {X getValue($)}} end}
-	 {self forAllItems(wait)}
+	  proc {$ X}
+	     if {Not {Unless X}}
+	     then {Wait {X getValue($)}}
+	     end
+	  end}
+	 {self forAllItems(proc {$ O} {O wait(unless:Unless)} end)}
       end
       
       /** % Calling the method bilinkItems with Items expresses that Items are contained in the container itself. The method establishes bidirectional links between both self and all Items. Method must not be called by user (only by class designer).
@@ -2337,10 +2345,11 @@ define
       end
    in
       fun {CopyScore MyScore}
-	 {MakeScore {MyScore toInitRecord($)}
+	 {MakeScore {CopyVars {MyScore toInitRecord($)}}
 	  {MyScore getInitClasses($)}}
       end
    end
+   
    /** %% Returns a container of ContainerClass containing Items. Args is a record of optional container init arguments.
    %% A MakeContainer call may specify more container init-arguments than specified as default arguments.
    %% The Items must still combinable with other score items, i.e. they must not be fully initialised (e.g. created by MakeScore2). Also the container returned by MakeContainer is  still combinable with other score items, i.e. in the end the score must be initialised by InitScore.
