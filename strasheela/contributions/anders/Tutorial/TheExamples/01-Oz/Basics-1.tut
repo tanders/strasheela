@@ -265,7 +265,29 @@ in
   {Browse X}
 end</oz>
 
-  <oz title="Functions are procedures">/* Here we treat `IsEven' as a procedure with two arguments.
+  <oz title="Functions are procedures">%% Since functions are procedures, we can treat them just like procedures.
+local
+  %% function definition
+  fun {Max X Y}
+     if X >= Y then X else Y end 
+  end
+  X
+in
+  %% function application like a procedure
+  {Max 4 3 X}
+  {Browse X}
+end</oz>
+<oz title="Procedures as functions">%% Remember, every procedure can also be called like a function for convenience.
+
+local
+  proc {Max X Y Z}
+     if X >= Y then Z = X else Z = Y end 
+  end
+in
+  {Browse {Max 4 3}}
+end</oz>
+
+  <oz title="Another example TODO">/* Here we treat `IsEven' as a procedure with two arguments.
 `IsEven' binds the variable B.  Please note the order of computations in this
 example:
   1.  B is browsed.
@@ -284,20 +306,12 @@ local B in
    {Browse B} 		
    {IsEven 4 B}
 end</oz>
-<oz title="Procedures as functions">%% Remember, every procedure can also be called like a function for convenience.
-
-local
-  proc {Max X Y Z}
-     if X >= Y then Z = X else Z = Y end 
-  end
-in
-  {Browse {Max 4 3}}
-end</oz>
-
 <oz title="$ marks a return value">/* Every procedure argument can be a return value.  The $ (dollar sign)
 always marks a return value.  This example is not yet very convincing,
 but procedures will encapsulate constraints in later examples...
 TODO:  what's happening here?  -gp
+TODO: I think this belongs somewhere in Basics-2, or even in the
+CSP stuff.
 */
 
 local
@@ -318,8 +332,8 @@ function Factorial implements the mathematical factorial concept. */
 
 local
    fun {Factorial N}
-      if N==0
-        then 1
+      if (N==0) then
+        1
       else
         N * {Factorial N-1}
       end
@@ -388,12 +402,16 @@ Internally, all of these data types are actually records (just like all function
   <oz title="Records (1)">%% A record has a label and consists of feature-value pairs.
 
 {Inspect label(feature1:value1 feature2:value2)}</oz>
-  <oz title="Records (2)">%% Records can be freely nested. 
+  <oz title="Records (2)">/* Integer features need not be listed explicitly; these two
+ examples are identical.  Note that the `foo' label does not count
+towards these integer features, and that the integer features are
+placed before non-integer features. */
+
+{Inspect test(1:one 2:two foo:bar 3:three)}
+{Inspect test(one two foo:bar three)}</oz>
+  <oz title="Records (3)">%% Records can be freely nested. 
   
 {Inspect test(1:hi 2:there x:unit(foo:bar))}</oz>
-  <oz title="Records (3)">/* Integer features can be omitted.  The following example is identical to the previous. */
-
-{Inspect test(hi there x:unit(foo:bar))}</oz>
 <oz title="Accessing record fields">/* Record fields are accessed with the dot operator.  R.X returns the
 value stored at feature X in record R.  Records support constant-time
 access (i.e. the time the access takes is independent of the feature
@@ -424,6 +442,7 @@ empty list, which terminates every list. */
 <oz title="Lists (4)">/* Consequently, the first element of a list can be accessed under the
 feature 1, and the remaining list under the feature 2. */
   
+{Inspect [a b c].1}
 {Inspect [a b c].2}</oz>
   <oz title="Pairs (1)">%% A pair is a convenient way of concatenating values. 
 
