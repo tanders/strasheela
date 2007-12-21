@@ -366,6 +366,24 @@ in
   X = 4
 end
 {Browse endOfProgram}</oz>
+
+<oz title="'Signalling' a blocking computation (2)">/* This example demonstrates a technique which causes an error (raises
+an exception) when the current thread blocks. The function
+`Thread.this' returns the current thread, and `Debug.setRaiseOnBlock'
+activates this debugging feature. The error message can even tell you
+which variable caused the blocking (although in this example the deduced variable name is simply _).
+
+Note that you must load Debug first, before using `Debug.setRaiseOnBlock' (which this tutorial does implicitly). */
+
+local
+  X 
+in
+  {Debug.setRaiseOnBlock {Thread.this} true}
+  %% !! blocks
+  {Browse X+3}
+  X = 4
+end
+</oz>
 </example>
 
 </examples> 
