@@ -49,7 +49,7 @@ export
    ApplyToContext ApplyToContext2 ApplyToContextR
    ForContexts MapContexts ForContextsR
    PatternMatchingApply PatternMatchingApply2
-   ForNumericRange ForNumericRange2
+   ForNumericRange ForNumericRange2 ForNumericRangeArgs
    
 define
 
@@ -651,8 +651,8 @@ define
    end
 
 
-   /** %% Applies unary procedure P to each element in Xs which index is expressed by Decl. Decl is a list which contains single index integers or index ranges of the form Min#Max (Min and Max are integers).
-   %% BTW: ForNumericRange corresponds roughly to rule application mechanism of Situation.
+   /** %% Applies unary procedure P to each element in Xs which index is expressed by Decl. Decl is a list which contains single index integers, or index ranges of the form Min#Max (Min and Max are integers).
+   %% BTW: ForNumericRange corresponds roughly to one of the rule application mechanisms of Situation. In my thesis, I the corresponding applicator `mapIndex'.
    %% */
    proc {ForNumericRange Xs Decl P}
       {ForNumericRange2 Xs Decl P proc {$ X} skip end}
@@ -666,11 +666,11 @@ define
       AllIs = {LUtils.mappend Decl fun {$ X}
 				      case X
 				      of Min#Max then {List.number Min Max 1}
-				      [] Val then
-					 if {IsInt Val} andthen Val =< XsLength
-					 then [Val]
-					 else raise faultyRangeDecl(Decl forList:Xs) end
-					 end
+				      [] Val then [Val]
+				      else {Exception.raiseError
+						 strasheela(failedRequirement X
+							    "format of declaration must be either Min#Max (integer pair) or I (single int).")}
+					 unit   % never returned
 				      end
 				   end}
       %% create tuple which contains P at all positions contained in
@@ -681,6 +681,43 @@ define
       {Record.forAll MatchingPs proc {$ X} if {IsFree X} then X = ElseP end end}
       %% apply respective proc to each element in Xs
       {List.forAllInd Xs proc {$ I X} {MatchingPs.I X} end}
+   end
+
+   /** %% Applies binary procedure P to each element in Xs which index is expressed by Decl -- together with additional arguments for that index. To all other elements of Xs the unary procedure ElseP is applied instead.
+   %% Decl is a list which contains single index integers plus constraint arguments in the form Ind#Args, or index ranges plus constraint arguments in the form (Min#Max)#Args. The index Ind and the range boundaries Min and Max are integers, Args is a list of arbitrary values (and can be nil).
+   %%  ForNumericRangeArgs implements a generalised variant of ForNumericRange (and ForNumericRange2) which implements an extended syntax for Decl.
+   %% */ 
+   proc {ForNumericRangeArgs Xs Decl P ElseP}
+      XsLength = {Length Xs}
+      %% instead, I could use LUtils.ranges and then flatten
+      IsWithArgs = {LUtils.mappend Decl fun {$ X}
+					   case X
+					   of (Min#Max)#Args % andthen {IsList Args} % and Min and Max are both ints and Min < Max
+					   then
+					      {Map {List.number Min Max 1}
+					       fun {$ I} I#Args end}
+					   [] I#Args % andthen {IsInt I} andthen I =< XsLength andthen {IsList Args}
+					   then [I#Args]
+					   else {Exception.raiseError
+						 strasheela(failedRequirement X
+							    "format of declaration must be either (Min#Max)#Args or I#Args.")}
+					      unit   % never returned
+					   end
+					end}
+      %% create tuple which contains P at all positions contained in
+      %% AllIs and ElseP at all other positions.
+      MatchingPs = {MakeTuple unit XsLength}
+   in
+      {ForAll IsWithArgs  proc {$ I#Args} MatchingPs.I = Args end}
+      %% apply respective proc to each element in Xs
+      {List.forAllInd Xs
+       proc {$ I X}
+	  Args = MatchingPs.I in
+	  if {IsFree Args} % is their an index for X in Decl?
+	  then {ElseP X}
+	  else {P X Args}
+	  end
+       end}
    end
    
 end
