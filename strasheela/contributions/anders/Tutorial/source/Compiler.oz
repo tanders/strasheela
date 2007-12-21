@@ -13,6 +13,7 @@ import
    % Inspector
    
    QTk at 'x-oz://system/wp/QTk.ozf'
+   Debug at 'x-oz://boot/Debug'
    
    %% Strasheela core
    Strasheela at 'x-ozlib://anders/strasheela/Strasheela.ozf'
@@ -305,7 +306,8 @@ define
 			     'WaitOr': WaitOr
 			     'WeakDictionary': WeakDictionary
 			     'Width': Width
-			     %%	   
+			     %% add-ons
+			     'Debug': Debug
 			     %% Strasheela core
 			     'Strasheela':Strasheela
 			     'Init':Init 'GUtils':GUtils 'LUtils':LUtils 'MUtils':MUtils
