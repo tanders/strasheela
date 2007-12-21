@@ -149,7 +149,7 @@ clearInterval(drawit)
 <a name="entity9">
 <span class="keyword">fun</span>{<span class="functionname">PairNoteEvents</span> Events}<br>
 <span class="string"> Expects a list of CSV Events. All note-on events and their corresponding note-off events are grouped into matching pairs NoteOn#NoteOff. All other events are passed unaltered.<BR>
- PairNoteEvents finds for every note-on event the first following note-off event with the same pitch. Note that in case there is no corresponding note-off event, the returned note pair is NoteOn#nil.<BR>
+ PairNoteEvents finds for every note-on event the first following note-off event with the same pitch and channel. Note that in case there is no corresponding note-off event, the returned note pair is NoteOn#nil. <BR>
 <BR>
 </span>
 </code><br>
