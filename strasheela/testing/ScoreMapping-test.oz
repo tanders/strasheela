@@ -372,6 +372,15 @@ end
 proc {$ X} {Browse elseCase#X} end}
 
 
+%% a#[hi] noMatch#b c#[there] d#[there] noMatch#e
+{SMapping.forNumericRangeArgs [a b c d e]
+ [1#[hi]
+  (3#4)#[there]]
+ proc {$ X Args} {Browse X#Args} end
+ proc {$ X} {Browse noMatch#X} end}
+
+
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%
 %% SMapping.patternMatchingApply
