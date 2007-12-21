@@ -62,6 +62,8 @@ isSimultaneous(note1, note2) -> isConsonant(note1, note2)
 %% Consonance is not determined for non-simultaneous notes.
 %%
 %%
+%% Problem: filter processes list elements sequentially in the list order. I may want to have a concurrent variant which possibly changes the order of elements in the list, but always returns/skips elements as soon as enough information is provided to decided either way.   
+%%
 */
 
 
