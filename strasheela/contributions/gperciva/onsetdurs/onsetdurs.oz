@@ -1,4 +1,4 @@
-/** %% TODO: general description of OnsetDurs.  (test of doc-string) */
+/** %% TODO: general description of OnsetDurations.  (test of doc-string) */
 
 functor
 import
@@ -18,14 +18,14 @@ define
    BeatDivisions
 
    /** %% link Onsets with Durations.  Setting a value (or narrowing the domain) in either list will update the other list. */
-   proc {Setup Beats BeatDivisionsGet Onsets Durs}
+   proc {Setup Beats BeatDivisionsGet Onsets Durations}
       NumOnsets = Beats*BeatDivisionsGet
    in
       BeatDivisions = BeatDivisionsGet
 
       %% setup lists, add fake note at end
-      Durs = {FD.list NumOnsets 0#NumOnsets}
-      Onsets = {FD.list NumOnsets+1 0#2}
+%      Durations = {FD.list NumOnsets 0#NumOnsets}
+%      Onsets = {FD.list NumOnsets+1 0#2}
       {Nth Onsets NumOnsets+1} =: 1
 
       %% first onset can't be "continue note"
@@ -34,19 +34,19 @@ define
       for X in 1..NumOnsets do
 
 	 %% setup maxmium durations
-	 {Nth Durs X} =<: NumOnsets+1-X
+	 {Nth Durations X} =<: NumOnsets+1-X
 
 
 	 %% align rests
 	 {FD.equi
-	  {Nth Durs X} =: 0
+	  {Nth Durations X} =: 0
 	  {Nth Onsets X} =: 0
 	  1}
 
 
 	 %% align 1 dur
 	 {FD.equi
-	  {Nth Durs X} =: 1
+	  {Nth Durations X} =: 1
 	  {FD.conj 
 	   {Nth Onsets X} >: 0
 	   {Nth Onsets X+1} >: 0
@@ -58,7 +58,7 @@ define
 	 for D in 2..NumOnsets do
 	    if ( X =< (NumOnsets+1-D) ) then
 	       {FD.equi
-		{Nth Durs X} =: D
+		{Nth Durations X} =: D
 		{FD.conj 
 		 {Nth Onsets X} >: 0
 		 {FoldR
@@ -82,27 +82,27 @@ define
    end
 
    %% internal for ToScore
-   proc {GetNotes Onsets Durs Notes}
+   proc {GetNotes Onsets Durations Notes}
       NumNotes = {EventsIn Onsets}
       Y = {NewCell 1}
    in
       Notes = {List.make NumNotes}
-      for X in 1..{Length Durs}
+      for X in 1..{Length Durations}
       do
 	 if {Nth Onsets X}==1 then
-	    {Nth Notes @Y} = {Nth Durs X}
+	    {Nth Notes @Y} = {Nth Durations X}
 	    Y := @Y + 1
 	 end
 	 if {Nth Onsets X}==2 then
-	    {Nth Notes @Y} = {Number.'~' {Nth Durs X}}
+	    {Nth Notes @Y} = {Number.'~' {Nth Durations X}}
 	    Y := @Y + 1
 	 end
       end
    end
 
-   /* %% Combines the Onsets and Durs and produces a Score object. */
-   proc {ToScore Onsets Durs ScoreInstance}
-      Notes = {GetNotes Onsets Durs}
+   /* %% Combines the Onsets and Durations and produces a Score object. */
+   proc {ToScore Onsets Durations ScoreInstance}
+      Notes = {GetNotes Onsets Durations}
    in
       {Score.makeScore
        seq(
