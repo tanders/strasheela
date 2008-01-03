@@ -1,13 +1,14 @@
 
+/*
 declare
 [HS Pattern]
 = {ModuleLink ['x-ozlib://anders/strasheela/HarmonisedScore/HarmonisedScore.ozf'
 		'x-ozlib://anders/strasheela/pattern/Pattern.ozf']}
-
+*/
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%
-%% check database
+%% check database 
 %%
 
 {HS.db.getEditChordDB}
@@ -20,9 +21,9 @@ declare
 {HS.db.getInternalIntervalDB}
 
 {HS.db.getPitchesPerOctave}	% 12 default
-{HS.db.getPitchUnit}		% midi
+{HS.db.getPitchUnit}		% midi default
 {HS.db.getAccidentalOffset}	% 2 -- for meaning of this see HarmonisedScore.score doc and tests ..
-{HS.db.getOctaveDomain}		% 3#6
+{HS.db.getOctaveDomain}		% 0#9 
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -42,7 +43,8 @@ declare
 
 
 %% NB: changing only the pitches per octave renders most of the rest of the default DB (i.e. chordDB, scaleDB, intervalDB, and probably also accidental offset) useless
-%% here, this setting is only done to check whether also pitch unit is appropriately updated 
+%% here, this setting is only done to check whether also pitch unit is appropriately updated
+%% !! this causes exception now
 {HS.db.setDB
  unit(pitchesPerOctave: 72)}
 
@@ -64,9 +66,13 @@ declare
 			    roots:[0 4 8]
 			    test:0
 			    comment:augmented))
-      scaleDB: scales(scale(pitchClasses:[0 2 4 6 8 10]
-			    roots:[0 2 4 6 8 10] % !!??
+      scaleDB: scales(scale(pitchClasses:[0 2 4 5 7 9 11]
+			    roots:[0] % !!??
 			    test:0
+			    comment:major)
+		      scale(pitchClasses:[0 2 4 6 8 10]
+			    roots:[0 2 4 6 8 10] % !!??
+			    test:1
 			    comment:wholeTone))
       intervalDB: intervals(interval(comment: majorSecond
 				     interval:2)
@@ -74,6 +80,14 @@ declare
 				     interval:10))
       pitchesPerOctave:12)}
 
+
+%% access indices from this database
+{Browse {HS.db.getChordIndex augmented}} % -> 2
+{Browse {HS.db.getScaleIndex wholeTone}} % -> 2
+{Browse {HS.db.getIntervalIndex minorSeventh}} % -> 2
+
+%% no db entry bla: nil
+{Browse {HS.db.getChordIndex bla}}
 
 %% !! I can do arbitrary chordDB accessors (e.g. get name of given chord pitch class set). I only need some standard format in the chord DB features 'comment'.
 %%
