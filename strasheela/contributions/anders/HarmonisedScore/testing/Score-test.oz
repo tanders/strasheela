@@ -438,6 +438,14 @@ PCFS = {FS.value.make [1 3 4 6 8 9 11]}
 Root = 4
 
 
+%% test: root is greatest number
+declare
+PCFS = {FS.value.make [0 3 6 9]}
+Root = 11
+
+{Browse {HS.score.pcSetToSequence PCFS Root}}
+
+
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -517,6 +525,44 @@ MyChord = {Score.makeScore chord(index:1
  unit(chordDB: chords(chord(pitchClasses:[0 3 6 9] 
 			    roots:[0]
 			    comment:'diminished')))}
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%
+%%
+%% InversionMixinForChord
+%%
+
+%% default database
+
+
+%% E major chord, 1st inversion, soprano is fifth
+declare
+InversionChord = {HS.score.makeInversionChordClass HS.score.chord}
+MyChord = {Score.makeScore chord(index:{HS.db.getChordIndex major}
+				 transposition:4
+				 bassChordDegree:2 % the third of major
+				 bassChordAccidental:{HS.score.absoluteToOffsetAccidental 0}
+				 sopranoChordDegree:3 % the fifth of major
+				 sopranoChordAccidental:{HS.score.absoluteToOffsetAccidental 0}
+				 duration:1
+				 startTime:0
+				 timeUnit:beats(4))
+	   unit(chord:InversionChord)}
+
+
+%% Check: bassPitchClass is 8 (G#) and sopranoPitchClass is 11 (B)
+{Inspect MyChord}
+
+{MyChord getPitchClasses($)} 
+% -> {4 8 11}
+
+{MyChord getBassPitchClass($)}
+% -> 8
+
+{MyChord getSopranoPitchClass($)}
+% -> 11
 
 
 
