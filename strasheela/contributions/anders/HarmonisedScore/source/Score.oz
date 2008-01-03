@@ -29,6 +29,8 @@
 %%
 %% * !! add class interval. Add creator with memoization, e.g., given two Strasheela notes.
 %%
+%% * for all (?) mixin classes create class constructors like MakeInversionChordClass
+%% 
 %% * add enharmonically correct Lilypond output for enharmonic notes
 %%
 %% * ?? refactor accidental representation with two parameters: direction and amount (this is only for convenience: adds no expressiveness and degrades performance)
@@ -160,9 +162,12 @@ export
    InScaleMixinForChord %% !!?? why export this
    DiatonicChord
    ScaleDegreeMixinForChord ScaleDegreeChord 
-
+   InversionMixinForChord MakeInversionChordClass
+   
    ChordStartMixin % MkChordsStartWithItems MkChordsStartWithItems2
    StartChordWithMarker
+
+   
    
    PitchClass IsPitchClass
 
@@ -191,16 +196,20 @@ define
    
    /** %% Defines the relation between an absolute pitch number Pitch (FD int) and its PitchClass (FD int) plus Octave component (FD int). Middle c has octave 4, according to conventions (cf. http://en.wikipedia.org/wiki/Scientific_pitch_notation). So (for PitchesPerOctave=12), octave=0 corresponds to Midi pitch 12, and Midi pitch 127 falls in octave 9.
    %% The domain of PitchClass is implicitly restricted to 0#{DB.getPitchesPerOctave}.
+   %% Pitch is implicitly declared to a FD int, so PitchClassToPitch can also be used like a deterministic function.
    %% */
    proc {PitchClassToPitch PitchClass#Octave Pitch}
+      Pitch = {FD.decl}
       PitchClass :: 0#{DB.getPitchesPerOctave}
       Pitch =: PitchClass + (Octave + 1)*{DB.getPitchesPerOctave}
    end
 
    /** %% Same as PitchClassToPitch. However, Middle c has octave 5 so that if Pitch = PitchClass, Octave = 0. This is in contrast to PitchClassToPitch, where Pitch is always >= PitchesPerOctave and thus always Pitch > PitchClass (even if Octave = 0). PitchClassToPitch2 is used with intervals, whereas PitchClassToPitch is used with pitches.
    %% The domain of PitchClass is implicitly restricted to 0#{DB.getPitchesPerOctave}.
+   %% Pitch is implicitly declared to a FD int, so PitchClassToPitch2 can also be used like a deterministic function.
    %% */
    proc {PitchClassToPitch2 PitchClass#Octave Pitch}
+      Pitch = {FD.decl}
       PitchClass :: 0#{DB.getPitchesPerOctave}
       Pitch =: PitchClass + Octave*{DB.getPitchesPerOctave}
    end
@@ -379,8 +388,8 @@ define
       end
    end
 
-   /** %% Expects a set of pitch classes from a scale or chord (PCFS, a determined FS) and a Root (an determined FD) and returns a list of ints in ascending order starting with the root (if root is present in PCFS).
-   %% PCSetToSequence is useful for creating an ordered PC collection to constrain the degree of some PC (e.g., with DegreeToPC). For example, the PC set of the E major scale is {1, 3, 4, 6, 8, 9, 11} and the root is 4. PCSetToSequence returns the ordered sequence [4 6 8 9 11 1 3].
+   /** %% Expects a set of pitch classes from a scale or chord (PCFS, a determined FS) and a Root (an determined FD) and returns a list of ints in ascending order starting with the root (if root is present in PCFS). If root is not present in PCFS, then the returned list starts with the pitch class which would follow root.  
+   %% PCSetToSequence is useful for creating an ordered PC collection to constrain the degree of some PC (e.g., with DegreeToPC). For example, the PC set of the E major scale is {1, 3, 4, 6, 8, 9, 11} and the root is 4: PCSetToSequence returns the ordered sequence [4 6 8 9 11 1 3]. 
    %%
    %% NB: PcSetToSequence blocks until its arguments PCFS and Root are determined.
    %% */
@@ -388,13 +397,15 @@ define
 %      thread % in case args are not determined
       Card = {FS.card PCFS}
       PCs = {FD.list Card 0#{DB.getPitchesPerOctave}-1}
-      RootPos Leading Trailing
+      RootPosTmp RootPos Leading Trailing
    in
       %% FS.int.match basically takes effect only after PCFS is determined
       %% (before it can only distribute bounds for all vars in PCs)
       PCs = {FS.int.match PCFS}
       %% first element = or > Root (Root itself may not be in PCFS)
-      RootPos = {LUtils.findPosition PCs fun {$ X} X >= Root end}
+      RootPosTmp = {LUtils.findPosition PCs fun {$ X} X >= Root end}
+      %% in case Root is greatest, take first
+      RootPos = if RootPosTmp==nil then 1 else RootPosTmp end
       {List.takeDrop PCs (RootPos-1) Leading Trailing}
       {Append Trailing Leading}
 %      end
@@ -510,7 +521,7 @@ define
 		   dbFeatures:DBFeats<=nil % arg list of symbols
 		   ...) = M
 	    Score.abstractElement, {Record.subtractList M
-				   [distance direction octave pitchClass dbFeatures]} 
+				    [distance direction octave pitchClass dbFeatures]} 
 	    @index = {New Score.parameter init(value:Index info:index)}
 	    @distance = {New Score.parameter init(value:Dist info:distance)}
 	    @direction = {New Score.parameter init(value:Dir info:direction)}
@@ -1242,6 +1253,140 @@ define
 		    rootAccidental#getRootAccidental#{DB.makeAccidentalFDInt}])
       end
    end
+
+   
+   local
+      proc {InitConstrain Self}
+	 thread
+	    BDegree = {Self getBassChordDegree($)} = {DB.makeChordDegreeFDInt} 
+	    BAccidental = {Self getBassChordAccidental($)} = {DB.makeAccidentalFDInt}
+	    BassPC = {Self getBassPitchClass($)} = {DB.makePitchClassFDInt}
+	    SDegree = {Self getSopranoChordDegree($)} = {DB.makeChordDegreeFDInt} 
+	    SAccidental = {Self getSopranoChordAccidental($)} = {DB.makeAccidentalFDInt}
+	    SopranoPC = {Self getSopranoPitchClass($)} = {DB.makePitchClassFDInt}
+	    %% NB: blocks until chord pitch classes and root is determined
+	    %% !!??
+	    ChordPCs = {PcSetToSequence {Self getPitchClasses($)} {Self getRoot($)}}
+	 in
+	    {DegreeToPC ChordPCs BDegree#BAccidental BassPC}
+	    {DegreeToPC ChordPCs SDegree#SAccidental SopranoPC}
+	 end
+      end
+   in
+      /** %% [abstract class] This mixin class extends a chord (sub-)class by information about the bass note (i.e., the chord inversion) and the soprano note (German: die Akkordlage). It defines the following additional parameters: bassChordDegree and sopranoChordDegree. These parameters represent the chord degree of the bass and the soprano. The chord degree is the position of the bass/soprano pitch class in the ordered list of chord pitch classes starting from the chord root. For example, the PC set of the A-major chord is {1, 4, 9}, and the root pitch class is 9 (PitchesPerOctave-12). The corresponding sorted pitch class sequence is thus [9 1 4]. If the bassChordDegree is set to 2, this means that the chord is a sixth-chord, and the bass pitch class is 1 (the second element of the ordered pitch class sequence). Note that the sorted pitch class sequence always would start with the root. If the root is not contained in the chord pitch classes, then the sequence starts with the first pitch class which would follow the root. 
+      %%
+      %% NB: the constraints on the parameter values of this mixin are delayed until the chord pitch classes and its root is determined! 
+      %% */
+      %%
+      %%
+      class InversionMixinForChord
+	 attr
+	    bassChordDegree bassChordAccidental bassPitchClass
+	    sopranoChordDegree sopranoChordAccidental sopranoPitchClass
+	 meth initInversionMixinForChord(bassChordDegree:BDegree<=_
+					 bassChordAccidental:BAccidental<=_
+					 bassPitchClass:BassPC<=_
+					 sopranoChordDegree:SDegree<=_
+					 sopranoChordAccidental:SAccidental<=_
+					 sopranoPitchClass:SopranoPC<=_) = M
+	    @bassChordDegree = {New Score.parameter
+				init(value:BDegree
+				     info:bassChordDegree)}
+	    @bassChordAccidental = {New Score.parameter
+				    init(value:BAccidental
+					 info:bassChordAccidental)}
+	    @bassPitchClass = {New PitchClass
+			       init(value:BassPC
+				    info:bassPitchClass
+				    'unit':{DB.getPitchUnit})}
+	    @sopranoChordDegree = {New Score.parameter
+				   init(value:SDegree
+					info:sopranoChordDegree)}
+	    @sopranoChordAccidental = {New Score.parameter
+				       init(value:SAccidental
+					    info:sopranoChordAccidental)}
+	    @sopranoPitchClass = {New PitchClass
+				  init(value:SopranoPC
+				       info:sopranoPitchClass
+				       'unit':{DB.getPitchUnit})}
+	    {self bilinkParameters([@bassChordDegree @bassChordAccidental
+				    @bassPitchClass
+				    @sopranoChordDegree @sopranoChordAccidental
+				    @sopranoPitchClass])}
+	    %% implicit constrains
+	    {InitConstrain self}
+	 end
+
+	 meth getBassChordDegree($)
+	    {@bassChordDegree getValue($)}
+	 end
+	 meth getBassChordDegreeParameter($)
+	    @bassChordDegree
+	 end
+	 meth getBassChordAccidental($)
+	    {@bassChordAccidental getValue($)}
+	 end
+	 meth getBassChordAccidentalParameter($)
+	    @bassChordAccidental
+	 end
+	 meth getBassPitchClass($)
+	    {@bassPitchClass getValue($)}
+	 end
+	 meth getBassPitchClassParameter($)
+	    @bassPitchClass
+	 end
+	 meth getSopranoChordDegree($)
+	    {@sopranoChordDegree getValue($)}
+	 end
+	 meth getSopranoChordDegreeParameter($)
+	    @sopranoChordDegree
+	 end
+	 meth getSopranoChordAccidental($)
+	    {@sopranoChordAccidental getValue($)}
+	 end
+	 meth getSopranoChordAccidentalParameter($)
+	    @sopranoChordAccidental
+	 end
+	 meth getSopranoPitchClass($)
+	    {@sopranoPitchClass getValue($)}
+	 end
+	 meth getSopranoPitchClassParameter($)
+	    @sopranoPitchClass
+	 end
+       
+      end
+   end
+
+   
+   /** %% Expects a chord class and returns a subclass which inherits from this chord class and InversionMixinForChord. 
+   %% */
+   fun {MakeInversionChordClass SuperClass}
+      class $ from SuperClass InversionMixinForChord % DissonanceMixinForChord
+	 feat label:inversionChord
+       
+	 meth init(...) = M
+	    MixinFeats = [bassChordDegree bassChordAccidental bassPitchClass
+			  sopranoChordDegree sopranoChordAccidental sopranoPitchClass]
+	 in
+	    SuperClass, {Record.subtractList M MixinFeats}
+	    InversionMixinForChord, {Adjoin {GUtils.takeFeatures M  MixinFeats}
+				     %% replace label
+				     initInversionMixinForChord}
+	 end
+    
+	 meth getInitInfo($ exclude:Excluded)	 
+	    unit(superclass:SuperClass
+		 args:[bassChordDegree#getBassChordDegree#{DB.makeChordDegreeFDInt}
+		       bassChordAccidental#getBassChordAccidental#{DB.makeAccidentalFDInt}
+		       bassPitchClass#getBassPitchClass#{DB.makePitchClassFDInt}
+		       sopranoChordDegree#getSopranoChordDegree#{DB.makeChordDegreeFDInt}
+		       sopranoChordAccidental#getSopranoChordAccidental#{DB.makeAccidentalFDInt}
+		       sopranoPitchClass#getSopranoPitchClass#{DB.makePitchClassFDInt}])
+	 end
+    
+      end
+   end
+
 
    
    %% this mixin only adds single param, an 0/1-int -- use makeClass
