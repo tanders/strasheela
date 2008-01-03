@@ -15,7 +15,7 @@
 %% */
 
 %%
-%% TODO
+%% TODO:
 %%
 %% OK? * extend means for chord and scale database by means for interval
 %% database (various rules may build on top of that, e.g., a rule
@@ -24,21 +24,26 @@
 %%
 %% OK * I should support setting the whole database with a single value to explicitly express the interdependencies of these values (e.g. dependency between chordDB and pitchesPerOctave) -- replace all setters by a single setter SetDB which expects a record with the settings as features. All features are optional and missing features are substituted by their defaults. For this end, replace all these cells by a single cell and all accessors access features of the record in this cell.
 %%
+%%
+%%
+%%
 
 functor
 import
    
    FD FS RecordC
    Browser(browse:Browse) 
+%   GUtils at 'x-ozlib://anders/strasheela/source/GeneralUtils.ozf'
    LUtils at 'x-ozlib://anders/strasheela/source/ListUtils.ozf'
    MUtils at 'x-ozlib://anders/strasheela/source/MusicUtils.ozf'
+   Out at 'x-ozlib://anders/strasheela/source/Output.ozf'
    DBs at 'databases/Databases.ozf'
    
 export
 
    SetDB
    % SetChordDB SetScaleDB
-   % SetPitchesPerOctave SetAccidentalOffset SetOctaveDomain
+   % SetPitchesPerOctave SetPitchUnit SetAccidentalOffset SetOctaveDomain
 
    GetEditChordDB GetInternalChordDB
    GetEditScaleDB GetInternalScaleDB
@@ -48,9 +53,11 @@ export
    MakePitchClassFDInt MakeOctaveFDInt MakeAccidentalFDInt
    MakeScaleDegreeFDInt MakeChordDegreeFDInt
    
-   RatiosInDBEntryToPCs
+   RatiosInDBEntryToPCs WasRatiosDBEntry
 
    Pc2Ratios
+
+   GetChordIndex GetScaleIndex GetIntervalIndex 
    
 define
 
@@ -192,12 +199,21 @@ define
       AccidentalOffset = {NewCell unit}
       PitchUnit = {NewCell unit}
       OctaveDomain = {NewCell unit}
+
+      %% maps db features to the respective setters
+      Optional_DB_Setters = unit(chordDB:SetChordDB
+				 scaleDB:SetScaleDB
+				 intervalDB:SetIntervalDB
+				 %% implicitly sets PitchUnit
+				 pitchesPerOctave:SetPitchesPerOctave)
+      %% complements Optional_DB_Setters: always set these features 
+      Obligatory_DB_Setters = unit(accidentalOffset:SetAccidentalOffset
+				   octaveDomain:SetOctaveDomain)
+      
       %% !! I can not request of global lock from local space..
       %% MyLock = {NewLock} 	% to deny access while setting the database vars
    in
-
-
-      /** %% Sets the database which is used by the music representation and rules of the HarmonisedScore contribution.
+      /** %% Sets the database which is used by the HarmonisedScore contribution (e.g., its music representation and rules).
       %% The syntax of the database is
       &lt;DB&gt; ==:: unit([chordDB:&lt;PCGroupDB&gt;]
 		     [scaleDB:&lt;PCGroupDB&gt;]
@@ -216,24 +232,41 @@ define
       &lt;AccidentalOffset&gt; ==:: &lt;Int&gt;
       &lt;OctaveDomain&gt; ==:: &lt;Int&gt;#&lt;Int&gt;
       
-      %% All features of the whole DB and also of some sub-DBs (e.g. of the chordDB and scaleDB) are optional (as marked by square brackets).
-      %% NB: every DB feature missing in NewDB is set to a default value. 
-
-      %% Temp doc: For further details read the doc of the aux accessors.
+      %% All features of the DB and also of some sub-DBs (e.g. of the chordDB and scaleDB) are optional (as marked by square brackets). Missing features are set to the features of the default database (HS.dbs.default). However, in case PitchesPerOctave \= 12, then the following features are mandatory: chordDB, scaleDB and intervalDB.
+      %% Note the above doc is unfinished: for further details read the doc of the aux accessors (available in the source file contributions/anders/HarmonisedScore/source/Database.oz).
       %% TODO: write a better doc..
       %% */
       proc {SetDB NewDB}
-	 %% Locking to ensure that reading happens only after (or before) _all_ DB variables are updated, even in a concurrent program. It is the responsibility of the user to ensure that reading happens only _after_ setting the DB, therefore, doing this locking is in fact overdone.. 
-	 %% lock MyLock then	
-	 DB = {Adjoin DefaultDB NewDB} 
+	 %% [outdated comment] Locking to ensure that reading happens only after (or before) _all_ DB variables are updated, even in a concurrent program. It is the responsibility of the user to ensure that reading happens only _after_ setting the DB, therefore, doing this locking is in fact overdone.. 
+	 %% lock MyLock then
+	 %%
+	 FullDB = {Adjoin DefaultDB NewDB}
       in
-	 {SetChordDB DB.chordDB}
-	 {SetScaleDB DB.scaleDB}
-	 {SetIntervalDB DB.intervalDB}
-	 {SetPitchesPerOctave DB.pitchesPerOctave} % implicitly sets PitchUnit
-	 {SetAccidentalOffset DB.accidentalOffset}
-	 {SetOctaveDomain DB.octaveDomain}
-	 %% end
+	 if FullDB.pitchesPerOctave == 12
+	 then 
+	    {Record.forAllInd {Adjoin Optional_DB_Setters
+			       Obligatory_DB_Setters}
+	     proc {$ Feat Setter} {Setter FullDB.Feat} end}
+	 else
+	    %% if PitchesPerOctave \= 12, then leave missing feats unset 
+	    MissingFeats = {Filter {Arity Optional_DB_Setters}
+			    fun {$ Feat} {Not {HasFeature NewDB Feat}} end}
+	 in
+	    if MissingFeats \= nil then
+	       %% NOTE: tmp solution: chord, scale and interval database are all required if PitchesPerOctave \= 12. Later, I may allow for leaving out some of them, but then I must carefully check all dependencies.
+	       {Exception.raiseError 
+		strasheela(failedRequirement NewDB "If PitchesPerOctave \\= 12, then all of the following features must be given to SetDB: "#{Out.listToVS MissingFeats ", "})}
+% 	    {Browse 'HS database setting: non-default PitchesPerOctave, so only explicitly specified database features are set. The following features are set to _'#MissingFeats} 
+% 	       {ForAll MissingFeats
+% 		proc {$ Feat} {Optional_DB_Setters.Feat unit} end}
+ 	    end
+	    %% set explicitly given feats
+	    {Record.forAllInd Optional_DB_Setters
+	     proc {$ Feat Setter} {Setter NewDB.Feat} end}    
+	    %% always set these
+	    {Record.forAllInd Obligatory_DB_Setters
+	     proc {$ Feat Setter} {Setter FullDB.Feat} end}
+	 end
       end
       
       /** %% Sets the database of chords which is used by a chord progression. Each chord is defined by its untransposed pitch classes, the possible untransposed roots (usually a single root) and further optional information. The chord pitch classes and roots are defined as indexes (i.e. integers) into an equidistanct tuning. The tuning is defined by the number of pitches per octave which is set by the proc SetPitchesPerOctave (defaults to 12).
@@ -280,27 +313,31 @@ define
 	 end 
       end
 	    
-      /** %% All pitch classes defined in the current functor are indexes into an equidistanct tuning. The tuning is defined by the number of pitches per octave (an integer, e.g. 12 for et12 or 1200 for cent values), the default is 12. Implicitly, this setting determines the pitchUnit for all pitches and pitch classes to either midi (NewPitchesPerOctave=12), et72 (NewPitchesPerOctave=72) or midicent (NewPitchesPerOctave=1200).
+      /** %% All pitch classes defined in the current functor are indexes into an equidistanct tuning. The tuning is defined by the number of pitches per octave (an integer, e.g. 12 for et12 or 1200 for cent values), the default is 12.
+      %% Implicitly, SetPitchesPerOctave also sets the pitchUnit for all pitches and pitch classes. Common pitchUnit cases are midi (NewPitchesPerOctave=12), and midicent (NewPitchesPerOctave=1200). For any other value of NewPitchesPerOctave, the pitchUnit is set to an atom 'et&lt;Int&gt;', where '&lt;Int&gt;' is NewPitchesPerOctave (e.g., et31 or et72 for NewPitchesPerOctave=31 or NewPitchesPerOctave=72).
       %% */
       proc {SetPitchesPerOctave NewPitchesPerOctave}
 	 if {IsInt NewPitchesPerOctave}
 	 then PitchesPerOctave := NewPitchesPerOctave
 	    case NewPitchesPerOctave
-	    of 12 then PitchUnit := midi
-	    [] 72 then PitchUnit := et72
-	    [] 1200 then PitchUnit := midicent
-	    else {Browse 'warn: pitch unit is not recognised and remains unbound'}
-	       PitchUnit := _
+	    of 12 then {SetPitchUnit midi}
+	    [] 1200 then {SetPitchUnit midicent}
+	    else {SetPitchUnit {VirtualString.toAtom 'et'#NewPitchesPerOctave}}
 	    end
 	 else raise noInteger(NewPitchesPerOctave) end
 	 end
       end
+ 
+      proc {SetPitchUnit NewPitchUnit}
+	 PitchUnit := NewPitchUnit
+      end
+      
       /** %% An accidental denotes an offset for a scaleDegree (a relative pitch class) or a noteName (an absolute pitch class, a scaleDegree into c-major). Because accidentals are FD integers, they can not be negative and thus an offset must be defined, the accidental offset. As the meaning of the numeric value of an accidental depends also on the maximum number of possible pitches between scale degrees (and thus on PitchesPerOctave), the offset can be set by the user.
       %% The default AccidentalOffset for common praxis music is 2.       
       %% NB: To avoid complicating the CSP definition with offsets, the use of the accidental conversions HarmonisedScore.score.absoluteToOffsetAccidental or HarmonisedScore.score.offsetToAbsoluteAccidental is recommended.
       %% */
-      proc {SetAccidentalOffset Offset}
-	 AccidentalOffset := Offset
+      proc {SetAccidentalOffset NewOffset}
+	 AccidentalOffset := NewOffset
       end
       
       /** %% To implicitely reduce the domain of all note pitches instantiated by the current functor an octave domain is defined by a FD spec (i.e. Min#Max). The resulting pitch range is (OctaveDomainMin * PitchesPerOctave) # (OctaveDomainMax * PitchesPerOctave + PitchesPerOctave-1). Middle c has octave 4, according to conventions (cf. http://en.wikipedia.org/wiki/Scientific_pitch_notation).
@@ -393,6 +430,7 @@ define
    local
       /** %% Returns the rounding error of rounding a pitch class float into a pitch class int. The meaning of PC (a float) depends on KeysPerOctave (a float). The error is returned in cent (a float).
       %% */
+      %% BUG: reported error signs not correct
       fun {PCError PC KeysPerOctave}
 	 fun {ToCent X}
 	    (X / KeysPerOctave) * 1200.0
@@ -433,12 +471,18 @@ define
       fun {IsRatioList X}
 	 {IsList X} andthen {List.all X IsRatio}
       end
+
+      MyName = {NewName}
    in
       /** %% Processes an entry for a HS database (e.g. for a chord database). HS depends on pitches as keynumbers and pitch classes (all represented by integers or FD ints), both depending on KeysPerOctave. RatiosInDBEntryToPCs, on the other hand, permits also ratios (floats or fractions specs) which are transformed and rounded to the nearest pitch class (a ratio representing an interval exceeding an octave is transformed into an interval within an octave). 
       %% MyDBEntry is a record with arbitrary features. Each feature value is either an interger, a list of integers, a ratio spec (either a float or a fraction spec in the form &lt;Int&gt;#&lt;Int&gt;), or a list of ratio specs. The output contains each integer/lists of integers unchanged but substitutes each ratio/list of ratios by the nearest pitch class interval (an integer), depending on KeysPerOctave (an integer).
       %% Additionally, a comment feature in MyDBEntry with arbitrary value is permitted. The returned record has always a comment feature with a record as value. The explaination of the comment in the return value is a bit complicated and depends on MyDBEntry. For features in MyDBEntry with a ratio, collect in comment the ratio, its pitch class plus the error, for other features in Test keep the orig value. In case MyDBEntry contains a feature comment as well, this value is preserved: in case MyDBEntry.comment is a record as well, its features are added to the comment record of the result. However, in case MyDBEntry.comment contains a feature 'comment' with the same feature as a feature in MyDBEntry itself, then the feature of MyDBEntry.comment is preferred. See the test file for examples.
+      %% Because the comment feature of the returned DB entry is changed, the function WasRatiosDBEntry recognises a DB entry processed by RatiosInDBEntryToPCs.
       %%
       %% NB: in HS.db, an OctaveDomain is also specified as &lt;Int&gt;#&lt;Int&gt;, but must not be mixed up with a fraction spec.
+      %% 
+      %%
+      %% BUG: reported error signs not correct -- check JI signs (you know what to expect..)
       %% */
       proc {RatiosInDBEntryToPCs MyDBEntry KeysPerOctave Out}
 	 %% Internally, KeysPerOctave arg is always a float
@@ -490,11 +534,47 @@ define
 	     end
 	  end}
 	 Out.comment = Comment
+	 %% add feature for recognising processed records
+	 Comment ^ MyName = unit
 	 %% close comment
 	 {RecordC.width Comment} = {Length {RecordC.reflectArity Comment}}
       end
+
+      /** %% Returns true if MyDBEntry was processed by RatiosInDBEntryToPCs.
+      %% */
+      fun {WasRatiosDBEntry MyDBEntry}
+	 {HasFeature MyDBEntry comment} andthen
+	 {HasFeature MyDBEntry.comment MyName}
+      end
+      
    end
 
+   local
+      fun {Index MyName DB}
+	 X = {LUtils.find {Record.toListInd DB}
+	      fun {$ _/*I*/#X}
+		 DBEntry = if {WasRatiosDBEntry X} then X.comment else X end
+	      in
+		 {HasFeature DBEntry comment}
+		 andthen (DBEntry.comment == MyName orelse
+			  ({HasFeature DBEntry.comment name}
+			   andthen DBEntry.comment.name == MyName))
+	      end}
+      in
+	 case X of  I#_/*DBEntry*/ then I
+	 else nil
+	 end
+      end
+   in
+      /** %% Convenience functions. ChordIndex expects a name (atom) for a chord and returns the corresponding index. This name is either the value stored under the edit database feature 'comment', or the value of a feature 'name' of a record stored under the edit database feature 'comment'. If no database entry with this name is defined, then nil is returned.
+      %% ScaleIndex and IntervalIndex do the same for scales and intervals.
+      %% */
+      %%
+      %% Problem: RatiosInDBEntryToPCs transforms edit DB so that comment feature contains extended version of orig comment (for storing additional information like the PC errors and ratios)
+      fun {GetChordIndex MyName} {Index MyName {GetEditChordDB}} end
+      fun {GetScaleIndex MyName} {Index MyName {GetEditScaleDB}} end
+      fun {GetIntervalIndex MyName} {Index MyName {GetEditIntervalDB}} end
+   end
    
    /** %% Returns a list of all ratios which match PC (an int) in IntervalDB (given in its edit form) which was defined using ratios (e.g. {HS.dbs.partch.getIntervals {HS.db.getPitchesPerOctave}}).
    %% A ratio consists in two integers and has the form Nom#Denom. If no entry in the database matches PC, nil is returned.
@@ -510,8 +590,7 @@ define
        fun {$ X} X.comment.interval.ratio end}
    end
 
-
-
+   
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
    
    %% !! initialise database -- evaluated when linked functor/module is 'used' for first time (i.e. when something defined in the functor is accessed for the first time)
