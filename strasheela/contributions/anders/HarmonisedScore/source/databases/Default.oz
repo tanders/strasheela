@@ -14,13 +14,13 @@ export
 define
 
    Chords = chords(chord(pitchClasses:[0 4 7]
-				roots:[0]
-				dissonanceDegree:2
-				comment:'major')
-			  chord(pitchClasses:[0 3 7]
-				roots:[0] % ? [7]
-				dissonanceDegree:3
-				comment:'minor'))
+			 roots:[0]
+			 dissonanceDegree:2
+			 comment:'major')
+		   chord(pitchClasses:[0 3 7]
+			 roots:[0] % ? [7]
+			 dissonanceDegree:3
+			 comment:'minor'))
    
    Scales = scales(scale(pitchClasses:[0 2 4 5 7 9 11]
 			 roots:[0]
