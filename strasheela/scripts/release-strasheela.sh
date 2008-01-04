@@ -11,8 +11,9 @@
 cd ~/oz/music/Strasheela/strasheela/trunk/strasheela/ # move into strasheela trunk
 # NOTE: updating in top-level dir causes loading all tags etc..
 svn update					      
-cd ~/oz/music/Strasheela/strasheela # move into top-level strasheela directory
-svn -v log > trunk/strasheela/CHANGELOG.txt 
+# cd ~/oz/music/Strasheela/strasheela # move into top-level strasheela directory
+# svn -v log > trunk/strasheela/CHANGELOG.txt 
+svn -v log > CHANGELOG.txt 
 
 #
 # create tag file in SVN repository
