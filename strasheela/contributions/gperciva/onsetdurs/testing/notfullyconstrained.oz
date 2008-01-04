@@ -1,8 +1,8 @@
 
 declare
 [OnsetDurs] = {ModuleLink ['x-ozlib://gperciva/onsetdurs/onsetdurs.ozf']}
-Beats=4
-BeatDivisions=2
+Beats=2
+BeatDivisions=1
 %% script
 proc {GetOnsets Sol}
    Durs Onsets
@@ -22,6 +22,18 @@ in
 end
 
 
-{ExploreOne GetOnsets}   
+%{ExploreOne GetOnsets}
+local
+  Sols Sc
+in
+   Sols = {SearchAll GetOnsets}
+   Sc = {Map Sols fun {$ X} {OnsetDurs.toScore X BeatDivisions} end}
+   {ForAll Sc proc {$ X} {OnsetDurs.writeLilyFile 'foo' X} end}
+end
+%   {ToScore 
+%   proc {ToScore Onsets Durations BeatDivisions ?ScoreInstance}
+
+
 {Browse 'script end'}
+
 

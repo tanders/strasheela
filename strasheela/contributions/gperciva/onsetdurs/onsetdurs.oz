@@ -15,15 +15,10 @@ export
    writeLilyFile: WriteLilyFile
 
 define
-%   BeatDivisions
-
    /** %% link Onsets with Durations.  Setting a value (or narrowing the domain) in either list will update the other list. */
    proc {Setup Beats BeatDivisionsGet Onsets Durations}
       NumOnsets = Beats*BeatDivisionsGet
    in
-      %% BUG: from within a script (i.e. a local computation space), you can not determine a global variable (i.e. a variable in the top-level space)
-%      BeatDivisions = BeatDivisionsGet
-
       %% setup lists, add fake note at end
        Durations = {FD.list NumOnsets 0#NumOnsets}
        Onsets = {FD.list NumOnsets+1 0#2}
@@ -81,7 +76,7 @@ define
    %% internal for ToScore
    fun {EventsIn Onsets}
       {FoldL Onsets fun {$ X Y} if Y>0 then X+1 else X end end
-       0} -1
+       0} - 1
    end
 
    %% internal for ToScore
@@ -104,8 +99,8 @@ define
    end
 
    /* %% Combines the Onsets and Durations and produces a Score object. */
-   proc {ToScore Onsets Durations BeatDivisions ?ScoreInstance}
-      Notes = {GetNotes Onsets Durations}
+   proc {ToScore OnsetsDurs BeatDivisions ?ScoreInstance}
+      Notes = {GetNotes OnsetsDurs.1 OnsetsDurs.2}
    in
       {Score.makeScore
        seq(
