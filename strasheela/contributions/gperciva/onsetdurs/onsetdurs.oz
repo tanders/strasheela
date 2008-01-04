@@ -24,8 +24,8 @@ define
       BeatDivisions = BeatDivisionsGet
 
       %% setup lists, add fake note at end
-%      Durations = {FD.list NumOnsets 0#NumOnsets}
-%      Onsets = {FD.list NumOnsets+1 0#2}
+      Durations = {FD.list NumOnsets 0#NumOnsets}
+      Onsets = {FD.list NumOnsets+1 0#2}
       {Nth Onsets NumOnsets+1} =: 1
 
       %% first onset can't be "continue note"
@@ -39,8 +39,8 @@ define
 
 	 %% align rests
 	 {FD.equi
-	  {Nth Durations X} =: 0
-	  {Nth Onsets X} =: 0
+	  ({Nth Durations X} =: 0)
+	  ({Nth Onsets X} =: 0)
 	  1}
 
 
@@ -48,8 +48,8 @@ define
 	 {FD.equi
 	  {Nth Durations X} =: 1
 	  {FD.conj 
-	   {Nth Onsets X} >: 0
-	   {Nth Onsets X+1} >: 0
+	   ({Nth Onsets X} >: 0)
+	   ({Nth Onsets X+1} >: 0)
 	  }
 	  1}
 
@@ -58,15 +58,15 @@ define
 	 for D in 2..NumOnsets do
 	    if ( X =< (NumOnsets+1-D) ) then
 	       {FD.equi
-		{Nth Durations X} =: D
+		({Nth Durations X} =: D)
 		{FD.conj 
-		 {Nth Onsets X} >: 0
+		 ({Nth Onsets X} >: 0)
 		 {FoldR
 		  {LUtils.sublist Onsets X+1 X+D-1}
 		  fun {$ X Y}
-		     {FD.conj X=:0 Y}
+		     {FD.conj (X=:0) Y}
 		  end
-		  {Nth Onsets X+D} >: 0
+		  ({Nth Onsets X+D} >: 0)
 		 }
 		}
 		1}

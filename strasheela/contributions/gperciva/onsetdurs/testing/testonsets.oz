@@ -11,12 +11,17 @@ local
 in
    {Browse Onsets}
    {Browse Durs}
+
+
    /*
+   %% don't allow rests  -- not used
    {ForAll Onsets proc {$ X}
 		     X\=:2
 		  end
    }
    */
+   %% each note must be 0 or 2 units long
+   %%  (ie all existing notes must be a quarter note)
    {ForAll Durs proc {$ X}
 		   {FD.disj X=:0 X=:2 1
 		   } end
@@ -25,6 +30,7 @@ in
    {Nth Onsets 3} =: 2
    {Nth Onsets 5} =: 2
    {Nth Onsets 7} =: 1
+
 
    /*
    {OnsetDurs.writeLilyFile
