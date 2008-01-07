@@ -484,7 +484,11 @@ define
 
    
    /** %% Defines and registers special error formatters for Strasheela. See http://www.mozart-oz.org/documentation/system/node76.html for a documentation of the error formatter format.
-   %% NB: for throwing exceptions use Exception.raiseError instead of raise ... end. Doing so automatically includes in the exception the feature-value-pair debug:unit (and that way provides information like tho offending souce file etc automatically), and additionally it allows for including more information with special error formatters like the ones here (this information is excluded if debug:unit is included directly in the exception). 
+   %% NB: for throwing exceptions use Exception.raiseError instead of raise ... end. Doing so automatically includes in the exception the feature-value-pair debug:unit (and that way provides information like tho offending souce file etc automatically), and additionally it allows for including more information with special error formatters like the ones here (this information is excluded if debug:unit is included directly in the exception).
+   %%
+   %% Example:
+   {Exception.raiseError
+    strasheela(failedRequirement OffendingValue "Message VS")}
    %% */
    %%
    %% NB: Oz source itself very rarely introduces special exceptions and error formatters. E.g., the whole List functor contains not a single expecitly raised exception. One the one hand, this can lead to hardly conprehend error messages (e.g. if the arguments of Nth are reversed or not a list is given as arg). On the other hand, entering lots of explicit exceptions (e.g. to quasi have some ad-hoc type checking) clutters the code and also makes the code less efficient (e.g. how useful would it be to check always that Nth gets a list and an integer as arg, and perhaps even that the integer is =< {Length Xs}). So, I should also be cautios with explicit exceptions. Only introduce them if specific errors are likely or would be extremely hard to find. Also, try to always avoid some 'default' check (like assert) -- especially if it would be costly (e.g. computes the length of a list).
