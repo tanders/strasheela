@@ -7,12 +7,12 @@
 
   - Added support for MIDI file import, see <doc> 
 
-  - Added class Interval to the harmony model, see <doc>.
+  - Extended the harmony model: added classes Interval, and InversionMixinForChord (plus MakeInversionChordClass)
+    and convenience functions GetChordIndex, GetScaleIndex, and GetIntervalIndex
+      see <doc>.
     example in .. and tests in .. 
 
-  - Finished the music representation chapter of the Tutorial: added an explanation for user-defined export procedures.
-
-  - Graham Percival proof-read parts of the tutorial (thanks!) 
+  - Revised the beginning of the tutorial together with Graham Percival (thanks!). Also, extended the music representation chapter: added an explanation for user-defined export procedures.
 
 ;  - added rule applicator SMapping.forNumericRangeArgs
 
@@ -20,7 +20,13 @@
 
   - Extended the installation documentation (e.g. documentation of the init file templates).
 
-  - Fixed bug in Score.copyScore (which did not create variable copies before) 
+  - Fixed bugs
+   
+    - Score.copyScore did not create variable copies before
+    - HS.score.pcSetToSequence could not handle cases where its arg Root is not in its arg PCFS
+    - HS.score.pitchClassToPitch and HS.score.pitchClassToPitch2 now can also be used like a deterministic functions
+    - HS.db.setDB with refined handling of optional arguments and added support for arbitrary equal temperament tunings (e.g., if PitchesPerOctave is set to 31 -- meaning 31 equal temperament -- then the pitch unit is set to the atom 'et31'). 
+    - Memo.memoize2 allows use of function memoization inside constraint scripts (in contrast to the original Memo.memoize)
 
   - For further fixes see [[../CHANGELOG.txt]]
 
