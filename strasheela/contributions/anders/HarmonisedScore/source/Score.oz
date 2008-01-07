@@ -162,7 +162,7 @@ export
    InScaleMixinForChord %% !!?? why export this
    DiatonicChord
    ScaleDegreeMixinForChord ScaleDegreeChord 
-   InversionMixinForChord MakeInversionChordClass
+   InversionMixinForChord MakeInversionChordClass InversionChord
    
    ChordStartMixin % MkChordsStartWithItems MkChordsStartWithItems2
    StartChordWithMarker
@@ -1386,7 +1386,9 @@ define
     
       end
    end
-
+   /** %% Class inheriting from Chord and InversionMixinForChord
+   %% */
+   InversionChord = {MakeInversionChordClass Chord}
 
    
    %% this mixin only adds single param, an 0/1-int -- use makeClass
