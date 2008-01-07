@@ -30,6 +30,7 @@ import
    
 export
    Memoize ClearAll
+   Memoize2
    SetGetID
    SetMinID
    
@@ -59,6 +60,7 @@ define
 	 end
       end
       /** %% Returns a unique integer. */
+      %% BUG: can not be called from within space: is stateful operation.
       fun {MakeID} I:=@I+1 end
    end
 
@@ -84,14 +86,15 @@ define
    %%
    %% The definition of the original function is not changed (in contrast to the Lisp implementation of Norvig) and thus recursive functions are not well memoized. Only the top-level call of the recursive function would get memoized but internally the function would call the original unmemoized version.
    %%
-   %% Memoize itself (and clearing the cache of a memoized function) performs a stateful operation. Still, calling the memo-function (and caching results) is stateless. Thus, memo-functions can be used freely in CSP, even if they are defined in the top-level space.
+   %% Memoize itself (and clearing the cache of a memoized function) performs a stateful operation. Still, calling the memo-function (and caching results) is stateless. However, you must not use Memoize (it would cause blocking). Instead, use Memoize2.
    %%
    %% Memo-functions are not thread save. In case the result for a particular set of arguments is not yet cached and the function is called with the same args (args with the same keys) in parallel, the cache will be set twice (in case of inconsistent values, an exception will be raised). Similarily, setting the ID of a value is not thread-save either.
    %% These operations could be made thread-save by locking multiple sub-operations. However, locks in a top-level space must not be 'entered' by statements in other spaces (i.e. during search). 
    %%
-   %% Efficiency of memo-functions lookup is only linear time (!) and depends on the number of results already cached (i.e. lookup is not performed in constant time as perhaps expected, because currently there exissts no constant time implementation of RecordC.reflectHasFeature).
+   %% Efficiency of memo-functions lookup is only linear time (!) and depends on the number of results already cached (i.e. lookup is not performed in constant time as perhaps expected, because currently there exists no constant time implementation of RecordC.reflectHasFeature).
+   %%
    %% */
-   proc {Memoize Fn MemoFn}
+   proc {Memoize Fn ?MemoFn}
       Table = {MRecord.new}
       proc {ClearP} {MRecord.clear Table} end
    in
@@ -110,8 +113,29 @@ define
    proc {ClearAll}
       {ForAll @ClearPs proc {$ P} {P} end}
    end
+
+
+   /** %% Like Memoize, but completely stateless. Functions memoized with Memoize2 are not cleared with ClearAll (in contrast to functions created with Memoize), but for functions local to CSPs this is not necessary.
+   %% Memoize2 is intended for locally use in CSP.
+   %%
+   %% BUG: setting IDs automatically does presently _not_ work from inside a local space (i.e. during search): implicitly called function MakeID is stateful operation.
+   %% Workaround for now: set IDs of score objects manually (the method getID returns the ID of an object, which is free, by default).
+   %% */
+   %% Idea to resolve bug: simply set ID to a name. Problem: I can not export the result to textual representation.
+   %% Alternative idea: traverse a lazily created unlimited list of integers.
+   proc {Memoize2 Fn ?MemoFn}
+      Table = {MRecord.new}
+   in
+      fun {MemoFn Xs}	 
+	 Keys = {Map Xs GetKey}
+      in
+	 {MRecord.condGetPutting Table Keys
+	  proc {$ Y} {Procedure.apply Fn [Xs Y]} end}
+      end
+   end
    
 end
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%
