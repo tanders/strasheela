@@ -89,7 +89,7 @@ export
    ZerosOnlyAtEnd RelevantLength
 define
    
-   /** % PlainPattern constraints Xs to a plain pattern (ie. no nesting or combination of patterns). The pattern is specified by the procedere Proc given to PlainPattern. Proc constraints a single pattern item and is called recursively. Proc expects two arguments: the current item and its predecessor in the list (i.e. Proc is called for all items except the with which has no predecessor).
+   /** % PlainPattern constraints Xs to a plain pattern (ie. no nesting or combination of patterns). The pattern is specified by the procedere Proc given to PlainPattern. Proc constraints a single pattern item and is called recursively. Proc expects two arguments: the current item and its predecessor in the list (i.e. Proc is called for all items except the first, which has no predecessor).
 %*/
    %% !! this is in effect the same as For2Neighbours..
    proc {PlainPattern Xs Proc}
