@@ -1,6 +1,6 @@
 
-declare 
-[Measure] = {ModuleLink ['x-ozlib://anders/strasheela/Measure/Measure.ozf']}
+%declare 
+%[Measure] = {ModuleLink ['x-ozlib://anders/strasheela/Measure/Measure.ozf']}
 
 
 %% single Measure:
