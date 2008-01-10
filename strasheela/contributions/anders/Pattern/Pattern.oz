@@ -557,15 +557,15 @@ define
    proc {OneTrueR Bs B}
       B = {FD.reified.sum Bs '=:' 1}
    end
-   /** %% Bs is a list of 0/1 integers (not implicitly declared). At least one element in Bs is true (i.e. one element is 1 and the rest is 0).
+   /** %% Bs is a list of 0/1 integers (not implicitly declared). At least one element in Bs is true (one element certainly is 1, the rest can be 0 or 1).
    %% */
    proc {SomeTrue Bs}
-      {FD.sum Bs '=<:' 1}
+      {FD.sum Bs '>:' 0}
    end
    /** %% Reified version of SomeTrue.
    %% */
    proc {SomeTrueR Bs B}
-      B = {FD.reified.sum Bs '=<:' 1}
+      B = {FD.reified.sum Bs '>:' 0}
    end
 
    /** %% Bs is a list of 0/1 integers (not implicitly declared) and N is a FD int: N elements in Bs are true (i.e. 1).
