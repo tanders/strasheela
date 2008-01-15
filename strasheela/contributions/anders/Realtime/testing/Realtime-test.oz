@@ -64,7 +64,7 @@ ScriptArgs = unit(n:5
 		  pitchDomain:48#60
 		  range:10)
 MyScript = {SDistro.makeSearchScript
-	    {RT.extendedScriptToScript TestExtendedScript ScriptArgs}
+	    {GUtils.extendedScriptToScript TestExtendedScript ScriptArgs}
 	    unit}
 
 declare
@@ -85,6 +85,22 @@ SolScores = {Search.base.one MyScript}
 %%
 
 /*
+
+
+%% finding a solution within 100 msecs
+declare
+proc {MyScript Sol}
+   local X Y in
+      Sol = [X Y]
+      Sol ::: 1#10
+      X + Y =: 7
+      X <: Y
+      {FD.distribute ff Sol}
+   end
+end
+{Browse {RT.searchWithTimeout MyScript
+	 unit(maxSearchTime:100)}}
+
 
 %% finding a solution within 100 msecs
 declare
@@ -131,7 +147,7 @@ SolScore = {RT.searchWithTimeout MyScript
 
 %% constraining a score..
 declare
-MyScript = {SDistro.makeSearchScript {RT.extendedScriptToScript TestExtendedScript
+MyScript = {SDistro.makeSearchScript {GUtils.extendedScriptToScript TestExtendedScript
 				      unit(n:5
 					   range:10)}
 	    unit}
