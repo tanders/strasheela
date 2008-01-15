@@ -26,7 +26,7 @@ Musical constraint satisfaction problems (CSP) usually have multiple solutions. 
 
 * [[Example-RhythmicalPatterns][Rhythmical Patterns]] 
 
-* [[Example-Realtime-SimpleCounterpoint][Realtime Constraint Programming: Counterpoint]] **(new)**
+* [[Example-Realtime-SimpleCounterpoint][Realtime Constraint Programming: Counterpoint]] 
 
 
 Please note that most of these examples implement (parts of) music theories which are described in detail by the literature. 
