@@ -35,7 +35,7 @@ These functors provide additional functionality.
 
 * Strasheela Extensions 
 
-These extensions simplify the definition of specific musical CSP classes (e.g. style specific CSPs such as harmonic CSPs). Naturally, these extensions can be combined (e.g. to constrain patterns on harmonic relations).
+These extensions simplify the definition of specific musical CSP classes (e.g. style specific CSPs such as harmonic CSPs). These extensions can often be combined (e.g. using the functors Pattern and HS for constraining patterns on harmonic relations).
 
   [[../contributions/anders/Pattern/doc/node1.html][Pattern]] -- constraints on lists to express patterns in music
 
