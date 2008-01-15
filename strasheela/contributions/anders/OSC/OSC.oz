@@ -1,7 +1,7 @@
 
 /** %% This functor provides an interface to OpenSound Control (OSC), by using the UNIX programs sendOSC and dumpOSC: using these applications instead of a C/C++ library is less efficient, but more easy to implement ;-). See http://www.cnmat.berkeley.edu/OpenSoundControl/ for more details on OSC in general, and also for details about these two applications. 
 %%
-%% This functor provides a representation of OSC messages as Oz values in the following way. An OSC message is represented by an Oz tuple. The tuple label is the OSC Address Pattern (e.g., '/test'). 0 or more OSC Arguments are represented by the contained tuple values. OSC arguments can be Oz integers, floats and virtual strings. 
+%% This functor provides a representation of OSC messages as Oz values in the following way. An OSC message is represented by an Oz tuple. The tuple label is the OSC Address Pattern (e.g., '/test'). 0 or more OSC arguments are represented by the contained tuple values. OSC arguments can be Oz integers, floats and virtual strings. 
 %%
 %% An OSC bundle is represented by an Oz list. Optionally, the first element is the time tag, followed by 0 or more OSC bundle elements (i.e. OSC messages or other bundles). Timetags can be specified in different formats, but must always be a number. The send method of the class SendOSC supports the user-definable transformation of timetags into different formats. By default, the number of milliseconds elapsed since midnight UTC of January 1, 1970 is expected (i.e. UNIX time multiplied by 1000), but other formats are possible (e.g., a float measuring in beats, where the time 0.0 is some user-defined UNIX time). Timetags in received bundles are obligarory, but may be 1 (meaning 'now'). Bundles can be nested (as sendOSC and dumpOSC support nested bundles). However, for sending bundles please note that some applications with OSC support don't support nested bundles (e.g. SuperCollider's synthesis server scsynth).
 %%
@@ -446,7 +446,7 @@ define
       %% msecs between 1900-01-01 and 1970-01-01
       ConversionConstant1000 = ConversionConstant * 1000
    in
-      /** %% Outputs an OSC time tag for the given UnixTime1000 as a hexadecimal number (a VS). UnixTime1000 (an integer) are the milliseconds since midnight UTC of January 1, 1970, in other words UNIX time multiplied by 1000.
+      /** %% [aux] Outputs an OSC time tag for the given UnixTime1000 as a hexadecimal number (a VS). UnixTime1000 (an integer) are the milliseconds since midnight UTC of January 1, 1970, in other words UNIX time multiplied by 1000.
       %% */
       fun {FormatTimeTag UnixTime1000}
 	 UTimeSecs = UnixTime1000 div 1000
@@ -483,14 +483,14 @@ define
 % 		     FractionalPart}}
 %       end
    
-      /** %% NTPTime1000 (an int: NTP time in msecs) transformed into UNIX time in msecs (an int).
+      /** %% [aux] NTPTime1000 (an int: NTP time in msecs) transformed into UNIX time in msecs (an int).
       %% */
       fun {NTPToUnixTime1000 NTPTime1000}
 	 NTPTime1000 - ConversionConstant1000
       end
    end
 
-   /** %% Outputs list of 'digits' for hexadecimal number of the decimal number X (an int).
+   /** %% [aux] Outputs list of 'digits' for hexadecimal number of the decimal number X (an int).
    %% NB: integers are used as figures: i.e. the decimal number 31 is represented as [1 15] instead of the usual 1F.
    %% */
    fun {DecimalToHex_Int X}
@@ -505,7 +505,7 @@ define
    in
       {Aux X nil}
    end
-   /** %% Convert the fractional part. X is in [999, 0] msecs, corresponding to [0.999, 0.0] secs. 
+   /** %% [aux] Convert the fractional part. X is in [999, 0] msecs, corresponding to [0.999, 0.0] secs. 
    %% */
    fun {DecimalToHex_Frac X}
       fun {Aux X Accum I}
@@ -521,7 +521,7 @@ define
    in
       {Reverse {Aux X nil 0}}
    end
-   /** %% Transforms a list of integers representing a hexadecimal number (as returned by DecimalToHex) into a VS in the usual format.
+   /** %% [aux] Transforms a list of integers representing a hexadecimal number (as returned by DecimalToHex) into a VS in the usual format.
    %% The dumpOSC output format is created: lowercase letters are used with (however, sendOSC also understands uppercase letters and leading 0x).
    %% */
    fun {FormatHex Xs}
@@ -586,7 +586,7 @@ define
    {HexCharToInt &2}
    */
       
-   /** %% Expects an hex number (string of exactly 16 ints/chars a-f, where the first 8 digits are greater 1 and the last 8 digits are less then 1, i.e. the last 8 digits are behind the dot) and returns the corresponding decimal integer times 1000.
+   /** %% [aux] Expects an hex number (string of exactly 16 ints/chars a-f, where the first 8 digits are greater 1 and the last 8 digits are less then 1, i.e. the last 8 digits are behind the dot) and returns the corresponding decimal integer times 1000.
    %% */
    fun {HexToDecimal1000 HexChars}
       %% internal accuracy: times 1000000 (i.e. 3 digits more accurate) 
