@@ -28,6 +28,7 @@ export
    Log Mod_Float
    %MakeConcurrentFn
    ToProc ToFun Procs2Proc
+   ExtendedScriptToScript
    ApplySelected EncodeRatio
    SelectArg
    TimeVString
@@ -277,7 +278,18 @@ define
    /* %% Binary procedure which does nothing.
    %% */
    proc {BinarySkip X Y} skip end
-    
+
+
+   /** %% Convenience function for parameterised CSP scripts. An extended script is a binary procedure, i.e., a script where the first argument is the usual root, and further arguments to the script are handed over in the second argument (e.g., a record). 
+   %% ExtendedScriptToScript expects an extended script plus its Args, and returns a plain script (i.e. a unary procedure).
+   %% */
+   %% !!?? put into ScoreDistro.oz?
+   fun {ExtendedScriptToScript MyExtendedScript Args}
+      proc {$ Sol}
+	 Sol = {MyExtendedScript $ Args}
+      end
+   end
+   
    
    /** % SelectArg is a tool, e.g., to define functions with quasi optional values. SelectArg returns the value at Feature in record Spec, if Spec has this feature. Otherwise the value at Feature in the record Defaults is returned. Defaults must have this record.
    %% !! Often the buildin Adjoin is a better solution: {Adjoin Defaults Args} = EffectiveArgs
