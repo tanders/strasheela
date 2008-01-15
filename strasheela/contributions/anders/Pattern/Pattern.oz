@@ -165,7 +165,7 @@ define
 
    /** % Constrains all elements in the list Xs (FD variables) to form a cycle pattern of the (shorter) list Ys (FD variables). I.e. Xs enumerates the elementes of Ys in sequential order and loops back to the first element of Ys after the last element has been reached.
    % */
-   %% !! changed name (was Cycle). Actually, I could remove this def, as the new Cycle allows equal expressivity and is more concise.
+   %% !! changed name (was Cycle). Actually, I could remove this def, as the new Cycle allows equal expressivity and is more concise. Still, specifying the pattern vars explicitly can be handy.
    proc {Cycle2 Xs Ys}
       {PlainPattern2 Xs
        proc {$ X Predecessors N}
