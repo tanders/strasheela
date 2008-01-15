@@ -7,7 +7,7 @@ The Strasheela project cordially welcomes contributors. You can support the Stra
 
 * Sharing Examples
 
-Please post your example with an explanation at the  [[https://lists.sourceforge.net/lists/listinfo/strasheela-users][Strasheela-users mailing list]]. Examples will be added to the [[StrasheelaExamples][Strasheela Examples]] list (referencing you as author).
+Please post your example with an explanation at the  [[https://lists.sourceforge.net/lists/listinfo/strasheela-users][Strasheela-users mailing list]]. Selected examples will be added to the [[StrasheelaExamples][Strasheela Examples]] list (referencing you as author).
 
 
 * Reporting Bugs 
