@@ -12,25 +12,15 @@
 functor
 import
    Search System
+   GUtils at 'x-ozlib://anders/strasheela/source/GeneralUtils.ozf'
    SDistro at 'x-ozlib://anders/strasheela/source/ScoreDistribution.ozf'
    Browser(browse:Browse) % temp for debugging
    
 export
-   ExtendedScriptToScript
    SearchWithTimeout
    ScoreSearcherWithTimeout
    
 define
-
-   /** %% Convenience function for parameterised CSP scripts. An extended script is a binary procedure, i.e., a script where the first argument is the usual root, and further arguments to the script are handed over in the second argument (e.g., a record). 
-   %% ExtendedScriptToScript expects an extended script plus its Args, and returns a plain script (i.e. a unary procedure).
-   %% */
-   %% !!?? put into ScoreDistro.oz?
-   fun {ExtendedScriptToScript MyExtendedScript Args}
-      proc {$ Sol}
-	 Sol = {MyExtendedScript $ Args}
-      end
-   end
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%
@@ -221,7 +211,7 @@ define
 	 %% store input (max inputLength)
 	 inputScores := {ReduceList InScore | @inputScores self.inputLength}
 	 %% call solver
-	 MyScript = {SDistro.makeSearchScript {ExtendedScriptToScript self.extendedScript Args}
+	 MyScript = {SDistro.makeSearchScript {GUtils.extendedScriptToScript self.extendedScript Args}
 		     Args.distroArgs}	 
 	 Result = {SearchWithTimeout MyScript Args}
 	 %% store output (max outputLength)
