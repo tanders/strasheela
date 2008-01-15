@@ -1,7 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
 <html>
  <head>
-  <title>Class PitchClass</title>
+  <title>Class ChordStartMixin</title>
   <style>BODY {
  background: url(page.gif) repeat-y white;
 }
@@ -123,11 +123,7 @@ clearInterval(drawit)
 
 <div style="margin-left:160px"><p align="right" class="margin"><div align="right">inheritance tree</div></p>
 <pre>
- Score.pitch
-      |
-      |
-      |
-  <a class="pre" href="node3.html#entity84">PitchClass</a>
+ <a class="pre" href="node3.html#entity109">ChordStartMixin</a>
 </pre>
 <hr><p class="margin"><div align="right">class definition</div></p>
 <code>
@@ -138,16 +134,42 @@ clearInterval(drawit)
 
 
 </tr></table>
-<span class="string"> [concrete class] PitchClass defined as a subclass from Score.pitch to inherit, e.g., getValueInMidi for other pitch units (e.g. cent). Consequently, a pitch class returns true for isPitch -- which may sometimes be undesired (e.g. for a concise/efficient distribution strategy definition).<BR>
- BTW: PitchClass is only applied for pitch class parameters and not for pitch class sets (as defined, e.g., by Chord or Scale).<BR>
- !! Problem: are the translations of Score.pitch into various units (e.g. freq) really what I am after for pitch classes?<BR>
+<span class="string"> [abstract class] A mixin class to add the parameter isStartingWithChord to a Score.item subclass. The parameter allows to constrain whether or not self starts with a chord (e.g. to denote chord changes). The parameter value is an 0/1-integer.<BR>
+<BR>
+ NB: This class does not apply any implicit constraints on the score. Please constrain explicitly using, e.g., MkChordsStartWithItems, MkChordsStartWithItems2, or StartChordWithMarker.<BR>
 <BR>
 </span>
-<span class="keyword">class</span> <span class="type">PitchClass</span> (Inheritance-free)<br>
-&nbsp;&nbsp;&nbsp;<span class="keyword">feat</span>&nbsp;!PitchClassType&nbsp;label
+<span class="keyword">class</span> <span class="type">ChordStartMixin</span> (Inheritance-free)<br>
+&nbsp;&nbsp;&nbsp;<span class="keyword">attr</span>&nbsp;isStartingWithChord
 <br>
-<br>
-<ul></ul>
+<ul><li><span class="functionname">chordStartInit</span>(isStartingWithChord:IsStartingWithChord)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"></span>
+</li><li><span class="functionname">getIsStartingWithChordParameter</span>(X)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"></span>
+</li><li><span class="functionname">isStartingWithChord</span>(X)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"></span>
+</li></ul>
 <span class="keyword">end</span>
 </code>
 </div></body>

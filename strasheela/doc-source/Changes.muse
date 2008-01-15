@@ -27,6 +27,7 @@
     - HS.score.pitchClassToPitch and HS.score.pitchClassToPitch2 now can also be used like a deterministic functions
     - HS.db.setDB with refined handling of optional arguments and added support for arbitrary equal temperament tunings (e.g., if PitchesPerOctave is set to 31 -- meaning 31 equal temperament -- then the pitch unit is set to the atom 'et31'). 
     - Memo.memoize2 allows use of function memoization inside constraint scripts (in contrast to the original Memo.memoize)
+    - Pattern.someTrue/Pattern.someTrue behaved like OneTrue (thanks Graham for the patch!)
 
   - For further fixes see [[../CHANGELOG.txt]]
 

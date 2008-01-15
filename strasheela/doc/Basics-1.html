@@ -149,106 +149,109 @@
 <a href="#sec34">Procedures as functions</a>
 </dt>
 <dt>
-<a href="#sec35">$ marks a return value</a>
+<a href="#sec35">Another example TODO</a>
 </dt>
 <dt>
-<a href="#sec36">Recursion</a>
+<a href="#sec36">$ marks a return value</a>
 </dt>
 <dt>
-<a href="#sec37">BACKGROUND</a>
-</dt>
-</dl>
-</dd>
-<dt>
-<a href="#sec38">Atoms and Names</a>
-</dt>
-<dd>
-<dl>
-<dt>
-<a href="#sec39">Atoms</a>
+<a href="#sec37">Recursion</a>
 </dt>
 <dt>
-<a href="#sec40">Equality</a>
-</dt>
-<dt>
-<a href="#sec41">Names</a>
+<a href="#sec38">BACKGROUND</a>
 </dt>
 </dl>
 </dd>
 <dt>
-<a href="#sec42">Compound Types</a>
+<a href="#sec39">Atoms and Names</a>
 </dt>
 <dd>
 <dl>
 <dt>
-<a href="#sec43">Records (1)</a>
+<a href="#sec40">Atoms</a>
 </dt>
 <dt>
-<a href="#sec44">Records (2)</a>
+<a href="#sec41">Equality</a>
 </dt>
 <dt>
-<a href="#sec45">Records (3)</a>
-</dt>
-<dt>
-<a href="#sec46">Accessing record fields</a>
-</dt>
-<dt>
-<a href="#sec47">Tuples (1)</a>
-</dt>
-<dt>
-<a href="#sec48">Tuples (2)</a>
-</dt>
-<dt>
-<a href="#sec49">Tuples (3)</a>
-</dt>
-<dt>
-<a href="#sec50">Lists (1)</a>
-</dt>
-<dt>
-<a href="#sec51">Lists (2)</a>
-</dt>
-<dt>
-<a href="#sec52">Lists (3)</a>
-</dt>
-<dt>
-<a href="#sec53">Lists (4)</a>
-</dt>
-<dt>
-<a href="#sec54">Pairs (1)</a>
-</dt>
-<dt>
-<a href="#sec55">Pairs (2)</a>
-</dt>
-<dt>
-<a href="#sec56">Strings (1)</a>
-</dt>
-<dt>
-<a href="#sec57">Strings (2)</a>
-</dt>
-<dt>
-<a href="#sec58">Virtual Strings</a>
+<a href="#sec42">Names</a>
 </dt>
 </dl>
 </dd>
 <dt>
-<a href="#sec59">Error messages</a>
+<a href="#sec43">Compound Types</a>
 </dt>
 <dd>
 <dl>
 <dt>
-<a href="#sec60">Parse error</a>
+<a href="#sec44">Records (1)</a>
 </dt>
 <dt>
-<a href="#sec61">Static analysis error</a>
+<a href="#sec45">Records (2)</a>
 </dt>
 <dt>
-<a href="#sec62">Binding analysis error</a>
+<a href="#sec46">Records (3)</a>
 </dt>
 <dt>
-<a href="#sec63">Type error</a>
+<a href="#sec47">Accessing record fields</a>
 </dt>
 <dt>
-<a href="#sec64">Failure</a>
+<a href="#sec48">Tuples (1)</a>
+</dt>
+<dt>
+<a href="#sec49">Tuples (2)</a>
+</dt>
+<dt>
+<a href="#sec50">Tuples (3)</a>
+</dt>
+<dt>
+<a href="#sec51">Lists (1)</a>
+</dt>
+<dt>
+<a href="#sec52">Lists (2)</a>
+</dt>
+<dt>
+<a href="#sec53">Lists (3)</a>
+</dt>
+<dt>
+<a href="#sec54">Lists (4)</a>
+</dt>
+<dt>
+<a href="#sec55">Pairs (1)</a>
+</dt>
+<dt>
+<a href="#sec56">Pairs (2)</a>
+</dt>
+<dt>
+<a href="#sec57">Strings (1)</a>
+</dt>
+<dt>
+<a href="#sec58">Strings (2)</a>
+</dt>
+<dt>
+<a href="#sec59">Virtual Strings</a>
+</dt>
+</dl>
+</dd>
+<dt>
+<a href="#sec60">Error messages</a>
+</dt>
+<dd>
+<dl>
+<dt>
+<a href="#sec61">Parse error</a>
+</dt>
+<dt>
+<a href="#sec62">Static analysis error</a>
+</dt>
+<dt>
+<a href="#sec63">Binding analysis error</a>
+</dt>
+<dt>
+<a href="#sec64">Type error</a>
+</dt>
+<dt>
+<a href="#sec65">Failure</a>
 </dt>
 </dl>
 </dd>
@@ -710,6 +713,41 @@ This Max function is equivalent to the Max procedure of the previous example.
 Functions are procedures</h3>
 
 <pre class="src">
+<span style="color: #b22222;">%% </span><span style="color: #b22222;">Since functions are procedures, we can treat them just like procedures.
+</span><span style="color: #a020f0;">local</span>
+  <span style="color: #b22222;">%% </span><span style="color: #b22222;">function definition
+</span>  <span style="color: #a020f0;">fun</span><span style="color: #b8860b;"> </span>{<span style="color: #0000ff;">Max</span> X Y}
+     <span style="color: #a020f0;">if</span> X <span style="color: #a020f0;">&gt;=</span> Y <span style="color: #a020f0;">then</span> X <span style="color: #a020f0;">else</span> Y <span style="color: #a020f0;">end</span>
+  <span style="color: #a020f0;">end</span>
+  X
+<span style="color: #a020f0;">in</span>
+  <span style="color: #b22222;">%% </span><span style="color: #b22222;">function application like a procedure
+</span>  {Max 4 3 X}
+  {Browse X}
+<span style="color: #a020f0;">end</span>
+</pre>
+
+
+<h3><a name="sec34" id="sec34"></a>
+Procedures as functions</h3>
+
+<pre class="src">
+<span style="color: #b22222;">%% </span><span style="color: #b22222;">Remember, every procedure can also be called like a function for convenience.
+</span>
+<span style="color: #a020f0;">local</span>
+  <span style="color: #a020f0;">proc</span><span style="color: #b8860b;"> </span>{<span style="color: #0000ff;">Max</span> X Y Z}
+     <span style="color: #a020f0;">if</span> X <span style="color: #a020f0;">&gt;=</span> Y <span style="color: #a020f0;">then</span> Z = X <span style="color: #a020f0;">else</span> Z = Y <span style="color: #a020f0;">end</span>
+  <span style="color: #a020f0;">end</span>
+<span style="color: #a020f0;">in</span>
+  {Browse {Max 4 3}}
+<span style="color: #a020f0;">end</span>
+</pre>
+
+
+<h3><a name="sec35" id="sec35"></a>
+Another example TODO</h3>
+
+<pre class="src">
 <span style="color: #b22222;">/* </span><span style="color: #b22222;">Here we treat `IsEven' as a procedure with two arguments.
 `IsEven' binds the variable B.  Please note the order of computations in this
 example:
@@ -732,23 +770,7 @@ until the information is available.
 </pre>
 
 
-<h3><a name="sec34" id="sec34"></a>
-Procedures as functions</h3>
-
-<pre class="src">
-<span style="color: #b22222;">%% </span><span style="color: #b22222;">Remember, every procedure can also be called like a function for convenience.
-</span>
-<span style="color: #a020f0;">local</span>
-  <span style="color: #a020f0;">proc</span><span style="color: #b8860b;"> </span>{<span style="color: #0000ff;">Max</span> X Y Z}
-     <span style="color: #a020f0;">if</span> X <span style="color: #a020f0;">&gt;=</span> Y <span style="color: #a020f0;">then</span> Z = X <span style="color: #a020f0;">else</span> Z = Y <span style="color: #a020f0;">end</span>
-  <span style="color: #a020f0;">end</span>
-<span style="color: #a020f0;">in</span>
-  {Browse {Max 4 3}}
-<span style="color: #a020f0;">end</span>
-</pre>
-
-
-<h3><a name="sec35" id="sec35"></a>
+<h3><a name="sec36" id="sec36"></a>
 $ marks a return value</h3>
 
 <pre class="src">
@@ -756,6 +778,8 @@ $ marks a return value</h3>
 always marks a return value.  This example is not yet very convincing,
 but procedures will encapsulate constraints in later examples...
 </span><span style="color: #ff0000; font-weight: bold;">TODO:</span><span style="color: #b22222;">  what's happening here?  -gp
+</span><span style="color: #ff0000; font-weight: bold;">TODO:</span><span style="color: #b22222;"> I think this belongs somewhere in Basics-2, or even in the
+CSP stuff.
 */</span>
 
 <span style="color: #a020f0;">local</span>
@@ -772,7 +796,7 @@ but procedures will encapsulate constraints in later examples...
 </pre>
 
 
-<h3><a name="sec36" id="sec36"></a>
+<h3><a name="sec37" id="sec37"></a>
 Recursion</h3>
 
 <pre class="src">
@@ -781,8 +805,8 @@ function Factorial implements the mathematical factorial concept. */</span>
 
 <span style="color: #a020f0;">local</span>
    <span style="color: #a020f0;">fun</span><span style="color: #b8860b;"> </span>{<span style="color: #0000ff;">Factorial</span> N}
-      <span style="color: #a020f0;">if</span> N<span style="color: #a020f0;">==</span>0
-        <span style="color: #a020f0;">then</span> 1
+      <span style="color: #a020f0;">if</span> (N<span style="color: #a020f0;">==</span>0) <span style="color: #a020f0;">then</span>
+        1
       <span style="color: #a020f0;">else</span>
         N <span style="color: #a020f0;">*</span> {Factorial N<span style="color: #a020f0;">-</span>1}
       <span style="color: #a020f0;">end</span>
@@ -795,7 +819,7 @@ function Factorial implements the mathematical factorial concept. */</span>
 </pre>
 
 
-<h3><a name="sec37" id="sec37"></a>
+<h3><a name="sec38" id="sec38"></a>
 BACKGROUND</h3>
 
 <pre class="src">
@@ -817,7 +841,7 @@ procedure.
 
 
 
-<h2><a name="sec38" id="sec38"></a>
+<h2><a name="sec39" id="sec39"></a>
 Atoms and Names</h2>
 
 <p class="first">Oz provides a number of basic data types which have a specific textual representation in source code.  We have already seen numbers (i.e. integers and floats).  Here we shall discuss two other data types: Atoms and Names.</p>
@@ -828,7 +852,7 @@ The safest way to create an atom is to surround it in single quotes: 'hi there'.
 <p>Name:
 There are a few things which look like atoms, but are a different variable type: Name.  The boolean values true and false are both Names (specifically, the Bool subtype).  Another often used value which looks like an atom is unit (also a name).</p>
 
-<h3><a name="sec39" id="sec39"></a>
+<h3><a name="sec40" id="sec40"></a>
 Atoms</h3>
 
 <pre class="src">
@@ -845,7 +869,7 @@ Atoms</h3>
 </pre>
 
 
-<h3><a name="sec40" id="sec40"></a>
+<h3><a name="sec41" id="sec41"></a>
 Equality</h3>
 
 <pre class="src">
@@ -853,7 +877,7 @@ Equality</h3>
 </pre>
 
 
-<h3><a name="sec41" id="sec41"></a>
+<h3><a name="sec42" id="sec42"></a>
 Names</h3>
 
 <pre class="src">
@@ -875,14 +899,14 @@ token is needed whose value is not important. */</span>
 
 
 
-<h2><a name="sec42" id="sec42"></a>
+<h2><a name="sec43" id="sec43"></a>
 Compound Types</h2>
 
 <p class="first">Besides the atomic types discussed before, Oz also provides compound data types: records, tuples, lists, and strings.</p>
 
 <p>Internally, all of these data types are actually records (just like all functions are actually procedures).  Tuples, lists, and strings just provide a different syntax for interacting with records.</p>
 
-<h3><a name="sec43" id="sec43"></a>
+<h3><a name="sec44" id="sec44"></a>
 Records (1)</h3>
 
 <pre class="src">
@@ -892,8 +916,22 @@ Records (1)</h3>
 </pre>
 
 
-<h3><a name="sec44" id="sec44"></a>
+<h3><a name="sec45" id="sec45"></a>
 Records (2)</h3>
+
+<pre class="src">
+<span style="color: #b22222;">/* </span><span style="color: #b22222;">Integer features need not be listed explicitly; these two
+ examples are identical.  Note that the `foo' label does not count
+towards these integer features, and that the integer features are
+placed before non-integer features. */</span>
+
+{Inspect test(1:one 2:two foo:bar 3:three)}
+{Inspect test(one two foo:bar three)}
+</pre>
+
+
+<h3><a name="sec46" id="sec46"></a>
+Records (3)</h3>
 
 <pre class="src">
 <span style="color: #b22222;">%% </span><span style="color: #b22222;">Records can be freely nested.
@@ -902,17 +940,7 @@ Records (2)</h3>
 </pre>
 
 
-<h3><a name="sec45" id="sec45"></a>
-Records (3)</h3>
-
-<pre class="src">
-<span style="color: #b22222;">/* </span><span style="color: #b22222;">Integer features can be omitted.  The following example is identical to the previous. */</span>
-
-{Inspect test(hi there x:<span style="color: #a020f0;">unit</span>(foo:bar))}
-</pre>
-
-
-<h3><a name="sec46" id="sec46"></a>
+<h3><a name="sec47" id="sec47"></a>
 Accessing record fields</h3>
 
 <pre class="src">
@@ -925,7 +953,7 @@ position). */</span>
 </pre>
 
 
-<h3><a name="sec47" id="sec47"></a>
+<h3><a name="sec48" id="sec48"></a>
 Tuples (1)</h3>
 
 <pre class="src">
@@ -935,7 +963,7 @@ Tuples (1)</h3>
 </pre>
 
 
-<h3><a name="sec48" id="sec48"></a>
+<h3><a name="sec49" id="sec49"></a>
 Tuples (2)</h3>
 
 <pre class="src">
@@ -947,7 +975,7 @@ are equivalent. */</span>
 </pre>
 
 
-<h3><a name="sec49" id="sec49"></a>
+<h3><a name="sec50" id="sec50"></a>
 Tuples (3)</h3>
 
 <pre class="src">
@@ -957,7 +985,7 @@ Tuples (3)</h3>
 </pre>
 
 
-<h3><a name="sec50" id="sec50"></a>
+<h3><a name="sec51" id="sec51"></a>
 Lists (1)</h3>
 
 <pre class="src">
@@ -967,7 +995,7 @@ Lists (1)</h3>
 </pre>
 
 
-<h3><a name="sec51" id="sec51"></a>
+<h3><a name="sec52" id="sec52"></a>
 Lists (2)</h3>
 
 <pre class="src">
@@ -978,7 +1006,7 @@ empty list, which terminates every list. */</span>
 </pre>
 
 
-<h3><a name="sec52" id="sec52"></a>
+<h3><a name="sec53" id="sec53"></a>
 Lists (3)</h3>
 
 <pre class="src">
@@ -988,18 +1016,19 @@ Lists (3)</h3>
 </pre>
 
 
-<h3><a name="sec53" id="sec53"></a>
+<h3><a name="sec54" id="sec54"></a>
 Lists (4)</h3>
 
 <pre class="src">
 <span style="color: #b22222;">/* </span><span style="color: #b22222;">Consequently, the first element of a list can be accessed under the
 feature 1, and the remaining list under the feature 2. */</span>
 
+{Inspect [a b c]<span style="color: #a020f0;">.</span>1}
 {Inspect [a b c]<span style="color: #a020f0;">.</span>2}
 </pre>
 
 
-<h3><a name="sec54" id="sec54"></a>
+<h3><a name="sec55" id="sec55"></a>
 Pairs (1)</h3>
 
 <pre class="src">
@@ -1009,7 +1038,7 @@ Pairs (1)</h3>
 </pre>
 
 
-<h3><a name="sec55" id="sec55"></a>
+<h3><a name="sec56" id="sec56"></a>
 Pairs (2)</h3>
 
 <pre class="src">
@@ -1019,7 +1048,7 @@ Pairs (2)</h3>
 </pre>
 
 
-<h3><a name="sec56" id="sec56"></a>
+<h3><a name="sec57" id="sec57"></a>
 Strings (1)</h3>
 
 <pre class="src">
@@ -1030,7 +1059,7 @@ procedures can be used for strings). */</span>
 </pre>
 
 
-<h3><a name="sec57" id="sec57"></a>
+<h3><a name="sec58" id="sec58"></a>
 Strings (2)</h3>
 
 <pre class="src">
@@ -1045,7 +1074,7 @@ string. */</span>
 </pre>
 
 
-<h3><a name="sec58" id="sec58"></a>
+<h3><a name="sec59" id="sec59"></a>
 Virtual Strings</h3>
 
 <pre class="src">
@@ -1062,7 +1091,7 @@ arguments can also handle virtual strings for convenience. */</span>
 
 
 
-<h2><a name="sec59" id="sec59"></a>
+<h2><a name="sec60" id="sec60"></a>
 Error messages</h2>
 
 <p class="first">When we do program, we almost inevitably write bugs
@@ -1089,7 +1118,7 @@ lines to each example (the resulting full example is shown just before
 the error message).</p>
 
 
-<h3><a name="sec60" id="sec60"></a>
+<h3><a name="sec61" id="sec61"></a>
 Parse error</h3>
 
 <pre class="src">
@@ -1099,7 +1128,7 @@ Parse error</h3>
 </pre>
 
 
-<h3><a name="sec61" id="sec61"></a>
+<h3><a name="sec62" id="sec62"></a>
 Static analysis error</h3>
 
 <pre class="src">
@@ -1109,7 +1138,7 @@ Static analysis error</h3>
 </pre>
 
 
-<h3><a name="sec62" id="sec62"></a>
+<h3><a name="sec63" id="sec63"></a>
 Binding analysis error</h3>
 
 <pre class="src">
@@ -1119,7 +1148,7 @@ X = 3
 </pre>
 
 
-<h3><a name="sec63" id="sec63"></a>
+<h3><a name="sec64" id="sec64"></a>
 Type error</h3>
 
 <pre class="src">
@@ -1129,7 +1158,7 @@ Type error</h3>
 </pre>
 
 
-<h3><a name="sec64" id="sec64"></a>
+<h3><a name="sec65" id="sec65"></a>
 Failure</h3>
 
 <pre class="src">
@@ -1152,7 +1181,7 @@ solutions to a constraint satisfaction problem. */</span>
 <div id="footer">
 <div id="author">&copy; 
 Torsten Anders</div>
-<div id="date">Last time edited: 2007.12.13</div>
+<div id="date">Last time edited: 2008.01.15</div>
 </div>
   </body>
 </html>

@@ -128,6 +128,7 @@ clearInterval(drawit)
 <h3>Export</h3>
 <code><ul><li>&lt;P/2:<a href="#entity4"><span class="functionname">Memoize</span></a>&gt;
 </li><li>&lt;P/0:<a href="#entity5"><span class="functionname">ClearAll</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity6"><span class="functionname">Memoize2</span></a>&gt;
 </li><li>&lt;P/1:<a href="#entity2"><span class="functionname">SetGetID</span></a>&gt;
 </li><li>&lt;P/1:<a href="#entity3"><span class="functionname">SetMinID</span></a>&gt;
 </li></ul></code>
@@ -143,12 +144,13 @@ clearInterval(drawit)
 <BR>
  The definition of the original function is not changed (in contrast to the Lisp implementation of Norvig) and thus recursive functions are not well memoized. Only the top-level call of the recursive function would get memoized but internally the function would call the original unmemoized version.<BR>
 <BR>
- Memoize itself (and clearing the cache of a memoized function) performs a stateful operation. Still, calling the memo-function (and caching results) is stateless. Thus, memo-functions can be used freely in CSP, even if they are defined in the top-level space.<BR>
+ Memoize itself (and clearing the cache of a memoized function) performs a stateful operation. Still, calling the memo-function (and caching results) is stateless. However, you must not use Memoize (it would cause blocking). Instead, use Memoize2.<BR>
 <BR>
  Memo-functions are not thread save. In case the result for a particular set of arguments is not yet cached and the function is called with the same args (args with the same keys) in parallel, the cache will be set twice (in case of inconsistent values, an exception will be raised). Similarily, setting the ID of a value is not thread-save either.<BR>
  These operations could be made thread-save by locking multiple sub-operations. However, locks in a top-level space must not be 'entered' by statements in other spaces (i.e. during search). <BR>
 <BR>
- Efficiency of memo-functions lookup is only linear time (!) and depends on the number of results already cached (i.e. lookup is not performed in constant time as perhaps expected, because currently there exissts no constant time implementation of RecordC.reflectHasFeature).<BR>
+ Efficiency of memo-functions lookup is only linear time (!) and depends on the number of results already cached (i.e. lookup is not performed in constant time as perhaps expected, because currently there exists no constant time implementation of RecordC.reflectHasFeature).<BR>
+<BR>
 <BR>
 </span>
 </code><br>
@@ -157,6 +159,18 @@ clearInterval(drawit)
 <a name="entity5">
 <span class="keyword">proc</span>{<span class="functionname">ClearAll</span> }<br>
 <span class="string"> Clears the cache of all memoized functions. <BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity6">
+<span class="keyword">proc</span>{<span class="functionname">Memoize2</span> Fn MemoFn}<br>
+<span class="string"> Like Memoize, but completely stateless. Functions memoized with Memoize2 are not cleared with ClearAll (in contrast to functions created with Memoize), but for functions local to CSPs this is not necessary.<BR>
+ Memoize2 is intended for locally use in CSP.<BR>
+<BR>
+ BUG: setting IDs automatically does presently _not_ work from inside a local space (i.e. during search): implicitly called function MakeID is stateful operation.<BR>
+ Workaround for now: set IDs of score objects manually (the method getID returns the ID of an object, which is free, by default).<BR>
 <BR>
 </span>
 </code><br>

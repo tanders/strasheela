@@ -125,6 +125,7 @@ clearInterval(drawit)
 <h3>Import</h3>
 <code><ul><li>Path at "<span class="string">x-ozlib://anders/tmp/Path/Path.ozf"
 </span></li><li><a href="node3.html">Compiler</a></li><li>Open</li><li>OS</li><li>System</li><li>Application</li><li>Error</li><li>Browser</li><li>Combinator</li><li>CompilerPanel</li><li>Connection</li><li>DistributionPanel</li><li>DPControl</li><li>DPInit</li><li>DPStatistics</li><li>DefaultURL</li><li>Discovery</li><li>Emacs</li><li>ErrorListener</li><li>ErrorRegistry</li><li>EvalDialog</li><li>Explorer</li><li>FD</li><li>FS</li><li>Fault</li><li>Finalize</li><li>Gump</li><li>GumpParser</li><li>GumpScanner</li><li>Listener</li><li>Macro</li><li>Module</li><li>Narrator</li><li>OPI</li><li>OPIEnv</li><li>OPIServer</li><li>ObjectSupport</li><li>OsTime</li><li>Ozcar</li><li>OzcarClient</li><li>Panel</li><li>Pickle</li><li>Profiler</li><li>Property</li><li>RecordC</li><li>Remote</li><li>Resolve</li><li>Schedule</li><li>Search</li><li>Service</li><li>Space</li><li>Tix</li><li>Tk</li><li>TkTools</li><li>Type</li><li>URL</li><li>VirtualSite</li><li>QTk at "<span class="string">x-oz://system/wp/QTk.ozf"
+</span></li><li>Debug at "<span class="string">x-oz://boot/Debug"
 </span></li><li>Strasheela at "<span class="string">x-ozlib://anders/strasheela/Strasheela.ozf"
 </span></li><li>CTT at "<span class="string">x-ozlib://anders/strasheela/ConstrainTimingTree/ConstrainTimingTree.ozf"
 </span></li><li>Pattern at "<span class="string">x-ozlib://anders/strasheela/Pattern/Pattern.ozf"
@@ -134,15 +135,15 @@ clearInterval(drawit)
 </span></li><li>ScoreInspector at "<span class="string">x-ozlib://anders/strasheela/ScoreInspector/ScoreInspector.ozf"
 </span></li></ul></code>
 <h3>Export</h3>
-<code><ul><li>&lt;P/1:<a href="#entity84"><span class="functionname">MakeCompiler</span></a>&gt;
-</li><li>&lt;P/2:<a href="#entity86"><span class="functionname">FeedStatement</span></a>&gt;
-</li><li>&lt;P/3:<a href="#entity87"><span class="functionname">FeedExpression</span></a>&gt;
-</li><li>&lt;P/1:<a href="#entity85"><span class="functionname">FeedInitFile</span></a>&gt;
+<code><ul><li>&lt;P/1:<a href="#entity85"><span class="functionname">MakeCompiler</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity87"><span class="functionname">FeedStatement</span></a>&gt;
+</li><li>&lt;P/3:<a href="#entity88"><span class="functionname">FeedExpression</span></a>&gt;
+</li><li>&lt;P/1:<a href="#entity86"><span class="functionname">FeedInitFile</span></a>&gt;
 </li></ul></code>
 <h3>Define</h3>
 
 <code>
-<a name="entity84">
+<a name="entity85">
 <span class="keyword">proc</span>{<span class="functionname">MakeCompiler</span> MyCompiler}<br>
 <span class="string"> Returns a new compiler with the full environment (comparable to the OPI + Strasheela). <BR>
 <BR>
@@ -150,7 +151,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity86">
+<a name="entity87">
 <span class="keyword">proc</span>{<span class="functionname">FeedStatement</span> MyCode MyCompiler}<br>
 <span class="string"> Feeds statement MyCode (VS) to MyCompiler. <BR>
 <BR>
@@ -158,7 +159,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity87">
+<a name="entity88">
 <span class="keyword">proc</span>{<span class="functionname">FeedExpression</span> MyCode MyCompiler Result}<br>
 <span class="string"> Feeds expression MyCode (VS) to MyCompiler and returns Result.<BR>
 <BR>
@@ -166,7 +167,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity85">
+<a name="entity86">
 <span class="keyword">proc</span>{<span class="functionname">FeedInitFile</span> MyCompiler}<br>
 <span class="string"> Feeds OZRC file to MyCompiler. The OZRC is search for at the usual places according conventions (cf. oz/doc/opi/node4.html).<BR>
 <BR>

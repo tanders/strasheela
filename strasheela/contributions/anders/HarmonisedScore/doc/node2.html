@@ -138,34 +138,39 @@ clearInterval(drawit)
 <h3>Import</h3>
 <code><ul><li>FD</li><li>FS</li><li>RecordC</li><li>Browser(browse:Browse)</li><li>LUtils at "<span class="string">x-ozlib://anders/strasheela/source/ListUtils.ozf"
 </span></li><li>MUtils at "<span class="string">x-ozlib://anders/strasheela/source/MusicUtils.ozf"
+</span></li><li>Out at "<span class="string">x-ozlib://anders/strasheela/source/Output.ozf"
 </span></li><li><a href="node5.html">DBs</a> at "<span class="string">databases/Databases.ozf"
 </span></li></ul></code>
 <h3>Export</h3>
-<code><ul><li>&lt;P/1:<a href="#entity20"><span class="functionname">SetDB</span></a>&gt;
-</li><li>&lt;P/1:<a href="#entity21"><span class="functionname">GetEditChordDB</span></a>&gt;
-</li><li>&lt;P/1:<a href="#entity22"><span class="functionname">GetInternalChordDB</span></a>&gt;
-</li><li>&lt;P/1:<a href="#entity23"><span class="functionname">GetEditScaleDB</span></a>&gt;
-</li><li>&lt;P/1:<a href="#entity24"><span class="functionname">GetInternalScaleDB</span></a>&gt;
-</li><li>&lt;P/1:<a href="#entity25"><span class="functionname">GetEditIntervalDB</span></a>&gt;
-</li><li>&lt;P/1:<a href="#entity26"><span class="functionname">GetInternalIntervalDB</span></a>&gt;
-</li><li>&lt;P/1:<a href="#entity27"><span class="functionname">GetPitchesPerOctave</span></a>&gt;
-</li><li>&lt;P/1:<a href="#entity29"><span class="functionname">GetPitchUnit</span></a>&gt;
-</li><li>&lt;P/1:<a href="#entity28"><span class="functionname">GetAccidentalOffset</span></a>&gt;
-</li><li>&lt;P/1:<a href="#entity30"><span class="functionname">GetOctaveDomain</span></a>&gt;
-</li><li>&lt;P/1:<a href="#entity31"><span class="functionname">MakePitchClassFDInt</span></a>&gt;
-</li><li>&lt;P/1:<a href="#entity32"><span class="functionname">MakeOctaveFDInt</span></a>&gt;
-</li><li>&lt;P/1:<a href="#entity33"><span class="functionname">MakeAccidentalFDInt</span></a>&gt;
-</li><li>&lt;P/1:<a href="#entity34"><span class="functionname">MakeScaleDegreeFDInt</span></a>&gt;
-</li><li>&lt;P/1:<a href="#entity35"><span class="functionname">MakeChordDegreeFDInt</span></a>&gt;
-</li><li>&lt;P/3:<a href="#entity36"><span class="functionname">RatiosInDBEntryToPCs</span></a>&gt;
-</li><li>&lt;P/3:<a href="#entity37"><span class="functionname">Pc2Ratios</span></a>&gt;
+<code><ul><li>&lt;P/1:<a href="#entity21"><span class="functionname">SetDB</span></a>&gt;
+</li><li>&lt;P/1:<a href="#entity22"><span class="functionname">GetEditChordDB</span></a>&gt;
+</li><li>&lt;P/1:<a href="#entity23"><span class="functionname">GetInternalChordDB</span></a>&gt;
+</li><li>&lt;P/1:<a href="#entity24"><span class="functionname">GetEditScaleDB</span></a>&gt;
+</li><li>&lt;P/1:<a href="#entity25"><span class="functionname">GetInternalScaleDB</span></a>&gt;
+</li><li>&lt;P/1:<a href="#entity26"><span class="functionname">GetEditIntervalDB</span></a>&gt;
+</li><li>&lt;P/1:<a href="#entity27"><span class="functionname">GetInternalIntervalDB</span></a>&gt;
+</li><li>&lt;P/1:<a href="#entity28"><span class="functionname">GetPitchesPerOctave</span></a>&gt;
+</li><li>&lt;P/1:<a href="#entity30"><span class="functionname">GetPitchUnit</span></a>&gt;
+</li><li>&lt;P/1:<a href="#entity29"><span class="functionname">GetAccidentalOffset</span></a>&gt;
+</li><li>&lt;P/1:<a href="#entity31"><span class="functionname">GetOctaveDomain</span></a>&gt;
+</li><li>&lt;P/1:<a href="#entity32"><span class="functionname">MakePitchClassFDInt</span></a>&gt;
+</li><li>&lt;P/1:<a href="#entity33"><span class="functionname">MakeOctaveFDInt</span></a>&gt;
+</li><li>&lt;P/1:<a href="#entity34"><span class="functionname">MakeAccidentalFDInt</span></a>&gt;
+</li><li>&lt;P/1:<a href="#entity35"><span class="functionname">MakeScaleDegreeFDInt</span></a>&gt;
+</li><li>&lt;P/1:<a href="#entity36"><span class="functionname">MakeChordDegreeFDInt</span></a>&gt;
+</li><li>&lt;P/3:<a href="#entity37"><span class="functionname">RatiosInDBEntryToPCs</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity38"><span class="functionname">WasRatiosDBEntry</span></a>&gt;
+</li><li>&lt;P/3:<a href="#entity42"><span class="functionname">Pc2Ratios</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity39"><span class="functionname">GetChordIndex</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity40"><span class="functionname">GetScaleIndex</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity41"><span class="functionname">GetIntervalIndex</span></a>&gt;
 </li></ul></code>
 <h3>Define</h3>
 
 <code>
-<a name="entity20">
+<a name="entity21">
 <span class="keyword">proc</span>{<span class="functionname">SetDB</span> NewDB}<br>
-<span class="string"> Sets the database which is used by the music representation and rules of the HarmonisedScore contribution.<BR>
+<span class="string"> Sets the database which is used by the HarmonisedScore contribution (e.g., its music representation and rules).<BR>
  The syntax of the database is<BR>
       &lt;DB&gt; ==:: unit([chordDB:&lt;PCGroupDB&gt;]<BR>
 		     [scaleDB:&lt;PCGroupDB&gt;]<BR>
@@ -184,67 +189,65 @@ clearInterval(drawit)
       &lt;AccidentalOffset&gt; ==:: &lt;Int&gt;<BR>
       &lt;OctaveDomain&gt; ==:: &lt;Int&gt;#&lt;Int&gt;<BR>
       <BR>
- All features of the whole DB and also of some sub-DBs (e.g. of the chordDB and scaleDB) are optional (as marked by square brackets).<BR>
- NB: every DB feature missing in NewDB is set to a default value. <BR>
-<BR>
- Temp doc: For further details read the doc of the aux accessors.<BR>
+ All features of the DB and also of some sub-DBs (e.g. of the chordDB and scaleDB) are optional (as marked by square brackets). Missing features are set to the features of the default database (HS.dbs.default). However, in case PitchesPerOctave \= 12, then the following features are mandatory: chordDB, scaleDB and intervalDB.<BR>
+ Note the above doc is unfinished: for further details read the doc of the aux accessors (available in the source file contributions/anders/HarmonisedScore/source/Database.oz).<BR>
  TODO: write a better doc..<BR>
 <BR>
 </span>
 </code><br>
 
 <code>
-<a name="entity21">
+<a name="entity22">
 <span class="keyword">fun</span>{<span class="functionname">GetEditChordDB</span> }
 </code><br>
 
 <code>
-<a name="entity22">
+<a name="entity23">
 <span class="keyword">fun</span>{<span class="functionname">GetInternalChordDB</span> }
 </code><br>
 
 <code>
-<a name="entity23">
+<a name="entity24">
 <span class="keyword">fun</span>{<span class="functionname">GetEditScaleDB</span> }
 </code><br>
 
 <code>
-<a name="entity24">
+<a name="entity25">
 <span class="keyword">fun</span>{<span class="functionname">GetInternalScaleDB</span> }
 </code><br>
 
 <code>
-<a name="entity25">
+<a name="entity26">
 <span class="keyword">fun</span>{<span class="functionname">GetEditIntervalDB</span> }
 </code><br>
 
 <code>
-<a name="entity26">
+<a name="entity27">
 <span class="keyword">fun</span>{<span class="functionname">GetInternalIntervalDB</span> }
 </code><br>
 
 <code>
-<a name="entity27">
+<a name="entity28">
 <span class="keyword">fun</span>{<span class="functionname">GetPitchesPerOctave</span> }
 </code><br>
 
 <code>
-<a name="entity29">
+<a name="entity30">
 <span class="keyword">fun</span>{<span class="functionname">GetPitchUnit</span> }
 </code><br>
 
 <code>
-<a name="entity28">
+<a name="entity29">
 <span class="keyword">fun</span>{<span class="functionname">GetAccidentalOffset</span> }
 </code><br>
 
 <code>
-<a name="entity30">
+<a name="entity31">
 <span class="keyword">fun</span>{<span class="functionname">GetOctaveDomain</span> }
 </code><br>
 
 <code>
-<a name="entity31">
+<a name="entity32">
 <span class="keyword">fun</span>{<span class="functionname">MakePitchClassFDInt</span> }<br>
 <span class="string"> Return a FD integer representing a pitch class (range defined by PitchesPerOctave).<BR>
 <BR>
@@ -252,7 +255,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity32">
+<a name="entity33">
 <span class="keyword">fun</span>{<span class="functionname">MakeOctaveFDInt</span> }<br>
 <span class="string"> Return a FD integer representing an octave (range OctaveDomain).<BR>
 <BR>
@@ -260,7 +263,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity33">
+<a name="entity34">
 <span class="keyword">fun</span>{<span class="functionname">MakeAccidentalFDInt</span> }<br>
 <span class="string"> Return a FD integer representing an accidental (range 0#AccidentalOffset*2). <BR>
 <BR>
@@ -268,7 +271,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity34">
+<a name="entity35">
 <span class="keyword">fun</span>{<span class="functionname">MakeScaleDegreeFDInt</span> }<br>
 <span class="string"> Returns a FD integer representing a scale degree (range 1#MaxScaleLength).<BR>
 <BR>
@@ -276,7 +279,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity35">
+<a name="entity36">
 <span class="keyword">fun</span>{<span class="functionname">MakeChordDegreeFDInt</span> }<br>
 <span class="string"> Returns a FD integer representing a chord degree (range 1#MaxChordLength).<BR>
 <BR>
@@ -284,19 +287,31 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity36">
+<a name="entity37">
 <span class="keyword">proc</span>{<span class="functionname">RatiosInDBEntryToPCs</span> MyDBEntry KeysPerOctave Out}<br>
 <span class="string"> Processes an entry for a HS database (e.g. for a chord database). HS depends on pitches as keynumbers and pitch classes (all represented by integers or FD ints), both depending on KeysPerOctave. RatiosInDBEntryToPCs, on the other hand, permits also ratios (floats or fractions specs) which are transformed and rounded to the nearest pitch class (a ratio representing an interval exceeding an octave is transformed into an interval within an octave). <BR>
  MyDBEntry is a record with arbitrary features. Each feature value is either an interger, a list of integers, a ratio spec (either a float or a fraction spec in the form &lt;Int&gt;#&lt;Int&gt;), or a list of ratio specs. The output contains each integer/lists of integers unchanged but substitutes each ratio/list of ratios by the nearest pitch class interval (an integer), depending on KeysPerOctave (an integer).<BR>
  Additionally, a comment feature in MyDBEntry with arbitrary value is permitted. The returned record has always a comment feature with a record as value. The explaination of the comment in the return value is a bit complicated and depends on MyDBEntry. For features in MyDBEntry with a ratio, collect in comment the ratio, its pitch class plus the error, for other features in Test keep the orig value. In case MyDBEntry contains a feature comment as well, this value is preserved: in case MyDBEntry.comment is a record as well, its features are added to the comment record of the result. However, in case MyDBEntry.comment contains a feature 'comment' with the same feature as a feature in MyDBEntry itself, then the feature of MyDBEntry.comment is preferred. See the test file for examples.<BR>
+ Because the comment feature of the returned DB entry is changed, the function WasRatiosDBEntry recognises a DB entry processed by RatiosInDBEntryToPCs.<BR>
 <BR>
  NB: in HS.db, an OctaveDomain is also specified as &lt;Int&gt;#&lt;Int&gt;, but must not be mixed up with a fraction spec.<BR>
+ <BR>
+<BR>
+ BUG: reported error signs not correct -- check JI signs (you know what to expect..)<BR>
 <BR>
 </span>
 </code><br>
 
 <code>
-<a name="entity37">
+<a name="entity38">
+<span class="keyword">fun</span>{<span class="functionname">WasRatiosDBEntry</span> MyDBEntry}<br>
+<span class="string"> Returns true if MyDBEntry was processed by RatiosInDBEntryToPCs.<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity42">
 <span class="keyword">fun</span>{<span class="functionname">Pc2Ratios</span> PC IntervalDB}<br>
 <span class="string"> Returns a list of all ratios which match PC (an int) in IntervalDB (given in its edit form) which was defined using ratios (e.g. {HS.dbs.partch.getIntervals {HS.db.getPitchesPerOctave}}).<BR>
  A ratio consists in two integers and has the form Nom#Denom. If no entry in the database matches PC, nil is returned.<BR>
@@ -308,6 +323,25 @@ clearInterval(drawit)
  NB: Pc2Ratios is a deterministic function and no constraint.<BR>
 <BR>
 </span>
+</code><br>
+
+<code>
+<a name="entity39">
+<span class="keyword">fun</span>{<span class="functionname">GetChordIndex</span> MyName}<br>
+<span class="string"> Convenience functions. ChordIndex expects a name (atom) for a chord and returns the corresponding index. This name is either the value stored under the edit database feature 'comment', or the value of a feature 'name' of a record stored under the edit database feature 'comment'. If no database entry with this name is defined, then nil is returned.<BR>
+ ScaleIndex and IntervalIndex do the same for scales and intervals.<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity40">
+<span class="keyword">fun</span>{<span class="functionname">GetScaleIndex</span> MyName}
+</code><br>
+
+<code>
+<a name="entity41">
+<span class="keyword">fun</span>{<span class="functionname">GetIntervalIndex</span> MyName}
 </code><br>
 <h3>End</h3>
 </div></body>

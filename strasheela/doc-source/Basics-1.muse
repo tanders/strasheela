@@ -390,6 +390,37 @@ end
 ** Functions are procedures
 
 <src lang="oz">
+%% Since functions are procedures, we can treat them just like procedures.
+local
+  %% function definition
+  fun {Max X Y}
+     if X >= Y then X else Y end 
+  end
+  X
+in
+  %% function application like a procedure
+  {Max 4 3 X}
+  {Browse X}
+end
+</src>
+
+** Procedures as functions
+
+<src lang="oz">
+%% Remember, every procedure can also be called like a function for convenience.
+
+local
+  proc {Max X Y Z}
+     if X >= Y then Z = X else Z = Y end 
+  end
+in
+  {Browse {Max 4 3}}
+end
+</src>
+
+** Another example TODO
+
+<src lang="oz">
 /* Here we treat `IsEven' as a procedure with two arguments.
 `IsEven' binds the variable B.  Please note the order of computations in this
 example:
@@ -411,20 +442,6 @@ local B in
 end
 </src>
 
-** Procedures as functions
-
-<src lang="oz">
-%% Remember, every procedure can also be called like a function for convenience.
-
-local
-  proc {Max X Y Z}
-     if X >= Y then Z = X else Z = Y end 
-  end
-in
-  {Browse {Max 4 3}}
-end
-</src>
-
 ** $ marks a return value
 
 <src lang="oz">
@@ -432,6 +449,8 @@ end
 always marks a return value.  This example is not yet very convincing,
 but procedures will encapsulate constraints in later examples...
 TODO:  what's happening here?  -gp
+TODO: I think this belongs somewhere in Basics-2, or even in the
+CSP stuff.
 */
 
 local
@@ -455,8 +474,8 @@ function Factorial implements the mathematical factorial concept. */
 
 local
    fun {Factorial N}
-      if N==0
-        then 1
+      if (N==0) then
+        1
       else
         N * {Factorial N-1}
       end
@@ -554,17 +573,21 @@ Internally, all of these data types are actually records (just like all function
 ** Records (2)
 
 <src lang="oz">
-%% Records can be freely nested. 
-  
-{Inspect test(1:hi 2:there x:unit(foo:bar))}
+/* Integer features need not be listed explicitly; these two
+ examples are identical.  Note that the `foo' label does not count
+towards these integer features, and that the integer features are
+placed before non-integer features. */
+
+{Inspect test(1:one 2:two foo:bar 3:three)}
+{Inspect test(one two foo:bar three)}
 </src>
 
 ** Records (3)
 
 <src lang="oz">
-/* Integer features can be omitted.  The following example is identical to the previous. */
-
-{Inspect test(hi there x:unit(foo:bar))}
+%% Records can be freely nested. 
+  
+{Inspect test(1:hi 2:there x:unit(foo:bar))}
 </src>
 
 ** Accessing record fields
@@ -635,6 +658,7 @@ empty list, which terminates every list. */
 /* Consequently, the first element of a list can be accessed under the
 feature 1, and the remaining list under the feature 2. */
   
+{Inspect [a b c].1}
 {Inspect [a b c].2}
 </src>
 

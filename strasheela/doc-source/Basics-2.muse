@@ -22,20 +22,22 @@ The primary pattern matching construct is the case statement, but some programmi
 ** Case statements (1)
 
 <src lang="oz">
- /* In the example below, case declares the two variables H and T and
+/* In the example below, =case= declares the two variables H and T and
 binds them to the head and tail of the list Xs.  Finally, the H and T are
 inspected.  Please note that the pattern-matching expression H|T is written
 with the usual list syntax using | (the cons-operation). 
 
 This approach can be used to pattern match lists of arbitrary length,
-except empty lists (i.e. nil). Try to change the definition of Xs to a
-list of a different length and watch how the value of T changes. */
+except empty lists (i.e. nil).  Try changingthe definition of Xs to a
+list of a different length and watch how the value of T changes.*/
 
 local
    Xs = [1 2 3 4]
 in
-   case Xs of H | T
-   then {Inspect H} {Inspect T}
+   case Xs of
+      H | T
+   then
+      {Inspect H} {Inspect T}
    end
 end
 </src>
@@ -45,15 +47,17 @@ end
 <src lang="oz">
 /* The previous example matched the head and the tail of a
 list. Instead, we can also match individual list elements (or the
-elements of other data structures, such as records or tuples). Note
-that in this example changing the length of the lists results in an
-error. */
+elements of other data structures, such as records or tuples).
+
+WARNING: if the length of the lists is not equal, an error occurs.*/
 
 local
    Xs = [1 2 3 4]
 in
-   case Xs of [A B C D]
-   then {Inspect A} {Inspect B} {Inspect C} {Inspect D}
+   case Xs of
+      [A B C D]
+   then
+      {Inspect A} {Inspect B} {Inspect C} {Inspect D}
    end
 end
 </src>
@@ -68,11 +72,17 @@ non-empty list, or an empty list, or some other value. You may want to
 play around with the value of Xs to try out these different
 clauses. */
 
-local Xs = [1 2 3 4]
+local
+   Xs = [1 2 3 4]
 in
-   case Xs of  H|T then {Inspect nonEmptyList}
-      [] nil then {Inspect emptyList}
-      else {Inspect differentValue}
+   case Xs of
+      H|T
+   then
+      {Inspect nonEmptyList}
+   [] nil then
+      {Inspect emptyList}
+   else
+      {Inspect notList}
    end 
 end
 </src>
@@ -105,7 +115,7 @@ Oz provides a rich set of procedures for processing these compound data such as 
    http://www.mozart-oz.org/documentation/base/index.html
 
 
-** HasFeature
+** Record HasFeature
 
 <src lang="oz">
 %% Tests whether a record has a certain feature
@@ -113,7 +123,7 @@ Oz provides a rich set of procedures for processing these compound data such as 
 {Inspect {HasFeature unit(x:1 y:2 z:3) y}}
 </src>
 
-** Arity
+** Record -> List
 
 <src lang="oz">
 %% Return the features of a record as a list.
@@ -121,16 +131,16 @@ Oz provides a rich set of procedures for processing these compound data such as 
 {Inspect {Arity unit(a b x:1 y:2 z:3)}}
 </src>
 
-** Adjoin
+** Combining records
 
 <src lang="oz">
-/* "Merge" two records.  Note that features and label of the second
+/* "Merge" two records.  Note that features and labels of the second
 record take precedence over the first. */
 
 {Inspect {Adjoin unit(x:1 y:2 z:3) test(foo:hi bar:there z:'overwrite!')}}
 </src>
 
-** Nth
+** Accessing a list element
 
 <src lang="oz">
 %% Return the nth element of a list.
@@ -138,7 +148,7 @@ record take precedence over the first. */
 {Inspect {Nth [a b c d] 2}}
 </src>
 
-** Reverse
+** Reverse list
 
 <src lang="oz">
 %% Reverse a list.
@@ -146,7 +156,7 @@ record take precedence over the first. */
 {Inspect {Reverse [a b c d]}}
 </src>
 
-** Append
+** Append lists
 
 <src lang="oz">
 %% Append two lists.
@@ -169,104 +179,6 @@ local
   end
 in
   {Inspect {Append [a b] [x y]}}
-end
-</src>
-
-* Unification
-
-The operator = performs unification of two variables.  The variables quasi share all the information they have about their values.  A variable without a name (an anonymous variable) is written as an underscore ( _ ).  Unification is a basic form of constraint programming (constraint programming is discussed further below).
-
-
-** Unifying two lists
-
-<src lang="oz">
-local 
-  X = [a _ _] 
-  Y = [_ b _]
-in 
-  X = Y          % unify X and Y
-  {Inspect X}
-end
-</src>
-
-** Recursive unification
-
-<src lang="oz">
-/* Unification also works recursively.  The Inspector and the Browser
-show two different ways for representing that (the Inspector can be
-configured to show either way: options menu, structure tab, under
-representation, select between tree and relation mode). */
-
-local X = unit(x:X) in 
-  {Browse X}
-  {Inspect X}
-end
-</src>
-
-* Class Method Application
-
-Oz supports object-oriented programming.  This programming paradigm introduces the notion of objects which instantiate classes.  An object (or class instance) is a datum which encapsulates its internal structure.  A class specifies what data are contained in its instances and what methods these instances understands.  A method (or message) is effectively a procedure which is defined for instances of specific classes only.
-
-For more details on object-oriented programming in general, please refer to other Oz documentation:
-    http://www.mozart-oz.org/documentation/tutorial/node10.html
-
-Internally, objects are actually procedures which expect a single argument -- hence this syntax.  When the object is sent a message (i.e. the procedure is called with a specific argument) it processes the message according to its definition.  This method definition may change its internal state, as we expect from typical objects.
-
-** Method call
-
-<src lang="oz">
-/* The following example creates a graphical user interface
-button.  You do not need to understand the code which creates the
-window itself (i.e., the call to QTk.build).  For our purposes here,
-only this single line is important:
-
-  {Window show}
-
-`Window' is an object, and `show' is the name of the method understood by
-this object.  This method results in showing the window with the button.
-
-Please note that the syntax of a method differs clearly from the procedure
-syntax shown before.  If `show' was a procedure, then we would write:
-
-  {Show Window}
-*/
-
-local
-   Window = {QTk.build lr(button(text:"Hello world!" 
-				 action:toplevel#close))}
-in
-   {Window show}
-end
-</src>
-
-** Method arguments
-
-<src lang="oz">
-/* Class methods are actually records which can contain method
-arguments.  For example, the following statement sends the following
-message to the object Window.  This changes the width of the border around
-the button and sets the background of this border to the color blue.
-
-  {Window set(borderwidth:1.0#c background:blue)}
-
-In general, the record denoting a message can wrap multiple arguments,
-as in the following example where the method myMethod with two
-arguments is send to the class MyObject.
-
-   {MyObject myMethod(Arg1 Arg2 ..)} 
-
-We will later see many more method application examples in the context
-of Strasheela's music representation. */
-
-local
-   Window = {QTk.build lr(button(text:"Hello world!" 
-				 action:toplevel#close))}
-in
-   {Window show}
-   %% change to button background color after 1000 msecs
-   {Delay 1000}
-   {Window set(borderwidth:1.0#c 
-               background:blue)}
 end
 </src>
 
@@ -411,6 +323,117 @@ in
 end
 </src>
 
+* Unification
+
+The operator = performs unification of two variables.  The variables share all the information they have about their values.  A variable without a name (an anonymous variable) is written as an underscore ( _ ).  Unification is a basic form of constraint programming (constraint programming is discussed further below).
+
+
+** Unifying two numbers
+
+<src lang="oz">
+local 
+  X = {FD.int 1#5}
+  Y = {FD.int 0#3}
+in 
+  X = Y          % unify X and Y
+  {Inspect X}
+end
+
+</src>
+
+** Unifying two lists
+
+<src lang="oz">
+local 
+  X = [a _ _] 
+  Y = [_ b _]
+in 
+  X = Y          % unify X and Y
+  {Inspect X}
+end
+</src>
+
+** Recursive unification
+
+<src lang="oz">
+/* Unification also works recursively.  The Inspector and the Browser
+show two different ways for representing that (the Inspector can be
+configured to show either way: options menu, structure tab, under
+representation, select between tree and relation mode). */
+
+local X = unit(x:X) in 
+  {Browse X}
+  {Inspect X}
+end
+</src>
+
+* Class Method Application
+
+Oz supports object-oriented programming.  This programming paradigm introduces the notion of objects which instantiate classes.  An object (or class instance) is a datum which encapsulates its internal structure.  A class specifies what data are contained in its instances and what methods these instances understands.  A method (or message) is effectively a procedure which is defined for instances of specific classes only.
+
+For more details on object-oriented programming in general, please refer to other Oz documentation:
+    http://www.mozart-oz.org/documentation/tutorial/node10.html
+
+Internally, objects are actually procedures which expect a single argument -- hence this syntax.  When the object is sent a message (i.e. the procedure is called with a specific argument) it processes the message according to its definition.  This method definition may change its internal state, as we expect from typical objects.
+
+** Method call
+
+<src lang="oz">
+/* The following example creates a graphical user interface
+button.  You do not need to understand the code which creates the
+window itself (i.e., the call to QTk.build).  For our purposes here,
+only this single line is important:
+
+  {Window show}
+
+`Window' is an object, and `show' is the name of the method understood by
+this object.  This method results in showing the window with the button.
+
+Please note that the syntax of a method differs clearly from the procedure
+syntax shown before.  If `show' was a procedure, then we would write:
+
+  {Show Window}
+*/
+
+local
+   Window = {QTk.build lr(button(text:"Hello world!" 
+				 action:toplevel#close))}
+in
+   {Window show}
+end
+</src>
+
+** Method arguments
+
+<src lang="oz">
+/* Class methods are actually records which can contain method
+arguments.  For example, the following statement sends the following
+message to the object Window.  This changes the width of the border around
+the button and sets the background of this border to the color blue.
+
+  {Window set(borderwidth:1.0#c background:blue)}
+
+In general, the record denoting a message can wrap multiple arguments,
+as in the following example where the method myMethod with two
+arguments is send to the class MyObject.
+
+   {MyObject myMethod(Arg1 Arg2 ..)} 
+
+We will later see many more method application examples in the context
+of Strasheela's music representation. */
+
+local
+   Window = {QTk.build lr(button(text:"Hello world!" 
+				 action:toplevel#close))}
+in
+   {Window show}
+   %% change to button background color after 1000 msecs
+   {Delay 1000}
+   {Window set(borderwidth:1.0#c 
+               background:blue)}
+end
+</src>
+
 * Concurrency
 
 Oz provides excellent support for concurrent programming, where computations run in parallel in multiple threads.  We will only touch on this subject and discuss aspects relevant for Strasheela.  In general, however, concurrent programming plays a major role in Oz programming. 
@@ -488,4 +511,26 @@ in
   X = 4
 end
 {Browse endOfProgram}
+</src>
+
+** 'Signalling' a blocking computation (2)
+
+<src lang="oz">
+/* This example demonstrates a technique which causes an error (raises
+an exception) when the current thread blocks. The function
+`Thread.this' returns the current thread, and `Debug.setRaiseOnBlock'
+activates this debugging feature. The error message can even tell you
+which variable caused the blocking (although in this example the deduced variable name is simply _).
+
+Note that you must load Debug first, before using `Debug.setRaiseOnBlock' (which this tutorial does implicitly). */
+
+local
+  X 
+in
+  {Debug.setRaiseOnBlock {Thread.this} true}
+  %% !! blocks
+  {Browse X+3}
+  X = 4
+end
+
 </src>

@@ -226,7 +226,7 @@ clearInterval(drawit)
 <code>
 <a name="entity8">
 <span class="keyword">proc</span>{<span class="functionname">PlainPattern</span> Xs Proc}<br>
-<span class="string"> PlainPattern constraints Xs to a plain pattern (ie. no nesting or combination of patterns). The pattern is specified by the procedere Proc given to PlainPattern. Proc constraints a single pattern item and is called recursively. Proc expects two arguments: the current item and its predecessor in the list (i.e. Proc is called for all items except the with which has no predecessor).<BR>
+<span class="string"> PlainPattern constraints Xs to a plain pattern (ie. no nesting or combination of patterns). The pattern is specified by the procedere Proc given to PlainPattern. Proc constraints a single pattern item and is called recursively. Proc expects two arguments: the current item and its predecessor in the list (i.e. Proc is called for all items except the first, which has no predecessor).<BR>
 <BR>
 </span>
 </code><br>
@@ -840,7 +840,7 @@ clearInterval(drawit)
 <code>
 <a name="entity42">
 <span class="keyword">proc</span>{<span class="functionname">SomeTrue</span> Bs}<br>
-<span class="string"> Bs is a list of 0/1 integers (not implicitly declared). At least one element in Bs is true (i.e. one element is 1 and the rest is 0).<BR>
+<span class="string"> Bs is a list of 0/1 integers (not implicitly declared). At least one element in Bs is true (one element certainly is 1, the rest can be 0 or 1).<BR>
 <BR>
 </span>
 </code><br>

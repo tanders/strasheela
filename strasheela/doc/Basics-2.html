@@ -55,22 +55,22 @@
 <dd>
 <dl>
 <dt>
-<a href="#sec9">HasFeature</a>
+<a href="#sec9">Record HasFeature</a>
 </dt>
 <dt>
-<a href="#sec10">Arity</a>
+<a href="#sec10">Record -&gt; List</a>
 </dt>
 <dt>
-<a href="#sec11">Adjoin</a>
+<a href="#sec11">Combining records</a>
 </dt>
 <dt>
-<a href="#sec12">Nth</a>
+<a href="#sec12">Accessing a list element</a>
 </dt>
 <dt>
-<a href="#sec13">Reverse</a>
+<a href="#sec13">Reverse list</a>
 </dt>
 <dt>
-<a href="#sec14">Append</a>
+<a href="#sec14">Append lists</a>
 </dt>
 <dt>
 <a href="#sec15">User-defined procedures</a>
@@ -78,72 +78,78 @@
 </dl>
 </dd>
 <dt>
-<a href="#sec16">Unification</a>
+<a href="#sec16">Higher-Order Programming</a>
 </dt>
 <dd>
 <dl>
 <dt>
-<a href="#sec17">Unifying two lists</a>
+<a href="#sec17">Filter</a>
 </dt>
 <dt>
-<a href="#sec18">Recursive unification</a>
+<a href="#sec18">ForAll</a>
+</dt>
+<dt>
+<a href="#sec19">Map</a>
+</dt>
+<dt>
+<a href="#sec20">Anonymous procedure definition</a>
+</dt>
+<dt>
+<a href="#sec21">Sort (1)</a>
+</dt>
+<dt>
+<a href="#sec22">Sort (2)</a>
+</dt>
+<dt>
+<a href="#sec23">Defining higher-order procedures</a>
 </dt>
 </dl>
 </dd>
 <dt>
-<a href="#sec19">Class Method Application</a>
+<a href="#sec24">Unification</a>
 </dt>
 <dd>
 <dl>
 <dt>
-<a href="#sec20">Method call</a>
+<a href="#sec25">Unifying two numbers</a>
 </dt>
 <dt>
-<a href="#sec21">Method arguments</a>
+<a href="#sec26">Unifying two lists</a>
+</dt>
+<dt>
+<a href="#sec27">Recursive unification</a>
 </dt>
 </dl>
 </dd>
 <dt>
-<a href="#sec22">Higher-Order Programming</a>
+<a href="#sec28">Class Method Application</a>
 </dt>
 <dd>
 <dl>
 <dt>
-<a href="#sec23">Filter</a>
+<a href="#sec29">Method call</a>
 </dt>
 <dt>
-<a href="#sec24">ForAll</a>
-</dt>
-<dt>
-<a href="#sec25">Map</a>
-</dt>
-<dt>
-<a href="#sec26">Anonymous procedure definition</a>
-</dt>
-<dt>
-<a href="#sec27">Sort (1)</a>
-</dt>
-<dt>
-<a href="#sec28">Sort (2)</a>
-</dt>
-<dt>
-<a href="#sec29">Defining higher-order procedures</a>
+<a href="#sec30">Method arguments</a>
 </dt>
 </dl>
 </dd>
 <dt>
-<a href="#sec30">Concurrency</a>
+<a href="#sec31">Concurrency</a>
 </dt>
 <dd>
 <dl>
 <dt>
-<a href="#sec31">Declarative concurrency</a>
+<a href="#sec32">Declarative concurrency</a>
 </dt>
 <dt>
-<a href="#sec32">Blocking computation</a>
+<a href="#sec33">Blocking computation</a>
 </dt>
 <dt>
-<a href="#sec33">'Signalling' a blocking computation</a>
+<a href="#sec34">'Signalling' a blocking computation</a>
+</dt>
+<dt>
+<a href="#sec35">'Signalling' a blocking computation (2)</a>
 </dt>
 </dl>
 </dd>
@@ -177,20 +183,22 @@ Pattern Matching</h2>
 Case statements (1)</h3>
 
 <pre class="src">
- <span style="color: #b22222;">/* </span><span style="color: #b22222;">In the example below, case declares the two variables H and T and
+<span style="color: #b22222;">/* </span><span style="color: #b22222;">In the example below, =case= declares the two variables H and T and
 binds them to the head and tail of the list Xs.  Finally, the H and T are
 inspected.  Please note that the pattern-matching expression H|T is written
 with the usual list syntax using | (the cons-operation).
 
 This approach can be used to pattern match lists of arbitrary length,
-except empty lists (i.e. nil). Try to change the definition of Xs to a
-list of a different length and watch how the value of T changes. */</span>
+except empty lists (i.e. nil).  Try changingthe definition of Xs to a
+list of a different length and watch how the value of T changes.*/</span>
 
 <span style="color: #a020f0;">local</span>
    Xs = [1 2 3 4]
 <span style="color: #a020f0;">in</span>
-   <span style="color: #a020f0;">case</span> Xs <span style="color: #a020f0;">of</span> H <span style="color: #a020f0;">|</span> T
-   <span style="color: #a020f0;">then</span> {Inspect H} {Inspect T}
+   <span style="color: #a020f0;">case</span> Xs <span style="color: #a020f0;">of</span>
+      H <span style="color: #a020f0;">|</span> T
+   <span style="color: #a020f0;">then</span>
+      {Inspect H} {Inspect T}
    <span style="color: #a020f0;">end</span>
 <span style="color: #a020f0;">end</span>
 </pre>
@@ -202,15 +210,17 @@ Case statements (2)</h3>
 <pre class="src">
 <span style="color: #b22222;">/* </span><span style="color: #b22222;">The previous example matched the head and the tail of a
 list. Instead, we can also match individual list elements (or the
-elements of other data structures, such as records or tuples). Note
-that in this example changing the length of the lists results in an
-error. */</span>
+elements of other data structures, such as records or tuples).
+
+</span><span style="color: #ff0000; font-weight: bold;">WARNING:</span><span style="color: #b22222;"> if the length of the lists is not equal, an error occurs.*/</span>
 
 <span style="color: #a020f0;">local</span>
    Xs = [1 2 3 4]
 <span style="color: #a020f0;">in</span>
-   <span style="color: #a020f0;">case</span> Xs <span style="color: #a020f0;">of</span> [A B C D]
-   <span style="color: #a020f0;">then</span> {Inspect A} {Inspect B} {Inspect C} {Inspect D}
+   <span style="color: #a020f0;">case</span> Xs <span style="color: #a020f0;">of</span>
+      [A B C D]
+   <span style="color: #a020f0;">then</span>
+      {Inspect A} {Inspect B} {Inspect C} {Inspect D}
    <span style="color: #a020f0;">end</span>
 <span style="color: #a020f0;">end</span>
 </pre>
@@ -227,11 +237,17 @@ non-empty list, or an empty list, or some other value. You may want to
 play around with the value of Xs to try out these different
 clauses. */</span>
 
-<span style="color: #a020f0;">local</span> Xs = [1 2 3 4]
+<span style="color: #a020f0;">local</span>
+   Xs = [1 2 3 4]
 <span style="color: #a020f0;">in</span>
-   <span style="color: #a020f0;">case</span> Xs <span style="color: #a020f0;">of</span>  H<span style="color: #a020f0;">|</span>T <span style="color: #a020f0;">then</span> {Inspect nonEmptyList}
-      <span style="color: #a020f0;">[]</span> nil <span style="color: #a020f0;">then</span> {Inspect emptyList}
-      <span style="color: #a020f0;">else</span> {Inspect differentValue}
+   <span style="color: #a020f0;">case</span> Xs <span style="color: #a020f0;">of</span>
+      H<span style="color: #a020f0;">|</span>T
+   <span style="color: #a020f0;">then</span>
+      {Inspect nonEmptyList}
+   <span style="color: #a020f0;">[]</span> nil <span style="color: #a020f0;">then</span>
+      {Inspect emptyList}
+   <span style="color: #a020f0;">else</span>
+      {Inspect notList}
    <span style="color: #a020f0;">end</span>
 <span style="color: #a020f0;">end</span>
 </pre>
@@ -272,7 +288,7 @@ Procedures over Compound Data</h2>
 
 
 <h3><a name="sec9" id="sec9"></a>
-HasFeature</h3>
+Record HasFeature</h3>
 
 <pre class="src">
 <span style="color: #b22222;">%% </span><span style="color: #b22222;">Tests whether a record has a certain feature
@@ -282,7 +298,7 @@ HasFeature</h3>
 
 
 <h3><a name="sec10" id="sec10"></a>
-Arity</h3>
+Record -&amp;gt; List</h3>
 
 <pre class="src">
 <span style="color: #b22222;">%% </span><span style="color: #b22222;">Return the features of a record as a list.
@@ -292,10 +308,10 @@ Arity</h3>
 
 
 <h3><a name="sec11" id="sec11"></a>
-Adjoin</h3>
+Combining records</h3>
 
 <pre class="src">
-<span style="color: #b22222;">/* </span><span style="color: #b22222;">"Merge" two records.  Note that features and label of the second
+<span style="color: #b22222;">/* </span><span style="color: #b22222;">"Merge" two records.  Note that features and labels of the second
 record take precedence over the first. */</span>
 
 {Inspect {Adjoin <span style="color: #a020f0;">unit</span>(x:1 y:2 z:3) test(foo:hi bar:there z:<span style="color: #bc8f8f;">'overwrite!'</span>)}}
@@ -303,7 +319,7 @@ record take precedence over the first. */</span>
 
 
 <h3><a name="sec12" id="sec12"></a>
-Nth</h3>
+Accessing a list element</h3>
 
 <pre class="src">
 <span style="color: #b22222;">%% </span><span style="color: #b22222;">Return the nth element of a list.
@@ -313,7 +329,7 @@ Nth</h3>
 
 
 <h3><a name="sec13" id="sec13"></a>
-Reverse</h3>
+Reverse list</h3>
 
 <pre class="src">
 <span style="color: #b22222;">%% </span><span style="color: #b22222;">Reverse a list.
@@ -323,7 +339,7 @@ Reverse</h3>
 
 
 <h3><a name="sec14" id="sec14"></a>
-Append</h3>
+Append lists</h3>
 
 <pre class="src">
 <span style="color: #b22222;">%% </span><span style="color: #b22222;">Append two lists.
@@ -354,125 +370,13 @@ Append. */</span>
 
 
 <h2><a name="sec16" id="sec16"></a>
-Unification</h2>
-
-<p class="first">The operator = performs unification of two variables.  The variables quasi share all the information they have about their values.  A variable without a name (an anonymous variable) is written as an underscore ( _ ).  Unification is a basic form of constraint programming (constraint programming is discussed further below).</p>
-
-
-<h3><a name="sec17" id="sec17"></a>
-Unifying two lists</h3>
-
-<pre class="src">
-<span style="color: #a020f0;">local</span>
-  X = [a _ _]
-  Y = [_ b _]
-<span style="color: #a020f0;">in</span>
-  X = Y          <span style="color: #b22222;">% </span><span style="color: #b22222;">unify X and Y
-</span>  {Inspect X}
-<span style="color: #a020f0;">end</span>
-</pre>
-
-
-<h3><a name="sec18" id="sec18"></a>
-Recursive unification</h3>
-
-<pre class="src">
-<span style="color: #b22222;">/* </span><span style="color: #b22222;">Unification also works recursively.  The Inspector and the Browser
-show two different ways for representing that (the Inspector can be
-configured to show either way: options menu, structure tab, under
-representation, select between tree and relation mode). */</span>
-
-<span style="color: #a020f0;">local</span> X = <span style="color: #a020f0;">unit</span>(x:X) <span style="color: #a020f0;">in</span>
-  {Browse X}
-  {Inspect X}
-<span style="color: #a020f0;">end</span>
-</pre>
-
-
-
-<h2><a name="sec19" id="sec19"></a>
-Class Method Application</h2>
-
-<p class="first">Oz supports object-oriented programming.  This programming paradigm introduces the notion of objects which instantiate classes.  An object (or class instance) is a datum which encapsulates its internal structure.  A class specifies what data are contained in its instances and what methods these instances understands.  A method (or message) is effectively a procedure which is defined for instances of specific classes only.</p>
-
-<p>For more details on object-oriented programming in general, please refer to other Oz documentation:
-<blockquote>
-<p class="quoted"><a href="http://www.mozart-oz.org/documentation/tutorial/node10.html">http://www.mozart-oz.org/documentation/tutorial/node10.html</a></p>
-</blockquote>
-
-<p>Internally, objects are actually procedures which expect a single argument &mdash; hence this syntax.  When the object is sent a message (i.e. the procedure is called with a specific argument) it processes the message according to its definition.  This method definition may change its internal state, as we expect from typical objects.</p>
-
-<h3><a name="sec20" id="sec20"></a>
-Method call</h3>
-
-<pre class="src">
-<span style="color: #b22222;">/* </span><span style="color: #b22222;">The following example creates a graphical user interface
-button.  You do not need to understand the code which creates the
-window itself (i.e., the call to QTk.build).  For our purposes here,
-only this single line is important:
-
-  {Window show}
-
-`Window' is an object, and `show' is the name of the method understood by
-this object.  This method results in showing the window with the button.
-
-Please note that the syntax of a method differs clearly from the procedure
-syntax shown before.  If `show' was a procedure, then we would write:
-
-  {Show Window}
-*/</span>
-
-<span style="color: #a020f0;">local</span>
-   Window = {QTk<span style="color: #a020f0;">.</span>build lr(button(text:<span style="color: #bc8f8f;">"Hello world!"</span>
-                                 action:toplevel<span style="color: #a020f0;">#</span>close))}
-<span style="color: #a020f0;">in</span>
-   {Window show}
-<span style="color: #a020f0;">end</span>
-</pre>
-
-
-<h3><a name="sec21" id="sec21"></a>
-Method arguments</h3>
-
-<pre class="src">
-<span style="color: #b22222;">/* </span><span style="color: #b22222;">Class methods are actually records which can contain method
-arguments.  For example, the following statement sends the following
-message to the object Window.  This changes the width of the border around
-the button and sets the background of this border to the color blue.
-
-  {Window set(borderwidth:1.0#c background:blue)}
-
-In general, the record denoting a message can wrap multiple arguments,
-as in the following example where the method myMethod with two
-arguments is send to the class MyObject.
-
-   {MyObject myMethod(Arg1 Arg2 ..)}
-
-We will later see many more method application examples in the context
-of Strasheela's music representation. */</span>
-
-<span style="color: #a020f0;">local</span>
-   Window = {QTk<span style="color: #a020f0;">.</span>build lr(button(text:<span style="color: #bc8f8f;">"Hello world!"</span>
-                                 action:toplevel<span style="color: #a020f0;">#</span>close))}
-<span style="color: #a020f0;">in</span>
-   {Window show}
-   <span style="color: #b22222;">%% </span><span style="color: #b22222;">change to button background color after 1000 msecs
-</span>   {Delay 1000}
-   {Window set(borderwidth:1<span style="color: #a020f0;">.</span>0<span style="color: #a020f0;">#</span>c
-               background:blue)}
-<span style="color: #a020f0;">end</span>
-</pre>
-
-
-
-<h2><a name="sec22" id="sec22"></a>
 Higher-Order Programming</h2>
 
 <p class="first">Oz procedures (and functions) are first-class values.  This means that a procedure can be processed like any other value.  For example, procedures can be given to other procedures as arguments.</p>
 
 <p>This leads to highly flexible programming technique called higher-order programming.  Procedures expecting procedures as arguments are called higher-order procedures.  This concept is demonstrated be several examples.</p>
 
-<h3><a name="sec23" id="sec23"></a>
+<h3><a name="sec17" id="sec17"></a>
 Filter</h3>
 
 <pre class="src">
@@ -491,7 +395,7 @@ numbers) to better understand this filtering.
 </pre>
 
 
-<h3><a name="sec24" id="sec24"></a>
+<h3><a name="sec18" id="sec18"></a>
 ForAll</h3>
 
 <pre class="src">
@@ -503,7 +407,7 @@ element. */</span>
 </pre>
 
 
-<h3><a name="sec25" id="sec25"></a>
+<h3><a name="sec19" id="sec19"></a>
 Map</h3>
 
 <pre class="src">
@@ -526,7 +430,7 @@ which doubles its argument. */</span>
 </pre>
 
 
-<h3><a name="sec26" id="sec26"></a>
+<h3><a name="sec20" id="sec20"></a>
 Anonymous procedure definition</h3>
 
 <pre class="src">
@@ -545,7 +449,7 @@ value itself. */</span>
 </pre>
 
 
-<h3><a name="sec27" id="sec27"></a>
+<h3><a name="sec21" id="sec21"></a>
 Sort (1)</h3>
 
 <pre class="src">
@@ -562,7 +466,7 @@ numbers in decreasing order. */</span>
 </pre>
 
 
-<h3><a name="sec28" id="sec28"></a>
+<h3><a name="sec22" id="sec22"></a>
 Sort (2)</h3>
 
 <pre class="src">
@@ -585,7 +489,7 @@ and odd numbers in ascending order.  This is done in the second
 </pre>
 
 
-<h3><a name="sec29" id="sec29"></a>
+<h3><a name="sec23" id="sec23"></a>
 Defining higher-order procedures</h3>
 
 <pre class="src">
@@ -622,7 +526,134 @@ list. */</span>
 
 
 
-<h2><a name="sec30" id="sec30"></a>
+<h2><a name="sec24" id="sec24"></a>
+Unification</h2>
+
+<p class="first">The operator = performs unification of two variables.  The variables share all the information they have about their values.  A variable without a name (an anonymous variable) is written as an underscore ( _ ).  Unification is a basic form of constraint programming (constraint programming is discussed further below).</p>
+
+
+<h3><a name="sec25" id="sec25"></a>
+Unifying two numbers</h3>
+
+<pre class="src">
+<span style="color: #a020f0;">local</span>
+  X = {FD<span style="color: #a020f0;">.</span>int 1<span style="color: #a020f0;">#</span>5}
+  Y = {FD<span style="color: #a020f0;">.</span>int 0<span style="color: #a020f0;">#</span>3}
+<span style="color: #a020f0;">in</span>
+  X = Y          <span style="color: #b22222;">% </span><span style="color: #b22222;">unify X and Y
+</span>  {Inspect X}
+<span style="color: #a020f0;">end</span>
+
+</pre>
+
+
+<h3><a name="sec26" id="sec26"></a>
+Unifying two lists</h3>
+
+<pre class="src">
+<span style="color: #a020f0;">local</span>
+  X = [a _ _]
+  Y = [_ b _]
+<span style="color: #a020f0;">in</span>
+  X = Y          <span style="color: #b22222;">% </span><span style="color: #b22222;">unify X and Y
+</span>  {Inspect X}
+<span style="color: #a020f0;">end</span>
+</pre>
+
+
+<h3><a name="sec27" id="sec27"></a>
+Recursive unification</h3>
+
+<pre class="src">
+<span style="color: #b22222;">/* </span><span style="color: #b22222;">Unification also works recursively.  The Inspector and the Browser
+show two different ways for representing that (the Inspector can be
+configured to show either way: options menu, structure tab, under
+representation, select between tree and relation mode). */</span>
+
+<span style="color: #a020f0;">local</span> X = <span style="color: #a020f0;">unit</span>(x:X) <span style="color: #a020f0;">in</span>
+  {Browse X}
+  {Inspect X}
+<span style="color: #a020f0;">end</span>
+</pre>
+
+
+
+<h2><a name="sec28" id="sec28"></a>
+Class Method Application</h2>
+
+<p class="first">Oz supports object-oriented programming.  This programming paradigm introduces the notion of objects which instantiate classes.  An object (or class instance) is a datum which encapsulates its internal structure.  A class specifies what data are contained in its instances and what methods these instances understands.  A method (or message) is effectively a procedure which is defined for instances of specific classes only.</p>
+
+<p>For more details on object-oriented programming in general, please refer to other Oz documentation:
+<blockquote>
+<p class="quoted"><a href="http://www.mozart-oz.org/documentation/tutorial/node10.html">http://www.mozart-oz.org/documentation/tutorial/node10.html</a></p>
+</blockquote>
+
+<p>Internally, objects are actually procedures which expect a single argument &mdash; hence this syntax.  When the object is sent a message (i.e. the procedure is called with a specific argument) it processes the message according to its definition.  This method definition may change its internal state, as we expect from typical objects.</p>
+
+<h3><a name="sec29" id="sec29"></a>
+Method call</h3>
+
+<pre class="src">
+<span style="color: #b22222;">/* </span><span style="color: #b22222;">The following example creates a graphical user interface
+button.  You do not need to understand the code which creates the
+window itself (i.e., the call to QTk.build).  For our purposes here,
+only this single line is important:
+
+  {Window show}
+
+`Window' is an object, and `show' is the name of the method understood by
+this object.  This method results in showing the window with the button.
+
+Please note that the syntax of a method differs clearly from the procedure
+syntax shown before.  If `show' was a procedure, then we would write:
+
+  {Show Window}
+*/</span>
+
+<span style="color: #a020f0;">local</span>
+   Window = {QTk<span style="color: #a020f0;">.</span>build lr(button(text:<span style="color: #bc8f8f;">"Hello world!"</span>
+                                 action:toplevel<span style="color: #a020f0;">#</span>close))}
+<span style="color: #a020f0;">in</span>
+   {Window show}
+<span style="color: #a020f0;">end</span>
+</pre>
+
+
+<h3><a name="sec30" id="sec30"></a>
+Method arguments</h3>
+
+<pre class="src">
+<span style="color: #b22222;">/* </span><span style="color: #b22222;">Class methods are actually records which can contain method
+arguments.  For example, the following statement sends the following
+message to the object Window.  This changes the width of the border around
+the button and sets the background of this border to the color blue.
+
+  {Window set(borderwidth:1.0#c background:blue)}
+
+In general, the record denoting a message can wrap multiple arguments,
+as in the following example where the method myMethod with two
+arguments is send to the class MyObject.
+
+   {MyObject myMethod(Arg1 Arg2 ..)}
+
+We will later see many more method application examples in the context
+of Strasheela's music representation. */</span>
+
+<span style="color: #a020f0;">local</span>
+   Window = {QTk<span style="color: #a020f0;">.</span>build lr(button(text:<span style="color: #bc8f8f;">"Hello world!"</span>
+                                 action:toplevel<span style="color: #a020f0;">#</span>close))}
+<span style="color: #a020f0;">in</span>
+   {Window show}
+   <span style="color: #b22222;">%% </span><span style="color: #b22222;">change to button background color after 1000 msecs
+</span>   {Delay 1000}
+   {Window set(borderwidth:1<span style="color: #a020f0;">.</span>0<span style="color: #a020f0;">#</span>c
+               background:blue)}
+<span style="color: #a020f0;">end</span>
+</pre>
+
+
+
+<h2><a name="sec31" id="sec31"></a>
 Concurrency</h2>
 
 <p class="first">Oz provides excellent support for concurrent programming, where computations run in parallel in multiple threads.  We will only touch on this subject and discuss aspects relevant for Strasheela.  In general, however, concurrent programming plays a major role in Oz programming.</p>
@@ -636,7 +667,7 @@ Concurrency</h2>
 <p>The examples demonstrates concurrent programming, but do not show a typical application (a typical application would be a program split in a server and one or more clients).  In the context of Strasheela, we will seldomly write concurrent programs explicitly.  Nevertheless, it is very important to know how concurrent programming works in Oz.  Even if we are not explicitly writing a concurrent program, constraint programming in Oz always results in a concurrent program.  Concurrent programming forms one of the foundations of Oz' constraint programming model, where each constraint (i.e. each propagator) is a concurrent agent running in its own thread.</p>
 
 
-<h3><a name="sec31" id="sec31"></a>
+<h3><a name="sec32" id="sec32"></a>
 Declarative concurrency</h3>
 
 <pre class="src">
@@ -659,7 +690,7 @@ thread: it can now compute X+3 and browse the sum. */</span>
 </pre>
 
 
-<h3><a name="sec32" id="sec32"></a>
+<h3><a name="sec33" id="sec33"></a>
 Blocking computation</h3>
 
 <pre class="src">
@@ -680,7 +711,7 @@ executes X = 4. */</span>
 </pre>
 
 
-<h3><a name="sec33" id="sec33"></a>
+<h3><a name="sec34" id="sec34"></a>
 'Signalling' a blocking computation</h3>
 
 <pre class="src">
@@ -708,6 +739,30 @@ surrounding it with a 'thread .. end' statement). */</span>
 </pre>
 
 
+<h3><a name="sec35" id="sec35"></a>
+'Signalling' a blocking computation (2)</h3>
+
+<pre class="src">
+<span style="color: #b22222;">/* </span><span style="color: #b22222;">This example demonstrates a technique which causes an error (raises
+an exception) when the current thread blocks. The function
+`Thread.this' returns the current thread, and `Debug.setRaiseOnBlock'
+activates this debugging feature. The error message can even tell you
+which variable caused the blocking (although in this example the deduced variable name is simply _).
+
+Note that you must load Debug first, before using `Debug.setRaiseOnBlock' (which this tutorial does implicitly). */</span>
+
+<span style="color: #a020f0;">local</span>
+  X
+<span style="color: #a020f0;">in</span>
+  {Debug<span style="color: #a020f0;">.</span>setRaiseOnBlock {Thread<span style="color: #a020f0;">.</span>this} <span style="color: #a020f0;">true</span>}
+  <span style="color: #b22222;">%% </span><span style="color: #b22222;">!! blocks
+</span>  {Browse X<span style="color: #a020f0;">+</span>3}
+  X = 4
+<span style="color: #a020f0;">end</span>
+
+</pre>
+
+
 
 
 <!-- Page published by Emacs Muse ends here -->
@@ -715,7 +770,7 @@ surrounding it with a 'thread .. end' statement). */</span>
 <div id="footer">
 <div id="author">&copy; 
 Torsten Anders</div>
-<div id="date">Last time edited: 2007.12.13</div>
+<div id="date">Last time edited: 2008.01.15</div>
 </div>
   </body>
 </html>
