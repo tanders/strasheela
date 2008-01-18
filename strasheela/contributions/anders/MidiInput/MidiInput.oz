@@ -11,9 +11,9 @@
 %%% GNU General Public License for more details.
 %%% *************************************************************
 
-/** %% This functor defines MIDI import for Strasheela. Similar to the MIDI output functor, this functor relies on midicsv (see http://www.fourmilab.ch/webtools/midicsv/). A MIDI file is transformed into a text file with midicsv with RenderCSVFile. This text file is rendered into a list of Oz values (MIDI events) with RenderCSVFile. The format of this event list is exactly the same as the format supported and documented by the  MIDI output functor. 
+/** %% This functor defines MIDI import for Strasheela. Similar to the MIDI output functor, this functor relies on midicsv (see http://www.fourmilab.ch/webtools/midicsv/). A MIDI file is transformed into a midicsv text file with the procedure RenderCSVFile. This text file is read into a list of Oz values (MIDI events) with the function ParseCSVFile. The format of this event list is exactly the same as the format supported and documented by the  MIDI output functor. 
 %%
-%% Oz programs may use this list of MIDI events directly. Alternatively, it can be transformed into a Strasheela score using EventsToNestedEvents and NestedEventsToScore. Examples for both approaches are provided in the test file (../testing/MidiInput-test.oz).
+%% You may use this list of MIDI events directly. Alternatively, it can be transformed into a Strasheela score using the functions EventsToNestedEvents and NestedEventsToScore. Examples for both approaches are provided in the test file (../testing/MidiInput-test.oz).
 %%
 %% This functor is provided as a contribution (i.e. not as part of the Strasheela core), because its compilation requires a C++ compiler, which is not necessarily available on all systems (especially not on Windows).
 %% */
@@ -25,7 +25,8 @@ import
    LUtils at 'x-ozlib://anders/strasheela/source/ListUtils.ozf'
    Out at 'x-ozlib://anders/strasheela/source/Output.ozf'
    Pattern at 'x-ozlib://anders/strasheela/Pattern/Pattern.ozf'
-   MyParser at 'source/ParserWrapper.ozf'
+   MyParser(parseCSVFile:ParseCSVFile
+	   renderCSVFile:RenderCSVFile) at 'source/ParserWrapper.ozf'
    
 export
    ParseCSVFile
@@ -36,8 +37,9 @@ export
    NestedEventsToScore
    
 define
-   ParseCSVFile = MyParser.parseCSVFile
-   RenderCSVFile = MyParser.renderCSVFile
+
+%   ParseCSVFile = MyParser.parseCSVFile
+%   RenderCSVFile = MyParser.renderCSVFile
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
