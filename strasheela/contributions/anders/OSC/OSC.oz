@@ -1,5 +1,5 @@
 
-/** %% This functor provides an interface to OpenSound Control (OSC), by using the UNIX programs sendOSC and dumpOSC: using these applications instead of a C/C++ library is less efficient, but more easy to implement ;-). See http://www.cnmat.berkeley.edu/OpenSoundControl/ for more details on OSC in general, and also for details about these two applications. 
+/** %% This functor provides an interface to Open Sound Control (OSC), by using the UNIX programs sendOSC and dumpOSC: using these applications instead of a C/C++ library is less efficient, but more easy to implement ;-). See http://www.cnmat.berkeley.edu/OpenSoundControl/ for more details on OSC in general, and also for details about these two applications. 
 %%
 %% This functor provides a representation of OSC messages as Oz values in the following way. An OSC message is represented by an Oz tuple. The tuple label is the OSC Address Pattern (e.g., '/test'). 0 or more OSC arguments are represented by the contained tuple values. OSC arguments can be Oz integers, floats and virtual strings. 
 %%
