@@ -1,5 +1,5 @@
 %%
-%% set directory of this file to current dir but starting Oz in this file.
+%% set CWD (current working directory) to folder of this file by starting Oz in this buffer (C-. r).
 %%
 
 declare
@@ -7,7 +7,9 @@ declare
 
 
 %% first test: parse existing csv file
-{Browse {MidiIn.parseCSVFile 'Test.csv'}}
+{Browse {MidiIn.parseCSVFile unit(file:"Test"
+				  csvExtension:'.csv'
+				  csvDir:{OS.getCWD}#"/")}}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -20,7 +22,9 @@ declare
 			   midiDir:{OS.getCWD}#"/"
 			   csvDir:{OS.getCWD}#"/")}
 
-{Browse {MidiIn.parseCSVFile 'bach.csv'}}
+{Browse {MidiIn.parseCSVFile unit(file:"bach"
+				  csvExtension:'.csv'
+				  csvDir:{OS.getCWD}#"/")}}
 
 
 
@@ -35,7 +39,8 @@ declare
 %%
 
 declare
-InCSVs = {MidiIn.parseCSVFile 'Test.csv'}
+InCSVs = {MidiIn.parseCSVFile unit(file:"Test"
+				   csvDir:{OS.getCWD}#"/")}
 %% Extract the number of clock pulses per quarter note and make it available for TicksToBeats
 {Out.midi.setDivision {List.last InCSVs.1.parameters}}
 %%
@@ -49,6 +54,7 @@ ChannelSeq = ScoreDecl.items.1.items.1
 {Browse ScoreDecl}
 {Browse ChannelSeq}
 
+%% in inspector: right mouse, Filter -> Show Textual Score  
 {Inspect {Score.makeScore {Adjoin ChannelSeq
 			   seq(startTime:0
 			       timeUnit:beats(4))}
@@ -61,10 +67,10 @@ ChannelSeq = ScoreDecl.items.1.items.1
 
 declare
 {MidiIn.renderCSVFile unit(file:"bach"
-			   midiExtension:".midi"
 			   midiDir:{OS.getCWD}#"/"
 			   csvDir:{OS.getCWD}#"/")}
-InCSVs = {MidiIn.parseCSVFile 'bach.csv'}
+InCSVs = {MidiIn.parseCSVFile unit(file:"bach"
+				   csvDir:{OS.getCWD}#"/")}
 %% set to division of 360 ticks by hand, because that is the actual
 %% duration of the notes in the MIDI file (division in file is 480,
 %% but that would result in some notes of duration 0)
@@ -131,7 +137,8 @@ CWD = {OS.getCWD}#"/"
 			   csvDir:CWD)}
 %% Parse CSV into Oz value (list of midi event specs, see doc of
 %% functor Out.midi for the format)
-InCSV = {MidiIn.parseCSVFile 'bach.csv'}
+InCSV = {MidiIn.parseCSVFile unit(file:"bach"
+				  csvDir:{OS.getCWD}#"/")}
 %% Extract the number of clock pulses per quarter note
 Division = {List.last InCSV.1.parameters}
 %% Process the CSV list: transpose all note-on and note-off events and
