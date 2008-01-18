@@ -14,7 +14,7 @@ s.boot;
 
 // latency of all notes
 // when this latency is not enough, scsyth reports late notes: just increase the latency..
-~latency = 0.05  ; // in secs
+~latency = 0.035  ; // in secs
 
 // network settings
 ~outPort = 7777;
