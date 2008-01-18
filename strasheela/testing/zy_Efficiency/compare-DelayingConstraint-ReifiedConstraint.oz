@@ -9,7 +9,7 @@
 %% Composing Music by Composing Rules", Sec. 6.3 "Constraining
 %% Inaccessible Score Contexts" for a discussion of this matter.
 %%
-%% The thesis suggests two solutions (besides reformulating the
+%% My thesis suggests two solutions (besides reformulating the
 %% problem): delayed rule application and using logical connectives
 %% such as FD.impl. The thesis argues that using logical connectives
 %% is more expressive. For example, the following FOL expression
@@ -37,12 +37,20 @@ isSimultaneous(note1, note2) -> isConsonant(note1, note2)
 
 %% With this construct, the score context "notes simultaneous to
 %% MyNote" is returned as soon as the score contains enough
-%% information to isolate this context. Before that, the accessor
-%% simply blocks, which makes it easy to simply apply constraints to
-%% the score context. The constraint application is then delayed until
-%% enough information is available -- but not any longer.
+%% information to isolate this context. Before that information is
+%% available, the accessor simply blocks, which makes it easy to apply
+%% constraints to this score context. The constraint application is
+%% thus delayed until enough information is available -- but not any
+%% longer.
 %%
-%% This example defines two variants of a CSP: a canon where the
+%% By contrast, the 'old approach' defined {IsSimultaneousItem X Y} as
+%% a boolean function which only returned when the temporal parameters
+%% of X and Y were determined (i.e. not using a reified
+%% constraint). Using this old approach together with the filter
+%% function/method as suggested above, the filtering blocks until the
+%% whole temporal structure of the score is determined.
+%%
+%% The example below defines two variants of a CSP: a canon where the
 %% rhythmical structure is undetermined in the problem definition. The
 %% two top-level definitions are SimpleCanonReified and
 %% SimpleCanonDelayed. Both definitions are idential except for two
