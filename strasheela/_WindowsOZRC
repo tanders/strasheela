@@ -91,6 +91,7 @@ Out = Strasheela.out
 %% player, or pdf file viewer.
 %% The following settings are the default installation directories for the applications in question. Edit them according to your system.
 {Init.putStrasheelaEnv csvmidi "C:\\Program Files\\midicsv-1.0\\Csvmidi.exe"}
+{Init.putStrasheelaEnv midicsv "C:\\Program Files\\midicsv-1.0\\Midicsv.exe"}
 {Init.putStrasheelaEnv midiPlayer "C:\\Program Files\\Windows Media Player\\wmplayer.exe"}
 {Init.putStrasheelaEnv csound "C:\\Program Files\\Csound\\bin\\csound.exe"}
 {Init.putStrasheelaEnv sndPlayer "C:\\Program Files\\Audacity\\audacity.exe"} % sweep

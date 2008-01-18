@@ -97,6 +97,7 @@ Out = Strasheela.out
 {Init.putStrasheelaEnv sndPlayer audacity} % sweep
 % {Init.putStrasheelaEnv cmdlineSndPlayer sndplay}
 {Init.putStrasheelaEnv csvmidi csvmidi}
+{Init.putStrasheelaEnv midicsv midicsv}
 {Init.putStrasheelaEnv midiPlayer kmid}
 %{Init.putStrasheelaEnv midiPlayer pmidi}
 {Init.putStrasheelaEnv lilypond lilypond}
