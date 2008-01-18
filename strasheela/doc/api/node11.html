@@ -630,7 +630,7 @@ csv(track:1 time:0 type:'Title_t' parameters:['\"This is my Title\"'])<BR>
 <code>
 <a name="entity598">
 <span class="keyword">fun</span>{<span class="functionname">HasChannel</span> X}<br>
-<span class="string"> Returns true if events of the type X belongs to provide a channel as parameter.<BR>
+<span class="string"> Returns true if events of the type X provides a channel as parameter.<BR>
 <BR>
 </span>
 </code><br>
@@ -638,15 +638,7 @@ csv(track:1 time:0 type:'Title_t' parameters:['\"This is my Title\"'])<BR>
 <code>
 <a name="entity599">
 <span class="keyword">fun</span>{<span class="functionname">BeatsToTicks</span> Beats}<br>
-<span class="string">  Function returns a listwith two CSV event specs. Creates an note-on/note-off event pair at Time (an int in MIDI clocks) to play the specified Pitch (an integer in range 0-127) on the given Channel (an int in 0-15 ?) with Velocity (an int in 0-127).<BR>
- */<BR>
-    fun {MakeMidiNote Track Time Duration Channel Pitch Velocity}<BR>
-       [{Out.midi.makeNoteOn Track Time Channel Pitch Velocity}<BR>
-        {Out.midi.makeNoteOff Track Time+Duration Channel Pitch 0}]<BR>
-    end<BR>
-<BR>
-<BR>
-/** %% Transforms a temporal value in beats (int or float) into the equivalent in MIDI ticks (int). The division is set by SetDivision.<BR>
+<span class="string"> Transforms a temporal value in beats (int or float) into the equivalent in MIDI ticks (int). The division is set by SetDivision.<BR>
 <BR>
 </span>
 </code><br>
