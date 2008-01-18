@@ -28,37 +28,41 @@
 <h2>Changes in Version 0.9.1 (no date yet)</h2>
 
 <ul>
-<li>Added support for MIDI file import, see &lt;doc&gt;</li>
+<li>Added support for MIDI file import, see its <a href="../contributions/anders/MidiInput/doc/node1.html">documentation</a> and <a href="../contributions/anders/MidiInput/testing/MidiInput-test.oz">test file</a>.</li>
 
-<li>Extended the harmony model: added classes Interval, and InversionMixinForChord (plus MakeInversionChordClass)
-and convenience functions GetChordIndex, GetScaleIndex, and GetIntervalIndex
-<blockquote>
-<p class="quoted">see &lt;doc&gt;.
-example in .. and tests in ..</p>
-</blockquote></li>
-
-<li>Revised the beginning of the tutorial together with Graham Percival (thanks!). Also, extended the music representation chapter: added an explanation for user-defined export procedures.</li>
+<li>Extended the harmony model: added classes Interval, and InversionMixinForChord (plus related classes like MakeInversionChordClass) to the functor HS.score, and convenience functions GetChordIndex, GetScaleIndex, and GetIntervalIndex to the functor HS.db.
+See the documentation for <a href="../contributions/anders/HarmonisedScore/doc/node3.html">HS.score</a> and <a href="../contributions/anders/HarmonisedScore/doc/node2.html">HS.db</a>. Simple examples for the classes are in the test file <a href="../contributions/anders/HarmonisedScore/testing/Score-test.oz">Score-test.oz</a> (an InversionMixinForChord example in the the middle of the file, an Interval example is at the bottom).</li>
 </ul>
 
 
+<ul>
+<li>Documentation
 
 <ul>
-<li>I realised a more suitable approach for delayed constraint application in order to constrain score contexts which are inaccessible in the problem definition. See thesis <a href="http://strasheela.sourceforge.net/documents/TorstenAnders-PhDThesis.pdf">Composing Music by Composing Rules</a>, Sec. 6.3 &quot;Constraining Inaccessible Score Contexts&quot; for a discussion of this matter, and the example <a href="../testing/zy_Efficiency/compare-DelayingConstraint-ReifiedConstraint.oz">here</a> for a demonstration of the new approach.</li>
-
+<li>Revised the beginning of the tutorial together with Graham Percival (thanks!).</li>
+<li>Extended the music representation chapter: added an explanation for user-defined export procedures.</li>
+<li>I realised a more suitable approach for the convenient delayed constraint application, a technique for constraining score contexts which are inaccessible in the problem definition. See my thesis <a href="http://strasheela.sourceforge.net/documents/TorstenAnders-PhDThesis.pdf">Composing Music by Composing Rules</a>, Sec. 6.3 &quot;Constraining Inaccessible Score Contexts&quot; for a discussion of this matter, and the example <a href="../testing/zy_Efficiency/compare-DelayingConstraint-ReifiedConstraint.oz">here</a> for a demonstration of the new approach.</li>
 <li>Extended the installation documentation (e.g. documentation of the init file templates).</li>
+</ul></li>
+</ul>
 
+
+<ul>
 <li>Fixed bugs
 
 <ul>
-<li>Score.copyScore did not create variable copies before</li>
-<li>HS.score.pcSetToSequence could not handle cases where its arg Root is not in its arg PCFS</li>
-<li>HS.score.pitchClassToPitch and HS.score.pitchClassToPitch2 now can also be used like a deterministic functions</li>
-<li>HS.db.setDB with refined handling of optional arguments and added support for arbitrary equal temperament tunings (e.g., if PitchesPerOctave is set to 31 &mdash; meaning 31 equal temperament &mdash; then the pitch unit is set to the atom 'et31').</li>
-<li>Memo.memoize2 allows use of function memoization inside constraint scripts (in contrast to the original Memo.memoize)</li>
-<li>Pattern.someTrue/Pattern.someTrue behaved like OneTrue (thanks Graham for the patch!)</li>
+<li>Score.copyScore did not create variable copies before.</li>
+<li>HS.score.pcSetToSequence could not handle cases where its arg Root is not in its arg PCFS.</li>
+<li>HS.score.pitchClassToPitch and HS.score.pitchClassToPitch2 now can also be used like a deterministic functions.</li>
+<li>HS.db.setDB now has a refined handling of optional arguments and I added support for arbitrary equal temperament tunings (e.g., if PitchesPerOctave is set to 31 &mdash; meaning 31 tone equal temperament &mdash; then atom 'et31' is created for the pitch unit).</li>
+<li>Memo.memoize2 allows use of function memoization inside constraint scripts (in contrast to the original Memo.memoize).</li>
+<li>Pattern.someTrue/Pattern.someTrueR wrongly behaved like Pattern.oneTrue (thanks Graham for the patch!).</li>
 </ul></li>
+</ul>
 
-<li>For further fixes see <a href="../CHANGELOG.txt">../CHANGELOG.txt</a></li>
+
+<ul>
+<li>For further fixes see <a href="../CHANGELOG.txt">../CHANGELOG.txt</a>.</li>
 </ul>
 
 
@@ -199,7 +203,7 @@ example in .. and tests in ..</p>
 <div id="footer">
 <div id="author">&copy; 
 Torsten Anders</div>
-<div id="date">Last time edited: 2008.01.15</div>
+<div id="date">Last time edited: 2008.01.17</div>
 </div>
   </body>
 </html>

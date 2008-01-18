@@ -119,9 +119,9 @@ clearInterval(drawit)
 
 
 </tr></table>
-<span class="string"> This functor defines MIDI import for Strasheela. Similar to the MIDI output functor, this functor relies on midicsv (see http://www.fourmilab.ch/webtools/midicsv/). A MIDI file is transformed into a text file with midicsv with RenderCSVFile. This text file is rendered into a list of Oz values (MIDI events) with RenderCSVFile. The format of this event list is exactly the same as the format supported and documented by the  MIDI output functor. <BR>
+<span class="string"> This functor defines MIDI import for Strasheela. Similar to the MIDI output functor, this functor relies on midicsv (see http://www.fourmilab.ch/webtools/midicsv/). A MIDI file is transformed into a midicsv text file with the procedure RenderCSVFile. This text file is read into a list of Oz values (MIDI events) with the function ParseCSVFile. The format of this event list is exactly the same as the format supported and documented by the  MIDI output functor. <BR>
 <BR>
- Oz programs may use this list of MIDI events directly. Alternatively, it can be transformed into a Strasheela score using EventsToNestedEvents and NestedEventsToScore. Examples for both approaches are provided in the test file (../testing/MidiInput-test.oz).<BR>
+ You may use this list of MIDI events directly. Alternatively, it can be transformed into a Strasheela score using the functions EventsToNestedEvents and NestedEventsToScore. Examples for both approaches are provided in the test file (../testing/MidiInput-test.oz).<BR>
 <BR>
  This functor is provided as a contribution (i.e. not as part of the Strasheela core), because its compilation requires a C++ compiler, which is not necessarily available on all systems (especially not on Windows).<BR>
 <BR>
@@ -134,7 +134,7 @@ clearInterval(drawit)
 </span></li><li>LUtils at "<span class="string">x-ozlib://anders/strasheela/source/ListUtils.ozf"
 </span></li><li>Out at "<span class="string">x-ozlib://anders/strasheela/source/Output.ozf"
 </span></li><li>Pattern at "<span class="string">x-ozlib://anders/strasheela/Pattern/Pattern.ozf"
-</span></li><li><a href="node2.html">MyParser</a> at "<span class="string">source/ParserWrapper.ozf"
+</span></li><li><a href="node2.html">MyParser</a>(parseCSVFile:ParseCSVFile renderCSVFile:RenderCSVFile) at "<span class="string">source/ParserWrapper.ozf"
 </span></li></ul></code>
 <h3>Export</h3>
 <code><ul><li><span class="variablename">ParseCSVFile</span>

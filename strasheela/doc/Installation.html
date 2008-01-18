@@ -102,6 +102,26 @@ Please leave all paths starting with <code>x-ozlib://</code> untouched. These ar
 
 <p>On Linux and MacOS X, you can save your initialisation file as <code>~/.ozrc</code> or <code>~/.oz/ozrc</code> (for Mac users unfamiliar with UNIX conventions: <code>~</code> indicates your home directory, e.g., /Users/yourself). On Windows, it is easiest to set the environment variable <code>OZRC</code> to the path of your initialisation file. A description how to manage environment variables on MS Windows XP can be found <a href="http://support.microsoft.com/default.aspx?scid=kb;en-us;310519">here</a>.</p>
 
+<p><a name="settingPATH" id="settingPATH"></a>
+Also, you may want to add the Oz applications (e.g., the Strasheela tutorial) to your <code>PATH</code> environment variable, so that you can call them directly at the commandline. For example, on MacOS or Linux add the following line to your <code>~/.profile</code> file. You may need to replace <code>1.3.2</code> with the mozart version you are using (just check how your subdirectory of <code>~/.oz</code> is called).</p>
+
+<blockquote>
+<p class="quoted"></p>
+</blockquote> 
+
+<pre class="example">
+export PATH=~/.oz/1.3.2/bin/:$PATH
+</pre>
+
+<p>You can test your setting by executing the following at the commmand line (first logout/login again or at least open a new terminal).</p>
+
+<blockquote>
+<p class="quoted"></p>
+</blockquote> 
+
+<pre class="example">
+StrasheelaTutorial
+</pre>
 
 
 <h2>Install the Software for which Strasheela Supports an Output Format</h2>
@@ -210,7 +230,7 @@ scripts/install-all.sh <span style="color: #bc8f8f;">\</span>
 <div id="footer">
 <div id="author">&copy; 
 Torsten Anders</div>
-<div id="date">Last time edited: 2007.11.28</div>
+<div id="date">Last time edited: 2008.01.17</div>
 </div>
   </body>
 </html>

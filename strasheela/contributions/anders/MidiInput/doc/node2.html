@@ -137,8 +137,11 @@ clearInterval(drawit)
 
 <code>
 <a name="entity21">
-<span class="keyword">proc</span>{<span class="functionname">ParseCSVFile</span> MyPath Result}<br>
-<span class="string"><BR>
+<span class="keyword">proc</span>{<span class="functionname">ParseCSVFile</span> Spec Result}<br>
+<span class="string"> Expects the path to a CSV file (a record of optional path components) and returns a list of corresponding midi events. The Spec defaults are the following<BR>
+   unit(file:"test"<BR>
+	csvDir:{Init.getStrasheelaEnv defaultCSVDir}<BR>
+	csvExtension:'.csv')<BR>
 <BR>
 </span>
 </code><br>
