@@ -11,14 +11,19 @@
 cd ~/oz/music/Strasheela/strasheela/trunk/strasheela/ # move into strasheela trunk
 # NOTE: updating in top-level dir causes loading all tags etc..
 svn update					      
-# cd ~/oz/music/Strasheela/strasheela # move into top-level strasheela directory
-# svn -v log > trunk/strasheela/CHANGELOG.txt 
+
+# create full change log (first edits to new trunk, and then edits to top-level)
+# !!?? why do I need to call svn explicitly on different branches? 
+# In this approach the order of the revisions is not OK, revisions top-level (e.g., creation of release branch) happen only after revisions to trunk 
+cd ~/oz/music/Strasheela/strasheela/trunk/strasheela/ # move into strasheela trunk
 svn -v log > CHANGELOG.txt 
+cd ~/oz/music/Strasheela/strasheela # move into top-level strasheela directory
+svn -v log >> trunk/strasheela/CHANGELOG.txt
 
 #
 # create tag file in SVN repository
 #
-VERSION=0.9
+VERSION=0.9.1
 
 svn copy https://strasheela.svn.sourceforge.net/svnroot/strasheela/trunk \
          https://strasheela.svn.sourceforge.net/svnroot/strasheela/tags/release-$VERSION \
