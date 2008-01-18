@@ -35,7 +35,7 @@ This tutorial introduces some fundamental concepts of Strasheela by concrete exa
 
 * Interactive Tutorial 
 
-Strasheela provides an interactive tutorial for learning the basics of Oz and Strasheela. Just execute the application =InteractiveTutorial.exe= in =strasheela/contributions/anders/Tutorial/= at a command line. The application sometimes takes a few seconds to start up (it starts the Oz compiler in the background).
+Strasheela provides an interactive tutorial for learning the basics of Oz and Strasheela. If you added the Oz applications to your =PATH= environment variable (see the [[Installation#settingPATH][installation instructions]]), you can just execute =InteractiveTutorial= at the commandline (=InteractiveTutorial.exe= on Windows). Alternatively, at the commandline move to the folder =strasheela/contributions/anders/Tutorial/= and execute =InteractiveTutorial.exe=. It is recommended to start the tutorial from the commandline, because some feedback is printed at the commandline. The application sometimes takes a few seconds to start up (it starts the Oz compiler in the background).
 
     [[tutorial-atFullResolution][./graphics/tutorial-reduced.png]]
 
