@@ -767,7 +767,7 @@ define
    /** %% Returns true if X is an event of type 'Note_off_c'.
    %% */
    fun {IsNoteOff X} X.type == 'Note_off_c' end
-   /** %% Returns true if events of the type X belongs to provide a channel as parameter.
+   /** %% Returns true if events of the type X provides a channel as parameter.
    %% */
    fun {HasChannel X}
       {Member X.type
@@ -787,8 +787,8 @@ define
    */
 
    
-%    /** %%  Function returns a listwith two CSV event specs. Creates an note-on/note-off event pair at Time (an int in MIDI clocks) to play the specified Pitch (an integer in range 0-127) on the given Channel (an int in 0-15 ?) with Velocity (an int in 0-127).
-%    %% */
+%    %%  Function returns a list with two CSV event specs. Creates an note-on/note-off event pair at Time (an int in MIDI clocks) to play the specified Pitch (an integer in range 0-127) on the given Channel (an int in 0-15 ?) with Velocity (an int in 0-127).
+%    %% 
 %    fun {MakeMidiNote Track Time Duration Channel Pitch Velocity}
 %       [{Out.midi.makeNoteOn Track Time Channel Pitch Velocity}
 %        {Out.midi.makeNoteOff Track Time+Duration Channel Pitch 0}]
