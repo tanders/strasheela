@@ -1245,9 +1245,9 @@ declare
 [Memo] = {ModuleLink ['x-ozlib://anders/strasheela/Memoize/Memoize.ozf']}
 %%
 %% define memo function
-NoteInterval_M = {Memo.memoize fun {$ [Note1 Note2]}
-				  {HS.score.noteInterval Note1 Note2 unit}
-			       end}
+NoteInterval_M = {Memo.memoize2 fun {$ [Note1 Note2]}
+				   {HS.score.noteInterval Note1 Note2 unit}
+				end}
 Note1 = {Score.makeScore note unit}
 Note2 = {Score.makeScore note unit}
 Interval1 = {NoteInterval_M [Note1 Note2]}
@@ -1256,7 +1256,7 @@ Interval2 = {NoteInterval_M [Note1 Note2]}
 %% check: OK
 {Browse Interval1 == Interval2}
 
-%% check score hierarchy recursively..
+%% check score hierarchy recursively or texual score
 {Inspect Interval1}
 {Inspect Interval2}
 
