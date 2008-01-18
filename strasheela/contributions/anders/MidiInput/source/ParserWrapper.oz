@@ -31,22 +31,32 @@ define
 %   \insert CSV_Scanner.ozg 
 %   \insert CSV_Parser.ozg
 
-   /** %%
+   /** %% Expects the path to a CSV file (a record of optional path components) and returns a list of corresponding midi events. The Spec defaults are the following
+   unit(file:"test"
+	csvDir:{Init.getStrasheelaEnv defaultCSVDir}
+	csvExtension:'.csv')
    %% */
-   %% !! TODO: dir and extension extra? 
-   proc {ParseCSVFile MyPath Result}
+   proc {ParseCSVFile Spec ?Result}
+      Defaults = unit(file:"test"
+		      csvDir:{Init.getStrasheelaEnv defaultCSVDir}
+		      csvExtension:'.csv')
+      Args = {Adjoin Defaults Spec}
+      CsvPath = Args.csvDir#Args.file#Args.csvExtension
       MyScanner = {New CSV_Scanner.'class' init()}
       MyParser = {New CSV_Parser.'class' init(MyScanner)}
       CSVRecords Status
    in 
-      {MyScanner scanFile(MyPath)}
+      {MyScanner scanFile(CsvPath)}
       {MyParser parse(records(?CSVRecords) ?Status)}
       {MyScanner close()}
       if Status then
 	 Result = CSVRecords
       else
-	 %% !! tmp exception
-	 raise parseError(MyPath) end
+	 %% TODO: proper exception
+	 %% !!?? failedRequirement error??
+%	 {Exception.raiseError
+%	  strasheela(failedRequirement CsvPath "Message VS")}
+	 raise parseError(CsvPath) end
       end 
    end
 
