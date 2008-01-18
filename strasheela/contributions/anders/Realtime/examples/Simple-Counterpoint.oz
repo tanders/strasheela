@@ -109,7 +109,7 @@ MyDumpOSC = {New OSC.dumpOSC init(port:InPort)}
 declare
 %%
 NoteAmplitude = 64		% MIDI velocity
-MaxSearchTime = 30		% in msecs
+MaxSearchTime = 10		% in msecs
 %% !! extra block for easy redefinition
 % declare
 %%
