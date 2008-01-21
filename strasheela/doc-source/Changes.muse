@@ -38,7 +38,7 @@
     - Refactoring: moved ExtendedScriptToScript from Realtime to GUtils. 
 
 
-  - For further fixes see the [[../CHANGELOG.txt]] (there have been 200 commits since the last release).
+  - For further fixes see the [[../CHANGELOG.txt]].
 
 
 * Changes in Version 0.9 (2 October 2007)
@@ -64,54 +64,54 @@
 
 * Changes in Version 0.8.3 (5 August 2007)
 
-** Documentation Additions
+   - Documentation Additions
 
-  - [[StrasheelaTutorial][Interactive Oz/Strasheela tutorial]]  (first version)
+     - [[StrasheelaTutorial][Interactive Oz/Strasheela tutorial]]  (first version)
 
-  - Monograph on Strasheela meanwhile available for [[http://strasheela.sourceforge.net/documents/TorstenAnders-PhDThesis.pdf][download]] 
+     - Monograph on Strasheela meanwhile available for [[http://strasheela.sourceforge.net/documents/TorstenAnders-PhDThesis.pdf][download]] 
 
-  - Extended documentation of [[StrasheelaExamples][Strasheela Examples]]
+     - Extended documentation of [[StrasheelaExamples][Strasheela Examples]]
 
-  - Template for Strasheela extensions at [[../contributions/ExtensionTemplate]]
-
-
-** Code Additions 
-
-  - [[../contributions/anders/ScoreInspector/doc/node1.html][ScoreInspector]]
-
-  - Complete rewrite of [[../contributions/anders/Fenv/doc/node1.html][Fenv]] (function envelope)
-
-  - [[../contributions/anders/Gnuplot/doc/node1.html][Gnuplot interface]]
-
-  - Extended/refactored the [[../contributions/anders/Motif/doc/node1.html][Motif]] contribution (e.g. new Motif.makeVariation considerable simplifies Motif definition, the set of test cases/examples is extended)
-
-  - Extended the [[../contributions/anders/HarmonisedScore/doc/node1.html][HS (HarmonisedScore)]] contribution: added notion of degrees (e.g., scale degrees, but implicitly also enharmonic spelling): see, e.g., classes FullNote, EnharmonicNote, ScaleDegreeNote, ChordDegreeNote, and ScaleDegreeChord in functor [[../contributions/anders/HarmonisedScore/doc/node3.html][HS.score]].
-
-  - [[../contributions/anders/SettingsGUI/doc/node1.html][SettingsGUI]] (first version)
-
-  - Extensions of the core Strasheela music representation (e.g., Out.saveScore, Out.loadScore, Score.copyScore, methods to [[../doc/api/node6.html#entity172][Score.scoreObject]]: unify, '==')
-
-  - Added reflection capabilities to score objects: all score objects inherit from class [[../doc/api/node6.html#entity217][Reflection]] methods such as getClass, getClassName, getFeatures, getAttrNames etc.
+     - Template for Strasheela extensions at [[../contributions/ExtensionTemplate]]
 
 
+  - Code Additions 
 
-** Other Fixes 
+    - [[../contributions/anders/ScoreInspector/doc/node1.html][ScoreInspector]]
 
-  - Important improvement of Strasheela initialisation (i.e., [[../_ozrc]]): please update your OZRC accordingly
+    - Complete rewrite of [[../contributions/anders/Fenv/doc/node1.html][Fenv]] (function envelope)
 
-  - Fixed bug which prevented MIDI output (removed illegal empty line in CSV output...)
+    - [[../contributions/anders/Gnuplot/doc/node1.html][Gnuplot interface]]
 
-  - Refactored transformation of score objects into the textual score format. Fixed some issues, and simplified the definition of new user classes
+    - Extended/refactored the [[../contributions/anders/Motif/doc/node1.html][Motif]] contribution (e.g. new Motif.makeVariation considerable simplifies Motif definition, the set of test cases/examples is extended)
 
-  - Refactored Strasheela's error messaging
+    - Extended the [[../contributions/anders/HarmonisedScore/doc/node1.html][HS (HarmonisedScore)]] contribution: added notion of degrees (e.g., scale degrees, but implicitly also enharmonic spelling): see, e.g., classes FullNote, EnharmonicNote, ScaleDegreeNote, ChordDegreeNote, and ScaleDegreeChord in functor [[../contributions/anders/HarmonisedScore/doc/node3.html][HS.score]].
 
-  - Extended [[http://www.amazon.com/gp/product/030680106X/sr=8-3/qid=1149574638/ref=pd_bbs_3/104-1993379-1061553?%5Fencoding=UTF8][Partch]] [[../contributions/anders/HarmonisedScore/doc/node8.html][harmony database]] (e.g. added information to intervals)
+    - [[../contributions/anders/SettingsGUI/doc/node1.html][SettingsGUI]] (first version)
 
-  - Fixed various documentation details in the reference 
+    - Extensions of the core Strasheela music representation (e.g., Out.saveScore, Out.loadScore, Score.copyScore, methods to [[../doc/api/node6.html#entity172][Score.scoreObject]]: unify, '==')
+
+    - Added reflection capabilities to score objects: all score objects inherit from class [[../doc/api/node6.html#entity217][Reflection]] methods such as getClass, getClassName, getFeatures, getAttrNames etc.
+
+
+
+  - Other Fixes 
+
+    - Important improvement of Strasheela initialisation (i.e., [[../_ozrc]]): please update your OZRC accordingly
+
+    - Fixed bug which prevented MIDI output (removed illegal empty line in CSV output...)
+
+    - Refactored transformation of score objects into the textual score format. Fixed some issues, and simplified the definition of new user classes
+
+    - Refactored Strasheela's error messaging
+
+    - Extended [[http://www.amazon.com/gp/product/030680106X/sr=8-3/qid=1149574638/ref=pd_bbs_3/104-1993379-1061553?%5Fencoding=UTF8][Partch]] [[../contributions/anders/HarmonisedScore/doc/node8.html][harmony database]] (e.g. added information to intervals)
+
+    - Fixed various documentation details in the reference 
   
-  - Many fixes in Oz' Path functor
+    - Many fixes in Oz' Path functor
 
-  - Many, many other fixes, see [[../CHANGELOG.txt][Strasheela/CHANGELOG.txt]] for details
+    - Many, many other fixes, see [[../CHANGELOG.txt][Strasheela/CHANGELOG.txt]] for details
 
 
 
