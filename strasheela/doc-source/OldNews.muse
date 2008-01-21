@@ -1,5 +1,9 @@
 #title Old Strasheela News
 
+  Strasheela 0.8.3 released ([[Changes]])  (7 August 2007)
+
+  Strasheela's ongoing development is funded for the coming three years -- it is part of the responsibilities of my new research fellow position at the [[http://cmr.soc.plymouth.ac.uk/index.html][Interdisciplinary Centre for Computer Music Research]], [[http://www.plymouth.ac.uk/][University of Plymouth]] (7 August 2007) 
+
   Monograph on Strasheela available for [[http://strasheela.sourceforge.net/documents/TorstenAnders-PhDThesis.pdf][download]]  (24 February 2007)
 
   Extensively extended [[StrasheelaExamples][examples]] section (24 February 2007)    

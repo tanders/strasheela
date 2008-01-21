@@ -3,7 +3,7 @@
 ; #author Torsten Anders
 
 
-* Changes in Version 0.9.1 (no date yet)
+* Changes in Version 0.9.1 (21 January 2008)
 
   - Code additions
     - Added support for MIDI file import, see its [[../contributions/anders/MidiInput/doc/node1.html][documentation]] and [[../contributions/anders/MidiInput/testing/MidiInput-test.oz][test file]].
