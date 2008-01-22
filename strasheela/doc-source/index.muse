@@ -16,6 +16,8 @@ Strasheela is a highly expressive constraint-based music composition system.[2] 
 
 * News 
 
+  The slides of four lectures related to Strasheela are made available [[Publications#presentations][online]] (22 January 2008)
+
   [[https://sourceforge.net/projects/strasheela/][Strasheela 0.9.1 released]] ([[Changes]])  (21 January 2008)
 
   We welcome Graham Percival, who recently joined the Strasheela team as a documentation writer. Graham already worked on the documentation of [[http://lilypond.org][Lilypond]] and [[http://marsyas.sness.net][Marsyas]] (13 December 2007)
