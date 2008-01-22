@@ -1,7 +1,9 @@
 
-The concepts of Strasheela are described in the following publications. 
+* Publications
 
-  Torsten Anders (2007). A Model of Musical Motifs. In *International Conference Mathematics and Computation in Music*. Berlin, Germany.
+The following publications describe concepts of Strasheela.
+
+  Torsten Anders (2007). [[http://cmr.soc.plymouth.ac.uk/tanders/publications/TorstenAnders-MotifModel-MCM2007.pdf][A Model of Musical Motifs]]. In *International Conference Mathematics and Computation in Music*. Berlin, Germany.
 
   Torsten Anders (2007). [[http://strasheela.sourceforge.net/documents/TorstenAnders-PhDThesis.pdf][Composing Music by Composing Rules: Design and Usage of a Generic Music Constraint System]]. PhD thesis, Queen's University, Belfast. 
 
@@ -9,4 +11,15 @@ The concepts of Strasheela are described in the following publications.
   
   Torsten Anders (2002). [[http://www.sarc.qub.ac.uk/~tanders/publications/TorstenAnders-ICMC2002.pdf][A wizard's aid: efficient music constraint programming with Oz]]. In *Proceedings of the 2002 International Computer Music Conference*. Goteborg, Sweden.
 
+
+#presentations
+* Presentations and Teaching
+
+Strasheela concepts are also explained in the following presentations. 
+
+  Music Constraint Programming. In lecture series *Interactive Intelligent Systems Workshop* (AINT503), University of Plymouth, 2007/08. 
+
+  These four lectures teach the use of constraint programming for computer-aided music composition. The first two lessons introduce fundamental concepts of music theory and music representation. In the remaining lessons, the field music constraint programming is briefly surveyed and the composition system Strasheela is presented. Audience: MSc students in computing and related fields.
+
+  Slides: [[http://cmr.soc.plymouth.ac.uk/tanders/teaching/TorstenAnders-AINT503-e1.pdf][lecture 1]], [[http://cmr.soc.plymouth.ac.uk/tanders/teaching/TorstenAnders-AINT503-e2.pdf][lecture 2]], [[http://cmr.soc.plymouth.ac.uk/tanders/teaching/TorstenAnders-AINT503-e3.pdf][lecture 3]], [[http://cmr.soc.plymouth.ac.uk/tanders/teaching/TorstenAnders-AINT503-e4.pdf][lecture 4]].
 
