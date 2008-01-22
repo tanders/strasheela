@@ -24,10 +24,51 @@
     <!-- Page published by Emacs Muse begins here -->
 
 
+<div class="contents">
+<dl>
+<dt>
+<a href="#sec1">Install Emacs</a>
+</dt>
+<dt>
+<a href="#sec2">Install Mozart</a>
+</dt>
+<dt>
+<a href="#sec3">Install Strasheela</a>
+</dt>
+<dd>
+<dl>
+<dt>
+<a href="#sec4">Which File to Download?</a>
+</dt>
+<dt>
+<a href="#sec5">Installation</a>
+</dt>
+<dt>
+<a href="#sec6">Update</a>
+</dt>
+</dl>
+</dd>
+<dt>
+<a href="#sec7">Edit Oz Initialisation File</a>
+</dt>
+<dt>
+<a href="#sec8">Install the Software for which Strasheela Supports an Output Format</a>
+</dt>
+<dt>
+<a href="#sec9">Install Oz Extensions</a>
+</dt>
+<dt>
+<a href="#sec10">Notes for Package Creators</a>
+</dt>
+</dl>
+</div>
+
+
 <p>This page provides installation instructions for Strasheela, a constraint-based computer aided composition environment. To install Strasheela on either Linux, Windows, or MacOS X conduct the following installation steps.</p>
 
 
-<h2>Install Emacs</h2>
+<h2><a name="sec1" id="sec1"></a>
+Install Emacs</h2>
 
 <p class="first">On Linux it is is probably already there.</p>
 
@@ -37,7 +78,8 @@
 
 
 
-<h2>Install Mozart</h2>
+<h2><a name="sec2" id="sec2"></a>
+Install Mozart</h2>
 
 <p class="first">Simply get a package ready to install from the <a href="http://www.mozart-oz.org/download">Download Mozart</a> page. In case of troubles or for compiling from source consult the Mozart <a href="http://www.mozart-oz.org/documentation/install/index.html">Installation Manual</a>. Additional help can be found <a href="http://gforge.info.ucl.ac.be/plugins/wiki/index.php?FAQ&amp;id=17&amp;type=g">here</a> (in particular for installing Mozart on Intel Macs). A usual Windows problem is that Mozart does not find Emacs if it has to be invoked with a different name (e.g., <code>runemacs.exe</code> as the Win-Emacs-Version recommended above). In that case, set the environment variable <code>OZEMACS</code> to the path of your Emacs application (e.g., <code>C:\Program Files\emacs-22.1\bin\runemacs.exe</code>) as described <a href="http://support.microsoft.com/default.aspx?scid=kb;en-us;310519">here</a>.</p>
 
@@ -51,7 +93,18 @@
 
 
 
-<h2>Install Strasheela</h2>
+<h2><a name="sec3" id="sec3"></a>
+Install Strasheela</h2>
+
+<h3><a name="sec4" id="sec4"></a>
+Which File to Download?</h3>
+
+<p class="first">Strasheela offers two archive files for download: <code>strasheela-$VERSION.tar.gz</code> and <code>strasheela-withSounds-$VERSION.tar.gz</code> (e.g., strasheela-0.9.tar.gz). Both files are identical, except that all sound files of the documentation are only contained in the bigger archive strasheela-withSounds-$VERSION.tar.gz. So, for running Strasheela the files don't make any difference. If you have a network connection where you can always access the Strasheela documentation online, then the archive file without the sounds is sufficient.</p>
+
+
+
+<h3><a name="sec5" id="sec5"></a>
+Installation</h3>
 
 <p class="first">On a UNIX-like system (i.e. Linux or MacOS), for compiling and installing Strasheela with all its extensions open a shell, move into <code>Strasheela/scripts</code><sup><a class="footref" name="fnr.1" href="#fn.1">1</a></sup> and run</p>
 
@@ -76,7 +129,7 @@
 </pre>
 
 
-<p>An alternative method installs the core of Strasheela (in <code>Strasheela/source</code>) and each of its extensions (in <code>Strasheela/contributions</code>) separately. This method also works on MS Windows. It uses <a href="http://www.mozart-oz.org/documentation/mozart-ozmake/index.html">ozmake</a>, a tool for installing Mozart packages (the above mentioned scripts internally call ozmake as well).</p>
+<p>An alternative method installs the core of Strasheela (in <code>Strasheela</code>) and each of its extensions (in <code>Strasheela/contributions/*/*</code>) separately. This method also works on MS Windows. It uses <a href="http://www.mozart-oz.org/documentation/mozart-ozmake/index.html">ozmake</a>, a tool for installing Mozart packages (the above mentioned scripts internally call ozmake as well).</p>
 
 <p>Open a shell (or a DOS promt) and move into the directory <code>Strasheela/contributions/tmp/Path/</code>. Then type</p>
 
@@ -93,8 +146,27 @@ ozmake --install
 <p>The steps above result only in a bare-bones Strasheela installation which is of limited practical use. The following installation steps bring Strasheela to life (e.g. they are essential for hearing Strasheela output). The examples provided with Strasheela assume that all the following installation steps have been conducted.</p>
 
 
+<h3><a name="sec6" id="sec6"></a>
+Update</h3>
 
-<h2>Edit Oz Initialisation File</h2>
+<p class="first">This section discusses how to update from an old to a new Strasheela version. In case your old Strasheela source folder contains no personal files, you can simply replace your old folder with the new one. If your old folder contains personal files (e.g., personal contributions), then you better first copy them to the new Strasheela version :)</p>
+
+<p>If  you are on UNIX, you then upgrade simply by running the script <code>Strasheela/scripts/upgrade-all.sh</code>. On Windows, you have to call <code>ozmake</code> manually, like during your first Strasheela installation. In a DOS window, move into the Strasheela top-level dictionary and enter the following.</p>
+
+<blockquote>
+<p class="quoted"></p>
+</blockquote> 
+
+<pre class="example">
+ozmake --upgrade
+</pre>
+
+<p>Then repeat this command in every Strasheela contribution directory.</p>
+
+
+
+<h2><a name="sec7" id="sec7"></a>
+Edit Oz Initialisation File</h2>
 
 <p class="first">You will usually want to load Strasheela automatically whenever you start Oz. For this purpose, please edit the Oz initialisation file. Strasheela provides the initialisation file template <code>Strasheela/_ozrc</code>, edit this template file according to your system.<sup><a class="footref" name="fnr.3" href="#fn.3">3</a></sup> A special template <code>Strasheela/_WindowsOZRC</code> is provided for Windows which demonstrates how Windows pathes are entered (this template still requires editing according to your system).
 Several settings in the initialisation file templates depend on the software for which Strasheela supports an output format (see below).
@@ -124,7 +196,8 @@ StrasheelaTutorial
 </pre>
 
 
-<h2>Install the Software for which Strasheela Supports an Output Format</h2>
+<h2><a name="sec8" id="sec8"></a>
+Install the Software for which Strasheela Supports an Output Format</h2>
 
 <p class="first">Strasheela exports its scores into various formats, for instance, to produce sheet music or sound output.</p>
 
@@ -152,7 +225,8 @@ StrasheelaTutorial
 
 
 
-<h2>Install Oz Extensions</h2>
+<h2><a name="sec9" id="sec9"></a>
+Install Oz Extensions</h2>
 
 <p class="first">Some Strasheela extensions make use of Oz functionality which is not part of plain Oz itself. For instance, the following examples in the examples folder rely on <a href="http://www.mozart-oz.org/mogul/info/duchier/select.html">selection constraints</a> (e.g. via Strasheela's harmony model): <code>04-AutomaticMelodyHarmonsation.oz</code>, <code>05-MicrotonalChordProgression.oz</code>, <code>07-Harmonised-L-system.oz</code>.</p>
 
@@ -170,7 +244,8 @@ ozmake --install --package=http://www.mozart-oz.org/mogul/populate/duchier/selec
 
 <p>NB: Unfortunately, it has been found that on Mozart 1.3.2 <code>ozmake</code> hangs when invoking the GNU compiler on Windows.<sup><a class="footref" name="fnr.4" href="#fn.4">4</a></sup></p>
 
-<h2><a name="forPackageCreators" id="forPackageCreators"></a>Notes for Package Creators</h2>
+<h2><a name="sec10" id="sec10"></a>
+<a name="forPackageCreators" id="forPackageCreators"></a>Notes for Package Creators</h2>
 
 <p class="first">We highly welcome contributors of packages which simplify the Strasheela installation. For example, RPM files for SUSE Linux can be found <a href="http://packman.links2linux.de/package/strasheela/">here</a> (thank you Toni!).</p>
 
@@ -230,7 +305,7 @@ scripts/install-all.sh <span style="color: #bc8f8f;">\</span>
 <div id="footer">
 <div id="author">&copy; 
 Torsten Anders</div>
-<div id="date">Last time edited: 2008.01.17</div>
+<div id="date">Last time edited: 2008.01.22</div>
 </div>
   </body>
 </html>
