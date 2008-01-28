@@ -1,4 +1,4 @@
-/** %% TODO: general description of OnsetDurations.  (test of doc-string) */
+/** %% TODO: general description of EventDurs.  (test of doc-string) */
 
 functor
 import
@@ -15,29 +15,29 @@ export
    writeLilyFile: WriteLilyFile
 
 define
-   /** %% link Onsets with Durations.  Setting a value (or narrowing the domain) in either list will update the other list. */
-   proc {Setup Beats BeatDivisionsGet Onsets Durations}
-      NumOnsets = Beats*BeatDivisionsGet
+   /** %% link Events with Durations.  Setting a value (or narrowing the domain) in either list will update the other list. */
+   proc {Setup Beats BeatDivisionsGet Events Durations}
+      NumEvents = Beats*BeatDivisionsGet
    in
       %% setup lists, add fake note at end
-       Durations = {FD.list NumOnsets 0#NumOnsets}
-       Onsets = {FD.list NumOnsets+1 0#2}
+       Durations = {FD.list NumEvents 0#NumEvents}
+       Events = {FD.list NumEvents+1 0#2}
       %% tmp comment
-      {Nth Onsets NumOnsets+1} =: 1
+      {Nth Events NumEvents+1} =: 1
 
       %% first onset can't be "continue note"
-      {Nth Onsets 1} \=: 0
+      {Nth Events 1} \=: 0
 
-      for X in 1..NumOnsets do
+      for X in 1..NumEvents do
 
 	 %% setup maxmium durations
-	 {Nth Durations X} =<: NumOnsets+1-X
+	 {Nth Durations X} =<: NumEvents+1-X
 
 
 	 %% align rests
 	 {FD.equi
 	  ({Nth Durations X} =: 0)
-	  ({Nth Onsets X} =: 0)
+	  ({Nth Events X} =: 0)
 	  1}
 
 
@@ -45,25 +45,25 @@ define
 	 {FD.equi
 	  {Nth Durations X} =: 1
 	  {FD.conj 
-	   ({Nth Onsets X} >: 0)
-	   ({Nth Onsets X+1} >: 0)
+	   ({Nth Events X} >: 0)
+	   ({Nth Events X+1} >: 0)
 	  }
 	  1}
 
 
 	 %% align 2+ dur
-	 for D in 2..NumOnsets do
-	    if ( X =< (NumOnsets+1-D) ) then
+	 for D in 2..NumEvents do
+	    if ( X =< (NumEvents+1-D) ) then
 	       {FD.equi
 		({Nth Durations X} =: D)
 		{FD.conj 
-		 ({Nth Onsets X} >: 0)
+		 ({Nth Events X} >: 0)
 		 {FoldR
-		  {LUtils.sublist Onsets X+1 X+D-1}
+		  {LUtils.sublist Events X+1 X+D-1}
 		  fun {$ X Y}
 		     {FD.conj (X=:0) Y}
 		  end
-		  ({Nth Onsets X+D} >: 0)
+		  ({Nth Events X+D} >: 0)
 		 }
 		}
 		1}
@@ -74,33 +74,33 @@ define
    end
 
    %% internal for ToScore
-   fun {EventsIn Onsets}
-      {FoldL Onsets fun {$ X Y} if Y>0 then X+1 else X end end
+   fun {EventsIn Events}
+      {FoldL Events fun {$ X Y} if Y>0 then X+1 else X end end
        0} - 1
    end
 
    %% internal for ToScore
-   proc {GetNotes Onsets Durations Notes}
-      NumNotes = {EventsIn Onsets}
+   proc {GetNotes Events Durations Notes}
+      NumNotes = {EventsIn Events}
       Y = {NewCell 1}
    in
       Notes = {List.make NumNotes}
       for X in 1..{Length Durations}
       do
-	 if {Nth Onsets X}==1 then
+	 if {Nth Events X}==1 then
 	    {Nth Notes @Y} = {Nth Durations X}
 	    Y := @Y + 1
 	 end
-	 if {Nth Onsets X}==2 then
+	 if {Nth Events X}==2 then
 	    {Nth Notes @Y} = {Number.'~' {Nth Durations X}}
 	    Y := @Y + 1
 	 end
       end
    end
 
-   /* %% Combines the Onsets and Durations and produces a Score object. */
-   proc {ToScore OnsetsDurs BeatDivisions ?ScoreInstance}
-      Notes = {GetNotes OnsetsDurs.1 OnsetsDurs.2}
+   /* %% Combines the Events and Durations and produces a Score object. */
+   proc {ToScore EventsDurs BeatDivisions ?ScoreInstance}
+      Notes = {GetNotes EventsDurs.1 EventsDurs.2}
    in
       {Score.makeScore
        seq(

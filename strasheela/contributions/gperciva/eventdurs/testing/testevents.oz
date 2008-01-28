@@ -1,20 +1,20 @@
 
 declare
-[OnsetDurs] = {ModuleLink ['x-ozlib://gperciva/onsetdurs/onsetdurs.ozf']}
+[EventDurs] = {ModuleLink ['x-ozlib://gperciva/eventdurs/eventdurs.ozf']}
 
 local
    Beats=4
    BeatDivisions=2
-   Onsets
+   Events
    Durs
 in
-   {OnsetDurs.setup Beats BeatDivisions Onsets Durs} 
+   {EventDurs.setup Beats BeatDivisions Events Durs} 
    
-   {Browse Onsets#onsets}
+   {Browse Events#events}
    {Browse Durs#durs}
    /*
    %% don't allow rests  -- not used
-   {ForAll Onsets proc {$ X}
+   {ForAll Events proc {$ X}
 		     X\=:2
 		  end
    }
@@ -23,14 +23,14 @@ in
    %%  (ie all existing notes must be a quarter note)
    {ForAll Durs proc {$ X} {FD.disj (X=:0) (X=:2) 1} end}
    
-   {Nth Onsets 1} =: 1
-   {Nth Onsets 3} =: 2
-   {Nth Onsets 5} =: 2
-   {Nth Onsets 7} =: 1
+   {Nth Events 1} =: 1
+   {Nth Events 3} =: 2
+   {Nth Events 5} =: 2
+   {Nth Events 7} =: 1
    /*
-   {OnsetDurs.writeLilyFile
+   {EventDurs.writeLilyFile
     'blahblah'
-    {OnsetDurs.toScore Onsets Durs}
+    {EventDurs.toScore Events Durs}
    }
    */
    %% check for blocking

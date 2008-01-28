@@ -1,37 +1,37 @@
 
 declare
-[OnsetDurs] = {ModuleLink ['x-ozlib://gperciva/onsetdurs/onsetdurs.ozf']}
+[EventDurs] = {ModuleLink ['x-ozlib://gperciva/eventdurs/eventdurs.ozf']}
 Beats=2
 BeatDivisions=1
 %% script
-proc {GetOnsets Sol}
-   Durs Onsets
+proc {GetEvents Sol}
+   Durs Events
 in
-   Sol = Onsets#Durs
+   Sol = Events#Durs
    %% setup defines the Onset and Durs list
-   {OnsetDurs.setup Beats BeatDivisions Onsets Durs} 
+   {EventDurs.setup Beats BeatDivisions Events Durs} 
    %%
    %% added constraints for testing
-   {Nth Onsets 1} =: 1
-   {Nth Onsets 2} \=: 2
+   {Nth Events 1} =: 1
+   {Nth Events 2} \=: 2
    %%
-%   {Browse Onsets#onsets}
+%   {Browse Events#events}
 %   {Browse Durs#durs}
    %%
-   {FD.distribute ff {Append Onsets Durs}}
+   {FD.distribute ff {Append Events Durs}}
 end
 
 
-%{ExploreOne GetOnsets}
+%{ExploreOne GetEvents}
 local
   Sols Sc
 in
-   Sols = {SearchAll GetOnsets}
-   Sc = {Map Sols fun {$ X} {OnsetDurs.toScore X BeatDivisions} end}
-   {ForAll Sc proc {$ X} {OnsetDurs.writeLilyFile 'foo' X} end}
+   Sols = {SearchAll GetEvents}
+   Sc = {Map Sols fun {$ X} {EventDurs.toScore X BeatDivisions} end}
+   {ForAll Sc proc {$ X} {EventDurs.writeLilyFile 'foo' X} end}
 end
 %   {ToScore 
-%   proc {ToScore Onsets Durations BeatDivisions ?ScoreInstance}
+%   proc {ToScore Events Durations BeatDivisions ?ScoreInstance}
 
 
 {Browse 'script end'}
