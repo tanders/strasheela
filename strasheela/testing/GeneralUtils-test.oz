@@ -164,3 +164,14 @@ UndetFS = {FS.var.decl}
 
 {GUtils.warnGUI "This is a test with a rather long text. The is also a singleverylongwordhere. The test text continues. This is a test with a rather long text. The is also a singlverylongwordheresinglverylongwordheresinglverylongwordhere. The test text continues. This is a test with a rather long text. The is also a singleverylongwordhere. The test text continues. This is a test with a rather long text. The is also a singleverylongwordhere. The test text continues. This is a test with a rather long text. The is also a singlverylongwordheresinglverylongwordheresinglverylongwordhere. The test text continues. This is a test with a rather long text. The is also a singleverylongwordhere. The test text continues."}
 
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%% GUtils.timeSpend
+%%
+
+{Browse {GUtils.timeSpend proc {$} _ = {List.number 1 10000000 1} end}}
+
+
