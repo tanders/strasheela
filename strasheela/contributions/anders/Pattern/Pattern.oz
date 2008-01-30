@@ -65,7 +65,7 @@ export
    ApplyToRange ForRanges MapRanges
    ParallelForAll ParallelMap
    ForCartesianProduct MapCartesianProduct
-   Sublists
+   Sublists AdjoinedSublists
    ForPairwise MapPairwise
    ForSublists MapSublists
    CollectPM ForPM MapPM 
@@ -754,7 +754,7 @@ define
    in
       {Aux 1 Xs}
    end
-   /** %% Similar to MapTail, but Fn is only applied to the first N lists.
+   /** %% Similar to MapTailInt, but Fn is only applied to the first N lists.
    %% In case N > {Length Xs}, an exception is raised.
    %% */
    fun {MapTailN Xs N Fn}
@@ -821,7 +821,21 @@ define
        fun {$ I SubXs}
 	  {List.take SubXs N}
        end}
-      
+   end
+
+   /** %% Chops Xs into non-overlapping subsequences of length N. For example, {AdjoinedSublists [a b c d e f] 2} results in [[a b] [c d] [e f]].
+   %% */
+   fun {AdjoinedSublists Xs N}
+      SubListNr = {Length Xs} - N + 1
+   in
+      {LUtils.remove {MapTailN Xs SubListNr
+		      fun {$ I SubXs}
+			 if I mod N == 1
+			 then {List.take SubXs N}
+			 else nil
+			 end
+		      end}
+       fun {$ X} X==nil end}
    end
    
    /** %% Traverses through list Xs by mapping the unary function Fn (expecting a list) on each list of N (an int > 0) neighboring elements in Xs. The length of returned list is by N-1 shorter then Xs. 

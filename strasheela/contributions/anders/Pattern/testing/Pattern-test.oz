@@ -1370,3 +1370,14 @@ Xs = [5 1 1 1 1 1 1 1 1 3]
 % -> [a c e g i]
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+{Pattern.sublists [a b c d] 2}
+
+% -> [[a b] [b c] [c d]].
+
+
+{Pattern.adjoinedSublists [a b c d e f] 2} 
+
+% -> [[a b] [c d] [e f]].
+
+
