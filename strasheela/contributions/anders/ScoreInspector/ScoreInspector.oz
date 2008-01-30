@@ -1,7 +1,7 @@
 
 /** %% This functor configures the Oz Inspector for score inspection. It defines several Inspector score filterings/mappings for interactive score traversal and display and Inspector score actions, for example, for outputting a score.
 %% 
-%% These Inspector mappings and actions are used in the common way. Score objects have a special context menu (right mouse click). See http://www.mozart-oz.org/documentation/inspector/node3.html#chapter.interactive for information on Inspector mappings and actions in general.
+%% These Inspector mappings and actions are used in the common way. Score objects have a special context menu (right mouse click, on MacOS middle mouse click). See http://www.mozart-oz.org/documentation/inspector/node3.html#chapter.interactive for information on Inspector mappings and actions in general.
 %%
 %% Please note, that when a score object is mapped, then its context menu changes to the menu of the shown mapping (e.g. a record) -- until you unmap the score object. So, if you want to inspect some details of a score object and at the same time use an Inspector action, for example, to play back the score object, you may want to display the same score object twice in two different Inspector widgets. For example, click  `Add new Widget'' from the Inspector menu and switch between widgets with the Tab-key (see http://www.mozart-oz.org/documentation/inspector/node2.html#chapter.basic). 
 %% */
