@@ -64,30 +64,30 @@ MyScore = {Score.make seq(items:[note(pitch:60
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 {Out.writeToFile
- {Out.midi.makeCSVScore
- [%% Header track
-  {Out.midi.makeTitle 1 0 "Close Encounters"}
-  {Out.midi.makeText 1 0 'Sample for MIDIcsv Distribution'}
-  {Out.midi.makeCopyright 1 0 "This file is in the public domain"}
-  {Out.midi.makeTimeSignature 1 0 4 2 24 8}
-  {Out.midi.makeTempo 1 0 500000}
-  %% data track
-  {Out.midi.makeTitle 3 0 "test title"}
-  {Out.midi.makeInstrumentName 3 0 'Church Organ'}
-  {Out.midi.makeProgramChange 3 0 1 19}
-  %% notes 
-  {Out.midi.makeNoteOn 3 0 1 79 81} 
-  {Out.midi.makeNoteOff 3 960 1 79 0}
-  {Out.midi.makeNoteOn 3 960 1 81 81}
-  {Out.midi.makeNoteOff 3 1920 1 81 0}
-  {Out.midi.makeNoteOn 3 1920 1 77 81}
-  {Out.midi.makeNoteOff 3 2880 1 77 0}
-  {Out.midi.makeNoteOn 3 2880 1 65 81}
-  {Out.midi.makeNoteOff 3 3840 1 65 0}
-  {Out.midi.makeNoteOn 3 3840 1 72 81}
-  {Out.midi.makeNoteOff 3 4800 1 72 0}]
-  480}
- "/home/t/sound/tmp/test.csv"}
+ {Out.midi.cSVScoreToVS
+  {Out.midi.makeCSVScore
+   [%% Header track
+    {Out.midi.makeTitle 1 0 "Close Encounters"}
+    {Out.midi.makeText 1 0 'Sample for MIDIcsv Distribution'}
+    {Out.midi.makeCopyright 1 0 "This file is in the public domain"}
+    {Out.midi.makeTimeSignature 1 0 4 2 24 8}
+    {Out.midi.makeTempo 1 0 500000}
+    %% data track
+    {Out.midi.makeTitle 3 0 "test title"}
+    {Out.midi.makeInstrumentName 3 0 'Church Organ'}
+    {Out.midi.makeProgramChange 3 0 1 19}
+    %% notes 
+    {Out.midi.makeNoteOn 3 0 1 79 81} 
+    {Out.midi.makeNoteOff 3 960 1 79 0}
+    {Out.midi.makeNoteOn 3 960 1 81 81}
+    {Out.midi.makeNoteOff 3 1920 1 81 0}
+    {Out.midi.makeNoteOn 3 1920 1 77 81}
+    {Out.midi.makeNoteOff 3 2880 1 77 0}
+    {Out.midi.makeNoteOn 3 2880 1 65 81}
+    {Out.midi.makeNoteOff 3 3840 1 65 0}
+    {Out.midi.makeNoteOn 3 3840 1 72 81}
+    {Out.midi.makeNoteOff 3 4800 1 72 0}]}}
+ "/tmp/test.csv"}
 
 
 {Out.midi.outputCSVScore [%% Header track
