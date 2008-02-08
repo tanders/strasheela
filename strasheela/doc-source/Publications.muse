@@ -3,6 +3,12 @@
 
 The following publications describe concepts of Strasheela.
 
+  Torsten Anders, Eduardo R. Miranda (submitted). Higher-Order Constraint Applicators for Music Constraint Programming. In *Proceedings of the 2008 International Computer Music Conference*. Belfast, UK.  
+
+  Torsten Anders, Eduardo R. Miranda (submitted). Constraint-Based Composition in Realtime. In *Proceedings of the 2008 International Computer Music Conference*. Belfast, UK.  
+
+;  Graham Percival, Torsten Anders, George Tzanetakis (submitted). Generating Targeted Rhythmic Exercises for Music Students with Constraint Satisfaction Programming. In *Proceedings of the 2008 International Computer Music Conference*. Belfast, UK.  
+
   Torsten Anders (2007). [[http://cmr.soc.plymouth.ac.uk/tanders/publications/TorstenAnders-MotifModel-MCM2007.pdf][A Model of Musical Motifs]]. In *International Conference Mathematics and Computation in Music*. Berlin, Germany.
 
   Torsten Anders (2007). [[http://strasheela.sourceforge.net/documents/TorstenAnders-PhDThesis.pdf][Composing Music by Composing Rules: Design and Usage of a Generic Music Constraint System]]. PhD thesis, Queen's University, Belfast. 
