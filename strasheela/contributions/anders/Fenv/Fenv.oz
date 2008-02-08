@@ -22,6 +22,7 @@ import
    Browser(browse:Browse) % temp for debugging
    GUtils at 'x-ozlib://anders/strasheela/source/GeneralUtils.ozf'
    LUtils at 'x-ozlib://anders/strasheela/source/ListUtils.ozf'
+   Out at 'x-ozlib://anders/strasheela/source/Output.ozf'
    GPlot(plot:Plot) at 'x-ozlib://anders/strasheela/Gnuplot/Gnuplot.ozf'
    
 export
@@ -40,6 +41,8 @@ export
    CombineFenvs ScaleFenv RescaleFenv
    Waveshape
    FenvSection
+
+   Fenv2MidiCC
    
 prepare
    FenvType = {Name.new}
@@ -61,14 +64,19 @@ define
 	 then 
 	    @env = fun {$ X}
 		      if {Not (0.0 =< X andthen X =< 1.0)}
-		      then raise outOfRange(X) end
+		      then
+			 {Exception.raiseError
+			  strasheela(failedRequirement X
+				     "Must be in [0.0, 1.0]")}
 		      end
 		      {Env Mn + (X * (Mx - Mn))}
 		   end
 	 else
 	    @env = fun {$ X}
 		      if {Not (Mn =< X andthen X =< Mx)}
-		      then raise outOfRange(X) end
+		      then {Exception.raiseError
+			    strasheela(failedRequirement X
+				       "Must be in ["#Mn#", "#Mx#"]")}
 		      end
 		      {Env (X - Mn) / (Mx - Mn)}
 		   end
@@ -514,7 +522,10 @@ define
    in
       if {Not ((0.0 =< As.min andthen As.min =< 1.0) andthen
 	       (0.0 =< As.max andthen As.max =< 1.0))}
-      then raise outOfRange([As.min As.max]) end
+      then
+	 {Exception.raiseError
+	  strasheela(failedRequirement [As.min As.max]
+		     "Must be both in [0.0, 1.0]")}
       end
       {New Fenv init(env: {MyFenv getEnv($)}
 		     min:As.min
@@ -528,6 +539,35 @@ define
 ;; hp-filter (env)
 ;; lp-filter (env)
    */
+
+
+   
+   
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%
+%%% Fenv output transformations 
+%%%
+
+   /* %% Transforms a Fenv into a list of continuous MIDI controller events. N events are output between StartTime and EndTime at Channel. 
+   %% Controller denotes which controller is output. Possible values are one of the atoms pitchbend, and channelAftertouch, or one of the pairs cc#Number (Number is the controller number) and polyAftertouch#Note (Note denotes the note pitch). 
+   %% */
+   fun {Fenv2MidiCC MyFenv N Track StartTime EndTime Channel Controller}
+      Times = {Map {LUtils.arithmeticSeries {IntToFloat StartTime}
+		    ({IntToFloat EndTime-StartTime} / {IntToFloat N})
+		    N}
+	       FloatToInt}
+   in
+      {Map {LUtils.matTrans [Times
+			     {Map {MyFenv toList($ N)} FloatToInt}]}
+       fun {$ [Time Value]}
+	  case Controller
+	  of pitchbend then {Out.midi.makePitchBend Track Time Channel Value}
+	  [] channelAftertouch then {Out.midi.makeChannelAftertouch Track Time Channel Value}
+	  [] cc#Number then {Out.midi.makeCC Track Time Channel Number Value}
+	  [] polyAftertouch#Note then {Out.midi.makePolyAftertouch Track Time Channel Note Value}
+	  end	  
+       end}
+end
 
    
 end
