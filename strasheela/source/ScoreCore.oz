@@ -316,13 +316,22 @@ define
       meth addInfo(X)
 	 info <- X | @info
       end  
-      /** %% Returns boolean whether the list at the attr info of self contains Info.
+      /** %% Returns boolean whether the list at the attr info of self contains Info. In case some info value is a record, then it is checked whether its label is Info.
       %% */
       meth hasThisInfo(?B Info)
 	 B = ({List.some {self getInfo($)}
 	       fun {$ X}
-		  X == Info
+		  if {IsRecord X}
+		  then {Label X} == Info
+		  else X == Info
+		  end
 	       end})
+      end
+      /** %% Returns first record with label L in the list in attribute info.
+      %% */
+      meth getInfoRecord($ L)
+	 {LUtils.find {self getInfo($)}
+	  fun {$ X} {IsRecord X} andthen {Label X} == L end}
       end
       /** %% [aux method for toPPrintRecord] Returns a record with the label of self (the value at the feature label of self) and the values of selected features/attributes of self at record labels. All atoms in the list Features which are member in the list Slots are features of the returned record. 
       %% Usually, the record feature is just bound to the value at the features/attributes of self. However, for certain features/attributes there are special access functions defined. The return value of these functions will be bound to the record features. These features and their functions are either given in a record to the optional method feature functions. Other features and their functions are predefined in the variable PPrintRecordFns.
