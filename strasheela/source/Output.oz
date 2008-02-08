@@ -254,7 +254,7 @@ define
    /** %% Transforms MyScore (a Strasheela score) into a list of events. Specs is a list of pairs in the form [Test1#Transform1 ...]. Each Test is a unary function (or method) expecting a score object and returning a boolean. Each Transform is a unary function expecting a score object and returning a list of events.
    %% The record Args expects the only optional argument test, a unary boolean function used to filter the set of score objects in MyScore: only  objects for which the test returns true are considered for processing. This test defaults to
    fun {Test X} {X isEvent($)} andthen {X isDet($)} andthen {X getDuration($)} > 0 end
-   %%  For every score object in MyScore which passes this Test, the appropriate Test#Transform pair is found out (i.e. the first pair which test returns true for the score object). If no matching pair is found, the object is skipped. Otherwise, the respective Transform is applied to this score object and the result appended to the full result of ScoreToEvents.
+   %%  For every score object in MyScore which passes this Test, the appropriate Test#Transform pair is found out (i.e. the first pair whose test returns true for the score object). If no matching pair is found, the object is skipped. Otherwise, the respective Transform is applied to this score object and the result appended to the full result of ScoreToEvents.
    %% The following example implements a simple Strasheela score -> Csound score transformation. Only the notes in the Strasheela score are considered (everything else is ignored) and these notes are transformed into a csound score event.
    {Out.scoreToEvents MyScore [isNote#fun {$ MyNote}
 					 [{Out.listToVS
@@ -279,22 +279,39 @@ define
 			      ({X getDuration($)} > 0)
 			   end)
       As = {Adjoin Defaults Args}
+      %% process MyScore as well, if it fits test
+      ScoreObjects = {Append if {As.test MyScore} then [MyScore] else nil end
+		      {MyScore collect($ test:As.test)}}
    in
-      %%
-      {MyScore mappend($ fun {$ X}
-			    Matching = {LUtils.find Specs
-					fun {$ Test#_}
-					   {{GUtils.toFun Test} X}
-					end}
-			 in if Matching == nil
-			    then nil
-			    else 
-			       _#Transform = Matching
-			    in
-			       {{GUtils.toFun Transform} X}
-			    end
-			 end
-		       test:As.test)}
+      {LUtils.mappend ScoreObjects
+       fun {$ X}
+	  Matching = {LUtils.find Specs
+		      fun {$ Test#_}
+			 {{GUtils.toFun Test} X}
+		      end}
+       in if Matching == nil
+	  then nil
+	  else 
+	     _#Transform = Matching
+	  in
+	     {{GUtils.toFun Transform} X}
+	  end
+       end}
+%       %%
+%       {MyScore mappend($ fun {$ X}
+% 			    Matching = {LUtils.find Specs
+% 					fun {$ Test#_}
+% 					   {{GUtils.toFun Test} X}
+% 					end}
+% 			 in if Matching == nil
+% 			    then nil
+% 			    else 
+% 			       _#Transform = Matching
+% 			    in
+% 			       {{GUtils.toFun Transform} X}
+% 			    end
+% 			 end
+% 		       test:As.test)}
    end
    
    
