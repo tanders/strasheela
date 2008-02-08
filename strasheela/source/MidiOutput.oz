@@ -92,6 +92,7 @@ export
    BeatsToTicks TicksToBeats
 
    MidiNoteMixin IsMidiNoteMixin MidiNote
+   Note2Midi
 
    SetDivision
 
@@ -323,7 +324,8 @@ define
 
 
    
-   /** %% Variant of Out.scoreToEvents which deletes questionable note off events. In principle, multiple notes of the same channel and pitch can overlap in a Midi file. However, there is only a single note ressource and the second note will take over this ressource. What is more problematic, however, is the fact that the first note off event will turn off the note regardless whether the first of the second note was actually longer. ScoreToEvents_Midi avoids this problem by filtering out any note off event which would switch off a note too early. Nevertheless, this function can not change the fact that Midi provides only a single ressource per channel and pitch -- the 'taking over' of this ressource (e.g. restarting of the envelope) by overlapping notes can not be avoided.  
+   /** %% Variant of Out.scoreToEvents which deletes questionable note off events. Transformation clauses in Specs must return a list of MIDI events.
+   %% In principle, multiple notes of the same channel and pitch can overlap in a Midi file. However, there is only a single note ressource and the second note will take over this ressource. What is more problematic, however, is the fact that the first note off event will turn off the note regardless whether the first of the second note was actually longer. ScoreToEvents_Midi avoids this problem by filtering out any note off event which would switch off a note too early. Nevertheless, this function can not change the fact that Midi provides only a single ressource per channel and pitch -- the 'taking over' of this ressource (e.g. restarting of the envelope) by overlapping notes can not be avoided.  
    %% */
    fun {ScoreToEvents_Midi MyScore Specs Args}
       Defaults = unit(test:fun {$ X}
@@ -361,17 +363,34 @@ define
 		%% Transform objects in MyScore (fulfilling test)
 		%% according to Specs. Returns list of lists of midi
 		%% event records
-		{MyScore map($ fun {$ X}
-				  Matching = {LUtils.find Specs
-					      fun {$ Test#_}
-						 {{GUtils.toFun Test} X}
-					      end}
-			       in if Matching == nil then nil
-				  else _#Transform = Matching
-				  in {{GUtils.toFun Transform} X}
-				  end
-			       end
-			     test:As.test)}
+		local
+		   %% process MyScore as well, if it fits test
+		   ScoreObjects = {Append if {As.test MyScore} then [MyScore] else nil end
+				   {MyScore collect($ test:As.test)}}
+		in
+		   {LUtils.mappend ScoreObjects
+		    fun {$ X}
+		       Matching = {LUtils.find Specs
+				   fun {$ Test#_}
+				      {{GUtils.toFun Test} X}
+				   end}
+		    in if Matching == nil then nil
+		       else _#Transform = Matching
+		       in [{{GUtils.toFun Transform} X}]
+		       end
+		    end}
+		end
+% 		   {MyScore map($ fun {$ X}
+% 				  Matching = {LUtils.find Specs
+% 					      fun {$ Test#_}
+% 						 {{GUtils.toFun Test} X}
+% 					      end}
+% 			       in if Matching == nil then nil
+% 				  else _#Transform = Matching
+% 				  in {{GUtils.toFun Transform} X}
+% 				  end
+% 			       end
+% 			     test:As.test)}
 		fun {$ Events} {Sort Events TimeLessThan} end}
 	  fun {$ Events1 Events2} {TimeLessThan Events1.1 Events2.1} end}}
       %% The stateless EventListsT will be used for traversing, and the
@@ -430,7 +449,8 @@ define
 
    /** %% Creates a MIDI file from MyScore as defined in Spec (see below). OutputMidiFile creates a CSV/MIDI file like an event list (i.e. only a single track is supported).
    %% The user can control the transformation process by specifing transformation clauses (cf. doc of Out.scoreToEvents). Each transformation function must return a list of Midi events. There must be only a single noteOn in the list of returned events and it must be coupled with a corresponding noteOff event (at least when removeQuestionableNoteoffs is set of true, which is recommended; see the doc of ScoreToEvents_Midi for the meaning of this option). Nevertheless, additional events (e.g. CC events) can be present in the same list. 
-   %% The argument clauses defaults to a transformation where only notes (either instances of Score.note, MidiNote, MidiNoteMixin or any subclasses) are considered for the MIDI file. 
+   %% The argument clauses defaults to a transformation where only notes (either instances of Score.note, MidiNote, MidiNoteMixin or any subclasses) are considered for the MIDI file.
+   %% The argument scoreToEventsArgs expects a record of arguments for the proc Out.scoreToEvents/ScoreToEvents_Midi called internally. This allows to control which score objects are considered at all for output (see the Out.scoreToEvents doc for details).
    %%
    %% Spec defaults to 
    unit(file:"test"
@@ -443,23 +463,9 @@ define
 			 {MakeTempo Track 0
 			  {BeatsPerMinuteToTempoNumber {FloatToInt {Init.getTempo}}}}
 		      end]
-	clauses:[isNote#fun {$ MyNote}
-			   Track = 2 % fixed track
-			   StartTime = {BeatsToTicks
-					{MyNote getStartTimeInSeconds($)}}
-			   EndTime = {BeatsToTicks
-				      {MyNote getEndTimeInSeconds($)}}
-			   Channel = if {IsMidiNoteMixin MyNote}
-				     then {MyNote getChannel($)}
-				     else 0 % default for all non-midi notes
-				     end
-			   Pitch = {FloatToInt {MyNote getPitchInMidi($)}}
-			   Velocity = {FloatToInt {MyNote getAmplitudeInVelocity($)}}
-			in
-			   [{MakeNoteOn Track StartTime Channel Pitch Velocity}
-			    {MakeNoteOff Track EndTime Channel Pitch 0}]
-			end]
-	removeQuestionableNoteoffs: true)
+	clauses:[isNote#fun {$ MyNote} {Note2Midi MyNote unit} end]
+	removeQuestionableNoteoffs: true
+	scoreToEventsArgs: unit)
 
    %% where the following variables are defined and exported by the present functor BeatsToTicks, IsMidiNoteMixin, MakeNoteOn and MakeNoteOff (e.g., they can be accessed as Out.midi.beatsToTicks, if the Output module is bound to Out).
    %% */
@@ -481,29 +487,14 @@ define
 			       {BeatsPerMinuteToTempoNumber {FloatToInt {Init.getTempo}}}}
 			   end]
 	     %% 
-	     clauses:[isNote#fun {$ MyNote}
-				Track = 2 % fixed track
-				StartTime = {BeatsToTicks
-					     {MyNote getStartTimeInSeconds($)}}
-				EndTime = {BeatsToTicks
-					   {MyNote getEndTimeInSeconds($)}}
-				Channel = if {IsMidiNoteMixin MyNote}
-					  then {MyNote getChannel($)}
-					     %% default for all other notes
-					  else 0
-					  end
-				Pitch = {FloatToInt {MyNote getPitchInMidi($)}}
-				Velocity = {FloatToInt {MyNote getAmplitudeInVelocity($)}}
-			     in
-				[{MakeNoteOn Track StartTime Channel Pitch Velocity}
-				 {MakeNoteOff Track EndTime Channel Pitch 0}]
-			     end]
-	     removeQuestionableNoteoffs: true)
+	     clauses:[isNote#fun {$ MyNote} {Note2Midi MyNote unit} end]
+	     removeQuestionableNoteoffs: true
+	     scoreToEventsArgs: unit)
       MySpec = {Adjoin DefaultSpec Spec}
       CVSEvents = {Append MySpec.headerEvents
 		   if MySpec.removeQuestionableNoteoffs
-		   then {ScoreToEvents_Midi MyScore MySpec.clauses unit}
-		   else {Out.scoreToEvents MyScore MySpec.clauses unit}
+		   then {ScoreToEvents_Midi MyScore MySpec.clauses MySpec.scoreToEventsArgs}
+		   else {Out.scoreToEvents MyScore MySpec.clauses MySpec.scoreToEventsArgs}
 		   end}
    in
       {OutputCSVScore CVSEvents MySpec}
@@ -699,6 +690,7 @@ define
    end
 
    /** %% Function returns a CSV event spec. The pitch bend Value is a 14 bit unsigned integer and hence must be in the inclusive range from 0 to 16383.
+   %% NB: there was is a bug in a former in csvmidi, where pitchbend values must be in [0, 127].
    %% */
    fun {MakePitchBend Track Time Channel Value}
       csv(track:Track time:Time type:'Pitch_bend_c' parameters:[Channel Value])
@@ -863,6 +855,33 @@ define
 	       {self makeInitRecord($ [channel#getChannel#0])}
 	       Excluded}}
       end
+   end
+
+   /* %% Expects a note object and returns a list with corresponding MIDI note-on and note-off events. Supported optional args are track, channel (only used when MyNote does not inherit from MidiNoteMixin), and noteOffVelocity. The defaults are
+   unit(track:2
+	channel:0
+	noteOffVelocity:0)
+   %% */
+   fun {Note2Midi MyNote Args}
+      Defaults = unit(track:2
+		      channel:0
+		      noteOffVelocity:0)
+      As = {Adjoin Defaults Args}
+      Track = As.track % fixed track
+      StartTime = {BeatsToTicks
+		   {MyNote getStartTimeInSeconds($)}}
+      EndTime = {BeatsToTicks
+		 {MyNote getEndTimeInSeconds($)}}
+      Channel = if {IsMidiNoteMixin MyNote}
+		then {MyNote getChannel($)}
+		else As.channel % default for all non-midi notes
+		end
+      Pitch = {FloatToInt {MyNote getPitchInMidi($)}}
+      Velocity = {FloatToInt {MyNote getAmplitudeInVelocity($)}}
+   in
+      %% output a list of MIDI events 
+      [{MakeNoteOn Track StartTime Channel Pitch Velocity}
+       {MakeNoteOff Track EndTime Channel Pitch As.noteOffVelocity}]
    end
    
 
