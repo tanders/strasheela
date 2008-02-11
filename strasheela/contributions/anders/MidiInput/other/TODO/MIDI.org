@@ -1,0 +1,148 @@
+
+NOTE: this project is sufficiently finished for now and closed. However, I keep this TODO list just in case...
+
+
+* MIDI file input 
+
+** DONE Define intermediate Oz value MIDI format (the format used for MIDI output)
+
+See MidiOutput.oz doc for details.
+
+
+** DONE Use Gump (http://www.mozart-oz.org/documentation/gump/index.html) to write parser CSV -> this intermediate MIDI format
+
+** DONE Refactor MidiInput.oz, so that the imported intermediate Oz value MIDI format can be directly output again
+
+Make transposition example: Midifile -> CSV file -> Import with Gumpo parser -> Mapping where for every note on/off some pitch offset is added -> CSV output -> Midi file
+ 
+Is this done already?
+
+
+** Transform MIDI clock time settings into another time format 
+
+using the number of clock pulses per quarter note given in header record. Shall I store this information extra somewhere so the transformation function (see below) can make use of it?
+
+** Function for sorting into tracks and channels (by keeping the intermediate format, e.g., list of lists)
+
+Make the sorting condition higher-order 
+
+A nested list will then optionally be the input for the transformation into the Strasheela score format (each list and sublist will be turned into a simultaneous container)
+
+
+** Function for grouping of note-on note-off records (by keeping the intermediate format, but notes are represented as pairs of records like NoteOn#NoteOff)
+
+** Transformation (highly user-controllable: with clauses again): intermediate MIDI format -> Strasheela score (textual format)
+
+Standard: collect all events in single simultaneous container
+
+?? option: have top-level simultanous containers containing a sim container for the events of each channel
+
+Default: transform into existing Strasheela classes (like notes) and ignore information for which no Strasheela classes exist yet (like control data, key signature etc.).
+  
+Later, I could create new score classes for the rest of the MIDI information..
+
+Or could I per default have some generic Strasheela event, with MIDI type read in as info, and all the information entered as additional parameters (??)
+
+
+* MIDI realtime support 
+
+Instead of OSC, I may use MIDI. I may write an interface to a MIDI library. Its important, however, that this library provides a reliable scheduler. 
+
+Honestly, I don't want to have MIDI I/O instead of OSC -- MIDI is just too restrictive..
+Also, can I use MIDI for communication of applications within a single machine (vai some network protocol?)
+
+
+** Music over ethernet 
+
+Overview:
+http://www.openmuse.org/transport/mip_oview.html
+http://www.openmuse.org/transport/mip_compare.html
+-> seems all the projects listed here are dead or not suitable for my purposes (e.g. is commercial software and without commandline interface)
+
+
+** Command line utilities
+
+*** Div's MIDI Utilities
+
+http://www.sreal.com:8000/~div/midi-utilities/
+
+Some commandline utilities use his (David G. Slomin) own NetMIDI protocoll
+http://www.sreal.com:8000/~div/other/
+http://www.sreal.com:8000/~div/
+
+On Windows, a MIDI loopback utility is necessary to get the most out of these programs. It will provide extra Windows MIDI ports which allow you to wire multiple MIDI programs together instead of speaking directly to your sound card or synthesizer. While several such programs exist, both free and commercial, I have had good luck with the free MIDI Yoke. Make sure you download the correct version, as there are separate ones for Windows 95/98/ME and NT/2000/XP.
+
+
+
+*** cinmidi / playascii
+
+http://www.ccarh.org/courses/253/lab/cinmidi/
+
+Display/Record MIDI input data as text on command line.
+Various filters etc are supported
+
+The output file created with the -o option can be played back if the -2 option was not used. To playback the file, save the file to a file called "file" and run the playascii program (executable given below).
+
+?? is thir reliable for realtime 
+?? which platforms are supported 
+
+*** midish
+
+http://caoua.org/midish/
+
+Only Unix: OpenBSD and Linux
+
+?? MacOS X Support. 
+
+requires MIDI sound module, MIDI keyboard (without any MIDI devices midish will be probably useless).
+
+*** amidimon
+
+Midi in..
+only for Alsa 
+
+*** pmidi 
+
+http://sourceforge.net/projects/pmidi
+http://www.parabola.me.uk/alsa/pmidi.html
+
+A simple ALSA sequencer client
+
+Requires midifile (!) input (no text)
+
+Only for Alsa
+
+*** ALSA MIDI Kommander
+
+http://kmetronome.sourceforge.net/kaseq/
+
+ALSA MIDI Kommander is a DCOP interface exposing many ALSA Sequencer features for shell scripts, Kommander scripts, or KDE programs requiring MIDI Sequencer services.
+
+** C Libraries for MIDI
+
+*** MidiShare
+
+http://midishare.sourceforge.net/
+
+**** Advantages
+
+Provides bindings for several languages: and is widely use (so, it is reliable)
+
+It also provides an efficient scheduler
+
+
+*** Portmidi
+
+http://www.cs.cmu.edu/~music/portmusic/
+
+
+**** Advantages
+
+runs on Windows, Macintosh, and Linux.
+
+**** Disadvantage
+
+only doc is *.h file, but there are also examples in pm_test
+
+
+
