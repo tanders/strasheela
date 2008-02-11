@@ -1,69 +1,37 @@
 
-* Strasheela installation
+* Strasheela installation					    :STRASHEELA:
 
-** TODO [#A] Create test program (executable) which tests a few core Strasheela functionalities and reports results at stdout to the user
+** TODO [#A] Create test program (executable) which tests a few core Strasheela functionalities and reports results at stdout to the user 		              :VIELLEICHT:
 
-** TODO [#C] ?? Define Oz GUI application for creating an OZRC file: pathes for applications and directories are then specified in a GUI
-
-
-* Strasheela design
-
-** TODO [#A] MIDI input
-
-*** DONE Define intermediate Oz value MIDI format (the format used for MIDI output)
-
-See MidiOutput.oz doc for details.
+useful for package creators and new users to test whether installation was successful
 
 
-*** DONE Use Gump (http://www.mozart-oz.org/documentation/gump/index.html) to write parser CSV -> this intermediate MIDI format
-
-*** [60%] Refactor MidiInput.oz, so that the imported intermediate Oz value MIDI format can be directly output again
-
-Make transposition example: Midifile -> CSV file -> Import with Gumpo parser -> Mapping where for every note on/off some pitch offset is added -> CSV output -> Midi file
- 
-Is this done already?
+** TODO [#C] ?? Define Oz GUI application for creating an OZRC file: pathes for applications and directories are then specified in a GUI                             :VIELLEICHT:
 
 
-*** Transform MIDI clock time settings into another time format 
+* Strasheela design						    :STRASHEELA:
 
-using the number of clock pulses per quarter note given in header record. Shall I store this information extra somewhere so the transformation function (see below) can make use of it?
+** TODO [#A] Time curves etc
 
-*** Function for sorting into tracks and channels (by keeping the intermediate format, e.g., list of lists)
+Goal: user can freely define tempo curve and time shift curve for any temporal container in score 
 
-Make the sorting condition higher-order 
+It should be relatively straitforward to access the performance time of any score time of a temporal item (e.g., note start and end times) depending on all temporal containers the item is contained in
 
-A nested list will then optionally be the input for the transformation into the Strasheela score format (each list and sublist will be turned into a simultaneous container)
-
-
-*** Function for grouping of note-on note-off records (by keeping the intermediate format, but notes are represented as pairs of records like NoteOn#NoteOff)
-
-*** Transformation (highly user-controllable: with clauses again): intermediate MIDI format -> Strasheela score (textual format)
-
-Standard: collect all events in single simultaneous container
-
-?? option: have top-level simultanous containers containing a sim container for the events of each channel
-
-Default: transform into existing Strasheela classes (like notes) and ignore information for which no Strasheela classes exist yet (like control data, key signature etc.).
-  
-Later, I could create new score classes for the rest of the MIDI information..
-
-Or could I per default have some generic Strasheela event, with MIDI type read in as info, and all the information entered as additional parameters (??)
+See my notes on paper...
 
 
-** TODO Oz Module.link / Module.apply: why did I need it
+** TODO Oz Module.link / Module.apply: why did I need it	    :VIELLEICHT:
 
 See ~/oz/music/Strasheela/private/test/OtherFunctors/ModuleLinkingTest
 
 why did I ever need ModuleLink instead of Module.link?
 
 Could it be that the problem appeared only when a buffer which loaded some module was re-fed? 
-
-** DONE [#A] Redefine find method concurrently (don't use collect - returns as soon as some fitting object is found)
-
-... I found a better approach using filter + reified constraints as boolean tests
+Isn't this a situation which is perfectly normal when you work with multiple non-functor files in the OPI? Shouldn't the default module manager in the OPI behave like the default module manager for functor compilation (which is only a single one, even if called in multiple files -- so no multiple copies of functors/modules are created)
 
 
-** TODO OutGUI
+
+** TODO OutGUI							    :VIELLEICHT:
 
 ** TODO [#A] 1W Refactor harmony model
 
@@ -110,7 +78,7 @@ Test interval class with memoization
 
 ** Multi-core  processing
 
-*** TODO [#C] Reread Oz distributed programming (van Roy)
+*** DONE Reread Oz distributed programming (van Roy)
 
 Play around with the possibilities: create multiple sites (on localhost simply for now) and communicate between them 
 
@@ -128,12 +96,12 @@ Check whether multiple CPUs are used
 How does communication of data structure slow down the process?
 
 
-** TODO Update Lilypond output
+** TODO Update Lilypond output 
 
 Lilypond export outputs only rather old version. Meanwhile, Lilypond handles nested scores (quasi sim/seq containers) better than old version, but behaviour of old version is pertained when using Lily's conversion script. So, I should update my Lily output to a more Lily syntax version
 
 
-** TODO NonmensuralENP->MensuralENP as Lisp def
+** TODO NonmensuralENP->MensuralENP as Lisp def			    :VIELLEICHT:
 
 see Strasheela/private/WorkInProgress/NonmensuralENP->mensuralENP 
 
@@ -145,13 +113,23 @@ see Strasheela/private/WorkInProgress/NonmensuralENP->mensuralENP
 
 ** Refactoring 
 
-*** TODO Concurrent method filter (filterThreaded) which does return stream instead of list: as soon as enough information is available on specific score object to fulfull given test function, add it to stream. Close stream as soon as it is known that no further elements will be added.
+*** TODO [#A] Concurrent method filter (filterThreaded) which does return stream instead of list: as soon as enough information is available on specific score object to fulfull given test function, add it to stream. Close stream as soon as it is known that no further elements will be added.
+
+NOTE: this matter could make it into a publication (part of a publication)! 
+
+Related approach: find using filter + reified constraints as boolean tests is related but note the same. 
+
+However, even if boolean test would return true for some datum already, find blocks if reified constraint blocks on some element before. This new approach works even when I don't know in which order variables are determined and thus in which order elements are added to the stream. 
+
+Similar issue with filter: even with reified constraints as boolean tests, filter may block completely until enough information is available in all data. An concurrent filter would return data in a stream as soon as enough information is available on these data.
+ 
+Sufficient to have a filter which concurrently processes a list of objects. I only need to collect all data with collect (e.g., all data matching test function) and then do concurrent filter on this result list. 
 
 A method filterThreaded would further improve the application of delayed constraints where filtering tests used reified constraints 
-
 E.g., I could use a method filterThreaded for a better definition of getSimultaneousItems
 
-*** TODO [#C] refactor output means: they are inconsistend, perhaps not general enough etc.
+
+*** TODO refactor output means: they are inconsistend, perhaps not general enough etc. :VIELLEICHT:
 
   - output of 'non-existing' timed items (e.g. notes of duration 0) -- skip
 
@@ -161,18 +139,17 @@ E.g., I could use a method filterThreaded for a better definition of getSimultan
 
   - refactor Lilypond output to use the (still to program) score transformation with allows to restructure a Strasheela score hierarchy
 
-*** TODO [#C] Output to lilypond etc: make extension for outputting specific score information (more) reusable
+*** TODO Output to lilypond etc: make extension for outputting specific score information (more) reusable :VIELLEICHT:
 
 E.g. for outputting information such as meter, key, motif boundaries... 
 
 
-*** TODO [#C] !!?? Some means to define rules in a more modular/generic way -- currently, e.g., more complex counterpoint rules, can not be used in other CSP as they rely on the specific score representation (e.g. extensions to Note)
+*** TODO !!?? Some means to define rules in a more modular/generic way -- currently, e.g., more complex counterpoint rules, can not be used in other CSP as they rely on the specific score representation (e.g. extensions to Note) :VIELLEICHT:
 
   -> Better solution: use memoization instead of extending the music representation ad hoc
-  ?? What did I mean by this idea ...
+  However, memoization can be computationally expensive
 
-
-*** TODO [#C] toInitRecord: further cleanup
+*** TODO toInitRecord: further cleanup				    :VIELLEICHT:
 
 
 **** toInitRecord: what to do with init args which get procedures or classes (e.g. classes of harmony model)?
@@ -191,13 +168,13 @@ E.g. for outputting information such as meter, key, motif boundaries...
     
    -> this todo item is probably outdated already: cf. Out.saveScore
 
-*** TODO [#C] Music representation consistency: so far, I used class attributes for object parameters etc. However, for the quick definition of subclasses with Score.makeClass I introduced stateless class features for additional parameters etc. This is neither consistent in the class usage (use of different accessors like {X getA} and Y.b) nor does it allow for later score editors..
+*** TODO Music representation consistency: so far, I used class attributes for object parameters etc. However, for the quick definition of subclasses with Score.makeClass I introduced stateless class features for additional parameters etc. This is neither consistent in the class usage (use of different accessors like {X getA} and Y.b) nor does it allow for later score editors.. :VIELLEICHT:
 
-*** TODO [#C] ?? remove toPPrintRecord and replace it with highly generic toFullRecord?
+*** TODO ?? remove toPPrintRecord and replace it with highly generic toFullRecord? :VIELLEICHT:
     sorted mainly already?
     OLD: toPPrintRecord: output graph mode using IDs similar to input of MakeScore
 
-*** TODO [#C] ?? add textual representation of parameters: currently, parameters are not supported my Score.makeScore
+*** TODO ?? add textual representation of parameters: currently, parameters are not supported my Score.makeScore :VIELLEICHT:
 
     should I add parameter support at all? Score.makeScore _does_ work on note-level. I would only need to create single params, e.g., for item init arg addParameters
 
@@ -270,9 +247,26 @@ See ../../testing/zy_Efficiency/KeepMusicRepresentationOutsideComputationalSpace
 ***** Instead with this Strasheela 'client', other CAC applications could also create CSP specs and call the Strasheela 'server' (e.g. PWGL)
 
 
-* Strasheela examples 
+* Strasheela examples						    :STRASHEELA:
 
-** TODO Inventio example
+** TODO [#A] 'Intelligent arpeggio' example
+
+  an example for Olle Romo
+  see description in strasheeela support tracker
+  
+  https://sourceforge.net/tracker/index.php?func=detail&aid=1883452&group_id=167225&atid=842099
+
+  ?? Duration: 1d -- probably more :)
+  
+
+** TODO Groove templates					    :VIELLEICHT:
+
+  an example for Olle Romo
+  see description in strasheeela support tracker
+https://sourceforge.net/tracker/index.php?func=detail&aid=1883454&group_id=167225&atid=842099
+
+
+** TODO Inventio example					    :VIELLEICHT:
 
 *** harmonic etc analysis of inventio 1
 
@@ -282,7 +276,7 @@ See ../../testing/zy_Efficiency/KeepMusicRepresentationOutsideComputationalSpace
 
 Abstract applied constraint, so the effect is controllable
 
-* Strasheela documentation
+* Strasheela documentation					    :STRASHEELA:
 
 ** Strasheela tutorial
 
@@ -291,15 +285,17 @@ Abstract applied constraint, so the effect is controllable
 
 *** TODO Email Tobias Kunze: CM CSS verwendet...
 
+
 * Collecting new ideas
 
 ** TODO Lesen XMG
 
 
 
-* General Oz todo
+* General Oz todo							    :OZ:
 
-** Oz Path
+** Oz Path								:URGENT:
+   SCHEDULED: <2008-02-11 Mon>
 
 *** TODO Oz Path: bug commits
 
@@ -308,11 +304,14 @@ Abstract applied constraint, so the effect is controllable
 *** TODO Oz Path: test cases
 
 
-** ozh
+** ozh								    :VIELLEICHT:
 
-*** TODO ozh: add SGML doc
+*** ozh: add SGML doc
 
 the orig documentation source files for creating, e.g., the HTML doc are still missing in our branch
+
+I meanwhile checked -- it appears this file is not available any more online
+
 
 *** TODO ?? ozh: add TODO list to wiki
 
@@ -334,5 +333,5 @@ Even better would be, if some wiki layout is supported (optionally). Does there 
 
 *** TODO Collozeum: make projects available at Mogul
 
-*** TODO ozcurl/ozjs TODO: add ozmake makefile
+*** TODO ozcurl/ozjs TODO: add ozmake makefile			    :VIELLEICHT:
 

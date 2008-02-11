@@ -1,4 +1,6 @@
 
+NOTE: this project is sufficiently finished for now, but I keep this file as record in case I come back to this later
+
 * Tasks
 
 ** Realtime Communication

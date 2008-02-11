@@ -1,6 +1,8 @@
 
 * Strasheela OSC interface design 
 
+NOTE: project closed for now. I may come back to this if the current implementation is not sufficient
+
 
 *** OSC interface
 
@@ -91,12 +93,6 @@ In SuperCollider, time is measured in beats, where 0 denotes the score start -- 
 %** Useless rules:        1
 %** Useless nonterminals: 1
 %** in file "/Users/t/oz/music/Strasheela/strasheela/contributions/anders/OSC/OSC_Parser.ozg", line 2, column 0
-
-
-
-
-
-
 
 
 
