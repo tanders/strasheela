@@ -35,13 +35,16 @@ export
    ConstantFenv
    SinOsc Saw Triangle Square Pulse
    
-   ReverseFenv InvertFenv
+   ReverseFenv InvertFenv Reciprocal
 
    %% !! to test
    CombineFenvs ScaleFenv RescaleFenv
    Waveshape
    FenvSection
 
+   Integrate
+   TempoCurve2TimeMap
+   
    Fenv2MidiCC
    
 prepare
@@ -443,7 +446,12 @@ define
    fun {InvertFenv MyFenv}
       {New Fenv init(env:fun {$ X} {MyFenv y($ X)} * ~1.0 end)}
    end
-
+   
+   /** %% Returns a Fenv which is the reciprocal of the given Fenv, i.e., 1/fenv.
+   %% */
+   fun {Reciprocal MyFenv}
+      {New Fenv init(env:fun {$ X} 1.0 / {MyFenv y($ X)} end)}
+   end
    
 
    /** %% Returns a fenv which combines the given fenvs with an n-ary numeric function. Fenvs is a list which consists of fenvs and floats (representing constant fenvs) in any order. The combine-func expects a list with as many floats as correspond to Fenv values (in their order and at the same x), and returns a float.
@@ -534,20 +542,98 @@ define
 
    /*
 
-;; noise...
+   ;; noise...
 
-;; hp-filter (env)
-;; lp-filter (env)
+   ;; hp-filter (env)
+   ;; lp-filter (env)
    */
 
 
+   /** %% Returns the integral fenv of fenv. 
+   %% Performs numerical integration internally whenever a value of the returned fenv is accessed, which can be computationally expensive.
+   %% Step (a float in [0.0 0.5]) specifies the resolution of the numeric integration: the smaller Step, the more accurate the integration and the more expensive the computation. Step=0.01 results in 100 "function slices".
+   %%
+   %% Note: implementation currently always uses Trapezoidal rule for the approximation (i.e. approximation by linear functions under given function), this can be made user-controllable if necessary (see implementation).
+   %% */
+   %% Note: I tried to improve the efficiency by memoization, but without success. Memoizing the integration of a single "function slice" is less efficient than recomputing it, and memoizing the integration of an inceasing function interval does not work, because my memoization does not work for recursive functions (I can not overwrite the definition of a function, and recursively calling the memoized function had no effect -- I really tried this for hours!).
+   %% NOTE: instead of 'simply' memoizing the function CompositeIntegral, I may do the internal caching manually. I would redefine CompositeIntegral to expect to integers, and change various details accrodingly: e.g., in the call to CompositeIntegral, X would be transformed into an integer {FloatToInt X/Step}. For the call to MyDefIntegral I then need floats again..
+   %% However, after the many attempts with memoization so far I am not sure whether this is worth the effort
+   fun {Integrate MyFenv Step}
+      %%  select approximation
+      MyDefIntegral = DefiniteIntegral_Trapezoidal
+      F = {MyFenv getEnv($)}
+      /** %% Returns the definite integral of function F in [A, B] (two floats), approximation uses Step (a float) size between A and B.
+      %% */
+      %% memoize CompositeIntegral: A and B must be computed into 'grid' of Step for memoization to work -- outside this function. So, I should convert A and B to integers for the memoized function, and back to a float for calling MyDefIntegral
+      %% However, Memo.memoize does not work recursively (I really tried!). 
+      fun {CompositeIntegral A B}
+	 B2 = B-Step 
+      in
+	 if B2 =< 0.0
+	 then A   			% TODO: tmp solution (seems OK so far..)
+	 else 
+	    {MyDefIntegral F B2 B} + {CompositeIntegral A B2}
+	 end
+      end
+   in
+      {New Fenv
+       init(env:fun {$ X} {CompositeIntegral 0.0 X} end)}
+   end
+% proc {IntegrateFenv MyFenv Step ?Result}
+%    MyDefIntegral = DefiniteIntegral_Trapezoidal % select approximation
+% %   ClearMemoFun 
+%    DefIntegral_Memo = {Memo.memoize
+% 		       fun {$ [A B]} {MyDefIntegral {MyFenv getEnv($)} A B} end
+% %		       ClearMemoFun
+% 		       _}
+%    %% test: no memoization
+% %   DefIntegral_Memo = fun {$ [A B]} {MyDefIntegral {MyFenv getEnv($)} A B} end
+%    /** %% Returns the definite integral of function F in [A, B] (two floats), approximation uses Step (a float) size between A and B.
+%    %% */ 
+%    fun {CompositeIntegral A B}
+%       %% from A to B with Step-size 
+%       Xs = for X in A;X=<B;X+Step
+% 	      collect:C
+% 	   do
+% 	      {C X}
+% 	   end
+%    in
+%       %% If A==B then Pattern.map2Neighbours returns nil, because {Length Xs}==1
+%       if A < B
+%       then
+%  	 {LUtils.accum {Pattern.map2Neighbours Xs
+% 			fun {$ A_i B_i} {DefIntegral_Memo [A_i B_i]} end}
+% 	  Number.'+'}
+%       else A 			% TODO: tmp solution (seems OK so far..)
+%       end
+%    end 
+% in
+%   Result = {New Fenv.fenv
+% 	    init(env:fun {$ X} {CompositeIntegral 0.0 X} end)}
+% end
+   /** %% Returns the definite integral of function F in [A, B] (two floats). Implemented with Trapezium rule, http://en.wikipedia.org/wiki/Trapezoidal_rule. 
+   %% */
+   fun {DefiniteIntegral_Trapezoidal F A B}
+      (B-A) * ({F A} + {F B}) / 2.0
+   end
+
+   /** %% Transforms a fenv expressing a tempo curve into a fenv expressing a time map. A tempo curve expresses a tempo factor, i.e., f(x) = 1 results in no tempo change. A time map maps score time to performance time or performance time 1 to performance time 2. For details see Honing (2001). From Time to Time: The Representation of Timing and Tempo. CMJ 35(3).
+   %% TempoCurve2TimeMap is only previded for convenience. Note that the x values for the input tempo curve and the resulting time map are always in [0,1], so the combination of time maps (i.e., g(f(x))) does not work with fenvs -- use plain functions instead. 
+   %% */
+   fun {TempoCurve2TimeMap MyFenv Step}
+      {Integrate {Reciprocal MyFenv}
+       Step}
+   end
+   
+
+   
    
    
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%
 %%% Fenv output transformations 
 %%%
-
+   
    /* %% Transforms a Fenv into a list of continuous MIDI controller events. N events are output between StartTime and EndTime at Channel. 
    %% Controller denotes which controller is output. Possible values are one of the atoms pitchbend, and channelAftertouch, or one of the pairs cc#Number (Number is the controller number) and polyAftertouch#Note (Note denotes the note pitch). 
    %% */
@@ -567,8 +653,8 @@ define
 	  [] polyAftertouch#Note then {Out.midi.makePolyAftertouch Track Time Channel Note Value}
 	  end	  
        end}
-end
-
+   end
+   
    
 end
 
