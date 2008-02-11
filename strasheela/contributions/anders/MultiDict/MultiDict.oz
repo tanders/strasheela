@@ -24,7 +24,7 @@ import
    LUtils at 'x-ozlib://anders/strasheela/source/ListUtils.ozf'
    
 export
-   New Is Put Get CondGet RemoveAll Entries
+   New Is Put Get CondGet CondGetPutting RemoveAll Entries
    
 prepare
    /** marker for type checking */
@@ -75,7 +75,8 @@ define
    end
 
    /** %% Returns the item in Dict at Keys if Keys is valid, otherwise DefVal is retured.
-   %% */ 
+   %% NOTE: not thread-save.
+   %% */
    fun {CondGet Dict Keys DefVal}
       case Keys of nil then Dict
       else
@@ -85,7 +86,23 @@ define
 	 end
       end
    end
+   
 
+   /** %% Returns the item in Dict at Keys if Keys is valid, otherwise otherwise put X at Keys and return that.
+   %% NOTE: not thread-save.
+   %% */ 
+   fun {CondGetPutting Dict Keys X}
+      case Keys of nil then Dict
+      else
+	 if {Dictionary.member Dict Keys.1}
+	 then {CondGetPutting {Dictionary.get Dict Keys.1} Keys.2 X}
+	    %% {Fn} can block, but value should be put at Keys immediately
+	 else {Put Dict Keys X} X
+	 end
+      end
+   end
+
+   
    /** %% Removes all entries currently in Dict.
    %% */
    proc {RemoveAll Dict}
