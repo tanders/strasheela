@@ -14,9 +14,9 @@
 /** %% This functor defines a multi-dimensional extendable record data structure (quasi a stateless dictionary, implemented by RecordC). The key to a value in a multi-dimensional record is a list Keys whose values are any combination of integers, atoms and names.
 %% This is a stateless data structure (and can therefore be used, e.g., in a CSP such that it is defined globally and 'changed' in the CSP). There is only one stateful operation: Clear (changes binding of cell created by New).
 %%
-%% NB: This implementation is not thread-save: checking whether a key is valid and putting a value at the key is not atomic. Using locks would limit the use of this data structure in a CSP..
+%% NOTE: This implementation is not thread-save: checking whether a key is valid and putting a value at the key is not atomic. Using locks would limit the use of this data structure in a CSP..
 %%
-%% NB: efficiency only linear time in worst case (depending on number of features of Rec), but thats the best I can do (currently, there is not RecordC.reflectHasFeature, only RecordC.reflectArity and thus the list of all currently stored keys must be searched in a tmp def of ReflectHasFeature defined here).
+%% NOTE: efficiency only linear time in worst case (depending on number of features of Rec), but thats the best I can do (currently, there is not RecordC.reflectHasFeature, only RecordC.reflectArity and thus the list of all currently stored keys must be searched in a tmp def of ReflectHasFeature defined here).
 %% */
 
 %% TODO:
