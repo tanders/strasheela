@@ -27,7 +27,7 @@
 %% Global definitions
 %%
 %% These definitions are used by multiple examples below -- always
-%% feed them first.
+%% feed these definitions first, then feed the examples paragraph-wise. 
 %%
 
 
