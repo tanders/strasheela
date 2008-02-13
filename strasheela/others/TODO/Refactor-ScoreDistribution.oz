@@ -16,6 +16,140 @@
 
 declare
 %% avoiding the non-determinism introduced above with approach proposed by Raphael Collet (email Wed, 02 Feb 2005 to users@mozart-oz.org)
+
+%% Raphael's orig code from 1st email:
+local
+   fun lazy {RandomStream} {OS.rand}|{RandomStream} end
+   RandomList={RandomStream}
+in
+   %% returns a pseudo-random number generator.
+   %% The generator returns the elements of RandomList in sequence.
+   fun {NewRandomGenerator}
+      Str={NewCell RandomList}
+   in
+      proc {$ ?X}
+         L in X|L=Str:=L
+      end
+   end
+end
+proc {Script Root}
+   Rand={NewRandomGenerator}
+in
+   ... % use Rand freely here
+end
+
+
+%% Raphael's orig code from 2dn email:
+%% initialise a script with random numbers
+fun {MakeScript}
+   fun lazy {RandomStream} {OS.rand}|{RandomStream} end
+   RandomNumbers={RandomStream}
+   fun {NewRandomGenerator}
+      Str={NewCell RandomNumbers} in proc {$ ?X} T in X|T=Str:=T end
+   end
+in
+   proc {$ Root}
+      Rand={NewRandomGenerator}
+   in
+      %% use Rand freely here
+   end
+end
+
+
+%% code in my reply mail
+declare
+local 
+  fun lazy {RandomStream} {OS.rand}|{RandomStream} end
+  RandomNumbers={RandomStream}
+in
+  fun {NewRandomGenerator}
+     Str={NewCell RandomNumbers} in proc {$ ?X} T in X|T=Str:=T end
+  end
+end
+fun {RandIntoRange Rand Min Max}   
+   MaxRand = {OS.randLimits 0}
+in 
+   {Int.'div' (Rand * (Max - Min)) MaxRand} + Min
+end
+proc {DummyScript Sol}   
+   RandGen = {NewRandomGenerator}
+in
+   %% dummy example without constraints: 
+   %% distribution decides randomly for variable domain values
+   Sol = {FD.list 5 1#10}
+   %%
+   {My_FD_distribute
+    generic(select:fun {$ X#_} X end
+            value:fun {$ X#R}
+                     %% !! does not work: 
+                     %% In orig FD.distribute,
+                     %% 'value' proc gets only var itself.
+                     %% In adjusted  My_FD_distribute,
+                     %% 'value' proc would get same arg as 
+                     %% 'select' proc.
+                     {FD.reflect.nextSmaller X
+                      {RandIntoRange R
+                       {FD.reflect.min X}
+                       {FD.reflect.max X}}}
+                  end)
+    %% associate each var with a random number
+    {Map Sol fun {$ X} X#{RandGen} end}}
+end
+{Explorer.one DummyScript}
+
+
+
+%% Raphael's 3rd mail: my code and Raphael's edits
+%%
+%% !! CSP has no solution, there must be some bug
+declare
+% local 
+fun lazy {RandomStream} {OS.rand}|{RandomStream} end
+RandomNumbers={RandomStream}
+% in
+fun {NewRandomGenerator}
+   Str={NewCell RandomNumbers} in proc {$ ?X} T in X|T=Str:=T end
+end
+% end
+fun {RandIntoRange Rand Min Max}   
+   MaxRand = {OS.randLimits 0}
+in 
+   {Int.'div' (Rand * (Max - Min)) MaxRand} + Min
+end
+proc {DummyScript Sol}   
+   RandGen = {NewRandomGenerator}
+in
+   %% dummy example without constraints: 
+   %% distribution decides randomly for variable domain values
+   Sol = {FD.list 5 1#10}
+   %%
+   {FD.distribute
+    generic(value:fun {$ X}
+		     %% a pseudo-random number is generated here
+		     %%
+		     %% BUG: random numbers created are outside of var domain -- the distribution should wait until space is stable, why this problem?
+                     {FD.reflect.nextSmaller X
+                      {RandIntoRange {RandGen}
+                       {FD.reflect.min X} {FD.reflect.max X}}}
+                  end)
+    Sol}
+end
+
+{Browse {Search.base.one DummyScript}}
+
+{Explorer.one DummyScript}
+
+
+declare
+RandGen = {NewRandomGenerator}
+
+
+{Browse {RandIntoRange {RandGen} 1 10}}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 %%
 %%
 %% !! This goes into GUtilts (including SetSeed)
@@ -38,6 +172,7 @@ in
       RandomNumbers:={RandomStream}
    end
 end
+
 %%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%

@@ -229,11 +229,15 @@ E.g. for outputting information such as meter, key, motif boundaries...
 # <<RandomDistribution>> 
 *** [#A] Refactor Strasheela distribution: recomputable support for random distribution :CURRENT:
 
-See also ./Refactor-ScoreDistribution.oz
 
 **** TODO Create SVN branch
 
 **** TODO Check out: there was an example for which it worked already
+
+     Understand orig example by Raphael
+     
+     [[file:Refactor-ScoreDistribution.oz]]
+
 
 **** TODO Change score solver interface in ScoreDistribution.oz so that it works for all cases 
 
