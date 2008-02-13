@@ -1,17 +1,54 @@
 
-* Strasheela installation					    :STRASHEELA:
-
-** TODO [#A] Create test program (executable) which tests a few core Strasheela functionalities and reports results at stdout to the user 		              :VIELLEICHT:
-
-useful for package creators and new users to test whether installation was successful
 
 
-** TODO [#C] ?? Define Oz GUI application for creating an OZRC file: pathes for applications and directories are then specified in a GUI                             :VIELLEICHT:
+* Strasheela examples						    :STRASHEELA:
+
+** Add new Fenv examples to [[file:~/oz/music/Strasheela/strasheela/trunk/strasheela/examples/ContinuousControllersInScore-MidiOutput.oz]]      :CURRENT:
+
+*** TODO Archive Fenvs with score 
+
+Transform with toInitRecord and then pickle with Score.saveScore
+
+*** TODO Tempo curve example 
+*** TODO Example with hierarchy of tempo curves and time shift functions 
+
+Wait for tempo curve related code to be finished...
+
+
+** TODO 'Interesting arpeggio' example [[file:~/oz/music/Strasheela/private/examples/forOlleRomo/Arpeggio.oz][Arpeggio.oz]]		       :CURRENT:
+
+  an example for Olle Romo
+  see description in strasheeela support tracker
+  
+  https://sourceforge.net/tracker/index.php?func=detail&aid=1883452&group_id=167225&atid=842099
+
+  ?? Duration: 1d -- probably more :)
+  
+
+** TODO Groove templates					    :MAYBE:
+
+  an example for Olle Romo
+  see description in strasheeela support tracker
+https://sourceforge.net/tracker/index.php?func=detail&aid=1883454&group_id=167225&atid=842099
+
+
+** TODO Inventio example					    :MAYBE:
+
+*** harmonic etc analysis of inventio 1
+
+*** Inventio B: Fuege "BrainImage Data" in CSP ein
+
+?? As parameter or info for motif?
+
+Abstract applied constraint, so the effect is controllable
+
+
+** TODO Muzak Beispiel mit Kilian 
 
 
 * Strasheela design						    :STRASHEELA:
 
-** TODO [#A] Time curves etc
+** TODO Time curves etc [[file:~/oz/music/Strasheela/private/examples/forOlleRomo/TempoCurves-etc.oz][TempoCurves-etc.oz]] 			       :CURRENT:
 
 Goal: user can freely define tempo curve and time shift curve for any temporal container in score 
 
@@ -19,8 +56,13 @@ It should be relatively straitforward to access the performance time of any scor
 
 See my notes on paper...
 
+** TODO [#A] optimal solution for CSPs with soft constraints
 
-** TODO Oz Module.link / Module.apply: why did I need it	    :VIELLEICHT:
+Design CSP template / abstractions with which I can model soft constraints by reified constraints and rate them in importance. A best-solution-search will find an optimal solution 
+
+
+
+** TODO Oz Module.link / Module.apply: why did I need it	    :MAYBE:
 
 See ~/oz/music/Strasheela/private/test/OtherFunctors/ModuleLinkingTest
 
@@ -31,9 +73,9 @@ Isn't this a situation which is perfectly normal when you work with multiple non
 
 
 
-** TODO OutGUI							    :VIELLEICHT:
+** TODO OutGUI							    :MAYBE:
 
-** TODO [#A] 1W Refactor harmony model
+** TODO 1W Refactor harmony model
 
 *** Harmony model: Databases as arg for object creation
 
@@ -46,7 +88,7 @@ Possibly, I leave the old database accessors and setters as is (i.e. without add
 In that case, I need to define new additional accessors which expect the object/database arg, and the doc of both the new and the old accessors/setters must make these two options using databases very clear.
 
 
-*** Harmony model: Interval as score object
+*** DONE Harmony model: Interval as score object
   
 Explicit interval score object. Creation uses memoization for two given pitches.
 
@@ -54,10 +96,12 @@ Explicit interval score object. Creation uses memoization for two given pitches.
 
 Test interval class with memoization
 
-*** Harmony model: Clean up doc
+*** [#C] Harmony model: Clean up doc
+
+This is partly done already..
 
 
-** TODO [#A] Extend meter model
+** TODO Extend meter model [[file:~/oz/music/Strasheela/strasheela/trunk/strasheela/contributions/anders/Measure/Measure.oz][Measure.oz]]
 
   - extend meter model for changing meter
 
@@ -101,7 +145,7 @@ How does communication of data structure slow down the process?
 Lilypond export outputs only rather old version. Meanwhile, Lilypond handles nested scores (quasi sim/seq containers) better than old version, but behaviour of old version is pertained when using Lily's conversion script. So, I should update my Lily output to a more Lily syntax version
 
 
-** TODO NonmensuralENP->MensuralENP as Lisp def			    :VIELLEICHT:
+** TODO NonmensuralENP->MensuralENP as Lisp def			    :MAYBE:
 
 see Strasheela/private/WorkInProgress/NonmensuralENP->mensuralENP 
 
@@ -129,7 +173,7 @@ A method filterThreaded would further improve the application of delayed constra
 E.g., I could use a method filterThreaded for a better definition of getSimultaneousItems
 
 
-*** TODO refactor output means: they are inconsistend, perhaps not general enough etc. :VIELLEICHT:
+*** TODO refactor output means: they are inconsistend, perhaps not general enough etc. :MAYBE:
 
   - output of 'non-existing' timed items (e.g. notes of duration 0) -- skip
 
@@ -139,17 +183,17 @@ E.g., I could use a method filterThreaded for a better definition of getSimultan
 
   - refactor Lilypond output to use the (still to program) score transformation with allows to restructure a Strasheela score hierarchy
 
-*** TODO Output to lilypond etc: make extension for outputting specific score information (more) reusable :VIELLEICHT:
+*** TODO Output to lilypond etc: make extension for outputting specific score information (more) reusable :MAYBE:
 
 E.g. for outputting information such as meter, key, motif boundaries... 
 
 
-*** TODO !!?? Some means to define rules in a more modular/generic way -- currently, e.g., more complex counterpoint rules, can not be used in other CSP as they rely on the specific score representation (e.g. extensions to Note) :VIELLEICHT:
+*** TODO !!?? Some means to define rules in a more modular/generic way -- currently, e.g., more complex counterpoint rules, can not be used in other CSP as they rely on the specific score representation (e.g. extensions to Note) :MAYBE:
 
   -> Better solution: use memoization instead of extending the music representation ad hoc
   However, memoization can be computationally expensive
 
-*** TODO toInitRecord: further cleanup				    :VIELLEICHT:
+*** TODO toInitRecord: further cleanup				    :MAYBE:
 
 
 **** toInitRecord: what to do with init args which get procedures or classes (e.g. classes of harmony model)?
@@ -168,13 +212,13 @@ E.g. for outputting information such as meter, key, motif boundaries...
     
    -> this todo item is probably outdated already: cf. Out.saveScore
 
-*** TODO Music representation consistency: so far, I used class attributes for object parameters etc. However, for the quick definition of subclasses with Score.makeClass I introduced stateless class features for additional parameters etc. This is neither consistent in the class usage (use of different accessors like {X getA} and Y.b) nor does it allow for later score editors.. :VIELLEICHT:
+*** TODO Music representation consistency: so far, I used class attributes for object parameters etc. However, for the quick definition of subclasses with Score.makeClass I introduced stateless class features for additional parameters etc. This is neither consistent in the class usage (use of different accessors like {X getA} and Y.b) nor does it allow for later score editors.. :MAYBE:
 
-*** TODO ?? remove toPPrintRecord and replace it with highly generic toFullRecord? :VIELLEICHT:
+*** TODO ?? remove toPPrintRecord and replace it with highly generic toFullRecord? :MAYBE:
     sorted mainly already?
     OLD: toPPrintRecord: output graph mode using IDs similar to input of MakeScore
 
-*** TODO ?? add textual representation of parameters: currently, parameters are not supported my Score.makeScore :VIELLEICHT:
+*** TODO ?? add textual representation of parameters: currently, parameters are not supported my Score.makeScore :MAYBE:
 
     should I add parameter support at all? Score.makeScore _does_ work on note-level. I would only need to create single params, e.g., for item init arg addParameters
 
@@ -182,10 +226,24 @@ E.g. for outputting information such as meter, key, motif boundaries...
 
 ** Efficiency
 
-
-*** TODO [#A] Refactor Strasheela distribution: recomputable support for random distribution
+# <<RandomDistribution>> 
+*** [#A] Refactor Strasheela distribution: recomputable support for random distribution :CURRENT:
 
 See also ./Refactor-ScoreDistribution.oz
+
+**** TODO Create SVN branch
+
+**** TODO Check out: there was an example for which it worked already
+
+**** TODO Change score solver interface in ScoreDistribution.oz so that it works for all cases 
+
+BTW: you may wan to create a Strasheela variant of the general solver object 
+
+**** TODO Change all solver calls in Strasheela if necessary -- check with my scripts like find-all
+
+this will take most time and is error prone, which is why I created a branch...
+
+
 
 *** TODO [#A] check out performance with adaptive recomputation
 
@@ -193,7 +251,7 @@ See also ./Refactor-ScoreDistribution.oz
      
   -> for this I most of all need a nicely working 'select random value' distribution which can be recomputed
 
-
+# <<ScoreOutsideScript>> 
 *** TODO [#A] Does score outside script/space save memory. If so, define abstractions/templates for having the score outside the script
 
 See ../../testing/zy_Efficiency/KeepMusicRepresentationOutsideComputationalSpace.oz 
@@ -246,44 +304,22 @@ See ../../testing/zy_Efficiency/KeepMusicRepresentationOutsideComputationalSpace
 
 ***** Instead with this Strasheela 'client', other CAC applications could also create CSP specs and call the Strasheela 'server' (e.g. PWGL)
 
-
-* Strasheela examples						    :STRASHEELA:
-
-** TODO [#A] 'Intelligent arpeggio' example
-
-  an example for Olle Romo
-  see description in strasheeela support tracker
-  
-  https://sourceforge.net/tracker/index.php?func=detail&aid=1883452&group_id=167225&atid=842099
-
-  ?? Duration: 1d -- probably more :)
-  
-
-** TODO Groove templates					    :VIELLEICHT:
-
-  an example for Olle Romo
-  see description in strasheeela support tracker
-https://sourceforge.net/tracker/index.php?func=detail&aid=1883454&group_id=167225&atid=842099
-
-
-** TODO Inventio example					    :VIELLEICHT:
-
-*** harmonic etc analysis of inventio 1
-
-*** Inventio B: Fuege "BrainImage Data" in CSP ein
-
-?? As parameter or info for motif?
-
-Abstract applied constraint, so the effect is controllable
-
 * Strasheela documentation					    :STRASHEELA:
 
 ** Strasheela tutorial
 
 *** DONE Strasheela tutorial: finish music representation 'chapter'
-*** TODO [#A] Strasheela tutorial: do music constraint programming 'chapter'
+*** TODO Strasheela tutorial: do music constraint programming 'chapter'
 
 *** TODO Email Tobias Kunze: CM CSS verwendet...
+* Strasheela installation					    :STRASHEELA:
+
+** TODO [#A] Create test program (executable) which tests a few core Strasheela functionalities and reports results at stdout to the user 		              :MAYBE:
+
+useful for package creators and new users to test whether installation was successful
+
+
+** TODO [#C] ?? Define Oz GUI application for creating an OZRC file: pathes for applications and directories are then specified in a GUI                             :MAYBE:
 
 
 * Collecting new ideas
@@ -295,7 +331,6 @@ Abstract applied constraint, so the effect is controllable
 * General Oz todo							    :OZ:
 
 ** Oz Path								:URGENT:
-   SCHEDULED: <2008-02-11 Mon>
 
 *** TODO Oz Path: bug commits
 
@@ -304,7 +339,7 @@ Abstract applied constraint, so the effect is controllable
 *** TODO Oz Path: test cases
 
 
-** ozh								    :VIELLEICHT:
+** ozh								    :MAYBE:
 
 *** ozh: add SGML doc
 
@@ -333,5 +368,5 @@ Even better would be, if some wiki layout is supported (optionally). Does there 
 
 *** TODO Collozeum: make projects available at Mogul
 
-*** TODO ozcurl/ozjs TODO: add ozmake makefile			    :VIELLEICHT:
+*** TODO ozcurl/ozjs TODO: add ozmake makefile			    :MAYBE:
 
