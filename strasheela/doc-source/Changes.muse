@@ -4,7 +4,7 @@
 
 * Changes in Version 0.9.2 (no date yet)
 
-  - Added to Fenv: Integrate, TempoCurve2TimeMap, Reciprocal
+  - Added to Fenv: TimeShiftToTimeMap, Integrate, TempoCurveToTimeMap, ConcatenateTempoCurves, Reciprocal, FenvToMidiCC, ItemFenvToMidiCC, ItemFenvY, TemporalFenvY
 
 
  - Added examples which demonstrate how to use continuous controllers in the score, and how to output them to MIDI, see [[../examples/ContinuousControllersInScore-MidiOutput.oz][here]]
@@ -15,7 +15,6 @@
    - Refactor: Memo.memoize now uses a more efficient stateful data structure internally (dictionary instead of record constraints), whereas Memo.memoize2 is fully stateless and thus can be used in a CSP, but is less efficient. Also, changed interface of Memo.memoize into {Memoize Fn ?ClearP ?MemoFn}
 
  - Minor
-   - Added Fenv.fenv2MidiCC
    - Added Out.midi.note2Midi
    - Added ScoreObject method getInfoRecord
 
