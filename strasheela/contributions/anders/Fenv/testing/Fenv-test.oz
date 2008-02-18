@@ -271,3 +271,98 @@ declare
  plot}
 
 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%% tempo curve related 
+%%
+
+
+%%
+%% Integrate a few different fenvs. Note: if the function for the input fenv is mapped from a different domain to [0,1] -- that is, if the fenv arguments min or max are used -- the integrated function of course depends on the _transformed_ input fenv. For example, the integral of cos(x) in [0, 2pi] mapped to [0,1] is a sine mapped to [0,1] -- but with a maximum value of about 0.15 and not 1 (see below). 
+%%
+
+{{Fenv.integrate {New Fenv.fenv init(env:fun {$ X} {Cos X} end
+				    min:0.0
+				    max:2.0*GUtils.pi)}
+  0.01} plot}
+
+
+{{Fenv.integrate {New Fenv.fenv init(env:fun {$ X} 1.0 end)}
+  0.01} plot}
+
+{{Fenv.integrate {New Fenv.fenv init(env:fun {$ X} X end)}
+  0.01} plot}
+
+{{Fenv.integrate {New Fenv.fenv init(env:fun {$ X} X*X end
+				    min:~1.0
+				    max:1.0)}
+  0.01} plot}
+
+
+
+%% integrate a given and take rubato tempo curve, cf. Henkjan's paper
+{{Fenv.integrate {Fenv.linearFenv [[0.0 0.5] [0.5 2.0] [1.0 0.5]]}
+  0.01} plot}
+
+
+%% intergrate a tempo curve with a sudden tempo change, cf. Henkjan's paper
+{{Fenv.integrate {Fenv.linearFenv [[0.0 3.0] [0.5 3.0] [0.5 0.3] [1.0 0.3]]}
+  0.01} plot}
+
+
+
+%% Fenv.integrate is thread-save
+%% However, the gnuplot interface uses always the same file names per default...
+thread
+{{Fenv.tempoCurve2TimeMap {Fenv.linearFenv [[0.0 0.3] [0.5 3.0] [1.0 0.3]]}
+  0.01}
+ plot(commandFile: "/tmp/gnuplot_command"#{GUtils.getCounterAndIncr}
+      dataFile:"/tmp/gnuplot_daten"#{GUtils.getCounterAndIncr})}
+end
+{{Fenv.tempoCurve2TimeMap {Fenv.linearFenv [[0.0 3.0] [0.5 3.0] [0.5 0.5] [1.0 0.5]]}
+  0.01}
+ plot(commandFile: "/tmp/gnuplot_command"#{GUtils.getCounterAndIncr}
+      dataFile:"/tmp/gnuplot_daten"#{GUtils.getCounterAndIncr})}
+
+
+/*
+
+%%
+%% old
+%%
+
+%% integration for Step=0.001
+%% no memoization: ~300 msecs
+%% with stateless memoization: ~7700 mecs
+%% improved/stateful memoization: > 400 msecs
+{Browse 
+ time#{GUtils.timeSpend 
+       proc {$}
+	  {{Fenv.integrate {Fenv.linearFenv [[0.0 0.3] [0.5 3.0] [1.0 0.3]]}
+	    0.001}
+	   plot}
+       end}}
+ 
+   
+*/
+
+
+%%
+%% ConcatenateTempoCurves
+%%
+
+declare
+MyTempoCurve = {Fenv.concatenateTempoCurves
+		[{Fenv.linearFenv [[0.0 0.5] [1.0 1.0]]}#1.0
+		 {Fenv.sinFenv [[0.0 1.0] [0.8 1.5] [1.0 1.0]]}#5.0
+		 {Fenv.linearFenv [[0.0 1.0] [1.0 1.0]]}#1.0
+		 {Fenv.sinFenv [[0.0 1.0] [1.0 0.5]]}#3.0]}
+
+
+{MyTempoCurve plot}
+
+{{Fenv.tempoCurveToTimeMap MyTempoCurve 0.01}
+ plot}
+
+
