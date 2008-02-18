@@ -43,9 +43,13 @@ export
    FenvSection
 
    Integrate
-   TempoCurve2TimeMap
+   TempoCurveToTimeMap
+   TimeShiftToTimeMap
+   ConcatenateTempoCurves
    
-   Fenv2MidiCC
+   TemporalFenvY ItemFenvY
+   
+   FenvToMidiCC ItemFenvToMidiCC
    
 prepare
    FenvType = {Name.new}
@@ -611,33 +615,89 @@ define
 %   Result = {New Fenv.fenv
 % 	    init(env:fun {$ X} {CompositeIntegral 0.0 X} end)}
 % end
-   /** %% Returns the definite integral of function F in [A, B] (two floats). Implemented with Trapezium rule, http://en.wikipedia.org/wiki/Trapezoidal_rule. 
+   /** %% [Aux] Returns the definite integral of function F in [A, B] (two floats). Implemented with Trapezium rule, http://en.wikipedia.org/wiki/Trapezoidal_rule.
+   %% Alternative options, e.g., Quadratic interpolation Simpson's rule, http://en.wikipedia.org/wiki/Simpson%27s_rule. Wikipedia 'numeric integration' points to even more.  
    %% */
    fun {DefiniteIntegral_Trapezoidal F A B}
       (B-A) * ({F A} + {F B}) / 2.0
    end
 
-   /** %% Transforms a fenv expressing a tempo curve into a fenv expressing a time map. A tempo curve expresses a tempo factor, i.e., f(x) = 1 results in no tempo change. A time map maps score time to performance time or performance time 1 to performance time 2. For details see Honing (2001). From Time to Time: The Representation of Timing and Tempo. CMJ 35(3).
-   %% TempoCurve2TimeMap is only previded for convenience. Note that the x values for the input tempo curve and the resulting time map are always in [0,1], so the combination of time maps (i.e., g(f(x))) does not work with fenvs -- use plain functions instead. 
+
+   
+   /** %% Transforms a fenv expressing a normalised tempo curve into a fenv expressing a normalised time map. Step (a float) specifies the precision (and efficiency!) of the transformation, see Integrate's doc for details. A tempo curve expresses a tempo factor, i.e., f(x) = 1 results in no tempo change. A normalised time map maps score time to performance time. 
+   %% Private Terminology: normalised time shift functions, time map functions and tempo curves: fenvs where x values denote the score time (usually of a temporal container) which is mapped into [0,1]: 0 corresponds to the container's start time, and 1 corresponds to the container's end time. See ContainerFenvY.
+   %% NB: a normalised time map fenvs cannot be combined by function combination (x values for fenvs are always in [0,1]). Instead, either combine tempo curve and time shift fenvs, or combine plain and un-normalised time map functions (i.e. no fenvs).
    %% */
-   fun {TempoCurve2TimeMap MyFenv Step}
+   fun {TempoCurveToTimeMap MyFenv Step}
       {Integrate {Reciprocal MyFenv}
        Step}
    end
-   
+
+   /* %% Expects a fenv representing a normalised time shift function and returns a fenv representing a normalised time map function. A time shift function expresses how much is added to a score time to yield a performance time, i.e., f(x) = 0 causes performance time to be score time. A normalised time map maps score time to performance time.
+   %% Private Terminology: normalised time shift functions, time map functions and tempo curves: fenvs where x values denote the score time (usually of a temporal container) which is mapped into [0,1]: 0 corresponds to the container's start time, and 1 corresponds to the container's end time. See ContainerFenvY.
+   %% NB: a normalised time map fenvs cannot be combined by function combination (x values for fenvs are always in [0,1]). Instead, either combine tempo curve and time shift fenvs, or combine plain and un-normalised time map functions (i.e. no fenvs).  
+   %% */
+   fun {TimeShiftToTimeMap TS}
+      {ScaleFenv TS unit(add:{New Fenv init(env:fun {$ X} X end)})}
+   end
 
    
+   /** %% Concatenates a sequence of successive tempo curve fenvs. Specs is a list of pairs and has the form [Fenv1#Dur1 Fenv2#Dur2 ... FenvN#DurN], where FenvI is a tempo curve fenv and DurI (a float) is the score time duration of this tempo curve. Returned is a single tempo curve fenv.
+   %% NB: in most use-cases the sequence of successive tempo curve fenvs should start at score time 0 and span over the entire score so that the global tempo curve fenv is the result. If you concatenate a tempo curve sequence which does not start at score time 0, you should decide whether the resulting tempo curve fenv starts at the performance or score start time of its first sub-tempo curve (i.e., whether a smooth continuation of previous tempo changes is intended or not). 
+   %% */
+   fun {ConcatenateTempoCurves Specs}
+      %% for each point, add all durations up to point 
+      fun {DursToPoints Specs Acc}
+	 case Specs of nil then nil
+	 else Fenv Dur X in
+	    Fenv#Dur = Specs.1 
+	    X = Acc + (Dur / TotalDur) 
+	    [Fenv X] | {DursToPoints Specs.2 X}
+	 end
+      end
+      TotalDur = {LUtils.accum {Map Specs fun {$ _#Dur} Dur end}
+		  Number.'+'}
+      FenvsAndPoints = {Append
+			{LUtils.accum {DursToPoints Specs 0.0} Append}
+			%% skip the last duration
+			[{List.last Specs}.1]}
+   in
+      {FenvSeq FenvsAndPoints}
+   end
    
+   
+   /** %% Accesses the y-value of MyFenv which starts at time point Start (a float) for time interval Duration (a float). The fenv x-value 0.0 corresponds to the start time and the fenv x-value 1.0 coresponds to the resulting end time. MyTime (a float) is any time between the start and end time. All times are score times measured in seconds.
+   %% */
+   fun {TemporalFenvY MyFenv Start Duration MyTime}
+      FenvX = (MyTime-Start) / Duration
+   in
+      {MyFenv y($ FenvX)}
+   end
+   
+   /** %% Accesses the y-value of MyFenv which is associated with a temporal item MyItem. The fenv x-value 0.0 corresponds to the container start time and the fenv x-value 1.0 coresponds to the container end time. MyTime (a float) is any time between MyContainer's start and end time. MyTime is a score time measured in seconds.
+   %% */
+   fun {ItemFenvY MyFenv MyItem MyTime}
+      {TemporalFenvY MyFenv
+       {MyItem getStartTimeInSeconds($)}
+       {MyItem getDurationInSeconds($)}
+       MyTime}
+   end
+   
+
    
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%
 %%% Fenv output transformations 
 %%%
    
-   /* %% Transforms a Fenv into a list of continuous MIDI controller events. N events are output between StartTime and EndTime at Channel. 
+   /* %% Transforms a Fenv into a list of continuous MIDI controller events. N events are output between StartTime and EndTime (two ints, given in MIDI ticks) at Channel (an int). 
    %% Controller denotes which controller is output. Possible values are one of the atoms pitchbend, and channelAftertouch, or one of the pairs cc#Number (Number is the controller number) and polyAftertouch#Note (Note denotes the note pitch). 
+   %% Finally, Controller can be a function expecting 4 arguments and returning a MIDI event. For example, the volume Controller can be defined as follows
+   fun {$ Track Time Channel Value}
+      {Out.midi.makeCC Track Time Channel 7 Value}
+   end
    %% */
-   fun {Fenv2MidiCC MyFenv N Track StartTime EndTime Channel Controller}
+   fun {FenvToMidiCC MyFenv N Track StartTime EndTime Channel Controller}
       Times = {Map {LUtils.arithmeticSeries {IntToFloat StartTime}
 		    ({IntToFloat EndTime-StartTime} / {IntToFloat N})
 		    N}
@@ -651,10 +711,20 @@ define
 	  [] channelAftertouch then {Out.midi.makeChannelAftertouch Track Time Channel Value}
 	  [] cc#Number then {Out.midi.makeCC Track Time Channel Number Value}
 	  [] polyAftertouch#Note then {Out.midi.makePolyAftertouch Track Time Channel Note Value}
+	  else %% Controller is function
+	     {Controller Track Time Channel Value}
 	  end	  
        end}
    end
-   
+
+   /** %% Like FenvToMidiCC, but here the Fenv is associated with a temporal item MyItem, whose start and end times are taken. 
+   %% */ 
+   fun {ItemFenvToMidiCC MyFenv N Track MyItem Channel Controller}
+      StartTime = {Out.midi.beatsToTicks {MyItem getStartTimeInSeconds($)}}
+      EndTime = {Out.midi.beatsToTicks {MyItem getEndTimeInSeconds($)}}
+   in
+      {FenvToMidiCC MyFenv N Track StartTime EndTime Channel Controller}
+   end
    
 end
 
