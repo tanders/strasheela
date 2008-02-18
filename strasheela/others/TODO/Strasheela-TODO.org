@@ -3,7 +3,7 @@
 
 * Strasheela examples						    :STRASHEELA:
 
-** Add new Fenv examples to [[file:~/oz/music/Strasheela/strasheela/trunk/strasheela/examples/ContinuousControllersInScore-MidiOutput.oz]]      :CURRENT:
+** Add new Fenv examples to [[file:~/oz/music/Strasheela/strasheela/trunk/strasheela/examples/ContinuousControllersInScore-MidiOutput.oz]]      :NEXT:
 
 *** TODO Archive Fenvs with score 
 
@@ -15,14 +15,69 @@ Transform with toInitRecord and then pickle with Score.saveScore
 Wait for tempo curve related code to be finished...
 
 
-** TODO 'Interesting arpeggio' example [[file:~/oz/music/Strasheela/private/examples/forOlleRomo/Arpeggio.oz][Arpeggio.oz]]		       :CURRENT:
+** TODO 'Interesting arpeggio' example [[file:~/oz/music/Strasheela/private/examples/forOlleRomo/Arpeggio.oz][Arpeggio.oz]]		       :NEXT:
+
+  ?? Duration working time: 1d -- probably more :)
 
   an example for Olle Romo
   see description in strasheeela support tracker
   
   https://sourceforge.net/tracker/index.php?func=detail&aid=1883452&group_id=167225&atid=842099
+  
 
-  ?? Duration: 1d -- probably more :)
+  Olle:
+  An example generating a 16 bar 4/4 16th notes arpeggio based on a given
+  chord sequence and scale/mode. The note length and velocities change
+  according to a given function - a sine shape for example.
+  
+  
+  Torsten:
+  I don't fully understand: do you mean a 'grid' of 16th notes (i.e.
+  that is the shortest note value possible)? If you want to shape your
+  durations with a function, then you don't have all durations of the
+  same length :)
+  
+  As far as I understand you, you predetermine the chord progression
+  and the function(s) shaping note parameters likes durations and
+  loudness. What are your actual constraints? Should each bar form a
+  simple arpeggio upwards where the note pitches only express pitch
+  classes from the underlying chord? If this is the only constraint,
+  then you can realise this even without constraint programming (e.g.,
+  in Common Music -- a system you mentioned before).
+  
+  Still, it can also be done in Strasheela, all the building blocks are
+  there. The music representation (notes, chords, scales) can be based
+  on Strasheela's harmony model (functor HS) and function-based
+  envelopes are provided in the functor Fenv.
+  
+  
+  Olle:
+  Sorry, I meant a grid. Notes quantized to a 16th note grid where the
+  durations can vary independently of the start times.
+  
+  By arpeggios I mean various phrases running within the given chord/mode. It
+  can be single 16th notes forming musical phrases and not just running up
+  and down scales. Certain notes can harmonise with 2 or 3 voices, etc...
+  
+  Olle:
+  
+  16th note arpeggio. Limit the note range. Stay within a given (16 measure)
+  chord structure. No more than two successive notes at the same pitch.
+  Duration pattern repeats each 2 measures - first measure the lower notes
+  are shorter and the higher notes are longer. Second measure the reversed.
+  Velocity pattern repeats each 4 measures.
+  
+  Voice one pattern repeats each measure exept for the first note. First note
+  of each measure alternates between tonic and fifth.
+  
+  Each repeated pitch is lower in velocity than the preceding note. Each time
+  voice one and two plays simultaneously velocity is 60. Otherwise it is set
+  at 90.
+  
+  Voice two repeats over two bars and plays no more than two notes in
+  succession without an intervening 16th note pause. Always in a higher
+  harmony to voice one. Still within the note range. Always the same duration
+  and velocity as voice one.
   
 
 ** TODO Groove templates					    :MAYBE:
@@ -48,13 +103,32 @@ Abstract applied constraint, so the effect is controllable
 
 * Strasheela design						    :STRASHEELA:
 
-** TODO Time curves etc [[file:~/oz/music/Strasheela/private/examples/forOlleRomo/TempoCurves-etc.oz][TempoCurves-etc.oz]] 			       :CURRENT:
+** Time curves etc [[file:~/oz/music/Strasheela/private/examples/forOlleRomo/TempoCurves-etc.oz][TempoCurves-etc.oz]] 					  :NEXT:
 
 Goal: user can freely define tempo curve and time shift curve for any temporal container in score 
 
 It should be relatively straitforward to access the performance time of any score time of a temporal item (e.g., note start and end times) depending on all temporal containers the item is contained in
 
 See my notes on paper...
+
+
+*** TODO Make test/prototype how to combine tempo curves and time shift curves and how to access performance value for given score value
+
+*** TODO Make simple prototype how timing fenvs are accessed from parent temporal containers
+
+*** TODO Address problem: timing fenvs of different containers depend on startTime/endTime of the containers: make abstraction expecting container, fenv and score time point and returning performance time point 
+
+Does this pose any additional problems to the combination of fenvs 
+
+*** TODO Abstract this: make approach of both prototypes easily usable 
+
+deadl with case that not every container gets time shift curve and tempo curve
+
+e.g., extend music representation, but perhaps there are more simple ways 
+
+
+*** TODO Make test/example which produces sound output 
+
 
 ** TODO [#A] optimal solution for CSPs with soft constraints
 
@@ -86,15 +160,6 @@ I should keep a global database as an option, because this is most suitable for 
 This refactoring requires that all database accessors expect a score object (chord, scale ..) or its database as argument. 
 Possibly, I leave the old database accessors and setters as is (i.e. without additional object/database arg) for compatibility of the old examples. 
 In that case, I need to define new additional accessors which expect the object/database arg, and the doc of both the new and the old accessors/setters must make these two options using databases very clear.
-
-
-*** DONE Harmony model: Interval as score object
-  
-Explicit interval score object. Creation uses memoization for two given pitches.
-
-?? Should I introduce further additional score objects like pitch and degree ??
-
-Test interval class with memoization
 
 *** [#C] Harmony model: Clean up doc
 
@@ -227,16 +292,26 @@ E.g. for outputting information such as meter, key, motif boundaries...
 ** Efficiency
 
 # <<RandomDistribution>> 
-*** [#A] Refactor Strasheela distribution: recomputable support for random distribution :CURRENT:
+*** [#A] Refactor Strasheela distribution: recomputable support for random distribution :NEXT:
 
 
-**** TODO Create SVN branch
+**** DONE Create SVN branch
+     CLOSED: [2008-02-13 Wed 17:49]
+
+**** TODO Read howto merge changes of branch back to trunk
+
+     decribed here:     
+     http://svnbook.red-bean.com/en/1.4/svn.branchmerge.commonuses.html
+     
+     record info here: 
+     [[file:~/oz/music/Strasheela/sourceforge-howto/svn-HOWTO.muse::Merging%20a%20Whole%20Branch%20to%20Another][file:~/oz/music/Strasheela/sourceforge-howto/svn-HOWTO.muse::Merging a Whole Branch to Another]]
+     
 
 **** TODO Check out: there was an example for which it worked already
 
      Understand orig example by Raphael
      
-     [[file:Refactor-ScoreDistribution.oz]]
+     [[file:~/oz/music/Strasheela/strasheela/branches/strasheela-randomValueOrdering/strasheela/others/TODO/Refactor-ScoreDistribution.oz]]
 
 
 **** TODO Change score solver interface in ScoreDistribution.oz so that it works for all cases 
@@ -334,13 +409,43 @@ useful for package creators and new users to test whether installation was succe
 
 * General Oz todo							    :OZ:
 
-** Oz Path								:URGENT:
 
-*** TODO Oz Path: bug commits
+** Oz Path							   :@NET:URGENT:
 
-*** TODO Oz Path: doc update
+*** TODO svn update my mozart
+
+*** TODO Incorporate my changes (see my tmp Strasheela functor) into Mozart Path functor
+
+When finished commit these changes. 
+
+Possibly, I do step-by-step commits -- but only if this does not complicate matters
+
+
+*** TODO Update Path doc 
+
+Edit the SGML files for Path functor (see comments in my tmp Strasheela functor)
+
 
 *** TODO Oz Path: test cases
+
+Decision: do simple solution: add a test file close to either Path source or its doc source
+Then report it on the Oz mailing list with request for improvement if necessary. 
+Also, somewhere in source code (and doc??) put pointer to test file. 
+
+---- 
+
+Thinking process:  
+
+There is no test suite yet for the Mozart standard library
+
+Simple solution: add a test file close to either Path source or its doc source
+
+Better but much mroe complex solution: check how test suite is done for Mozart base system and do something similar. 
+I probably need to specify test cases then with expected output -- how complex is that, as I don't know file system of computer on which test suite is run 
+
+Problem: I must fully understand how test suite is run for base system
+Problem: should that be called automatically when certain tests are executed? Where is that called 
+
 
 
 ** ozh								    :MAYBE:
@@ -373,4 +478,15 @@ Even better would be, if some wiki layout is supported (optionally). Does there 
 *** TODO Collozeum: make projects available at Mogul
 
 *** TODO ozcurl/ozjs TODO: add ozmake makefile			    :MAYBE:
+
+
+** OPI:  
+
+*** Emacs TAGS for Oz and Strasheela 
+
+this does already work in principle, but I need 'to prefix' the functor variable before each TAGS entry
+
+[[file:~/oz/music/Strasheela/strasheela/trunk/strasheela/scripts/generate-TAGS.sh::fun%20Foo%20Foo56%201566][file:~/oz/music/Strasheela/strasheela/trunk/strasheela/scripts/generate-TAGS.sh::fun Foo Foo56 1566]]
+
+
 
