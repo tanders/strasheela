@@ -34,17 +34,11 @@
 declare
 [Fenv] = {ModuleLink ['x-ozlib://anders/strasheela/Fenv/Fenv.ozf']}
 %% fixed track for MIDI output
-Track = 2 
-/** %% Accesses the y-value of MyFenv which is associated with a temporal container MyContainer. The fenv x-value 0.0 corresponds to the container start time and the fenv x-value 1.0 coresponds to the container end time. MyTime (a float) is any time between MyContainer's start and end time. MyTime is a score time measured in seconds.
-%% */
-fun {ContainerFenvY MyFenv MyContainer MyTime}
-   CStart = {MyContainer getStartTimeInSeconds($)}
-   CDur = {MyContainer getDurationInSeconds($)}
-   FenvX = (MyTime-CStart) / CDur
-in
-   {MyFenv y($ FenvX)}
-end
-
+Track = 2
+ProcessEventsAndContainers = unit(test:fun {$ X}
+					  {X isItem($)} andthen {X isDet($)}
+					  andthen {X getDuration($)} > 0
+				       end)
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -208,21 +202,17 @@ Test2 = {Score.makeScore
 		     {Out.midi.beatsPerMinuteToTempoNumber {FloatToInt {Init.getTempo}}}}]
       %% Overwrite note output
       clauses:[isNote#fun {$ MyNote}
-			 StartTime = {Out.midi.beatsToTicks
-				      {MyNote getStartTimeInSeconds($)}}
-			 EndTime = {Out.midi.beatsToTicks
-				    {MyNote getEndTimeInSeconds($)}}
 			 %% MyNote is MIDI note, so I can access its channel
 			 Channel = {MyNote getChannel($)}
  			 %% Extract record with label fenv from note's info
 			 Fenvs = {MyNote getInfoRecord($ fenvs)}
-			 %% volume output as list of CC 7 events: 10
-			 %% values between StartTime and EndTime.
-			 VolEvents = {Fenv.fenv2MidiCC Fenvs.volume 10 Track
-				      StartTime EndTime Channel cc#7}
+			 %% volume output as list of CC 7 events: 
+			 %% 10 values between start and end time of MyNote
+			 VolEvents = {Fenv.itemFenvToMidiCC Fenvs.volume 10 Track MyNote Channel
+				      cc#7}
 			 %% 100 pitchbend values are output.
-			 PBEvents = {Fenv.fenv2MidiCC Fenvs.pitchBend 100 Track
-				     StartTime EndTime Channel pitchbend}
+			 PBEvents = {Fenv.itemFenvToMidiCC Fenvs.pitchBend 100 Track MyNote Channel
+				     pitchbend}
 			 %% Create list of note-on and note-off events for MyNote 
 			 NoteEvents = {Out.midi.note2Midi MyNote unit(track:Track)}
 		      in
@@ -291,15 +281,10 @@ Test3 = {Score.makeScore
 	       fun {$ X}
 		  {X isSequential($)} andthen {X hasThisInfo($ voice)}
 	       end#fun {$ MySeq}
-		      StartTime = {Out.midi.beatsToTicks
-				   {MySeq getStartTimeInSeconds($)}}
-		      EndTime = {Out.midi.beatsToTicks
-				 {MySeq getEndTimeInSeconds($)}}
 		      %% Extract fenv record from info
 		      Fenvs = {MySeq getInfoRecord($ fenvs)}
-		      Channel = Fenvs.channel
 		   in
-		      {Fenv.fenv2MidiCC Fenvs.volume 10 Track StartTime EndTime Channel
+		      {Fenv.itemFenvToMidiCC Fenvs.volume 10 Track MySeq Fenvs.channel
 		       cc#7}
 		   end])}
 
@@ -310,8 +295,8 @@ Test3 = {Score.makeScore
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%
-%% Example 4: with time shift function stored in container as
-%% fenv. The time shift function is used from within the note output.
+%% Example 4: with time shift fenv stored in container. The time shift
+%% fenv is used from within the note output.
 %%
 %%
 
@@ -357,10 +342,7 @@ Test4 = {Score.makeScore
       %% output, but we want to process containers as well. We now
       %% consider all fully determined items with duration > 0 for
       %% output.
-      scoreToEventsArgs:unit(test:fun {$ X}
-				     {X isItem($)} andthen {X isDet($)}
-				     andthen {X getDuration($)} > 0
-				  end)
+      scoreToEventsArgs:ProcessEventsAndContainers
       %% clauses
       clauses:[isNote#fun {$ MyNote}
 			 MySeq = {MyNote getTemporalContainer($)}
@@ -370,8 +352,8 @@ Test4 = {Score.makeScore
 			 Channel = {MyNote getChannel($)}
 			 Pitch = {FloatToInt {MyNote getPitchInMidi($)}}
 			 Velocity = {FloatToInt {MyNote getAmplitudeInVelocity($)}}
-			 StartOffset = {ContainerFenvY TimeShiftF MySeq NoteStart}
-			 EndOffset = {ContainerFenvY TimeShiftF MySeq NoteEnd}
+			 StartOffset = {Fenv.itemFenvY TimeShiftF MySeq NoteStart}
+			 EndOffset = {Fenv.itemFenvY TimeShiftF MySeq NoteEnd}
 			 %% compute note start and end times 
 			 StartTime = {Out.midi.beatsToTicks NoteStart + StartOffset}
 			 EndTime = {Out.midi.beatsToTicks NoteEnd + EndOffset}
@@ -379,5 +361,151 @@ Test4 = {Score.makeScore
 			 [{Out.midi.makeNoteOn Track StartTime Channel Pitch Velocity}
 			  {Out.midi.makeNoteOff Track EndTime Channel Pitch 0}]
 		      end])}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%% Example 5: with global tempo curve fenv stored in top-level 
+%%
+%%
+
+declare
+Pitches = 60|62|64|59|{List.make 13}
+{Pattern.cycle Pitches 4}	% determines pitches
+Durs = 2|2|3|1|{List.make 13}
+{Pattern.cycle Durs 4}
+%% Tempo curve: y values in beats per minute 
+TempoF = {Fenv.linearFenv [[0.0 30.0] [1.0 120.0]]}
+Chan = 0
+Test5a = {Score.makeScore
+	 seq(info:[topLevel fenvs(tempo:TempoF channel:Chan)]
+	     items:{Map {LUtils.matTrans [Durs Pitches]}
+		    fun {$ [Dur Pitch]}
+		       note(duration:Dur
+			    pitch:Pitch
+			    amplitude:64
+			    channel:Chan)
+		    end}
+	     startTime:0
+	     timeUnit:beats(2))
+	 add(note:Out.midi.midiNote)}
+
+
+
+/*
+%% plot tempo curve
+{TempoF plot}
+*/
+
+
+
+%% Outputting the global tempo curve as MIDI tempo values.
+%% 
+%% NOTE: MIDI tempo values are stored globally in a MIDI file, some
+%% players/sequencers ignore them or load them only under specific
+%% circumstances.  For example, the Quicktime Player ignores them and
+%% Logic only loads them when a MIDI file is opened and not imported.
+{Out.midi.renderAndPlayMidiFile Test5a
+ unit(file:"Test5a"
+      %% process containers as well. 
+      scoreToEventsArgs:ProcessEventsAndContainers
+      %% clauses
+      clauses:[%% Default note output
+	       isNote#fun {$ MyNote} {Out.midi.note2Midi MyNote unit} end
+	       fun {$ X}
+		  {X isSequential($)} andthen {X hasThisInfo($ topLevel)}
+	       end#fun {$ MySeq}
+		      Fenvs = {MySeq getInfoRecord($ fenvs)}
+		   in
+		      {Fenv.itemFenvToMidiCC Fenvs.tempo 10 Track MySeq Fenvs.channel
+		       fun {$ Track Time _/*Channel*/ Value}
+			  %% implicitly, transform beats per minute to MIDI tempo value
+			  {Out.midi.makeTempo Track Time
+			   {Out.midi.beatsPerMinuteToTempoNumber Value}}
+		       end}
+		   end])}
+
+
+%%%%%%%%%%%%%%%%%%%%%
+
+declare
+Pitches = 60|62|64|59|{List.make 13}
+{Pattern.cycle Pitches 4}	% determines pitches
+Durs = 2|2|3|1|{List.make 13}
+{Pattern.cycle Durs 4}
+%% Tempo curve: y value 1 means score tempo (60 BPM), 0.5 means halve score tempo (30 BPM) etc.
+% TempoF = {Fenv.linearFenv [[0.0 0.1] [1.0 0.1]]}
+TempoF = {Fenv.linearFenv [[0.0 1.0] [1.0 1.0]]}
+%% transform the tempo curve into a time map
+%% (internally, this uses numeric integration)
+TimeMapF = {Fenv.tempoCurveToTimeMap TempoF 0.01}
+Chan = 0
+Test5b = {Score.makeScore
+	 seq(info:[topLevel fenvs(timeMap:TimeMapF channel:Chan)]
+	     items:{Map {LUtils.matTrans [Durs Pitches]}
+		    fun {$ [Dur Pitch]}
+		       note(duration:Dur
+			    pitch:Pitch
+			    amplitude:64
+			    channel:Chan)
+		    end}
+	     startTime:0
+	     timeUnit:beats(2))
+	 add(note:Out.midi.midiNote)}
+
+
+/*
+%% plot tempo curve
+{TempoF plot}
+%% plot resulting time map function
+{TimeMapF plot}
+*/
+
+
+%% Outputting the global tempo curve by adjusting the MIDI event times. 
+%% 
+{Out.midi.renderAndPlayMidiFile Test5b
+ unit(file:"Test5b"
+      scoreToEventsArgs:ProcessEventsAndContainers
+      %% clauses
+      clauses:[isNote#fun {$ MyNote}
+			 fun {PerformanceTime ScoreTime}
+			    %% NormScoreTime is in [0, 1]
+			    NormScoreTime = (ScoreTime-SeqStart) / SeqDur
+			    NormPerformanceTime = {TimeMapF y($ NormScoreTime)}
+			    PerformanceTime = NormPerformanceTime * SeqDur + SeqStart
+			 in
+			    %% BUG:
+			    %% Time values are not exact. For example,
+			    %% !! NormScoreTime \= NormPerformanceTime, as it should be for tempo=1
+			    {Browse unit(scoreTime:ScoreTime
+					 normScoreTime:NormScoreTime
+					 normPerformanceTime:NormPerformanceTime
+					 performance:PerformanceTime
+					% midi:{Out.midi.beatsToTicks PerformanceTime}
+					)}
+			    {Out.midi.beatsToTicks PerformanceTime}
+			 end
+			 MySeq = {MyNote getTemporalContainer($)}
+			 SeqStart = {MySeq getStartTimeInSeconds($)}
+			 SeqDur = {MySeq getDurationInSeconds($)}
+			 {Browse unit(seqStart:SeqStart seqDur:SeqDur)}
+			 TimeMapF = {MySeq getInfoRecord($ fenvs)}.timeMap
+			 %% 
+			 Start = {PerformanceTime {MyNote getStartTimeInSeconds($)}}
+			 End = {PerformanceTime {MyNote getEndTimeInSeconds($)}} 
+			 Channel = {MyNote getChannel($)}
+			 Pitch = {FloatToInt {MyNote getPitchInMidi($)}}
+			 Velocity = {FloatToInt {MyNote getAmplitudeInVelocity($)}}
+		      in
+			 [{Out.midi.makeNoteOn Track Start Channel Pitch Velocity}
+			  {Out.midi.makeNoteOff Track End Channel Pitch 0}]
+		      end])}
+
+
+
+%% some bug when transforming score time to performance time: tempo to high
+%% 
 
 
