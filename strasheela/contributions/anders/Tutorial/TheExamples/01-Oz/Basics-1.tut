@@ -8,7 +8,7 @@
 
 Nevertheless, this tutorial is kept brief.  The explanation of Oz focuses on aspects which are particularly important for Strasheela, and even Strasheela concepts are only briefly outlined.  In other words, it is not the intention of this tutorial to replace the extensive documentation already available on Oz, nor my thesis on Strasheela ;-)
 
-This tutorial is organised in small lessons.  After you started the interactive tutorial application, you can select the chapters in the list at the top-left of this window.  Many lessons consist of several sub-chapters, accesible via the list in the bottom-right corner.  These chapters are best studied in their order.
+This tutorial is organised in small lessons.  After you started the interactive tutorial application, you can select the chapters and sections in the list at the top-left corner of this window.  Each section consist of several subsections, accesible via the list in the bottom-left corner.  These lessons are best studied in their order.
 
 (if you are reading the tutorial in your HTML browser, of course there are no lists of lessons and chapters)
 </info>
@@ -20,12 +20,11 @@ This tutorial is organised in small lessons.  After you started the interactive 
 <info>We use a few conventions to present information in this tutorial:
 
   - `command': in the running text, code in the Oz language is formatted
-    `like this'; remove them when writing your own code. 
-    (NOTE: formatting is work in progress)
+    `like this'; remove the `quotes' when writing your own code. 
   - {...}: the {curly braces} denote a procedure in Oz; you should never
     remove them when writing your own code.
   - WARNING: explains a particularly confusing part of the Oz language.
-  - BACKGROUND: these chapters give brief explanations of generic
+  - BACKGROUND: these sections give brief explanations of generic
     concepts in Computer Science; please see them if the lesson contains
     unfamiliar terms.
 </info>
@@ -38,47 +37,58 @@ This tutorial is organised in small lessons.  After you started the interactive 
       http://www.info.ucl.ac.be/~pvr/book.html
   - The Oz documentation:
       http://www.mozart-oz.org/documentation/
-  - Wikipedia (maybe?  -I'd rather find a better resource, though) TODO
+  - Wikipedia:
+      http://www.wikipedia.org/
 </info>
 <oz></oz>
 </subsection>
 </section>
 
 <section title="Hello World and Comments">
-<subsection title="intro">
+<subsection title="Introduction">
 <info>By convention, the first steps in any programming langauge is to output the text "Hello World!".  This tutorial obeys this rule.  :)
 
-Hit the [Run] button in the bottom-left corner to execute this section.  The other chapters demonstrate alternative ways to output information:
+After you select another subsection in the bottom-left corner, hit the [Run] button to execute the code.  The first three subsections demonstrate alternate ways to output information:
 
   - Browse: opens a Browse window
-  - Show: outputs text to standard out
+  - Show: outputs text to standard out (i.e. the command-line)
   - Inspect: opens an Inspect window
 
 (the Browse and Inspect windows might be hidden behind this window)
 
 
-Oz supports line comments and block comments.  Please select each section to see how these comments differ.
+Oz supports line comments and block comments.  Please select each subsection to see how these comments differ.  (Executing these subsections does nothing, of course!)
+</info>
+<oz></oz>
+</subsection>
+<subsection title="Browse">
+<info>This will open a Browse window.
 
-(Executing these comment-chapters does nothing, of course!)</info>
-<oz>
-</oz>
+WARNING: the Browse window may be hidden behind this tutorial window.
+</info>
+<oz>{Browse 'Hello World!'}</oz>
 </subsection>
-<subsection title="Browse"><info></info><oz>{Browse 'Hello World!'}</oz>
+<subsection title="Show">
+<info>Show something at standard out (the commandline where you started
+this tutorial).
+</info>
+<oz>{Show 'Hello World!'}</oz>
 </subsection>
-<subsection title="Show"><info></info><oz>/* Show something at standard out (the commandline where you started
-this tutorial). */
+<subsection title="Inspect">
+<info>The inspector shows sometimes more information than the Browser
+(depending on the inspected value).
 
-{Show 'Hello World!'}</oz>
+WARNING: the Inspector window may be hidden behind this tutorial window.
+</info>
+<oz>{Inspect 'Hello World!'}</oz>
 </subsection>
-<subsection title="Inspect"><info></info><oz>/* The inspector shows sometimes more information than the Browser
-(depending on the inspected value).  The inspector may be hidden behind
-this tutorial.. */
-
-{Inspect 'Hello World!'}</oz>
+<subsection title="Line comment">
+<info>This example will not produce any output.</info>
+<oz>% this is a line comment</oz>
 </subsection>
-<subsection title="Line comment"><info></info><oz>% this is a line comment</oz>
-</subsection>
-<subsection title="Block comment"><info></info><oz>/*
+<subsection title="Block comment">
+<info>This example will not produce any output.</info>
+<oz>/*
 this is a
 block
 comment
@@ -87,7 +97,7 @@ comment
 </section>
 
 <section title="Calculator">
-  <subsection title="intro">
+<subsection title="intro">
 <info>This section executes simple numeric calculations and displays the result. 
   
 Try changing the calculation by using different numbers and freely combining the operators +, -, * , ~ (negation), div (integer division), mod (integer modulus) and / (float division).  You may also use parenthesis to indicate precedence.
