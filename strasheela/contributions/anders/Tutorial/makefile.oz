@@ -22,6 +22,7 @@ makefile(
 	 'TheExamples/01-Oz/ConstraintProgramming.tut'
 	 'TheExamples/02-Strasheela/MusicRepresentation.tut'
 	 'TheExamples/02-Strasheela/MusicalCSPs.tut'
+
 %	 'fromOthers/grolaux-tree-1.0/Tree.ozf'
 %	 'fromOthers/grolaux-help-1.0/Help.ozf'
 %	 'fromOthers/franzen-browsercontrol/BrowserControl.ozf'

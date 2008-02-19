@@ -22,11 +22,11 @@
 
 /** %% This functor provides an interactive tutorial for the Oz programming language and for Strasheela. Just start InteractiveTutorial.exe (e.g. at the command line).
 %%
-%% The examples (documentation and code) is all stored in the directory "./TheExamples/" (possibly in subdirectories). They are stored in *.tut files of the following XML format just (giving some example, for a formal definition see ../xml-schema/tutorial.rnc). Examples are shown in the alphabetical order of their *.tut file pathes, and in the order they are stored in the *.tut file. 
+%% The chapters (documentation and code) is all stored in the directory "./TheExamples/" (possibly in subdirectories). They are stored in *.tut files of the following XML format just (giving some example, for a formal definition see ../xml-schema/tutorial.rnc). Chapters are shown in the alphabetical order of their *.tut file pathes, and in the order they are stored in the *.tut file. 
 
 &lt;?xml version="1.0" encoding="UTF-8"?&gt;
 
-&lt;examples&gt;
+&lt;chapters&gt;
 &lt;example title="My Test 1"&gt;
 &lt;info&gt;this is a test&lt;/info&gt;
 &lt;oz&gt;{Browse hi}&lt;/oz&gt;
@@ -41,7 +41,7 @@ this
 &lt;oz title="Browse hi"&gt;{Browse hi}&lt;/oz&gt;
 &lt;oz title="Browse there"&gt;{Browse there}&lt;/oz&gt;
 &lt;/example&gt;
-&lt;/examples&gt;
+&lt;/chapters&gt;
 
 %% The *.tut files are best edited with the Emacs nxml-mode (http://thaiopensource.com/nxml-mode/). Validation, automatic completition etc. are supported for the *.tut files format: an XML schema for *.tut files is provided (in the Relax NG format) at ../xml-schema/tutorial.rnc. For the existing files, Emacs finds this schema file automatically (at least on UNIX..) due to a schemas.xml file in the respective directories.
 %%
@@ -57,23 +57,23 @@ this
 %%
 %%   * feed/browse/inspect line/region/buffer  
 %%
-%% - ???? Spead up start up: Store datastructure with all examples (i.e. what is returned by ReadExamples) as persistant value (pickle, cf. http://www.mozart-oz.org/documentation/system/node56.html#chapter.pickle).
+%% - ???? Spead up start up: Store datastructure with all chapters (i.e. what is returned by ReadChapters) as persistant value (pickle, cf. http://www.mozart-oz.org/documentation/system/node56.html#chapter.pickle).
 %%
-%%   * first do some profiling: how long does ReadExamples take: is this really the issue which slows down the start up?
+%%   * first do some profiling: how long does ReadChapters take: is this really the issue which slows down the start up?
 %%     -> always starts quickly? Is perhaps starting the compiler is issue??
 %%
-%%   * after startup read old pickled example data structure. Only in case there is no such pickle, then execute ReadExamples
+%%   * after startup read old pickled example data structure. Only in case there is no such pickle, then execute ReadChapters
 %%
-%%   * Add a menu entry: Re-Read Examples which also calls ReadExamples (i.e. the examples are stored in a cell which can be updated)
+%%   * Add a menu entry: Re-Read Chapters which also calls ReadChapters (i.e. the chapters are stored in a cell which can be updated)
 %%
 %%
 
 %%
 %% The compiler created by this functor is independent from any OZRC,
-%% and thus these examples can be tried out even if OZRC has not been
+%% and thus these chapters can be tried out even if OZRC has not been
 %% set up properly -- only a full Strasheela installation is sufficient. 
 %% Problem: this way I have no software to playback the music output...
-%% For now, just make output dir explicit in examples code and let user open output with their own app..
+%% For now, just make output dir explicit in chapters code and let user open output with their own app..
 %% Still, paths to external apps like lily and csound are still problematic. So, I should first do my output GUI before I release this..
 %%
 
@@ -90,7 +90,9 @@ import
    Parser at 'x-oz://system/xml/Parser.ozf'
    QTk at 'x-oz://system/wp/QTk.ozf'
    Application
+% not used
    Browser(browse:Browse)
+   System
    % Error
    
    LUtils at 'x-ozlib://anders/strasheela/source/ListUtils.ozf'
@@ -106,10 +108,10 @@ export
    
    %% !! Tmp for debugging
    /*
-   ReadExamples
+   ReadChapters
    ExamplesDir
    MyParser
-   GetExamples
+   GetChapters
    GetTitle
    GetOz
    GetInfo
@@ -126,12 +128,14 @@ define
 
 %   ExamplesDir = {Path.make CWD#"/../TheExamples/"}
 
-   %% List of XML files with the examples. When extending, also add new files to makefile.oz! 
-   MyExamples = {Map ['x-ozlib://anders/strasheela/Tutorial/TheExamples/01-Oz/Basics-1.tut'
+   %% List of XML files with the chapters. When extending, also add new files to makefile.oz! 
+   MyChapters = {Map [
+		      'x-ozlib://anders/strasheela/Tutorial/TheExamples/01-Oz/Basics-1.tut'
 		      'x-ozlib://anders/strasheela/Tutorial/TheExamples/01-Oz/Basics-2.tut'
 		      'x-ozlib://anders/strasheela/Tutorial/TheExamples/01-Oz/ConstraintProgramming.tut'
 		      'x-ozlib://anders/strasheela/Tutorial/TheExamples/02-Strasheela/MusicRepresentation.tut'
-		      'x-ozlib://anders/strasheela/Tutorial/TheExamples/02-Strasheela/MusicalCSPs.tut']
+		      'x-ozlib://anders/strasheela/Tutorial/TheExamples/02-Strasheela/MusicalCSPs.tut'
+		     ]
 		 fun {$ URI}
 		    {Path.make {Resolve.localize URI}.1}
 		 end}
@@ -150,26 +154,26 @@ define
       Args.toplevelH = Window
    in      
       %% show first info (set all but first list selection to false..)
-      {Args.listH set(selection:(true|{Map Args.examples.2 fun {$ X} false end}))}
-      {Args.infoH set(Args.examples.1.info)}
+      {Args.listH set(selection:(true|{Map Args.chapter.2 fun {$ X} false end}))}
+      {ChangeSection Args}
       %% 
       {Window show(wait:true)}
    end
    
    /** %% MakeInterchangeData creates a record which is interchanged by the procs of the prototyper. This record has following format.
 
-   unit(examples: &lt;list of example specs in the form unit(title:VS oz:Xs info:VS), where each oz spec is a list of records in the form oz(title:VS text:VS)&gt;
-	currentExample: &lt;cell with present example spec&gt;
-	toplevelH: &lt;top level window handle&gt;
-	listH:&lt;list object handle: shows list of example titles&gt;
-	listSelection:&lt;cell recording selection of listH&gt;
-	codeListH:&lt;list object handle: shows list of code example per example titles&gt;
-	infoH: &lt;info text widget handle&gt;
-	codeH: &lt;code text widget handle&gt;)
+   unit(chapters: &lt;list of example specs in the form unit(title:VS oz:Xs info:VS), where each oz spec is a list of records in the form oz(title:VS text:VS)&gt;
+	  currentSection: &lt;cell with present example spec&gt;
+	  toplevelH: &lt;top level window handle&gt;
+	  listH:&lt;list object handle: shows list of example titles&gt;
+	  listSelection:&lt;cell recording selection of listH&gt;
+	  codeListH:&lt;list object handle: shows list of code example per example titles&gt;
+	  infoH: &lt;info text widget handle&gt;
+	  codeH: &lt;code text widget handle&gt;)
    */
    fun {MakeInterchangeData}
-      unit(examples:{ReadExamples}
-	   currentExample: {NewCell nil}
+      unit(chapter:{ReadChapter}
+	   currentSection: {NewCell nil}
 	   %% <Something>H denotes a Gui object handle
 	   toplevelH:_
 	   listH:_
@@ -191,11 +195,11 @@ define
    /** %% Create GUI spec. This spec also contains calls to the processes defined above
    %% */
    fun {MakeGui Args}
-      unit(examples:Examples
+      unit(chapter:Chapter
 	   listH:ListH infoH:InfoH codeListH:CodeListH codeH:CodeH
 %	   dropListH:DropListH codeTitleH:CodeTitleH
 	   ...) = Args
-      Titles = {List.map Examples fun{$ unit(title:N ...)} N end}
+      Titles = {List.map Chapter fun{$ unit(title:N ...)} N end}
    in
       td(title:Title
 	 %% top interface line
@@ -227,7 +231,7 @@ define
 						   tdscrollbar:true
 						   init:Titles
 						   width:20
-						   action:proc {$} {ChangeExample Args} end))
+						   action:proc {$} {ChangeSection Args} end))
 					td(glue:nswe
 					   text(glue:nswe bg:white
 						tdscrollbar:true
@@ -238,16 +242,16 @@ define
 		       td(glue:nswe
 			  lrrubberframe(glue:nswe
 					td(glue:nswe
-					   text(glue:nswe bg:white
-						tdscrollbar:true
-						wrap:word
-						handle:CodeH))
-					td(glue:nswe
 					   listbox(glue:nswe bg:white
 						   handle:CodeListH
 						   tdscrollbar:true
 						   width:20
 						   action:proc {$} {ChangeCode Args} end))
+					td(glue:nswe
+					   text(glue:nswe bg:white
+						tdscrollbar:true
+						wrap:word
+						handle:CodeH))
 				       ))
 		      )
 	 %% buttons in bottom line  
@@ -297,19 +301,19 @@ define
 
 %    /** %% This proc is called when the revert buttom is pressed: reload possibly edited code.
 %    %% */
-%    proc {ReloadCode unit(currentExample:CurrEx codeH:CodeH ...)}
-%       MyExample = {Access CurrEx}
+%    proc {ReloadCode unit(currentSection:CurrEx codeH:CodeH ...)}
+%       MySection = {Access CurrEx}
 %    in
-%       %% MyExample is nil just after startup
-%       if MyExample\=nil
-%       then {CodeH set(MyExample.oz)}
+%       %% MySection is nil just after startup
+%       if MySection\=nil
+%       then {CodeH set(MySection.oz)}
 %       end
 %    end
    
    /** %% This proc is called when the list object was touched by user: load selected example into titleH, InfoH, and CodeH
    %% */ 
-   proc {ChangeExample Args}
-      unit(examples:Examples currentExample:CurrEx
+   proc {ChangeSection Args}
+      unit(chapter:Chapter currentSection:CurrEx
 	   toplevelH:ToplevelH
 	   listH:ListH listSelection:ListSel
 	   codeListH:CodeListH
@@ -317,25 +321,26 @@ define
       Index = {ListH get(firstselection:$)}
    in
       if Index \= 0 then
-	 MyExample = {Nth Examples Index}
-	 MyCodeTitles = {Map MyExample.oz fun {$ X} X.title end}
+	 MySection = {Nth Chapter Index}
+	 MySubSectionTitles = {Map MySection.subsections fun {$ X} X.title end}
+	 MySubSection = MySection.subsections.1
 	 %% init to first code example
       in
-	 {Assign CurrEx MyExample}
+	 {Assign CurrEx MySection}
 	 {Assign ListSel {ListH get(selection:$)}}
 	 %%
-	 {ToplevelH set(title:Title#": "#MyExample.title)}
-	 {CodeListH set(MyCodeTitles)}
+	 {ToplevelH set(title:Title#": "#MySection.title)}
+	 {CodeListH set(MySubSectionTitles)}
 	 %% select first code example
-	 {CodeH set({Nth MyExample.oz 1}.text)}
+	 {CodeH set(MySubSection.oz)}
 %	 %% users can not edit the info text, but I need to enable
 %	 %% editing before I can update this window.
 %	 {InfoH set(state:normal)}
-	 {InfoH set(MyExample.info)}
+	 {InfoH set(MySubSection.info)}
 %	 {InfoH set(state:disabled)}
       else
-	 %% just savety: Index is only 0 before list object is
-	 %% touched, but then ChangeExample was not called yet ...
+	 %% just safety: Index is only 0 before list object is
+	 %% touched, but then ChangeSection was not called yet ...
 	 {InfoH set("")}
 	 {CodeH set("")}
       end	    
@@ -343,19 +348,22 @@ define
 
    /** %% Called after user selects a code example with dropdownlist: update content of dropdownlist label and of code widget. 
    %% */
-   proc {ChangeCode unit(currentExample:CurrEx
-			 listH:ListH listSelection:ListSel
-			 codeListH:CodeListH codeH:CodeH ...)}      
+   proc {ChangeCode Args}
+      unit(chapter:Chapter currentSection:CurrEx
+	   toplevelH:ToplevelH
+	   listH:ListH listSelection:ListSel
+	   codeListH:CodeListH
+	   infoH:InfoH codeH:CodeH ...) = Args
       %% firstselection returns index of selected list element
       Index = {CodeListH get(firstselection:$)}
    in
       if Index > 0
       then
-	 MyExample = {Access CurrEx}
+	 MySection = {Access CurrEx}
+	 MySubSection = {Nth {Flatten {Record.toList MySection.subsections}} Index}
       in
-	 {CodeH set({Nth MyExample.oz Index}.text)}
-	 %% keep the present ListH selection
-	 {ListH set(selection:{Access ListSel})}
+	 {InfoH set(MySubSection.info)}
+	 {CodeH set(MySubSection.oz)}
       end
    end
 
@@ -369,7 +377,7 @@ define
    /** %% Expects a directory (VS), transforms all *.tut files of the tutorial in *.muse files and writes them into this directory. The basefile name of the *.tut files are kept, but their extension is changed to *.muse.
    %% */
    proc {OutputMuse Dir}
-      {ForAll MyExamples
+      {ForAll MyChapters
        % {CollectXMLFiles ExamplesDir}
        proc {$ PathObject}
 	  PathString = {PathObject toString($)}
@@ -386,10 +394,10 @@ define
    %% */ 
    fun {TutToMuse PathString}
       ParsedFile = {MyParser parseFile(PathString $)}
-      Examples = {LUtils.find ParsedFile
-		  fun {$ X} {Label X} == examples end}
+      Chapter = {LUtils.find ParsedFile
+		  fun {$ X} {Label X} == chapter end}
       %% title obligatory
-      Title = "#title "#{GetTitle Examples}
+      Title = "#title "#{GetTitle Chapter}
    in
       {Out.listToLines
        {Append [Title
@@ -398,18 +406,18 @@ define
 		nil
 		"* About this document\n\nThis file was automatically generated from the interactive Strasheela tutorial. Some aspects of the text only make sense in the original interactive tutorial application (e.g., buttons indicated to press, and positions specified on the screen), and not in this version of the text."
 		nil]
-	{Map {GetExamples ParsedFile}
-	 ExampleToMuse}}}
+	{Map {GetChapter ParsedFile}
+	 SectionToMuse}}}
    end
 
    /** %% Expects parsed example and outputs example in Muse format (as VS)
    %% */ 
-   fun {ExampleToMuse Example}
+   fun {SectionToMuse Section}
       %% title obligatory
-      Title = "* "#{GetTitle Example}
+      Title = "* "#{GetTitle Section}
       [info(text:InfoText
-	    title:_)] = {GetContent Example info nil}
-      OzData = {GetContent Example oz nil}
+	    title:_)] = {GetContent Section info nil}
+      OzData = {GetContent Section oz nil}
       OzAsMuse = {Map OzData
 		  fun {$ oz(text:Text
 			    title:Title)}		   
@@ -440,7 +448,7 @@ define
    
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%
-%%% Finding and reading all the examples 
+%%% Finding and reading all the chapters 
 %%%
    
 %    /** %% Recursively collect all *.tut pathes contained recursively in MyPath. 
@@ -475,23 +483,23 @@ define
 % 	 end
 %       end
 %    end
-   /** %% ["data abstraction"] expects the full parse tree of an XML file and returns the list of all examples contained in the top-level <examples> element.
+   /** %% ["data abstraction"] expects the full parse tree of an XML file and returns the list of all chapters contained in the top-level <chapters> element.
    %% */
-   fun {GetExamples FullParseTree}
-     Examples = {LUtils.find FullParseTree
-		 fun {$ X} {Label X} == examples end}
+   fun {GetChapter FullParseTree}
+      Chapter = {LUtils.find FullParseTree
+		  fun {$ X} {Label X} == chapter end}
    in
-      Examples.children
+      Chapter.children
    end
    /** %% ["data abstraction"] Returns title of example (record created by parsing the XML data)
    %% */ 
-   fun {GetTitle Example} Example.alist.title end   
+   fun {GetTitle Section} Section.alist.title end   
    /** %% ["data abstraction"] Returns content of example (record created by parsing the XML data)  of Type (either oz or info), and uses Default in case there is no content or the type does not exist.
    %% Returned is a list of records of the form Type(title:Title content:Content).
    %% NB: there is always a single info without a title, but this format is created consistently for infos and oz. GetInfo extracts the 'pure' info..
    %% */ 
-   fun {GetContent Example Type Default}
-      Xs = {Filter Example.children
+   fun {GetContent SubSection Type Default}
+      Xs = {Filter SubSection.children
 	    fun {$ X} {Label X} == Type end}
       TitleDefault = ""
    in
@@ -514,32 +522,39 @@ define
 	  end}
       end
    end
-   fun {GetInfo Example}
+   fun {GetInfo SubSection}
       %% info and oz have the same format, but I don't need multiple infos and no info title..
-      {GetContent Example info "No information available."}.1.text
+      {GetContent SubSection info "No information available."}.1.text
    end
-   fun {GetOz Example} {GetContent Example oz nil} end
+   fun {GetOz SubSection}
+      {GetContent SubSection oz nil}.1.text
+   end
    
-   /** %% Returns list of example specs in the form unit(title:VS oz:Xs info:VS), where each oz spec is a list of records in the form oz(title:VS text:VS).
+   /** %% Returns list of chapter specs in the form unit(title:VS sections:Xs), where each section spec is a SOMETHING in the form sections(title:VS subsections:Xs) and each subsection is a SOMETHING in the form subsections(title:Vs info:Vs oz:Vs).
    %% */ 
    %% efficiency: use record instead of list with example titles as feats (e.g. see loadCurFile)
-   fun {ReadExamples}
+   fun {ReadChapter}
       {Flatten
-       {Map MyExamples
+       {Map MyChapters
 	% {CollectXMLFiles ExamplesDir}
 	fun {$ XMLPath}
-	   {Map {GetExamples {MyParser parseFile({XMLPath toString($)} $)}}
-	    fun {$ Example}
-	       unit(title:{GetTitle Example}
-		    oz:{GetOz Example}
-		    info:{GetInfo Example})
-	    end}	  
+	   {Map {GetChapter {MyParser parseFile({XMLPath toString($)} $)}}
+	    fun {$ Section}
+	       unit(title:{GetTitle Section}
+		    subsections:{Map Section.children
+				 fun {$ SubSection}
+				    unit(title:{GetTitle SubSection}
+					 oz:{GetOz SubSection}
+					 info:{GetInfo SubSection})
+				 end}
+		   )
+	    end}
 	end}}
    end
    
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%
-%%% Parsing the examples (XML files) 
+%%% Parsing the chapters (XML files) 
 %%%
    
    /** %% Defines XML parser (cf. example in http://www.mozart-oz.org/documentation/mozart-stdlib/xml/parser/index.html).

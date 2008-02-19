@@ -1,42 +1,47 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<examples title="Constraint Programming">
+<chapter title="Constraint Programming">
 
-<example title="-- Constraint Programming">
-  <info>The following examples introduce the basics of constraint programming in Oz.
+<section title="-- Constraint Programming">
+  <subsection title="intro">
+<info>The following sections introduce the basics of constraint programming in Oz.
   </info>
   <oz>
-  </oz>
-</example>
+  </oz></subsection>
+</section>
 
-<example title="Constrained Variables">
+<section title="Constrained Variables">
+<subsection title="intro">
 <info>The two variables X and Y are declared to integers with a specific domain of allowed values (finite domain, FD). X is explicitly declared to an integer in {0, ..., 10}. Y is declared to any integer supported by Oz (so you see the maximum domain supported by Oz).
 
 Please note that a finite domain consists always of integers in Oz (for efficiency reasons), and that FD integers can not be negative. There are also other domains supported (e.g. sets of finite integers, and real numbers). 
 </info>
-<oz>local 
+<oz></oz></subsection>
+<subsection title="blah"><info></info><oz>local 
   X = {FD.int 0#10}
   Y = {FD.decl}
 in
   {Browse [X Y]}
-end</oz>
-</example>
+end</oz></subsection>
+</section>
 
-<example title="Constraint Propagation">
-<info>This example declares two finite domain integers as the example before. In addition, it states that X is greater than Y. The domain of both variables are automatically reduced, so that all domain values fulfill the greater-than constraint. 
+<section title="Constraint Propagation">
+<subsection title="intro">
+<info>This section declares two finite domain integers as the section before. In addition, it states that X is greater than Y. The domain of both variables are automatically reduced, so that all domain values fulfill the greater-than constraint. 
 
-However, no specific solution is shown. The next example shows how to search for solutions of a constraint satisfaction problem (CSP) in Oz.  </info>
+However, no specific solution is shown. The next section shows how to search for solutions of a constraint satisfaction problem (CSP) in Oz.  </info>
 <oz>local 
   X = {FD.int 0#10}
   Y = {FD.decl}
 in
   X &gt;: Y
   {Browse [X Y]}
-end</oz>
-</example>
+end</oz></subsection>
+</section>
 
-<example title="A Simple Script">
-  <info>This example shows the first full constraint satisfaction problem (CSP) definition. A constraint solver (here SearchAll) expects a CSP in form of a script. A script is a procedure (here an anonymous procedure) whose only argument is the solution of the solved CSP. The variable is often called the root variable of the script. Transformed into common mathematical notation, the CSP states the following conjunction
+<section title="A Simple Script">
+  <subsection title="intro">
+<info>This section shows the first full constraint satisfaction problem (CSP) definition. A constraint solver (here SearchAll) expects a CSP in form of a script. A script is a procedure (here an anonymous procedure) whose only argument is the solution of the solved CSP. The variable is often called the root variable of the script. Transformed into common mathematical notation, the CSP states the following conjunction
 
   X + Y = Z  AND  X &lt; Y
 
@@ -61,20 +66,21 @@ The distribution strategy specifies in which order variables are visited during 
      X &lt;: Y
      %% search strategy
      {FD.distribute ff Solution}
-  end}}</oz>
-</example>
+  end}}</oz></subsection>
+</section>
 
 
-<example title="Parameterised Script">
-<info>This example defines a script which expects an argument -- a parameterised script. IncreasingInts expects an integer L and returns the actual script (an anonymous procedure). This script creates a list of L finite domain integers (using FD.list). It then constrains all integers in this list to be pairwise distinct (using the constraint FD.distinct). In addition, it constrains the sum of all integers to be equal the square of L (using FD.sum). 
+<section title="Parameterised Script">
+<subsection title="intro">
+<info>This section defines a script which expects an argument -- a parameterised script. IncreasingInts expects an integer L and returns the actual script (an anonymous procedure). This script creates a list of L finite domain integers (using FD.list). It then constrains all integers in this list to be pairwise distinct (using the constraint FD.distinct). In addition, it constrains the sum of all integers to be equal the square of L (using FD.sum). 
 
-This example uses another constraint solver, the Oz Explorer. The Explorer visualises the search space. Green nodes in the tree denote solutions, red nodes represent a fail, blue nodes show a stage in the search where there are still open decisions. Triangles represent a subtree (use the middle mouse button to show the nodes of the subtree).
+This section uses another constraint solver, the Oz Explorer. The Explorer visualises the search space. Green nodes in the tree denote solutions, red nodes represent a fail, blue nodes show a stage in the search where there are still open decisions. Triangles represent a subtree (use the middle mouse button to show the nodes of the subtree).
 
-Just double-click on a node to see the values of the variables at this stage during the search process (you can not look at failed nodes, though). You can use this facility to get some intuitive understanding of the search process. For example, look first at the variable values in the root node, than in a child node of the root and in a grand-child node and so forth, to monitor how the search process shrinks the variable domains. For understanding this process please read the "Finite Domain Constraint Programming Tutorial".
+Just double-click on a node to see the values of the variables at this stage during the search process (you can not look at failed nodes, though). You can use this facility to get some intuitive understanding of the search process. For section, look first at the variable values in the root node, than in a child node of the root and in a grand-child node and so forth, to monitor how the search process shrinks the variable domains. For understanding this process please read the "Finite Domain Constraint Programming Tutorial".
 
-You may play around with the menu entries of the Oz Explorer. For example, select the top node with the mouse, then go to the 'Search' menu and select 'Next Solution'.
+You may play around with the menu entries of the Oz Explorer. For section, select the top node with the mouse, then go to the 'Search' menu and select 'Next Solution'.
 
-You may also edit the CSP definition. For example, change the value for L in the IncreasingInts call to another integer.
+You may also edit the CSP definition. For section, change the value for L in the IncreasingInts call to another integer.
 </info>
 <oz>local
    fun {IncreasingInts L}
@@ -89,10 +95,10 @@ You may also edit the CSP definition. For example, change the value for L in the
    end
 in
    {ExploreOne {IncreasingInts 7}}
-end</oz>
-</example>
+end</oz></subsection>
+</section>
 
 <!-- Proofread until here -->
 
-</examples> 
+</chapter> 
 

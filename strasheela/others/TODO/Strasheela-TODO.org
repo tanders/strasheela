@@ -308,6 +308,11 @@ See ../../testing/zy_Efficiency/KeepMusicRepresentationOutsideComputationalSpace
 
 ** Strasheela tutorial
 
+*** TODO Revise Grahams update of StrasheelaPrototyper.oz 
+
+E.g., there are a few unused variables:  Chapter, ToplevelH, ...
+
+
 *** DONE Strasheela tutorial: finish music representation 'chapter'
 *** TODO Strasheela tutorial: do music constraint programming 'chapter'
 

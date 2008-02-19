@@ -1,24 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<examples title="Musical Constraint Satisfaction Problems in Strasheela">
+<chapter title="Musical Constraint Satisfaction Problems in Strasheela">
 
-<example title="-- Music Constraint Programming">
-  <info>The following examples introduce music constraint programming with Strasheela.
+<section title="-- Music Constraint Programming">
+<subsection title="intro">
+  <info>The following sections introduce music constraint programming with Strasheela.
 
 *Please note that this part of the tutorial is still unfinished!*
   </info>
   <oz>
     
   </oz>
-</example>
+</subsection>
+</section>
 
-<example title="A Dummy Example">
-  <info>This example is extremely simple: you could easily create its result without constraint programming. Nevertheless, because it is so simple this example helps you do understand the basic structure of a typical Strasheela example.
+<section title="A Dummy Example">
+  <subsection title="intro">
+<info>This section is extremely simple: you could easily create its result without constraint programming. Nevertheless, because it is so simple this section helps you do understand the basic structure of a typical Strasheela section.
 
-The constraint script for this example is a unary procedure (as was explained above in the example "A Simple Script"). The single argument of a Strasheela constraint script is the solution score. The script creates the solution score MyScore, consisting of a sequence container with three notes, where the domain of each notes pitch is the set {60, ..., 72} (i.e., the pitches of the octave above middle c -- the pitchUnit is its default keynumber). Then the example applies the constraint that in every pair of two neighbouring notes, the pitch of the later note is higher. 
+The constraint script for this section is a unary procedure (as was explained above in the section "A Simple Script"). The single argument of a Strasheela constraint script is the solution score. The script creates the solution score MyScore, consisting of a sequence container with three notes, where the domain of each notes pitch is the set {60, ..., 72} (i.e., the pitches of the octave above middle c -- the pitchUnit is its default keynumber). Then the section applies the constraint that in every pair of two neighbouring notes, the pitch of the later note is higher. 
 
-This script is handed to a constraint solver. For convenience, Strasheela provides custom constraint solvers which resemble the standard Oz solvers, but which add special support for searching for Strasheela scores. The solver of this example is SDistro.searchOne. Like the standard solver SearchOne, SearchOne searches for a single solution, which is retured in a list. In contrast to SearchOne, however, SDistro.searchOne expects two arguments. The first argument is the script and the second argument is a specification of the search strategy (distribution strategy) to use. Here, this specification is just unit, that is, the default settings are used.</info>
-  <oz title="With comments">/* This first version of the example comes with extensive inline comments. */
+This script is handed to a constraint solver. For convenience, Strasheela provides custom constraint solvers which resemble the standard Oz solvers, but which add special support for searching for Strasheela scores. The solver of this section is SDistro.searchOne. Like the standard solver SearchOne, SearchOne searches for a single solution, which is retured in a list. In contrast to SearchOne, however, SDistro.searchOne expects two arguments. The first argument is the script and the second argument is a specification of the search strategy (distribution strategy) to use. Here, this specification is just unit, that is, the default settings are used.</info>
+<oz></oz></subsection>
+  <subsection title="With comments"><info></info><oz>/* This first version of the section comes with extensive inline comments. */
 
 local
    MyScore =
@@ -65,14 +69,14 @@ in
    {Out.renderAndPlayCsound MyScore
     unit(file:{Tk.return tk_getSaveFile}
 	 scoDir:nil soundDir:nil)}
-end</oz>
-<oz title="Without comments">/* This example is essentially the same as the previous one, but more
+end</oz></subsection>
+<subsection title="Without comments"><info></info><oz>/* This section is essentially the same as the previous one, but more
 terse. All comments are stripped out, and the notes in the score are
 not all explicitly noted. Instead, a list with all pitch variables is
 created: FD.list returns a list of FD integers (try changing the
 number of notes and the pitch variable domains..). This list is then
 transformed into note declarations using Map (Map was explained in the
-example "Higher-Order Programming"). */
+section "Higher-Order Programming"). */
 
 local
    Sol = {SDistro.searchOne
@@ -98,13 +102,14 @@ in
     unit(file:{Tk.return tk_getSaveFile}
 	 scoDir:nil soundDir:nil)}
 end  
-</oz>
-</example>
+</oz></subsection>
+</section>
 
 <!-- unfinished from here -->
 
-<example title="A Real Example">
-  <info>[Note: unfinished]
+<section title="A Real Example">
+  <subsection title="intro">
+<info>[Note: unfinished]
 
 The Explorer has been extended for outputting Strasheela scores into various formats. 
 
@@ -146,76 +151,87 @@ Note for developer: output dir is always default (ie. /tmp) and this can not be 
     {List.last Pitches} \=: MaxPitch
     {List.last Pitches} \=: MinPitch
  end
- unit(value:random)}</oz>
-</example>
+ unit(value:random)}</oz></subsection>
+</section>
 
 
-<example title="Score Distribution Strategies">
-  <info>Show how to use various predefined score distribution strategies. 
+<section title="Score Distribution Strategies">
+  <subsection title="intro">
+<info>Show how to use various predefined score distribution strategies. 
 
 One of Strasheela's major strength is that it allows you to define your own score distribution strategies -- optimised for your specific musical CSP. Although the definition of score distribution strategies is beyond this tutorial, it is already discussed in detail in the thesis "Composing Music by Composing Rules: Design and Usage of a Generic Music Constraint System", Chap. 7 (http://strasheela.sourceforge.net/documents/TorstenAnders-PhDThesis.pdf). This chapter also points to further relevant Oz documentation. 
   </info>
   <oz>    
-  </oz>
-</example>
+  </oz></subsection>
+</section>
 
 
-<example title="Structuring complex CSPs">
-  <info>Decomposing a CSP into modular definitions which create parts of the score and define compositional rules. 
+<section title="Structuring complex CSPs">
+  <subsection title="intro">
+<info>Decomposing a CSP into modular definitions which create parts of the score and define compositional rules. 
   </info>
   <oz>    
-  </oz>
-</example>
+  </oz></subsection>
+</section>
 
 
-<example title="Rule Applicators">
-  <info>Defining and Applying Abstracted Rules ..
+<section title="Rule Applicators">
+  <subsection title="intro">
+<info>Defining and Applying Abstracted Rules ..
   </info>
   <oz>    
-  </oz>
-</example>
+  </oz></subsection>
+</section>
 
 
 
-<example title="Deriving Information as Variable">
-  <info>Creating variables on the fly..
+<section title="Deriving Information as Variable">
+  <subsection title="intro">
+<info>Creating variables on the fly..
 
 Also show Memoization?
   </info>
   <oz>    
-  </oz>
-</example>
+  </oz></subsection>
+</section>
 
-<example title="?? Pattern Constraints">
+<section title="?? Pattern Constraints">
+<subsection title="intro">
   <info>
   </info>
   <oz>    
-  </oz>
-</example>
+  </oz></subsection>
+</section>
 
 
-<example title="Constraining Inaccessible Score Contexts">
+<section title="Constraining Inaccessible Score Contexts">
+<subsection title="intro">
   <info>two ways: delayed constraint application and reified constraint
 
 third way: redefine your CSP
   </info>
   <oz>    
-  </oz>
-</example>
+  </oz></subsection>
+</section>
 
 
-<example title="Modelling Soft Constraints">
-  <info>
+<section title="Modelling Soft Constraints">
+  <subsection title="intro">
+<info>
   </info>
   <oz>    
-  </oz>
-</example>
+  </oz></subsection>
+</section>
 
 
-<example title="Reified Constraints as Boolean Test">
-  <info> Test: find simultaneous notes. Problem: temporal structure is only partially determined. 
+<section title="Reified Constraints as Boolean Test">
+  <subsection title="intro">
+<info> Test: find simultaneous notes. Problem: temporal structure is only partially determined. 
   </info>
-  <oz title="Using plain test">    
+<oz></oz>
+</subsection>
+  <subsection title="Using plain test">
+<info></info><oz>
 %% Using the plain boolean test isSimultaneousItem (i.e., a method returning either true or false) blocks until the temporal structure is fully determined
 
 local
@@ -241,8 +257,9 @@ in
 			     {Note1 isSimultaneousItem($ X)}
 			  end)}}
 end
-  </oz>
-  <oz title="">
+  </oz></subsection>
+<subsection title="wrong">
+<info></info><oz>
 %% Wrong approach: first testing whether items are determined before using isSimultaneousItem does not block, but notes which are potentially simultaneous are ignored
 
 local
@@ -270,8 +287,9 @@ in
 			  end)}}
 end
      
-  </oz>
-  <oz title="">    
+  </oz></subsection>
+  <subsection title="good">
+<info></info><oz>    
 %% Suitable approach: using reified constraint together with an equality check as a boolean test
 
 local
@@ -305,18 +323,19 @@ in
 {Note2 getDuration($)} = 4
 % {Seq1 getDuration($)} = 1
 end
-  </oz>
-</example>
+  </oz></subsection>
+</section>
 
 
 
 
-<example title="More Information">
-  <info>This tutorial provided an overview of important Strasheela concepts and demonstrated them with many examples. It concludes with references to further Strasheela documentation. 
+<section title="More Information">
+<subsection title="intro">
+<info>This tutorial provided an overview of important Strasheela concepts and demonstrated them with many sections. It concludes with references to further Strasheela documentation. 
 
 The fundamental concepts and the design of Strasheela is detailed in my thesis "Composing Music by Composing Rules: Design and Usage of a Generic Music Constraint System" (http://strasheela.sourceforge.net/documents/TorstenAnders-PhDThesis.pdf). This text also compares Strasheela carefully with other similar systems. 
 
-The examples in this tutorial are all rather short and explain only specific matters. More elaborated examples can be found at strasheela/doc/StrasheelaExamples.html. 
+The sections in this tutorial are all rather short and explain only specific matters. More elaborated sections can be found at strasheela/doc/StrasheelaExamples.html. 
 
 This tutorial gave an overview of various Strasheela functionality. The Strasheela reference documentation at strasheela/doc/StrasheelaReference.html (hopefully) explains every Strasheela construct (procedure, class, ...) in detail. In addition, the usage of most Strasheela constructs is also demonstrated in several test cases in Strasheela's test files. The test files for the Strasheela core are situated in strasheela/testing/. 
 
@@ -331,11 +350,11 @@ Have fun with Strasheela!
 Torsten Anders
   </info>
   <oz>    
-  </oz>
-</example>
+  </oz></subsection>
+</section>
 
 
 
 
-</examples>
+</chapter>
 
