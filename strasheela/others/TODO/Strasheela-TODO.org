@@ -1,6 +1,4 @@
 
-
-
 * Strasheela examples						    :STRASHEELA:
 
 ** Add new Fenv examples to [[file:~/oz/music/Strasheela/strasheela/trunk/strasheela/examples/ContinuousControllersInScore-MidiOutput.oz]]      :NEXT:
@@ -78,29 +76,11 @@ Wait for tempo curve related code to be finished...
   succession without an intervening 16th note pause. Always in a higher
   harmony to voice one. Still within the note range. Always the same duration
   and velocity as voice one.
-  
-
-** TODO Groove templates					    :MAYBE:
-
-  an example for Olle Romo
-  see description in strasheeela support tracker
-https://sourceforge.net/tracker/index.php?func=detail&aid=1883454&group_id=167225&atid=842099
-
-
-** TODO Inventio example					    :MAYBE:
-
-*** harmonic etc analysis of inventio 1
-
-*** Inventio B: Fuege "BrainImage Data" in CSP ein
-
-?? As parameter or info for motif?
-
-Abstract applied constraint, so the effect is controllable
 
 
 ** TODO Muzak Beispiel mit Kilian 
 
-
+   
 * Strasheela design						    :STRASHEELA:
 
 ** Time curves etc [[file:~/oz/music/Strasheela/private/examples/forOlleRomo/TempoCurves-etc.oz][TempoCurves-etc.oz]] 					  :NEXT:
@@ -135,19 +115,6 @@ e.g., extend music representation, but perhaps there are more simple ways
 Design CSP template / abstractions with which I can model soft constraints by reified constraints and rate them in importance. A best-solution-search will find an optimal solution 
 
 
-
-** TODO Oz Module.link / Module.apply: why did I need it	    :MAYBE:
-
-See ~/oz/music/Strasheela/private/test/OtherFunctors/ModuleLinkingTest
-
-why did I ever need ModuleLink instead of Module.link?
-
-Could it be that the problem appeared only when a buffer which loaded some module was re-fed? 
-Isn't this a situation which is perfectly normal when you work with multiple non-functor files in the OPI? Shouldn't the default module manager in the OPI behave like the default module manager for functor compilation (which is only a single one, even if called in multiple files -- so no multiple copies of functors/modules are created)
-
-
-
-** TODO OutGUI							    :MAYBE:
 
 ** TODO 1W Refactor harmony model
 
@@ -210,11 +177,6 @@ How does communication of data structure slow down the process?
 Lilypond export outputs only rather old version. Meanwhile, Lilypond handles nested scores (quasi sim/seq containers) better than old version, but behaviour of old version is pertained when using Lily's conversion script. So, I should update my Lily output to a more Lily syntax version
 
 
-** TODO NonmensuralENP->MensuralENP as Lisp def			    :MAYBE:
-
-see Strasheela/private/WorkInProgress/NonmensuralENP->mensuralENP 
-
-
 ** TODO add a score transformation with allows to restructure a Strasheela score hierarchy in a highle generic wasy (e.g. for outputting the fixed hierarchies of ENP-notation, Lilypond, MIDI...)
 
    - it would be great if in a transformed and more flat representation the info on the previous hierarchic representation is still retained (e.g. added to item info: 'begin(<marker>)' and 'end(<marker>)'). When the more flat representation is then output (e.g. to lilypond, ENP-notation or MIDI), these markers could be used to somehow retain the old nesting in the output format (e.g. to draw analysis brackets in Lilypond or ENP, or as text events in MIDI out). When the output music is edited, it could later perhaps be loaded into Strasheela again and the old hierarchy could be restored??
@@ -247,47 +209,6 @@ E.g., I could use a method filterThreaded for a better definition of getSimultan
      object as arg.
 
   - refactor Lilypond output to use the (still to program) score transformation with allows to restructure a Strasheela score hierarchy
-
-*** TODO Output to lilypond etc: make extension for outputting specific score information (more) reusable :MAYBE:
-
-E.g. for outputting information such as meter, key, motif boundaries... 
-
-
-*** TODO !!?? Some means to define rules in a more modular/generic way -- currently, e.g., more complex counterpoint rules, can not be used in other CSP as they rely on the specific score representation (e.g. extensions to Note) :MAYBE:
-
-  -> Better solution: use memoization instead of extending the music representation ad hoc
-  However, memoization can be computationally expensive
-
-*** TODO toInitRecord: further cleanup				    :MAYBE:
-
-
-**** toInitRecord: what to do with init args which get procedures or classes (e.g. classes of harmony model)?
-
-     %% I must exclude procedures and classes as init argument if I export into text files.
-     %% Moreover, these will probably not work for pickling: can I pickle a proc which references an object??
-     %%
-     %% ?? when do I need procedures and classes as init argument: if I what to recreate a CSP (e.g. after hand-editing results). I probably don't need these args for score objects which are fully determined and are only archived..
-
-
-**** Add correct cases to toInitRecord defs for classes such as HS.score.note etc which expect procedures as init args. I may filter out these args with excluded..
-
-**** use output of toInitRecord together with init classes for saving of score instances into pickles
-     
-  ?? also output into text file with specified classes: I can introduce a "dictionary" which maps classes to their textual representation...
-    
-   -> this todo item is probably outdated already: cf. Out.saveScore
-
-*** TODO Music representation consistency: so far, I used class attributes for object parameters etc. However, for the quick definition of subclasses with Score.makeClass I introduced stateless class features for additional parameters etc. This is neither consistent in the class usage (use of different accessors like {X getA} and Y.b) nor does it allow for later score editors.. :MAYBE:
-
-*** TODO ?? remove toPPrintRecord and replace it with highly generic toFullRecord? :MAYBE:
-    sorted mainly already?
-    OLD: toPPrintRecord: output graph mode using IDs similar to input of MakeScore
-
-*** TODO ?? add textual representation of parameters: currently, parameters are not supported my Score.makeScore :MAYBE:
-
-    should I add parameter support at all? Score.makeScore _does_ work on note-level. I would only need to create single params, e.g., for item init arg addParameters
-
-
 
 ** Efficiency
 
@@ -391,14 +312,9 @@ See ../../testing/zy_Efficiency/KeepMusicRepresentationOutsideComputationalSpace
 *** TODO Strasheela tutorial: do music constraint programming 'chapter'
 
 *** TODO Email Tobias Kunze: CM CSS verwendet...
+
+
 * Strasheela installation					    :STRASHEELA:
-
-** TODO [#A] Create test program (executable) which tests a few core Strasheela functionalities and reports results at stdout to the user 		              :MAYBE:
-
-useful for package creators and new users to test whether installation was successful
-
-
-** TODO [#C] ?? Define Oz GUI application for creating an OZRC file: pathes for applications and directories are then specified in a GUI                             :MAYBE:
 
 
 * Collecting new ideas
@@ -448,30 +364,6 @@ Problem: should that be called automatically when certain tests are executed? Wh
 
 
 
-** ozh								    :MAYBE:
-
-*** ozh: add SGML doc
-
-the orig documentation source files for creating, e.g., the HTML doc are still missing in our branch
-
-I meanwhile checked -- it appears this file is not available any more online
-
-
-*** TODO ?? ozh: add TODO list to wiki
-
-  - better file names for resulting HTML files, and better anchor names (make them persistent): see below
-  - better/more flexible layout of doc strings (see below) 
-  
-*** TODO ozh: update save file and anchor names 
-
-File names and anchor names should be generated from source entries (e.g., file names, class names) instead of generic names like node1.html or class1.html where links from elsewhere into the documentation get if files etc. are added to the source later
-
-*** TODO ozh: Formatting of documentation strings 
-
-The current implementation does not even preserve whitespace after a new line in doc strings. Consequently, the layout of code examples is destroyed.
-
-Even better would be, if some wiki layout is supported (optionally). Does there exist some easy wiki-layout -> HTML application (expecting wikified text snippets and returning corresponding HTML code snippets).   
-
 
 ** Collozeum
 
@@ -487,6 +379,7 @@ Even better would be, if some wiki layout is supported (optionally). Does there 
 this does already work in principle, but I need 'to prefix' the functor variable before each TAGS entry
 
 [[file:~/oz/music/Strasheela/strasheela/trunk/strasheela/scripts/generate-TAGS.sh::fun%20Foo%20Foo56%201566][file:~/oz/music/Strasheela/strasheela/trunk/strasheela/scripts/generate-TAGS.sh::fun Foo Foo56 1566]]
+
 
 
 
