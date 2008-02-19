@@ -97,31 +97,39 @@ comment
 </section>
 
 <section title="Calculator">
-<subsection title="intro">
+<subsection title="Introduction">
 <info>This section executes simple numeric calculations and displays the result. 
   
 Try changing the calculation by using different numbers and freely combining the operators +, -, * , ~ (negation), div (integer division), mod (integer modulus) and / (float division).  You may also use parenthesis to indicate precedence.
   
 You can use integers (e.g. 3, 7) and floats (e.g. 1.0, 3.14).  However, you can not directly mix integers and floats in a calculation (in that case, an error will be printed at the command line).</info>
 <oz></oz></subsection>
-  <subsection title="Integer section 1"><info></info><oz>{Browse 3+4}</oz></subsection>
-  <subsection title="Integer section 2"><info></info><oz>%% ~ is the negation sign
-{Browse ~7 * 5}</oz></subsection>
-  <subsection title="Integer section 3"><info></info><oz>{Browse (4 + 2) div 2}</oz></subsection>
-  <subsection title="Float section 1"><info></info><oz>{Browse 3.0 / ~2.0}</oz></subsection>
-<subsection title="Float section 2"><info></info><oz>/* A float is converted into the closest integer
-with the function FloatToInt (in case two integers are equally close it rounds
-to the closest even integer).  There is also a function IntToFloat. */
+<subsection title="Integers (simple)">
+<info>Simple math</info>
+<oz>{Browse 3+4}</oz></subsection>
+<subsection title="Integers (negative)">
+<info>Oz uses `~' to denote a negative number.</info>
+<oz>{Browse ~7 * 5}</oz></subsection>
+<subsection title="Integers (more)">
+<info>Parentheses may be used to nest calculations.</info>
+<oz>{Browse (4 + 2) div 2}</oz></subsection>
 
-{Browse {FloatToInt 3.5}}</oz></subsection>
-  <subsection title="Float section 3"><info></info><oz>%% many other numeric functions are available for floats,
-%% e.g., Exp, Log, Sin, Cos...
-{Browse {Sqrt 9.0}}</oz></subsection>
+<subsection title="Floats (simple)">
+<info>Simple math</info>
+<oz>{Browse 3.0 / ~2.0}</oz></subsection>
+<subsection title="Floats (converting)">
+<info>A float is converted into the closest integer with the function `FloatToInt' (in case two integers are equally close it rounds to the closest even integer).  There is also a function IntToFloat.
+</info>
+<oz>{Browse {FloatToInt 3.5}}</oz></subsection>
+<subsection title="Floats (more)">
+<info>There are many other numeric functions are available for floats, e.g., Exp, Log, Sin, Cos...
+</info>
+<oz>{Browse {Sqrt 9.0}}</oz></subsection>
 </section>
 
 <section title="Variables">
-  <subsection title="intro">
-<info>All variables in Oz must start with a capital letter.  They must be declared first, for section, with the keyword `local'.
+<subsection title="Introduction">
+<info>All variables in Oz must start with a capital letter.  Most variables will be declared with the keyword `local', and are valid for the relevant scope.
 
 Global variables can be introduced with the keyword `declare'.  However, global variables are intended for testing and are not supported in this tutorial application.
 
@@ -129,18 +137,18 @@ WARNING: Oz variables are single assignment variables.  If you do not have exper
 
 Rewritable data storage is also supported by Oz; the simplest form are called Cells.  Other types of stateful data include arrays, directories, and objects, but we shall not cover them in this tutorial.</info>
 <oz></oz></subsection>
-  <subsection title="Variable declaration"><info></info><oz>local
+<subsection title="Variable declaration">
+<info>Local variables are declared with `local'.</info>
+<oz>local
    X = 1 + 1
    Y
 in
    Y = 3
    {Browse X*Y}
 end</oz></subsection>
-<subsection title="Variable scope"><info></info><oz>/* Local statements can be freely nested (like
-virtually everything in Oz).  Oz supports static or lexical scope
-(i.e. a variable always refers to its nearest enclosing binding). */
-
-local
+<subsection title="Variable scope">
+<info>`local' statements can be freely nested (like virtually everything in Oz).  Oz supports static or lexical scope (i.e. a variable always refers to its nearest enclosing binding).</info>
+<oz>local
    X = 3
 in
   local 
@@ -152,21 +160,20 @@ in
   %% later, browse original X 
   {Browse X}
 end</oz></subsection>
-<subsection title="A variable can be unbound"><info></info><oz>/* Watch the Browser: X is first unbound (_ is displayed).
-X is bound to 3 after 2000 msec. */
-
-local
+<subsection title="A variable can be unbound">
+<info>Watch the Browser: X is first unbound (_ is displayed).  After 3 seconds, X is bound to 3.</info>
+<oz>local
    X 
 in
    {Browse X}
    {Delay 2000}
    X = 3
 end</oz></subsection>
-<subsection title="Cells"><info></info><oz>/* Cells provide rewritable memory for values.
-WARNING: The syntax for reading and writing to cells is different than
-the syntax for variables.
-*/
-local
+<subsection title="Cells">
+<info>Cells provide rewritable memory for values.
+
+WARNING: The syntax for reading and writing to cells is different than the syntax for variables.</info>
+<oz>local
   C = {NewCell 0}  % create new cell with initial value 0 
   V
 in
@@ -178,8 +185,8 @@ in
   {Browse V}
 end
 </oz></subsection>
-<subsection title="BACKGROUND"><info></info><oz>/*
-TODO Torsten: revise terminology
+<subsection title="BACKGROUND">
+<info>TODO Torsten: revise terminology
 
 Terms: single assignment, logic variable, bound/determined variables,
 unbound/free variables, local variables, global variables.
@@ -200,34 +207,32 @@ Reading:
 
   - van Roy and Haridi, Chap. 1-2 (in particular Sec. 1.2, and 2.2).
   - Oz Tutorial, Chap. 3, introduction
-*/
-</oz></subsection>
+</info>
+<oz></oz></subsection>
 </section>
 
 <section title="If">
-<subsection title="intro">
+<subsection title="Introduction">
 <info>Oz provides the usual `if' control structure.  Note that unlike many programming languages, parenthesis () are not required around the condition, althought they may make the code easier to read.
 
 Please note that the `if' control structure can also be used as an expression which returns a value from the `then' or `else' clause.
 </info>
 <oz></oz></subsection>
-<subsection title="if ... else ... end"><info></info><oz>%% try changing 2 to 6... 
-
-if (2 &lt; 5) then
+<subsection title="if ... else ... end">
+<info>Try changing 2 to 6.</info>
+<oz>if (2 &lt; 5) then
     {Browse less}
 else
     {Browse more}
 end</oz></subsection>
-<subsection title="if ... end"><info></info><oz>/* The `else' clause is optional. This section does nothing, but try
-changing `==' to `\=.' The operations `==' and `\=' test equality and
-inequality of values. */
-
-if (this == that) then
+<subsection title="if ... end">
+<info>The `else' clause is optional. This section does nothing, but try changing `==' to `\=.' The operations `==' and `\=' test equality and inequality of values.</info>
+<oz>if (this == that) then
     {Browse hi}
 end</oz></subsection>
-<subsection title="if as an expression"><info></info><oz>%% This `if' returns a value, which is browsed.
-
-{Browse 
+<subsection title="if as an expression">
+<info>This `if' returns a value, which is browsed.</info>
+<oz>{Browse 
  if (2 &lt; 5) then less else more end}</oz></subsection>
 </section>
 
