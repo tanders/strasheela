@@ -12,8 +12,7 @@ This tutorial is organised in small lessons.  After you started the interactive 
 
 (if you are reading the tutorial in your HTML browser, of course there are no lists of lessons and chapters)
 </info>
-<oz>
-</oz>
+<oz></oz>
 </subsection>
 
 <subsection title="Conventions">
@@ -30,6 +29,7 @@ This tutorial is organised in small lessons.  After you started the interactive 
 </info>
 <oz></oz>
 </subsection>
+
 <subsection title="BACKGROUND"><info>For explanations about general concepts, see:
 
   - van Roy and Haridi (2004). Concepts, Techniques, and Models of
@@ -61,6 +61,7 @@ Oz supports line comments and block comments.  Please select each subsection to 
 </info>
 <oz></oz>
 </subsection>
+
 <subsection title="Browse">
 <info>This will open a Browse window.
 
@@ -68,12 +69,14 @@ WARNING: the Browse window may be hidden behind this tutorial window.
 </info>
 <oz>{Browse 'Hello World!'}</oz>
 </subsection>
+
 <subsection title="Show">
 <info>Show something at standard out (the commandline where you started
 this tutorial).
 </info>
 <oz>{Show 'Hello World!'}</oz>
 </subsection>
+
 <subsection title="Inspect">
 <info>The inspector shows sometimes more information than the Browser
 (depending on the inspected value).
@@ -82,10 +85,12 @@ WARNING: the Inspector window may be hidden behind this tutorial window.
 </info>
 <oz>{Inspect 'Hello World!'}</oz>
 </subsection>
+
 <subsection title="Line comment">
 <info>This example will not produce any output.</info>
 <oz>% this is a line comment</oz>
 </subsection>
+
 <subsection title="Block comment">
 <info>This example will not produce any output.</info>
 <oz>/*
@@ -102,29 +107,42 @@ comment
   
 Try changing the calculation by using different numbers and freely combining the operators +, -, * , ~ (negation), div (integer division), mod (integer modulus) and / (float division).  You may also use parenthesis to indicate precedence.
   
-You can use integers (e.g. 3, 7) and floats (e.g. 1.0, 3.14).  However, you can not directly mix integers and floats in a calculation (in that case, an error will be printed at the command line).</info>
-<oz></oz></subsection>
+You can use integers (e.g. 3, 7) and floats (e.g. 1.0, 3.14).  However, you can not directly mix integers and floats in a calculation (in that case, an error will be printed at the command line).
+</info>
+<oz></oz>
+</subsection>
+
 <subsection title="Integers (simple)">
 <info>Simple math</info>
-<oz>{Browse 3+4}</oz></subsection>
+<oz>{Browse 3+4}</oz>
+</subsection>
+
 <subsection title="Integers (negative)">
 <info>Oz uses `~' to denote a negative number.</info>
-<oz>{Browse ~7 * 5}</oz></subsection>
+<oz>{Browse ~7 * 5}</oz>
+</subsection>
+
 <subsection title="Integers (more)">
 <info>Parentheses may be used to nest calculations.</info>
-<oz>{Browse (4 + 2) div 2}</oz></subsection>
+<oz>{Browse (4 + 2) div 2}</oz>
+</subsection>
 
 <subsection title="Floats (simple)">
 <info>Simple math</info>
-<oz>{Browse 3.0 / ~2.0}</oz></subsection>
+<oz>{Browse 3.0 / ~2.0}</oz>
+</subsection>
+
 <subsection title="Floats (converting)">
 <info>A float is converted into the closest integer with the function `FloatToInt' (in case two integers are equally close it rounds to the closest even integer).  There is also a function IntToFloat.
 </info>
-<oz>{Browse {FloatToInt 3.5}}</oz></subsection>
+<oz>{Browse {FloatToInt 3.5}}</oz>
+</subsection>
+
 <subsection title="Floats (more)">
 <info>There are many other numeric functions are available for floats, e.g., Exp, Log, Sin, Cos...
 </info>
-<oz>{Browse {Sqrt 9.0}}</oz></subsection>
+<oz>{Browse {Sqrt 9.0}}</oz>
+</subsection>
 </section>
 
 <section title="Variables">
@@ -135,8 +153,11 @@ Global variables can be introduced with the keyword `declare'.  However, global 
 
 WARNING: Oz variables are single assignment variables.  If you do not have experience with functional or logic programming languages, we highly recommend reading the background section!  Variables may be bound to a value, or may be left unbound or even partially bound (for compound data types such as lists).  However, their value can never be changed! 
 
-Rewritable data storage is also supported by Oz; the simplest form are called Cells.  Other types of stateful data include arrays, directories, and objects, but we shall not cover them in this tutorial.</info>
-<oz></oz></subsection>
+Rewritable data storage is also supported by Oz; the simplest form are called Cells.  Other types of stateful data include arrays, directories, and objects, but we shall not cover them in this tutorial.
+</info>
+<oz></oz>
+</subsection>
+
 <subsection title="Variable declaration">
 <info>Local variables are declared with `local'.</info>
 <oz>local
@@ -145,7 +166,9 @@ Rewritable data storage is also supported by Oz; the simplest form are called Ce
 in
    Y = 3
    {Browse X*Y}
-end</oz></subsection>
+end</oz>
+</subsection>
+
 <subsection title="Variable scope">
 <info>`local' statements can be freely nested (like virtually everything in Oz).  Oz supports static or lexical scope (i.e. a variable always refers to its nearest enclosing binding).</info>
 <oz>local
@@ -159,7 +182,9 @@ in
   end
   %% later, browse original X 
   {Browse X}
-end</oz></subsection>
+end</oz>
+</subsection>
+
 <subsection title="A variable can be unbound">
 <info>Watch the Browser: X is first unbound (_ is displayed).  After 3 seconds, X is bound to 3.</info>
 <oz>local
@@ -168,7 +193,9 @@ in
    {Browse X}
    {Delay 2000}
    X = 3
-end</oz></subsection>
+end</oz>
+</subsection>
+
 <subsection title="Cells">
 <info>Cells provide rewritable memory for values.
 
@@ -184,7 +211,9 @@ in
   V = @C
   {Browse V}
 end
-</oz></subsection>
+</oz>
+</subsection>
+
 <subsection title="BACKGROUND">
 <info>TODO Torsten: revise terminology
 
@@ -208,7 +237,8 @@ Reading:
   - van Roy and Haridi, Chap. 1-2 (in particular Sec. 1.2, and 2.2).
   - Oz Tutorial, Chap. 3, introduction
 </info>
-<oz></oz></subsection>
+<oz></oz>
+</subsection>
 </section>
 
 <section title="If">
@@ -217,55 +247,58 @@ Reading:
 
 Please note that the `if' control structure can also be used as an expression which returns a value from the `then' or `else' clause.
 </info>
-<oz></oz></subsection>
+<oz></oz>
+</subsection>
+
 <subsection title="if ... else ... end">
 <info>Try changing 2 to 6.</info>
 <oz>if (2 &lt; 5) then
     {Browse less}
 else
     {Browse more}
-end</oz></subsection>
+end</oz>
+</subsection>
+
 <subsection title="if ... end">
 <info>The `else' clause is optional. This section does nothing, but try changing `==' to `\=.' The operations `==' and `\=' test equality and inequality of values.</info>
 <oz>if (this == that) then
     {Browse hi}
-end</oz></subsection>
+end</oz>
+</subsection>
+
 <subsection title="if as an expression">
 <info>This `if' returns a value, which is browsed.</info>
 <oz>{Browse 
- if (2 &lt; 5) then less else more end}</oz></subsection>
+ if (2 &lt; 5) then less else more end}</oz>
+</subsection>
 </section>
 
 
 <section title="Procedure and Functions">
-  <subsection title="intro">
+<subsection title="Introduction">
 <info>Procedures and functions are the standard means for expressing a collection of computations in a single entity.  Examples range from numeric computations to commands involving the operating system.  For section, we have already seen a number of numeric operations expressed by the common infix notation.
 
 WARNING: curly braces {...} must surround a function or a procedure call.  This syntax for procedure/function application is rather unusual when compared with other programming languages, but it is also unambiguous. 
 
 In Oz, procedures are the fundamental concept.  Functions are just a syntactic variant of procedures, added for convenience.  The main difference between functions and procedures is that functions are procedures which always returns exactly one value.  Procedures do not necessarily return anything.
 
-More specifically, a function is a procedure whose last argument -- the return value -- is expressed implicitly.  Every function may be called like a procedure by adding this return value explicitly.  In addition, any procedure can also be called as a function which returns its omitted last argument. 
-  </info>
-<oz></oz></subsection>
+More specifically, a function is a procedure whose last argument -- the return value -- is expressed implicitly.  Every function may be called like a procedure by adding this return value explicitly.  In addition, any procedure can also be called as a function which returns its omitted last argument.
+</info>
+<oz></oz>
+</subsection>
 
-  <subsection title="Usage"><info></info><oz>/* Procedure `Browse' is called with the result of function `IsEven'.
-`IsEven' expects one integer as an argument, and returns true or false.
-`Browse' expects one argument (any variable type), and returns nothing.
-*/
-
-{Browse
+<subsection title="Usage">
+<info>The procedure `Browse' is called with the result of function `IsEven'.  `IsEven' expects one integer as an argument, and returns true or false.  `Browse' expects one argument (any variable type), and returns nothing.</info>
+<oz>{Browse
  {IsEven 3}
-}</oz></subsection>
+}</oz>
+</subsection>
 
-<subsection title="Defining Max: procedure"><info></info><oz>/* The procedure Max gets two numbers as its first two arguments and
-binds its last argument to the greater number.
+<subsection title="Defining Max: procedure">
+<info>The procedure `Max' gets two numbers as its first two arguments and binds its last argument to the greater number.
 
-WARNING: the variable X in the Max definition and the variable X
-outside are different variables (cf.  variable scope above).
-*/
-
-local
+WARNING: the variable X in the Max definition and the variable X outside are different variables (cf.  variable scope above).</info>
+<oz>local
   %% procedure definition
   proc {Max X Y Z}
      if X >= Y then Z = X else Z = Y end 
@@ -275,15 +308,14 @@ in
   %% procedure application
   {Max 4 3 X}
   {Browse X}
-end</oz></subsection>
-<subsection title="Defining Max: function"><info></info><oz>/* As mentioned above, a function in Oz is a procedure which returns
-its last value.  Functions are just "syntactic sugar", added for
-programming convenience.
+end</oz>
+</subsection>
 
-This Max function is equivalent to the Max procedure of the previous section.
-*/
+<subsection title="Defining Max: function">
+<info>As mentioned above, a function in Oz is a procedure which returns its last value.  Functions are just "syntactic sugar", added for programming convenience.
 
-local
+This Max function is equivalent to the Max procedure of the previous section.</info>
+<oz>local
   %% function definition
   fun {Max X Y}
      if X >= Y then X else Y end 
@@ -293,10 +325,12 @@ in
   %% function application
   X = {Max 4 3}
   {Browse X}
-end</oz></subsection>
+end</oz>
+</subsection>
 
-  <subsection title="Functions are procedures"><info></info><oz>%% Since functions are procedures, we can treat them just like procedures.
-local
+<subsection title="Functions are procedures">
+<info>Since functions are procedures, we can treat them just like procedures.</info>
+<oz>local
   %% function definition
   fun {Max X Y}
      if X >= Y then X else Y end 
@@ -306,45 +340,43 @@ in
   %% function application like a procedure
   {Max 4 3 X}
   {Browse X}
-end</oz></subsection>
-<subsection title="Procedures as functions"><info></info><oz>%% Remember, every procedure can also be called like a function for convenience.
+end</oz>
+</subsection>
 
-local
+<subsection title="Procedures as functions">
+<info>Remember, every procedure can also be called like a function for convenience.</info>
+<oz>local
   proc {Max X Y Z}
      if X >= Y then Z = X else Z = Y end 
   end
 in
   {Browse {Max 4 3}}
-end</oz></subsection>
+end</oz>
+</subsection>
 
-  <subsection title="Another section TODO"><info></info><oz>/* Here we treat `IsEven' as a procedure with two arguments.
-`IsEven' binds the variable B.  Please note the order of computations in this
-section:
+<subsection title="Another section TODO">
+<info>Here we treat `IsEven' as a procedure with two arguments.  `IsEven' binds the variable B.  Please note the order of computations in this section:
   1.  B is browsed.
   2.  IsEven binds B to false.
 
 However, `Browse' does indeed show the correct value of B.
 
-This demonstrates a vital feature of Oz: variables are be used to
-communicate information between different parts of a program -- even
-if the information is not available yet.  Browse can handle unknown
-information, but other parts of the program may wait (i.e. block)
-until the information is available.
-*/
-
-local B in
+This demonstrates a vital feature of Oz: variables are be used to communicate information between different parts of a program -- even if the information is not available yet.  Browse can handle unknown information, but other parts of the program may wait (i.e. block) until the information is available.
+</info>
+<oz>local B in
    {Browse B} 		
    {IsEven 4 B}
-end</oz></subsection>
-<subsection title="$ marks a return value"><info></info><oz>/* Every procedure argument can be a return value.  The $ (dollar sign)
-always marks a return value.  This section is not yet very convincing,
-but procedures will encapsulate constraints in later sections...
+end</oz>
+</subsection>
+
+<subsection title="$ marks a return value">
+<info>Every procedure argument can be a return value.  The $ (dollar sign) always marks a return value.  This section is not yet very convincing, but procedures will encapsulate constraints in later sections...
+
 TODO:  what's happening here?  -gp
 TODO: I think this belongs somewhere in Basics-2, or even in the
 CSP stuff.
-*/
-
-local
+</info>
+<oz>local
    proc {Max X Y Z}
       if X >= Y then Z = X else Z = Y end 
    end 
@@ -354,13 +386,14 @@ in
    %% Note the $
    X = {Max $ 3 Result}
    {Browse Result}   
-end</oz></subsection>
+end</oz>
+</subsection>
 
+<subsection title="Recursion">
+<info>To understand recursion, you must first understand recursion.  :)
 
-<subsection title="Recursion"><info></info><oz>/* Procedures and functions can call themselves (recursion).  The
-function Factorial implements the mathematical factorial concept. */
-
-local
+Procedures and functions can call themselves (recursion).  The function Factorial implements the mathematical factorial concept.</info>
+<oz>local
    fun {Factorial N}
       if (N==0) then
         1
@@ -372,9 +405,11 @@ in
    %% 10! = 3628800
    {Browse
     {Factorial 10}}
-end</oz></subsection>
-<subsection title="BACKGROUND"><info></info><oz>/*
-Terms: procedure, function.
+end</oz>
+</subsection>
+
+<subsection title="BACKGROUND">
+<info>Terms: procedure, function.
 
 Procedures and functions are the standard means for expressing a
 collection of computations in a single entity.  Examples range
@@ -384,178 +419,191 @@ operations expressed by the common infix notation.
 
 A procedure definition wraps up (abstracts) some computation: a
 complex computation can then be executed simply by calling the
-procedure.
-*/
-</oz></subsection>
+procedure.</info>
+<oz></oz>
+</subsection>
 </section>
 
 
 <section title="Atoms and Names">
-  <subsection title="intro">
+<subsection title="Introduction">
 <info>Oz provides a number of basic data types which have a specific textual representation in source code.  We have already seen numbers (i.e. integers and floats).  Here we shall discuss two other data types: Atoms and Names.
 
 Atom:
 The safest way to create an atom is to surround it in single quotes: 'hi there'..  Atoms may also be written as text (without spaces) as long as they do not start with a capital letter (those are variables) and the text is not an Oz keyword.  For simplicity, we recommend using 'single quotes'.  ;)
 
 Name:
-There are a few things which look like atoms, but are a different variable type: Name.  The boolean values true and false are both Names (specifically, the Bool subtype).  Another often used value which looks like an atom is unit (also a name).</info>
-<oz></oz></subsection>
-  <subsection title="Atoms"><info></info><oz>%% Several atoms are inspected below. (Remember that the inspector window
-%% might open behind the tutorial!)
+There are a few things which look like atoms, but are a different variable type: Name.  The boolean values true and false are both Names (specifically, the Bool subtype).  Another often used value which looks like an atom is unit (also a name).
+</info>
+<oz></oz>
+</subsection>
 
-{Inspect 'I am an atom'}
+<subsection title="Atoms">
+<info>Several atoms are inspected below.
+
+WARNING: Remember that the inspector window might open behind the tutorial.</info>
+<oz>{Inspect 'I am an atom'}
 {Inspect iAmAnAtom}
 {Inspect test}
 {Inspect nil}
 %% if is an Oz keyword, but 'if' is an atom
 {Inspect 'if'}
-{Inspect '=='}</oz></subsection>
-  <subsection title="Equality"><info></info><oz>{Inspect test == 'test'}</oz></subsection>
-  <subsection title="Names"><info></info><oz>/* The values `true', `false' and `unit' are values which are similar
-to atoms, but which play a special role (note that the quotes don't
-belong to the values here). Obviously, `true' and `false' are the
-common boolean values. Oz provides the value `unit' for the computer
-science concept of the unit type (a value which is intended to express
-no further information). For section, `unit' is often used wherever a
-token is needed whose value is not important. */
+{Inspect '=='}</oz>
+</subsection>
 
-{Inspect true}
+<subsection title="Equality">
+<info>Atoms are the same, whether entered with 'quotes' or not.</info>
+<oz>{Inspect test == 'test'}</oz>
+</subsection>
+
+<subsection title="Names">
+<info>The values `true', `false' and `unit' are values which are similar to atoms, but which play a special role (note that the quotes don't belong to the values here).
+
+Obviously, `true' and `false' are the common boolean values.  Oz provides the value `unit' for the computer science concept of the unit type (a value which is intended to express no further information).  For this section, `unit' is often used wherever a token is needed whose value is not important.
+</info>
+<oz>{Inspect true}
 {Inspect false}
 {Inspect unit}
 
 %% The Inspector shows atoms and names in different colors
-{Inspect 'I am an atom'}</oz></subsection>
+{Inspect 'I am an atom'}</oz>
+</subsection>
 </section>
 
 <section title="Compound Types">
-  <subsection title="intro">
+<subsection title="Introduction">
 <info>Besides the atomic types discussed before, Oz also provides compound data types: records, tuples, lists, and strings.
 
 Internally, all of these data types are actually records (just like all functions are actually procedures).  Tuples, lists, and strings just provide a different syntax for interacting with records.</info>
-<oz></oz></subsection>
-  <subsection title="Records (1)"><info></info><oz>%% A record has a label and consists of feature-value pairs.
+<oz></oz>
+</subsection>
 
-{Inspect label(feature1:value1 feature2:value2)}</oz></subsection>
-  <subsection title="Records (2)"><info></info><oz>/* Integer features need not be listed explicitly; these two
- sections are identical.  Note that the `foo' label does not count
-towards these integer features, and that the integer features are
-placed before non-integer features. */
+<subsection title="Records (1)">
+<info>A record has a label and consists of feature-value pairs.</info>
+<oz>{Inspect label(feature1:value1 feature2:value2)}</oz>
+</subsection>
 
-{Inspect test(1:one 2:two foo:bar 3:three)}
-{Inspect test(one two foo:bar three)}</oz></subsection>
-  <subsection title="Records (3)"><info></info><oz>%% Records can be freely nested. 
-  
-{Inspect test(1:hi 2:there x:unit(foo:bar))}</oz></subsection>
-<subsection title="Accessing record fields"><info></info><oz>/* Record fields are accessed with the dot operator.  R.X returns the
-value stored at feature X in record R.  Records support constant-time
-access (i.e. the time the access takes is independent of the feature
-position). */
+<subsection title="Records (2)">
+<info>Integer features need not be listed explicitly; these two sections are identical.  Note that the `foo' label does not count towards these integer features, and that the integer features are placed before non-integer features.</info>
+<oz>{Inspect test(1:one 2:two foo:bar 3:three)}
+{Inspect test(one two foo:bar three)}</oz>
+</subsection>
 
-{Inspect test(x:hi y:there).x}</oz></subsection>
-  <subsection title="Tuples (1)"><info></info><oz>%% A tuple consists of a label and values.
+<subsection title="Records (3)">
+<info>Records can be freely nested.</info>
+<oz>{Inspect test(1:hi 2:there x:unit(foo:bar))}</oz>
+</subsection>
 
-{Inspect label(value1 value2 value3)}</oz></subsection>
-<subsection title="Tuples (2)"><info></info><oz>/* Actually, a tuple is a record which has only integer features in
-ascending order.  These features can be omitted.  The two records below
-are equivalent. */
+<subsection title="Accessing record fields">
+<info>Record fields are accessed with the dot operator.  R.X returns the value stored at feature X in record R.  Records support constant-time access (i.e. the time the access takes is independent of the feature position).</info>
+<oz>{Inspect test(x:hi y:there).x}</oz>
+</subsection>
 
-{Inspect unit(1:a 2:b 3:c) == unit(a b c)}</oz></subsection>
-  <subsection title="Tuples (3)"><info></info><oz>%% An atom is an "empty" tuple.
+<subsection title="Tuples (1)">
+<info>A tuple consists of a label and values.</info>
+<oz>{Inspect label(value1 value2 value3)}</oz>
+</subsection>
 
-{Inspect test() == test}</oz></subsection>
-  <subsection title="Lists (1)"><info></info><oz>%% A list is a sequence of values.
+<subsection title="Tuples (2)">
+<info>Actually, a tuple is a record which has only integer features in ascending order.  These features can be omitted.  The two records below are equivalent.</info>
+<oz>{Inspect unit(1:a 2:b 3:c) == unit(a b c)}</oz>
+</subsection>
 
-{Browse [value1 value2 value3]}</oz></subsection>
-<subsection title="Lists (2)"><info></info><oz>/* A list can also be written using | (cf. cons in Lisp). nil is the
-empty list, which terminates every list. */
+<subsection title="Tuples (3)">
+<info>An atom is an "empty" tuple.</info>
+<oz>{Inspect test() == test}</oz>
+</subsection>
 
-{Inspect a|b|c|nil}</oz></subsection>
-  <subsection title="Lists (3)"><info></info><oz>%% Actually, a list is a nested tuple with the labels '|'.
+<subsection title="Lists (1)">
+<info>A list is a sequence of values.</info>
+<oz>{Browse [value1 value2 value3]}</oz>
+</subsection>
 
-{Inspect [a b c] == '|'(a '|'(b '|'(c nil)))}</oz></subsection>
-<subsection title="Lists (4)"><info></info><oz>/* Consequently, the first element of a list can be accessed under the
-feature 1, and the remaining list under the feature 2. */
-  
-{Inspect [a b c].1}
-{Inspect [a b c].2}</oz></subsection>
-  <subsection title="Pairs (1)"><info></info><oz>%% A pair is a convenient way of concatenating values. 
+<subsection title="Lists (2)">
+<info>A list can also be written using | (cf. cons in Lisp). nil is the empty list, which terminates every list.</info>
+<oz>{Inspect a|b|c|nil}</oz>
+</subsection>
 
-{Inspect value1 # value2 # value3}</oz></subsection>
-  <subsection title="Pairs (2)"><info></info><oz>%% Actually, a pair is a tuple with the label '#'.
+<subsection title="Lists (3)">
+<info>Actually, a list is a nested tuple with the labels '|'.</info>
+<oz>{Inspect [a b c] == '|'(a '|'(b '|'(c nil)))}</oz>
+</subsection>
 
-{Inspect a#b#c  == '#'(a b c)}</oz></subsection>
-<subsection title="Strings (1)"><info></info><oz>/* A string is a list of integers denoting characters (i.e. all list
-procedures can be used for strings). */
+<subsection title="Lists (4)">
+<info>Consequently, the first element of a list can be accessed under the feature 1, and the remaining list under the feature 2.</info>
+<oz>{Inspect [a b c].1}
+{Inspect [a b c].2}</oz>
+</subsection>
 
-{Inspect "test" == [116 101 115 116]}</oz></subsection>
-<subsection title="Strings (2)"><info></info><oz>/* Although a string is just a list of integers, you can show strings
-as text in the Browser and the Inspector.  However, you need to
-configure them for showing strings first.  In the Inspector Preference
-settings (Options menu), select the tab Appearance and tick "Show
-Strings".  You need to do these settings before you inspect a
-string. */
+<subsection title="Pairs (1)">
+<info>A pair is a convenient way of concatenating values.</info>
+<oz>{Inspect value1 # value2 # value3}</oz>
+</subsection>
 
-{Inspect "This is a string!"}</oz></subsection>
-<subsection title="Virtual Strings"><info></info><oz>/* A virtual string (VS) is a (possibly nested) concatenation of
-strings, atoms, and numbers.  Many procedures expecting strings as
-arguments can also handle virtual strings for convenience. */
-  
-local 
+<subsection title="Pairs (2)">
+<info>Actually, a pair is a tuple with the label '#'.</info>
+<oz>{Inspect a#b#c  == '#'(a b c)}</oz>
+</subsection>
+
+<subsection title="Strings (1)">
+<info>A string is a list of integers denoting characters (i.e. all list procedures can be used for strings).</info>
+<oz>{Inspect "test" == [116 101 115 116]}</oz>
+</subsection>
+
+<subsection title="Strings (2)">
+<info>Although a string is just a list of integers, you can show strings as text in the Browser and the Inspector.  However, you need to configure them for showing strings first.  In the Inspector Preference settings (Options menu), select the tab Appearance and tick "Show Strings".  You need to do these settings before you inspect a string.</info>
+<oz>{Inspect "This is a string!"}</oz>
+</subsection>
+
+<subsection title="Virtual Strings">
+<info>A virtual string (VS) is a (possibly nested) concatenation of strings, atoms, and numbers.  Many procedures expecting strings as arguments can also handle virtual strings for convenience.</info>
+<oz>local 
   VS = 'my test '
 in
   {Inspect VS#3}
-end</oz></subsection>
+end</oz>
+</subsection>
 </section>
 
 <section title="Error messages">
-<subsection title="intro">
-<info>When we do program, we almost inevitably write bugs
-sometimes.  Luckily, when confronted with specific problems in
-programs, compilers try to tell us about the problem (naturally, the
-real hard bugs are the ones no compiler complains about).  All errors
-are actually raised exceptions (see the Tutorial of Oz, Sec. 5.10 for
-more details).
+<subsection title="Introduction">
+<info>When we program, we almost inevitably write bugs.  Luckily, when confronted with specific problems in programs, compilers try to tell us about the problem (naturally, the real hard bugs are the ones no compiler complains about).  All errors are actually raised exceptions (see the Tutorial of Oz, Sec. 5.10 for more details).
 
-The compiler is your friend, so this section introduces you to some
-typical Oz error messages ;-) During your programming sessions,
-carefully reading error messages can save you much time.  In this
-tutorial, all these messages are shown at the shell (or in the DOS
-box) where you started the tutorial.  The Oz Programming Interface
-(OPI) even supports moving to the code where the bug is likely to be
-located (see the Tutorial of Oz, Sec. 2.3.3).
+The compiler is your friend, so this section introduces you to some typical Oz error messages ;-) During your programming sessions, carefully reading error messages can save you much time.  In this tutorial, all these messages are shown at the shell (or in the DOS box) where you started the tutorial.  The Oz Programming Interface (OPI) even supports moving to the code where the bug is likely to be located (see the Tutorial of Oz, Sec. 2.3.3).
 
-BTW: the error messages of this tutorial are slightly obscured
-unfortunately by some trick which keeps the tutorial application
-running even in the case of an error: there are always a few lines of
-other code before the actual error message.  Also, the reported line
-number is not correct, because the tutorial application adds a few
-lines to each section (the resulting full section is shown just before
-the error message).
+BTW: the error messages of this tutorial are slightly obscured unfortunately by some trick which keeps the tutorial application running even in the case of an error: there are always a few lines of other code before the actual error message.  Also, the reported line number is not correct, because the tutorial application adds a few lines to each section (the resulting full section is shown just before the error message).
 </info>
-<oz></oz></subsection>
-<subsection title="Parse error"><info></info><oz>%% The left curly brace does not match the right parenthesis
+<oz></oz>
+</subsection>
 
-{Browse hello)</oz></subsection>
-<subsection title="Static analysis error"><info></info><oz>%% Browse expects only a single argument
+<subsection title="Parse error">
+<info>The left curly brace does not match the right parenthesis.</info>
+<oz>{Browse hello)</oz>
+</subsection>
 
-{Browse hi there}</oz></subsection>
-<subsection title="Binding analysis error"><info></info><oz>%% Variable X is not declared 
+<subsection title="Static analysis error">
+<info>Browse expects only a single argument.</info>
+<oz>{Browse hi there}</oz>
+</subsection>
 
-X = 3</oz></subsection>
-<subsection title="Type error"><info></info><oz>%% We can not add an integer and a float 
+<subsection title="Binding analysis error">
+<info>Variable X is not declared .</info>
+<oz>X = 3</oz>
+</subsection>
 
-{Browse 3 + 2.0}</oz></subsection>
-<subsection title="Failure"><info></info><oz>/* Inconsistent constraint programs result in a failure.  Failures play
-an important role internally in a constraint solver searching for
-solutions to a constraint satisfaction problem. */
+<subsection title="Type error">
+<info>We can not add an integer and a float.</info>
+<oz>{Browse 3 + 2.0}</oz>
+</subsection>
 
-local
+<subsection title="Failure">
+<info>Inconsistent constraint programs result in a failure.  Failures play an important role internally in a constraint solver searching for solutions to a constraint satisfaction problem.</info>
+<oz>local
    X = 3
 in
    3 + 4 =: X
-end</oz></subsection>
+end</oz>
+</subsection>
 </section>
-
-
 
 </chapter>
