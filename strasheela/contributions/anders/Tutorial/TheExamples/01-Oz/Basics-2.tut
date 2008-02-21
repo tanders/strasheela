@@ -336,6 +336,21 @@ The sections demonstrates concurrent programming, but do not show a typical appl
 <oz></oz>
 </subsection>
 
+<subsection title="Another section TODO">
+<info>Here we treat `IsEven' as a procedure with two arguments.  `IsEven' binds the variable B.  Please note the order of computations in this section:
+  1.  B is browsed.
+  2.  IsEven binds B to false.
+
+However, `Browse' does indeed show the correct value of B.
+
+This demonstrates a vital feature of Oz: variables are be used to communicate information between different parts of a program -- even if the information is not available yet.  Browse can handle unknown information, but other parts of the program may wait (i.e. block) until the information is available.
+</info>
+<oz>local B in
+   {Browse B} 		
+   {IsEven 4 B}
+end</oz>
+</subsection>
+
 <subsection title="Declarative concurrency">
 <info>This section declares X and then browses 'hello' (just to show that the browser works in principle).  However, the addition X+3 can not be executed immediately and blocks.  Because this computation is executed in its own thread, the top-level thread continues regardless, and calls the procedure Delay, which waits for 3000 msecs.  After that time, the top-level thread determines X to 4.  This awakes the other thread: it can now compute X+3 and browse the sum.
 </info>
