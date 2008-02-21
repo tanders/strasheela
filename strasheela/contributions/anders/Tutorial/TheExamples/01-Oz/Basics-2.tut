@@ -4,23 +4,22 @@
 
 <section title="-- More Oz Basics">
 <subsection title="Introduction">
-<info>This chapter covers more basic info about Oz.</info>
+<info>This chapter covers more basic info about Oz.  However, despite still beging "basic" information, it requires a solid understanding of material in the previous chapter.</info>
 <oz></oz>
-
 </subsection>
 </section>
 
 <section title="Pattern Matching">
 <subsection title="Introduction">
-<info>Pattern matching is a convenient way to access the elements contained in records, lists etc.  Pattern matching decomposes such compound data, declares new variables, and binds these variables to parts of the compound data.  
+<info>Pattern matching is a convenient way to access the elements contained in compund data types (i.e. records, lists, etc).  Pattern matching decomposes such compund data, declares new variables, and binds these variables to parts of the compound data.
 
-The primary pattern matching construct is the case statement, but some programming constructs (for section, functions) allow pattern matching via an implicit case statement.
+The primary pattern matching construct is the case statement, but some programming constructs (such as functions) allow pattern matching via an implicit case statement.
 </info>
 <oz></oz>
 
 </subsection>
 
-<subsection title="Case statements (1)">
+<subsection title="Case (head and tail)">
 <info>In the section below, `case' declares the two variables H and T and binds them to the head and tail of the list Xs.  Finally, the H and T are inspected.  Please note that the pattern-matching expression H|T is written with the usual list syntax using | (the cons-operation). 
 
 This approach can be used to pattern match lists of arbitrary length, except empty lists (i.e. nil).  Try changing the definition of Xs to a list of a different length and watch how the value of T changes.
@@ -31,12 +30,13 @@ in
    case Xs of
       H | T
    then
-      {Inspect H} {Inspect T}
+      {Inspect H}
+      {Inspect T}
    end
 end</oz>
 </subsection>
 
-<subsection title="Case statements (2)">
+<subsection title="Case (every element)">
 <info>The previous section matched the head and the tail of a list.  Instead, we can also match individual list elements (or the elements of other data structures, such as records or tuples).
 
 WARNING: if the length of the lists is not equal, an error occurs.
@@ -47,13 +47,16 @@ in
    case Xs of
       [A B C D]
    then
-      {Inspect A} {Inspect B} {Inspect C} {Inspect D}
+      {Inspect A}
+      {Inspect B}
+      {Inspect C}
+      {Inspect D}
    end
 end</oz>
 </subsection>
 
 <subsection title="Multiple case clauses">
-<info>Having only a single clause to match against (as in the previous sections), can be too restrictive. This section presents a typical case expression matching a list, which checks whether Xs is either a non-empty list, or an empty list, or some other value. You may want to play around with the value of Xs to try out these different clauses.</info>
+<info>Having only a single clause to match against (as in the previous sections), can be too restrictive.  This section presents a typical `case' expression.  It matches a list, which checks whether Xs is either a non-empty list, an empty list, or some other value.  You may want to play around with the value of Xs to try out these different clauses.</info>
 <oz>local
    Xs = [1 2 3 4]
 in
@@ -70,16 +73,20 @@ end</oz>
 </subsection>
 
 <subsection title="Implicit pattern matching">
-<info>The following function GetPitch expects a record as argument which must match the record note(pitch:Pitch ...).  The variable Pitch is implicitly declared and bound to the value at the feature 'pitch' of the record given as argument to the function.
+<info>The following function GetFeature2 expects a record as argument; this record must match recordType(feature2:_ ...).  The variable MyVar is implicitly declared and bound to the value at the feature 'feature2' of the record given as argument to the function.
 
-Please note that the record in the header of the function GetPitch is not even complete but contains three dots (...) to indicate that further record features are possible.
+Please note that the record in the header of the function GetFeature2 is not even complete but contains three dots (...) to indicate that further record features are possible.
 </info>
 <oz>local
-   fun {GetPitch note(pitch:Pitch ...)}
-      Pitch
+   MyRec = recordType(feature1:value1 feature2:value2)
+   fun {GetFeature2 recordType(feature2:MyVar ...)}
+      MyVar
    end
 in
-   {Inspect {GetPitch note(duration:4 pitch:60)}}
+   %% show the normal record
+   {Inspect MyRec}
+   %% show the feature we want
+   {Inspect {GetFeature2 MyRec}}
 end</oz>
 </subsection>
 </section>

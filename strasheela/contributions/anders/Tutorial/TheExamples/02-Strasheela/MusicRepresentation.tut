@@ -8,6 +8,20 @@
 </info>
 <oz>
 </oz></subsection>
+
+<subsection title="Implicit pattern matching in Strasheela">
+<info>The following function GetPitch expects a record as argument which must match the record note(pitch:Pitch ...).  The variable Pitch is implicitly declared and bound to the value at the feature 'pitch' of the record given as argument to the function.
+
+Please note that the record in the header of the function GetPitch is not even complete but contains three dots (...) to indicate that further record features are possible.
+</info>
+<oz>local
+   fun {GetPitch note(pitch:Pitch ...)}
+      Pitch
+   end
+in
+   {Inspect {GetPitch note(duration:4 pitch:60)}}
+end</oz>
+</subsection>
 </section>
 
 <section title="Score Creation">
@@ -124,6 +138,7 @@ in
     unit(file:{Tk.return tk_getSaveFile}
 	 scoDir:nil soundDir:nil)}
 end</oz></subsection>
+
 </section>
 
 
