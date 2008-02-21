@@ -3,29 +3,29 @@
 <chapter title="More Oz Basics">
 
 <section title="-- More Oz Basics">
-
-<subsection title="intro">
+<subsection title="Introduction">
 <info>This chapter covers more basic info about Oz.</info>
-<oz></oz></subsection>
+<oz></oz>
+
+</subsection>
 </section>
 
 <section title="Pattern Matching">
-<subsection title="intro">
+<subsection title="Introduction">
 <info>Pattern matching is a convenient way to access the elements contained in records, lists etc.  Pattern matching decomposes such compound data, declares new variables, and binds these variables to parts of the compound data.  
 
 The primary pattern matching construct is the case statement, but some programming constructs (for section, functions) allow pattern matching via an implicit case statement.
 </info>
-<oz></oz></subsection>
-<subsection title="Case statements (1)"><info></info><oz>/* In the section below, =case= declares the two variables H and T and
-binds them to the head and tail of the list Xs.  Finally, the H and T are
-inspected.  Please note that the pattern-matching expression H|T is written
-with the usual list syntax using | (the cons-operation). 
+<oz></oz>
 
-This approach can be used to pattern match lists of arbitrary length,
-except empty lists (i.e. nil).  Try changingthe definition of Xs to a
-list of a different length and watch how the value of T changes.*/
+</subsection>
 
-local
+<subsection title="Case statements (1)">
+<info>In the section below, `case' declares the two variables H and T and binds them to the head and tail of the list Xs.  Finally, the H and T are inspected.  Please note that the pattern-matching expression H|T is written with the usual list syntax using | (the cons-operation). 
+
+This approach can be used to pattern match lists of arbitrary length, except empty lists (i.e. nil).  Try changing the definition of Xs to a list of a different length and watch how the value of T changes.
+</info>
+<oz>local
    Xs = [1 2 3 4]
 in
    case Xs of
@@ -33,14 +33,15 @@ in
    then
       {Inspect H} {Inspect T}
    end
-end</oz></subsection>
-<subsection title="Case statements (2)"><info></info><oz>/* The previous section matched the head and the tail of a
-list. Instead, we can also match individual list elements (or the
-elements of other data structures, such as records or tuples).
+end</oz>
+</subsection>
 
-WARNING: if the length of the lists is not equal, an error occurs.*/
+<subsection title="Case statements (2)">
+<info>The previous section matched the head and the tail of a list.  Instead, we can also match individual list elements (or the elements of other data structures, such as records or tuples).
 
-local
+WARNING: if the length of the lists is not equal, an error occurs.
+</info>
+<oz>local
    Xs = [1 2 3 4]
 in
    case Xs of
@@ -48,15 +49,12 @@ in
    then
       {Inspect A} {Inspect B} {Inspect C} {Inspect D}
    end
-end</oz></subsection>
-<subsection title="Multiple case clauses"><info></info><oz>/* Having only a single clause to match against (as in the previous
-sections), can be too restrictive. This section presents a typical
-case expression matching a list, which checks whether Xs is either a
-non-empty list, or an empty list, or some other value. You may want to
-play around with the value of Xs to try out these different
-clauses. */
+end</oz>
+</subsection>
 
-local
+<subsection title="Multiple case clauses">
+<info>Having only a single clause to match against (as in the previous sections), can be too restrictive. This section presents a typical case expression matching a list, which checks whether Xs is either a non-empty list, or an empty list, or some other value. You may want to play around with the value of Xs to try out these different clauses.</info>
+<oz>local
    Xs = [1 2 3 4]
 in
    case Xs of
@@ -68,56 +66,66 @@ in
    else
       {Inspect notList}
    end 
-end</oz></subsection>
-<subsection title="Implicit pattern matching"><info></info><oz>/* The following function GetPitch expects a record as
-argument which must match the record note(pitch:Pitch ...).  The
-variable Pitch is implicitly declared and bound to the value at the
-feature 'pitch' of the record given as argument to the function.
+end</oz>
+</subsection>
 
-Please note that the record in the header of the function
-GetPitch is not even complete but contains three dots (...) to
-indicate that further record features are possible. */
+<subsection title="Implicit pattern matching">
+<info>The following function GetPitch expects a record as argument which must match the record note(pitch:Pitch ...).  The variable Pitch is implicitly declared and bound to the value at the feature 'pitch' of the record given as argument to the function.
 
-local
+Please note that the record in the header of the function GetPitch is not even complete but contains three dots (...) to indicate that further record features are possible.
+</info>
+<oz>local
    fun {GetPitch note(pitch:Pitch ...)}
       Pitch
    end
 in
    {Inspect {GetPitch note(duration:4 pitch:60)}}
-end</oz></subsection>
+end</oz>
+</subsection>
 </section>
 
 <section title="Procedures over Compound Data">
-<subsection title="intro">
+<subsection title="Introduction">
 <info>Oz provides a rich set of procedures for processing these compound data such as lists and records.  A few sections are shown here.  More procedures are listed in the reference documentation at
 
    http://www.mozart-oz.org/documentation/base/index.html
 </info>
-<oz></oz></subsection>
-<subsection title="Record HasFeature"><info></info><oz>%% Tests whether a record has a certain feature
+<oz></oz>
+</subsection>
 
-{Inspect {HasFeature unit(x:1 y:2 z:3) y}}</oz></subsection>
-<subsection title="Record -> List"><info></info><oz>%% Return the features of a record as a list.
+<subsection title="Record HasFeature">
+<info>Tests whether a record has a certain feature.</info>
+<oz>{Inspect {HasFeature unit(x:1 y:2 z:3) y}}</oz>
+</subsection>
 
-{Inspect {Arity unit(a b x:1 y:2 z:3)}}</oz></subsection>
-<subsection title="Combining records"><info></info><oz>/* "Merge" two records.  Note that features and labels of the second
-record take precedence over the first. */
+<subsection title="Record -> List">
+<info>Return the features of a record as a list.</info>
+<oz>{Inspect {Arity unit(a b x:1 y:2 z:3)}}</oz>
+</subsection>
 
-{Inspect {Adjoin unit(x:1 y:2 z:3) test(foo:hi bar:there z:'overwrite!')}}</oz></subsection>
-<subsection title="Accessing a list element"><info></info><oz>%% Return the nth element of a list.
+<subsection title="Combining records">
+<info>"Merge" two records.  Note that features and labels of the second record take precedence over the first.</info>
+<oz>{Inspect {Adjoin unit(x:1 y:2 z:3) test(foo:hi bar:there z:'overwrite!')}}</oz>
+</subsection>
 
-{Inspect {Nth [a b c d] 2}}</oz></subsection>
-<subsection title="Reverse list"><info></info><oz>%% Reverse a list.
+<subsection title="Accessing a list element">
+<info>Return the nth element of a list.</info>
+<oz>{Inspect {Nth [a b c d] 2}}</oz>
+</subsection>
 
-{Inspect {Reverse [a b c d]}}</oz></subsection>
-<subsection title="Append lists"><info></info><oz>%% Append two lists.
+<subsection title="Reverse list">
+<info>Reverse a list.</info>
+<oz>{Inspect {Reverse [a b c d]}}</oz>
+</subsection>
 
-{Inspect {Append [a b] [x y]}}</oz></subsection>
-<subsection title="User-defined procedures"><info></info><oz>/* You can define procedures over lists and records as easily as
-numeric procedures.  Following is the definition of the function
-Append. */
+<subsection title="Append lists">
+<info>Append two lists.</info>
+<oz>{Inspect {Append [a b] [x y]}}</oz>
+</subsection>
 
-local
+<subsection title="User-defined procedures">
+<info>You can define procedures over lists and records as easily as numeric procedures.  Following is the definition of the function Append.</info>
+<oz>local
   fun {Append Xs Ys}
     if Xs == nil then Ys
     else Xs.1 | {Append Xs.2 Ys}
@@ -125,79 +133,66 @@ local
   end
 in
   {Inspect {Append [a b] [x y]}}
-end</oz></subsection>
+end</oz>
+</subsection>
 </section>
 
 
 <section title="Higher-Order Programming">
-<subsection title="intro">
+<subsection title="Introduction">
 <info>Oz procedures (and functions) are first-class values.  This means that a procedure can be processed like any other value.  For section, procedures can be given to other procedures as arguments.
 
-This leads to highly flexible programming technique called higher-order programming.  Procedures expecting procedures as arguments are called higher-order procedures.  This concept is demonstrated be several sections.</info>
-<oz></oz></subsection>
-<subsection title="Filter"><info></info><oz>/* The function Filter expects a list and a test function, and returns
-only those elements for which the test function returns true.
+This leads to highly flexible programming technique called higher-order programming.  Procedures expecting procedures as arguments are called higher-order procedures.  This concept is demonstrated be several sections.
+</info>
+<oz></oz>
+</subsection>
 
-The function IsEven returns true for even integers and thus a list
-with only the even integers in [~3 ~2 ~1 0 1 2 3] is returned.  Try
-replaying IsEven by IsOdd, IsNumber or IsNat (testing for natural
-numbers) to better understand this filtering.
+<subsection title="Filter">
+<info>The function Filter expects a list and a test function, and returns only those elements for which the test function returns true.
+
+The function IsEven returns true for even integers and thus a list with only the even integers in [~3 ~2 ~1 0 1 2 3] is returned.  Try replaying IsEven by IsOdd, IsNumber or IsNat (testing for natural numbers) to better understand this filtering.
 
 (BTW: there is a bug in IsOdd concerning negative numbers)
-*/
+</info>
+<oz>{Browse {Filter [~ 4 ~3 ~2 ~1 0 1 2 3] IsEven}}</oz>
+</subsection>
 
-{Browse {Filter [~ 4 ~3 ~2 ~1 0 1 2 3] IsEven}}</oz></subsection>
-<subsection title="ForAll"><info></info><oz>/* The procedure ForAll applies a given procedure to any element of a
-list.  In this section, the procedure Browse is applied to every list
-element. */
+<subsection title="ForAll">
+<info>The procedure ForAll applies a given procedure to any element of a list.  In this section, the procedure Browse is applied to every list element.</info>
+<oz>{ForAll [a b c d e f] Browse}</oz>
+</subsection>
 
-{ForAll [a b c d e f] Browse}</oz></subsection>
-<subsection title="Map"><info></info><oz>/* The function Map expects a list and a unary function (i.e. a
-function expecting a single value) as arguments.  It applies the
-function to every list element, and returns the collected results in a
-list.
+<subsection title="Map">
+<info>The function Map expects a list and a unary function (i.e. a function expecting a single value) as arguments.  It applies the function to every list element, and returns the collected results in a list.
 
-The section defines and uses the function square in order to square
-all numbers in the list.  You may want to change this function to
-understand that any function can be given to a higher-order function
-as an argument.  For section, replace Square by a function Double,
-which doubles its argument. */
-
-local
+The section defines and uses the function square in order to square all numbers in the list.  You may want to change this function to understand that any function can be given to a higher-order function as an argument.  For section, replace Square by a function Double, which doubles its argument.
+</info>
+<oz>local
   fun {Square X} X * X end
 in
   {Browse {Map [1 2 3 4 5 6] Square}}
-end</oz></subsection>
-<subsection title="Anonymous procedure definition"><info></info><oz>/* Sometimes we need a function only once -- as the function Square in
-the previous section.  In such cases we don't necessarily need to care
-about giving the function any name.  Instead, we can define an
-anonymous function.
+end</oz>
+</subsection>
 
-This section restates the previous section by defining the Square
-function 'inline' without giving it any name.  Please recall that $
-always denotes a return value.  In this case, $ returns the function
-value itself. */
+<subsection title="Anonymous procedure definition">
+<info>Sometimes we need a function only once -- as the function Square in the previous section.  In such cases we don't necessarily need to care about giving the function any name.  Instead, we can define an anonymous function.
 
-{Browse 
- {Map [1 2 3 4 5 6] fun {$ X} X * X end}}</oz></subsection>
-<subsection title="Sort (1)"><info></info><oz>/* The function Sort expects a list and a binary function (i.e. a
-function expecting two values) as arguments.  This binary function
-compares two values, and Sort sorts the list values according to this
-comparison.  For section, the function in the section compares two
-numbers and returns true if the first number is smaller.  Consequently,
-this section sorts the list elements in ascending order.  You may want
-to replace the &lt; by &gt; in the function definition to sort the
-numbers in decreasing order. */
+This section restates the previous section by defining the Square function 'inline' without giving it any name.  Please recall that $ always denotes a return value.  In this case, $ returns the function value itself.
+</info>
+<oz>{Browse 
+ {Map [1 2 3 4 5 6] fun {$ X} X * X end}}</oz>
+</subsection>
 
-{Browse {Sort [1 5 3 2 0 7] fun {$ X Y}  X &lt; Y end}}</oz></subsection>
+<subsection title="Sort (1)">
+<info>The function Sort expects a list and a binary function (i.e. a function expecting two values) as arguments.  This binary function compares two values, and Sort sorts the list values according to this comparison.  For section, the function in the section compares two numbers and returns true if the first number is smaller.  Consequently, this section sorts the list elements in ascending order.  You may want to replace the &lt; by &gt; in the function definition to sort the numbers in decreasing order.
+</info>
+<oz>{Browse {Sort [1 5 3 2 0 7] fun {$ X Y}  X &lt; Y end}}</oz>
+</subsection>
 
-<subsection title="Sort (2)"><info></info><oz>/* You can actually sort the list elements in any way you want using
-the Sort function.  For section, you may place all even numbers at the
-beginning and all odd numbers at the end of the list and sort all even
-and odd numbers in ascending order.  This is done in the second
-(commented) Sort call.  How does this sorting work? */
-
-{Browse {Sort [1 5 3 2 0 7] fun {$ X Y} 
+<subsection title="Sort (2)">
+<info>You can actually sort the list elements in any way you want using the Sort function.  For section, you may place all even numbers at the beginning and all odd numbers at the end of the list and sort all even and odd numbers in ascending order.  This is done in the second (commented) Sort call.  How does this sorting work?
+</info>
+<oz>{Browse {Sort [1 5 3 2 0 7] fun {$ X Y} 
                               if {IsEven X} 
 			      then
 			        if {IsEven Y}
@@ -206,25 +201,15 @@ and odd numbers in ascending order.  This is done in the second
 				end
 			      else false
 			      end
-                            end}}</oz></subsection>
+                            end}}</oz>
+</subsection>
 
-<subsection title="Defining higher-order procedures"><info></info><oz>/* Higher order procedures are defined like any other procedure: some
-arguments are simply procedures -- which are then usually applied in
-the definition.  This section defines a higher-order function Find
-which expects a list Xs and a test function Fn: Find returns the first
-element in Xs for which Fn returns true.
+<subsection title="Defining higher-order procedures">
+<info>Higher order procedures are defined like any other procedure: some arguments are simply procedures -- which are then usually applied in the definition.  This section defines a higher-order function Find which expects a list Xs and a test function Fn: Find returns the first element in Xs for which Fn returns true.
 
-This section also demonstrates the pattern-matching case statement
-with multiple clauses operating on the list Xs.  In case Xs is the
-empty list nil, then Find returns nil.  Otherwise (multiple clauses are
-separated with the keyword []), Xs is matched with X|Xr, where X is
-bound to the first element of Xs and Xr to the list's tail or
-rest.  The function Find then checks whether {Fn X} returns true.  In
-that case, the searched for list element has been found and is
-returned.  Otherwise, Find is called recursively with the rest of the
-list. */
-
-local
+This section also demonstrates the pattern-matching case statement with multiple clauses operating on the list Xs.  In case Xs is the empty list nil, then Find returns nil.  Otherwise (multiple clauses are separated with the keyword []), Xs is matched with X|Xr, where X is bound to the first element of Xs and Xr to the list's tail or rest.  The function Find then checks whether {Fn X} returns true.  In that case, the searched for list element has been found and is returned.  Otherwise, Find is called recursively with the rest of the list.
+</info>
+<oz>local
    fun {Find Xs Fn}
       case Xs
       of nil then nil
@@ -236,90 +221,93 @@ local
    end
 in
    {Browse {Find  [1 2 3 4 5 6] IsEven}}
-end</oz></subsection>
+end</oz>
+</subsection>
 </section>
 
 <section title="Unification">
-<subsection title="intro">
+<subsection title="Introduction">
 <info>The operator = performs unification of two variables.  The variables share all the information they have about their values.  A variable without a name (an anonymous variable) is written as an underscore ( _ ).  Unification is a basic form of constraint programming (constraint programming is discussed further below).
 </info>
-<oz></oz></subsection>
-<subsection title="Unifying two numbers"><info></info><oz>local 
+<oz></oz>
+</subsection>
+
+<subsection title="Unifying two numbers">
+<info>TODO: add something</info>
+<oz>local 
   X = {FD.int 1#5}
   Y = {FD.int 0#3}
 in 
   X = Y          % unify X and Y
   {Inspect X}
 end
-</oz></subsection>
-<subsection title="Unifying two lists"><info></info><oz>local 
+</oz>
+</subsection>
+
+<subsection title="Unifying two lists">
+<info>TODO: add something</info>
+<oz>local 
   X = [a _ _] 
   Y = [_ b _]
 in 
   X = Y          % unify X and Y
   {Inspect X}
-end</oz></subsection>
-<subsection title="Recursive unification"><info></info><oz>/* Unification also works recursively.  The Inspector and the Browser
-show two different ways for representing that (the Inspector can be
-configured to show either way: options menu, structure tab, under
-representation, select between tree and relation mode). */
+end</oz>
+</subsection>
 
-local X = unit(x:X) in 
+<subsection title="Recursive unification">
+<info>Unification also works recursively.  The Inspector and the Browser show two different ways for representing that (the Inspector can be configured to show either way: options menu, structure tab, under representation, select between tree and relation mode).</info>
+<oz>local X = unit(x:X) in 
   {Browse X}
   {Inspect X}
-end</oz></subsection>
+end</oz>
+</subsection>
 </section>
 
 
-
 <section title="Class Method Application">
-<subsection title="intro">
+<subsection title="Introduction">
 <info>Oz supports object-oriented programming.  This programming paradigm introduces the notion of objects which instantiate classes.  An object (or class instance) is a datum which encapsulates its internal structure.  A class specifies what data are contained in its instances and what methods these instances understands.  A method (or message) is effectively a procedure which is defined for instances of specific classes only.
 
 For more details on object-oriented programming in general, please refer to other Oz documentation:
     http://www.mozart-oz.org/documentation/tutorial/node10.html
 
-Internally, objects are actually procedures which expect a single argument -- hence this syntax.  When the object is sent a message (i.e. the procedure is called with a specific argument) it processes the message according to its definition.  This method definition may change its internal state, as we expect from typical objects.</info>
-<oz></oz></subsection>
-<subsection title="Method call"><info></info><oz>/* The following section creates a graphical user interface
-button.  You do not need to understand the code which creates the
-window itself (i.e., the call to QTk.build).  For our purposes here,
-only this single line is important:
+Internally, objects are actually procedures which expect a single argument -- hence this syntax.  When the object is sent a message (i.e. the procedure is called with a specific argument) it processes the message according to its definition.  This method definition may change its internal state, as we expect from typical objects.
+</info>
+<oz></oz>
+</subsection>
+
+<subsection title="Method call">
+<info>The following section creates a graphical user interface button.  You do not need to understand the code which creates the window itself (i.e., the call to QTk.build).  For our purposes here, only this single line is important:
 
   {Window show}
 
-`Window' is an object, and `show' is the name of the method understood by
-this object.  This method results in showing the window with the button.
+`Window' is an object, and `show' is the name of the method understood by this object.  This method results in showing the window with the button.
 
-Please note that the syntax of a method differs clearly from the procedure
-syntax shown before.  If `show' was a procedure, then we would write:
+Please note that the syntax of a method differs clearly from the procedure syntax shown before.  If `show' was a procedure, then we would write:
 
   {Show Window}
-*/
-
-local
+</info>
+<oz>local
    Window = {QTk.build lr(button(text:"Hello world!" 
 				 action:toplevel#close))}
 in
    {Window show}
-end</oz></subsection>
-<subsection title="Method arguments"><info></info><oz>/* Class methods are actually records which can contain method
-arguments.  For section, the following statement sends the following
-message to the object Window.  This changes the width of the border around
-the button and sets the background of this border to the color blue.
+end</oz>
+</subsection>
+
+<subsection title="Method arguments">
+<info>Class methods are actually records which can contain method arguments.  For section, the following statement sends the following message to the object Window.  This changes the width of the border around the button and sets the background of this border to the color blue.
 
   {Window set(borderwidth:1.0#c background:blue)}
 
-In general, the record denoting a message can wrap multiple arguments,
-as in the following section where the method myMethod with two
-arguments is send to the class MyObject.
+In general, the record denoting a message can wrap multiple arguments, as in the following section where the method myMethod with two arguments is send to the class MyObject.
 
    {MyObject myMethod(Arg1 Arg2 ..)} 
 
-We will later see many more method application sections in the context
-of Strasheela's music representation. */
-
-local
+We will later see many more method application sections in the context of Strasheela's music representation.
+</info>
+<oz>local
    Window = {QTk.build lr(button(text:"Hello world!" 
 				 action:toplevel#close))}
 in
@@ -328,13 +316,13 @@ in
    {Delay 1000}
    {Window set(borderwidth:1.0#c 
                background:blue)}
-end</oz></subsection>
+end</oz>
+</subsection>
 </section>
 
 
-
 <section title="Concurrency">
-<subsection title="intro">
+<subsection title="Introduction">
 <info>Oz provides excellent support for concurrent programming, where computations run in parallel in multiple threads.  We will only touch on this subject and discuss aspects relevant for Strasheela.  In general, however, concurrent programming plays a major role in Oz programming. 
 
 The computations in different threads can communicate with each other via variables.  Multiple threads can use the same variable in a computation.  If the value of a variable does not present enough information for performing a specific operation, then the thread simply blocks and waits for more information.  In the section below, the addition X+3 can not be performed as long as the value of X is unknown.  As soon as more information about the variable value is available, the thread resumes its execution. 
@@ -345,50 +333,37 @@ The downside of this concurrency model is that it can result in an unintended bl
 
 The sections demonstrates concurrent programming, but do not show a typical application (a typical application would be a program split in a server and one or more clients).  In the context of Strasheela, we will seldomly write concurrent programs explicitly.  Nevertheless, it is very important to know how concurrent programming works in Oz.  Even if we are not explicitly writing a concurrent program, constraint programming in Oz always results in a concurrent program.  Concurrent programming forms one of the foundations of Oz' constraint programming model, where each constraint (i.e. each propagator) is a concurrent agent running in its own thread.
 </info>
-<oz></oz></subsection>
-<subsection title="Declarative concurrency"><info></info><oz>/* This section declares X and then browses 'hello' (just to show that
-the browser works in principle).  However, the addition X+3 can not be
-executed immediately and blocks.  Because this computation is executed
-in its own thread, the top-level thread continues regardless, and
-calls the procedure Delay, which waits for 3000 msecs.  After that
-time, the top-level thread determines X to 4.  This awakes the other
-thread: it can now compute X+3 and browse the sum. */
+<oz></oz>
+</subsection>
 
-local
+<subsection title="Declarative concurrency">
+<info>This section declares X and then browses 'hello' (just to show that the browser works in principle).  However, the addition X+3 can not be executed immediately and blocks.  Because this computation is executed in its own thread, the top-level thread continues regardless, and calls the procedure Delay, which waits for 3000 msecs.  After that time, the top-level thread determines X to 4.  This awakes the other thread: it can now compute X+3 and browse the sum.
+</info>
+<oz>local
   X 
 in
   {Browse hello}
   thread {Browse X + 3} end
   {Delay 3000}
   X = 4
-end</oz></subsection>
-<subsection title="Blocking computation"><info></info><oz>/* This section demonstrates a buggy program which does not signal any
-error but simply does nothing.  The section is very similar to the
-previous section, but does not place the blocking X+3 in its own
-thread.  As a result, the whole program blocks at that point and never
-executes X = 4. */
+end</oz>
+</subsection>
 
-local
+<subsection title="Blocking computation">
+<info>This section demonstrates a buggy program which does not signal any error but simply does nothing.  The section is very similar to the previous section, but does not place the blocking X+3 in its own thread.  As a result, the whole program blocks at that point and never executes X = 4.</info>
+<oz>local
   X
 in
   {Browse hello}
   %% !! blocks
   {Browse X+3}
   X = 4
-end</oz></subsection>
-<subsection title="'Signalling' a blocking computation"><info></info><oz>/* This section demonstrates a pragmatic approach which checks for
-blocking programs.  The section ends with the statement {Browse
-endOfProgram}.  A non-blocking program will always execute this last
-line of code and show 'endOfProgram' in the Browser.  However, a
-blocking program (as the present one) does not do that and thus
-indicates that it is blocking.  Although this little trick does not
-tell us *where* the program blocks, the information *that* we wrote a
-blocking program can prove very helpful already.  You may get a feel
-for this trick by changing the section so that the message
-'endOfProgram' is shown (e.g. comment the blocking statement out, or
-surrounding it with a 'thread .. end' statement). */
+end</oz>
+</subsection>
 
-local
+<subsection title="'Signalling' a blocking computation">
+<info>This section demonstrates a pragmatic approach which checks for blocking programs.  The section ends with the statement {Browse endOfProgram}.  A non-blocking program will always execute this last line of code and show 'endOfProgram' in the Browser.  However, a blocking program (as the present one) does not do that and thus indicates that it is blocking.  Although this little trick does not tell us *where* the program blocks, the information *that* we wrote a blocking program can prove very helpful already.  You may get a feel for this trick by changing the section so that the message 'endOfProgram' is shown (e.g. comment the blocking statement out, or surrounding it with a 'thread .. end' statement).</info>
+<oz>local
   X
 in
   {Browse hello}
@@ -396,17 +371,14 @@ in
   {Browse X+3}
   X = 4
 end
-{Browse endOfProgram}</oz></subsection>
+{Browse endOfProgram}</oz>
+</subsection>
 
-<subsection title="'Signalling' a blocking computation (2)"><info></info><oz>/* This section demonstrates a technique which causes an error (raises
-an exception) when the current thread blocks. The function
-`Thread.this' returns the current thread, and `Debug.setRaiseOnBlock'
-activates this debugging feature. The error message can even tell you
-which variable caused the blocking (although in this section the deduced variable name is simply _).
+<subsection title="'Signalling' a blocking computation (2)">
+<info>This section demonstrates a technique which causes an error (raises an exception) when the current thread blocks. The function `Thread.this' returns the current thread, and `Debug.setRaiseOnBlock' activates this debugging feature. The error message can even tell you which variable caused the blocking (although in this section the deduced variable name is simply _).
 
-Note that you must load Debug first, before using `Debug.setRaiseOnBlock' (which this tutorial does implicitly). */
-
-local
+Note that you must load Debug first, before using `Debug.setRaiseOnBlock' (which this tutorial does implicitly).</info>
+<oz>local
   X 
 in
   {Debug.setRaiseOnBlock {Thread.this} true}
@@ -414,7 +386,8 @@ in
   {Browse X+3}
   X = 4
 end
-</oz></subsection>
+</oz>
+</subsection>
 </section>
 
 </chapter> 
