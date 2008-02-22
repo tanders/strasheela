@@ -1,19 +1,9 @@
 
+
 * Strasheela examples						    :STRASHEELA:
 
-** Add new Fenv examples to [[file:~/oz/music/Strasheela/strasheela/trunk/strasheela/examples/ContinuousControllersInScore-MidiOutput.oz]]      :NEXT:
 
-*** TODO Archive Fenvs with score 
-
-Transform with toInitRecord and then pickle with Score.saveScore
-
-*** TODO Tempo curve example 
-*** TODO Example with hierarchy of tempo curves and time shift functions 
-
-Wait for tempo curve related code to be finished...
-
-
-** TODO 'Interesting arpeggio' example [[file:~/oz/music/Strasheela/private/examples/forOlleRomo/Arpeggio.oz][Arpeggio.oz]]		       :NEXT:
+** TODO 'Interesting arpeggio' example [[file:~/oz/music/Strasheela/private/examples/forOlleRomo/Arpeggio.oz][Arpeggio.oz]]			  :SOON:
 
   ?? Duration working time: 1d -- probably more :)
 
@@ -83,31 +73,36 @@ Wait for tempo curve related code to be finished...
    
 * Strasheela design						    :STRASHEELA:
 
-** Time curves etc [[file:~/oz/music/Strasheela/private/examples/forOlleRomo/TempoCurves-etc.oz][TempoCurves-etc.oz]] 					  :NEXT:
 
-Goal: user can freely define tempo curve and time shift curve for any temporal container in score 
+** Time curves etc [[file:~/oz/music/Strasheela/private/examples/forOlleRomo/TempoCurves-etc.oz][TempoCurves-etc.oz]]					  :SOON:
 
-It should be relatively straitforward to access the performance time of any score time of a temporal item (e.g., note start and end times) depending on all temporal containers the item is contained in
-
-See my notes on paper...
-
-
-*** TODO Make test/prototype how to combine tempo curves and time shift curves and how to access performance value for given score value
-
-*** TODO Make simple prototype how timing fenvs are accessed from parent temporal containers
-
-*** TODO Address problem: timing fenvs of different containers depend on startTime/endTime of the containers: make abstraction expecting container, fenv and score time point and returning performance time point 
-
-Does this pose any additional problems to the combination of fenvs 
-
-*** TODO Abstract this: make approach of both prototypes easily usable 
-
-deadl with case that not every container gets time shift curve and tempo curve
-
-e.g., extend music representation, but perhaps there are more simple ways 
+[[file:~/oz/music/Strasheela/strasheela/trunk/strasheela/examples/ContinuousControllersInScore-MidiOutput.oz]]
+[[file:~/oz/music/Strasheela/private/examples/forOlleRomo/TempoCurves-etc.oz]]
+[[file:~/oz/music/Strasheela/strasheela/trunk/strasheela/contributions/anders/Fenv/Fenv.oz]]
 
 
-*** TODO Make test/example which produces sound output 
+Old Goal (unrealistic): user can freely define tempo curve and time shift curve for any temporal container in score 
+
+New reduced goal: user can freely define a single global tempo curve (possibly defining segments locally) and nested time shift functions for any temporal container in score 
+I feel the building blocks are now there, but there are examples to do
+
+*** DONE ?? concatenate tempo curve fenvs with associated start and end times in seconds
+    CLOSED: [2008-02-20 Wed 10:30]
+
+*** TODO example with single global tempo curve fenv
+
+Example partly done at [[file:~/oz/music/Strasheela/strasheela/trunk/strasheela/examples/ContinuousControllersInScore-MidiOutput.oz::][ContinuousControllersInScore-MidiOutput.oz]], Example 5, 
+but it still has bugs.
+
+*** TODO example with nested local time shift fenvs
+First create abstraction to access and combine local time shift fenvs
+
+*** TODO example with a global tempo curve derived from consecutive local tempo curves
+
+*** TODO ?? tempo canon example
+*** TODO Archive Fenvs with score 
+
+Transform with toInitRecord and then pickle with Score.saveScore
 
 
 ** TODO [#A] optimal solution for CSPs with soft constraints
@@ -215,11 +210,11 @@ E.g., I could use a method filterThreaded for a better definition of getSimultan
 # <<RandomDistribution>> 
 *** [#A] Refactor Strasheela distribution: recomputable support for random distribution :NEXT:
 
-
 **** DONE Create SVN branch
      CLOSED: [2008-02-13 Wed 17:49]
 
-**** TODO Read howto merge changes of branch back to trunk
+**** DONE Read howto merge changes of branch back to trunk
+     CLOSED: [2008-02-20 Wed 09:13]
 
      decribed here:     
      http://svnbook.red-bean.com/en/1.4/svn.branchmerge.commonuses.html
@@ -228,21 +223,32 @@ E.g., I could use a method filterThreaded for a better definition of getSimultan
      [[file:~/oz/music/Strasheela/sourceforge-howto/svn-HOWTO.muse::Merging%20a%20Whole%20Branch%20to%20Another][file:~/oz/music/Strasheela/sourceforge-howto/svn-HOWTO.muse::Merging a Whole Branch to Another]]
      
 
-**** TODO Check out: there was an example for which it worked already
+**** DONE Check out: there was an example for which it worked already
+     CLOSED: [2008-02-21 Thu 18:10]
 
      Understand orig example by Raphael
      
      [[file:~/oz/music/Strasheela/strasheela/branches/strasheela-randomValueOrdering/strasheela/others/TODO/Refactor-ScoreDistribution.oz]]
 
 
-**** TODO Change score solver interface in ScoreDistribution.oz so that it works for all cases 
+**** DONE Change score solver interface in ScoreDistribution.oz so that it works for all cases 
+     CLOSED: [2008-02-21 Thu 18:10]
 
 BTW: you may wan to create a Strasheela variant of the general solver object 
 
-**** TODO Change all solver calls in Strasheela if necessary -- check with my scripts like find-all
 
-this will take most time and is error prone, which is why I created a branch...
 
+**** DONE Clean up documentation
+     CLOSED: [2008-02-22 Fri 13:47]
+
+     in ScoreDistribution
+
+     do example 
+
+
+**** TODO Merge code into trunk
+         
+**** TODO Delete branch
 
 
 *** TODO [#A] check out performance with adaptive recomputation
@@ -303,14 +309,30 @@ See ../../testing/zy_Efficiency/KeepMusicRepresentationOutsideComputationalSpace
        !! -> How to access the ID when the constraint gets the variable directly?? I would need to rewrite all Strasheela programs such that every Strasheela constraint substitute always expects parameter objects instead of variables!
 
 ***** Instead with this Strasheela 'client', other CAC applications could also create CSP specs and call the Strasheela 'server' (e.g. PWGL)
-
 * Strasheela documentation					    :STRASHEELA:
 
 ** Strasheela tutorial
 
-*** TODO Revise Grahams update of StrasheelaPrototyper.oz 
+*** Graham's Tutorial update: fix remaining things			  :NEXT:
+
+**** TODO Revise Graham's update of StrasheelaPrototyper.oz 
+
+[[file:~/oz/music/Strasheela/strasheela/trunk/strasheela/contributions/anders/Tutorial/source/StrasheelaPrototyper.oz]]
 
 E.g., there are a few unused variables:  Chapter, ToplevelH, ...
+
+Where to start with this task? 
+
+**** TODO Check/revise Tutorial Muse format export after Graham's update
+
+[[file:~/oz/music/Strasheela/strasheela/trunk/strasheela/contributions/anders/Tutorial/source/StrasheelaPrototyper.oz]]
+
+**** TODO Update StrasheelaPrototyper.oz doc to reflect new format
+
+[[file:~/oz/music/Strasheela/strasheela/trunk/strasheela/contributions/anders/Tutorial/source/StrasheelaPrototyper.oz::lt%20chapter%20gt][file:~/oz/music/Strasheela/strasheela/trunk/strasheela/contributions/anders/Tutorial/source/StrasheelaPrototyper.oz::lt chapter gt]]
+
+
+**** TODO Delete temporal branch strasheela-updateTutorial
 
 
 *** DONE Strasheela tutorial: finish music representation 'chapter'
@@ -330,6 +352,70 @@ E.g., there are a few unused variables:  Chapter, ToplevelH, ...
 
 * General Oz todo							    :OZ:
 
+** OzUnit								  :SOON:
+
+   file://Users/t/oz/Collozeum/collozeum/OzUnit/
+
+*** TODO Test all error cases -- most are done already
+
+*** DONE Understand higher-level functionality: how to process a whole test suite etc. 
+    CLOSED: [2008-02-20 Wed 19:30]
+
+*** TODO Create documentation
+
+    use ozh, as usual..
+
+    Mention critic: timeout cases wait for specified time..
+
+
+    --------
+
+    Copy form email: 
+
+    On Apr 6, 2007, at 8:26 AM, Juergen Stuber wrote:
+    
+    Hi Torsten, hi Gal,
+ 
+    <snip>
+    
+    Actually I think (from experience with Java unit tests in
+    industry) that there should be something better than wait in real
+    time for a timeout when testing concurrent programs.  The timeouts
+    slow down the tests a lot, and the outcome is nondeterministic
+    (e.g. tests run fine for the developer, but fail in a complete
+    system build).
+    
+    I'd like a meta-interpreter which can provoke all the nasty races
+    deterministically and test that they are handled correctly, and
+    run as quickly as possibly by simulating the passage of time.  But
+    that would be a very big project.
+    
+    Jürgen
+    
+    -- 
+    Jürgen Stuber <juergen@jstuber.net>
+    
+
+*** TODO Create abstraction which simplifies use
+
+    only specifies list of test suites and gets results, statistics etc are created implicitly 
+
+    two cases: if test suites are either specified directly (as I did in test file) or as a functor
+    
+*** ?? possibly an application called on the shell wrote with this abstraction
+
+*** ?? Create working test suite for OzUnit  itself
+
+*** Upload to Collozeum 
+
+**** Contact Juergen Stueber and ask for permission
+
+     juergen@jstuber.net
+
+**** Upload via SVN 
+**** Inform Oz mailing list
+
+     Also, ask whether this is a suitable means for writing tests for the standard lib
 
 ** Oz Path							   :@NET:URGENT:
 
@@ -384,6 +470,9 @@ Problem: should that be called automatically when certain tests are executed? Wh
 this does already work in principle, but I need 'to prefix' the functor variable before each TAGS entry
 
 [[file:~/oz/music/Strasheela/strasheela/trunk/strasheela/scripts/generate-TAGS.sh::fun%20Foo%20Foo56%201566][file:~/oz/music/Strasheela/strasheela/trunk/strasheela/scripts/generate-TAGS.sh::fun Foo Foo56 1566]]
+
+
+
 
 
 
