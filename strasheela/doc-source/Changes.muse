@@ -9,10 +9,17 @@
 
  - Added examples which demonstrate how to use continuous controllers in the score, and how to output them to MIDI, see [[../examples/ContinuousControllersInScore-MidiOutput.oz][here]]
 
+ - Added to SDistro: SearchOneDepth 
+ - SDistro: Revised documentation for MakeSearchScript, removed MakeFDDistribution as exported value -- the solvers provided by SDistro are more convenient to use
+ [TODO: Check where MakeFDDistribution is used in examples]
+
  - Fixes
+  - Distribution strategy with random value ordering now supports recomputation
+    This is a very important fix: a randomisation of the solution is very important for music and recomputation is essential for solving highly complex problems which would take too much memory (recomputation trades RAM for runtime).
+   - Refactors MakeRandomGenerator and adds SetRandomGeneratorSeed
    - Out.scoreToEvents and Out.midi.scoreToEvents_Midi: now also support processing the top-level score container for output (if it passes the given test) 
-   - ScoreObject method hasThisInfo: in case some info value is a record, then it is checked whether its label is given info.
    - Refactor: Memo.memoize now uses a more efficient stateful data structure internally (dictionary instead of record constraints), whereas Memo.memoize2 is fully stateless and thus can be used in a CSP, but is less efficient. Also, changed interface of Memo.memoize into {Memoize Fn ?ClearP ?MemoFn}
+   - ScoreObject method hasThisInfo: in case some info value is a record, then it is checked whether its label is given info.
 
  - Minor
    - Added Out.midi.note2Midi
