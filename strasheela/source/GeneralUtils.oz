@@ -24,9 +24,10 @@ export
    XOr Cases
    IsFS
    Identity
-   Random RandIntoRange MakeRandomGenerator
+   Random RandIntoRange
+   MakeRandomGenerator SetRandomGeneratorSeed
    Log Mod_Float
-   %MakeConcurrentFn
+   % MakeConcurrentFn
    ToProc ToFun Procs2Proc
    ExtendedScriptToScript
    ApplySelected EncodeRatio
@@ -109,21 +110,31 @@ define
    in 
       {Int.'div' (Rand * (Max - Min)) MaxRand} + Min
    end
+
    local
-      fun lazy {RandomStream} {OS.rand}|{RandomStream} end
-      RandomNumbers={RandomStream}
+      fun lazy {RandomStream} {OS.rand}|{RandomStream} end   
+      RandomNumbers={NewCell {RandomStream}}
    in
-      /** %% Returns a nullary function which returns a random integer each time it is called.
-      %% The retured random number generator is intended to be used within a constraint search script: all random values are 'recorded' behind the scene and outside the script. Therefore, such a random generator can be used, e.g., within a distribution strategy definition to randomise the decision process and the resulting script can still apply recomputation (see SDistro.makeRandomDistributionValue).
-      %% NB: the random number generator returns always the same sequence of random numbers. To get a different sequence, MakeRandomGenerator itself must be re-evaluated (i.e. this definition does not provide different sequences -- simply take the source itself into your CSP..).
-      %% TODO: to overcome this limitation set the random seed: use {OS.srand +I}
+      /** %% Returns a random number generator (a null-ary function) which returns a pseudo-random integer whenever it is called. Every returned random number generator will always produce the same number sequence: all random values are 'recorded' behind the scene in the top-level space. In other words, the random number generator is deterministic. Such a random generator can be used for a randomised value ordering, and the resulting distribution strategy can still apply recomputation (see SDistro.makeRandomDistributionValue). In such as case, MakeRandomGenerator must be called inside script. The convenient Strasheela solvers in SDistro do that implicitly. 
+      %% MakeRandomGenerator can be (re)-initialised with SetRandomGeneratorSeed.
       %% */
-      %% source by Raphael Collet for random distribution with recomputation.
+      %%
+      %% This implementation is based on a suggestion by Raphael Collet (emails Wed, 02 Feb 2005 to users@mozart-oz.org). 
+      %% If MakeRandomGenerator is called inside a script, then the cell Str (see below) is local to that script and can thus be statefully changed in the script by the proc returned by MakeRandomGenerator. 
       fun {MakeRandomGenerator}
-	 Str={NewCell RandomNumbers} in proc {$ ?X} T in X|T=Str:=T end
+	 Str={NewCell @RandomNumbers}
+      in
+	 proc {$ ?X} T in X|T=Str:=T end
+      end
+      /** %% Sets the seed for the random number generator used by MakeRandomGenerator (which internally uses OS.rand). If Seed is 0, the seed will be generated from the current time.
+      %% NOTE: calling SetRandomGeneratorSeed will corrupt any random number generator previously created with MakeRandomGenerator. Either call {SetRandomGeneratorSeed 0} only once after starting Mozart (so a 'random' seed is used), or re-feed your code calling MakeRandomGenerator after using SetRandomGeneratorSeed (e.g., re-call your solver).
+      %% */
+      proc {SetRandomGeneratorSeed Seed}
+	 {OS.srand Seed}
+	 RandomNumbers:={RandomStream}
       end
    end
-   %%
+   
    /** %% Returns the logarithm to the base Base of X. X and Base must be floats and a float is returned.
    %% */
    fun {Log X Base}

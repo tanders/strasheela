@@ -8,11 +8,155 @@
 
 */
 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%
-%% * I can not change state in the global space directly from within a local space. But I can do this with a port!
-%% see Christians book (p. 40) or Moz mailing list: raph@info.ucl.ac.be: Re: memoization + search script. 4. Mai 2006 12:53:05 MESZ 
+%% 'random value ordering distribution' for recomputation
+%%
+%% working example constraining score 
 %%
 
+
+declare
+proc {DummyScript MyScore}   
+   MyScore = {Score.makeScore seq(items:{LUtils.collectN 5
+					 fun {$}
+					    note(duration:1
+						 pitch:{FD.int 60#72})
+					 end}
+				  startTime:0
+				  timeUnit:beats)
+	      unit}
+end
+
+{SDistro.exploreOne DummyScript
+ unit(order:size
+      value:random)}
+
+
+%% randomise the randomisation (otherwise there is a tendency for the first random values..)
+{OS.srand 0}
+{GUtils.setRandomGeneratorSeed {OS.rand}}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%% 'random value ordering distribution' for recomputation
+%%
+%% working example with plain variables (no score), copied from
+%% ScoreDistribution.oz
+%%
+
+%%
+%% Note:
+%%
+%% - MakeRandomGenerator must be called inside script
+%% - For finding a different first random solution, call GUtils.setRandomGeneratorSeed
+%%
+
+%% TODO: move this example into ScoreDistribution-test.oz and remove all the non-working random value ordering examples there
+
+declare
+%% randomise the randomisation (otherwise there is a tendency for the first random values..)
+{OS.srand 0}
+{GUtils.setRandomGeneratorSeed {OS.rand}}
+proc {DummyScript Sol}   
+   %% dummy example without constraints: 
+   %% distribution decides randomly for variable domain values
+   Sol = {FD.list 5 1#10}
+   %%
+   {FD.distribute
+    generic(value:{SDistro.makeRandomDistributionValue
+		   {GUtils.makeRandomGenerator}})
+    Sol}
+end
+
+{Browse {SearchOne DummyScript}}
+
+{ExploreOne DummyScript}
+
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%% 'random value ordering distribution' for recomputation
+%%
+%% working example with plain variables (no score), copied from
+%% ScoreDistribution.oz
+%%
+
+%%
+%% Note:
+%%
+%% - MakeRandomGenerator etc must be defined outside script
+%% - MakeRandomGenerator must be called inside script
+%% - For finding a different first random solution, call SetSeed
+%%
+
+
+declare
+%% cf. approach proposed by Raphael Collet (email Wed, 02 Feb 2005 to users@mozart-oz.org)
+local
+   fun lazy {RandomStream} {OS.rand}|{RandomStream} end   
+   RandomNumbers={NewCell {RandomStream}}
+in
+   /** %% Return null-ary function which returns pseudo-random integer whenever called.
+   %% The returned random number generator is intended to be used within a constraint search script: all random values are 'recorded' behind the scene and outside the script. Therefore, such a random generator can be used, e.g., within a distribution strategy definition to randomise the value ordering and the resulting script can still apply recomputation (see SDistro.makeRandomDistributionValue).
+   %% */
+   fun {MakeRandomGenerator}
+      Str={NewCell @RandomNumbers}
+   in
+      proc {$ ?X} T in X|T=Str:=T end
+   end
+   /** %% Sets the seed for the random number generator used by MakeRandomGenerator (which internally uses OS.rand). If Seed is 0, the seed will be generated from the current time. 
+   %% */
+   proc {SetSeed Seed}
+      {OS.srand Seed}
+      RandomNumbers:={RandomStream}
+   end
+end
+%% 
+proc {DummyScript Sol}   
+   % RandGen = {GUtils.makeRandomGenerator}
+   RandGen = {MakeRandomGenerator}
+in
+   %% dummy example without constraints: 
+   %% distribution decides randomly for variable domain values
+   Sol = {FD.list 5 1#10}
+   %%
+   {FD.distribute
+    generic(value:{SDistro.makeRandomDistributionValue RandGen})
+    Sol}
+end
+
+{SetSeed 0}
+
+
+{ExploreOne DummyScript}
+
+{Browse {SearchOne DummyScript}}
+
+
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%% old
+%%
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%% orig examples
+%%
 
 declare
 %% avoiding the non-determinism introduced above with approach proposed by Raphael Collet (email Wed, 02 Feb 2005 to users@mozart-oz.org)

@@ -11,6 +11,10 @@
 %%% GNU General Public License for more details.
 %%% *************************************************************
 
+
+/** %% The functor defines solvers and distribution strategies tailored for a score search.
+% */
+
 										    
 %% TODO: 
 %%
@@ -48,10 +52,6 @@ fun {Order Xs Fn}
 end
 */
 
-
-/** %% The functor defines means to generate distribution strategies particularily tailored for a score search.
-% */
-
 	
 functor 
 import 
@@ -61,16 +61,19 @@ import
    % Score at 'ScoreCore.ozf'
    % Browser(browse:Browse) % temp for debugging
 export 
-   MakeFDDistribution
+%   MakeFDDistribution % better use MakeSearchScript
    MakeSearchScript
    SearchOne SearchAll SearchBest
+   SearchOneDepth 
    ExploreOne ExploreAll ExploreBest
    MakeRandomDistributionValue
    MakeSetPreferredOrder MakeSetPreferredOrder2
 define
+
    %%
    %% General means to define score distribution strategies
    %%
+
    local
       fun {IsTimeParameter X}
 	 %% ?? shall I test only for TimeInterval or for time point too?
@@ -180,6 +183,12 @@ define
 		  mid: mid %FD.reflect.mid
 		  splitMin: splitMin
 		  splitMax: splitMax
+		  %% NOTE: random value ordering defined directly in
+		  %% MakeSearchScript
+
+		  %%
+		  %% OLD stuff below, for information only 
+		  %%
 		  %% Function returns a random value out of the
 		  %% FD int X.
 		  %%
@@ -188,34 +197,16 @@ define
 		  %% MakeRandomDistributionValue below for an
 		  %% alternative.
 		  %%
-		  %% 
-%% * I can not change state in the global space directly from within a local space. But I can do this with a port!
-%% see Christians book (p. 40) or Moz mailing list: raph@info.ucl.ac.be: Re: memoization + search script. 4. Mai 2006 12:53:05 MESZ 
-%%.
-		  %%
 		  %% !!!! Does Min ever occur?? 
-		  random:fun {$ X}
-			    Min = {FD.reflect.min X}
-			    Max = {FD.reflect.max X}
-			    Range = Max - Min
-			 in
-			    {FD.reflect.nextLarger
-			     X
-			     {GUtils.random Range} + Min - 1}
-			 end
-% 		  %% -- this is unfinished work: requires to redefine script generator such that distributor is given as proc expecting parameters to propagate
-		  %% TMP: this now even works for recomputation (but MakeFDDistribution must be called within script)
-% 		  random:local RandGen = {GUtils.makeRandomGenerator}
-% 			 in {SDistro.makeRandomDistributionValue RandGen}
+% 		  random:fun {$ X}
+% 			    Min = {FD.reflect.min X}
+% 			    Max = {FD.reflect.max X}
+% 			    Range = Max - Min
+% 			 in
+% 			    {FD.reflect.nextLarger
+% 			     X
+% 			     {GUtils.random Range} + Min - 1}
 % 			 end
-% 		    randomOld: fun {$ X}
-% 				  %% !! highly inefficient, especially
-% 				  %% for for large domains
-% 				  XL = {FD.reflect.domList X}
-% 				  N = {GUtils.random {Length XL}-1}+1
-% 			       in
-% 				  {Nth XL N}
-% 			       end
 % 		    splitRandom:fun {$ X}
 % 				   Min = {FD.reflect.min X}
 % 				   Max = {FD.reflect.max X}
@@ -272,29 +263,8 @@ define
 	 end
       end
    in
-      /** %% Function returns a specification of a distribution strategy (i.e. an argument for FD.distribute) for parameter score objects. The reader is asked to first read the documentation for FD.distribute.
-      %%
-      %% The result of MakeFDDistribution is a record with the functions specifying a FD distribution strategy (i.e. a record with the features filter, order, etc.). The specified distribution strategies differ slightly from the default distribution strategies of FD.distribute: the functions at the features filter, order and select handle parameter score objects. 
-      %%
-      %% The user can access some predefined distribution strategies by giving an atom to the argument Spec: 
-      %% 
-      %% <code>ff</code>: Specifies a first fail distribution for score parameters, i.e. parameters with smallest domain size are determined first.
-      %% <code>firstTimingFF</code>: Timing parameters are determined first. Parameters with smaller value domain size are preferred.
-      %% <code>startTime</code>: Parameters are determined in the order of the stratTime of the item the parameter belong to. Parameters with smaller value domain size are preferred. 
-      %%
-      %% The user may specify new score distribution strategies by specifying a subset of the functions at the features filter, order, select, value, and procedure to the argument Spec of MakeFDDistribution. However, some functions are already predefined for each feature and can be specified by an atom.
-      %%
-      %% filter: undet
-      %% order: size timeParams timeParamsAndSize startTime
-      %% select: value
-      %% value: min random
-      %% <!! unfinished doc -- see code>
-      %%
-      %% Features missing in Spec are taken form the default specification, which is a first fail distribution strategy for parameter score objects.
-      %% <!! add defaults> 
-      %%
+      /** %% Function returns a specification of a distribution strategy (i.e. an argument for FD.distribute) for parameter score objects. The result of MakeFDDistribution is a FD distribution strategy specification as expected by FD.distribute (see http://www.mozart-oz.org/documentation/system/node26.html). However, the distribution defined by MakeFDDistribution always distributes score parameter objects, not plain variables.
       %% */
-      %% !! unfinished comment
       fun {MakeFDDistribution Spec}
 	 FullSpec = {PreProcessSpec Spec}
       in
@@ -311,34 +281,95 @@ define
 
    end				
 
-   /** %% Returns a search script (a unary procedure) whose solution is a score.  ScoreScript is a unary proc expressing whole search problem involving a score as its solution, however without specifying any distribution strategy. Args is a record specifying the score distribution strategy with the usual features for a distribution strategy (filter, order, select, value, and procedure) and the additional feature test. The distribution strategy features have the same meaning and usage as in MakeFDDistribution. The feature test expects a unary boolean function: all score parameters fulfilling the test are distributed. Test defaults to the following (NB: for this case, the offsetTime of temporal items must be determined).
-   fun {Test X}
-      {Not {X isTimePoint($)}} andthen
-      {Not {{X getItem($)} isContainer($)}}
-   end
+   /** %% Returns a search script (a unary procedure) whose solution is a score. ScoreScript is a unary proc expressing a whole search problem involving a score as its solution, however without specifying any distribution strategy. Args is a record specifying the score distribution strategy with same features expected by FD.distribute for a distribution strategy (filter, order, select, value, and procedure) and the additional feature test. The distribution strategy features have the same meaning and usage as in FD.distribute, for example, all these arguments support procedures as values (for details, see http://www.mozart-oz.org/documentation/system/node26.html). However, the distribution defined by MakeSearchScript always distributes score parameter objects, not plain variables. For example, the predefined select-procedure 'value' is defined as follows
+
+   fun {$ X} {X getValue($)} end
+   
+   %% MakeSearchScript extends the set of predefined values for filter, order, select, value, and procedure already defined by FD.distribute. The following values are supported. 
+   %%
+   %% filter:
+%     undet: Considers only parameter objects with undetermined value.
+%     unary Boolean function P: Considers only the parameter objects X, for which {P X} yields true. 
+   %%
+   %% order:
+%    naive: Selects the first parameter object.
+%    size: Selects the first parameter, whose value domain has the smallest size.
+%    width: Select the first parameter with the smallest difference between the domain bounds of its value. 
+%    nbSusps: Selects the first parameter with the largest number of suspensions on its value, i.e., with the larges number of constraint propagators applied to it.  
+%    min: Selects the first parameter, whose value's lower bound is minimal.
+%    max: Selects the first parameter, whose value's lower bound is maximal.
+%    timeParams: Selects the first temporal parameter object.
+%    timeParamsAndSize: Selects the first parameter, whose value domain has the smallest size, but always selects temporal parameter objects first.
+%    startTime: Left-to-right distribution: Selects a parameter object whose associated temporal item has the smallest start time. Temporal parameters are preferred over other parameters. Note: the outmost temporal container msut have a determined startTime.
+%    binary Boolean function P: Selects the first parameter objects which is minimal with respect to the order relation P.   
+   %%
+   %% select: 
+%    value: selects the parameter value (a variable).
+%    unary function P: accesses a variable from the parameter object selected by order and filter.   
+   %%
+   %% value:  
+%    min: Selects the lower bound of the domain.
+%    max: Selects the upper bound of the domain.
+%    mid: Selects the value, which is closest to the middle of the domain (the arithmetical means between the lower and upper bound of the domain). In case of ties, the smaller element is selected.
+%    splitMin: Selects the interval from the lower bound to the middle of the domain (see mid).
+%    splitMax: Selects the interval from the element following the middle to the upper bound of the domain (see mid).
+%    random: Selects a domain value at random. This value ordering is deterministic, i.e., recomputation is supported.
+%    binary procedure P: Takes a variable as first argument, and binds its second argument to a domain descriptor D to serve as the restriction on said variable to be used in a binary distribution step (D in one branch, compl(D) in the other). 
+   %%
+   %% The feature test expects a unary boolean function: all score parameters fulfilling the test are distributed.
+   %%
+   %% The following are the defaults for Args. Note the argument test, which specifies that by default container parameters are ignored by the distribution. 
+   unit(filter: undet 
+	order: size
+	select: value
+	value: min
+	test:fun {Test X}
+		{Not {{X getItem($)} isContainer($)}}
+	     end)
    %% */
+   %%
    fun {MakeSearchScript ScoreScript Args}
       Defaults = unit(test: fun {$ X}
+			       {Not {{X getItem($)} isContainer($)}}
 			       %% offsets are determined: only look
 			       %% at durations (then startTime and
 			       %% endTime get determined as well)
-			       {Not {X isTimePoint($)}} andthen
-			       {Not {{X getItem($)} isContainer($)}}
+%			       {Not {X isTimePoint($)}} andthen
 			    end)
       ActualArgs = {Adjoin Defaults Args}
       DistributionArgs = {Record.subtract ActualArgs test}
       Test = ActualArgs.test
    in
-      proc {$ MyScore}
-	 MyScore = {ScoreScript}
-	 {FD.distribute
-	  {MakeFDDistribution DistributionArgs}
-	  {MyScore collect($ test:fun {$ X}
-				     {X isParameter($)} andthen
-				     {Test X}
-				  end)}}
+      %% !!?? TODO: abstract to avoid code-doubling
+      %% TODO: add value:splitRandom
+
+      %% random value ordering? 
+      case DistributionArgs of unit(value:random
+				    ...)
+      then
+	 proc {$ MyScore}
+	    MyScore = {ScoreScript}
+	    {FD.distribute {Adjoin {MakeFDDistribution {Record.subtract DistributionArgs
+							value}}
+			    generic(value:{MakeRandomDistributionValue
+					   {GUtils.makeRandomGenerator}})}
+	     {MyScore collect($ test:fun {$ X}
+					{X isParameter($)} andthen
+					{Test X}
+				     end)}}
+	 end
+      else
+	 proc {$ MyScore}
+	    MyScore = {ScoreScript}
+	    {FD.distribute {MakeFDDistribution DistributionArgs}
+	     {MyScore collect($ test:fun {$ X}
+					{X isParameter($)} andthen
+					{Test X}
+				     end)}}
+	 end
       end
    end
+   
    /** %% Calls Search.base.one with a script created by MakeSearchScript. The meaning of the arguments ScoreScript and Args are the same as for MakeSearchScript.
    %% */
    fun {SearchOne ScoreScript Args}
@@ -355,6 +386,15 @@ define
       {Search.base.best {MakeSearchScript ScoreScript Args}
        OrderP}
    end
+
+   
+   /** %% Calls Search.one.depth with a script created by MakeSearchScript. The meaning of the arguments ScoreScript and Args are the same as for MakeSearchScript.
+   %% RcdI (an int) is the recomputation distance, and KillP (a nullary procedure) kills the search engine, for details see http://www.mozart-oz.org/documentation/system/node11.html.  
+   %% */
+   fun {SearchOneDepth ScoreScript RcdI Args ?KillP}
+      {Search.one.depth {MakeSearchScript ScoreScript Args} RcdI KillP}
+   end
+   
    /** %% Calls Explorer.one with a script created by MakeSearchScript. The meaning of the arguments are the same as for MakeSearchScript.
    %% */
    proc {ExploreOne ScoreScript Args}
@@ -372,8 +412,7 @@ define
        OrderP}
    end
 
-   /** %% Defines a means for a 'random distribution', i.e., for a FD distribution strategy which randomly decides for a domain value of a variable in a deterministic (i.e. recomputable) way. 
-   %% MakeRandomDistributionValue returns a binary procedure for the argument 'value' of FD.distribute. The argument RandGen is a nullary function generated by GUtils.makeRandomGenerator.
+   /** %% Returns randomised value ordering, that is, a unary function for the argument 'value' of FD.distribute. The argument RandGen is a nullary function. If RandGen is created by GUtils.makeRandomGenerator, then the value ordering is randomised but still deterministic: re-executing the distribution will allways yield the same results. Consequently, such a randomised value ordering can be used for recomputation. 
    %% */
    fun {MakeRandomDistributionValue RandGen}
       fun {$ X}

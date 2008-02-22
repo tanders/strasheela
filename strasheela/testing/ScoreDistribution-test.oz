@@ -1,4 +1,147 @@
 
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%% distribution with random variable ordering, which even works for
+%% recomputation
+%%
+
+
+%%%%%%%%
+%%
+%% Example with plain variables (no score object). The solution is
+%% randomised. However, calling the solver again always results in the
+%% same first solution. For finding a different first random solution,
+%% call GUtils.setRandomGeneratorSeed.
+%%
+
+declare
+%% NOTE: MakeRandomGenerator must be called inside script
+{GUtils.setRandomGeneratorSeed 0}
+proc {DummyScript Sol}   
+   %% dummy example without constraints: 
+   %% distribution decides randomly for variable domain values
+   Sol = {FD.list 5 1#10}
+   %%
+   {FD.distribute
+    generic(value:{SDistro.makeRandomDistributionValue
+		   {GUtils.makeRandomGenerator}})
+    Sol}
+end
+
+{Browse {SearchOne DummyScript}}
+
+{ExploreOne DummyScript}
+
+
+/*
+%% randomise the randomisation (otherwise, at similar times there is a tendency for the first random values to be similar)
+{OS.srand 0}
+{GUtils.setRandomGeneratorSeed {OS.rand}}
+*/
+
+
+
+%%%%%%%%
+%%
+%% Example constraining a score object using a convenient
+%% SDistro-solver with integrated distribution strategy definition,
+%% and which also supports a random value ordering.  Again, the
+%% solution is randomised but re-calling the solver returns the same
+%% solution -- until a new seed has been set.
+%%
+
+
+declare
+{GUtils.setRandomGeneratorSeed 0}
+proc {DummyScript MyScore}   
+   MyScore = {Score.makeScore seq(items:{LUtils.collectN 5
+					 fun {$}
+					    note(duration:1
+						 pitch:{FD.int 60#72})
+					 end}
+				  startTime:0
+				  timeUnit:beats)
+	      unit}
+end
+
+declare
+MyScore = {SDistro.searchOne DummyScript
+	   unit(order:size
+		value:random)}.1
+{Out.renderAndShowLilypond MyScore
+ %% create unique file name 
+ unit(file:"test-"#{GUtils.getCounterAndIncr})}
+
+
+%% Select some score output under Notes->Information Action
+{SDistro.exploreOne DummyScript 
+ unit(order:size
+      value:random)}
+
+
+
+%%%%%%%%
+%%
+%% Example using recomputation: highly complex problems may take too
+%% much memory. Recomputation trades memory for runtime. The
+%% predefined distribution strategy with random value ordering
+%% supports recomputation.
+%%
+
+%%
+%% TODO: demonstrate how recomputation uses less memory, but takes
+%% more time. With profiler?
+%%
+
+declare
+{GUtils.setRandomGeneratorSeed 0}
+proc {DummyScript MyScore}   
+   MyScore = {Score.makeScore seq(items:{LUtils.collectN 5
+					 fun {$}
+					    note(duration:1
+						 pitch:{FD.int 60#72})
+					 end}
+				  startTime:0
+				  timeUnit:beats)
+	      unit}
+end
+
+
+
+declare
+RecomputationDistance = 10
+MyScore = {SDistro.searchOneDepth DummyScript RecomputationDistance
+	   unit(order:size
+		value:random)
+	  _ /* KillP */}.1
+{Out.renderAndShowLilypond MyScore
+ %% create unique file name 
+ unit(file:"test-"#{GUtils.getCounterAndIncr})}
+
+
+
+%% Recomputation can also be specified in the Explorer
+%% (options->search)
+{SDistro.exploreOne DummyScript 
+ unit(order:size
+      value:random)}
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%% OLD:
+%%
+%% SDistro.makeFDDistribution is not exported any more. Use the more
+%% convenient predefined solvers or MakeSearchScript instead
+%%
+
+
 {SDistro.makeFDDistribution ff}
 
 {SDistro.makeFDDistribution startTime}
@@ -29,12 +172,13 @@
 %% test exception
 {SDistro.makeFDDistribution generic(order: blabla)}
 
+
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-
 %%
 %% simple script to compare and study distribution strategies 
 %%
+
 declare
 fun {MakeSearchScript Distribution}
    proc {$ PPScore}
@@ -85,153 +229,5 @@ end
 {ExploreOne {MakeSearchScript {SDistro.makeFDDistribution firstTimingFF}}}
 
 {ExploreOne {MakeSearchScript {SDistro.makeFDDistribution startTime}}}
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%
-%% 'random distribution' for recomputation -- does not work as required
-%%
-
-declare
-%% avoiding the non-determinism introduced above with approach proposed by Raphael Collet (email Wed, 02 Feb 2005 to users@mozart-oz.org)
-%%
-%% both RandomNumbers and MakeRandomGenerator must be re-evaluated to get different random numbers
-fun lazy {RandomStream} {OS.rand}|{RandomStream} end
-RandomNumbers={RandomStream}
-fun {MakeRandomGenerator}
-   Str={NewCell RandomNumbers}
-in
-   proc {$ ?X} T in X|T=Str:=T end
-end
-
-declare
-proc {DummyScript Sol}   
-   % RandGen = {GUtils.makeRandomGenerator}
-   RandGen = {MakeRandomGenerator}
-in
-   %% dummy example without constraints: 
-   %% distribution decides randomly for variable domain values
-   Sol = {FD.list 5 1#10}
-   %%
-   {FD.distribute
-    generic(value:{SDistro.makeRandomDistributionValue RandGen})
-    Sol}
-end
-
-{ExploreOne DummyScript}
-
-%% always finds the same solution
-{SearchOne DummyScript}
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%
-%% this solution does not work:
-%%
-%% reimplement using Service, see http://www.mozart-oz.org/pipermail/mozart-users/2004/012230.html (google Service.synchronous site:www.mozart-oz.org)
-%%
-
-declare
-%% avoiding the non-determinism introduced above with approach proposed by Raphael Collet (email Wed, 02 Feb 2005 to users@mozart-oz.org)
-%%
-%% both RandomNumbers and MakeRandomGenerator must be re-evaluated to get different random numbers
-fun lazy {RandomStream} {OS.rand}|{RandomStream} end
-RandomNumbers={RandomStream}
-fun {MakeRandomGenerator}
-   Str={NewCell RandomNumbers}
-in
-   proc {$ ?X} T in X|T=Str:=T end
-end
-RandGen = {MakeRandomGenerator}
-%% ?? do I need synchronous or asynchronous
-%%
-%% -> providing RandGen as service works like plain rand (i.e. every call creates a NEW random number)
-RandGenService = {Service.synchronous.newFun RandGen}
-%%
-%% -> providing MakeRandomGenerator as a service still causes global state change from local space
-% MakeRandomGeneratorService = {Service.synchronous.newFun MakeRandomGenerator}
-
-
-declare
-proc {DummyScript Sol}   
-   %% dummy example without constraints: 
-   %% distribution decides randomly for variable domain values
-   Sol = {FD.list 5 1#10}
-   %%
-   {FD.distribute
-    generic(value:{SDistro.makeRandomDistributionValue RandGenService})
-    Sol}
-end
-
-%% !! explorer does not work with this anymore, why?
-{ExploreOne DummyScript}
-
-%% !!?? calling search script multiple times causes different results
-{SearchOne DummyScript}
-
-
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%
-%% this solution does not work:
-%%
-%% test: reimplement using Port.sendRecv
-%%
-
-declare
-local
-   %% avoiding the non-determinism introduced above with approach proposed by Raphael Collet (email Wed, 02 Feb 2005 to users@mozart-oz.org)
-   %%
-   %% both RandomNumbers and MakeRandomGenerator must be re-evaluated to get different random numbers
-   RandomNumbers
-   MyPort={NewPort RandomNumbers}
-   thread
-      for unit#X in RandomNumbers do
-	 X = {OS.rand}
-      end
-   end
-% fun lazy {RandomStream} {OS.rand}|{RandomStream} end
-% RandomNumbers={RandomStream}
-   %%
-in
-%    proc {RandGen X}
-%       {Send MyPort X}
-%    end
-   %% NB: Port.send does not work (that would send a free variable that belongs to a computation space outside that computation space which is forbidden), but in Port.sendRecv works. Yet, the 'message' send by Port.sendRecv must be determined (here to unit).
-   proc {RandGen X}
-      {Port.sendRecv MyPort unit X}
-   end
-   %% alternative.. 
-%   RandGen = {Service.synchronous.newFun proc {$ X} <call old RandGen> end}
-end
-
-% fun {MakeRandomGenerator}
-%    Str={NewCell RandomNumbers}
-% in
-%    proc {$ ?X} T in X|T=Str:=T end
-% end
-% RandGen = {MakeRandomGenerator}
-
-
-declare
-proc {DummyScript Sol}   
-   %% dummy example without constraints: 
-   %% distribution decides randomly for variable domain values
-   Sol = {FD.list 5 1#10}
-   %%
-   {FD.distribute
-    generic(value:{SDistro.makeRandomDistributionValue RandGen})
-    Sol}
-end
-
-{ExploreOne DummyScript}
-
-{RandGen}
-
-
-
-
-
 
 
