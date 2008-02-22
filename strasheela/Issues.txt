@@ -1,11 +1,20 @@
 
 This is a beta release of Strasheela. Most of the intendend functionality is already fully working. However, there are some issues which are not fixed yet. Particular important issues are listed in this document. It is hoped that all these issues are resolved in later versions of Strasheela.
 
- * At present, the Lilypond output is tested only with Lilypond version 2.4.5. It may work with later Lilypond versions as well, but because the syntax of Lilypond files often changed it may also not work. In that case, you can transform the *.ly files to the new syntax. See the Lilypond documentation for details.
-
  * At present, Strasheela's search process is very memory (RAM) demanding. Consider using recomputation in case you machine starts swapping.  
 
- * At present, Strasheela does not support recomputation with the predefined random domain value ordering. 
-
  * At present, the implicit temporal constraints of the temporal items (e.g. note, sequential, simultaneous) are hard-wired for FD integers. This means that the value of any temporal parameter (offsetTime, startTime, duration, endTime) must be a FD integer. For instance, it can not be a real from the XRI constraint system. This limitation makes complex rhythms (e.g. nested tuplets)  harder to realise (although setting the timeUnit to beats(N) where N is reasonably large can still make complex nested tuplets possible). Moreover, the offsetTime of temporal items can not be negative (e.g. items in a sequential container can not overlap).
+
+
+--------------------
+
+Old issues which are meanwhile resolved:
+
+
+ * At present, Strasheela does not support recomputation with the predefined random value ordering. 
+   -> Strasheela now predefines distribution strategy with random value ordering which is suitable for recomputation.
+
+ * At present, the Lilypond output is tested only with Lilypond version 2.4.5. It may work with later Lilypond versions as well, but because the syntax of Lilypond files often changed it may also not work. In that case, you can transform the *.ly files to the new syntax. See the Lilypond documentation for details.
+   -> the Lilypond output file is meanwhile automatically transformed into the installed format. Later we will also update the format output by Strasheela to a newer Lilypond version.
+
 
