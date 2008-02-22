@@ -26,7 +26,7 @@
 
 &lt;?xml version="1.0" encoding="UTF-8"?&gt;
 
-&lt;chapters&gt;
+&lt;chapter&gt;
 &lt;example title="My Test 1"&gt;
 &lt;info&gt;this is a test&lt;/info&gt;
 &lt;oz&gt;{Browse hi}&lt;/oz&gt;
