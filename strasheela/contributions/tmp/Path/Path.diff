@@ -1,5 +1,5 @@
---- /home/t/oz/mozart-source/mozart/trunk/mozart-stdlib/os/Path.oz	2007-02-07 07:09:26.000000000 +0100
-+++ ./Path.oz	2007-02-12 14:29:52.000000000 +0100
+--- /Users/t/oz/mozart/trunk/mozart-stdlib/os/Path.oz	2007-06-28 20:48:16.000000000 +0100
++++ /Users/t/oz/music/Strasheela/strasheela/trunk/strasheela/contributions/tmp/Path/Path.oz	2007-10-02 13:23:52.000000000 +0100
 @@ -23,6 +23,7 @@
     Readdir
     Extension DropExtension AddExtension
