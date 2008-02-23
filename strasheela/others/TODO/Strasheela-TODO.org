@@ -208,47 +208,20 @@ E.g., I could use a method filterThreaded for a better definition of getSimultan
 ** Efficiency
 
 # <<RandomDistribution>> 
-*** [#A] Refactor Strasheela distribution: recomputable support for random distribution :NEXT:
 
-**** DONE Create SVN branch
-     CLOSED: [2008-02-13 Wed 17:49]
+*** [#A] support IOzSeF solver						  :NEXT:
 
-**** DONE Read howto merge changes of branch back to trunk
-     CLOSED: [2008-02-20 Wed 09:13]
+    http://www.mozart-oz.org/mogul/doc/tack/iozsef/iozsef.html
+    
+**** Add solver interfaces to SDistro 
 
-     decribed here:     
-     http://svnbook.red-bean.com/en/1.4/svn.branchmerge.commonuses.html
-     
-     record info here: 
-     [[file:~/oz/music/Strasheela/sourceforge-howto/svn-HOWTO.muse::Merging%20a%20Whole%20Branch%20to%20Another][file:~/oz/music/Strasheela/sourceforge-howto/svn-HOWTO.muse::Merging a Whole Branch to Another]]
-     
+     IozefExploreOne already done -- easy
+    
+**** Define score output for IOzSeF
 
-**** DONE Check out: there was an example for which it worked already
-     CLOSED: [2008-02-21 Thu 18:10]
-
-     Understand orig example by Raphael
-     
-     [[file:~/oz/music/Strasheela/strasheela/branches/strasheela-randomValueOrdering/strasheela/others/TODO/Refactor-ScoreDistribution.oz]]
-
-
-**** DONE Change score solver interface in ScoreDistribution.oz so that it works for all cases 
-     CLOSED: [2008-02-21 Thu 18:10]
-
-BTW: you may wan to create a Strasheela variant of the general solver object 
-
-
-
-**** DONE Clean up documentation
-     CLOSED: [2008-02-22 Fri 13:47]
-
-     in ScoreDistribution
-
-     do example 
-
-
-**** TODO Merge code into trunk
-         
-**** TODO Delete branch
+     with IOzSeF.addInformationAction(NameAtom root Action)
+     Action is a unary procedure expecting root (i.e. score object) as arg
+     see doc
 
 
 *** TODO [#A] check out performance with adaptive recomputation
