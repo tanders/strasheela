@@ -27,21 +27,23 @@
 &lt;?xml version="1.0" encoding="UTF-8"?&gt;
 
 &lt;chapter&gt;
-&lt;example title="My Test 1"&gt;
+&lt;section title="My Test 1"&gt;
+&lt;subsection title="My Test 1.1"&gt;
 &lt;info&gt;this is a test&lt;/info&gt;
 &lt;oz&gt;{Browse hi}&lt;/oz&gt;
-&lt;/example&gt;
-&lt;example title="My Test 2"&gt;
+&lt;/subsection&gt;
+&lt;subsection title="My Test 1.2"&gt;
 &lt;info&gt;
 the
 next
 test is
 this
 &lt;/info&gt;
-&lt;oz title="Browse hi"&gt;{Browse hi}&lt;/oz&gt;
-&lt;oz title="Browse there"&gt;{Browse there}&lt;/oz&gt;
-&lt;/example&gt;
+&lt;oz&gt;{Browse there}&lt;/oz&gt;
+&lt;/subsection&gt;
+&lt;/section&gt;
 &lt;/chapters&gt;
+
 
 %% The *.tut files are best edited with the Emacs nxml-mode (http://thaiopensource.com/nxml-mode/). Validation, automatic completition etc. are supported for the *.tut files format: an XML schema for *.tut files is provided (in the Relax NG format) at ../xml-schema/tutorial.rnc. For the existing files, Emacs finds this schema file automatically (at least on UNIX..) due to a schemas.xml file in the respective directories.
 %%
@@ -92,7 +94,7 @@ import
    Application
 % not used
    Browser(browse:Browse)
-   System
+   % System
    % Error
    
    LUtils at 'x-ozlib://anders/strasheela/source/ListUtils.ozf'
@@ -105,18 +107,22 @@ export
    StartPrototyper
    
    OutputMuse
-   
-   %% !! Tmp for debugging
+
    /*
-   ReadChapters
-   ExamplesDir
+   %% !! Tmp for debugging
+   ReadChapter
+%   ExamplesDir
    MyParser
-   GetChapters
+   GetSections
    GetTitle
    GetOz
    GetInfo
+   MyChapters
+   TutToMuse
+   SectionToMuse
+   SubsectionToMuse
    */
-
+   
 %require
 %   OS
    
@@ -349,11 +355,14 @@ define
    /** %% Called after user selects a code example with dropdownlist: update content of dropdownlist label and of code widget. 
    %% */
    proc {ChangeCode Args}
-      unit(chapter:Chapter currentSection:CurrEx
-	   toplevelH:ToplevelH
-	   listH:ListH listSelection:ListSel
+      unit(% chapter:Chapter
+	   currentSection:CurrEx
+	   % toplevelH:ToplevelH
+	   % listH:ListH
+	   % listSelection:ListSel
 	   codeListH:CodeListH
-	   infoH:InfoH codeH:CodeH ...) = Args
+	   infoH:InfoH codeH:CodeH
+	   ...) = Args
       %% firstselection returns index of selected list element
       Index = {CodeListH get(firstselection:$)}
    in
@@ -406,45 +415,65 @@ define
 		nil
 		"* About this document\n\nThis file was automatically generated from the interactive Strasheela tutorial. Some aspects of the text only make sense in the original interactive tutorial application (e.g., buttons indicated to press, and positions specified on the screen), and not in this version of the text."
 		nil]
-	{Map {GetChapter ParsedFile}
-	 SectionToMuse}}}
+	{Map {GetSections ParsedFile} SectionToMuse}}}
    end
 
-   /** %% Expects parsed example and outputs example in Muse format (as VS)
+   /** %% Expects parsed section and outputs it in Muse format (as VS)
    %% */ 
    fun {SectionToMuse Section}
       %% title obligatory
       Title = "* "#{GetTitle Section}
-      [info(text:InfoText
-	    title:_)] = {GetContent Section info nil}
-      OzData = {GetContent Section oz nil}
-      OzAsMuse = {Map OzData
-		  fun {$ oz(text:Text
-			    title:Title)}		   
-		     FullTitle = if Title == nil then nil
-				 else "** "#Title
-				 end
-		     FullText = if Text == nil then nil
-				else 
-				   ["<src lang=\"oz\">"
-				    Text
-				    "</src>"
-				    nil]
-				end
-		  in
-		     {Out.listToLines {Append [FullTitle
-					       nil] % empty line
-				       FullText}}
-		  end}
    in
       {Out.listToLines
-       {Append [Title
-		nil % empty line
-		InfoText
-		nil]
-	OzAsMuse}}
+       Title | nil |  {Map Section.children SubsectionToMuse}}
    end
 
+   /** %% Expects parsed subsection and outputs it in Muse format (as VS)
+   %% */ 
+   fun {SubsectionToMuse Subsection}
+      %% title is optional according to xml schema
+      Title = {GetTitle Subsection}
+      TitleVS = if Title == nil then ""
+		  else {Out.listToLines ["** "#Title nil]}
+		  end
+      InfoText = {GetInfo Subsection}
+      OzData = {GetOz Subsection}
+      OzVS = if OzData == nil then ""
+	     else {Out.listToLines ["<src lang=\"oz\">"
+				    OzData
+				    "</src>"
+				    nil]}
+	     end
+%      [info(text:InfoText
+%	    title:_)] = {GetContent Subsection info nil}
+%      OzData = {GetContent SubSection oz nil}
+%       OzAsMuse = {Map OzData
+% 		  fun {$ oz(text:Text
+% 			    title:Title)}		   
+% 		     FullTitle = if Title == nil then nil
+% 				 else "** "#Title
+% 				 end
+% 		     FullText = if Text == nil then nil
+% 				else 
+% 				   ["<src lang=\"oz\">"
+% 				    Text
+% 				    "</src>"
+% 				    nil]
+% 				end
+% 		  in
+% 		     {Out.listToLines {Append [FullTitle
+% 					       nil] % empty line
+% 				       FullText}}
+% 		  end}
+   in
+      {Out.listToLines [TitleVS
+			InfoText
+			nil
+			OzVS]}
+   end
+
+   
+   
    
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%
@@ -483,9 +512,9 @@ define
 % 	 end
 %       end
 %    end
-   /** %% ["data abstraction"] expects the full parse tree of an XML file and returns the list of all chapters contained in the top-level <chapters> element.
+   /** %% ["data abstraction"] expects the full parse tree of an XML file and returns the list of all sections contained in the top-level <chapters> element.
    %% */
-   fun {GetChapter FullParseTree}
+   fun {GetSections FullParseTree}
       Chapter = {LUtils.find FullParseTree
 		  fun {$ X} {Label X} == chapter end}
    in
@@ -538,7 +567,7 @@ define
        {Map MyChapters
 	% {CollectXMLFiles ExamplesDir}
 	fun {$ XMLPath}
-	   {Map {GetChapter {MyParser parseFile({XMLPath toString($)} $)}}
+	   {Map {GetSections {MyParser parseFile({XMLPath toString($)} $)}}
 	    fun {$ Section}
 	       unit(title:{GetTitle Section}
 		    subsections:{Map Section.children
