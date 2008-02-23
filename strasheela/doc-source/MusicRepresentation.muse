@@ -8,21 +8,44 @@ This file was automatically generated from the interactive Strasheela tutorial. 
 
 * -- Strasheela's Music Representation
 
-The following examples introduce various aspects of Strasheela's music representation. The representation is then later used for defining musical constraint satisfaction problems. 
+** intro
+
+The following sections introduce various aspects of Strasheela's music representation. The representation is then later used for defining musical constraint satisfaction problems. 
 
 
 
+** Implicit pattern matching in Strasheela
+
+The following function GetPitch expects a record as argument which must match the record note(pitch:Pitch ...).  The variable Pitch is implicitly declared and bound to the value at the feature 'pitch' of the record given as argument to the function.
+
+Please note that the record in the header of the function GetPitch is not even complete but contains three dots (...) to indicate that further record features are possible.
+
+
+<src lang="oz">
+local
+   fun {GetPitch note(pitch:Pitch ...)}
+      Pitch
+   end
+in
+   {Inspect {GetPitch note(duration:4 pitch:60)}}
+end
+</src>
 
 * Score Creation
 
-This example creates a Strasheela score, consisting of a single note. The score is specified textually, and this specification is then transformed into a score object instance. A textual representation, on the one hand, is conveniently entered and edited. A score object instance, on the other hand, has the advantage that many operations are already defined for it. For example, there are various operations available for accessing score information and for outputting a score into other formats (e.g. Csound or Lilypond). The textual score format and the interface of a score object (i.e. the operations it understands) are explained later. 
+** intro
 
-The created score object is shown by the Inspector. The Inspector shows <O: Note>, where the O says that this is an object, and Note is the name of its class. However, the Inspector also allows you to look 'inside' a score object via the object's context menu (typically right-mouseclick, but happens to be the middle-mouse key on my Mac...). Select 'Filter' -> 'Show Textual Score'. This shows the score in the textual form as entered in the example. Note also that the background color behind the score changed to indicate that we are now 'looking into' something. You can 'go back' to the original view by the context menu entry 'unmap' (you have to right-click on the top-level label note). 
+This section creates a Strasheela score, consisting of a single note. The score is specified textually, and this specification is then transformed into a score object instance. A textual representation, on the one hand, is conveniently entered and edited. A score object instance, on the other hand, has the advantage that many operations are already defined for it. For section, there are various operations available for accessing score information and for outputting a score into other formats (e.g. Csound or Lilypond). The textual score format and the interface of a score object (i.e. the operations it understands) are explained later. 
 
-The Inspector also provides different views on the score via the other 'Filter' context menu entries. These provide more information on the internal structure of a score object. For example, 'Show Score Hierarchy Recursively' reveals that even a plain note is internally represented hiearchically: the note parameters (e.g. duration, pitch) are represented by their own objects.  
+The created score object is shown by the Inspector. The Inspector shows <O: Note>, where the O says that this is an object, and Note is the name of its class. However, the Inspector also allows you to look 'inside' a score object via the object's context menu (typically right-mouseclick, but happens to be the middle-mouse key on my Mac...). Select 'Filter' -> 'Show Textual Score'. This shows the score in the textual form as entered in the section. Note also that the background color behind the score changed to indicate that we are now 'looking into' something. You can 'go back' to the original view by the context menu entry 'unmap' (you have to right-click on the top-level label note). 
+
+The Inspector also provides different views on the score via the other 'Filter' context menu entries. These provide more information on the internal structure of a score object. For section, 'Show Score Hierarchy Recursively' reveals that even a plain note is internally represented hiearchically: the note parameters (e.g. duration, pitch) are represented by their own objects.  
+
 
 
 ** Inspect score object
+
+No information available.
 
 <src lang="oz">
 %% Inspector may be behind the tutorial...
@@ -41,22 +64,27 @@ end
 
 * Sound Output
 
-This example creates a Strasheela score consisting of three notes. The first example saves a Csound score file (with the procedure Out.outputCsoundScore). The second and third examples additionally call Csound in the background and open the resulting sound file with an editor (with the procedure Out.renderAndPlayCsound). Note that these examples requires that you specified where Csound is installed on your system and what sound file editor you want to use (see 'Settings...' in the Tutorial menu).
+** intro
 
-This example introduces Strasheela containers: three notes are contained in a simultaneous container (sim). This container expresses how the notes are temporally arranged. The startTime of notes in a simultaneous container is their offsetTime plus the startTime of the encapsulating simultaneous container (which is 0 here). Thus, in this example the first note starts at 0, the second at 500, and the third at 1500.
+This section creates a Strasheela score consisting of three notes. The first section saves a Csound score file (with the procedure Out.outputCsoundScore). The second and third sections additionally call Csound in the background and open the resulting sound file with an editor (with the procedure Out.renderAndPlayCsound). Note that these sections requires that you specified where Csound is installed on your system and what sound file editor you want to use (see 'Settings...' in the Tutorial menu).
+
+This section introduces Strasheela containers: three notes are contained in a simultaneous container (sim). This container expresses how the notes are temporally arranged. The startTime of notes in a simultaneous container is their offsetTime plus the startTime of the encapsulating simultaneous container (which is 0 here). Thus, in this section the first note starts at 0, the second at 500, and the third at 1500.
 
 The temporal structure of the score is specified in milliseconds, as the timeUnit argument of this container indicates. Please note that the timeUnit must be specified only once in a score. This setting is shared by all temporal score objects (i.e. the container and the notes). 
 
-The examples demonstrate different ways to specify the output file(s). In the first two examples, the path is specified textually in two components: directory and file name (the extension .sco is added automatically). For example, the first example outputs the file "/tmp/test.sco". You may change these settings by editing the arguments scoDir (the directory for the sco file), soundDir (the directory for the resulting sound file), and file (the file name without extension). Windows users will have to input a directory path like, for example, "C:\\Dokumente und Einstellungen\\" (German settings..). In the third example, the output file is specified with a file dialog for convenience. BTW: most directory arguments of output procedures (e.g., scoDir soundDir of Out.renderAndPlayCsound) can be omitted; their default value are directories set in the Strasheela environment (cf. the _ozrc file in the Strasheela directory for an example how to set these default directories).
+The sections demonstrate different ways to specify the output file(s). In the first two sections, the path is specified textually in two components: directory and file name (the extension .sco is added automatically). For section, the first section outputs the file "/tmp/test.sco". You may change these settings by editing the arguments scoDir (the directory for the sco file), soundDir (the directory for the resulting sound file), and file (the file name without extension). Windows users will have to input a directory path like, for section, "C:\\Dokumente und Einstellungen\\" (German settings..). In the third section, the output file is specified with a file dialog for convenience. BTW: most directory arguments of output procedures (e.g., scoDir soundDir of Out.renderAndPlayCsound) can be omitted; their default value are directories set in the Strasheela environment (cf. the _ozrc file in the Strasheela directory for an section how to set these default directories).
 
 Please note that the shell (or Dos) where you started this tutorial provides feedback. It confirms the writing of the Csound score file, shows the call to Csound resulting from your settings etc. When you are using Strasheela from within the OPI, the Emacs buffer 'Oz Emulator' shows this information. 
 
-Please have a look at the content of the resulting Csound score file (on UNIX, you may just uncomment the last line of the first example). You will notice that the Csound p-fields p2 and p3 (i.e. the second and third columns) correspond to the notes' offset time and duration, now measured in Csound beats (note the Csound tempo specification above, which can be changed with the procedure Init.setTempo, but defaults to 60.0). Moreover, p4 is the amplitude (measure as midi velocity value in the example and now normalised in 0-1) and p5 is the pitch (measured as midi keynumber). In strasheela/goodies/csound you will find a demo Csound orc file which works with these settings. This file is used in the second and third example. 
+Please have a look at the content of the resulting Csound score file (on UNIX, you may just uncomment the last line of the first section). You will notice that the Csound p-fields p2 and p3 (i.e. the second and third columns) correspond to the notes' offset time and duration, now measured in Csound beats (note the Csound tempo specification above, which can be changed with the procedure Init.setTempo, but defaults to 60.0). Moreover, p4 is the amplitude (measure as midi velocity value in the section and now normalised in 0-1) and p5 is the pitch (measured as midi keynumber). In strasheela/goodies/csound you will find a demo Csound orc file which works with these settings. This file is used in the second and third section. 
 
-The example requires to wait with the Csound output until all score information not explicitly specified (e.g. the start time of the notes) is propagated in the background. Remember that Oz is a concurrent programming languages: propagation of such score information happens concurrently 'behind the scene'. The wait method blocks until all parameter values in the score are determined (we will not need it later in actual CSPs).
+The section requires to wait with the Csound output until all score information not explicitly specified (e.g. the start time of the notes) is propagated in the background. Remember that Oz is a concurrent programming languages: propagation of such score information happens concurrently 'behind the scene'. The wait method blocks until all parameter values in the score are determined (we will not need it later in actual CSPs).
+
 
 
 ** Output Csound score file
+
+No information available.
 
 <src lang="oz">
 local
@@ -86,6 +114,8 @@ end
 </src>
 
 ** Output sound file
+
+No information available.
 
 <src lang="oz">
 %% NB: set Csound and sound file editor in 'Settings...' in the Tutorial menu
@@ -117,6 +147,8 @@ end
 
 ** Output sound file (file dialog)
 
+No information available.
+
 <src lang="oz">
 %% Specify file with file dialog (full path without extension)
 %% NB: set Csound and sound file editor (or just a player) in 'Settings...' in the Tutorial menu
@@ -147,14 +179,19 @@ end
 
 * Sheet Music Output
 
-This example creates a hierarchically nested score and outputs it to sheet music. The previous example presented the simultaneous container (sim), which arranges its contained score objects simultaneously in time. The present example introduces the sequential container (seq), which arranges its contained score objects sequentially in time. The example demonstrates that simultaneous and sequential containers can be arbitrarily nested. 
+** intro
 
-In the previous example, the timeUnit was set to milliseconds. Here, it is set to beats(4), which means that the duration 4 indicates a quarter-note (a beat) and consequently duration 1 is a sixteenth-note. In general, all musical parameters support some unit of measurement which indicates how the numeric parameter value is interpreted (in particular for output into export formats). For example, the pitchUnit defaults to (MIDI) 'keynumber', but can also be set to midicent, frequency, or et72 (i.e. equal temperament with 72 steps per octave). These various parameter units of measurements are supported, because Strasheela parameter values are (at least presently) always integers. Whereas the timeUnit must be set only once in the score, other units can be set individually for every score object. The timeUnit is handled differently, because Strasheela implicitly applies some constraints to all temporal parameters (e.g., the temporal structure in sequential and simultaneous containers is enforced by constraints), and these constraints require a consistent timeUnit for all parameters.
+This section creates a hierarchically nested score and outputs it to sheet music. The previous section presented the simultaneous container (sim), which arranges its contained score objects simultaneously in time. The present section introduces the sequential container (seq), which arranges its contained score objects sequentially in time. The section demonstrates that simultaneous and sequential containers can be arbitrarily nested. 
 
-The first example outputs the music to a PDF file (using Lilypond). The second example outputs to a MusicXML file (using Fomus), which can be opened, for example, by software like Finale and Sibelius. Fomus supports outputting into further formats and supports tweaking the MusicXML output specifically for Finale or Sibelius usage: just set the appropriate Fomus flag in the example below (see the Fomus documentation for the supported flags). Please note that for running these examples you must specify (via 'Settings...' menu entry) where Strasheela can find the applications lilypond, convert-ly (an application part of Lilypond), a PDF file viewer, and Fomus. 
+In the previous section, the timeUnit was set to milliseconds. Here, it is set to beats(4), which means that the duration 4 indicates a quarter-note (a beat) and consequently duration 1 is a sixteenth-note. In general, all musical parameters support some unit of measurement which indicates how the numeric parameter value is interpreted (in particular for output into export formats). For section, the pitchUnit defaults to (MIDI) 'keynumber', but can also be set to midicent, frequency, or et72 (i.e. equal temperament with 72 steps per octave). These various parameter units of measurements are supported, because Strasheela parameter values are (at least presently) always integers. Whereas the timeUnit must be set only once in the score, other units can be set individually for every score object. The timeUnit is handled differently, because Strasheela implicitly applies some constraints to all temporal parameters (e.g., the temporal structure in sequential and simultaneous containers is enforced by constraints), and these constraints require a consistent timeUnit for all parameters.
+
+The first section outputs the music to a PDF file (using Lilypond). The second section outputs to a MusicXML file (using Fomus), which can be opened, for section, by software like Finale and Sibelius. Fomus supports outputting into further formats and supports tweaking the MusicXML output specifically for Finale or Sibelius usage: just set the appropriate Fomus flag in the section below (see the Fomus documentation for the supported flags). Please note that for running these sections you must specify (via 'Settings...' menu entry) where Strasheela can find the applications lilypond, convert-ly (an application part of Lilypond), a PDF file viewer, and Fomus. 
+
 
 
 ** Output Lilypond
+
+No information available.
 
 <src lang="oz">
 local
@@ -195,6 +232,8 @@ end
 </src>
 
 ** Output MusicXML, via Fomus
+
+No information available.
 
 <src lang="oz">
 local
@@ -237,25 +276,30 @@ end
 
 * Specifying and Accessing Basic Score Object Information
 
-Various information about score objects can be stored and retrieved from Strasheela's music representation. This information is used for formulating music theory models. For example, a musical CSP may specify a score where all note pitch variables are initialised to certain domains, and neighbouring melodic notes are then accessed and constrained.
+** intro
 
-The textual music representation allows for the convenient definition of complex scores, as already shown by the previous examples. The interface defined for Strasheela score objects, on the other hand, simplifies the access to score information. As shown before, the textual representation is transformed into a score object with the function Score.makeScore. Vice versa, a score object can be transformed into its textual representation (see below for an example). Using the textual representation and Score.makeScore is strongly recommended for creating Strasheela score objects, because it hides low-level details of the score object creation process. 
+Various information about score objects can be stored and retrieved from Strasheela's music representation. This information is used for formulating music theory models. For section, a musical CSP may specify a score where all note pitch variables are initialised to certain domains, and neighbouring melodic notes are then accessed and constrained.
 
-This example introduces the textual music representation format in more detail. In general, a textual score is a (often nested) Oz record. Record labels correspond with score classes, and record features are initialisation arguments for the class creation. This was already demonstrated in previous examples. In the following, specific aspects are introduced in more detail by examples. For additional information and examples of the textual representation please see the Score.makeScore reference documentation (strasheela/doc/api/node6.html#entity225) and and the Score.makeScore examples in strasheela/testing/ScoreCore-test.oz. 
+The textual music representation allows for the convenient definition of complex scores, as already shown by the previous sections. The interface defined for Strasheela score objects, on the other hand, simplifies the access to score information. As shown before, the textual representation is transformed into a score object with the function Score.makeScore. Vice versa, a score object can be transformed into its textual representation (see below for an section). Using the textual representation and Score.makeScore is strongly recommended for creating Strasheela score objects, because it hides low-level details of the score object creation process. 
 
-The example also demonstrates the retrieval of various basic information. Basic information includes access to object parameter values (e.g. the pitch of a note), checking the type (class) of an object (e.g. checking whether object X is a note), checking the identity of two objects, and exploring the hierarchic structure of a score. Later examples will show how you can access more complex information. 
+This section introduces the textual music representation format in more detail. In general, a textual score is a (often nested) Oz record. Record labels correspond with score classes, and record features are initialisation arguments for the class creation. This was already demonstrated in previous sections. In the following, specific aspects are introduced in more detail by sections. For additional information and sections of the textual representation please see the Score.makeScore reference documentation (strasheela/doc/api/node6.html#entity225) and and the Score.makeScore sections in strasheela/testing/ScoreCore-test.oz. 
+
+The section also demonstrates the retrieval of various basic information. Basic information includes access to object parameter values (e.g. the pitch of a note), checking the type (class) of an object (e.g. checking whether object X is a note), checking the identity of two objects, and exploring the hierarchic structure of a score. Later sections will show how you can access more complex information. 
 
 The naming of many methods and functions accessing basic information follows common conventions. Such convensions are briefly summarised here. The name of accessor methods usually start with 'get' as in getSomething (e.g., getDuration, getPitch, getContainers). Type-checking methods usually start with 'is' (e.g., isNote, isPause). Methods which check a has-a relation often start with 'has' (hasSuccessor, hasThisInfo). Converters start often with 'to' or contain 'to' in their name (e.g. toInitRecord, but also Int.toFloat). The name of many constructors starts with 'make' (Score.makeScore, Score.makeClass).
 
 
+
 ** Setting/accessing a parameter value
+
+No information available.
 
 <src lang="oz">
 /* A parameter value (e.g. the duration of a note, or of a
 simultaneous container) is usually specified in the textual score with
 the name of the parameter as a record feature (e.g. duration), and
 accessed with a method get<MyParameter> (e.g. getDuration). The
-following example initialises and accesses the duration of a
+following section initialises and accesses the duration of a
 simultaneous container. */
 
 local 
@@ -267,22 +311,24 @@ end
 
 ** Default parameter values
 
+No information available.
+
 <src lang="oz">
 /* The textual music representation specifies initialisation arguments
 for score object to create (e.g., sets the pitch of a note, or the
 duration of a sequential container). Most of these initialisation
 arguments are optional, and Strasheela defines a default value for
-these initialisation arguments. For example, parameter values such as
+these initialisation arguments. For section, parameter values such as
 durations and pitches default to a constrained variable.
 
-This example creates a single note and specifies no initialisation
+This section creates a single note and specifies no initialisation
 arguments at all. You can inspect the note's parameters and their
 default values (mostly undetermined constrained variables). In the
 Inspector, use the note's context menu: 'Filter' -> 'Show Score
 Hierarchy Recursively'. 
 
 An undetermined parameter value is accessed the same way as a
-determined parameter. For example, a note's undetermined pitch is
+determined parameter. For section, a note's undetermined pitch is
 accessed with the method getPitch. Accessing undetermined parameter
 values is important for constraining these values. */
 
@@ -296,10 +342,12 @@ end
 
 ** Type checking (1)
 
+No information available.
+
 <src lang="oz">
 /* The type (class) of Strasheela objects can be checked. Methods such
 as isNote or isPause return either true or false. This information can
-be useful, for example, to decide to which object a constraint is
+be useful, for section, to decide to which object a constraint is
 applied and which objects are skipped. */
 
 local
@@ -313,12 +361,14 @@ end
 
 ** Type checking (2)
 
+No information available.
+
 <src lang="oz">
 /* Strasheela defines a hierarchy of types (class hierarchy). For
-example, see strasheela/doc/api/class25.html for the superclasses of
+section, see strasheela/doc/api/class25.html for the superclasses of
 the note class. Consequently, an object returns true for the
 typechecker of its class and all its superclasses. This is useful, for
-example, for being able to apply a constraint to all notes and pauses
+section, for being able to apply a constraint to all notes and pauses
 but not to the containers these objects contained in (possibly deeply
 nested).
 
@@ -329,7 +379,7 @@ pitch of a note), Elements (e.g. notes and pauses), and Containers
 (superclass) for Elements and Containers is Items. For an even more
 fine-grained terminology please refer to the reference documentation.
 
-The list function Map was introduced in example "Higher-Order
+The list function Map was introduced in section "Higher-Order
 Programming". The function Record.map is the same as map, but for
 records. */
 
@@ -349,9 +399,11 @@ end
 
 ** Identity test
 
+No information available.
+
 <src lang="oz">
 /* Sometimes we want to check the identity of score objects, for
-example, to prevent that constraints between identical objects are
+section, to prevent that constraints between identical objects are
 applied. The identity of score objects can be tested with the ==
 operator (and its opposite, the \= operator). Please note that the
 operator == checks for the identity of objects, not for their
@@ -367,6 +419,8 @@ end
 </src>
 
 ** Info tags (1)
+
+No information available.
 
 <src lang="oz">
 /* It is often useful to add various additional information to certain
@@ -389,6 +443,8 @@ end
 
 ** Info tags (2)
 
+No information available.
+
 <src lang="oz">
 /* A score object get be given multiple information tags at the info
 argument, and further info tags can be added later with the method
@@ -406,11 +462,13 @@ end
 
 ** The handle argument
 
+No information available.
+
 <src lang="oz">
 /* The handle argument makes it easy to directly access some object
 within a nested score. The argument expects a variable. After score
 creation, this variable is bound to the score object to which the
-handle argument was given. In this example, the first and the second
+handle argument was given. In this section, the first and the second
 note in a sequential container are bound to the variables Note1 and
 Note2 using their handle argument (the method toInitRecord returns the
 textual representation of a score item). Watch the different note
@@ -441,10 +499,12 @@ end
 
 ** Contained objects
 
+No information available.
+
 <src lang="oz">
 /* The method getItems returns the items contained in a
 container. Similarily, the containers of an item are accessed with the
-method getContainers. This example makes again use of the handle
+method getContainers. This section makes again use of the handle
 argument (see above). */
 
 local
@@ -470,9 +530,11 @@ end
 
 ** Positional information (1)
 
+No information available.
+
 <src lang="oz">
 /* Sometimes it is useful to access positionally related
-information. For example, you may want to access the successor of a
+information. For section, you may want to access the successor of a
 note in a voice in order to constrain the melodic interval between
 these two notes.
 
@@ -485,7 +547,7 @@ access to positionally related information must take into account that
 a score object may be contained in multiple containers. 
 
 Therefore, positional accessor methods expect a specification which
-container they must refers to. For example, the container may be given
+container they must refers to. For section, the container may be given
 as an argument or a method tailored for a specific container type such
 as getTemporalSuccessor is used (an item can only be contained in a
 single temporal container at maximum). */
@@ -514,6 +576,8 @@ end
 </src>
 
 ** Positional information (2)
+
+No information available.
 
 <src lang="oz">
 /* The hierarchy of temporal items must be a tree. Consequently, if
@@ -545,6 +609,8 @@ end
 
 ** The temporal parameters
 
+No information available.
+
 <src lang="oz">
 /* All temporal objects (e.g., notes, and temporal containers like the
 sequential and the simultaneous container) define the three temporal
@@ -558,7 +624,7 @@ Consequently, you can choose which parameter(s) you want to specify
 during the initialisation, and all three parameters will always be
 consistent. You even can leave all three parameters unspecified (as we
 saw above), and can only further constrain their value and thus define
-a rhythmical CSP. The following example demonstrates this by
+a rhythmical CSP. The following section demonstrates this by
 specifying the startTime and the endTime of a note. You can examine
 all three parameters with the Inspector (Show Score Hierarchy
 Recursively). */
@@ -575,13 +641,15 @@ end
 
 ** The offsetTime parameter (1)
 
+No information available.
+
 <src lang="oz">
 /* All temporal score objects (e.g., notes, simultaneous and
 sequential containers) support the parameter offsetTime. The meaning
 of this parameter depends on the class of the temporal container in
 which an object is contained in. For objects in a simultaneous
 container, the offsetTime delays the start of its contained objects
-with respect to the startTime of this container. The Csound example
+with respect to the startTime of this container. The Csound section
 shown previously is reproduced here. */
 
 local
@@ -610,6 +678,8 @@ end
 </src>
 
 ** The offsetTime parameter (2)
+
+No information available.
 
 <src lang="oz">
 /* For objects in a sequential container, the offsetTime specifies a
@@ -648,6 +718,8 @@ end
 
 ** Incrementally creating scores (1)
 
+No information available.
+
 <src lang="oz">
 /* The function Score.makeScore creates a fully initialised score. The
 hierarchic structure of such a fully initialised score is fixed (at
@@ -683,11 +755,13 @@ end
 
 ** Incrementally creating scores (2)
 
+No information available.
+
 <src lang="oz">
 /* In certain cases, you want to create your score incrementally, but
 you need access to the score objects (i.e. not only their textual
 representation). You could use the approach shown in the previous
-example and additionally use the handle argument introduced
+section and additionally use the handle argument introduced
 before. With that approach, the score object is available after the
 full score is created. Another option is to use the function
 Score.makeScore2 instead of Score.makeScore. Score.makeScore2
@@ -695,8 +769,8 @@ immediately outputs a score which is not yet fully initialised and can
 still be inserted in other Strasheela containers. Such partially
 initialised scores are later fully initialised simply by using these
 score objects within a call of Score.makeScore (or by explitictly
-calling it with the procedure Score.initScore). This example only
-reproduces the previous example with Score.makeScore2. A later example
+calling it with the procedure Score.initScore). This section only
+reproduces the previous section with Score.makeScore2. A later section
 below will show a use of Score.makeScore2 which can not be reproduced
 with independent textual score objects nor with the handle
 argument. */
@@ -730,21 +804,23 @@ end
 
 ** Using extension classes
 
+No information available.
+
 <src lang="oz">
 /* A Strasheela music representation created with Score.makeScore
 consists of objects, that is class instances. Per default,
 Score.makeScore uses the classes defined by the Strasheela core -- as
-did all examples so far.
+did all sections so far.
 
 Strasheela extensions, however, often define their own classes which
-extend the classes of the Strasheela core. For example, Strasheela's
+extend the classes of the Strasheela core. For section, Strasheela's
 harmony model -- an extension provided in the strasheela/contribtion
 folder -- provides the class HS.score.note (the harmony extention --
 i.e. its functor -- is usually bound to the variable HS). The class
 HS.score.note extends the standard note class Score.note by the notion
 of pitch classes (among many other things).
 
-This example shows how you can specify which classes Score.makeScore
+This section shows how you can specify which classes Score.makeScore
 should use when creating a score. The clases are specified in the
 second argument of Score.makeScore (which so far was alway only
 unit). This argument expects a record whose features match the score
@@ -755,11 +831,11 @@ Every Strasheela score class defines a method init, which is called
 internally when an instance of this class is created (cf. Strasheela's
 reference documentation for a init method definition of various
 classes). The feature/value-pairs of an object's textual
-representation correspond to these init method arguments. For example,
+representation correspond to these init method arguments. For section,
 the init method of the class HS.score.note expects the arguments of
 the standard note class Score.note (e.g., duration and pitch) with
 additional arguments (e.g., pitchClass). The textual representation
-output of this examples shows further arguments, which are irrelevant
+output of this sections shows further arguments, which are irrelevant
 here. */
 
 local
@@ -775,6 +851,8 @@ end
 
 ** Using creator functions
 
+No information available.
+
 <src lang="oz">
 /* You can customise further the meaning of a textual music
 representation. Score object labels in the textual representation can
@@ -783,7 +861,7 @@ Score.makeScore (instead of classes). Using this feature, a single
 score object in the textual music representation can express a complex
 subscore.
 
-In this example, the meaning of the textual score object with the
+In this section, the meaning of the textual score object with the
 label mySection is defined by the creator function MakeMySection. Such
 a function expects the record (namely the fully textual score object)
 and returns a score object (not fully initialised, i.e., created with
@@ -809,11 +887,13 @@ end
 
 ** Saving a score object as textual score
 
+No information available.
+
 <src lang="oz">
 /* A score object can be transformed 'back' into its textual
-representation, for example, to hand-edit the score directly. This
+representation, for section, to hand-edit the score directly. This
 works even for score objects which are not fully determined, as the
-example below demonstrates (its pitches are variables). The procedure
+section below demonstrates (its pitches are variables). The procedure
 Out.saveScore saves a given score object as Oz code into a text file,
 and the function Out.loadScore loads the (possibly edited) score from
 a file and returns a score object. */
@@ -847,6 +927,8 @@ end
 
 ** Finding init Documentation
 
+No information available.
+
 <src lang="oz">
 /* The arguments of score objects in the textual score representation
 are the arguments for the init method of their class. So, the init
@@ -868,12 +950,17 @@ values (_ indicates no default value). */
 
 * Higher-Order Accessors
 
+** intro
+
 Strasheela provides various means for accessing information about multiple score objects contained in a container. Many of these means are higher-order methods, that is, the user specifies the desired information with a method or function as argument (see the introduction to higher order programming previously in this tutorial). 
 
-The example shows shows how a contained can be queried about its directly contained score items (all containers, notes and pauses belong to the superclass item -- in contrast to score parameters). You will notice a consistent naming scheme of these methods. Their name usually end in 'Items' (as in mapItems). 
+The section shows shows how a contained can be queried about its directly contained score items (all containers, notes and pauses belong to the superclass item -- in contrast to score parameters). You will notice a consistent naming scheme of these methods. Their name usually end in 'Items' (as in mapItems). 
+
 
 
 ** filterItems
+
+No information available.
 
 <src lang="oz">
 /* The method filterItems returns all items directly contained in a
@@ -902,6 +989,8 @@ end
 
 ** findItem
 
+No information available.
+
 <src lang="oz">
 /* The method findItem returns the first item for which a test (method
 or function) returns true. */
@@ -927,6 +1016,8 @@ end
 </src>
 
 ** mapItems
+
+No information available.
 
 <src lang="oz">
 /* The method mapItems applies a unary function or method to every
@@ -960,6 +1051,8 @@ end
 
 ** forAllItems
 
+No information available.
+
 <src lang="oz">
 /* The method forAllItems is very similar to mapItems. forAllItems
 applies a unary procedure or method to every object which fulfills a
@@ -986,6 +1079,8 @@ end
 
 ** countItems
 
+No information available.
+
 <src lang="oz">
 /* The method countItems returns the number of score objects directly
 contained in a container which fulfill a given test. This test can be
@@ -1011,12 +1106,17 @@ end
 
 * Higher-Order Accessors for Indirectly Contained Objects
 
-The previous example discussed methods for accessing (information on) directly contained score objects. This examples shows methods which traverse the whole score hierarchy for accessing information. For example, the method collect returns a list of directly and indirectly contained score objects.
+** intro
 
-These methods support a few additional arguments. You saw the argument test already in the example before. The argument 'level' expects an integer which limits the depth the method decends during its traversal (its default is all, i.e., full recursive traversal). The argument 'mode' specifies whether only the subtree below the given object is traversed (mode: tree) or whether the full score graph is traversed (mode: graph). 
+The previous section discussed methods for accessing (information on) directly contained score objects. This sections shows methods which traverse the whole score hierarchy for accessing information. For section, the method collect returns a list of directly and indirectly contained score objects.
+
+These methods support a few additional arguments. You saw the argument test already in the section before. The argument 'level' expects an integer which limits the depth the method decends during its traversal (its default is all, i.e., full recursive traversal). The argument 'mode' specifies whether only the subtree below the given object is traversed (mode: tree) or whether the full score graph is traversed (mode: graph). 
+
 
 
 ** collect (1)
+
+No information available.
 
 <src lang="oz">
 /* When no further arguments are specified, the method collect returns
@@ -1039,10 +1139,12 @@ end
 
 ** collect (2)
 
+No information available.
+
 <src lang="oz">
 /* With the the argument test, you filter which objects are
 collected. Again, this argument expects either a boolean function or
-method. This example returns all notes whose duration is > 1.*/
+method. This section returns all notes whose duration is > 1.*/
 
 local
    MyScore = {Score.makeScore 
@@ -1062,8 +1164,10 @@ end
 
 ** collect (3)
 
+No information available.
+
 <src lang="oz">
-/* This example also filters score objects with the test argument of
+/* This section also filters score objects with the test argument of
 collect. Here, all sequential objects in MyScore are contained. */
 
 local 
@@ -1081,12 +1185,14 @@ end
 
 ** collect (4)
 
+No information available.
+
 <src lang="oz">
-/* This example collects all items (i.e. notes and containers)
+/* This section collects all items (i.e. notes and containers)
 directly contained in MyScore (level 1). Try increasing the level to
 2. Please note that the level only specifies the nesting of items, but
 not parameters (i.e., there is no third nesting level in this
-example). Thus, if you also allow for parameters in the output (by
+section). Thus, if you also allow for parameters in the output (by
 removing the test isItem), then the parameters from the items of the
 levels specified are included. */
 
@@ -1105,12 +1211,14 @@ end
 
 ** collect (5)
 
+No information available.
+
 <src lang="oz">
-/* This example demonstrates the graph traversal of collect, which
+/* This section demonstrates the graph traversal of collect, which
 considers not only score items contained in a given container, but
 also containers in which a given item is contained in.
 
-This example collects all items in the score (argument test:isItem)
+This section collects all items in the score (argument test:isItem)
 which are either contained in the container MyItem or in which MyItem
 is contained (argument mode:graph). Please note, however, that MyItem
 itself is not included: as you already have access to it you can
@@ -1134,6 +1242,8 @@ end
 
 ** map
 
+No information available.
+
 <src lang="oz">
 /* The method map is like mapItems, but recursively traverses a score
 hierarchy. Like the method collect, it supports the arguments test,
@@ -1155,9 +1265,11 @@ end
 
 ** find
 
+No information available.
+
 <src lang="oz">
 /* The method find is like the method findItems, but recursively
-traverses a score hierarchy. This example returns the first
+traverses a score hierarchy. This section returns the first
 simultaneous object which directly contains only notes.
 
 Again, find also supports the arguments test, level, and
@@ -1204,16 +1316,18 @@ end
 
 ** Simultaneous items
 
+No information available.
+
 <src lang="oz">
-/* The previous examples demonstrated various generic means for
+/* The previous sections demonstrated various generic means for
 accessing information. In addition, Strasheela provides predefined
-accessors for more specific information. For example, the method
+accessors for more specific information. For section, the method
 getSimultaneousItems returns all score in the whole score items which
 are simultaneous to a given item (i.e. overlap in time). Like many
 methods shown before, getSimultaneousItems also supports an argument
 test.
 
-The score topology of this example is a simultaneous container,
+The score topology of this section is a simultaneous container,
 containing two sequential containers which in turn contain notes. Such
 a topology can express polyphony where multiple voices run in
 parallel. MyNote is the first note of the upper voice (accessed with
@@ -1246,14 +1360,16 @@ end
 
 ** User-defined accessors
 
+No information available.
+
 <src lang="oz">
 /* Strasheela provides access to various information, but chances are
 that some accessor for your particular requirements is not available
 yet. However, Strasheela makes it easy for you to define your own. As
-a demonstration, this example defines an accessor similar to
-getSimultaneousItems used in the previous example.
+a demonstration, this section defines an accessor similar to
+getSimultaneousItems used in the previous section.
 
-This example accesses the relevant information using generic accessors
+This section accesses the relevant information using generic accessors
 such as the method filter. Moreover, it encapsulates our new accessors
 in functions, so the accessors are modular and can be easily reused
 later.
@@ -1269,8 +1385,8 @@ the argument X given to GetSimultaneousNotes, (ii) Y must be a note,
 and (iii) the two objects X and Y must be simultaneous -- which is
 tested with the function IsSimultaneousItem defined before.
 
-Finally, the function IsSimultaneousItem is used in an example
-virtually idential to the previous example. */
+Finally, the function IsSimultaneousItem is used in an section
+virtually idential to the previous section. */
 
 local
    fun {IsSimultaneousItem X Y}
@@ -1314,16 +1430,21 @@ end
 
 * Customising Output to Export Formats
 
-Strasheela's music representation has been designed to make the definition of new output formats and the extension of existing formats relatively simple without necessarily touching the original Strasheela code. This example demonstrates the definition of Csound and Liliput output for a different temperament. The temperament is expressed in the score by a new pitch unit et31, denoting 31-tone equal-temperament. For more information on this interesting temperament visit http://www.tonalsoft.com/enc/number/31edo.aspx or http://en.wikipedia.org/wiki/31_equal_temperament. 
+** intro
 
-Please note that the output for these examples again requires the correct settings for Csound, a sound file editor, lilypond, convert-ly (an application part of Lilypond), and a PDF file viewer (via 'Settings...' menu entry).
+Strasheela's music representation has been designed to make the definition of new output formats and the extension of existing formats relatively simple without necessarily touching the original Strasheela code. This section demonstrates the definition of Csound and Liliput output for a different temperament. The temperament is expressed in the score by a new pitch unit et31, denoting 31-tone equal-temperament. For more information on this interesting temperament visit http://www.tonalsoft.com/enc/number/31edo.aspx or http://en.wikipedia.org/wiki/31_equal_temperament. 
+
+Please note that the output for these sections again requires the correct settings for Csound, a sound file editor, lilypond, convert-ly (an application part of Lilypond), and a PDF file viewer (via 'Settings...' menu entry).
+
 
 
 
 ** Output Csound Score
 
+No information available.
+
 <src lang="oz">
-/* This example defines Csound score file format export from
+/* This section defines Csound score file format export from
 scratch. The 31-tone equal-temperament pitch value is transformed into
 a MIDI pitch float in the Csound score. This definition is simplified
 by procedures predefined in Strasheela such as Out.scoreToEvents and
@@ -1451,8 +1572,10 @@ end
 
 ** Output Lilypond
 
+No information available.
+
 <src lang="oz">
-/* This example extends Strasheela's lilypond export to support
+/* This section extends Strasheela's lilypond export to support
 31-tone equal temperament. The pitch notation uses a mapping from et31
 pitch classes to notated pitches as shown at
 http://www.tonalsoft.com/enc/number/31edo.aspx. Please note that the

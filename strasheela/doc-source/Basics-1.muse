@@ -8,45 +8,35 @@ This file was automatically generated from the interactive Strasheela tutorial. 
 
 * -- First Steps in Oz
 
-This chapter covers fundamental concepts in Oz.
-  
+** Introduction
 
-
-
-* This Tutorial
-
-This interactive tutorial demonstrates the basics of the Oz programming language and Strasheela.  By presenting small code snippets which can be easily executed and edited, we hope to simply the process of learning about Oz/Strasheela.
+This interactive tutorial demonstrates the basics of the Oz programming language and Strasheela.  By presenting small code snippets which can be easily executed and edited, we hope to simplify the process of learning about Oz/Strasheela.
 
 Nevertheless, this tutorial is kept brief.  The explanation of Oz focuses on aspects which are particularly important for Strasheela, and even Strasheela concepts are only briefly outlined.  In other words, it is not the intention of this tutorial to replace the extensive documentation already available on Oz, nor my thesis on Strasheela ;-)
 
-This tutorial is organised in small lessons.  After you started the interactive tutorial application, you can select the examples in the list at the top-left of this window.  Many lessons consist of several sub-examples, accesible via the list in the bottom-right corner.  These examples are best studied in their order.
+This tutorial is organised in small lessons.  After you started the interactive tutorial application, you can select the chapters and sections in the list at the top-left corner of this window.  Each section consist of several subsections, accesible via the list in the bottom-left corner.  These lessons are best studied in their order.
 
-(if you are reading the tutorial in your HTML browser, of course there are no lists of lessons and examples)
+(if you are reading the tutorial in your HTML browser, of course there are no lists of lessons and chapters)
+
 
 
 ** Conventions
 
-<src lang="oz">
-/*
 We use a few conventions to present information in this tutorial:
 
   - `command': in the running text, code in the Oz language is formatted
-    `like this'; remove them when writing your own code. 
-    (NOTE: formatting is work in progress)
+    `like this'; remove the `quotes' when writing your own code. 
   - {...}: the {curly braces} denote a procedure in Oz; you should never
     remove them when writing your own code.
   - WARNING: explains a particularly confusing part of the Oz language.
-  - BACKGROUND: these examples give brief explanations of generic
+  - BACKGROUND: these sections give brief explanations of generic
     concepts in Computer Science; please see them if the lesson contains
     unfamiliar terms.
-*/
 
-</src>
+
 
 ** BACKGROUND
 
-<src lang="oz">
-/*
 For explanations about general concepts, see:
 
   - van Roy and Haridi (2004). Concepts, Techniques, and Models of
@@ -54,29 +44,36 @@ For explanations about general concepts, see:
       http://www.info.ucl.ac.be/~pvr/book.html
   - The Oz documentation:
       http://www.mozart-oz.org/documentation/
-  - Wikipedia (maybe?  -I'd rather find a better resource, though) TODO
-*/
+  - Wikipedia:
+      http://www.wikipedia.org/
 
-</src>
+
 
 * Hello World and Comments
 
-By convention, the first steps in any programming langauge is to output the text "Hello World!".  This tutorial obeys this rule.  :)
+** Introduction
 
-Hit the [Run] button in the bottom-left corner to execute this example.  The other examples demonstrate alternative ways to output information:
+By convention, the first steps in any programming langauge is to output the text "Hello World!".  This tutorial obeys that convention.  :)
+
+After you select another subsection in the bottom-left corner, hit the [Run] button to execute the code.  The first three subsections demonstrate alternate ways to output information:
 
   - Browse: opens a Browse window
-  - Show: outputs text to standard out
+  - Show: outputs text to standard out (i.e. the command-line)
   - Inspect: opens an Inspect window
 
 (the Browse and Inspect windows might be hidden behind this window)
 
 
-Oz supports line comments and block comments.  Please select each example to see how these comments differ.
+Oz supports line comments and block comments.  Please select each subsection to see how these comments differ.  (Executing these subsections does nothing, of course!)
 
-(Executing these comment-examples does nothing, of course!)
+
 
 ** Browse
+
+This will open a Browse window.
+
+WARNING: the Browse window may be hidden behind this tutorial window.
+
 
 <src lang="oz">
 {Browse 'Hello World!'}
@@ -84,30 +81,37 @@ Oz supports line comments and block comments.  Please select each example to see
 
 ** Show
 
-<src lang="oz">
-/* Show something at standard out (the commandline where you started
-this tutorial). */
+Show something on standard out (the command-line where you started
+this tutorial).
 
+
+<src lang="oz">
 {Show 'Hello World!'}
 </src>
 
 ** Inspect
 
-<src lang="oz">
-/* The inspector shows sometimes more information than the Browser
-(depending on the inspected value).  The inspector may be hidden behind
-this tutorial.. */
+The inspector shows sometimes more information than the Browser
+(depending on the inspected value).
 
+WARNING: the Inspector window may be hidden behind this tutorial window.
+
+
+<src lang="oz">
 {Inspect 'Hello World!'}
 </src>
 
 ** Line comment
+
+This example will not produce any output.
 
 <src lang="oz">
 % this is a line comment
 </src>
 
 ** Block comment
+
+This example will not produce any output.
 
 <src lang="oz">
 /*
@@ -119,66 +123,84 @@ comment
 
 * Calculator
 
-This example executes simple numeric calculations and displays the result. 
+** Introduction
+
+This section executes simple numeric calculations and displays the result. 
   
 Try changing the calculation by using different numbers and freely combining the operators +, -, * , ~ (negation), div (integer division), mod (integer modulus) and / (float division).  You may also use parenthesis to indicate precedence.
   
 You can use integers (e.g. 3, 7) and floats (e.g. 1.0, 3.14).  However, you can not directly mix integers and floats in a calculation (in that case, an error will be printed at the command line).
 
-** Integer example 1
+
+
+** Integers (simple)
+
+Simple math
 
 <src lang="oz">
 {Browse 3+4}
 </src>
 
-** Integer example 2
+** Integers (negative)
+
+Oz uses `~' to denote a negative number.
 
 <src lang="oz">
-%% ~ is the negation sign
 {Browse ~7 * 5}
 </src>
 
-** Integer example 3
+** Integers (more)
+
+Parentheses may be used to nest calculations.
 
 <src lang="oz">
 {Browse (4 + 2) div 2}
 </src>
 
-** Float example 1
+** Floats (simple)
+
+Simple math
 
 <src lang="oz">
 {Browse 3.0 / ~2.0}
 </src>
 
-** Float example 2
+** Floats (converting to ints)
+
+A float is converted into the closest integer with the function `FloatToInt'.  If two integers are equally close (ie x.5) it rounds to the closest even integer).  There is also a function `IntToFloat'.
+
 
 <src lang="oz">
-/* A float is converted into the closest integer
-with the function FloatToInt (in case two integers are equally close it rounds
-to the closest even integer).  There is also a function IntToFloat. */
-
 {Browse {FloatToInt 3.5}}
+{Browse {IntToFloat 5}}
 </src>
 
-** Float example 3
+** Floats (more)
+
+There are many other numeric functions are available for floats, e.g., Exp, Log, Sin, Cos...
+
 
 <src lang="oz">
-%% many other numeric functions are available for floats,
-%% e.g., Exp, Log, Sin, Cos...
 {Browse {Sqrt 9.0}}
 </src>
 
 * Variables
 
-All variables in Oz must start with a capital letter.  They must be declared first, for example, with the keyword `local'.
+** Introduction
+
+All variables in Oz must start with a capital letter.  Most variables will be declared with the keyword `local', and are valid for the relevant scope.
 
 Global variables can be introduced with the keyword `declare'.  However, global variables are intended for testing and are not supported in this tutorial application.
 
-WARNING: Oz variables are single assignment variables.  If you do not have experience with functional or logic programming languages, we highly recommend reading the background example!  Variables may be bound to a value, or may be left unbound or even partially bound (for compound data types such as lists).  However, their value can never be changed! 
+WARNING: Oz variables are single assignment variables.  If you do not have experience with functional or logic programming languages, we highly recommend reading the background section!  Variables may be bound to a value, or may be left unbound or even partially bound (for compound data types such as lists).  However, their value can never be changed! 
 
 Rewritable data storage is also supported by Oz; the simplest form are called Cells.  Other types of stateful data include arrays, directories, and objects, but we shall not cover them in this tutorial.
 
+
+
 ** Variable declaration
+
+Local variables are declared with `local'.
 
 <src lang="oz">
 local
@@ -192,11 +214,9 @@ end
 
 ** Variable scope
 
-<src lang="oz">
-/* Local statements can be freely nested (like
-virtually everything in Oz).  Oz supports static or lexical scope
-(i.e. a variable always refers to its nearest enclosing binding). */
+`local' statements can be freely nested (like virtually everything in Oz).  Oz supports static or lexical scope (i.e. a variable always refers to its nearest enclosing binding).
 
+<src lang="oz">
 local
    X = 3
 in
@@ -213,10 +233,9 @@ end
 
 ** A variable can be unbound
 
-<src lang="oz">
-/* Watch the Browser: X is first unbound (_ is displayed).
-X is bound to 3 after 2000 msec. */
+Watch the Browser: X is first unbound (_ is displayed).  After 3 seconds, X is bound to 3.
 
+<src lang="oz">
 local
    X 
 in
@@ -228,11 +247,11 @@ end
 
 ** Cells
 
+Cells provide rewritable memory for values.
+
+WARNING: The syntax for reading and writing to cells is different than the syntax for variables.
+
 <src lang="oz">
-/* Cells provide rewritable memory for values.
-WARNING: The syntax for reading and writing to cells is different than
-the syntax for variables.
-*/
 local
   C = {NewCell 0}  % create new cell with initial value 0 
   V
@@ -249,8 +268,6 @@ end
 
 ** BACKGROUND
 
-<src lang="oz">
-/*
 TODO Torsten: revise terminology
 
 Terms: single assignment, logic variable, bound/determined variables,
@@ -272,22 +289,24 @@ Reading:
 
   - van Roy and Haridi, Chap. 1-2 (in particular Sec. 1.2, and 2.2).
   - Oz Tutorial, Chap. 3, introduction
-*/
 
-</src>
+
 
 * If
+
+** Introduction
 
 Oz provides the usual `if' control structure.  Note that unlike many programming languages, parenthesis () are not required around the condition, althought they may make the code easier to read.
 
 Please note that the `if' control structure can also be used as an expression which returns a value from the `then' or `else' clause.
 
 
+
 ** if ... else ... end
 
-<src lang="oz">
-%% try changing 2 to 6... 
+Try changing 2 to 6.
 
+<src lang="oz">
 if (2 < 5) then
     {Browse less}
 else
@@ -297,11 +316,9 @@ end
 
 ** if ... end
 
-<src lang="oz">
-/* The `else' clause is optional. This example does nothing, but try
-changing `==' to `\=.' The operations `==' and `\=' test equality and
-inequality of values. */
+The `else' clause is optional. This section does nothing, but try changing `==' to `\=.' The operations `==' and `\=' test equality and inequality of values.
 
+<src lang="oz">
 if (this == that) then
     {Browse hi}
 end
@@ -309,14 +326,16 @@ end
 
 ** if as an expression
 
-<src lang="oz">
-%% This `if' returns a value, which is browsed.
+This `if' returns a value, which is browsed.
 
+<src lang="oz">
 {Browse 
  if (2 < 5) then less else more end}
 </src>
 
 * Procedure and Functions
+
+** Introduction
 
 Procedures and functions are the standard means for expressing a collection of computations in a single entity.  Examples range from numeric computations to commands involving the operating system.  For example, we have already seen a number of numeric operations expressed by the common infix notation.
 
@@ -324,38 +343,32 @@ WARNING: curly braces {...} must surround a function or a procedure call.  This 
 
 In Oz, procedures are the fundamental concept.  Functions are just a syntactic variant of procedures, added for convenience.  The main difference between functions and procedures is that functions are procedures which always returns exactly one value.  Procedures do not necessarily return anything.
 
-More specifically, a function is a procedure whose last argument -- the return value -- is expressed implicitly.  Every function may be called like a procedure by adding this return value explicitly.  In addition, any procedure can also be called as a function which returns its omitted last argument. 
-  
+More specifically, a function is a procedure whose last argument -- the return value -- is expressed implicitly.  Every function may be called like a procedure by adding this return value explicitly.  In addition, any procedure can also be called as a function which returns its omitted last argument.
+
+
 
 ** Usage
 
-<src lang="oz">
-/* Procedure `Browse' is called with the result of function `IsEven'.
-`IsEven' expects one integer as an argument, and returns true or false.
-`Browse' expects one argument (any variable type), and returns nothing.
-*/
+The procedure `Browse' is called with the result of function `IsEven'.  `IsEven' expects one integer as an argument, and returns true or false.  `Browse' expects one argument (any variable type), and returns nothing.
 
+<src lang="oz">
 {Browse
- {IsEven 3}
-}
+ {IsEven 3}}
 </src>
 
 ** Defining Max: procedure
 
+The procedure `Max' gets two numbers as its first two arguments and binds its last argument to the greater number.
+
+WARNING: the variable X in the Max definition and the variable X outside are different variables (cf. variable scope above).
+
 <src lang="oz">
-/* The procedure Max gets two numbers as its first two arguments and
-binds its last argument to the greater number.
-
-WARNING: the variable X in the Max definition and the variable X
-outside are different variables (cf.  variable scope above).
-*/
-
 local
+  X
   %% procedure definition
   proc {Max X Y Z}
      if X >= Y then Z = X else Z = Y end 
   end 
-  X
 in
   %% procedure application
   {Max 4 3 X}
@@ -365,20 +378,17 @@ end
 
 ** Defining Max: function
 
+As mentioned above, a function in Oz is a procedure which returns its last value.  Functions are just "syntactic sugar", added for programming convenience.
+
+This Max function is equivalent to the Max procedure of the previous section.
+
 <src lang="oz">
-/* As mentioned above, a function in Oz is a procedure which returns
-its last value.  Functions are just "syntactic sugar", added for
-programming convenience.
-
-This Max function is equivalent to the Max procedure of the previous example.
-*/
-
 local
+  X
   %% function definition
   fun {Max X Y}
      if X >= Y then X else Y end 
   end
-  X
 in
   %% function application
   X = {Max 4 3}
@@ -388,14 +398,15 @@ end
 
 ** Functions are procedures
 
+Since functions are procedures, we can treat them just like procedures.
+
 <src lang="oz">
-%% Since functions are procedures, we can treat them just like procedures.
 local
+  X
   %% function definition
   fun {Max X Y}
      if X >= Y then X else Y end 
   end
-  X
 in
   %% function application like a procedure
   {Max 4 3 X}
@@ -405,53 +416,36 @@ end
 
 ** Procedures as functions
 
-<src lang="oz">
-%% Remember, every procedure can also be called like a function for convenience.
+Remember, every procedure can also be called like a function for convenience.
 
+<src lang="oz">
 local
+  X
+  %% procedure definition
   proc {Max X Y Z}
      if X >= Y then Z = X else Z = Y end 
-  end
+  end 
 in
-  {Browse {Max 4 3}}
+  %% procedure application like a function
+  X = {Max 4 3}
+  {Browse X}
 end
 </src>
 
-** Another example TODO
+** Nesting marker $
+
+Every procedure argument can be a return value.  The $ (dollar sign) always marks a return value.
+
+This can simplify code for experienced programmers.  Instead of writing
+  local X in {Obj get(X)} {Browse X} end
+we can write
+  {Browse {Obj get($)}}
+
+TODO: This section is not yet very convincing, but procedures will encapsulate constraints in later sections...
+TODO: can we find a better example?
+
 
 <src lang="oz">
-/* Here we treat `IsEven' as a procedure with two arguments.
-`IsEven' binds the variable B.  Please note the order of computations in this
-example:
-  1.  B is browsed.
-  2.  IsEven binds B to false.
-
-However, `Browse' does indeed show the correct value of B.
-
-This demonstrates a vital feature of Oz: variables are be used to
-communicate information between different parts of a program -- even
-if the information is not available yet.  Browse can handle unknown
-information, but other parts of the program may wait (i.e. block)
-until the information is available.
-*/
-
-local B in
-   {Browse B} 		
-   {IsEven 4 B}
-end
-</src>
-
-** $ marks a return value
-
-<src lang="oz">
-/* Every procedure argument can be a return value.  The $ (dollar sign)
-always marks a return value.  This example is not yet very convincing,
-but procedures will encapsulate constraints in later examples...
-TODO:  what's happening here?  -gp
-TODO: I think this belongs somewhere in Basics-2, or even in the
-CSP stuff.
-*/
-
 local
    proc {Max X Y Z}
       if X >= Y then Z = X else Z = Y end 
@@ -467,10 +461,11 @@ end
 
 ** Recursion
 
-<src lang="oz">
-/* Procedures and functions can call themselves (recursion).  The
-function Factorial implements the mathematical factorial concept. */
+To understand recursion, you must first understand recursion.  :)
 
+Procedures and functions can call themselves (recursion).  The function Factorial implements the mathematical factorial concept.
+
+<src lang="oz">
 local
    fun {Factorial N}
       if (N==0) then
@@ -488,8 +483,6 @@ end
 
 ** BACKGROUND
 
-<src lang="oz">
-/*
 Terms: procedure, function.
 
 Procedures and functions are the standard means for expressing a
@@ -501,28 +494,32 @@ operations expressed by the common infix notation.
 A procedure definition wraps up (abstracts) some computation: a
 complex computation can then be executed simply by calling the
 procedure.
-*/
 
-</src>
 
 * Atoms and Names
+
+** Introduction
 
 Oz provides a number of basic data types which have a specific textual representation in source code.  We have already seen numbers (i.e. integers and floats).  Here we shall discuss two other data types: Atoms and Names.
 
 Atom:
-The safest way to create an atom is to surround it in single quotes: 'hi there'..  Atoms may also be written as text (without spaces) as long as they do not start with a capital letter (those are variables) and the text is not an Oz keyword.  For simplicity, we recommend using 'single quotes'.  ;)
+The safest way to create an atom is to surround it in single quotes: 'hi there'.  Atoms may also be written as text (without spaces) as long as they do not start with a capital letter (those are variables) and the text is not an Oz keyword.  For simplicity, we recommend using 'single quotes'.  ;)
 
 Name:
 There are a few things which look like atoms, but are a different variable type: Name.  The boolean values true and false are both Names (specifically, the Bool subtype).  Another often used value which looks like an atom is unit (also a name).
 
+
+
 ** Atoms
 
-<src lang="oz">
-%% Several atoms are inspected below. (Remember that the inspector window
-%% might open behind the tutorial!)
+Several atoms are inspected below.
 
+WARNING: Remember that the inspector window might open behind the tutorial.
+
+<src lang="oz">
 {Inspect 'I am an atom'}
 {Inspect iAmAnAtom}
+{Inspect 'iAmAnAtom'}
 {Inspect test}
 {Inspect nil}
 %% if is an Oz keyword, but 'if' is an atom
@@ -532,21 +529,20 @@ There are a few things which look like atoms, but are a different variable type:
 
 ** Equality
 
+Atoms are the same, whether entered with 'quotes' or not.
+
 <src lang="oz">
 {Inspect test == 'test'}
 </src>
 
 ** Names
 
-<src lang="oz">
-/* The values `true', `false' and `unit' are values which are similar
-to atoms, but which play a special role (note that the quotes don't
-belong to the values here). Obviously, `true' and `false' are the
-common boolean values. Oz provides the value `unit' for the computer
-science concept of the unit type (a value which is intended to express
-no further information). For example, `unit' is often used wherever a
-token is needed whose value is not important. */
+The values `true', `false' and `unit' are values which are similar to atoms, but which play a special role (note that the quotes don't belong to the values here).
 
+Obviously, `true' and `false' are the common boolean values.  Oz provides the value `unit' for the computer science concept of the unit type (a value which is intended to express no further information).  For this section, `unit' is often used wherever a token is needed whose value is not important.
+
+
+<src lang="oz">
 {Inspect true}
 {Inspect false}
 {Inspect unit}
@@ -557,155 +553,140 @@ token is needed whose value is not important. */
 
 * Compound Types
 
+** Introduction
+
 Besides the atomic types discussed before, Oz also provides compound data types: records, tuples, lists, and strings.
 
-Internally, all of these data types are actually records (just like all functions are actually procedures).  Tuples, lists, and strings just provide a different syntax for interacting with records.
+Internally, all of these data types are actually records, just like all functions are actually procedures.  Tuples, lists, and strings just provide a different syntax for interacting with records.
 
-** Records (1)
+
+** Records (definition)
+
+A record has a label and consists of feature-value pairs.
 
 <src lang="oz">
-%% A record has a label and consists of feature-value pairs.
-
 {Inspect label(feature1:value1 feature2:value2)}
 </src>
 
-** Records (2)
+** Records (integer features)
+
+Integer features need not be listed explicitly; these two examples are identical.  Note that the `foo' label does not count towards these integer features, and that the integer features are placed before non-integer features.
 
 <src lang="oz">
-/* Integer features need not be listed explicitly; these two
- examples are identical.  Note that the `foo' label does not count
-towards these integer features, and that the integer features are
-placed before non-integer features. */
-
 {Inspect test(1:one 2:two foo:bar 3:three)}
 {Inspect test(one two foo:bar three)}
 </src>
 
-** Records (3)
+** Records (nesting)
+
+Records can be freely nested.
 
 <src lang="oz">
-%% Records can be freely nested. 
-  
 {Inspect test(1:hi 2:there x:unit(foo:bar))}
 </src>
 
-** Accessing record fields
+** Records (accessing fields)
+
+Record fields are accessed with the dot operator.  R.X returns the value stored at feature X in record R.  Records support constant-time access (i.e. the time the access takes is independent of the feature position).
 
 <src lang="oz">
-/* Record fields are accessed with the dot operator.  R.X returns the
-value stored at feature X in record R.  Records support constant-time
-access (i.e. the time the access takes is independent of the feature
-position). */
-
 {Inspect test(x:hi y:there).x}
 </src>
 
-** Tuples (1)
+** Tuples (definition)
+
+A tuple consists of a label and values.
 
 <src lang="oz">
-%% A tuple consists of a label and values.
-
 {Inspect label(value1 value2 value3)}
 </src>
 
-** Tuples (2)
+** Tuples (as a record)
+
+Actually, a tuple is a record which has only integer features in ascending order.  These features can be omitted.  The two records below are equivalent.
 
 <src lang="oz">
-/* Actually, a tuple is a record which has only integer features in
-ascending order.  These features can be omitted.  The two records below
-are equivalent. */
-
 {Inspect unit(1:a 2:b 3:c) == unit(a b c)}
 </src>
 
-** Tuples (3)
+** Tuples (as an empty tuple)
+
+An atom is an "empty" tuple.
 
 <src lang="oz">
-%% An atom is an "empty" tuple.
-
 {Inspect test() == test}
 </src>
 
-** Lists (1)
+** Lists (definition)
+
+A list is a sequence of values, ending with `nil'.
 
 <src lang="oz">
-%% A list is a sequence of values.
-
-{Browse [value1 value2 value3]}
+{Inspect [value1 value2 value3]}
 </src>
 
-** Lists (2)
+** Lists (like Lisp)
+
+A list can also be written using | (cf. cons in Lisp).  `nil' is the empty list, which terminates every list.
 
 <src lang="oz">
-/* A list can also be written using | (cf. cons in Lisp). nil is the
-empty list, which terminates every list. */
-
 {Inspect a|b|c|nil}
 </src>
 
-** Lists (3)
+** Lists (as a tuple)
+
+Actually, a list is a nested tuple with the labels '|'.
 
 <src lang="oz">
-%% Actually, a list is a nested tuple with the labels '|'.
-
 {Inspect [a b c] == '|'(a '|'(b '|'(c nil)))}
 </src>
 
-** Lists (4)
+** Lists (accesing the head)
+
+Consequently, the first element of a list can be accessed under the feature 1, and the remaining list under the feature 2.
 
 <src lang="oz">
-/* Consequently, the first element of a list can be accessed under the
-feature 1, and the remaining list under the feature 2. */
-  
 {Inspect [a b c].1}
 {Inspect [a b c].2}
 </src>
 
-** Pairs (1)
+** Pairs (definition)
+
+A pair is a convenient way of concatenating values.
 
 <src lang="oz">
-%% A pair is a convenient way of concatenating values. 
-
 {Inspect value1 # value2 # value3}
 </src>
 
-** Pairs (2)
+** Pairs (as a tuple)
+
+Actually, a pair is a tuple with the label '#'.
 
 <src lang="oz">
-%% Actually, a pair is a tuple with the label '#'.
-
 {Inspect a#b#c  == '#'(a b c)}
 </src>
 
-** Strings (1)
+** Strings (definition)
+
+A string is a list of integers denoting characters (i.e. all list procedures can be used for strings).
 
 <src lang="oz">
-/* A string is a list of integers denoting characters (i.e. all list
-procedures can be used for strings). */
-
 {Inspect "test" == [116 101 115 116]}
 </src>
 
-** Strings (2)
+** Strings (showing text)
+
+Although a string is just a list of integers, you can show strings as text in the Browser and the Inspector.  However, you need to configure them for showing strings first.  In the Inspector Preference settings (Options menu), select the tab Appearance and tick "Show Strings".  You need to do these settings before you inspect a string.
 
 <src lang="oz">
-/* Although a string is just a list of integers, you can show strings
-as text in the Browser and the Inspector.  However, you need to
-configure them for showing strings first.  In the Inspector Preference
-settings (Options menu), select the tab Appearance and tick "Show
-Strings".  You need to do these settings before you inspect a
-string. */
-
 {Inspect "This is a string!"}
 </src>
 
 ** Virtual Strings
 
+A virtual string (VS) is a (possibly nested) concatenation of strings, atoms, and numbers.  Many procedures expecting strings as arguments can also handle virtual strings for convenience.
+
 <src lang="oz">
-/* A virtual string (VS) is a (possibly nested) concatenation of
-strings, atoms, and numbers.  Many procedures expecting strings as
-arguments can also handle virtual strings for convenience. */
-  
 local 
   VS = 'my test '
 in
@@ -715,69 +696,53 @@ end
 
 * Error messages
 
-When we do program, we almost inevitably write bugs
-sometimes.  Luckily, when confronted with specific problems in
-programs, compilers try to tell us about the problem (naturally, the
-real hard bugs are the ones no compiler complains about).  All errors
-are actually raised exceptions (see the Tutorial of Oz, Sec. 5.10 for
-more details).
+** Introduction
 
-The compiler is your friend, so this example introduces you to some
-typical Oz error messages ;-) During your programming sessions,
-carefully reading error messages can save you much time.  In this
-tutorial, all these messages are shown at the shell (or in the DOS
-box) where you started the tutorial.  The Oz Programming Interface
-(OPI) even supports moving to the code where the bug is likely to be
-located (see the Tutorial of Oz, Sec. 2.3.3).
+When we program, we almost inevitably write bugs.  Luckily, when confronted with specific problems in programs, compilers try to tell us about the problem (naturally, the real hard bugs are the ones no compiler complains about).  All errors are actually raised exceptions (see the Tutorial of Oz, Sec. 5.10 for more details).
 
-BTW: the error messages of this tutorial are slightly obscured
-unfortunately by some trick which keeps the tutorial application
-running even in the case of an error: there are always a few lines of
-other code before the actual error message.  Also, the reported line
-number is not correct, because the tutorial application adds a few
-lines to each example (the resulting full example is shown just before
-the error message).
+The compiler is your friend, so this section introduces you to some typical Oz error messages.  During your programming sessions, carefully reading error messages can save you much time.  In this tutorial, all these messages are shown at the shell (or in the DOS box) where you started the tutorial.  The Oz Programming Interface (OPI) even supports moving to the code where the bug is likely to be located (see the Tutorial of Oz, Sec. 2.3.3).
+
+WARNING: the error messages of this tutorial are slightly obscured unfortunately by some trick which keeps the tutorial application running even in the case of an error: there are always a few lines of other code before the actual error message.  Also, the reported line number is not correct, because the tutorial application adds a few lines to each section (the resulting full section is shown just before the error message).
+
 
 
 ** Parse error
 
-<src lang="oz">
-%% The left curly brace does not match the right parenthesis
+The left curly brace does not match the right parenthesis.
 
+<src lang="oz">
 {Browse hello)
 </src>
 
 ** Static analysis error
 
-<src lang="oz">
-%% Browse expects only a single argument
+Browse expects only a single argument.
 
+<src lang="oz">
 {Browse hi there}
 </src>
 
 ** Binding analysis error
 
-<src lang="oz">
-%% Variable X is not declared 
+Variable X is not declared .
 
+<src lang="oz">
 X = 3
 </src>
 
 ** Type error
 
-<src lang="oz">
-%% We can not add an integer and a float 
+We can not add an integer and a float.
 
+<src lang="oz">
 {Browse 3 + 2.0}
 </src>
 
 ** Failure
 
-<src lang="oz">
-/* Inconsistent constraint programs result in a failure.  Failures play
-an important role internally in a constraint solver searching for
-solutions to a constraint satisfaction problem. */
+Inconsistent constraint programs result in a failure.  Failures play an important role internally in a constraint solver searching for solutions to a constraint satisfaction problem.
 
+<src lang="oz">
 local
    X = 3
 in

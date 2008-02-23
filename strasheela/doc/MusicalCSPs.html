@@ -30,56 +30,138 @@
 <dt>
 <a href="#sec2">&mdash; Music Constraint Programming</a>
 </dt>
-<dt>
-<a href="#sec3">A Dummy Example</a>
-</dt>
 <dd>
 <dl>
 <dt>
-<a href="#sec4">With comments</a>
-</dt>
-<dt>
-<a href="#sec5">Without comments</a>
+<a href="#sec3">intro</a>
 </dt>
 </dl>
 </dd>
 <dt>
-<a href="#sec6">A Real Example</a>
-</dt>
-<dt>
-<a href="#sec7">Score Distribution Strategies</a>
-</dt>
-<dt>
-<a href="#sec8">Structuring complex CSPs</a>
-</dt>
-<dt>
-<a href="#sec9">Rule Applicators</a>
-</dt>
-<dt>
-<a href="#sec10">Deriving Information as Variable</a>
-</dt>
-<dt>
-<a href="#sec11">?? Pattern Constraints</a>
-</dt>
-<dt>
-<a href="#sec12">Constraining Inaccessible Score Contexts</a>
-</dt>
-<dt>
-<a href="#sec13">Modelling Soft Constraints</a>
-</dt>
-<dt>
-<a href="#sec14">Reified Constraints as Boolean Test</a>
+<a href="#sec4">A Dummy Example</a>
 </dt>
 <dd>
 <dl>
 <dt>
-<a href="#sec15">Using plain test</a>
+<a href="#sec5">intro</a>
+</dt>
+<dt>
+<a href="#sec6">With comments</a>
+</dt>
+<dt>
+<a href="#sec7">Without comments</a>
 </dt>
 </dl>
 </dd>
 <dt>
-<a href="#sec16">More Information</a>
+<a href="#sec8">A Real Example</a>
 </dt>
+<dd>
+<dl>
+<dt>
+<a href="#sec9">intro</a>
+</dt>
+</dl>
+</dd>
+<dt>
+<a href="#sec10">Score Distribution Strategies</a>
+</dt>
+<dd>
+<dl>
+<dt>
+<a href="#sec11">intro</a>
+</dt>
+</dl>
+</dd>
+<dt>
+<a href="#sec12">Structuring complex CSPs</a>
+</dt>
+<dd>
+<dl>
+<dt>
+<a href="#sec13">intro</a>
+</dt>
+</dl>
+</dd>
+<dt>
+<a href="#sec14">Rule Applicators</a>
+</dt>
+<dd>
+<dl>
+<dt>
+<a href="#sec15">intro</a>
+</dt>
+</dl>
+</dd>
+<dt>
+<a href="#sec16">Deriving Information as Variable</a>
+</dt>
+<dd>
+<dl>
+<dt>
+<a href="#sec17">intro</a>
+</dt>
+</dl>
+</dd>
+<dt>
+<a href="#sec18">?? Pattern Constraints</a>
+</dt>
+<dd>
+<dl>
+<dt>
+<a href="#sec19">intro</a>
+</dt>
+</dl>
+</dd>
+<dt>
+<a href="#sec20">Constraining Inaccessible Score Contexts</a>
+</dt>
+<dd>
+<dl>
+<dt>
+<a href="#sec21">intro</a>
+</dt>
+</dl>
+</dd>
+<dt>
+<a href="#sec22">Modelling Soft Constraints</a>
+</dt>
+<dd>
+<dl>
+<dt>
+<a href="#sec23">intro</a>
+</dt>
+</dl>
+</dd>
+<dt>
+<a href="#sec24">Reified Constraints as Boolean Test</a>
+</dt>
+<dd>
+<dl>
+<dt>
+<a href="#sec25">intro</a>
+</dt>
+<dt>
+<a href="#sec26">Using plain test</a>
+</dt>
+<dt>
+<a href="#sec27">wrong</a>
+</dt>
+<dt>
+<a href="#sec28">good</a>
+</dt>
+</dl>
+</dd>
+<dt>
+<a href="#sec29">More Information</a>
+</dt>
+<dd>
+<dl>
+<dt>
+<a href="#sec30">intro</a>
+</dt>
+</dl>
+</dd>
 </dl>
 </div>
 
@@ -93,7 +175,10 @@ About this document</h2>
 <h2><a name="sec2" id="sec2"></a>
 &mdash; Music Constraint Programming</h2>
 
-<p class="first">The following examples introduce music constraint programming with Strasheela.</p>
+<h3><a name="sec3" id="sec3"></a>
+intro</h3>
+
+<p class="first">The following sections introduce music constraint programming with Strasheela.</p>
 
 <p><em>Please note that this part of the tutorial is still unfinished!</em></p>
 
@@ -101,20 +186,27 @@ About this document</h2>
 
 
 
-<h2><a name="sec3" id="sec3"></a>
+<h2><a name="sec4" id="sec4"></a>
 A Dummy Example</h2>
 
-<p class="first">This example is extremely simple: you could easily create its result without constraint programming. Nevertheless, because it is so simple this example helps you do understand the basic structure of a typical Strasheela example.</p>
+<h3><a name="sec5" id="sec5"></a>
+intro</h3>
 
-<p>The constraint script for this example is a unary procedure (as was explained above in the example &quot;A Simple Script&quot;). The single argument of a Strasheela constraint script is the solution score. The script creates the solution score MyScore, consisting of a sequence container with three notes, where the domain of each notes pitch is the set {60, ..., 72} (i.e., the pitches of the octave above middle c &mdash; the pitchUnit is its default keynumber). Then the example applies the constraint that in every pair of two neighbouring notes, the pitch of the later note is higher.</p>
+<p class="first">This section is extremely simple: you could easily create its result without constraint programming. Nevertheless, because it is so simple this section helps you do understand the basic structure of a typical Strasheela section.</p>
 
-<p>This script is handed to a constraint solver. For convenience, Strasheela provides custom constraint solvers which resemble the standard Oz solvers, but which add special support for searching for Strasheela scores. The solver of this example is SDistro.searchOne. Like the standard solver SearchOne, SearchOne searches for a single solution, which is retured in a list. In contrast to SearchOne, however, SDistro.searchOne expects two arguments. The first argument is the script and the second argument is a specification of the search strategy (distribution strategy) to use. Here, this specification is just unit, that is, the default settings are used.</p>
+<p>The constraint script for this section is a unary procedure (as was explained above in the section &quot;A Simple Script&quot;). The single argument of a Strasheela constraint script is the solution score. The script creates the solution score MyScore, consisting of a sequence container with three notes, where the domain of each notes pitch is the set {60, ..., 72} (i.e., the pitches of the octave above middle c &mdash; the pitchUnit is its default keynumber). Then the section applies the constraint that in every pair of two neighbouring notes, the pitch of the later note is higher.</p>
 
-<h3><a name="sec4" id="sec4"></a>
+<p>This script is handed to a constraint solver. For convenience, Strasheela provides custom constraint solvers which resemble the standard Oz solvers, but which add special support for searching for Strasheela scores. The solver of this section is SDistro.searchOne. Like the standard solver SearchOne, SearchOne searches for a single solution, which is retured in a list. In contrast to SearchOne, however, SDistro.searchOne expects two arguments. The first argument is the script and the second argument is a specification of the search strategy (distribution strategy) to use. Here, this specification is just unit, that is, the default settings are used.</p>
+
+
+
+<h3><a name="sec6" id="sec6"></a>
 With comments</h3>
 
+<p class="first">No information available.</p>
+
 <pre class="src">
-<span style="color: #b22222;">/* </span><span style="color: #b22222;">This first version of the example comes with extensive inline comments. */</span>
+<span style="color: #b22222;">/* </span><span style="color: #b22222;">This first version of the section comes with extensive inline comments. */</span>
 
 <span style="color: #a020f0;">local</span>
    MyScore =
@@ -165,17 +257,19 @@ With comments</h3>
 </pre>
 
 
-<h3><a name="sec5" id="sec5"></a>
+<h3><a name="sec7" id="sec7"></a>
 Without comments</h3>
 
+<p class="first">No information available.</p>
+
 <pre class="src">
-<span style="color: #b22222;">/* </span><span style="color: #b22222;">This example is essentially the same as the previous one, but more
+<span style="color: #b22222;">/* </span><span style="color: #b22222;">This section is essentially the same as the previous one, but more
 terse. All comments are stripped out, and the notes in the score are
 not all explicitly noted. Instead, a list with all pitch variables is
 created: FD.list returns a list of FD integers (try changing the
 number of notes and the pitch variable domains..). This list is then
 transformed into note declarations using Map (Map was explained in the
-example "Higher-Order Programming"). */</span>
+section "Higher-Order Programming"). */</span>
 
 <span style="color: #a020f0;">local</span>
    Sol = {SDistro<span style="color: #a020f0;">.</span>searchOne
@@ -206,8 +300,11 @@ example "Higher-Order Programming"). */</span>
 
 
 
-<h2><a name="sec6" id="sec6"></a>
+<h2><a name="sec8" id="sec8"></a>
 A Real Example</h2>
+
+<h3><a name="sec9" id="sec9"></a>
+intro</h3>
 
 <p class="first">[Note: unfinished]</p>
 
@@ -216,8 +313,6 @@ A Real Example</h2>
 <p>Do settings for different program path names as explained before</p>
 
 <p>Note for developer: output dir is always default (ie. /tmp) and this can not be changed in settings GUI yet</p>
-
-
 
 
 <pre class="src">
@@ -259,8 +354,12 @@ A Real Example</h2>
 </pre>
 
 
-<h2><a name="sec7" id="sec7"></a>
+
+<h2><a name="sec10" id="sec10"></a>
 Score Distribution Strategies</h2>
+
+<h3><a name="sec11" id="sec11"></a>
+intro</h3>
 
 <p class="first">Show how to use various predefined score distribution strategies.</p>
 
@@ -270,8 +369,11 @@ Score Distribution Strategies</h2>
 
 
 
-<h2><a name="sec8" id="sec8"></a>
+<h2><a name="sec12" id="sec12"></a>
 Structuring complex CSPs</h2>
+
+<h3><a name="sec13" id="sec13"></a>
+intro</h3>
 
 <p class="first">Decomposing a CSP into modular definitions which create parts of the score and define compositional rules.</p>
 
@@ -279,8 +381,11 @@ Structuring complex CSPs</h2>
 
 
 
-<h2><a name="sec9" id="sec9"></a>
+<h2><a name="sec14" id="sec14"></a>
 Rule Applicators</h2>
+
+<h3><a name="sec15" id="sec15"></a>
+intro</h3>
 
 <p class="first">Defining and Applying Abstracted Rules ..</p>
 
@@ -288,8 +393,11 @@ Rule Applicators</h2>
 
 
 
-<h2><a name="sec10" id="sec10"></a>
+<h2><a name="sec16" id="sec16"></a>
 Deriving Information as Variable</h2>
+
+<h3><a name="sec17" id="sec17"></a>
+intro</h3>
 
 <p class="first">Creating variables on the fly..</p>
 
@@ -299,16 +407,22 @@ Deriving Information as Variable</h2>
 
 
 
-<h2><a name="sec11" id="sec11"></a>
+<h2><a name="sec18" id="sec18"></a>
 ?? Pattern Constraints</h2>
 
+<h3><a name="sec19" id="sec19"></a>
+intro</h3>
+
+<p class="first">No information available.</p>
 
 
 
 
-
-<h2><a name="sec12" id="sec12"></a>
+<h2><a name="sec20" id="sec20"></a>
 Constraining Inaccessible Score Contexts</h2>
+
+<h3><a name="sec21" id="sec21"></a>
+intro</h3>
 
 <p class="first">two ways: delayed constraint application and reified constraint</p>
 
@@ -318,24 +432,34 @@ Constraining Inaccessible Score Contexts</h2>
 
 
 
-<h2><a name="sec13" id="sec13"></a>
+<h2><a name="sec22" id="sec22"></a>
 Modelling Soft Constraints</h2>
 
+<h3><a name="sec23" id="sec23"></a>
+intro</h3>
+
+<p class="first">No information available.</p>
 
 
 
 
-
-<h2><a name="sec14" id="sec14"></a>
+<h2><a name="sec24" id="sec24"></a>
 Reified Constraints as Boolean Test</h2>
+
+<h3><a name="sec25" id="sec25"></a>
+intro</h3>
 
 <blockquote>
 <p class="quoted">Test: find simultaneous notes. Problem: temporal structure is only partially determined.</p>
 </blockquote>
 
 
-<h3><a name="sec15" id="sec15"></a>
+
+
+<h3><a name="sec26" id="sec26"></a>
 Using plain test</h3>
+
+<p class="first">No information available.</p>
 
 <pre class="src">
 
@@ -367,7 +491,13 @@ MyScore = {Score<span style="color: #a020f0;">.</span>makeScore
 
 </pre>
 
-<h3><pre class="src"></h3>
+
+<h3><a name="sec27" id="sec27"></a>
+wrong</h3>
+
+<p class="first">No information available.</p>
+
+<pre class="src">
 
 <span style="color: #b22222;">%% </span><span style="color: #b22222;">Wrong approach: first testing whether items are determined before using isSimultaneousItem does not block, but notes which are potentially simultaneous are ignored
 </span>
@@ -399,7 +529,13 @@ MyScore = {Score<span style="color: #a020f0;">.</span>makeScore
 
 </pre>
 
-<h3><pre class="src"></h3>
+
+<h3><a name="sec28" id="sec28"></a>
+good</h3>
+
+<p class="first">No information available.</p>
+
+<pre class="src">
 
 <span style="color: #b22222;">%% </span><span style="color: #b22222;">Suitable approach: using reified constraint together with an equality check as a boolean test
 </span>
@@ -439,14 +575,17 @@ MyScore = {Score<span style="color: #a020f0;">.</span>makeScore
 
 
 
-<h2><a name="sec16" id="sec16"></a>
+<h2><a name="sec29" id="sec29"></a>
 More Information</h2>
 
-<p class="first">This tutorial provided an overview of important Strasheela concepts and demonstrated them with many examples. It concludes with references to further Strasheela documentation.</p>
+<h3><a name="sec30" id="sec30"></a>
+intro</h3>
+
+<p class="first">This tutorial provided an overview of important Strasheela concepts and demonstrated them with many sections. It concludes with references to further Strasheela documentation.</p>
 
 <p>The fundamental concepts and the design of Strasheela is detailed in my thesis &quot;Composing Music by Composing Rules: Design and Usage of a Generic Music Constraint System&quot; (<a href="http://strasheela.sourceforge.net/documents/TorstenAnders-PhDThesis.pdf">http://strasheela.sourceforge.net/documents/TorstenAnders-PhDThesis.pdf</a>). This text also compares Strasheela carefully with other similar systems.</p>
 
-<p>The examples in this tutorial are all rather short and explain only specific matters. More elaborated examples can be found at strasheela/doc/<a href="StrasheelaExamples.html">StrasheelaExamples</a>.html.</p>
+<p>The sections in this tutorial are all rather short and explain only specific matters. More elaborated sections can be found at strasheela/doc/<a href="StrasheelaExamples.html">StrasheelaExamples</a>.html.</p>
 
 <p>This tutorial gave an overview of various Strasheela functionality. The Strasheela reference documentation at strasheela/doc/<a href="StrasheelaReference.html">StrasheelaReference</a>.html (hopefully) explains every Strasheela construct (procedure, class, ...) in detail. In addition, the usage of most Strasheela constructs is also demonstrated in several test cases in Strasheela's test files. The test files for the Strasheela core are situated in strasheela/testing/.</p>
 
@@ -462,12 +601,13 @@ More Information</h2>
 
 
 
+
 <!-- Page published by Emacs Muse ends here -->
 <!-- Footer -->
 <div id="footer">
 <div id="author">&copy; 
 Torsten Anders</div>
-<div id="date">Last time edited: 2008.01.21</div>
+<div id="date">Last time edited: 2008.02.23</div>
 </div>
   </body>
 </html>

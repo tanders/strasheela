@@ -30,18 +30,56 @@
 <dt>
 <a href="#sec2">&mdash; Constraint Programming</a>
 </dt>
+<dd>
+<dl>
 <dt>
-<a href="#sec3">Constrained Variables</a>
+<a href="#sec3">Introduction</a>
+</dt>
+</dl>
+</dd>
+<dt>
+<a href="#sec4">Constrained Variables</a>
+</dt>
+<dd>
+<dl>
+<dt>
+<a href="#sec5">Introduction</a>
 </dt>
 <dt>
-<a href="#sec4">Constraint Propagation</a>
+<a href="#sec6">blah</a>
 </dt>
+</dl>
+</dd>
 <dt>
-<a href="#sec5">A Simple Script</a>
+<a href="#sec7">Constraint Propagation</a>
 </dt>
+<dd>
+<dl>
 <dt>
-<a href="#sec6">Parameterised Script</a>
+<a href="#sec8">Introduction</a>
 </dt>
+</dl>
+</dd>
+<dt>
+<a href="#sec9">A Simple Script</a>
+</dt>
+<dd>
+<dl>
+<dt>
+<a href="#sec10">Introduction</a>
+</dt>
+</dl>
+</dd>
+<dt>
+<a href="#sec11">Parameterised Script</a>
+</dt>
+<dd>
+<dl>
+<dt>
+<a href="#sec12">Introduction</a>
+</dt>
+</dl>
+</dd>
 </dl>
 </div>
 
@@ -55,20 +93,32 @@ About this document</h2>
 <h2><a name="sec2" id="sec2"></a>
 &mdash; Constraint Programming</h2>
 
-<p class="first">The following examples introduce the basics of constraint programming in Oz.</p>
+<h3><a name="sec3" id="sec3"></a>
+Introduction</h3>
+
+<p class="first">The following sections introduce the basics of constraint programming in Oz.</p>
 
 
 
 
 
-<h2><a name="sec3" id="sec3"></a>
+<h2><a name="sec4" id="sec4"></a>
 Constrained Variables</h2>
+
+<h3><a name="sec5" id="sec5"></a>
+Introduction</h3>
 
 <p class="first">The two variables X and Y are declared to integers with a specific domain of allowed values (finite domain, FD). X is explicitly declared to an integer in {0, ..., 10}. Y is declared to any integer supported by Oz (so you see the maximum domain supported by Oz).</p>
 
 <p>Please note that a finite domain consists always of integers in Oz (for efficiency reasons), and that FD integers can not be negative. There are also other domains supported (e.g. sets of finite integers, and real numbers).</p>
 
 
+
+
+<h3><a name="sec6" id="sec6"></a>
+blah</h3>
+
+<p class="first">TODO</p>
 
 
 <pre class="src">
@@ -81,13 +131,16 @@ Constrained Variables</h2>
 </pre>
 
 
-<h2><a name="sec4" id="sec4"></a>
+
+<h2><a name="sec7" id="sec7"></a>
 Constraint Propagation</h2>
 
-<p class="first">This example declares two finite domain integers as the example before. In addition, it states that X is greater than Y. The domain of both variables are automatically reduced, so that all domain values fulfill the greater-than constraint.</p>
+<h3><a name="sec8" id="sec8"></a>
+Introduction</h3>
 
-<p>However, no specific solution is shown. The next example shows how to search for solutions of a constraint satisfaction problem (CSP) in Oz.</p>
+<p class="first">This section declares two finite domain integers as the section before. In addition, it states that X is greater than Y. The domain of both variables are automatically reduced, so that all domain values fulfill the greater-than constraint.</p>
 
+<p>However, no specific solution is shown. The next section shows how to search for solutions of a constraint satisfaction problem (CSP) in Oz.</p>
 
 
 <pre class="src">
@@ -101,10 +154,14 @@ Constraint Propagation</h2>
 </pre>
 
 
-<h2><a name="sec5" id="sec5"></a>
+
+<h2><a name="sec9" id="sec9"></a>
 A Simple Script</h2>
 
-<p class="first">This example shows the first full constraint satisfaction problem (CSP) definition. A constraint solver (here SearchAll) expects a CSP in form of a script. A script is a procedure (here an anonymous procedure) whose only argument is the solution of the solved CSP. The variable is often called the root variable of the script. Transformed into common mathematical notation, the CSP states the following conjunction</p>
+<h3><a name="sec10" id="sec10"></a>
+Introduction</h3>
+
+<p class="first">This section shows the first full constraint satisfaction problem (CSP) definition. A constraint solver (here SearchAll) expects a CSP in form of a script. A script is a procedure (here an anonymous procedure) whose only argument is the solution of the solved CSP. The variable is often called the root variable of the script. Transformed into common mathematical notation, the CSP states the following conjunction</p>
 
 <blockquote>
 <p class="quoted">X + Y = Z  AND  X &lt; Y</p>
@@ -121,8 +178,6 @@ A Simple Script</h2>
 <p>The last line of the script shows a very characteristic Oz feature: an Oz script explicitly defines a search strategy (or, more specifically the distribution strategy). The procedure FD.distribute expects a specification of a distribution strategy and a record or list of the constrained variables.</p>
 
 <p>The distribution strategy specifies in which order variables are visited during the search process. The specification 'ff' stands for first-fail and means that always a variable with smallest domain is visited next. The selection of a suitable distribution strategy is vital for the performance of the search process. Nevertheless, for keeping things simple this tutorial does not discuss constraint distribution in detail. Please refer to the Oz documentation for more information (e.g. the &quot;Finite Domain Constraint Programming Tutorial&quot; at <a href="http://www.mozart-oz.org/documentation/fdt/index.html">http://www.mozart-oz.org/documentation/fdt/index.html</a>).</p>
-
-
 
 <pre class="src">
 {Browse
@@ -141,20 +196,22 @@ A Simple Script</h2>
 </pre>
 
 
-<h2><a name="sec6" id="sec6"></a>
+
+<h2><a name="sec11" id="sec11"></a>
 Parameterised Script</h2>
 
-<p class="first">This example defines a script which expects an argument &mdash; a parameterised script. IncreasingInts expects an integer L and returns the actual script (an anonymous procedure). This script creates a list of L finite domain integers (using FD.list). It then constrains all integers in this list to be pairwise distinct (using the constraint FD.distinct). In addition, it constrains the sum of all integers to be equal the square of L (using FD.sum).</p>
+<h3><a name="sec12" id="sec12"></a>
+Introduction</h3>
 
-<p>This example uses another constraint solver, the Oz Explorer. The Explorer visualises the search space. Green nodes in the tree denote solutions, red nodes represent a fail, blue nodes show a stage in the search where there are still open decisions. Triangles represent a subtree (use the middle mouse button to show the nodes of the subtree).</p>
+<p class="first">This section defines a script which expects an argument &mdash; a parameterised script. IncreasingInts expects an integer L and returns the actual script (an anonymous procedure). This script creates a list of L finite domain integers (using FD.list). It then constrains all integers in this list to be pairwise distinct (using the constraint FD.distinct). In addition, it constrains the sum of all integers to be equal the square of L (using FD.sum).</p>
 
-<p>Just double-click on a node to see the values of the variables at this stage during the search process (you can not look at failed nodes, though). You can use this facility to get some intuitive understanding of the search process. For example, look first at the variable values in the root node, than in a child node of the root and in a grand-child node and so forth, to monitor how the search process shrinks the variable domains. For understanding this process please read the &quot;Finite Domain Constraint Programming Tutorial&quot;.</p>
+<p>This section uses another constraint solver, the Oz Explorer. The Explorer visualises the search space. Green nodes in the tree denote solutions, red nodes represent a fail, blue nodes show a stage in the search where there are still open decisions. Triangles represent a subtree (use the middle mouse button to show the nodes of the subtree).</p>
 
-<p>You may play around with the menu entries of the Oz Explorer. For example, select the top node with the mouse, then go to the 'Search' menu and select 'Next Solution'.</p>
+<p>Just double-click on a node to see the values of the variables at this stage during the search process (you can not look at failed nodes, though). You can use this facility to get some intuitive understanding of the search process. For section, look first at the variable values in the root node, than in a child node of the root and in a grand-child node and so forth, to monitor how the search process shrinks the variable domains. For understanding this process please read the &quot;Finite Domain Constraint Programming Tutorial&quot;.</p>
 
-<p>You may also edit the CSP definition. For example, change the value for L in the IncreasingInts call to another integer.</p>
+<p>You may play around with the menu entries of the Oz Explorer. For section, select the top node with the mouse, then go to the 'Search' menu and select 'Next Solution'.</p>
 
-
+<p>You may also edit the CSP definition. For section, change the value for L in the IncreasingInts call to another integer.</p>
 
 
 <pre class="src">
@@ -176,12 +233,13 @@ Parameterised Script</h2>
 
 
 
+
 <!-- Page published by Emacs Muse ends here -->
 <!-- Footer -->
 <div id="footer">
 <div id="author">&copy; 
 Torsten Anders</div>
-<div id="date">Last time edited: 2008.01.21</div>
+<div id="date">Last time edited: 2008.02.23</div>
 </div>
   </body>
 </html>
