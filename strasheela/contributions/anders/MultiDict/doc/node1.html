@@ -131,8 +131,9 @@ clearInterval(drawit)
 </li><li>&lt;P/3:<a href="#entity4"><span class="functionname">Put</span></a>&gt;
 </li><li>&lt;P/3:<a href="#entity5"><span class="functionname">Get</span></a>&gt;
 </li><li>&lt;P/4:<a href="#entity6"><span class="functionname">CondGet</span></a>&gt;
-</li><li>&lt;P/1:<a href="#entity7"><span class="functionname">RemoveAll</span></a>&gt;
-</li><li>&lt;P/2:<a href="#entity8"><span class="functionname">Entries</span></a>&gt;
+</li><li>&lt;P/4:<a href="#entity7"><span class="functionname">CondGetPutting</span></a>&gt;
+</li><li>&lt;P/1:<a href="#entity8"><span class="functionname">RemoveAll</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity9"><span class="functionname">Entries</span></a>&gt;
 </li></ul></code>
 <h3>Define</h3>
 
@@ -172,12 +173,22 @@ clearInterval(drawit)
 <a name="entity6">
 <span class="keyword">fun</span>{<span class="functionname">CondGet</span> Dict Keys DefVal}<br>
 <span class="string"> Returns the item in Dict at Keys if Keys is valid, otherwise DefVal is retured.<BR>
+ NOTE: not thread-save.<BR>
 <BR>
 </span>
 </code><br>
 
 <code>
 <a name="entity7">
+<span class="keyword">fun</span>{<span class="functionname">CondGetPutting</span> Dict Keys X}<br>
+<span class="string"> Returns the item in Dict at Keys if Keys is valid, otherwise otherwise put X at Keys and return that.<BR>
+ NOTE: not thread-save.<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity8">
 <span class="keyword">proc</span>{<span class="functionname">RemoveAll</span> Dict}<br>
 <span class="string"> Removes all entries currently in Dict.<BR>
 <BR>
@@ -185,7 +196,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity8">
+<a name="entity9">
 <span class="keyword">fun</span>{<span class="functionname">Entries</span> Dict}<br>
 <span class="string"> Returns the list of current entries of Dictionary. An entry is a pair Keys#X, where Keys is a list and X the corresponding item.<BR>
 <BR>

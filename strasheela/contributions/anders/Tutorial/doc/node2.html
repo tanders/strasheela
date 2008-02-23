@@ -120,26 +120,28 @@ clearInterval(drawit)
 </tr></table>
 <span class="string"> This functor provides an interactive tutorial for the Oz programming language and for Strasheela. Just start InteractiveTutorial.exe (e.g. at the command line).<BR>
 <BR>
- The examples (documentation and code) is all stored in the directory "./TheExamples/" (possibly in subdirectories). They are stored in *.tut files of the following XML format just (giving some example, for a formal definition see ../xml-schema/tutorial.rnc). Examples are shown in the alphabetical order of their *.tut file pathes, and in the order they are stored in the *.tut file. <BR>
+ The chapters (documentation and code) is all stored in the directory "./TheExamples/" (possibly in subdirectories). They are stored in *.tut files of the following XML format just (giving some example, for a formal definition see ../xml-schema/tutorial.rnc). Chapters are shown in the alphabetical order of their *.tut file pathes, and in the order they are stored in the *.tut file. <BR>
 <BR>
 &lt;?xml version="1.0" encoding="UTF-8"?&gt;<BR>
 <BR>
-&lt;examples&gt;<BR>
-&lt;example title="My Test 1"&gt;<BR>
+&lt;chapter&gt;<BR>
+&lt;section title="My Test 1"&gt;<BR>
+&lt;subsection title="My Test 1.1"&gt;<BR>
 &lt;info&gt;this is a test&lt;/info&gt;<BR>
 &lt;oz&gt;{Browse hi}&lt;/oz&gt;<BR>
-&lt;/example&gt;<BR>
-&lt;example title="My Test 2"&gt;<BR>
+&lt;/subsection&gt;<BR>
+&lt;subsection title="My Test 1.2"&gt;<BR>
 &lt;info&gt;<BR>
 the<BR>
 next<BR>
 test is<BR>
 this<BR>
 &lt;/info&gt;<BR>
-&lt;oz title="Browse hi"&gt;{Browse hi}&lt;/oz&gt;<BR>
-&lt;oz title="Browse there"&gt;{Browse there}&lt;/oz&gt;<BR>
-&lt;/example&gt;<BR>
-&lt;/examples&gt;<BR>
+&lt;oz&gt;{Browse there}&lt;/oz&gt;<BR>
+&lt;/subsection&gt;<BR>
+&lt;/section&gt;<BR>
+&lt;/chapters&gt;<BR>
+<BR>
 <BR>
  The *.tut files are best edited with the Emacs nxml-mode (http://thaiopensource.com/nxml-mode/). Validation, automatic completition etc. are supported for the *.tut files format: an XML schema for *.tut files is provided (in the Relax NG format) at ../xml-schema/tutorial.rnc. For the existing files, Emacs finds this schema file automatically (at least on UNIX..) due to a schemas.xml file in the respective directories.<BR>
 <BR>

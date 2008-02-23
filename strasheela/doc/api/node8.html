@@ -126,8 +126,44 @@ clearInterval(drawit)
 
 
 </tr></table>
-<span class="string"> The functor defines means to generate distribution strategies particularily tailored for a score search.<BR>
+<span class="string"> The functor defines solvers and distribution strategies tailored for a score search.<BR>
+ */<BR>
 <BR>
+<BR>
+ TODO: <BR>
+<BR>
+ !!?? * debug startTime distribution strategy (already OK?)<BR>
+<BR>
+ * extensively testing, e.g. of order preferring timing parameters<BR>
+<BR>
+ <BR>
+<BR>
+<BR>
+<BR>
+ Nachdenken: I want more efficient distributions: the computations performed at each distribution step should be as little as possible and the list of distributable data should be as short as possible:<BR>
+<BR>
+ * !! Can I use multiple sequential distribution calls to define specific distribution strategies. E.g., in case I first want to determine all timing parameters and only after that all the rest: I may apply a first FD.distribute with all needed timing parameters and a second distribution application with the further parameters.<BR>
+<BR>
+ * !! Or has the order of distributable data (i.e. parameters) any influence on the distribution.<BR>
+<BR>
+ -> E.g. example in FD toot, Sec. 6.1 defines two distributions. Here, the first distribution defines the size of the problem before additional constraints are added to the problem. I don't want to add constraints, but simply split the effort for FD.distribute into two calls -- should work! The first FD.distribute should simply block until all its distributable data is determined..<BR>
+<BR>
+ NB: \cite[p. 35f]{Schulte:Book:2002}: multiple distributors introduce hard to find programming errors<BR>
+<BR>
+<BR>
+<BR>
+ MINI version of FD.distribute which I may use instead..<BR>
+ NB: def seems not to be quite correct: see examples/private/distribution-test.oz<BR>
+<BR>
+<BR>
+ Is is list of variables<BR>
+<BR>
+ Order sorts a list of values according to given comparison function, but only first element is important (i.e. Order does not perform full sorting)<BR>
+ !! tmp def with Sort<BR>
+/*<BR>
+fun {Order Xs Fn}<BR>
+   {Sort Xs Fn}<BR>
+end<BR>
 </span>
 </span>
 <h3>Functor</h3>
@@ -135,64 +171,85 @@ clearInterval(drawit)
 <h3>Import</h3>
 <code><ul><li>FD</li><li>Search</li><li>Explorer</li><li><a href="node3.html">GUtils</a> at "<span class="string">GeneralUtils.ozf"
 </span></li><li><a href="node4.html">LUtils</a> at "<span class="string">ListUtils.ozf"
+</span></li><li>IOzSeF at "<span class="string">x-ozlib://tack/iozsef/iozsef.ozf"
 </span></li></ul></code>
 <h3>Export</h3>
-<code><ul><li>&lt;P/2:<a href="#entity324"><span class="functionname">MakeFDDistribution</span></a>&gt;
-</li><li>&lt;P/3:<a href="#entity325"><span class="functionname">MakeSearchScript</span></a>&gt;
-</li><li>&lt;P/3:<a href="#entity326"><span class="functionname">SearchOne</span></a>&gt;
-</li><li>&lt;P/3:<a href="#entity327"><span class="functionname">SearchAll</span></a>&gt;
-</li><li>&lt;P/4:<a href="#entity328"><span class="functionname">SearchBest</span></a>&gt;
-</li><li>&lt;P/2:<a href="#entity329"><span class="functionname">ExploreOne</span></a>&gt;
-</li><li>&lt;P/2:<a href="#entity330"><span class="functionname">ExploreAll</span></a>&gt;
-</li><li>&lt;P/3:<a href="#entity331"><span class="functionname">ExploreBest</span></a>&gt;
-</li><li>&lt;P/2:<a href="#entity332"><span class="functionname">MakeRandomDistributionValue</span></a>&gt;
-</li><li>&lt;P/3:<a href="#entity334"><span class="functionname">MakeSetPreferredOrder</span></a>&gt;
-</li><li>&lt;P/2:<a href="#entity333"><span class="functionname">MakeSetPreferredOrder2</span></a>&gt;
+<code><ul><li>&lt;P/3:<a href="#entity327"><span class="functionname">MakeSearchScript</span></a>&gt;
+</li><li>&lt;P/3:<a href="#entity328"><span class="functionname">SearchOne</span></a>&gt;
+</li><li>&lt;P/3:<a href="#entity329"><span class="functionname">SearchAll</span></a>&gt;
+</li><li>&lt;P/4:<a href="#entity330"><span class="functionname">SearchBest</span></a>&gt;
+</li><li>&lt;P/5:<a href="#entity331"><span class="functionname">SearchOneDepth</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity332"><span class="functionname">ExploreOne</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity333"><span class="functionname">ExploreAll</span></a>&gt;
+</li><li>&lt;P/3:<a href="#entity334"><span class="functionname">ExploreBest</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity335"><span class="functionname">IozsefInit</span></a>&gt;
+</li><li>&lt;P/3:<a href="#entity336"><span class="functionname">IozsefInitBest</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity337"><span class="functionname">IozsefExploreOne</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity338"><span class="functionname">IozsefExploreAll</span></a>&gt;
+</li><li>&lt;P/3:<a href="#entity339"><span class="functionname">IozsefExploreBest</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity340"><span class="functionname">IozsefSearchOne</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity341"><span class="functionname">IozsefSearchAll</span></a>&gt;
+</li><li>&lt;P/3:<a href="#entity342"><span class="functionname">IozsefSearchBest</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity343"><span class="functionname">MakeRandomDistributionValue</span></a>&gt;
+</li><li>&lt;P/3:<a href="#entity345"><span class="functionname">MakeSetPreferredOrder</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity344"><span class="functionname">MakeSetPreferredOrder2</span></a>&gt;
 </li></ul></code>
 <h3>Define</h3>
 
 <code>
-<a name="entity324">
-<span class="keyword">fun</span>{<span class="functionname">MakeFDDistribution</span> Spec}<br>
-<span class="string"> Function returns a specification of a distribution strategy (i.e. an argument for FD.distribute) for parameter score objects. The reader is asked to first read the documentation for FD.distribute.<BR>
-<BR>
- The result of MakeFDDistribution is a record with the functions specifying a FD distribution strategy (i.e. a record with the features filter, order, etc.). The specified distribution strategies differ slightly from the default distribution strategies of FD.distribute: the functions at the features filter, order and select handle parameter score objects. <BR>
-<BR>
- The user can access some predefined distribution strategies by giving an atom to the argument Spec: <BR>
- <BR>
- <code>ff</code>: Specifies a first fail distribution for score parameters, i.e. parameters with smallest domain size are determined first.<BR>
- <code>firstTimingFF</code>: Timing parameters are determined first. Parameters with smaller value domain size are preferred.<BR>
- <code>startTime</code>: Parameters are determined in the order of the stratTime of the item the parameter belong to. Parameters with smaller value domain size are preferred. <BR>
-<BR>
- The user may specify new score distribution strategies by specifying a subset of the functions at the features filter, order, select, value, and procedure to the argument Spec of MakeFDDistribution. However, some functions are already predefined for each feature and can be specified by an atom.<BR>
-<BR>
- filter: undet<BR>
- order: size timeParams timeParamsAndSize startTime<BR>
- select: value<BR>
- value: min random<BR>
- <!! unfinished doc -- see code><BR>
-<BR>
- Features missing in Spec are taken form the default specification, which is a first fail distribution strategy for parameter score objects.<BR>
- <!! add defaults> <BR>
-<BR>
-<BR>
-</span>
-</code><br>
-
-<code>
-<a name="entity325">
+<a name="entity327">
 <span class="keyword">fun</span>{<span class="functionname">MakeSearchScript</span> ScoreScript Args}<br>
-<span class="string"> Returns a search script (a unary procedure) whose solution is a score.  ScoreScript is a unary proc expressing whole search problem involving a score as its solution, however without specifying any distribution strategy. Args is a record specifying the score distribution strategy with the usual features for a distribution strategy (filter, order, select, value, and procedure) and the additional feature test. The distribution strategy features have the same meaning and usage as in MakeFDDistribution. The feature test expects a unary boolean function: all score parameters fulfilling the test are distributed. Test defaults to the following (NB: for this case, the offsetTime of temporal items must be determined).<BR>
-   fun {Test X}<BR>
-      {Not {X isTimePoint($)}} andthen<BR>
-      {Not {{X getItem($)} isContainer($)}}<BR>
-   end<BR>
+<span class="string"> Returns a search script (a unary procedure) whose solution is a score. ScoreScript is a unary proc expressing a whole search problem involving a score as its solution, however without specifying any distribution strategy. Args is a record specifying the score distribution strategy with same features expected by FD.distribute for a distribution strategy (filter, order, select, value, and procedure) and the additional feature test. The distribution strategy features have the same meaning and usage as in FD.distribute, for example, all these arguments support procedures as values (for details, see http://www.mozart-oz.org/documentation/system/node26.html). However, the distribution defined by MakeSearchScript always distributes score parameter objects, not plain variables. For example, the predefined select-procedure 'value' is defined as follows<BR>
+<BR>
+   fun {$ X} {X getValue($)} end<BR>
+   <BR>
+ MakeSearchScript extends the set of predefined values for filter, order, select, value, and procedure already defined by FD.distribute. The following values are supported. <BR>
+<BR>
+ filter:<BR>
+     undet: Considers only parameter objects with undetermined value.<BR>
+     unary Boolean function P: Considers only the parameter objects X, for which {P X} yields true. <BR>
+<BR>
+ order:<BR>
+    naive: Selects the first parameter object.<BR>
+    size: Selects the first parameter, whose value domain has the smallest size.<BR>
+    width: Select the first parameter with the smallest difference between the domain bounds of its value. <BR>
+    nbSusps: Selects the first parameter with the largest number of suspensions on its value, i.e., with the larges number of constraint propagators applied to it.  <BR>
+    min: Selects the first parameter, whose value's lower bound is minimal.<BR>
+    max: Selects the first parameter, whose value's lower bound is maximal.<BR>
+    timeParams: Selects the first temporal parameter object.<BR>
+    timeParamsAndSize: Selects the first parameter, whose value domain has the smallest size, but always selects temporal parameter objects first.<BR>
+    startTime: Left-to-right distribution: Selects a parameter object whose associated temporal item has the smallest start time. Temporal parameters are preferred over other parameters. Note: the outmost temporal container msut have a determined startTime.<BR>
+    binary Boolean function P: Selects the first parameter objects which is minimal with respect to the order relation P.   <BR>
+<BR>
+ select: <BR>
+    value: selects the parameter value (a variable).<BR>
+    unary function P: accesses a variable from the parameter object selected by order and filter.   <BR>
+<BR>
+ value:  <BR>
+    min: Selects the lower bound of the domain.<BR>
+    max: Selects the upper bound of the domain.<BR>
+    mid: Selects the value, which is closest to the middle of the domain (the arithmetical means between the lower and upper bound of the domain). In case of ties, the smaller element is selected.<BR>
+    splitMin: Selects the interval from the lower bound to the middle of the domain (see mid).<BR>
+    splitMax: Selects the interval from the element following the middle to the upper bound of the domain (see mid).<BR>
+    random: Selects a domain value at random. This value ordering is deterministic, i.e., recomputation is supported.<BR>
+    binary procedure P: Takes a variable as first argument, and binds its second argument to a domain descriptor D to serve as the restriction on said variable to be used in a binary distribution step (D in one branch, compl(D) in the other). <BR>
+<BR>
+ The feature test expects a unary boolean function: all score parameters fulfilling the test are distributed.<BR>
+<BR>
+ The following are the defaults for Args. Note the argument test, which specifies that by default container parameters are ignored by the distribution. <BR>
+   unit(filter: undet <BR>
+	order: size<BR>
+	select: value<BR>
+	value: min<BR>
+	test:fun {Test X}<BR>
+		{Not {{X getItem($)} isContainer($)}}<BR>
+	     end)<BR>
 <BR>
 </span>
 </code><br>
 
 <code>
-<a name="entity326">
+<a name="entity328">
 <span class="keyword">fun</span>{<span class="functionname">SearchOne</span> ScoreScript Args}<br>
 <span class="string"> Calls Search.base.one with a script created by MakeSearchScript. The meaning of the arguments ScoreScript and Args are the same as for MakeSearchScript.<BR>
 <BR>
@@ -200,7 +257,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity327">
+<a name="entity329">
 <span class="keyword">fun</span>{<span class="functionname">SearchAll</span> ScoreScript Args}<br>
 <span class="string"> Calls Search.base.all with a script created by MakeSearchScript. The meaning of the arguments ScoreScript and Args are the same as for MakeSearchScript.<BR>
 <BR>
@@ -208,7 +265,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity328">
+<a name="entity330">
 <span class="keyword">fun</span>{<span class="functionname">SearchBest</span> ScoreScript OrderP Args}<br>
 <span class="string"> Calls Search.base.best with a script created by MakeSearchScript. The meaning of the arguments ScoreScript and Args are the same as for MakeSearchScript. Best solution is performed with respect to OrderP (a binary procedure). <BR>
 <BR>
@@ -216,7 +273,16 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity329">
+<a name="entity331">
+<span class="keyword">fun</span>{<span class="functionname">SearchOneDepth</span> ScoreScript RcdI Args KillP}<br>
+<span class="string"> Calls Search.one.depth with a script created by MakeSearchScript. The meaning of the arguments ScoreScript and Args are the same as for MakeSearchScript.<BR>
+ RcdI (an int) is the recomputation distance, and KillP (a nullary procedure) kills the search engine, for details see http://www.mozart-oz.org/documentation/system/node11.html.  <BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity332">
 <span class="keyword">proc</span>{<span class="functionname">ExploreOne</span> ScoreScript Args}<br>
 <span class="string"> Calls Explorer.one with a script created by MakeSearchScript. The meaning of the arguments are the same as for MakeSearchScript.<BR>
 <BR>
@@ -224,7 +290,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity330">
+<a name="entity333">
 <span class="keyword">proc</span>{<span class="functionname">ExploreAll</span> ScoreScript Args}<br>
 <span class="string"> Calls Explorer.all with a script created by MakeSearchScript. The meaning of the arguments are the same as for MakeSearchScript.<BR>
 <BR>
@@ -232,7 +298,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity331">
+<a name="entity334">
 <span class="keyword">proc</span>{<span class="functionname">ExploreBest</span> ScoreScript OrderP Args}<br>
 <span class="string"> Calls Explorer.best with a script created by MakeSearchScript. The meaning of the arguments ScoreScript and Args are the same as for MakeSearchScript. Best solution is performed with respect to OrderP (a binary procedure). <BR>
 <BR>
@@ -240,16 +306,65 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity332">
-<span class="keyword">fun</span>{<span class="functionname">MakeRandomDistributionValue</span> RandGen}<br>
-<span class="string"> Defines a means for a 'random distribution', i.e., for a FD distribution strategy which randomly decides for a domain value of a variable in a deterministic (i.e. recomputable) way. <BR>
- MakeRandomDistributionValue returns a binary procedure for the argument 'value' of FD.distribute. The argument RandGen is a nullary function generated by GUtils.makeRandomGenerator.<BR>
+<a name="entity335">
+<span class="keyword">proc</span>{<span class="functionname">IozsefInit</span> ScoreScript Args}<br>
+<span class="string"> Calls IOzSeF.init with a script created by MakeSearchScript. It opens the IOzSeF 'explorer' without starting any search. This variant of the Explorer provides additional features (e.g., support for more forms of recomputation, and various search strategies). It requires an installation of IOzSeF, see http://www.mozart-oz.org/mogul/doc/tack/iozsef/iozsef.html. The meaning of the arguments are the same as for MakeSearchScript.<BR>
+<BR>
+ NB: IOzSeF support is unfinished. No score output functionality is presently provided. <BR>
 <BR>
 </span>
 </code><br>
 
 <code>
-<a name="entity334">
+<a name="entity336">
+<span class="keyword">proc</span>{<span class="functionname">IozsefInitBest</span> ScoreScript OrderP Args}
+</code><br>
+
+<code>
+<a name="entity337">
+<span class="keyword">proc</span>{<span class="functionname">IozsefExploreOne</span> ScoreScript Args}<br>
+<span class="string"> Calls IOzSeF.exploreOne with a script created by MakeSearchScript. This variant of the Explorer provides additional features (e.g., support for more forms of recomputation, and various search strategies). It requires an installation of IOzSeF, see http://www.mozart-oz.org/mogul/doc/tack/iozsef/iozsef.html. The meaning of the arguments are the same as for MakeSearchScript.<BR>
+<BR>
+ NB: IOzSeF support is unfinished. No score output functionality is presently provided. <BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity338">
+<span class="keyword">proc</span>{<span class="functionname">IozsefExploreAll</span> ScoreScript Args}
+</code><br>
+
+<code>
+<a name="entity339">
+<span class="keyword">proc</span>{<span class="functionname">IozsefExploreBest</span> ScoreScript OrderP Args}
+</code><br>
+
+<code>
+<a name="entity340">
+<span class="keyword">proc</span>{<span class="functionname">IozsefSearchOne</span> ScoreScript Args}
+</code><br>
+
+<code>
+<a name="entity341">
+<span class="keyword">proc</span>{<span class="functionname">IozsefSearchAll</span> ScoreScript Args}
+</code><br>
+
+<code>
+<a name="entity342">
+<span class="keyword">proc</span>{<span class="functionname">IozsefSearchBest</span> ScoreScript OrderP Args}
+</code><br>
+
+<code>
+<a name="entity343">
+<span class="keyword">fun</span>{<span class="functionname">MakeRandomDistributionValue</span> RandGen}<br>
+<span class="string"> Returns randomised value ordering, that is, a unary function for the argument 'value' of FD.distribute. The argument RandGen is a nullary function. If RandGen is created by GUtils.makeRandomGenerator, then the value ordering is randomised but still deterministic: re-executing the distribution will allways yield the same results. Consequently, such a randomised value ordering can be used for recomputation. <BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity345">
 <span class="keyword">fun</span>{<span class="functionname">MakeSetPreferredOrder</span> Tests IfEqual}<br>
 <span class="string"> Returns a score distribution strategy 'order' procedure. Tests is a list of unary boolean funcs which expect a parameter. The distribution 'prefers' parameters for which a test with smaller index in Tests returns true. IfEqual is a binary boolean function which 'decides' in case for two parameters with equal 'test index'.<BR>
  More general Variation of MakeSetPreferredOrder2. Which strategy variant is more efficient depends on the problem.. <BR>
@@ -258,7 +373,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity333">
+<a name="entity344">
 <span class="keyword">fun</span>{<span class="functionname">MakeSetPreferredOrder2</span> Tests}<br>
 <span class="string"> Returns a score distribution strategy 'order' procedure. Tests is a list of unary boolean funcs which expect a parameter. The distribution 'prefers' parameters for which a test with smaller index in Tests returns true. In case of two parameters with equal 'test index' the strategy decides for the first param.<BR>
 <BR>

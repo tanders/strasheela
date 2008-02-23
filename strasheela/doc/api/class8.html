@@ -120,23 +120,23 @@ clearInterval(drawit)
 
 <div style="margin-left:160px"><p align="right" class="margin"><div align="right">inheritance tree</div></p>
 <pre>
- <a class="pre" href="node6.html#entity216">NonType</a> <a class="pre" href="node6.html#entity217">Reflection</a>
+ <a class="pre" href="node6.html#entity218">NonType</a> <a class="pre" href="node6.html#entity219">Reflection</a>
     |        |
     `-----+--'
           |
-     <a class="pre" href="node6.html#entity218">ScoreObject</a>
+     <a class="pre" href="node6.html#entity220">ScoreObject</a>
           |
           |
           |
-      <a class="pre" href="node6.html#entity220">Parameter</a>
+      <a class="pre" href="node6.html#entity222">Parameter</a>
           |
           |
           |
-    <a class="pre" href="node6.html#entity223">TimeParameter</a>
+    <a class="pre" href="node6.html#entity225">TimeParameter</a>
           |
          +'
          |
-    <a class="pre" href="node6.html#entity225">TimeInterval</a>
+    <a class="pre" href="node6.html#entity227">TimeInterval</a>
 </pre>
 <hr><p class="margin"><div align="right">class definition</div></p>
 <code>
@@ -284,6 +284,17 @@ clearInterval(drawit)
 
 </tr></table>
 <span class="string"></span>
+</li><li><span class="functionname">getInfoRecord</span>($ L)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> Returns first record with label L in the list in attribute info.<BR>
+<BR>
+</span>
 </li><li><span class="functionname">getInitArgDefaults</span>($)<br>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
@@ -441,7 +452,7 @@ clearInterval(drawit)
 
 
 </tr></table>
-<span class="string"> Returns boolean whether the list at the attr info of self contains Info.<BR>
+<span class="string"> Returns boolean whether the list at the attr info of self contains Info. In case some info value is a record, then it is checked whether its label is Info.<BR>
 <BR>
 </span>
 </li><li><span class="functionname">init</span>(unit:Unit value:Value&nbsp;...)<br>

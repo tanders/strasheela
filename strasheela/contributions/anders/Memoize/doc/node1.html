@@ -116,7 +116,18 @@ clearInterval(drawit)
 
 
 </tr></table>
-<span class="string"> This functor provides memoization of functions. <BR>
+<span class="string"> This functor provides memoization of functions.<BR>
+<BR>
+ NOTE: Memoize2: accessing memoized values is slow -- it can be far<BR>
+ slower than recomputing!  Efficiency of memo-functions lookup is<BR>
+ only linear time (!) and depends on the number of results already<BR>
+ cached (i.e. lookup is not performed in constant time as perhaps<BR>
+ expected, because currently there exists no constant time<BR>
+ implementation of RecordC.reflectHasFeature).  It may still be<BR>
+ sufficiently efficient in a CSP when used for avoiding redundant<BR>
+ propagators, but you may want to compare the performance with and<BR>
+ without memoization...<BR>
+<BR>
 <BR>
 </span>
 </span>
@@ -124,39 +135,40 @@ clearInterval(drawit)
 <ul>Memoize ("<span class="string">Memoize.oz</span>")<br></ul>
 <h3>Import</h3>
 <code><ul><li>MRecord at "<span class="string">x-ozlib://anders/strasheela/MultiRecord/MultiRecord.ozf"
+</span></li><li>MDict at "<span class="string">x-ozlib://anders/strasheela/MultiDict/MultiDict.ozf"
 </span></li></ul></code>
 <h3>Export</h3>
-<code><ul><li>&lt;P/2:<a href="#entity4"><span class="functionname">Memoize</span></a>&gt;
-</li><li>&lt;P/0:<a href="#entity5"><span class="functionname">ClearAll</span></a>&gt;
-</li><li>&lt;P/2:<a href="#entity6"><span class="functionname">Memoize2</span></a>&gt;
-</li><li>&lt;P/1:<a href="#entity2"><span class="functionname">SetGetID</span></a>&gt;
-</li><li>&lt;P/1:<a href="#entity3"><span class="functionname">SetMinID</span></a>&gt;
+<code><ul><li>&lt;P/3:<a href="#entity5"><span class="functionname">Memoize</span></a>&gt;
+</li><li>&lt;P/0:<a href="#entity6"><span class="functionname">ClearAll</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity7"><span class="functionname">Memoize2</span></a>&gt;
+</li><li>&lt;P/1:<a href="#entity3"><span class="functionname">SetGetID</span></a>&gt;
+</li><li>&lt;P/1:<a href="#entity4"><span class="functionname">SetMinID</span></a>&gt;
 </li></ul></code>
 <h3>Define</h3>
 
 <code>
-<a name="entity4">
-<span class="keyword">proc</span>{<span class="functionname">Memoize</span> Fn MemoFn}<br>
-<span class="string"> Expects a unary function Fn (expecting a list of values and returning a value) and returns the corresponding memoized function MemoFn (ie. a function which caches the result for specific arguments and returns this pre-computed value again when called with the same arguments instead of computing the value again, see 'Norvig. Paradigms of Aritificial Intelligence Programming, 1992' for details). <BR>
+<a name="entity5">
+<span class="keyword">proc</span>{<span class="functionname">Memoize</span> Fn ClearP MemoFn}<br>
+<span class="string"> Expects a unary function Fn (expecting a list of values and returning a value) and returns the corresponding memoized function MemoFn (ie. a function which caches the result for specific arguments and returns this pre-computed value again when called with the same arguments instead of computing the value again, see 'Norvig. Paradigms of Aritificial Intelligence Programming, 1992' for details). Additionally, the nullary proc ClearP is returned: calling ClearP clears the cache for MemoFn.<BR>
 <BR>
  The identity of the memoized function arguments is checked with a function GetID. This function can be set with SetGetID, and must return a unique key (a name, atom or an integer) for every unique function argument. Also, the memoized function arguments must be values for which their unique key can be computed. GetID defaults to fun {$ X} {X getID($)} end, that is, per default a memoized function must expect a list of score objects with a unique determined ID or a free ID.<BR>
  In case the ID retured by GetID is a free variable, then this variable is set to a unique integer. The minimum integer ID can be specified with SetMinID.<BR>
 <BR>
- The definition of the original function is not changed (in contrast to the Lisp implementation of Norvig) and thus recursive functions are not well memoized. Only the top-level call of the recursive function would get memoized but internally the function would call the original unmemoized version.<BR>
+ The definition of the original function is not changed (in contrast to the Lisp implementation of Norvig) and thus recursive functions are not well memoized. Only the top-level call of the recursive function would get memoized but internally the function would call the original unmemoized version. Note that memoization is usually most effectful at recursive functions, whereas the present Memoize is useful only under very specific circumstances. <BR>
 <BR>
- Memoize itself (and clearing the cache of a memoized function) performs a stateful operation. Still, calling the memo-function (and caching results) is stateless. However, you must not use Memoize (it would cause blocking). Instead, use Memoize2.<BR>
+ Memoize performs stateful operations and is therefore not applicable in a CSP. For CSP use Memoize2 instead.<BR>
 <BR>
  Memo-functions are not thread save. In case the result for a particular set of arguments is not yet cached and the function is called with the same args (args with the same keys) in parallel, the cache will be set twice (in case of inconsistent values, an exception will be raised). Similarily, setting the ID of a value is not thread-save either.<BR>
- These operations could be made thread-save by locking multiple sub-operations. However, locks in a top-level space must not be 'entered' by statements in other spaces (i.e. during search). <BR>
+ TODO: these operations could be made thread-save by locking multiple sub-operations within the functor MultiDict. <BR>
 <BR>
- Efficiency of memo-functions lookup is only linear time (!) and depends on the number of results already cached (i.e. lookup is not performed in constant time as perhaps expected, because currently there exists no constant time implementation of RecordC.reflectHasFeature).<BR>
-<BR>
+ Lookup with Memoize is far more efficient than Memoize2. Still, you better check whether memoization is really more efficient than recomputing...<BR>
+ <BR>
 <BR>
 </span>
 </code><br>
 
 <code>
-<a name="entity5">
+<a name="entity6">
 <span class="keyword">proc</span>{<span class="functionname">ClearAll</span> }<br>
 <span class="string"> Clears the cache of all memoized functions. <BR>
 <BR>
@@ -164,10 +176,18 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity6">
+<a name="entity7">
 <span class="keyword">proc</span>{<span class="functionname">Memoize2</span> Fn MemoFn}<br>
-<span class="string"> Like Memoize, but completely stateless. Functions memoized with Memoize2 are not cleared with ClearAll (in contrast to functions created with Memoize), but for functions local to CSPs this is not necessary.<BR>
- Memoize2 is intended for locally use in CSP.<BR>
+<span class="string"> Clears the cache of all memoized functions. <BR>
+ */ <BR>
+    proc {ClearAll}<BR>
+       {ForAll @ClearPs proc {$ P} {P} end}<BR>
+    end<BR>
+<BR>
+<BR>
+/** %% Like Memoize, but completely stateless. Functions memoized with Memoize2 are not cleared with ClearAll (in contrast to functions created with Memoize), but for functions local to CSPs this is not necessary.<BR>
+ Memoize2 is intended for locally use in CSP where its use can avoid re-applying redundant propagators. <BR>
+ Efficiency of memo-functions lookup is only linear time (!) and depends on the number of results already cached (i.e. lookup is not performed in constant time as perhaps expected, because currently there exists no constant time implementation of RecordC.reflectHasFeature).<BR>
 <BR>
  BUG: setting IDs automatically does presently _not_ work from inside a local space (i.e. during search): implicitly called function MakeID is stateful operation.<BR>
  Workaround for now: set IDs of score objects manually (the method getID returns the ID of an object, which is free, by default).<BR>
@@ -176,16 +196,17 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity2">
+<a name="entity3">
 <span class="keyword">proc</span>{<span class="functionname">SetGetID</span> Fn}<br>
-<span class="string"> Sets the function which accesses the unique ID of an argument to a memoization function. This must be a name, atom or an integer. Alternatively, the value returned by Fn my be a free variable. In that case, this variable gets implicitly bound to a unique integer (see SetMinID).<BR>
+<span class="string"> Sets the function which accesses the unique ID of an argument to a memoization function. This must be a name, atom or an integer. Alternatively, the value returned by Fn may be a free variable. In that case, this variable gets implicitly bound to a unique integer (see SetMinID).<BR>
  The default GetIdFn is fun {$ X} {X getID($)} end.<BR>
+ NOTE: the use of SetGetID is not thread-safe. SetGetID performs a stateful operation and may overwrite the key expected by a concurrent computation. Workaround: create a unique Memo module with Module.link for each key needed.<BR>
 <BR>
 </span>
 </code><br>
 
 <code>
-<a name="entity3">
+<a name="entity4">
 <span class="keyword">proc</span>{<span class="functionname">SetMinID</span> Min}<br>
 <span class="string"> A memo-function created by Memoize recognises values by their ID. In case this ID is a free variable, it is determined to a unique integer.<BR>
  SetMinId sets the minimum ID. This allows to avoid conflicts of automatically created IDs with IDs created by hand. The default min ID is 0.<BR>
