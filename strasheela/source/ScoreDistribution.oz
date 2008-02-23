@@ -58,6 +58,7 @@ import
    FD Search Explorer
    GUtils at 'GeneralUtils.ozf'
    LUtils at 'ListUtils.ozf'
+   IOzSeF at 'x-ozlib://tack/iozsef/iozsef.ozf'
    % Score at 'ScoreCore.ozf'
    % Browser(browse:Browse) % temp for debugging
 export 
@@ -66,6 +67,11 @@ export
    SearchOne SearchAll SearchBest
    SearchOneDepth 
    ExploreOne ExploreAll ExploreBest
+
+   IozsefInit IozsefInitBest
+   IozsefExploreOne IozsefExploreAll IozsefExploreBest
+   IozsefSearchOne IozsefSearchAll IozsefSearchBest
+   
    MakeRandomDistributionValue
    MakeSetPreferredOrder MakeSetPreferredOrder2
 define
@@ -411,6 +417,53 @@ define
       {Explorer.best {MakeSearchScript ScoreScript Args}
        OrderP}
    end
+
+   /** %% Calls IOzSeF.init with a script created by MakeSearchScript. It opens the IOzSeF 'explorer' without starting any search. This variant of the Explorer provides additional features (e.g., support for more forms of recomputation, and various search strategies). It requires an installation of IOzSeF, see http://www.mozart-oz.org/mogul/doc/tack/iozsef/iozsef.html. The meaning of the arguments are the same as for MakeSearchScript.
+   %%
+   %% NB: IOzSeF support is unfinished. No score output functionality is presently provided. 
+   %% */
+   %%
+   %% IOzSeF.getSolutions: Returns the solutions found so far during interactive exploration
+   %% IOzSeF.cancelExploration:	Cancels the current interactive exploration.
+   proc {IozsefInit ScoreScript Args}
+      {IOzSeF.init {MakeSearchScript ScoreScript Args}}
+   end
+   proc {IozsefInitBest ScoreScript OrderP Args}
+      {IOzSeF.initBest {MakeSearchScript ScoreScript Args} OrderP}
+   end
+   /** %% Calls IOzSeF.exploreOne with a script created by MakeSearchScript. This variant of the Explorer provides additional features (e.g., support for more forms of recomputation, and various search strategies). It requires an installation of IOzSeF, see http://www.mozart-oz.org/mogul/doc/tack/iozsef/iozsef.html. The meaning of the arguments are the same as for MakeSearchScript.
+   %%
+   %% NB: IOzSeF support is unfinished. No score output functionality is presently provided. 
+   %% */
+   %%
+   %% IOzSeF.getSolutions: Returns the solutions found so far during interactive exploration
+   %% IOzSeF.cancelExploration:	Cancels the current interactive exploration.
+   proc {IozsefExploreOne ScoreScript Args}
+      {IOzSeF.exploreOne {MakeSearchScript ScoreScript Args}}
+   end
+   proc {IozsefExploreAll ScoreScript Args}
+      {IOzSeF.exploreAll {MakeSearchScript ScoreScript Args}}
+   end
+   proc {IozsefExploreBest ScoreScript OrderP Args}
+      {IOzSeF.exploreBest {MakeSearchScript ScoreScript Args} OrderP}
+   end   
+   %% IOzSeF.cancelSearch: Cancels the current non-interactive search.
+   %% IOzSeF.setOption(Key Value) sets options like explorationStrat (dfs,bdfs,id,lds), noOfSols (0,...), recompStrat (plain,fixed,adaptive), mrd (0,...)
+   %% IOzSeF.getTime
+   %% 
+   %% NB: no kill proc is supported -- should I instead define my own solvers?
+   %% NB: it appears only a single search can be executed at one time. This is sufficient for most cases, but why this restriction?
+   proc {IozsefSearchOne ScoreScript Args}
+      {IOzSeF.searchOne {MakeSearchScript ScoreScript Args}}
+   end
+   proc {IozsefSearchAll ScoreScript Args}
+      {IOzSeF.searchAll {MakeSearchScript ScoreScript Args}}
+   end
+   proc {IozsefSearchBest ScoreScript OrderP Args}
+      {IOzSeF.searchBest {MakeSearchScript ScoreScript Args} OrderP}
+   end
+   
+   
 
    /** %% Returns randomised value ordering, that is, a unary function for the argument 'value' of FD.distribute. The argument RandGen is a nullary function. If RandGen is created by GUtils.makeRandomGenerator, then the value ordering is randomised but still deterministic: re-executing the distribution will allways yield the same results. Consequently, such a randomised value ordering can be used for recomputation. 
    %% */
