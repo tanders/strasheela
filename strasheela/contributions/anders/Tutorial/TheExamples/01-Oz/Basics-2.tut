@@ -20,7 +20,7 @@ The primary pattern matching construct is the case statement, but some programmi
 </subsection>
 
 <subsection title="Case (head and tail)">
-<info>In the section below, `case' declares the two variables H and T and binds them to the head and tail of the list Xs.  Finally, the H and T are inspected.  Please note that the pattern-matching expression H|T is written with the usual list syntax using | (the cons-operation). 
+<info>In the section below, `case' declares the two variables H and T and binds them to the head and tail of the list Xs.  Finally, the H and T are inspected.  Please note that the pattern-matching expression H|T is written with the usual list syntax using the cons-operation (|). 
 
 This approach can be used to pattern match lists of arbitrary length, except empty lists (i.e. nil).  Try changing the definition of Xs to a list of a different length and watch how the value of T changes.
 </info>
