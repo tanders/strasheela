@@ -363,4 +363,10 @@ end
       value:random)}
 
 
+%% tmp
+{SDistro.iozsefExploreOne Fux_FirstSpecies
+ unit(order:size
+      value:random)}
+
+
 */
