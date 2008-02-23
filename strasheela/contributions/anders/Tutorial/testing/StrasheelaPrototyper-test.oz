@@ -11,6 +11,31 @@ declare
 %% the following calls work only when the respective procs are exported..
 %%
 
+
+{Browse {SPrototyper.myParser parseFile({SPrototyper.myChapters.1 toString($)} $)}}
+
+{Browse {SPrototyper.tutToMuse {SPrototyper.myChapters.1 toString($)}}}
+
+{IsVirtualString {SPrototyper.tutToMuse {SPrototyper.myChapters.1 toString($)}}}
+
+
+declare
+MyTut = {SPrototyper.myParser parseFile({SPrototyper.myChapters.1 toString($)} $)}
+MyChapter = {LUtils.find MyTut
+	     fun {$ X} {Label X} == chapter end}
+MySection = {SPrototyper.getSections MyTut}.1
+MySubsection = MySection.children.1 
+
+
+{Browse {IsVirtualString {SPrototyper.subsectionToMuse MySubsection}}}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%% old stuff 
+%%
+
+
 {SPrototyper.readExamples}
 
 {Map {SPrototyper.collectXMLFiles SPrototyper.examplesDir}
@@ -20,13 +45,6 @@ declare
 declare 
 ParsedFile = {SPrototyper.myParser parseFile({{SPrototyper.collectXMLFiles SPrototyper.examplesDir}.1 toString($)} $)}
 
-
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%
-%% old stuff 
-%%
 
 %% evaluate buffer StrasheelaPrototyper to define functor
 
