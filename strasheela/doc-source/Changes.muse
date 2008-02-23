@@ -9,7 +9,7 @@
 
  - Added examples which demonstrate how to use continuous controllers in the score, and how to output them to MIDI, see [[../examples/ContinuousControllersInScore-MidiOutput.oz][here]]
 
- - Added to SDistro: SearchOneDepth 
+ - Added to SDistro: SearchOneDepth,  added IozsefInit, IozsefInitBest, IozsefExploreOne, IozsefExploreAll, IozsefExploreBest, IozsefSearchOne, IozsefSearchAll, IozsefSearchBest 
  - SDistro: Revised documentation for MakeSearchScript, removed MakeFDDistribution as exported value -- the solvers provided by SDistro are more convenient to use
  [TODO: Check where MakeFDDistribution is used in examples]
 
