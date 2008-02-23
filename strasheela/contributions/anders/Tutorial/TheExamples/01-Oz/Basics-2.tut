@@ -91,7 +91,7 @@ end</oz>
 </subsection>
 </section>
 
-<section title="Procedures over Compound Data">
+<section title="Procedures over Compounds">
 <subsection title="Introduction">
 <info>Oz provides a rich set of procedures for processing these compound data such as lists and records.  A few sections are shown here.  More procedures are listed in the reference documentation at
 
@@ -116,7 +116,7 @@ end</oz>
 </subsection>
 
 <subsection title="Accessing a list element">
-<info>Return the nth element of a list.</info>
+<info>Return the nth element of a list.  Note that the list is 1-indexed.</info>
 <oz>{Inspect {Nth [a b c d] 2}}</oz>
 </subsection>
 
@@ -147,7 +147,7 @@ end</oz>
 
 <section title="Higher-Order Programming">
 <subsection title="Introduction">
-<info>Oz procedures (and functions) are first-class values.  This means that a procedure can be processed like any other value.  For section, procedures can be given to other procedures as arguments.
+<info>Oz procedures (and functions) are first-class values.  This means that a procedure can be processed like any other value.  For example, procedures can be given to other procedures as arguments.
 
 This leads to highly flexible programming technique called higher-order programming.  Procedures expecting procedures as arguments are called higher-order procedures.  This concept is demonstrated be several sections.
 </info>
@@ -172,7 +172,7 @@ The function IsEven returns true for even integers and thus a list with only the
 <subsection title="Map">
 <info>The function Map expects a list and a unary function (i.e. a function expecting a single value) as arguments.  It applies the function to every list element, and returns the collected results in a list.
 
-The section defines and uses the function square in order to square all numbers in the list.  You may want to change this function to understand that any function can be given to a higher-order function as an argument.  For section, replace Square by a function Double, which doubles its argument.
+The section defines and uses the function square in order to square all numbers in the list.  You may want to change this function to understand that any function can be given to a higher-order function as an argument.  For example, replace Square by a function Double, which doubles its argument.
 </info>
 <oz>local
   fun {Square X} X * X end
@@ -181,7 +181,7 @@ in
 end</oz>
 </subsection>
 
-<subsection title="Anonymous procedure definition">
+<subsection title="Anonymous procedures">
 <info>Sometimes we need a function only once -- as the function Square in the previous section.  In such cases we don't necessarily need to care about giving the function any name.  Instead, we can define an anonymous function.
 
 This section restates the previous section by defining the Square function 'inline' without giving it any name.  Please recall that $ always denotes a return value.  In this case, $ returns the function value itself.
@@ -190,25 +190,40 @@ This section restates the previous section by defining the Square function 'inli
  {Map [1 2 3 4 5 6] fun {$ X} X * X end}}</oz>
 </subsection>
 
-<subsection title="Sort (1)">
-<info>The function Sort expects a list and a binary function (i.e. a function expecting two values) as arguments.  This binary function compares two values, and Sort sorts the list values according to this comparison.  For section, the function in the section compares two numbers and returns true if the first number is smaller.  Consequently, this section sorts the list elements in ascending order.  You may want to replace the &lt; by &gt; in the function definition to sort the numbers in decreasing order.
+<subsection title="Sort (simple)">
+<info>The function Sort expects a list and a binary function (i.e. a function expecting two values) as arguments.  This binary function compares two values, and Sort sorts the list values according to this comparison.  For example, the function in the section compares two numbers and returns true if the first number is smaller.  Consequently, this section sorts the list elements in ascending order.  You may want to replace the &lt; by &gt; in the function definition to sort the numbers in decreasing order.
 </info>
-<oz>{Browse {Sort [1 5 3 2 0 7] fun {$ X Y}  X &lt; Y end}}</oz>
+<oz>{Browse
+ {Sort
+  [1 5 3 2 0 7]
+  fun {$ X Y}
+    X &lt; Y
+  end
+ }}</oz>
 </subsection>
 
-<subsection title="Sort (2)">
-<info>You can actually sort the list elements in any way you want using the Sort function.  For section, you may place all even numbers at the beginning and all odd numbers at the end of the list and sort all even and odd numbers in ascending order.  This is done in the second (commented) Sort call.  How does this sorting work?
+<subsection title="Sort (advanced)">
+<info>You can actually sort the list elements in any way you want using the Sort function.  For example, you may place all even numbers at the beginning and all odd numbers at the end of the list and sort all even and odd numbers in ascending order.  This is done in the second (commented) Sort call.  How does this sorting work?
 </info>
-<oz>{Browse {Sort [1 5 3 2 0 7] fun {$ X Y} 
-                              if {IsEven X} 
-			      then
-			        if {IsEven Y}
-				then X &lt; Y
-				else true
-				end
-			      else false
-			      end
-                            end}}</oz>
+<oz>{Browse
+ {Sort
+  [1 5 3 2 0 7]
+  fun {$ X Y} 
+    if {IsEven X} then
+      if {IsEven Y} then
+        X &lt; Y
+      else
+        true
+      end
+    else
+      if {IsOdd Y} then
+        X &lt; Y
+      else
+        false
+      end
+    end
+  end
+ }}</oz>
 </subsection>
 
 <subsection title="Defining higher-order procedures">
@@ -227,8 +242,13 @@ This section also demonstrates the pattern-matching case statement with multiple
       end 
    end
 in
-   {Browse {Find  [1 2 3 4 5 6] IsEven}}
+   {Browse {Find [1 2 3 4 5 6] IsEven}}
 end</oz>
+</subsection>
+
+<subsection title="BACKGROUND">
+<info>TODO: Torsten, please add info about "first-class values" here.  :)</info>
+<oz></oz>
 </subsection>
 </section>
 
@@ -304,7 +324,7 @@ end</oz>
 </subsection>
 
 <subsection title="Method arguments">
-<info>Class methods are actually records which can contain method arguments.  For section, the following statement sends the following message to the object Window.  This changes the width of the border around the button and sets the background of this border to the color blue.
+<info>Class methods are actually records which can contain method arguments.  For example, the following statement sends the following message to the object Window.  This changes the width of the border around the button and sets the background of this border to the color blue.
 
   {Window set(borderwidth:1.0#c background:blue)}
 
