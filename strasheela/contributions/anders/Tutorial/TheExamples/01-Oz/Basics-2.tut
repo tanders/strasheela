@@ -260,7 +260,7 @@ end</oz>
 </subsection>
 
 <subsection title="Unifying two numbers">
-<info>TODO: add something</info>
+<info>Unification shares information between two variables, including the domain of possible values.</info>
 <oz>local 
   X = {FD.int 1#5}
   Y = {FD.int 0#3}
@@ -272,7 +272,7 @@ end
 </subsection>
 
 <subsection title="Unifying two lists">
-<info>TODO: add something</info>
+<info>Lists may be unified as well.</info>
 <oz>local 
   X = [a _ _] 
   Y = [_ b _]
@@ -283,7 +283,9 @@ end</oz>
 </subsection>
 
 <subsection title="Recursive unification">
-<info>Unification also works recursively.  The Inspector and the Browser show two different ways for representing that (the Inspector can be configured to show either way: options menu, structure tab, under representation, select between tree and relation mode).</info>
+<info>Unification also works recursively.  The Inspector and Browser windows show two different ways for representing this.
+
+The Inspector can be configured to show either way: under the options menu, structure tab, below representation, select between tree and relation mode.</info>
 <oz>local X = unit(x:X) in 
   {Browse X}
   {Inspect X}
@@ -292,7 +294,7 @@ end</oz>
 </section>
 
 
-<section title="Class Method Application">
+<section title="Object-Oriented Programming">
 <subsection title="Introduction">
 <info>Oz supports object-oriented programming.  This programming paradigm introduces the notion of objects which instantiate classes.  An object (or class instance) is a datum which encapsulates its internal structure.  A class specifies what data are contained in its instances and what methods these instances understands.  A method (or message) is effectively a procedure which is defined for instances of specific classes only.
 
@@ -345,6 +347,10 @@ in
                background:blue)}
 end</oz>
 </subsection>
+
+<!--
+TODO: add subsections for creating an object
+-->
 </section>
 
 
@@ -352,46 +358,46 @@ end</oz>
 <subsection title="Introduction">
 <info>Oz provides excellent support for concurrent programming, where computations run in parallel in multiple threads.  We will only touch on this subject and discuss aspects relevant for Strasheela.  In general, however, concurrent programming plays a major role in Oz programming. 
 
-The computations in different threads can communicate with each other via variables.  Multiple threads can use the same variable in a computation.  If the value of a variable does not present enough information for performing a specific operation, then the thread simply blocks and waits for more information.  In the section below, the addition X+3 can not be performed as long as the value of X is unknown.  As soon as more information about the variable value is available, the thread resumes its execution. 
+The computations in different threads can communicate with each other via variables.  Multiple threads can use the same variable in a computation.  If the value of a variable does not present enough information for performing a specific operation, then the thread simply blocks and waits for more information.  As soon as more information about the variable value is available, the thread resumes its execution. 
   
-This behaviour leads to a concurrent programming model which is highly declarative -- and thus easy to program in.  We will later see how this model simplifies the definition of complex musical constraint satisfaction problems (Oz' constraint programming model is based on concurrent programming).
-
-The downside of this concurrency model is that it can result in an unintended blocking of a program which is not explicitly signalled (e.g. no error message is shown when a program blocks, because this is a normal program behaviour).  The second and third section below demonstrate a pragmatic way to deal with this downside. 
-
-The sections demonstrates concurrent programming, but do not show a typical application (a typical application would be a program split in a server and one or more clients).  In the context of Strasheela, we will seldomly write concurrent programs explicitly.  Nevertheless, it is very important to know how concurrent programming works in Oz.  Even if we are not explicitly writing a concurrent program, constraint programming in Oz always results in a concurrent program.  Concurrent programming forms one of the foundations of Oz' constraint programming model, where each constraint (i.e. each propagator) is a concurrent agent running in its own thread.
+The downside of this concurrency model is that it can result in an unintended blocking of a program which is not explicitly signalled (e.g. no error message is shown when a program blocks, because this is a normal program behaviour).  There are a few pragmatic tricks we can use to avoid this downside; these are covered later in this chapter.
 </info>
 <oz></oz>
 </subsection>
 
-<subsection title="Another section TODO">
-<info>Here we treat `IsEven' as a procedure with two arguments.  `IsEven' binds the variable B.  Please note the order of computations in this section:
+<subsection title="Variables (single thread)">
+<info>Variables may be used to communicate information between different parts of a program -- even if the information is not available yet.  Browse can handle unknown information, but other parts of the program may wait (i.e. block) until the information is available.
+
+Here, `IsEven' binds the variable B.  Please note the order of computations in this section:
+
   1.  B is browsed.
   2.  IsEven binds B to false.
 
-However, `Browse' does indeed show the correct value of B.
-
-This demonstrates a vital feature of Oz: variables are be used to communicate information between different parts of a program -- even if the information is not available yet.  Browse can handle unknown information, but other parts of the program may wait (i.e. block) until the information is available.
+However, `Browse' does indeed show the correct value of B.  WARNING: not all procedures can handle unknown information.
 </info>
 <oz>local B in
-   {Browse B} 		
+   {Browse B}
+   {Delay 2000}
    {IsEven 4 B}
 end</oz>
 </subsection>
 
-<subsection title="Declarative concurrency">
-<info>This section declares X and then browses 'hello' (just to show that the browser works in principle).  However, the addition X+3 can not be executed immediately and blocks.  Because this computation is executed in its own thread, the top-level thread continues regardless, and calls the procedure Delay, which waits for 3000 msecs.  After that time, the top-level thread determines X to 4.  This awakes the other thread: it can now compute X+3 and browse the sum.
+<subsection title="Variables (multiple threads)">
+<info>Variables may also be used to communicate between different threads.  This example declares X and then browses 'hello' (just to show that the browser works in principle).  However, the addition X+3 can not be executed immediately and blocks.  Because this computation is executed in its own thread, the top-level thread continues regardless, and calls the procedure Delay, which waits for 3000 msecs.  After that time, the top-level thread determines X to 4.  This awakes the other thread: it can now compute X+3 and browse the sum.
+
+In the section below, the addition X+3 can not be performed as long as the value of X is unknown.
 </info>
 <oz>local
   X 
 in
   {Browse hello}
   thread {Browse X + 3} end
-  {Delay 3000}
+  {Delay 2000}
   X = 4
 end</oz>
 </subsection>
 
-<subsection title="Blocking computation">
+<subsection title="Blocked programs">
 <info>This section demonstrates a buggy program which does not signal any error but simply does nothing.  The section is very similar to the previous section, but does not place the blocking X+3 in its own thread.  As a result, the whole program blocks at that point and never executes X = 4.</info>
 <oz>local
   X
@@ -403,7 +409,7 @@ in
 end</oz>
 </subsection>
 
-<subsection title="'Signalling' a blocking computation">
+<subsection title="Detecting blocked programs (1)">
 <info>This section demonstrates a pragmatic approach which checks for blocking programs.  The section ends with the statement {Browse endOfProgram}.  A non-blocking program will always execute this last line of code and show 'endOfProgram' in the Browser.  However, a blocking program (as the present one) does not do that and thus indicates that it is blocking.  Although this little trick does not tell us *where* the program blocks, the information *that* we wrote a blocking program can prove very helpful already.  You may get a feel for this trick by changing the section so that the message 'endOfProgram' is shown (e.g. comment the blocking statement out, or surrounding it with a 'thread .. end' statement).</info>
 <oz>local
   X
@@ -416,7 +422,7 @@ end
 {Browse endOfProgram}</oz>
 </subsection>
 
-<subsection title="'Signalling' a blocking computation (2)">
+<subsection title="Detecting blocked programs (2)">
 <info>This section demonstrates a technique which causes an error (raises an exception) when the current thread blocks. The function `Thread.this' returns the current thread, and `Debug.setRaiseOnBlock' activates this debugging feature. The error message can even tell you which variable caused the blocking (although in this section the deduced variable name is simply _).
 
 Note that you must load Debug first, before using `Debug.setRaiseOnBlock' (which this tutorial does implicitly).</info>
@@ -429,6 +435,15 @@ in
   X = 4
 end
 </oz>
+</subsection>
+
+<subsection title="BACKGROUND">
+<info>TODO: fill, organize
+
+This chapter demonstrates concurrent programming, but do not show a typical application (a typical application would be a program split in a server and one or more clients).  In the context of Strasheela, we will seldomly write concurrent programs explicitly.  Nevertheless, it is very important to know how concurrent programming works in Oz.  Even if we are not explicitly writing a concurrent program, constraint programming in Oz always results in a concurrent program.  Concurrent programming forms one of the foundations of Oz' constraint programming model, where each constraint (i.e. each propagator) is a concurrent agent running in its own thread.
+
+</info>
+<oz></oz>
 </subsection>
 </section>
 
