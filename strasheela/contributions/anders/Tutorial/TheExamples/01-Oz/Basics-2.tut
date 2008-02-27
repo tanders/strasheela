@@ -375,10 +375,12 @@ Here, `IsEven' binds the variable B.  Please note the order of computations in t
 
 However, `Browse' does indeed show the correct value of B.  WARNING: not all procedures can handle unknown information.
 </info>
-<oz>local B in
-   {Browse B}
-   {Delay 2000}
-   {IsEven 4 B}
+<oz>local
+  B
+in
+  {Browse B}
+  {Delay 2000}
+  {IsEven 4 B}
 end</oz>
 </subsection>
 
@@ -409,7 +411,7 @@ in
 end</oz>
 </subsection>
 
-<subsection title="Detecting blocked programs (1)">
+<subsection title="Detecting blocked progs (1)">
 <info>This section demonstrates a pragmatic approach which checks for blocking programs.  The section ends with the statement {Browse endOfProgram}.  A non-blocking program will always execute this last line of code and show 'endOfProgram' in the Browser.  However, a blocking program (as the present one) does not do that and thus indicates that it is blocking.  Although this little trick does not tell us *where* the program blocks, the information *that* we wrote a blocking program can prove very helpful already.  You may get a feel for this trick by changing the section so that the message 'endOfProgram' is shown (e.g. comment the blocking statement out, or surrounding it with a 'thread .. end' statement).</info>
 <oz>local
   X
@@ -422,7 +424,7 @@ end
 {Browse endOfProgram}</oz>
 </subsection>
 
-<subsection title="Detecting blocked programs (2)">
+<subsection title="Detecting blocked progs (2)">
 <info>This section demonstrates a technique which causes an error (raises an exception) when the current thread blocks. The function `Thread.this' returns the current thread, and `Debug.setRaiseOnBlock' activates this debugging feature. The error message can even tell you which variable caused the blocking (although in this section the deduced variable name is simply _).
 
 Note that you must load Debug first, before using `Debug.setRaiseOnBlock' (which this tutorial does implicitly).</info>
