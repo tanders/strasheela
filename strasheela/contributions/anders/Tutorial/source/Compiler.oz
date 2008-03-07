@@ -75,7 +75,9 @@ define
 %   SMapping = Strasheela.sMapping
    SDistro = Strasheela.sDistro
    Out = Strasheela.out
-   
+
+   %% TODO: replace by OPIEnv.full: 
+   %% x-oz://system/OPIEnv.ozf' conveniently exports the full environment as "OPIEnv.full".
    CompilerEnvironment = env('Abs': Abs
 			     'Access': Access
 			     'Acos': Acos
