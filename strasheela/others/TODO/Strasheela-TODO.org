@@ -2,7 +2,6 @@
 
 * Strasheela examples						    :STRASHEELA:
 
-
 ** TODO 'Interesting arpeggio' example [[file:~/oz/music/Strasheela/private/examples/forOlleRomo/Arpeggio.oz][Arpeggio.oz]]			  :SOON:
 
   ?? Duration working time: 1d -- probably more :)
@@ -72,6 +71,201 @@
 
    
 * Strasheela design						    :STRASHEELA:
+
+** Markov chain constraints which include probablilty			  :NEXT:
+
+** Add support for Real Interval constraints 
+
+*** Install XRI on MBP 
+
+**** Contact developers on failed installation attempt		      :@MAIL:NA:
+
+    I tried to install XRI on MacOS 10.4, but the configure script failed. Below are the error messages (I filtered out all other messages). It appears the configure script somewhere hardwires the Mozart installation directory to /usr/lib/mozart and can therefore not find the Mozart installation on my system in /usr/local/oz. Setting OZHOME does not help. 
+
+
+
+$ ./configure > configure.log
+make: /usr/lib/mozart/bin/oztool: Command not found
+make: /usr/lib/mozart/bin/oztool: Command not found
+make: /usr/lib/mozart/bin/oztool: Command not found
+make: /usr/lib/mozart/bin/oztool: Command not found
+make: /usr/lib/mozart/bin/oztool: Command not found
+make: /usr/lib/mozart/bin/oztool: Command not found
+make: /usr/lib/mozart/bin/oztool: Command not found
+In file included from ri.hh:39,
+                 from propagators.hh:38,
+                 from reified-prop.hh:38,
+                 from reified-prop.cc:34:
+misc.hh:42:25: error: mozart_cpi.hh: No such file or directory
+In file included from ri.hh:39,
+                 from propagators.hh:38,
+                 from trig-prop.hh:38,
+                 from trig-prop.cc:35:
+misc.hh:42:25: error: mozart_cpi.hh: No such file or directory
+In file included from ri.hh:39,
+                 from propagators.hh:38,
+                 from propagators.cc:35:
+misc.hh:42:25: error: mozart_cpi.hh: No such file or directory
+In file included from ri.hh:39,
+                 from constraint.hh:39,
+                 from constraint.cc:34:
+misc.hh:42:25: error: mozart_cpi.hh: No such file or directory
+In file included from ri.hh:39,
+                 from ri.cc:36:
+misc.hh:42:25: error: mozart_cpi.hh: No such file or directory
+make: *** No rule to make target `ltmain.sh'.  Stop.
+configure: error: ozinstall not found
+
+
+
+
+
+*** Understand XRI 
+
+**** Read documentation and try examples				    :NA:
+
+***** Understand whether/how I can define a relation between XRI variables and FD variables
+
+      All I found was reflection (?) procedures like XRI.getUpperBound and XRI.getMidPoint, which return a corresponding float. I could then transform the float to a FD int. However, it appears XRI does not support any constraint which defines a direct relation (e.g., there is not constraint like {XRI.absRound XRI_var FD_var})
+
+
+*** Generalise Strasheela distribution Strategy for possible XRI 
+
+    XRI requires special distribution definitions. I somehow need to generalise the Strasheela distribution if parameter values should be either FD ints or XRI vars
+
+    TODO: specify next actions
+
+
+*** Define XRI temporal constraints
+
+    Presently, the temporal constraints are only defined for FD int startTimes, durations etc.
+
+    Possible generalisation: some flag (e.g., set in Init) specifies whether _all_ temporal variables are FD ints (the default) or XRI variables. The suitable constraints are then applied accordingly.
+ 
+
+*** Generalise accessors used for output
+
+    Accessor methods like getDurationInSeconds or getPitchInMidi must be generalised to support either FD ints or XRI vars
+
+
+** Move ET31.score.chordsToScore to HS.score.chordsToScore
+
+   Check where I use ET31.score.chordsToScore and update it accordingly
+   Examples: ET31.out, testfiles..
+
+
+** Introduce some generalised concept of 'cadence' 
+
+   Example: {Cadence Chords Scale} constraints that union of all pitch classes in Chords (list of N chords) contains all pitchclasses of Scale. Additional arguments (some FD int?) may allow to specify whether cadence ends in I or some form of deceptive cadence occurs. 
+   Combined with disallowing of weak harmonic steps with ProgressionStrength this should result in classical cadence (doublecheck ??)
+ 
+   What generalised notions are there in the literature for a cadence?
+   My problem: I would like to have a cadence concept which also works, e.g., for music in extended just intonation and is not simply something like II V I... I would like to structure [unconventional] music. Does this problem occur in literature? How do they do this in Jazz, for example?
+
+
+** Introduce some generalised concept of resolution of dissonances
+
+
+*** Extend chord music representation: which chord degrees are dissonant? 
+
+    Which pitch classes are dissonant is expressed in database with chord degrees
+
+    Constraint method isDissonantChordNote(PitchClass B): tests whether PitchClass (or scale degree?) is specified to be dissonant in chord database
+
+
+*** Constraint {IsDissonanceR MyPitchClass B}
+
+    Constraint needed to define rules of resolving dissonances: 
+
+    NOT(isChordNote(MyPitchClass)) OR isDissonantChordNote(MyPitchClass)
+
+
+*** Rule ideas for resolving dissonances
+
+    Direct resolution: 
+
+    Strict case: next melodic note has pitch class one
+    semitone/wholetone below dissonant pitch class, which is consonant
+    
+    
+    Less strict case: next melodic note has consonant pitch class which
+    is at maximum a wholetone above or below the dissonant pitch class
+    (also pitch repetition is permitted)
+
+    Indirect resolution: 
+
+
+
+** Introduce some abstraction for modulation
+
+   Modulation expressed with chord sequence and sim sequence of scales which overlap
+   
+*** Define constraints defining relations between chords and scales which result in expressing modulation
+
+    ?? Overlapping scales: chords should use only pitches occuring in both scales
+
+    After overlapping ends, new scale is clarified by some (form of) cadence
+
+    Re-read Schoenberg on this matter
+
+
+** Harmonic constraint ProgressionStrength				  :SOON:
+
+   see [[file://~/oz/music/Strasheela/strasheela/trunk/strasheela/contributions/anders/HarmonisedScore/source/Rules.oz::]]
+
+*** Implement constraint for strong, weak and superstrong 		    :NA:
+
+    As reified constraints?
+
+*** Combine these constraints to single rating				    :NA:
+
+    With reified constraints?
+
+*** Combine this single rating with secondary rating based on number of common pitch classes 
+
+*** Create example(s)
+*** Create Documentation						  
+
+** Morphology analysis constraints					  :SOON:
+
+   see  [[file:~/oz/music/Strasheela/private/WorkInProgress/Morphology/Morphology.oz]]
+
+*** 'whole FD numbers' (i.e. support of neg numbers)
+
+**** Integrate into Strasheela 
+     
+     ?? As contribution into contribution/anders?
+
+**** [50%] Test all constraints of functor Whole 
+
+     See [[file:~/oz/music/Strasheela/private/WorkInProgress/Morphology/WholeNumbers.oz::functor%20WholeF][file:~/oz/music/Strasheela/private/WorkInProgress/Morphology/WholeNumbers.oz::functor WholeF]]
+
+
+*** NewOld_Analysis as constraint 
+*** Energy profile
+
+*** Extend: add support of FD lists as values for constrast constraint
+    
+    Map sequence of integers into single integer 
+    (see [[file:~/oz/music/Strasheela/private/WorkInProgress/Morphology/Morphology.oz]])
+
+*** Understand how they apply Morphology analysis to motif sequence (Sec Thematic construction)
+    
+     file:///Users/t/texte/variousDocs-and-Articles/music_etc/PRISMA/PRISMA-2004/PaoloAralla_Morph.An./index.html
+
+     file:/Users/t/texte/variousDocs-and-Articles/music_etc/PRISMA/Prisma-Jan2007/Jacopo/ 
+
+*** Integrate into Strasheela 
+
+    Where? Subfunctor of functor Pattern?
+
+*** Create example(s)
+*** Create Documentation						  :@NET:
+
+    Can I somewhere point to literature for further details? 
+
+    Lit cited by Paolo Aralla: 
+    - Baboni Schilingi, Jacopo and Voisin Frederic. 1997. Morphologie et structures musicales in Morphologie, Reference Manual. Paris: IRCAM.
 
 
 ** Time curves etc [[file:~/oz/music/Strasheela/private/examples/forOlleRomo/TempoCurves-etc.oz][TempoCurves-etc.oz]]					  :SOON:
@@ -213,25 +407,48 @@ E.g., I could use a method filterThreaded for a better definition of getSimultan
 
     http://www.mozart-oz.org/mogul/doc/tack/iozsef/iozsef.html
     
-**** Add solver interfaces to SDistro 
+**** Add solver interfaces to SDistro					    :NA:
 
-     IozefExploreOne already done -- easy
+     already finished??
     
 **** Define score output for IOzSeF
+
+***** Compare doc of Explorer and IOzSeF how info actions are defined	    :NA:
 
      with IOzSeF.addInformationAction(NameAtom root Action)
      Action is a unary procedure expecting root (i.e. score object) as arg
      see doc
+     
+***** Port Explorer info actions to IOzSeF				    :NA:
+
+      Possibly generalise so that these actions are only defined once
+      ... I figure that generalisation is easy 
 
 
 *** TODO [#A] check out performance with adaptive recomputation
 
-  Adaptive recomputation is highly recommended by Schulte, so I should possibly do this before investigating other approaches to improve efficiency
-     
-  -> for this I most of all need a nicely working 'select random value' distribution which can be recomputed
+  Adaptive recomputation is highly recommended by Schulte, so I should possibly do this before investigating other approaches to improve efficiency (memory and run time)    
+  
+**** Check out: where is adaptive recomputation implemented ready for use: only in IOzSeF? 
+
+***** Check Oz documentation, index Virtual Manual (wiki), mailing list archive :@NET:NA:
+
+***** Ask Oz mailing list: where is adaptive recomputation implemented ready for use: only in IOzSeF? :@NET:NA:
+      
+      CC to Guido? 
+
+
+**** Create benchmark suite of musical CSPs which require special score distribution strategies 
+
+     see [[file:~/texte/0-Publications/Publications-TODO.org::*Create%20benchmark%20suite%20of%20musical%20CSPs%20which%20require%20special%20score%20distribution%20strategies][file:~/texte/0-Publications/Publications-TODO.org::*Create benchmark suite of musical CSPs which require special score distribution strategies]]
+
+
+
 
 # <<ScoreOutsideScript>> 
 *** TODO [#A] Does score outside script/space save memory. If so, define abstractions/templates for having the score outside the script
+
+    First carefully evaluated what I can gain from recomputation and adaptive recomputation. Only if I feel it is necessary, I will then further improve memory (also a bit runtime) efficiency by having (most data of) the music representation stored in the top-level space only
 
 See ../../testing/zy_Efficiency/KeepMusicRepresentationOutsideComputationalSpace.oz 
 
@@ -282,33 +499,18 @@ See ../../testing/zy_Efficiency/KeepMusicRepresentationOutsideComputationalSpace
        !! -> How to access the ID when the constraint gets the variable directly?? I would need to rewrite all Strasheela programs such that every Strasheela constraint substitute always expects parameter objects instead of variables!
 
 ***** Instead with this Strasheela 'client', other CAC applications could also create CSP specs and call the Strasheela 'server' (e.g. PWGL)
+
 * Strasheela documentation					    :STRASHEELA:
 
 ** Strasheela tutorial
 
-*** Graham's Tutorial update: fix remaining things			  :NEXT:
+*** Proofread Strasheela tutorial before next release			  :NEXT:
 
-**** TODO Revise Graham's update of StrasheelaPrototyper.oz 
+**** Checkout all sections marked TODO and edit them			    :NA:
 
-[[file:~/oz/music/Strasheela/strasheela/trunk/strasheela/contributions/anders/Tutorial/source/StrasheelaPrototyper.oz]]
-
-E.g., there are a few unused variables:  Chapter, ToplevelH, ...
-
-Where to start with this task? 
-
-**** TODO Check/revise Tutorial Muse format export after Graham's update
-
-[[file:~/oz/music/Strasheela/strasheela/trunk/strasheela/contributions/anders/Tutorial/source/StrasheelaPrototyper.oz]]
-
-**** TODO Update StrasheelaPrototyper.oz doc to reflect new format
-
-[[file:~/oz/music/Strasheela/strasheela/trunk/strasheela/contributions/anders/Tutorial/source/StrasheelaPrototyper.oz::lt%20chapter%20gt][file:~/oz/music/Strasheela/strasheela/trunk/strasheela/contributions/anders/Tutorial/source/StrasheelaPrototyper.oz::lt chapter gt]]
+**** Proofread whole Oz-part as printout				    :NA:
 
 
-**** TODO Delete temporal branch strasheela-updateTutorial
-
-
-*** DONE Strasheela tutorial: finish music representation 'chapter'
 *** TODO Strasheela tutorial: do music constraint programming 'chapter'
 
 *** TODO Email Tobias Kunze: CM CSS verwendet...
@@ -392,9 +594,10 @@ Where to start with this task?
 
 ** Oz Path							   :@NET:URGENT:
 
-*** TODO svn update my mozart
+*** DONE svn update my mozart
+    CLOSED: [2008-03-05 Wed 17:36]
 
-*** TODO Incorporate my changes (see my tmp Strasheela functor) into Mozart Path functor
+*** Incorporate my changes (see my tmp Strasheela functor) into Mozart Path functor :NA:
 
 When finished commit these changes. 
 
