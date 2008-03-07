@@ -508,6 +508,29 @@ define
 % %    end
 
 
+
+   %%
+   %% TODO:  
+   %%
+   %% Strength of 'harmonic step' (Schoenberg's concept, Harmonielehre p.134ff, p. 144 Zsfassung):
+   %% - strong / ascending (root of predecessor is non-root pitchclass in successor). Schoenberg differs strong steps further: the less common pitch classes the stronger (V I is stronger than III I). 
+   %% - weak / descending (non-root PC of predecessor is root of successor). Again, the more common pitch classes the weaker.
+   %% - superstrong (ueberspringend) (no common pitchclasses between two neighbouring chords).  ueberspringend steps requires [besonderen Anlass]
+   %%   What about case where root of successor is no pitchclass in predecessor, but root of predecessor is not contained in successor either -- superstrong case
+   %%   Any other case missed?
+   %%
+   %% Schoenberg recommends preference for strong progressions (i.e. avoid weak if you don't know what you are doing), and also [Abwechslung] of the degree of strength (i.e. no mechanical repetition of specific step). Paraphrasing: On a higher level, repetition and [abwechslung] should create form.
+   %% Should rating based on number of common chord tones abstract from total chord tone number (e.g. divide by chord tone number -- always multiply by, say, 100, to map float into int)?
+   %%
+   %% 
+   %%
+   %% Combine categories strong/weak/ueberspringend with rating how much common pitch classes. E.g., represent both by integer, multiply category by PitchClassesPerOctave and add both
+   /*
+   %% Expects two chord objects and FD int X expressing the 'strength' of the harmonic progression. 
+   proc {ProgressionStrength Chord1 Chord2 X} end
+   */
+
+
 end
 
    
