@@ -456,7 +456,7 @@ Root = 11
  
 declare
 [HS Pattern]
-= {Module.link ['x-ozlib://anders/strasheela/HarmonisedScore/HarmonisedScore.ozf'
+= {ModuleLink ['x-ozlib://anders/strasheela/HarmonisedScore/HarmonisedScore.ozf'
 		'x-ozlib://anders/strasheela/pattern/Pattern.ozf']}
 
 
@@ -564,6 +564,50 @@ MyChord = {Score.makeScore chord(index:{HS.db.getChordIndex major}
 {MyChord getSopranoPitchClass($)}
 % -> 11
 
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%% archiving chords
+%%
+
+%% determined chord index and transposition: index is ommitted
+declare
+MyChord = {Score.makeScore chord(index:1
+				 transposition:1
+				 % dbFeatures:[dissonanceDegree]
+				 %root:1	
+				 duration:1
+				 startTime:0
+				 timeUnit:beats(4))
+	   add(chord:HS.score.chord)}
+
+{Browse {MyChord toInitRecord($)}}
+
+%% undetermined index: chord index is included
+declare
+MyChord = {Score.makeScore chord(index:{FD.int 1#3}
+				 transposition:1
+				 %root:1	
+				 duration:1
+				 startTime:0
+				 timeUnit:beats(4))
+	   add(chord:HS.score.chord)}
+
+{Browse {MyChord toInitRecord($)}}
+
+
+%% undetermined transposition: chord index is included
+declare
+MyChord = {Score.makeScore chord(index:1
+				 %transposition:1
+				 %root:1	
+				 duration:1
+				 startTime:0
+				 timeUnit:beats(4))
+	   add(chord:HS.score.chord)}
+
+{Browse {MyChord toInitRecord($)}}
 
 
 
