@@ -1,84 +1,50 @@
-
+#+CATEGORY: Strasheela
 
 * Strasheela examples						    :STRASHEELA:
 
-** TODO 'Interesting arpeggio' example [[file:~/oz/music/Strasheela/private/examples/forOlleRomo/Arpeggio.oz][Arpeggio.oz]]			  :SOON:
+** 'Interesting arpeggio' example [[file:~/oz/music/Strasheela/private/examples/forOlleRomo/Arpeggio.oz][Arpeggio.oz]] 				  :SOON:
 
   ?? Duration working time: 1d -- probably more :)
 
-  an example for Olle Romo
-  see description in strasheeela support tracker
+  an example for Olle Romo, see description in strasheeela support tracker
   
   https://sourceforge.net/tracker/index.php?func=detail&aid=1883452&group_id=167225&atid=842099
   
-
-  Olle:
-  An example generating a 16 bar 4/4 16th notes arpeggio based on a given
-  chord sequence and scale/mode. The note length and velocities change
-  according to a given function - a sine shape for example.
   
-  
-  Torsten:
-  I don't fully understand: do you mean a 'grid' of 16th notes (i.e.
-  that is the shortest note value possible)? If you want to shape your
-  durations with a function, then you don't have all durations of the
-  same length :)
-  
-  As far as I understand you, you predetermine the chord progression
-  and the function(s) shaping note parameters likes durations and
-  loudness. What are your actual constraints? Should each bar form a
-  simple arpeggio upwards where the note pitches only express pitch
-  classes from the underlying chord? If this is the only constraint,
-  then you can realise this even without constraint programming (e.g.,
-  in Common Music -- a system you mentioned before).
-  
-  Still, it can also be done in Strasheela, all the building blocks are
-  there. The music representation (notes, chords, scales) can be based
-  on Strasheela's harmony model (functor HS) and function-based
-  envelopes are provided in the functor Fenv.
-  
-  
-  Olle:
-  Sorry, I meant a grid. Notes quantized to a 16th note grid where the
-  durations can vary independently of the start times.
-  
-  By arpeggios I mean various phrases running within the given chord/mode. It
-  can be single 16th notes forming musical phrases and not just running up
-  and down scales. Certain notes can harmonise with 2 or 3 voices, etc...
-  
-  Olle:
-  
-  16th note arpeggio. Limit the note range. Stay within a given (16 measure)
-  chord structure. No more than two successive notes at the same pitch.
-  Duration pattern repeats each 2 measures - first measure the lower notes
-  are shorter and the higher notes are longer. Second measure the reversed.
-  Velocity pattern repeats each 4 measures.
-  
-  Voice one pattern repeats each measure exept for the first note. First note
-  of each measure alternates between tonic and fifth.
-  
-  Each repeated pitch is lower in velocity than the preceding note. Each time
-  voice one and two plays simultaneously velocity is 60. Otherwise it is set
-  at 90.
-  
-  Voice two repeats over two bars and plays no more than two notes in
-  succession without an intervening 16th note pause. Always in a higher
-  harmony to voice one. Still within the note range. Always the same duration
-  and velocity as voice one.
+*** TODO Describe task in English, mentioning Strasheela techniques to use
+*** Implement description
 
 
-** TODO Muzak Beispiel mit Kilian 
+** Muzak Beispiel mit Kilian 
 
+   see 
+   [[file:/Users/t/texte/CollaborationWithKilian/Muzaks/]]
    
+*** TODO Recapitulate definition: how is resulting value seq organised
+*** Port Lisp to Oz
+*** Redefine as constraint 
+
+
 * Strasheela design						    :STRASHEELA:
 
 ** Markov chain constraints which include probablilty			  :NEXT:
+
+*** TODO Recapitulate my simple Markov chain constraint
+    
+    MarkovChain, MarkovChain_1
+    [[file:~/oz/music/Strasheela/strasheela/trunk/strasheela/contributions/anders/Pattern/Pattern.oz::proc%20MarkovChain%20Xs%20Decl][file:~/oz/music/Strasheela/strasheela/trunk/strasheela/contributions/anders/Pattern/Pattern.oz::proc MarkovChain Xs Decl]]
+    
+*** TODO Extend/Edit definition using something like HowManyTrue / HowManyTrueR
+
+    ?? Use name MarkovChain for new constraint and give old defs
+    MarkovChain, MarkovChain_1 a new name
+
 
 ** Add support for Real Interval constraints 
 
 *** Install XRI on MBP 
 
-**** Contact developers on failed installation attempt		      :@MAIL:NA:
+**** TODO Contact developers on failed installation attempt		 :@MAIL:
 
     I tried to install XRI on MacOS 10.4, but the configure script failed. Below are the error messages (I filtered out all other messages). It appears the configure script somewhere hardwires the Mozart installation directory to /usr/lib/mozart and can therefore not find the Mozart installation on my system in /usr/local/oz. Setting OZHOME does not help. 
 
@@ -122,7 +88,7 @@ configure: error: ozinstall not found
 
 *** Understand XRI 
 
-**** Read documentation and try examples				    :NA:
+**** TODO Read documentation and try examples
 
 ***** Understand whether/how I can define a relation between XRI variables and FD variables
 
@@ -148,7 +114,7 @@ configure: error: ozinstall not found
     Accessor methods like getDurationInSeconds or getPitchInMidi must be generalised to support either FD ints or XRI vars
 
 
-** Move ET31.score.chordsToScore to HS.score.chordsToScore
+** TODO Move ET31.score.chordsToScore to HS.score.chordsToScore
 
    Check where I use ET31.score.chordsToScore and update it accordingly
    Examples: ET31.out, testfiles..
@@ -162,22 +128,29 @@ configure: error: ozinstall not found
    What generalised notions are there in the literature for a cadence?
    My problem: I would like to have a cadence concept which also works, e.g., for music in extended just intonation and is not simply something like II V I... I would like to structure [unconventional] music. Does this problem occur in literature? How do they do this in Jazz, for example?
 
+*** TODO Check literature for cadence concepts
+
+    Is there anything like a generalised concept proposed already
+
+*** Define constraint 
+
 
 ** Introduce some generalised concept of resolution of dissonances
 
-
-*** Extend chord music representation: which chord degrees are dissonant? 
+*** TODO Extend chord music representation: which chord degrees are dissonant?
 
     Which pitch classes are dissonant is expressed in database with chord degrees
 
     Constraint method isDissonantChordNote(PitchClass B): tests whether PitchClass (or scale degree?) is specified to be dissonant in chord database
 
 
-*** Constraint {IsDissonanceR MyPitchClass B}
+*** TODO Define constraint {IsDissonanceR MyPitchClass B}
 
     Constraint needed to define rules of resolving dissonances: 
 
     NOT(isChordNote(MyPitchClass)) OR isDissonantChordNote(MyPitchClass)
+
+    Where? In HS.rules?
 
 
 *** Rule ideas for resolving dissonances
@@ -197,10 +170,12 @@ configure: error: ozinstall not found
 
 
 ** Introduce some abstraction for modulation
-
-   Modulation expressed with chord sequence and sim sequence of scales which overlap
    
+   NOTE: unfinished action list -- project postponed
+
 *** Define constraints defining relations between chords and scales which result in expressing modulation
+    
+    Modulation expressed with chord sequence and sim sequence of scales which overlap
 
     ?? Overlapping scales: chords should use only pitches occuring in both scales
 
@@ -208,16 +183,22 @@ configure: error: ozinstall not found
 
     Re-read Schoenberg on this matter
 
+*** Think about other ways
+
+   Are there other ways: using overlapping scale objects effectively results in CSP which constraints hierarchic structure
+
+
+
 
 ** Harmonic constraint ProgressionStrength				  :SOON:
 
    see [[file://~/oz/music/Strasheela/strasheela/trunk/strasheela/contributions/anders/HarmonisedScore/source/Rules.oz::]]
 
-*** Implement constraint for strong, weak and superstrong 		    :NA:
+*** TODO Implement constraint for strong, weak and superstrong
 
     As reified constraints?
 
-*** Combine these constraints to single rating				    :NA:
+*** TODO Combine these constraints to single rating
 
     With reified constraints?
 
@@ -226,7 +207,8 @@ configure: error: ozinstall not found
 *** Create example(s)
 *** Create Documentation						  
 
-** Morphology analysis constraints					  :SOON:
+
+** Morphology analysis constraints					  :NEXT:
 
    see  [[file:~/oz/music/Strasheela/private/WorkInProgress/Morphology/Morphology.oz]]
 
@@ -268,136 +250,87 @@ configure: error: ozinstall not found
     - Baboni Schilingi, Jacopo and Voisin Frederic. 1997. Morphologie et structures musicales in Morphologie, Reference Manual. Paris: IRCAM.
 
 
-** Time curves etc [[file:~/oz/music/Strasheela/private/examples/forOlleRomo/TempoCurves-etc.oz][TempoCurves-etc.oz]]					  :SOON:
+** Time curves etc [[file:~/oz/music/Strasheela/private/examples/forOlleRomo/TempoCurves-etc.oz][TempoCurves-etc.oz]]					  :NEXT:
 
-[[file:~/oz/music/Strasheela/strasheela/trunk/strasheela/examples/ContinuousControllersInScore-MidiOutput.oz]]
-[[file:~/oz/music/Strasheela/private/examples/forOlleRomo/TempoCurves-etc.oz]]
-[[file:~/oz/music/Strasheela/strasheela/trunk/strasheela/contributions/anders/Fenv/Fenv.oz]]
-
-
-Old Goal (unrealistic): user can freely define tempo curve and time shift curve for any temporal container in score 
-
-New reduced goal: user can freely define a single global tempo curve (possibly defining segments locally) and nested time shift functions for any temporal container in score 
-I feel the building blocks are now there, but there are examples to do
+   [[file:~/oz/music/Strasheela/strasheela/trunk/strasheela/examples/ContinuousControllersInScore-MidiOutput.oz]]
+   [[file:~/oz/music/Strasheela/private/examples/forOlleRomo/TempoCurves-etc.oz]]
+   [[file:~/oz/music/Strasheela/strasheela/trunk/strasheela/contributions/anders/Fenv/Fenv.oz]]
+   
+   Old Goal (unrealistic): user can freely define tempo curve and time shift curve for any temporal container in score 
+   
+   New reduced goal: user can freely define a single global tempo curve (possibly defining segments locally) and nested time shift functions for any temporal container in score 
+   I feel the building blocks are now there, but there are examples to do
 
 *** DONE ?? concatenate tempo curve fenvs with associated start and end times in seconds
     CLOSED: [2008-02-20 Wed 10:30]
 
-*** TODO example with single global tempo curve fenv
+*** TODO Create example with single global tempo curve fenv
 
-Example partly done at [[file:~/oz/music/Strasheela/strasheela/trunk/strasheela/examples/ContinuousControllersInScore-MidiOutput.oz::][ContinuousControllersInScore-MidiOutput.oz]], Example 5, 
-but it still has bugs.
+    Example partly done at [[file:~/oz/music/Strasheela/strasheela/trunk/strasheela/examples/ContinuousControllersInScore-MidiOutput.oz::][ContinuousControllersInScore-MidiOutput.oz]], Example 5, 
+    but it still has bugs.
+    
+*** TODO Create example with nested local time shift fenvs
+    First create abstraction to access and combine local time shift fenvs
 
-*** TODO example with nested local time shift fenvs
-First create abstraction to access and combine local time shift fenvs
+*** TODO Create example with a global tempo curve derived from consecutive local tempo curves
 
-*** TODO example with a global tempo curve derived from consecutive local tempo curves
+*** ?? Create tempo canon example
 
-*** TODO ?? tempo canon example
-*** TODO Archive Fenvs with score 
+*** Means to archive score with fenvs 
 
-Transform with toInitRecord and then pickle with Score.saveScore
-
-
-** TODO [#A] optimal solution for CSPs with soft constraints
-
-Design CSP template / abstractions with which I can model soft constraints by reified constraints and rate them in importance. A best-solution-search will find an optimal solution 
+    Transform with toInitRecord and then pickle with Score.saveScore
 
 
+** [#A] optimal solution for CSPs with soft constraints
 
-** TODO 1W Refactor harmony model
+   Design CSP template / abstractions with which I can model soft constraints by reified constraints and rate them in importance. A best-solution-search will find an optimal solution 
 
-*** Harmony model: Databases as arg for object creation
-
-Presently there is only a global chord, scale etc database 
-
-I should keep a global database as an option, because this is most suitable for most CSP. Additionally, it should be possible to give the databases to score objects (chords, scales, ..) as optional init argument -- the init arg defaults to the global database.
-
-This refactoring requires that all database accessors expect a score object (chord, scale ..) or its database as argument. 
-Possibly, I leave the old database accessors and setters as is (i.e. without additional object/database arg) for compatibility of the old examples. 
-In that case, I need to define new additional accessors which expect the object/database arg, and the doc of both the new and the old accessors/setters must make these two options using databases very clear.
-
-*** [#C] Harmony model: Clean up doc
-
-This is partly done already..
+*** TODO Brainstorm: how can I collect goodness-measurement for all soft constraints and combine them
 
 
-** TODO Extend meter model [[file:~/oz/music/Strasheela/strasheela/trunk/strasheela/contributions/anders/Measure/Measure.oz][Measure.oz]]
+** Update Lilypond output 
 
-  - extend meter model for changing meter
+   Lilypond export outputs only rather old version. Meanwhile, Lilypond handles nested scores (quasi sim/seq containers) better than old version, but behaviour of old version is pertained when using Lily's conversion script. So, I should update my Lily output to a more Lily syntax version
 
-  - test constraining metric structure with sim meter: for accessing potentially inaccessible context sim meter use delaying constraints: filter and test with a reified constraint together with an equality test
+*** TODO Create SVN branch
 
-{ForAll {MyScore filter($ fun {$ X}
-			     {IsMeasure X} andthen
-			     {MyNote isSimultaneousItemR($ X)} == 1
-			  end)}
- MyConstraint}
+*** Understand what format Strasheela presently outputs and compare with recent Lily doc
 
-
-   - !!?? there was some idea of "Orjan which I wanted to incorporate to Strasheela and for which I needed this delayed constraints approach..? 
-     Was it harmony rule depending on metric structure? For example, no non-chord tones on strong beat
-
-   - Optional: lilypond output for metric structure
-
-
-** Multi-core  processing
-
-*** DONE Reread Oz distributed programming (van Roy)
-
-Play around with the possibilities: create multiple sites (on localhost simply for now) and communicate between them 
-
-*** DONE Test: multiple Oz sides are independent processes on the computer
-
-That is: test whether multiple processes can run on different CPUs
-
-*** DONE Simple CSP with parallel search
-
-Check whether multiple CPUs are used  
-
-
-*** DONE Simple Musical CSP with parallel search
-
-How does communication of data structure slow down the process?
-
-
-** TODO Update Lilypond output 
-
-Lilypond export outputs only rather old version. Meanwhile, Lilypond handles nested scores (quasi sim/seq containers) better than old version, but behaviour of old version is pertained when using Lily's conversion script. So, I should update my Lily output to a more Lily syntax version
-
-
-** TODO add a score transformation with allows to restructure a Strasheela score hierarchy in a highle generic wasy (e.g. for outputting the fixed hierarchies of ENP-notation, Lilypond, MIDI...)
-
-   - it would be great if in a transformed and more flat representation the info on the previous hierarchic representation is still retained (e.g. added to item info: 'begin(<marker>)' and 'end(<marker>)'). When the more flat representation is then output (e.g. to lilypond, ENP-notation or MIDI), these markers could be used to somehow retain the old nesting in the output format (e.g. to draw analysis brackets in Lilypond or ENP, or as text events in MIDI out). When the output music is edited, it could later perhaps be loaded into Strasheela again and the old hierarchy could be restored??
+**** TODO Hierarchic nesting (sim and seq containers)
+**** Note object output
+**** ?? Chord output 
+**** My extensions
 
 
 ** Refactoring 
 
-*** TODO [#A] Concurrent method filter (filterThreaded) which does return stream instead of list: as soon as enough information is available on specific score object to fulfull given test function, add it to stream. Close stream as soon as it is known that no further elements will be added.
+*** [#A] Concurrent procedure/method filter (filterThreaded) which does return stream instead of list
 
-NOTE: this matter could make it into a publication (part of a publication)! 
+    as soon as enough information is available on specific score
+    object to fulfull given test function, add it to stream. Close
+    stream as soon as it is known that no further elements will be
+    added.
 
-Related approach: find using filter + reified constraints as boolean tests is related but note the same. 
+**** More Info
 
-However, even if boolean test would return true for some datum already, find blocks if reified constraint blocks on some element before. This new approach works even when I don't know in which order variables are determined and thus in which order elements are added to the stream. 
+     NOTE: this matter could make it into a publication (part of a publication)! 
 
-Similar issue with filter: even with reified constraints as boolean tests, filter may block completely until enough information is available in all data. An concurrent filter would return data in a stream as soon as enough information is available on these data.
- 
-Sufficient to have a filter which concurrently processes a list of objects. I only need to collect all data with collect (e.g., all data matching test function) and then do concurrent filter on this result list. 
+     Related approach: find using filter + reified constraints as boolean tests is related but note the same. 
 
-A method filterThreaded would further improve the application of delayed constraints where filtering tests used reified constraints 
-E.g., I could use a method filterThreaded for a better definition of getSimultaneousItems
+     However, even if boolean test would return true for some datum already, find blocks if reified constraint blocks on some element before. This new approach works even when I don't know in which order variables are determined and thus in which order elements are added to the stream. 
 
+     Similar issue with filter: even with reified constraints as boolean tests, filter may block completely until enough information is available in all data. An concurrent filter would return data in a stream as soon as enough information is available on these data.
+  
+     Sufficient to have a filter which concurrently processes a list of objects. I only need to collect all data with collect (e.g., all data matching test function) and then do concurrent filter on this result list. 
 
-*** TODO refactor output means: they are inconsistend, perhaps not general enough etc. :MAYBE:
+     A method filterThreaded would further improve the application of delayed constraints where filtering tests used reified constraints 
+     E.g., I could use a method filterThreaded for a better definition of getSimultaneousItems
 
-  - output of 'non-existing' timed items (e.g. notes of duration 0) -- skip
+    
+**** TODO Create small-scale example which will demonstrate the effect of the procedure filter
 
-  - !!?? make MakeEvent2CsoundFn more general: Idea Spec is either some
-     method (e.g. an accessor) or some unary function which gets
-     object as arg.
+**** TODO Read plain Filter definition: how can it be made into the concurrent version
 
-  - refactor Lilypond output to use the (still to program) score transformation with allows to restructure a Strasheela score hierarchy
 
 ** Efficiency
 
@@ -407,33 +340,33 @@ E.g., I could use a method filterThreaded for a better definition of getSimultan
 
     http://www.mozart-oz.org/mogul/doc/tack/iozsef/iozsef.html
     
-**** Add solver interfaces to SDistro					    :NA:
+**** TODO Add solver interfaces to SDistro
 
      already finished??
     
 **** Define score output for IOzSeF
 
-***** Compare doc of Explorer and IOzSeF how info actions are defined	    :NA:
+***** TODO Compare doc of Explorer and IOzSeF how info actions are defined
 
      with IOzSeF.addInformationAction(NameAtom root Action)
      Action is a unary procedure expecting root (i.e. score object) as arg
      see doc
      
-***** Port Explorer info actions to IOzSeF				    :NA:
+***** TODO Port Explorer info actions to IOzSeF
 
       Possibly generalise so that these actions are only defined once
       ... I figure that generalisation is easy 
 
 
-*** TODO [#A] check out performance with adaptive recomputation
+*** [#A] check out performance with adaptive recomputation
 
   Adaptive recomputation is highly recommended by Schulte, so I should possibly do this before investigating other approaches to improve efficiency (memory and run time)    
   
 **** Check out: where is adaptive recomputation implemented ready for use: only in IOzSeF? 
 
-***** Check Oz documentation, index Virtual Manual (wiki), mailing list archive :@NET:NA:
+***** TODO Check Oz documentation, index Virtual Manual (wiki), mailing list archive :@NET:
 
-***** Ask Oz mailing list: where is adaptive recomputation implemented ready for use: only in IOzSeF? :@NET:NA:
+***** TODO Ask Oz mailing list: where is adaptive recomputation implemented ready for use: only in IOzSeF? :@NET:
       
       CC to Guido? 
 
@@ -446,7 +379,7 @@ E.g., I could use a method filterThreaded for a better definition of getSimultan
 
 
 # <<ScoreOutsideScript>> 
-*** TODO [#A] Does score outside script/space save memory. If so, define abstractions/templates for having the score outside the script
+*** [#A] Does score outside script/space save memory. If so, define abstractions/templates for having the score outside the script
 
     First carefully evaluated what I can gain from recomputation and adaptive recomputation. Only if I feel it is necessary, I will then further improve memory (also a bit runtime) efficiency by having (most data of) the music representation stored in the top-level space only
 
@@ -464,7 +397,7 @@ See ../../testing/zy_Efficiency/KeepMusicRepresentationOutsideComputationalSpace
     Alternative option: temporarily, compile whole Mozart with profiling and check memory consumption of space copying proc (results will be very hard to read in this case!) 
 
 
-****  _if_ I found out that memory reduction can be significantly reduced by defining the music representation outside the script/space, then I have to develop abstractions/templates for the following cases (it will be more complex than having the score inside the script, but it shouldn't be too hard..).
+**** _if_ I found out that memory reduction can be significantly reduced by defining the music representation outside the script/space, then I have to develop abstractions/templates for the following cases (it will be more complex than having the score inside the script, but it shouldn't be too hard..).
 
 
   - distribution strategies
@@ -500,28 +433,27 @@ See ../../testing/zy_Efficiency/KeepMusicRepresentationOutsideComputationalSpace
 
 ***** Instead with this Strasheela 'client', other CAC applications could also create CSP specs and call the Strasheela 'server' (e.g. PWGL)
 
+
 * Strasheela documentation					    :STRASHEELA:
 
 ** Strasheela tutorial
 
 *** Proofread Strasheela tutorial before next release			  :NEXT:
 
-**** Checkout all sections marked TODO and edit them			    :NA:
+**** TODO Checkout all sections marked TODO and edit them
 
-**** Proofread whole Oz-part as printout				    :NA:
-
-
-*** TODO Strasheela tutorial: do music constraint programming 'chapter'
-
-*** TODO Email Tobias Kunze: CM CSS verwendet...
+**** TODO Proofread whole Oz-part as printout
 
 
-* Strasheela installation					    :STRASHEELA:
+*** Strasheela tutorial: do music constraint programming 'chapter'
+
+*** Email Tobias Kunze: CM CSS verwendet
+
 
 
 * Collecting new ideas
 
-** TODO Lesen XMG
+** Lesen XMG literature							 :@READ:
 
 
 
@@ -531,12 +463,12 @@ See ../../testing/zy_Efficiency/KeepMusicRepresentationOutsideComputationalSpace
 
    file://Users/t/oz/Collozeum/collozeum/OzUnit/
 
-*** TODO Test all error cases -- most are done already
+*** Test all error cases -- most are done already
 
 *** DONE Understand higher-level functionality: how to process a whole test suite etc. 
     CLOSED: [2008-02-20 Wed 19:30]
 
-*** TODO Create documentation
+*** TODO Create documentation, using my tests
 
     use ozh, as usual..
 
@@ -571,7 +503,7 @@ See ../../testing/zy_Efficiency/KeepMusicRepresentationOutsideComputationalSpace
     Jürgen Stuber <juergen@jstuber.net>
     
 
-*** TODO Create abstraction which simplifies use
+*** Create abstraction which simplifies use
 
     only specifies list of test suites and gets results, statistics etc are created implicitly 
 
@@ -597,16 +529,11 @@ See ../../testing/zy_Efficiency/KeepMusicRepresentationOutsideComputationalSpace
 *** DONE svn update my mozart
     CLOSED: [2008-03-05 Wed 17:36]
 
-*** Incorporate my changes (see my tmp Strasheela functor) into Mozart Path functor :NA:
+*** TODO Incorporate my changes (see my tmp Strasheela functor) into Mozart Path functor
 
 When finished commit these changes. 
 
 Possibly, I do step-by-step commits -- but only if this does not complicate matters
-
-
-*** TODO Update Path doc 
-
-Edit the SGML files for Path functor (see comments in my tmp Strasheela functor)
 
 
 *** TODO Oz Path: test cases
@@ -630,13 +557,18 @@ Problem: I must fully understand how test suite is run for base system
 Problem: should that be called automatically when certain tests are executed? Where is that called 
 
 
+*** Update Path doc 
+
+Edit the SGML files for Path functor (see comments in my tmp Strasheela functor)
+
+
 
 
 ** Collozeum
 
-*** TODO Collozeum: make projects available at Mogul
+*** Collozeum: make projects available at Mogul
 
-*** TODO ozcurl/ozjs TODO: add ozmake makefile			    :MAYBE:
+*** ozcurl/ozjs TODO: add ozmake makefile 				 :MAYBE:
 
 
 ** OPI:  
