@@ -5,6 +5,8 @@ import
    FD
    LUtils at 'x-ozlib://anders/strasheela/source/ListUtils.ozf'
    Score at 'x-ozlib://anders/strasheela/source/ScoreCore.ozf'
+   %% for debug
+   %Browser
 
    %% for WriteLilyFile; this might be moved to a different module
    System
@@ -12,6 +14,7 @@ import
 export
    setup: Setup
    toScore: ToScore
+   toScoreDouble: ToScoreDouble
    writeLilyFile: WriteLilyFile
 
 define
@@ -20,8 +23,8 @@ define
       NumEvents = Beats*BeatDivisionsGet
    in
       %% setup lists, add fake note at end
-       Durations = {FD.list NumEvents 0#NumEvents}
-       Events = {FD.list NumEvents+1 0#2}
+      Durations = {FD.list NumEvents 0#NumEvents}
+      Events = {FD.list NumEvents+1 0#2}
       %% tmp comment
       {Nth Events NumEvents+1} =: 1
 
@@ -80,7 +83,7 @@ define
    end
 
    %% internal for ToScore
-   proc {GetNotes Events Durations Notes}
+   proc {GetNotes Events Durations ?Notes}
       NumNotes = {EventsIn Events}
       Y = {NewCell 1}
    in
@@ -120,6 +123,19 @@ define
       {ScoreInstance wait}
    end
 
+   /* %% Combines the Events and Durations and produces a Score
+   * object.  Repeats the events and durs -- ie 1 bar becomes 2
+   * bars. */
+   proc {ToScoreDouble EventDurs BeatDivisions ?ScoreInstance}
+      %% play games to avoid duplicating the "extra 1"
+      Events = {Append {Append
+			{List.take EventDurs.1 {Length EventDurs.1}-1}
+			{List.take EventDurs.1 {Length EventDurs.1}-1}
+		       } [1]}
+      Durs = {Append EventDurs.2 EventDurs.2}
+   in
+      ScoreInstance = {ToScore Events#Durs BeatDivisions}
+   end
 
    C={NewCell 1}
    /* %% outputs a Score to a file.  Adds support for rests (ie 'pause' events). */
