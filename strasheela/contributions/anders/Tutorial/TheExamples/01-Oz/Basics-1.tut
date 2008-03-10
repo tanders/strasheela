@@ -148,13 +148,13 @@ You can use integers (e.g. 3, 7) and floats (e.g. 1.0, 3.14).  However, you can 
 
 <section title="Variables">
 <subsection title="Introduction">
-<info>All variables in Oz must start with a capital letter.  Most variables will be declared with the keyword `local', and are valid for the relevant scope.
-
-Global variables can be introduced with the keyword `declare'.  However, global variables are intended for testing and are not supported in this tutorial application.
-
-WARNING: Oz variables are single assignment variables.  If you do not have experience with functional or logic programming languages, we highly recommend reading the background section!  Variables may be bound to a value, or may be left unbound or even partially bound (for compound data types such as lists).  However, their value can never be changed! 
+<info>Oz variables are single assignment variables.  Variables are initially unbound (free) and they can be bound once.  However, their value never changes!  If you do not have experience with functional or logic programming languages, we highly recommend reading the background section! 
 
 Rewritable data storage is also supported by Oz; the simplest form are called Cells.  Other types of stateful data include arrays, directories, and objects, but we shall not cover them in this tutorial.
+
+All variables in Oz must start with a capital letter.  Local variables are declared with the keyword `local', and are valid for the relevant scope.
+
+Global variables can be introduced with the keyword `declare'.  However, global variables are intended for testing and are not supported in this tutorial application.
 </info>
 <oz></oz>
 </subsection>
@@ -216,27 +216,29 @@ end
 </subsection>
 
 <subsection title="BACKGROUND">
-<info>TODO Torsten: revise terminology
+<info>Terms: single assignment variable, bound/determined variable,
+unbound/free variable, lexical scope.
 
-Terms: single assignment, logic variable, bound/determined variables,
-unbound/free variables, local variables, global variables.
+In mainstream programming languages, variable values may be read
+and written at will.  Actually, a better term for them may be
+"mutables".  This often confuses new programmers, since variables in
+math do not operate this way -- once the value of a variable is set,
+it stays set.
 
-In mainstream programming languages, variables may be read and written
-at will. Actually, a better term for them may be "mutables".  This often
-confuses new programmers, since variables in math do not operate this
-way -- once the value of a variable is set, it stays set.
-
-In Oz, variables operate more like math variables. Assigning a value
-to a variable is called "binding"; once a variable is "bound", it
-cannot be changed.  Variables are "free" (have no value) by default,
-and compound variables (such as lists) may be "partially bound" (ie
-some elements may be bound, while others are unbound).
-
+In Oz, variables operate more like math variables.  Assigning a value
+to a variable is called "binding"; once a variable is "bound" (or
+"determined"), it cannot be changed.  Variables are "free" (have no
+value) by default, and compound variables (such as lists) may be
+"partially bound" (ie. some elements may be bound, while others are
+unbound). The advantage of single assignment variables is that
+programs where variable values never change are more easy to
+understand and maintain.
 
 Reading: 
 
-  - van Roy and Haridi, Chap. 1-2 (in particular Sec. 1.2, and 2.2).
+  - van Roy and Haridi, Chap. 1-2 (in particular Sec. 1.2, and 2.2)
   - Oz Tutorial, Chap. 3, introduction
+  - 
 </info>
 <oz></oz>
 </subsection>

@@ -10,7 +10,7 @@
 </subsection>
 </section>
 
-<section title="Defining CSPs">
+<section title="Variables and Constraints">
 <subsection title="Introduction">
 <info>A Contraint Satisfaction Problem (CSP) is defined as a tuple consisting of
 
@@ -22,9 +22,9 @@
 </subsection>
 
 <subsection title="Variables domains">
-<info>The two variables X and Y are declared to integers with a specific domain of allowed values (finite domain, FD).  X is explicitly declared to an integer in {0, ..., 10}. Y is declared to any integer supported by Oz (so you see the maximum domain supported by Oz).
+<info>The two variables X and Y are declared to integers with a specific domain of allowed values (finite domain, FD).  X is explicitly declared to an integer in {0, ..., 10}. Y is declared to any integer supported by Oz (so you see the maximum integer domain supported by Oz).
 
-Please note that a finite domain consists always of integers in Oz (for efficiency reasons), and that FD integers can not be negative. There are also other domains supported (e.g. sets of finite integers, and real numbers). 
+Please note that a finite domain consists always of integers in Oz (for efficiency reasons), and that FD integers can not be negative. There are also other domains supported (e.g. sets of finite integers are build-in, and real numbers are available as a third-party extension). 
 </info>
 <oz>local 
   X = {FD.int 0#10}
@@ -35,7 +35,7 @@ end</oz>
 </subsection>
 
 <subsection title="Constraint Propagation">
-<info>This section declares two finite domain integers as the section before. In addition, it states that X is greater than Y. The domain of both variables are automatically reduced, so that all domain values fulfill the greater-than constraint. 
+<info>This section declares two finite domain integers as the section before. In addition, it states that X is greater than Y. The domain of both variables are automatically reduced, so that all domain values potentially fulfill the greater-than constraint. 
 
 However, no specific solution is shown. The next section shows how to search for solutions of a constraint satisfaction problem (CSP) in Oz.
 </info>
@@ -57,14 +57,14 @@ end</oz>
 </subsection>
 
 <subsection title="A Simple Script">
-<info>This section shows the first full constraint satisfaction problem (CSP) definition.  A constraint solver (here SearchAll) expects a CSP in form of a script.  A script is a procedure (FindSols) whose only argument is the solution of the solved CSP.  The variable is often called the "root variable" of the script.  Transformed into common mathematical notation, the CSP states the following conjunction
+<info>This section shows the first full constraint satisfaction problem (CSP) definition.  A constraint solver (here SearchAll) expects a CSP in form of a script.  A script is a procedure (MyScript) whose only argument is the solution of the solved CSP.  The variable is often called the "root variable" of the script.  Transformed into common mathematical notation, the CSP states the following conjunction
 
   X + Y = Z  AND  X &lt; Y
 
-The script simply collects the three variables X, Y, and Z in a record stored in the root variable Solution.  The solver SearchAll returns a list with all solutions of the CSP defined by the script.  Note the use of the special constraint operators `&lt;:' and `=:' instead of `&lt;' and `='.
+The script simply collects the three variables X, Y, and Z in a record stored in the root variable Solution.  The solver SearchAll returns a list with all solutions of the problem defined by the script.  Note the use of the special constraint operators `&lt;:' and `=:' instead of `&lt;' and `='.
 </info>
 <oz>local
-  proc {FindSols Solution}
+  proc {MyScript Solution}
      X = {FD.int 1#10}
      Y = {FD.int 1#10}
      Z = {FD.int 1#10}
@@ -76,14 +76,14 @@ The script simply collects the three variables X, Y, and Z in a record stored in
      {FD.distribute naive Solution}
   end
 in
-  {Browse {SearchAll FindSols}}
+  {Browse {SearchAll MyScript}}
 end</oz>
 </subsection>
 
 <subsection title="Oz Explorer">
 <info>This example uses another constraint solver, the Oz Explorer.  The Explorer visualises the search space.  Green nodes in the tree denote solutions, red nodes represent a fail, blue nodes show a stage in the search where there are still open decisions.  Triangles represent a subtree (use the middle mouse button to show the nodes of the subtree).
 
-Just double-click on a node to see the values of the variables at this stage during the search process (you can not look at failed nodes, though).  You can use this facility to get some intuitive understanding of the search process.  For example, look first at the variable values in the root node, than in a child node of the root and in a grand-child node and so forth, to monitor how the search process shrinks the variable domains.
+Just double-click on a node to see the values of the variables at this stage during the search process (you can not look at failed nodes, though).  Note that you may need to select a suitable Explorer action first: in the menu Nodes select Information Action -> Inspect (the other actions are intended for score processing).  You can use the Explorer to get some intuitive understanding of the search process.  For example, look first at the variable values in the root node, than in a child node of the root and in a grand-child node and so forth, to monitor how the search process shrinks the variable domains.
 
 You may play around with the menu entries of the Oz Explorer.  For example, select the top node with the mouse, then go to the 'Search' menu and select 'Next Solution'.
 </info>
@@ -110,6 +110,7 @@ end</oz>
 The distribution strategy specifies in which order variables are visited during the search process.  The specification 'ff' stands for first-fail and means that always a variable with smallest domain is visited next.  The selection of a suitable distribution strategy is vital for the performance of the search process. Nevertheless, for keeping things simple this tutorial does not discuss constraint distribution in detail.
 
 TODO: find an example where changing the distribution strategy actually does something!
+Idea: Send More Money: distro changes efficiency
 </info>
 <oz>local
   proc {FindSols Solution}
@@ -126,7 +127,8 @@ TODO: find an example where changing the distribution strategy actually does som
      {FD.distribute split Solution}
   end
 in
-  {Browse {SearchAll FindSols}}
+  {ExploreOne FindSols}
+%  {Browse {SearchAll FindSols}}
 end</oz>
 </subsection>
 
@@ -155,7 +157,7 @@ end</oz>
 <subsection title="BACKGROUND">
 <info>Terms: TODO.
 
-For more information, please see the "Finite Domain Constraint Programming Tutotiral at
+For more information, please see the "Finite Domain Constraint Programming Tutorial at
   http://www.mozart-oz.org/documentation/fdt/index.html
 </info>
 <oz></oz>

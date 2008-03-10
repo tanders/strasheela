@@ -247,32 +247,45 @@ end</oz>
 </subsection>
 
 <subsection title="BACKGROUND">
-<info>TODO: Torsten, please add info about "first-class values" here.  :)</info>
+<info>Terms: first-class value, first-class function/procedure, higher-order function/procedure.
+
+A first-class value is a value (also object, or citizen) which can be stored in data structures, given to procedures as arguments and returned as results. Functions as first-class values are also called first-class function. 
+
+First-class functions are a central concept of functional programming. They allow for higher-order programming, which make procedures more general and in effect can greatly reduce the length of a program. For example, instead of defining a sort function for every kind of data you need to sort (e.g., numbers, strings, score objects) you only define a single sort function and specify how it compares values. 
+
+Reading: 
+
+  - van Roy and Haridi, Sec. 3.6
+  - Wikipedia: http://en.wikipedia.org/wiki/First-class_function
+
+</info>
 <oz></oz>
 </subsection>
 </section>
 
 <section title="Unification">
 <subsection title="Introduction">
-<info>The operator = performs unification of two variables.  The variables share all the information they have about their values.  A variable without a name (an anonymous variable) is written as an underscore ( _ ).  Unification is a basic form of constraint programming (constraint programming is discussed further below).
+<info>The operator = performs unification of two variables.  The variables share all the information they have about their values.  A variable without a name (an anonymous variable) is written as an underscore ( _ ). 
 </info>
 <oz></oz>
 </subsection>
 
 <subsection title="Unifying two numbers">
-<info>Unification shares information between two variables, including the domain of possible values.</info>
+<info>Unification shares information between two variables, including the domain of possible values. This example introduces finite domain integers (FD), discussed below in more detail.
+
+</info>
 <oz>local 
-  X = {FD.int 1#5}
+  X = {FD.int 1#5} % declare an integer with domain {1, ..., 5}
   Y = {FD.int 0#3}
 in 
   X = Y          % unify X and Y
-  {Inspect X}
+  {Inspect X}    % X now has the domain {1, ..., 3}
 end
 </oz>
 </subsection>
 
 <subsection title="Unifying two lists">
-<info>Lists may be unified as well.</info>
+<info>Compound data structures such as lists may contain free variables. Such lists are then partially bound and they can be unified.</info>
 <oz>local 
   X = [a _ _] 
   Y = [_ b _]
@@ -290,6 +303,20 @@ The Inspector can be configured to show either way: under the options menu, stru
   {Browse X}
   {Inspect X}
 end</oz>
+</subsection>
+
+<subsection title="BACKGROUND">
+<info>Terms: logic variables, unification.
+
+Unification is the core operation of logic programming (besides search). Variables which allow for unification are therefore also called "logic variables". Unification is also the first constraint we meet. Constraint programming is discussed further below.
+
+Reading: 
+
+  - van Roy and Haridi, Chap. 2 (in particular Sec. 2.2, and 2.7.2)
+  - Wikipedia: http://en.wikipedia.org/wiki/Unification
+
+</info>
+<oz></oz>
 </subsection>
 </section>
 
@@ -358,9 +385,11 @@ TODO: add subsections for creating an object
 <subsection title="Introduction">
 <info>Oz provides excellent support for concurrent programming, where computations run in parallel in multiple threads.  We will only touch on this subject and discuss aspects relevant for Strasheela.  In general, however, concurrent programming plays a major role in Oz programming. 
 
-The computations in different threads can communicate with each other via variables.  Multiple threads can use the same variable in a computation.  If the value of a variable does not present enough information for performing a specific operation, then the thread simply blocks and waits for more information.  As soon as more information about the variable value is available, the thread resumes its execution. 
+The computations in different threads can communicate with each other via variables.  Multiple threads can use the same variable in a computation.  If the value of a variable does not present enough information for performing a specific operation, then the thread simply blocks and waits for more information.  As soon as more information about the variable value is available, the thread resumes its execution.  This approach makes concurrent programs highly declarative and thus easy to write and understand.
   
 The downside of this concurrency model is that it can result in an unintended blocking of a program which is not explicitly signalled (e.g. no error message is shown when a program blocks, because this is a normal program behaviour).  There are a few pragmatic tricks we can use to avoid this downside; these are covered later in this chapter.
+
+This section demonstrates concurrent programming, but does not show a typical application (a typical application would be a program split in a server and one or more clients).  In the context of Strasheela, we will seldomly write concurrent programs explicitly.  Nevertheless, it is very important to know how concurrent programming works in Oz.  Even if we are not explicitly writing a concurrent program, constraint programming in Oz always results in a concurrent program.  Concurrent programming forms one of the foundations of Oz' constraint programming model, where each constraint (i.e. each propagator) is a concurrent agent running in its own thread.
 </info>
 <oz></oz>
 </subsection>
@@ -379,7 +408,7 @@ However, `Browse' does indeed show the correct value of B.  WARNING: not all pro
   B
 in
   {Browse B}
-  {Delay 2000}
+  {Delay 3000}
   {IsEven 4 B}
 end</oz>
 </subsection>
@@ -393,7 +422,7 @@ In the section below, the addition X+3 can not be performed as long as the value
   X 
 in
   {Browse hello}
-  thread {Browse X + 3} end
+  thread {Browse X + 3} end  % compute and browse X+3 concurrently
   {Delay 2000}
   X = 4
 end</oz>
@@ -412,7 +441,10 @@ end</oz>
 </subsection>
 
 <subsection title="Detecting blocked progs (1)">
-<info>This section demonstrates a pragmatic approach which checks for blocking programs.  The section ends with the statement {Browse endOfProgram}.  A non-blocking program will always execute this last line of code and show 'endOfProgram' in the Browser.  However, a blocking program (as the present one) does not do that and thus indicates that it is blocking.  Although this little trick does not tell us *where* the program blocks, the information *that* we wrote a blocking program can prove very helpful already.  You may get a feel for this trick by changing the section so that the message 'endOfProgram' is shown (e.g. comment the blocking statement out, or surrounding it with a 'thread .. end' statement).</info>
+<info>This section demonstrates a pragmatic approach which checks for blocking programs.  The section ends with the statement {Browse endOfProgram}.  A non-blocking program will always execute this last line of code and show 'endOfProgram' in the Browser.  However, a blocking program (as the present one) does not do that and thus indicates that it is blocking.  Although this little trick does not tell us *where* the program blocks, the information *that* we wrote a blocking program can prove very helpful already.  You may get a feel for this trick by changing the section so that the message 'endOfProgram' is shown (e.g. comment the blocking statement out, or surrounding it with a 'thread .. end' statement).
+
+Of course, this technique is most effective for programs which should complete immediately. By contrast, if we call procedures like Delay in a program (see above), the browsing of 'endOfProgram' will also be delayed accordingly. 
+</info>
 <oz>local
   X
 in
@@ -427,7 +459,11 @@ end
 <subsection title="Detecting blocked progs (2)">
 <info>This section demonstrates a technique which causes an error (raises an exception) when the current thread blocks. The function `Thread.this' returns the current thread, and `Debug.setRaiseOnBlock' activates this debugging feature. The error message can even tell you which variable caused the blocking (although in this section the deduced variable name is simply _).
 
-Note that you must load Debug first, before using `Debug.setRaiseOnBlock' (which this tutorial does implicitly).</info>
+Note that you must load Debug first, before using `Debug.setRaiseOnBlock' (which this tutorial does implicitly). For example, include the following line at the beginning of your program.
+
+declare [Debug] = {Module.link ['x-oz://boot/Debug']}
+
+</info>
 <oz>local
   X 
 in
@@ -439,15 +475,15 @@ end
 </oz>
 </subsection>
 
+<!-- 
 <subsection title="BACKGROUND">
-<info>TODO: fill, organize
-
-This chapter demonstrates concurrent programming, but do not show a typical application (a typical application would be a program split in a server and one or more clients).  In the context of Strasheela, we will seldomly write concurrent programs explicitly.  Nevertheless, it is very important to know how concurrent programming works in Oz.  Even if we are not explicitly writing a concurrent program, constraint programming in Oz always results in a concurrent program.  Concurrent programming forms one of the foundations of Oz' constraint programming model, where each constraint (i.e. each propagator) is a concurrent agent running in its own thread.
+<info>TODO: thread, data flow variable
 
 </info>
 <oz></oz>
 </subsection>
-</section>
+ -->
 
+</section>
 </chapter> 
 
