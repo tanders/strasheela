@@ -181,6 +181,20 @@ in
 end</oz>
 </subsection>
 
+<subsection title="Zip">
+<info>Zip applies a procedure to elements from two lists.  The
+lists must have the same size.</info>
+<oz>local
+  proc {Max X Y Z}
+     if X >= Y then Z = X else Z = Y end 
+  end
+  A = [1 2 3 4 5]
+  B = [5 4 3 2 1]
+in
+  {Browse {List.zip A B Max}}
+end</oz>
+</subsection>
+
 <subsection title="Anonymous procedures">
 <info>Sometimes we need a function only once -- as the function Square in the previous section.  In such cases we don't necessarily need to care about giving the function any name.  Instead, we can define an anonymous function.
 
