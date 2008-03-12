@@ -57,8 +57,18 @@
 <dt>
 <a href="#sec9">Install Oz Extensions</a>
 </dt>
+<dd>
+<dl>
 <dt>
-<a href="#sec10">Notes for Package Creators</a>
+<a href="#sec10">Selection Constraints</a>
+</dt>
+<dt>
+<a href="#sec11">IOzSeF</a>
+</dt>
+</dl>
+</dd>
+<dt>
+<a href="#sec12">Notes for Package Creators</a>
 </dt>
 </dl>
 </div>
@@ -228,11 +238,16 @@ Install the Software for which Strasheela Supports an Output Format</h2>
 <h2><a name="sec9" id="sec9"></a>
 Install Oz Extensions</h2>
 
-<p class="first">Some Strasheela extensions make use of Oz functionality which is not part of plain Oz itself. For instance, the following examples in the examples folder rely on <a href="http://www.mozart-oz.org/mogul/info/duchier/select.html">selection constraints</a> (e.g. via Strasheela's harmony model): <code>04-AutomaticMelodyHarmonsation.oz</code>, <code>05-MicrotonalChordProgression.oz</code>, <code>07-Harmonised-L-system.oz</code>.</p>
+<p class="first">Some Strasheela extensions make use of Oz functionality which is not part of plain Oz itself.</p>
+
+<h3><a name="sec10" id="sec10"></a>
+Selection Constraints</h3>
+
+<p class="first">For instance, the following examples in the examples folder rely on <a href="http://www.mozart-oz.org/mogul/info/duchier/select.html">selection constraints</a> (e.g. via Strasheela's harmony model): <code>04-AutomaticMelodyHarmonsation.oz</code>, <code>05-MicrotonalChordProgression.oz</code>, <code>07-Harmonised-L-system.oz</code>.</p>
 
 
 
-<p>Please note that you need a C++ compiler in order to install these constraints. The GNU C++ compiler is usually already installed on Linux. On MacOS X, install Apple's developer tool Xcode (available either from your MacOS installation CDs, or from <a href="http://developer.apple.com/tools/xcode/">here</a> if this online version is newer). On Windows, you may consider installing this compiler under <a href="http://www.cygwin.com/">Cygwin</a>. You can install the selection constraints, for instance, by typing</p>
+<p>Please note that you need a C++ compiler in order to install these constraints. The GNU C++ compiler is usually already installed on Linux. On MacOS X, install Apple's developer tool Xcode (available either from your MacOS installation CDs, or from <a href="http://developer.apple.com/tools/xcode/">here</a> if this online version is newer). On Windows, you may consider installing this compiler under <a href="http://www.cygwin.com/">Cygwin</a>. You can install the selection constraints by typing</p>
 
 <blockquote>
 <p class="quoted"></p>
@@ -244,7 +259,21 @@ ozmake --install --package=http://www.mozart-oz.org/mogul/populate/duchier/selec
 
 <p>NB: Unfortunately, it has been found that on Mozart 1.3.2 <code>ozmake</code> hangs when invoking the GNU compiler on Windows.<sup><a class="footref" name="fnr.4" href="#fn.4">4</a></sup></p>
 
-<h2><a name="sec10" id="sec10"></a>
+
+<h3><a name="sec11" id="sec11"></a>
+IOzSeF</h3>
+
+<p><a href="http://www.mozart-oz.org/mogul/doc/tack/iozsef/iozsef.html">IOzSeF</a> provides search engines which can solve complex constraint problems more efficiently. For example, all IOzSeF solvers support adaptive recomputation &mdash; a technique saving memory (see <a href="http://books.google.com/books?id=BYXNltNPDGAC&amp;pg=PR1&amp;ots=XEZwT73n-z&amp;dq=Programming+Constraint+Services&amp;sig=vfakyMOLFnvtSWHV3_aUGo94iX8">Programming Constraint Services</a>).</p>
+
+<p>Strasheela integrates IOzSeF for convenient score search (see <a href="../doc/api/node8.html">SDistro</a>). You can install IOzSeF by typing</p>
+
+<pre class="example">
+ozmake --install --package=mogul:/tack/TkTreeWidget
+ozmake --install --package=mogul:/tack/iozsef
+</pre>
+
+
+<h2><a name="sec12" id="sec12"></a>
 <a name="forPackageCreators" id="forPackageCreators"></a>Notes for Package Creators</h2>
 
 <p class="first">We highly welcome contributors of packages which simplify the Strasheela installation. For example, RPM files for SUSE Linux can be found <a href="http://packman.links2linux.de/package/strasheela/">here</a> (thank you Toni!).</p>
@@ -305,7 +334,7 @@ scripts/install-all.sh <span style="color: #bc8f8f;">\</span>
 <div id="footer">
 <div id="author">&copy; 
 Torsten Anders</div>
-<div id="date">Last time edited: 2008.01.22</div>
+<div id="date">Last time edited: 2008.03.12</div>
 </div>
   </body>
 </html>
