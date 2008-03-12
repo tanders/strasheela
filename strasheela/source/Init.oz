@@ -19,6 +19,8 @@ import
    Browser(browse:Browse)
    Inspector(inspect:Inspect)
    Pickle Explorer Error Resolve
+   IOzSeF at 'x-ozlib://tack/iozsef/iozsef.ozf'
+   
    Strasheela at '../Strasheela.ozf'
    GUtils at 'GeneralUtils.ozf'
    Score at 'ScoreCore.ozf'
@@ -56,6 +58,7 @@ export
    SaveStrasheelaEnv LoadStrasheelaEnv
    GetBeatDuration SetBeatDuration GetTempo SetTempo
    AddExplorerOuts_Standard AddExplorerOuts_Extended
+   AddIOzSeFOuts
 %   StrasheelaDir
    StrasheelaSourceDir StrasheelaInstallDir
    
@@ -408,7 +411,7 @@ define
 %       end}
    in
       
-      /** %% Extends the Explorer menu Notes:Information Action by a few entries to output scores into various formats just by clicking the solution nodes in the Explorer.
+      /** %% Extends the Explorer menu "Notes -> Information Action" by a few entries to output scores into various formats just by clicking the solution nodes in the Explorer.
       %% This procedure adds standard output formats like Csound, Lilypond, and MIDI.
       %% */
       proc {AddExplorerOuts_Standard}	 
@@ -431,7 +434,7 @@ define
 	  add(information RenderMidi
 	      label: 'to Midi')}
       end
-      /** %% Extends the Explorer menu Notes:Information Action by a few entries to output scores into various formats just by clicking the solution nodes in the Explorer. 
+      /** %% Extends the Explorer menu "Notes -> Information Action" by a few entries to output scores into various formats just by clicking the solution nodes in the Explorer. 
       %% This procedure complements the formats of AddExplorerOuts_Standard by further formats like ENP and Fomus.
       %%
       %% This split into two procedures is only intended to avoid confusing new users with too many options. Anyway, the Explorer actions created by both procs are (hopefully) soon obsolete and replaced by a GUI settings dialog...
@@ -467,6 +470,30 @@ define
 	 {Explorer.object
 	  add(information RenderFomus
 	      label: 'to Fomus')}
+      end
+
+      /** %% Extends the IOzSeF menu "Options -> Information Action" by a few entries to output scores into various formats just by clicking the solution nodes in the Explorer. This procedure adds standard output formats like Csound, Lilypond, and MIDI, as well as further formats like ENP and Fomus.
+      %% */
+      %% NOTE: implementation simply reuses defs for Explorer actions. There Explorer actions always expect number of Explorer node as argument. IOzSeF does not support this -- so this node nubmer argument is always 1 here. 
+      proc {AddIOzSeFOuts}
+	 %% Standard
+	 {IOzSeF.addInformationAction 'Inspect Score (use score object context menu)' root
+	  proc {$ X} {ScoreInspector.inspect X} end}
+	 {IOzSeF.addInformationAction 'Archive initRecord' root
+	  proc {$ X}  {ArchiveInitRecord 1 X} end}
+	 {IOzSeF.addInformationAction 'to Csound' root
+	  proc {$ X}  {RenderCsound 1 X} end}
+	 {IOzSeF.addInformationAction 'to Lilypond' root
+	  proc {$ X}  {RenderLilypond 1 X} end}
+	 {IOzSeF.addInformationAction 'to Midi' root
+	  proc {$ X}  {RenderMidi 1 X} end}
+	 %% Extended
+	 {IOzSeF.addInformationAction 'Archive ENPNonMensural' root
+	  proc {$ X}  {ArchiveENPNonMensural 1 X} end}
+	 {IOzSeF.addInformationAction 'Archive Fomus' root
+	  proc {$ X}  {ArchiveFomus 1 X} end}
+	 {IOzSeF.addInformationAction 'to Fomus' root
+	  proc {$ X}  {RenderFomus 1 X} end}
       end
       
    end

@@ -139,9 +139,12 @@ Out = Strasheela.out
 	     'x-ozlib://anders/strasheela/Measure/Measure.ozf'
 	    ]}
 
-%% Extend the Explorer menu Nodes:Information Action for easy score output
+%% Extend the Explorer menu "Notes -> Information Action" for easy score output
 {Init.addExplorerOuts_Standard} % standard formats 
 % {Init.addExplorerOuts_Extended} % even more formats
+%% IOzSeF output for menu "Options -> Information Action". 
+%% Uncomment if you have IOzSeF installed 
+% {Init.addIOzSeFOuts}
 
 %% Shadow the original Inspector with the ScoreInspector
 [Inspector] = {ModuleLink ['x-ozlib://anders/strasheela/ScoreInspector/ScoreInspector.ozf']}
