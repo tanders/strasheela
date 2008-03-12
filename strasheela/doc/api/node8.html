@@ -174,30 +174,30 @@ end<BR>
 </span></li><li>IOzSeF at "<span class="string">x-ozlib://tack/iozsef/iozsef.ozf"
 </span></li></ul></code>
 <h3>Export</h3>
-<code><ul><li>&lt;P/3:<a href="#entity327"><span class="functionname">MakeSearchScript</span></a>&gt;
-</li><li>&lt;P/3:<a href="#entity328"><span class="functionname">SearchOne</span></a>&gt;
-</li><li>&lt;P/3:<a href="#entity329"><span class="functionname">SearchAll</span></a>&gt;
-</li><li>&lt;P/4:<a href="#entity330"><span class="functionname">SearchBest</span></a>&gt;
-</li><li>&lt;P/5:<a href="#entity331"><span class="functionname">SearchOneDepth</span></a>&gt;
-</li><li>&lt;P/2:<a href="#entity332"><span class="functionname">ExploreOne</span></a>&gt;
-</li><li>&lt;P/2:<a href="#entity333"><span class="functionname">ExploreAll</span></a>&gt;
-</li><li>&lt;P/3:<a href="#entity334"><span class="functionname">ExploreBest</span></a>&gt;
-</li><li>&lt;P/2:<a href="#entity335"><span class="functionname">IozsefInit</span></a>&gt;
-</li><li>&lt;P/3:<a href="#entity336"><span class="functionname">IozsefInitBest</span></a>&gt;
-</li><li>&lt;P/2:<a href="#entity337"><span class="functionname">IozsefExploreOne</span></a>&gt;
-</li><li>&lt;P/2:<a href="#entity338"><span class="functionname">IozsefExploreAll</span></a>&gt;
-</li><li>&lt;P/3:<a href="#entity339"><span class="functionname">IozsefExploreBest</span></a>&gt;
-</li><li>&lt;P/2:<a href="#entity340"><span class="functionname">IozsefSearchOne</span></a>&gt;
-</li><li>&lt;P/2:<a href="#entity341"><span class="functionname">IozsefSearchAll</span></a>&gt;
-</li><li>&lt;P/3:<a href="#entity342"><span class="functionname">IozsefSearchBest</span></a>&gt;
-</li><li>&lt;P/2:<a href="#entity343"><span class="functionname">MakeRandomDistributionValue</span></a>&gt;
-</li><li>&lt;P/3:<a href="#entity345"><span class="functionname">MakeSetPreferredOrder</span></a>&gt;
-</li><li>&lt;P/2:<a href="#entity344"><span class="functionname">MakeSetPreferredOrder2</span></a>&gt;
+<code><ul><li>&lt;P/3:<a href="#entity330"><span class="functionname">MakeSearchScript</span></a>&gt;
+</li><li>&lt;P/3:<a href="#entity331"><span class="functionname">SearchOne</span></a>&gt;
+</li><li>&lt;P/3:<a href="#entity332"><span class="functionname">SearchAll</span></a>&gt;
+</li><li>&lt;P/4:<a href="#entity333"><span class="functionname">SearchBest</span></a>&gt;
+</li><li>&lt;P/5:<a href="#entity334"><span class="functionname">SearchOneDepth</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity335"><span class="functionname">ExploreOne</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity336"><span class="functionname">ExploreAll</span></a>&gt;
+</li><li>&lt;P/3:<a href="#entity337"><span class="functionname">ExploreBest</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity338"><span class="functionname">IozsefInit</span></a>&gt;
+</li><li>&lt;P/3:<a href="#entity339"><span class="functionname">IozsefInitBest</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity340"><span class="functionname">IozsefExploreOne</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity341"><span class="functionname">IozsefExploreAll</span></a>&gt;
+</li><li>&lt;P/3:<a href="#entity342"><span class="functionname">IozsefExploreBest</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity343"><span class="functionname">IozsefSearchOne</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity344"><span class="functionname">IozsefSearchAll</span></a>&gt;
+</li><li>&lt;P/3:<a href="#entity345"><span class="functionname">IozsefSearchBest</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity346"><span class="functionname">MakeRandomDistributionValue</span></a>&gt;
+</li><li>&lt;P/3:<a href="#entity348"><span class="functionname">MakeSetPreferredOrder</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity347"><span class="functionname">MakeSetPreferredOrder2</span></a>&gt;
 </li></ul></code>
 <h3>Define</h3>
 
 <code>
-<a name="entity327">
+<a name="entity330">
 <span class="keyword">fun</span>{<span class="functionname">MakeSearchScript</span> ScoreScript Args}<br>
 <span class="string"> Returns a search script (a unary procedure) whose solution is a score. ScoreScript is a unary proc expressing a whole search problem involving a score as its solution, however without specifying any distribution strategy. Args is a record specifying the score distribution strategy with same features expected by FD.distribute for a distribution strategy (filter, order, select, value, and procedure) and the additional feature test. The distribution strategy features have the same meaning and usage as in FD.distribute, for example, all these arguments support procedures as values (for details, see http://www.mozart-oz.org/documentation/system/node26.html). However, the distribution defined by MakeSearchScript always distributes score parameter objects, not plain variables. For example, the predefined select-procedure 'value' is defined as follows<BR>
 <BR>
@@ -249,7 +249,7 @@ end<BR>
 </code><br>
 
 <code>
-<a name="entity328">
+<a name="entity331">
 <span class="keyword">fun</span>{<span class="functionname">SearchOne</span> ScoreScript Args}<br>
 <span class="string"> Calls Search.base.one with a script created by MakeSearchScript. The meaning of the arguments ScoreScript and Args are the same as for MakeSearchScript.<BR>
 <BR>
@@ -257,7 +257,7 @@ end<BR>
 </code><br>
 
 <code>
-<a name="entity329">
+<a name="entity332">
 <span class="keyword">fun</span>{<span class="functionname">SearchAll</span> ScoreScript Args}<br>
 <span class="string"> Calls Search.base.all with a script created by MakeSearchScript. The meaning of the arguments ScoreScript and Args are the same as for MakeSearchScript.<BR>
 <BR>
@@ -265,7 +265,7 @@ end<BR>
 </code><br>
 
 <code>
-<a name="entity330">
+<a name="entity333">
 <span class="keyword">fun</span>{<span class="functionname">SearchBest</span> ScoreScript OrderP Args}<br>
 <span class="string"> Calls Search.base.best with a script created by MakeSearchScript. The meaning of the arguments ScoreScript and Args are the same as for MakeSearchScript. Best solution is performed with respect to OrderP (a binary procedure). <BR>
 <BR>
@@ -273,7 +273,7 @@ end<BR>
 </code><br>
 
 <code>
-<a name="entity331">
+<a name="entity334">
 <span class="keyword">fun</span>{<span class="functionname">SearchOneDepth</span> ScoreScript RcdI Args KillP}<br>
 <span class="string"> Calls Search.one.depth with a script created by MakeSearchScript. The meaning of the arguments ScoreScript and Args are the same as for MakeSearchScript.<BR>
  RcdI (an int) is the recomputation distance, and KillP (a nullary procedure) kills the search engine, for details see http://www.mozart-oz.org/documentation/system/node11.html.  <BR>
@@ -282,7 +282,7 @@ end<BR>
 </code><br>
 
 <code>
-<a name="entity332">
+<a name="entity335">
 <span class="keyword">proc</span>{<span class="functionname">ExploreOne</span> ScoreScript Args}<br>
 <span class="string"> Calls Explorer.one with a script created by MakeSearchScript. The meaning of the arguments are the same as for MakeSearchScript.<BR>
 <BR>
@@ -290,7 +290,7 @@ end<BR>
 </code><br>
 
 <code>
-<a name="entity333">
+<a name="entity336">
 <span class="keyword">proc</span>{<span class="functionname">ExploreAll</span> ScoreScript Args}<br>
 <span class="string"> Calls Explorer.all with a script created by MakeSearchScript. The meaning of the arguments are the same as for MakeSearchScript.<BR>
 <BR>
@@ -298,7 +298,7 @@ end<BR>
 </code><br>
 
 <code>
-<a name="entity334">
+<a name="entity337">
 <span class="keyword">proc</span>{<span class="functionname">ExploreBest</span> ScoreScript OrderP Args}<br>
 <span class="string"> Calls Explorer.best with a script created by MakeSearchScript. The meaning of the arguments ScoreScript and Args are the same as for MakeSearchScript. Best solution is performed with respect to OrderP (a binary procedure). <BR>
 <BR>
@@ -306,57 +306,69 @@ end<BR>
 </code><br>
 
 <code>
-<a name="entity335">
-<span class="keyword">proc</span>{<span class="functionname">IozsefInit</span> ScoreScript Args}<br>
-<span class="string"> Calls IOzSeF.init with a script created by MakeSearchScript. It opens the IOzSeF 'explorer' without starting any search. This variant of the Explorer provides additional features (e.g., support for more forms of recomputation, and various search strategies). It requires an installation of IOzSeF, see http://www.mozart-oz.org/mogul/doc/tack/iozsef/iozsef.html. The meaning of the arguments are the same as for MakeSearchScript.<BR>
-<BR>
- NB: IOzSeF support is unfinished. No score output functionality is presently provided. <BR>
-<BR>
-</span>
-</code><br>
-
-<code>
-<a name="entity336">
-<span class="keyword">proc</span>{<span class="functionname">IozsefInitBest</span> ScoreScript OrderP Args}
-</code><br>
-
-<code>
-<a name="entity337">
-<span class="keyword">proc</span>{<span class="functionname">IozsefExploreOne</span> ScoreScript Args}<br>
-<span class="string"> Calls IOzSeF.exploreOne with a script created by MakeSearchScript. This variant of the Explorer provides additional features (e.g., support for more forms of recomputation, and various search strategies). It requires an installation of IOzSeF, see http://www.mozart-oz.org/mogul/doc/tack/iozsef/iozsef.html. The meaning of the arguments are the same as for MakeSearchScript.<BR>
-<BR>
- NB: IOzSeF support is unfinished. No score output functionality is presently provided. <BR>
-<BR>
-</span>
-</code><br>
-
-<code>
 <a name="entity338">
-<span class="keyword">proc</span>{<span class="functionname">IozsefExploreAll</span> ScoreScript Args}
+<span class="keyword">proc</span>{<span class="functionname">IozsefInit</span> ScoreScript Args}
 </code><br>
 
 <code>
 <a name="entity339">
-<span class="keyword">proc</span>{<span class="functionname">IozsefExploreBest</span> ScoreScript OrderP Args}
+<span class="keyword">proc</span>{<span class="functionname">IozsefInitBest</span> ScoreScript OrderP Args}<br>
+<span class="string"> Calls IOzSeF.init/IOzSeF.initBest with a script created by MakeSearchScript. It opens the IOzSeF 'Explorer' without starting any search. Best solution is performed with respect to OrderP (a binary procedure).  This variant of the Explorer provides additional features (e.g., support for more forms of recomputation, and various search strategies). It requires an installation of IOzSeF, see http://www.mozart-oz.org/mogul/doc/tack/iozsef/iozsef.html. The meaning of the arguments are the same as for MakeSearchScript.<BR>
+<BR>
+ Please see the IOzSeF documentation for more information. Note the following procedures <BR>
+ - IOzSeF.getSolutions: Returns the solutions found so far during interactive exploration<BR>
+ - IOzSeF.cancelExploration: Cancels the current interactive exploration.<BR>
+<BR>
+</span>
 </code><br>
 
 <code>
 <a name="entity340">
-<span class="keyword">proc</span>{<span class="functionname">IozsefSearchOne</span> ScoreScript Args}
+<span class="keyword">proc</span>{<span class="functionname">IozsefExploreOne</span> ScoreScript Args}
 </code><br>
 
 <code>
 <a name="entity341">
-<span class="keyword">proc</span>{<span class="functionname">IozsefSearchAll</span> ScoreScript Args}
+<span class="keyword">proc</span>{<span class="functionname">IozsefExploreAll</span> ScoreScript Args}
 </code><br>
 
 <code>
 <a name="entity342">
-<span class="keyword">proc</span>{<span class="functionname">IozsefSearchBest</span> ScoreScript OrderP Args}
+<span class="keyword">proc</span>{<span class="functionname">IozsefExploreBest</span> ScoreScript OrderP Args}<br>
+<span class="string"> Calls IOzSeF.exploreOne/IOzSeF.exploreAll/IOzSeF.exploreBest with a script created by MakeSearchScript. Best solution is performed with respect to OrderP (a binary procedure). This variant of the Explorer provides additional features (e.g., support for more forms of recomputation, and various search strategies). It requires an installation of IOzSeF, see http://www.mozart-oz.org/mogul/doc/tack/iozsef/iozsef.html. The meaning of the arguments are the same as for MakeSearchScript.<BR>
+<BR>
+ Please see the IOzSeF documentation for more information. Note the following procedures <BR>
+ - IOzSeF.getSolutions: Returns the solutions found so far during interactive exploration<BR>
+ - IOzSeF.cancelExploration: Cancels the current interactive exploration.<BR>
+<BR>
+</span>
 </code><br>
 
 <code>
 <a name="entity343">
+<span class="keyword">proc</span>{<span class="functionname">IozsefSearchOne</span> ScoreScript Args}
+</code><br>
+
+<code>
+<a name="entity344">
+<span class="keyword">proc</span>{<span class="functionname">IozsefSearchAll</span> ScoreScript Args}
+</code><br>
+
+<code>
+<a name="entity345">
+<span class="keyword">proc</span>{<span class="functionname">IozsefSearchBest</span> ScoreScript OrderP Args}<br>
+<span class="string"> Calls IOzSeF.searchOne/IOzSeF.searchAll/IOzSeF.searchBest with a script created by MakeSearchScript. Best solution is performed with respect to OrderP (a binary procedure). It requires an installation of IOzSeF, see http://www.mozart-oz.org/mogul/doc/tack/iozsef/iozsef.html. The meaning of the arguments are the same as for MakeSearchScript.<BR>
+<BR>
+ Please see the IOzSeF documentation for more information. Note the following procedures <BR>
+ - IOzSeF.cancelSearch: Cancels the current non-interactive search.<BR>
+ - IOzSeF.setOption(Key Value) sets options like explorationStrat (dfs,bdfs,id,lds), noOfSols (0,...), recompStrat (plain,fixed,adaptive), mrd (0,...)<BR>
+ - IOzSeF.getTime<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity346">
 <span class="keyword">fun</span>{<span class="functionname">MakeRandomDistributionValue</span> RandGen}<br>
 <span class="string"> Returns randomised value ordering, that is, a unary function for the argument 'value' of FD.distribute. The argument RandGen is a nullary function. If RandGen is created by GUtils.makeRandomGenerator, then the value ordering is randomised but still deterministic: re-executing the distribution will allways yield the same results. Consequently, such a randomised value ordering can be used for recomputation. <BR>
 <BR>
@@ -364,7 +376,7 @@ end<BR>
 </code><br>
 
 <code>
-<a name="entity345">
+<a name="entity348">
 <span class="keyword">fun</span>{<span class="functionname">MakeSetPreferredOrder</span> Tests IfEqual}<br>
 <span class="string"> Returns a score distribution strategy 'order' procedure. Tests is a list of unary boolean funcs which expect a parameter. The distribution 'prefers' parameters for which a test with smaller index in Tests returns true. IfEqual is a binary boolean function which 'decides' in case for two parameters with equal 'test index'.<BR>
  More general Variation of MakeSetPreferredOrder2. Which strategy variant is more efficient depends on the problem.. <BR>
@@ -373,7 +385,7 @@ end<BR>
 </code><br>
 
 <code>
-<a name="entity344">
+<a name="entity347">
 <span class="keyword">fun</span>{<span class="functionname">MakeSetPreferredOrder2</span> Tests}<br>
 <span class="string"> Returns a score distribution strategy 'order' procedure. Tests is a list of unary boolean funcs which expect a parameter. The distribution 'prefers' parameters for which a test with smaller index in Tests returns true. In case of two parameters with equal 'test index' the strategy decides for the first param.<BR>
 <BR>
