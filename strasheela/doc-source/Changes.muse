@@ -9,7 +9,11 @@
 
  - Added examples which demonstrate how to use continuous controllers in the score, and how to output them to MIDI, see [[../examples/ContinuousControllersInScore-MidiOutput.oz][here]]
 
- - Added to SDistro: SearchOneDepth,  added IozsefInit, IozsefInitBest, IozsefExploreOne, IozsefExploreAll, IozsefExploreBest, IozsefSearchOne, IozsefSearchAll, IozsefSearchBest 
+ - Added support for IOzSeF search engines which can solve complex constraint problems more efficiently. For example, all IOzSeF solvers support adaptive recomputation -- a technique saving memory (see [[http://books.google.com/books?id=BYXNltNPDGAC&pg=PR1&ots=XEZwT73n-z&dq=Programming+Constraint+Services&sig=vfakyMOLFnvtSWHV3_aUGo94iX8][Programming Constraint Services]]). 
+   - Added to SDistro: IozsefInit, IozsefInitBest, IozsefExploreOne, IozsefExploreAll, IozsefExploreBest, IozsefSearchOne, IozsefSearchAll, IozsefSearchBest 
+   - You can enable score output information actions for the IOzSeF 'Explorer' by calling ={Init.addIOzSeFOuts}= (e.g., in your OZRC init file)
+
+ - Added to SDistro: SearchOneDepth
  - SDistro: Revised documentation for MakeSearchScript, removed MakeFDDistribution as exported value -- the solvers provided by SDistro are more convenient to use
  [TODO: Check where MakeFDDistribution is used in examples]
 
