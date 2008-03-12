@@ -35,6 +35,8 @@ Strasheela uses the multi-paradigm programming language Oz as its user-interface
 * Contributed Mozart Packages 
 
   [[http://www.mozart-oz.org/mogul/info/duchier/select.html][Select]] -- selection constraints for finite domains and for finite sets.
+  
+  [[http://www.mozart-oz.org/mogul/doc/tack/iozsef/iozsef.html][IOzSeF]] -- a toolbox for building custom search engines, which also provides many ready-made search engines. 
 
   [[http://home.gna.org/xrilpoz/][XRI and LP]] -- a constraint system over real numbers and a linear programming solver.
 
