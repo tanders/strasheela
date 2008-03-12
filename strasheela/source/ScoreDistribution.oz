@@ -418,47 +418,53 @@ define
        OrderP}
    end
 
-   /** %% Calls IOzSeF.init with a script created by MakeSearchScript. It opens the IOzSeF 'explorer' without starting any search. This variant of the Explorer provides additional features (e.g., support for more forms of recomputation, and various search strategies). It requires an installation of IOzSeF, see http://www.mozart-oz.org/mogul/doc/tack/iozsef/iozsef.html. The meaning of the arguments are the same as for MakeSearchScript.
-   %%
-   %% NB: IOzSeF support is unfinished. No score output functionality is presently provided. 
-   %% */
-   %%
-   %% IOzSeF.getSolutions: Returns the solutions found so far during interactive exploration
-   %% IOzSeF.cancelExploration:	Cancels the current interactive exploration.
+
    proc {IozsefInit ScoreScript Args}
       {IOzSeF.init {MakeSearchScript ScoreScript Args}}
    end
+   /** %% Calls IOzSeF.init/IOzSeF.initBest with a script created by MakeSearchScript. It opens the IOzSeF 'Explorer' without starting any search. Best solution is performed with respect to OrderP (a binary procedure).  This variant of the Explorer provides additional features (e.g., support for more forms of recomputation, and various search strategies). It requires an installation of IOzSeF, see http://www.mozart-oz.org/mogul/doc/tack/iozsef/iozsef.html. The meaning of the arguments are the same as for MakeSearchScript.
+   %%
+   %% Please see the IOzSeF documentation for more information. Note the following procedures 
+   %% - IOzSeF.getSolutions: Returns the solutions found so far during interactive exploration
+   %% - IOzSeF.cancelExploration: Cancels the current interactive exploration.
+   %% */
+   %%
    proc {IozsefInitBest ScoreScript OrderP Args}
       {IOzSeF.initBest {MakeSearchScript ScoreScript Args} OrderP}
    end
-   /** %% Calls IOzSeF.exploreOne with a script created by MakeSearchScript. This variant of the Explorer provides additional features (e.g., support for more forms of recomputation, and various search strategies). It requires an installation of IOzSeF, see http://www.mozart-oz.org/mogul/doc/tack/iozsef/iozsef.html. The meaning of the arguments are the same as for MakeSearchScript.
-   %%
-   %% NB: IOzSeF support is unfinished. No score output functionality is presently provided. 
-   %% */
-   %%
-   %% IOzSeF.getSolutions: Returns the solutions found so far during interactive exploration
-   %% IOzSeF.cancelExploration:	Cancels the current interactive exploration.
+   
    proc {IozsefExploreOne ScoreScript Args}
       {IOzSeF.exploreOne {MakeSearchScript ScoreScript Args}}
    end
    proc {IozsefExploreAll ScoreScript Args}
       {IOzSeF.exploreAll {MakeSearchScript ScoreScript Args}}
    end
+   /** %% Calls IOzSeF.exploreOne/IOzSeF.exploreAll/IOzSeF.exploreBest with a script created by MakeSearchScript. Best solution is performed with respect to OrderP (a binary procedure). This variant of the Explorer provides additional features (e.g., support for more forms of recomputation, and various search strategies). It requires an installation of IOzSeF, see http://www.mozart-oz.org/mogul/doc/tack/iozsef/iozsef.html. The meaning of the arguments are the same as for MakeSearchScript.
+   %%
+   %% Please see the IOzSeF documentation for more information. Note the following procedures 
+   %% - IOzSeF.getSolutions: Returns the solutions found so far during interactive exploration
+   %% - IOzSeF.cancelExploration: Cancels the current interactive exploration.
+   %% */
    proc {IozsefExploreBest ScoreScript OrderP Args}
       {IOzSeF.exploreBest {MakeSearchScript ScoreScript Args} OrderP}
-   end   
-   %% IOzSeF.cancelSearch: Cancels the current non-interactive search.
-   %% IOzSeF.setOption(Key Value) sets options like explorationStrat (dfs,bdfs,id,lds), noOfSols (0,...), recompStrat (plain,fixed,adaptive), mrd (0,...)
-   %% IOzSeF.getTime
-   %% 
-   %% NB: no kill proc is supported -- should I instead define my own solvers?
-   %% NB: it appears only a single search can be executed at one time. This is sufficient for most cases, but why this restriction?
+   end
+   
    proc {IozsefSearchOne ScoreScript Args}
       {IOzSeF.searchOne {MakeSearchScript ScoreScript Args}}
    end
    proc {IozsefSearchAll ScoreScript Args}
       {IOzSeF.searchAll {MakeSearchScript ScoreScript Args}}
    end
+   /** %% Calls IOzSeF.searchOne/IOzSeF.searchAll/IOzSeF.searchBest with a script created by MakeSearchScript. Best solution is performed with respect to OrderP (a binary procedure). It requires an installation of IOzSeF, see http://www.mozart-oz.org/mogul/doc/tack/iozsef/iozsef.html. The meaning of the arguments are the same as for MakeSearchScript.
+   %%
+   %% Please see the IOzSeF documentation for more information. Note the following procedures 
+   %% - IOzSeF.cancelSearch: Cancels the current non-interactive search.
+   %% - IOzSeF.setOption(Key Value) sets options like explorationStrat (dfs,bdfs,id,lds), noOfSols (0,...), recompStrat (plain,fixed,adaptive), mrd (0,...)
+   %% - IOzSeF.getTime
+   %% */
+   %% 
+   %% NB: no kill proc is supported -- should I instead define my own solvers?
+   %% NB: it appears only a single search can be executed at one time. This is sufficient for most cases, but why this restriction?
    proc {IozsefSearchBest ScoreScript OrderP Args}
       {IOzSeF.searchBest {MakeSearchScript ScoreScript Args} OrderP}
    end
