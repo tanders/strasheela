@@ -451,6 +451,44 @@ See ../../testing/zy_Efficiency/KeepMusicRepresentationOutsideComputationalSpace
 
 
 
+* Strasheela Bugs
+
+** ScoreInspector hangs on determined FS vars
+
+   More specifically, a newly created Inspector object without any further
+   configuration hangs on inspecting determined FS variables, whereas other values and undetermined FS variables work fine. 
+
+declare
+InspectorObject = {Inspector.new unit}
+
+%% hangs
+{InspectorObject inspect({FS.value.make [1 2 3]})}
+
+%% works fine
+{InspectorObject inspect({FS.var.decl})}
+{InspectorObject inspect(foo)}
+
+
+  It seems this is only a problem on Mac OS, On Mar 12, 2008, at 4:31
+  PM, Robert Van Dam reported on users@mozart-oz.org that the problem
+  above works fine on Linux.
+
+
+*** TODO Check whether I can fix problem of Inspector.new itself without too much hassle 
+
+    [[file:~/oz/mozart/trunk/mozart/share/tools/inspector/InspectorMain.oz::fun%20NewInspector%20Options][file:~/oz/mozart/trunk/mozart/share/tools/inspector/InspectorMain.oz::fun NewInspector Options]]
+
+*** TODO Check whether I can/should configure default inspector instead of creating a new object
+
+    [[file:~/oz/music/Strasheela/strasheela/trunk/strasheela/contributions/anders/ScoreInspector/ScoreInspector.oz::proc%20ApplyMyConfiguration%20MyInspector][file:~/oz/music/Strasheela/strasheela/trunk/strasheela/contributions/anders/ScoreInspector/ScoreInspector.oz::proc ApplyMyConfiguration MyInspector]]
+
+
+*** TODO Decide whether costomised Inspector should be Strasheela default
+
+    If not, then adopt OZRC templates and Tutorial accordingly.
+
+
+
 * Collecting new ideas
 
 ** Lesen XMG literature							 :@READ:
@@ -523,45 +561,6 @@ See ../../testing/zy_Efficiency/KeepMusicRepresentationOutsideComputationalSpace
 **** Inform Oz mailing list
 
      Also, ask whether this is a suitable means for writing tests for the standard lib
-
-** Oz Path							   :@NET:URGENT:
-
-*** DONE svn update my mozart
-    CLOSED: [2008-03-05 Wed 17:36]
-
-*** TODO Incorporate my changes (see my tmp Strasheela functor) into Mozart Path functor
-
-When finished commit these changes. 
-
-Possibly, I do step-by-step commits -- but only if this does not complicate matters
-
-
-*** TODO Oz Path: test cases
-
-Decision: do simple solution: add a test file close to either Path source or its doc source
-Then report it on the Oz mailing list with request for improvement if necessary. 
-Also, somewhere in source code (and doc??) put pointer to test file. 
-
----- 
-
-Thinking process:  
-
-There is no test suite yet for the Mozart standard library
-
-Simple solution: add a test file close to either Path source or its doc source
-
-Better but much mroe complex solution: check how test suite is done for Mozart base system and do something similar. 
-I probably need to specify test cases then with expected output -- how complex is that, as I don't know file system of computer on which test suite is run 
-
-Problem: I must fully understand how test suite is run for base system
-Problem: should that be called automatically when certain tests are executed? Where is that called 
-
-
-*** Update Path doc 
-
-Edit the SGML files for Path functor (see comments in my tmp Strasheela functor)
-
-
 
 
 ** Collozeum
