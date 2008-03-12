@@ -8,7 +8,30 @@
 
 
 %%
-%% TODO
+%% BUG:
+%%
+%% Inspecting determined FS vars does not work with ScoreInspector. 
+%%
+%% When creating a new Inspector object, even without any further
+%% configuration, inspecting determined variables hangs.
+%%
+%% This seems to be a Mac OS problem (not on Linux).
+/*
+declare
+InspectorObject = {Inspector.new unit}
+
+%% hangs
+{InspectorObject inspect({FS.value.make [1 2 3]})}
+
+%% works fine
+{InspectorObject inspect({FS.var.decl})}
+{InspectorObject inspect(foo)}
+*/
+
+
+
+%%
+%% TODO:
 %%
 %% * output actions (context menu)
 %%
@@ -62,6 +85,9 @@ export
    object: InspectorObject
 
    new: Inspector_New
+
+   %% tmp
+%   ApplyMyConfiguration
    
 define
 
