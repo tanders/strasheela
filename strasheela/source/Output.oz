@@ -99,6 +99,15 @@ define
 
    /** %% Writes/overwrites Output (a virtual string) to file at Path.
    %% */
+   %% TODO: 
+   %% !! how to ensure that {File close} is called, ie. how to
+   %% 'unwind-protect'
+   /*
+   try  
+      {Process F}
+   catch X then {Browse '** '#X#' **'}  
+   finally {CloseFile F} end
+   */
    proc {WriteToFile Output Path}
       File = {New Open.file  
 	      init(name: Path
@@ -108,8 +117,6 @@ define
    in
       {System.showInfo "writing to "#Path}
       {File write(vs:Output)}
-      %% !! how to ensure that {File close} is called, ie. how to
-      %% 'unwind-protect'
       {File close}
    end
    /** %% Reads the content of the text file at Path and returns it as string.
