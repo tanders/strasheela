@@ -118,7 +118,7 @@ export
    UnequalParameter UnequalParameterR NeighboursWithUnequalParameter
    Distinct DistinctR DistinctNeighbours
    PairwiseDistinct ButNDistinct DistinctForN
-   CommonPCs CommonPCsR NeighboursWithCommonPCs 
+   CommonPCs CommonPCs_Card CommonPCsR NeighboursWithCommonPCs 
    ParameterDistance ParameterDistanceR LimitParameterDistanceOfNeighbours
 
    %% melodic rules
@@ -224,10 +224,8 @@ define
 
 
    /** %% Constraints the chords/scales X and Y to have at least 1 common pitch class.
-   %% NB: The constraint introduces auxilary variables which possibly remain undetermined in the solution. 
    %% */
    proc {CommonPCs X Y}
-      %% !! HarmBand and HarmBandWidth remain possibly undetermined in the solution
       PC1 = {X getPitchClasses($)}
       PC2 = {Y getPitchClasses($)}
       HarmBand = {FS.var.decl}
@@ -236,18 +234,24 @@ define
       HarmBandWidth >: 0 
       {FS.intersect PC1 PC2 HarmBand}
    end
-   /** %% Reified version of CommonPCs: B=1 <-> chords/scales X and Y have at least 1 common pitch class.
-   %% NB: The constraint introduces auxilary variables which possibly remain undetermined in the solution. 
+
+   
+   /** %% N (an FD int) is the cardiality of the set of common pitch classes between the chords/scales X and Y.
    %% */
-   proc {CommonPCsR X Y B}
-      %% !! HarmBand and HarmBandWidth remain possibly undetermined in the solution
+   proc {CommonPCs_Card X Y N}
       PC1 = {X getPitchClasses($)}
       PC2 = {Y getPitchClasses($)}
       HarmBand = {FS.var.decl}
-      HarmBandWidth = {FS.card HarmBand}
    in
+      N = {FS.card HarmBand}
       {FS.intersect PC1 PC2 HarmBand}
-      B = {FD.decl}		% ?? needed?
+   end
+   
+   /** %% Reified version of CommonPCs: B=1 <-> chords/scales X and Y have at least 1 common pitch class. 
+   %% */
+   proc {CommonPCsR X Y B}
+      HarmBandWidth = {CommonPCs_Card X Y}
+   in
       B =: (HarmBandWidth >: 0) 
    end
    /** %% Each successive chord/scale pair in list Xs has at least 1 common pitch class.
@@ -512,12 +516,11 @@ define
    %%
    %% TODO:  
    %%
-   %% Strength of 'harmonic step' (Schoenberg's concept, Harmonielehre p.134ff, p. 144 Zsfassung):
+   %% Strength of 'harmonic step' (Schoenberg's concept, Harmonielehre p. 134ff, p. 144 Zsfassung):
    %% - strong / ascending (root of predecessor is non-root pitchclass in successor). Schoenberg differs strong steps further: the less common pitch classes the stronger (V I is stronger than III I). 
    %% - weak / descending (non-root PC of predecessor is root of successor). Again, the more common pitch classes the weaker.
    %% - superstrong (ueberspringend) (no common pitchclasses between two neighbouring chords).  ueberspringend steps requires [besonderen Anlass]
-   %%   What about case where root of successor is no pitchclass in predecessor, but root of predecessor is not contained in successor either -- superstrong case
-   %%   Any other case missed?
+   %% Omitted case: chord repetition or two different chords with same root -- it seems Schoenberg disallows this progression implicitly altogether. Still, in rare cases, this can be a strong progression.
    %%
    %% Schoenberg recommends preference for strong progressions (i.e. avoid weak if you don't know what you are doing), and also [Abwechslung] of the degree of strength (i.e. no mechanical repetition of specific step). Paraphrasing: On a higher level, repetition and [abwechslung] should create form.
    %% Should rating based on number of common chord tones abstract from total chord tone number (e.g. divide by chord tone number -- always multiply by, say, 100, to map float into int)?
