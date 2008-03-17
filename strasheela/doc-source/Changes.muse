@@ -13,6 +13,8 @@
    - Added to SDistro: IozsefInit, IozsefInitBest, IozsefExploreOne, IozsefExploreAll, IozsefExploreBest, IozsefSearchOne, IozsefSearchAll, IozsefSearchBest 
    - You can enable score output information actions for the IOzSeF 'Explorer' by calling ={Init.addIOzSeFOuts}= (e.g., in your OZRC init file)
 
+ - Added LUtils.concurrentFilter: why important .. ?
+
  - Added to SDistro: SearchOneDepth
  - SDistro: Revised documentation for MakeSearchScript, removed MakeFDDistribution as exported value -- the solvers provided by SDistro are more convenient to use
  [TODO: Check where MakeFDDistribution is used in examples]
