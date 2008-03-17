@@ -76,7 +76,8 @@ export
    HowManyAs
    HowMany Once
    ForN ForPercent NDifferences ForNEither
-   AllTrue AllTrueR OneTrue OneTrueR SomeTrue SomeTrueR HowManyTrue HowManyTrueR
+   AllTrue AllTrueR OneTrue OneTrueR SomeTrue SomeTrueR
+   HowManyTrue HowManyTrueR PercentTrue
    WhichTrue
    SymbolToDirection DirectionToSymbol
    Direction DirectionR Contour InverseContour ContourMatrix
@@ -568,16 +569,35 @@ define
       B = {FD.reified.sum Bs '>:' 0}
    end
 
-   /** %% Bs is a list of 0/1 integers (not implicitly declared) and N is a FD int: N elements in Bs are true (i.e. 1).
+   /** %% Bs is a list of 0/1 integers (not implicitly declared) and N is a FD int (implicitly declared): N elements in Bs are true (i.e. 1).
    %% */
    proc {HowManyTrue Bs N}
+      N = {FD.decl}
       {FD.sum Bs '=:' N}
    end
    /** %% Reified version of HowManyTrue.
    %% */
    proc {HowManyTrueR Bs N B}
+      N = {FD.decl}
       B = {FD.reified.sum Bs '=:' N}
    end
+
+   /** %% Bs is a list of 0/1 integers (not implicitly declared) and Percent is a FD int: Percent % elements in Bs are true (i.e. 1).
+   %% NOTE: Percent is rounded to integer value -- complementary percent values don't necessarily sum up to exactly 100 (e.g., 1/3 corresponds to 33 percent and 2/3 to 66 percent). Also, there is only a single solution for Percent for a specific determined list Bs (e.g., Bs = [1 1 0] <-> Percent = 66; Percent = 65 causes fail in this case).
+   %% Summary: PercentTrue is highly restricted for defining soft of probabilistic CSPs -- I would need true soft multiplication and division propagators instead.
+   %% */
+   %% implements: Percent / 100 = N / L 
+   proc {PercentTrue Bs Percent}
+      L = {Length Bs}
+      N = {HowManyTrue Bs}
+      Aux = {FD.decl}   
+   in
+      Percent = {FD.int 0#100}
+      %% Percent = N * 100 / L 
+      Aux =: N * 100
+      Percent = {FD.divI Aux L}
+   end
+
    
    /** %% WhichTrue constraints the Ith element in Bs to be true. Bs is a list of 0/1 integers and  I is a FD int. Only a single element of Bs is true (i.e. 1).
    %% */

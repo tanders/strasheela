@@ -1381,3 +1381,44 @@ Xs = [5 1 1 1 1 1 1 1 1 3]
 % -> [[a b] [c d] [e f]].
 
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%% Pattern.percentTrue
+%%
+
+
+declare
+Bs = [1 1 0 0 0 0]
+X 
+{Browse X}
+
+{Pattern.percentTrue Bs X}
+% X = 33
+
+%%%%
+
+declare
+%% find all Bs of length N with Percent elements 1, remaining 0
+fun {Test N Percent}
+   {SearchAll
+    proc {$ Bs}
+       Bs = {FD.list N 0#1}
+       {Pattern.percentTrue Bs Percent}
+       %%
+       {FD.distribute ff Bs}
+    end}
+end
+
+%%
+%% given Percent value must exactly fit N, otherwise no solution
+%% -> this is unsuitable for a Markov chain def, instead I would need soft constraints
+%%
+
+{Browse {Test 6 33}}
+
+{Browse {Test 5 33}}
+%% nil
+
+{Browse {Test 6 34}}
+%% nil
+
