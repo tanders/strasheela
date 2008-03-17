@@ -27,9 +27,13 @@
 
 * Strasheela design						    :STRASHEELA:
 
-** Markov chain constraints which include probablilty			  :NEXT:
 
-*** TODO Recapitulate my simple Markov chain constraint
+** Markov chain constraints which include probablilty		     :NEXT:WAIT:
+
+   Wait for soft constraints support for Strasheela
+   (I realised: this is not so simple: I first need support of _real_ soft constraints)
+
+*** Recapitulate my simple Markov chain constraint
     
     MarkovChain, MarkovChain_1
     [[file:~/oz/music/Strasheela/strasheela/trunk/strasheela/contributions/anders/Pattern/Pattern.oz::proc%20MarkovChain%20Xs%20Decl][file:~/oz/music/Strasheela/strasheela/trunk/strasheela/contributions/anders/Pattern/Pattern.oz::proc MarkovChain Xs Decl]]
@@ -38,6 +42,8 @@
 
     ?? Use name MarkovChain for new constraint and give old defs
     MarkovChain, MarkovChain_1 a new name
+
+
 
 
 ** Add support for Real Interval constraints 
@@ -137,11 +143,22 @@ configure: error: ozinstall not found
 
 ** Introduce some generalised concept of resolution of dissonances
 
-*** TODO Extend chord music representation: which chord degrees are dissonant?
+*** Extend chord music representation: which chord notes are dissonant?
 
-    Which pitch classes are dissonant is expressed in database with chord degrees
+**** DONE Edit default database: which pitch classes are dissonant?
+     CLOSED: [2008-03-17 Mon 12:52]
+     
+**** TODO Extend chord music representation (as mixin)
 
-    Constraint method isDissonantChordNote(PitchClass B): tests whether PitchClass (or scale degree?) is specified to be dissonant in chord database
+     Chord representation similar to representation of chord pitch
+     classes: dissoance PCs in database, transposed by transposition
+     param
+
+**** TODO Extend note music representation (as mixin)
+
+     Constraint method isDissonantChordNote(PitchClass B): tests
+     whether PitchClass (or scale degree?) is specified to be
+     dissonant in related chord
 
 
 *** TODO Define constraint {IsDissonanceR MyPitchClass B}
@@ -152,20 +169,25 @@ configure: error: ozinstall not found
 
     Where? In HS.rules?
 
+*** TODO Define abstraction similar to {DissonanceResolvedR MyNote ResolveConditions} 
 
-*** Rule ideas for resolving dissonances
+    For ideas cf. meth nonChordPCConditions(Conditions)
+    [[file:~/oz/music/Strasheela/strasheela/trunk/strasheela/contributions/anders/HarmonisedScore/source/Score.oz::meth%20nonChordPCConditions%20Conditions][file:~/oz/music/Strasheela/strasheela/trunk/strasheela/contributions/anders/HarmonisedScore/source/Score.oz::meth nonChordPCConditions Conditions]]
 
-    Direct resolution: 
 
-    Strict case: next melodic note has pitch class one
-    semitone/wholetone below dissonant pitch class, which is consonant
-    
-    
-    Less strict case: next melodic note has consonant pitch class which
-    is at maximum a wholetone above or below the dissonant pitch class
-    (also pitch repetition is permitted)
+**** Rule ideas for resolving dissonances
 
-    Indirect resolution: 
+     Direct resolution: 
+
+     Strict case: next melodic note has pitch class one
+     semitone/wholetone below dissonant pitch class, which is consonant
+     
+     
+     Less strict case: next melodic note has consonant pitch class which
+     is at maximum a wholetone above or below the dissonant pitch class
+     (also pitch repetition is permitted)
+
+     Indirect resolution: 
 
 
 
@@ -190,22 +212,35 @@ configure: error: ozinstall not found
 
 
 
-** Harmonic constraint ProgressionStrength				  :SOON:
+** Harmonic constraint ProgressionStrength				  :NEXT:
 
-   see [[file://~/oz/music/Strasheela/strasheela/trunk/strasheela/contributions/anders/HarmonisedScore/source/Rules.oz::]]
+   see [[file:~/oz/music/Strasheela/tmp.oz::functor%20SchoenbergF][file:~/oz/music/Strasheela/tmp.oz::functor SchoenbergF]]
 
-*** TODO Implement constraint for strong, weak and superstrong
+*** TODO Move definitions from Strasheela/tmp.oz into HS.rules 
+    
+    As subfunctor?
+
+*** DONE Implement constraint for strong, weak and superstrong
+    CLOSED: [2008-03-17 Mon 14:03]
 
     As reified constraints?
 
-*** TODO Combine these constraints to single rating
+*** DONE Combine these constraints to single rating
+    CLOSED: [2008-03-17 Mon 14:03]
 
     With reified constraints?
 
-*** Combine this single rating with secondary rating based on number of common pitch classes 
+*** DONE Combine this single rating with secondary rating based on number of common pitch classes 
+    CLOSED: [2008-03-17 Mon 14:04]
+
+    
+*** TODO Write test suite for testing all constraints 
+*** TODO Implement Schoenbergs orig defs				 :MAYBE:
+
+    Based on root PC intervals 
 
 *** Create example(s)
-*** Create Documentation						  
+*** Create Documentation [70%]						  
 
 
 ** Morphology analysis constraints					  :NEXT:
@@ -214,16 +249,19 @@ configure: error: ozinstall not found
 
 *** 'whole FD numbers' (i.e. support of neg numbers)
 
-**** Integrate into Strasheela 
+**** TODO Integrate 'whole FD numbers' into Strasheela 
      
      ?? As contribution into contribution/anders?
 
-**** [50%] Test all constraints of functor Whole 
+**** TODO [50%] Test all constraints of functor Whole 
 
      See [[file:~/oz/music/Strasheela/private/WorkInProgress/Morphology/WholeNumbers.oz::functor%20WholeF][file:~/oz/music/Strasheela/private/WorkInProgress/Morphology/WholeNumbers.oz::functor WholeF]]
 
 
-*** NewOld_Analysis as constraint 
+*** TODO Finish implementation: NewOld_Analysis as constraint 
+
+    (deterministic implementation first?)
+
 *** Energy profile
 
 *** Extend: add support of FD lists as values for constrast constraint
@@ -281,11 +319,33 @@ configure: error: ozinstall not found
     Transform with toInitRecord and then pickle with Score.saveScore
 
 
-** [#A] optimal solution for CSPs with soft constraints
+** CSPs with soft constraints 						  :NEXT:
+   
+   How can I model soft constraints with the means available in Oz, e.g.,
+   - reified constraints
+   - best solution search (BAB)
 
-   Design CSP template / abstractions with which I can model soft constraints by reified constraints and rate them in importance. A best-solution-search will find an optimal solution 
+*** Read literature on soft constraints					 :@READ:
 
-*** TODO Brainstorm: how can I collect goodness-measurement for all soft constraints and combine them
+**** TODO [#A] Read soft constraints article in "Handbook of Constraint Programming"
+**** DONE Read Bartak soft constraints survey
+     CLOSED: [2008-03-17 Mon 18:33]
+
+
+**** DONE Skim "Constraint Satisfaction with Preferences" 
+     CLOSED: [2008-03-17 Mon 18:45]
+
+@PHDTHESIS{Ru:thesis01,
+        TITLE = {{Constraint Satisfaction with Preferences}},
+        AUTHOR = "Hana Rudov{\'a}",
+        SCHOOL = {Faculty of Informatics, Masaryk University},
+        YEAR = 2001,
+        OPTURL = "http://www.fi.muni.cz/~hanka/phd.html",
+  OPTcomment = {survey on soft constraint approaches},
+  OPTpath = {programming/constraints/Rudova-phd.pdf},
+  OPTnote = 	 {},
+  OPTannote = 	 {file InMyLib}
+}
 
 
 ** Update Lilypond output 
@@ -304,16 +364,21 @@ configure: error: ozinstall not found
 
 ** Refactoring 
 
-*** [#A] Concurrent procedure/method filter (filterThreaded) which does return stream instead of list
+*** Concurrent procedure/method filter (filterThreaded) which does return stream instead of list :NEXT:
 
     as soon as enough information is available on specific score
     object to fulfull given test function, add it to stream. Close
     stream as soon as it is known that no further elements will be
     added.
 
-**** TODO Synchronise Strasheela on MBP and Office Mac			:URGENT:
+**** TODO [#A] Create small-scale musical example which demonstrates the effect of LUtils.cFilter and LUtils.cFind
 
-     SVN commit changes on Office Mac, so I can update the MBP accordingly
+     map(filter(getAllNotes(myScore), isOnStrongBeat), 
+       f : f(n) := getPitchClass(n) \in getPitchClassSet(find(getChordProgression(myScore), 
+                                                              g : g(c) := isSimultaneous(n, c))))
+
+     see LUtils-test.oz for a LUtils.cFilter and LUtils.cFind test
+
 
 **** More Info
 
@@ -329,30 +394,6 @@ configure: error: ozinstall not found
 
      A method filterThreaded would further improve the application of delayed constraints where filtering tests used reified constraints 
      E.g., I could use a method filterThreaded for a better definition of getSimultaneousItems
-
-    
-**** Define ConcurrentFind
-
-     see draft at [[file:~/oz/music/Strasheela/tmp.oz::proc%20ConcurrentFind%20Xs%20F%20Result][file:~/oz/music/Strasheela/tmp.oz::proc ConcurrentFind Xs F Result]]
-
-***** TODO Reply mail to raph and Jorge					:URGENT:
-
-**** TODO Create small-scale musical example which demonstrates the effect of LUtils.concurrentFilter
-
-     map(filter(getAllNotes(myScore), isOnStrongBeat), 
-       f : f(n) := getPitchClass(n) \in getPitchClassSet(find(getChordProgression(myScore), 
-                                                              g : g(c) := isSimultaneous(n, c))))
-
-     see LUtils-test.oz for a LUtils.concurrentFilter test
-
-**** DONE Read plain Filter definition: how can it be made into the concurrent version
-     CLOSED: [2008-03-14 Fri 11:43]
-**** DONE Define ConcurrentFilter as proc
-     CLOSED: [2008-03-14 Fri 11:44]
-
-     see LUtils.concurrentFilter
-
-**** 
 
 
 ** Efficiency
@@ -472,17 +513,21 @@ InspectorObject = {Inspector.new unit}
   PM, Robert Van Dam reported on users@mozart-oz.org that the problem
   above works fine on Linux.
 
+*** TODO Check: which platform is affected
 
-*** TODO Check whether I can fix problem of Inspector.new itself without too much hassle 
+    Is this only a MacOS issue?
+    
+
+*** Check whether I can fix problem of Inspector.new itself without too much hassle 
 
     [[file:~/oz/mozart/trunk/mozart/share/tools/inspector/InspectorMain.oz::fun%20NewInspector%20Options][file:~/oz/mozart/trunk/mozart/share/tools/inspector/InspectorMain.oz::fun NewInspector Options]]
 
-*** TODO Check whether I can/should configure default inspector instead of creating a new object
+*** Check whether I can/should configure default inspector instead of creating a new object
 
     [[file:~/oz/music/Strasheela/strasheela/trunk/strasheela/contributions/anders/ScoreInspector/ScoreInspector.oz::proc%20ApplyMyConfiguration%20MyInspector][file:~/oz/music/Strasheela/strasheela/trunk/strasheela/contributions/anders/ScoreInspector/ScoreInspector.oz::proc ApplyMyConfiguration MyInspector]]
 
 
-*** TODO Decide whether costomised Inspector should be Strasheela default
+*** Decide whether costomised Inspector should be Strasheela default
 
     If not, then adopt OZRC templates and Tutorial accordingly.
 
@@ -571,11 +616,13 @@ InspectorObject = {Inspector.new unit}
 
 ** OPI:  
 
-*** Emacs TAGS for Oz and Strasheela 
+*** Emacs TAGS for Oz and Strasheela					 :MAYBE:
 
-this does already work in principle, but I need 'to prefix' the functor variable before each TAGS entry
+    Better wait for Code navigation tool from Wolfgang Meyer
 
-[[file:~/oz/music/Strasheela/strasheela/trunk/strasheela/scripts/generate-TAGS.sh::fun%20Foo%20Foo56%201566][file:~/oz/music/Strasheela/strasheela/trunk/strasheela/scripts/generate-TAGS.sh::fun Foo Foo56 1566]]
+    this does already work in principle, but I need 'to prefix' the functor variable before each TAGS entry
+    
+    [[file:~/oz/music/Strasheela/strasheela/trunk/strasheela/scripts/generate-TAGS.sh::fun%20Foo%20Foo56%201566][file:~/oz/music/Strasheela/strasheela/trunk/strasheela/scripts/generate-TAGS.sh::fun Foo Foo56 1566]]
 
 
 

@@ -1,0 +1,135 @@
+#    -*- mode: org -*-
+
+
+Archived entries from file /Users/tanders/oz/music/Strasheela/strasheela/trunk/strasheela/others/TODO/Strasheela-TODO.org
+
+* DONE Oz Path							   :@NET:URGENT:
+  CLOSED: [2008-03-10 Mon 17:38]
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2008-03-10 Mon 17:38
+  :ARCHIVE_FILE: ~/oz/music/Strasheela/strasheela/trunk/strasheela/others/TODO/Strasheela-TODO.org
+  :ARCHIVE_OLPATH: General Oz todo
+  :ARCHIVE_CATEGORY: Strasheela-TODO
+  :ARCHIVE_TODO: DONE
+  :ARCHIVE_ITAGS: OZ
+  :END:
+
+** DONE svn update my mozart
+   CLOSED: [2008-03-10 Mon 17:38]
+
+** DONE Incorporate my changes (see my tmp Strasheela functor) into Mozart Path functor
+    CLOSED: [2008-03-10 Mon 17:38]
+
+When finished commit these changes. 
+
+Possibly, I do step-by-step commits -- but only if this does not complicate matters
+
+
+** DONE Update Path doc 
+    CLOSED: [2008-03-10 Mon 17:38]
+
+Edit the SGML files for Path functor (see comments in my tmp Strasheela functor)
+
+
+** DONE Oz Path: test cases
+    CLOSED: [2008-03-10 Mon 17:38]
+
+Decision: do simple solution: add a test file close to either Path source or its doc source
+Then report it on the Oz mailing list with request for improvement if necessary. 
+Also, somewhere in source code (and doc??) put pointer to test file. 
+
+---- 
+
+Thinking process:  
+
+There is no test suite yet for the Mozart standard library
+
+Simple solution: add a test file close to either Path source or its doc source
+
+Better but much mroe complex solution: check how test suite is done for Mozart base system and do something similar. 
+I probably need to specify test cases then with expected output -- how complex is that, as I don't know file system of computer on which test suite is run 
+
+Problem: I must fully understand how test suite is run for base system
+Problem: should that be called automatically when certain tests are executed? Where is that called 
+
+    
+* DONE Define ConcurrentFind
+  CLOSED: [2008-03-17 Mon 12:48]
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2008-03-17 Mon 12:49
+  :ARCHIVE_FILE: ~/oz/music/Strasheela/strasheela/trunk/strasheela/others/TODO/Strasheela-TODO.org
+  :ARCHIVE_OLPATH: Strasheela design/Refactoring/Concurrent procedure/method filter (filterThreaded) which does return stream instead of list
+  :ARCHIVE_CATEGORY: Strasheela
+  :ARCHIVE_TODO: DONE
+  :ARCHIVE_ITAGS: STRASHEELA
+  :END:
+
+  see draft at [[file:~/oz/music/Strasheela/tmp.oz::proc%20ConcurrentFind%20Xs%20F%20Result][file:~/oz/music/Strasheela/tmp.oz::proc ConcurrentFind Xs F Result]]
+
+** DONE Reply mail to raph and Jorge					:URGENT:
+   CLOSED: [2008-03-17 Mon 12:26]
+
+* DONE Read plain Filter definition: how can it be made into the concurrent version
+  CLOSED: [2008-03-14 Fri 11:43]
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2008-03-17 Mon 12:49
+  :ARCHIVE_FILE: ~/oz/music/Strasheela/strasheela/trunk/strasheela/others/TODO/Strasheela-TODO.org
+  :ARCHIVE_OLPATH: Strasheela design/Refactoring/Concurrent procedure/method filter (filterThreaded) which does return stream instead of list
+  :ARCHIVE_CATEGORY: Strasheela
+  :ARCHIVE_TODO: DONE
+  :ARCHIVE_ITAGS: STRASHEELA
+  :END:
+* DONE Define ConcurrentFilter as proc
+  CLOSED: [2008-03-14 Fri 11:44]
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2008-03-17 Mon 12:49
+  :ARCHIVE_FILE: ~/oz/music/Strasheela/strasheela/trunk/strasheela/others/TODO/Strasheela-TODO.org
+  :ARCHIVE_OLPATH: Strasheela design/Refactoring/Concurrent procedure/method filter (filterThreaded) which does return stream instead of list
+  :ARCHIVE_CATEGORY: Strasheela
+  :ARCHIVE_TODO: DONE
+  :ARCHIVE_ITAGS: STRASHEELA
+  :END:
+
+  see LUtils.concurrentFilter
+    
+* DONE Add solver interfaces to SDistro
+  CLOSED: [2008-03-17 Mon 12:50]
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2008-03-17 Mon 12:50
+  :ARCHIVE_FILE: ~/oz/music/Strasheela/strasheela/trunk/strasheela/others/TODO/Strasheela-TODO.org
+  :ARCHIVE_OLPATH: Strasheela design/Efficiency/support IOzSeF solver
+  :ARCHIVE_CATEGORY: Strasheela
+  :ARCHIVE_TODO: DONE
+  :ARCHIVE_ITAGS: STRASHEELA NEXT
+  :END:
+
+  already finished??
+
+* DONE Define score output for IOzSeF
+  CLOSED: [2008-03-17 Mon 12:50]
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2008-03-17 Mon 12:50
+  :ARCHIVE_FILE: ~/oz/music/Strasheela/strasheela/trunk/strasheela/others/TODO/Strasheela-TODO.org
+  :ARCHIVE_OLPATH: Strasheela design/Efficiency/support IOzSeF solver
+  :ARCHIVE_CATEGORY: Strasheela
+  :ARCHIVE_TODO: DONE
+  :ARCHIVE_ITAGS: STRASHEELA NEXT
+  :END:
+
+** TODO Compare doc of Explorer and IOzSeF how info actions are defined
+
+  with IOzSeF.addInformationAction(NameAtom root Action)
+  Action is a unary procedure expecting root (i.e. score object) as arg
+  see doc
+  
+** TODO Port Explorer info actions to IOzSeF
+
+   Possibly generalise so that these actions are only defined once
+   ... I figure that generalisation is easy 
+
+
+
+
+
+
+
