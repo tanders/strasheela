@@ -311,6 +311,10 @@ configure: error: ozinstall not found
     stream as soon as it is known that no further elements will be
     added.
 
+**** TODO Synchronise Strasheela on MBP and Office Mac			:URGENT:
+
+     SVN commit changes on Office Mac, so I can update the MBP accordingly
+
 **** More Info
 
      NOTE: this matter could make it into a publication (part of a publication)! 
@@ -352,32 +356,8 @@ configure: error: ozinstall not found
 
 
 ** Efficiency
-
-# <<RandomDistribution>> 
-
-*** [#A] support IOzSeF solver						  :NEXT:
-
-    http://www.mozart-oz.org/mogul/doc/tack/iozsef/iozsef.html
-    
-**** TODO Add solver interfaces to SDistro
-
-     already finished??
-    
-**** Define score output for IOzSeF
-
-***** TODO Compare doc of Explorer and IOzSeF how info actions are defined
-
-     with IOzSeF.addInformationAction(NameAtom root Action)
-     Action is a unary procedure expecting root (i.e. score object) as arg
-     see doc
-     
-***** TODO Port Explorer info actions to IOzSeF
-
-      Possibly generalise so that these actions are only defined once
-      ... I figure that generalisation is easy 
-
-
-*** [#A] check out performance with adaptive recomputation
+   
+*** [#A] check out performance with adaptive recomputation		  :NEXT:
 
   Adaptive recomputation is highly recommended by Schulte, so I should possibly do this before investigating other approaches to improve efficiency (memory and run time)    
   
