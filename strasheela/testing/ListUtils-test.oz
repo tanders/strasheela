@@ -145,7 +145,7 @@ EList = {New LUtils.extendableList init}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%
-%% LUtils.concurrentFilter
+%% LUtils.cFilter 
 %%
 
 
@@ -167,14 +167,31 @@ thread Ys = {Filter Xs IsOdd} end
 declare
 Xs = [1 2 3 _ 4 _ 7]
 Ys
-thread Ys = {LUtils.concurrentFilter Xs IsOdd} end
 {Browse Ys}
+thread Ys = {LUtils.cFilter Xs IsOdd} end
 
 {Nth Xs 6} = 6
 
 {Nth Xs 4} = 5
 
 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%% LUtils.cFind
+%%
+
+
+declare
+Xs = [1 _ 2 _ 3]
+Y
+{Browse Y}
+Y = {LUtils.cFind Xs fun {$ X} X > 3 end} 
+
+
+%% Y will be either 5 or 6 (whoever comes first)
+thread {Nth Xs 4} = 5 end
+thread {Nth Xs 2} = 6 end
 
 
 

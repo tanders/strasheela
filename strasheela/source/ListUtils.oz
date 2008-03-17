@@ -23,7 +23,8 @@ export
    Contains
    Position Positions FindPosition FindPositions
    Remove
-   Find ConcurrentFilter
+   Find
+   CFilter CFind 
    Substitute Substitute1
    Count
    Accum
@@ -162,11 +163,10 @@ define
       end 
    end
 
-   /** %% Concurrent variant of Filter: return/skip elements of Xs as soon as enough information is provided to decided either way, possibly changing the order of list elements.
-   %% As in Filter, Xs is a list and F is a Boolean function. ConcurrentFilter returns a stream of values in Xs for which F returns true. If it is known that no elements will be added, then the stream Result will be closed.
+   /** %% Concurrent variant of Filter. Like Filter, CFilter returns a stream/list of elements in Xs for which F (a Boolean function) returns true. However, CFilter does not necessarily completely block on free variables in Xs. Instead, it returns/skips elements of Xs as soon as enough information is provided to decided either way, possibly changing the order of list elements. If it is known that no elements will be added, then the stream Result will be closed.
    %% Less efficient than Filter (e.g., many threads are created).
-   %% */
-   proc {ConcurrentFilter Xs F ?Result}
+   %% */ 
+   proc {CFilter Xs F ?Result}
       Result_XL = {New ExtendableList init}
       %% Stream for notifying that F returned for an element of Xs
       Finished_L
@@ -195,6 +195,28 @@ define
       in
 	 {Aux Finished_L 1} 
       end
+   end
+
+   /** %% Concurrent variant of Find. Like Find, CFind returns one element in Xs for which F returns true. However, the Result is not necessarily the first 'matching' element in Xs. CFind returns a result as soon as enough information is available to decide for any element -- even if free variables are in Xs before that element.
+   %% Less efficient than Find (e.g., many threads are created).
+   %% */
+   proc {CFind Xs F ?Result}
+      %% use a port for collecting results to avoid race conditions and locks
+      S P={NewPort S}
+      Threads = {Map Xs proc {$ X T}
+			   thread
+			      T={Thread.this}
+			      if {F X} then {Send P X} end
+			      %% keep all threads running, so they can
+			      %% all be terminated without errors
+			      %% (catching the exception would not work
+			      %% from other threads..)
+			      {Wait _}
+			   end
+			end}
+   in
+      Result = S.1     % wait for first value sent
+      {ForAll Threads Thread.terminate}
    end
 
    
