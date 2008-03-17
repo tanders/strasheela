@@ -1,6 +1,14 @@
 
 /** %% Defines a few 'standard' database entries for 12 pitches per octave..
-%% */ 
+%% */
+
+%%
+%% TODO:
+%%
+%% - revise specs for required PC and dissonances PC 
+%%
+%% - dissonance degree: incorporate some standard measurements
+%%
 
 functor
 export
@@ -13,14 +21,120 @@ export
    db:DB
 define
 
-   Chords = chords(chord(pitchClasses:[0 4 7]
-			 roots:[0]
-			 dissonanceDegree:2
-			 comment:'major')
-		   chord(pitchClasses:[0 3 7]
-			 roots:[0] % ? [7]
-			 dissonanceDegree:3
-			 comment:'minor'))
+   Chords = chords(
+	       %%
+	       %% triads
+	       %%
+	       chord(pitchClasses:[0 4 7]
+		     roots:[0]
+		     required:[0 4]
+		     dissonances:nil
+			 % dissonanceDegree:2
+		     comment:'major')
+	       chord(pitchClasses:[0 3 7]
+		     roots:[0]
+		     required:[0 3]
+		     dissonances:nil
+			 % dissonanceDegree:3
+		     comment:'minor')
+	       chord(pitchClasses:[0 3 6]
+		     roots:[8] 	% NOTE: ??
+		     required:[0 6]
+		     dissonances:[6]
+		     comment:'diminished')
+	       chord(pitchClasses:[0 4 8]
+		     roots:[0] 	% NOTE: ?? 
+		     required:[0 4 8]
+		     dissonances:[8]
+		     comment:'augmented')
+	       %%
+	       %% tetrads
+	       %%
+	       chord(pitchClasses:[0 4 7 11]
+		     roots:[0] 
+		     required:[0 4 11]
+		     dissonances:[11]
+		     comment:'major seventh')
+	       chord(pitchClasses:[0 4 7 10]
+		     roots:[0] 
+		     required:[0 4 10]
+		     dissonances:[10]
+		     comment:'dominant seventh')
+	       chord(pitchClasses:[0 3 7 10]
+		     roots:[0] 
+		     required:[0 3 10]
+		     dissonances:[10]
+		     comment:'minor seventh')
+	       chord(pitchClasses:[0 3 7 11]
+		     roots:[0] 
+		     required:[0 3 11]
+		     dissonances:[11]
+		     comment:'minor major seventh')
+	       chord(pitchClasses:[0 3 6 10]
+		     roots:[8] 	% NOTE: ??
+		     required:[0 3 6 10] % NOTE: ??
+		     dissonances:[6 10]
+		     comment:'half-diminished seventh')
+	       chord(pitchClasses:[0 3 6 9]
+		     roots:[2 5 8 11] 
+		     required:[0 3 6 9] % NOTE: ??
+		     dissonances:[6 9]	% NOTE: ??
+		     comment:'diminished seventh')
+
+
+	       %%
+	       %% unfinished
+	       %%
+
+	       /*
+	       chord(pitchClasses:[0]
+		     roots:[0] 
+		     required:[0]
+		     dissonances:nil
+		     comment:'')
+	       chord(pitchClasses:[0]
+		     roots:[0] 
+		     required:[0]
+		     dissonances:nil
+		     comment:'')
+	       chord(pitchClasses:[0]
+		     roots:[0] 
+		     required:[0]
+		     dissonances:nil
+		     comment:'')
+	       chord(pitchClasses:[0]
+		     roots:[0] 
+		     required:[0]
+		     dissonances:nil
+		     comment:'')
+	       chord(pitchClasses:[0]
+		     roots:[0] 
+		     required:[0]
+		     dissonances:nil
+		     comment:'')
+	       chord(pitchClasses:[0]
+		     roots:[0] 
+		     required:[0]
+		     dissonances:nil
+		     comment:'')
+	       chord(pitchClasses:[0]
+		     roots:[0] 
+		     required:[0]
+		     dissonances:nil
+		     comment:'')
+	       chord(pitchClasses:[0]
+		     roots:[0] 
+		     required:[0]
+		     dissonances:nil
+		     comment:'')
+	       chord(pitchClasses:[0]
+		     roots:[0] 
+		     required:[0]
+		     dissonances:nil
+		     comment:'')
+	       */
+	       
+	       )
    
    Scales = scales(scale(pitchClasses:[0 2 4 5 7 9 11]
 			 roots:[0]
