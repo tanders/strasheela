@@ -132,9 +132,6 @@ define
 
       %% init(...) is the main user-oriented constructor
       %%
-      %% [implementation changed: exact has only influence of computation of output string with ComputeString. However, the SlashFinal is set nevertheless always to true when input path ends with slash]
-      %%
-      %% [add to doc:] It is possible to indicate a directory by additing a terminal / or \ (depending on OS). However, this slash/backslash is removed in the string output when exact is set to false. 
       meth init(S windows:WIN<=IS_WINDOWS exact:Exact<=false)
 	 STR1 = {VS2S S}
 	 IsLastCharSlash	% aux: B, denoting terminal slash
@@ -178,7 +175,6 @@ define
 	 else SlashInitial=false Items2=Items
 	 end
 	 %% set SlashFinal
-	 %% [changed: Split never returns nil as last element if path ends in single slash/backslash..]
 	 if IsLastCharSlash
 	 then SlashFinal=true
 	 else SlashFinal=false
@@ -195,20 +191,15 @@ define
 		     exact        : Exact
 		     ))}
       end
-
-      %% [!! tmp meth for debugging]
-      meth getInfo($) @info end
       
       meth toString($) @info.string end
       meth toAtom($) {S2A @info.string} end
       meth length($) {LLength @info.string} end
       meth isAbsolute($) @info.slashinitial end
       meth isRelative($) {Not Path,isAbsolute($)} end
-      %% [missing in doc] Returns the string representation for the parent directory of self. 
       meth dirnameString($)
 	 {{self dirname($)} toString($)}
       end
-      %% [add to doc] if self contains only a single component (i.e. self is a plain file) then dirname returns nil.
       meth dirname($)
 	 INFO = @info
 	 COM = INFO.components
@@ -232,11 +223,9 @@ define
 	    {self newFromRecord(INFO2 $)}
 	 end
       end
-      %% [changed def: return plain string, not wrapped in a list]  
       meth basenameString($)
 	 {{self basename($)} toString($)}
       end
-      %% [changed def: UNIX basename always returns last component of path, even if path ends with dir]
       meth basename($)
 	 INFO = @info
 	 COM = INFO.components
@@ -261,19 +250,15 @@ define
       meth stat($)
 	 {OS.stat @info.string}
       end
-      %% [Add to doc] only works for existing file which is either absolute path or in current path. 
       meth isDir($)
 	 (Path,stat($)).type == 'dir'
       end
-      %% [missing in doc] Returns true if path ends in slash/backslash. This is not a foolproof method for checking for directories, but works also for non-existing pathes. 
       meth isDir2($)
 	 @info.slashfinal orelse {self isRoot($)}
       end
-      %% [Add to doc] only works for existing file which is either absolute path or in current path. 
       meth isFile($)
 	 (Path,stat($)).type == 'reg'
       end
-      %% [missing in doc] Returns true if path does NOT end in slash/backslash. This is not a foolproof method for checking for basenames, but works also for non-existing pathes. 
       meth isFile2($)
 	 {Not @info.slashfinal}
       end
@@ -283,8 +268,10 @@ define
       meth mtime($)
 	 (Path,stat($)).mtime
       end
+      
+      %% tmp meth for debugging
+      /* meth getInfo($) @info end */
       meth GetInfo($) @info end
-      %% [add to doc:] If P2 [see doc, X here] is an absolute path, then return a path object only for P2. NB: resolve also 'appends' P2 to P [self] in case P is a regular file.  
       meth resolve(X $)
 	 P = {Make X}
       in
@@ -365,11 +352,9 @@ define
       meth extension($)
 	 Path,SplitExtension(_ $)
       end
-      %% [change doc: orig doc does not reflect orig implementation] Returns a new path object of _basename_ of P with the extension of P, if any, omitted
       meth dropExtension($)
 	 {Path,dirname($) resolve(Path,SplitExtension($ _) $)}
       end
-      %% [change doc: orig doc does not reflect orig implementation] Returns a new path object of _basename_ of P which is like P but with the extension VS added. NB: the extension is also added to directory (e.g., adding 'txt' to root dir results in '/.txt').
       meth addExtension(Ext $)
 	 {Path,dirname($) resolve((Path,basenameString($))#'.'#Ext $)}
       end
