@@ -141,46 +141,49 @@
 <dt>
 <a href="#sec33">Recursive unification</a>
 </dt>
-</dl>
-</dd>
 <dt>
-<a href="#sec34">Class Method Application</a>
-</dt>
-<dd>
-<dl>
-<dt>
-<a href="#sec35">Introduction</a>
-</dt>
-<dt>
-<a href="#sec36">Method call</a>
-</dt>
-<dt>
-<a href="#sec37">Method arguments</a>
+<a href="#sec34">BACKGROUND</a>
 </dt>
 </dl>
 </dd>
 <dt>
-<a href="#sec38">Concurrency</a>
+<a href="#sec35">Object-Oriented Programming</a>
 </dt>
 <dd>
 <dl>
 <dt>
-<a href="#sec39">Introduction</a>
+<a href="#sec36">Introduction</a>
 </dt>
 <dt>
-<a href="#sec40">Another section TODO</a>
+<a href="#sec37">Method call</a>
 </dt>
 <dt>
-<a href="#sec41">Declarative concurrency</a>
+<a href="#sec38">Method arguments</a>
+</dt>
+</dl>
+</dd>
+<dt>
+<a href="#sec39">Concurrency</a>
+</dt>
+<dd>
+<dl>
+<dt>
+<a href="#sec40">Introduction</a>
 </dt>
 <dt>
-<a href="#sec42">Blocking computation</a>
+<a href="#sec41">Variables (single thread)</a>
 </dt>
 <dt>
-<a href="#sec43">'Signalling' a blocking computation</a>
+<a href="#sec42">Variables (multiple threads)</a>
 </dt>
 <dt>
-<a href="#sec44">'Signalling' a blocking computation (2)</a>
+<a href="#sec43">Blocked programs</a>
+</dt>
+<dt>
+<a href="#sec44">Detecting blocked progs (1)</a>
+</dt>
+<dt>
+<a href="#sec45">Detecting blocked progs (2)</a>
 </dt>
 </dl>
 </dd>
@@ -547,7 +550,20 @@ Defining higher-order procedures</h3>
 <h3><a name="sec28" id="sec28"></a>
 BACKGROUND</h3>
 
-<p class="first">TODO: Torsten, please add info about &quot;first-class values&quot; here.  :)</p>
+<p class="first">Terms: first-class value, first-class function/procedure, higher-order function/procedure.</p>
+
+<p>A first-class value is a value (also object, or citizen) which can be stored in data structures, given to procedures as arguments and returned as results. Functions as first-class values are also called first-class function.</p>
+
+<p>First-class functions are a central concept of functional programming. They allow for higher-order programming, which make procedures more general and in effect can greatly reduce the length of a program. For example, instead of defining a sort function for every kind of data you need to sort (e.g., numbers, strings, score objects) you only define a single sort function and specify how it compares values.</p>
+
+<p>Reading:</p>
+
+<ul>
+<li>van Roy and Haridi, Sec. 3.6</li>
+<li>Wikipedia: <a href="http://en.wikipedia.org/wiki/First-class_function">http://en.wikipedia.org/wiki/First-class_function</a></li>
+</ul>
+
+
 
 
 
@@ -558,7 +574,7 @@ Unification</h2>
 <h3><a name="sec30" id="sec30"></a>
 Introduction</h3>
 
-<p class="first">The operator = performs unification of two variables.  The variables share all the information they have about their values.  A variable without a name (an anonymous variable) is written as an underscore ( _ ).  Unification is a basic form of constraint programming (constraint programming is discussed further below).</p>
+<p class="first">The operator = performs unification of two variables.  The variables share all the information they have about their values.  A variable without a name (an anonymous variable) is written as an underscore ( _ ).</p>
 
 
 
@@ -566,16 +582,18 @@ Introduction</h3>
 <h3><a name="sec31" id="sec31"></a>
 Unifying two numbers</h3>
 
-<p class="first">TODO: add something</p>
+<p class="first">Unification shares information between two variables, including the domain of possible values. This example introduces finite domain integers (FD), discussed below in more detail.</p>
+
+
 
 <pre class="src">
 <span style="color: #a020f0;">local</span>
-  X = {FD<span style="color: #a020f0;">.</span>int 1<span style="color: #a020f0;">#</span>5}
-  Y = {FD<span style="color: #a020f0;">.</span>int 0<span style="color: #a020f0;">#</span>3}
+  X = {FD<span style="color: #a020f0;">.</span>int 1<span style="color: #a020f0;">#</span>5} <span style="color: #b22222;">% </span><span style="color: #b22222;">declare an integer with domain {1, ..., 5}
+</span>  Y = {FD<span style="color: #a020f0;">.</span>int 0<span style="color: #a020f0;">#</span>3}
 <span style="color: #a020f0;">in</span>
   X = Y          <span style="color: #b22222;">% </span><span style="color: #b22222;">unify X and Y
-</span>  {Inspect X}
-<span style="color: #a020f0;">end</span>
+</span>  {Inspect X}    <span style="color: #b22222;">% </span><span style="color: #b22222;">X now has the domain {1, ..., 3}
+</span><span style="color: #a020f0;">end</span>
 
 </pre>
 
@@ -583,7 +601,7 @@ Unifying two numbers</h3>
 <h3><a name="sec32" id="sec32"></a>
 Unifying two lists</h3>
 
-<p class="first">TODO: add something</p>
+<p class="first">Compound data structures such as lists may contain free variables. Such lists are then partially bound and they can be unified.</p>
 
 <pre class="src">
 <span style="color: #a020f0;">local</span>
@@ -599,7 +617,9 @@ Unifying two lists</h3>
 <h3><a name="sec33" id="sec33"></a>
 Recursive unification</h3>
 
-<p class="first">Unification also works recursively.  The Inspector and the Browser show two different ways for representing that (the Inspector can be configured to show either way: options menu, structure tab, under representation, select between tree and relation mode).</p>
+<p class="first">Unification also works recursively.  The Inspector and Browser windows show two different ways for representing this.</p>
+
+<p>The Inspector can be configured to show either way: under the options menu, structure tab, below representation, select between tree and relation mode.</p>
 
 <pre class="src">
 <span style="color: #a020f0;">local</span> X = <span style="color: #a020f0;">unit</span>(x:X) <span style="color: #a020f0;">in</span>
@@ -609,11 +629,29 @@ Recursive unification</h3>
 </pre>
 
 
+<h3><a name="sec34" id="sec34"></a>
+BACKGROUND</h3>
 
-<h2><a name="sec34" id="sec34"></a>
-Class Method Application</h2>
+<p class="first">Terms: logic variables, unification.</p>
 
-<h3><a name="sec35" id="sec35"></a>
+<p>Unification is the core operation of logic programming (besides search). Variables which allow for unification are therefore also called &quot;logic variables&quot;. Unification is also the first constraint we meet. Constraint programming is discussed further below.</p>
+
+<p>Reading:</p>
+
+<ul>
+<li>van Roy and Haridi, Chap. 2 (in particular Sec. 2.2, and 2.7.2)</li>
+<li>Wikipedia: <a href="http://en.wikipedia.org/wiki/Unification">http://en.wikipedia.org/wiki/Unification</a></li>
+</ul>
+
+
+
+
+
+
+<h2><a name="sec35" id="sec35"></a>
+Object-Oriented Programming</h2>
+
+<h3><a name="sec36" id="sec36"></a>
 Introduction</h3>
 
 <p class="first">Oz supports object-oriented programming.  This programming paradigm introduces the notion of objects which instantiate classes.  An object (or class instance) is a datum which encapsulates its internal structure.  A class specifies what data are contained in its instances and what methods these instances understands.  A method (or message) is effectively a procedure which is defined for instances of specific classes only.</p>
@@ -628,7 +666,7 @@ Introduction</h3>
 
 
 
-<h3><a name="sec36" id="sec36"></a>
+<h3><a name="sec37" id="sec37"></a>
 Method call</h3>
 
 <p class="first">The following section creates a graphical user interface button.  You do not need to understand the code which creates the window itself (i.e., the call to QTk.build).  For our purposes here, only this single line is important:</p>
@@ -656,7 +694,7 @@ Method call</h3>
 </pre>
 
 
-<h3><a name="sec37" id="sec37"></a>
+<h3><a name="sec38" id="sec38"></a>
 Method arguments</h3>
 
 <p class="first">Class methods are actually records which can contain method arguments.  For example, the following statement sends the following message to the object Window.  This changes the width of the border around the button and sets the background of this border to the color blue.</p>
@@ -689,52 +727,55 @@ Method arguments</h3>
 
 
 
-<h2><a name="sec38" id="sec38"></a>
+<h2><a name="sec39" id="sec39"></a>
 Concurrency</h2>
 
-<h3><a name="sec39" id="sec39"></a>
+<h3><a name="sec40" id="sec40"></a>
 Introduction</h3>
 
 <p class="first">Oz provides excellent support for concurrent programming, where computations run in parallel in multiple threads.  We will only touch on this subject and discuss aspects relevant for Strasheela.  In general, however, concurrent programming plays a major role in Oz programming.</p>
 
-<p>The computations in different threads can communicate with each other via variables.  Multiple threads can use the same variable in a computation.  If the value of a variable does not present enough information for performing a specific operation, then the thread simply blocks and waits for more information.  In the section below, the addition X+3 can not be performed as long as the value of X is unknown.  As soon as more information about the variable value is available, the thread resumes its execution.</p>
+<p>The computations in different threads can communicate with each other via variables.  Multiple threads can use the same variable in a computation.  If the value of a variable does not present enough information for performing a specific operation, then the thread simply blocks and waits for more information.  As soon as more information about the variable value is available, the thread resumes its execution.  This approach makes concurrent programs highly declarative and thus easy to write and understand.</p>
 
-<p>This behaviour leads to a concurrent programming model which is highly declarative &mdash; and thus easy to program in.  We will later see how this model simplifies the definition of complex musical constraint satisfaction problems (Oz' constraint programming model is based on concurrent programming).</p>
+<p>The downside of this concurrency model is that it can result in an unintended blocking of a program which is not explicitly signalled (e.g. no error message is shown when a program blocks, because this is a normal program behaviour).  There are a few pragmatic tricks we can use to avoid this downside; these are covered later in this chapter.</p>
 
-<p>The downside of this concurrency model is that it can result in an unintended blocking of a program which is not explicitly signalled (e.g. no error message is shown when a program blocks, because this is a normal program behaviour).  The second and third section below demonstrate a pragmatic way to deal with this downside.</p>
-
-<p>The sections demonstrates concurrent programming, but do not show a typical application (a typical application would be a program split in a server and one or more clients).  In the context of Strasheela, we will seldomly write concurrent programs explicitly.  Nevertheless, it is very important to know how concurrent programming works in Oz.  Even if we are not explicitly writing a concurrent program, constraint programming in Oz always results in a concurrent program.  Concurrent programming forms one of the foundations of Oz' constraint programming model, where each constraint (i.e. each propagator) is a concurrent agent running in its own thread.</p>
+<p>This section demonstrates concurrent programming, but does not show a typical application (a typical application would be a program split in a server and one or more clients).  In the context of Strasheela, we will seldomly write concurrent programs explicitly.  Nevertheless, it is very important to know how concurrent programming works in Oz.  Even if we are not explicitly writing a concurrent program, constraint programming in Oz always results in a concurrent program.  Concurrent programming forms one of the foundations of Oz' constraint programming model, where each constraint (i.e. each propagator) is a concurrent agent running in its own thread.</p>
 
 
 
 
-<h3><a name="sec40" id="sec40"></a>
-Another section TODO</h3>
+<h3><a name="sec41" id="sec41"></a>
+Variables (single thread)</h3>
 
-<p class="first">Here we treat `IsEven' as a procedure with two arguments.  `IsEven' binds the variable B.  Please note the order of computations in this section:</p>
+<p class="first">Variables may be used to communicate information between different parts of a program &mdash; even if the information is not available yet.  Browse can handle unknown information, but other parts of the program may wait (i.e. block) until the information is available.</p>
+
+<p>Here, `IsEven' binds the variable B.  Please note the order of computations in this section:</p>
 
 <ol>
 <li>B is browsed.</li>
 <li>IsEven binds B to false.</li>
 </ol>
 
-<p>However, `Browse' does indeed show the correct value of B.</p>
-
-<p>This demonstrates a vital feature of Oz: variables are be used to communicate information between different parts of a program &mdash; even if the information is not available yet.  Browse can handle unknown information, but other parts of the program may wait (i.e. block) until the information is available.</p>
+<p>However, `Browse' does indeed show the correct value of B.  WARNING: not all procedures can handle unknown information.</p>
 
 
 <pre class="src">
-<span style="color: #a020f0;">local</span> B <span style="color: #a020f0;">in</span>
-   {Browse B}
-   {IsEven 4 B}
+<span style="color: #a020f0;">local</span>
+  B
+<span style="color: #a020f0;">in</span>
+  {Browse B}
+  {Delay 3000}
+  {IsEven 4 B}
 <span style="color: #a020f0;">end</span>
 </pre>
 
 
-<h3><a name="sec41" id="sec41"></a>
-Declarative concurrency</h3>
+<h3><a name="sec42" id="sec42"></a>
+Variables (multiple threads)</h3>
 
-<p class="first">This section declares X and then browses 'hello' (just to show that the browser works in principle).  However, the addition X+3 can not be executed immediately and blocks.  Because this computation is executed in its own thread, the top-level thread continues regardless, and calls the procedure Delay, which waits for 3000 msecs.  After that time, the top-level thread determines X to 4.  This awakes the other thread: it can now compute X+3 and browse the sum.</p>
+<p class="first">Variables may also be used to communicate between different threads.  This example declares X and then browses 'hello' (just to show that the browser works in principle).  However, the addition X+3 can not be executed immediately and blocks.  Because this computation is executed in its own thread, the top-level thread continues regardless, and calls the procedure Delay, which waits for 3000 msecs.  After that time, the top-level thread determines X to 4.  This awakes the other thread: it can now compute X+3 and browse the sum.</p>
+
+<p>In the section below, the addition X+3 can not be performed as long as the value of X is unknown.</p>
 
 
 <pre class="src">
@@ -742,15 +783,15 @@ Declarative concurrency</h3>
   X
 <span style="color: #a020f0;">in</span>
   {Browse hello}
-  <span style="color: #a020f0;">thread</span> {Browse X <span style="color: #a020f0;">+</span> 3} <span style="color: #a020f0;">end</span>
-  {Delay 3000}
+  <span style="color: #a020f0;">thread</span> {Browse X <span style="color: #a020f0;">+</span> 3} <span style="color: #a020f0;">end</span>  <span style="color: #b22222;">% </span><span style="color: #b22222;">compute and browse X+3 concurrently
+</span>  {Delay 2000}
   X = 4
 <span style="color: #a020f0;">end</span>
 </pre>
 
 
-<h3><a name="sec42" id="sec42"></a>
-Blocking computation</h3>
+<h3><a name="sec43" id="sec43"></a>
+Blocked programs</h3>
 
 <p class="first">This section demonstrates a buggy program which does not signal any error but simply does nothing.  The section is very similar to the previous section, but does not place the blocking X+3 in its own thread.  As a result, the whole program blocks at that point and never executes X = 4.</p>
 
@@ -766,10 +807,13 @@ Blocking computation</h3>
 </pre>
 
 
-<h3><a name="sec43" id="sec43"></a>
-'Signalling' a blocking computation</h3>
+<h3><a name="sec44" id="sec44"></a>
+Detecting blocked progs (1)</h3>
 
 <p class="first">This section demonstrates a pragmatic approach which checks for blocking programs.  The section ends with the statement {Browse endOfProgram}.  A non-blocking program will always execute this last line of code and show 'endOfProgram' in the Browser.  However, a blocking program (as the present one) does not do that and thus indicates that it is blocking.  Although this little trick does not tell us <em>where</em> the program blocks, the information <em>that</em> we wrote a blocking program can prove very helpful already.  You may get a feel for this trick by changing the section so that the message 'endOfProgram' is shown (e.g. comment the blocking statement out, or surrounding it with a 'thread .. end' statement).</p>
+
+<p>Of course, this technique is most effective for programs which should complete immediately. By contrast, if we call procedures like Delay in a program (see above), the browsing of 'endOfProgram' will also be delayed accordingly.</p>
+
 
 <pre class="src">
 <span style="color: #a020f0;">local</span>
@@ -784,12 +828,16 @@ Blocking computation</h3>
 </pre>
 
 
-<h3><a name="sec44" id="sec44"></a>
-'Signalling' a blocking computation (2)</h3>
+<h3><a name="sec45" id="sec45"></a>
+Detecting blocked progs (2)</h3>
 
 <p class="first">This section demonstrates a technique which causes an error (raises an exception) when the current thread blocks. The function `Thread.this' returns the current thread, and `Debug.setRaiseOnBlock' activates this debugging feature. The error message can even tell you which variable caused the blocking (although in this section the deduced variable name is simply _).</p>
 
-<p>Note that you must load Debug first, before using `Debug.setRaiseOnBlock' (which this tutorial does implicitly).</p>
+<p>Note that you must load Debug first, before using `Debug.setRaiseOnBlock' (which this tutorial does implicitly). For example, include the following line at the beginning of your program.</p>
+
+<p>declare [Debug] = {Module.link ['x-oz://boot/Debug']}</p>
+
+
 
 <pre class="src">
 <span style="color: #a020f0;">local</span>
@@ -811,7 +859,7 @@ Blocking computation</h3>
 <div id="footer">
 <div id="author">&copy; 
 Torsten Anders</div>
-<div id="date">Last time edited: 2008.02.23</div>
+<div id="date">Last time edited: 2008.03.12</div>
 </div>
   </body>
 </html>

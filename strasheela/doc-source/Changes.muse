@@ -16,6 +16,8 @@
  - Added to SDistro: SearchOneDepth
  - SDistro: Revised documentation for MakeSearchScript, removed MakeFDDistribution as exported value -- the solvers provided by SDistro are more convenient to use
  [TODO: Check where MakeFDDistribution is used in examples]
+ - Added HS.rules.commonPCs_Card
+
 
  - Fixes
   - Distribution strategy with random value ordering now supports recomputation
