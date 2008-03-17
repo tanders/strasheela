@@ -141,3 +141,42 @@ EList = {New LUtils.extendableList init}
 
 {LUtils.substitute1 [a b c b d] b hi}
 
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%% LUtils.concurrentFilter
+%%
+
+
+%%
+%% Filter blocks are undetermined vars
+%%
+
+declare
+Xs = [1 2 3 _ 4 _ 7]
+Ys
+thread Ys = {Filter Xs IsOdd} end
+{Browse Ys}
+
+
+%%
+%% ConcurrentFilter, on the other hand, processes as much as there is available
+%%
+
+declare
+Xs = [1 2 3 _ 4 _ 7]
+Ys
+thread Ys = {LUtils.concurrentFilter Xs IsOdd} end
+{Browse Ys}
+
+{Nth Xs 6} = 6
+
+{Nth Xs 4} = 5
+
+
+
+
+
+
+
