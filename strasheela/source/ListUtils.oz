@@ -23,7 +23,7 @@ export
    Contains
    Position Positions FindPosition FindPositions
    Remove
-   Find
+   Find ConcurrentFilter
    Substitute Substitute1
    Count
    Accum
@@ -162,6 +162,42 @@ define
       end 
    end
 
+   /** %% Concurrent variant of Filter: return/skip elements of Xs as soon as enough information is provided to decided either way, possibly changing the order of list elements.
+   %% As in Filter, Xs is a list and F is a Boolean function. ConcurrentFilter returns a stream of values in Xs for which F returns true. If it is known that no elements will be added, then the stream Result will be closed.
+   %% Less efficient than Filter (e.g., many threads are created).
+   %% */
+   proc {ConcurrentFilter Xs F ?Result}
+      Result_XL = {New ExtendableList init}
+      %% Stream for notifying that F returned for an element of Xs
+      Finished_L
+      Finished_P = {NewPort Finished_L}
+      L = {Length Xs}
+   in
+      Result = Result_XL.list
+      {ForAll Xs proc {$ X}
+		    thread
+		       if {F X}
+		       then
+			  {Result_XL add(X)}
+			  {Send Finished_P unit}
+		       else {Send Finished_P unit}
+		       end
+		    end
+		 end}
+      %% Wait until F returned a value for all elements of Xs, then close list
+      thread
+	 proc {Aux Xs I}
+	    {Wait Xs.1}
+	    if I==L then {Result_XL close}
+	    else {Aux Xs.2 I+1}
+	    end
+	 end
+      in
+	 {Aux Finished_L 1} 
+      end
+   end
+
+   
    /** %% Replaces all occurances of Old in Xs by New. 
    %% */
    fun {Substitute Xs Old New}   
