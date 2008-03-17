@@ -327,9 +327,28 @@ configure: error: ozinstall not found
      E.g., I could use a method filterThreaded for a better definition of getSimultaneousItems
 
     
-**** TODO Create small-scale example which will demonstrate the effect of the procedure filter
+**** Define ConcurrentFind
 
-**** TODO Read plain Filter definition: how can it be made into the concurrent version
+     see draft at [[file:~/oz/music/Strasheela/tmp.oz::proc%20ConcurrentFind%20Xs%20F%20Result][file:~/oz/music/Strasheela/tmp.oz::proc ConcurrentFind Xs F Result]]
+
+***** TODO Reply mail to raph and Jorge					:URGENT:
+
+**** TODO Create small-scale musical example which demonstrates the effect of LUtils.concurrentFilter
+
+     map(filter(getAllNotes(myScore), isOnStrongBeat), 
+       f : f(n) := getPitchClass(n) \in getPitchClassSet(find(getChordProgression(myScore), 
+                                                              g : g(c) := isSimultaneous(n, c))))
+
+     see LUtils-test.oz for a LUtils.concurrentFilter test
+
+**** DONE Read plain Filter definition: how can it be made into the concurrent version
+     CLOSED: [2008-03-14 Fri 11:43]
+**** DONE Define ConcurrentFilter as proc
+     CLOSED: [2008-03-14 Fri 11:44]
+
+     see LUtils.concurrentFilter
+
+**** 
 
 
 ** Efficiency
