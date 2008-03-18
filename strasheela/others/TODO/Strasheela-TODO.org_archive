@@ -3,6 +3,298 @@
 
 Archived entries from file /Users/tanders/oz/music/Strasheela/strasheela/trunk/strasheela/others/TODO/Strasheela-TODO.org
 
+
+* DONE Harmony model: Interval as score object
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2008-02-14 Thu 00:22
+  :ARCHIVE_FILE: ~/oz/music/Strasheela/strasheela/trunk/strasheela/others/TODO/Strasheela-TODO.org
+  :ARCHIVE_OLPATH: Strasheela design/1W Refactor harmony model
+  :ARCHIVE_CATEGORY: Strasheela-TODO
+  :ARCHIVE_TODO: DONE
+  :ARCHIVE_ITAGS: STRASHEELA
+  :END:
+  
+Explicit interval score object. Creation uses memoization for two given pitches.
+
+?? Should I introduce further additional score objects like pitch and degree ??
+
+Test interval class with memoization
+* DONE [#A] Refactor Strasheela distribution: recomputable support for random distribution :NEXT:
+  CLOSED: [2008-02-22 Fri 19:22]
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2008-02-22 Fri 19:22
+  :ARCHIVE_FILE: ~/oz/music/Strasheela/strasheela/trunk/strasheela/others/TODO/Strasheela-TODO.org
+  :ARCHIVE_OLPATH: Strasheela design/Efficiency
+  :ARCHIVE_CATEGORY: Strasheela-TODO
+  :ARCHIVE_TODO: DONE
+  :ARCHIVE_ITAGS: STRASHEELA
+  :END:
+
+** DONE Create SVN branch
+   CLOSED: [2008-02-13 Wed 17:49]
+
+** DONE Read howto merge changes of branch back to trunk
+   CLOSED: [2008-02-20 Wed 09:13]
+
+   decribed here:     
+   http://svnbook.red-bean.com/en/1.4/svn.branchmerge.commonuses.html
+   
+   record info here: 
+   [[file:~/oz/music/Strasheela/sourceforge-howto/svn-HOWTO.muse::Merging%20a%20Whole%20Branch%20to%20Another][file:~/oz/music/Strasheela/sourceforge-howto/svn-HOWTO.muse::Merging a Whole Branch to Another]]
+   
+
+** DONE Check out: there was an example for which it worked already
+   CLOSED: [2008-02-21 Thu 18:10]
+
+   Understand orig example by Raphael
+   
+   [[file:~/oz/music/Strasheela/strasheela/branches/strasheela-randomValueOrdering/strasheela/others/TODO/Refactor-ScoreDistribution.oz]]
+
+
+** DONE Change score solver interface in ScoreDistribution.oz so that it works for all cases 
+     CLOSED: [2008-02-21 Thu 18:10]
+
+BTW: you may wan to create a Strasheela variant of the general solver object 
+
+
+
+** DONE Clean up documentation
+   CLOSED: [2008-02-22 Fri 13:47]
+
+   in ScoreDistribution
+
+   do example 
+
+
+** DONE Merge code into trunk
+   CLOSED: [2008-02-22 Fri 19:22]
+       
+** DONE Delete branch
+   CLOSED: [2008-02-22 Fri 19:22]
+
+* DONE Graham's Tutorial update: fix remaining things			  :NEXT:
+  CLOSED: [2008-02-23 Sat 15:21]
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2008-02-23 Sat 15:21
+  :ARCHIVE_FILE: ~/oz/music/Strasheela/strasheela/trunk/strasheela/others/TODO/Strasheela-TODO.org
+  :ARCHIVE_OLPATH: Strasheela documentation/Strasheela tutorial
+  :ARCHIVE_CATEGORY: Strasheela-TODO
+  :ARCHIVE_TODO: DONE
+  :ARCHIVE_ITAGS: STRASHEELA
+  :END:
+
+** TODO Revise Graham's update of StrasheelaPrototyper.oz 
+
+[[file:~/oz/music/Strasheela/strasheela/trunk/strasheela/contributions/anders/Tutorial/source/StrasheelaPrototyper.oz]]
+
+E.g., there are a few unused variables:  Chapter, ToplevelH, ...
+
+Where to start with this task? 
+
+** TODO Check/revise Tutorial Muse format export after Graham's update
+
+[[file:~/oz/music/Strasheela/strasheela/trunk/strasheela/contributions/anders/Tutorial/source/StrasheelaPrototyper.oz]]
+
+** TODO Update StrasheelaPrototyper.oz doc to reflect new format
+
+[[file:~/oz/music/Strasheela/strasheela/trunk/strasheela/contributions/anders/Tutorial/source/StrasheelaPrototyper.oz::lt%20chapter%20gt][file:~/oz/music/Strasheela/strasheela/trunk/strasheela/contributions/anders/Tutorial/source/StrasheelaPrototyper.oz::lt chapter gt]]
+
+
+** TODO Delete temporal branch strasheela-updateTutorial
+
+* DONE Strasheela tutorial: finish music representation 'chapter'
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2008-02-23 Sat 15:21
+  :ARCHIVE_FILE: ~/oz/music/Strasheela/strasheela/trunk/strasheela/others/TODO/Strasheela-TODO.org
+  :ARCHIVE_OLPATH: Strasheela documentation/Strasheela tutorial
+  :ARCHIVE_CATEGORY: Strasheela-TODO
+  :ARCHIVE_TODO: DONE
+  :ARCHIVE_ITAGS: STRASHEELA
+  :END:
+
+* DONE Contrasts_OneLevel as constraint					    :NA:
+  CLOSED: [2008-03-01 Sat 18:30]
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2008-03-01 Sat 18:30
+  :ARCHIVE_FILE: ~/oz/music/Strasheela/strasheela/trunk/strasheela/others/TODO/Strasheela-TODO.org
+  :ARCHIVE_OLPATH: Strasheela design/Morphology analysis constraints
+  :ARCHIVE_CATEGORY: Strasheela-TODO
+  :ARCHIVE_TODO: DONE
+  :ARCHIVE_ITAGS: STRASHEELA SOON
+  :END:
+
+* DONE Write functor for whole numbers 
+  CLOSED: [2008-03-02 Sun 17:51]
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2008-03-02 Sun 17:51
+  :ARCHIVE_FILE: ~/oz/music/Strasheela/strasheela/trunk/strasheela/others/TODO/Strasheela-TODO.org
+  :ARCHIVE_OLPATH: Strasheela design/Morphology analysis constraints/'whole FD numbers' (i.e. support of neg numbers)
+  :ARCHIVE_CATEGORY: Strasheela-TODO
+  :ARCHIVE_TODO: DONE
+  :ARCHIVE_ITAGS: STRASHEELA SOON
+  :END:
+
+
+* Multi-core  processing
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2008-03-08 Sat 17:02
+  :ARCHIVE_FILE: ~/oz/music/Strasheela/strasheela/trunk/strasheela/others/TODO/Strasheela-TODO.org
+  :ARCHIVE_OLPATH: Strasheela design
+  :ARCHIVE_CATEGORY: Strasheela-TODO
+  :ARCHIVE_ITAGS: STRASHEELA
+  :END:
+
+** DONE Reread Oz distributed programming (van Roy)
+
+Play around with the possibilities: create multiple sites (on localhost simply for now) and communicate between them 
+
+** DONE Test: multiple Oz sides are independent processes on the computer
+
+That is: test whether multiple processes can run on different CPUs
+
+** DONE Simple CSP with parallel search
+
+Check whether multiple CPUs are used  
+
+
+** DONE Simple Musical CSP with parallel search
+
+How does communication of data structure slow down the process?
+
+* DONE Oz Path							   :@NET:URGENT:
+  CLOSED: [2008-03-10 Mon 21:40]
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2008-03-10 Mon 21:40
+  :ARCHIVE_FILE: ~/oz/music/Strasheela/strasheela/trunk/strasheela/others/TODO/Strasheela-TODO.org
+  :ARCHIVE_OLPATH: General Oz todo
+  :ARCHIVE_CATEGORY: Strasheela
+  :ARCHIVE_TODO: DONE
+  :ARCHIVE_ITAGS: OZ
+  :END:
+
+** DONE svn update my mozart
+   CLOSED: [2008-03-05 Wed 17:36]
+
+** TODO Incorporate my changes (see my tmp Strasheela functor) into Mozart Path functor
+
+When finished commit these changes. 
+
+Possibly, I do step-by-step commits -- but only if this does not complicate matters
+
+
+** TODO Oz Path: test cases
+
+Decision: do simple solution: add a test file close to either Path source or its doc source
+Then report it on the Oz mailing list with request for improvement if necessary. 
+Also, somewhere in source code (and doc??) put pointer to test file. 
+
+---- 
+
+Thinking process:  
+
+There is no test suite yet for the Mozart standard library
+
+Simple solution: add a test file close to either Path source or its doc source
+
+Better but much mroe complex solution: check how test suite is done for Mozart base system and do something similar. 
+I probably need to specify test cases then with expected output -- how complex is that, as I don't know file system of computer on which test suite is run 
+
+Problem: I must fully understand how test suite is run for base system
+Problem: should that be called automatically when certain tests are executed? Where is that called 
+
+
+** Update Path doc 
+
+Edit the SGML files for Path functor (see comments in my tmp Strasheela functor)
+
+* DONE [#A] support IOzSeF solver					  :NEXT:
+  CLOSED: [2008-03-12 Wed 18:33]
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2008-03-12 Wed 18:33
+  :ARCHIVE_FILE: ~/oz/music/Strasheela/strasheela/trunk/strasheela/others/TODO/Strasheela-TODO.org
+  :ARCHIVE_OLPATH: Strasheela design/Efficiency
+  :ARCHIVE_CATEGORY: Strasheela
+  :ARCHIVE_TODO: DONE
+  :ARCHIVE_ITAGS: STRASHEELA
+  :END:
+
+  http://www.mozart-oz.org/mogul/doc/tack/iozsef/iozsef.html
+  
+** DONE Add solver interfaces to SDistro
+   CLOSED: [2008-03-12 Wed 18:32]
+
+   already finished??
+  
+** DONE Define score output for IOzSeF
+   CLOSED: [2008-03-12 Wed 18:33]
+
+*** DONE Compare doc of Explorer and IOzSeF how info actions are defined
+    CLOSED: [2008-03-12 Wed 18:33]
+
+   with IOzSeF.addInformationAction(NameAtom root Action)
+   Action is a unary procedure expecting root (i.e. score object) as arg
+   see doc
+   
+*** DONE Port Explorer info actions to IOzSeF
+    CLOSED: [2008-03-12 Wed 18:33]
+
+    Possibly generalise so that these actions are only defined once
+    ... I figure that generalisation is easy 
+
+    
+* Define ConcurrentFind
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2008-03-17 Mon 23:00
+  :ARCHIVE_FILE: ~/oz/music/Strasheela/strasheela/trunk/strasheela/others/TODO/Strasheela-TODO.org
+  :ARCHIVE_OLPATH: Strasheela design/Refactoring/Concurrent procedure/method filter (filterThreaded) which does return stream instead of list
+  :ARCHIVE_CATEGORY: Strasheela
+  :ARCHIVE_ITAGS: STRASHEELA
+  :END:
+
+  see draft at [[file:~/oz/music/Strasheela/tmp.oz::proc%20ConcurrentFind%20Xs%20F%20Result][file:~/oz/music/Strasheela/tmp.oz::proc ConcurrentFind Xs F Result]]
+
+** DONE Reply mail to raph and Jorge					:URGENT:
+   CLOSED: [2008-03-17 Mon 23:00]
+
+* DONE Synchronise Strasheela on MBP and Office Mac			:URGENT:
+  CLOSED: [2008-03-17 Mon 23:00]
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2008-03-17 Mon 23:00
+  :ARCHIVE_FILE: ~/oz/music/Strasheela/strasheela/trunk/strasheela/others/TODO/Strasheela-TODO.org
+  :ARCHIVE_OLPATH: Strasheela design/Refactoring/Concurrent procedure/method filter (filterThreaded) which does return stream instead of list
+  :ARCHIVE_CATEGORY: Strasheela
+  :ARCHIVE_TODO: DONE
+  :ARCHIVE_ITAGS: STRASHEELA
+  :END:
+
+  SVN commit changes on Office Mac, so I can update the MBP accordingly
+
+* DONE Read plain Filter definition: how can it be made into the concurrent version
+  CLOSED: [2008-03-14 Fri 11:43]
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2008-03-17 Mon 23:01
+  :ARCHIVE_FILE: ~/oz/music/Strasheela/strasheela/trunk/strasheela/others/TODO/Strasheela-TODO.org
+  :ARCHIVE_OLPATH: Strasheela design/Refactoring/Concurrent procedure/method filter (filterThreaded) which does return stream instead of list
+  :ARCHIVE_CATEGORY: Strasheela
+  :ARCHIVE_TODO: DONE
+  :ARCHIVE_ITAGS: STRASHEELA
+  :END:
+
+* DONE Define ConcurrentFilter as proc
+  CLOSED: [2008-03-14 Fri 11:44]
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2008-03-17 Mon 23:01
+  :ARCHIVE_FILE: ~/oz/music/Strasheela/strasheela/trunk/strasheela/others/TODO/Strasheela-TODO.org
+  :ARCHIVE_OLPATH: Strasheela design/Refactoring/Concurrent procedure/method filter (filterThreaded) which does return stream instead of list
+  :ARCHIVE_CATEGORY: Strasheela
+  :ARCHIVE_TODO: DONE
+  :ARCHIVE_ITAGS: STRASHEELA
+  :END:
+
+  see LUtils.concurrentFilter
+
+
+
 * DONE Oz Path							   :@NET:URGENT:
   CLOSED: [2008-03-10 Mon 17:38]
   :PROPERTIES:
