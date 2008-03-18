@@ -142,7 +142,7 @@ define
    proc {WriteLilyFile BaseFilename MyScore}
       Filename=BaseFilename#@C
    in
-      {System.show @C}
+      %{System.show @C}
       {Out.outputLilypond
        MyScore
        unit(file:Filename
