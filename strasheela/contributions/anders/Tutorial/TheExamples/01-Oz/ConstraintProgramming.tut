@@ -24,7 +24,7 @@
 <subsection title="Variables domains">
 <info>The two variables X and Y are declared to integers with a specific domain of allowed values (finite domain, FD).  X is explicitly declared to an integer in {0, ..., 10}. Y is declared to any integer supported by Oz (so you see the maximum integer domain supported by Oz).
 
-Please note that a finite domain consists always of integers in Oz (for efficiency reasons), and that FD integers can not be negative. There are also other domains supported (e.g. sets of finite integers are build-in, and real numbers are available as a third-party extension). 
+Please note that a finite domain consists always of integers in Oz (for efficiency reasons), and that FD integers cannot be negative. There are also other domains supported (e.g. sets of finite integers are build-in, and real numbers are available as a third-party extension). 
 </info>
 <oz>local 
   X = {FD.int 0#10}
@@ -83,7 +83,7 @@ end</oz>
 <subsection title="Oz Explorer">
 <info>This example uses another constraint solver, the Oz Explorer.  The Explorer visualises the search space.  Green nodes in the tree denote solutions, red nodes represent a fail, blue nodes show a stage in the search where there are still open decisions.  Triangles represent a subtree (use the middle mouse button to show the nodes of the subtree).
 
-Just double-click on a node to see the values of the variables at this stage during the search process (you can not look at failed nodes, though).  Note that you may need to select a suitable Explorer action first: in the menu Nodes select Information Action -> Inspect (the other actions are intended for score processing).  You can use the Explorer to get some intuitive understanding of the search process.  For example, look first at the variable values in the root node, than in a child node of the root and in a grand-child node and so forth, to monitor how the search process shrinks the variable domains.
+Just double-click on a node to see the values of the variables at this stage during the search process (you cannot look at failed nodes, though).  Note that you may need to select a suitable Explorer action first: in the menu Nodes select Information Action -> Inspect (the other actions are intended for score processing).  You can use the Explorer to get some intuitive understanding of the search process.  For example, look first at the variable values in the root node, than in a child node of the root and in a grand-child node and so forth, to monitor how the search process shrinks the variable domains.
 
 You may play around with the menu entries of the Oz Explorer.  For example, select the top node with the mouse, then go to the 'Search' menu and select 'Next Solution'.
 </info>

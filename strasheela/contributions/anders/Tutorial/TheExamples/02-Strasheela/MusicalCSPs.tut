@@ -115,7 +115,7 @@ The Explorer has been extended for outputting Strasheela scores into various for
 
 Do settings for different program path names as explained before
 
-Note for developer: output dir is always default (ie. /tmp) and this can not be changed in settings GUI yet
+Note for developer: output dir is always default (ie. /tmp) and this cannot be changed in settings GUI yet
   </info>
   <oz>{SDistro.exploreOne
  proc {$ MyScore}
@@ -232,7 +232,7 @@ third way: redefine your CSP
 </subsection>
   <subsection title="Using plain test">
 <info></info><oz>
-%% Using the plain boolean test isSimultaneousItem (i.e., a method returning either true or false) blocks until the temporal structure is fully determined
+%% Using the plain Boolean test isSimultaneousItem (i.e., a method returning either true or false) blocks until the temporal structure is fully determined
 
 local
 Note1
@@ -290,7 +290,7 @@ end
   </oz></subsection>
   <subsection title="good">
 <info></info><oz>    
-%% Suitable approach: using reified constraint together with an equality check as a boolean test
+%% Suitable approach: using reified constraint together with an equality check as a Boolean test
 
 local
 Note1 Note2 Seq1

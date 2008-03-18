@@ -4,7 +4,7 @@
 
 <section title="-- More Oz Basics">
 <subsection title="Introduction">
-<info>This chapter covers more basic info about Oz.  However, despite still beging "basic" information, it requires a solid understanding of material in the previous chapter.</info>
+<info>This chapter covers more basic info about Oz.  However, despite still being "basic" information, it requires a solid understanding of material in the previous chapter.</info>
 <oz></oz>
 </subsection>
 </section>
@@ -13,7 +13,7 @@
 <subsection title="Introduction">
 <info>Pattern matching is a convenient way to access the elements contained in compund data types (i.e. records, lists, etc).  Pattern matching decomposes such compund data, declares new variables, and binds these variables to parts of the compound data.
 
-The primary pattern matching construct is the case statement, but some programming constructs (such as functions) allow pattern matching via an implicit case statement.
+The primary pattern matching construct is the `case' statement, but some programming constructs (such as functions) allow pattern matching via an implicit case statement.
 </info>
 <oz></oz>
 
@@ -27,8 +27,7 @@ This approach can be used to pattern match lists of arbitrary length, except emp
 <oz>local
    Xs = [1 2 3 4]
 in
-   case Xs of
-      H | T
+   case Xs of H | T
    then
       {Inspect H}
       {Inspect T}
@@ -44,8 +43,7 @@ WARNING: if the length of the lists is not equal, an error occurs.
 <oz>local
    Xs = [1 2 3 4]
 in
-   case Xs of
-      [A B C D]
+   case Xs of [A B C D]
    then
       {Inspect A}
       {Inspect B}
@@ -56,44 +54,37 @@ end</oz>
 </subsection>
 
 <subsection title="Multiple case clauses">
-<info>Having only a single clause to match against (as in the previous sections), can be too restrictive.  This section presents a typical `case' expression.  It matches a list, which checks whether Xs is either a non-empty list, an empty list, or some other value.  You may want to play around with the value of Xs to try out these different clauses.</info>
+<info>Having only a single clause to match against (as in the previous sections), can be too restrictive.  This section presents a typical `case' expression.  It matches a list, which checks whether Xs is either a non-empty list, an empty list, or some other value.  Additional case-clauses are introduced with the keyword `[]'.  You may want to play around with the value of Xs to try out these different clauses.</info>
 <oz>local
    Xs = [1 2 3 4]
 in
-   case Xs of
-      H|T
-   then
-      {Inspect nonEmptyList}
-   [] nil then
-      {Inspect emptyList}
-   else
-      {Inspect notList}
+   case Xs of H|T then {Inspect nonEmptyList}
+   [] nil then {Inspect emptyList}
+   else {Inspect notList}
    end 
 end</oz>
 </subsection>
 
 <subsection title="Implicit pattern matching">
-<info>The following function GetFeature2 expects a record as argument; this record must match recordType(feature2:_ ...).  The variable MyVar is implicitly declared and bound to the value at the feature 'feature2' of the record given as argument to the function.
+<info>The following function GetX expects a record as argument; this record must match test(x:X ...).  The variable X is implicitly declared and bound to the value at the feature 'x' of the record given as argument to the function.
 
-Please note that the record in the header of the function GetFeature2 is not even complete but contains three dots (...) to indicate that further record features are possible.
+Please note that the record in the header of the function GetX is not even complete but contains three dots (...) to indicate that further record features are possible.
 </info>
 <oz>local
-   MyRec = recordType(feature1:value1 feature2:value2)
-   fun {GetFeature2 recordType(feature2:MyVar ...)}
-      MyVar
-   end
+   R = test(x:value1 y:value2)
+   fun {GetX test(x:X ...)} X end
 in
    %% show the normal record
-   {Inspect MyRec}
+   {Inspect R}
    %% show the feature we want
-   {Inspect {GetFeature2 MyRec}}
+   {Inspect {GetX R}}
 end</oz>
 </subsection>
 </section>
 
 <section title="Procedures over Compounds">
 <subsection title="Introduction">
-<info>Oz provides a rich set of procedures for processing these compound data such as lists and records.  A few sections are shown here.  More procedures are listed in the reference documentation at
+<info>Oz provides a rich set of procedures for processing compound data such as lists and records.  A few examples are shown here.  More procedures are listed in the reference documentation at
 
    http://www.mozart-oz.org/documentation/base/index.html
 </info>
@@ -101,11 +92,11 @@ end</oz>
 </subsection>
 
 <subsection title="Record HasFeature">
-<info>Tests whether a record has a certain feature.</info>
+<info>Test whether a record has a certain feature.</info>
 <oz>{Inspect {HasFeature unit(x:1 y:2 z:3) y}}</oz>
 </subsection>
 
-<subsection title="Record -> List">
+<subsection title="Record arity">
 <info>Return the features of a record as a list.</info>
 <oz>{Inspect {Arity unit(a b x:1 y:2 z:3)}}</oz>
 </subsection>
@@ -157,11 +148,11 @@ This leads to highly flexible programming technique called higher-order programm
 <subsection title="Filter">
 <info>The function Filter expects a list and a test function, and returns only those elements for which the test function returns true.
 
-The function IsEven returns true for even integers and thus a list with only the even integers in [~3 ~2 ~1 0 1 2 3] is returned.  Try replaying IsEven by IsOdd, IsNumber or IsNat (testing for natural numbers) to better understand this filtering.
+The function IsEven returns true for even integers and thus a list with only the even integers in [~4 ~3 ~2 ~1 0 1 2 3] is returned.  Try replaying IsEven by IsOdd, IsNumber or IsNat (testing for natural numbers) to better understand this filtering.
 
 (BTW: there is a bug in IsOdd concerning negative numbers)
 </info>
-<oz>{Browse {Filter [~ 4 ~3 ~2 ~1 0 1 2 3] IsEven}}</oz>
+<oz>{Browse {Filter [~4 ~3 ~2 ~1 0 1 2 3] IsEven}}</oz>
 </subsection>
 
 <subsection title="ForAll">
@@ -198,22 +189,19 @@ end</oz>
 <subsection title="Anonymous procedures">
 <info>Sometimes we need a function only once -- as the function Square in the previous section.  In such cases we don't necessarily need to care about giving the function any name.  Instead, we can define an anonymous function.
 
-This section restates the previous section by defining the Square function 'inline' without giving it any name.  Please recall that $ always denotes a return value.  In this case, $ returns the function value itself.
-</info>
+This section restates the previous section by defining the Square function 'inline' without giving it any name.  In an anonymous function definition, the variable which names the function is replaced by $ (dollar sign).</info>
 <oz>{Browse 
  {Map [1 2 3 4 5 6] fun {$ X} X * X end}}</oz>
 </subsection>
+
+
 
 <subsection title="Sort (simple)">
 <info>The function Sort expects a list and a binary function (i.e. a function expecting two values) as arguments.  This binary function compares two values, and Sort sorts the list values according to this comparison.  For example, the function in the section compares two numbers and returns true if the first number is smaller.  Consequently, this section sorts the list elements in ascending order.  You may want to replace the &lt; by &gt; in the function definition to sort the numbers in decreasing order.
 </info>
 <oz>{Browse
- {Sort
-  [1 5 3 2 0 7]
-  fun {$ X Y}
-    X &lt; Y
-  end
- }}</oz>
+ {Sort [1 5 3 2 0 7]
+  fun {$ X Y} X &lt; Y end}}</oz>
 </subsection>
 
 <subsection title="Sort (advanced)">
@@ -224,20 +212,15 @@ This section restates the previous section by defining the Square function 'inli
   [1 5 3 2 0 7]
   fun {$ X Y} 
     if {IsEven X} then
-      if {IsEven Y} then
-        X &lt; Y
-      else
-        true
+      if {IsEven Y} then X &lt; Y
+      else true
       end
     else
-      if {IsOdd Y} then
-        X &lt; Y
-      else
-        false
+      if {IsOdd Y} then X &lt; Y
+      else false
       end
     end
-  end
- }}</oz>
+  end}}</oz>
 </subsection>
 
 <subsection title="Defining higher-order procedures">
@@ -263,7 +246,7 @@ end</oz>
 <subsection title="BACKGROUND">
 <info>Terms: first-class value, first-class function/procedure, higher-order function/procedure.
 
-A first-class value is a value (also object, or citizen) which can be stored in data structures, given to procedures as arguments and returned as results. Functions as first-class values are also called first-class function. 
+A first-class value is a value (also object, or citizen) which can be stored in data structures, given to procedures as arguments and returned as results. Functions which are first-class values are also called first-class functions. 
 
 First-class functions are a central concept of functional programming. They allow for higher-order programming, which make procedures more general and in effect can greatly reduce the length of a program. For example, instead of defining a sort function for every kind of data you need to sort (e.g., numbers, strings, score objects) you only define a single sort function and specify how it compares values. 
 
@@ -271,7 +254,6 @@ Reading:
 
   - van Roy and Haridi, Sec. 3.6
   - Wikipedia: http://en.wikipedia.org/wiki/First-class_function
-
 </info>
 <oz></oz>
 </subsection>
@@ -286,7 +268,6 @@ Reading:
 
 <subsection title="Unifying two numbers">
 <info>Unification shares information between two variables, including the domain of possible values. This example introduces finite domain integers (FD), discussed below in more detail.
-
 </info>
 <oz>local 
   X = {FD.int 1#5} % declare an integer with domain {1, ..., 5}
@@ -327,8 +308,8 @@ Unification is the core operation of logic programming (besides search). Variabl
 Reading: 
 
   - van Roy and Haridi, Chap. 2 (in particular Sec. 2.2, and 2.7.2)
+  - Oz Tutorial, Chap. 4
   - Wikipedia: http://en.wikipedia.org/wiki/Unification
-
 </info>
 <oz></oz>
 </subsection>
@@ -337,12 +318,7 @@ Reading:
 
 <section title="Object-Oriented Programming">
 <subsection title="Introduction">
-<info>Oz supports object-oriented programming.  This programming paradigm introduces the notion of objects which instantiate classes.  An object (or class instance) is a datum which encapsulates its internal structure.  A class specifies what data are contained in its instances and what methods these instances understands.  A method (or message) is effectively a procedure which is defined for instances of specific classes only.
-
-For more details on object-oriented programming in general, please refer to other Oz documentation:
-    http://www.mozart-oz.org/documentation/tutorial/node10.html
-
-Internally, objects are actually procedures which expect a single argument -- hence this syntax.  When the object is sent a message (i.e. the procedure is called with a specific argument) it processes the message according to its definition.  This method definition may change its internal state, as we expect from typical objects.
+<info>Oz supports object-oriented programming (OOP).  This programming paradigm introduces the notion of objects.  Objects encapsulate internal data and understand methods (or messages) which somehow process this internal data.  Different 'kinds' of objects are defined by defining classes: objects are class instances.  A class specifies what data are contained in its instances and what methods these instances understands.  A method is effectively a procedure which is defined for instances of specific classes only.
 </info>
 <oz></oz>
 </subsection>
@@ -357,6 +333,8 @@ Internally, objects are actually procedures which expect a single argument -- he
 Please note that the syntax of a method differs clearly from the procedure syntax shown before.  If `show' was a procedure, then we would write:
 
   {Show Window}
+
+Internally, objects are actually procedures which expect a single argument -- hence this syntax.  When the object is sent a message (i.e. the procedure is called with a specific argument) it processes the message according to its definition.  
 </info>
 <oz>local
    Window = {QTk.build lr(button(text:"Hello world!" 
@@ -389,9 +367,110 @@ in
 end</oz>
 </subsection>
 
+
+<subsection title="Nesting marker $">
+<info>Oz provides a special construct for marking return values. This nesting marker is notated $ (dollar sign).  In a previous example (repeated below), the nesting marker replaced the variable naming the function.  In this case, $ returns the function value itself.
+
+  {Map [1 2 3 4 5 6] fun {$ X} X * X end}
+
+
+More generally, the nesting marker transforms any statement into an expression.  For example, method calls are statements by default -- they return nothing.  Using the nesting marker can make code more concise.  Instead of writing 
+
+  local X in {Obj get(X)} {Browse X} end
+
+we can write
+
+  {Browse {Obj get($)}}
+
+The following example creates a text entry widget.  Whenever you edit the widget text, it is (re-)browsed.  Again it is not important to understand the full example; just note the code segment which does the browsing (see below).  Entry is the entry widget object, and the method get(X) binds its argument X to the present widget text (as string). 
+
+  {Browse {String.toAtom {Entry get($)}}}
+</info>
+<oz>local
+   Entry
+   Window = {QTk.build
+	     lr(entry(init:"Change this text..." 
+		      handle:Entry
+		      action:proc{$} {Browse {String.toAtom {Entry get($)}}} end))}
+in
+   {Window show}
+end</oz>
+<!-- OLD EXAMPLE 
+<oz>local
+   proc {Max X Y Z}
+      if X >= Y then Z = X else Z = Y end 
+   end 
+   X = 4
+   Result
+in
+   %% Note the $
+   X = {Max $ 3 Result}
+   {Browse Result}   
+end</oz>   -->
+</subsection>
+
+<subsection title="Class definition">
+  <!-- TODO: UNFINISHED SEC -->
+<info>This example defines a simple counter class. The class has one attribute (and internal datum) for storing the current counter value, named i. The class defines three methods. The method init expects an integer I  
+</info>
+<oz>local
+   class Counter
+      attr i
+      meth init(I) i:= I end
+      meth get(I) I=@i end
+      meth incr i := @i+1 end
+   end
+   MyCounter = {New Counter init(3)}
+in
+   {Browse {MyCounter get($)}}
+   {MyCounter incr}
+   {Browse {MyCounter get($)}}
+end
+</oz>
+</subsection>
+
 <!--
-TODO: add subsections for creating an object
+TODO: add subsections for [defining a class ? and] creating an object
 -->
+
+<subsection title="BACKGROUND">
+  <!-- TODO: UNFINISHED SEC -->
+<info>Terms: class, object (class instance), method
+
+Writing Strasheela programs requires some basic 
+
+
+Strasheela makes extensive use of object-oriented programming 
+
+
+Object-oriented programming is a complex programming paradigm. 
+
+
+This section presented only 
+
+
+how 
+
+
+
+
+introduced only 
+
+
+Note that object-oriented programming is often used as a stateful programming paradigmn: methods often change the internal state of objects. By constrast, most methods in Strasheela are stateless...
+
+
+For more details on object-oriented programming in general, please refer to other Oz documentation:
+
+
+Reading: 
+
+  - van Roy and Haridi, Chap. 7
+  - Oz Tutorial, Chap. 10
+
+</info>
+<oz></oz>
+</subsection>
 </section>
 
 
@@ -428,9 +507,9 @@ end</oz>
 </subsection>
 
 <subsection title="Variables (multiple threads)">
-<info>Variables may also be used to communicate between different threads.  This example declares X and then browses 'hello' (just to show that the browser works in principle).  However, the addition X+3 can not be executed immediately and blocks.  Because this computation is executed in its own thread, the top-level thread continues regardless, and calls the procedure Delay, which waits for 3000 msecs.  After that time, the top-level thread determines X to 4.  This awakes the other thread: it can now compute X+3 and browse the sum.
+<info>Variables may also be used to communicate between different threads.  This example declares X and then browses 'hello' (just to show that the browser works in principle).  However, the addition X+3 cannot be executed immediately and blocks.  Because this computation is executed in its own thread, the top-level thread continues regardless, and calls the procedure Delay, which waits for 3000 msecs.  After that time, the top-level thread determines X to 4.  This awakes the other thread: it can now compute X+3 and browse the sum.
 
-In the section below, the addition X+3 can not be performed as long as the value of X is unknown.
+In the section below, the addition X+3 cannot be performed as long as the value of X is unknown.
 </info>
 <oz>local
   X 
