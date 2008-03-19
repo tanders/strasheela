@@ -962,7 +962,9 @@ define
 %       end
    end
 
-   /** %% Free parameter values are by default turned into FD ints during the score initialisation (with InitScore). In contrast, parameters which inherit from this mixin are left untouched (i.e. if their value is a free variable, it remains free during initialisation). This can be useful, for example, if parameter values are potentially non-integers (e.g., floats).  
+   /** %% Free parameter values are by default turned into FD ints during the score initialisation (with InitScore). In contrast, parameters which inherit from this mixin are left untouched (i.e. if their value is a free variable, it remains free during initialisation). This can be useful, for example, if parameter values are potentially non-integers (e.g., floats).
+   %%
+   %% NOTE: uninitialised parameters will cause problems for the score distribution -- better exclude them from the distribution.  
    %% */
    class LeaveUninitialisedParameterMixin
       feat !LeaveUninitialisedParameterMixinType:unit
