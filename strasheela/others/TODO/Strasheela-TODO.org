@@ -25,6 +25,14 @@
 *** Redefine as constraint 
 
 
+** TODO Add revised Fuxian Counterpoint example with scale degrees 	  :NEXT:
+
+   No much fuss: add to list of examples under name Fuxian-revised or something
+
+   Mention in comment: example demonstrates use of scale degrees
+
+   Add note/link to example HTML file in doc
+
 ** Josquin counterpoint example						 :MAYBE:
 
    See description at [[file:~/oz/music/Strasheela/private/examples/Josquin/PlanningAndThinking/JosquinCounterpoint-MusikTheorie.txt]]
@@ -39,22 +47,95 @@
 
 * Strasheela design						    :STRASHEELA:
 
+** CSPs with soft constraints 						  :NEXT:
+   
+   How can I model soft constraints with the means available in Oz, e.g.,
+   - reified constraints
+   - best solution search (BAB)
 
-** Markov chain constraints which include probablilty		     :NEXT:WAIT:
+*** Read literature on soft constraints					 :@READ:
+
+**** TODO [#A] [50%] Read soft constraints article in "Handbook of Constraint Programming"
+**** DONE Read Bartak soft constraints survey
+     CLOSED: [2008-03-17 Mon 18:33]
+
+
+**** Check further literature on weighted constraints
+
+     Sharpiro, Haralick (1981). Structural descriptions and inexact matchings. IEEE Transactions Pattern Analysis Machine Intelligence, 3:504-519. 
+
+     k-weighted constraints: J. Larrosa (2002). On arc and node consistency in weighted CSP. Proc of AAAI'02, pp. 48-53.  
+
+     Search web ...
+
+**** DONE Skim "Constraint Satisfaction with Preferences" 
+     CLOSED: [2008-03-17 Mon 18:45]
+
+@PHDTHESIS{Ru:thesis01,
+        TITLE = {{Constraint Satisfaction with Preferences}},
+        AUTHOR = "Hana Rudov{\'a}",
+        SCHOOL = {Faculty of Informatics, Masaryk University},
+        YEAR = 2001,
+        OPTURL = "http://www.fi.muni.cz/~hanka/phd.html",
+  OPTcomment = {survey on soft constraint approaches},
+  OPTpath = {programming/constraints/Rudova-phd.pdf},
+  OPTnote = 	 {},
+  OPTannote = 	 {file InMyLib}
+}
+
+
+
+*** Weighted constraints for Strasheela
+
+**** TODO Revise my idea sketch on paper 
+
+     see folder "Strasheela: weighted constraints"
+
+***** Question: should I better use generic framework (e.g., semiring-based soft constraints) instead of only specific case weighted constraints
+
+      Counterargument: I can implement weighted constraints with FD ints, and I can transform all existing Strasheela constraints in soft weighted constraints with reification. Also, this will still work with GeOz
+      For all other frameworks I need at least real interval constraints (and who is maintaining them..)
+
+
+**** TODO Write dummy CSP with weighted constraints 
+
+**** With the dummy example create abstractions for writing weighted constraint problems 
+
+     E.g., 
+     - How to easily collect and sum all weights (store sum FD int in info slot of top-level container, so comparison constraint of best solution search can easily access it?). 
+     - "Dynamic" soft constraints: what is my formalism? Idea: proc (constraint) returning cost as last arg. Can be applied easily with all mapping funs (e.g., MapNeighbours) and results are then added
+     - Soft variant of PercentTrue: returns cost how far constraint is violated
+       - Other soft variant of PercentTrue: allow for range spec (Min#Max)
+	 Less precise, but more simple (and more efficient -- no optimisation..)
+
+
+** Markov chain constraints which include probablilty			  :WAIT:
 
    Wait for soft constraints support for Strasheela
-   (I realised: this is not so simple: I first need support of _real_ soft constraints)
 
 *** Recapitulate my simple Markov chain constraint
     
     MarkovChain, MarkovChain_1
     [[file:~/oz/music/Strasheela/strasheela/trunk/strasheela/contributions/anders/Pattern/Pattern.oz::proc%20MarkovChain%20Xs%20Decl][file:~/oz/music/Strasheela/strasheela/trunk/strasheela/contributions/anders/Pattern/Pattern.oz::proc MarkovChain Xs Decl]]
     
-*** TODO Extend/Edit definition using something like HowManyTrue / HowManyTrueR
 
+*** TODO Extend/Edit definition using PercentTrue (as soft constraint)
+
+    - Markov chain def 
+      - For each clause in Markov chain
+	- For each sublist of given list (sublist length depending on
+	  order, 0th order: sublist length is 1)
+	  - Apply reified constraint checking checking whether clause holds
+      - Check probability with soft PercentTrue, return cost/penalty FD int
+    - Return cost sum of all clauses: will be used for optimising with BAB 
+
+    The following values are vars: input list, clauses (value sequences and percentages).
+    Fixed: number of clauses and order.  
+    So, this approach can be used for generation and [engeschraenkt] for analysis.
+    ?? How can I make number of clauses constrainable? 
+    
     ?? Use name MarkovChain for new constraint and give old defs
     MarkovChain, MarkovChain_1 a new name
-
 
 
 
@@ -300,6 +381,15 @@ configure: error: ozinstall not found
     - Baboni Schilingi, Jacopo and Voisin Frederic. 1997. Morphologie et structures musicales in Morphologie, Reference Manual. Paris: IRCAM.
 
 
+*** Extend: dirrent input sequence elements are of different importance
+
+    Example: Melody: some notes are longer or on stronger beat and therefore more important. 
+    Can I somehow grade the importance of sequence elements (e.g., with some factor per element?)?
+
+**** TODO Brainstorm: ideas to express this			
+
+
+
 ** Time curves etc [[file:~/oz/music/Strasheela/private/examples/forOlleRomo/TempoCurves-etc.oz][TempoCurves-etc.oz]]					  :NEXT:
 
    [[file:~/oz/music/Strasheela/strasheela/trunk/strasheela/examples/ContinuousControllersInScore-MidiOutput.oz]]
@@ -331,34 +421,39 @@ configure: error: ozinstall not found
     Transform with toInitRecord and then pickle with Score.saveScore
 
 
-** CSPs with soft constraints 						  :NEXT:
-   
-   How can I model soft constraints with the means available in Oz, e.g.,
-   - reified constraints
-   - best solution search (BAB)
-
-*** Read literature on soft constraints					 :@READ:
-
-**** TODO [#A] Read soft constraints article in "Handbook of Constraint Programming"
-**** DONE Read Bartak soft constraints survey
-     CLOSED: [2008-03-17 Mon 18:33]
 
 
-**** DONE Skim "Constraint Satisfaction with Preferences" 
-     CLOSED: [2008-03-17 Mon 18:45]
+** Soft contour constraint
 
-@PHDTHESIS{Ru:thesis01,
-        TITLE = {{Constraint Satisfaction with Preferences}},
-        AUTHOR = "Hana Rudov{\'a}",
-        SCHOOL = {Faculty of Informatics, Masaryk University},
-        YEAR = 2001,
-        OPTURL = "http://www.fi.muni.cz/~hanka/phd.html",
-  OPTcomment = {survey on soft constraint approaches},
-  OPTpath = {programming/constraints/Rudova-phd.pdf},
-  OPTnote = 	 {},
-  OPTannote = 	 {file InMyLib}
-}
+   Idea: most intervals follow given contour, but not all. Combines
+   Contour and PercentTrue (percentage specified as range)
 
+   Applications: 
+
+   - Contour of melody follows simple shape in general (e.g. first ascending then
+     decending), but there are exceptions
+
+     -> I got this idea while listening to some non-Western music..
+
+     Option: additionally, the overall direction of the melody is
+     constrained by constraining specific intervals (e.g. between
+     first and last pitch)
+
+*** TODO Define constraint InpreciseContour (name?)
+*** Define example (see above)
+
+
+** Score transformation
+
+   see [[file:~/oz/music/Strasheela/private/WorkInProgress/ScoreTransformation/ScoreTransformation.oz]]
+   and [[file:~/oz/music/Strasheela/private/WorkInProgress/ScoreTransformation/testing/ScoreTransformation-test.oz]]
+
+*** TODO Reread/Revise already existing code 
+
+*** Check todo section in source and test file for further step(s)
+
+   see [[file:~/oz/music/Strasheela/private/WorkInProgress/ScoreTransformation/ScoreTransformation.oz]]
+   and [[file:~/oz/musi
 
 ** Update Lilypond output 
 
