@@ -62,7 +62,7 @@ import
    % Score at 'ScoreCore.ozf'
    % Browser(browse:Browse) % temp for debugging
 export 
-%   MakeFDDistribution % better use MakeSearchScript
+   MakeFDDistribution % better use MakeSearchScript
    MakeSearchScript
    SearchOne SearchAll SearchBest
    SearchOneDepth 
@@ -269,7 +269,9 @@ define
 	 end
       end
    in
-      /** %% Function returns a specification of a distribution strategy (i.e. an argument for FD.distribute) for parameter score objects. The result of MakeFDDistribution is a FD distribution strategy specification as expected by FD.distribute (see http://www.mozart-oz.org/documentation/system/node26.html). However, the distribution defined by MakeFDDistribution always distributes score parameter objects, not plain variables.
+      /** %% [obsolete function] Function returns a specification of a distribution strategy (i.e. an argument for FD.distribute) for parameter score objects. The result of MakeFDDistribution is a FD distribution strategy specification as expected by FD.distribute (see http://www.mozart-oz.org/documentation/system/node26.html). However, the distribution defined by MakeFDDistribution always distributes score parameter objects, not plain variables.
+      %%
+      %% NOTE: Using MakeFDDistribution is discouraged, better use MakeSearchScript. 
       %% */
       fun {MakeFDDistribution Spec}
 	 FullSpec = {PreProcessSpec Spec}
