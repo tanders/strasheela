@@ -1,0 +1,72 @@
+
+* Measure runtime (walltime)
+
+
+    /** %% Returns the time (in msecs) the application of P (a null-
+ary procedure) took.
+    %% */
+    fun {TimeSpend P}
+       Start End
+    in
+       Start = {Property.get 'time.total'}
+       {P}
+       End = {Property.get 'time.total'}
+       End - Start
+    end
+
+** users@mozart-oz.org
+     
+   On Mar 11, 2008, at 4:26 PM, Robert Van Dam wrote:
+   
+   I've been using profiling of this sort for a while and I think 'time.total' is the best mechanism that I know of for doing walltime.  Of course you can also use time.user and time.system if you prefer cpu time.  The only problem I've ever encountered is that it reports multiples of 10 millisecond s so you can't reliably measure anything smaller or much more precisely than that (except of course by repeated calls and an average)
+
+
+
+* Measure memory consumption
+
+  use Profile.getInfo and select measurements for given proc name. See mail from Wolfgang Meyer for details and example
+
+
+** users@mozart-oz.org
+
+  On Mar 11, 2008, at 6:28 PM, Wolfgang Meyer wrote:
+
+  I am using the internal "Profile" module to check the runtime complexity
+  of functions in unit tests.
+  "Profile.getInfo" returns a list of records like this:
+  
+  profileStats(calls:1001 closures:1 column:0 file:'Oz' heap:25120 line:9
+  name:'ForProc' samples:0)
+  
+  "samples" does not work, but I found that "calls" (number of function
+  calls) often reflects the used time quite accurately.
+  "heap" is useful to trace the memory consumption.
+  
+  Example usage:
+
+\switch +profile
+declare
+[Profile] = {Module.link ['x-oz://boot/Profile']}
+Dict = {NewDictionary}
+in
+{Profile.mode true}
+{Profile.reset}
+
+for I in 1..1000 do
+   _ = I div 2
+   Dict.I := I
+end
+
+{Inspect {Profile.getInfo}}
+
+
+------
+
+    On Mar 11, 2008, at 4:26 PM, Robert Van Dam wrote:
+
+As for memory, I used the property 'gc.size' quite frequently although you have to be sure to call System.gcDo before you read from it or else you'll get a lot of random jitter.  However, if your procedure P has no side effects then the increase in 'gc.size' will be minimal if not zero.  So for cases like that, I've found 'memory.heap' to be extremely informative.  I believe that it gives an idea of how much memory your call used in the general sense (rather than how much memory its output and/or side effects used).
+
+P.S. Check the docs, but I think 'gc.size' and 'memory.heap' report numbers in different units (e.g. KB vs MB)
+
+
+
