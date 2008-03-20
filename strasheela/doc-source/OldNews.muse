@@ -1,5 +1,11 @@
 #title Old Strasheela News
 
+  We welcome Graham Percival, who recently joined the Strasheela team as a documentation writer. Graham already worked on the documentation of [[http://lilypond.org][Lilypond]] and [[http://marsyas.sness.net][Marsyas]] (13 December 2007)
+
+  [[http://packman.links2linux.de/package/strasheela/][SuSE Linux RPM packages available for Strasheela 0.9 (thanks Toni!)]] (3 October 2007)
+
+  Strasheela 0.9 released ([[Changes]])  (2 October 2007)
+
   Strasheela 0.8.3 released ([[Changes]])  (7 August 2007)
 
   Strasheela's ongoing development is funded for the coming three years -- it is part of the responsibilities of my new research fellow position at the [[http://cmr.soc.plymouth.ac.uk/index.html][Interdisciplinary Centre for Computer Music Research]], [[http://www.plymouth.ac.uk/][University of Plymouth]] (7 August 2007) 
