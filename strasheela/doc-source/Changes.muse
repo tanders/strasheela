@@ -4,36 +4,56 @@
 
 * Changes in Version 0.9.2 (no date yet)
 
-  - Added to Fenv: TimeShiftToTimeMap, Integrate, TempoCurveToTimeMap, ConcatenateTempoCurves, Reciprocal, FenvToMidiCC, ItemFenvToMidiCC, ItemFenvY, TemporalFenvY
+  - Code additions
+
+    - Support for IOzSeF search engines which can solve complex constraint problems more efficiently. For example, all IOzSeF solvers support adaptive recomputation -- a technique saving memory (see [[http://books.google.com/books?id=BYXNltNPDGAC&pg=PR1&ots=XEZwT73n-z&dq=Programming+Constraint+Services&sig=vfakyMOLFnvtSWHV3_aUGo94iX8][Programming Constraint Services]]). Note that you can enable score output information actions for the IOzSeF 'Explorer' by calling ={Init.addIOzSeFOuts}= (e.g., in your OZRC init file).  
+
+      Added to [[../doc/api/node8.html][SDistro]]: IozsefInit, IozsefInitBest, IozsefExploreOne, IozsefExploreAll, IozsefExploreBest, IozsefSearchOne, IozsefSearchAll, IozsefSearchBest, SearchOneDepth 
+
+    - Concurrent filtering functions, suitable for delayed constraint application
+
+      Added to [[../doc/api/node4.html][LUtils]]: CFilter, CFind
+
+    - Processing of tempo curves and time shift functions, plus further funtionality 
+
+      Added to [[../contributions/anders/Fenv/doc/node1.html][Fenv]]: TimeShiftToTimeMap, Integrate, TempoCurveToTimeMap, ConcatenateTempoCurves, Reciprocal, FenvToMidiCC, ItemFenvToMidiCC, ItemFenvY, TemporalFenvY
+
+    - Minor additions 
+      - [[../doc/api/node11.html][Out.midi]].note2Midi
+      - [[../contributions/anders/HarmonisedScore/doc/node1.html][HS]].rules.commonPCs_Card
 
 
- - Added examples which demonstrate how to use continuous controllers in the score, and how to output them to MIDI, see [[../examples/ContinuousControllersInScore-MidiOutput.oz][here]]
+  - Documentation
+ 
+    - First three chapters of the [[StrasheelaTutorial][tutorial]] text and the structure of the tutorial have been revised (thanks Graham!)
 
- - Added support for IOzSeF search engines which can solve complex constraint problems more efficiently. For example, all IOzSeF solvers support adaptive recomputation -- a technique saving memory (see [[http://books.google.com/books?id=BYXNltNPDGAC&pg=PR1&ots=XEZwT73n-z&dq=Programming+Constraint+Services&sig=vfakyMOLFnvtSWHV3_aUGo94iX8][Programming Constraint Services]]). 
-   - Added to SDistro: IozsefInit, IozsefInitBest, IozsefExploreOne, IozsefExploreAll, IozsefExploreBest, IozsefSearchOne, IozsefSearchAll, IozsefSearchBest 
-   - You can enable score output information actions for the IOzSeF 'Explorer' by calling ={Init.addIOzSeFOuts}= (e.g., in your OZRC init file)
+    - Added examples which demonstrate how to use continuous controllers in the score, and how to output them to MIDI, see [[../examples/ContinuousControllersInScore-MidiOutput.oz][here]]
 
- - Added in LUtils: CFilter, CFind: why important .. ?
+    - Revised documentation for [[../doc/api/node8.html][SDistro]].makeSearchScript (explains common interface of all solvers in SDistro). Note that Distro.makeFDDistribution is now marked obsolete (kept for now as some examples use it)
 
- - Added to SDistro: SearchOneDepth
- - SDistro: Revised documentation for MakeSearchScript, removed MakeFDDistribution as exported value -- the solvers provided by SDistro are more convenient to use
- [TODO: Check where MakeFDDistribution is used in examples]
- - Added HS.rules.commonPCs_Card
+  
+  - Fixes
+
+    - Distribution strategy with random value ordering now supports recomputation
+      This is a very important fix: a randomisation of the solution is crucial for many musical CSPs and recomputation is essential for solving highly complex problems which would take too much memory (recomputation trades RAM for runtime).
+
+      Refactored SDistro.makeSearchScript, GUtils.makeRandomGenerator and added GUtils.setRandomGeneratorSeed
+
+    - Out.scoreToEvents and Out.midi.scoreToEvents_Midi: now also support processing the top-level score container for output (if it passes the given test) 
+
+    - [[../contributions/anders/Memoize/doc/node1.html][Memo]].memoize now uses a more efficient stateful data structure internally (dictionary instead of record constraints), whereas Memo.memoize2 is fully stateless and thus can be used in a CSP, but is less efficient. Also, changed interface of Memo.memoize into {Memoize Fn ?ClearP ?MemoFn}
+
+    - [[../doc/api/node6.html][Score]].scoreObject info attribute: now convenient adding of 'labeled' info tags as records with a label supported. 
+
+      Revised ScoreObject method hasThisInfo: in case some info value is a record, then it is checked whether its label is given info atom
+
+      New ScoreObject method getInfoRecord returns info record with given label. 
+
+    - HS.score.pitchClassCollection: archiving chords and scales in a solution score is now more stable: the chord/scale index is omitted from the output if chord/scale pitch classes and transposition are determined. That way, even if the chord/scale database was edited  later (e.g., chords were added) so that the indices changed, the archived score will still work as long as the set of pitch classes for the original chords did not change.
 
 
- - Fixes
-  - Distribution strategy with random value ordering now supports recomputation
-    This is a very important fix: a randomisation of the solution is very important for music and recomputation is essential for solving highly complex problems which would take too much memory (recomputation trades RAM for runtime).
-   - Refactors MakeRandomGenerator and adds SetRandomGeneratorSeed
-   - Out.scoreToEvents and Out.midi.scoreToEvents_Midi: now also support processing the top-level score container for output (if it passes the given test) 
-   - Refactor: Memo.memoize now uses a more efficient stateful data structure internally (dictionary instead of record constraints), whereas Memo.memoize2 is fully stateless and thus can be used in a CSP, but is less efficient. Also, changed interface of Memo.memoize into {Memoize Fn ?ClearP ?MemoFn}
-   - ScoreObject method hasThisInfo: in case some info value is a record, then it is checked whether its label is given info.
-   - HS.score.pitchClassCollection: archiving chords and scales in a solution score is now more stable: the chord/scale index is omitted from the output if chord/scale pitch classes and transposition are determined. That way, even if the chord/scale database was edited  later (e.g., chords were added) so that the indices changed, the archived score will still work as long as the set of pitch classes for the original chords did not change.
+  - For further fixes see the [[../CHANGELOG.txt]].
 
-
- - Minor
-   - Added Out.midi.note2Midi
-   - Added ScoreObject method getInfoRecord
 
 
 * Changes in Version 0.9.1 (21 January 2008)

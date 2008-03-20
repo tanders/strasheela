@@ -27,49 +27,72 @@
 <h2>Changes in Version 0.9.2 (no date yet)</h2>
 
 <ul>
-<li>Added to Fenv: TimeShiftToTimeMap, Integrate, TempoCurveToTimeMap, ConcatenateTempoCurves, Reciprocal, FenvToMidiCC, ItemFenvToMidiCC, ItemFenvY, TemporalFenvY</li>
+<li>Code additions
+
+<ul>
+<li>Support for IOzSeF search engines which can solve complex constraint problems more efficiently. For example, all IOzSeF solvers support adaptive recomputation &mdash; a technique saving memory (see <a href="http://books.google.com/books?id=BYXNltNPDGAC&amp;pg=PR1&amp;ots=XEZwT73n-z&amp;dq=Programming+Constraint+Services&amp;sig=vfakyMOLFnvtSWHV3_aUGo94iX8">Programming Constraint Services</a>). Note that you can enable score output information actions for the IOzSeF 'Explorer' by calling <code>{Init.addIOzSeFOuts}</code> (e.g., in your OZRC init file).
+
+<p>Added to <a href="../doc/api/node8.html">SDistro</a>: IozsefInit, IozsefInitBest, IozsefExploreOne, IozsefExploreAll, IozsefExploreBest, IozsefSearchOne, IozsefSearchAll, IozsefSearchBest, SearchOneDepth</p></li>
+
+<li>Concurrent filtering functions, suitable for delayed constraint application
+
+<p>Added to <a href="../doc/api/node4.html">LUtils</a>: CFilter, CFind</p></li>
+
+<li>Processing of tempo curves and time shift functions, plus further funtionality
+
+<p>Added to <a href="../contributions/anders/Fenv/doc/node1.html">Fenv</a>: TimeShiftToTimeMap, Integrate, TempoCurveToTimeMap, ConcatenateTempoCurves, Reciprocal, FenvToMidiCC, ItemFenvToMidiCC, ItemFenvY, TemporalFenvY</p></li>
+
+<li>Minor additions
+
+<ul>
+<li><a href="../doc/api/node11.html">Out.midi</a>.note2Midi</li>
+<li><a href="../contributions/anders/HarmonisedScore/doc/node1.html">HS</a>.rules.commonPCs_Card</li>
+</ul></li>
+</ul></li>
 </ul>
 
 
 <ul>
-<li>Added examples which demonstrate how to use continuous controllers in the score, and how to output them to MIDI, see <a href="../examples/ContinuousControllersInScore-MidiOutput.oz">here</a></li>
-
-<li>Added support for IOzSeF search engines which can solve complex constraint problems more efficiently. For example, all IOzSeF solvers support adaptive recomputation &mdash; a technique saving memory (see <a href="http://books.google.com/books?id=BYXNltNPDGAC&amp;pg=PR1&amp;ots=XEZwT73n-z&amp;dq=Programming+Constraint+Services&amp;sig=vfakyMOLFnvtSWHV3_aUGo94iX8">Programming Constraint Services</a>).
+<li>Documentation
 
 <ul>
-<li>Added to SDistro: IozsefInit, IozsefInitBest, IozsefExploreOne, IozsefExploreAll, IozsefExploreBest, IozsefSearchOne, IozsefSearchAll, IozsefSearchBest</li>
-<li>You can enable score output information actions for the IOzSeF 'Explorer' by calling <code>{Init.addIOzSeFOuts}</code> (e.g., in your OZRC init file)</li>
+<li>First three chapters of the <a href="StrasheelaTutorial.html">tutorial</a> text and the structure of the tutorial have been revised (thanks Graham!)</li>
+
+<li>Added examples which demonstrate how to use continuous controllers in the score, and how to output them to MIDI, see <a href="../examples/ContinuousControllersInScore-MidiOutput.oz">here</a></li>
+
+<li>Revised documentation for <a href="../doc/api/node8.html">SDistro</a>.makeSearchScript (explains common interface of all solvers in SDistro). Note that Distro.makeFDDistribution is now marked obsolete (kept for now as some examples use it)</li>
 </ul></li>
+</ul>
 
-<li>Added to SDistro: SearchOneDepth</li>
-<li>SDistro: Revised documentation for MakeSearchScript, removed MakeFDDistribution as exported value &mdash; the solvers provided by SDistro are more convenient to use
-[TODO: Check where MakeFDDistribution is used in examples]</li>
 
+<ul>
 <li>Fixes
 
 <ul>
 <li>Distribution strategy with random value ordering now supports recomputation
-This is a very important fix: a randomisation of the solution is very important for music and recomputation is essential for solving highly complex problems which would take too much memory (recomputation trades RAM for runtime).
+This is a very important fix: a randomisation of the solution is crucial for many musical CSPs and recomputation is essential for solving highly complex problems which would take too much memory (recomputation trades RAM for runtime).
 
-<ul>
-<li>Refactors MakeRandomGenerator and adds SetRandomGeneratorSeed</li>
+<p>Refactored SDistro.makeSearchScript, GUtils.makeRandomGenerator and added GUtils.setRandomGeneratorSeed</p></li>
+
 <li>Out.scoreToEvents and Out.midi.scoreToEvents_Midi: now also support processing the top-level score container for output (if it passes the given test)</li>
-<li>Refactor: Memo.memoize now uses a more efficient stateful data structure internally (dictionary instead of record constraints), whereas Memo.memoize2 is fully stateless and thus can be used in a CSP, but is less efficient. Also, changed interface of Memo.memoize into {Memoize Fn ?ClearP ?MemoFn}</li>
-<li>ScoreObject method hasThisInfo: in case some info value is a record, then it is checked whether its label is given info.</li>
+
+<li><a href="../contributions/anders/Memoize/doc/node1.html">Memo</a>.memoize now uses a more efficient stateful data structure internally (dictionary instead of record constraints), whereas Memo.memoize2 is fully stateless and thus can be used in a CSP, but is less efficient. Also, changed interface of Memo.memoize into {Memoize Fn ?ClearP ?MemoFn}</li>
+
+<li><a href="../doc/api/node6.html">Score</a>.scoreObject info attribute: now convenient adding of 'labeled' info tags as records with a label supported.
+
+<p>Revised ScoreObject method hasThisInfo: in case some info value is a record, then it is checked whether its label is given info atom</p>
+
+<p>New ScoreObject method getInfoRecord returns info record with given label.</p></li>
+
 <li>HS.score.pitchClassCollection: archiving chords and scales in a solution score is now more stable: the chord/scale index is omitted from the output if chord/scale pitch classes and transposition are determined. That way, even if the chord/scale database was edited  later (e.g., chords were added) so that the indices changed, the archived score will still work as long as the set of pitch classes for the original chords did not change.</li>
 </ul></li>
-</ul></li>
 </ul>
 
 
 <ul>
-<li>Minor
-
-<ul>
-<li>Added Out.midi.note2Midi</li>
-<li>Added ScoreObject method getInfoRecord</li>
-</ul></li>
+<li>For further fixes see the <a href="../CHANGELOG.txt">../CHANGELOG.txt</a>.</li>
 </ul>
+
 
 
 
@@ -266,7 +289,7 @@ See the documentation for <a href="../contributions/anders/HarmonisedScore/doc/n
 <div id="footer">
 <div id="author">&copy; 
 Torsten Anders</div>
-<div id="date">Last time edited: 2008.03.12</div>
+<div id="date">Last time edited: 2008.03.20</div>
 </div>
   </body>
 </html>
