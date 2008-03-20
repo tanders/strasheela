@@ -435,8 +435,9 @@ end
  unit(order:startTime
       value:random)}
 
-%% changes random seed for random value ordering. NB: the random value ordering is only a temporary hack still (does not support recomputation). When it is done properly (in the not too far future ;-) ), setting the seed will not work anymore like this..
-% {OS.srand 1}
+%% change random seed
+{GUtils.setRandomGeneratorSeed 0}
+
 
 */
 
