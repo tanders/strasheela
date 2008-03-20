@@ -164,54 +164,54 @@
 <a href="#sec39">Procedures as functions</a>
 </dt>
 <dt>
-<a href="#sec40">Nesting marker $</a>
+<a href="#sec40">Recursion</a>
 </dt>
 <dt>
-<a href="#sec41">Recursion</a>
-</dt>
-<dt>
-<a href="#sec42">BACKGROUND</a>
+<a href="#sec41">BACKGROUND</a>
 </dt>
 </dl>
 </dd>
 <dt>
-<a href="#sec43">Atoms and Names</a>
+<a href="#sec42">Atoms and Names</a>
 </dt>
 <dd>
 <dl>
 <dt>
-<a href="#sec44">Introduction</a>
+<a href="#sec43">Introduction</a>
 </dt>
 <dt>
-<a href="#sec45">Atoms</a>
+<a href="#sec44">Atoms</a>
 </dt>
 <dt>
-<a href="#sec46">Equality</a>
+<a href="#sec45">Equality</a>
 </dt>
 <dt>
-<a href="#sec47">Names</a>
+<a href="#sec46">Names</a>
 </dt>
 </dl>
 </dd>
 <dt>
-<a href="#sec48">Compound Types</a>
+<a href="#sec47">Compound Types</a>
 </dt>
 <dd>
 <dl>
 <dt>
-<a href="#sec49">Introduction</a>
+<a href="#sec48">Introduction</a>
 </dt>
 <dt>
-<a href="#sec50">Records (definition)</a>
+<a href="#sec49">Records (definition)</a>
 </dt>
 <dt>
-<a href="#sec51">Records (integer features)</a>
+<a href="#sec50">Records (integer features)</a>
 </dt>
 <dt>
-<a href="#sec52">Records (nesting)</a>
+<a href="#sec51">Records (nesting)</a>
 </dt>
 <dt>
-<a href="#sec53">Records (accessing fields)</a>
+<a href="#sec52">Records (accessing fields)</a>
+</dt>
+<dt>
+<a href="#sec53">Atoms are 'empty' records</a>
 </dt>
 <dt>
 <a href="#sec54">Tuples (definition)</a>
@@ -220,59 +220,56 @@
 <a href="#sec55">Tuples (as a record)</a>
 </dt>
 <dt>
-<a href="#sec56">Tuples (as an empty tuple)</a>
+<a href="#sec56">Lists (definition)</a>
 </dt>
 <dt>
-<a href="#sec57">Lists (definition)</a>
+<a href="#sec57">Lists (consing)</a>
 </dt>
 <dt>
-<a href="#sec58">Lists (like Lisp)</a>
+<a href="#sec58">Lists (as a record)</a>
 </dt>
 <dt>
-<a href="#sec59">Lists (as a tuple)</a>
+<a href="#sec59">Lists (accessing head and tail)</a>
 </dt>
 <dt>
-<a href="#sec60">Lists (accesing the head)</a>
+<a href="#sec60">Pairs (definition)</a>
 </dt>
 <dt>
-<a href="#sec61">Pairs (definition)</a>
+<a href="#sec61">Pairs (as a tuple)</a>
 </dt>
 <dt>
-<a href="#sec62">Pairs (as a tuple)</a>
+<a href="#sec62">Strings (definition)</a>
 </dt>
 <dt>
-<a href="#sec63">Strings (definition)</a>
+<a href="#sec63">Strings (showing text)</a>
 </dt>
 <dt>
-<a href="#sec64">Strings (showing text)</a>
-</dt>
-<dt>
-<a href="#sec65">Virtual Strings</a>
+<a href="#sec64">Virtual Strings</a>
 </dt>
 </dl>
 </dd>
 <dt>
-<a href="#sec66">Error messages</a>
+<a href="#sec65">Error messages</a>
 </dt>
 <dd>
 <dl>
 <dt>
-<a href="#sec67">Introduction</a>
+<a href="#sec66">Introduction</a>
 </dt>
 <dt>
-<a href="#sec68">Parse error</a>
+<a href="#sec67">Parse error</a>
 </dt>
 <dt>
-<a href="#sec69">Static analysis error</a>
+<a href="#sec68">Static analysis error</a>
 </dt>
 <dt>
-<a href="#sec70">Binding analysis error</a>
+<a href="#sec69">Binding analysis error</a>
 </dt>
 <dt>
-<a href="#sec71">Type error</a>
+<a href="#sec70">Type error</a>
 </dt>
 <dt>
-<a href="#sec72">Failure</a>
+<a href="#sec71">Failure</a>
 </dt>
 </dl>
 </dd>
@@ -296,7 +293,7 @@ Introduction</h3>
 
 <p>Nevertheless, this tutorial is kept brief.  The explanation of Oz focuses on aspects which are particularly important for Strasheela, and even Strasheela concepts are only briefly outlined.  In other words, it is not the intention of this tutorial to replace the extensive documentation already available on Oz, nor my thesis on Strasheela ;-)</p>
 
-<p>This tutorial is organised in small lessons.  After you started the interactive tutorial application, you can select the chapters and sections in the list at the top-left corner of this window.  Each section consist of several subsections, accesible via the list in the bottom-left corner.  These lessons are best studied in their order.</p>
+<p>This tutorial is organised in small lessons.  After you started the interactive tutorial application, you can select the sections in the list at the top-left corner of this window.  Each section consist of several subsections, accesible via the list in the bottom-left corner.  These lessons are best studied in their order.</p>
 
 <p>(if you are reading the tutorial in your HTML browser, of course there are no lists of lessons and chapters)</p>
 
@@ -313,7 +310,7 @@ Conventions</h3>
 `like this'; remove the `quotes' when writing your own code.</li>
 <li>{...}: the {curly braces} denote a procedure in Oz; you should never
 remove them when writing your own code.</li>
-<li>WARNING: explains a particularly confusing part of the Oz language.</li>
+<li>WARNING: explains a part of the Oz language which is particularly unusual or confusing.</li>
 <li>BACKGROUND: these sections give brief explanations of generic
 concepts in Computer Science; please see them if the lesson contains
 unfamiliar terms.</li>
@@ -328,19 +325,9 @@ BACKGROUND</h3>
 <p class="first">For explanations about general concepts, see:</p>
 
 <ul>
-<li>van Roy and Haridi (2004). Concepts, Techniques, and Models of
-<blockquote>
-<p class="quoted">Computer Programming. MIT Press.
-<a href="http://www.info.ucl.ac.be/~pvr/book.html">http://www.info.ucl.ac.be/~pvr/book.html</a></p>
-</blockquote></li>
-<li>The Oz documentation:
-<blockquote>
-<p class="quoted"><a href="http://www.mozart-oz.org/documentation/">http://www.mozart-oz.org/documentation/</a></p>
-</blockquote></li>
-<li>Wikipedia:
-<blockquote>
-<p class="quoted"><a href="http://www.wikipedia.org/">http://www.wikipedia.org/</a></p>
-</blockquote></li>
+<li>van Roy and Haridi (2004). Concepts, Techniques, and Models of Computer Programming. MIT Press. <a href="http://www.info.ucl.ac.be/~pvr/book.html">http://www.info.ucl.ac.be/~pvr/book.html</a></li>
+<li>The Oz documentation: <a href="http://www.mozart-oz.org/documentation/">http://www.mozart-oz.org/documentation/</a></li>
+<li>Wikipedia: <a href="http://www.wikipedia.org/">http://www.wikipedia.org/</a></li>
 </ul>
 
 
@@ -353,7 +340,7 @@ Hello World and Comments</h2>
 <h3><a name="sec7" id="sec7"></a>
 Introduction</h3>
 
-<p class="first">By convention, the first steps in any programming langauge is to output the text &quot;Hello World!&quot;.  This tutorial obeys that convention.  :)</p>
+<p class="first">By convention, the first steps in any programming language is to output the text &quot;Hello World!&quot;.  This tutorial obeys that convention.  :)</p>
 
 <p>After you select another subsection in the bottom-left corner, hit the [Run] button to execute the code.  The first three subsections demonstrate alternate ways to output information:</p>
 
@@ -445,7 +432,7 @@ Introduction</h3>
 
 <p>Try changing the calculation by using different numbers and freely combining the operators +, -, * , ~ (negation), div (integer division), mod (integer modulus) and / (float division).  You may also use parenthesis to indicate precedence.</p>
 
-<p>You can use integers (e.g. 3, 7) and floats (e.g. 1.0, 3.14).  However, you can not directly mix integers and floats in a calculation (in that case, an error will be printed at the command line).</p>
+<p>You can use integers (e.g. 3, 7) and floats (e.g. 1.0, 3.14).  However, you cannot directly mix integers and floats in a calculation (in that case, an error will be printed at the command line).</p>
 
 
 
@@ -493,7 +480,7 @@ Floats (simple)</h3>
 <h3><a name="sec19" id="sec19"></a>
 Floats (converting to ints)</h3>
 
-<p class="first">A float is converted into the closest integer with the function `FloatToInt'.  If two integers are equally close (ie x.5) it rounds to the closest even integer).  There is also a function `IntToFloat'.</p>
+<p class="first">A float is converted into the closest integer with the function `FloatToInt'.  If two integers are equally close (ie x.5) it rounds to the closest even integer.  There is also a function `IntToFloat'.</p>
 
 
 <pre class="src">
@@ -505,7 +492,7 @@ Floats (converting to ints)</h3>
 <h3><a name="sec20" id="sec20"></a>
 Floats (more)</h3>
 
-<p class="first">There are many other numeric functions are available for floats, e.g., Exp, Log, Sin, Cos...</p>
+<p class="first">There are many other numeric functions available for floats, e.g., Exp, Log, Sin, Cos...</p>
 
 
 <pre class="src">
@@ -520,13 +507,13 @@ Variables</h2>
 <h3><a name="sec22" id="sec22"></a>
 Introduction</h3>
 
-<p class="first">Oz variables are single assignment variables.  Variables are initially unbound (free) and they can be bound once.  However, their value never changes!  If you do not have experience with functional or logic programming languages, we highly recommend reading the background section!</p>
-
-<p>Rewritable data storage is also supported by Oz; the simplest form are called Cells.  Other types of stateful data include arrays, directories, and objects, but we shall not cover them in this tutorial.</p>
-
-<p>All variables in Oz must start with a capital letter.  Local variables are declared with the keyword `local', and are valid for the relevant scope.</p>
+<p class="first">All variables in Oz must start with a capital letter.  Local variables are declared with the keyword `local', and are valid for the relevant scope.</p>
 
 <p>Global variables can be introduced with the keyword `declare'.  However, global variables are intended for testing and are not supported in this tutorial application.</p>
+
+<p>WARNING: Oz variables are single assignment variables.  Variables are initially unbound (free) and they can be bound once.  However, their value never changes!  If you do not have experience with functional or logic programming languages, we highly recommend reading the background section!</p>
+
+<p>Rewritable data storage is also supported by Oz; the simplest form is called Cells.  Other types of stateful data include arrays, directories, and objects, but we shall not cover them in this tutorial.</p>
 
 
 
@@ -571,15 +558,15 @@ Variable scope</h3>
 <h3><a name="sec25" id="sec25"></a>
 A variable can be unbound</h3>
 
-<p class="first">Watch the Browser: X is first unbound (_ is displayed).  After 3 seconds, X is bound to 3.</p>
+<p class="first">Watch the Browser: X is first unbound (_ is displayed).  After 3 seconds (3000 msec), X is bound to 42.</p>
 
 <pre class="src">
 <span style="color: #a020f0;">local</span>
    X
 <span style="color: #a020f0;">in</span>
    {Browse X}
-   {Delay 2000}
-   X = 3
+   {Delay 3000}
+   X = 42
 <span style="color: #a020f0;">end</span>
 </pre>
 
@@ -598,7 +585,7 @@ Cells</h3>
 <span style="color: #a020f0;">in</span>
   {Browse <span style="color: #a020f0;">@</span>C}      <span style="color: #b22222;">% </span><span style="color: #b22222;">browse cell value
 </span>  {Delay 2000}
-  C <span style="color: #a020f0;">:=</span> 5           <span style="color: #b22222;">% </span><span style="color: #b22222;">change cell value to 0 (stateful operation)
+  C <span style="color: #a020f0;">:=</span> 5           <span style="color: #b22222;">% </span><span style="color: #b22222;">change cell value to 5 (stateful operation)
 </span>  {Browse <span style="color: #a020f0;">@</span>C}
   V = <span style="color: #a020f0;">@</span>C
   {Browse V}
@@ -633,7 +620,6 @@ understand and maintain.</p>
 <ul>
 <li>van Roy and Haridi, Chap. 1-2 (in particular Sec. 1.2, and 2.2)</li>
 <li>Oz Tutorial, Chap. 3, introduction</li>
-<li></li>
 </ul>
 
 
@@ -646,7 +632,7 @@ If</h2>
 <h3><a name="sec29" id="sec29"></a>
 Introduction</h3>
 
-<p class="first">Oz provides the usual `if' control structure.  Note that unlike many programming languages, parenthesis () are not required around the condition, althought they may make the code easier to read.</p>
+<p class="first">Oz provides the usual `if' control structure.  Note that unlike some mainstream programming languages, parenthesis () are not required around the condition, althought they may make the code easier to read.</p>
 
 <p>Please note that the `if' control structure can also be used as an expression which returns a value from the `then' or `else' clause.</p>
 
@@ -670,7 +656,7 @@ if ... else ... end</h3>
 <h3><a name="sec31" id="sec31"></a>
 if ... end</h3>
 
-<p class="first">The `else' clause is optional. This section does nothing, but try changing `==' to `\=.' The operations `==' and `\=' test equality and inequality of values.</p>
+<p class="first">The `else' clause is optional. This example does nothing, but try changing `==' to `\=.' The operations `==' and `\=' test equality and inequality of values.</p>
 
 <pre class="src">
 <span style="color: #a020f0;">if</span> (this <span style="color: #a020f0;">==</span> that) <span style="color: #a020f0;">then</span>
@@ -711,7 +697,7 @@ Introduction</h3>
 <h3><a name="sec35" id="sec35"></a>
 Usage</h3>
 
-<p class="first">The procedure `Browse' is called with the result of function `IsEven'.  `IsEven' expects one integer as an argument, and returns true or false.  `Browse' expects one argument (any variable type), and returns nothing.</p>
+<p class="first">The procedure `Browse' is called with the result of function `IsEven'.  `IsEven' expects one integer as an argument, and returns true or false.  `Browse' expects one argument (any value), and returns nothing.</p>
 
 <pre class="src">
 {Browse
@@ -804,37 +790,6 @@ Procedures as functions</h3>
 
 
 <h3><a name="sec40" id="sec40"></a>
-Nesting marker $</h3>
-
-<p class="first">Every procedure argument can be a return value.  The $ (dollar sign) always marks a return value.</p>
-
-<p>This can simplify code for experienced programmers.  Instead of writing
-<blockquote>
-<p class="quoted">local X in {Obj get(X)} {Browse X} end
-we can write
-{Browse {Obj get($)}}</p>
-</blockquote>
-
-<p>TODO: This section is not yet very convincing, but procedures will encapsulate constraints in later sections...
-TODO: can we find a better example?</p>
-
-
-<pre class="src">
-<span style="color: #a020f0;">local</span>
-   <span style="color: #a020f0;">proc</span><span style="color: #b8860b;"> </span>{<span style="color: #0000ff;">Max</span> X Y Z}
-      <span style="color: #a020f0;">if</span> X <span style="color: #a020f0;">&gt;=</span> Y <span style="color: #a020f0;">then</span> Z = X <span style="color: #a020f0;">else</span> Z = Y <span style="color: #a020f0;">end</span>
-   <span style="color: #a020f0;">end</span>
-   X = 4
-   Result
-<span style="color: #a020f0;">in</span>
-   <span style="color: #b22222;">%% </span><span style="color: #b22222;">Note the $
-</span>   X = {Max $ 3 Result}
-   {Browse Result}
-<span style="color: #a020f0;">end</span>
-</pre>
-
-
-<h3><a name="sec41" id="sec41"></a>
 Recursion</h3>
 
 <p class="first">To understand recursion, you must first understand recursion.  :)</p>
@@ -844,10 +799,9 @@ Recursion</h3>
 <pre class="src">
 <span style="color: #a020f0;">local</span>
    <span style="color: #a020f0;">fun</span><span style="color: #b8860b;"> </span>{<span style="color: #0000ff;">Factorial</span> N}
-      <span style="color: #a020f0;">if</span> (N<span style="color: #a020f0;">==</span>0) <span style="color: #a020f0;">then</span>
-        1
-      <span style="color: #a020f0;">else</span>
-        N <span style="color: #a020f0;">*</span> {Factorial N<span style="color: #a020f0;">-</span>1}
+      <span style="color: #a020f0;">if</span> N<span style="color: #a020f0;">==</span>0
+      <span style="color: #a020f0;">then</span> 1
+      <span style="color: #a020f0;">else</span> N <span style="color: #a020f0;">*</span> {Factorial N<span style="color: #a020f0;">-</span>1}
       <span style="color: #a020f0;">end</span>
    <span style="color: #a020f0;">end</span>
 <span style="color: #a020f0;">in</span>
@@ -858,28 +812,32 @@ Recursion</h3>
 </pre>
 
 
-<h3><a name="sec42" id="sec42"></a>
+<h3><a name="sec41" id="sec41"></a>
 BACKGROUND</h3>
 
 <p class="first">Terms: procedure, function.</p>
 
-<p>Procedures and functions are the standard means for expressing a
-collection of computations in a single entity.  Examples range
-from numeric computations to commands involving the operating
-system.  For example, we have already seen a number of numeric
-operations expressed by the common infix notation.</p>
+<p>Procedure and function definitions wrap up (abstract) some
+computation: a complex computation can then be executed simply by
+calling the procedure/function.</p>
 
-<p>A procedure definition wraps up (abstracts) some computation: a
-complex computation can then be executed simply by calling the
-procedure.</p>
+<p>Functions are often convenient to define and use, because we are often
+interested in the result of a computation.  The more general concept
+of procedures, on the other hand, is important when we need explicit
+access to all arguments (e.g., in constraint definitions), or when a
+computation does not return a value (as is the case for many graphical
+user interfaces, e.g., the browser).  Also, procedures are more
+suitable for concurrent programming, where we cannot return values
+to a concurrent computation running in a different thread.  Constraint
+programming and concurrent programming are discussed later.</p>
 
 
 
 
-<h2><a name="sec43" id="sec43"></a>
+<h2><a name="sec42" id="sec42"></a>
 Atoms and Names</h2>
 
-<h3><a name="sec44" id="sec44"></a>
+<h3><a name="sec43" id="sec43"></a>
 Introduction</h3>
 
 <p class="first">Oz provides a number of basic data types which have a specific textual representation in source code.  We have already seen numbers (i.e. integers and floats).  Here we shall discuss two other data types: Atoms and Names.</p>
@@ -888,12 +846,12 @@ Introduction</h3>
 The safest way to create an atom is to surround it in single quotes: 'hi there'.  Atoms may also be written as text (without spaces) as long as they do not start with a capital letter (those are variables) and the text is not an Oz keyword.  For simplicity, we recommend using 'single quotes'.  ;)</p>
 
 <p>Name:
-There are a few things which look like atoms, but are a different variable type: Name.  The boolean values true and false are both Names (specifically, the Bool subtype).  Another often used value which looks like an atom is unit (also a name).</p>
+There are a few things which look like atoms, but are a different variable type: Name.  The Boolean values true and false are both names (specifically, the Bool subtype).  Another often used value which looks like an atom is unit (also a name).</p>
 
 
 
 
-<h3><a name="sec45" id="sec45"></a>
+<h3><a name="sec44" id="sec44"></a>
 Atoms</h3>
 
 <p class="first">Several atoms are inspected below.</p>
@@ -912,7 +870,7 @@ Atoms</h3>
 </pre>
 
 
-<h3><a name="sec46" id="sec46"></a>
+<h3><a name="sec45" id="sec45"></a>
 Equality</h3>
 
 <p class="first">Atoms are the same, whether entered with 'quotes' or not.</p>
@@ -922,12 +880,12 @@ Equality</h3>
 </pre>
 
 
-<h3><a name="sec47" id="sec47"></a>
+<h3><a name="sec46" id="sec46"></a>
 Names</h3>
 
 <p class="first">The values `true', `false' and `unit' are values which are similar to atoms, but which play a special role (note that the quotes don't belong to the values here).</p>
 
-<p>Obviously, `true' and `false' are the common boolean values.  Oz provides the value `unit' for the computer science concept of the unit type (a value which is intended to express no further information).  For this section, `unit' is often used wherever a token is needed whose value is not important.</p>
+<p>Obviously, `true' and `false' are the common Boolean values.  Oz provides the value `unit' for the computer science concept of the unit type (a value which is intended to express no further information).  `unit' is often used wherever a token is needed whose value is not important.</p>
 
 
 <pre class="src">
@@ -941,10 +899,10 @@ Names</h3>
 
 
 
-<h2><a name="sec48" id="sec48"></a>
+<h2><a name="sec47" id="sec47"></a>
 Compound Types</h2>
 
-<h3><a name="sec49" id="sec49"></a>
+<h3><a name="sec48" id="sec48"></a>
 Introduction</h3>
 
 <p class="first">Besides the atomic types discussed before, Oz also provides compound data types: records, tuples, lists, and strings.</p>
@@ -953,7 +911,7 @@ Introduction</h3>
 
 
 
-<h3><a name="sec50" id="sec50"></a>
+<h3><a name="sec49" id="sec49"></a>
 Records (definition)</h3>
 
 <p class="first">A record has a label and consists of feature-value pairs.</p>
@@ -963,7 +921,7 @@ Records (definition)</h3>
 </pre>
 
 
-<h3><a name="sec51" id="sec51"></a>
+<h3><a name="sec50" id="sec50"></a>
 Records (integer features)</h3>
 
 <p class="first">Integer features need not be listed explicitly; these two examples are identical.  Note that the `foo' label does not count towards these integer features, and that the integer features are placed before non-integer features.</p>
@@ -974,7 +932,7 @@ Records (integer features)</h3>
 </pre>
 
 
-<h3><a name="sec52" id="sec52"></a>
+<h3><a name="sec51" id="sec51"></a>
 Records (nesting)</h3>
 
 <p class="first">Records can be freely nested.</p>
@@ -984,13 +942,24 @@ Records (nesting)</h3>
 </pre>
 
 
-<h3><a name="sec53" id="sec53"></a>
+<h3><a name="sec52" id="sec52"></a>
 Records (accessing fields)</h3>
 
 <p class="first">Record fields are accessed with the dot operator.  R.X returns the value stored at feature X in record R.  Records support constant-time access (i.e. the time the access takes is independent of the feature position).</p>
 
 <pre class="src">
 {Inspect test(x:hi y:there)<span style="color: #a020f0;">.</span>x}
+</pre>
+
+
+<h3><a name="sec53" id="sec53"></a>
+Atoms are 'empty' records</h3>
+
+<p class="first">An atom is a record which only consists in its label, but which has no features.</p>
+
+<pre class="src">
+{Inspect test() <span style="color: #a020f0;">==</span> test}
+{Inspect {IsRecord test}}
 </pre>
 
 
@@ -1015,16 +984,6 @@ Tuples (as a record)</h3>
 
 
 <h3><a name="sec56" id="sec56"></a>
-Tuples (as an empty tuple)</h3>
-
-<p class="first">An atom is an &quot;empty&quot; tuple.</p>
-
-<pre class="src">
-{Inspect test() <span style="color: #a020f0;">==</span> test}
-</pre>
-
-
-<h3><a name="sec57" id="sec57"></a>
 Lists (definition)</h3>
 
 <p class="first">A list is a sequence of values, ending with `nil'.</p>
@@ -1034,35 +993,28 @@ Lists (definition)</h3>
 </pre>
 
 
-<h3><a name="sec58" id="sec58"></a>
-Lists (like Lisp)</h3>
+<h3><a name="sec57" id="sec57"></a>
+Lists (consing)</h3>
 
-<table class="muse-table" border="2" cellpadding="5">
-  <tbody>
-    <tr>
-      <td>A list can also be written using</td>
-      <td>(cf. cons in Lisp).  `nil' is the empty list, which terminates every list.</td>
-    </tr>
-  </tbody>
-</table>
+<p class="first">A list can also be written using the cons operator (|).  `nil' is the empty list, which terminates a list.</p>
 
 <pre class="src">
-{Inspect a<span style="color: #a020f0;">|</span>b<span style="color: #a020f0;">|</span>c<span style="color: #a020f0;">|</span>nil}
+{Inspect [a b c] <span style="color: #a020f0;">==</span> a<span style="color: #a020f0;">|</span>b<span style="color: #a020f0;">|</span>c<span style="color: #a020f0;">|</span>nil}
 </pre>
 
 
-<h3><a name="sec59" id="sec59"></a>
-Lists (as a tuple)</h3>
+<h3><a name="sec58" id="sec58"></a>
+Lists (as a record)</h3>
 
-<p class="first">Actually, a list is a nested tuple with the labels '|'.</p>
+<p class="first">Actually, a list is a nested record with the labels '|'.</p>
 
 <pre class="src">
 {Inspect [a b c] <span style="color: #a020f0;">==</span> <span style="color: #bc8f8f;">'|'</span>(a <span style="color: #bc8f8f;">'|'</span>(b <span style="color: #bc8f8f;">'|'</span>(c nil)))}
 </pre>
 
 
-<h3><a name="sec60" id="sec60"></a>
-Lists (accesing the head)</h3>
+<h3><a name="sec59" id="sec59"></a>
+Lists (accessing head and tail)</h3>
 
 <p class="first">Consequently, the first element of a list can be accessed under the feature 1, and the remaining list under the feature 2.</p>
 
@@ -1072,7 +1024,7 @@ Lists (accesing the head)</h3>
 </pre>
 
 
-<h3><a name="sec61" id="sec61"></a>
+<h3><a name="sec60" id="sec60"></a>
 Pairs (definition)</h3>
 
 <p class="first">A pair is a convenient way of concatenating values.</p>
@@ -1082,7 +1034,7 @@ Pairs (definition)</h3>
 </pre>
 
 
-<h3><a name="sec62" id="sec62"></a>
+<h3><a name="sec61" id="sec61"></a>
 Pairs (as a tuple)</h3>
 
 <p class="first">Actually, a pair is a tuple with the label '#'.</p>
@@ -1092,7 +1044,7 @@ Pairs (as a tuple)</h3>
 </pre>
 
 
-<h3><a name="sec63" id="sec63"></a>
+<h3><a name="sec62" id="sec62"></a>
 Strings (definition)</h3>
 
 <p class="first">A string is a list of integers denoting characters (i.e. all list procedures can be used for strings).</p>
@@ -1102,35 +1054,35 @@ Strings (definition)</h3>
 </pre>
 
 
-<h3><a name="sec64" id="sec64"></a>
+<h3><a name="sec63" id="sec63"></a>
 Strings (showing text)</h3>
 
-<p class="first">Although a string is just a list of integers, you can show strings as text in the Browser and the Inspector.  However, you need to configure them for showing strings first.  In the Inspector Preference settings (Options menu), select the tab Appearance and tick &quot;Show Strings&quot;.  You need to do these settings before you inspect a string.</p>
+<p class="first">Although a string is just a list of integers, you can show strings as text in the Browser and the Inspector.  However, you need to configure them for showing strings first.  In the Inspector Preference settings (Options menu), select the tab Appearance and tick &quot;Show Strings&quot;.  You need to do these settings before you inspect a string. Alternatively, you select your string with the mouse, and then in the menu Selection you click &quot;Reinspect&quot;.  The Inspector and Browser do not show strings by default, because a string is just a list of integers, and you may use integer lists which are not strings.</p>
 
 <pre class="src">
 {Inspect <span style="color: #bc8f8f;">"This is a string!"</span>}
 </pre>
 
 
-<h3><a name="sec65" id="sec65"></a>
+<h3><a name="sec64" id="sec64"></a>
 Virtual Strings</h3>
 
-<p class="first">A virtual string (VS) is a (possibly nested) concatenation of strings, atoms, and numbers.  Many procedures expecting strings as arguments can also handle virtual strings for convenience.</p>
+<p class="first">A virtual string (VS) is concatenation (pair) of strings, atoms, and numbers.  Many procedures expecting strings as arguments can also handle virtual strings for convenience.  In this example, the virtual string VS consists of an atom, a string and an integer. The Browser supports showing virtual strings as text, but it must be configured first (menu Options -&gt; Representation...: tick Virtual Strings, then select the virtual string and rebrowse).</p>
 
 <pre class="src">
 <span style="color: #a020f0;">local</span>
-  VS = <span style="color: #bc8f8f;">'my test '</span>
+  VS = <span style="color: #bc8f8f;">'my test'</span><span style="color: #a020f0;">#</span><span style="color: #bc8f8f;">"_"</span><span style="color: #a020f0;">#</span>3
 <span style="color: #a020f0;">in</span>
-  {Inspect VS<span style="color: #a020f0;">#</span>3}
+  {Browse VS}
 <span style="color: #a020f0;">end</span>
 </pre>
 
 
 
-<h2><a name="sec66" id="sec66"></a>
+<h2><a name="sec65" id="sec65"></a>
 Error messages</h2>
 
-<h3><a name="sec67" id="sec67"></a>
+<h3><a name="sec66" id="sec66"></a>
 Introduction</h3>
 
 <p class="first">When we program, we almost inevitably write bugs.  Luckily, when confronted with specific problems in programs, compilers try to tell us about the problem (naturally, the real hard bugs are the ones no compiler complains about).  All errors are actually raised exceptions (see the Tutorial of Oz, Sec. 5.10 for more details).</p>
@@ -1142,7 +1094,7 @@ Introduction</h3>
 
 
 
-<h3><a name="sec68" id="sec68"></a>
+<h3><a name="sec67" id="sec67"></a>
 Parse error</h3>
 
 <p class="first">The left curly brace does not match the right parenthesis.</p>
@@ -1152,7 +1104,7 @@ Parse error</h3>
 </pre>
 
 
-<h3><a name="sec69" id="sec69"></a>
+<h3><a name="sec68" id="sec68"></a>
 Static analysis error</h3>
 
 <p class="first">Browse expects only a single argument.</p>
@@ -1162,7 +1114,7 @@ Static analysis error</h3>
 </pre>
 
 
-<h3><a name="sec70" id="sec70"></a>
+<h3><a name="sec69" id="sec69"></a>
 Binding analysis error</h3>
 
 <p class="first">Variable X is not declared .</p>
@@ -1172,17 +1124,17 @@ X = 3
 </pre>
 
 
-<h3><a name="sec71" id="sec71"></a>
+<h3><a name="sec70" id="sec70"></a>
 Type error</h3>
 
-<p class="first">We can not add an integer and a float.</p>
+<p class="first">We cannot add an integer and a float.</p>
 
 <pre class="src">
 {Browse 3 <span style="color: #a020f0;">+</span> 2<span style="color: #a020f0;">.</span>0}
 </pre>
 
 
-<h3><a name="sec72" id="sec72"></a>
+<h3><a name="sec71" id="sec71"></a>
 Failure</h3>
 
 <p class="first">Inconsistent constraint programs result in a failure.  Failures play an important role internally in a constraint solver searching for solutions to a constraint satisfaction problem.</p>
@@ -1202,8 +1154,8 @@ Failure</h3>
 <!-- Footer -->
 <div id="footer">
 <div id="author">&copy; 
-Torsten Anders</div>
-<div id="date">Last time edited: 2008.03.12</div>
+Torsten Anders and Graham Percival</div>
+<div id="date">Last time edited: 2008.03.20</div>
 </div>
   </body>
 </html>

@@ -1,4 +1,5 @@
 #title Constraint Programming
+#author Torsten Anders and Graham Percival
 
 <contents depth="2">
 
@@ -30,7 +31,7 @@ A Contraint Satisfaction Problem (CSP) is defined as a tuple consisting of
 
 The two variables X and Y are declared to integers with a specific domain of allowed values (finite domain, FD).  X is explicitly declared to an integer in {0, ..., 10}. Y is declared to any integer supported by Oz (so you see the maximum integer domain supported by Oz).
 
-Please note that a finite domain consists always of integers in Oz (for efficiency reasons), and that FD integers can not be negative. There are also other domains supported (e.g. sets of finite integers are build-in, and real numbers are available as a third-party extension). 
+Please note that a finite domain consists always of integers in Oz (for efficiency reasons), and that FD integers cannot be negative. There are also other domains supported (e.g. sets of finite integers are build-in, and real numbers are available as a third-party extension). 
 
 
 <src lang="oz">
@@ -69,11 +70,11 @@ This section introduces constraint solvers.
 
 ** A Simple Script
 
-This section shows the first full constraint satisfaction problem (CSP) definition.  A constraint solver (here SearchAll) expects a CSP in form of a script.  A script is a procedure (MyScript) whose only argument is the solution of the solved CSP.  The variable is often called the "root variable" of the script.  Transformed into common mathematical notation, the CSP states the following conjunction
+This section shows the first full constraint satisfaction problem (CSP) definition.  A constraint solver (here SearchAll) expects a CSP in form of a script.  A script is a procedure (MyScript) whose only argument is the solution of the solved CSP.  This variable is often called the "root variable" of the script.  Transformed into common mathematical notation, the CSP states the following conjunction
 
   X + Y = Z  AND  X < Y
 
-The script simply collects the three variables X, Y, and Z in a record stored in the root variable Solution.  The solver SearchAll returns a list with all solutions of the problem defined by the script.  Note the use of the special constraint operators `<:' and `=:' instead of `<' and `='.
+The script simply collects the three variables X, Y, and Z in a record stored in the root variable Solution.  The solver SearchAll returns a list with all solutions of the problem defined by the script.  Note the use of the special constraint operators (e.g., `<:' instead of `<').
 
 
 <src lang="oz">
@@ -98,14 +99,14 @@ end
 
 This example uses another constraint solver, the Oz Explorer.  The Explorer visualises the search space.  Green nodes in the tree denote solutions, red nodes represent a fail, blue nodes show a stage in the search where there are still open decisions.  Triangles represent a subtree (use the middle mouse button to show the nodes of the subtree).
 
-Just double-click on a node to see the values of the variables at this stage during the search process (you can not look at failed nodes, though).  Note that you may need to select a suitable Explorer action first: in the menu Nodes select Information Action -> Inspect (the other actions are intended for score processing).  You can use the Explorer to get some intuitive understanding of the search process.  For example, look first at the variable values in the root node, than in a child node of the root and in a grand-child node and so forth, to monitor how the search process shrinks the variable domains.
+Just double-click on a node to see the values of the variables at this stage during the search process (you cannot look at failed nodes, though).  Note that you may need to select a suitable Explorer action first: in the menu Nodes select Information Action -> Inspect (the other actions are intended for Strasheela score processing).  You can use the Explorer to get some intuitive understanding of the search process.  For example, look first at the variable values in the root node, than in a child node of the root and in a grand-child node and so forth, to monitor how the search process shrinks the variable domains.
 
 You may play around with the menu entries of the Oz Explorer.  For example, select the top node with the mouse, then go to the 'Search' menu and select 'Next Solution'.
 
 
 <src lang="oz">
 local
-  proc {FindSols Solution}
+  proc {MyScript Solution}
      X = {FD.int 1#10}
      Y = {FD.int 1#10}
      Z = {FD.int 1#10}
@@ -117,38 +118,7 @@ local
      {FD.distribute naive Solution}
   end
 in
-  {ExploreOne FindSols}
-end
-</src>
-
-** Distribution Strategy
-
-The last line of the script shows a very characteristic Oz feature: an Oz script explicitly defines a search strategy (or, more specifically the distribution strategy).  The procedure FD.distribute expects a specification of a distribution strategy and a record or list of the constrained variables.
-
-The distribution strategy specifies in which order variables are visited during the search process.  The specification 'ff' stands for first-fail and means that always a variable with smallest domain is visited next.  The selection of a suitable distribution strategy is vital for the performance of the search process. Nevertheless, for keeping things simple this tutorial does not discuss constraint distribution in detail.
-
-TODO: find an example where changing the distribution strategy actually does something!
-Idea: Send More Money: distro changes efficiency
-
-
-<src lang="oz">
-local
-  proc {FindSols Solution}
-     X = {FD.int 1#10}
-     Y = {FD.int 1#10}
-     Z = {FD.int 1#10}
-  in
-     Solution = unit(x:X y:Y z:Z)
-     X + Y =: Z
-     X <: Y
-     %% search strategy
-     %{FD.distribute naive Solution}
-     %{FD.distribute ff Solution}
-     {FD.distribute split Solution}
-  end
-in
-  {ExploreOne FindSols}
-%  {Browse {SearchAll FindSols}}
+  {ExploreOne MyScript}
 end
 </src>
 
@@ -176,11 +146,53 @@ in
 end
 </src>
 
+** Distribution Strategy
+
+In Oz, we have great control over the search process.  One important aspect is the distribution strategy, often defined in the last line of a script.  The procedure FD.distribute expects a specification of a distribution strategy and a record or list of the constrained variables.
+
+The distribution strategy specifies in which order variables are visited during the search process.  For example, the naive distribution simply visits variables in their order.  The first-fail (ff) distribution, on the other hand, always visits next a variable with smallest domain and for which a solution is therefore harder to find.  The selection of a suitable distribution strategy is vital for the performance of the search process.  
+
+The following example demonstrates this with an example, the Send More Money Puzzle.  The example defines the following equation, where distinct letters stand for distinct digits. 
+
+  SEND + MORE = MONEY 
+
+This equation has only a single solution. 
+
+  9567 + 1085 = 10652
+
+Select different distribution strategies and observe how the size of the search tree changes (there are 3 failed notes with first fail, and 6 failed notes with naive distribution).  This example is discussed in more detail in the "Finite Domain Constraint Programming Tutorial", section 3.2
+
+  http://www.mozart-oz.org/documentation/fdt/node15.html
+
+
+<src lang="oz">
+proc {Money Root}
+   S E N D M O R Y
+in 
+   Root = sol(s:S e:E n:N d:D m:M o:O r:R y:Y)      
+   Root ::: 0#9                            % set domain for all digits           
+   {FD.distinct Root}                               
+   S \=: 0                                 % first digits must not be 0         
+   M \=: 0
+   1000*S + 100*E + 10*N + D               % define equation
+   +            1000*M + 100*O + 10*R + E
+   =: 10000*M + 1000*O + 100*N + 10*E + Y
+   {FD.distribute naive Root}              % define distribution 
+%   {FD.distribute ff Root}
+end
+{ExploreAll Money}
+</src>
+
 ** BACKGROUND
 
-Terms: TODO.
+Terms: Variable, constraint, solver, distribution
 
-For more information, please see the "Finite Domain Constraint Programming Tutorial at
-  http://www.mozart-oz.org/documentation/fdt/index.html
+This section presented constraint programming basics: how constraint satisfaction problems are defined as scripts, and how constraint solvers solve these problems.  For keeping things simple, we did not cover any details, in particular we did not discuss constraint distribution in detail.  For more information, please see the Oz documentation. 
+
+Reading: 
+
+  - "Finite Domain Constraint Programming Tutorial": http://www.mozart-oz.org/documentation/fdt/index.html
+  - van Roy and Haridi, Chap. 12
+
 
 

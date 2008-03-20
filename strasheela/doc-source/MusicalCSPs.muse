@@ -1,4 +1,5 @@
 #title Musical Constraint Satisfaction Problems in Strasheela
+#author Torsten Anders and Graham Percival
 
 <contents depth="2">
 
@@ -132,7 +133,7 @@ The Explorer has been extended for outputting Strasheela scores into various for
 
 Do settings for different program path names as explained before
 
-Note for developer: output dir is always default (ie. /tmp) and this can not be changed in settings GUI yet
+Note for developer: output dir is always default (ie. /tmp) and this cannot be changed in settings GUI yet
   
 
 <src lang="oz">
@@ -247,7 +248,7 @@ No information available.
 
 <src lang="oz">
 
-%% Using the plain boolean test isSimultaneousItem (i.e., a method returning either true or false) blocks until the temporal structure is fully determined
+%% Using the plain Boolean test isSimultaneousItem (i.e., a method returning either true or false) blocks until the temporal structure is fully determined
 
 local
 Note1
@@ -317,7 +318,7 @@ No information available.
 
 <src lang="oz">
     
-%% Suitable approach: using reified constraint together with an equality check as a boolean test
+%% Suitable approach: using reified constraint together with an equality check as a Boolean test
 
 local
 Note1 Note2 Seq1

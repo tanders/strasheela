@@ -254,6 +254,8 @@ intro</h3>
 
 <p class="first">The following sections introduce various aspects of Strasheela's music representation. The representation is then later used for defining musical constraint satisfaction problems.</p>
 
+<p><em>Please note that this part of the tutorial is still unfinished!</em></p>
+
 
 
 
@@ -989,7 +991,7 @@ container.
 he offsetTime parameter defaults to 0 (this is the only parameter in
 the Strasheela core which defaults to a determined value). Please note
 that (like all FD integers) the offsetTime can *not* be negative (i.e.,
-it can not be used for expressing an overlap of objects in a
+it cannot be used for expressing an overlap of objects in a
 sequential container). */</span>
 
 <span style="color: #a020f0;">local</span>
@@ -1075,7 +1077,7 @@ initialised scores are later fully initialised simply by using these
 score objects within a call of Score.makeScore (or by explitictly
 calling it with the procedure Score.initScore). This section only
 reproduces the previous section with Score.makeScore2. A later section
-below will show a use of Score.makeScore2 which can not be reproduced
+below will show a use of Score.makeScore2 which cannot be reproduced
 with independent textual score objects nor with the handle
 argument. */</span>
 
@@ -1283,7 +1285,7 @@ filterItems</h3>
 <pre class="src">
 <span style="color: #b22222;">/* </span><span style="color: #b22222;">The method filterItems returns all items directly contained in a
 container for which a given unary function or method returns true. Try
-using a boolean method (e.g., isNote). */</span>
+using a Boolean method (e.g., isNote). */</span>
 
 <span style="color: #a020f0;">local</span>
    MyScore = {Score<span style="color: #a020f0;">.</span>makeScore seq(items:[note(duration:2
@@ -1477,7 +1479,7 @@ collect (2)</h3>
 
 <pre class="src">
 <span style="color: #b22222;">/* </span><span style="color: #b22222;">With the the argument test, you filter which objects are
-collected. Again, this argument expects either a boolean function or
+collected. Again, this argument expects either a Boolean function or
 method. This section returns all notes whose duration is &gt; 1.*/</span>
 
 <span style="color: #a020f0;">local</span>
@@ -2072,8 +2074,8 @@ used in the test for simplicity). */</span>
 <!-- Footer -->
 <div id="footer">
 <div id="author">&copy; 
-Torsten Anders</div>
-<div id="date">Last time edited: 2008.03.12</div>
+Torsten Anders and Graham Percival</div>
+<div id="date">Last time edited: 2008.03.20</div>
 </div>
   </body>
 </html>

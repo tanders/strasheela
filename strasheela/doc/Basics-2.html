@@ -71,7 +71,7 @@
 <a href="#sec12">Record HasFeature</a>
 </dt>
 <dt>
-<a href="#sec13">Record -&gt; List</a>
+<a href="#sec13">Record arity</a>
 </dt>
 <dt>
 <a href="#sec14">Combining records</a>
@@ -108,82 +108,94 @@
 <a href="#sec23">Map</a>
 </dt>
 <dt>
-<a href="#sec24">Anonymous procedures</a>
+<a href="#sec24">Zip</a>
 </dt>
 <dt>
-<a href="#sec25">Sort (simple)</a>
+<a href="#sec25">Anonymous procedures</a>
 </dt>
 <dt>
-<a href="#sec26">Sort (advanced)</a>
+<a href="#sec26">Sort (simple)</a>
 </dt>
 <dt>
-<a href="#sec27">Defining higher-order procedures</a>
+<a href="#sec27">Sort (advanced)</a>
 </dt>
 <dt>
-<a href="#sec28">BACKGROUND</a>
-</dt>
-</dl>
-</dd>
-<dt>
-<a href="#sec29">Unification</a>
-</dt>
-<dd>
-<dl>
-<dt>
-<a href="#sec30">Introduction</a>
+<a href="#sec28">Defining higher-order procedures</a>
 </dt>
 <dt>
-<a href="#sec31">Unifying two numbers</a>
-</dt>
-<dt>
-<a href="#sec32">Unifying two lists</a>
-</dt>
-<dt>
-<a href="#sec33">Recursive unification</a>
-</dt>
-<dt>
-<a href="#sec34">BACKGROUND</a>
+<a href="#sec29">BACKGROUND</a>
 </dt>
 </dl>
 </dd>
 <dt>
-<a href="#sec35">Object-Oriented Programming</a>
+<a href="#sec30">Unification</a>
 </dt>
 <dd>
 <dl>
 <dt>
-<a href="#sec36">Introduction</a>
+<a href="#sec31">Introduction</a>
 </dt>
 <dt>
-<a href="#sec37">Method call</a>
+<a href="#sec32">Unifying two numbers</a>
 </dt>
 <dt>
-<a href="#sec38">Method arguments</a>
+<a href="#sec33">Unifying two lists</a>
+</dt>
+<dt>
+<a href="#sec34">Recursive unification</a>
+</dt>
+<dt>
+<a href="#sec35">BACKGROUND</a>
 </dt>
 </dl>
 </dd>
 <dt>
-<a href="#sec39">Concurrency</a>
+<a href="#sec36">Object-Oriented Programming</a>
 </dt>
 <dd>
 <dl>
 <dt>
-<a href="#sec40">Introduction</a>
+<a href="#sec37">Introduction</a>
 </dt>
 <dt>
-<a href="#sec41">Variables (single thread)</a>
+<a href="#sec38">Method call</a>
 </dt>
 <dt>
-<a href="#sec42">Variables (multiple threads)</a>
+<a href="#sec39">Method arguments</a>
 </dt>
 <dt>
-<a href="#sec43">Blocked programs</a>
+<a href="#sec40">Nesting marker $</a>
 </dt>
 <dt>
-<a href="#sec44">Detecting blocked progs (1)</a>
+<a href="#sec41">Class definition</a>
 </dt>
 <dt>
-<a href="#sec45">Detecting blocked progs (2)</a>
+<a href="#sec42">BACKGROUND</a>
+</dt>
+</dl>
+</dd>
+<dt>
+<a href="#sec43">Concurrency</a>
+</dt>
+<dd>
+<dl>
+<dt>
+<a href="#sec44">Introduction</a>
+</dt>
+<dt>
+<a href="#sec45">Variables (single thread)</a>
+</dt>
+<dt>
+<a href="#sec46">Variables (multiple threads)</a>
+</dt>
+<dt>
+<a href="#sec47">Blocked programs</a>
+</dt>
+<dt>
+<a href="#sec48">Detecting blocked progs (1)</a>
+</dt>
+<dt>
+<a href="#sec49">Detecting blocked progs (2)</a>
 </dt>
 </dl>
 </dd>
@@ -203,7 +215,7 @@ About this document</h2>
 <h3><a name="sec3" id="sec3"></a>
 Introduction</h3>
 
-<p class="first">This chapter covers more basic info about Oz.  However, despite still beging &quot;basic&quot; information, it requires a solid understanding of material in the previous chapter.</p>
+<p class="first">This chapter covers more basic info about Oz.  However, despite still being &quot;basic&quot; information, it requires a solid understanding of material in the previous chapter.</p>
 
 
 
@@ -216,7 +228,7 @@ Introduction</h3>
 
 <p class="first">Pattern matching is a convenient way to access the elements contained in compund data types (i.e. records, lists, etc).  Pattern matching decomposes such compund data, declares new variables, and binds these variables to parts of the compound data.</p>
 
-<p>The primary pattern matching construct is the case statement, but some programming constructs (such as functions) allow pattern matching via an implicit case statement.</p>
+<p>The primary pattern matching construct is the `case' statement, but some programming constructs (such as functions) allow pattern matching via an implicit case statement.</p>
 
 
 
@@ -233,8 +245,7 @@ Case (head and tail)</h3>
 <span style="color: #a020f0;">local</span>
    Xs = [1 2 3 4]
 <span style="color: #a020f0;">in</span>
-   <span style="color: #a020f0;">case</span> Xs <span style="color: #a020f0;">of</span>
-      H <span style="color: #a020f0;">|</span> T
+   <span style="color: #a020f0;">case</span> Xs <span style="color: #a020f0;">of</span> H <span style="color: #a020f0;">|</span> T
    <span style="color: #a020f0;">then</span>
       {Inspect H}
       {Inspect T}
@@ -255,8 +266,7 @@ Case (every element)</h3>
 <span style="color: #a020f0;">local</span>
    Xs = [1 2 3 4]
 <span style="color: #a020f0;">in</span>
-   <span style="color: #a020f0;">case</span> Xs <span style="color: #a020f0;">of</span>
-      [A B C D]
+   <span style="color: #a020f0;">case</span> Xs <span style="color: #a020f0;">of</span> [A B C D]
    <span style="color: #a020f0;">then</span>
       {Inspect A}
       {Inspect B}
@@ -270,20 +280,15 @@ Case (every element)</h3>
 <h3><a name="sec8" id="sec8"></a>
 Multiple case clauses</h3>
 
-<p class="first">Having only a single clause to match against (as in the previous sections), can be too restrictive.  This section presents a typical `case' expression.  It matches a list, which checks whether Xs is either a non-empty list, an empty list, or some other value.  You may want to play around with the value of Xs to try out these different clauses.</p>
+<p class="first">Having only a single clause to match against (as in the previous sections), can be too restrictive.  This section presents a typical `case' expression.  It matches a list, which checks whether Xs is either a non-empty list, an empty list, or some other value.  Additional case-clauses are introduced with the keyword `[]'.  You may want to play around with the value of Xs to try out these different clauses.</p>
 
 <pre class="src">
 <span style="color: #a020f0;">local</span>
    Xs = [1 2 3 4]
 <span style="color: #a020f0;">in</span>
-   <span style="color: #a020f0;">case</span> Xs <span style="color: #a020f0;">of</span>
-      H<span style="color: #a020f0;">|</span>T
-   <span style="color: #a020f0;">then</span>
-      {Inspect nonEmptyList}
-   <span style="color: #a020f0;">[]</span> nil <span style="color: #a020f0;">then</span>
-      {Inspect emptyList}
-   <span style="color: #a020f0;">else</span>
-      {Inspect notList}
+   <span style="color: #a020f0;">case</span> Xs <span style="color: #a020f0;">of</span> H<span style="color: #a020f0;">|</span>T <span style="color: #a020f0;">then</span> {Inspect nonEmptyList}
+   <span style="color: #a020f0;">[]</span> nil <span style="color: #a020f0;">then</span> {Inspect emptyList}
+   <span style="color: #a020f0;">else</span> {Inspect notList}
    <span style="color: #a020f0;">end</span>
 <span style="color: #a020f0;">end</span>
 </pre>
@@ -292,22 +297,20 @@ Multiple case clauses</h3>
 <h3><a name="sec9" id="sec9"></a>
 Implicit pattern matching</h3>
 
-<p class="first">The following function GetFeature2 expects a record as argument; this record must match recordType(feature2:_ ...).  The variable MyVar is implicitly declared and bound to the value at the feature 'feature2' of the record given as argument to the function.</p>
+<p class="first">The following function GetX expects a record as argument; this record must match test(x:X ...).  The variable X is implicitly declared and bound to the value at the feature 'x' of the record given as argument to the function.</p>
 
-<p>Please note that the record in the header of the function GetFeature2 is not even complete but contains three dots (...) to indicate that further record features are possible.</p>
+<p>Please note that the record in the header of the function GetX is not even complete but contains three dots (...) to indicate that further record features are possible.</p>
 
 
 <pre class="src">
 <span style="color: #a020f0;">local</span>
-   MyRec = recordType(feature1:value1 feature2:value2)
-   <span style="color: #a020f0;">fun</span><span style="color: #b8860b;"> </span>{<span style="color: #0000ff;">GetFeature2</span> recordType(feature2:MyVar <span style="color: #a020f0;">...</span>)}
-      MyVar
-   <span style="color: #a020f0;">end</span>
+   R = test(x:value1 y:value2)
+   <span style="color: #a020f0;">fun</span><span style="color: #b8860b;"> </span>{<span style="color: #0000ff;">GetX</span> test(x:X <span style="color: #a020f0;">...</span>)} X <span style="color: #a020f0;">end</span>
 <span style="color: #a020f0;">in</span>
    <span style="color: #b22222;">%% </span><span style="color: #b22222;">show the normal record
-</span>   {Inspect MyRec}
+</span>   {Inspect R}
    <span style="color: #b22222;">%% </span><span style="color: #b22222;">show the feature we want
-</span>   {Inspect {GetFeature2 MyRec}}
+</span>   {Inspect {GetX R}}
 <span style="color: #a020f0;">end</span>
 </pre>
 
@@ -319,7 +322,7 @@ Procedures over Compounds</h2>
 <h3><a name="sec11" id="sec11"></a>
 Introduction</h3>
 
-<p class="first">Oz provides a rich set of procedures for processing these compound data such as lists and records.  A few sections are shown here.  More procedures are listed in the reference documentation at</p>
+<p class="first">Oz provides a rich set of procedures for processing compound data such as lists and records.  A few examples are shown here.  More procedures are listed in the reference documentation at</p>
 
 <blockquote>
 <p class="quoted"><a href="http://www.mozart-oz.org/documentation/base/index.html">http://www.mozart-oz.org/documentation/base/index.html</a></p>
@@ -331,7 +334,7 @@ Introduction</h3>
 <h3><a name="sec12" id="sec12"></a>
 Record HasFeature</h3>
 
-<p class="first">Tests whether a record has a certain feature.</p>
+<p class="first">Test whether a record has a certain feature.</p>
 
 <pre class="src">
 {Inspect {HasFeature <span style="color: #a020f0;">unit</span>(x:1 y:2 z:3) y}}
@@ -339,7 +342,7 @@ Record HasFeature</h3>
 
 
 <h3><a name="sec13" id="sec13"></a>
-Record -&amp;gt; List</h3>
+Record arity</h3>
 
 <p class="first">Return the features of a record as a list.</p>
 
@@ -425,13 +428,13 @@ Filter</h3>
 
 <p class="first">The function Filter expects a list and a test function, and returns only those elements for which the test function returns true.</p>
 
-<p>The function IsEven returns true for even integers and thus a list with only the even integers in [~3 ~2 ~1 0 1 2 3] is returned.  Try replaying IsEven by IsOdd, IsNumber or IsNat (testing for natural numbers) to better understand this filtering.</p>
+<p>The function IsEven returns true for even integers and thus a list with only the even integers in [~4 ~3 ~2 ~1 0 1 2 3] is returned.  Try replaying IsEven by IsOdd, IsNumber or IsNat (testing for natural numbers) to better understand this filtering.</p>
 
 <p>(BTW: there is a bug in IsOdd concerning negative numbers)</p>
 
 
 <pre class="src">
-{Browse {Filter [<span style="color: #a020f0;">~</span> 4 <span style="color: #a020f0;">~</span>3 <span style="color: #a020f0;">~</span>2 <span style="color: #a020f0;">~</span>1 0 1 2 3] IsEven}}
+{Browse {Filter [<span style="color: #a020f0;">~</span>4 <span style="color: #a020f0;">~</span>3 <span style="color: #a020f0;">~</span>2 <span style="color: #a020f0;">~</span>1 0 1 2 3] IsEven}}
 </pre>
 
 
@@ -463,12 +466,30 @@ Map</h3>
 
 
 <h3><a name="sec24" id="sec24"></a>
+Zip</h3>
+
+<p class="first">Zip applies a procedure to elements from two lists.  The
+lists must have the same size.</p>
+
+<pre class="src">
+<span style="color: #a020f0;">local</span>
+  <span style="color: #a020f0;">proc</span><span style="color: #b8860b;"> </span>{<span style="color: #0000ff;">Max</span> X Y Z}
+     <span style="color: #a020f0;">if</span> X <span style="color: #a020f0;">&gt;=</span> Y <span style="color: #a020f0;">then</span> Z = X <span style="color: #a020f0;">else</span> Z = Y <span style="color: #a020f0;">end</span>
+  <span style="color: #a020f0;">end</span>
+  A = [1 2 3 4 5]
+  B = [5 4 3 2 1]
+<span style="color: #a020f0;">in</span>
+  {Browse {List<span style="color: #a020f0;">.</span>zip A B Max}}
+<span style="color: #a020f0;">end</span>
+</pre>
+
+
+<h3><a name="sec25" id="sec25"></a>
 Anonymous procedures</h3>
 
 <p class="first">Sometimes we need a function only once &mdash; as the function Square in the previous section.  In such cases we don't necessarily need to care about giving the function any name.  Instead, we can define an anonymous function.</p>
 
-<p>This section restates the previous section by defining the Square function 'inline' without giving it any name.  Please recall that $ always denotes a return value.  In this case, $ returns the function value itself.</p>
-
+<p>This section restates the previous section by defining the Square function 'inline' without giving it any name.  In an anonymous function definition, the variable which names the function is replaced by $ (dollar sign).</p>
 
 <pre class="src">
 {Browse
@@ -476,7 +497,7 @@ Anonymous procedures</h3>
 </pre>
 
 
-<h3><a name="sec25" id="sec25"></a>
+<h3><a name="sec26" id="sec26"></a>
 Sort (simple)</h3>
 
 <p class="first">The function Sort expects a list and a binary function (i.e. a function expecting two values) as arguments.  This binary function compares two values, and Sort sorts the list values according to this comparison.  For example, the function in the section compares two numbers and returns true if the first number is smaller.  Consequently, this section sorts the list elements in ascending order.  You may want to replace the &lt; by &gt; in the function definition to sort the numbers in decreasing order.</p>
@@ -484,16 +505,12 @@ Sort (simple)</h3>
 
 <pre class="src">
 {Browse
- {Sort
-  [1 5 3 2 0 7]
-  <span style="color: #a020f0;">fun</span><span style="color: #b8860b;"> </span>{<span style="color: #0000ff;">$</span> X Y}
-    X <span style="color: #a020f0;">&lt;</span> Y
-  <span style="color: #a020f0;">end</span>
- }}
+ {Sort [1 5 3 2 0 7]
+  <span style="color: #a020f0;">fun</span><span style="color: #b8860b;"> </span>{<span style="color: #0000ff;">$</span> X Y} X <span style="color: #a020f0;">&lt;</span> Y <span style="color: #a020f0;">end</span>}}
 </pre>
 
 
-<h3><a name="sec26" id="sec26"></a>
+<h3><a name="sec27" id="sec27"></a>
 Sort (advanced)</h3>
 
 <p class="first">You can actually sort the list elements in any way you want using the Sort function.  For example, you may place all even numbers at the beginning and all odd numbers at the end of the list and sort all even and odd numbers in ascending order.  This is done in the second (commented) Sort call.  How does this sorting work?</p>
@@ -505,24 +522,19 @@ Sort (advanced)</h3>
   [1 5 3 2 0 7]
   <span style="color: #a020f0;">fun</span><span style="color: #b8860b;"> </span>{<span style="color: #0000ff;">$</span> X Y}
     <span style="color: #a020f0;">if</span> {IsEven X} <span style="color: #a020f0;">then</span>
-      <span style="color: #a020f0;">if</span> {IsEven Y} <span style="color: #a020f0;">then</span>
-        X <span style="color: #a020f0;">&lt;</span> Y
-      <span style="color: #a020f0;">else</span>
-        <span style="color: #a020f0;">true</span>
+      <span style="color: #a020f0;">if</span> {IsEven Y} <span style="color: #a020f0;">then</span> X <span style="color: #a020f0;">&lt;</span> Y
+      <span style="color: #a020f0;">else</span> <span style="color: #a020f0;">true</span>
       <span style="color: #a020f0;">end</span>
     <span style="color: #a020f0;">else</span>
-      <span style="color: #a020f0;">if</span> {IsOdd Y} <span style="color: #a020f0;">then</span>
-        X <span style="color: #a020f0;">&lt;</span> Y
-      <span style="color: #a020f0;">else</span>
-        <span style="color: #a020f0;">false</span>
+      <span style="color: #a020f0;">if</span> {IsOdd Y} <span style="color: #a020f0;">then</span> X <span style="color: #a020f0;">&lt;</span> Y
+      <span style="color: #a020f0;">else</span> <span style="color: #a020f0;">false</span>
       <span style="color: #a020f0;">end</span>
     <span style="color: #a020f0;">end</span>
-  <span style="color: #a020f0;">end</span>
- }}
+  <span style="color: #a020f0;">end</span>}}
 </pre>
 
 
-<h3><a name="sec27" id="sec27"></a>
+<h3><a name="sec28" id="sec28"></a>
 Defining higher-order procedures</h3>
 
 <p class="first">Higher order procedures are defined like any other procedure: some arguments are simply procedures &mdash; which are then usually applied in the definition.  This section defines a higher-order function Find which expects a list Xs and a test function Fn: Find returns the first element in Xs for which Fn returns true.</p>
@@ -547,12 +559,12 @@ Defining higher-order procedures</h3>
 </pre>
 
 
-<h3><a name="sec28" id="sec28"></a>
+<h3><a name="sec29" id="sec29"></a>
 BACKGROUND</h3>
 
 <p class="first">Terms: first-class value, first-class function/procedure, higher-order function/procedure.</p>
 
-<p>A first-class value is a value (also object, or citizen) which can be stored in data structures, given to procedures as arguments and returned as results. Functions as first-class values are also called first-class function.</p>
+<p>A first-class value is a value (also object, or citizen) which can be stored in data structures, given to procedures as arguments and returned as results. Functions which are first-class values are also called first-class functions.</p>
 
 <p>First-class functions are a central concept of functional programming. They allow for higher-order programming, which make procedures more general and in effect can greatly reduce the length of a program. For example, instead of defining a sort function for every kind of data you need to sort (e.g., numbers, strings, score objects) you only define a single sort function and specify how it compares values.</p>
 
@@ -567,11 +579,10 @@ BACKGROUND</h3>
 
 
 
-
-<h2><a name="sec29" id="sec29"></a>
+<h2><a name="sec30" id="sec30"></a>
 Unification</h2>
 
-<h3><a name="sec30" id="sec30"></a>
+<h3><a name="sec31" id="sec31"></a>
 Introduction</h3>
 
 <p class="first">The operator = performs unification of two variables.  The variables share all the information they have about their values.  A variable without a name (an anonymous variable) is written as an underscore ( _ ).</p>
@@ -579,11 +590,10 @@ Introduction</h3>
 
 
 
-<h3><a name="sec31" id="sec31"></a>
+<h3><a name="sec32" id="sec32"></a>
 Unifying two numbers</h3>
 
 <p class="first">Unification shares information between two variables, including the domain of possible values. This example introduces finite domain integers (FD), discussed below in more detail.</p>
-
 
 
 <pre class="src">
@@ -598,7 +608,7 @@ Unifying two numbers</h3>
 </pre>
 
 
-<h3><a name="sec32" id="sec32"></a>
+<h3><a name="sec33" id="sec33"></a>
 Unifying two lists</h3>
 
 <p class="first">Compound data structures such as lists may contain free variables. Such lists are then partially bound and they can be unified.</p>
@@ -614,7 +624,7 @@ Unifying two lists</h3>
 </pre>
 
 
-<h3><a name="sec33" id="sec33"></a>
+<h3><a name="sec34" id="sec34"></a>
 Recursive unification</h3>
 
 <p class="first">Unification also works recursively.  The Inspector and Browser windows show two different ways for representing this.</p>
@@ -629,7 +639,7 @@ Recursive unification</h3>
 </pre>
 
 
-<h3><a name="sec34" id="sec34"></a>
+<h3><a name="sec35" id="sec35"></a>
 BACKGROUND</h3>
 
 <p class="first">Terms: logic variables, unification.</p>
@@ -640,6 +650,7 @@ BACKGROUND</h3>
 
 <ul>
 <li>van Roy and Haridi, Chap. 2 (in particular Sec. 2.2, and 2.7.2)</li>
+<li>Oz Tutorial, Chap. 4</li>
 <li>Wikipedia: <a href="http://en.wikipedia.org/wiki/Unification">http://en.wikipedia.org/wiki/Unification</a></li>
 </ul>
 
@@ -647,26 +658,18 @@ BACKGROUND</h3>
 
 
 
-
-<h2><a name="sec35" id="sec35"></a>
+<h2><a name="sec36" id="sec36"></a>
 Object-Oriented Programming</h2>
 
-<h3><a name="sec36" id="sec36"></a>
+<h3><a name="sec37" id="sec37"></a>
 Introduction</h3>
 
-<p class="first">Oz supports object-oriented programming.  This programming paradigm introduces the notion of objects which instantiate classes.  An object (or class instance) is a datum which encapsulates its internal structure.  A class specifies what data are contained in its instances and what methods these instances understands.  A method (or message) is effectively a procedure which is defined for instances of specific classes only.</p>
-
-<p>For more details on object-oriented programming in general, please refer to other Oz documentation:
-<blockquote>
-<p class="quoted"><a href="http://www.mozart-oz.org/documentation/tutorial/node10.html">http://www.mozart-oz.org/documentation/tutorial/node10.html</a></p>
-</blockquote>
-
-<p>Internally, objects are actually procedures which expect a single argument &mdash; hence this syntax.  When the object is sent a message (i.e. the procedure is called with a specific argument) it processes the message according to its definition.  This method definition may change its internal state, as we expect from typical objects.</p>
+<p class="first">Oz supports object-oriented programming (OOP).  This programming paradigm introduces the notion of objects.  Objects encapsulate internal data and understand methods (or messages) which somehow process this internal data.  Different 'kinds' of objects are defined by defining classes: objects are class instances.  A class specifies what data are contained in its instances and what methods these instances understand. A method is effectively a procedure which is defined for instances of specific classes only.</p>
 
 
 
 
-<h3><a name="sec37" id="sec37"></a>
+<h3><a name="sec38" id="sec38"></a>
 Method call</h3>
 
 <p class="first">The following section creates a graphical user interface button.  You do not need to understand the code which creates the window itself (i.e., the call to QTk.build).  For our purposes here, only this single line is important:</p>
@@ -683,6 +686,8 @@ Method call</h3>
 <p class="quoted">{Show Window}</p>
 </blockquote>
 
+<p>Internally, objects are actually procedures which expect a single argument &mdash; hence this syntax.  When the object is sent a message (i.e. the procedure is called with a specific argument) it processes the message according to its definition.</p>
+
 
 <pre class="src">
 <span style="color: #a020f0;">local</span>
@@ -694,7 +699,7 @@ Method call</h3>
 </pre>
 
 
-<h3><a name="sec38" id="sec38"></a>
+<h3><a name="sec39" id="sec39"></a>
 Method arguments</h3>
 
 <p class="first">Class methods are actually records which can contain method arguments.  For example, the following statement sends the following message to the object Window.  This changes the width of the border around the button and sets the background of this border to the color blue.</p>
@@ -703,10 +708,10 @@ Method arguments</h3>
 <p class="quoted">{Window set(borderwidth:1.0#c background:blue)}</p>
 </blockquote>
 
-<p>In general, the record denoting a message can wrap multiple arguments, as in the following section where the method myMethod with two arguments is send to the class MyObject.</p>
+<p>In general, the record denoting a message can wrap multiple arguments, as in the following example where the method myMethod with multiple arguments is send to the class MyObject.</p>
 
 <blockquote>
-<p class="quoted">{MyObject myMethod(Arg1 Arg2 ..)}</p>
+<p class="quoted">{MyObject myMethod(Arg1 Arg2 ...)}</p>
 </blockquote>
 
 <p>We will later see many more method application sections in the context of Strasheela's music representation.</p>
@@ -718,7 +723,7 @@ Method arguments</h3>
                                  action:toplevel<span style="color: #a020f0;">#</span>close))}
 <span style="color: #a020f0;">in</span>
    {Window show}
-   <span style="color: #b22222;">%% </span><span style="color: #b22222;">change to button background color after 1000 msecs
+   <span style="color: #b22222;">%% </span><span style="color: #b22222;">change to button background color after 1000 msec
 </span>   {Delay 1000}
    {Window set(borderwidth:1<span style="color: #a020f0;">.</span>0<span style="color: #a020f0;">#</span>c
                background:blue)}
@@ -726,11 +731,100 @@ Method arguments</h3>
 </pre>
 
 
+<h3><a name="sec40" id="sec40"></a>
+Nesting marker $</h3>
 
-<h2><a name="sec39" id="sec39"></a>
+<p class="first">Oz provides a special construct for marking return values.  This construct is the nesting marker which is notated $ (dollar sign).  In a previous example (repeated below), the nesting marker was used for defining an anonymous function.  In this case, $ returns the function value itself.</p>
+
+<blockquote>
+<p class="quoted">{Map [1 2 3 4 5 6] fun {$ X} X * X end}</p>
+</blockquote>
+
+
+<p>More generally, the nesting marker transforms any statement into an expression.  For example, method calls are statements by default &mdash; they return nothing.  The nesting marker can turn methods into expressions.  Using the nesting marker can make code more concise.  Instead of writing</p>
+
+<blockquote>
+<p class="quoted">local X in {Obj get(X)} {Browse X} end</p>
+</blockquote>
+
+<p>we can write</p>
+
+<blockquote>
+<p class="quoted">{Browse {Obj get($)}}</p>
+</blockquote>
+
+<p>The following example creates a text entry widget.  Whenever you edit the widget text, it is (re-)browsed.  Again it is not important to understand the full example; just note the code segment which does the browsing (see below).  Entry is the entry widget object, and the method get(X) binds its argument X to the present widget text (as string).</p>
+
+<blockquote>
+<p class="quoted">{Browse {String.toAtom {Entry get($)}}}</p>
+</blockquote>
+
+
+<pre class="src">
+<span style="color: #a020f0;">local</span>
+   Entry
+   Window = {QTk<span style="color: #a020f0;">.</span>build
+             lr(entry(init:<span style="color: #bc8f8f;">"Change this text..."</span>
+                      handle:Entry
+                      action:<span style="color: #a020f0;">proc</span>{<span style="color: #0000ff;">$</span>} {Browse {String<span style="color: #a020f0;">.</span>toAtom {Entry get($)}}} <span style="color: #a020f0;">end</span>))}
+<span style="color: #a020f0;">in</span>
+   {Window show}
+<span style="color: #a020f0;">end</span>
+</pre>
+
+
+<h3><a name="sec41" id="sec41"></a>
+Class definition</h3>
+
+<p class="first">This example defines a simple counter class.  It stores internally a counter value in its attribute i.  This value is accessed with the method get, and the method incr raises the counter value by one.  Every class defines an initialisation method: the method init expects the initial counter value as argument.  Note that the syntax for accessing and overwriting attribute values is very similar the the syntax of cells (see above).  In fact, object attributes are also stateful data, like cells.</p>
+
+<p>The example then creates a counter object (MyCounter) with the function New, which expects a class and an initialisation method.  The rest of the example uses this object.  Its initial counter value 3 is first browsed. The object is then incremented (so the counter becomes 4), and then its value is browsed again.  Note the use of the nesting marking for returning the counter value.</p>
+
+
+<pre class="src">
+<span style="color: #a020f0;">local</span>
+   <span style="color: #a020f0;">class</span> <span style="color: #228b22;">Counter</span>
+      <span style="color: #a020f0;">attr</span> i                    <span style="color: #b22222;">% </span><span style="color: #b22222;">define attribute i
+</span>      <span style="color: #a020f0;">meth</span> <span style="color: #0000ff;">init</span>(I) i <span style="color: #a020f0;">:=</span> I <span style="color: #a020f0;">end</span>   <span style="color: #b22222;">% </span><span style="color: #b22222;">bind i to arg I
+</span>      <span style="color: #a020f0;">meth</span> <span style="color: #0000ff;">get</span>(I) I=<span style="color: #a020f0;">@</span>i <span style="color: #a020f0;">end</span>      <span style="color: #b22222;">% </span><span style="color: #b22222;">return i
+</span>      <span style="color: #a020f0;">meth</span> <span style="color: #0000ff;">incr</span> i <span style="color: #a020f0;">:=</span> <span style="color: #a020f0;">@</span>i<span style="color: #a020f0;">+</span>1 <span style="color: #a020f0;">end</span>   <span style="color: #b22222;">% </span><span style="color: #b22222;">increment i by one
+</span>   <span style="color: #a020f0;">end</span>
+   MyCounter = {New Counter init(3)}
+<span style="color: #a020f0;">in</span>
+   {Browse {MyCounter get($)}}
+   {MyCounter incr}
+   {Browse {MyCounter get($)}}
+<span style="color: #a020f0;">end</span>
+
+</pre>
+
+
+<h3><a name="sec42" id="sec42"></a>
+BACKGROUND</h3>
+
+<p class="first">Terms: class, object (class instance), method</p>
+
+<p>Strasheela's music representation makes extensive use of object-oriented programming.  Even basic Strasheela programs commonly require writing method calls.  Extending Strasheela often means writing new Strasheela classes.</p>
+
+<p>Nevertheless, object-oriented programming is a complex programming paradigm.  This section therefore presented only the very basics of this paradigm.  For more details, please refer to other Oz documentation:</p>
+
+<p>Reading:</p>
+
+<ul>
+<li>van Roy and Haridi, Chap. 7</li>
+<li>Oz Tutorial, Chap. 10</li>
+</ul>
+
+<p>Please note that object-oriented programming is often used as a stateful programming paradigm: methods often change the internal state of objects (cf. the counter example above).  By constrast, most methods in Strasheela are stateless which is important in the context of constraint programming.  The Strasheela music representation is introduced later in this tutorial.</p>
+
+
+
+
+
+<h2><a name="sec43" id="sec43"></a>
 Concurrency</h2>
 
-<h3><a name="sec40" id="sec40"></a>
+<h3><a name="sec44" id="sec44"></a>
 Introduction</h3>
 
 <p class="first">Oz provides excellent support for concurrent programming, where computations run in parallel in multiple threads.  We will only touch on this subject and discuss aspects relevant for Strasheela.  In general, however, concurrent programming plays a major role in Oz programming.</p>
@@ -744,7 +838,7 @@ Introduction</h3>
 
 
 
-<h3><a name="sec41" id="sec41"></a>
+<h3><a name="sec45" id="sec45"></a>
 Variables (single thread)</h3>
 
 <p class="first">Variables may be used to communicate information between different parts of a program &mdash; even if the information is not available yet.  Browse can handle unknown information, but other parts of the program may wait (i.e. block) until the information is available.</p>
@@ -770,12 +864,12 @@ Variables (single thread)</h3>
 </pre>
 
 
-<h3><a name="sec42" id="sec42"></a>
+<h3><a name="sec46" id="sec46"></a>
 Variables (multiple threads)</h3>
 
-<p class="first">Variables may also be used to communicate between different threads.  This example declares X and then browses 'hello' (just to show that the browser works in principle).  However, the addition X+3 can not be executed immediately and blocks.  Because this computation is executed in its own thread, the top-level thread continues regardless, and calls the procedure Delay, which waits for 3000 msecs.  After that time, the top-level thread determines X to 4.  This awakes the other thread: it can now compute X+3 and browse the sum.</p>
+<p class="first">Variables may also be used to communicate between different threads.  This example declares X and then browses 'hello' (just to show that the browser works in principle).  However, the addition X+3 cannot be executed immediately and blocks.  Because this computation is executed in its own thread, the top-level thread continues regardless, and calls the procedure Delay, which waits for 3000 msec.  After that time, the top-level thread determines X to 4.  This awakes the other thread: it can now compute X+3 and browse the sum.</p>
 
-<p>In the section below, the addition X+3 can not be performed as long as the value of X is unknown.</p>
+<p>In the section below, the addition X+3 cannot be performed as long as the value of X is unknown.</p>
 
 
 <pre class="src">
@@ -784,13 +878,13 @@ Variables (multiple threads)</h3>
 <span style="color: #a020f0;">in</span>
   {Browse hello}
   <span style="color: #a020f0;">thread</span> {Browse X <span style="color: #a020f0;">+</span> 3} <span style="color: #a020f0;">end</span>  <span style="color: #b22222;">% </span><span style="color: #b22222;">compute and browse X+3 concurrently
-</span>  {Delay 2000}
+</span>  {Delay 3000}
   X = 4
 <span style="color: #a020f0;">end</span>
 </pre>
 
 
-<h3><a name="sec43" id="sec43"></a>
+<h3><a name="sec47" id="sec47"></a>
 Blocked programs</h3>
 
 <p class="first">This section demonstrates a buggy program which does not signal any error but simply does nothing.  The section is very similar to the previous section, but does not place the blocking X+3 in its own thread.  As a result, the whole program blocks at that point and never executes X = 4.</p>
@@ -807,7 +901,7 @@ Blocked programs</h3>
 </pre>
 
 
-<h3><a name="sec44" id="sec44"></a>
+<h3><a name="sec48" id="sec48"></a>
 Detecting blocked progs (1)</h3>
 
 <p class="first">This section demonstrates a pragmatic approach which checks for blocking programs.  The section ends with the statement {Browse endOfProgram}.  A non-blocking program will always execute this last line of code and show 'endOfProgram' in the Browser.  However, a blocking program (as the present one) does not do that and thus indicates that it is blocking.  Although this little trick does not tell us <em>where</em> the program blocks, the information <em>that</em> we wrote a blocking program can prove very helpful already.  You may get a feel for this trick by changing the section so that the message 'endOfProgram' is shown (e.g. comment the blocking statement out, or surrounding it with a 'thread .. end' statement).</p>
@@ -828,7 +922,7 @@ Detecting blocked progs (1)</h3>
 </pre>
 
 
-<h3><a name="sec45" id="sec45"></a>
+<h3><a name="sec49" id="sec49"></a>
 Detecting blocked progs (2)</h3>
 
 <p class="first">This section demonstrates a technique which causes an error (raises an exception) when the current thread blocks. The function `Thread.this' returns the current thread, and `Debug.setRaiseOnBlock' activates this debugging feature. The error message can even tell you which variable caused the blocking (although in this section the deduced variable name is simply _).</p>
@@ -858,8 +952,8 @@ Detecting blocked progs (2)</h3>
 <!-- Footer -->
 <div id="footer">
 <div id="author">&copy; 
-Torsten Anders</div>
-<div id="date">Last time edited: 2008.03.12</div>
+Torsten Anders and Graham Percival</div>
+<div id="date">Last time edited: 2008.03.20</div>
 </div>
   </body>
 </html>

@@ -1,4 +1,5 @@
 #title First Steps in Oz
+#author Torsten Anders and Graham Percival
 
 <contents depth="2">
 
@@ -14,7 +15,7 @@ This interactive tutorial demonstrates the basics of the Oz programming language
 
 Nevertheless, this tutorial is kept brief.  The explanation of Oz focuses on aspects which are particularly important for Strasheela, and even Strasheela concepts are only briefly outlined.  In other words, it is not the intention of this tutorial to replace the extensive documentation already available on Oz, nor my thesis on Strasheela ;-)
 
-This tutorial is organised in small lessons.  After you started the interactive tutorial application, you can select the chapters and sections in the list at the top-left corner of this window.  Each section consist of several subsections, accesible via the list in the bottom-left corner.  These lessons are best studied in their order.
+This tutorial is organised in small lessons.  After you started the interactive tutorial application, you can select the sections in the list at the top-left corner of this window.  Each section consist of several subsections, accesible via the list in the bottom-left corner.  These lessons are best studied in their order.
 
 (if you are reading the tutorial in your HTML browser, of course there are no lists of lessons and chapters)
 
@@ -28,7 +29,7 @@ We use a few conventions to present information in this tutorial:
     `like this'; remove the `quotes' when writing your own code. 
   - {...}: the {curly braces} denote a procedure in Oz; you should never
     remove them when writing your own code.
-  - WARNING: explains a particularly confusing part of the Oz language.
+  - WARNING: explains a part of the Oz language which is particularly unusual or confusing.
   - BACKGROUND: these sections give brief explanations of generic
     concepts in Computer Science; please see them if the lesson contains
     unfamiliar terms.
@@ -39,13 +40,9 @@ We use a few conventions to present information in this tutorial:
 
 For explanations about general concepts, see:
 
-  - van Roy and Haridi (2004). Concepts, Techniques, and Models of
-      Computer Programming. MIT Press.
-      http://www.info.ucl.ac.be/~pvr/book.html
-  - The Oz documentation:
-      http://www.mozart-oz.org/documentation/
-  - Wikipedia:
-      http://www.wikipedia.org/
+  - van Roy and Haridi (2004). Concepts, Techniques, and Models of Computer Programming. MIT Press. http://www.info.ucl.ac.be/~pvr/book.html
+  - The Oz documentation: http://www.mozart-oz.org/documentation/
+  - Wikipedia: http://www.wikipedia.org/
 
 
 
@@ -53,7 +50,7 @@ For explanations about general concepts, see:
 
 ** Introduction
 
-By convention, the first steps in any programming langauge is to output the text "Hello World!".  This tutorial obeys that convention.  :)
+By convention, the first steps in any programming language is to output the text "Hello World!".  This tutorial obeys that convention.  :)
 
 After you select another subsection in the bottom-left corner, hit the [Run] button to execute the code.  The first three subsections demonstrate alternate ways to output information:
 
@@ -129,7 +126,7 @@ This section executes simple numeric calculations and displays the result.
   
 Try changing the calculation by using different numbers and freely combining the operators +, -, * , ~ (negation), div (integer division), mod (integer modulus) and / (float division).  You may also use parenthesis to indicate precedence.
   
-You can use integers (e.g. 3, 7) and floats (e.g. 1.0, 3.14).  However, you can not directly mix integers and floats in a calculation (in that case, an error will be printed at the command line).
+You can use integers (e.g. 3, 7) and floats (e.g. 1.0, 3.14).  However, you cannot directly mix integers and floats in a calculation (in that case, an error will be printed at the command line).
 
 
 
@@ -167,7 +164,7 @@ Simple math
 
 ** Floats (converting to ints)
 
-A float is converted into the closest integer with the function `FloatToInt'.  If two integers are equally close (ie x.5) it rounds to the closest even integer).  There is also a function `IntToFloat'.
+A float is converted into the closest integer with the function `FloatToInt'.  If two integers are equally close (ie x.5) it rounds to the closest even integer.  There is also a function `IntToFloat'.
 
 
 <src lang="oz">
@@ -177,7 +174,7 @@ A float is converted into the closest integer with the function `FloatToInt'.  I
 
 ** Floats (more)
 
-There are many other numeric functions are available for floats, e.g., Exp, Log, Sin, Cos...
+There are many other numeric functions available for floats, e.g., Exp, Log, Sin, Cos...
 
 
 <src lang="oz">
@@ -188,13 +185,13 @@ There are many other numeric functions are available for floats, e.g., Exp, Log,
 
 ** Introduction
 
-Oz variables are single assignment variables.  Variables are initially unbound (free) and they can be bound once.  However, their value never changes!  If you do not have experience with functional or logic programming languages, we highly recommend reading the background section! 
-
-Rewritable data storage is also supported by Oz; the simplest form are called Cells.  Other types of stateful data include arrays, directories, and objects, but we shall not cover them in this tutorial.
-
 All variables in Oz must start with a capital letter.  Local variables are declared with the keyword `local', and are valid for the relevant scope.
 
 Global variables can be introduced with the keyword `declare'.  However, global variables are intended for testing and are not supported in this tutorial application.
+
+WARNING: Oz variables are single assignment variables.  Variables are initially unbound (free) and they can be bound once.  However, their value never changes!  If you do not have experience with functional or logic programming languages, we highly recommend reading the background section! 
+
+Rewritable data storage is also supported by Oz; the simplest form is called Cells.  Other types of stateful data include arrays, directories, and objects, but we shall not cover them in this tutorial.
 
 
 
@@ -233,15 +230,15 @@ end
 
 ** A variable can be unbound
 
-Watch the Browser: X is first unbound (_ is displayed).  After 3 seconds, X is bound to 3.
+Watch the Browser: X is first unbound (_ is displayed).  After 3 seconds (3000 msec), X is bound to 42.
 
 <src lang="oz">
 local
    X 
 in
    {Browse X}
-   {Delay 2000}
-   X = 3
+   {Delay 3000}
+   X = 42
 end
 </src>
 
@@ -258,7 +255,7 @@ local
 in
   {Browse @C}      % browse cell value
   {Delay 2000}
-  C := 5           % change cell value to 0 (stateful operation)
+  C := 5           % change cell value to 5 (stateful operation)
   {Browse @C}      
   V = @C
   {Browse V}
@@ -290,7 +287,6 @@ Reading:
 
   - van Roy and Haridi, Chap. 1-2 (in particular Sec. 1.2, and 2.2)
   - Oz Tutorial, Chap. 3, introduction
-  - 
 
 
 
@@ -298,7 +294,7 @@ Reading:
 
 ** Introduction
 
-Oz provides the usual `if' control structure.  Note that unlike many programming languages, parenthesis () are not required around the condition, althought they may make the code easier to read.
+Oz provides the usual `if' control structure.  Note that unlike some mainstream programming languages, parenthesis () are not required around the condition, althought they may make the code easier to read.
 
 Please note that the `if' control structure can also be used as an expression which returns a value from the `then' or `else' clause.
 
@@ -318,7 +314,7 @@ end
 
 ** if ... end
 
-The `else' clause is optional. This section does nothing, but try changing `==' to `\=.' The operations `==' and `\=' test equality and inequality of values.
+The `else' clause is optional. This example does nothing, but try changing `==' to `\=.' The operations `==' and `\=' test equality and inequality of values.
 
 <src lang="oz">
 if (this == that) then
@@ -351,7 +347,7 @@ More specifically, a function is a procedure whose last argument -- the return v
 
 ** Usage
 
-The procedure `Browse' is called with the result of function `IsEven'.  `IsEven' expects one integer as an argument, and returns true or false.  `Browse' expects one argument (any variable type), and returns nothing.
+The procedure `Browse' is called with the result of function `IsEven'.  `IsEven' expects one integer as an argument, and returns true or false.  `Browse' expects one argument (any value), and returns nothing.
 
 <src lang="oz">
 {Browse
@@ -434,33 +430,6 @@ in
 end
 </src>
 
-** Nesting marker $
-
-Every procedure argument can be a return value.  The $ (dollar sign) always marks a return value.
-
-This can simplify code for experienced programmers.  Instead of writing
-  local X in {Obj get(X)} {Browse X} end
-we can write
-  {Browse {Obj get($)}}
-
-TODO: This section is not yet very convincing, but procedures will encapsulate constraints in later sections...
-TODO: can we find a better example?
-
-
-<src lang="oz">
-local
-   proc {Max X Y Z}
-      if X >= Y then Z = X else Z = Y end 
-   end 
-   X = 4
-   Result
-in
-   %% Note the $
-   X = {Max $ 3 Result}
-   {Browse Result}   
-end
-</src>
-
 ** Recursion
 
 To understand recursion, you must first understand recursion.  :)
@@ -470,10 +439,9 @@ Procedures and functions can call themselves (recursion).  The function Factoria
 <src lang="oz">
 local
    fun {Factorial N}
-      if (N==0) then
-        1
-      else
-        N * {Factorial N-1}
+      if N==0
+      then 1
+      else N * {Factorial N-1}
       end
    end
 in
@@ -487,15 +455,19 @@ end
 
 Terms: procedure, function.
 
-Procedures and functions are the standard means for expressing a
-collection of computations in a single entity.  Examples range
-from numeric computations to commands involving the operating
-system.  For example, we have already seen a number of numeric
-operations expressed by the common infix notation.
+Procedure and function definitions wrap up (abstract) some
+computation: a complex computation can then be executed simply by
+calling the procedure/function.
 
-A procedure definition wraps up (abstracts) some computation: a
-complex computation can then be executed simply by calling the
-procedure.
+Functions are often convenient to define and use, because we are often
+interested in the result of a computation.  The more general concept
+of procedures, on the other hand, is important when we need explicit
+access to all arguments (e.g., in constraint definitions), or when a
+computation does not return a value (as is the case for many graphical
+user interfaces, e.g., the browser).  Also, procedures are more
+suitable for concurrent programming, where we cannot return values
+to a concurrent computation running in a different thread.  Constraint
+programming and concurrent programming are discussed later.
 
 
 * Atoms and Names
@@ -508,7 +480,7 @@ Atom:
 The safest way to create an atom is to surround it in single quotes: 'hi there'.  Atoms may also be written as text (without spaces) as long as they do not start with a capital letter (those are variables) and the text is not an Oz keyword.  For simplicity, we recommend using 'single quotes'.  ;)
 
 Name:
-There are a few things which look like atoms, but are a different variable type: Name.  The boolean values true and false are both Names (specifically, the Bool subtype).  Another often used value which looks like an atom is unit (also a name).
+There are a few things which look like atoms, but are a different variable type: Name.  The Boolean values true and false are both names (specifically, the Bool subtype).  Another often used value which looks like an atom is unit (also a name).
 
 
 
@@ -541,7 +513,7 @@ Atoms are the same, whether entered with 'quotes' or not.
 
 The values `true', `false' and `unit' are values which are similar to atoms, but which play a special role (note that the quotes don't belong to the values here).
 
-Obviously, `true' and `false' are the common boolean values.  Oz provides the value `unit' for the computer science concept of the unit type (a value which is intended to express no further information).  For this section, `unit' is often used wherever a token is needed whose value is not important.
+Obviously, `true' and `false' are the common Boolean values.  Oz provides the value `unit' for the computer science concept of the unit type (a value which is intended to express no further information).  `unit' is often used wherever a token is needed whose value is not important.
 
 
 <src lang="oz">
@@ -595,6 +567,15 @@ Record fields are accessed with the dot operator.  R.X returns the value stored 
 {Inspect test(x:hi y:there).x}
 </src>
 
+** Atoms are 'empty' records
+
+An atom is a record which only consists in its label, but which has no features.
+
+<src lang="oz">
+{Inspect test() == test}
+{Inspect {IsRecord test}}
+</src>
+
 ** Tuples (definition)
 
 A tuple consists of a label and values.
@@ -611,14 +592,6 @@ Actually, a tuple is a record which has only integer features in ascending order
 {Inspect unit(1:a 2:b 3:c) == unit(a b c)}
 </src>
 
-** Tuples (as an empty tuple)
-
-An atom is an "empty" tuple.
-
-<src lang="oz">
-{Inspect test() == test}
-</src>
-
 ** Lists (definition)
 
 A list is a sequence of values, ending with `nil'.
@@ -627,23 +600,23 @@ A list is a sequence of values, ending with `nil'.
 {Inspect [value1 value2 value3]}
 </src>
 
-** Lists (like Lisp)
+** Lists (consing)
 
-A list can also be written using | (cf. cons in Lisp).  `nil' is the empty list, which terminates every list.
+A list can also be written using the cons operator (|).  `nil' is the empty list, which terminates a list.
 
 <src lang="oz">
-{Inspect a|b|c|nil}
+{Inspect [a b c] == a|b|c|nil}
 </src>
 
-** Lists (as a tuple)
+** Lists (as a record)
 
-Actually, a list is a nested tuple with the labels '|'.
+Actually, a list is a nested record with the labels '|'.
 
 <src lang="oz">
 {Inspect [a b c] == '|'(a '|'(b '|'(c nil)))}
 </src>
 
-** Lists (accesing the head)
+** Lists (accessing head and tail)
 
 Consequently, the first element of a list can be accessed under the feature 1, and the remaining list under the feature 2.
 
@@ -678,7 +651,7 @@ A string is a list of integers denoting characters (i.e. all list procedures can
 
 ** Strings (showing text)
 
-Although a string is just a list of integers, you can show strings as text in the Browser and the Inspector.  However, you need to configure them for showing strings first.  In the Inspector Preference settings (Options menu), select the tab Appearance and tick "Show Strings".  You need to do these settings before you inspect a string.
+Although a string is just a list of integers, you can show strings as text in the Browser and the Inspector.  However, you need to configure them for showing strings first.  In the Inspector Preference settings (Options menu), select the tab Appearance and tick "Show Strings".  You need to do these settings before you inspect a string. Alternatively, you select your string with the mouse, and then in the menu Selection you click "Reinspect".  The Inspector and Browser do not show strings by default, because a string is just a list of integers, and you may use integer lists which are not strings.
 
 <src lang="oz">
 {Inspect "This is a string!"}
@@ -686,13 +659,13 @@ Although a string is just a list of integers, you can show strings as text in th
 
 ** Virtual Strings
 
-A virtual string (VS) is a (possibly nested) concatenation of strings, atoms, and numbers.  Many procedures expecting strings as arguments can also handle virtual strings for convenience.
+A virtual string (VS) is concatenation (pair) of strings, atoms, and numbers.  Many procedures expecting strings as arguments can also handle virtual strings for convenience.  In this example, the virtual string VS consists of an atom, a string and an integer. The Browser supports showing virtual strings as text, but it must be configured first (menu Options -> Representation...: tick Virtual Strings, then select the virtual string and rebrowse).
 
 <src lang="oz">
 local 
-  VS = 'my test '
+  VS = 'my test'#"_"#3
 in
-  {Inspect VS#3}
+  {Browse VS}
 end
 </src>
 
@@ -734,7 +707,7 @@ X = 3
 
 ** Type error
 
-We can not add an integer and a float.
+We cannot add an integer and a float.
 
 <src lang="oz">
 {Browse 3 + 2.0}

@@ -407,9 +407,11 @@ define
 		  fun {$ X} {Label X} == chapter end}
       %% title obligatory
       Title = "#title "#{GetTitle Chapter}
+      Author = "#author Torsten Anders and Graham Percival"
    in
       {Out.listToLines
        {Append [Title
+		Author
 		nil % empty line
 		'<contents depth="2">'
 		nil

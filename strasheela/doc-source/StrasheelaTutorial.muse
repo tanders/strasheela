@@ -1,7 +1,7 @@
 #title Strasheela Tutorial
-#author Torsten Anders
+#author Torsten Anders and Graham Percival
 
-[[http://www.torsten-anders.de][Torsten Anders]]
+[[http://www.torsten-anders.de][Torsten Anders]] and Graham Percival
 
 <contents depth="1">
 

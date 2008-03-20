@@ -318,7 +318,7 @@ Reading:
 
 <section title="Object-Oriented Programming">
 <subsection title="Introduction">
-<info>Oz supports object-oriented programming (OOP).  This programming paradigm introduces the notion of objects.  Objects encapsulate internal data and understand methods (or messages) which somehow process this internal data.  Different 'kinds' of objects are defined by defining classes: objects are class instances.  A class specifies what data are contained in its instances and what methods these instances understands.  A method is effectively a procedure which is defined for instances of specific classes only.
+<info>Oz supports object-oriented programming (OOP).  This programming paradigm introduces the notion of objects.  Objects encapsulate internal data and understand methods (or messages) which somehow process this internal data.  Different 'kinds' of objects are defined by defining classes: objects are class instances.  A class specifies what data are contained in its instances and what methods these instances understand. A method is effectively a procedure which is defined for instances of specific classes only.
 </info>
 <oz></oz>
 </subsection>
@@ -349,9 +349,9 @@ end</oz>
 
   {Window set(borderwidth:1.0#c background:blue)}
 
-In general, the record denoting a message can wrap multiple arguments, as in the following section where the method myMethod with two arguments is send to the class MyObject.
+In general, the record denoting a message can wrap multiple arguments, as in the following example where the method myMethod with multiple arguments is send to the class MyObject.
 
-   {MyObject myMethod(Arg1 Arg2 ..)} 
+   {MyObject myMethod(Arg1 Arg2 ...)} 
 
 We will later see many more method application sections in the context of Strasheela's music representation.
 </info>
@@ -360,7 +360,7 @@ We will later see many more method application sections in the context of Strash
 				 action:toplevel#close))}
 in
    {Window show}
-   %% change to button background color after 1000 msecs
+   %% change to button background color after 1000 msec
    {Delay 1000}
    {Window set(borderwidth:1.0#c 
                background:blue)}
@@ -369,12 +369,12 @@ end</oz>
 
 
 <subsection title="Nesting marker $">
-<info>Oz provides a special construct for marking return values. This nesting marker is notated $ (dollar sign).  In a previous example (repeated below), the nesting marker replaced the variable naming the function.  In this case, $ returns the function value itself.
+<info>Oz provides a special construct for marking return values.  This construct is the nesting marker which is notated $ (dollar sign).  In a previous example (repeated below), the nesting marker was used for defining an anonymous function.  In this case, $ returns the function value itself.
 
   {Map [1 2 3 4 5 6] fun {$ X} X * X end}
 
 
-More generally, the nesting marker transforms any statement into an expression.  For example, method calls are statements by default -- they return nothing.  Using the nesting marker can make code more concise.  Instead of writing 
+More generally, the nesting marker transforms any statement into an expression.  For example, method calls are statements by default -- they return nothing.  The nesting marker can turn methods into expressions.  Using the nesting marker can make code more concise.  Instead of writing 
 
   local X in {Obj get(X)} {Browse X} end
 
@@ -395,30 +395,19 @@ The following example creates a text entry widget.  Whenever you edit the widget
 in
    {Window show}
 end</oz>
-<!-- OLD EXAMPLE 
-<oz>local
-   proc {Max X Y Z}
-      if X >= Y then Z = X else Z = Y end 
-   end 
-   X = 4
-   Result
-in
-   %% Note the $
-   X = {Max $ 3 Result}
-   {Browse Result}   
-end</oz>   -->
 </subsection>
 
 <subsection title="Class definition">
-  <!-- TODO: UNFINISHED SEC -->
-<info>This example defines a simple counter class. The class has one attribute (and internal datum) for storing the current counter value, named i. The class defines three methods. The method init expects an integer I  
+<info>This example defines a simple counter class.  It stores internally a counter value in its attribute i.  This value is accessed with the method get, and the method incr raises the counter value by one.  Every class defines an initialisation method: the method init expects the initial counter value as argument.  Note that the syntax for accessing and overwriting attribute values is very similar the the syntax of cells (see above).  In fact, object attributes are also stateful data, like cells.
+
+The example then creates a counter object (MyCounter) with the function New, which expects a class and an initialisation method.  The rest of the example uses this object.  Its initial counter value 3 is first browsed. The object is then incremented (so the counter becomes 4), and then its value is browsed again.  Note the use of the nesting marking for returning the counter value.
 </info>
 <oz>local
    class Counter
-      attr i
-      meth init(I) i:= I end
-      meth get(I) I=@i end
-      meth incr i := @i+1 end
+      attr i                    % define attribute i
+      meth init(I) i := I end   % bind i to arg I
+      meth get(I) I=@i end      % return i
+      meth incr i := @i+1 end   % increment i by one
    end
    MyCounter = {New Counter init(3)}
 in
@@ -429,45 +418,20 @@ end
 </oz>
 </subsection>
 
-<!--
-TODO: add subsections for [defining a class ? and] creating an object
--->
 
 <subsection title="BACKGROUND">
-  <!-- TODO: UNFINISHED SEC -->
 <info>Terms: class, object (class instance), method
 
-Writing Strasheela programs requires some basic 
+Strasheela's music representation makes extensive use of object-oriented programming.  Even basic Strasheela programs commonly require writing method calls.  Extending Strasheela often means writing new Strasheela classes. 
 
-
-Strasheela makes extensive use of object-oriented programming 
-
-
-Object-oriented programming is a complex programming paradigm. 
-
-
-This section presented only 
-
-
-how 
-
-
-
-
-introduced only 
-
-
-Note that object-oriented programming is often used as a stateful programming paradigmn: methods often change the internal state of objects. By constrast, most methods in Strasheela are stateless...
-
-
-For more details on object-oriented programming in general, please refer to other Oz documentation:
-
+Nevertheless, object-oriented programming is a complex programming paradigm.  This section therefore presented only the very basics of this paradigm.  For more details, please refer to other Oz documentation:
 
 Reading: 
 
   - van Roy and Haridi, Chap. 7
   - Oz Tutorial, Chap. 10
 
+Please note that object-oriented programming is often used as a stateful programming paradigm: methods often change the internal state of objects (cf. the counter example above).  By constrast, most methods in Strasheela are stateless which is important in the context of constraint programming.  The Strasheela music representation is introduced later in this tutorial. 
 </info>
 <oz></oz>
 </subsection>
@@ -507,7 +471,7 @@ end</oz>
 </subsection>
 
 <subsection title="Variables (multiple threads)">
-<info>Variables may also be used to communicate between different threads.  This example declares X and then browses 'hello' (just to show that the browser works in principle).  However, the addition X+3 cannot be executed immediately and blocks.  Because this computation is executed in its own thread, the top-level thread continues regardless, and calls the procedure Delay, which waits for 3000 msecs.  After that time, the top-level thread determines X to 4.  This awakes the other thread: it can now compute X+3 and browse the sum.
+<info>Variables may also be used to communicate between different threads.  This example declares X and then browses 'hello' (just to show that the browser works in principle).  However, the addition X+3 cannot be executed immediately and blocks.  Because this computation is executed in its own thread, the top-level thread continues regardless, and calls the procedure Delay, which waits for 3000 msec.  After that time, the top-level thread determines X to 4.  This awakes the other thread: it can now compute X+3 and browse the sum.
 
 In the section below, the addition X+3 cannot be performed as long as the value of X is unknown.
 </info>
@@ -516,7 +480,7 @@ In the section below, the addition X+3 cannot be performed as long as the value 
 in
   {Browse hello}
   thread {Browse X + 3} end  % compute and browse X+3 concurrently
-  {Delay 2000}
+  {Delay 3000}
   X = 4
 end</oz>
 </subsection>
