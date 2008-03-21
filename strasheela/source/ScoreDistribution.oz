@@ -13,7 +13,7 @@
 
 
 /** %% The functor defines solvers and distribution strategies tailored for a score search.
-% */
+%% */
 
 										    
 %% TODO: 
@@ -46,11 +46,10 @@
 %%
 %% Order sorts a list of values according to given comparison function, but only first element is important (i.e. Order does not perform full sorting)
 %% !! tmp def with Sort
-/*
-fun {Order Xs Fn}
-   {Sort Xs Fn}
-end
-*/
+%
+% fun {Order Xs Fn}
+%    {Sort Xs Fn}
+% end
 
 	
 functor 

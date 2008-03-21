@@ -120,7 +120,7 @@ clearInterval(drawit)
 
 <div style="margin-left:160px"><p align="right" class="margin"><div align="right">inheritance tree</div></p>
 <pre>
- <a class="pre" href="node6.html#entity226">LeaveUninitialisedParameterMixin</a>
+ <a class="pre" href="node6.html#entity230">LeaveUninitialisedParameterMixin</a>
 </pre>
 <hr><p class="margin"><div align="right">class definition</div></p>
 <code>
@@ -131,7 +131,9 @@ clearInterval(drawit)
 
 
 </tr></table>
-<span class="string"> Free parameter values are by default turned into FD ints during the score initialisation (with InitScore). In contrast, parameters which inherit from this mixin are left untouched (i.e. if their value is a free variable, it remains free during initialisation). This can be useful, for example, if parameter values are potentially non-integers (e.g., floats).  <BR>
+<span class="string"> Free parameter values are by default turned into FD ints during the score initialisation (with InitScore). In contrast, parameters which inherit from this mixin are left untouched (i.e. if their value is a free variable, it remains free during initialisation). This can be useful, for example, if parameter values are potentially non-integers (e.g., floats).<BR>
+<BR>
+ NOTE: uninitialised parameters will cause problems for the score distribution -- better exclude them from the distribution.  <BR>
 <BR>
 </span>
 <span class="keyword">class</span> <span class="type">LeaveUninitialisedParameterMixin</span> (Inheritance-free)<br>

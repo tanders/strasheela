@@ -138,8 +138,8 @@ define
       {Object.is X} andthen {HasFeature X MotifType}
    end
    
-%    /** %% Some container of X is a motif.
-%    %% */
+%    %% Some container of X is a motif.
+%    %% 
 %    fun {IsInMotif X}
 %       {Some {X getContainers($)} IsMotif} 
 %    end

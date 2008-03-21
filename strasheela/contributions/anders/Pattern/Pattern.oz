@@ -480,13 +480,13 @@ define
    
 
    /*
-   /** %% B=1 <-> X = Y
-   %% */
+    %% B=1 <-> X = Y
+   %% 
    proc {UnifyR X Y B}
       B = {Combinator.'reify' proc {$} X = Y end} 
    end
-   /** %% X (any unifiable value) occures N (FD int) times in Xs (list of unifiable values).
-   %% */
+    %% X (any unifiable value) occures N (FD int) times in Xs (list of unifiable values).
+   %% 
    proc {HowMany2 X Xs N}
       {FD.sum {Map Xs
 	       proc {$ Y B}
@@ -1400,9 +1400,10 @@ define
    proc {DisjAll Xs ?B}
       {FD.reified.sum Xs '>=:' 1 B}
    end
-%    /** %% Proc has two arguments and constraints two neighboring cycle periods (I can do transposition this way, but I can not change the cycle length)
+   
+%    %% Proc has two arguments and constraints two neighboring cycle periods (I can do transposition this way, but I can not change the cycle length)
 %    %% SelectFn has two arguments, Xs (needed?) and N (the period number) and returns a list of FD vars specifying the period. ConstraintProc has three arguments, a list containing the predecessor period, a list containing the current period and the current period number. The proc constraints the period.
-%    %% */
+%    %% 
 %    proc {VariatedCycle Xs Ys SelectFn ConstraintProc}
        
 %    end

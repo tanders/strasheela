@@ -217,8 +217,8 @@ define
    end
 
 
-%    /** %% Returns a score in CSV format (a VS). Events is a list of MIDI event specs (created by one of the low-level MIDI event creators such as MakeNoteOn etc.).
-%    %% */
+%     %% Returns a score in CSV format (a VS). Events is a list of MIDI event specs (created by one of the low-level MIDI event creators such as MakeNoteOn etc.).
+%    %% 
 %    %%
 %    fun {MakeCSVScore Events}
 %       %% NTracks is the number of tracks in the file
@@ -228,8 +228,8 @@ define
 % 	       then 0
 % 	       else 1
 % 	       end
-% %   /** %% Records in the CSV file are sorted first by the track number, then by time.
-% %   %% */
+% %   %% Records in the CSV file are sorted first by the track number, then by time.
+% %   %% 
 % %   fun {MySort Tracks}
 % %      {Flatten {Sort Tracks fun {$ X Y} X.1.track =< Y.1.track end}}
 % %   end

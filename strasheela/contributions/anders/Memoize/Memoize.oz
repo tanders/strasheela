@@ -14,14 +14,14 @@
 /** %% This functor provides memoization of functions.
 %%
 %% NOTE: Memoize2: accessing memoized values is slow -- it can be far
-%% slower than recomputing!  Efficiency of memo-functions lookup is
-%% only linear time (!) and depends on the number of results already
-%% cached (i.e. lookup is not performed in constant time as perhaps
-%% expected, because currently there exists no constant time
-%% implementation of RecordC.reflectHasFeature).  It may still be
-%% sufficiently efficient in a CSP when used for avoiding redundant
-%% propagators, but you may want to compare the performance with and
-%% without memoization...
+%% slower than recomputing the memoized values!  Efficiency of
+%% memo-functions lookup is only linear time (!) and depends on the
+%% number of results already cached (i.e. lookup is not performed in
+%% constant time as perhaps expected, because currently there exists
+%% no constant time implementation of RecordC.reflectHasFeature).  It
+%% may still be sufficiently efficient in a CSP when used for avoiding
+%% redundant propagators, but you may want to compare the performance
+%% with and without memoization...
 %%
 %% */
 
@@ -143,7 +143,7 @@ define
 %       end
 %    end
 
-%    /** %% Clears the cache of all memoized functions. 
+%    /* %% Clears the cache of all memoized functions. 
 %    %% */ 
 %    proc {ClearAll}
 %       {ForAll @ClearPs proc {$ P} {P} end}

@@ -633,7 +633,7 @@ define
        Step}
    end
 
-   /* %% Expects a fenv representing a normalised time shift function and returns a fenv representing a normalised time map function. A time shift function expresses how much is added to a score time to yield a performance time, i.e., f(x) = 0 causes performance time to be score time. A normalised time map maps score time to performance time.
+   /** %% Expects a fenv representing a normalised time shift function and returns a fenv representing a normalised time map function. A time shift function expresses how much is added to a score time to yield a performance time, i.e., f(x) = 0 causes performance time to be score time. A normalised time map maps score time to performance time.
    %% Private Terminology: normalised time shift functions, time map functions and tempo curves: fenvs where x values denote the score time (usually of a temporal container) which is mapped into [0,1]: 0 corresponds to the container's start time, and 1 corresponds to the container's end time. See ContainerFenvY.
    %% NB: a normalised time map fenvs cannot be combined by function combination (x values for fenvs are always in [0,1]). Instead, either combine tempo curve and time shift fenvs, or combine plain and un-normalised time map functions (i.e. no fenvs).  
    %% */
@@ -690,7 +690,7 @@ define
 %%% Fenv output transformations 
 %%%
    
-   /* %% Transforms a Fenv into a list of continuous MIDI controller events. N events are output between StartTime and EndTime (two ints, given in MIDI ticks) at Channel (an int). 
+   /** %% Transforms a Fenv into a list of continuous MIDI controller events. N events are output between StartTime and EndTime (two ints, given in MIDI ticks) at Channel (an int). 
    %% Controller denotes which controller is output. Possible values are one of the atoms pitchbend, and channelAftertouch, or one of the pairs cc#Number (Number is the controller number) and polyAftertouch#Note (Note denotes the note pitch). 
    %% Finally, Controller can be a function expecting 4 arguments and returning a MIDI event. For example, the volume Controller can be defined as follows
    fun {$ Track Time Channel Value}

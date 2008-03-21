@@ -102,12 +102,10 @@ define
    %% TODO: 
    %% !! how to ensure that {File close} is called, ie. how to
    %% 'unwind-protect'
-   /*
-   try  
-      {Process F}
-   catch X then {Browse '** '#X#' **'}  
-   finally {CloseFile F} end
-   */
+%    try  
+%       {Process F}
+%    catch X then {Browse '** '#X#' **'}  
+%    finally {CloseFile F} end
    proc {WriteToFile Output Path}
       File = {New Open.file  
 	      init(name: Path
@@ -204,8 +202,8 @@ define
 
    %% old defs kept for reference for a while, just in case 
    %%
-%    /** % Transforms a list of virtual strings into a single virtual string without any sign between the list elements.
-%    %% */
+%     % Transforms a list of virtual strings into a single virtual string without any sign between the list elements.
+%    %% 
 %    fun {ListToVS2 Xs}
 %       {ListToVS Xs ''}
 % %       case Xs
@@ -214,8 +212,8 @@ define
 % %       [] nil then nil
 % %       end
 %    end
-%    /** % Transforms a list of virtual strings into a single virtual string with a single whitespace between the list elements.
-%    %% */
+%     % Transforms a list of virtual strings into a single virtual string with a single whitespace between the list elements.
+%    %% 
 %    fun {ListToVS3 Xs}
 %       {ListToVS Xs " "}
 % %       case Xs
@@ -995,8 +993,8 @@ define
       else ''
       end
    end
-%    /** %% Returns a Lily fingering mark (a virtual string) which represents a micro-tonal tuning deviation in 72ET temperament.
-%    %% */
+%    %% Returns a Lily fingering mark (a virtual string) which represents a micro-tonal tuning deviation in 72ET temperament.
+%    %% 
 %    fun {LilyMakeEt72MarkFromMidiPitch MidiPitch}
 %       Marks = unit("-0" "-1" "-2" "-3" "-4" "-5" "-6")
 %       %Pitch = {PitchParam getValueInMidi($)}

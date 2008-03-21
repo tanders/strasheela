@@ -169,8 +169,8 @@ define
 	 X = @accentsFS
       end
       
-%       /** %% 
-%       %% */
+%        %% 
+%       %% 
 %       %% !!?? put this in TimeMixin in ScoreCore.oz?
 %       meth getTicksPerBeat(?X)
 % 	 case {self getTimeUnit($)}
@@ -248,8 +248,8 @@ define
 % % 	 {self getOffsetTime($)} = 0
 % %       end
    
-%   /** %% B=1 <-> Time equals the start time of some measure in UniformMeasures.
-%   */
+%    %% B=1 <-> Time equals the start time of some measure in UniformMeasures.
+%   
 % 	 meth onMeasureStartR(Time B)
 % 	    {Pattern.disjAll
 % 	     {self mapItems($ proc {$ MyMeasure B} 
@@ -259,9 +259,9 @@ define
 % 	     B}
 % 	 end
 
-% 	 /** %% B=1 <-> Time equals some strong beat in of some measure in UniformMeasures.
+% 	  %% B=1 <-> Time equals some strong beat in of some measure in UniformMeasures.
 % 	 %% NB: onAccentR blocks until all beatNumber of all Measures in self are determined.
-% 	 %% */
+% 	 %% 
 % 	 %% !! failure if Time < some MyMeasure start 
 % 	 meth onAccentR(Time B)
 % 	    %% !!?? implicitly constraints/determines beatDuration of preceeding measure(s)
@@ -278,9 +278,9 @@ define
 % 	     B}
 % 	 end
 
-% 	 /** %% B=1 <-> Time equals some beat in of some measure in UniformMeasures.
+% 	 %% B=1 <-> Time equals some beat in of some measure in UniformMeasures.
 % 	 %% NB: onBeatR blocks until all beatNumber of all Measures in self are determined.
-% 	 %% */
+% 	 %% 
 % 	 %% !! failure if Time < some MyMeasure start 
 % 	 meth onBeatR(Time B)
 % 	    {Pattern.disjAll

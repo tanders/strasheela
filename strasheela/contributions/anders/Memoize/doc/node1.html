@@ -119,14 +119,14 @@ clearInterval(drawit)
 <span class="string"> This functor provides memoization of functions.<BR>
 <BR>
  NOTE: Memoize2: accessing memoized values is slow -- it can be far<BR>
- slower than recomputing!  Efficiency of memo-functions lookup is<BR>
- only linear time (!) and depends on the number of results already<BR>
- cached (i.e. lookup is not performed in constant time as perhaps<BR>
- expected, because currently there exists no constant time<BR>
- implementation of RecordC.reflectHasFeature).  It may still be<BR>
- sufficiently efficient in a CSP when used for avoiding redundant<BR>
- propagators, but you may want to compare the performance with and<BR>
- without memoization...<BR>
+ slower than recomputing the memoized values!  Efficiency of<BR>
+ memo-functions lookup is only linear time (!) and depends on the<BR>
+ number of results already cached (i.e. lookup is not performed in<BR>
+ constant time as perhaps expected, because currently there exists<BR>
+ no constant time implementation of RecordC.reflectHasFeature).  It<BR>
+ may still be sufficiently efficient in a CSP when used for avoiding<BR>
+ redundant propagators, but you may want to compare the performance<BR>
+ with and without memoization...<BR>
 <BR>
 <BR>
 </span>
@@ -178,14 +178,7 @@ clearInterval(drawit)
 <code>
 <a name="entity7">
 <span class="keyword">proc</span>{<span class="functionname">Memoize2</span> Fn MemoFn}<br>
-<span class="string"> Clears the cache of all memoized functions. <BR>
- */ <BR>
-    proc {ClearAll}<BR>
-       {ForAll @ClearPs proc {$ P} {P} end}<BR>
-    end<BR>
-<BR>
-<BR>
-/** %% Like Memoize, but completely stateless. Functions memoized with Memoize2 are not cleared with ClearAll (in contrast to functions created with Memoize), but for functions local to CSPs this is not necessary.<BR>
+<span class="string"> Like Memoize, but completely stateless. Functions memoized with Memoize2 are not cleared with ClearAll (in contrast to functions created with Memoize), but for functions local to CSPs this is not necessary.<BR>
  Memoize2 is intended for locally use in CSP where its use can avoid re-applying redundant propagators. <BR>
  Efficiency of memo-functions lookup is only linear time (!) and depends on the number of results already cached (i.e. lookup is not performed in constant time as perhaps expected, because currently there exists no constant time implementation of RecordC.reflectHasFeature).<BR>
 <BR>

@@ -16,17 +16,17 @@
 %% configuration, inspecting determined variables hangs.
 %%
 %% This seems to be a Mac OS problem (not on Linux).
-/*
-declare
-InspectorObject = {Inspector.new unit}
 
-%% hangs
-{InspectorObject inspect({FS.value.make [1 2 3]})}
+% declare
+% InspectorObject = {Inspector.new unit}
 
-%% works fine
-{InspectorObject inspect({FS.var.decl})}
-{InspectorObject inspect(foo)}
-*/
+% %% hangs
+% {InspectorObject inspect({FS.value.make [1 2 3]})}
+
+% %% works fine
+% {InspectorObject inspect({FS.var.decl})}
+% {InspectorObject inspect(foo)}
+
 
 
 

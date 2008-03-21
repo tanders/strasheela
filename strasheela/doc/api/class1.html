@@ -120,7 +120,7 @@ clearInterval(drawit)
 
 <div style="margin-left:160px"><p align="right" class="margin"><div align="right">inheritance tree</div></p>
 <pre>
- <a class="pre" href="node4.html#entity165">ExtendableList</a>
+ <a class="pre" href="node4.html#entity167">ExtendableList</a>
 </pre>
 <hr><p class="margin"><div align="right">class definition</div></p>
 <code>
@@ -131,22 +131,7 @@ clearInterval(drawit)
 
 
 </tr></table>
-<span class="string"> <BR>
- */<BR>
-    fun {ArithmeticSeries N Start Summand}<BR>
-       {List.number Start ((N-1)*Summand+Start) Summand}<BR>
-    end<BR>
-    /** %% <BR>
- */<BR>
- N!! wrong def<BR>
-    fun {GeometricSeries N Start Factor}<BR>
-       {Map {List.number 0 N-1 1}<BR>
-        fun {$ I}<BR>
- 	  {Pow Factor I} <BR>
-        end}<BR>
-    end<BR>
-<BR>
-/** %% An ExtendableList instance provides the feature list, which is a list whose tail is unbound. The list is a stateless data structure. However, new list elements can be added at the tail of the list.<BR>
+<span class="string"> An ExtendableList instance provides the feature list, which is a list whose tail is unbound. The list is a stateless data structure. However, new list elements can be added at the tail of the list.<BR>
  This datastructure is similar to a Port. The difference is that (i) the tail is not protected (no read-only variable) and (ii) the resulting stream can be closed, thus transforming the stream into a proper list. <BR>
  NB: adding new list elements is a stateful operation (the binding of the internal attribute tail is changed), but the state is completely encapsulated in this data structure.<BR>
 <BR>

@@ -766,8 +766,7 @@ define
    %% The TimeUnit specifies what the numeric values for the TimeMixin attributes actually mean. The TimeUnit either specifies an absolute value (e.g. seconds) or a relative value (e.g. beats). The meaning of beat depends on the output definition, for instance, for the Lilypond output a beat is a quarter note. Currently, possible values are 'seconds' (or 'secs'), 'milliseconds' (or 'msecs'), 'beats', or beats(N), where  N means number of ticks (i.e. the integer range) within a beat. For example, if the TimeUnit = beats(4) and a beat corresponds to a quarter note, then a note of duration 1 corresponds to a sixteenth note. beats is equivalent with beats(1). The meaning of a beat for sound output can be specified by the tempo (see Init.setBeatDuration, Init.setTempo etc.)
    %% NB: to avoid confusion, the time units of all temporal items in the score are unified when a Strasheela score is initialised.   
    %% NB: A negative offsetTime value is not possible if the offsetTime is a FD integer (which presently is the only option). For the other temporal parameters, a negative value does not make sense anyway.
-   %%*/
-   %%*/
+   %% */
    class TimeMixin
       feat 
 	 %'class': TimeMixin
@@ -2423,10 +2422,10 @@ define
 % 	 end
 %       end
 %    in
-%       /** % [!! ?? unfinished conceptually] Util for MakeScore. Transforms a short hand score representation with repeat signs into the full representation for MakeScore. A repeat sign (<code>#</code>) may appear after any ScoreSpec denoting an item using the form <code>ScoreSpec#N</code>.
+%       % [!! ?? unfinished conceptually] Util for MakeScore. Transforms a short hand score representation with repeat signs into the full representation for MakeScore. A repeat sign (<code>#</code>) may appear after any ScoreSpec denoting an item using the form <code>ScoreSpec#N</code>.
 %       %% Restriction:
 %       %% Items are literally repeated. Therefore, items with ID are literally copied and all repeatitions result in 'unified' objects.
-%       % */
+%       % 
 %       fun {ResolveRepeats ScoreSpec}
 % 	 {ResolveRepeatsAux ScoreSpec}.1
 %       end

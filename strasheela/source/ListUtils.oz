@@ -359,8 +359,8 @@ define
    /*
    %% generalised version of EveryNth, but buggy -- arithm series outputs 0-based positions (not 1-based as required for Oz) and influence Offset is ignored for length of arithm series
    
-   /** %% Returns a list which contains every Nth element in Xs starting at offset.
-   %% */
+   %% Returns a list which contains every Nth element in Xs starting at offset.
+   %% 
    fun {EveryNth Xs N Offset}
       %% transform into tuple to allow for constant time access (is this really more efficient?)
       {Map {ArithmeticSeries {IntToFloat Offset} {IntToFloat N}
@@ -368,11 +368,11 @@ define
        fun {$ I} {Nth Xs {FloatToInt I}} end}
    end
 
-   /** %% Returns every element in Xs at an odd position.
-   %% */
+    %% Returns every element in Xs at an odd position.
+   %% 
    fun {OddPositions Xs} {EveryNth Xs 2 1} end
-   /** %% Returns every element in Xs at an even position.
-   %% */
+    %% Returns every element in Xs at an even position.
+   %%
    fun {EvenPositions Xs} {EveryNth Xs 2 0} end
    */
    
@@ -406,6 +406,7 @@ define
 	  Start+Difference*({Int.toFloat I}-1.0) 
        end}
    end
+   
    /** %% Returns the reciprocals of an arithmetic series with N elements. The arithmetic series starts from start and has difference Difference between its elements. Start and Difference must be floats, N must be an integer. A list of floats is returned.
    %% The  reciprocal series is not transposed, i.e. for Difference>0 seach series element is smaller than its predecessor and all but the first series elements are < Start.
    %% */   
@@ -424,13 +425,13 @@ define
    end
 
    
-%    /** %% 
-%    %% */
+%     %% 
+%    %% 
 %    fun {ArithmeticSeries N Start Summand}
 %       {List.number Start ((N-1)*Summand+Start) Summand}
 %    end
-%    /** %% 
-%    %% */
+%    %% 
+%    %% 
 %    %% N!! wrong def
 %    fun {GeometricSeries N Start Factor}
 %       {Map {List.number 0 N-1 1}
