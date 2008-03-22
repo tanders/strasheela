@@ -110,6 +110,7 @@ import
    SMapping at 'x-ozlib://anders/strasheela/source/ScoreMapping.ozf'
 %    Score at 'x-ozlib://anders/strasheela/ScoreCore.ozf'
    Pattern at 'x-ozlib://anders/strasheela/Pattern/Pattern.ozf'
+   Schoenberg at 'Schoenberg.ozf'
    
 export
 
@@ -129,6 +130,9 @@ export
    IsBetweenChordNotesR
    IsAuxiliaryR
    IsBetweenStepsR
+
+   %% subfunctors
+   Schoenberg
    
 define
 
@@ -252,6 +256,7 @@ define
    proc {CommonPCsR X Y B}
       HarmBandWidth = {CommonPCs_Card X Y}
    in
+      B = {FD.int 0#1}
       B =: (HarmBandWidth >: 0) 
    end
    /** %% Each successive chord/scale pair in list Xs has at least 1 common pitch class.
