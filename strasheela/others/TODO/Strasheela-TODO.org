@@ -213,12 +213,6 @@ configure: error: ozinstall not found
     Accessor methods like getDurationInSeconds or getPitchInMidi must be generalised to support either FD ints or XRI vars
 
 
-** TODO Move ET31.score.chordsToScore to HS.score.chordsToScore
-
-   Check where I use ET31.score.chordsToScore and update it accordingly
-   Examples: ET31.out, testfiles..
-
-
 ** Introduce some generalised concept of 'cadence' 
 
    Example: {Cadence Chords Scale} constraints that union of all pitch classes in Chords (list of N chords) contains all pitchclasses of Scale. Additional arguments (some FD int?) may allow to specify whether cadence ends in I or some form of deceptive cadence occurs. 
@@ -309,8 +303,8 @@ configure: error: ozinstall not found
 
    see [[file:~/oz/music/Strasheela/tmp.oz::functor%20SchoenbergF][file:~/oz/music/Strasheela/tmp.oz::functor SchoenbergF]]
 
-*** TODO Move definitions from Strasheela/tmp.oz into HS.rules 
-    
+*** DONE Move definitions from Strasheela/tmp.oz into HS.rules 
+    CLOSED: [2008-03-22 Sat 00:15]    
     As subfunctor?
 
 *** DONE Implement constraint for strong, weak and superstrong
@@ -327,7 +321,12 @@ configure: error: ozinstall not found
     CLOSED: [2008-03-17 Mon 14:04]
 
     
-*** TODO Write test suite for testing all constraints 
+*** TODO [80%] Write test suite for testing all constraints 
+
+    Missing is only ResolveDescendingProgressions
+
+    [[file:~/oz/music/Strasheela/strasheela/trunk/strasheela/contributions/anders/HarmonisedScore/testing/Rules-test.oz::TODO%20ResolveDescendingProgressions][file:~/oz/music/Strasheela/strasheela/trunk/strasheela/contributions/anders/HarmonisedScore/testing/Rules-test.oz::TODO ResolveDescendingProgressions]]
+
 *** TODO Implement Schoenbergs orig defs				 :MAYBE:
 
     Based on root PC intervals 
