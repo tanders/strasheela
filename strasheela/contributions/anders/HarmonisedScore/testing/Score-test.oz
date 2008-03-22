@@ -1309,3 +1309,22 @@ Interval2 = {NoteInterval_M [Note1 Note2]}
 
 %% .. now re-inspect: OK
 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%% ChordsToScore
+%%
+
+%% A 2 chord progression: after a C major chord in root position (default database), any chord can follow
+declare
+MyScore = {HS.score.chordsToScore [chord(duration:1
+					 index:1
+					 transposition:0
+					 bassChordDegree:1
+					 timeUnit:beats)
+				   chord(duration:1)]
+	   unit}
+
+{Out.renderAndShowLilypond MyScore
+ unit}
+
