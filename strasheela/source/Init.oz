@@ -309,6 +309,11 @@ define
 	     unit(file: FileName)}
 	 end
       end
+      proc {BrowseInitRecord I X}
+	 if {Score.isScoreObject X}
+	 then {Browse {X toInitRecord($)}}
+	 end
+      end
 %       proc {ArchiveENPNonMensural I X}
 % 	 if {Score.isScoreObject X}
 % 	 then 
@@ -424,6 +429,9 @@ define
 	 {Explorer.object
 	  add(information ArchiveInitRecord
 	      label: 'Archive initRecord')}
+	 {Explorer.object
+	  add(information BrowseInitRecord
+	      label: 'Browse initRecord')}
 	 {Explorer.object
 	  add(information RenderCsound
 	      label: 'to Csound')}
