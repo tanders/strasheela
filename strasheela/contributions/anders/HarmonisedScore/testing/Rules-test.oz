@@ -234,11 +234,54 @@ end
 
 
 
-%%%%%
+%%
+%% ResolveDescendingProgressions
+%%
+%% For three chords, find all solutions which complete a weak progression between the first two chords (I V ??). Solutions are not necessarily diatonic..
+%%
+%% Solutions for the third root: 1 2 3 5 6 8 9 10 11
+%% I.e., no 0, 4, 7 -- the descending progressions from C major.
+%% If allowInterchangeProgression is true, then 0 is permitted as well.
+declare
+proc {MyScript MyScore}
+   Chord1 Chord2 Chord3
+in
+   MyScore = {Score.makeScore
+	      seq(items:[chord(duration:1
+			       index:{HS.db.getChordIndex 'major'}
+			       transposition:0
+			       handle:Chord1)
+			 chord(duration:1
+			       index:{HS.db.getChordIndex 'major'}
+			       transposition:7
+			       handle:Chord2)
+			 chord(duration:1
+			       index:{HS.db.getChordIndex 'major'}
+			       handle:Chord3)]
+		  startTime:0
+		  timeUnit:beats)
+	      add(chord:HS.score.chord)}
+   {HS.rules.schoenberg.resolveDescendingProgressions [Chord1 Chord2 Chord3]
+%    unit(allowInterchangeProgression:true)
+    unit
+   }
+end
 
+%% browse solutions as init record
+{Browse {Map {SDistro.searchAll MyScript
+		 unit(order:size
+		      value:min)}
+	 fun {$ Sol} {Sol toInitRecord($)} end}}
 
-%% TODO: ResolveDescendingProgressions
-
+%% browse roots of all sols of third chord
+{Browse {Map {SDistro.searchAll MyScript
+		 unit(order:size
+		      value:min)}
+	 fun {$ Sol}
+	    InitR = {Sol toInitRecord($)}
+	 in
+	    {List.last InitR.items}.root
+	 end}}
 
 
 
