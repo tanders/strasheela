@@ -581,6 +581,23 @@ See ../../testing/zy_Efficiency/KeepMusicRepresentationOutsideComputationalSpace
 ***** Instead with this Strasheela 'client', other CAC applications could also create CSP specs and call the Strasheela 'server' (e.g. PWGL)
 
 
+** Scale scale support							 :MAYBE:
+
+   Idea: method getPitchInMidi gets couterpart getPitchInMidi_Tempered where the pitch spec depends on a *.scl file, whose path is either given to some proc in Init, or (for changing the tuning on the fly) to the method getPitchInMidi_Tempered directly.  
+
+   getPitchInMidi_Tempered uses some record which contains the pitches for all pitches (some upper limit?). I may also always compute pitches on the fly -- if the computation does not depend on computing other pitches first...
+   This record is created by evaluating the scala file (first parsing it, then ...).
+   
+   If HS pitches per octave and spec in Scala file disagree, then ... 
+
+*** Program more simple temperament support (at first) 
+
+    - Tuning values are entered by hand (no parsing of Scala file)
+    - Tuning values are all cents
+    - However, octave may be \= 1200 cent, and temperament shifts tuning by corresponding (reduced/streched) octave for computing any pitch
+
+
+
 * Strasheela documentation					    :STRASHEELA:
 
 ** Strasheela tutorial
