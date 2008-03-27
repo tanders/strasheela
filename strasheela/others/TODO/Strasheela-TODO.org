@@ -598,6 +598,32 @@ See ../../testing/zy_Efficiency/KeepMusicRepresentationOutsideComputationalSpace
 
 
 
+** Reconsider automatic releases					 :MAYBE:
+
+   I would like to speed up my release process (so I would release Strasheela more often)
+
+   The only tools for automating this I found so far are freshmeat-submit and shipper
+   http://catb.org/~esr/software.html
+   
+   Plus: I may release info on more sites than now (ibiblio)
+   Downside: somewhat targeted towards Linux apps and RPM packages, no support for sourceforge upload
+   
+   Note: Installation seems to work out of the box on a Mac.
+
+*** Search whether other tools are available for this 
+
+    
+*** ?? Contact Eric Raymond: ask whether his software shipper meanwhile supports SourceForge as a destination
+
+    His doc at 
+    http://www.catb.org/~esr/shipper/shipper.html
+    says "In the future, we hope to support (for example) Debian packages as deliverables and SourceForge as a destination." 
+
+    Don't contact him -- there is no hint anywere that shipper meanwhile supports SourceForge in the (brief) list of changes. 
+
+    Eric S. Raymond <esr@thyrsus.com>
+
+
 * Strasheela documentation					    :STRASHEELA:
 
 ** Strasheela tutorial
