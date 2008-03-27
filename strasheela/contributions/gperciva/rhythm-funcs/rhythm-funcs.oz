@@ -90,9 +90,19 @@ define
       {FD.sum {Map Durs fun {$ X} (X=:DurValue) end} '>=:' NumDurs}
    end
 
+
+  %% only does 1-6 durations!
   proc {NoAdjacentRests Events Durs}
    %% 1r R  cannot in this level
-
+   for I in 1..{Length Events}-1 do
+      {FD.impl
+       ( {FD.conj
+	  ({Nth Events I} =: 2)
+	  ({Nth Durs I} =: 1)
+	 } )
+       ( {Nth Events I+1} \=: 2 )
+       1}
+   end
    %% removes 2r . R rests
    for I in 1..{Length Events}-2 do
       {FD.impl
@@ -103,6 +113,15 @@ define
        ( {Nth Events I+2} \=: 2 )
        1}
    end
+   %% removes 3r . . R rests
+   for I in 1..{Length Events}-3 do
+      {FD.impl
+       {FD.conj
+	({Nth Events I} =: 2)
+	({Nth Durs I} =: 3) }
+       ( {Nth Events I+3} \=: 2 )
+       1}
+   end
    %% removes 4r . . . R rests
    for I in 1..{Length Events}-4 do
       {FD.impl
@@ -110,6 +129,23 @@ define
 	({Nth Events I} =: 2)
 	({Nth Durs I} =: 4) }
        ( {Nth Events I+4} \=: 2 )
+       1}
+   end
+   %% removes 5 rests
+   for I in 1..{Length Events}-5 do
+      {FD.impl
+       {FD.conj
+	({Nth Events I} =: 2)
+	({Nth Durs I} =: 5) }
+       ( {Nth Events I+5} \=: 2 )
+       1}
+   end   %% removes 6 rests
+   for I in 1..{Length Events}-6 do
+      {FD.impl
+       {FD.conj
+	({Nth Events I} =: 2)
+	({Nth Durs I} =: 6) }
+       ( {Nth Events I+6} \=: 2 )
        1}
    end
   end
