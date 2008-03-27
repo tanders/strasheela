@@ -73,20 +73,27 @@ define
    /** %% Expects two chord/scale objects X and Y, and returns N (an FD int) expressing the 'strength' of the harmonic progression encoded by a single integer.
    %% More specifically, N can be used to distinguish between the following cases.
    %% N = 0: X and Y share the same root 
-   %% 0 < N < PitchesPerOctave: descending progression, N = PitchesPerOctave-1 for 1 common pitch class between X and Y, N = PitchesPerOctave-2 for 2 common pitch classes etc.
-   %% PitchesPerOctave < N < PitchesPerOct * 2: ascending progression, N = PitchesPerOctave*2-1 for 1 common pitch class between X and Y, N = PitchesPerOctave*2-2 for 2 common pitch classes etc.
+   %% 0 < N < PitchesPerOctave: descending progression.
+   %% PitchesPerOctave < N < PitchesPerOct * 2: ascending progression.
    %% N = PitchesPerOct * 2: superstrong progression.
-   %%
+   %% Within the two categories descending and ascending progression, N is rated depending on the number of common pitch classes between X and Y, the number of pitch classes of Y, and the PitchesPerOctave. For example (PitchesPerOctave=12), if a descending progression X to Y shares a single pitch class, and Y is a triad, then N is 8. If X and Y share two pitch classes, then N is 4. If Y is a tetrad, and X and Y share a single pitch classes, then N is 9.  If Y is a tetrad, and X and Y share two pitch classes, then N is 6 etc.
    */
    proc {ProgressionStrength X Y N}
       PitchesPerOct = {HS.db.getPitchesPerOctave}
+      %% used as rating within categories like ascending or decending
       CommonPCsStrength = {FD.decl}  
       DescB = {DescendingProgressionR X Y}
       AscB = {AscendingProgressionR X Y}
       SuperB = {SuperstrongProgressionR X Y}
+      %% cardiality of Y's pitch class set
+      Y_Card = {FD.decl}
    in
       N = {FD.decl}
-      CommonPCsStrength =: PitchesPerOct - {HS.rules.commonPCs_Card X Y}
+      %% old rating
+%      CommonPCsStrength =: PitchesPerOct - {HS.rules.commonPCs_Card X Y}
+      %% new rating depends on Y_Card
+      Y_Card = {FS.card {Y getPitchClasses($)}}
+      CommonPCsStrength =: PitchesPerOct - {HS.rules.commonPCs_Card X Y} * PitchesPerOct div Y_Card
       N =: CommonPCsStrength * DescB
            + PitchesPerOct * AscB + CommonPCsStrength * AscB
            + PitchesPerOct * 2 * SuperB

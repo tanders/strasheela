@@ -203,28 +203,34 @@ end
 
 %% same root: 0
 {Browse {GetProgressionStrength unit(transposition:0
-				     index:1)}}
+				     index:{HS.db.getChordIndex 'major'})}}
+{Browse {GetProgressionStrength unit(transposition:0
+				     index:{HS.db.getChordIndex 'minor'})}}
 
 %% descending: 1-11
-%% E major: 11, E minor:10 (1 vs 2 common tones with C maj)
-{Browse {GetProgressionStrength unit(transposition:4 index:1)}}
-{Browse {GetProgressionStrength unit(transposition:4 index:2)}}
-%% G maj: 11
-{Browse {GetProgressionStrength unit(transposition:7 index:1)}}
-
+%% E major: 8, E minor:4 (1 vs 2 common tones with C maj, and both are triads)
+{Browse {GetProgressionStrength unit(transposition:4 index:{HS.db.getChordIndex 'major'})}}
+{Browse {GetProgressionStrength unit(transposition:4 index:{HS.db.getChordIndex 'minor'})}}
+%% G maj: 8
+{Browse {GetProgressionStrength unit(transposition:7 index:{HS.db.getChordIndex 'major'})}}
+%% G dominant seventh: 9
+{Browse {GetProgressionStrength unit(transposition:7
+				     index:{HS.db.getChordIndex 'dominant seventh'})}}
+{Browse {GetProgressionStrength unit(transposition:4
+				     index:{HS.db.getChordIndex 'minor seventh'})}}
 
 %% ascending: 13-23
-%% F maj: 23
-{Browse {GetProgressionStrength unit(transposition:5 index:1)}}
-%% A min: 22
-{Browse {GetProgressionStrength unit(transposition:9 index:2)}}
-%% Ab maj: 23
-{Browse {GetProgressionStrength unit(transposition:8 index:1)}}
+%% F maj: 20
+{Browse {GetProgressionStrength unit(transposition:5 index:{HS.db.getChordIndex 'major'})}}
+%% A min: 16
+{Browse {GetProgressionStrength unit(transposition:9 index:{HS.db.getChordIndex 'minor'})}}
+%% Ab maj: 20
+{Browse {GetProgressionStrength unit(transposition:8 index:{HS.db.getChordIndex 'major'})}}
 
 
 %% superstrong: 24
 {Browse {GetProgressionStrength unit(transposition:2
-				     index:1)}}
+				     index:{HS.db.getChordIndex 'major'})}}
 
 
 
