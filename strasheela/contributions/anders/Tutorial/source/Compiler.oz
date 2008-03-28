@@ -8,6 +8,8 @@ import
    Path at 'x-ozlib://anders/tmp/Path/Path.ozf'
    
    %% General Oz stuff (load into environment of compiler)
+   %% TODO: replace by OPIEnv.full: 
+   %% x-oz://system/OPIEnv.ozf' conveniently exports the full environment as "OPIEnv.full".
    Compiler Open OS System Application Error
    Browser Combinator CompilerPanel Connection DistributionPanel DPControl DPInit DPStatistics DefaultURL Discovery  Emacs ErrorListener ErrorRegistry EvalDialog Explorer FD FS Fault Finalize Gump GumpParser GumpScanner Listener Macro Module Narrator OPI OPIEnv OPIServer ObjectSupport OsTime Ozcar OzcarClient Panel Pickle Profiler Property RecordC Remote Resolve Schedule Search Service Space Tix Tk TkTools Type URL VirtualSite
    % Inspector
