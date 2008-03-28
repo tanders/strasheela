@@ -707,6 +707,7 @@ define
       /** %% Initialises all constrainable variables in Self (a PitchClassCollection) to a FD int respectively a FS, relates these variables to the chord/scale database and interrelates the variables (e.g. by TransposePC).
       %% */
       proc {InitConstrain Self}
+	 %% Self::PitchClassCollection 
 	 thread % don't block init if some information is still missing
 	    MyDB = {Self getDB($)}
 	    PCFSs = MyDB.pitchClasses
