@@ -46,6 +46,8 @@ import
    Inspector(inspect:Inspect)
 
    %% vars imported to build compiler environment
+   %% TODO: replace by OPIEnv.full: 
+   %% x-oz://system/OPIEnv.ozf' conveniently exports the full environment as "OPIEnv.full".
    CompilerPanel Application Combinator Connection DistributionPanel DPControl DPInit DPStatistics DefaultURL Discovery  Emacs Error ErrorListener ErrorRegistry EvalDialog Explorer Fault Finalize Gump GumpParser GumpScanner Listener Macro Module Narrator OPI OPIEnv OPIServer ObjectSupport OsTime Ozcar OzcarClient Panel Pickle Profiler Property RecordC Remote Resolve Schedule Search Service Space Tix TkTools Type URL VirtualSite
    
    %% !! tmp
@@ -74,7 +76,7 @@ export
    %% ?? temp export these ? clean things up once..
    LilyMakePitch LilyMakeFromMidiPitch
    LilyMakeRhythms LilyMakeMicroPitch LilyMakeEt72MarkFromMidiPitch
-   MakeNoteToLily
+   MakeNoteToLily MakeNoteToLily2
    SeqToLily SimToLily OutmostSimToLily
    %% 
    OutputSCScore MakeSCScore MakeSCEventOutFn
@@ -1094,6 +1096,39 @@ define
 	 end
       end
    end
+
+   
+/** %% [For experts only] Returns unary function expecting note object and returning a lilypond note output (a VS). MakePitch is a unary function expecting the note and returning a Lilypond pitch (a VS). MakeAddedSigns is unary function expecting the note and returning a VS of arbitrary added signs (e.g. fingering marks, articulation marks etc.). MakeNoteToLily2 adds the rhythmic information and cares for ties.
+%% */
+fun {MakeNoteToLily2 MakePitch MakeAddedSigns}
+   fun {$ Note}
+      Rhythms = {LilyMakeRhythms {Note getDurationParameter($)}}
+   in
+      if Rhythms == nil
+      then ''
+      else  
+	 Pitch = {MakePitch Note}
+	 AddedSigns = {MakeAddedSigns Note}
+	 FirstNote = Pitch#Rhythms.1#AddedSigns
+	    % MicroPitch = {LilyMakeMicroPitch {Note getPitchParameter($)}}  % ?? temp fix?
+	    % FirstNote = Pitch#Rhythms.1#MicroPitch
+      in
+	 %% !! ?? generalise (needed elsewhere)
+	 if {Length Rhythms} == 1
+	 then FirstNote
+	    %% all values in Rhythm.2 are tied to predecessor
+	 else FirstNote#{ListToVS
+			 {Map Rhythms.2
+			  fun {$ R}
+			     " ~ "#Pitch#R#AddedSigns
+				%" ~ "#Pitch#R#MicroPitch
+			  end}
+			 " "}
+	 end
+      end
+   end
+end
+
 %    fun {NoteToLily Note}
 %       Rhythms = {LilyMakeRhythms {Note getDurationParameter($)}}
 %    in
