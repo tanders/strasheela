@@ -462,11 +462,36 @@ configure: error: ozinstall not found
 
 *** Understand what format Strasheela presently outputs and compare with recent Lily doc
 
-**** TODO Hierarchic nesting (sim and seq containers)
-**** Note object output
-**** ?? Chord output 
-**** My extensions
+**** TODO Decide for target Lilypond version 
 
+     There are presently only few Strasheela users, so I might ask/force them all to switch to the latest Lilypond development version.
+
+***** Ueberlegung
+
+     Are there the syntax differences between Lily 2.10 (stable) and Lily 2.11 (development)?
+
+     The output of convert-ly indicates that there have been changes in the syntax in version 2.11. 
+
+> convert-ly -e out2-1.ly
+convert-ly (GNU LilyPond) 2.11.43
+Processing `out2-1.ly'... 
+Applying conversion: 2.5.0, 2.5.1, 2.5.2, 2.5.3, 2.5.12, 2.5.13, 2.5.17, 2.5.18, 2.5.21, 2.5.25, 2.6.0, 2.7.0, 2.7.1, 2.7.2, 2.7.4, 2.7.6, 2.7.10, 2.7.11, 2.7.12, 2.7.13, 2.7.14, 2.7.15, 2.7.22, 2.7.24, 2.7.28, 2.7.29, 2.7.30, 2.7.31, 2.7.32, 2.7.32, 2.7.36, 2.7.40, 2.9.4, 2.9.6, 2.9.9, 2.9.11, 2.9.13, 2.9.16, 2.9.19, 2.10.0, 2.11.2, 2.11.5, 2.11.6, 2.11.10, 2.11.11, 2.11.13, 2.11.15, 2.11.23, 2.11.35, 2.11.38
+
+
+**** TODO Compare current Strasheela output and desired output 
+
+     - Create relatively complex nested Strasheela determined score: sim(seq(sim(note+)+)+)
+     - Avoid that convert-ly overwrites output (e.g., just disable it for a test), then create Lily output with Strasheela and keep a copy of the orig Strasheela output
+     - Convert to current Lily version with convert-ly
+     - Simplify convert-ly output (Lilypond then reduces the number of staffs) 
+     - Compare orig Strasheela output and new format with diff
+     - Adjust Strasheela lilypond output generation accordingly
+
+**** With the new version test the following cases
+***** Hierarchic nesting (sim and seq containers)
+***** Note object output
+***** ?? Chord output 
+***** My extensions
 
 ** Refactoring 
 
