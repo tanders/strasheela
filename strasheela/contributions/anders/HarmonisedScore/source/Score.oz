@@ -284,14 +284,16 @@ define
       {Select.fd CollectionPCs Degree CollectionPC}
    end
 
-   /** %% Constrains the relation between the FD ints Degree, Accidental, and PC with respect to the just C-major scale. The closest approximation of the just C-major scale [1/1 9/8 5/4 4/3 3/2 5/3 15/8] within the present setting of PitchesPerOctave is considered.
-   %% CMajorDegreeToPC is the same as DegreeToPC, but with a predefined CollectionPCs (the just C-major scale). See DegreeToPC for further details.
+   /** %% Constrains the relation between the FD ints Degree, Accidental, and PC with respect to the just C-major scale. The closest approximation of the Pythagorean C-major scale [1/1 9/8 81/64 4/3 3/2 27/16 243/128] within the present setting of PitchesPerOctave is considered.
+   %% CMajorDegreeToPC is the same as DegreeToPC, but with a predefined CollectionPCs (the Pythagorean C-major scale). See DegreeToPC for further details.
    %%
-   %% NOTE: this constraint is used to derive an enharmonic notation, even for PitchesPerOctave \= 12. However, this constraint presents only one possible interpretation of the "white piano keys", namely as just C-major scale degrees. All pitches with accidentals are understood as deviations of the just C-major scale. Other interpretations of the "white piano keys" are possible (e.g., a chain of fifths in Phythagorean tuning). For different PitchesPerOctave (e.g., if PitchesPerOctave=1200), different interpretations (i.e. different CollectionPCs used as a reference) will result in different accidentals or even different degrees for a given pitch class. 
+   %% NOTE: this constraint is used to derive an enharmonic notation, even for PitchesPerOctave \= 12. However, this constraint presents only one possible interpretation of the "white piano keys", namely as Pythagorean C-major scale degrees. All pitches with accidentals are understood as deviations of the Pythagorean C-major scale. Other interpretations of the "white piano keys" are possible (e.g., a just intonation of the C-major scale). For different PitchesPerOctave (e.g., if PitchesPerOctave=1200), different interpretations (i.e. different CollectionPCs used as a reference) will result in different accidentals or even different degrees for a given pitch class. 
    %% */
    %% !!?? How to decide for sharp or flat accidentals? I must apply additional constraints on the Degree, e.g., the chord database is defined in degrees with accidentals and not only pitch classes, and this chord information is propagated to note degrees.. 
    proc {CMajorDegreeToPC Degree#Accidental PC}
-      CMajorScale = {Map [1#1 9#8 5#4 4#3 3#2 5#3 15#8]
+      CMajorScale = {Map
+		     % [1#1 9#8 5#4 4#3 3#2 5#3 15#8]
+		     [1#1 9#8 81#64 4#3 3#2 27#16 243#128]
 		     fun {$ Ratio}
 			{FloatToInt {MUtils.ratioToKeynumInterval Ratio
 				     {IntToFloat {DB.getPitchesPerOctave}}}}
