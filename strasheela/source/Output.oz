@@ -75,6 +75,8 @@ export
    LilyMakePitch LilyMakeFromMidiPitch
    LilyMakeRhythms LilyMakeMicroPitch LilyMakeEt72MarkFromMidiPitch
    MakeNoteToLily
+   SeqToLily SimToLily OutmostSimToLily
+   %% 
    OutputSCScore MakeSCScore MakeSCEventOutFn
    SendOsc SendSCserver SendSClang
    ToNonmensuralENP OutputNonmensuralENP
@@ -967,6 +969,9 @@ define
    %% all un-punctuated BeatIndices 
    LilyRhythmIdxs = {Map [16.0 8.0 4.0 2.0 1.0 0.5 0.25 0.125] BeatSpecToIdx}
    SmallesRhythmIdxs = {BeatSpecToIdx 0.125}
+   
+   /** %% [For experts only] creates lilypond duration output (a VS) for a duration parameter.
+   %% */
    fun {LilyMakeRhythms DurationParam}
       %% returns a list of Lilypond rhythm values, which are tied together 
       {MakeRhythmsAux {BeatsToIdx {DurationParam getValueInBeats($)}}}
@@ -985,6 +990,8 @@ define
 	 LilyRhythms.BiggestSubRhythm | {MakeRhythmsAux BeatIdx-BiggestSubRhythm}
       end
    end
+    /** %% [For experts only] creates lilypond microtonal pitch output (a VS) for a pitch parameter. Note: works only if the pitch unit is et72.
+   %% */
    %% !!?? temp fix
    fun {LilyMakeMicroPitch PitchParam}
       %% et72: represent 12th notes by fingering marks
@@ -1002,7 +1009,7 @@ define
 %    in
 %       Marks.Micro
 %    end
-   /** %% Returns a Lily fingering mark (a virtual string) which represents a micro-tonal tuning deviation in 72ET temperament.
+   /** %% [For experts only] Returns a Lily fingering mark (a virtual string) which represents a micro-tonal tuning deviation in 72ET temperament.
    %% */
    fun {LilyMakeEt72MarkFromMidiPitch MidiPitch}
       Marks = unit(%% !!?? alternative sign for quarter note flat?
@@ -1036,6 +1043,9 @@ define
    in
       Marks.Micro
    end
+   
+   /** %% [For experts only] creates lilypond pitch output (a VS) for a pitch parameter.
+   %% */
    fun {LilyMakePitch PitchParam}
       %% create pitchClass and octave expression
       %% !! unit must be bound
@@ -1043,6 +1053,8 @@ define
    in
       {LilyMakeFromMidiPitch MidiPitch}
    end
+   /** %% [For experts only] creates lilypond pitch output (a VS) for a midi pitch value (an integer).
+   %% */
    fun {LilyMakeFromMidiPitch MidiPitch}
       PC = {Int.'mod' MidiPitch 12} + 1
       Oct = {Int.'div' MidiPitch 12} + 1
@@ -1052,7 +1064,7 @@ define
    %% !! What about notating Events (e.g. percussion notation)
    %% !! Notate explicite Pauses.
    %% !! TODO: angleichen die verschiedenen Funs
-   /** %% Returns unary function expecting note. MakeAddedSigns is unary fun expecting the note and returning VS of arbitrary added signs (e.g. fingering marks, articulation marks etc.)
+   /** %% [For experts only] Returns unary function expecting note object and returning a lilypond note output (a VS). MakeAddedSigns is unary fun expecting the note and returning a VS of arbitrary added signs (e.g. fingering marks, articulation marks etc.)
    %% */
    fun {MakeNoteToLily MakeAddedSigns}
       fun {$ Note}
@@ -1124,6 +1136,9 @@ define
 	 end
       end
    end
+   
+   /** %% [For experts only] creates lilypond output (a VS) for an inner simultaneous container which you could use when you overwrite the default simultaneous output in a clause. FurtherClauses are clauses relevant of items contained in Sim.
+   %% */
    %% only for inner Sims
    %% !! I don't differ between general Sims and chords
    %% !! offsets are currently ignored: only positive offsets are currently possible in SDL -- express them by rests or invisible rests (i.e. \skip <duration> )
@@ -1165,6 +1180,8 @@ define
 	  " "}
       end
    end
+   /** %% [For experts only] creates lilypond output (a VS) for a sequential container which you could use when you overwrite the default sequential output in a clause. FurtherClauses are clauses relevant of items contained in Seq.
+   %% */
    %% !! offsets are currently ignored: only positive offsets are currently possible in SDL -- express them by rests
    fun {SeqToLily Seq FurtherClauses}
       {ListToVS
@@ -1201,6 +1218,9 @@ define
       end
    end
    OuterSimBound = {Cell.new false}
+   
+   /** %% [For experts only] creates lilypond output (a VS) for a top-level simultaneous container which you could use when you overwrite the default simultaneous output in a clause. FurtherClauses are clauses relevant of items contained in Sim.
+   %% */
    %% !! no clef defs yet
    %% !! no time signature def yet
    %%
@@ -1227,27 +1247,6 @@ define
    %% Do type checking and call appropriate function,
    %% FurtherClauses: additional types can be added as a list of the form [TypeCheck1#ProcessingFun1 ...]
    %% !! todo: generalise/refactor: all types and their processing is defined in a single form -- this could be some general processing fun for ScoreMapping...
-%       fun {ToLilypondAux MyScore FurtherTypes}
-% 	 if {MyScore isSequential($)}
-% 	 then {SeqToLily MyScore}
-% 	 elseif {MyScore isSimultaneous($)}
-% 	 then
-% 	    %% distinguish between outmost and inner Sims 
-% 	    if {Cell.access OuterSimBound}
-% 	    then {SimToLily MyScore}
-% 	    else
-% 	       %% outmost sims are staffs
-% 	       {OutmostSimToLily MyScore}
-% 	    end
-% 	 elseif {MyScore isNote($)}
-% 	 then {NoteToLily MyScore}
-% 	 %elseif {LUtils.find FurtherTypes}
-% 	 else
-% 	    % raise unsupportedClass(MyScore ToLilypondAux) end
-% 	    {Browse warn#unsupportedClass(MyScore ToLilypondAux)}
-% 	    ''
-% 	 end
-%       end
    %%
    fun {ToLilypondAux MyScore FurtherClauses}
       {GUtils.cases MyScore
@@ -1344,7 +1343,7 @@ define
       {WriteToFile {ToLilypond MyScore FurtherClauses} Path}
    end
 
-   /** %% Calls lilypond on a lilypond file specified by Spec. The defaults of Spec are:
+   /** %% Calls lilypond on a lilypond file specified by Spec. Txhe defaults of Spec are:
    unit(dir: {Init.getStrasheelaEnv defaultLilypondDir}
 	file: test) % !! file name without extention
    %% */
