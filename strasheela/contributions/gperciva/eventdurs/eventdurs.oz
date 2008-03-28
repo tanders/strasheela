@@ -153,21 +153,25 @@ define
 				 Rhythms = {Out.lilyMakeRhythms
 					    {MyPause getDurationParameter($)}}
 			      in
-				 %% if pause duration is 0 or too
-                             %short
-				 %% (less than a 64th note, or 0.0625
-                             %beat)
+				 %% if pause duration is 0 or
+			         %% too short (less than a 64th
+			         %% note, or 0.0625 beat)
 				 if Rhythms == nil
 				 then '' % omit pause
-				    %% otherwise output VS of Lily
-                                %pause(s)
+				    %% otherwise output VS
+			            %% of Lily pause(s)
 				 else {Out.listToVS {Map Rhythms fun
 								    {$ R} r#R
 								 end}
 				       " "}
 				 end
-			      end]
-
+			      end
+		      isSequential#fun {$ Staff}
+%% FIXME: doesn't work!
+			"\\new RhythmicStaff \n"
+%			"\\new RhythmicStaff \n"#{Out.toLilypondAux Staff}
+			      end
+		    ]
 	   )}
       C:=@C+1
    end

@@ -9,16 +9,7 @@ local
    Durs
 in
    {EventDurs.setup Beats BeatDivisions Events Durs} 
-   
-   {Browse Events#events}
-   {Browse Durs#durs}
-   /*
-   %% don't allow rests  -- not used
-   {ForAll Events proc {$ X}
-		     X\=:2
-		  end
-   }
-   */
+      
    %% each note must be 0 or 2 units long
    %%  (ie all existing notes must be a quarter note)
    {ForAll Durs proc {$ X} {FD.disj (X=:0) (X=:2) 1} end}
@@ -27,13 +18,11 @@ in
    {Nth Events 3} =: 2
    {Nth Events 5} =: 2
    {Nth Events 7} =: 1
-   /*
    {EventDurs.writeLilyFile
     'blahblah'
-    {EventDurs.toScore Events Durs}
+    {EventDurs.toScore Events#Durs BeatDivisions}
    }
-   */
    %% check for blocking
-   {Browse 'script end'}
+   % {Browse 'script end'}
 end
 
