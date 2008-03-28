@@ -12,8 +12,12 @@
 
   - Documentation
 
+    - added example demonstrating how to improve Lilypond output by full enharmonic notation, key signatures are the beginning of a container and more, see here
+
   - Fixes
-    - Out now exports the functions SeqToLily SimToLily OutmostSimToLily (simplifies overwriting default lilypond output of sequential and simultaneous containers). These and a number of related functions are now also briefly documented. 
+    - Out now exports the functions SeqToLily SimToLily OutmostSimToLily  (simplifies overwriting default lilypond output of sequential and simultaneous containers). These and a number of related functions are now also briefly documented. 
+      MakeNoteToLily2
+    - HS.score.cMajorDegreeToPC: use Pythagorean C-major scale as reference, not JI C-major scale. 
 
 
 * Changes in Version 0.9.2 (20 March 2008)
