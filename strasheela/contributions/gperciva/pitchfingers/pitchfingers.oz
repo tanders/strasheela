@@ -33,7 +33,7 @@ define
 	 Position = {Nth Positions X}
 	 Finger = {Nth Fingers X}
       in
-	 Pitch =: 78 - (String*9) + Position + Finger
+	 Pitch =: 81 - (7*String) + Position + Finger
 
       end
 
@@ -48,7 +48,6 @@ define
    end
 
 
-   /* %% Combines the Events and Durations and produces a Score object. */
    proc {ToScore Pitches ?ScoreInstance}
       {Score.makeScore
        seq(
@@ -63,7 +62,7 @@ define
 			     end
 			  end}
 	  startTime:0
-	  timeUnit:beats)
+	  timeUnit:beats(4))
        unit ScoreInstance}
       {ScoreInstance wait}
    end

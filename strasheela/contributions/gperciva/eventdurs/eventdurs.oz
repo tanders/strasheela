@@ -9,7 +9,7 @@ import
    %Browser
 
    %% for WriteLilyFile; this might be moved to a different module
-   System
+%   System
    Out at 'x-ozlib://anders/strasheela/source/Output.ozf'
 export
    setup: Setup
@@ -106,19 +106,19 @@ define
       Notes = {GetNotes EventsDurs.1 EventsDurs.2}
    in
       {Score.makeScore
-       seq(
-	  items:
-	     {Map Notes fun {$ Note}
-			   if (Note>0) then
-			      note(duration:Note
-				   pitch:60
-				   amplitude:64)
-			   else
-			      pause(duration:{Number.abs Note})
-			   end
-			end}
-	  startTime:0
-	  timeUnit:beats(BeatDivisions))
+       seq(info:staff
+	   items:(
+		  {Map Notes fun {$ Note}
+				if (Note>0) then
+				   note(duration:Note
+					pitch:60
+					amplitude:64)
+				else
+				   pause(duration:{Number.abs Note})
+				end
+			     end})
+	   startTime:0
+	   timeUnit:beats(BeatDivisions))
        unit ScoreInstance}
       {ScoreInstance wait}
    end
@@ -137,46 +137,48 @@ define
       ScoreInstance = {ToScore Events#Durs BeatDivisions}
    end
 
+
+   OutClauses = [isPause#
+		 fun {$ MyPause}
+		    %%  returns a list of Lilypond rhythm
+		    %%  values matching dur of MyPause
+		    Rhythms = {Out.lilyMakeRhythms
+			       {MyPause getDurationParameter($)}}
+		 in
+		    %% if pause duration is 0 or
+		    %% too short (less than a 64th
+		    %% note, or 0.0625 beat)
+		    if Rhythms == nil
+		    then '' % omit pause
+		       %% otherwise output VS
+		       %% of Lily pause(s)
+		    else {Out.listToVS
+			  {Map Rhythms
+			   fun {$ R} r#R end}
+			  " "}
+		    end
+		 end
+		 %% make sure only seqs representing staffs
+		 %% are turned into staffs in Lilypond
+		 fun {$ X}
+		    {X isSequential($)} andthen {X hasThisInfo($ staff)}
+		 end#fun {$ Staff}
+			"\\new RhythmicStaff"#
+			{Out.seqToLily Staff OutClauses}
+		     end
+		]
    C={NewCell 1}
-   /* %% outputs a Score to a file.  Adds support for rests (ie 'pause' events). */
+   /* %% outputs a Score to a file.  Adds support for rests (ie 'pause' events) and RhythmicStaff. */
    proc {WriteLilyFile BaseFilename MyScore}
       Filename=BaseFilename#@C
    in
-      %{System.show @C}
       {Out.outputLilypond
        MyScore
        unit(file:Filename
-	    %% definition of pause output
-	    clauses:[ isPause#fun {$ MyPause}
-				 %%  returns a list of Lilypond rhythm
-				 %%  values matching dur of MyPause
-				 Rhythms = {Out.lilyMakeRhythms
-					    {MyPause getDurationParameter($)}}
-			      in
-				 %% if pause duration is 0 or
-			         %% too short (less than a 64th
-			         %% note, or 0.0625 beat)
-				 if Rhythms == nil
-				 then '' % omit pause
-				    %% otherwise output VS
-			            %% of Lily pause(s)
-				 else {Out.listToVS {Map Rhythms fun
-								    {$ R} r#R
-								 end}
-				       " "}
-				 end
-			      end
-		      isSequential#fun {$ Staff}
-%% FIXME: doesn't work!
-			"\\new RhythmicStaff \n"
-%			"\\new RhythmicStaff \n"#{Out.toLilypondAux Staff}
-			      end
-		    ]
+	    clauses:OutClauses
 	   )}
       C:=@C+1
    end
-
-
 
 
 end
