@@ -81,7 +81,7 @@ define
 
 
 
-   /** %% Returns a database with Lou Harrison 16 tone Just Intonation scale (cp. www.microtonal-synthesis.com/scales.html). For usage in HS, the intervals are rounded to the nearest pitch class interval depending on KeysPerOctave (an int).
+   /** %% Returns a database with Lou Harrison's 16 tone Just Intonation scale (cf. www.microtonal-synthesis.com/scales.html). For usage in HS, the intervals are rounded to the nearest pitch class interval depending on KeysPerOctave (an int).
    %% */
    fun {GetIntervals KeysPerOctave}
       {Record.map Intervals

@@ -113,7 +113,7 @@ define
 
 
 
-   /** %% Returns a database with the Jon Catler 24 tone Just Intonation Scale "over and under the 13 limit" (cp. www.microtonal-synthesis.com/scales.html). For usage in HS, the intervals are rounded to the nearest pitch class interval depending on KeysPerOctave (an int).
+   /** %% Returns a database with the Jon Catler 24 tone Just Intonation Scale "over and under the 13 limit" (cf. www.microtonal-synthesis.com/scales.html). For usage in HS, the intervals are rounded to the nearest pitch class interval depending on KeysPerOctave (an int).
    %% */
    fun {GetIntervals KeysPerOctave}
       {Record.map Intervals

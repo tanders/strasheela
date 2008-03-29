@@ -117,7 +117,7 @@ define
 
 
 
-   /** %% Returns a database with the Ben Johnston intervals (just enharmonic scale) (cp. www.microtonal-synthesis.com/scales.html). For usage in HS, the intervals are rounded to the nearest pitch class interval depending on KeysPerOctave (an int).
+   /** %% Returns a database with the Ben Johnston 25 note just enharmonic scale (cf. www.microtonal-synthesis.com/scales.html). For usage in HS, the intervals are rounded to the nearest pitch class interval depending on KeysPerOctave (an int).
    %% */
    fun {GetIntervals KeysPerOctave}
       {Record.map Intervals
