@@ -1294,6 +1294,50 @@ MyScore = {Score.makeScore
 
 
 
+%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%% Enharmonic Lily output of enharmonic notes, and explicit pauses
+%%
+
+declare
+%% Accidentals (incoded as integers): param values of cMajorAccidental
+Sharp = {HS.score.absoluteToOffsetAccidental 1}
+Natural = {HS.score.absoluteToOffsetAccidental 0}
+Flat = {HS.score.absoluteToOffsetAccidental ~1}
+%%
+MyScore = {Score.makeScore
+	   seq(info:[lily("\\key d \\major \\time 3/4")]
+	       items:[seq(items:[note(duration:4
+				      pitch:62
+				      cMajorAccidental:Natural)
+				 note(duration:1
+				      pitch:64
+				      cMajorAccidental:Flat)
+				 note(duration:1
+				      pitch:66
+				      cMajorAccidental:Sharp)])
+		      seq(info:lily("\\key f \\minor")
+			  items:[note(duration:2
+				      pitch:67
+				      cMajorAccidental:Natural)
+				 note(duration:1
+				      pitch:61
+				      cMajorAccidental:Flat)
+				 pause(duration:1)
+				 note(duration:2
+				      pitch:63
+				      cMajorAccidental:Flat)])]
+	       startTime:0
+	       timeUnit:beats(2))
+	   add(note:HS.score.enharmonicNote)}
+%%
+{Out.outputLilypond MyScore
+ unit}
+
+
+
+ 
+
 
 
 
