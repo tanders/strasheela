@@ -77,7 +77,7 @@ export
    HowMany Once
    ForN ForPercent NDifferences ForNEither
    AllTrue AllTrueR OneTrue OneTrueR SomeTrue SomeTrueR
-   HowManyTrue HowManyTrueR PercentTrue
+   HowManyTrue HowManyTrueR PercentTrue PercentTrue_Range
    WhichTrue
    SymbolToDirection DirectionToSymbol
    Direction DirectionR Contour InverseContour ContourMatrix
@@ -507,11 +507,12 @@ define
    /** %% Constraint Fn (a unary function returning an 0/1 int) holds for between Min and Max percent. Min and Max are (determined) integers.
    %% */
    proc {ForPercent Xs Fn Min Max}
-      L = {IntToFloat {Length Xs}}
-      MinDomain = {FloatToInt L * {IntToFloat Min} / {IntToFloat 100}}
-      MaxDomain = {FloatToInt L * {IntToFloat Max} / {IntToFloat 100}}
-   in
-      {ForN Xs Fn {FD.int MinDomain#MaxDomain}}
+       {PercentTrue_Range {Map Xs Fn} Min Max}      
+%       L = {IntToFloat {Length Xs}}
+%       MinDomain = {FloatToInt L * {IntToFloat Min} / {IntToFloat 100}}
+%       MaxDomain = {FloatToInt L * {IntToFloat Max} / {IntToFloat 100}}
+%    in
+%       {ForN Xs Fn {FD.int MinDomain#MaxDomain}}
    end
 
    /** %% N elements of Xs hold the constraint Fn1, the rest holds Fn2.  Fn1 and Fn2 are unary functions returning an 0/1 int, N is a FD integer.
@@ -582,7 +583,7 @@ define
       B = {FD.reified.sum Bs '=:' N}
    end
 
-   /** %% Bs is a list of 0/1 integers (not implicitly declared) and Percent is a FD int: Percent % elements in Bs are true (i.e. 1).
+   /** %% Bs is a list of 0/1 integers (not implicitly declared) and Percent is a FD int (implicitly declared): Percent % elements in Bs are true (i.e. 1).
    %% NOTE: Percent is rounded to integer value -- complementary percent values don't necessarily sum up to exactly 100 (e.g., 1/3 corresponds to 33 percent and 2/3 to 66 percent). Also, there is only a single solution for Percent for a specific determined list Bs (e.g., Bs = [1 1 0] <-> Percent = 66; Percent = 65 causes fail in this case).
    %% Summary: PercentTrue is highly restricted for defining soft of probabilistic CSPs -- I would need true soft multiplication and division propagators instead.
    %% */
@@ -597,7 +598,14 @@ define
       Aux =: N * 100
       Percent = {FD.divI Aux L}
    end
-
+   /** %% Like PercentTrue, but a range is specified: the percentage of true values in Bs is between MinPercent and MaxPercent (both FD ints, not implicitly declared).
+   %% If MinPercent or MaxPercent are undetermined in the CSP, they might be undetermined in the solution too.
+   %% */
+   proc {PercentTrue_Range Bs MinPercent MaxPercent}
+      Percent = {PercentTrue Bs}
+   in
+      MinPercent <: Percent <: MaxPercent
+   end
    
    /** %% WhichTrue constraints the Ith element in Bs to be true. Bs is a list of 0/1 integers and  I is a FD int. Only a single element of Bs is true (i.e. 1).
    %% */
