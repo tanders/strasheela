@@ -106,8 +106,7 @@ define
       Notes = {GetNotes EventsDurs.1 EventsDurs.2}
    in
       {Score.makeScore
-	   seq(info:[lily("\\clef treble \\key d \\major \\time
-3/4")
+	   seq(info:[lily(" \\new RhythmicStaff")
 		     staff]
 	   items:(
 		  {Map Notes fun {$ Note}
@@ -140,49 +139,15 @@ define
    end
 
 
-   OutClauses = [isPause#
-		 fun {$ MyPause}
-		    %%  returns a list of Lilypond rhythm
-		    %%  values matching dur of MyPause
-		    Rhythms = {Out.lilyMakeRhythms
-			       {MyPause getDurationParameter($)}}
-		 in
-		    %% if pause duration is 0 or
-		    %% too short (less than a 64th
-		    %% note, or 0.0625 beat)
-		    if Rhythms == nil
-		    then '' % omit pause
-		       %% otherwise output VS
-		       %% of Lily pause(s)
-		    else {Out.listToVS
-			  {Map Rhythms
-			   fun {$ R} r#R end}
-			  " "}
-		    end
-		 end
-		 %% make sure only seqs representing staffs
-		 %% are turned into staffs in Lilypond
-/*
-		 fun {$ X}
-		    {X isSequential($)} andthen {X hasThisInfo($ staff)}
-		 end#fun {$ Staff}
-			"\\new RhythmicStaff"#
-			{Out.seqToLily Staff OutClauses}
-		     end
-*/
-		]
    C={NewCell 1}
-   /* %% outputs a Score to a file.  Adds support for rests (ie 'pause' events) and RhythmicStaff. */
+   /* %% outputs a Score to a file.*/
    proc {WriteLilyFile BaseFilename MyScore}
       Filename=BaseFilename#@C
    in
       {Out.outputLilypond
        MyScore
-       unit(file:Filename
-	    clauses:OutClauses
-	   )}
+       unit(file:Filename unit)}
       C:=@C+1
    end
-
 
 end
