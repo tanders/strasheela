@@ -106,7 +106,9 @@ define
       Notes = {GetNotes EventsDurs.1 EventsDurs.2}
    in
       {Score.makeScore
-       seq(info:staff
+	   seq(info:[lily("\\clef treble \\key d \\major \\time
+3/4")
+		     staff]
 	   items:(
 		  {Map Notes fun {$ Note}
 				if (Note>0) then
@@ -160,12 +162,14 @@ define
 		 end
 		 %% make sure only seqs representing staffs
 		 %% are turned into staffs in Lilypond
+/*
 		 fun {$ X}
 		    {X isSequential($)} andthen {X hasThisInfo($ staff)}
 		 end#fun {$ Staff}
 			"\\new RhythmicStaff"#
 			{Out.seqToLily Staff OutClauses}
 		     end
+*/
 		]
    C={NewCell 1}
    /* %% outputs a Score to a file.  Adds support for rests (ie 'pause' events) and RhythmicStaff. */
