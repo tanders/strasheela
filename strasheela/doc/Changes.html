@@ -24,6 +24,43 @@
     <!-- Page published by Emacs Muse begins here -->
 
 
+
+<h2>Changes in Version 0.9.3 (no date yet)</h2>
+
+<ul>
+<li>Code additions
+
+<ul>
+<li>Functor <a href="../contributions/anders/HarmonisedScore/doc/node6.html">HS.rules.schoenberg</a>: a generalised version of Schoenbergs guidelines on writing good tonal chord progressions have been implemented as constraints</li>
+
+<li>Functor <a href="../contributions/anders/ET31/doc/node1.html">ET31</a> for composition in <a href="http://en.wikipedia.org/wiki/31_equal_temperament">31-tone equal temperament</a></li>
+
+<li>HS.score.chordsToScore</li>
+
+<li>Pattern.percentTrue_Range</li>
+</ul></li>
+
+<li>Documentation
+
+<ul>
+<li>added example demonstrating how to improve Lilypond output by full enharmonic notation, key signatures are the beginning of a container and more, see here</li>
+</ul></li>
+
+<li>Fixes
+
+<ul>
+<li>Added support for explicit pause objects and enharmonic notation (for enharmonic note objects like HS.score.enharmonicNote in 12 ET) to the default Lilypond output</li>
+<li>Arbitrary Lilypond code can be added to container and note objects via a tuple with the label 'lily' given to the info attribute of the score object.</li>
+<li>Out now exports the functions SeqToLily SimToLily OutmostSimToLily  (simplifies overwriting default lilypond output of sequential and simultaneous containers). These and a number of related functions are now also briefly documented.
+MakeNoteToLily2</li>
+<li>HS.score.cMajorDegreeToPC: use Pythagorean C-major scale as reference, not JI C-major scale. This constraint is used for deriving enharmonic information.</li>
+<li>Added to HS.score a number of type checks: IsInScaleMixinForChord, IsScaleDegreeMixinForChord, IsInversionMixinForChord, IsInChordMixinForNote, IsInScaleMixinForNote, IsEnharmonicSpellingMixinForNote, IsScaleDegreeMixinForNote, IsChordDegreeMixinForNote, IsPitchClassMixin</li>
+</ul></li>
+</ul>
+
+
+
+
 <h2>Changes in Version 0.9.2 (20 March 2008)</h2>
 
 <ul>
@@ -289,7 +326,7 @@ See the documentation for <a href="../contributions/anders/HarmonisedScore/doc/n
 <div id="footer">
 <div id="author">&copy; 
 Torsten Anders</div>
-<div id="date">Last time edited: 2008.03.21</div>
+<div id="date">Last time edited: 2008.03.29</div>
 </div>
   </body>
 </html>
