@@ -604,7 +604,8 @@ define
    proc {PercentTrue_Range Bs MinPercent MaxPercent}
       Percent = {PercentTrue Bs}
    in
-      MinPercent <: Percent <: MaxPercent
+      MinPercent =<: Percent
+      Percent =<: MaxPercent
    end
    
    /** %% WhichTrue constraints the Ith element in Bs to be true. Bs is a list of 0/1 integers and  I is a FD int. Only a single element of Bs is true (i.e. 1).
