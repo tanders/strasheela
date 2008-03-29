@@ -2424,13 +2424,23 @@ define
       
 
       
-   /** %% Expects a list of inversion chord objects in textual form (records), and returns a homophonic score object with notes expressing these chords (chord labels are either chord or inversionChord). The notes are constrained to express all chord pitch classes. ChordSpecs must be fully determined, but chord attributes can be missing (e.g., the chord root is either determined or missing). Note that attributes cannot be undetermined variables -- ChordsToScore blocks in this case (it leads to a script with undetermined variables in the top-level space).
-   %% The created score topology has the following form: sim([seq([note note ...]) seq( note...) ... seq(chord chord ...)])
-   %% The function defines the following optional Args. voices: the number of homophonic voices, pitchDomain: the pitch domain for whole chord (depends on PitchesPerOctave). amp: the amplitude of all notes. value: the score distribution value selection strategy. ignoreSopranoChordDegree: only if false (the default), then the sopranoChordDegrees of the input chords affect the output notes. minIntervalToBass: smallest interval allowed between bass and next lowest pitch
-   %% NB: the timeUnit must be in the chords.
-   %% Note: no solution can be caused if, e.g., the number of voices is insufficient for expressing all chord tones, the pitchDomain is too small, the number of voices equals the number of chord tones, but soprano and bass chord degree are equal as well etc. 
-   %% */
-   %% NOTE: add arg: ignoreSopranoChordDegree
+      /** %% Expects a list of inversion chord objects in textual form (records), and returns a homophonic score object with notes expressing these chords (chord labels are either chord or inversionChord). The notes are constrained to express all chord pitch classes, but chords can contain more notes than chord pitch classes. The CSP defined by ChordsToScore is intentionally relatively simple, as it is intended for listening to isolated chord progressions only (e.g., Bruckner's role of the "shortest path" between notes in a voice is not implemented).
+      %% ChordSpecs must be fully determined, but chord attributes can be missing (e.g., the chord root is either determined or missing). 
+      %% The created score topology has the following form: sim([seq([note note ...]) seq( note...) ... seq(chord chord ...)])
+      %% The function defines the following optional Args. voices: the number of homophonic voices, pitchDomain: the pitch domain for all notes (depends on PitchesPerOctave). amp: the amplitude of all notes. value: the score distribution value selection strategy. ignoreSopranoChordDegree: if false, the sopranoChordDegrees of the input chords affect the output notes. minIntervalToBass: smallest interval allowed between bass and next lowest pitch. These are the default values
+      unit(voices:4
+	   pitchDomain:48#72
+	   amp:30
+	   value:mid
+	   ignoreSopranoChordDegree:false
+	   minIntervalToBass:0)
+      %% 
+      %% IMPORTANT: there are a few things to watch out for.
+      %%
+      %% - The timeUnit must be set in at least one chord spec.
+      %% - Chord attributes cannot be undetermined variables -- ChordsToScore blocks in this case (it leads to a script with undetermined variables in the top-level space). 
+      %% - ChordsToScore conducts a search and it is possible that no solution can be found. For example, the following cases can lead to no solution: the number of voices is insufficient for expressing all chord tones, the pitchDomain is too small, the number of voices equals the number of chord tones, but the soprano and bass chord degrees are equal so that these voices express the same chord tone and hence one tone is missing etc. 
+      %% */
    %%
    %% OLD doc snippets:
    %% engeLage: a boolean specifying whether the interval between simultaneous notes of neighbouring voices must be less than an octave.   
@@ -2447,12 +2457,12 @@ define
       /** %% Expects C (a chord declaration) and returns a chord object.
       %% NB: the returned chord object is not fully initialised! 
       %% */
-   fun {MakeChord C}
-      {Score.makeScore2 C
-       %% label can be either chord or inversionChord
-       unit(chord:InversionChord
-	    inversionChord:InversionChord)}
-   end
+      fun {MakeChord C}
+	 {Score.makeScore2 C
+	  %% label can be either chord or inversionChord
+	  unit(chord:InversionChord
+	       inversionChord:InversionChord)}
+      end
       /** %% Expects D (a FD int) and returns a singleton FS which contains only D.
       %% */
       proc {MakeSingletonSet D ?MyFS}
@@ -2523,7 +2533,14 @@ define
 	    sim(items:{Map
 		       %% returns lists of notes/chords belonging into a single staff
 		       {LUtils.matTrans ChordNotes}
-		       fun {$ Xs} seq(items:Xs) end}
+		       fun {$ Xs}
+			  if {IsChord Xs.1}
+			     %% mark staff with chords
+			  then seq(info:lily('\\set Staff.instrumentName = "Analysis"')
+				   items:Xs)
+			  else seq(items:Xs)
+			  end
+		       end}
 		   startTime:0
 		%% implicit
 %		timeUnit:{Cs.1 getTimeUnit($)}
