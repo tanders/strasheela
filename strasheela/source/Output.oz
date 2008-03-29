@@ -60,6 +60,9 @@ import
    Init at 'Init.ozf'
    Midi at 'MidiOutput.ozf'
 %   Score at 'ScoreCore.ozf'
+
+   %% NOTE: adds dependency to Strasheela extension
+   HS at 'x-ozlib://anders/strasheela/HarmonisedScore/HarmonisedScore.ozf'
    
 export
    WriteToFile ReadFromFile
@@ -1316,6 +1319,50 @@ end
 		 fun {$ Note}
 		    {LilyMakeMicroPitch {Note getPitchParameter($)}} 
 		 end}
+
+	 %% NOTE: adds dependency to Strasheela extension
+	 fun {$ X}
+	    {HS.score.isEnharmonicSpellingMixinForNote X}
+	    andthen {HS.db.getPitchePerOctave} == 12
+	 end#local
+		%%
+		LilyNominals = unit(c d e f g a b)
+		LilyAccidentals = unit(eses es "" is isis)
+		LilyOctaves = octs(",,,," ",,," ",," "," "" "'" "''" "'''" "''''")
+	     in
+		fun {$ N}
+		   {{MakeNoteToLily2
+		     %% create enharmonic Lily note
+		     fun {$ N}
+			Nominal = LilyNominals.{N getCMajorDegree($)}
+			Accidental = LilyAccidentals.({N getCMajorAccidental($)} + 1)
+			Octave = LilyOctaves.({N getOctave($)} + 2)
+		     in
+			Nominal#Accidental#Octave
+		     end
+		     %% no additional articulations etc for now
+		     fun {$ N} nil end}
+		    N}
+		end
+	     end
+	 
+	 isPause#fun {$ MyPause}
+		    %%  returns a list of Lilypond rhythm
+		    %%  values matching dur of MyPause
+		    Rhythms = {LilyMakeRhythms
+			       {MyPause getDurationParameter($)}}
+		 in
+		    %% if pause duration is 0 or
+		    %% too short (less than a 64th
+		    %% note, or 0.0625 beat)
+		    if Rhythms == nil
+		    then '' % omit pause
+		       %% otherwise output VS of Lily pause(s)
+		    else {ListToVS {Map Rhythms fun {$ R} r#R end}
+			  " "}
+		    end
+		 end
+	 
 	   % Otherwise
 	 fun {$ X} true end
 	 #fun {$ X}
