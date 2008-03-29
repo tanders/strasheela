@@ -1,0 +1,166 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<html>
+ <head>
+  <title>Out</title>
+  <style>BODY {
+ background: url(page.gif) repeat-y white;
+}
+#slidemenubar, #slidemenubar2{
+ position:absolute;
+ left:-144px;
+ width:160px;
+ top:10px;
+ border:0px solid black;
+ font:bold 12px Verdana;
+ line-height:10px;
+}
+.margin {
+ position: absolute;
+ left: 10px;
+ width: 130px;
+}
+BODY, P, H1, H2, H3, A {
+ font-family: sans-serif;
+}
+PRE, CODE {
+ font-family: courier, monospace;
+}
+P {
+ text-align: justify;
+}
+H1     { color: #9B0000; }
+H2     { color: #FF9933; }
+H3, H4 { color: #881155; }
+CODE              { color: #663366; }
+.code CODE        { color: #000000; }
+SPAN.comment      { color: #B22222; }
+SPAN.keyword      { color: #A020F0; }
+SPAN.string       { color: #BC8F8F; }
+SPAN.functionname { color: #0000FF; }
+SPAN.type         { color: #228B22; }
+SPAN.variablename { color: #B8860B; }
+SPAN.reference    { color: #5F9EA0; }
+SPAN.builtin      { color: #DA70D6; }
+A:link {
+ color: #666666;
+}
+A:visited {
+ color: black;
+}
+A.pre { font-family: courier, monospace;
+ color: #228B22;
+}
+</style>
+ </head>
+<body>
+<script language="JavaScript1.2">
+if (document.all)
+document.write('<div id="slidemenubar2" style="left:-144" onMouseover="pull()" onMouseout="draw()">')
+</script>
+<layer id="slidemenubar" onMouseover="pull()" onMouseout="draw()">
+<table border="0" cellpadding="0" cellspacing="0" width="161"><tr><td bgcolor="#009cff" width="144"><a href="index.html">Index</a>
+</td><td rowspan="7" valign="top" width="16"><img src="menu.gif" width="16"></td></tr><tr><td bgcolor="#009cff" width="144"><a href="node1.html">ET31</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node2.html">DB</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node3.html">Out</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node4.html">C</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node5.html">Score</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node6.html">ET31</a>
+</td></tr></table></layer>
+<script language="JavaScript1.2">
+function regenerate(){
+window.location.reload()
+}
+function regenerate2(){
+if (document.layers)
+setTimeout("window.onresize=regenerate",400)
+}
+window.onload=regenerate2
+if (document.all){
+document.write('</div>')
+themenu=document.all.slidemenubar2.style
+rightboundary=0
+leftboundary=-144
+}
+else{
+themenu=document.layers.slidemenubar
+rightboundary=144
+leftboundary=0
+}
+function pull(){
+if (window.drawit)
+clearInterval(drawit)
+pullit=setInterval("pullengine()",20)
+}
+function draw(){
+clearInterval(pullit)
+drawit=setInterval("drawengine()",50)
+}
+function pullengine(){
+if (document.all&&themenu.pixelLeft<rightboundary)
+themenu.pixelLeft+=5
+else if(document.layers&&themenu.left<rightboundary)
+themenu.left+=5
+else if (window.pullit)
+clearInterval(pullit)
+}
+function drawengine(){
+if (document.all&&themenu.pixelLeft>leftboundary)
+themenu.pixelLeft-=5
+else if(document.layers&&themenu.left>leftboundary)
+themenu.left-=5
+else if (window.drawit)
+clearInterval(drawit)
+}
+</script>
+
+<div style="margin-left:160px"><span class="string">
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> This functor defines Lilypond output (using semitone and quartertone accidentals) and Explorer output actions for 31 ET.<BR>
+<BR>
+</span>
+</span>
+<h3>Functor</h3>
+<ul>Out ("<span class="string">/Users/t/oz/music/Strasheela/strasheela/trunk/strasheela/contributions/anders/ET31/source/Output.oz</span>")<br></ul>
+<h3>Import</h3>
+<code><ul><li>OS</li><li>FS</li><li>Explorer</li><li>Out at "<span class="string">x-ozlib://anders/strasheela/source/Output.ozf"
+</span></li><li>Score at "<span class="string">x-ozlib://anders/strasheela/source/ScoreCore.ozf"
+</span></li><li>HS at "<span class="string">x-ozlib://anders/strasheela/HarmonisedScore/HarmonisedScore.ozf"
+</span></li><li><a href="node6.html">ET31</a> at "<span class="string">../ET31.ozf"
+</span></li><li><a href="node2.html">DB</a> at "<span class="string">DB.ozf"
+</span></li></ul></code>
+<h3>Export</h3>
+<code><ul><li>&lt;P/2:<a href="#entity35"><span class="functionname">RenderAndShowLilypond</span></a>&gt;
+</li><li>&lt;P/1:<a href="#entity34"><span class="functionname">AddExplorerOut_ChordsToScore</span></a>&gt;
+</li></ul></code>
+<h3>Define</h3>
+
+<code>
+<a name="entity35">
+<span class="keyword">proc</span>{<span class="functionname">RenderAndShowLilypond</span> MyScore Args}<br>
+<span class="string"> Proc is like Out.renderAndShowLilypond, but provides buildin support for notes and chords with pitch units in et31.<BR>
+ Please note that this support is defined by the argument Clauses (see Out.renderAndShowLilypond) -- additional clauses are still possible, but adding new note/chord clauses will overwrite the support for 31 ET.<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity34">
+<span class="keyword">proc</span>{<span class="functionname">AddExplorerOut_ChordsToScore</span> Args}<br>
+<span class="string"> Creates an Explorer output. The script solution must be a sequential container with chord objects (i.e. without the actual notes).<BR>
+ The Explorer output action creates a CSP with expects a chord sequence and returns a homophonic chord progression. AddExplorerOut_ChordsToScore internally uses ET31.score.chordsToScore for this purpose.  <BR>
+ The result is transformed into music notation (with Lilypond), sound (with Csound), and Strasheela code (archived score objects).<BR>
+ Args are outname and the arguments of ET31.score.chordsToScore. the outname arg sets the output file name (which gets added the space number in the Explorer and then a random number). outname also sets the name under which this action appears in the Explorer menu.<BR>
+<BR>
+ IMPORTANT: ET31.score.chordsToScore conducts a search which potentially can fail (e.g., if insufficient arguments are provided)!<BR>
+<BR>
+</span>
+</code><br>
+<h3>End</h3>
+</div></body>
+</html>
