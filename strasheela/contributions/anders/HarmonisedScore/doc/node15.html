@@ -1,0 +1,196 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<html>
+ <head>
+  <title>HS</title>
+  <style>BODY {
+ background: url(page.gif) repeat-y white;
+}
+#slidemenubar, #slidemenubar2{
+ position:absolute;
+ left:-144px;
+ width:160px;
+ top:10px;
+ border:0px solid black;
+ font:bold 12px Verdana;
+ line-height:10px;
+}
+.margin {
+ position: absolute;
+ left: 10px;
+ width: 130px;
+}
+BODY, P, H1, H2, H3, A {
+ font-family: sans-serif;
+}
+PRE, CODE {
+ font-family: courier, monospace;
+}
+P {
+ text-align: justify;
+}
+H1     { color: #9B0000; }
+H2     { color: #FF9933; }
+H3, H4 { color: #881155; }
+CODE              { color: #663366; }
+.code CODE        { color: #000000; }
+SPAN.comment      { color: #B22222; }
+SPAN.keyword      { color: #A020F0; }
+SPAN.string       { color: #BC8F8F; }
+SPAN.functionname { color: #0000FF; }
+SPAN.type         { color: #228B22; }
+SPAN.variablename { color: #B8860B; }
+SPAN.reference    { color: #5F9EA0; }
+SPAN.builtin      { color: #DA70D6; }
+A:link {
+ color: #666666;
+}
+A:visited {
+ color: black;
+}
+A.pre { font-family: courier, monospace;
+ color: #228B22;
+}
+</style>
+ </head>
+<body>
+<script language="JavaScript1.2">
+if (document.all)
+document.write('<div id="slidemenubar2" style="left:-144" onMouseover="pull()" onMouseout="draw()">')
+</script>
+<layer id="slidemenubar" onMouseover="pull()" onMouseout="draw()">
+<table border="0" cellpadding="0" cellspacing="0" width="161"><tr><td bgcolor="#009cff" width="144"><a href="index.html">Index</a>
+</td><td rowspan="16" valign="top" width="16"><img src="menu.gif" width="16"></td></tr><tr><td bgcolor="#009cff" width="144"><a href="node1.html">HarmonisedScore</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node2.html">DB</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node3.html">Score</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node4.html">Rules</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node5.html">DBs</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node6.html">Schoenberg</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node7.html">Default</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node8.html">Jazz</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node9.html">Partch</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node10.html">Johnston</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node11.html">Harrison</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node12.html">Chalmers</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node13.html">Catler</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node14.html">ArithmeticalSeriesChords</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node15.html">HS</a>
+</td></tr></table></layer>
+<script language="JavaScript1.2">
+function regenerate(){
+window.location.reload()
+}
+function regenerate2(){
+if (document.layers)
+setTimeout("window.onresize=regenerate",400)
+}
+window.onload=regenerate2
+if (document.all){
+document.write('</div>')
+themenu=document.all.slidemenubar2.style
+rightboundary=0
+leftboundary=-144
+}
+else{
+themenu=document.layers.slidemenubar
+rightboundary=144
+leftboundary=0
+}
+function pull(){
+if (window.drawit)
+clearInterval(drawit)
+pullit=setInterval("pullengine()",20)
+}
+function draw(){
+clearInterval(pullit)
+drawit=setInterval("drawengine()",50)
+}
+function pullengine(){
+if (document.all&&themenu.pixelLeft<rightboundary)
+themenu.pixelLeft+=5
+else if(document.layers&&themenu.left<rightboundary)
+themenu.left+=5
+else if (window.pullit)
+clearInterval(pullit)
+}
+function drawengine(){
+if (document.all&&themenu.pixelLeft>leftboundary)
+themenu.pixelLeft-=5
+else if(document.layers&&themenu.left>leftboundary)
+themenu.left-=5
+else if (window.drawit)
+clearInterval(drawit)
+}
+</script>
+
+<div style="margin-left:160px"><span class="string">
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> This functor defines a harmony model for Strasheela. It provides users with the means for defining their own theory of harmony. The functor defines representations for analytical concepts (such as intervals, chords and scales), provides databases with information for specific instances of such analytical concepts (e.g. specific chords), and also predefines generic rules on harmonic concepts. Strasheela objects representing analytical concepts such as intervals, chords and scales are silent when the score is played. However, constraints may restrict relations between actual notes in the score and such analytical objects.<BR>
+<BR>
+ The harmony model provides convenient means in a highly generic way. For example, the model is suitable for theories of harmony is the conventional 12-tone equal-temperament. However, also microtonal music is supported: the representations for analytical concepts are suitable for any other equal division of the octave, and that way also for approximations of just intonation. For this purpose, the model generalises established concepts of 12-tone equal-temperament for other equal-temperaments. A number of fundamental terms which are generalised are explained below.<BR>
+ <BR>
+ The present functor is the top-level functor of the harmony model. It only exports subfunctors.<BR>
+<BR>
+<BR>
+ Terminology: (all terms denote integers and can be represented by FD ints)<BR>
+ ============<BR>
+<BR>
+ pitch:<BR>
+ absolute pitch number. If pitchesPerOctave=12 (default), pitch is the common MIDI note number. The pitches per octave setting denotes any equidistant tuning (e.g. pitchesPerOctave=1200 results in a MIDIcent pitch unit). Among all such settings, the pitch 0 is always the same pitch (thus the MIDI pitch 60 and the MIDIcent pitch 6000 are equal).<BR>
+ Here, 'absolute pitch' means that the pitch is independent of any chord or scale in the piece. Nonetheless, the pitch depends of course on the general tuning of the concert pitch.<BR>
+<BR>
+<BR>
+ This pitch information can be expressed more elaborated by a compound representation consisting in a pitchClass and an octave. <BR>
+<BR>
+<BR>
+ pitchClass:<BR>
+ absolute pitch number without octave component. If pitchesPerOctave=12, the meaning of pitchClass is defined as by Allen Forte (e.g. c# = 1). The range of possible pitchClasses is always in the interval [0, pitchesPerOctave-1]. However, for other pitches per octave settings, the pitchClass value 1 does not mean c# as in Forte's definition anymore. For instance, for pitchesPerOctave=1200 the pitchClass value 1 means c raised by 1 cent instead.<BR>
+ See also HS.score.pitchClassToPitch.<BR>
+<BR>
+ octave:<BR>
+ number of octave to which a pitch belongs. Every transposition of c starts a new octave. Middle c has octave 4, according to conventions (cf. http://en.wikipedia.org/wiki/Scientific_pitch_notation), and thus octave 0 (the lowest octave) starts with pitch 12. Also an interval can be represented by a pitch class and an octave, but for an interval the octave 0 starts with the interval's pitch distance 0 (i.e. the pitch distance 12 has the octave 1 and differs in that respect from a pitch octave). <BR>
+<BR>
+<BR>
+ This pitch class information can be expressed more elaborated by a compound representation consisting in a degree and an accidental (depending on a pitch class collection such as a scale).<BR>
+<BR>
+<BR>
+ degree:<BR>
+ a relative pitch representation which denotes quasi an index into a collection of pitch classes. This collection of pitch classes consists often in the pitch classes of a scale. However, other pitch class collections (e.g. the pitch classes of a chord) are possible as well.  <BR>
+ In case of a 'neutral' accidental (see below), the degree denotes the pitch class in the collection at the position of that degree. For instance (given pitchesPerOctave=12), in case the pitch class collection consists in the pitch classes of the C-major scale -- [0, 2, 4, 5, 7, 9, 11] -- the degree 3 denotes the pitch class at position 3 (the third of C-major), which is the pitch class 4 (i.e. the pitch class of e). However, the pitch class collection can contain an arbitrary collection of pitch classes, e.g., the D-minor chord [2 5 9]. For this collection, the (chord) degree 3 denotes the third note in the chord (i.e. the pitch class 9 representing the pitch class of a).<BR>
+ The accidental has the effect of 'alternating' which pitch class the degree means. For instance, the degree 3 for the C-major scale with an accidental denoting the interval ~1 (a flat) is the pitch class 4 together with the flat-accidental (i.e. denoting e-flat).<BR>
+ Please remember that the meaning of a pitch class depends on the PitchesPerOctave. This naturally effects the meaning of degrees. For example, if PitchesPerOctave=1200 then degrees point into a collection of pitch classes measured in MIDIcent.<BR>
+ See also HarmonisedScore.score.degreeToPC<BR>
+ <BR>
+<BR>
+ accidental:<BR>
+ An accidental is a device to express an 'alternating' of the pitch class denoted by a degree. The meaning of its actual numeric value is a bit complicated due to the fact that a FD integer must be positive. It depends on two factors: (i) the maximum number of 'accumulated' accidentals allowed (e.g., to sharp # accumulate to x in common praxis), and (ii) an offset, which must be added to the accidental value (because even flats must be non-negative) and which depends also on (i). The maximum number of 'accumulated' accidentals may be chosen dependent on the possible pitch classes between the pitch classes in the collection. For example, if the pitch class collection is harmonic C-minor [0, 2, 3, 5, 7, 8, 11] a double-sharp may be permitted to optionally bridge the pitch gap between the pitch classes 8 and 11). For common praxis, the accidental offset defaults 2, thus the common accidentals are numerically encoded as such: bb=0, b=1, neutral=2, #=3, x=4.<BR>
+ The accidental actually denotes an transposition interval for the pitch class to which the degree is pointing. Because the meaning of numeric intervals depend on the value of pitchesPerOctave, also the numeric value of the accidental depends on pitchesPerOctave. For instance, for pitchesPerOctave=1200 an accidental denoting the interval ~1 means a flatted pitch by only a single cent.<BR>
+ Please note that determined accidentals are specified more easily using the accidental conversions Score.absoluteToOffsetAccidental and Score.offsetToAbsoluteAccidental. The function Score.absoluteToOffsetAccidental expects an accidental without added offset (e.g., ~1 means b, and 0 means neutral) and internally uses the accidental offset to convert this accidental accordingly.<BR>
+ NB: To allow the user more flexibility, the accidentalOffset is not automatically set when the user sets the pitchesPerOctave value. Instead, the accidentalOffset can be set independently (see DB.setDB).<BR>
+<BR>
+<BR>
+</span>
+</span>
+<h3>Functor</h3>
+<ul>HS ("<span class="string">/Users/t/oz/music/Strasheela/strasheela/trunk/strasheela/contributions/anders/HarmonisedScore/HarmonisedScore.oz</span>")<br></ul>
+<h3>Import</h3>
+<code><ul><li><a href="node2.html">DB</a> at "<span class="string">source/Database.ozf"
+</span></li><li><a href="node3.html">Score</a> at "<span class="string">source/Score.ozf"
+</span></li><li><a href="node4.html">Rules</a> at "<span class="string">source/Rules.ozf"
+</span></li><li><a href="node5.html">DBs</a> at "<span class="string">source/databases/Databases.ozf"
+</span></li></ul></code>
+<h3>Export</h3>
+<code><ul><li>db:<span class="variablename">DB</span>
+</li><li>dbs:<span class="variablename">DBs</span>
+</li><li>score:<span class="variablename">Score</span>
+</li><li>rules:<span class="variablename">Rules</span>
+</li></ul></code>
+<h3>Define</h3>
+<h3>End</h3>
+</div></body>
+</html>
