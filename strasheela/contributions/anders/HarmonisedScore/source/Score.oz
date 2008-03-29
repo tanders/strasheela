@@ -153,18 +153,23 @@ export
    IsInterval
    NoteInterval TransposeNote
    
-   InChordMixinForNote InScaleMixinForNote
-   PitchClassMixin
-   EnharmonicSpellingMixinForNote ScaleDegreeMixinForNote ChordDegreeMixinForNote
+   InChordMixinForNote IsInChordMixinForNote
+   InScaleMixinForNote IsInScaleMixinForNote
+   PitchClassMixin IsPitchClassMixin
+   EnharmonicSpellingMixinForNote IsEnharmonicSpellingMixinForNote
+   ScaleDegreeMixinForNote IsScaleDegreeMixinForNote
+   ChordDegreeMixinForNote IsChordDegreeMixinForNote
    Note Note2 FullNote EnharmonicNote ScaleDegreeNote ChordDegreeNote
    
    PitchClassCollection IsPitchClassCollection %% !!?? why export this
    Chord IsChord
    Scale IsScale
-   InScaleMixinForChord %% !!?? why export this
+   InScaleMixinForChord IsInScaleMixinForChord %% !!?? why export this
    DiatonicChord
-   ScaleDegreeMixinForChord ScaleDegreeChord 
-   InversionMixinForChord MakeInversionChordClass InversionChord
+   ScaleDegreeMixinForChord IsScaleDegreeMixinForChord
+   ScaleDegreeChord 
+   InversionMixinForChord IsInversionMixinForChord
+   MakeInversionChordClass InversionChord
    
    ChordStartMixin % MkChordsStartWithItems MkChordsStartWithItems2
    StartChordWithMarker
@@ -190,6 +195,19 @@ prepare
    PitchClassCollectionType = {Name.new}
    ChordType = {Name.new}
    ScaleType = {Name.new}
+
+   InScaleMixinForChordType = {Name.new}
+   ScaleDegreeMixinForChordType = {Name.new}
+   InversionMixinForChordType = {Name.new}
+
+   InChordMixinForNoteType = {Name.new}
+   InScaleMixinForNoteType = {Name.new}
+   PitchClassMixinType = {Name.new}
+   EnharmonicSpellingMixinForNoteType = {Name.new}
+   ScaleDegreeMixinForNoteType = {Name.new}
+   ChordDegreeMixinForNoteType = {Name.new}
+   
+   
 define
 
    
@@ -1042,6 +1060,7 @@ define
       %% */
       %% !! definition mirrors InChordMixinForNote -- much code repetition with different arg etc names. 
       class InScaleMixinForChord
+	 feat !InScaleMixinForChordType:unit
 	 attr
 	    inScaleB		% parameter with 0/1 int
 	    chordPCsInScale % FS. May remain undetermined in case inScaleB value = 0.
@@ -1118,6 +1137,9 @@ define
 % 		 Excluded}
 % 	 end
       end
+   end
+   fun {IsInScaleMixinForChord X}
+      {Object.is X} andthen {HasFeature X InScaleMixinForChordType}
    end
 
    /** %% [concrete class] Defines a Chord which relates to a Scale (the Scale is defined by getScales and isRelatedScale). When the parameter value of inScaleB (a 0/1 integer) = 1, then all Chord pitch classes are diatonic, i.e. they are also pitch classes of the related Scale. 
@@ -1216,6 +1238,7 @@ define
       %% */      
       %% NB: ScaleDegreeMixinForChord is virtually the same as ScaleDegreeMixinForNote -- except that it is related to the parameter root (not pitchClass) and that it extends all its parameter names by a prefix 'root' to clarify the purpose of these parameters.
       class ScaleDegreeMixinForChord
+	 feat !ScaleDegreeMixinForChordType:unit
 	 attr rootDegree rootAccidental
 	 meth initScaleDegreeMixinForChord(rootDegree:Degree<=_
 					   rootAccidental:Accidental<=_) = M
@@ -1244,7 +1267,10 @@ define
 % 	    X = [scaleDegree scaleAccidental] 
 % 	 end
       end
-   end      
+   end
+   fun {IsScaleDegreeMixinForChord X}
+      {Object.is X} andthen {HasFeature X ScaleDegreeMixinForChordType}
+   end
 
    /** %% [concrete class] ScaleDegreeChord is a chord related to a scale (see DiatonicChord) whose root is additionally expressed in terms of a scale degree with respect to that scale. See the doc of the superclasses DiatonicChord and ScaleDegreeMixinForChord for details.
    %% */
@@ -1296,6 +1322,7 @@ define
       %%
       %%
       class InversionMixinForChord
+	 feat !InversionMixinForChordType:unit
 	 attr
 	    bassChordDegree bassChordAccidental bassPitchClass
 	    sopranoChordDegree sopranoChordAccidental sopranoPitchClass
@@ -1372,7 +1399,9 @@ define
        
       end
    end
-
+   fun {IsInversionMixinForChord X}
+      {Object.is X} andthen {HasFeature X InversionMixinForChordType}
+   end
    
    /** %% Expects a chord class and returns a subclass which inherits from this chord class and InversionMixinForChord. 
    %% */
@@ -1591,6 +1620,7 @@ define
       %% PitchClassMixin is defined as a mixin to the class Score.note to make it more easy to combine this mixin with other extensions to the note class. In Oz, multiple superclasses must not have a common class as their superclasses. Therefore, multiple note subclasses can not be directly combined, but multiple mixins for the note class can.. 
       %% */
       class PitchClassMixin
+	 feat !PitchClassMixinType:unit
 	 attr pitchClass octave 
 	 meth initPitchClassMixin(octave:Oct<=_ pitchClass:PC<=_) = M
 	    %{self getPitchUnit($)} = {GetPitchUnit}
@@ -1620,7 +1650,11 @@ define
 %	    X =[pitchClass octave] 
 %	 end
       end
+   end  
+   fun {IsPitchClassMixin X}
+      {Object.is X} andthen {HasFeature X PitchClassMixinType}
    end
+
       
    local
       /** %% Defines relation between Self (a note) and its related chord. 
@@ -1683,6 +1717,7 @@ define
       %%
       %% !!?? inChordB as parameter or just attribute: no explicite unit of measurement needed (always 0/1-int). Thus: Is inChordB required as parameter to define some distribution strategy? 
       class InChordMixinForNote
+	 feat !InChordMixinForNoteType:unit
 	 attr inChordB % nonChordPCConditions:nil
 	    chords  % list of chord candidate objects
 	    relatedChordBs % list of 0/1-ints matching chord candidate objects
@@ -1755,7 +1790,10 @@ define
 %	 end
       end
    end
-
+   fun {IsInChordMixinForNote X}
+      {Object.is X} andthen {HasFeature X InChordMixinForNoteType}
+   end
+   
    %% !! definition mirrors chord relation above as scale relation -- much code repetition with different arg etc names.
    local
       proc {InitConstrain Self Args}
@@ -1797,6 +1835,7 @@ define
       %% */
       %% !! definition mirrors InChordMixinForNote as scale relation -- much code repetition with different arg etc names. 
       class InScaleMixinForNote
+	 feat !InScaleMixinForNoteType:unit
 	 attr inScaleB
 	    scales % list of scale candidate objects
 	    relatedScaleBs % list of 0/1-ints matching scale candidate objects
@@ -1860,6 +1899,9 @@ define
 %	 end
       end	 
    end
+   fun {IsInScaleMixinForNote X}
+      {Object.is X} andthen {HasFeature X InScaleMixinForNoteType}
+   end
 
    
    local
@@ -1897,6 +1939,7 @@ define
       %%
       %% NB: The classes EnharmonicSpellingMixin and ScaleDegreeMixin are virtually idential, only the scale to which the degree/accidental relates is different. Nevertheless, two independent mixins are required, because I want to have a note class inheriting from both mixins, and I need different names for the parameters etc.  
       class EnharmonicSpellingMixinForNote
+	 feat !EnharmonicSpellingMixinForNoteType:unit
 	 attr cMajorDegree cMajorAccidental
 	 meth initEnharmonicSpellingMixinForNote(cMajorDegree:Degree<=_
 						 cMajorAccidental:Accidental<=_) = M
@@ -1925,6 +1968,9 @@ define
 % 	    X = [cMajorDegree cMajorAccidental] 
 % 	 end
       end
+   end
+   fun {IsEnharmonicSpellingMixinForNote X}
+      {Object.is X} andthen {HasFeature X EnharmonicSpellingMixinForNoteType}
    end
 
    local
@@ -1974,6 +2020,7 @@ define
       %% */      
       %% NB: The classes EnharmonicSpellingMixinForNote and ScaleDegreeMixin are very similar, only the scale to which the degree/accidental relates is different (in EnharmonicSpellingMixinForNote the related scale is always known -- in contrast to this mixin). Nevertheless, two independent mixins are required, because I want to have a note class optionally inheriting from both mixins, and I need different names for the parameters etc.  
       class ScaleDegreeMixinForNote
+	 feat !ScaleDegreeMixinForNoteType:unit
 	 attr scaleDegree scaleAccidental
 	 meth initScaleDegreeMixinForNote(scaleDegree:Degree<=_
 					  scaleAccidental:Accidental<=_) = M
@@ -2002,7 +2049,10 @@ define
 % 	    X = [scaleDegree scaleAccidental] 
 % 	 end
       end
-   end      
+   end
+   fun {IsScaleDegreeMixinForNote X}
+      {Object.is X} andthen {HasFeature X ScaleDegreeMixinForNoteType}
+   end
 
 
    
@@ -2051,6 +2101,7 @@ define
       %% NB: Like ScaleDegreeMixinForNote, the constrains posted by ChordDegreeMixinForNote are only effective after the related chord is known and determined. 
       %% */
       class ChordDegreeMixinForNote
+	 feat !ChordDegreeMixinForNoteType:unit
 	 attr chordDegree chordAccidental
 	 meth initChordDegreeMixinForNote(chordDegree:Degree<=_
 					  chordAccidental:Accidental<=_) = M
@@ -2080,7 +2131,9 @@ define
 % 	 end
       end
    end      
-
+   fun {IsChordDegreeMixinForNote X}
+      {Object.is X} andthen {HasFeature X ChordDegreeMixinForNoteType}
+   end
 
 
    /** %% [concrete class] Note2 extends the Strasheela core class Score.note by the parameters pitchClass and octave. In addition, Note2 constrains the relation between the three pitch parameters pitch, pitchClass, and octave. The pitchUnit for Note2 instances are set implicitly and depend on the pitches per octave set by DB.setPitchesPerOctave. 
