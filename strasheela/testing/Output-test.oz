@@ -1269,6 +1269,33 @@ MyScore = {Score.makeScore
  fun {$ X} [seq ' ' e] end}
 
 
+%%%
+
+%%
+%% the lily attribute
+%%
+
+declare
+MyScore = {Score.makeScore
+	   sim(items:[seq(info:[lily("\\key d \\major \\time 3/4" "\\clef alto")]
+			  items:[note(duration:8 pitch:64)
+				 note(duration:8 pitch:64)])
+		      seq(info:[lily("\\clef bass")]
+			  items:[note(duration:4 pitch:64 info:lily("("))
+				 note(duration:4 pitch:64 info:lily("\\staccato"))
+				 note(duration:4 pitch:64 info:lily("\\mordent" "\\breathe"))
+				 note(duration:4 pitch:64 info:lily(")"))
+				])
+		     ]
+	       startTime:0
+	       timeUnit:beats(4))
+	   unit}
+{Out.outputLilypond MyScore unit}
+
+
+
+
+
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

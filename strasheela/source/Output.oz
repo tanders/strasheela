@@ -1077,7 +1077,7 @@ define
 	 else  
 	    Pitch = {LilyMakePitch {Note getPitchParameter($)}}
 	    AddedSigns = {MakeAddedSigns Note}
-	    FirstNote = Pitch#Rhythms.1#AddedSigns
+	    FirstNote = Pitch#Rhythms.1#AddedSigns#{GetUserLily Note}
 	    % MicroPitch = {LilyMakeMicroPitch {Note getPitchParameter($)}}  % ?? temp fix?
 	    % FirstNote = Pitch#Rhythms.1#MicroPitch
 	 in
@@ -1109,7 +1109,7 @@ fun {MakeNoteToLily2 MakePitch MakeAddedSigns}
       else  
 	 Pitch = {MakePitch Note}
 	 AddedSigns = {MakeAddedSigns Note}
-	 FirstNote = Pitch#Rhythms.1#AddedSigns
+	 FirstNote = Pitch#Rhythms.1#AddedSigns#{GetUserLily Note}
 	    % MicroPitch = {LilyMakeMicroPitch {Note getPitchParameter($)}}  % ?? temp fix?
 	    % FirstNote = Pitch#Rhythms.1#MicroPitch
       in
@@ -1209,23 +1209,38 @@ end
 	 %% 'normal' sim
       else
 	 {ListToVS
+	  {GetUserLily Sim} |
 	  "\n <<" |
 	  {Append {Map {Sim getItems($)}
 		   fun {$ X} {OffsetToPauses X FurtherClauses} end} [">>"]}
 	  " "}
       end
    end
+   
    /** %% [For experts only] creates lilypond output (a VS) for a sequential container which you could use when you overwrite the default sequential output in a clause. FurtherClauses are clauses relevant of items contained in Seq.
    %% */
    %% !! offsets are currently ignored: only positive offsets are currently possible in SDL -- express them by rests
    fun {SeqToLily Seq FurtherClauses}
       {ListToVS
+       {GetUserLily Seq} |
        "\n {" |
        {Append {Map {Seq getItems($)}
 		fun {$ X} {OffsetToPauses X FurtherClauses} end}
 	["}"]}
        " "}
    end
+
+   /** %% Accesses tuple with label 'lily' in info feature of X, and returns VS. The lily tuple must only contain VSs.
+      %% */
+      fun {GetUserLily X}
+	 Lily = {X getInfoRecord($ lily)}
+      in
+	 case Lily of nil then nil
+	 else {Adjoin Lily '#'}
+	 end
+      end
+
+   
    %% average pitch decides clef
    % LilyClefs = clef(bass_8 bass violin "violin^8")
    fun {DecideClef X}
@@ -1269,13 +1284,13 @@ end
       %% reset it to false at the end. This only works in a purely
       %% sequential program!
       {Cell.assign OuterSimBound true}	    
-      Result = "<<"#{ListToVS
-		     {Map {Sim getItems($)}
-		      fun {$ X}
-			 "\n \\new Staff { \\clef "#{DecideClef X}#" "
-			 #{OffsetToPauses X FurtherClauses}#" }"
-		      end}
-		     " "}#"\n"#">>"
+      Result = " <<"#{ListToVS
+		      {Map {Sim getItems($)}
+		       fun {$ X}
+			  "\n \\new Staff { \\clef "#{DecideClef X}#" "
+			  #{OffsetToPauses X FurtherClauses}#" }"
+		       end}
+		      " "}#"\n"#">>"
       {Cell.assign OuterSimBound false}
    end
 
@@ -1310,6 +1325,7 @@ end
    end
    /** %% Transforms a score object into a Lilypond score virtual string. The score layout is hardwired: the Items in the outmost Simultaneous container are put in their own staff. [currently, if outmost Simultaneous containers are contained in surround Sequentials, new staffs will be draw for each Item contained in each Simultaneous.]
    %% The argument FurtherClauses allows for specifying what Lilypond shows for specific score objects. FurtherClauses expects a list of the form [TypeCheck1#ProcessingFun1 ...].  TypeCheckN is a boolean function or method (e.g. isNote) and ProcessingFunN is a function which expects score objects for which TypeCheckN returns true as argument. ProcessingFunN returns a Lilypond VS. For example, the user may define a subclass of Score.note with an additional articulation attribute (e.g. values may be staccato, tenuto etc.) and the user then defines a clause which causes Lilypond to show the articulation by its common sign in the sheetmusic score.
+   %% Arbitrary Lilypond code can be added to container and note objects via a tuple with the label 'lily' given to the info attribute of the score object. This tuple must only contain VSs which are legal Lilypond code. For containers, this lilypond code is always inserted in the Lilypond output before the container, for notes it is inserted after the note. 
    %% */
    %%
    %% !! TODO: further arg to extend/modify wrapper Lily code (e.g. to add "\header {tagline = \"\"})" for an empty tagline)
