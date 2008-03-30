@@ -99,11 +99,9 @@ define
    %%
    %% TODO:
    %%
-   %%  - note/chord: replace bb and x with 'quartertones'
    %%  - chord: make ratio printing optional (use def MakeChordRatios)
    %%  - chord: make name/comment printing optional (use def MakeChordComment)
    %%  - chord: print root, bass note, (soprano?), (all pitch classes?)
-   %%  - !! use different clef for chords / chord sequence
    %%  
    %%
    %% DECIDE:
@@ -118,6 +116,7 @@ define
    %%
    %% BUG: 'Ab' is shown as 1/1 and 'C' as 5/4
    %% Anyway, better show chord names...
+   %% ?? Really bug? Some chords have silent root below pitches, but ratio factor should not be root in that case.
    %%
    
    local
@@ -182,26 +181,10 @@ define
       %% support any expessions (e.g. fingering marks, or articulation
       %% marks).
       fun {NoteEt31ToLily MyNote}
-	 Rhythms = {Out.lilyMakeRhythms {MyNote getDurationParameter($)}}
-      in
-	 %% if MyNote is shorter than 64th then skip it (Out.lilyMakeRhythms
-	 %% then returns nil)
-	 if Rhythms == nil
-	 then ''
-	 else  
-	    MyPitch = {ET31PitchToLily {MyNote getPitch($)}}
-	    FirstNote = MyPitch#Rhythms.1
-	 in
-	    %% handle tied notes
-	    if {Length Rhythms} == 1
-	       %% no tied notes
-	    then FirstNote
-	       %% all values in Rhythm.2 are tied to predecessor
-	    else FirstNote#{Out.listToVS {Map Rhythms.2
-					  fun {$ R} " ~ "#MyPitch#R end}
-			    " "}
-	    end
-	 end
+	 {{Out.makeNoteToLily2
+	   fun {$ N} {ET31PitchToLily {N getPitch($)}} end
+	   fun {$ _} nil end}
+	  MyNote}
       end
 
       /** %% Returns the chord comment.
