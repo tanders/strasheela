@@ -23,7 +23,7 @@ svn -v log >> trunk/strasheela/CHANGELOG.txt
 #
 # create tag file in SVN repository
 #
-VERSION=0.9.1
+export VERSION=0.9.3
 
 svn copy https://strasheela.svn.sourceforge.net/svnroot/strasheela/trunk \
          https://strasheela.svn.sourceforge.net/svnroot/strasheela/tags/release-$VERSION \
