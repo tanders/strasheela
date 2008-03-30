@@ -3,13 +3,13 @@
 ; #author Torsten Anders
 
 
-* Changes in Version 0.9.3 (29 March 2008)
+* Changes in Version 0.9.3 (30 March 2008)
 
   - Code additions
  
     - Functor [[../contributions/anders/HarmonisedScore/doc/node6.html][HS.rules.schoenberg]]: a generalised version of Schoenbergs guidelines on writing good tonal chord progressions have been implemented as constraints
 
-    - Functor [[../contributions/anders/ET31/doc/node1.html][ET31]] for composition in [[http://en.wikipedia.org/wiki/31_equal_temperament][31-tone equal temperament]]
+    - Functor [[../contributions/anders/ET31/doc/node1.html][ET31]] for composition in [[http://en.wikipedia.org/wiki/31_equal_temperament][31-tone equal temperament]]. A [[../contributions/anders/ET31/testing/ET31-test.oz][simple example]] demonstrates this functor with one of the Schoenberg constraints.
 
     - [[../contributions/anders/HarmonisedScore/doc/node3.html#entity137][HS.score.chordsToScore]]
 
