@@ -184,7 +184,7 @@ define
 	    end
 	 elseif {IsFree X} then "_"
 	 elseif {FD.is X} then {VirtualString.toString
-				  '{FD.int '#{Domain2VS {FD.reflect.dom X}}#'}'}
+				'{FD.int '#{Domain2VS {FD.reflect.dom X}}#'}'}
 	 elseif {GUtils.isFS X}
 	 then {VirtualString.toString
 	       '{FS.var.bounds '
@@ -904,7 +904,7 @@ define
       end
    end
 
-     /** % Creates a csound score of all (determined) events in MyScore, renders the score and plays the resulting sound. See the documentation of OutputCsoundScore, CallCsound, and PlaySound for arguments in Spec (the PlaySound argument extension is substituted by the argument soundExtension).
+   /** % Creates a csound score of all (determined) events in MyScore, renders the score and plays the resulting sound. See the documentation of OutputCsoundScore, CallCsound, and PlaySound for arguments in Spec (the PlaySound argument extension is substituted by the argument soundExtension).
    %% */
    proc {RenderAndPlayCsound MyScore Spec}
       Defaults = unit(test:fun {$ X}
@@ -995,7 +995,7 @@ define
 	 LilyRhythms.BiggestSubRhythm | {MakeRhythmsAux BeatIdx-BiggestSubRhythm}
       end
    end
-    /** %% [For experts only] creates lilypond microtonal pitch output (a VS) for a pitch parameter. Note: works only if the pitch unit is et72.
+   /** %% [For experts only] creates lilypond microtonal pitch output (a VS) for a pitch parameter. Note: works only if the pitch unit is et72.
    %% */
    %% !!?? temp fix
    fun {LilyMakeMicroPitch PitchParam}
@@ -1099,38 +1099,37 @@ define
 	 end
       end
    end
-
    
-/** %% [For experts only] Returns unary function expecting note object and returning a lilypond note output (a VS). MakePitch is a unary function expecting the note and returning a Lilypond pitch (a VS). MakeAddedSigns is unary function expecting the note and returning a VS of arbitrary added signs (e.g. fingering marks, articulation marks etc.). MakeNoteToLily2 adds the rhythmic information and cares for ties.
-%% */
-fun {MakeNoteToLily2 MakePitch MakeAddedSigns}
-   fun {$ Note}
-      Rhythms = {LilyMakeRhythms {Note getDurationParameter($)}}
-   in
-      if Rhythms == nil
-      then ''
-      else  
-	 Pitch = {MakePitch Note}
-	 AddedSigns = {MakeAddedSigns Note}
-	 FirstNote = Pitch#Rhythms.1#AddedSigns#{GetUserLily Note}
+   /** %% [For experts only] Returns unary function expecting note object and returning a lilypond note output (a VS). MakePitch is a unary function expecting the note and returning a Lilypond pitch (a VS). MakeAddedSigns is unary function expecting the note and returning a VS of arbitrary added signs (e.g. fingering marks, articulation marks etc.). MakeNoteToLily2 adds the rhythmic information and cares for ties.
+   %% */
+   fun {MakeNoteToLily2 MakePitch MakeAddedSigns}
+      fun {$ Note}
+	 Rhythms = {LilyMakeRhythms {Note getDurationParameter($)}}
+      in
+	 if Rhythms == nil
+	 then ''
+	 else  
+	    Pitch = {MakePitch Note}
+	    AddedSigns = {MakeAddedSigns Note}
+	    FirstNote = Pitch#Rhythms.1#AddedSigns#{GetUserLily Note}
 	    % MicroPitch = {LilyMakeMicroPitch {Note getPitchParameter($)}}  % ?? temp fix?
 	    % FirstNote = Pitch#Rhythms.1#MicroPitch
-      in
-	 %% !! ?? generalise (needed elsewhere)
-	 if {Length Rhythms} == 1
-	 then FirstNote
-	    %% all values in Rhythm.2 are tied to predecessor
-	 else FirstNote#{ListToVS
-			 {Map Rhythms.2
-			  fun {$ R}
-			     " ~ "#Pitch#R#AddedSigns
+	 in
+	    %% !! ?? generalise (needed elsewhere)
+	    if {Length Rhythms} == 1
+	    then FirstNote
+	       %% all values in Rhythm.2 are tied to predecessor
+	    else FirstNote#{ListToVS
+			    {Map Rhythms.2
+			     fun {$ R}
+				" ~ "#Pitch#R#AddedSigns
 				%" ~ "#Pitch#R#MicroPitch
-			  end}
-			 " "}
+			     end}
+			    " "}
+	    end
 	 end
       end
    end
-end
 
 %    fun {NoteToLily Note}
 %       Rhythms = {LilyMakeRhythms {Note getDurationParameter($)}}
@@ -1234,14 +1233,14 @@ end
    end
 
    /** %% Accesses tuple with label 'lily' in info feature of X, and returns VS. The lily tuple must only contain VSs.
-      %% */
-      fun {GetUserLily X}
-	 Lily = {X getInfoRecord($ lily)}
-      in
-	 case Lily of nil then nil
-	 else {Adjoin Lily '#'}
-	 end
+   %% */
+   fun {GetUserLily X}
+      Lily = {X getInfoRecord($ lily)}
+   in
+      case Lily of nil then nil
+      else {Adjoin Lily '#'}
       end
+   end
 
    
    %% average pitch decides clef
@@ -1371,74 +1370,45 @@ end
 	  end]}}
    end
    /** %% Transforms a score object into a Lilypond score virtual string. The score layout is hardwired: the Items in the outmost Simultaneous container are put in their own staff. [currently, if outmost Simultaneous containers are contained in surround Sequentials, new staffs will be draw for each Item contained in each Simultaneous.]
-   %% The argument FurtherClauses allows for specifying what Lilypond shows for specific score objects. FurtherClauses expects a list of the form [TypeCheck1#ProcessingFun1 ...].  TypeCheckN is a boolean function or method (e.g. isNote) and ProcessingFunN is a function which expects score objects for which TypeCheckN returns true as argument. ProcessingFunN returns a Lilypond VS. For example, the user may define a subclass of Score.note with an additional articulation attribute (e.g. values may be staccato, tenuto etc.) and the user then defines a clause which causes Lilypond to show the articulation by its common sign in the sheetmusic score.
+   %% ToLilypond expects two optional arguments. The argument clauses for specifying what Lilypond shows for specific score objects. FurtherClauses expects a list of the form [TypeCheck1#ProcessingFun1 ...].  TypeCheckN is a boolean function or method (e.g. isNote) and ProcessingFunN is a function which expects score objects for which TypeCheckN returns true as argument. ProcessingFunN returns a Lilypond VS. For example, the user may define a subclass of Score.note with an additional articulation attribute (e.g. values may be staccato, tenuto etc.) and the user then defines a clause which causes Lilypond to show the articulation by its common sign in the sheetmusic score.
+   %% The argument wrapper expects a list of two VSs with legal Lilypond code. These VSs are inserted at the beginning and the end respecitively of the score. Note that the Lilypond version statement is hardwired -- you should not add a version statement to your header. The argument defaults are shown below. 
+   
+   unit(clauses:nil
+	wrapper:["\\paper {}\n\n{\n" %% empty paper def
+		 "\n}"])
+
    %% Arbitrary Lilypond code can be added to container and note objects via a tuple with the label 'lily' given to the info attribute of the score object. This tuple must only contain VSs which are legal Lilypond code. For containers, this lilypond code is always inserted in the Lilypond output before the container, for notes it is inserted after the note. 
    %% */
-   %%
-   %% !! TODO: further arg to extend/modify wrapper Lily code (e.g. to add "\header {tagline = \"\"})" for an empty tagline)
-   fun {ToLilypond MyScore FurtherClauses}
+   fun {ToLilypond MyScore Args}
+      Default =  unit(clauses:nil
+		      wrapper:["\\paper {}\n\n{\n" %% empty paper def
+			       "\n}"])
+      As = {Adjoin Default Args}
+   in
       {Cell.assign OuterSimBound false}
-      "\\version \"2.4.1\"\n\n"#
-      %% empty paper def
-      "\\paper { \n}\n\n"#
-      %% for analysis brackets
-      "\\layout {\n\\context {\n\\Staff \\consists \"Horizontal_bracket_engraver\"}}"#
-      %% Lilypond 2.4.1: wide horizontal spacing
-%       "\\layout{ "
-%       #"\n\\context { \n\\Score \\override SpacingSpanner #\'spacing-increment = #6.0 \n}" 
-%       #"\n\\context { \n\\Voice \\remove "Note_heads_engraver" \\consists \"Completion_heads_engraver\" \n}\n}\n\n"#
-      %% the actual score
-      "{\n"#
-      {ToLilypondAux MyScore FurtherClauses}#
-      "\n}"
+      {ListToVS ["%%% created by Strasheela at "#{GUtils.timeVString}
+		 "\n\\version \"2.4.1\"\n"
+		 As.wrapper.1
+		 {ToLilypondAux MyScore As.clauses}
+		 As.wrapper.2.1]
+       "\n"}
    end
-%       fun {ToLilypond MyScore FurtherClauses}
-%       {Cell.assign OuterSimBound false}
-%       "\\score { \n \\notes{\n"#
-%       {ToLilypondAux MyScore FurtherClauses}#
-%       "\n}"#
-%       %% !! quick hack: layout control in \paper should be argument
-%       %%
-%       %% BTW: Lilypond has problems to automatically break notes correctly in a complex rhythmic situation
-%       %%
-%       %% Lilypond 2.0 (on my iBook)
-%       %"\\paper { \n \\translator { \\ThreadContext \\remove "Note_heads_engraver" \\consists \"Completion_heads_engraver\" } \n}"#
-%       %% Lilypond 2.2 (on my LinuxBox)
-%       %"\\paper{ \n\\context { \n\\VoiceContext \\remove "Note_heads_engraver" \\consists \"Completion_heads_engraver\" \n} \n}"#
-%       %"\n}"
-%       %% Lilypond 2.2: wide horizontal spacing
-%       "\\paper{ "
-%       #"\n\\context { \n\\ScoreContext \\override SpacingSpanner #\'spacing-increment = #6.0 \n}" 
-%       #"\n\\context { \n\\VoiceContext \\remove "Note_heads_engraver" \\consists \"Completion_heads_engraver\" \n} \n}"
-%       #"\n}"
-%    end
-
    
-%    fun {MkDefaultSpec}
-%       %% ?? this is function because otherwise
-%       %% OutputLilypond calls Init.getStrasheelaEnv
-%       %% only once at compile time (?)
-%       {Browse mkDefaultSpec#{Init.getStrasheelaEnv defaultLilypondDir}}
-%       unit(dir: {Init.getStrasheelaEnv defaultLilypondDir}
-% 	   file: test % !! file name without extention
-% 	   clauses:nil)
-%    end
-   /** %% Transforms MyScore into a Lilypond score. See the documentation of ToLilypond for an explanation of the argument clauses in Spec. 
-   The defaults of Spec are
+   /** %% Transforms MyScore into a Lilypond score and writes it to a file. The defaults values for the optional arguments are shown below. See the documentation of ToLilypond for an explanation of additional arguments.
+   
    unit(dir: {Init.getStrasheelaEnv defaultLilypondDir}
 	file: "test" % !! file name without extention
-	clauses:nil)
+       )
+					  
    %% */
-   proc {OutputLilypond MyScore Spec}
-      DefaultSpec =  unit(dir: {Init.getStrasheelaEnv defaultLilypondDir}
-			  file: "test" % !! file name without extention
-			  clauses:nil)
-      MySpec = {Adjoin DefaultSpec Spec}
-      Path = MySpec.dir#MySpec.file#".ly"
-      FurtherClauses = MySpec.clauses
+   proc {OutputLilypond MyScore Args}
+      Default =  unit(dir: {Init.getStrasheelaEnv defaultLilypondDir}
+		      file: "test" % !! file name without extention
+		     )
+      As = {Adjoin Default Args}
+      Path = As.dir#As.file#".ly"
    in
-      %{Browse Path#Spec#{MkDefaultSpec}}
-      {WriteToFile {ToLilypond MyScore FurtherClauses} Path}
+      {WriteToFile {ToLilypond MyScore As} Path}
    end
 
    /** %% Calls lilypond on a lilypond file specified by Spec. Txhe defaults of Spec are:
@@ -1745,7 +1715,7 @@ end
 	       %% Disadvantage for performance: checking for the label requires traversing the whole list
 	       %% NB: in case the list contains more than one :label, the first such pair determines the property. 
 	       [{LispKeyword 'record-label'} {OzToLisp {Label X} Args}]}
-	     " "}#")"
+	      " "}#")"
       end
    in
       /** %% OzToLisp transforms a literal Oz value (i.e. a value with a textual representation) into a corresponding literal Lisp value expressed by a VS. 
@@ -1995,10 +1965,10 @@ end
 				unit(instr:":treble-bass")
 			     end
 	     getEventKeywords:fun {$ MyEvent}
-				unit(off:{MyEvent getStartTimeInBeats($)}
-				     dur:{MyEvent getDurationInBeats($)}
-				     note:{MyEvent getPitchInMidi($)})
-			     end
+				 unit(off:{MyEvent getStartTimeInBeats($)}
+				      dur:{MyEvent getDurationInBeats($)}
+				      note:{MyEvent getPitchInMidi($)})
+			      end
 	     file:"test"
 	     extension:".fms"
 	     dir:{Init.getStrasheelaEnv defaultFomusDir})
@@ -2297,8 +2267,8 @@ end
    %% */
    %% Transformation of def by Christian Schulte in "Open Programming in Mozart"
    class Shell from Open.pipe Open.text
-      /** %% Start interactive program Cmd (VS) with Args (list of VSs). The default is the shell "sh" with args ["-s"] for reading from standard input. See the test file for examples for other interactive commands (e.g., the interactive ruby shell or a Common Lisp compiler). 
-      %% */
+		  /** %% Start interactive program Cmd (VS) with Args (list of VSs). The default is the shell "sh" with args ["-s"] for reading from standard input. See the test file for examples for other interactive commands (e.g., the interactive ruby shell or a Common Lisp compiler). 
+		  %% */
       meth init(cmd:Cmd<="sh" args:Args<=["-s"]) 
 	 Open.pipe,init(cmd:Cmd args:Args)  
       end
