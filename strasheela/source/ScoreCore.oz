@@ -1097,45 +1097,69 @@ define
       end
    end
 
-   /** %% [concrete class] 
-   %%*/
-   class Pitch from Parameter
-      feat %'class': Pitch
-	 label: pitch
-      meth isPitch(?B) B=true end
+   local
+      /** %% Returns true if PitchUnit is an atom which matches the pattern et<Digit>+ such as et31 or et72.
+      %% */
+      fun {IsET PitchUnit}
+	 S = {AtomToString PitchUnit}
+	 H T
+      in
+	 {List.takeDrop S 2 H T}
+	 %% 
+	 H == "et" andthen T \= nil andthen
+	 {All T fun {$ C} {Char.isDigit C} end} 
+      end
+      /** %% Returns the pitches per octave expressed by an ET pitch unit, e.g., for et31 it returns 31. 
+      %% */
+      fun {GetPitchesPerOctave EtPitchUnit}
+	 {StringToInt {List.drop {AtomToString EtPitchUnit} 2}}
+      end
+   in
+      /** %% [concrete class] 
+      %%*/
+      class Pitch from Parameter
+	 feat %'class': Pitch
+	    label: pitch
+	 meth isPitch(?B) B=true end
 %       meth getValue(?X unit:Unit<=midicents)
 % 	 X={self convertTo($ Unit)}
 %       end
-      /** %% Returns the parameter value translated to a float representing a Midi keynumber (i.e. 60.5 is a quarternote above middle c). The translation uses the parameter unit which must be bound (otherwise the method suspends, but warns also). Supported units are (represented by these atoms): midi/keynumber, midicent/midic, frequency/freq/hz and et72 (equal temperament with 72 steps per octave).
-      %% */
-      meth getValueInMidi(?X)
-	 Unit = {self getUnit($)}
-	 Value = {IntToFloat {self getValue($)}}
-      in
-	 %% !! IsDet does not wait for binding -- quasi side effect. 
-	 if {Not {IsDet Unit}}
-	 then {GUtils.warnGUI 'pitch unit unbound'}
-	 end
-	 %% !!?? remove redundancy for e.g. midi or keynumber
-	 X = case Unit
-	     of midi then Value
-	     [] keynumber then Value
-	     [] et72 then Value / 6.0 % * 12.0 / 72.0
-	     [] et31 then Value * 12.0 / 31.0 
-	     [] midicent then Value / 100.0
-	     [] midic then Value / 100.0
-	     [] millimidicent then Value / 10000.0
-	     [] frequency then {MUtils.freqToKeynum Value 12.0}
-	     [] freq then {MUtils.freqToKeynum Value 12.0}
-	     [] hz then {MUtils.freqToKeynum Value 12.0}
-	     else
-		{Exception.raiseError
-		 strasheela(illParameterUnit Unit self
-			    "Supported units are midi, keynumber, et31, et72, midicent (or midic), frequency (or freq), and hz."
+	 /** %% Returns the parameter value translated to a float representing a Midi keynumber (i.e. 60.5 is a quarternote above middle c). The translation uses the parameter unit which must be bound (otherwise the method suspends, but warns also). Supported units are (represented by these atoms): midi/keynumber, midicent/midic, frequency/freq/hz and et72 (equal temperament with 72 steps per octave).
+	 %% */
+	 meth getValueInMidi(?X)
+	    Unit = {self getUnit($)}
+	    Value = {IntToFloat {self getValue($)}}
+	 in
+	    %% !! IsDet does not wait for binding -- quasi side effect. 
+	    if {Not {IsDet Unit}}
+	    then {GUtils.warnGUI 'pitch unit unbound'}
+	    end
+	    %% !!?? remove redundancy for e.g. midi or keynumber
+	    X = case Unit
+		of midi then Value
+		[] keynumber then Value
+% 		[] et72 then Value / 6.0 % * 12.0 / 72.0
+% 		[] et31 then Value * 12.0 / 31.0 
+% 		[] et22 then Value * 12.0 / 22.0 
+		[] midicent then Value / 100.0
+		[] midic then Value / 100.0
+		[] millimidicent then Value / 10000.0
+		[] frequency then {MUtils.freqToKeynum Value 12.0}
+		[] freq then {MUtils.freqToKeynum Value 12.0}
+		[] hz then {MUtils.freqToKeynum Value 12.0}
+		else
+		   if {IsET Unit}
+		   then Value * 12.0 / {IntToFloat {GetPitchesPerOctave Unit}}
+		   else 
+		   {Exception.raiseError
+		    strasheela(illParameterUnit Unit self
+			       "Supported units are midi, keynumber, et22, et31, et72, midicent (or midic), frequency (or freq), and hz."
 			    % "Unsupported pitch unit."
-			   )}
-		unit		% never returned
-	     end
+			      )}
+		      unit		% never returned
+		   end
+		end
+	 end
       end
    end
    
