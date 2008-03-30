@@ -21,10 +21,9 @@ define
    proc {Setup NumNotes Pitches Strings Positions Fingers}
       %% setup lists
       Pitches = {FD.list NumNotes 0#127}
-      %% need to redo this: define numbers for finger extentions
       Strings = {FD.list NumNotes 1#4}
       Positions = {FD.list NumNotes 1#8}
-      Fingers = {FD.list NumNotes 0#4}
+      Fingers = {FD.list NumNotes 0#8}
 
       %% definition of pitches on a violin
       for X in 1..NumNotes do
