@@ -20,32 +20,18 @@ declare
 %      minIntervalToBass:{ET31.pc 'F'}
      )}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%
-%% test notation
-%%
-
-/*
-
-{ET31.pc 'C#'}
-{ET31.pc 'Db'}
-
-{ET31.pcName 2}
-{ET31.pcName 3}
-
-{ET31.acc '#|'}
-{ET31.acc 'bb'}
-
-
-{ET31.pitch 'C'#0}
-{ET31.pitch 'C#'#4}
-
-*/
-
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%
+%%  Creates short demo chord progression in 31 ET. Neighbouring chords
+%%  are harmonically closely related, but the example does not
+%%  necessarily stay in a single key. The example also demonstrates
+%%  one of the Schoenberg constraints: all chord progressions are
+%%  either ascending, or some decending progression is only a 'passing
+%%  chord'. See HS.rules.schoenberg for details on these constraints.
 %% 
+%% The solution contains a bare chord sequence, use the Explorer
+%% action "ChordsToScore" to actually read and hear a solution.
 %%
 
 /*
@@ -85,11 +71,12 @@ in
    ChordSeq = {Score.makeScore seq(items:Chords
 				   startTime:0)
 	       unit}
-   %% Good progression
+   %% Good progression: ascending or descending progression only as 'passing chords'
    {HS.rules.schoenberg.resolveDescendingProgressions Chords unit}
-   {Pattern.for2Neighbours Chords % no super strong progression
+   %% no super strong progression in such a simple progression
+   {Pattern.for2Neighbours Chords 
     proc {$ C1 C2} {HS.rules.schoenberg.superstrongProgressionR C1 C2 0} end}
-   %% First and last chord are equal (neither index nor transposition are distinct)
+   %% First and last chords are equal (neither index nor transposition are distinct)
    {HS.rules.distinctR Chords.1 {List.last Chords} 0}
    %% roots of all other chords are distinct
    {FD.distinct {Map Chords.2 fun {$ X} {X getRoot($)} end}}
@@ -119,5 +106,29 @@ end
 */
 
 
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%% test notation
+%%
+
+/*
+
+{ET31.pc 'C#'}
+{ET31.pc 'Db'}
+
+{ET31.pcName 2}
+{ET31.pcName 3}
+
+{ET31.acc '#|'}
+{ET31.acc 'bb'}
+
+
+{ET31.pitch 'C'#0}
+{ET31.pitch 'C#'#4}
+
+*/
 
 
