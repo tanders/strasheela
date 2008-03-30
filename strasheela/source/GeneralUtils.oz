@@ -108,7 +108,7 @@ define
    fun {RandIntoRange Rand Min Max}   
       MaxRand = {OS.randLimits 0}
    in 
-      {Int.'div' (Rand * (Max - Min)) MaxRand} + Min
+      (Rand * (Max - Min + 1)) div MaxRand + Min
    end
 
    local
