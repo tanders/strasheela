@@ -12,9 +12,9 @@ import
    FD FS
 %   Browser(browse:Browse) % temp for debugging
 %   GUtils at 'x-ozlib://anders/strasheela/GeneralUtils.ozf'
-   Score at 'x-ozlib://anders/strasheela/ScoreCore.ozf'
-   SDistro at 'x-ozlib://anders/strasheela/ScoreDistribution.ozf'
-   Out at 'x-ozlib://anders/strasheela/Output.ozf'
+   Score at 'x-ozlib://anders/strasheela/source/ScoreCore.ozf'
+   SDistro at 'x-ozlib://anders/strasheela/source/ScoreDistribution.ozf'
+   Out at 'x-ozlib://anders/strasheela/source/Output.ozf'
    HS at 'x-ozlib://anders/strasheela/HarmonisedScore/HarmonisedScore.ozf'
 export
 
