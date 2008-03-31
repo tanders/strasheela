@@ -68,41 +68,16 @@ define
 
 
    C={NewCell 1}
-   /* %% outputs a Score to a file.  Adds support for rests (ie 'pause' events). */
+   /* %% outputs a Score to a file. */
    proc {WriteLilyFile BaseFilename MyScore}
       Filename=BaseFilename#@C
    in
-      %{System.show @C}
       {Out.outputLilypond
        MyScore
        unit(file:Filename
-	    %% definition of pause output
-	    clauses:[ isPause#fun {$ MyPause}
-				 %%  returns a list of Lilypond rhythm
-				 %%  values matching dur of MyPause
-				 Rhythms = {Out.lilyMakeRhythms
-					    {MyPause getDurationParameter($)}}
-			      in
-				 %% if pause duration is 0 or too
-                             %short
-				 %% (less than a 64th note, or 0.0625
-                             %beat)
-				 if Rhythms == nil
-				 then '' % omit pause
-				    %% otherwise output VS of Lily
-                                %pause(s)
-				 else {Out.listToVS {Map Rhythms fun
-								    {$ R} r#R
-								 end}
-				       " "}
-				 end
-			      end]
-
-	   )}
+	    wrapper:"\\score{"#(" \\layout{}\n \\midi{}\n}\n"#"")
+	    unit)}
       C:=@C+1
    end
-
-
-
 
 end
