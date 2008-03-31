@@ -62,7 +62,7 @@ define
 		   %%
 
 		   chord(pitchClasses:[6#6 6#5 6#4] % 'C' 'Es' 'G'
-			 roots:[6#6]
+			 roots:[6#6] % 6#6
 %				dissonanceDegree:2
 			 comment:'minor')
 		   chord(pitchClasses:[4#4 5#4 6#4] % 'C' 'E' 'G'
@@ -79,11 +79,12 @@ define
 		   
 		   %% !! nice :) 
 		   chord(pitchClasses:[5#5 6#5 7#5] % 'C' 'Eb' 'F#'
-			 roots:[4#5]  % 'As'
+			 roots:[5#5]
+			 % silentRoots:[4#5]  % 'As'
 %				dissonanceDegree:2
 			 comment:'harmonic diminished')		   
 		   chord(pitchClasses:[7#7 7#6 7#5] % ['C' 'D#' 'F#']
-			 roots:[1#1] % ?? 'A#'  
+			 roots:[7#7]
 %				dissonanceDegree:2
 			 comment:'utonal diminished') % reversed harmonic diminished
 		   %% relatively high tuning error of 'tritone'
@@ -99,7 +100,8 @@ define
 
 		   %% !!
 		   chord(pitchClasses:[6#1 7#1 9#1] % 'C' 'Eb;' 'G'
-			 roots:[4#1]   % ?? 'F'
+			 roots:[6#1]
+			 % silentRoots:[4#1]   % ?? 'F'
 %				dissonanceDegree:2
 			 comment:'subminor')
 		   
@@ -135,34 +137,42 @@ define
 		   chord(pitchClasses:['C' 'E' 'G' 'Bb']
 			 roots:['C']  
 %				dissonanceDegree:2
-			 comment:'dominant seventh')
-		   chord(pitchClasses:['C' 'Eb' 'Gb' 'Bb']
+			 comment:'dominant 7th')
+		   chord(% pitchClasses:['C' 'Eb' 'Gb' 'Bb']
+			 pitchClasses:['C' 'Eb' 'G' 'A']
 			 roots:['C']  % ??
 %				dissonanceDegree:2
-			 comment:'reversed dominant seventh')
+			 % comment:'reversed dominant seventh'
+			 comment:'minor 6th')
 		   %% !!
 		   %% mind tiny difference to reversed dominant seventh
 		   %% reversed form of this chord is 'C' 'Fb' 'G' 'Bb' -- un-usable
-		   chord(pitchClasses:['C' 'Eb' 'F#' 'Bb'] % 5:6:7:9
-			 roots:['Ab']  
+		   chord(% pitchClasses:['C' 'Eb' 'F#' 'Bb'] % 5:6:7:9
+			 pitchClasses:['C' 'D#' 'G' 'A'] % 5:6:7:9
+			 roots:['C']
+			 % silentRoots:['F']  
 %				dissonanceDegree:2
-			 comment:'harmonic halve-diminished seventh')
+%			 comment:'harmonic halve-diminished seventh'
+			 comment:'subminor 6th')
 		   %% !!
 		   chord(pitchClasses:['C' 'E' 'G' 'Bb;']
 			 roots:['C']  
 %				dissonanceDegree:2
-			 comment:'harmonic dominant seventh')
+			 comment:'harmonic 7th')
 		   %% !!!
 		   chord(pitchClasses:['C' 'D#' 'F#' 'A#']
-			 roots:['C']  % ??
+			 roots:['C' 'D#']
+			 % silentRoots:['G#']
 %				dissonanceDegree:2
-			 comment:'reversed harmonic dominant seventh')
+%			 comment:'reversed harmonic dominant seventh'
+			 comment:'subharmonic 6th'
+			)
 		   %% !!!!
 		   %% non-reversable chord (reversed chord is same chord)
 		   chord(pitchClasses:['C' 'E' 'F#' 'A#'] % [1#1 5#4 7#5 7#4] 
 			 roots:['C']  % ??
 %				dissonanceDegree:2
-			 comment:'mix of plain and reversed harmonic dominant seventh')
+			 comment:'mix of plain and reversed harmonic dominant 7th')
 		   
 		   
 		   %% same as minor with minor seventh, but different root
@@ -175,7 +185,7 @@ define
 		   chord(pitchClasses:['C' 'Eb' 'G' 'Bb']
 			 roots:['C']  
 %				dissonanceDegree:2
-			 comment:'minor with minor seventh')
+			 comment:'minor 7th')
 
 		   
 		   %%
@@ -212,6 +222,9 @@ define
 		   scale(pitchClasses:['C' 'D' 'Eb' 'F' 'G' 'Ab' 'Bb']
 			 roots:['C']
 			 comment:'natural minor')
+		   scale(pitchClasses:['C' 'D' 'Eb' 'F' 'G' 'Ab' 'B']
+			 roots:['C']
+			 comment:'harmonic minor')
 
 		   %% !!
 		   %% Similar scales in Scale, e.g., "soft diatonic dorian"
