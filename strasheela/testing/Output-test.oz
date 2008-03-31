@@ -809,6 +809,7 @@ Proc = {New Open.pipe
   unit}}
 */
 
+
 {Out.toLilypond
  {Score.makeScore
   note(duration: 1
@@ -816,7 +817,7 @@ Proc = {New Open.pipe
        timeUnit:beats(4)
        pitch: 60)
   unit}
- nil}
+ unit}
 
 %% note with dur = 0
 {Out.toLilypond
@@ -826,7 +827,7 @@ Proc = {New Open.pipe
        timeUnit:beats(4)
        pitch: 60)
   unit}
- nil}
+ unit}
 
 %% container with note of dur = 0
 {Out.toLilypond
@@ -840,7 +841,7 @@ Proc = {New Open.pipe
 		  timeUnit:beats(4)
 		  pitch: 60)])
   unit}
- nil}
+ unit}
 
 %% container with all notes of dur = 0
 {Out.toLilypond
@@ -854,7 +855,7 @@ Proc = {New Open.pipe
 		  timeUnit:beats(4)
 		  pitch: 60)])
   unit}
- nil}
+ unit}
 
 
 {Out.toLilypond
@@ -863,7 +864,7 @@ Proc = {New Open.pipe
        timeUnit:beats(4)
        pitch: 47)
   unit}
- nil}
+ unit}
 
 
 {Out.toLilypond
@@ -876,7 +877,7 @@ Proc = {New Open.pipe
 		   pitch: 73)]
      timeUnit:beats(4))
   unit}
- nil}
+ unit}
 
 {VirtualString.toString
  {Out.toLilypond
@@ -889,7 +890,7 @@ Proc = {New Open.pipe
 		    pitch: 73)]
      timeUnit:beats(4))
    unit}
- nil}}
+ unit}}
 
 {VirtualString.toString
  {Out.toLilypond
@@ -930,8 +931,8 @@ Proc = {New Open.pipe
 				 pitch: 63)])]
             timeUnit:beats(4))
     unit}
-   nil}
- "/home/to/tmp/test.ly"}
+   unit}
+ "/Users/t/tmp/test.ly"}
 
 %%%%%%%%
 
@@ -968,7 +969,7 @@ Proc = {New Open.pipe
 	timeUnit:beats(4)
 	pitch: 75)
    unit}
-  nil}
+  unit}
  "/home/to/tmp/test.ly"}
 
 {Out.outputLilypond
@@ -1059,7 +1060,7 @@ Proc = {New Open.pipe
       offsetTime:0
       timeUnit:beats(4))
   unit}
- nil}
+ unit}
 
 
 {Out.renderAndShowLilypond
@@ -1150,7 +1151,7 @@ MyScore = {Score.makeScore
 			       pitch: 50)])]
        timeUnit:milliseconds)
    unit}
-  nil}
+  unit}
  "/home/t/tmp/test2.ly"}
 
 {Out.writeToFile
@@ -1183,7 +1184,7 @@ MyScore = {Score.makeScore
 					   pitch: 67)])])]
        timeUnit:milliseconds)
    unit}
-  nil}}
+  unit}}
  "/home/t/tmp/test2.ly"}
 
 
