@@ -1804,14 +1804,12 @@ define
 	    RelatedScaleBs	% list of 0/1-int 
 	    = {Self getRelatedScaleBs($)}
 	    = {Map Scales     
-	       fun {$ Scale}
-		  {Args.isRelatedScale Self Scale}
-	       end}
+	       fun {$ Scale} {Args.isRelatedScale Self Scale} end}
 	    NotePC = {Self getPitchClass($)} % FD int 
 	    InScaleB = {Self getInScaleB($)} = {FD.int 0#1} % 0/1-int
 	    ExistingNoteB = {CTT.isExisting Self} % 0/1-int
 	 in
-	    %% constraints only applied unless Chords==nil (the default!)
+	    %% constraints only applied unless Scales==nil (the default!)
 	    if {Not (Scales==nil)}
 	       %% see comment for constraints for chord in InChordMixinForNote InitConstrain
 	    then 1 = {FD.sum RelatedScaleBs '=:'}
