@@ -170,6 +170,7 @@ export
    ScaleDegreeChord 
    InversionMixinForChord IsInversionMixinForChord
    MakeInversionChordClass InversionChord
+   FullChord
    
    ChordStartMixin % MkChordsStartWithItems MkChordsStartWithItems2
    StartChordWithMarker
@@ -1436,6 +1437,9 @@ define
    /** %% Class inheriting from Chord and InversionMixinForChord
    %% */
    InversionChord = {MakeInversionChordClass Chord}
+   /** %% Class inheriting from ScaleDegreeChord and InversionMixinForChord
+   %% */
+   FullChord = {MakeInversionChordClass ScaleDegreeChord}
 
    
    %% this mixin only adds single param, an 0/1-int -- use makeClass
@@ -2422,7 +2426,7 @@ define
       
 
       
-      /** %% Expects a list of inversion chord objects in textual form (records), and returns a homophonic score object with notes expressing these chords (chord labels are either chord or inversionChord). The notes are constrained to express all chord pitch classes, but chords can contain more notes than chord pitch classes. The CSP defined by ChordsToScore is intentionally relatively simple, as it is intended for listening to isolated chord progressions only (e.g., Bruckner's role of the "shortest path" between notes in a voice is not implemented).
+      /** %% Expects a list of chord objects in textual form (init records for FullChord), and returns a homophonic score object with notes expressing these chords. The notes are constrained to express all chord pitch classes, but chords can contain more notes than chord pitch classes. The CSP defined by ChordsToScore is intentionally relatively simple, as it is intended for listening to isolated chord progressions only (e.g., Bruckner's role of the "shortest path" between notes in a voice is not implemented).
       %% ChordSpecs must be fully determined, but chord attributes can be missing (e.g., the chord root is either determined or missing). 
       %% The created score topology has the following form: sim([seq([note note ...]) seq( note...) ... seq(chord chord ...)])
       %% The function defines the following optional Args. voices: the number of homophonic voices, pitchDomain: the pitch domain for all notes (depends on PitchesPerOctave). amp: the amplitude of all notes. value: the score distribution value selection strategy. ignoreSopranoChordDegree: if false, the sopranoChordDegrees of the input chords affect the output notes. minIntervalToBass: smallest interval allowed between bass and next lowest pitch. These are the default values
@@ -2456,10 +2460,8 @@ define
       %% NB: the returned chord object is not fully initialised! 
       %% */
       fun {MakeChord C}
-	 {Score.makeScore2 C
-	  %% label can be either chord or inversionChord
-	  unit(chord:InversionChord
-	       inversionChord:InversionChord)}
+%	 {Score.makeScore2 {Adjoin C chord} unit(chord:FullChord)}
+	 {Score.makeScore2 {Adjoin C chord} unit(chord:InversionChord)}
       end
       /** %% Expects D (a FD int) and returns a singleton FS which contains only D.
       %% */
