@@ -48,11 +48,10 @@ define
 
    end
 
-
-   proc {ToScore Pitches ?ScoreInstance}
+   proc {ToScore Pitches Lily ?ScoreInstance}
       {Score.makeScore
-       seq(
-	  items:
+       seq(info:[lily(" "#Lily)]
+           items:
 	     {Map
 {LUtils.butLast Pitches}
 fun {$ Pitch}
@@ -72,14 +71,14 @@ fun {$ Pitch}
 
    /* %% doubles the number of pitches, and outputs a Score
    * object. */
-   proc {ToScoreDouble Pitches ?ScoreInstance}
+   proc {ToScoreDouble Pitches Lily ?ScoreInstance}
       %% play games to avoid duplicating the "extra note"
       DoubledPitches = {Append {Append
 {LUtils.butLast Pitches}
 {LUtils.butLast Pitches}
 		      } [{Nth Pitches 1}]}
    in
-      ScoreInstance = {ToScore DoubledPitches}
+      ScoreInstance = {ToScore DoubledPitches Lily}
    end
 
 
@@ -91,7 +90,7 @@ fun {$ Pitch}
       {Out.outputLilypond
        MyScore
        unit(file:Filename
-	    wrapper:"\\score{"#(" \\layout{}\n \\midi{}\n}\n"#"")
+	    wrapper:"\\score{\n {"#(" }\n \\layout{}\n \\midi{}\n}\n"#"")
 	    unit)}
       C:=@C+1
    end
