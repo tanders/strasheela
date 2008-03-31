@@ -16,14 +16,19 @@ export
    
 define
    
-   /** %% [Convenience def only] Expects C (a chord declaration of an inversion chord, labels are either chord or inversionChord) and returns a chord object.
+   /** %% [Convenience def only] Expects C (declaration of a chord, a record with the label chord) and returns a chord object (instance of HS.score.fullChord). 
    %% NB: the returned chord object is not fully initialised! 
    %% */
    fun {MakeChord C}
-      {Score.makeScore2 C
+      Defaults = chord(%% just to remove symmetries 
+		       sopranoChordDegree:1
+		      )
+      ChordSpec = {Adjoin {Adjoin Defaults C} chord}
+   in
+      {Score.makeScore2 ChordSpec
        %% label can be either chord or inversionChord
-       unit(chord:HS.score.inversionChord
-	    inversionChord:HS.score.inversionChord)}
+       unit(chord:HS.score.inversionChord)
+      }
    end
 
    /** %% [Convenience def only] HS.score.chordsToScore with different Args defaults.
