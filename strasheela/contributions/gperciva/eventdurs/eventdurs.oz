@@ -6,7 +6,7 @@ import
    LUtils at 'x-ozlib://anders/strasheela/source/ListUtils.ozf'
    Score at 'x-ozlib://anders/strasheela/source/ScoreCore.ozf'
    %% for debug
-   %Browser
+   Browser
 
    %% for WriteLilyFile; this might be moved to a different module
 %   System
@@ -101,27 +101,49 @@ define
       end
    end
 
+   %Triplet = {NewCell 0}
    /* %% Combines the Events and Durations and produces a Score object. */
    proc {ToScore EventsDurs BeatDivisions ?ScoreInstance}
       Notes = {GetNotes EventsDurs.1 EventsDurs.2}
    in
+      /*
+      if ({Int.'mod' BeatDivisions 3} == 0) then
+	 BasicBeats = {Int.'div' (2*BeatDivisions) 3}
+      else
+	 BasicBeats = BeatDivisions
+      end
+      */
       {Score.makeScore
-	   seq(info:[lily(" \\new RhythmicStaff")
-		     staff]
+       seq(info:[lily(" \\new RhythmicStaff")
+		 staff]
 	   items:(
 		  {Map Notes fun {$ Note}
-				if (Note>0) then
+				if (Note<0) then
+				   pause(duration:{Number.abs Note})
+				else
+%if ({Int.'mod' Note 3} == 0) then
 				   note(duration:Note
 					pitch:60
 					amplitude:64)
+				   /*
 				else
-				   pause(duration:{Number.abs Note})
+				   if (@Triplet == 0) then
+				      Triplet =: @Triplet+1
+				      seq(info:tuplet(3 2) items:[
+								  note(duration:{Int.'div' 3*Note 2}
+								       pitch:60
+								       amplitude:64) ] )
+				   end
 				end
-			     end})
+%zz
+				*/
+			     end
+		  end})
 	   startTime:0
 	   timeUnit:beats(BeatDivisions))
        unit ScoreInstance}
       {ScoreInstance wait}
+%{Browser.browse ScoreInstance}
    end
 
    /* %% Combines the Events and Durations and produces a Score
@@ -139,6 +161,16 @@ define
    end
 
 
+   OutClauses = [ fun {$ X}
+		     {X isSequential($)} andthen {X hasThisInfo($ tuplet)}
+		  end#fun {$ Seq}
+			 case {Seq getInfoRecord($ tuplet)}
+			 of tuplet(X Y) then 
+			    "\\times "#X#"/"#Y#" "#{Out.seqToLily Seq OutClauses}
+			 end
+		      end
+		]
+
    C={NewCell 1}
    /* %% outputs a Score to a file.*/
    proc {WriteLilyFile BaseFilename MyScore}
@@ -146,7 +178,9 @@ define
    in
       {Out.outputLilypond
        MyScore
-       unit(file:Filename unit)}
+       unit(file:Filename clauses:OutClauses
+	    wrapper:"\\score{"#(" \\layout{}\n \\midi{}\n}\n"#"")
+	    unit)}
       C:=@C+1
    end
 
