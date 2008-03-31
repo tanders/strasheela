@@ -32,7 +32,7 @@ export
    MatTrans NthWrapped
    EveryNth % OddPositions EvenPositions
    Replace
-   ButLast
+   ButLast LastN
    ArithmeticSeries ReciprocalArithmeticSeries
    %ArithmeticSeries GeometricSeries
    ExtendableList IsExtendableList
@@ -390,6 +390,12 @@ define
    fun {ButLast Xs}
       {List.take Xs {Length Xs}-1}
    end
+
+   /** %% Returns the last N elements of Xs (quasi the opposite of List.take).
+   %% */
+   fun {LastN Xs N} {Reverse {List.take {Reverse Xs} N}} end
+   
+   
 
    
    /** %% Returns an arithmetic series with N elements, starting from start and with difference Difference between the elements.
