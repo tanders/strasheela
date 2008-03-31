@@ -407,9 +407,15 @@ clearInterval(drawit)
 
 <code>
 <a name="entity469">
-<span class="keyword">fun</span>{<span class="functionname">ToLilypond</span> MyScore FurtherClauses}<br>
+<span class="keyword">fun</span>{<span class="functionname">ToLilypond</span> MyScore Args}<br>
 <span class="string"> Transforms a score object into a Lilypond score virtual string. The score layout is hardwired: the Items in the outmost Simultaneous container are put in their own staff. [currently, if outmost Simultaneous containers are contained in surround Sequentials, new staffs will be draw for each Item contained in each Simultaneous.]<BR>
- The argument FurtherClauses allows for specifying what Lilypond shows for specific score objects. FurtherClauses expects a list of the form [TypeCheck1#ProcessingFun1 ...].  TypeCheckN is a boolean function or method (e.g. isNote) and ProcessingFunN is a function which expects score objects for which TypeCheckN returns true as argument. ProcessingFunN returns a Lilypond VS. For example, the user may define a subclass of Score.note with an additional articulation attribute (e.g. values may be staccato, tenuto etc.) and the user then defines a clause which causes Lilypond to show the articulation by its common sign in the sheetmusic score.<BR>
+ ToLilypond expects two optional arguments. The argument clauses for specifying what Lilypond shows for specific score objects. FurtherClauses expects a list of the form [TypeCheck1#ProcessingFun1 ...].  TypeCheckN is a boolean function or method (e.g. isNote) and ProcessingFunN is a function which expects score objects for which TypeCheckN returns true as argument. ProcessingFunN returns a Lilypond VS. For example, the user may define a subclass of Score.note with an additional articulation attribute (e.g. values may be staccato, tenuto etc.) and the user then defines a clause which causes Lilypond to show the articulation by its common sign in the sheetmusic score.<BR>
+ The argument wrapper expects a list of two VSs with legal Lilypond code. These VSs are inserted at the beginning and the end respecitively of the score. Note that the Lilypond version statement is hardwired -- you should not add a version statement to your header. The argument defaults are shown below. <BR>
+   <BR>
+   unit(clauses:nil<BR>
+	wrapper:["\\paper {}\n\n{\n" %% empty paper def<BR>
+		 "\n}"])<BR>
+<BR>
  Arbitrary Lilypond code can be added to container and note objects via a tuple with the label 'lily' given to the info attribute of the score object. This tuple must only contain VSs which are legal Lilypond code. For containers, this lilypond code is always inserted in the Lilypond output before the container, for notes it is inserted after the note. <BR>
 <BR>
 </span>
@@ -417,12 +423,13 @@ clearInterval(drawit)
 
 <code>
 <a name="entity470">
-<span class="keyword">proc</span>{<span class="functionname">OutputLilypond</span> MyScore Spec}<br>
-<span class="string"> Transforms MyScore into a Lilypond score. See the documentation of ToLilypond for an explanation of the argument clauses in Spec. <BR>
-   The defaults of Spec are<BR>
+<span class="keyword">proc</span>{<span class="functionname">OutputLilypond</span> MyScore Args}<br>
+<span class="string"> Transforms MyScore into a Lilypond score and writes it to a file. The defaults values for the optional arguments are shown below. See the documentation of ToLilypond for an explanation of additional arguments.<BR>
+   <BR>
    unit(dir: {Init.getStrasheelaEnv defaultLilypondDir}<BR>
 	file: "test" % !! file name without extention<BR>
-	clauses:nil)<BR>
+       )<BR>
+					  <BR>
 <BR>
 </span>
 </code><br>
