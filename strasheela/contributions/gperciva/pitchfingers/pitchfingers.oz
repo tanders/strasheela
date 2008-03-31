@@ -3,27 +3,30 @@
 functor
 import
    FD
-%   LUtils at 'x-ozlib://anders/strasheela/source/ListUtils.ozf'
+   LUtils at 'x-ozlib://anders/strasheela/source/ListUtils.ozf'
    Pattern at 'x-ozlib://anders/strasheela/Pattern/Pattern.ozf'
    Score at 'x-ozlib://anders/strasheela/source/ScoreCore.ozf'
-   %% for debug
-   %Browser
-
-   %% for WriteLilyFile; this might be moved to a different module
-%   System
    Out at 'x-ozlib://anders/strasheela/source/Output.ozf'
+
+   Browser(browse:Browse) % temp for debugging
 export
    setup: Setup
    toScore: ToScore
+   toScoreDouble: ToScoreDouble
    writeLilyFile: WriteLilyFile
 
 define
    proc {Setup NumNotes Pitches Strings Positions Fingers}
       %% setup lists
-      Pitches = {FD.list NumNotes 0#127}
-      Strings = {FD.list NumNotes 1#4}
-      Positions = {FD.list NumNotes 1#8}
-      Fingers = {FD.list NumNotes 0#8}
+      Pitches = {FD.list NumNotes+1 0#127}
+      Strings = {FD.list NumNotes+1 1#4}
+      Positions = {FD.list NumNotes+1 1#8}
+      Fingers = {FD.list NumNotes+1 0#8}
+
+      {Nth Pitches NumNotes+1} =: {Nth Pitches 1}
+      {Nth Strings NumNotes+1} =: {Nth Strings 1}
+      {Nth Positions NumNotes+1} =: {Nth Positions 1}
+      {Nth Fingers NumNotes+1} =: {Nth Fingers 1}
 
       %% definition of pitches on a violin
       for X in 1..NumNotes do
@@ -33,7 +36,6 @@ define
 	 Finger = {Nth Fingers X}
       in
 	 Pitch =: 81 - (7*String) + Position + Finger
-
       end
 
       %% cannot repeat notes -- required for analysis
@@ -51,7 +53,9 @@ define
       {Score.makeScore
        seq(
 	  items:
-	     {Map Pitches fun {$ Pitch}
+	     {Map
+{LUtils.butLast Pitches}
+fun {$ Pitch}
 			     if (Pitch>0) then
 				note(duration:4
 				     pitch:Pitch
@@ -64,6 +68,18 @@ define
 	  timeUnit:beats(4))
        unit ScoreInstance}
       {ScoreInstance wait}
+   end
+
+   /* %% doubles the number of pitches, and outputs a Score
+   * object. */
+   proc {ToScoreDouble Pitches ?ScoreInstance}
+      %% play games to avoid duplicating the "extra note"
+      DoubledPitches = {Append {Append
+{LUtils.butLast Pitches}
+{LUtils.butLast Pitches}
+		      } [{Nth Pitches 1}]}
+   in
+      ScoreInstance = {ToScore DoubledPitches}
    end
 
 

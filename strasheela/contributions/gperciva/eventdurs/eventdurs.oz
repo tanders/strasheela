@@ -5,12 +5,9 @@ import
    FD
    LUtils at 'x-ozlib://anders/strasheela/source/ListUtils.ozf'
    Score at 'x-ozlib://anders/strasheela/source/ScoreCore.ozf'
-   %% for debug
-   Browser
-
-   %% for WriteLilyFile; this might be moved to a different module
-%   System
    Out at 'x-ozlib://anders/strasheela/source/Output.ozf'
+
+   Browser(browse:Browse) % temp for debugging
 export
    setup: Setup
    toScore: ToScore
@@ -25,24 +22,20 @@ define
       %% setup lists, add fake note at end
       Durations = {FD.list NumEvents 0#NumEvents}
       Events = {FD.list NumEvents+1 0#2}
-      %% tmp comment
+      %% "courtesy one" to simply Duration defintions
       {Nth Events NumEvents+1} =: 1
-
       %% first onset can't be "continue note"
       {Nth Events 1} \=: 0
 
       for X in 1..NumEvents do
-
 	 %% setup maxmium durations
 	 {Nth Durations X} =<: NumEvents+1-X
-
 
 	 %% align rests
 	 {FD.equi
 	  ({Nth Durations X} =: 0)
 	  ({Nth Events X} =: 0)
 	  1}
-
 
 	 %% align 1 dur
 	 {FD.equi
@@ -52,7 +45,6 @@ define
 	   ({Nth Events X+1} >: 0)
 	  }
 	  1}
-
 
 	 %% align 2+ dur
 	 for D in 2..NumEvents do
@@ -73,7 +65,6 @@ define
 	    end
 	 end
       end
-      
    end
 
    %% internal for ToScore
@@ -101,6 +92,7 @@ define
       end
    end
 
+   %% FIXME: add support for triplets
    %Triplet = {NewCell 0}
    /* %% Combines the Events and Durations and produces a Score object. */
    proc {ToScore EventsDurs BeatDivisions ?ScoreInstance}
@@ -152,8 +144,8 @@ define
    proc {ToScoreDouble EventDurs BeatDivisions ?ScoreInstance}
       %% play games to avoid duplicating the "extra 1"
       Events = {Append {Append
-			{List.take EventDurs.1 {Length EventDurs.1}-1}
-			{List.take EventDurs.1 {Length EventDurs.1}-1}
+{LUtils.butLast EventDurs.1}
+{LUtils.butLast EventDurs.1}
 		       } [1]}
       Durs = {Append EventDurs.2 EventDurs.2}
    in
@@ -161,14 +153,14 @@ define
    end
 
 
-   OutClauses = [ fun {$ X}
-		     {X isSequential($)} andthen {X hasThisInfo($ tuplet)}
-		  end#fun {$ Seq}
-			 case {Seq getInfoRecord($ tuplet)}
-			 of tuplet(X Y) then 
-			    "\\times "#X#"/"#Y#" "#{Out.seqToLily Seq OutClauses}
-			 end
-		      end
+   OutClauses = [fun {$ X}
+		    {X isSequential($)} andthen {X hasThisInfo($ tuplet)}
+		 end#fun {$ Seq}
+			case {Seq getInfoRecord($ tuplet)}
+			of tuplet(X Y) then 
+			   "\\times "#X#"/"#Y#" "#{Out.seqToLily Seq OutClauses}
+			end
+		     end
 		]
 
    C={NewCell 1}
