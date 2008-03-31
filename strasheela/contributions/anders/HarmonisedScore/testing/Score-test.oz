@@ -645,7 +645,7 @@ MyNote = {Score.makeScore note(duration:1
 			      )
 	   add(note:HS.score.note)}
 
-{MyNote toFullRecord($)}
+{Browse {MyNote toFullRecord($)}}
 
 %% test 2
 %%
@@ -694,7 +694,9 @@ MyScore = {Score.makeScore2
 {Score.initScore MyScore}
 {Browse ok}
 
-{MyScore toFullRecord($)}
+{Browse {MyScore toFullRecord($)}}
+
+{Browse {MyScore toInitRecord($)}}
 
 % {MyNote getPitch($)} = 62
 
