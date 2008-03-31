@@ -12,6 +12,9 @@
 %%
 %% 'reversed': an chord which exactly reverses some chord (e.g., the utonal equivalent of some otonal chord). A better term might be 'inversed', but that is already used differently..
 %%
+%% 
+%% Please visit the source as ../source/DB.oz to read the actual databases.
+%%
 %% */
 
 functor 
