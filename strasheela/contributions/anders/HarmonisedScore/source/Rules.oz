@@ -122,6 +122,9 @@ export
    CommonPCs CommonPCs_Card CommonPCsR NeighboursWithCommonPCs 
    ParameterDistance ParameterDistanceR LimitParameterDistanceOfNeighbours
 
+   Cadence
+   DiatonicChord NoteInPCCollection
+
    %% melodic rules
    IsStep IsStepR
    ResolveStepwiseR
@@ -300,6 +303,27 @@ define
        end}
    end
 
+
+   /** %% Constraints the union of the pitch classes of Chords (a list of chord objects) to be the same set as the set of pitch classes of MyScale (a scale object). In other words, all chords only use scale tones (diatonic chords) and all scale tones are played.  Also, the root of the last chord is constrained to the root of the scale.
+   %% In common usage, Chords has length three and is applied to the last three chords of a progression. 
+   %% */
+   proc {Cadence MyScale Chords}
+      {MyScale getPitchClasses($)} = {FS.unionN
+				      {Map Chords fun {$ C} {C getPitchClasses($)} end}}
+      {MyScale getRoot($)} = {{List.last Chords} getRoot($)}
+   end
+   /** %% All pitch classes of MyChord are in MyScale (scale must of course not diatonic, procedure name uses the phrase "diatonic to" as a synonym for "belonging to"). 
+   %% */
+   proc {DiatonicChord MyChord MyScale}
+      {FS.subset {MyChord getPitchClasses($)} {MyScale getPitchClasses($)}}
+   end
+   /** %% The pitch class of MyNote is in MyPCCollection (a chord or a scale).
+   %% */
+   proc {NoteInPCCollection MyNote MyPCCollection}
+      {FS.include {MyNote getPitchClass($)} {MyPCCollection getPitchClasses($)}}
+   end
+   
+   
    
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%
