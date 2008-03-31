@@ -3,6 +3,21 @@
 ; #author Torsten Anders
 
 
+* Changes in Version 0.9.4 (no date yet)
+
+  - Additions
+    - Functor ET22
+
+  - Documentation
+
+
+  - Fixes
+    - GUtils.randIntoRange never selected upper random limit (and so random value ordering never selected upper domain boundary)
+    - Lilypond output procedures/functions support an additional optional argument 'wrapper' for inserting arbitrary Lilypond code at the beginning and end of the Lilypond output file
+    - The pitch parameter method getValueInMidi now supports any equal temperament pitch unit which fits the pattern et<Digit>+, e.g., et31 or et53  
+
+
+
 * Changes in Version 0.9.3 (30 March 2008)
 
   - Code additions
