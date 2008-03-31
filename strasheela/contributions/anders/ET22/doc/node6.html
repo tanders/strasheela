@@ -1,0 +1,185 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<html>
+ <head>
+  <title>ET22</title>
+  <style>BODY {
+ background: url(page.gif) repeat-y white;
+}
+#slidemenubar, #slidemenubar2{
+ position:absolute;
+ left:-144px;
+ width:160px;
+ top:10px;
+ border:0px solid black;
+ font:bold 12px Verdana;
+ line-height:10px;
+}
+.margin {
+ position: absolute;
+ left: 10px;
+ width: 130px;
+}
+BODY, P, H1, H2, H3, A {
+ font-family: sans-serif;
+}
+PRE, CODE {
+ font-family: courier, monospace;
+}
+P {
+ text-align: justify;
+}
+H1     { color: #9B0000; }
+H2     { color: #FF9933; }
+H3, H4 { color: #881155; }
+CODE              { color: #663366; }
+.code CODE        { color: #000000; }
+SPAN.comment      { color: #B22222; }
+SPAN.keyword      { color: #A020F0; }
+SPAN.string       { color: #BC8F8F; }
+SPAN.functionname { color: #0000FF; }
+SPAN.type         { color: #228B22; }
+SPAN.variablename { color: #B8860B; }
+SPAN.reference    { color: #5F9EA0; }
+SPAN.builtin      { color: #DA70D6; }
+A:link {
+ color: #666666;
+}
+A:visited {
+ color: black;
+}
+A.pre { font-family: courier, monospace;
+ color: #228B22;
+}
+</style>
+ </head>
+<body>
+<script language="JavaScript1.2">
+if (document.all)
+document.write('<div id="slidemenubar2" style="left:-144" onMouseover="pull()" onMouseout="draw()">')
+</script>
+<layer id="slidemenubar" onMouseover="pull()" onMouseout="draw()">
+<table border="0" cellpadding="0" cellspacing="0" width="161"><tr><td bgcolor="#009cff" width="144"><a href="index.html">Index</a>
+</td><td rowspan="7" valign="top" width="16"><img src="menu.gif" width="16"></td></tr><tr><td bgcolor="#009cff" width="144"><a href="node1.html">ET22</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node2.html">DB</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node3.html">Out</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node4.html">C</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node5.html">Score</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node6.html">ET22</a>
+</td></tr></table></layer>
+<script language="JavaScript1.2">
+function regenerate(){
+window.location.reload()
+}
+function regenerate2(){
+if (document.layers)
+setTimeout("window.onresize=regenerate",400)
+}
+window.onload=regenerate2
+if (document.all){
+document.write('</div>')
+themenu=document.all.slidemenubar2.style
+rightboundary=0
+leftboundary=-144
+}
+else{
+themenu=document.layers.slidemenubar
+rightboundary=144
+leftboundary=0
+}
+function pull(){
+if (window.drawit)
+clearInterval(drawit)
+pullit=setInterval("pullengine()",20)
+}
+function draw(){
+clearInterval(pullit)
+drawit=setInterval("drawengine()",50)
+}
+function pullengine(){
+if (document.all&&themenu.pixelLeft<rightboundary)
+themenu.pixelLeft+=5
+else if(document.layers&&themenu.left<rightboundary)
+themenu.left+=5
+else if (window.pullit)
+clearInterval(pullit)
+}
+function drawengine(){
+if (document.all&&themenu.pixelLeft>leftboundary)
+themenu.pixelLeft-=5
+else if(document.layers&&themenu.left>leftboundary)
+themenu.left-=5
+else if (window.drawit)
+clearInterval(drawit)
+}
+</script>
+
+<div style="margin-left:160px"><span class="string">
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> Top-level functor for 22 ET and related tunings with 22 pitches per octave (e.g., Paul Erlich's Pajara). <BR>
+<BR>
+</span>
+</span>
+<h3>Functor</h3>
+<ul>ET22 ("<span class="string">/Users/t/oz/music/Strasheela/strasheela/trunk/strasheela/contributions/anders/ET22/ET22.oz</span>")<br></ul>
+<h3>Import</h3>
+<code><ul><li>HS at "<span class="string">x-ozlib://anders/strasheela/HarmonisedScore/HarmonisedScore.ozf"
+</span></li><li><a href="node2.html">DB</a> at "<span class="string">source/DB.ozf"
+</span></li><li><a href="node3.html">Out</a> at "<span class="string">source/Output.ozf"
+</span></li><li><a href="node4.html">C</a> at "<span class="string">source/Convenience.ozf"
+</span></li><li><a href="node5.html">Score</a> at "<span class="string">source/Score.ozf"
+</span></li></ul></code>
+<h3>Export</h3>
+<code><ul><li>db:<span class="variablename">DB</span>
+</li><li><span class="variablename">Out</span>
+</li><li><span class="variablename">C</span>
+</li><li><span class="variablename">Score</span>
+</li><li>&lt;P/2:<a href="#entity68"><span class="functionname">Acc</span></a>&gt;
+</li><li>pc:&lt;P/2:<a href="#entity69"><span class="functionname">PC</span></a>&gt;
+</li><li>pcName:&lt;P/2:<a href="#entity70"><span class="functionname">PCName</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity71"><span class="functionname">Pitch</span></a>&gt;
+</li></ul></code>
+<h3>Define</h3>
+
+<code>
+<a name="entity68">
+<span class="keyword">fun</span>{<span class="functionname">Acc</span> SymAcc}<br>
+<span class="string"> Transforms symbolic accidental (atom) into the corresponding accidental integer. The following symbolic accidentals are supported: '' is natural (!), '/' is a comma sharp, '\\' is a comma flat (two slash because of an escape character), '#\\' is a semitone minus a comma sharp, 'b/' is a semitone minus a comma flat, '#' is a semitone sharp and 'b' is a semitone flat. <BR>
+ Note: Returned value depends on {HS.db.getAccidentalOffset}.<BR>
+ This accidental notation stems from the Scala software, see the scale documentation in hexample.html, or set HELP SET NOTATION.<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity69">
+<span class="keyword">fun</span>{<span class="functionname">PC</span> SymPC}<br>
+<span class="string"> Tranforms a conventional symbolic note names to the corresponding 31 ET pitch class. Notation of the symbolic note names: 'C' is c natural, 'C/' is c 'comma sharp',  'C#\\' is c sharp flattened by a comma, 'C#' is c sharp, 'C//' is c comma flat, 'Cb\' is c flat raised by a comma, 'Cb' is c flat.<BR>
+ NB: the following pitch class names are undefined (otherwise, the meaning of octave would become inconsistent): any flattened C and any raised B.  <BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity70">
+<span class="keyword">fun</span>{<span class="functionname">PCName</span> MyPC}<br>
+<span class="string"> Expects a PC (an int) and returns a list of the corresponding symbolic note names (a list of atom). Complements function PC.<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity71">
+<span class="keyword">fun</span>{<span class="functionname">Pitch</span> SymPC#Octave}<br>
+<span class="string"> Transforms a symbolic pair SymPC#Octave into the corresponding pitch (an int). SymPC is a pitch class symbol (an atom) as expected by the function PC, octave is an integer. The returned value depends on PitchesPerOctave.<BR>
+<BR>
+</span>
+</code><br>
+<h3>End</h3>
+</div></body>
+</html>
