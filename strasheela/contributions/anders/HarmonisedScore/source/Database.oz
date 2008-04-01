@@ -281,10 +281,12 @@ define
       proc {SetChordDB NewChordDB}
 	 %% there is at least one chord in NewChordDB (more checking
 	 %% within EditToInteral)
-	 if {IsTuple NewChordDB} andthen {HasFeature NewChordDB 1}
-	 then
+	 if {IsTuple NewChordDB} andthen {HasFeature NewChordDB 1} then
 	    EditChordDB := NewChordDB
 	    InternalChordDB := {EditToInteral NewChordDB}
+	 elseif NewChordDB == unit orelse NewChordDB == nil then
+	    EditChordDB := unit
+	    InternalChordDB := unit
 	 else raise malformedChordDB(NewChordDB) end
 	 end 
       end
@@ -294,10 +296,12 @@ define
       proc {SetScaleDB NewScaleDB}
 	 %% there is at least one scale in NewScaleDB (more checking
 	 %% within EditToInteral)
-	 if {IsTuple NewScaleDB} andthen {HasFeature NewScaleDB 1}
-	 then
+	 if {IsTuple NewScaleDB} andthen {HasFeature NewScaleDB 1} then
 	    EditScaleDB := NewScaleDB
 	    InternalScaleDB := {EditToInteral NewScaleDB}
+	 elseif NewScaleDB == unit orelse NewScaleDB == nil then
+	    EditScaleDB := unit
+	    InternalScaleDB := unit
 	 else raise malformedScaleDB(NewScaleDB) end
 	 end 
       end
@@ -305,10 +309,12 @@ define
       proc {SetIntervalDB NewIntervalDB}
 	 %% there is at least one interval in NewIntervalDB (more checking
 	 %% within EditToInteral)
-	 if {IsTuple NewIntervalDB} andthen {HasFeature NewIntervalDB 1}
-	 then
+	 if {IsTuple NewIntervalDB} andthen {HasFeature NewIntervalDB 1} then
 	    EditIntervalDB := NewIntervalDB
 	    InternalIntervalDB := {EditToInteral NewIntervalDB}
+	 elseif NewIntervalDB == unit orelse NewIntervalDB == nil then
+	    EditIntervalDB := unit
+	    InternalIntervalDB := unit
 	 else raise malformedIntervalDB(NewIntervalDB) end
 	 end 
       end
