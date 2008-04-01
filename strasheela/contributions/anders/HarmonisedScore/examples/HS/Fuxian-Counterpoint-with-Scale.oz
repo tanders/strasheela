@@ -13,7 +13,12 @@
 
 
 %%
-%% NB: this CSP generalises the first-species Fuxian counterpoint example in strasheela/examples. 
+%% NB: this CSP generalises the first-species Fuxian counterpoint
+%% example in strasheela/examples. It defines a parameterised script
+%% (e.g., the user can specify the cantus firmus, even in different
+%% modes). The rule set has been refined with respect to the more
+%% simple example in strasheela/examples. Also, this example
+%% demonstrates the use of scale objects together with note objects.
 %%
 
 %     This example defines two-voice first species counterpoint as
@@ -54,12 +59,6 @@
 %     - No melodic skips follow each other in same direction.
       
 %     - Skips must be compensated for.
-      
-%     OK - The butlast pitch of the counterpoint must form a cadence where
-%       -- depending on the mode -- the counterpoint is raised by a
-%       semitone. The butlast pitch is always the II degree for the
-%       cantus firmus and the VII degree for the counterpoint. For
-%       example, in dorian mode the butlast counterpoint pitch is always c#.
       
 %     - A tone can only be repeated once at maximum (instead, the
 %       example shown here completely prohibts repetitions).
@@ -113,7 +112,7 @@
 %%
 %% - ?? disallow tritone not only between successive melodic notes, but also between local min and maxima (dir changes or first/last melody notes)  
 %%
-%% - memoize GetInterval
+%% ?? - memoize GetInterval
 %%
 %% OK - use reduced note class: I only need Score.note PitchClassMixin InScaleMixinForNote, ScaleDegreeMixinForNote
 %%
@@ -131,33 +130,34 @@
 
 declare
 
+[ET12] = {ModuleLink ['x-ozlib://anders/strasheela/ET12/ET12.ozf']}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%
 %% Top-level of definition 
 %%
-  
-%% Top-level script
 
-/** %%
-%% Args: cantusFirmus: list of pitches. Note that pitch classes must all be in {0, 2, 4, 5, 7, 9, 11}, that butlast note must be II scale/mode degree (e.g., E if mode is dorian) and last note must be root of mode. 
+/** %% Top-level script. Args: cantusFirmus: list of pitch integers, counterpointDomain: domain spec for the counterpoint note pitches.
+%% Note that pitch classes must all be in {0, 2, 4, 5, 7, 9, 11}, that butlast note must be II scale/mode degree (e.g., E if mode is dorian) and last note must be root of mode. 
 %% */
 proc {Fux_FirstSpecies MyScore Args}
-   Defaults = unit(cantusFirmus: [62 65 64 62 67 65 69 67 65 64 62]
-		   counterpointRange:60#76 % 48#64
-		  )
+   Defaults = unit(cantusFirmus: {Map ['D'#4 'F'#4 'E'#4 'D'#4
+				       'G'#4 'F'#4 'A'#4 'G'#4
+				       'F'#4 'E'#4 'D'#4]
+				  ET12.pitch} 
+		   counterpointDomain:{ET12.pitch 'C'#4}#{ET12.pitch 'E'#5})
    As = {Adjoin Defaults Args}
    %% Fully initialise scale (use Score.makeScore): it is not included in score
    MyScale = {Score.makeScore	
 	      scale(duration:4	% irrelevant
 		    startTime:0 % irrelevant
-		 % index:1
+		    %% index:1
 		    transposition:0)
 	   unit(scale:HS.score.scale)}
-   CantusFirmus = {MakeVoice As.cantusFirmus MyScale}
+   CantusFirmus = {MakeVoice As.cantusFirmus MyScale 'c.f.'}
    Counterpoint = {MakeVoice {FD.list {Length As.cantusFirmus}
-			      As.counterpointRange}
-		   MyScale}
+			      As.counterpointDomain}
+		   MyScale 'cpt.'}
 in
    MyScore = {Score.makeScore sim(info:scale(MyScale)
 				  items: [Counterpoint CantusFirmus]
@@ -166,12 +166,13 @@ in
 	      unit}
    {SetScaleRoot MyScale CantusFirmus}
    {DoCadence Counterpoint}
-%   {OnlyDiatonicPitches Counterpoint}
    {RestrictMelodicIntervals Counterpoint}
    {OnlyConsonances Counterpoint}
    {PreferImperfectConsonances Counterpoint}
    {NoDirectMotionIntoPerfectConsonance Counterpoint}
    {StartAndEndWithPerfectConsonance Counterpoint}
+   {ResoveSkip Counterpoint}
+   {NoChromaticInterval Counterpoint}
 end
 /** %% Only single scale candidate defined for note, so we can make it directly accessible.
 %% */
@@ -179,9 +180,10 @@ fun {GetScale MyNote}
    {MyNote getScales($)}.1
 end
 
-fun {MakeVoice Pitches MyScale}
+fun {MakeVoice Pitches MyScale VoiceName}
    {Score.makeScore2
-    seq(items: {Map Pitches fun {$ Pitch}
+    seq(info:lily("\\set Staff.instrumentName = \""#VoiceName#"\"")
+	items: {Map Pitches fun {$ Pitch}
 			       note(duration: 4
 				    pitch: Pitch
 				    inScaleB:{FD.int 0#1}
@@ -222,6 +224,26 @@ MyScales = scales(1: scale(pitchClasses:[0 2 4 5 7 9 11]
 
 {HS.db.setDB unit(scaleDB:MyScales)}
 
+/*
+
+%% test
+declare
+MyScale = {Score.makeScore	
+	      scale(transposition:0)
+	   unit(scale:HS.score.scale)}
+CantusFirmus = {MakeVoice {Map ['E'#4 'C'#4 'D'#4 'C'#4
+				'A'#3 'A'#4 'G'#4 'E'#4
+				'F'#4 'E'#4]
+			   ET12.pitch}
+		MyScale}
+{Score.initScore CantusFirmus}
+{SetScaleRoot MyScale CantusFirmus}
+
+%% OK, root is 4
+{Browse {MyScale getRoot($)}}
+
+*/
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%
 %% new Rule definitions 
@@ -253,8 +275,10 @@ in
    %% Raise seventh degree for Dorian, Mixolydian or Aeolian.
    %% Mode know at time of problem def, so I can simply use if
    thread
-      if ScaleIndex == 2 orelse ScaleIndex == 5 orelse ScaleIndex == 6
-      then {PenultimateNote getScaleAccidental($)} = {HS.score.absoluteToOffsetAccidental 1}
+      if {Member ScaleIndex {Map ['Dorian' 'Mixolydian' 'Aeolian']
+			     HS.db.getScaleIndex}}
+      then {PenultimateNote getScaleAccidental($)} = {ET12.acc '#'}  
+      else {PenultimateNote getScaleAccidental($)} = {ET12.acc ''} 
       end
    end
    {PenultimateNote getScaleDegree($)} = 7
@@ -296,22 +320,6 @@ in
        {LastNote getPitch($)} {{GetSimNote LastNote} getPitch($)}}
    end
 end   
-
-/*
-%% All pitches in MyScore are constrained to diatonic pitches (here
-%% simply pitches in the C-major scale).
-local 
-   ScalePCs = [0 2 4 5 7 9 11] % list of pitch classes in c-major scale
-   %% pitch classes of MyPitch reduced to scale degrees
-   proc {InScale MyPitch} {FD.modI MyPitch 12} :: ScalePCs end
-in
-   proc {OnlyDiatonicPitches MyScore}
-      %% apply InScale to all single notes in score
-      {MyScore forAll(test:isNote
-		      proc {$ X} {InScale {X getPitch($)}} end)}
-   end
-end
-*/
 
 %% Only certain melodic intervals are allowed and small intervals are preferred.
 local
@@ -386,6 +394,34 @@ proc {NoDirectMotionIntoPerfectConsonance CounterPoint}
 	1}
     end}
 end
+
+
+/** %% When a skip occurs, continue by step in opposite direction.
+%% */ 
+proc {ResoveSkip Counterpoint}
+   {Pattern.forNeighbours {Counterpoint getItems($)} 3
+    proc {$ [N1 N2 N3]}
+       Dir1 = {Pattern.direction
+	       {N1 getPitch($)} {N2 getPitch($)}}
+       Dir2 = {Pattern.direction
+	       {N2 getPitch($)} {N3 getPitch($)}}
+    in
+       {FD.impl {IsSkip N1 N2}
+	{FD.conj (Dir1 \=: Dir2) {FD.nega {IsSkip N2 N3}}}
+	1}
+    end}
+end
+
+/** %% If two successive notes are on the same scale degree, then the share the same accidental.
+%% */
+proc {NoChromaticInterval Counterpoint}
+   {Pattern.for2Neighbours {Counterpoint getItems($)}
+    proc {$ N1 N2}
+       {FD.impl  ({N1 getScaleDegree($)} =: {N2 getScaleDegree($)}) 
+	({N1 getScaleAccidental($)} =: {N2 getScaleAccidental($)})
+	1}    
+    end}
+end
  
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -428,7 +464,17 @@ in
       B = {FS.reified.include Interval PerfectConsonance}
    end
 end
-   
+
+%% B=1 <-> interval between notes N1 and N2 is greater than a mojor second.
+proc {IsSkip N1 N2 B}
+   B = {FD.reified.distance {N1 getPitch($)} {N2 getPitch($)} '>:' 2}
+end
+
+
+%% Sets the tempo for output formats such as MIDI and Csound.
+{Init.setTempo 120.0}
+%{Init.setTempo 100.0}
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%
@@ -436,10 +482,6 @@ end
 %%
 
 /*
-
-%% Sets the tempo for output formats such as MIDI and Csound.
-{Init.setTempo 120.0}
-%{Init.setTempo 100.0}
 
 %% A few different score distribution strategies are
 %% demonstrated. Yet, for this simple example their performance does
@@ -453,69 +495,42 @@ end
 %%
 %% Select a suitable output format in the Explorer menu
 %% Nodes:Information Action
-{SDistro.exploreOne {GUtils.extendedScriptToScript Fux_FirstSpecies
-		     unit}
- unit(order:size
-      value:mid)}
-
-
-{SDistro.exploreOne {GUtils.extendedScriptToScript Fux_FirstSpecies
-		     unit(counterpointRange:48#64)}
- unit(order:size
-      value:mid)}
-
-
-%%
-%% tmp:
-%%
-declare
-MyScore = {SDistro.searchOne {GUtils.extendedScriptToScript Fux_FirstSpecies
-		     unit}
-	   unit(order:size
-		value:mid)}.1
-
-{Out.renderAndShowLilypond MyScore
- unit}
-
-{Browse {MyScore toInitRecord($)}}
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-
-%% Score distribution strategy: (i) left-to-right variable ordering:
-%% select parameters in order of the start times of the events or
-%% temporal containers these parameters belong to. (ii) value
-%% ordering: select middle element (see above).
-{SDistro.exploreOne {GUtils.extendedScriptToScript Fux_FirstSpecies
-		     unit}
- unit(order:startTime
-      value:mid)}
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-%% The next distribution strategy generates a new result at each
-%% solver call.
-
-%% Score distribution strategy: (i) first-fail variable ordering (see
-%% above). (ii) value ordering: select a random domain value.
-%%
-%% NB: Presently, the random value ordering does not allow for
-%% recomputation (recomputation is explained, e.g., in the book
-%% 'Programming Constraint Services', details and a link to the book
-%% are given in the Strasheela documentation).
+{GUtils.setRandomGeneratorSeed 0} % always find different solution..
 {SDistro.exploreOne {GUtils.extendedScriptToScript Fux_FirstSpecies
 		     unit}
  unit(order:size
       value:random)}
 
 
-%% tmp
-{SDistro.iozsefExploreOne {GUtils.extendedScriptToScript Fux_FirstSpecies
-			   unit}
+{GUtils.setRandomGeneratorSeed 0} 
+{SDistro.exploreOne {GUtils.extendedScriptToScript Fux_FirstSpecies
+		     unit(counterpointDomain:{ET12.pitch 'C'#3}#{ET12.pitch 'E'#4})}
  unit(order:size
       value:random)}
+
+
+%% use cantus firmus in a mode where cadence does _not_ require a raised note
+{SDistro.exploreOne {GUtils.extendedScriptToScript Fux_FirstSpecies
+		     unit(cantusFirmus:{Map ['E'#4 'C'#4 'D'#4 'C'#4
+					     'A'#3 'A'#4 'G'#4 'E'#4
+					     'F'#4 'E'#4]
+					ET12.pitch})}
+ unit(order:size
+      value:random)}
+
+
+
+%% use cantus firmus in a non-dorian mode, which nevertheless requires a raised cadence note
+{SDistro.exploreOne {GUtils.extendedScriptToScript Fux_FirstSpecies
+		     unit(cantusFirmus:{Map ['G'#3 'C'#4 'B'#3 'G'#3
+					     'C'#4 'E'#4 'D'#4 'G'#4
+					     'E'#4 'C'#4 'D'#4 'B'#3
+					     'A'#3 'G'#3]
+					ET12.pitch})}
+ unit(order:size
+      value:random)}
+
+
 
 
 */
