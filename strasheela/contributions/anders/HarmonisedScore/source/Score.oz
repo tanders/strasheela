@@ -159,7 +159,7 @@ export
    EnharmonicSpellingMixinForNote IsEnharmonicSpellingMixinForNote
    ScaleDegreeMixinForNote IsScaleDegreeMixinForNote
    ChordDegreeMixinForNote IsChordDegreeMixinForNote
-   Note Note2 FullNote EnharmonicNote ScaleDegreeNote ChordDegreeNote
+   Note Note2 FullNote EnharmonicNote ScaleDegreeNote ChordDegreeNote ScaleNote ChordNote
    
    PitchClassCollection IsPitchClassCollection %% !!?? why export this
    Chord IsChord
@@ -2252,6 +2252,7 @@ define
       end
    end
 
+
    
    /** %% [concrete class] The class FullNote extends the class Note (HS.score.note) by a representation for its scale degree and an enharmonic notation. These extensions are defined by the mixin classes EnharmonicSpellingMixinForNote and ScaleDegreeMixinForNote. See their documentation for details. 
    %% */
@@ -2362,6 +2363,67 @@ define
    end
 
    
+   /** %% [concrete class] Note class extended by scale-related mixins (in contrast to ScaleDegreeNote, it does not inherit from InChordMixinForNote). 
+   %% */
+   class ScaleNote from Score.note PitchClassMixin InScaleMixinForNote ScaleDegreeMixinForNote
+      meth init(octave:Oct<=_ pitchClass:PC<=_
+		...) = M
+	 PitchClassMixinFeats = [octave pitchClass]
+	 InScaleMixinFeats = [inScaleB getScales isRelatedScale]
+	 ScaleDegreeMixinFeats = [scaleDegree scaleAccidental]
+      in
+	 Score.note, {Adjoin {Record.subtractList M
+			      {Append PitchClassMixinFeats
+			       {Append InScaleMixinFeats ScaleDegreeMixinFeats}}}
+		      init(pitchUnit:{DB.getPitchUnit})}
+	 PitchClassMixin, {Adjoin {GUtils.takeFeatures M PitchClassMixinFeats}
+			   initPitchClassMixin}
+	 InScaleMixinForNote, {Adjoin {GUtils.takeFeatures M InScaleMixinFeats}
+			       initInScaleMixinForNote}
+	 ScaleDegreeMixinForNote, {Adjoin {GUtils.takeFeatures M ScaleDegreeMixinFeats}
+				   initScaleDegreeMixinForNote}
+      end
+   
+      meth getInitInfo($ exclude:Excluded)	 
+	 unit(superclass:Score.note
+	      args:[pitchClass#getPitchClass#{DB.makePitchClassFDInt}
+		    octave#getOctave#{DB.makeOctaveFDInt}
+		    inScaleB#getInScaleB#{FD.int 0#1}
+		    scaleDegree#getScaleDegree#{DB.makeScaleDegreeFDInt}
+		    scaleAccidental#getScaleAccidental#{DB.makeAccidentalFDInt}])
+      end
+   end
+
+   /** %% [concrete class] Note class extended by chord-related mixins (in contrast to ChordDegreeNote, it does not inherit from InScaleMixinForNote). 
+   %% */
+   class ChordNote from Score.note PitchClassMixin InChordMixinForNote ChordDegreeMixinForNote
+      meth init(octave:Oct<=_ pitchClass:PC<=_
+		...) = M
+	 PitchClassMixinFeats = [octave pitchClass]
+	 InChordMixinFeats = [inChordB getChords isRelatedChord]
+	 ChordDegreeMixinFeats = [chordDegree chordAccidental]
+      in
+	 Score.note, {Adjoin {Record.subtractList M
+			      {Append PitchClassMixinFeats
+			       {Append InChordMixinFeats ChordDegreeMixinFeats}}}
+		      init(pitchUnit:{DB.getPitchUnit})}
+	 PitchClassMixin, {Adjoin {GUtils.takeFeatures M PitchClassMixinFeats}
+			   initPitchClassMixin}
+	 InChordMixinForNote, {Adjoin {GUtils.takeFeatures M InChordMixinFeats}
+			       initInChordMixinForNote}
+	 ChordDegreeMixinForNote, {Adjoin {GUtils.takeFeatures M ChordDegreeMixinFeats}
+				   initChordDegreeMixinForNote}
+      end
+   
+      meth getInitInfo($ exclude:Excluded)	 
+	 unit(superclass:Score.note
+	      args:[pitchClass#getPitchClass#{DB.makePitchClassFDInt}
+		    octave#getOctave#{DB.makeOctaveFDInt}
+		    inChordB#getInChordB#{FD.int 0#1}
+		    chordDegree#getChordDegree#{DB.makeChordDegreeFDInt}
+		    chordAccidental#getChordAccidental#{DB.makeAccidentalFDInt}])
+      end
+   end
 
    local
       /** %% Expects list of chords and list of those items which are to start with a chord. Each of these items is constrained to start at the same time as the chord at the corresponding position. The number of Chords and the number of Items must be equal.
@@ -2443,69 +2505,69 @@ define
       %% - Chord attributes cannot be undetermined variables -- ChordsToScore blocks in this case (it leads to a script with undetermined variables in the top-level space). 
       %% - ChordsToScore conducts a search and it is possible that no solution can be found. For example, the following cases can lead to no solution: the number of voices is insufficient for expressing all chord tones, the pitchDomain is too small, the number of voices equals the number of chord tones, but the soprano and bass chord degrees are equal so that these voices express the same chord tone and hence one tone is missing etc. 
       %% */
-   %%
-   %% OLD doc snippets:
-   %% engeLage: a boolean specifying whether the interval between simultaneous notes of neighbouring voices must be less than an octave.   
-   fun {ChordsToScore ChordSpecs Args}
-      Defaults = unit(voices:4
-		      pitchDomain:48#72
-		      amp:30
-		      value:mid
-		      ignoreSopranoChordDegree:false
-		      minIntervalToBass:0
+      %%
+      %% OLD doc snippets:
+      %% engeLage: a boolean specifying whether the interval between simultaneous notes of neighbouring voices must be less than an octave.   
+      fun {ChordsToScore ChordSpecs Args}
+	 Defaults = unit(voices:4
+			 pitchDomain:48#72
+			 amp:30
+			 value:mid
+			 ignoreSopranoChordDegree:false
+			 minIntervalToBass:0
 		     % engeLage:false
-		     ) 
-      As = {Adjoin Defaults Args}
-      /** %% Expects C (a chord declaration) and returns a chord object.
-      %% NB: the returned chord object is not fully initialised! 
-      %% */
-      fun {MakeChord C}
+			) 
+	 As = {Adjoin Defaults Args}
+	 /** %% Expects C (a chord declaration) and returns a chord object.
+	 %% NB: the returned chord object is not fully initialised! 
+	 %% */
+	 fun {MakeChord C}
 %	 {Score.makeScore2 {Adjoin C chord} unit(chord:FullChord)}
-	 {Score.makeScore2 {Adjoin C chord} unit(chord:InversionChord)}
-      end
-      /** %% Expects D (a FD int) and returns a singleton FS which contains only D.
-      %% */
-      proc {MakeSingletonSet D ?MyFS}
-	 MyFS = {FS.var.decl}
-	 {FS.include D MyFS}
-	 {FS.card MyFS 1}
-      end
-      proc {MyScript MyScore}
-	 Cs = {Map ChordSpecs MakeChord}
-	 %% list of list of simultaneous note and chord objects 
-	 ChordNotes = {Map Cs
-		       proc {$ C ?Result}
-			  Dur = {C getDuration($)}
-			  %% Pairs of note objects and
-			  %% singletons sets with the note's
-			  %% PC
-			  NotesAndPCs = {LUtils.collectN As.voices
-					 fun {$}
-					    N PC_FS
-					    PC = {DB.makePitchClassFDInt}
-					 in
-					    N = {Score.makeScore2
-						 note(duration:Dur
-						      pitchClass:PC
-						      pitch:{FD.int As.pitchDomain}
-						      amplitude:As.amp)
-						 unit(note:Note)}
-					    %% N is chord note
-					    {FS.include PC {C getPitchClasses($)}}
-					    %% for constraining that all chord PC are expressed
-					    {MakeSingletonSet PC PC_FS}
-					    %% return result
-					    N#PC_FS
-					 end}
-			  Notes = {Map NotesAndPCs fun {$ N#_} N end}
-			  PC_FSs = {Map NotesAndPCs fun {$ _#PC_FS} PC_FS end}
-		       in
-			  Result = {Append Notes [C]}
-			  %% no voice crossing (but unison doublings are OK)
-			  {Pattern.continuous
-			   {Map Notes fun {$ N} {N getPitch($)} end}
-			   '>=:'}
-			  %% QUATSCH (diese def fuer enge lage)
+	    {Score.makeScore2 {Adjoin C chord} unit(chord:InversionChord)}
+	 end
+	 /** %% Expects D (a FD int) and returns a singleton FS which contains only D.
+	 %% */
+	 proc {MakeSingletonSet D ?MyFS}
+	    MyFS = {FS.var.decl}
+	    {FS.include D MyFS}
+	    {FS.card MyFS 1}
+	 end
+	 proc {MyScript MyScore}
+	    Cs = {Map ChordSpecs MakeChord}
+	    %% list of list of simultaneous note and chord objects 
+	    ChordNotes = {Map Cs
+			  proc {$ C ?Result}
+			     Dur = {C getDuration($)}
+			     %% Pairs of note objects and
+			     %% singletons sets with the note's
+			     %% PC
+			     NotesAndPCs = {LUtils.collectN As.voices
+					    fun {$}
+					       N PC_FS
+					       PC = {DB.makePitchClassFDInt}
+					    in
+					       N = {Score.makeScore2
+						    note(duration:Dur
+							 pitchClass:PC
+							 pitch:{FD.int As.pitchDomain}
+							 amplitude:As.amp)
+						    unit(note:Note)}
+					       %% N is chord note
+					       {FS.include PC {C getPitchClasses($)}}
+					       %% for constraining that all chord PC are expressed
+					       {MakeSingletonSet PC PC_FS}
+					       %% return result
+					       N#PC_FS
+					    end}
+			     Notes = {Map NotesAndPCs fun {$ N#_} N end}
+			     PC_FSs = {Map NotesAndPCs fun {$ _#PC_FS} PC_FS end}
+			  in
+			     Result = {Append Notes [C]}
+			     %% no voice crossing (but unison doublings are OK)
+			     {Pattern.continuous
+			      {Map Notes fun {$ N} {N getPitch($)} end}
+			      '>=:'}
+			     %% QUATSCH (diese def fuer enge lage)
 % 			  %% sim intervals between neighbouring voices
 % 			  %% all > than an octave
 % 			  if As.engeLage then
@@ -2515,59 +2577,59 @@ define
 % 				 P1 - P2 <: {HS.db.getPitchesPerOctave}
 % 			      end}
 % 			  end
-			  %% first and last Note PCs are bass and soprano of C
-			  if {Not As.ignoreSopranoChordDegree} then 
-			     {Notes.1 getPitchClass($)} = {C getSopranoPitchClass($)}
-			  end
-			  {{List.last Notes} getPitchClass($)} = {C getBassPitchClass($)}
-			  %%
-			  if As.minIntervalToBass > 0 then 
-			     {Notes.1 getPitchClass($)} - {{Nth Notes 2} getPitchClass($)} >=: As.minIntervalToBass
-			  end
-			  %% The note PCs together express all PCs of C (and no others)
-			  {FS.unionN PC_FSs {C getPitchClasses($)}}
-		       end}
-      in
-	 MyScore
-	 = {Score.makeScore
-	    sim(items:{Map
-		       %% returns lists of notes/chords belonging into a single staff
-		       {LUtils.matTrans ChordNotes}
-		       fun {$ Xs}
-			  if {IsChord Xs.1}
-			     %% mark staff with chords
-			  then seq(info:lily('\\set Staff.instrumentName = "Analysis"')
-				   items:Xs)
-			  else seq(items:Xs)
-			  end
-		       end}
+			     %% first and last Note PCs are bass and soprano of C
+			     if {Not As.ignoreSopranoChordDegree} then 
+				{Notes.1 getPitchClass($)} = {C getSopranoPitchClass($)}
+			     end
+			     {{List.last Notes} getPitchClass($)} = {C getBassPitchClass($)}
+			     %%
+			     if As.minIntervalToBass > 0 then 
+				{Notes.1 getPitchClass($)} - {{Nth Notes 2} getPitchClass($)} >=: As.minIntervalToBass
+			     end
+			     %% The note PCs together express all PCs of C (and no others)
+			     {FS.unionN PC_FSs {C getPitchClasses($)}}
+			  end}
+	 in
+	    MyScore
+	    = {Score.makeScore
+	       sim(items:{Map
+			  %% returns lists of notes/chords belonging into a single staff
+			  {LUtils.matTrans ChordNotes}
+			  fun {$ Xs}
+			     if {IsChord Xs.1}
+				%% mark staff with chords
+			     then seq(info:lily('\\set Staff.instrumentName = "Analysis"')
+				      items:Xs)
+			     else seq(items:Xs)
+			     end
+			  end}
 		   startTime:0
-		%% implicit
+		   %% implicit
 %		timeUnit:{Cs.1 getTimeUnit($)}
-	       )
-	    unit}
-      end
-      {System.showInfo "ChordsToScore: start searching..."}
-      %% !! TODO: check distro strategy
-      Sol = {SDistro.searchOne MyScript
-	     unit(order:{SDistro.makeSetPreferredOrder
-			 %% order: time params, chord params, pitch classes, octaves, pitches
-			 [fun {$ X} {X isTimeParameter($)} end
-			  fun {$ X} {IsChord {X getItem($)}} end
-			  fun {$ X} {IsPitchClass X} end
-			  fun {$ X} {X hasThisInfo($ octave)} end]
-			 fun {$ X Y}
-			    fun {GetDomSize X} {FD.reflect.size {X getValue($)}} end
-			 in {GetDomSize X} < {GetDomSize Y}
-			 end}
+		  )
+	       unit}
+	 end
+	 {System.showInfo "ChordsToScore: start searching..."}
+	 %% !! TODO: check distro strategy
+	 Sol = {SDistro.searchOne MyScript
+		unit(order:{SDistro.makeSetPreferredOrder
+			    %% order: time params, chord params, pitch classes, octaves, pitches
+			    [fun {$ X} {X isTimeParameter($)} end
+			     fun {$ X} {IsChord {X getItem($)}} end
+			     fun {$ X} {IsPitchClass X} end
+			     fun {$ X} {X hasThisInfo($ octave)} end]
+			    fun {$ X Y}
+			       fun {GetDomSize X} {FD.reflect.size {X getValue($)}} end
+			    in {GetDomSize X} < {GetDomSize Y}
+			    end}
 		 % value:random
-		  value:As.value
-		 )}
-   in
-      if Sol == nil then raise noSolution(inProc:ChordsToScore) end
-      else Sol.1
-      end 
-   end
+		     value:As.value
+		    )}
+      in
+	 if Sol == nil then raise noSolution(inProc:ChordsToScore) end
+	 else Sol.1
+	 end 
+      end
 
       
    end
