@@ -78,19 +78,15 @@ VoiceNo = 3
 {HS.db.setDB unit(chordDB:{HS.dbs.partch.get5LimitDiamondChords PitchesPerOctave}
 		  intervalDB:{HS.dbs.partch.getIntervals PitchesPerOctave}
 		  pitchesPerOctave:PitchesPerOctave
-		  %% NB: still default et12 scales in database (scales
-		  %% are not used in this example).
-		  % scaleDB:MyScaleDB
+		  scaleDB:nil
 		 )}
 */
 
-VoiceNo = 4 
+VoiceNo = 4
 {HS.db.setDB unit(chordDB:{HS.dbs.partch.get7LimitDiamondChords PitchesPerOctave}
 		  intervalDB:{HS.dbs.partch.getIntervals PitchesPerOctave}
 		  pitchesPerOctave:PitchesPerOctave
-		  %% NB: still default et12 scales in database (scales
-		  %% are not used in this example).
-		  % scaleDB:MyScaleDB
+		  scaleDB:nil
 		 )}
 
 
@@ -101,9 +97,7 @@ VoiceNo = 6
 {HS.db.setDB unit(chordDB:{HS.dbs.partch.get11LimitDiamondChords PitchesPerOctave}
 		  intervalDB:{HS.dbs.partch.getIntervals PitchesPerOctave}
 		  pitchesPerOctave:PitchesPerOctave
-		  %% NB: still default et12 scales in database (scales
-		  %% are not used in this example).
-		  % scaleDB:MyScaleDB
+		  scaleDB:nil 
 		 )}
 */
 
@@ -148,10 +142,11 @@ in
 			       VoiceNo}}
       Voices = {List.mapInd PitchDomains fun {$ I D}
 					    {MakeVoice unit(midiPitchDomain:D
-							    info:voice#I)}
+							    info:voice(I))}
 					 end}
       ChordSeq = {Score.makeScore2
-		  seq(info:chordSeq
+		  seq(% info:chordSeq
+		      info:[chordSeq lily("\\set Staff.instrumentName = \"Analysis\"")]
 		      items:{LUtils.collectN As.chordNo
 			     fun {$} chord(duration:As.dur) end})
 		  Aux.myCreators}
@@ -213,7 +208,7 @@ proc {DistinctSimPitchClasses MyScore}
    end
 in
    %% apply MyRule on any note of soprano voice in MyScore
-   {{MyScore findItem($ {MkInfoCheck voice#1})} forAllItems(MyRule)} 
+   {{MyScore findItem($ {MkInfoCheck voice(1)})} forAllItems(MyRule)} 
 end
 
 /** %% No voice crossing: the order of the pitches of all sim notes starting with the first (i.e. highest voice) is decreasing.
@@ -235,7 +230,7 @@ end
 %% */
 %% !!?? wenn chord index = 5 (for specific chord DB) gibt es keine Loesung wegen ChordInversion??
 proc {ApproriateChordInversion MyScore MinRootPositions}
-   BassVoice = {MyScore findItem($ {MkInfoCheck voice#VoiceNo})}
+   BassVoice = {MyScore findItem($ {MkInfoCheck voice(VoiceNo)})}
    /** %% B=1 <-> interval between BassNote pitch and the pitch of its predecessor is larger than 2*PitchesPer100Cent (i.e. a major second)
    %% */
    proc {IsSkippingR Note1 Note2 B}
@@ -312,7 +307,7 @@ proc {RestrictMelodicIntervals MyScore MaxMelodicSkipsPerVoice}
    end
    %% !! depends on unchanged score topology
    Voices = {LUtils.butLast {MyScore getItems($)}}
-%   Voices = {MyScore findItem($ {MkInfoCheck voice#_})}
+%   Voices = {MyScore findItem($ {MkInfoCheck voice(_)})}
    Fifth = {RatioToKeynum 3#2}
    MajorSecond = {RatioToKeynum 9#8}
 in
@@ -458,9 +453,7 @@ end
 /** %% Returns test function. This test function returns true in case its argument stores Info as info. 
 %% */
 fun {MkInfoCheck Info}
-   fun {$ X}
-      {X hasThisInfo($ Info)}
-   end
+   fun {$ X} {X getInfoRecord($ {Label Info})} == Info end
 end
 
 /** %% Transforms ratio spec in format X#Y into pitchclass matching current PitchesPerOctave.
