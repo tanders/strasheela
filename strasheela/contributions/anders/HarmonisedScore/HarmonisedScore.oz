@@ -11,7 +11,9 @@
 %%% GNU General Public License for more details.
 %%% *************************************************************
 
-/** %% This functor defines a harmony model for Strasheela. It provides users with the means for defining their own theory of harmony. The functor defines representations for analytical concepts (such as intervals, chords and scales), provides databases with information for specific instances of such analytical concepts (e.g. specific chords), and also predefines generic rules on harmonic concepts. Strasheela objects representing analytical concepts such as intervals, chords and scales are silent when the score is played. However, constraints may restrict relations between actual notes in the score and such analytical objects.
+/** %% This functor defines a harmony model for Strasheela. This functor exports several subfunctors. 
+%%
+%% The harmony model provides users with the means for defining their own theory of harmony. The functor defines representations for analytical concepts (such as intervals, chords and scales), provides databases with information for specific instances of such analytical concepts (e.g. specific chords), and also predefines generic rules on harmonic concepts. Strasheela objects representing analytical concepts such as intervals, chords and scales are silent when the score is played. However, constraints may restrict relations between actual notes in the score and such analytical objects.
 %%
 %% The harmony model provides convenient means in a highly generic way. For example, the model is suitable for theories of harmony is the conventional 12-tone equal-temperament. However, also microtonal music is supported: the representations for analytical concepts are suitable for any other equal division of the octave, and that way also for approximations of just intonation. For this purpose, the model generalises established concepts of 12-tone equal-temperament for other equal-temperaments. A number of fundamental terms which are generalised are explained below.
 %% 
@@ -135,4 +137,5 @@ export
    dbs:DBs
    score:Score
    rules:Rules
+   
 end
