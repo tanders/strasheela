@@ -32,10 +32,10 @@ declare
 /*
 
 declare
-MyScale = {Score.makeScore scale(index:{HS.db.getScaleIndex 'major'}
+MyScale = {Score.makeScore scale(% index:{HS.db.getScaleIndex 'major'}
 				 % index:{HS.db.getScaleIndex 'natural minor'}
 				 %% no solution if superstrong progressions are not allowed
-				 % index:{HS.db.getScaleIndex 'harmonic minor'}
+				  index:{HS.db.getScaleIndex 'harmonic minor'}
 				 transposition:{ET31.pc 'C'})
            unit(scale:HS.score.scale)}
 %%
@@ -48,7 +48,8 @@ proc {MyScript ChordSeq}
    %% only specified chord types are used 
    ChordIndices = {Map ['major'
 			'minor'
-			% 'augmented'
+			'harmonic diminished'
+			'augmented'
 		       ]
 		   HS.db.getChordIndex}
    %% create chord objects
