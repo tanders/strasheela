@@ -74,6 +74,13 @@
 %%   octave is not allowed.
 %%
 
+%%
+%% Note that a generalisation of this example is available at
+%% strasheela/contributions/anders/HarmonisedScore/examples/HS/Fuxian-Counterpoint-with-Scale.oz.
+%% This variant is parameterised (e.g., the user can specify a cantus
+%% firmus, even in different modi). Also, this variant demonstrates
+%% the use of scale objects together with note objects.
+%%
 
 declare
 
@@ -311,18 +318,17 @@ in
       B = {FS.reified.include Interval PerfectConsonance}
    end
 end
-   
 
+%% Sets the tempo for output formats such as MIDI and Csound.
+{Init.setTempo 120.0}
+%{Init.setTempo 100.0}
+   
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%
 %% Call solver (a few alternative solver calls are shown)
 %%
 
 /*
-
-%% Sets the tempo for output formats such as MIDI and Csound.
-{Init.setTempo 120.0}
-%{Init.setTempo 100.0}
 
 %% A few different score distribution strategies are
 %% demonstrated. Yet, for this simple example their performance does
