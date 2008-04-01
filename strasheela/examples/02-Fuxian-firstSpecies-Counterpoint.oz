@@ -55,19 +55,13 @@
 %%
 %%
 %%
-%% BTW: a few Fuxian rules are omitted here for brevity (most of these
-%% rules are only given in footnotes the the Fux translation by
-%% Mann). The omitted rules are the following:
+%% BTW: a few Fuxian rules are omitted here for brevity (these rules
+%% are only given in footnotes to the first chapter in the Fux
+%% translation by Mann). The omitted rules are the following:
 %%
 %%   * No melodic skips follow each other in same direction.
 %%
 %%   * Skips must be compensated for.
-%%
-%%   * The butlast pitch of the counterpoint must form a cadence where
-%%   -- depending on the mode -- the counterpoint is raised by a
-%%   semitone. The butlast pitch is always the II degree for the
-%%   cantus firmus and the VII degree for the counterpoint. For
-%%   example, in dorian mode the last counterpoint pitch is always c#.
 %%
 %%   * A tone can only be repeated once at maximum (instead, the
 %%   example shown here completely prohibts repetitions).
@@ -105,7 +99,8 @@ proc {Fux_FirstSpecies MyScore}
    %% Counterpoint can be given as an argument, but there exist only
    %% few solutions if the Counterpoint is the lower voice.
    Counterpoint = {MakeVoice {FD.list 11 60#76}}
-   % Counterpoint = {MakeVoice {FD.list 11 48#64}} 
+   % Counterpoint = {MakeVoice {FD.list 11 48#64}}
+   CounterpointNotes = {Counterpoint getItems($)}
 in
    %% create the score: two voices (CantusFirmus + Counterpoint) run
    %% in parallel. A simultaneous container is used which is a
@@ -118,7 +113,19 @@ in
 				  timeUnit:beats)
 	      unit}
    %% apply compositional rules
-   {OnlyDiatonicPitches Counterpoint}
+   %%
+   %% every note is diatonic, except the cadence note (the butlast note)
+   {OnlyDiatonicPitches
+    {List.last CounterpointNotes} | {List.take CounterpointNotes
+				     {Length CounterpointNotes}-2}}
+   %% Note: simple approach, only suitable for Dorian mode
+   %% Cadence: but last pitch is C#
+   {FD.modI {{LUtils.lastN CounterpointNotes 2}.1 getPitch($)} 12 1}
+   %% No chromatic interval: C must not lead into C#
+   local PC = {FD.decl} in 
+      {FD.modI {{LUtils.lastN CounterpointNotes 3}.1 getPitch($)} 12 PC}
+      PC \=: 0 
+   end
    {RestrictMelodicIntervals Counterpoint}
    {OnlyConsonances Counterpoint}
    {PreferImperfectConsonances Counterpoint}
@@ -179,6 +186,7 @@ in
    end
 end   
 
+
 %% All pitches in MyScore are constrained to diatonic pitches (here
 %% simply pitches in the C-major scale).
 local 
@@ -186,10 +194,9 @@ local
    %% pitch classes of MyPitch reduced to scale degrees
    proc {InScale MyPitch} {FD.modI MyPitch 12} :: ScalePCs end
 in
-   proc {OnlyDiatonicPitches MyScore}
+   proc {OnlyDiatonicPitches Notes}
       %% apply InScale to all single notes in score
-      {MyScore forAll(test:isNote
-		      proc {$ X} {InScale {X getPitch($)}} end)}
+      {ForAll Notes proc {$ N} {InScale {N getPitch($)}} end}
    end
 end
 
