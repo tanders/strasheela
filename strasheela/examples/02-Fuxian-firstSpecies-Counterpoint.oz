@@ -95,7 +95,7 @@ proc {Fux_FirstSpecies MyScore}
    %% The pitches of the cantus firmus are given as MIDI keynumbers
    %% (the cantus is taken from Fux). For the definition of MakeVoice
    %% see below.
-   CantusFirmus = {MakeVoice [62 65 64 62 67 65 69 67 65 64 62]}
+   CantusFirmus = {MakeVoice [62 65 64 62 67 65 69 67 65 64 62] 'c.f.'}
    %% The pitches of the counterpoint are undetermined and only
    %% restricted to a certain range. For example, the pitches are
    %% restricted to the interval [60,76] (i.e. the counterpoint is
@@ -105,7 +105,7 @@ proc {Fux_FirstSpecies MyScore}
    %% The definition could be changed such that the pitch range of the
    %% Counterpoint can be given as an argument, but there exist only
    %% few solutions if the Counterpoint is the lower voice.
-   Counterpoint = {MakeVoice {FD.list 11 60#76}}
+   Counterpoint = {MakeVoice {FD.list 11 60#76} 'cpt.'}
    % Counterpoint = {MakeVoice {FD.list 11 48#64}}
    CounterpointNotes = {Counterpoint getItems($)}
 in
@@ -146,11 +146,12 @@ end
 %% sequence). MakeVoice expects a list of pitches (i.e. constrained
 %% variables) which are incorporated into the note objects of the
 %% voice returned.
-fun {MakeVoice Pitches}
+fun {MakeVoice Pitches VoiceName}
    %% Score.makeScore2 (in contrast to Score.makeScore) returns a
    %% score which is not yet fully initialised and can still be
    %% integrated into other containers.
-   {Score.makeScore2 seq(items: {Map Pitches fun {$ Pitch}
+   {Score.makeScore2 seq(info:lily("\\set Staff.instrumentName = \""#VoiceName#"\"")
+			 items: {Map Pitches fun {$ Pitch}
 						note(duration: 4
 						     pitch: Pitch
 						     pitchUnit: midi
