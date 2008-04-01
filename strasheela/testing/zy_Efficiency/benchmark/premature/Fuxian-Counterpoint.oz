@@ -13,7 +13,7 @@
 
 
 %%
-%% NB: this CSP is same as Fuxian counterpoint example in strasheela/examples
+%% NB: this CSP generalises the first-species Fuxian counterpoint example in strasheela/examples. 
 %%
 
 %     This example defines two-voice first species counterpoint as
@@ -188,45 +188,12 @@ fun {MakeVoice Pitches MyScale}
 				    getScales:proc {$ Self Scales} 
 						 Scales = [MyScale]
 					      end
-				    isRelatedScale:proc {$ Self Scale B} 
-						      B=1
-						   end
+				    isRelatedScale:proc {$ Self Scale B} B=1 end
 				    amplitude: 80)
 			    end})
-    add(note:Note)}
+    add(note:HS.score.scaleNote)}
 end
 
-/** %% Note class extended by scale-related mixins. 
-%% */
-%% NOTE: shall I include this class and its chord equivalent into HS.score?
-class Note from Score.note HS.score.pitchClassMixin HS.score.inScaleMixinForNote HS.score.scaleDegreeMixinForNote
-   meth init(octave:Oct<=_ pitchClass:PC<=_
-	     ...) = M
-      PitchClassMixinFeats = [octave pitchClass]
-      InScaleMixinFeats = [inScaleB getScales isRelatedScale]
-      ScaleDegreeMixinFeats = [scaleDegree scaleAccidental]
-   in
-      Score.note, {Adjoin {Record.subtractList M
-			      {Append PitchClassMixinFeats
-			       {Append InScaleMixinFeats ScaleDegreeMixinFeats}}}
-		      init(pitchUnit:{HS.db.getPitchUnit})}
-      HS.score.pitchClassMixin, {Adjoin {GUtils.takeFeatures M PitchClassMixinFeats}
-				 initPitchClassMixin}
-      HS.score.inScaleMixinForNote, {Adjoin {GUtils.takeFeatures M InScaleMixinFeats}
-				     initInScaleMixinForNote}
-      HS.score.scaleDegreeMixinForNote, {Adjoin {GUtils.takeFeatures M ScaleDegreeMixinFeats}
-					 initScaleDegreeMixinForNote}
-   end
-   
-   meth getInitInfo($ exclude:Excluded)	 
-      unit(superclass:Score.note
-	   args:[pitchClass#getPitchClass#{HS.db.makePitchClassFDInt}
-		 octave#getOctave#{HS.db.makeOctaveFDInt}
-		 inScaleB#getInScaleB#{FD.int 0#1}
-		 scaleDegree#getScaleDegree#{HS.db.makeScaleDegreeFDInt}
-		 scaleAccidental#getScaleAccidental#{HS.db.makeAccidentalFDInt}])
-   end
-end
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
