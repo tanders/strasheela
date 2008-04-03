@@ -28,7 +28,7 @@ declare
 %% for easy creation of doc output
 % OutDir = {OS.getCWD}#"/Output/"
 %% tmp
-OutDir = "/home/t/oz/music/Strasheela/private/examples/Standard-Examples-Output/07-Harmonised-L-system/"
+% OutDir = "/home/t/oz/music/Strasheela/private/examples/Standard-Examples-Output/07-Harmonised-L-system/"
 
 
 %%
