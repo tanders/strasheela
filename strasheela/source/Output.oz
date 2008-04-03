@@ -78,8 +78,9 @@ export
    RenderLilypond RenderAndShowLilypond
    %% ?? temp export these ? clean things up once..
    LilyMakePitch LilyMakeFromMidiPitch
-   LilyMakeRhythms LilyMakeMicroPitch LilyMakeEt72MarkFromMidiPitch
+   LilyMakeRhythms LilyMakeRhythms2 LilyMakeMicroPitch LilyMakeEt72MarkFromMidiPitch
    MakeNoteToLily MakeNoteToLily2
+   PauseToLily MakeLilyTupletClauses
    SeqToLily SimToLily OutmostSimToLily
    %% 
    OutputSCScore MakeSCScore MakeSCEventOutFn
@@ -953,6 +954,7 @@ define
    fun {BeatSpecToIdx BeatSpec}
       {FloatToInt BeatSpec * IdxFactor}
    end
+   %% Lily meanwhile does tie automatically in specific cases, but I still need this (simplyt scaling durations has not always any effect on the notation)
    proc {MakeLilyRhythm Result}
       %% this determines IdxFactor (IdxFactor * 0.109375 = 7.0,
       %% i.e. can be integer)
@@ -975,11 +977,15 @@ define
    LilyRhythmIdxs = {Map [16.0 8.0 4.0 2.0 1.0 0.5 0.25 0.125] BeatSpecToIdx}
    SmallesRhythmIdxs = {BeatSpecToIdx 0.125}
    
-   /** %% [For experts only] creates lilypond duration output (a VS) for a duration parameter.
+   /** %% [For experts only] creates lilypond duration output (a list of Lilypond rhythm values, which in the end are tied together) for a duration parameter.
    %% */
    fun {LilyMakeRhythms DurationParam}
-      %% returns a list of Lilypond rhythm values, which are tied together 
-      {MakeRhythmsAux {BeatsToIdx {DurationParam getValueInBeats($)}}}
+      {LilyMakeRhythms2 {DurationParam getValueInBeats($)}}
+   end
+   /** %% [For experts only] creates lilypond duration output (a list of Lilypond rhythm values, which in the end are tied together) for a duration measured in beats (a float).
+   %% */
+   fun {LilyMakeRhythms2 DurationInBeats}
+      {MakeRhythmsAux {BeatsToIdx DurationInBeats}}
    end
    fun {MakeRhythmsAux BeatIdx}
       %% create a list of note durations, dots and ties
@@ -1131,6 +1137,25 @@ define
       end
    end
 
+   /** %% [For experts only] Expects a pause object and returns the lilypond pause output (a VS).
+   %% */
+   fun {PauseToLily MyPause}
+      %%  returns a list of Lilypond rhythm
+      %%  values matching dur of MyPause
+      Rhythms = {LilyMakeRhythms
+		 {MyPause getDurationParameter($)}}
+   in
+      %% if pause duration is 0 or
+      %% too short (less than a 64th
+      %% note, or 0.0625 beat)
+      if Rhythms == nil
+      then '' % omit pause
+	 %% otherwise output VS of Lily pause(s)
+      else {ListToVS {Map Rhythms fun {$ R} r#R end}
+	    " "}
+      end
+   end
+   
 %    fun {NoteToLily Note}
 %       Rhythms = {LilyMakeRhythms {Note getDurationParameter($)}}
 %    in
@@ -1296,6 +1321,86 @@ define
       {Cell.assign OuterSimBound false}
    end
 
+   
+   local
+      TupletName = {NewName}
+      
+      /** %% Mark X (score element) and all its successors as belonging to a tuplet, until the duration of the tuplets Accum (an int) sums to something dividable by 3. 
+      %% */
+      proc {MarkSuccessors X Num#Denom Accum}
+	 Accum2 = Accum + {X getDuration($)}
+      in
+	 if Accum2 > ({X getTimeUnit($)}.1 * 16)
+	 then {Exception.raiseError
+	       strasheela(failedRequirement Accum2
+			  "Tuplet duration exceeds 4 whole notes, error in score input assumed.")}
+	 else 
+	    if Accum2 mod Denom == 0 
+	    then {X addInfo(TupletName(Num#Denom 'end'))} 
+	    else
+	       {X addInfo(TupletName(Num#Denom))}
+	       if {Not {X hasTemporalSuccessor($)}} orelse {Not {{X getTemporalSuccessor($)} isElement($)}}
+	       then {Exception.raiseError
+		     strasheela(failedRequirement X
+				"No successor element found, and tuplet duration not completed.")}
+	       else {MarkSuccessors {X getTemporalSuccessor($)} Num#Denom Accum2}
+	       end
+	    end
+	 end
+      end
+      fun {MakeEmptyString _} "" end
+      /** %%
+      %% */ 
+      fun {MakeLilyTupletElement E Num#Denom}
+	 CorrectedDur = {E getDuration($)} * Denom div Num
+	 DurcorrectedElement = {Score.makeScore {Adjoin {E toInitRecord($)}
+						 x(duration:CorrectedDur
+						   startTime:{E getStartTime($)}
+						   timeUnit:{E getTimeUnit($)})}
+				unit(x: {E getClass($)})}
+      in
+	 if {E isNote($)}
+	 then {{MakeNoteToLily MakeEmptyString} DurcorrectedElement}
+	 elseif {E isPause($)}
+	 then {PauseToLily DurcorrectedElement} 
+	 end 
+      end
+   in
+      /** %% Create a list of lilypond clauses for tuplet output. Fractions is a list of pairs Numerator#Denominator indicating the fractions of the tuplets. For example, clauses for triplets is created with he fraction 2#3 and clauses for quintuplets with the fraction 2#5. Tuplets are recognised automatically in the score by the duration of score elements (notes and pause objects). The time unit must be set to beats(N), where N is some quarter note division which allows to express all required duration. For example, if the time unit is beats(60) then the duration 60 indicates a quarter note, 30 indicates an eigth note, three notes of duration 20 form an eigth note triplet and 5 notes of duration 6 form a sixteenth note quintuplet.   
+      %% BUGS: Rests must be expressed explicitly with pause objects, rests expressed by the offset time of score objects are not notated correctly if their duration should be part of a tuplet. Dotted notes at the beginning of a tuplet do not work. Tuplets only work correctly for score elements within a single sequential container, a tuplet must not extend across container boundaries. Due to these shortcomings, the default Lilypond output not support tuplets.
+      %% */
+      fun {MakeLilyTupletClauses Fractions}
+	 TupletStartClauses
+	 = {Map Fractions
+	    fun {$ Num#Denom}
+	       %% find beginning of a tuplet note
+	       fun {$ X}
+		  {X isElement($)} andthen {Not {X getDuration($)} mod Denom == 0}
+		  %% necessary if we have different tuplets
+		  andthen {X getDuration($)} mod Num == 0
+		  andthen {Not {X hasThisInfo($ TupletName)}}
+	       end#fun {$ X}
+		      {X addInfo(TupletName(Num#Denom 'start'))}
+		      %% TODO: check whether there is successor
+		      {MarkSuccessors {X getTemporalSuccessor($)} Num#Denom {X getDuration($)}}
+		      %% create note output
+		      "\\times "#Num#"/"#Denom#" {"#{MakeLilyTupletElement X Num#Denom}
+		   end 
+	    end}
+	 TupletContinuationClause
+	 = fun {$ X} {X isElement($)} andthen {X hasThisInfo($ TupletName)}
+	   end#fun {$ N}
+		  case {N getInfoRecord($ TupletName)} of
+		     TupletName(Num#Denom) then {MakeLilyTupletElement N Num#Denom} % intermediate tuplet notes 
+		  [] TupletName(Num#Denom 'end') then {MakeLilyTupletElement N Num#Denom}#"}" % final tuplet note
+		  end
+	       end	     
+      in
+	 TupletContinuationClause | TupletStartClauses
+      end
+   end
+
+
    %% Do type checking and call appropriate function,
    %% FurtherClauses: additional types can be added as a list of the form [TypeCheck1#ProcessingFun1 ...]
    %% !! todo: generalise/refactor: all types and their processing is defined in a single form -- this could be some general processing fun for ScoreMapping...
@@ -1304,6 +1409,7 @@ define
       {GUtils.cases MyScore
        {Append
 	FurtherClauses
+	%% default Lily output clauses:  
 	[isSequential#fun {$ X} {SeqToLily X FurtherClauses} end
 	 isSimultaneous#fun {$ X}
 			   %% distinguish between outmost and inner Sims 
@@ -1345,22 +1451,7 @@ define
 		end
 	     end
 	 
-	 isPause#fun {$ MyPause}
-		    %%  returns a list of Lilypond rhythm
-		    %%  values matching dur of MyPause
-		    Rhythms = {LilyMakeRhythms
-			       {MyPause getDurationParameter($)}}
-		 in
-		    %% if pause duration is 0 or
-		    %% too short (less than a 64th
-		    %% note, or 0.0625 beat)
-		    if Rhythms == nil
-		    then '' % omit pause
-		       %% otherwise output VS of Lily pause(s)
-		    else {ListToVS {Map Rhythms fun {$ R} r#R end}
-			  " "}
-		    end
-		 end
+	 isPause#PauseToLily
 	 
 	   % Otherwise
 	 fun {$ X} true end
