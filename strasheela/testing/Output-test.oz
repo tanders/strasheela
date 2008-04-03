@@ -1337,10 +1337,109 @@ MyScore = {Score.makeScore
 
 
 
- 
+%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%% Tuplet output
+%%
+
+declare
+fun {MakeElement Dur}
+   if (Dur < 0) then
+      pause(duration:{Number.abs Dur})
+   else
+      note(duration:Dur
+	   pitch:60
+	   amplitude:64)	 
+   end
+end   
+proc {MakeScore Durs BeatDivisions ?ScoreInstance}
+   ScoreInstance = {Score.makeScore
+		    seq(info:[lily(" \\new RhythmicStaff")
+			      staff]
+			items:{Map Durs MakeElement}
+			startTime:0
+			timeUnit:beats(BeatDivisions))
+		    unit}
+   {ScoreInstance wait}
+end
+
+
+declare
+%% produces triplets:
+%% c4 \times 2/3 {r8 c8 c} r8 r8 \times 2/3 {c4 c8}
+Durations = [6 ~2 2 2 ~3 3 4 2]
+BeatDivisions = 6
+MyScore = {MakeScore Durations BeatDivisions}
+{Out.renderAndShowLilypond MyScore
+ unit(file:'triplet-test'
+      %% definition of pause output
+      clauses:{Out.makeLilyTupletClauses [2#3]})}
+
+
+declare
+%% produces triplets and dotted notes (no dotted triplets)
+Durations = [6 ~2 2 2 3 3 4 2 9 3 6 2 4]
+BeatDivisions = 6
+MyScore = {MakeScore Durations BeatDivisions}
+{Out.renderAndShowLilypond MyScore
+ unit(file:'triplet-test-2'
+      %% definition of pause output
+      clauses:{Out.makeLilyTupletClauses [2#3]})}
+
+declare
+%% produces quintuplets
+Durations = [10 2 ~2 2 2 ~2 ~5 5 4 2 ~4]
+BeatDivisions = 10q
+MyScore = {MakeScore Durations BeatDivisions}
+{Out.renderAndShowLilypond MyScore
+ unit(file:'quintuplet-test'
+      %% definition of pause output
+      clauses:{Out.makeLilyTupletClauses [2#5]})}
+
+
+declare
+%% produces quintuplets and dotted notes (no dotted quintuplets)
+Durations = [15 5 2 ~2 2 2 ~2 5 4 2 ~4]
+BeatDivisions = 10
+MyScore = {MakeScore Durations BeatDivisions}
+{Out.renderAndShowLilypond MyScore
+ unit(file:'quintuplet-test'
+      %% definition of pause output
+      clauses:{Out.makeLilyTupletClauses [2#5]})}
+
+
+declare
+%% produces triplets and quintuplets (but not nested)
+Durations = [60 20 20 ~20 30 30 12 12 12 12 12 6 6 6 ~12 10 20 60 120]
+BeatDivisions = 60
+MyScore = {MakeScore Durations BeatDivisions}
+{Out.renderAndShowLilypond MyScore
+ unit(file:'triplet-and-quintuplet-test'
+      %% definition of pause output
+      clauses:{Out.makeLilyTupletClauses [2#3 2#5]})}
+
+
+declare
+%% exception: tuplet cannot be completed
+Durations = [60 20 20 30 30]
+BeatDivisions = 60
+MyScore = {MakeScore Durations BeatDivisions}
+{Out.renderAndShowLilypond MyScore
+ unit(file:'exception-test-1'
+      %% definition of pause output
+      clauses:{Out.makeLilyTupletClauses [2#3 2#5]})}
 
 
 
+declare
+%% exception: tuplet dur exceeds 4 whole notes
+Durations = [60 20 20 30 10 30 60 60 60 60 60 60 60 60 60 60 60 60 60 60 60 60 60 60 60 60 60 60 60 60]
+BeatDivisions = 60
+MyScore = {MakeScore Durations BeatDivisions}
+{Out.renderAndShowLilypond MyScore
+ unit(file:'exception-test-2'
+      %% definition of pause output
+      clauses:{Out.makeLilyTupletClauses [2#3 2#5]})}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
