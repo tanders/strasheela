@@ -1417,6 +1417,18 @@ MyScore = {MakeScore Durations BeatDivisions}
  unit(file:'triplet-and-quintuplet-test'
       %% definition of pause output
       clauses:{Out.makeLilyTupletClauses [2#3 2#5]})}
+ 
+
+
+declare
+%% exception: tuplet dur exceeds 4 whole notes
+Durations = [60 20 20 30 10 30 60 60 60 60 60 60 60 60 60 60 60 60 60 60 60 60 60 60 60 60 ]
+BeatDivisions = 60
+MyScore = {MakeScore Durations BeatDivisions}
+{Out.renderAndShowLilypond MyScore
+ unit(file:'exception-test-2'
+      %% definition of pause output
+      clauses:{Out.makeLilyTupletClauses [2#3 2#5]})}
 
 
 declare
@@ -1426,18 +1438,6 @@ BeatDivisions = 60
 MyScore = {MakeScore Durations BeatDivisions}
 {Out.renderAndShowLilypond MyScore
  unit(file:'exception-test-1'
-      %% definition of pause output
-      clauses:{Out.makeLilyTupletClauses [2#3 2#5]})}
-
-
-
-declare
-%% exception: tuplet dur exceeds 4 whole notes
-Durations = [60 20 20 30 10 30 60 60 60 60 60 60 60 60 60 60 60 60 60 60 60 60 60 60 60 60 60 60 60 60]
-BeatDivisions = 60
-MyScore = {MakeScore Durations BeatDivisions}
-{Out.renderAndShowLilypond MyScore
- unit(file:'exception-test-2'
       %% definition of pause output
       clauses:{Out.makeLilyTupletClauses [2#3 2#5]})}
 
