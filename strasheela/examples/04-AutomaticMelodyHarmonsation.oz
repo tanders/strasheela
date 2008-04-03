@@ -159,7 +159,8 @@ fun {AutomaticHarmonisation MelodyNoteDurPitchPairs ChordDur}
 		 Aux.myCreators}
       proc {GetMyScale Self Scales} Scales = [MyScale] end
       MyChordSeq = {Score.makeScore2
-		    seq(items:{LUtils.collectN ChordNr
+		    seq(info:lily("\\set Staff.instrumentName = \"Analysis\"")
+		     items:{LUtils.collectN ChordNr
 			       fun {$}
 				  diatonicChord(duration:ChordDur
 						inScaleB:1
@@ -171,7 +172,8 @@ fun {AutomaticHarmonisation MelodyNoteDurPitchPairs ChordDur}
 		    %% ../AuxDefs/AuxDefs.oz
 		    Aux.myCreators}
       MyVoice = {Score.makeScore2 
-		 seq(items:{Map MelodyNoteDurPitchPairs
+		 seq(info:lily("\\set Staff.instrumentName = \"Melody\"")
+		     items:{Map MelodyNoteDurPitchPairs
 			    fun {$ Dur#Pitch}
 			       note(duration:Dur
 				    pitch:Pitch
