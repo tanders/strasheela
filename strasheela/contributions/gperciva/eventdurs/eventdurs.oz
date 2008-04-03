@@ -16,8 +16,8 @@ export
 
 define
    /** %% link Events with Durations.  Setting a value (or narrowing the domain) in either list will update the other list. */
-   proc {Setup Beats BeatDivisionsGet Events Durations}
-      NumEvents = Beats*BeatDivisionsGet
+   proc {Setup Beats BeatDivisions Events Durations}
+      NumEvents = Beats*BeatDivisions
    in
       %% setup lists, add fake note at end
       Durations = {FD.list NumEvents 0#NumEvents}
@@ -92,50 +92,27 @@ define
       end
    end
 
-   %% FIXME: add support for triplets
-   %Triplet = {NewCell 0}
    /* %% Combines the Events and Durations and produces a Score object. */
    proc {ToScore EventsDurs BeatDivisions ?ScoreInstance}
-      Notes = {GetNotes EventsDurs.1 EventsDurs.2}
+      Durs = {GetNotes EventsDurs.1 EventsDurs.2}
    in
-      /*
-      if ({Int.'mod' BeatDivisions 3} == 0) then
-	 BasicBeats = {Int.'div' (2*BeatDivisions) 3}
-      else
-	 BasicBeats = BeatDivisions
-      end
-      */
       {Score.makeScore
        seq(info:[lily(" \\new RhythmicStaff")
 		 staff]
 	   items:(
-		  {Map Notes fun {$ Note}
-				if (Note<0) then
-				   pause(duration:{Number.abs Note})
-				else
-%if ({Int.'mod' Note 3} == 0) then
-				   note(duration:Note
-					pitch:60
-					amplitude:64)
-				   /*
-				else
-				   if (@Triplet == 0) then
-				      Triplet =: @Triplet+1
-				      seq(info:tuplet(3 2) items:[
-								  note(duration:{Int.'div' 3*Note 2}
-								       pitch:60
-								       amplitude:64) ] )
-				   end
-				end
-%zz
-				*/
-			     end
-		  end})
+		  {Map Durs fun {$ Dur}
+			       if (Dur<0) then
+				  pause(duration:{Number.abs Dur})
+			       else
+				  note(duration:Dur
+				       pitch:60
+				       amplitude:64)
+			       end
+			    end})
 	   startTime:0
 	   timeUnit:beats(BeatDivisions))
        unit ScoreInstance}
       {ScoreInstance wait}
-%{Browser.browse ScoreInstance}
    end
 
    /* %% Combines the Events and Durations and produces a Score
@@ -144,8 +121,8 @@ define
    proc {ToScoreDouble EventDurs BeatDivisions ?ScoreInstance}
       %% play games to avoid duplicating the "extra 1"
       Events = {Append {Append
-{LUtils.butLast EventDurs.1}
-{LUtils.butLast EventDurs.1}
+			{LUtils.butLast EventDurs.1}
+			{LUtils.butLast EventDurs.1}
 		       } [1]}
       Durs = {Append EventDurs.2 EventDurs.2}
    in
@@ -153,21 +130,17 @@ define
    end
 
 
-   OutClauses = [fun {$ X}
-		    {X isSequential($)} andthen {X hasThisInfo($ tuplet)}
-		 end#fun {$ Seq}
-			case {Seq getInfoRecord($ tuplet)}
-			of tuplet(X Y) then 
-			   "\\times "#X#"/"#Y#" "#{Out.seqToLily Seq OutClauses}
-			end
-		     end
-		]
-
    C={NewCell 1}
    /* %% outputs a Score to a file.*/
-   proc {WriteLilyFile BaseFilename MyScore}
+   proc {WriteLilyFile BaseFilename BeatDivisions MyScore}
       Filename=BaseFilename#@C
+      OutClauses
    in
+      if ({Int.'mod' BeatDivisions 3} == 0) then
+	 OutClauses = {Out.makeLilyTupletClauses [2#3]}
+      else
+	 OutClauses = nil
+      end
       {Out.outputLilypond
        MyScore
        unit(file:Filename clauses:OutClauses
