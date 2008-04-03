@@ -6,21 +6,26 @@
 * Changes in Version 0.9.4 (no date yet)
 
   - Additions
-    - Functor ET22
-
-    - HS.rule: added Cadence, DiatonicChord, NoteInPCCollection
-    - HS.score.fullChord
-    - LUtils.lastN
+    - Functor ET22 for composition in 22-tone equal temperament [link Erlich paper]
+    - HS.rule: Cadence
+    - Functor ET12: convenient 12 ET pitch notation functions
+    - Out.makeLilyTupletClauses: easy Lilypond customisation for tuplet support
 
 
   - Documentation
     - Added further ET31 examples (ET31-test.oz)
+    - Fuxian counterpoint example revised (now follows Fux' cadence rule): [file] 
+    - Generalised Fuxian counterpoint example: the user can specify the cantus firmus, even in different modes. Also, this example demonstrates the use of scale objects together with note objects: [file]
 
-  - Fixes
+  - Fixes and minor additions 
     - GUtils.randIntoRange never selected upper random limit (and so random value ordering never selected upper domain boundary)
     - Lilypond output procedures/functions support an additional optional argument 'wrapper' for inserting arbitrary Lilypond code at the beginning and end of the Lilypond output file
     - The pitch parameter method getValueInMidi now supports any equal temperament pitch unit which fits the pattern et<Digit>+, e.g., et31 or et53  
     - Revised ET31 chord database
+    - HS.rule: DiatonicChord NoteInPCCollection
+    - HS.score: added classes FullChord, ChordNote, ScaleNote
+    - LUtils.lastN
+    - Fixed bugs in examples/05-MicrotonalChordProgression.oz (harmony database specification and accessing score object info attribute were obsolete)  
 
 
 
