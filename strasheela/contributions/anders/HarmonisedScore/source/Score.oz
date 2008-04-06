@@ -186,7 +186,7 @@ export
 %    % LinkItemsIntoContainerRecord 
 %    % MkChordProgression IsChordProgression
 
-   ChordsToScore
+   ChordsToScore ChordsToScore_Script
    
 prepare
    %% Name for type checking of chord class. Defined in 'prepare' to
@@ -2486,33 +2486,13 @@ define
       end
 
       
-
-      
-      /** %% Expects a list of chord objects in textual form (init records for FullChord), and returns a homophonic score object with notes expressing these chords. The notes are constrained to express all chord pitch classes, but chords can contain more notes than chord pitch classes. The CSP defined by ChordsToScore is intentionally relatively simple, as it is intended for listening to isolated chord progressions only (e.g., Bruckner's role of the "shortest path" between notes in a voice is not implemented).
-      %% ChordSpecs must be fully determined, but chord attributes can be missing (e.g., the chord root is either determined or missing). 
-      %% The created score topology has the following form: sim([seq([note note ...]) seq( note...) ... seq(chord chord ...)])
-      %% The function defines the following optional Args. voices: the number of homophonic voices, pitchDomain: the pitch domain for all notes (depends on PitchesPerOctave). amp: the amplitude of all notes. value: the score distribution value selection strategy. ignoreSopranoChordDegree: if false, the sopranoChordDegrees of the input chords affect the output notes. minIntervalToBass: smallest interval allowed between bass and next lowest pitch. These are the default values
-      unit(voices:4
-	   pitchDomain:48#72
-	   amp:30
-	   value:mid
-	   ignoreSopranoChordDegree:false
-	   minIntervalToBass:0)
-      %% 
-      %% IMPORTANT: there are a few things to watch out for.
-      %%
-      %% - The timeUnit must be set in at least one chord spec.
-      %% - Chord attributes cannot be undetermined variables -- ChordsToScore blocks in this case (it leads to a script with undetermined variables in the top-level space). 
-      %% - ChordsToScore conducts a search and it is possible that no solution can be found. For example, the following cases can lead to no solution: the number of voices is insufficient for expressing all chord tones, the pitchDomain is too small, the number of voices equals the number of chord tones, but the soprano and bass chord degrees are equal so that these voices express the same chord tone and hence one tone is missing etc. 
+      /** %% Returns the script defined internally by ChordsToScore. See there for details. 
       %% */
-      %%
-      %% OLD doc snippets:
-      %% engeLage: a boolean specifying whether the interval between simultaneous notes of neighbouring voices must be less than an octave.   
-      fun {ChordsToScore ChordSpecs Args}
+      fun {ChordsToScore_Script ChordSpecs Args}
 	 Defaults = unit(voices:4
 			 pitchDomain:48#72
 			 amp:30
-			 value:mid
+			 % value:mid
 			 ignoreSopranoChordDegree:false
 			 minIntervalToBass:0
 		     % engeLage:false
@@ -2532,7 +2512,8 @@ define
 	    {FS.include D MyFS}
 	    {FS.card MyFS 1}
 	 end
-	 proc {MyScript MyScore}
+      in
+	 proc {$ /* MyScript */ MyScore}
 	    Cs = {Map ChordSpecs MakeChord}
 	    %% list of list of simultaneous note and chord objects 
 	    ChordNotes = {Map Cs
@@ -2551,7 +2532,7 @@ define
 							 pitchClass:PC
 							 pitch:{FD.int As.pitchDomain}
 							 amplitude:As.amp)
-						    unit(note:Note)}
+						    unit(note:Note2)}
 					       %% N is chord note
 					       {FS.include PC {C getPitchClasses($)}}
 					       %% for constraining that all chord PC are expressed
@@ -2608,20 +2589,55 @@ define
 %		timeUnit:{Cs.1 getTimeUnit($)}
 		  )
 	       unit}
-	 end
-	 {System.showInfo "ChordsToScore: start searching..."}
-	 %% !! TODO: check distro strategy
-	 Sol = {SDistro.searchOne MyScript
-		unit(order:{SDistro.makeSetPreferredOrder
+	 end	 
+      end
+      
+      /** %% Expects a list of chord objects in textual form (init records for InversionChord), and returns a homophonic score object with notes expressing these chords. The notes (Note2 objects) are constrained to express all chord pitch classes, but chords can contain more notes than chord pitch classes. The CSP defined by ChordsToScore is intentionally relatively simple, as it is intended for listening to isolated chord progressions only (e.g., Bruckner's role of the "shortest path" between notes in a voice is not implemented).
+      %% ChordSpecs must be fully determined, but chord attributes can be missing (e.g., the chord root is either determined or missing). 
+      %% The created score topology has the following form: sim([seq([note note ...]) seq( note...) ... seq(chord chord ...)])
+      %% The function defines the following optional Args. voices: the number of homophonic voices, pitchDomain: the pitch domain for all notes (depends on PitchesPerOctave). amp: the amplitude of all notes. order: the score distribition variable ordering strategy. value: the score distribution value selection strategy. ignoreSopranoChordDegree: if false, the sopranoChordDegrees of the input chords affect the output notes. minIntervalToBass: smallest interval allowed between bass and next lowest pitch. These are the default values
+      unit(voices:4
+	   pitchDomain:48#72
+	   amp:30
+	   value:mid
+	   ignoreSopranoChordDegree:false
+	   minIntervalToBass:0)
+      %% 
+      %% IMPORTANT: there are a few things to watch out for.
+      %%
+      %% - The timeUnit must be set in at least one chord spec.
+      %% - Chord attributes cannot be undetermined variables -- ChordsToScore blocks in this case (it leads to a script with undetermined variables in the top-level space). 
+      %% - ChordsToScore conducts a search and it is possible that no solution can be found. For example, the following cases can lead to no solution: the number of voices is insufficient for expressing all chord tones, the pitchDomain is too small, the number of voices equals the number of chord tones, but the soprano and bass chord degrees are equal so that these voices express the same chord tone and hence one tone is missing etc. 
+      %% */
+      %%
+      %% OLD doc snippets:
+      %% engeLage: a boolean specifying whether the interval between simultaneous notes of neighbouring voices must be less than an octave.   
+      fun {ChordsToScore ChordSpecs Args}
+	 Defaults = unit(%voices:4
+			 %pitchDomain:48#72
+			 %amp:30
+			 value:mid
+			 order:{SDistro.makeSetPreferredOrder
 			    %% order: time params, chord params, pitch classes, octaves, pitches
 			    [fun {$ X} {X isTimeParameter($)} end
 			     fun {$ X} {IsChord {X getItem($)}} end
-			     fun {$ X} {IsPitchClass X} end
-			     fun {$ X} {X hasThisInfo($ octave)} end]
+			     %% NOTE: searching for PCs before octaves can lead to massive increase of search size
+			    % fun {$ X} {IsPitchClass X} end
+			    % fun {$ X} {X hasThisInfo($ octave)} end
+			    ]
 			    fun {$ X Y}
 			       fun {GetDomSize X} {FD.reflect.size {X getValue($)}} end
 			    in {GetDomSize X} < {GetDomSize Y}
 			    end}
+			 %ignoreSopranoChordDegree:false
+			 %minIntervalToBass:0
+		         % engeLage:false
+			) 
+	 As = {Adjoin Defaults Args}
+	 {System.showInfo "ChordsToScore: start searching..."}
+	 %% !! TODO: check distro strategy
+	 Sol = {SDistro.searchOne {ChordsToScore_Script ChordSpecs Args}
+		unit(order:As.order
 		 % value:random
 		     value:As.value
 		    )}
