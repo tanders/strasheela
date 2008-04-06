@@ -1514,7 +1514,7 @@ define
    proc {CallLilypond Spec}
       DefaultSpec = unit(dir: {Init.getStrasheelaEnv defaultLilypondDir}
 			 file: test % !! file name without extention
-			 'convert-ly':{Init.getStrasheelaEnv 'convert-ly'}
+			 % 'convert-ly':{Init.getStrasheelaEnv 'convert-ly'}
 			 lilypond:{Init.getStrasheelaEnv lilypond}
 			 flags:{Init.getStrasheelaEnv defaultLilypondFlags})
       MySpec = {Adjoin DefaultSpec Spec}
@@ -1525,7 +1525,7 @@ define
    in
       {System.showInfo "> cd "#Dir}
       {OS.chDir Dir}
-      {Exec MySpec.'convert-ly' ["-e" LyFile]}
+      % {Exec MySpec.'convert-ly' ["-e" LyFile]}
       {Exec MySpec.lilypond {Append  MySpec.flags [LyFile]}}
    end
 
