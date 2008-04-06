@@ -1312,34 +1312,6 @@ define
    end
 
    
-   %% TODO: tmp comment until replaced
-%    %%
-%    /** %% [For experts only] creates lilypond output (a VS) for a top-level simultaneous container which you could use when you overwrite the default simultaneous output in a clause. FurtherClauses are clauses relevant of items contained in Sim.
-%    %% */
-%    %% !! no clef defs yet
-%    %% !! no time signature def yet
-%    %%
-%    %% !! in outmost sims contained in surrounding seqs I cause new
-%    %% staff creation. Refering to the old staff may be better (depends
-%    %% on context). So for now just always put a Sim around your score
-%    %% aeussere seqs funktionieren nicht (keine staff def fuer spaetere
-%    %% outmost sims)
-%    proc {OutmostSimToLily Sim FurtherClauses ?Result}
-%       %% set OuterSimBound to true for all processing within Sim and
-%       %% reset it to false at the end. This only works in a purely
-%       %% sequential program!
-%       {Cell.assign OuterSimBound true}	    
-%       Result = " <<"#{ListToVS
-% 		      {Map {Sim getItems($)}
-% 		       fun {$ X}
-% 			  "\n \\new Staff { \\clef "#{DecideClef X}#" "
-% 			  #{OffsetToPauses X FurtherClauses}#" }"
-% 		       end}
-% 		      " "}#"\n"#">>"
-%       {Cell.assign OuterSimBound false}
-%    end
-
-   
    local
       TupletName = {NewName}
       
@@ -1399,8 +1371,14 @@ define
 		  andthen {Not {X hasThisInfo($ TupletName)}}
 	       end#fun {$ X}
 		      {X addInfo(TupletName(Num#Denom 'start'))}
-		      %% TODO: check whether there is successor
-		      {MarkSuccessors {X getTemporalSuccessor($)} Num#Denom {X getDuration($)}}
+		      %% process sucessors
+		      if {Not {X hasTemporalSuccessor($)}} orelse
+			 {Not {{X getTemporalSuccessor($)} isElement($)}}
+		      then {Exception.raiseError
+			    strasheela(failedRequirement X
+				       "No successor element found, and tuplet duration not completed.")}
+		      else {MarkSuccessors {X getTemporalSuccessor($)} Num#Denom {X getDuration($)}}
+		      end
 		      %% create note output
 		      "\\times "#Num#"/"#Denom#" {"#{MakeLilyTupletElement X Num#Denom}
 		   end 
@@ -1419,15 +1397,16 @@ define
    end
 
 
-   %% Do type checking and call appropriate function,
-   %% FurtherClauses: additional types can be added as a list of the form [TypeCheck1#ProcessingFun1 ...]
-   %% !! todo: generalise/refactor: all types and their processing is defined in a single form -- this could be some general processing fun for ScoreMapping...
-   %%
+   %% Transforms MyScore into Lilypond VS. Transformation is defined by a set of default clauses of the form BooleanFun1#ProcessingFun1.   
+   %% FurtherClauses: additional clauses can be added as a list in the form [BooleanFun1#ProcessingFun1 ...]
    fun {ToLilypondAux MyScore FurtherClauses}
       {GUtils.cases MyScore
        {Append
 	FurtherClauses
-	%% default Lily output clauses:  
+	
+	%%
+	%% NOTE: these are the default Lily output clauses
+	%%
 	[
 	 %% Each outmost sequential creates a staff. Outmost sequential here means a sequential container which has no direct or indirect temporal container which is a sequential container 
 	 fun {$ X}
@@ -1483,13 +1462,14 @@ define
 	 
 	 isPause#PauseToLily
 	 
-	   % Otherwise
+	   % Otherwise clause
 	 fun {$ X} true end
 	 #fun {$ X}
 	     {Browse warn#unsupportedClass(X ToLilypondAux)}
 	     ''
 	  end]}}
    end
+   
    /** %% Transforms a score object into a Lilypond score virtual string. The score layout is hardwired: the Items in the outmost Simultaneous container are put in their own staff. [currently, if outmost Simultaneous containers are contained in surround Sequentials, new staffs will be draw for each Item contained in each Simultaneous.]
    %% ToLilypond expects two optional arguments. The argument clauses for specifying what Lilypond shows for specific score objects. FurtherClauses expects a list of the form [TypeCheck1#ProcessingFun1 ...].  TypeCheckN is a boolean function or method (e.g. isNote) and ProcessingFunN is a function which expects score objects for which TypeCheckN returns true as argument. ProcessingFunN returns a Lilypond VS. For example, the user may define a subclass of Score.note with an additional articulation attribute (e.g. values may be staccato, tenuto etc.) and the user then defines a clause which causes Lilypond to show the articulation by its common sign in the sheetmusic score.
    %% The argument wrapper expects a list of two VSs with legal Lilypond code. These VSs are inserted at the beginning and the end respecitively of the score. Note that the Lilypond version statement is hardwired -- you should not add a version statement to your header. The argument defaults are shown below. 
