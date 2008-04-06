@@ -1478,7 +1478,7 @@ define
    in
       {Cell.assign OuterSimBound false}
       {ListToVS ["%%% created by Strasheela at "#{GUtils.timeVString}
-		 "\n\\version \"2.4.1\"\n"
+		 "\n\\version \"2.10.0\"\n"
 		 As.wrapper.1
 		 {ToLilypondAux MyScore As.clauses}
 		 As.wrapper.2.1]
