@@ -81,7 +81,7 @@ export
    LilyMakeRhythms LilyMakeRhythms2 LilyMakeMicroPitch LilyMakeEt72MarkFromMidiPitch
    MakeNoteToLily MakeNoteToLily2
    PauseToLily MakeLilyTupletClauses
-   SeqToLily SimToLily OutmostSimToLily
+   SeqToLily SimToLily % OutmostSimToLily
    %% 
    OutputSCScore MakeSCScore MakeSCEventOutFn
    SendOsc SendSCserver SendSClang
@@ -1199,11 +1199,11 @@ define
       end
    end
    
-   /** %% [For experts only] creates lilypond output (a VS) for an inner simultaneous container which you could use when you overwrite the default simultaneous output in a clause. FurtherClauses are clauses relevant of items contained in Sim.
+   /** %%  %% [For experts only] creates lilypond output (a VS) for a simultaneous container. FurtherClauses are clauses relevant of items contained in Seq.
+   %% Default Lilypond output uses this definition. Using this function may simplify writing custom output clauses which overwrite the default output.
    %% */
-   %% only for inner Sims
    %% !! I don't differ between general Sims and chords
-   %% !! offsets are currently ignored: only positive offsets are currently possible in SDL -- express them by rests or invisible rests (i.e. \skip <duration> )
+   %% !! offsets are currently ignored: only positive offsets are currently possible -- express them by rests or invisible rests (i.e. \skip <duration> )
    fun {SimToLily Sim FurtherClauses}
       Items = {Sim getItems($)}
    in
@@ -1239,22 +1239,60 @@ define
 	  {GetUserLily Sim} |
 	  "\n <<" |
 	  {Append {Map {Sim getItems($)}
-		   fun {$ X} {OffsetToPauses X FurtherClauses} end} [">>"]}
+		   fun {$ X} {OffsetToPauses X FurtherClauses} end}
+	   ["\n>>"]}
 	  " "}
       end
    end
    
-   /** %% [For experts only] creates lilypond output (a VS) for a sequential container which you could use when you overwrite the default sequential output in a clause. FurtherClauses are clauses relevant of items contained in Seq.
+   /** %% [For experts only] creates lilypond output (a VS) for a sequential container. FurtherClauses are clauses relevant of items contained in Seq.
+   %% Default Lilypond output uses this definition. Using this function may simplify writing custom output clauses which overwrite the default output.
    %% */
    %% !! offsets are currently ignored: only positive offsets are currently possible in SDL -- express them by rests
    fun {SeqToLily Seq FurtherClauses}
       {ListToVS
        {GetUserLily Seq} |
-       "\n {" |
+       "\n {\n" |
        {Append {Map {Seq getItems($)}
 		fun {$ X} {OffsetToPauses X FurtherClauses} end}
-	["}"]}
+	["\n}"]}
        " "}
+   end
+
+
+   local
+      %% average pitch decides clef
+      %% LilyClefs = clef(bass_8 bass violin "violin^8")
+      fun {DecideClef X}
+	 %% simple check avarage pitch got confused with pitch classes
+	 %% (note pitch class and chord root are also pitches)
+	 Pitches = {X map($ getValueInMidi test:fun {$ X}
+						   {X isPitch($)} andthen
+						   {Not {X hasThisInfo($ pitchClass)}}
+						% {{X getItem($)} isNote($)}
+						end)}
+	 AveragePitch = {FoldL Pitches Number.'+' 0.0} / {IntToFloat
+							  {Length Pitches}}
+      in
+	 if AveragePitch < 12.0 then "\"bass_29\""
+	 elseif AveragePitch < 24.0 then "\"bass_22\""
+	 elseif AveragePitch < 36.0 then "\"bass_15\""
+	 elseif AveragePitch < 48.0 then "\"bass_8\""
+	 elseif AveragePitch < 60.0 then bass
+	 elseif AveragePitch < 72.0 then violin
+	 elseif AveragePitch < 84.0 then "\"violin^8\""
+	 elseif AveragePitch < 96.0 then "\"violin^15\""
+	 elseif AveragePitch < 108.0 then  "\"violin^22\""
+	 else "\"violin^29\""
+	 end
+      end
+   in
+      /** %% Create a staff and clef for Seq, then output Seq
+      %% */
+      %% Not exported
+      fun {OutmostSeqToLily Seq FurtherClauses}
+	 "\n \\new Staff { \\clef "#{DecideClef Seq}#" "#{SeqToLily Seq FurtherClauses}#" }"
+      end
    end
 
    /** %% Accesses tuple with label 'lily' in info feature of X, and returns VS. The lily tuple must only contain VSs.
@@ -1268,58 +1306,32 @@ define
    end
 
    
-   %% average pitch decides clef
-   % LilyClefs = clef(bass_8 bass violin "violin^8")
-   fun {DecideClef X}
-      %% simple check avarage pitch got confused with pitch classes
-      %% (note pitch class and chord root are also pitches)
-      Pitches = {X map($ getValueInMidi test:fun {$ X}
-						{X isPitch($)} andthen
-						{Not {X hasThisInfo($ pitchClass)}}
-						% {{X getItem($)} isNote($)}
-					     end)}
-      AveragePitch = {FoldL Pitches Number.'+' 0.0} / {IntToFloat
-						       {Length Pitches}}
-   in
-      % {Browse decideClef(X Pitches AveragePitch)}
-      if AveragePitch < 12.0 then "\"bass_29\""
-      elseif AveragePitch < 24.0 then "\"bass_22\""
-      elseif AveragePitch < 36.0 then "\"bass_15\""
-      elseif AveragePitch < 48.0 then "\"bass_8\""
-      elseif AveragePitch < 60.0 then bass
-      elseif AveragePitch < 72.0 then violin
-      elseif AveragePitch < 84.0 then "\"violin^8\""
-      elseif AveragePitch < 96.0 then "\"violin^15\""
-      elseif AveragePitch < 108.0 then  "\"violin^22\""
-      else "\"violin^29\""
-      end
-   end
-   OuterSimBound = {Cell.new false}
-   
-   /** %% [For experts only] creates lilypond output (a VS) for a top-level simultaneous container which you could use when you overwrite the default simultaneous output in a clause. FurtherClauses are clauses relevant of items contained in Sim.
-   %% */
-   %% !! no clef defs yet
-   %% !! no time signature def yet
-   %%
-   %% !! in outmost sims contained in surrounding seqs I cause new
-   %% staff creation. Refering to the old staff may be better (depends
-   %% on context). So for now just always put a Sim around your score
-   %% aeussere seqs funktionieren nicht (keine staff def fuer spaetere
-   %% outmost sims)
-   proc {OutmostSimToLily Sim FurtherClauses ?Result}
-      %% set OuterSimBound to true for all processing within Sim and
-      %% reset it to false at the end. This only works in a purely
-      %% sequential program!
-      {Cell.assign OuterSimBound true}	    
-      Result = " <<"#{ListToVS
-		      {Map {Sim getItems($)}
-		       fun {$ X}
-			  "\n \\new Staff { \\clef "#{DecideClef X}#" "
-			  #{OffsetToPauses X FurtherClauses}#" }"
-		       end}
-		      " "}#"\n"#">>"
-      {Cell.assign OuterSimBound false}
-   end
+   %% TODO: tmp comment until replaced
+%    %%
+%    /** %% [For experts only] creates lilypond output (a VS) for a top-level simultaneous container which you could use when you overwrite the default simultaneous output in a clause. FurtherClauses are clauses relevant of items contained in Sim.
+%    %% */
+%    %% !! no clef defs yet
+%    %% !! no time signature def yet
+%    %%
+%    %% !! in outmost sims contained in surrounding seqs I cause new
+%    %% staff creation. Refering to the old staff may be better (depends
+%    %% on context). So for now just always put a Sim around your score
+%    %% aeussere seqs funktionieren nicht (keine staff def fuer spaetere
+%    %% outmost sims)
+%    proc {OutmostSimToLily Sim FurtherClauses ?Result}
+%       %% set OuterSimBound to true for all processing within Sim and
+%       %% reset it to false at the end. This only works in a purely
+%       %% sequential program!
+%       {Cell.assign OuterSimBound true}	    
+%       Result = " <<"#{ListToVS
+% 		      {Map {Sim getItems($)}
+% 		       fun {$ X}
+% 			  "\n \\new Staff { \\clef "#{DecideClef X}#" "
+% 			  #{OffsetToPauses X FurtherClauses}#" }"
+% 		       end}
+% 		      " "}#"\n"#">>"
+%       {Cell.assign OuterSimBound false}
+%    end
 
    
    local
@@ -1410,21 +1422,31 @@ define
        {Append
 	FurtherClauses
 	%% default Lily output clauses:  
-	[isSequential#fun {$ X} {SeqToLily X FurtherClauses} end
-	 isSimultaneous#fun {$ X}
-			   %% distinguish between outmost and inner Sims 
-			   if {Cell.access OuterSimBound}
-			   then {SimToLily X FurtherClauses}
-			   else
-			      %% outmost sims are staffs
-			      {OutmostSimToLily X FurtherClauses}
-			   end
-			end
+	[
+	 %% Each outmost sequential creates a staff. Outmost sequential here means a sequential container which has no direct or indirect temporal container which is a sequential container 
+	 fun {$ X}
+	    %% Returns true if Y has a sequential as either direct or indirect container
+	    fun {HasSequentialAsContainer Y}
+	       C = {Y getTemporalContainer($)}
+	    in 
+	       C \= nil andthen
+	       ({C isSequential($)} orelse {HasSequentialAsContainer C})
+	    end
+	 in
+	    {X isSequential($)} andthen {Not {HasSequentialAsContainer X}} 
+	 end#fun {$ X} {OutmostSeqToLily X FurtherClauses} end
+	 
+	 isSequential#fun {$ X} {SeqToLily X FurtherClauses} end
+
+	 isSimultaneous#fun {$ X} {SimToLily X FurtherClauses} end
+	 
 	 isNote#{MakeNoteToLily
 		 fun {$ Note}
 		    {LilyMakeMicroPitch {Note getPitchParameter($)}} 
 		 end}
 
+	 %% enharmonic note output
+	 %%
 	 %% NOTE: adds dependency to Strasheela extension
 	 fun {$ X}
 	    {HS.score.isEnharmonicSpellingMixinForNote X}
@@ -1476,7 +1498,6 @@ define
 			       "\n}"])
       As = {Adjoin Default Args}
    in
-      {Cell.assign OuterSimBound false}
       {ListToVS ["%%% created by Strasheela at "#{GUtils.timeVString}
 		 "\n\\version \"2.10.0\"\n"
 		 As.wrapper.1
