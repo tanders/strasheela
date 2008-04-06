@@ -1205,43 +1205,49 @@ define
    %% !! I don't differ between general Sims and chords
    %% !! offsets are currently ignored: only positive offsets are currently possible -- express them by rests or invisible rests (i.e. \skip <duration> )
    fun {SimToLily Sim FurtherClauses}
+      {ListToVS
+       {GetUserLily Sim} |
+       "\n <<" |
+       {Append {Map {Sim getItems($)}
+		fun {$ X} {OffsetToPauses X FurtherClauses} end}
+	["\n>>"]}
+       " "}
+   end
+
+    %% chord contains only notes with equal start and end times 
+   fun {IsLilyChord Sim}
+      if {Sim isSimultaneous($)} 
+      then Items = {Sim getItems($)} in 
+	 {All Items {GUtils.toFun isNote}}
+	 andthen {All Items.2
+		  fun {$ Y}
+		     {Y getStartTime($)} == {Items.1 getStartTime($)}
+		     andthen {Y getEndTime($)} == {Items.1 getEndTime($)}
+		  end}
+      else false
+      end
+   end
+   
+   fun {SimToChord Sim}
       Items = {Sim getItems($)}
+      Pitches = {ListToVS
+		 {Map Items
+		  fun {$ X}
+		     %% ?? micro pitch tmp fix?
+		     {LilyMakePitch {X getPitchParameter($)}}
+		     #{LilyMakeMicroPitch {X getPitchParameter($)}} 
+		  end}
+		 " "}
+      Rhythms = {LilyMakeRhythms
+		 {Items.1 getDurationParameter($)}}
+      FirstChord = {GetUserLily Sim}#"\n <"#Pitches#">"#Rhythms.1
    in
-      %% chord: sim contains only events of same duration
-      if {All Items {GUtils.toFun isEvent}}
-	 andthen
-	 {All Items.2
-	  fun {$ X}
-	     {X getDuration($)} == {Items.1 getDuration($)}
-	  end}
-      then
-	 Pitches = {ListToVS
-		    {Map Items fun {$ X}
-				  %% ?? micro pitch tmp fix?
-				  {LilyMakePitch {X getPitchParameter($)}}
-				  #{LilyMakeMicroPitch {X getPitchParameter($)}} 
-			       end}
-		    " "}
-	 Rhythms = {LilyMakeRhythms
-		    {Items.1 getDurationParameter($)}}
-	 FirstChord = "\n <"#Pitches#">"#Rhythms.1
-      in
-	 if {Length Rhythms} == 1
-	 then FirstChord
-	 else FirstChord#{ListToVS
-			  {Map Rhythms.2
-			   fun {$ R} " ~ <"#Pitches#">"#R end}
-			  " "}
-	 end
-	 %% 'normal' sim
-      else
-	 {ListToVS
-	  {GetUserLily Sim} |
-	  "\n <<" |
-	  {Append {Map {Sim getItems($)}
-		   fun {$ X} {OffsetToPauses X FurtherClauses} end}
-	   ["\n>>"]}
-	  " "}
+      if {Length Rhythms} == 1
+      then FirstChord
+      else FirstChord#{ListToVS
+		       {Map Rhythms.2
+			fun {$ R} " ~ <"#Pitches#">"#R end}
+		       " "}
       end
    end
    
@@ -1437,6 +1443,8 @@ define
 	 end#fun {$ X} {OutmostSeqToLily X FurtherClauses} end
 	 
 	 isSequential#fun {$ X} {SeqToLily X FurtherClauses} end
+
+	 IsLilyChord#SimToChord
 
 	 isSimultaneous#fun {$ X} {SimToLily X FurtherClauses} end
 	 
