@@ -27,6 +27,7 @@ export
    AscendingProgressionR
    DescendingProgressionR
    SuperstrongProgressionR
+   ConstantProgressionR
    ProgressionStrength
 
    ResolveDescendingProgressions
@@ -62,13 +63,11 @@ define
    end
 
 
-   /*
    %% B=1 <-> the two scales X and Y have a common root but their pitchclasses differ. This case is ommited by Schoenberg discussing root progressions (he likely implicitly disallowed it).
    %% 
    proc {ConstantProgressionR X Y B}
       B = ({X getRoot($)} =: {Y getRoot($)})
    end
-   */
 
 
    /** %% Expects two chord/scale objects X and Y, and returns N (an FD int) expressing the 'strength' of the harmonic progression encoded by a single integer.
@@ -101,10 +100,11 @@ define
    end
 
    /** %% Expects a list of chord/scale objects and constrains them according to Schoenberg's recommendation. For any three successive chords/scales, if the first two chords form a descending progression, then the progression from the first to the third chord forms a strong/superstrong progression (so the middle chord is quasi a 'passing chord'). Also, the last chord/scale pair forms always a strong progression.
-   %% Optional Args: allowInterchangeProgression (default is false). If true, then mere interchange progressions (e.g., I V I), are permitted as well. In any case, no two descending progression must follow each other.
+   %% Optional Args: allowInterchangeProgression (default is false). If true, then mere interchange progressions (e.g., I V I), are permitted as well. In any case, no two descending progression must follow each other. allowRepetition: if true, two neighbouring chords can have the same root. Defaults to false.
    %% */ 
    proc {ResolveDescendingProgressions Xs Args}
-      Default = unit(allowInterchangeProgression:false)
+      Default = unit(allowInterchangeProgression:false
+		     allowRepetition:false)
       As = {Adjoin Default Args}
    in
       if As.allowInterchangeProgression
@@ -121,6 +121,10 @@ define
 		 {SuperstrongProgressionR X Z}}
 		1}
 	    end}
+      end
+      if {Not As.allowRepetition}
+      then {Pattern.for2Neighbours Xs
+	    proc {$ X Y} {ConstantProgressionR X Y} = 0 end}
       end
       %% the last two chords must form an ascending progression.
 %      {AscendingProgressionR {List.last Xs} {LUtils.butLast Xs}
