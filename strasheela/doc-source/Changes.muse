@@ -12,12 +12,21 @@
     - Out.makeLilyTupletClauses: easy Lilypond customisation for tuplet support
 
 
+
   - Documentation
     - Added further ET31 examples (ET31-test.oz)
     - Fuxian counterpoint example revised (now follows Fux' cadence rule): [file] 
     - Generalised Fuxian counterpoint example: the user can specify the cantus firmus, even in different modes. Also, this example demonstrates the use of scale objects together with note objects: [file]
+    - Added examples/HarmonicProgressions-31ET.oz
 
   - Fixes and minor additions 
+    - Revised Lilypond output 
+      - Now outputs version 2.10.0 (latest stable release) 
+      - Revised output of chords (sims containing only notes) to Lilypond
+      - Only for outmost sequential container (which has no direct or indirect sequential container) a staff is explicitly created. For example, a chord progression can not be notated on a single staff with the following score topology: seq(sim(note+)+)
+        Note: in typical Lily-suitable score topology, a sim is top-level container and its items are seq containers corresponding to the instruments  If top-level is a seq, then there is only a single staff. However, you can always explicitly create staffs in subcontainers with lily info-tags, see [above] (such staffs last only for duration of their container) 
+      - 
+      - Removed function: Out.outmostSimToLily 
     - GUtils.randIntoRange never selected upper random limit (and so random value ordering never selected upper domain boundary)
     - Lilypond output procedures/functions support an additional optional argument 'wrapper' for inserting arbitrary Lilypond code at the beginning and end of the Lilypond output file
     - The pitch parameter method getValueInMidi now supports any equal temperament pitch unit which fits the pattern et<Digit>+, e.g., et31 or et53  
@@ -26,6 +35,8 @@
     - HS.score: added classes FullChord, ChordNote, ScaleNote
     - LUtils.lastN
     - Fixed bugs in examples/05-MicrotonalChordProgression.oz (harmony database specification and accessing score object info attribute were obsolete)  
+    - HS.rules.schoenberg: fixed ResolveDescendingProgressions (no root repetition by default), added ConstantProgressionR
+    - HS.score.chordsToScore: fixed distribution strategy (was extremely slow if note octave was more restricted than pitch class)
 
 
 
