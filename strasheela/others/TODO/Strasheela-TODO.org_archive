@@ -436,6 +436,43 @@ Problem: should that be called automatically when certain tests are executed? Wh
   Examples: ET31.out, testfiles..
 
 
+* DONE Add revised Fuxian Counterpoint example with scale degrees	  :NEXT:
+  CLOSED: [2008-04-08 Tue 18:01]
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2008-04-08 Tue 18:02
+  :ARCHIVE_FILE: ~/oz/music/Strasheela/strasheela/trunk/strasheela/others/TODO/Strasheela-TODO.org
+  :ARCHIVE_OLPATH: Strasheela examples
+  :ARCHIVE_CATEGORY: Strasheela
+  :ARCHIVE_TODO: DONE
+  :ARCHIVE_ITAGS: STRASHEELA
+  :END:
+
+  No much fuss: add to list of examples under name Fuxian-revised or something
+
+  Mention in comment: example demonstrates use of scale degrees
+
+  Add note/link to example HTML file in doc
+
+* DONE Proofread Strasheela tutorial before next release		  :NEXT:
+  CLOSED: [2008-04-08 Tue 18:11]
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2008-04-08 Tue 18:11
+  :ARCHIVE_FILE: ~/oz/music/Strasheela/strasheela/trunk/strasheela/others/TODO/Strasheela-TODO.org
+  :ARCHIVE_OLPATH: Strasheela documentation/Strasheela tutorial
+  :ARCHIVE_CATEGORY: Strasheela
+  :ARCHIVE_TODO: DONE
+  :ARCHIVE_ITAGS: STRASHEELA
+  :END:
+
+** DONE Checkout all sections marked TODO and edit them
+   CLOSED: [2008-04-08 Tue 18:11]
+
+** DONE Proofread whole Oz-part as printout
+   CLOSED: [2008-04-08 Tue 18:11]
+
+
+
+
 
 
 

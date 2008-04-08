@@ -2,6 +2,7 @@
 
 * Strasheela examples						    :STRASHEELA:
 
+
 ** TODO Create decatonic test chord progression				  :NEXT:
 
    Check chord progression CSPs I did for 31 ET and adapt them for
@@ -36,7 +37,50 @@
 *** Implement description
 
 
-** Muzak Beispiel mit Kilian 
+
+*** Concurrent procedure/method filter (filterThreaded) which does return stream instead of list :NEXT:
+
+    as soon as enough information is available on specific score
+    object to fulfull given test function, add it to stream. Close
+    stream as soon as it is known that no further elements will be
+    added.
+
+
+** Create small-scale musical example which demonstrates the effect of LUtils.cFilter and LUtils.cFind :NEXT:
+   
+*** TODO Sketch a small-scale music theory in plain English  
+
+    Idea: modulation example: scale(s) related to each chord (and chords related to each note) are found with LUtils.cFilter/LUtils.cFind. 
+
+    Alternative idea:  
+    
+    map(filter(getAllNotes(myScore), isOnStrongBeat), 
+      f : f(n) := getPitchClass(n) \in getPitchClassSet(find(getChordProgression(myScore), 
+							     g : g(c) := isSimultaneous(n, c))))
+
+*** TODO Implement this theory
+
+    see LUtils-test.oz for a LUtils.cFilter and LUtils.cFind test
+
+
+*** More Info
+
+    NOTE: this matter could make it into a publication (part of a publication)! 
+
+    Related approach: find using filter + reified constraints as boolean tests is related but note the same. 
+
+    However, even if boolean test would return true for some datum already, find blocks if reified constraint blocks on some element before. This new approach works even when I don't know in which order variables are determined and thus in which order elements are added to the stream. 
+
+    Similar issue with filter: even with reified constraints as boolean tests, filter may block completely until enough information is available in all data. An concurrent filter would return data in a stream as soon as enough information is available on these data.
+ 
+    Sufficient to have a filter which concurrently processes a list of objects. I only need to collect all data with collect (e.g., all data matching test function) and then do concurrent filter on this result list. 
+
+    A method filterThreaded would further improve the application of delayed constraints where filtering tests used reified constraints 
+    E.g., I could use a method filterThreaded for a better definition of getSimultaneousItems
+
+
+
+** Muzak Beispiel mit Kilian						 :MAYBE:
 
    see 
    [[file:/Users/t/texte/CollaborationWithKilian/Muzaks/]]
@@ -44,15 +88,6 @@
 *** TODO Recapitulate definition: how is resulting value seq organised
 *** Port Lisp to Oz
 *** Redefine as constraint 
-
-
-** TODO Add revised Fuxian Counterpoint example with scale degrees 	  :NEXT:
-
-   No much fuss: add to list of examples under name Fuxian-revised or something
-
-   Mention in comment: example demonstrates use of scale degrees
-
-   Add note/link to example HTML file in doc
 
 ** Josquin counterpoint example						 :MAYBE:
 
@@ -233,6 +268,7 @@ configure: error: ozinstall not found
 *** Generalise accessors used for output
 
     Accessor methods like getDurationInSeconds or getPitchInMidi must be generalised to support either FD ints or XRI vars
+
 
 ** DONE Introduce some generalised concept of 'cadence'		       :ARCHIVE:
    CLOSED: [2008-04-08 Tue 17:10]
@@ -975,41 +1011,6 @@ Applying conversion: 2.5.0, 2.5.1, 2.5.2, 2.5.3, 2.5.12, 2.5.13, 2.5.17, 2.5.18,
 ****** My extensions
 
 
-** Refactoring 
-
-*** Concurrent procedure/method filter (filterThreaded) which does return stream instead of list :NEXT:
-
-    as soon as enough information is available on specific score
-    object to fulfull given test function, add it to stream. Close
-    stream as soon as it is known that no further elements will be
-    added.
-
-**** TODO [#A] Create small-scale musical example which demonstrates the effect of LUtils.cFilter and LUtils.cFind
-
-     map(filter(getAllNotes(myScore), isOnStrongBeat), 
-       f : f(n) := getPitchClass(n) \in getPitchClassSet(find(getChordProgression(myScore), 
-                                                              g : g(c) := isSimultaneous(n, c))))
-
-
-     see LUtils-test.oz for a LUtils.cFilter and LUtils.cFind test
-
-
-**** More Info
-
-     NOTE: this matter could make it into a publication (part of a publication)! 
-
-     Related approach: find using filter + reified constraints as boolean tests is related but note the same. 
-
-     However, even if boolean test would return true for some datum already, find blocks if reified constraint blocks on some element before. This new approach works even when I don't know in which order variables are determined and thus in which order elements are added to the stream. 
-
-     Similar issue with filter: even with reified constraints as boolean tests, filter may block completely until enough information is available in all data. An concurrent filter would return data in a stream as soon as enough information is available on these data.
-  
-     Sufficient to have a filter which concurrently processes a list of objects. I only need to collect all data with collect (e.g., all data matching test function) and then do concurrent filter on this result list. 
-
-     A method filterThreaded would further improve the application of delayed constraints where filtering tests used reified constraints 
-     E.g., I could use a method filterThreaded for a better definition of getSimultaneousItems
-
-
 ** Efficiency
    
 *** [#A] check out performance with adaptive recomputation		  :NEXT:
@@ -1296,13 +1297,6 @@ See ../../testing/zy_Efficiency/KeepMusicRepresentationOutsideComputationalSpace
 * Strasheela documentation					    :STRASHEELA:
 
 ** Strasheela tutorial
-
-*** Proofread Strasheela tutorial before next release			  :NEXT:
-
-**** TODO Checkout all sections marked TODO and edit them
-
-**** TODO Proofread whole Oz-part as printout
-
 
 *** Strasheela tutorial: do music constraint programming 'chapter'
 
