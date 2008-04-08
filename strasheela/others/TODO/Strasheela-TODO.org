@@ -2,7 +2,28 @@
 
 * Strasheela examples						    :STRASHEELA:
 
-** 'Interesting arpeggio' example [[file:~/oz/music/Strasheela/private/examples/forOlleRomo/Arpeggio.oz][Arpeggio.oz]] 				  :SOON:
+** TODO Create decatonic test chord progression				  :NEXT:
+
+   Check chord progression CSPs I did for 31 ET and adapt them for
+   22 ET with decatonic scales
+   
+*** Further ideas for rules 
+
+    - Only decatonic chords
+    - Strong chord progressions (Schoenberg rule)
+    - ?? Finish with cadence (needs def what cadence is)
+    - ?? Constrain chord identity with morphology constraints to roughly follow "orgiastic curve"
+
+    - ?? resolve dissonances
+    - ?? control degree of dissonances (e.g., either only gradually increasing and decreasing of dissonance or use of dissonance where [betonung] is needed)
+    - ?? 'harmonic motifs': short chord sequences which are repetitions of previous sequences but on different degree (possibly even extending tonality..)
+
+
+** 'Interesting arpeggio' example [[file:~/oz/music/Strasheela/private/examples/forOlleRomo/Arpeggio.oz][Arpeggio.oz]]				  :SOON:
+
+   [?? Wait until I have prototype-based motif model -- he wants to
+   shape duration and velo parameters with functions, I can do that
+   with fenvs, but is this consistent with new motifs idea?]
 
   ?? Duration working time: 1d -- probably more :)
 
@@ -44,6 +65,7 @@
 ** Inventio								 :MAYBE:
 
    See [[file:/Users/t/oz/music/Strasheela/private/examples/Inventio/]]
+
 
 * Strasheela design						    :STRASHEELA:
 
@@ -212,8 +234,10 @@ configure: error: ozinstall not found
 
     Accessor methods like getDurationInSeconds or getPitchInMidi must be generalised to support either FD ints or XRI vars
 
+** DONE Introduce some generalised concept of 'cadence'		       :ARCHIVE:
+   CLOSED: [2008-04-08 Tue 17:10]
 
-** Introduce some generalised concept of 'cadence' 
+   =======
 
    Example: {Cadence Chords Scale} constraints that union of all pitch classes in Chords (list of N chords) contains all pitchclasses of Scale. Additional arguments (some FD int?) may allow to specify whether cadence ends in I or some form of deceptive cadence occurs. 
    Combined with disallowing of weak harmonic steps with ProgressionStrength this should result in classical cadence (doublecheck ??)
@@ -221,13 +245,15 @@ configure: error: ozinstall not found
    What generalised notions are there in the literature for a cadence?
    My problem: I would like to have a cadence concept which also works, e.g., for music in extended just intonation and is not simply something like II V I... I would like to structure [unconventional] music. Does this problem occur in literature? How do they do this in Jazz, for example?
 
-*** TODO Check literature for cadence concepts
+*** DONE Check literature for cadence concepts
+    CLOSED: [2008-04-08 Tue 17:10]
 
     Is there anything like a generalised concept proposed already
 
 *** Define constraint 
 
 
+    
 ** Introduce some generalised concept of resolution of dissonances
 
 *** Extend chord music representation: which chord notes are dissonant?
@@ -296,15 +322,16 @@ configure: error: ozinstall not found
 
    Are there other ways: using overlapping scale objects effectively results in CSP which constraints hierarchic structure
 
+   
 
 
-
-** Harmonic constraint ProgressionStrength				  :NEXT:
+** Harmonic constraint ProgressionStrength			  :NEXT:ARCHIVE:
 
    see [[file:~/oz/music/Strasheela/tmp.oz::functor%20SchoenbergF][file:~/oz/music/Strasheela/tmp.oz::functor SchoenbergF]]
 
 *** DONE Move definitions from Strasheela/tmp.oz into HS.rules 
-    CLOSED: [2008-03-22 Sat 00:15]    
+    CLOSED: [2008-04-08 Tue 17:09]
+
     As subfunctor?
 
 *** DONE Implement constraint for strong, weak and superstrong
@@ -321,7 +348,8 @@ configure: error: ozinstall not found
     CLOSED: [2008-03-17 Mon 14:04]
 
     
-*** TODO [80%] Write test suite for testing all constraints 
+*** DONE Write test suite for testing all constraints 
+    CLOSED: [2008-04-08 Tue 17:37]
 
     Missing is only ResolveDescendingProgressions
 
@@ -331,8 +359,11 @@ configure: error: ozinstall not found
 
     Based on root PC intervals 
 
-*** Create example(s)
-*** Create Documentation [70%]						  
+*** DONE Create example(s)
+    CLOSED: [2008-04-08 Tue 17:09]
+*** DONE Create Documentation 						  
+    CLOSED: [2008-04-08 Tue 17:10]
+
 
 
 ** Morphology analysis constraints					  :NEXT:
@@ -456,6 +487,332 @@ configure: error: ozinstall not found
 *** Define example (see above)
 
 
+** Edit chord, scale and interval database (22 pitches per octave)
+
+    [[file:~/oz/music/Strasheela/private/0-privateContributions/ET22/source/DB.oz::functor]]
+
+*** Better understand decatonic scales					  :NEXT:
+
+**** TODO Analyse their intervals (incl JI interpretations)
+
+     See decatonic scales GTD folder: emails by Erlich with ratios,
+     his article with picts showing scales as periodicity block etc
+
+**** TODO Understand which chords can be formed on which degree
+
+     I can do CSP for this: find all consonant decatonic chords
+     possible on degree X
+
+**** TODO Understand close decatonic [regions]: what would be the septimal equivalent of mediants
+
+
+*** Chord database
+
+**** TODO Manually add harmonicity measurements				  :EASY:
+
+     %% Howto get harmonicity measurements from Scala
+%%
+%        create scale (chord/intervals are also scales) from ratios in Scale (e.g., with new or edit scale), then do 
+%        SHOW DATA
+%
+%        extract the interesting numbers from the printout, e.g., 
+%        Euler's gradus suavitatis, Vogel's harmonic complexity, Sum of Tenney's harmonic distance, Wilson's harmonic complexity, Sum of Mann's harmonic distance
+%
+%        alternative for single intervals:
+%        SHOW/ATTRIBUTE pitch <pitch>
+%        Show the value of all attributes for the given pitch (regardless of scale context)
+%
+%        for single intervals I also wrote a litte script for showing a few measurements
+%        /Applications/Scala/T_Harmonicity.cmd
+%       
+%        NOTE: these values can only be computed from ratios! 
+
+**** TODO Add feature 'dissonance'
+
+     extend music representation etc accordingly
+
+**** TODO Add feature 'required' (pitch classes)
+
+     Otherwise, chord DB entries are redundant
+
+     ?? extend music representation etc accordingly
+
+     Quick solution before I have this extension: restrict to chord indices with max number of pitches (e.g., no triads which are contained in tetrads)
+
+**** TODO Add feature 'otonal/utonal'
+**** TODO ?? Add silent roots (e.g., 5:6:7 and 6:7:9 both have silent root 4)
+
+**** TODO decide: shall I combine siblings which only differ in root into single chord: constraining chord index, e.g., with Morphology constraints may make more sense then. 
+
+**** Verify chords
+
+     Note: look particularly for chord pairs on pict by Dave Keenan -- do they indeed only differ in root 
+
+
+***** TODO Study lily output for all chords
+
+      common music notation with 22 ET accidentals, ratios, and chord name
+
+      see [[file:~/oz/music/Strasheela/strasheela/trunk/strasheela/contributions/anders/ET22/testing/DB-test.oz::Traverse%20all%20chords%20in%20database%20create%20a%20score%20whose%20notes%20express%20it%20and%20output%20Lilypond%20Csound][file:~/oz/music/Strasheela/strasheela/trunk/strasheela/contributions/anders/ET22/testing/DB-test.oz::Traverse all chords in database create a score whose notes express it and output Lilypond Csound]]
+
+***** TODO listen: all consonant?
+      
+
+**** TODO Search for further chords					 :MAYBE:
+
+
+**** TODO Extract remaining chords from hexad on picts by Dave Keenan (GTD folder "decatonic scales") :MAYBE:
+     
+
+*** Scale database							 :MAYBE:
+
+
+**** ?? Extend scale database						 :MAYBE:
+
+     There are many other scales in Scala which fit into 22 ET
+
+     
+*** Create Midi output for 22 ET					  :NEXT:
+
+**** TODO For my Kontakt scripting
+
+**** TODO General MIDI out hack
+
+     Use 16 MIDI channel, add pitch bend value for each note (assuming 2 semitone range up and down), voice stealing: oldest note.
+     Note: this is a hack which does not always work (oldest note may still be sounding!). But it is a useful hack, and if added to Tutorial then users can adapt it at need.
+
+
+
+*** Different Temperaments 
+
+**** TODO Create list with advantages / disadvantages of the different temperaments suggested for the decatonic scales
+    
+     Re-read the emails, check which basic intervals (3, 5, 7-limit)
+     are how well represented (read cent figures in Scala and listen
+     to intervals and chords)
+
+     Don't decide for a temperament at this stage. Instead, I better
+     make temperament easy to change. Then I can later just try
+     different temperaments and decide which I like most. I might even
+     use different temperaments for different sections
+
+
+*** Extend simple decatonic test theory of harmony			  :WAIT:
+
+    First finish DB and get preliminary examples running
+
+**** TODO Understand the advantages of each decatonic scale 
+
+**** Create extended 'decatonic tonality'
+
+     What is septimal correspondant of mediant chords..?
+
+     Shall I in (the beginning?) handle "wendepunkte" as adviced by Schoenberg?
+
+**** Create modulation with 'decatonic tonality'
+
+
+*** Create little melodies						  :WAIT:
+
+    Wait until databases and first test are created.
+
+**** Melodic rules
+
+     - ?? Restrict melodic intervals
+     - Over given chord, all chord pitches are permitted and all non-chord pitches if they are resolved (step-wise progression)  
+       Better form for this??
+     - ?? Constrain pitch (class) sequence with morphology constraints (constrain contour of morphology analysis to roughly follow "orgiastic curve")
+       
+
+**** Melody using motifs (over chord progression)
+
+     For now monophonic melody (with simple accompaniment?), later polyphonic setting, e.g., harmonic counterpoint
+
+     Either use my motif model or (more simple?) sub-CSPs (extended
+     scripts), e.g., with algo comp technique like L-ystems.
+
+     Example rules for motifs:
+
+     - restrict melodic contour (only tendency? with something like PercentTrue_Range)
+     - restrict rhythm to something recognisable (i.e. motif instances are recognised)
+       Again, do this 'soft'. E.g., specify startTime (relative to motif start) and duration of important notes, without specifying the position of this note (i.e. number of notes can vary). Or specify the start time (relative to motif start) of local pitch maxima (again, number of notes can vary).
+
+     - ?? Use timing curve to create 'interpretation' (create variants for different motifs)
+
+	
+
+
+
+
+** Edit chord, scale and interval database (31 pitches per octave)	 :MAYBE:
+
+   See [[file:~/oz/music/Strasheela/private/0-privateContributions/ET31/source/DB.oz::Internally%20database%20entries%20are%20often%20defined%20by%20ratios%20using%20notation%20X%20Y%20for%20X%20Y%20to%20make%20them%20more%20comprehensible%20and%20portable%20to%20other%20temperaments%20Alternatively%20chords%20and%20scales%20are%20notated%20with%20conventional%20symbolic%20note%20names%20see%20function%20PC%20In%20any%20case%20the%20databases%20focus%20on%20chords%20scales%20and%20intervals%20which%20are%20close%20to%20just%20intonation%20in%2031%20ET][file:~/oz/music/Strasheela/private/0-privateContributions/ET31/source/DB.oz]]
+   and [[file:ET31/music-sketches/ChordTest.oz][file:~/oz/music/Strasheela/private/CompositionPlans/ET31/music-sketches/ChordTest.oz]]
+
+*** Add harmonic complexity / dissonance degree info
+
+    Use Scala software to get information about [dissonance degree] 
+    There are different measurements available (Vogler, Tenney?, Barlow?): use multiple in extra DB features? 
+
+**** TODO Manually add harmonicity measurements to all DB entries 
+
+%% Howto get harmonicity measurements from Scala
+%%
+%        create scale (chord/intervals are also scales) from ratios in Scale (e.g., with new or edit scale), then do 
+%        SHOW DATA
+%
+%        extract the interesting numbers from the printout, e.g., 
+%        Euler's gradus suavitatis, Vogel's harmonic complexity, Sum of Tenney's harmonic distance, Wilson's harmonic complexity, Sum of Mann's harmonic distance
+%
+%        alternative for single intervals:
+%        SHOW/ATTRIBUTE pitch <pitch>
+%        Show the value of all attributes for the given pitch (regardless of scale context)
+%
+%        for single intervals I also wrote a litte script for showing a few measurements
+%        /Applications/Scala/T_Harmonicity.cmd
+%       
+%        NOTE: these values can only be computed from ratios! 
+
+
+***** chord / scale (works for intervals too)
+
+      create scale/chord from ratios in Scale (e.g., with new or edit scale), then do 
+      SHOW DATA
+
+      extract the interesting numbers from the printout, e.g., 
+      Euler's gradus suavitatis, Vogel's harmonic complexity, Sum of Tenney's harmonic distance, Wilson's harmonic complexity, Sum of Mann's harmonic distance    
+      
+      NOTE: these values can only be computed from ratios! 
+
+***** Single interval
+
+      First step: I wrote a litte script for showing a few measurements
+      [[file:/Applications/Scala/T_Harmonicity.cmd::Creates%20new%20scale%20from%20user%20input%20and%20returns%20harmonicity%20measurements][file:/Applications/Scala/T_Harmonicity.cmd::Creates new scale from user input and returns harmonicity measurements]]
+
+      Alternative:
+
+      Show/Attribute pitch <pitch>
+      Show the value of all attributes for the given pitch (regardless of scale context)
+
+      Does something similar for chords/scales exist?
+      
+***** Info
+
+      Add this info to DB, so I later know..  
+
+****** Transform ET scale into just scale
+
+       harmonicity calculations require JI ratios, not an ET scale... 
+
+       Note: this operation takes long time. 
+
+	 Approximate [LIMIT]
+
+       Hm, this completely changes the scale, probably a less good idea.
+       Instead, for every interval (chord/scale), I could do the approximation myself (already in ET31 database..), and then use these data for my queries
+
+****** Display interval info
+
+       First, change attribute displayed with commands like SHOW. See possible values below
+
+	 set attribute <VALUE>
+
+       Then display values, e.g.,
+
+	 Show
+	 Show/Attribute : Only displays attribute
+
+       Note: only works for JI ratios, not 31 ET
+
+
+       Values (http://www.xs4all.nl/~huygensf/scala/help.htm#SET): 
+       - GRADUS: the Gradus Suavitatis of Euler 
+       - HARMON: the Barlow harmonicity value 
+       - INV_HARMON: the absolute reciprocal of Barlow's harmonicity value
+       - VOGEL: the Vogel harmonic complexity value
+       - TENNEY: the Tenney harmonic distance value: log(num*den) 
+       - WILSON: the Wilson harmonic complexity value (sum of primes except 2)
+       - PERRY: the Perry harmonic complexity value 
+	 ... 
+
+	 There are various remarks in doc on these..
+
+****** Display scale info
+
+       Show data
+
+       Again, works for JI scale, not ET
+
+
+
+
+*** Add additional chords 
+
+**** Play around with Scala clavier to find additional chords 
+
+***** TODO Find further septimal chords
+
+
+**** Check Scala chord database: which chords fit into 31 ET
+
+     I feel I did this already..
+
+
+**** Re-check written info on chords in articles in [meinen Unterlagen] 
+
+     I feel this is mostly done already
+
+
+*** Add scales suitable for chords which go beyond 5-limit (not simply diatonic scales)
+    
+    If I want to use melodic steps, then I likely must use non-harmonic notes. However, then I must introduce scales (so the non-harmonic notes are not arbitrary). These scales must match the chords. 
+
+**** DONE Get info: how can I construct suitable scales for given set of chords :ARCHIVE:
+     CLOSED: [2008-04-07 Mon 18:45]
+
+    Possible approaches (see new menu in Scale): create Euler-Fokker genus (lattice), create Fokker periodicity block, create poly chordal scale, create combination product set ...  
+
+    Use lattrice player for evaluating, testing, thinking about...
+
+
+
+**** TODO Scale: After creating 31 ET scale check available scales (modes)
+
+     Evaluate these scales for 7-limit harmony. Even if they are inverior to Erlich's decatonic scales, consider using them in a restricted way where scales change all the time togethere with the chords. 
+
+     There are e.g. the following scales 
+
+     - Octatonic
+     - Lumma Decatonic
+     - Hahn symmetric pentachordal
+     - Hahn pentachordal
+
+     Note that these scales are inverior to Erlich's decatonic scales
+
+     - Melodically less convincing
+     - Harmonically less flexible
+       Less consonant intervals and chords are available 
+       Example: 
+       - In Erlich's scale there are 8 usable chords with same key pattern (2 not usable)
+       - Lumma Decatonic: only 4 5th, 5 3rds (diatonically speaking)
+       - Hahn summ pentachordal: 4 5th, 4 3th
+       - Hahn pentachordal: 5 5th
+       - Octatonic: 6 kl 3th
+
+
+*** TODO Edit/Doublecheck the naming of chords, scales, and intervals
+
+    Use Scala as a reference 
+
+    Make names short enough that they are [eindeutig] in 31 ET
+
+*** TODO Add abbrevations as alternative naming scheme			 :MAYBE:
+
+    Edit HS.db.getChordIndex and friends accordingly
+
+*** Add additional diatonic scales 					 :MAYBE:
+
+
 ** Score transformation
 
    see [[file:~/oz/music/Strasheela/private/WorkInProgress/ScoreTransformation/ScoreTransformation.oz]]
@@ -467,7 +824,6 @@ configure: error: ozinstall not found
 
    see [[file:~/oz/music/Strasheela/private/WorkInProgress/ScoreTransformation/ScoreTransformation.oz]]
    and [[file:~/oz/musi
-
 
 
 ** Idea: user-guided search process: preserve already satisfying sections in output :WAIT:
