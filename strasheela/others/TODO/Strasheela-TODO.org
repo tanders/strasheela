@@ -389,6 +389,20 @@ configure: error: ozinstall not found
 
 
 
+** New prototype-based motif model					  :NEXT:
+
+   see [[file:~/oz/music/Strasheela/private/WorkInProgress/Motifs-Again/Ideas.org]]
+   und GTD folder 
+
+*** TODO Brainstorming fuer mini language
+
+    see handgeschriebene Notizen in GTD folder "Motif model: prototype based"
+
+*** TODO Brainstorming fuer constraints between motif instances 
+    
+*** TODO Formalisieren der Ideen 
+
+
 ** Time curves etc [[file:~/oz/music/Strasheela/private/examples/forOlleRomo/TempoCurves-etc.oz][TempoCurves-etc.oz]]					  :NEXT:
 
    [[file:~/oz/music/Strasheela/strasheela/trunk/strasheela/examples/ContinuousControllersInScore-MidiOutput.oz]]
@@ -454,19 +468,131 @@ configure: error: ozinstall not found
    see [[file:~/oz/music/Strasheela/private/WorkInProgress/ScoreTransformation/ScoreTransformation.oz]]
    and [[file:~/oz/musi
 
-** Update Lilypond output 
 
-   Lilypond export outputs only rather old version. Meanwhile, Lilypond handles nested scores (quasi sim/seq containers) better than old version, but behaviour of old version is pertained when using Lily's conversion script. So, I should update my Lily output to a more Lily syntax version
 
-*** TODO Create SVN branch
+** Idea: user-guided search process: preserve already satisfying sections in output :WAIT:
 
-*** Understand what format Strasheela presently outputs and compare with recent Lily doc
+   [wait until prototype-based motif model is realised]
 
-**** TODO Decide for target Lilypond version 
+   When composing, I have to listen to much solutions. Some parts of a solution might satisfy already, so I might want to keep that part and then get further results. How can I formalise this for easy use? 
+   
+*** Approach sketched
 
-     There are presently only few Strasheela users, so I might ask/force them all to switch to the latest Lilypond development version.
+    CSP defined by extended script. One optional script arg expects function which creates a score. This score is 'unified' with solution. (if no arg was given, this unification is skipped) 
 
-***** Ueberlegung
+    Whenever we have a solution where we like some parts, we save (archive) the init record. In this textual representation we mark the bits we like (manual editing: add specific info tags to single elements or containers). For a more flexible approach, different marks might be introduced (use the mini language of the prototype-based motif model). For example, we might apply constraints directly to single score objects (e.g., this note should be highest pitch) 
+
+    Some function (to define) expects this annotated score and creates reduced score spec whose score topology is exactly as the solution, constraints according to mini language are applied (typically, only marked parameters are determined, every other parameter is unconstrained).
+   For convenience, this function might expect the path of the archive score file (*.ssco file) whose def in the included with an \include statement. 
+
+   Parts which are marked in the input are again marked in the solution (so they have not to be marked again). 
+
+   Later, this approach might be complemented by a GUI score interface (e.g., using PWConstraints score editor) for marking score parts to keep.
+
+**** Mini language for marking score objects 
+
+     See mini language for prototype-based motif model. It should be the same mini language.
+
+**** Explanation why extra arg for extended script: 
+     
+     I need script definition where I can specify a partically determined solution. I already have that somehow. Script always returns solution and it usually contains some texual spec. However, I cannot use solution arg as input (its an object containing vars, I cannot have vars defined outside script), and within script the music representation is often created in stages. So, I need an additional arg which expects a function which returns partially determined score object. This score and the solution are then 'unified' (using my score unification via the textual representation. NOTE: things where these scores might differ including the info tag might be left out).  
+   
+
+
+define CSP which expects its solution score in textual form. 
+
+archive init record. 
+
+   
+
+*** TODO Create simple example which uses this approach 
+
+*** Create abstractions needed for this approach 
+
+**** TODO Mini-language implementation	
+
+     Expects an annotated score object (textual representation) and returns score object constrained according to the mini language
+
+     -> Use implementation of mini language for prototype-based motif model
+     
+
+**** TODO Define function expecting a path with a *.ssco file and returning a nullary function which returns score where only the marked bits are determined / constrained
+
+     
+
+
+** Update Lilypond output						  :NEXT:
+
+*** TODO Create clause for multiple voices in single staff
+
+    Test for sim which contains only seq, which in turn contain only notes or lily chords
+   
+    If seqs in sim, and there are further higher-level containers, only notes and sims expressing chords (i.e. sim expresses muliple voices in single staff), and the seqs contain only notes (needed condition?),
+    then separate multiple seqs with // as in 
+
+    <<
+       { a4 g2 f4~ f4 } \\
+       { r4 g4 f2 f4 }
+     >>
+
+     Note: having a slash too much at the end does not hurt..
+
+    http://lilypond.org/doc/v2.11/Documentation/user/lilypond-learning/Single-staff-polyphony#Single-staff-polyphony
+
+*** TODO Check what OffsetToPauses does
+
+    SeqToLily and SimToLily claim that offsets are ignored, but they use function OffsetToPauses..
+
+*** DONE Update version tag to "2.10.0"
+    CLOSED: [2008-04-06 Sun 20:58]
+
+*** DONE Remove OuterSimBound
+    CLOSED: [2008-04-06 Sun 23:55]
+
+*** DONE Only outmost sequential container creates a staff
+    CLOSED: [2008-04-06 Sun 23:30]
+
+    NB: Upmost sim container does _not_ always create staffs  
+
+    Revise: each top-level sequential creates a staff. Top-level here means a sequential container which has no direct or indirect temporal container which is a sequential container 
+
+    Use decide clef! 
+
+    -----
+
+    Note: in typical Lily-suitable score topology, a sim is top-level container and its items are seq containers corresponding to the instruments 
+    If top-level is a seq, then there is only a single staff. However, I can always explicitly create staffs in subcontainers (when then last for a short time only)
+
+
+
+*** DONE Create clause for chords
+    CLOSED: [2008-04-06 Sun 23:54]
+    
+    do test: if sim and only notes of same start and end time are contained: then print chord (almost equivalent to single note in notation: only single stem, common ties etc)
+
+    Remove corresponding code section in SimToLily
+
+
+*** DONE Disable call of convert-ly
+    CLOSED: [2008-04-06 Sun 21:00]
+
+
+*** Old todo for Lilypond output 
+
+    Lilypond export outputs only rather old version. Meanwhile, Lilypond handles nested scores (quasi sim/seq containers) better than old version, but behaviour of old version is pertained when using Lily's conversion script. So, I should update my Lily output to a more Lily syntax version
+
+
+
+
+**** TODO Create SVN branch
+
+**** Understand what format Strasheela presently outputs and compare with recent Lily doc
+
+***** TODO Decide for target Lilypond version 
+
+      There are presently only few Strasheela users, so I might ask/force them all to switch to the latest Lilypond development version.
+
+****** Ueberlegung
 
      Are there the syntax differences between Lily 2.10 (stable) and Lily 2.11 (development)?
 
@@ -478,19 +604,20 @@ Processing `out2-1.ly'...
 Applying conversion: 2.5.0, 2.5.1, 2.5.2, 2.5.3, 2.5.12, 2.5.13, 2.5.17, 2.5.18, 2.5.21, 2.5.25, 2.6.0, 2.7.0, 2.7.1, 2.7.2, 2.7.4, 2.7.6, 2.7.10, 2.7.11, 2.7.12, 2.7.13, 2.7.14, 2.7.15, 2.7.22, 2.7.24, 2.7.28, 2.7.29, 2.7.30, 2.7.31, 2.7.32, 2.7.32, 2.7.36, 2.7.40, 2.9.4, 2.9.6, 2.9.9, 2.9.11, 2.9.13, 2.9.16, 2.9.19, 2.10.0, 2.11.2, 2.11.5, 2.11.6, 2.11.10, 2.11.11, 2.11.13, 2.11.15, 2.11.23, 2.11.35, 2.11.38
 
 
-**** TODO Compare current Strasheela output and desired output 
+***** TODO Compare current Strasheela output and desired output 
 
-     - Create relatively complex nested Strasheela determined score: sim(seq(sim(note+)+)+)
-     - Create one old format output with Out.outputLilypond and one new format output (using convert-ly -e on a copy of the output)
-     - Simplify convert-ly output (Lilypond then reduces the number of staffs) -- but keep/enter explicit sim/seq nesting in Lily output
-     - Compare orig Strasheela output and new format with diff
-     - Adjust Strasheela lilypond output generation accordingly
+      - Create relatively complex nested Strasheela determined score: sim(seq(sim(note+)+)+)
+      - Create one old format output with Out.outputLilypond and one new format output (using convert-ly -e on a copy of the output)
+      - Simplify convert-ly output (Lilypond then reduces the number of staffs) -- but keep/enter explicit sim/seq nesting in Lily output
+      - Compare orig Strasheela output and new format with diff
+      - Adjust Strasheela lilypond output generation accordingly
 
-**** With the new version test the following cases
-***** Hierarchic nesting (sim and seq containers)
-***** Note object output
-***** ?? Chord output 
-***** My extensions
+***** With the new version test the following cases
+****** Hierarchic nesting (sim and seq containers)
+****** Note object output
+****** ?? Chord output 
+****** My extensions
+
 
 ** Refactoring 
 
@@ -532,6 +659,8 @@ Applying conversion: 2.5.0, 2.5.1, 2.5.2, 2.5.3, 2.5.12, 2.5.13, 2.5.17, 2.5.18,
 *** [#A] check out performance with adaptive recomputation		  :NEXT:
 
   Adaptive recomputation is highly recommended by Schulte, so I should possibly do this before investigating other approaches to improve efficiency (memory and run time)    
+
+  *Note: in a few first tests with Explorer and IOzsef I could not see any effect of recomputation on the memory consumption. What am I missing?* 
   
 **** Check out: where is adaptive recomputation implemented ready for use: only in IOzSeF? 
 
@@ -605,20 +734,180 @@ See ../../testing/zy_Efficiency/KeepMusicRepresentationOutsideComputationalSpace
 ***** Instead with this Strasheela 'client', other CAC applications could also create CSP specs and call the Strasheela 'server' (e.g. PWGL)
 
 
-** Scale scale support							 :MAYBE:
 
-   Idea: method getPitchInMidi gets couterpart getPitchInMidi_Tempered where the pitch spec depends on a *.scl file, whose path is either given to some proc in Init, or (for changing the tuning on the fly) to the method getPitchInMidi_Tempered directly.  
+** Support for alternate tunings					  :NEXT:
 
-   getPitchInMidi_Tempered uses some record which contains the pitches for all pitches (some upper limit?). I may also always compute pitches on the fly -- if the computation does not depend on computing other pitches first...
-   This record is created by evaluating the scala file (first parsing it, then ...).
-   
-   If HS pitches per octave and spec in Scala file disagree, then ... 
+*** TODO Define pair of (internally stateful) procs like {Init.setTuningTable Table} and {Init.getTuningTable ?Table}
 
-*** Program more simple temperament support (at first) 
+*** TODO Modify getPitchInMidi to use tuning table if one is set
 
-    - Tuning values are entered by hand (no parsing of Scala file)
-    - Tuning values are all cents
-    - However, octave may be \= 1200 cent, and temperament shifts tuning by corresponding (reduced/streched) octave for computing any pitch
+*** Provide Scala scale format support 
+
+**** TODO Write Parser for Scala scale format
+
+     Format is rather simple -- easy to write a parser
+
+     Format description 
+     http://www.xs4all.nl/~huygensf/scala/scl_format.html
+
+     First support only scales specified in cent with a period
+
+     Then add support for ratios (simply compute cent value for given ratio using MUtils function)
+
+
+**** TODO Transform data of Scala scale file into a tuning table (pitch int to pitch float in cents measurement)
+
+     Note that 1/1 (0 cent) is implicit and not specified. I must add it to beginning of list of pitches. 
+
+     How is a periodic tuning spec repeated? I assume this is rather simple: for first period (preiod commonly octave) take the orig scale pitches, for the second period add the period (e.g., 1200 cent) to these pitches, for the third period add 2 * the period etc.
+ 
+
+     Example: pajara TOP tuning 
+     [[file:/Applications/Scala/scl/erlich_paj3.scl::Applications%20Scala%20scl%20erlich_paj3%20scl][file:/Applications/Scala/scl/erlich_paj3.scl::Applications Scala scl erlich_paj3 scl]]
+
+
+     When loading a scala file, a warning a shown if the present number of notes per octave and the number of scale notes does conflict
+
+
+*** Define some simple tuning table generation functions 
+
+**** TODO Define transformation of a tuning spec for an octave to a full tuning table by octave transpositions
+     
+**** TODO Define program for creating regular temperaments, expecting generator and period intervals
+
+     Generator and Period are cent values
+
+     G is generator
+     P is period
+     N \in 1..max_N
+     M \in 1..max_M
+
+     Pitch_i = (G*N) - (P*M) 
+
+     Total number of pitches N*M
+
+
+     -------
+
+     Python code (Generator and Period are cent values)
+     !! implements different formula
+
+
+     scale = []
+     for nSteps in range(stepsPerPeriod):
+     root = (nSteps*generator)%period
+     for repeat in range(periodsPerOctave):
+     scale.append(period*repeat + root)
+     scale.sort()
+     
+     It assumes the generator and period are specified in cents. 
+     It also assumes periodsPerOctave is given. If you don't 
+     have that you can still get a tuning table for one period.
+     
+     sorted([(n*generator)%period
+     for n in range(stepsPerPeriod)])
+     
+     You always have to choose the number of steps you want. You 
+     may also like the period to be include in the table
+     
+     sorted([(n*generator)%period
+     for n in range(stepsPerPeriod)])+[period]
+
+
+     
+
+     ------
+
+     See email replies "[tuning] Re: Algorithm for 'unfolding' regular temperaments" in my action folder for details
+
+***** DONE [#B] Ask tuning mailing list for regular temperament algorithm
+      CLOSED: [2008-04-07 Mon 22:14]
+
+      Guess: rank two regular temperament: 
+      By adding the GENRATOR repeatedly, namely SIZE times, that number of pitches is obtained. These pitches are then again transposed by the PERIOD (commonly 1200 cent) 
+     
+
+*** ?? TODO Predefine some full tuning tables for easy access 
+
+    Meantone
+
+    Pajara: some variants
+
+    More when I need them (or on request..)  
+
+    Some TOP temperaments.. More in the Erlich paper
+    http://xenharmonic.wikispaces.com/Regular+Temperaments
+
+*** Info
+
+**** Overview
+
+     My harmony model supports equi-distant divisions of the octave. By keeping this as is, I can introduce the idea of alternate tunings for the playback. Nevertheless, pitches (and pitch classes etc) are still represented by FD ints, but these ints are used as indices into a tuning table for playback. 
+
+     Application examples: play music with 12 pitches per octave in meantone, play music with 22 pitches per octave using some pajara temperament (e.g., TOP tuning). 
+
+     Note: the definition of the music theory must possibly be modified (e.g., only particular keys are useful in meantone). 
+
+
+**** Tuning table definition
+
+     I have to decide for either format
+
+***** Format 1: similar to Scala scale format
+
+      Tuning table is a tuple with floats which map note pitches (integers) to pitches measured in cent (MIDI floats). 
+
+      For simplicity, only a single period is defined (typically one octave). Additional tuning table features are the 'size' (int: number of pitches) and the 'period' (a float, MIDI cent) -- which is also the last pitch in the tuning table
+
+      The mapping for arbitrary pitches are accessed by the following formula
+
+      Octave = Pitch div TuningTable.size
+      PC = Pitch mod TuningTable.size 
+      TuningTable.PC + Octave * TuningTable.period
+
+
+***** Format 2: Full tuning table
+
+      Tuning table: Tuning specification format: a tuple with floats which map note pitches (integers) to pitches measured in cent (MIDI floats). There is an entry for all possible pitches. 
+
+      Such a tuning table is either created by hand, or by some program. Examples: 
+      - Transformation of a tuning spec for an octave to a full tuning table by octave transpositions
+      - Program for regular temperaments, expecting generator and period intervals
+      - Program parsing and processing Scala files (see below)
+
+
+**** Tuning table use
+
+***** Possibly: Use directly, e.g., in a custom-made Csound output proc
+
+***** More effective: modify getPitchInMidi to use tuning table
+
+****** Defining static tuning table
+
+       A static tuning table is settable/accessible by pair of (internally stateful) procs like {Init.setTuningTable Table} and {Init.getTuningTable ?Table}. Defaults to nil, in which case getPitchInMidi calculates pitch as before. Otherwise, user-defined tuning-table is used.
+
+
+****** ?? Changing tuning table on-the-fly
+
+       getPitchInMidi expects optional arg tuning table, so tuning can be changed on-the-fly
+
+       Note: for changing tunings on-the-fly I should somehow put tuning tables in score and these tuning tables should be used by output 
+
+
+**** Scale scale support						 :MAYBE:
+
+     Idea: method getPitchInMidi gets couterpart getPitchInMidi_Tempered where the pitch spec depends on a *.scl file, whose path is either given to some proc in Init, or (for changing the tuning on the fly) to the method getPitchInMidi_Tempered directly.  
+
+     getPitchInMidi_Tempered uses some record which contains the pitches for all pitches (some upper limit?). I may also always compute pitches on the fly -- if the computation does not depend on computing other pitches first...
+     This record is created by evaluating the scala file (first parsing it, then ...).
+     
+     If HS pitches per octave and spec in Scala file disagree, then ... 
+
+***** Program more simple temperament support (at first) 
+
+      - Tuning values are entered by hand (no parsing of Scala file)
+      - Tuning values are all cents
+      - However, octave may be \= 1200 cent, and temperament shifts tuning by corresponding (reduced/streched) octave for computing any pitch
 
 
 
