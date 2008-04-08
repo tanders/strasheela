@@ -1,4 +1,5 @@
 ------------------------------------------------------------------------
+
 r915 | t-anders | 2008-03-29 22:50:46 +0000 (Sat, 29 Mar 2008) | 2 lines
 Changed paths:
    M /trunk/strasheela/doc/index.html
@@ -3480,6 +3481,149 @@ Changed paths:
 Add new root directory
 
 ------------------------------------------------------------------------
+r820 | gperciva | 2008-02-27 22:23:28 +0000 (Wed, 27 Feb 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/contributions/anders/Tutorial/TheExamples/01-Oz/Basics-2.tut
+   M /trunk/strasheela/contributions/anders/Tutorial/TheExamples/01-Oz/ConstraintProgramming.tut
+
+Finish tutorial stuff for now.
+
+------------------------------------------------------------------------
+r819 | gperciva | 2008-02-27 21:50:26 +0000 (Wed, 27 Feb 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/contributions/anders/Tutorial/TheExamples/01-Oz/Basics-2.tut
+
+Update tutorial.
+
+------------------------------------------------------------------------
+r818 | t-anders | 2008-02-23 15:10:48 +0000 (Sat, 23 Feb 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/contributions/anders/Fenv/doc/class1.html
+   M /trunk/strasheela/contributions/anders/Fenv/doc/node1.html
+   M /trunk/strasheela/contributions/anders/Memoize/doc/node1.html
+   M /trunk/strasheela/contributions/anders/MultiDict/doc/node1.html
+   M /trunk/strasheela/contributions/anders/MultiRecord/doc/node1.html
+   M /trunk/strasheela/contributions/anders/Pattern/doc/node1.html
+   M /trunk/strasheela/contributions/anders/ScoreInspector/doc/node1.html
+   M /trunk/strasheela/contributions/anders/Tutorial/doc/node2.html
+   M /trunk/strasheela/contributions/gperciva/eventdurs/doc/index.html
+   M /trunk/strasheela/contributions/gperciva/eventdurs/doc/node1.html
+   M /trunk/strasheela/doc/Publications.html
+   M /trunk/strasheela/doc/api/class1.html
+   M /trunk/strasheela/doc/api/class10.html
+   M /trunk/strasheela/doc/api/class11.html
+   M /trunk/strasheela/doc/api/class12.html
+   M /trunk/strasheela/doc/api/class13.html
+   M /trunk/strasheela/doc/api/class14.html
+   M /trunk/strasheela/doc/api/class15.html
+   M /trunk/strasheela/doc/api/class16.html
+   M /trunk/strasheela/doc/api/class17.html
+   M /trunk/strasheela/doc/api/class18.html
+   M /trunk/strasheela/doc/api/class19.html
+   M /trunk/strasheela/doc/api/class2.html
+   M /trunk/strasheela/doc/api/class20.html
+   M /trunk/strasheela/doc/api/class21.html
+   M /trunk/strasheela/doc/api/class22.html
+   M /trunk/strasheela/doc/api/class23.html
+   M /trunk/strasheela/doc/api/class24.html
+   M /trunk/strasheela/doc/api/class25.html
+   M /trunk/strasheela/doc/api/class26.html
+   M /trunk/strasheela/doc/api/class27.html
+   M /trunk/strasheela/doc/api/class28.html
+   M /trunk/strasheela/doc/api/class29.html
+   M /trunk/strasheela/doc/api/class3.html
+   M /trunk/strasheela/doc/api/class30.html
+   M /trunk/strasheela/doc/api/class31.html
+   M /trunk/strasheela/doc/api/class4.html
+   M /trunk/strasheela/doc/api/class5.html
+   M /trunk/strasheela/doc/api/class6.html
+   M /trunk/strasheela/doc/api/class7.html
+   M /trunk/strasheela/doc/api/class8.html
+   M /trunk/strasheela/doc/api/class9.html
+   M /trunk/strasheela/doc/api/node11.html
+   M /trunk/strasheela/doc/api/node3.html
+   M /trunk/strasheela/doc/api/node4.html
+   M /trunk/strasheela/doc/api/node5.html
+   M /trunk/strasheela/doc/api/node6.html
+   M /trunk/strasheela/doc/api/node7.html
+   M /trunk/strasheela/doc/api/node8.html
+   M /trunk/strasheela/doc/api/node9.html
+
+Updated documentation
+
+------------------------------------------------------------------------
+r817 | t-anders | 2008-02-23 15:09:36 +0000 (Sat, 23 Feb 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/doc/Changes.html
+   M /trunk/strasheela/doc-source/Changes.muse
+
+Updated list of changes
+
+------------------------------------------------------------------------
+r816 | t-anders | 2008-02-23 15:08:27 +0000 (Sat, 23 Feb 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/doc/Basics-1.html
+   M /trunk/strasheela/doc/Basics-2.html
+   M /trunk/strasheela/doc/ConstraintProgramming.html
+   M /trunk/strasheela/doc/MusicRepresentation.html
+   M /trunk/strasheela/doc/MusicalCSPs.html
+   M /trunk/strasheela/doc-source/Basics-1.muse
+   M /trunk/strasheela/doc-source/Basics-2.muse
+   M /trunk/strasheela/doc-source/ConstraintProgramming.muse
+   M /trunk/strasheela/doc-source/MusicRepresentation.muse
+   M /trunk/strasheela/doc-source/MusicalCSPs.muse
+
+Rendered HTML output of tutorial
+
+------------------------------------------------------------------------
+r815 | t-anders | 2008-02-23 15:07:17 +0000 (Sat, 23 Feb 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/contributions/anders/Tutorial/TheExamples/01-Oz/Basics-2.tut
+
+Cleaned up occurance of | for Muse/HTML output
+
+------------------------------------------------------------------------
+r814 | t-anders | 2008-02-23 15:06:39 +0000 (Sat, 23 Feb 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/others/TODO/Strasheela-TODO.org
+
+Updated TODO
+
+------------------------------------------------------------------------
+r813 | t-anders | 2008-02-23 15:06:17 +0000 (Sat, 23 Feb 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/examples/02-Fuxian-firstSpecies-Counterpoint.oz
+
+Tmp: test IOzSeF explorer
+
+------------------------------------------------------------------------
+r812 | t-anders | 2008-02-23 15:05:45 +0000 (Sat, 23 Feb 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/source/ScoreDistribution.oz
+
+Added IOzSeF support: added IozsefInit, IozsefInitBest, IozsefExploreOne, IozsefExploreAll, IozsefExploreBest, IozsefSearchOne, IozsefSearchAll, IozsefSearchBest
+
+------------------------------------------------------------------------
+r811 | t-anders | 2008-02-23 14:58:16 +0000 (Sat, 23 Feb 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/contributions/anders/Tutorial/testing/StrasheelaPrototyper-test.oz
+
+Testing after *.tut file format change, moved some obsolete examples into Old section
+
+------------------------------------------------------------------------
+r810 | t-anders | 2008-02-23 14:57:01 +0000 (Sat, 23 Feb 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/contributions/anders/Tutorial/source/StrasheelaPrototyper.oz
+
+Repaired Muse export for new *.tut file format, corrected doc for this format, and some clean up
+
+------------------------------------------------------------------------
+r809 | gperciva | 2008-02-23 07:43:17 +0000 (Sat, 23 Feb 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/contributions/anders/Tutorial/TheExamples/01-Oz/Basics-2.tut
+
+Update second chapter.
+
 ------------------------------------------------------------------------
 r808 | t-anders | 2008-02-22 19:17:23 +0000 (Fri, 22 Feb 2008) | 1 line
 Changed paths:
