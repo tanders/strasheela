@@ -1214,10 +1214,10 @@ define
        " "}
    end
 
-    %% chord contains only notes with equal start and end times 
-   fun {IsLilyChord Sim}
-      if {Sim isSimultaneous($)} 
-      then Items = {Sim getItems($)} in 
+   %% Returns true if X is chord, i.e. a simultaneous which contains only notes with equal start and end times 
+   fun {IsLilyChord X}
+      if {X isSimultaneous($)} 
+      then Items = {X getItems($)} in 
 	 {All Items {GUtils.toFun isNote}}
 	 andthen {All Items.2
 		  fun {$ Y}
@@ -1265,7 +1265,24 @@ define
        " "}
    end
 
-
+   
+   /** %% An outmost sequential implicitly creates a staff. Outmost sequential here means a sequential container which has no direct or indirect temporal container which is a sequential container. Also, it either top-level container, or (the most common case) contained in a top-level simultaneous container.  
+   %% */
+   fun {IsOutmostSeq X}
+      %% Returns true if Y has a sequential as either direct or indirect container
+      fun {HasSequentialAsContainer Y}
+	 C = {Y getTemporalContainer($)}
+      in 
+	 C \= nil andthen
+	 ({C isSequential($)} orelse {HasSequentialAsContainer C})
+      end
+   in
+      {X isSequential($)} andthen
+      {Not {HasSequentialAsContainer X}} andthen
+      {Not {X hasTemporalContainer($)} andthen
+       {{X getTemporalContainer($)} hasTemporalContainer($)}}
+   end
+	  
    local
       %% average pitch decides clef
       %% LilyClefs = clef(bass_8 bass violin "violin^8")
@@ -1311,6 +1328,39 @@ define
       end
    end
 
+   local
+      fun {IsVoiceContent X}
+	 {X isElement($)} orelse 
+	 {IsLilyChord X} orelse
+	 ({X isSequential($)} andthen {All {X getItems($)} IsVoiceContent})
+      end
+      /** %% Returns true if X is a simultaneous which containes multiple voices; each voice is a sequential which contains only (i) notes, (ii) simultaneous containers which are chords or (iii) sequentials which in turn contain only notes or chords. 
+      %% */
+   in
+      fun {IsSingleStaffPolyphony X}
+	 if {X isSimultaneous($)}
+	    andthen {X hasTemporalContainer($)}
+	 then {All {X getItems($)}
+	       fun {$ Y}
+		  {Y isSequential($)} andthen
+		  {All {Y getItems($)} IsVoiceContent}
+	       end}
+	 else false
+	 end
+      end
+   end
+   /** %% Outputs X (fulfilling IsSingleStaffPolyphony) as single staff Lily VS. 
+   %% */
+   fun {SingleStaffPolyphonyToLily Sim FurtherClauses}
+      {ListToVS
+       {GetUserLily Sim} |
+       "\n <<" |
+       {ListToVS {Map {Sim getItems($)}
+		  fun {$ X} {OffsetToPauses X FurtherClauses} end}
+	"\\\\"} |
+	["\n>>"]
+       " "}
+   end
    
    local
       TupletName = {NewName}
@@ -1400,74 +1450,65 @@ define
    %% Transforms MyScore into Lilypond VS. Transformation is defined by a set of default clauses of the form BooleanFun1#ProcessingFun1.   
    %% FurtherClauses: additional clauses can be added as a list in the form [BooleanFun1#ProcessingFun1 ...]
    fun {ToLilypondAux MyScore FurtherClauses}
-      {GUtils.cases MyScore
-       {Append
-	FurtherClauses
-	
-	%%
-	%% NOTE: these are the default Lily output clauses
-	%%
-	[
-	 %% Each outmost sequential creates a staff. Outmost sequential here means a sequential container which has no direct or indirect temporal container which is a sequential container 
-	 fun {$ X}
-	    %% Returns true if Y has a sequential as either direct or indirect container
-	    fun {HasSequentialAsContainer Y}
-	       C = {Y getTemporalContainer($)}
-	    in 
-	       C \= nil andthen
-	       ({C isSequential($)} orelse {HasSequentialAsContainer C})
-	    end
-	 in
-	    {X isSequential($)} andthen {Not {HasSequentialAsContainer X}} 
-	 end#fun {$ X} {OutmostSeqToLily X FurtherClauses} end
-	 
-	 isSequential#fun {$ X} {SeqToLily X FurtherClauses} end
-
-	 IsLilyChord#SimToChord
-
-	 isSimultaneous#fun {$ X} {SimToLily X FurtherClauses} end
-	 
-	 isNote#{MakeNoteToLily
-		 fun {$ Note}
-		    {LilyMakeMicroPitch {Note getPitchParameter($)}} 
-		 end}
-
-	 %% enharmonic note output
+      Clauses
+      = {Append FurtherClauses
 	 %%
-	 %% NOTE: adds dependency to Strasheela extension
-	 fun {$ X}
-	    {HS.score.isEnharmonicSpellingMixinForNote X}
-	    andthen {HS.db.getPitchePerOctave} == 12
-	 end#local
-		%%
-		LilyNominals = unit(c d e f g a b)
-		LilyAccidentals = unit(eses es "" is isis)
-		LilyOctaves = octs(",,,," ",,," ",," "," "" "'" "''" "'''" "''''")
-	     in
-		fun {$ N}
-		   {{MakeNoteToLily2
-		     %% create enharmonic Lily note
-		     fun {$ N}
-			Nominal = LilyNominals.{N getCMajorDegree($)}
-			Accidental = LilyAccidentals.({N getCMajorAccidental($)} + 1)
-			Octave = LilyOctaves.({N getOctave($)} + 2)
-		     in
-			Nominal#Accidental#Octave
-		     end
-		     %% no additional articulations etc for now
-		     fun {$ N} nil end}
-		    N}
-		end
-	     end
+	 %% NOTE: these are the default Lily output clauses
+	 %%
+	 [
+	  IsOutmostSeq#fun {$ X} {OutmostSeqToLily X Clauses} end
 	 
-	 isPause#PauseToLily
+	  isSequential#fun {$ X} {SeqToLily X Clauses} end
+
+	  IsSingleStaffPolyphony#fun {$ X} {SingleStaffPolyphonyToLily X Clauses} end
+	 
+	  IsLilyChord#SimToChord
+
+	  isSimultaneous#fun {$ X} {SimToLily X Clauses} end
+	 
+	  isNote#{MakeNoteToLily
+		  fun {$ Note}
+		     {LilyMakeMicroPitch {Note getPitchParameter($)}} 
+		  end}
+
+	  %% enharmonic note output
+	  %%
+	  %% NOTE: adds dependency to Strasheela extension
+	  fun {$ X}
+	     {HS.score.isEnharmonicSpellingMixinForNote X}
+	     andthen {HS.db.getPitchePerOctave} == 12
+	  end#local
+		 %%
+		 LilyNominals = unit(c d e f g a b)
+		 LilyAccidentals = unit(eses es "" is isis)
+		 LilyOctaves = octs(",,,," ",,," ",," "," "" "'" "''" "'''" "''''")
+	      in
+		 fun {$ N}
+		    {{MakeNoteToLily2
+		      %% create enharmonic Lily note
+		      fun {$ N}
+			 Nominal = LilyNominals.{N getCMajorDegree($)}
+			 Accidental = LilyAccidentals.({N getCMajorAccidental($)} + 1)
+			 Octave = LilyOctaves.({N getOctave($)} + 2)
+		      in
+			 Nominal#Accidental#Octave
+		      end
+		      %% no additional articulations etc for now
+		      fun {$ N} nil end}
+		     N}
+		 end
+	      end
+	 
+	  isPause#PauseToLily
 	 
 	   % Otherwise clause
-	 fun {$ X} true end
-	 #fun {$ X}
-	     {Browse warn#unsupportedClass(X ToLilypondAux)}
-	     ''
-	  end]}}
+	  fun {$ X} true end
+	  #fun {$ X}
+	      {Browse warn#unsupportedClass(X ToLilypondAux)}
+	      ''
+	   end]}
+   in
+      {GUtils.cases MyScore Clauses}
    end
    
    /** %% Transforms a score object into a Lilypond score virtual string. The score layout is hardwired: the Items in the outmost Simultaneous container are put in their own staff. [currently, if outmost Simultaneous containers are contained in surround Sequentials, new staffs will be draw for each Item contained in each Simultaneous.]
