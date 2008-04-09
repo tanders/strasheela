@@ -1,6 +1,7 @@
 
 %%
-%% Example with support for additional lilypond output support and supporting enharmonic information. 
+%% Example with support for additional lilypond output support and
+%% supporting enharmonic information.
 %%
 %% In the score, the info attribute of sequential containers supports
 %% a record with the label lily. The VS at feature 1 of this record
