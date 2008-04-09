@@ -1176,6 +1176,7 @@ define
 % 	 end
 %       end
 %    end
+   
    %% appends pauses before X to express offsetTime
    fun {OffsetToPauses X Args}
       Offset = {X getOffsetTimeParameter($)}
@@ -1198,6 +1199,7 @@ define
 	 end
       end
    end
+
    
    /** %%  %% [For experts only] creates lilypond output (a VS) for a simultaneous container. Args is a record of optional args (clauses and implicitStaffs).
    %% Default Lilypond output uses this definition. Using this function may simplify writing custom output clauses which overwrite the default output.
