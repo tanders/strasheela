@@ -853,6 +853,25 @@ configure: error: ozinstall not found
    and [[file:~/oz/musi
 
 
+** Complement existing general variable and value orderings for Strasheela :NEXT:
+
+   strasheela source 
+    [[file:~/oz/music/Strasheela/strasheela/trunk/strasheela/source/ScoreDistribution.oz::order]]
+
+*** TODO Check literature for variable and value orderings 
+
+    van Beek in Constraint Handbook
+
+    Bessiere and Regin article
+
+    etc
+
+*** TODO Double-check Mozart source
+
+    Mozart distro source
+    [[file:~/oz/mozart/trunk/mozart/share/lib/cp/FD.oz::Generic%20only][file:~/oz/mozart/trunk/mozart/share/lib/cp/FD.oz::Generic only]]
+
+
 ** Idea: user-guided search process: preserve already satisfying sections in output :WAIT:
 
    [wait until prototype-based motif model is realised]
