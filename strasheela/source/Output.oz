@@ -1177,9 +1177,9 @@ define
 %       end
 %    end
    %% appends pauses before X to express offsetTime
-   fun {OffsetToPauses X FurtherClauses}
-      Offset = {X getOffsetTimeParameter($)} 
-      LilyX = {ToLilypondAux X FurtherClauses}
+   fun {OffsetToPauses X Args}
+      Offset = {X getOffsetTimeParameter($)}
+      LilyX = {ToLilypondAux X Args}
    in
       if {Offset getValueInBeats($)} == 0.0
       then
@@ -1199,17 +1199,17 @@ define
       end
    end
    
-   /** %%  %% [For experts only] creates lilypond output (a VS) for a simultaneous container. FurtherClauses are clauses relevant of items contained in Seq.
+   /** %%  %% [For experts only] creates lilypond output (a VS) for a simultaneous container. Args is a record of optional args (clauses and implicitStaffs).
    %% Default Lilypond output uses this definition. Using this function may simplify writing custom output clauses which overwrite the default output.
    %% */
    %% !! I don't differ between general Sims and chords
    %% !! offsets are currently ignored: only positive offsets are currently possible -- express them by rests or invisible rests (i.e. \skip <duration> )
-   fun {SimToLily Sim FurtherClauses}
+   fun {SimToLily Sim Args}
       {ListToVS
        {GetUserLily Sim} |
        "\n <<" |
        {Append {Map {Sim getItems($)}
-		fun {$ X} {OffsetToPauses X FurtherClauses} end}
+		fun {$ X} {OffsetToPauses X Args} end}
 	["\n>>"]}
        " "}
    end
@@ -1251,16 +1251,16 @@ define
       end
    end
    
-   /** %% [For experts only] creates lilypond output (a VS) for a sequential container. FurtherClauses are clauses relevant of items contained in Seq.
+   /** %% [For experts only] creates lilypond output (a VS) for a sequential container. Args is a record of optional args (clauses and implicitStaffs).
    %% Default Lilypond output uses this definition. Using this function may simplify writing custom output clauses which overwrite the default output.
    %% */
    %% !! offsets are currently ignored: only positive offsets are currently possible in SDL -- express them by rests
-   fun {SeqToLily Seq FurtherClauses}
+   fun {SeqToLily Seq Args}
       {ListToVS
        {GetUserLily Seq} |
        "\n {\n" |
        {Append {Map {Seq getItems($)}
-		fun {$ X} {OffsetToPauses X FurtherClauses} end}
+		fun {$ X} {OffsetToPauses X Args} end}
 	["\n}"]}
        " "}
    end
@@ -1313,8 +1313,13 @@ define
       /** %% Create a staff and clef for Seq, then output Seq
       %% */
       %% Not exported
-      fun {OutmostSeqToLily Seq FurtherClauses}
-	 "\n \\new Staff { \\clef "#{DecideClef Seq}#" "#{SeqToLily Seq FurtherClauses}#" }"
+      fun {OutmostSeqToLily Seq Args}
+	 Staff = if Args.implicitStaffs
+		 then "\\new Staff "#"{ \\clef "#{DecideClef Seq}
+		 else ""
+		 end
+      in
+	 "\n "#Staff#" "#{SeqToLily Seq Args}#" }"
       end
    end
 
@@ -1351,12 +1356,12 @@ define
    end
    /** %% Outputs X (fulfilling IsSingleStaffPolyphony) as single staff Lily VS. 
    %% */
-   fun {SingleStaffPolyphonyToLily Sim FurtherClauses}
+   fun {SingleStaffPolyphonyToLily Sim Args}
       {ListToVS
        {GetUserLily Sim} |
        "\n <<" |
        {ListToVS {Map {Sim getItems($)}
-		  fun {$ X} {OffsetToPauses X FurtherClauses} end}
+		  fun {$ X} {OffsetToPauses X Args} end}
 	"\\\\"} |
 	["\n>>"]
        " "}
@@ -1445,61 +1450,62 @@ define
 	 TupletContinuationClause | TupletStartClauses
       end
    end
-
+   
 
    %% Transforms MyScore into Lilypond VS. Transformation is defined by a set of default clauses of the form BooleanFun1#ProcessingFun1.   
-   %% FurtherClauses: additional clauses can be added as a list in the form [BooleanFun1#ProcessingFun1 ...]
-   fun {ToLilypondAux MyScore FurtherClauses}
+   %% Args is a record of optional args (clauses and implicitStaffs).
+   fun {ToLilypondAux MyScore Args}
       Clauses
-      = {Append FurtherClauses
+      %% NOTE: Args.clauses, not As.clauses is used below
+      As = {Adjoin Args unit(clauses:Clauses)}
+   in
+      Clauses
+      = {Append Args.clauses
 	 %%
 	 %% NOTE: these are the default Lily output clauses
 	 %%
 	 [
-	  IsOutmostSeq#fun {$ X} {OutmostSeqToLily X Clauses} end
+	  IsOutmostSeq#fun {$ X} {OutmostSeqToLily X As} end
 	 
-	  isSequential#fun {$ X} {SeqToLily X Clauses} end
+	  isSequential#fun {$ X} {SeqToLily X As} end
 
-	  IsSingleStaffPolyphony#fun {$ X} {SingleStaffPolyphonyToLily X Clauses} end
+	  IsSingleStaffPolyphony#fun {$ X} {SingleStaffPolyphonyToLily X As} end
 	 
 	  IsLilyChord#SimToChord
 
-	  isSimultaneous#fun {$ X} {SimToLily X Clauses} end
+	  isSimultaneous#fun {$ X} {SimToLily X As} end
 	 
-	  isNote#{MakeNoteToLily
-		  fun {$ Note}
-		     {LilyMakeMicroPitch {Note getPitchParameter($)}} 
-		  end}
-
-	  %% enharmonic note output
-	  %%
-	  %% NOTE: adds dependency to Strasheela extension
-	  fun {$ X}
-	     {HS.score.isEnharmonicSpellingMixinForNote X}
-	     andthen {HS.db.getPitchePerOctave} == 12
-	  end#local
-		 %%
-		 LilyNominals = unit(c d e f g a b)
-		 LilyAccidentals = unit(eses es "" is isis)
-		 LilyOctaves = octs(",,,," ",,," ",," "," "" "'" "''" "'''" "''''")
-	      in
+	 %% enharmonic note output
+	 %%
+	 %% NOTE: adds dependency to Strasheela extension
+	 fun {$ X}
+	    {HS.score.isEnharmonicSpellingMixinForNote X}
+	    andthen {HS.db.getPitchesPerOctave} == 12
+	 end#local
+		LilyNominals = unit(c d e f g a b)
+		LilyAccidentals = unit(eses es "" is isis)
+		LilyOctaves = octs(",,,," ",,," ",," "," "" "'" "''" "'''" "''''")
+	     in
+		{MakeNoteToLily2
+		 %% create enharmonic Lily note
 		 fun {$ N}
-		    {{MakeNoteToLily2
-		      %% create enharmonic Lily note
-		      fun {$ N}
-			 Nominal = LilyNominals.{N getCMajorDegree($)}
-			 Accidental = LilyAccidentals.({N getCMajorAccidental($)} + 1)
-			 Octave = LilyOctaves.({N getOctave($)} + 2)
-		      in
-			 Nominal#Accidental#Octave
-		      end
-		      %% no additional articulations etc for now
-		      fun {$ N} nil end}
-		     N}
+		    Nominal = LilyNominals.{N getCMajorDegree($)}
+		    Accidental = LilyAccidentals.({N getCMajorAccidental($)} + 1)
+		    Octave = LilyOctaves.({N getOctave($)} + 2)
+		 in
+		    Nominal#Accidental#Octave
 		 end
-	      end
+		 %% no additional articulations etc for now
+		 fun {$ N} nil end}
+	     end
 	 
-	  isPause#PauseToLily
+	 isNote#{MakeNoteToLily
+		 fun {$ Note}
+		    {LilyMakeMicroPitch {Note getPitchParameter($)}} 
+		 end}
+
+	 
+	 isPause#PauseToLily
 	 
 	   % Otherwise clause
 	  fun {$ X} true end
@@ -1507,30 +1513,38 @@ define
 	      {Browse warn#unsupportedClass(X ToLilypondAux)}
 	      ''
 	   end]}
-   in
+      
       {GUtils.cases MyScore Clauses}
    end
    
-   /** %% Transforms a score object into a Lilypond score virtual string. The score layout is hardwired: the Items in the outmost Simultaneous container are put in their own staff. [currently, if outmost Simultaneous containers are contained in surround Sequentials, new staffs will be draw for each Item contained in each Simultaneous.]
-   %% ToLilypond expects two optional arguments. The argument clauses for specifying what Lilypond shows for specific score objects. FurtherClauses expects a list of the form [TypeCheck1#ProcessingFun1 ...].  TypeCheckN is a boolean function or method (e.g. isNote) and ProcessingFunN is a function which expects score objects for which TypeCheckN returns true as argument. ProcessingFunN returns a Lilypond VS. For example, the user may define a subclass of Score.note with an additional articulation attribute (e.g. values may be staccato, tenuto etc.) and the user then defines a clause which causes Lilypond to show the articulation by its common sign in the sheetmusic score.
-   %% The argument wrapper expects a list of two VSs with legal Lilypond code. These VSs are inserted at the beginning and the end respecitively of the score. Note that the Lilypond version statement is hardwired -- you should not add a version statement to your header. The argument defaults are shown below. 
+   /** %% ToLilypond transforms a score object into a Lilypond score virtual string.
+   %% By default, Strasheela supports the following cases for Lilypond score output. Strasheela temporal containers are transformed into their Lilypond counterpart. A simultaneous container becomes "<< .. >>" and a sequential container becomes "{ ... }". Nevertheless, there are a few special cases supported by default.
+   %% By default, a staff is implicitly created for a sequential container which is either at the top-level or contained in a top-level simultaneous container. In typical Strasheela score topology for Lilypond output, a simultaneous is the top-level container and its items are sequential containers corresponding to staffs. If top-level is a sequential, then there is only a single staff. You can define arbitrary other nestings, but in such cases you should explicitly specify which container corresponds to a staff using the lily info-tag (see below). Moreover, you can also explicitly create staff or staff groups which last for the duration of their container only with the lily info-tag. The implicit staff creation can be switched off entirely by setting the optional argument 'implicitStaffs' to false.
+   %% A simultaneous container within a staff containing only notes with common start and end times result in a chord (notes on a single staff sharing a stem). Single staff polyphony is supported: multiple (nested) sequentials and simultaneous container representing chords which are contained in a simultaneous (and which corresponds to or is situated in a staff) are output as single staff polyphony. Note that the description of these special cases is slightly simplified in this explanation, see the clause test function sources in Output.oz, when exactly these clauses apply.
+   %% Enharmonic notation is supported for enharmonic note objects (subclasses of HS.score.enharmonicSpellingMixinForNote such as HS.score.enharmonicNote). Tuplet output is supported via clauses conveniently created with the function MakeLilyTupletClauses (see there).
+   %% 
+   %% ToLilypond expects the following further arguments. The optional argument 'clauses' provides much control on how the Lilypond output is conducted. Internally, almost all functionality of ToLilypond is also defined by such clauses: further special cases (as described above) can be defined, or the default ones overwritten. 'clauses' expects a list of the form [Test1#ProcessingFun1 ...]. TestN and ProcessingFunN are both unary functions expecting a score object (an item instance such as notes or containers). If the Boolean function TestN is the first clause test which returns true for a score object in MyScore, then ProcessingFunN will create the Lilypond VS for this object. For example, the user may define a subclass of Score.note with an additional articulation attribute (e.g. values may be staccato, tenuto etc.) and the user then defines a clause which causes Lilypond to show the articulation by its common sign in the printed score.
+   %% The argument 'wrapper' expects a list of two VSs with legal Lilypond code. These VSs are inserted at the beginning and the end respecitively of the Lilypond score. Note that the Lilypond version statement is hardwired -- you should not add a version statement to your header. 
+   %% Arbitrary Lilypond code can be added to container and note objects via a tuple with the label 'lily' given to the info attribute of the score object. This tuple must only contain VSs which are legal Lilypond code. For containers, this lilypond code is always inserted in the Lilypond output before the container, for notes it is inserted after the note.
+   %% The argument defaults are shown below. 
    
    unit(clauses:nil
 	wrapper:["\\paper {}\n\n{\n" %% empty paper def
-		 "\n}"])
+		 "\n}"]
+	implicitStaffs:true)
 
-   %% Arbitrary Lilypond code can be added to container and note objects via a tuple with the label 'lily' given to the info attribute of the score object. This tuple must only contain VSs which are legal Lilypond code. For containers, this lilypond code is always inserted in the Lilypond output before the container, for notes it is inserted after the note. 
    %% */
    fun {ToLilypond MyScore Args}
       Default =  unit(clauses:nil
 		      wrapper:["\\paper {}\n\n{\n" %% empty paper def
-			       "\n}"])
+			       "\n}"]
+		      implicitStaffs:true)
       As = {Adjoin Default Args}
    in
       {ListToVS ["%%% created by Strasheela at "#{GUtils.timeVString}
 		 "\n\\version \"2.10.0\"\n"
 		 As.wrapper.1
-		 {ToLilypondAux MyScore As.clauses}
+		 {ToLilypondAux MyScore As}
 		 As.wrapper.2.1]
        "\n"}
    end
@@ -1552,7 +1566,7 @@ define
       {WriteToFile {ToLilypond MyScore As} Path}
    end
 
-   /** %% Calls lilypond on a lilypond file specified by Spec. Txhe defaults of Spec are:
+   /** %% Calls lilypond on a lilypond file specified by Spec. The defaults of Spec are:
    unit(dir: {Init.getStrasheelaEnv defaultLilypondDir}
 	file: test) % !! file name without extention
    %% */
@@ -1601,7 +1615,7 @@ define
       {ExecNonQuitting App [Path]}
    end
 
-   /** %% Outputs a Lilypond file for MyScore, calls Lilypond to process it, and calls the PDF viewer with the result. See OutputLilypond, CallLilypond, and ViewPDF for details on Spec.
+   /** %% Outputs a Lilypond file for MyScore, calls Lilypond to process it, and calls the PDF viewer with the result. See ToLilypond, OutputLilypond, CallLilypond, and ViewPDF for details on Spec.
    %% */ 
    %% !! ?? this does not necessarily work for partly undetermined score
    proc {RenderAndShowLilypond MyScore Spec}
@@ -1614,7 +1628,7 @@ define
       {ViewPDF MySpec}
    end
 
-   /** %% Outputs a Lilypond file for MyScore and calls Lilypond to process it. See OutputLilypond and CallLilypond for details on Spec.
+   /** %% Outputs a Lilypond file for MyScore and calls Lilypond to process it. See ToLilypond, OutputLilypond and CallLilypond for details on Spec.
    %% */ 
    proc {RenderLilypond MyScore Spec}
       DefaultSpec = unit
@@ -1626,6 +1640,7 @@ define
       % {ViewPDF MySpec}
    end
 
+   
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%
 %%% SuperCollider output related stuff
