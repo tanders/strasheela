@@ -1236,9 +1236,10 @@ MyScore = {Score.makeScore
 
 
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+%%
 %% Hierarchical output
+%%
 
 declare
 MyScore = {Score.makeScore
@@ -1295,7 +1296,7 @@ MyScore = {Score.makeScore
 
 
 
-%%%%%%%%%%%%%%%%%%%%%%%%%
+
 %%
 %% Enharmonic Lily output of enharmonic notes, and explicit pauses
 %%
@@ -1337,9 +1338,9 @@ MyScore = {Score.makeScore
 
 
 
-%%%%%%%%%%%%%%%%%%%%%%%%%
+
 %%
-%% Tuplet output
+%% Lily Tuplet output
 %%
 
 declare
@@ -1442,9 +1443,122 @@ MyScore = {MakeScore Durations BeatDivisions}
       clauses:{Out.makeLilyTupletClauses [2#3 2#5]})}
 
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+
+
+%%
+%% Lily single voice polyphony
+%%
+
+declare
+MyScore = {Score.makeScore
+	   seq(items:[sim(items:[seq(items:[note(duration:2
+						 pitch:72)
+					    note(duration:2
+						 pitch:71)
+					    note(duration:2
+						 pitch:69)
+					    note(duration:2
+						 pitch:67)])
+				 seq(items:[note(duration:2
+						 pitch:60)
+					    note(duration:2
+						 pitch:62)
+					    note(duration:2
+						 pitch:64)
+					    note(duration:2
+						 pitch:67)])])]
+	       startTime:0
+	       timeUnit:beats(4))
+	   unit}
+{Out.renderAndShowLilypond MyScore
+ unit}
+
+%%%
+
+
+declare
+MyScore = {Score.makeScore
+	   seq(items:[sim(items:[seq(items:[note(duration:2
+						 pitch:72)
+					    seq(items:[note(duration:2
+							    pitch:71)
+						       note(duration:2
+							    pitch:69)
+						       note(duration:2
+							    pitch:67)])])
+				 seq(items:[sim(items:[note(duration:2
+							    pitch:60)
+						       note(duration:2
+							    pitch:57)])
+					    note(duration:2
+						 pitch:62)
+					    note(duration:2
+						 pitch:64)
+					    note(duration:2
+						 pitch:67)])])]
+	       startTime:0
+	       timeUnit:beats(4))
+	   unit}
+
+
+{Out.renderAndShowLilypond MyScore
+ unit}
+
+%%
+
+%% problematic: no staff implicitly created for nested sims -- done explicitly 
+declare
+MyScore = {Score.makeScore
+	   sim(items:[sim(info:lily("\\new Staff")
+			  items:[seq(items:[note(duration:2
+						 pitch:72)
+					    note(duration:2
+						 pitch:71)
+					    note(duration:2
+						 pitch:69)
+					    note(duration:2
+						 pitch:67)])
+				 seq(items:[note(duration:2
+						 pitch:60)
+					    note(duration:2
+						 pitch:62)
+					    note(duration:2
+						 pitch:64)
+					    note(duration:2
+						 pitch:67)])])
+		      sim(info:lily("\\new Staff")
+			  items:[seq(items:[note(duration:2
+						 pitch:72)
+					    note(duration:2
+						 pitch:71)
+					    note(duration:2
+						 pitch:69)
+					    note(duration:2
+						 pitch:67)])
+				 seq(items:[note(duration:2
+						 pitch:60)
+					    note(duration:2
+						 pitch:62)
+					    note(duration:2
+						 pitch:64)
+					    note(duration:2
+						 pitch:67)])])]
+	       startTime:0
+	       timeUnit:beats(4))
+	   unit}
+{Out.renderAndShowLilypond MyScore
+ unit(file:problematicCase)}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
 %% SC output
+%%
 
 declare
 TestSCEventOut = {Out.makeSCEventOutFn
