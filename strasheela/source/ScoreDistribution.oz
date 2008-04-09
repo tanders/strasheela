@@ -105,6 +105,8 @@ define
 			 =<
 			 {FD.reflect.width {Y getValue($)}}
 		      end
+	       %% Choose the constraint on which most propagators are suspended (i.e. constraints are applied), an in case this is equal then take the variable with the smallest domain. 
+	       %% This mirrors the default nbSusps implementation in Mozart.
 	       nbSusps: fun {$ X Y}
 			   L1 = {FD.reflect.nbSusps {X getValue($)}}
 			   L2 = {FD.reflect.nbSusps {Y getValue($)}}
@@ -115,6 +117,15 @@ define
 			    =<
 			    {FD.reflect.size {Y getValue($)}})
 			end
+	       %% First fail variant: quotient of domain size and number of constraints applied
+	       'dom/deg':local Factor = 1000000 in
+				 fun {$ X Y}
+				  %% factor added in order to avoid that integer quotient is often 0
+				  {FD.reflect.size {X getValue($)}} * Factor div {FD.reflect.nbSusps {X getValue($)}}
+				  =<
+				  {FD.reflect.size {Y getValue($)}} * Factor div {FD.reflect.nbSusps {Y getValue($)}}
+				 end
+			      end
 	       min: fun {$ X Y}
 		       {FD.reflect.min {X getValue($)}}
 		       =<
@@ -302,7 +313,8 @@ define
 %    naive: Selects the first parameter object.
 %    size: Selects the first parameter, whose value domain has the smallest size.
 %    width: Select the first parameter with the smallest difference between the domain bounds of its value. 
-%    nbSusps: Selects the first parameter with the largest number of suspensions on its value, i.e., with the larges number of constraint propagators applied to it.  
+%    nbSusps: Selects a parameter with the largest number of suspensions on its value, i.e., with the larges number of constraint propagators applied to it. In in case this is equal for several parameters with most suspended propagators, then take the first parameter with the smallest value domain.
+%    'dom/deg': Selects the first parameter for which the quotient of domain size and number of suspended propagators is maximum. 
 %    min: Selects the first parameter, whose value's lower bound is minimal.
 %    max: Selects the first parameter, whose value's lower bound is maximal.
 %    timeParams: Selects the first temporal parameter object.
