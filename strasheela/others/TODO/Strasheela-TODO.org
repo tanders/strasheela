@@ -37,15 +37,6 @@
 *** Implement description
 
 
-
-*** Concurrent procedure/method filter (filterThreaded) which does return stream instead of list :NEXT:
-
-    as soon as enough information is available on specific score
-    object to fulfull given test function, add it to stream. Close
-    stream as soon as it is known that no further elements will be
-    added.
-
-
 ** Create small-scale musical example which demonstrates the effect of LUtils.cFilter and LUtils.cFind :NEXT:
    
 *** TODO Sketch a small-scale music theory in plain English  
@@ -915,7 +906,8 @@ archive init record.
 
 ** Update Lilypond output						  :NEXT:
 
-*** TODO Create clause for multiple voices in single staff
+*** DONE Create clause for multiple voices in single staff
+    CLOSED: [2008-04-08 Tue 22:54]
 
     Test for sim which contains only seq, which in turn contain only notes or lily chords
    
