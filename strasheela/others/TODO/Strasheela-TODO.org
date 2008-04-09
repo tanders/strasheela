@@ -1,5 +1,33 @@
 #+CATEGORY: Strasheela
 
+* Strasheela release							  :NEXT:
+
+** TODO Fix bug for Lily output of (container) offset times 
+
+   offset time must be inserted within container, not simply put
+   before it. Also, there should be a white space after a rest in Lily
+   code.
+
+   Replace OffsetToPauses def by a def returning lily rest VS. Every
+   caller of OffsetToPauses then inserts this rest where it
+   belongs. Container output calls ToLilypondAux (or ToLilypond ?)
+   explicitly instead of OffsetToPauses.
+
+** Lily usage examples 
+
+   See 
+   
+*** DONE Example for chord output 
+    CLOSED: [2008-04-09 Wed 20:48]
+*** DONE Example for single voice polyphony
+    CLOSED: [2008-04-09 Wed 20:48]
+*** TODO Example creating staffs which last only for container duration
+
+** ET22 example
+
+   modify ET31 cadence example
+
+
 * Strasheela examples						    :STRASHEELA:
 
 
