@@ -9,6 +9,7 @@
     - Functor ET22 for composition in 22-tone equal temperament [link Erlich paper]
     - HS.rule: Cadence
     - Functor ET12: convenient 12 ET pitch notation functions
+    - SDistro.makeSearchScript (and all Strasheela search engines): Added generic variable orderings 'dom/deg'
 
 
   - Revised Lilypond output  
