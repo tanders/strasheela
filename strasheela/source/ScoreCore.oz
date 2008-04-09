@@ -1305,6 +1305,9 @@ define
       meth getTemporalContainer($)
 	 {self getTemporalAspect($)}
       end
+      meth hasTemporalContainer($)
+	 {self getTemporalContainer($)} \= nil
+      end
 
       /** %% Apply unary procedure P (expecting a list) to the sublist from Xs (a list) matching PatternMatchingExpr (a list of atoms: a single 'x' and any number of 'o' in any order). PatternMatchingExpr expresses a sublist of Xs positionally related to self (an element of Xs). The atom 'x' in PatternMatchingExpr reprents self and one or more 'o' atoms around 'x' express predecessors or successors of self in Xs. For instance, <code>{Self patternMatchingApply([o o x] Xs P)</code> applies P to the list consisting in the two predecessors of Self in Xs and Self itself (in that order). 
       %% PatternMatchingApply reduces to skip in case there is no matching sublist in Xs (e.g. the PatternMatchingExpr = [o x] and self is already the first element in Xs).
