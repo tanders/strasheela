@@ -19,7 +19,7 @@
     - Support for single staff polyphony: multiple (nested) seqs and chords contained in a sim (which corresponds to or is situated in a staff) are output as single staff polyphony 
     - Support for enharmonic notation (for enharmonic note objects)   
     - Out.makeLilyTupletClauses: easy Lilypond customisation for tuplet support
-    - A staff is implicitly created for a sequential container which is either at the top-level or contained in a top-level simultaneous container. In typical Strasheela score topology for Lilypond output, a sim is top-level container and its items are seq containers corresponding to staffs. If top-level is a seq, then there is only a single staff. You can define arbitrary other nestings, but in such cases you should explicitly specify which container corresponds to a staff using the mentioned lily info-tag. Moreover, you can also explicitly create staff or staff groups which last for the duration of their container only. Also, implicit staff creation can be switched off entirely by setting the optional argument 'implicitStaffs' to false. 
+    - A staff is implicitly created for a sequential container which is either at the top-level or contained in a top-level simultaneous container. In typical Strasheela score topology for Lilypond output, a sim is the top-level container and its items are seq containers corresponding to staffs. If top-level is a seq, then there is only a single staff. You can define arbitrary other nestings, but in such cases you should explicitly specify which container corresponds to a staff using the mentioned lily info-tag. Moreover, you can also explicitly create staff or staff groups which last for the duration of their container only. The implicit staff creation can be switched off entirely by setting the optional argument 'implicitStaffs' to false. 
     - Removed function: Out.outmostSimToLily 
 
 
@@ -27,6 +27,7 @@
     - Added multiple tonal chord progression CSPs in 31 ET, partly demonstrating the new cadence constraint and the Schoenberg constraints (introduced in the previous release): examples/HarmonicProgressions-31ET.oz
     - Fuxian counterpoint example revised (now follows Fux' cadence rule): [file] 
     - Generalised Fuxian counterpoint example: the user can specify the cantus firmus, even in different modes. Also, this example demonstrates the use of scale objects together with note objects: [file]
+    - Revised the reference documentation for Out.toLilypond
 
 
   - Fixes and minor additions 
