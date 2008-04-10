@@ -149,16 +149,17 @@ clearInterval(drawit)
 </span></li><li>HS at "<span class="string">x-ozlib://anders/strasheela/HarmonisedScore/HarmonisedScore.ozf"
 </span></li></ul></code>
 <h3>Export</h3>
-<code><ul><li>&lt;P/3:<a href="#entity284"><span class="functionname">AscendingProgressionR</span></a>&gt;
-</li><li>&lt;P/3:<a href="#entity285"><span class="functionname">DescendingProgressionR</span></a>&gt;
-</li><li>&lt;P/3:<a href="#entity286"><span class="functionname">SuperstrongProgressionR</span></a>&gt;
-</li><li>&lt;P/3:<a href="#entity287"><span class="functionname">ProgressionStrength</span></a>&gt;
-</li><li>&lt;P/2:<a href="#entity288"><span class="functionname">ResolveDescendingProgressions</span></a>&gt;
+<code><ul><li>&lt;P/3:<a href="#entity300"><span class="functionname">AscendingProgressionR</span></a>&gt;
+</li><li>&lt;P/3:<a href="#entity301"><span class="functionname">DescendingProgressionR</span></a>&gt;
+</li><li>&lt;P/3:<a href="#entity302"><span class="functionname">SuperstrongProgressionR</span></a>&gt;
+</li><li>&lt;P/3:<a href="#entity303"><span class="functionname">ConstantProgressionR</span></a>&gt;
+</li><li>&lt;P/3:<a href="#entity304"><span class="functionname">ProgressionStrength</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity305"><span class="functionname">ResolveDescendingProgressions</span></a>&gt;
 </li></ul></code>
 <h3>Define</h3>
 
 <code>
-<a name="entity284">
+<a name="entity300">
 <span class="keyword">proc</span>{<span class="functionname">AscendingProgressionR</span> X Y B}<br>
 <span class="string"> B=1 <-> the progression from chord/scale X to chord/scale Y is ascending (or strong): X and Y have common pitch classes, but the root of Y does not occur in the set of X's pitchclasses.<BR>
 <BR>
@@ -166,7 +167,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity285">
+<a name="entity301">
 <span class="keyword">proc</span>{<span class="functionname">DescendingProgressionR</span> X Y B}<br>
 <span class="string"> B=1 <-> the progression from chord/scale X to chord/scale Y is descending (or weak): a non-root pitchclass of X is root in Y.<BR>
 <BR>
@@ -174,7 +175,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity286">
+<a name="entity302">
 <span class="keyword">proc</span>{<span class="functionname">SuperstrongProgressionR</span> X Y B}<br>
 <span class="string"> B=1 <-> the progression from chord/scale X to chord/scale Y is superstrong in a Schoenbergian sense (cf. Harmonielehre): X and Y have no common pitch classes.<BR>
 <BR>
@@ -182,7 +183,12 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity287">
+<a name="entity303">
+<span class="keyword">proc</span>{<span class="functionname">ConstantProgressionR</span> X Y B}
+</code><br>
+
+<code>
+<a name="entity304">
 <span class="keyword">proc</span>{<span class="functionname">ProgressionStrength</span> X Y N}<br>
 <span class="string"> Expects two chord/scale objects X and Y, and returns N (an FD int) expressing the 'strength' of the harmonic progression encoded by a single integer.<BR>
  More specifically, N can be used to distinguish between the following cases.<BR>
@@ -195,10 +201,10 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity288">
+<a name="entity305">
 <span class="keyword">proc</span>{<span class="functionname">ResolveDescendingProgressions</span> Xs Args}<br>
 <span class="string"> Expects a list of chord/scale objects and constrains them according to Schoenberg's recommendation. For any three successive chords/scales, if the first two chords form a descending progression, then the progression from the first to the third chord forms a strong/superstrong progression (so the middle chord is quasi a 'passing chord'). Also, the last chord/scale pair forms always a strong progression.<BR>
- Optional Args: allowInterchangeProgression (default is false). If true, then mere interchange progressions (e.g., I V I), are permitted as well. In any case, no two descending progression must follow each other.<BR>
+ Optional Args: allowInterchangeProgression (default is false). If true, then mere interchange progressions (e.g., I V I), are permitted as well. In any case, no two descending progression must follow each other. allowRepetition: if true, two neighbouring chords can have the same root. Defaults to false.<BR>
 <BR>
 </span>
 </code><br>

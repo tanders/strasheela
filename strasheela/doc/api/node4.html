@@ -160,10 +160,11 @@ clearInterval(drawit)
 </li><li>&lt;P/3:<a href="#entity162"><span class="functionname">EveryNth</span></a>&gt;
 </li><li>&lt;P/3:<a href="#entity163"><span class="functionname">Replace</span></a>&gt;
 </li><li>&lt;P/2:<a href="#entity164"><span class="functionname">ButLast</span></a>&gt;
-</li><li>&lt;P/4:<a href="#entity165"><span class="functionname">ArithmeticSeries</span></a>&gt;
-</li><li>&lt;P/4:<a href="#entity166"><span class="functionname">ReciprocalArithmeticSeries</span></a>&gt;
-</li><li>&lt;C:<a href="#entity167"><span class="type">ExtendableList</span></a>&gt;
-</li><li>&lt;P/2:<a href="#entity168"><span class="functionname">IsExtendableList</span></a>&gt;
+</li><li>&lt;P/3:<a href="#entity165"><span class="functionname">LastN</span></a>&gt;
+</li><li>&lt;P/4:<a href="#entity166"><span class="functionname">ArithmeticSeries</span></a>&gt;
+</li><li>&lt;P/4:<a href="#entity167"><span class="functionname">ReciprocalArithmeticSeries</span></a>&gt;
+</li><li>&lt;C:<a href="#entity168"><span class="type">ExtendableList</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity169"><span class="functionname">IsExtendableList</span></a>&gt;
 </li></ul></code>
 <h3>Define</h3>
 
@@ -373,6 +374,14 @@ clearInterval(drawit)
 
 <code>
 <a name="entity165">
+<span class="keyword">fun</span>{<span class="functionname">LastN</span> Xs N}<br>
+<span class="string"> Returns the last N elements of Xs (quasi the opposite of List.take).<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity166">
 <span class="keyword">fun</span>{<span class="functionname">ArithmeticSeries</span> Start Difference N}<br>
 <span class="string"> Returns an arithmetic series with N elements, starting from start and with difference Difference between the elements.<BR>
  Start and Difference must be floats, N must be an integer. A list of floats is returned.<BR>
@@ -381,7 +390,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity166">
+<a name="entity167">
 <span class="keyword">fun</span>{<span class="functionname">ReciprocalArithmeticSeries</span> Start Difference N}<br>
 <span class="string"> Returns the reciprocals of an arithmetic series with N elements. The arithmetic series starts from start and has difference Difference between its elements. Start and Difference must be floats, N must be an integer. A list of floats is returned.<BR>
  The  reciprocal series is not transposed, i.e. for Difference>0 seach series element is smaller than its predecessor and all but the first series elements are < Start.<BR>
@@ -389,7 +398,7 @@ clearInterval(drawit)
 </span>
 </code><br>
 
-<a name="entity167">
+<a name="entity168">
 <p class="margin"><div align="right"><a href="class1.html">[class info]</a></div></p>
 <code>
 
@@ -417,7 +426,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity168">
+<a name="entity169">
 <span class="keyword">fun</span>{<span class="functionname">IsExtendableList</span> X}<br>
 <span class="string"> Returns a boolean whether X is an ExtendableList<BR>
 <BR>

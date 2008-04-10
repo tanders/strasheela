@@ -1,7 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
 <html>
  <head>
-  <title>Class ScaleDegreeChord</title>
+  <title>Class DiatonicChord</title>
   <style>BODY {
  background: url(page.gif) repeat-y white;
 }
@@ -128,19 +128,15 @@ clearInterval(drawit)
            |
            |
            |
-  <a class="pre" href="node3.html#entity99">PitchClassCollection</a>
+  <a class="pre" href="node3.html#entity100">PitchClassCollection</a>
            |
            |
            |
-         <a class="pre" href="node3.html#entity101">Chord</a>         <a class="pre" href="node3.html#entity105">InScaleMixinForChord</a>
+         <a class="pre" href="node3.html#entity102">Chord</a>         <a class="pre" href="node3.html#entity106">InScaleMixinForChord</a>
            |                    |
            `----------+---------'
                       |
-                <a class="pre" href="node3.html#entity107">DiatonicChord</a>               <a class="pre" href="node3.html#entity108">ScaleDegreeMixinForChord</a>
-                      |                                |
-                      `-----------+--------------------'
-                                  |
-                           <a class="pre" href="node3.html#entity110">ScaleDegreeChord</a>
+                <a class="pre" href="node3.html#entity108">DiatonicChord</a>
 </pre>
 <hr><p class="margin"><div align="right">class definition</div></p>
 <code>
@@ -151,13 +147,14 @@ clearInterval(drawit)
 
 
 </tr></table>
-<span class="string"> [concrete class] ScaleDegreeChord is a chord related to a scale (see DiatonicChord) whose root is additionally expressed in terms of a scale degree with respect to that scale. See the doc of the superclasses DiatonicChord and ScaleDegreeMixinForChord for details.<BR>
+<span class="string"> [concrete class] Defines a Chord which relates to a Scale (the Scale is defined by getScales and isRelatedScale). When the parameter value of inScaleB (a 0/1 integer) = 1, then all Chord pitch classes are diatonic, i.e. they are also pitch classes of the related Scale. <BR>
+ See doc for Chord and InScaleMixinForChord for further details.<BR>
 <BR>
 </span>
-<span class="keyword">class</span> <span class="type">ScaleDegreeChord</span> (Inheritance-free)<br>
-&nbsp;&nbsp;&nbsp;<span class="keyword">feat</span>&nbsp;!ChordType&nbsp;!InScaleMixinForChordType&nbsp;!PitchClassCollectionType&nbsp;!ScaleDegreeMixinForChordType&nbsp;label
+<span class="keyword">class</span> <span class="type">DiatonicChord</span> (Inheritance-free)<br>
+&nbsp;&nbsp;&nbsp;<span class="keyword">feat</span>&nbsp;!ChordType&nbsp;!InScaleMixinForChordType&nbsp;!PitchClassCollectionType&nbsp;label
 <br>
-&nbsp;&nbsp;&nbsp;<span class="keyword">attr</span>&nbsp;chordPCsInScale&nbsp;dbFeatures&nbsp;inScaleB&nbsp;index&nbsp;pitchClasses&nbsp;relatedScaleBs&nbsp;root&nbsp;rootAccidental&nbsp;rootDegree&nbsp;scales&nbsp;transposition&nbsp;untransposedPitchClasses&nbsp;untransposedRoot
+&nbsp;&nbsp;&nbsp;<span class="keyword">attr</span>&nbsp;chordPCsInScale&nbsp;dbFeatures&nbsp;inScaleB&nbsp;index&nbsp;pitchClasses&nbsp;relatedScaleBs&nbsp;root&nbsp;scales&nbsp;transposition&nbsp;untransposedPitchClasses&nbsp;untransposedRoot
 <br>
 <ul><li><span class="functionname">degreeToPC</span>(Degree Accidental PC)<br>
 
@@ -284,42 +281,6 @@ clearInterval(drawit)
 
 </tr></table>
 <span class="string"></span>
-</li><li><span class="functionname">getRootAccidental</span>($)<br>
-
-<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
-
-
-
-
-</tr></table>
-<span class="string"></span>
-</li><li><span class="functionname">getRootAccidentalParameter</span>($)<br>
-
-<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
-
-
-
-
-</tr></table>
-<span class="string"></span>
-</li><li><span class="functionname">getRootDegree</span>($)<br>
-
-<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
-
-
-
-
-</tr></table>
-<span class="string"></span>
-</li><li><span class="functionname">getRootDegreeParameter</span>($)<br>
-
-<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
-
-
-
-
-</tr></table>
-<span class="string"></span>
 </li><li><span class="functionname">getRootParameter</span>(X)<br>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
@@ -395,15 +356,6 @@ clearInterval(drawit)
 </tr></table>
 <span class="string"></span>
 </li><li><span class="functionname">initInScaleMixinForChord</span>(...)<br>
-
-<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
-
-
-
-
-</tr></table>
-<span class="string"></span>
-</li><li><span class="functionname">initScaleDegreeMixinForChord</span>(rootAccidental:Accidental rootDegree:Degree)<br>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
 

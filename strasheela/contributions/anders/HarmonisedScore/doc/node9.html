@@ -138,15 +138,15 @@ clearInterval(drawit)
 <code><ul><li><a href="node15.html">HS</a> at "<span class="string">../../HarmonisedScore.ozf"
 </span></li></ul></code>
 <h3>Export</h3>
-<code><ul><li>&lt;P/2:<a href="#entity324"><span class="functionname">GetIntervals</span></a>&gt;
-</li><li>&lt;P/2:<a href="#entity321"><span class="functionname">Get11LimitDiamondChords</span></a>&gt;
-</li><li>&lt;P/2:<a href="#entity322"><span class="functionname">Get7LimitDiamondChords</span></a>&gt;
-</li><li>&lt;P/2:<a href="#entity323"><span class="functionname">Get5LimitDiamondChords</span></a>&gt;
+<code><ul><li>&lt;P/2:<a href="#entity342"><span class="functionname">GetIntervals</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity339"><span class="functionname">Get11LimitDiamondChords</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity340"><span class="functionname">Get7LimitDiamondChords</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity341"><span class="functionname">Get5LimitDiamondChords</span></a>&gt;
 </li></ul></code>
 <h3>Define</h3>
 
 <code>
-<a name="entity324">
+<a name="entity342">
 <span class="keyword">fun</span>{<span class="functionname">GetIntervals</span> KeysPerOctave}<br>
 <span class="string"> Returns a database with the Partch intervals. For usage in HS, the intervals are rounded to the nearest pitch class interval depending on KeysPerOctave (an int).<BR>
 <BR>
@@ -154,7 +154,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity321">
+<a name="entity339">
 <span class="keyword">fun</span>{<span class="functionname">Get11LimitDiamondChords</span> KeysPerOctave}<br>
 <span class="string"> Returns a database with the two chords which constitute the 11-limit tonality diamond. All other <code>6*6-2=34</code> chords of this diamond are transpositions of these two by the proportions of the other.<BR>
  For usage in HS, each chord's pitchclasses and root are rounded to the nearest pitch class depending on KeysPerOctave (an int).<BR>
@@ -165,12 +165,12 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity322">
+<a name="entity340">
 <span class="keyword">fun</span>{<span class="functionname">Get7LimitDiamondChords</span> KeysPerOctave}
 </code><br>
 
 <code>
-<a name="entity323">
+<a name="entity341">
 <span class="keyword">fun</span>{<span class="functionname">Get5LimitDiamondChords</span> KeysPerOctave}
 </code><br>
 <h3>End</h3>

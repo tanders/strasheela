@@ -1,7 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
 <html>
  <head>
-  <title>Class Chord</title>
+  <title>Class ChordNote</title>
   <style>BODY {
  background: url(page.gif) repeat-y white;
 }
@@ -124,15 +124,11 @@ clearInterval(drawit)
 
 <div style="margin-left:160px"><p align="right" class="margin"><div align="right">inheritance tree</div></p>
 <pre>
- Score.temporalElement
-           |
-           |
-           |
-  <a class="pre" href="node3.html#entity99">PitchClassCollection</a>
-           |
-           |
-           |
-         <a class="pre" href="node3.html#entity101">Chord</a>
+ Score.note <a class="pre" href="node3.html#entity117">PitchClassMixin</a> <a class="pre" href="node3.html#entity119">InChordMixinForNote</a> <a class="pre" href="node3.html#entity127">ChordDegreeMixinForNote</a>
+     |             |                 |                     |
+     `-------------`----------------+'---------------------'
+                                    |
+                                <a class="pre" href="node3.html#entity139">ChordNote</a>
 </pre>
 <hr><p class="margin"><div align="right">class definition</div></p>
 <code>
@@ -143,16 +139,15 @@ clearInterval(drawit)
 
 
 </tr></table>
-<span class="string"> Chord represents an analytical chord, i.e. a chord which is silent when the score is played but is used to constrain notes simultaneous with the chord. For example, Chord instances can be used to express a roman numeral or functional analysis of the music.<BR>
- For further information see doc of PitchClassCollection.<BR>
+<span class="string"> [concrete class] Note class extended by chord-related mixins (in contrast to ChordDegreeNote, it does not inherit from InScaleMixinForNote). <BR>
 <BR>
 </span>
-<span class="keyword">class</span> <span class="type">Chord</span> (Inheritance-free)<br>
-&nbsp;&nbsp;&nbsp;<span class="keyword">feat</span>&nbsp;!ChordType&nbsp;!PitchClassCollectionType&nbsp;label
+<span class="keyword">class</span> <span class="type">ChordNote</span> (Inheritance-free)<br>
+&nbsp;&nbsp;&nbsp;<span class="keyword">feat</span>&nbsp;!ChordDegreeMixinForNoteType&nbsp;!InChordMixinForNoteType&nbsp;!PitchClassMixinType
 <br>
-&nbsp;&nbsp;&nbsp;<span class="keyword">attr</span>&nbsp;dbFeatures&nbsp;index&nbsp;pitchClasses&nbsp;root&nbsp;transposition&nbsp;untransposedPitchClasses&nbsp;untransposedRoot
+&nbsp;&nbsp;&nbsp;<span class="keyword">attr</span>&nbsp;chordAccidental&nbsp;chordDegree&nbsp;chords&nbsp;inChordB&nbsp;octave&nbsp;pitchClass&nbsp;relatedChordBs
 <br>
-<ul><li><span class="functionname">degreeToPC</span>(Degree Accidental PC)<br>
+<ul><li><span class="functionname">getChordAccidental</span>($)<br>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
 
@@ -161,40 +156,7 @@ clearInterval(drawit)
 
 </tr></table>
 <span class="string"></span>
-</li><li><span class="functionname">getDB</span>(X)<br>
-
-<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
-
-
-
-
-</tr></table>
-<span class="string"> The chord database is defined by DB.setDB. getDB returns the internal representation of this database (see the DB.setDB for more details).<BR>
-<BR>
-</span>
-</li><li><span class="functionname">getDBFeature</span>(X Feat)<br>
-
-<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
-
-
-
-
-</tr></table>
-<span class="string"> Returns the value (FD int or FS) of the additional feature Feat.<BR>
-<BR>
-</span>
-</li><li><span class="functionname">getDBFeatures</span>(X)<br>
-
-<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
-
-
-
-
-</tr></table>
-<span class="string"> Returns a record with the additional features defined in the database and 'announced' to self with the init argument dbFeatures.<BR>
-<BR>
-</span>
-</li><li><span class="functionname">getIndex</span>(X)<br>
+</li><li><span class="functionname">getChordAccidentalParameter</span>($)<br>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
 
@@ -203,7 +165,45 @@ clearInterval(drawit)
 
 </tr></table>
 <span class="string"></span>
-</li><li><span class="functionname">getIndexParameter</span>(X)<br>
+</li><li><span class="functionname">getChordDegree</span>($)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"></span>
+</li><li><span class="functionname">getChordDegreeParameter</span>($)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"></span>
+</li><li><span class="functionname">getChords</span>(X)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> Returns the list of candidate chord objects, i.e. the value returned by the proc set via the getChords init argument. <BR>
+<BR>
+</span>
+</li><li><span class="functionname">getInChordB</span>(X)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"></span>
+</li><li><span class="functionname">getInChordBParameter</span>(X)<br>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
 
@@ -220,11 +220,55 @@ clearInterval(drawit)
 
 
 </tr></table>
-<span class="string"> The parameter 'index' is included if it is undetermined, but it is omitted in case both the set of pitch classes and the transposition are determined. If the index is determined, then the set of pitch classes plus the transposition should be sufficient and the index can be derived from them. Omitting the index makes archived score solutions more stable. Even if the chord/scale database was edited  later (e.g., chords were added) so that the indices changed, the archived score will still work as long as the set of pitch classes for the original chords did not change.<BR>
- In principle, it is possible that there are two chords with the same pitchclasses and transposition but different index and different additional db features. However, that should be considered a bug in the database. In case alternative db feature values for a single chord/scale are needed, then these should be defined as variable domain values for a single db entry, not as additional entries.  <BR>
+<span class="string"></span>
+</li><li><span class="functionname">getOctave</span>(X)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"></span>
+</li><li><span class="functionname">getOctaveParameter</span>(X)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"></span>
+</li><li><span class="functionname">getPitchClass</span>(X)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"></span>
+</li><li><span class="functionname">getPitchClassParameter</span>(X)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"></span>
+</li><li><span class="functionname">getRelatedChordBs</span>(X)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> Returns a list of 0/1-integers returned by {Map {<getChords>} <isRelatedChord>}. <getChords> and <isRelatedChord> are the functions given to initInChordMixinForNote.<BR>
 <BR>
 </span>
-</li><li><span class="functionname">getPitchClasses</span>(X)<br>
+</li><li><span class="functionname">init</span>(octave:Oct pitchClass:PC&nbsp;...)<br>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
 
@@ -233,7 +277,7 @@ clearInterval(drawit)
 
 </tr></table>
 <span class="string"></span>
-</li><li><span class="functionname">getRoot</span>(X)<br>
+</li><li><span class="functionname">initChordDegreeMixinForNote</span>(chordAccidental:Accidental chordDegree:Degree)<br>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
 
@@ -242,7 +286,7 @@ clearInterval(drawit)
 
 </tr></table>
 <span class="string"></span>
-</li><li><span class="functionname">getRootParameter</span>(X)<br>
+</li><li><span class="functionname">initInChordMixinForNote</span>(...)<br>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
 
@@ -251,7 +295,7 @@ clearInterval(drawit)
 
 </tr></table>
 <span class="string"></span>
-</li><li><span class="functionname">getTransposition</span>(X)<br>
+</li><li><span class="functionname">initPitchClassMixin</span>(octave:Oct pitchClass:PC)<br>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
 
@@ -260,7 +304,7 @@ clearInterval(drawit)
 
 </tr></table>
 <span class="string"></span>
-</li><li><span class="functionname">getTranspositionParameter</span>(X)<br>
+</li><li><span class="functionname">isInChord</span>(B)<br>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
 
@@ -268,8 +312,10 @@ clearInterval(drawit)
 
 
 </tr></table>
-<span class="string"></span>
-</li><li><span class="functionname">getUntransposedPitchClasses</span>(X)<br>
+<span class="string"> Returns an 0/1-int which states whether or not the pitch class of self is included in the pitch classes of its related chord. This definition is an alias for getInChordB.<BR>
+<BR>
+</span>
+</li><li><span class="functionname">nonChordPCConditions</span>(Conditions)<br>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
 
@@ -277,43 +323,11 @@ clearInterval(drawit)
 
 
 </tr></table>
-<span class="string"></span>
-</li><li><span class="functionname">getUntransposedRoot</span>(X)<br>
-
-<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
-
-
-
-
-</tr></table>
-<span class="string"></span>
-</li><li><span class="functionname">getUntransposedRootParameter</span>(X)<br>
-
-<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
-
-
-
-
-</tr></table>
-<span class="string"></span>
-</li><li><span class="functionname">init</span>(dbFeatures:DBFeats index:Index pitchClasses:PitchClasses root:Root transposition:Trans untransposedPitchClasses:UntransposedPitchClasses untransposedRoot:UntranspRoot&nbsp;...)<br>
-
-<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
-
-
-
-
-</tr></table>
-<span class="string"></span>
-</li><li><span class="functionname">toPPrintRecord</span>(X excluded:Excluded features:Features)<br>
-
-<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
-
-
-
-
-</tr></table>
-<span class="string"></span>
+<span class="string"> Defines and applies a 'meta-rule' which conveniently defines a number of conditions which effect self dependent on the value of {self isInChord($)}. Conditions is a list of binary procs expecting self and an 0/1-int (declared within the proc). These conditions form alternative constraints on self. A typical condition example would be a boolean constraint whether self is a passing note, another whether self is a suspension.<BR>
+ If none of the given conditions is true, then self must be 'in' the chord (i.e. 1={self isInChord($)}). Similarily, if self is not in the chord, at least one of the conditions must be true. However, the opposite is not necessarily true: if one or more conditions are the case then self may or may not be in the chord and also if self is in the chord then one or more conditions still may or may not be true.<BR>
+ For instance, this meta-rule never constraints a note to necessarily be a non-chord note. You may however easily do this, e.g, by constraining {self isInChord($)}=0 directly -- which would have the consequence that one of Conditions must be true. <BR>
+<BR>
+</span>
 </li></ul>
 <span class="keyword">end</span>
 </code>

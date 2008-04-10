@@ -116,7 +116,7 @@ clearInterval(drawit)
 
 
 </tr></table>
-<span class="string"> TODO: general description of EventDurs.  (test of doc-string)<BR>
+<span class="string"> EventDurs facilitates creating short rhythmic exercises.<BR>
 </span>
 </span>
 <h3>Functor</h3>
@@ -125,35 +125,43 @@ clearInterval(drawit)
 <code><ul><li>FD</li><li>LUtils at "<span class="string">x-ozlib://anders/strasheela/source/ListUtils.ozf"
 </span></li><li>Score at "<span class="string">x-ozlib://anders/strasheela/source/ScoreCore.ozf"
 </span></li><li>Out at "<span class="string">x-ozlib://anders/strasheela/source/Output.ozf"
-</span></li></ul></code>
+</span></li><li>Browser(browse:Browse)</li></ul></code>
 <h3>Export</h3>
-<code><ul><li>setup:&lt;P/4:<a href="#entity5"><span class="functionname">Setup</span></a>&gt;
-</li><li>toScore:&lt;P/3:<a href="#entity6"><span class="functionname">ToScore</span></a>&gt;
-</li><li>toScoreDouble:&lt;P/3:<a href="#entity7"><span class="functionname">ToScoreDouble</span></a>&gt;
-</li><li>writeLilyFile:&lt;P/2:<a href="#entity8"><span class="functionname">WriteLilyFile</span></a>&gt;
+<code><ul><li>setup:&lt;P/4:<a href="#entity6"><span class="functionname">Setup</span></a>&gt;
+</li><li>toScore:&lt;P/3:<a href="#entity7"><span class="functionname">ToScore</span></a>&gt;
+</li><li>toScoreDouble:&lt;P/3:<a href="#entity8"><span class="functionname">ToScoreDouble</span></a>&gt;
+</li><li>writeLilyFile:&lt;P/3:<a href="#entity9"><span class="functionname">WriteLilyFile</span></a>&gt;
 </li></ul></code>
 <h3>Define</h3>
 
 <code>
-<a name="entity5">
-<span class="keyword">proc</span>{<span class="functionname">Setup</span> Beats BeatDivisionsGet Events Durations}<br>
+<a name="entity6">
+<span class="keyword">proc</span>{<span class="functionname">Setup</span> Beats BeatDivisions Events Durations}<br>
 <span class="string"> link Events with Durations.  Setting a value (or narrowing the domain) in either list will update the other list.<BR>
+<BR>
+   NB: the Event list has a "courtesy one" at the end.<BR>
 </span>
 </code><br>
 
 <code>
-<a name="entity6">
-<span class="keyword">proc</span>{<span class="functionname">ToScore</span> EventsDurs BeatDivisions ScoreInstance}
-</code><br>
-
-<code>
 <a name="entity7">
-<span class="keyword">proc</span>{<span class="functionname">ToScoreDouble</span> EventDurs BeatDivisions ScoreInstance}
+<span class="keyword">proc</span>{<span class="functionname">ToScore</span> EventsDurs BeatDivisions ScoreInstance}<br>
+<span class="string"> Combines the Events and Durations and produces a Score object.<BR>
+</span>
 </code><br>
 
 <code>
 <a name="entity8">
-<span class="keyword">proc</span>{<span class="functionname">WriteLilyFile</span> BaseFilename MyScore}
+<span class="keyword">proc</span>{<span class="functionname">ToScoreDouble</span> EventDurs BeatDivisions ScoreInstance}<br>
+<span class="string"> Combines the Events and Durations and produces a Score<BR>
+* object.  Repeats the events and durs -- ie 1 bar becomes 2<BR>
+* bars.<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity9">
+<span class="keyword">proc</span>{<span class="functionname">WriteLilyFile</span> BaseFilename BeatDivisions MyScore}
 </code><br>
 <h3>End</h3>
 </div></body>
