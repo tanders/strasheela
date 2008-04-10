@@ -25,6 +25,7 @@
 
   - Documentation    
     - Added multiple tonal chord progression CSPs in 31 ET, partly demonstrating the new cadence constraint and the Schoenberg constraints (introduced in the previous release): examples/HarmonicProgressions-31ET.oz
+    - Added examples/HarmonicProgressions-22ET.oz
     - Fuxian counterpoint example revised (now follows Fux' cadence rule): [file] 
     - Generalised Fuxian counterpoint example: the user can specify the cantus firmus, even in different modes. Also, this example demonstrates the use of scale objects together with note objects: [file]
     - Revised the reference documentation for Out.toLilypond
