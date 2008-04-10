@@ -74,14 +74,15 @@ export
    MakeEvent2CsoundFn MakeCsoundScore
    OutputCsoundScore RenderCsound RenderAndPlayCsound
    CallCsound
-   ToLilypond OutputLilypond CallLilypond ViewPDF
+   ToLilypond ToLilypond2 OutputLilypond CallLilypond ViewPDF
    RenderLilypond RenderAndShowLilypond
    %% ?? temp export these ? clean things up once..
    LilyMakePitch LilyMakeFromMidiPitch
    LilyMakeRhythms LilyMakeRhythms2 LilyMakeMicroPitch LilyMakeEt72MarkFromMidiPitch
    IsOutmostSeq IsSingleStaffPolyphony SingleStaffPolyphonyToLily IsLilyChord SimToLilyChord GetUserLily
    MakeNoteToLily MakeNoteToLily2
-   PauseToLily MakeLilyTupletClauses
+   PauseToLily LilyRest
+   MakeLilyTupletClauses
    SeqToLily SimToLily % OutmostSimToLily
    %% 
    OutputSCScore MakeSCScore MakeSCEventOutFn
@@ -1138,13 +1139,12 @@ define
       end
    end
 
-   /** %% [For experts only] Expects a pause object and returns the lilypond pause output (a VS).
+   /** %% [For experts only] Expects a pause duration in beats (a float) and returns a Lilypond rest (a VS).  
    %% */
-   fun {PauseToLily MyPause}
+   fun {LilyRest PauseDurInBeats}
       %%  returns a list of Lilypond rhythm
       %%  values matching dur of MyPause
-      Rhythms = {LilyMakeRhythms
-		 {MyPause getDurationParameter($)}}
+     Rhythms = {LilyMakeRhythms2 PauseDurInBeats}
    in
       %% if pause duration is 0 or
       %% too short (less than a 64th
@@ -1153,8 +1153,14 @@ define
       then '' % omit pause
 	 %% otherwise output VS of Lily pause(s)
       else {ListToVS {Map Rhythms fun {$ R} r#R end}
-	    " "}
+	    " "}#" "
       end
+   end
+
+   /** %% [For experts only] Expects a pause object and returns a Lilypond rest (a VS).
+   %% */
+   fun {PauseToLily MyPause}
+      {LilyRest {MyPause getDurationInBeats($)}}
    end
    
 %    fun {NoteToLily Note}
@@ -1177,32 +1183,16 @@ define
 % 	 end
 %       end
 %    end
-   
-   %% appends pauses before X to express offsetTime
-   fun {OffsetToPauses X Args}
-      Offset = {X getOffsetTimeParameter($)}
-      LilyX = {ToLilypondAux X Args}
-   in
-      if {Offset getValueInBeats($)} == 0.0
-      then
-	 LilyX
-      else
-	 %% !! ?? generalise (needed elsewhere)
-	 %% !! offset must be positive (currently)
-	 Rhythms = {LilyMakeRhythms Offset}
-	 FirstRest = r#Rhythms.1
-      in
-	 if {Length Rhythms} == 1
-	 then FirstRest#LilyX
-	 else FirstRest#{ListToVS {Map Rhythms.2
-				   fun {$ R} r#R end}
-			 " "}#LilyX
-	 end
-      end
+
+   %% ... {ToLilypond2 X Args}
+   %% TODO: change:
+   %% create Lily pause (VS) for the offset time of X
+   fun {OffsetToLilyRest X}
+      {LilyRest {X getOffsetTimeInBeats($)}}
    end
 
    
-   /** %%  %% [For experts only] creates lilypond output (a VS) for a simultaneous container. Args is a record of optional args (clauses and implicitStaffs).
+   /** %% [For experts only] creates lilypond output (a VS) for a simultaneous container. Args is a record of optional args (clauses and implicitStaffs).
    %% Default Lilypond output uses this definition. Using this function may simplify writing custom output clauses which overwrite the default output.
    %% */
    %% !! I don't differ between general Sims and chords
@@ -1212,7 +1202,9 @@ define
        {GetUserLily Sim} |
        "\n <<" |
        {Append {Map {Sim getItems($)}
-		fun {$ X} {OffsetToPauses X Args} end}
+		fun {$ X}
+		   {OffsetToLilyRest X}#{ToLilypond2 X Args}
+		end}
 	["\n>>"]}
        " "}
    end
@@ -1263,7 +1255,7 @@ define
        {GetUserLily Seq} |
        "\n {\n" |
        {Append {Map {Seq getItems($)}
-		fun {$ X} {OffsetToPauses X Args} end}
+		fun {$ X}  {OffsetToLilyRest X}#{ToLilypond2 X Args} end}
 	["\n}"]}
        " "}
    end
@@ -1364,7 +1356,7 @@ define
        {GetUserLily Sim} |
        "\n <<" |
        {ListToVS {Map {Sim getItems($)}
-		  fun {$ X} {OffsetToPauses X Args} end}
+		  fun {$ X} {OffsetToLilyRest X}#{ToLilypond2 X Args} end}
 	"\\\\"} |
 	["\n>>"]
        " "}
@@ -1455,9 +1447,10 @@ define
    end
    
 
-   %% Transforms MyScore into Lilypond VS. Transformation is defined by a set of default clauses of the form BooleanFun1#ProcessingFun1.   
-   %% Args is a record of optional args (clauses and implicitStaffs).
-   fun {ToLilypondAux MyScore Args}
+
+   /** %% [For experts only] like ToLilypond, except only the bare lilypond score is created. That is, no Lilypond version number is inserted in the output, nor is the wrapper Lilypond code inserted (see wrapper argument of ToLilypond).
+   %% */ 
+   fun {ToLilypond2 MyScore Args}
       Clauses
       %% NOTE: Args.clauses, not As.clauses is used below
       As = {Adjoin Args unit(clauses:Clauses)}
@@ -1513,7 +1506,7 @@ define
 	   % Otherwise clause
 	  fun {$ X} true end
 	  #fun {$ X}
-	      {Browse warn#unsupportedClass(X ToLilypondAux)}
+	      {Browse warn#unsupportedClass(X ToLilypond2)}
 	      ''
 	   end]}
       
@@ -1527,7 +1520,7 @@ define
    %% Enharmonic notation is supported for enharmonic note objects (subclasses of HS.score.enharmonicSpellingMixinForNote such as HS.score.enharmonicNote). Tuplet output is supported via clauses conveniently created with the function MakeLilyTupletClauses (see there).
    %% 
    %% ToLilypond expects the following further arguments. The optional argument 'clauses' provides much control on how the Lilypond output is conducted. Internally, almost all functionality of ToLilypond is also defined by such clauses: further special cases (as described above) can be defined, or the default ones overwritten. 'clauses' expects a list of the form [Test1#ProcessingFun1 ...]. TestN and ProcessingFunN are both unary functions expecting a score object (an item instance such as notes or containers). If the Boolean function TestN is the first clause test which returns true for a score object in MyScore, then ProcessingFunN will create the Lilypond VS for this object. For example, the user may define a subclass of Score.note with an additional articulation attribute (e.g. values may be staccato, tenuto etc.) and the user then defines a clause which causes Lilypond to show the articulation by its common sign in the printed score.
-   %% The argument 'wrapper' expects a list of two VSs with legal Lilypond code. These VSs are inserted at the beginning and the end respecitively of the Lilypond score. Note that the Lilypond version statement is hardwired -- you should not add a version statement to your header. 
+   %% The argument 'wrapper' expects a list of two VSs with legal Lilypond code. These VSs are inserted at the beginning and the end respecitively of the Lilypond score. Note that the Lilypond version statement is hardwired -- you should not add a version statement to your header (there is a 'version' argument expecting the version number as a VS, use at own risk). 
    %% Arbitrary Lilypond code can be added to container and note objects via a tuple with the label 'lily' given to the info attribute of the score object. This tuple must only contain VSs which are legal Lilypond code. For containers, this lilypond code is always inserted in the Lilypond output before the container, for notes it is inserted after the note.
    %% The argument defaults are shown below. 
    
@@ -1541,13 +1534,14 @@ define
       Default =  unit(clauses:nil
 		      wrapper:["\\paper {}\n\n\\score{" %% empty paper def
 			       "\n}"]
-		      implicitStaffs:true)
+		      implicitStaffs:true
+		      version:"2.10.0")
       As = {Adjoin Default Args}
    in
       {ListToVS ["%%% created by Strasheela at "#{GUtils.timeVString}
-		 "\n\\version \"2.10.0\"\n"
+		 "\n\\version \""#As.version#"\"\n"
 		 As.wrapper.1
-		 {ToLilypondAux MyScore As}
+		 {ToLilypond2 MyScore As}
 		 As.wrapper.2.1]
        "\n"}
    end
