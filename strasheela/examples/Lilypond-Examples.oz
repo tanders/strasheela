@@ -47,14 +47,16 @@ MyScore = {Score.makeScore seq(items:[note(duration:4
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%
-%% The Strasheela score topology sim(seq(note+)+) results in the
-%% typical Lilypond score layout with an extra staff for each voice
-%% represented by a sequential. Also, note that item offset times are
-%% notated as rests.
+%% The Strasheela score topology sim(seq(...)+) results in the typical
+%% Lilypond score layout with an extra staff for each sequential
+%% directly contained in a top-level simultaneous container. Note
+%% that the score can be further nested within the outmost sequential
+%% containers corresponding to staffs. Also, note that item offset
+%% times are notated as rests.
 %%
 
 %%
-%% BUG: offset time must be inserted within container, not simply put before it. Also, there should be a white space after a rest in Lily code.  
+%% BUG: offset time must be inserted within container, not simply put before it.
 %%
 
 declare
@@ -62,15 +64,13 @@ MyScore = {Score.makeScore
 	   sim(items:[ seq(items:[note(duration: 4
 				       pitch: 60)
 				  note(duration: 2
-				       offsetTime: 2
 				       pitch: 62)
 				  note(duration: 8
 				       pitch: 64)])
 		       seq(items:[note(duration: 4
 				       pitch: 72)
 				  note(duration: 8 
-				       pitch: 67)]
-			   offsetTime:4)]
+				       pitch: 67)])]
 	       startTime:0
 	       timeUnit:beats(4))
 	   unit}
@@ -78,6 +78,87 @@ MyScore = {Score.makeScore
  unit(file:defaultTopology)}
 
 
+%%%%%
+
+
+%% Further nesting: a seq in a seq and offset times for notes and containers 
+declare
+MyScore = {Score.makeScore
+	   sim(offsetTime:4
+	       items:[ seq(items:[note(duration: 4
+				       pitch: 60)
+				  seq(offsetTime: 2
+				     items:[note(duration: 2
+						 pitch: 62)
+					    note(duration: 4
+						 pitch: 64)])])
+		       seq(items:[note(duration: 4
+				       pitch: 72)
+				  note(offsetTime: 4
+				       duration: 4 
+				       pitch: 67)]
+			   offsetTime:4)]
+	       startTime:0
+	       timeUnit:beats(4))
+	   unit}
+{Out.renderAndShowLilypond MyScore
+ unit(file:defaultTopology2)}
+
+
+%%%%%
+
+
+%% Inner nesting with a different effect: sims in a staff can express chords
+declare
+MyScore = {Score.makeScore
+	   sim(items:[seq(items:[note(duration: 4
+				      pitch: 60)
+				 sim(offsetTime: 2
+				     items:[note(offsetTime: 2
+						 duration: 4
+						 pitch: 62)
+					    note(offsetTime: 2
+						 duration: 8
+						 pitch: 59)])])
+		      seq(items:[note(duration: 4
+				      pitch: 72)
+				 note(duration: 4
+				      pitch: 67)])]
+	       startTime:0
+	       timeUnit:beats(4))
+	   unit}
+{Out.renderAndShowLilypond MyScore
+ unit(file:defaultTopology3)}
+
+
+%%%%
+
+
+
+
+%% Again, inner nesting with a different effect: sims in a staff can also express single staff polyphony
+declare
+MyScore = {Score.makeScore
+	   sim(items:[seq(items:[note(duration: 4
+				      pitch: 60)
+				 sim(items:[seq(items:[note(duration: 4
+							    pitch: 67)
+						       note(duration: 8
+							    pitch: 65)])
+					    seq(offsetTime:2
+						items:[note(duration: 2
+							    pitch: 62)
+						       note(duration: 4
+							    pitch: 55)])])])
+		      seq(items:[note(duration: 4
+				      pitch: 72)
+				 note(duration: 8
+				      pitch: 71)])]
+	       startTime:0
+	       timeUnit:beats(4))
+	   unit}
+{Out.renderAndShowLilypond MyScore
+ unit(file:defaultTopology4)}
 
 
 
