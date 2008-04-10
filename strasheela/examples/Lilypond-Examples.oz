@@ -81,23 +81,22 @@ MyScore = {Score.makeScore
 %%%%%
 
 
-%% Further nesting: a seq in a seq and offset times for notes and containers 
+%% Further nesting: a seq in a seq and offset times for notes and containers
 declare
 MyScore = {Score.makeScore
-	   sim(offsetTime:4
-	       items:[ seq(items:[note(duration: 4
-				       pitch: 60)
-				  seq(offsetTime: 2
+	   sim(items:[seq(items:[note(duration: 4
+				      pitch: 60)
+				 seq(offsetTime: 2
 				     items:[note(duration: 2
 						 pitch: 62)
 					    note(duration: 4
 						 pitch: 64)])])
-		       seq(items:[note(duration: 4
-				       pitch: 72)
-				  note(offsetTime: 4
-				       duration: 4 
-				       pitch: 67)]
-			   offsetTime:4)]
+		      seq(offsetTime:4
+			  items:[note(duration: 3
+				      pitch: 72)
+				 note(offsetTime: 1
+				      duration: 4 
+				      pitch: 67)])]
 	       startTime:0
 	       timeUnit:beats(4))
 	   unit}
@@ -113,13 +112,17 @@ declare
 MyScore = {Score.makeScore
 	   sim(items:[seq(items:[note(duration: 4
 				      pitch: 60)
+				 %% NOTE: a chord
 				 sim(offsetTime: 2
 				     items:[note(offsetTime: 2
 						 duration: 4
 						 pitch: 62)
 					    note(offsetTime: 2
-						 duration: 8
-						 pitch: 59)])])
+						 duration: 4
+						 pitch: 59)
+					    note(offsetTime: 2
+						 duration: 4
+						 pitch: 55)])])
 		      seq(items:[note(duration: 4
 				      pitch: 72)
 				 note(duration: 4
@@ -202,7 +205,7 @@ MyScore = {Score.makeScore seq(items:[note(duration:4
 {Out.renderAndShowLilypond MyScore
  unit(wrapper:[%% header
 	       "\\paper {}"
-	       #"\\header { title = \"Symphony\" composer = \"Me\" opus = \"Op. 9\" }"
+	       #"\\header { title = \"Symphony\" composer = \"Me\" opus = \"Op. 42\" }"
 	       #"\n\n{\n"
 	       %% footer
 	       "\n}"]
@@ -212,7 +215,7 @@ MyScore = {Score.makeScore seq(items:[note(duration:4
 
 %%%%%%%%%%%%%%%%%%%%%%%%%
 %%
-%% Single voice polyphony and chords 
+%% Again, single voice polyphony and chords 
 %%
 
 
@@ -294,7 +297,31 @@ MyScore = {Score.makeScore
 					    note(duration:2
 						 pitch:67)])])
 		      sim(info:lily("\\new Staff")
-			  items:[seq(items:[note(duration:2
+			  items:[seq(items:[note(duration:8
+						 pitch:67)])
+				 seq(items:[note(duration:3
+						 pitch:64)
+					    note(duration:1
+						 pitch:62)
+					    note(duration:4
+						 pitch:60)])])]
+	       startTime:0
+	       timeUnit:beats(4))
+	   unit}
+{Out.renderAndShowLilypond MyScore
+ unit}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%% Creating an additional staff which lasts for only the duration of a
+%% specific container
+%%
+
+declare
+MyScore = {Score.makeScore
+	   seq(items:[sim(items:[seq(offsetTime:4
+				     items:[note(duration:2
 						 pitch:72)
 					    note(duration:2
 						 pitch:71)
@@ -302,20 +329,23 @@ MyScore = {Score.makeScore
 						 pitch:69)
 					    note(duration:2
 						 pitch:67)])
-				 seq(items:[note(duration:2
-						 pitch:60)
-					    note(duration:2
-						 pitch:62)
-					    note(duration:2
-						 pitch:64)
-					    note(duration:2
-						 pitch:67)])])]
+				 seq(offsetTime:4
+				     items:[seq(info:lily("\\new Staff")
+						items:[note(duration:2
+							    pitch:60)
+						       note(duration:2
+							    pitch:62)])
+					    seq(items:[note(duration:2
+							    pitch:64)
+						       note(duration:2
+							    pitch:67)])])])]
 	       startTime:0
 	       timeUnit:beats(4))
 	   unit}
 {Out.renderAndShowLilypond MyScore
- unit}
+ unit(file:explicitStaff)}
 
+%%
 
 
 
