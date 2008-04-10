@@ -89,9 +89,9 @@ etTwentytwoGlyphs = #'((1 . "accidentals.doublesharp")
        )
 
 { 
-\override Accidental #'glyph-name-alist =  \etTwentytwoGlyphs
+\override Score.Accidental #'glyph-name-alist =  \etTwentytwoGlyphs
 
-\override Staff.KeySignature #'glyph-name-alist = \etTwentytwoGlyphs
+\override Score.KeySignature #'glyph-name-alist = \etTwentytwoGlyphs
 
 % test
 % \relative { c4 ccu cscd cs d dcd dfcu df c }
