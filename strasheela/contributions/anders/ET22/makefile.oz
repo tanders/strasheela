@@ -13,7 +13,7 @@
 
 makefile(
    lib: ['ET22.ozf'
-	 'source/Lilyheader.ly']
+	 'source/Lilyheader.ly.data']
    uri: 'x-ozlib://anders/strasheela/ET22'
    mogul: 'mogul:/anders/strasheela/ET22'
    author: 'Torsten Anders')

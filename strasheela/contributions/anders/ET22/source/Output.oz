@@ -220,7 +220,7 @@ define
       LilyHeader = {Out.readFromFile
 		    {{Path.make
 		      {Resolve.localize
-		       'x-ozlib://anders/strasheela/ET22/source/Lilyheader.ly'}.1}
+		       'x-ozlib://anders/strasheela/ET22/source/Lilyheader.ly.data'}.1}
 		     toString($)}}
       LilyFooter = "\n}"
       
