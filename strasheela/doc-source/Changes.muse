@@ -20,6 +20,8 @@
     - Support for enharmonic notation (for enharmonic note objects)   
     - Out.makeLilyTupletClauses: easy Lilypond customisation for tuplet support
     - A staff is implicitly created for a sequential container which is either at the top-level or contained in a top-level simultaneous container. In typical Strasheela score topology for Lilypond output, a sim is the top-level container and its items are seq containers corresponding to staffs. If top-level is a seq, then there is only a single staff. You can define arbitrary other nestings, but in such cases you should explicitly specify which container corresponds to a staff using the mentioned lily info-tag. Moreover, you can also explicitly create staff or staff groups which last for the duration of their container only. The implicit staff creation can be switched off entirely by setting the optional argument 'implicitStaffs' to false. 
+    - Added to Out: ToLilypond2, IsOutmostSeq IsSingleStaffPolyphony SingleStaffPolyphonyToLily IsLilyChord SimToLilyChord GetUserLily LilyRest
+    - Fixed several bugs concerning offset time notation 
     - Removed function: Out.outmostSimToLily 
 
 
@@ -38,7 +40,6 @@
     - HS.rule: added constraints DiatonicChord NoteInPCCollection
     - HS.score: added classes FullChord, ChordNote, ScaleNote
     - Added LUtils.lastN
-    - Out: Added IsOutmostSeq IsSingleStaffPolyphony SingleStaffPolyphonyToLily IsLilyChord SimToLilyChord GetUserLily 
     - Fixed bugs in examples/05-MicrotonalChordProgression.oz (harmony database specification and accessing score object info attribute were obsolete)  
     - HS.rules.schoenberg: fixed ResolveDescendingProgressions (no root repetition by default), added ConstantProgressionR
     - HS.score.chordsToScore: fixed distribution strategy (was extremely slow if note octave was more restricted than pitch class)
