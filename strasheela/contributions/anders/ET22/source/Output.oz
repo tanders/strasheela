@@ -2,7 +2,7 @@
 %% */ 
 functor
 import
-   OS FS Explorer
+   OS Explorer
    Resolve
    
    %% !! tmp functor until next release with debugged Path of stdlib
@@ -12,7 +12,7 @@ import
    Score at 'x-ozlib://anders/strasheela/source/ScoreCore.ozf'
    HS at 'x-ozlib://anders/strasheela/HarmonisedScore/HarmonisedScore.ozf'
    ET22 at '../ET22.ozf'
-   DB at 'DB.ozf'
+%   DB at 'DB.ozf'
    
 export
    RenderAndShowLilypond
@@ -114,24 +114,6 @@ define
    %%
    
    local
-      /** %% Transforms the pitch class MyPC into a ratio VS. Alternative ratio transformations are given (written like 1/2|1/3). If no transformation existists, 'n/a' is output.
-      %% NB: transformation uses the interval specs defined for 22 ET, but because as a temperament just intonation intervals are [ambigious] the returned ratio may be missleading.. 
-      %% */
-      fun {PC2RatioVS MyPC}
-	 IntervalDB = DB.fullDB.intervalDB
-	 fun {PrettyRatios Rs}
-	    %% alternative ratio transformations written as 1/2|1/3
-	    {Out.listToVS
-	     {Map Rs fun {$ Nom#Den} Nom#'/'#Den end}
-	     '|'}
-	 end
-	 Ratios = {HS.db.pc2Ratios MyPC IntervalDB}
-      in
-	 if Ratios == nil
-	 then 'n/a'
-	 else {PrettyRatios Ratios}
-	 end
-      end
    
       fun {IsEt22Note X}
 	 {X isNote($)} andthen 
@@ -171,34 +153,37 @@ define
 	   fun {$ _} nil end}
 	  MyNote}
       end
+
+      fun {SimTo22LilyChord Sim}
+	 Items = {Sim getItems($)}
+	 Pitches = {Out.listToVS
+		    {Map Items
+		     fun {$ N} {ET22PitchToLily {N getPitch($)}} end}
+		    " "}
+	 Rhythms = {Out.lilyMakeRhythms
+		    {Items.1 getDurationParameter($)}}
+	 FirstChord = {Out.getUserLily Sim}#"\n <"#Pitches#">"#Rhythms.1
+      in
+	 if {Length Rhythms} == 1
+	 then FirstChord
+	 else FirstChord#{Out.listToVS
+			  {Map Rhythms.2
+			   fun {$ R} " ~ <"#Pitches#">"#R end}
+			  " "}
+	 end
+      end
       
       /** %% Returns the chord comment.
       %% */
       proc {MakeChordComment MyChord ?Result}
 	 ChordComment = {HS.db.getInternalChordDB}.comment.{MyChord getIndex($)}
       in
-	 Result = '#'('\\column < '
+	 Result = '#'('\\column {'
 		      if {IsRecord ChordComment} andthen {HasFeature ChordComment comment}
 		      then ChordComment.comment
 		      else ChordComment
 		      end
-		      ' > ')
-	 %% 
-	 if {Not {IsVirtualString Result}}
-	 then raise noVS(Result) end
-	 end
-      end
-      /* %% Returns the chord as ratio spec: Transposition x untransposed PCs (a VS).
-      %% */
-      proc {MakeChordRatios MyChord ?Result}
-	 Result = '#'('\\column < '
-		      {PC2RatioVS {MyChord getTransposition($)}}
-		      ' x ('
-		      {Out.listToVS {Map {FS.reflect.lowerBoundList
-					  {MyChord getUntransposedPitchClasses($)}}
-				     PC2RatioVS}
-		       ' '}
-		      ') >')
+		      ' } ')
 	 %% 
 	 if {Not {IsVirtualString Result}}
 	 then raise noVS(Result) end
@@ -209,8 +194,8 @@ define
       %%
       fun {ChordEt22ToLily MyChord}
 	 Rhythms = {Out.lilyMakeRhythms {MyChord getDurationParameter($)}}
-%	 ChordDescr = {MakeChordComment MyChord}
-	 ChordDescr = {MakeChordRatios MyChord} 
+	 ChordDescr = {MakeChordComment MyChord}
+%	 ChordDescr = {MakeChordRatios MyChord} 
 	 AddedSigns = '_\\markup{'#ChordDescr#'}'
       in
 	 %% if MyChord is shorter than 64th then skip it (Out.lilyMakeRhythms
@@ -245,7 +230,8 @@ define
       %% Also, note that convert-ly (which updates) sometimes breaks the 22 ET notation (e.g., when inserting new explicit staffs).
       %% */
       proc {RenderAndShowLilypond MyScore Args}
-	 AddedClauses = [IsEt22Note#NoteEt22ToLily
+	 AddedClauses = [Out.isLilyChord#SimTo22LilyChord
+			 IsEt22Note#NoteEt22ToLily
 			 IsEt22Chord#ChordEt22ToLily]
 	 ET22Wrapper = [LilyHeader LilyFooter]
 	 AddedArgs = unit(wrapper:if {HasFeature Args wrapper}
