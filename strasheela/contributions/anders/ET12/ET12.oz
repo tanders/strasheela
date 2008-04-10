@@ -59,21 +59,21 @@ define
       %% defined for 12 ET.
       %%
 
-      /** %% Transforms symbolic accidental (atom) into the corresponding accidental integer for 12 ET. The following symbolic accidentals are supported: '' is natural (!), '#' is a sharp, and 'b' is a flat.
-      %% Note: Returned value depends on {HS.db.getAccidentalOffset}.
+      /** %% Transforms symbolic accidental (atom) into the corresponding accidental integer for 12 ET. The following symbolic accidentals are supported: the empty atom '' is natural (!), '#' is a sharp, 'x' is a double sharp, 'b' is a flat, and 'bb' is a double flat.
+      %% Note: Returned value depends on {HS.db.getAccidentalOffset} -- leave this HS database value at its default.
       %% */
       %% TODO: umkehroperation..
       fun {Acc SymAcc}
 	 AccDecls.SymAcc + {HS.db.getAccidentalOffset} 
       end
       
-      /** %% Tranforms a conventional symbolic note names to the corresponding 12 ET pitch class. Notation of the symbolic note names: 'C' is c natural, 'C#' is c sharp, 'Cb' is c flat.
-      %% NB: the following pitch class names are undefined (otherwise, the meaning of octave would become inconsistent): any flattened C and any raised B.  
+      /** %% Tranforms a conventional symbolic note names to the corresponding 12 ET pitch class. Notation of the symbolic note names: 'C' is c natural, 'C#' is c sharp, 'Cb' is c flat (double sharp and double flat are supported as well). 
+      %% NB: any flattened C and any raised B are undefined (otherwise, the meaning of octave would become inconsistent).  
       %% */
       fun {PC SymPC}
 	 PCDecls.SymPC
       end
-      /** %% Expects a PC (an int) and returns a list of the corresponding 12 ET symbolic note names (a list of atom). Complements function PC.
+      /** %% Expects a PC (an int) and returns a list of the corresponding 12 ET symbolic note names (a list of atoms). Complements function PC.
       %% */
       fun {PCName MyPC}
 	 {Map {Filter {Record.toListInd PCDecls}

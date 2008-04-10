@@ -136,8 +136,8 @@ clearInterval(drawit)
 <code>
 <a name="entity2">
 <span class="keyword">fun</span>{<span class="functionname">Acc</span> SymAcc}<br>
-<span class="string"> Transforms symbolic accidental (atom) into the corresponding accidental integer for 12 ET. The following symbolic accidentals are supported: '' is natural (!), '#' is a sharp, and 'b' is a flat.<BR>
- Note: Returned value depends on {HS.db.getAccidentalOffset}.<BR>
+<span class="string"> Transforms symbolic accidental (atom) into the corresponding accidental integer for 12 ET. The following symbolic accidentals are supported: the empty atom '' is natural (!), '#' is a sharp, 'x' is a double sharp, 'b' is a flat, and 'bb' is a double flat.<BR>
+ Note: Returned value depends on {HS.db.getAccidentalOffset} -- leave this HS database value at its default.<BR>
 <BR>
 </span>
 </code><br>
@@ -145,8 +145,8 @@ clearInterval(drawit)
 <code>
 <a name="entity3">
 <span class="keyword">fun</span>{<span class="functionname">PC</span> SymPC}<br>
-<span class="string"> Tranforms a conventional symbolic note names to the corresponding 12 ET pitch class. Notation of the symbolic note names: 'C' is c natural, 'C#' is c sharp, 'Cb' is c flat.<BR>
- NB: the following pitch class names are undefined (otherwise, the meaning of octave would become inconsistent): any flattened C and any raised B.  <BR>
+<span class="string"> Tranforms a conventional symbolic note names to the corresponding 12 ET pitch class. Notation of the symbolic note names: 'C' is c natural, 'C#' is c sharp, 'Cb' is c flat (double sharp and double flat are supported as well). <BR>
+ NB: any flattened C and any raised B are undefined (otherwise, the meaning of octave would become inconsistent).  <BR>
 <BR>
 </span>
 </code><br>
@@ -154,7 +154,7 @@ clearInterval(drawit)
 <code>
 <a name="entity4">
 <span class="keyword">fun</span>{<span class="functionname">PCName</span> MyPC}<br>
-<span class="string"> Expects a PC (an int) and returns a list of the corresponding 12 ET symbolic note names (a list of atom). Complements function PC.<BR>
+<span class="string"> Expects a PC (an int) and returns a list of the corresponding 12 ET symbolic note names (a list of atoms). Complements function PC.<BR>
 <BR>
 </span>
 </code><br>

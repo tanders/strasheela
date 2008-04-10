@@ -72,9 +72,9 @@ define
       %% defined for 22 ET.
       %%
 
-      /** %% Transforms symbolic accidental (atom) into the corresponding accidental integer. The following symbolic accidentals are supported: '' is natural (!), '/' is a comma sharp, '\\' is a comma flat (two slash because of an escape character), '#\\' is a semitone minus a comma sharp, 'b/' is a semitone minus a comma flat, '#' is a semitone sharp and 'b' is a semitone flat. 
-      %% Note: Returned value depends on {HS.db.getAccidentalOffset}.
-      %% This accidental notation stems from the Scala software, see the scale documentation in hexample.html, or set HELP SET NOTATION.
+      /** %% Transforms symbolic accidental (atom) into the corresponding accidental integer. The following symbolic accidentals are supported: the empty atom '' is natural (!), '/' is a comma sharp, '\\' is a comma flat (two slash because of an escape character), '#\\' is a semitone minus a comma sharp, 'b/' is a semitone minus a comma flat, '#' is a semitone sharp and 'b' is a semitone flat. 
+      %% Note: Returned value depends on {HS.db.getAccidentalOffset}, set the HS database to ET22.db.fullDB.
+      %% This accidental notation stems from the Scala software, see the Scala documentation (hexample.html or set HELP SET NOTATION).
       %% */
       %% TODO: umkehroperation..
       fun {Acc SymAcc}
