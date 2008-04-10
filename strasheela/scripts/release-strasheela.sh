@@ -23,7 +23,7 @@ svn -v log >> trunk/strasheela/CHANGELOG.txt
 #
 # create tag file in SVN repository
 #
-export VERSION=0.9.3
+export VERSION=0.9.4
 
 svn copy https://strasheela.svn.sourceforge.net/svnroot/strasheela/trunk \
          https://strasheela.svn.sourceforge.net/svnroot/strasheela/tags/release-$VERSION \
@@ -42,7 +42,8 @@ svn co https://strasheela.svn.sourceforge.net/svnroot/strasheela/tags/release-$V
 #
 cd ~/oz/music/Strasheela/releases/strasheela-$VERSION
 # create tar, only of the essential files -- excluding all soundfiles etc. (take VERSION as argument)
-tar -cvzf - `find strasheela -type f \! \( -name "*.wav" -o -name "*.aiff" -o -name "*.mp3" -o -name "*.mid" -o -name "*.midi" -o -name "*.ly" \) -print | sed /.svn/d` > strasheela-$VERSION.tar.gz
+# however, include *.ly and *.midi files: not very big and sometimes needed for testing or functionality
+tar -cvzf - `find strasheela -type f \! \( -name "*.wav" -o -name "*.aiff" -o -name "*.mp3" \) -print | sed /.svn/d` > strasheela-$VERSION.tar.gz
 # create tar of all the files in the repository (take VERSION as argument)
 tar -cvzf - `find strasheela -type f -print | sed /.svn/d` > strasheela-withSounds-$VERSION.tar.gz
 
