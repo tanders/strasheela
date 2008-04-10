@@ -1,0 +1,177 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<html>
+ <head>
+  <title>Class ChordStartMixin</title>
+  <style>BODY {
+ background: url(page.gif) repeat-y white;
+}
+#slidemenubar, #slidemenubar2{
+ position:absolute;
+ left:-144px;
+ width:160px;
+ top:10px;
+ border:0px solid black;
+ font:bold 12px Verdana;
+ line-height:10px;
+}
+.margin {
+ position: absolute;
+ left: 10px;
+ width: 130px;
+}
+BODY, P, H1, H2, H3, A {
+ font-family: sans-serif;
+}
+PRE, CODE {
+ font-family: courier, monospace;
+}
+P {
+ text-align: justify;
+}
+H1     { color: #9B0000; }
+H2     { color: #FF9933; }
+H3, H4 { color: #881155; }
+CODE              { color: #663366; }
+.code CODE        { color: #000000; }
+SPAN.comment      { color: #B22222; }
+SPAN.keyword      { color: #A020F0; }
+SPAN.string       { color: #BC8F8F; }
+SPAN.functionname { color: #0000FF; }
+SPAN.type         { color: #228B22; }
+SPAN.variablename { color: #B8860B; }
+SPAN.reference    { color: #5F9EA0; }
+SPAN.builtin      { color: #DA70D6; }
+A:link {
+ color: #666666;
+}
+A:visited {
+ color: black;
+}
+A.pre { font-family: courier, monospace;
+ color: #228B22;
+}
+</style>
+ </head>
+<body>
+<script language="JavaScript1.2">
+if (document.all)
+document.write('<div id="slidemenubar2" style="left:-144" onMouseover="pull()" onMouseout="draw()">')
+</script>
+<layer id="slidemenubar" onMouseover="pull()" onMouseout="draw()">
+<table border="0" cellpadding="0" cellspacing="0" width="161"><tr><td bgcolor="#009cff" width="144"><a href="index.html">Index</a>
+</td><td rowspan="16" valign="top" width="16"><img src="menu.gif" width="16"></td></tr><tr><td bgcolor="#009cff" width="144"><a href="node1.html">HarmonisedScore</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node2.html">DB</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node3.html">Score</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node4.html">Rules</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node5.html">DBs</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node6.html">Schoenberg</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node7.html">Default</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node8.html">Jazz</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node9.html">Partch</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node10.html">Johnston</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node11.html">Harrison</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node12.html">Chalmers</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node13.html">Catler</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node14.html">ArithmeticalSeriesChords</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node15.html">HS</a>
+</td></tr></table></layer>
+<script language="JavaScript1.2">
+function regenerate(){
+window.location.reload()
+}
+function regenerate2(){
+if (document.layers)
+setTimeout("window.onresize=regenerate",400)
+}
+window.onload=regenerate2
+if (document.all){
+document.write('</div>')
+themenu=document.all.slidemenubar2.style
+rightboundary=0
+leftboundary=-144
+}
+else{
+themenu=document.layers.slidemenubar
+rightboundary=144
+leftboundary=0
+}
+function pull(){
+if (window.drawit)
+clearInterval(drawit)
+pullit=setInterval("pullengine()",20)
+}
+function draw(){
+clearInterval(pullit)
+drawit=setInterval("drawengine()",50)
+}
+function pullengine(){
+if (document.all&&themenu.pixelLeft<rightboundary)
+themenu.pixelLeft+=5
+else if(document.layers&&themenu.left<rightboundary)
+themenu.left+=5
+else if (window.pullit)
+clearInterval(pullit)
+}
+function drawengine(){
+if (document.all&&themenu.pixelLeft>leftboundary)
+themenu.pixelLeft-=5
+else if(document.layers&&themenu.left>leftboundary)
+themenu.left-=5
+else if (window.drawit)
+clearInterval(drawit)
+}
+</script>
+
+<div style="margin-left:160px"><p align="right" class="margin"><div align="right">inheritance tree</div></p>
+<pre>
+ <a class="pre" href="node3.html#entity115">ChordStartMixin</a>
+</pre>
+<hr><p class="margin"><div align="right">class definition</div></p>
+<code>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> [abstract class] A mixin class to add the parameter isStartingWithChord to a Score.item subclass. The parameter allows to constrain whether or not self starts with a chord (e.g. to denote chord changes). The parameter value is an 0/1-integer.<BR>
+<BR>
+ NB: This class does not apply any implicit constraints on the score. Please constrain explicitly using, e.g., MkChordsStartWithItems, MkChordsStartWithItems2, or StartChordWithMarker.<BR>
+<BR>
+</span>
+<span class="keyword">class</span> <span class="type">ChordStartMixin</span> (Inheritance-free)<br>
+&nbsp;&nbsp;&nbsp;<span class="keyword">attr</span>&nbsp;isStartingWithChord
+<br>
+<ul><li><span class="functionname">chordStartInit</span>(isStartingWithChord:IsStartingWithChord)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"></span>
+</li><li><span class="functionname">getIsStartingWithChordParameter</span>(X)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"></span>
+</li><li><span class="functionname">isStartingWithChord</span>(X)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"></span>
+</li></ul>
+<span class="keyword">end</span>
+</code>
+</div></body>
+</html>
