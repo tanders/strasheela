@@ -21,7 +21,7 @@
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%
-%% Dummy example: single note output
+%% Mini example: single note output
 %%
 
 declare
@@ -45,6 +45,28 @@ MyScore = {Score.makeScore seq(items:[note(duration:4
  unit(file:test)}
 
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%% WARNING: a score must be fully determined for Lilypond output (as
+%% for other output formats, like Csound or MIDI). The following
+%% example blocks (does nothing!), because some parameter values are
+%% not determined.
+%%
+
+
+declare
+MyScore = {Score.makeScore note(duration:4
+				%% NOTE: pitch is not determined (it
+				%% defaults to an FD int)
+                                % pitch:60
+				startTime:0
+				timeUnit:beats)
+	   unit}
+{Out.renderAndShowLilypond MyScore
+ unit(file:blockingTest)}
+
+
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%
 %% The Strasheela score topology sim(seq(...)+) results in the typical
@@ -53,10 +75,6 @@ MyScore = {Score.makeScore seq(items:[note(duration:4
 %% that the score can be further nested within the outmost sequential
 %% containers corresponding to staffs. Also, note that item offset
 %% times are notated as rests.
-%%
-
-%%
-%% BUG: offset time must be inserted within container, not simply put before it.
 %%
 
 declare
@@ -495,5 +513,6 @@ MyScore = {MakeScore Durations BeatDivision}
       %% definition of pause output
       clauses:{Out.makeLilyTupletClauses [2#3 2#5]})}
  
+
 
 
