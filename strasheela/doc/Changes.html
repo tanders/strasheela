@@ -25,42 +25,48 @@
 
 
 
-<h2>Changes in Version 0.9.4 (no date yet)</h2>
+<h2>Changes in Version 0.9.4 (10 April 2008)</h2>
 
 <ul>
-<li>Additions
-
-<ul>
-<li>Functor ET22 for composition in 22-tone equal temperament [link Erlich paper]</li>
-<li>HS.rule: Cadence</li>
-<li>Functor ET12: convenient 12 ET pitch notation functions</li>
-</ul></li>
-</ul>
-
-
-<ul>
-<li>Revised Lilypond output
+<li>Revised Lilypond output (<a href="../doc/api/node9.html">Out</a>)
 
 <ul>
 <li>This Strasheela version outputs Lilypond version 2.10.0 code (latest stable release)</li>
-<li>All Lilypond output procedures and functions support an additional optional argument 'wrapper' for inserting arbitrary Lilypond code at the beginning and end of the Lilypond output file. Remember that the previous release already introduced the 'lily' info-tag for arbitrary item-related Lilypond code</li>
-<li>Revised output of chords: a sim containing only notes with common start and end times result in a chord (notes on a single staff sharing a stem)</li>
-<li>Support for single staff polyphony: multiple (nested) seqs and chords contained in a sim (which corresponds to or is situated in a staff) are output as single staff polyphony</li>
+<li>Several <a href="../examples/Lilypond-Examples.oz">examples</a> demonstrate the new Lilypond output features</li>
 <li>Support for enharmonic notation (for enharmonic note objects)</li>
+<li>Revised output of chords: a simultaneous container in a staff containing only notes can result in a chord (i.e. notes on a single staff sharing a stem)</li>
+<li>Support for single staff polyphony: a simultaneous container in a staff can contain further sequential and simultaneous containers which will be notated as polyphonic voices</li>
 <li>Out.makeLilyTupletClauses: easy Lilypond customisation for tuplet support</li>
-<li>A staff is implicitly created for a sequential container which is either at the top-level or contained in a top-level simultaneous container. In typical Strasheela score topology for Lilypond output, a sim is top-level container and its items are seq containers corresponding to staffs. If top-level is a seq, then there is only a single staff. You can define arbitrary other nestings, but in such cases you should explicitly specify which container corresponds to a staff using the mentioned lily info-tag. Moreover, you can also explicitly create staff or staff groups which last for the duration of their container only. Also, implicit staff creation can be switched off entirely by setting the optional argument 'implicitStaffs' to false.</li>
+<li>All Lilypond output procedures and functions support an additional optional argument 'wrapper' for inserting arbitrary Lilypond code at the beginning and end of the Lilypond output file (remember that the previous release already introduced the 'lily' info-tag for inserting arbitrary score object related Lilypond code)</li>
+<li>New rules for automatic score layout: a staff is implicitly created for a sequential container which is either at the top-level or contained in a top-level simultaneous container. Typical Strasheela score topology for Lilypond output: top-level container is a simultaneous container and its items are sequential containers corresponding to staffs. If the top-level container is a sequential, however, then there is only a single staff. You can define arbitrary other nestings, but in such cases you should explicitly specify which container corresponds to a staff using the mentioned lily info-tag. Moreover, you can also explicitly create staffs which last for the duration of a container only. The implicit staff creation can be switched off entirely by setting the optional argument 'implicitStaffs' to false.</li>
+<li>Facilitated customisation by clauses: the following functions are added to <a href="../doc/api/node9.html">Out</a>: ToLilypond2, IsOutmostSeq, IsSingleStaffPolyphony, SingleStaffPolyphonyToLily, IsLilyChord, SimToLilyChord, GetUserLily, LilyRest</li>
+<li>Revised reference documentation for Out.toLilypond and other Lilypond output related functions</li>
+<li>Fixed several bugs concerning offset time notation</li>
 <li>Removed function: Out.outmostSimToLily</li>
 </ul></li>
 </ul>
 
 
 <ul>
-<li>Documentation
+<li>Further Additions
 
 <ul>
-<li>Added multiple tonal chord progression CSPs in 31 ET, partly demonstrating the new cadence constraint and the Schoenberg constraints (introduced in the previous release): examples/HarmonicProgressions-31ET.oz</li>
-<li>Fuxian counterpoint example revised (now follows Fux' cadence rule): [file]</li>
-<li>Generalised Fuxian counterpoint example: the user can specify the cantus firmus, even in different modes. Also, this example demonstrates the use of scale objects together with note objects: [file]</li>
+<li>Functor <a href="../contributions/anders/ET22/doc/node1.html">ET22</a> for composition in <a href="http://en.wikipedia.org/wiki/22_equal_temperament">22-tone equal temperament</a></li>
+<li><a href="../contributions/anders/HarmonisedScore/doc/node1.html">HS</a>.rule: Cadence</li>
+<li>Functor <a href="../contributions/anders/ET12/doc/node1.html">ET12</a>: convenient 12 ET pitch notation functions</li>
+<li><a href="../doc/api/node8.html">SDistro</a>.makeSearchScript (and all Strasheela search engines): Added generic variable ordering 'dom/deg'</li>
+</ul></li>
+</ul>
+
+
+<ul>
+<li>Further Documentation
+
+<ul>
+<li>Added multiple tonal <a href="../examples/HarmonicProgressions-31ET.oz">chord progression example CSPs</a> in 31 ET, partly demonstrating the new cadence constraint and the Schoenberg constraints (introduced in the previous release):</li>
+<li>Added <a href="../examples/HarmonicProgressions-22ET.oz">chord progression example CSPs</a> in 22 ET</li>
+<li><a href="../examples/02-Fuxian-firstSpecies-Counterpoint.oz">Fuxian counterpoint example</a> revised (now follows Fux' cadence rule): [file]</li>
+<li><a href="../contributions/anders/HarmonisedScore/examples/HS/Fuxian-Counterpoint-with-Scale.oz">Generalised Fuxian counterpoint example</a>: the user can specify the cantus firmus, even in different modes. Also, this example demonstrates the use of scale objects together with note objects.</li>
 </ul></li>
 </ul>
 
@@ -69,15 +75,15 @@
 <li>Fixes and minor additions
 
 <ul>
-<li>GUtils.randIntoRange never selected upper random limit (and so random value ordering never selected upper domain boundary)</li>
-<li>The pitch parameter method getValueInMidi now supports any equal temperament pitch unit which fits the pattern et&lt;Digit&gt;+, e.g., et31 or et53</li>
-<li>Revised ET31 chord database</li>
-<li>HS.rule: added constraints DiatonicChord NoteInPCCollection</li>
-<li>HS.score: added classes FullChord, ChordNote, ScaleNote</li>
-<li>Added LUtils.lastN</li>
-<li>Fixed bugs in examples/05-MicrotonalChordProgression.oz (harmony database specification and accessing score object info attribute were obsolete)</li>
-<li>HS.rules.schoenberg: fixed ResolveDescendingProgressions (no root repetition by default), added ConstantProgressionR</li>
-<li>HS.score.chordsToScore: fixed distribution strategy (was extremely slow if note octave was more restricted than pitch class)</li>
+<li><a href="../doc/api/node3.html">GUtils</a>.randIntoRange never selected upper random limit (and so random value ordering never selected upper domain boundary)</li>
+<li>The <a href="../doc/api/node6.html">Score</a>.pitch class method getValueInMidi now supports any equal temperament pitch unit which fits the pattern et&lt;Digit&gt;+, e.g., et31 or et53. This automatically enables Csound output for these formats (and any other output definition which uses the note pitch method getPitchInMidi).</li>
+<li>Revised <a href="../contributions/anders/ET31/doc/node1.html">ET31</a> chord database (e.g., the root of utonal chords like minor is now defined according to common convention as the lower tone of the fifth, not the 1/1)</li>
+<li><a href="../contributions/anders/HarmonisedScore/doc/node1.html">HS</a>.rules: added constraints DiatonicChord NoteInPCCollection</li>
+<li><a href="../contributions/anders/HarmonisedScore/doc/node1.html">HS</a>.score: added classes FullChord, ChordNote, ScaleNote</li>
+<li>Added <a href="../doc/api/node4.html">LUtils</a>.lastN</li>
+<li>Fixed bugs in <a href="../examples/05-MicrotonalChordProgression.oz">../examples/05-MicrotonalChordProgression.oz</a> (harmony database specification and accessing score object info attribute were obsolete)</li>
+<li><a href="../contributions/anders/HarmonisedScore/doc/node1.html">HS</a>.rules.schoenberg: fixed ResolveDescendingProgressions (no root repetition by default), added ConstantProgressionR</li>
+<li><a href="../contributions/anders/HarmonisedScore/doc/node1.html">HS</a>.score.chordsToScore: fixed distribution strategy (was extremely slow if note octave was more restricted than pitch class)</li>
 </ul></li>
 </ul>
 
@@ -396,7 +402,7 @@ See the documentation for <a href="../contributions/anders/HarmonisedScore/doc/n
 <div id="footer">
 <div id="author">&copy; 
 Torsten Anders</div>
-<div id="date">Last time edited: 2008.04.09</div>
+<div id="date">Last time edited: 2008.04.10</div>
 </div>
   </body>
 </html>
