@@ -169,25 +169,25 @@ clearInterval(drawit)
 </li><li>&lt;P/1:<a href="#entity484"><span class="functionname">ViewPDF</span></a>&gt;
 </li><li>&lt;P/2:<a href="#entity486"><span class="functionname">RenderLilypond</span></a>&gt;
 </li><li>&lt;P/2:<a href="#entity485"><span class="functionname">RenderAndShowLilypond</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity479"><span class="functionname">MakeLilyTupletClauses</span></a>&gt;
+</li><li>&lt;P/3:<a href="#entity474"><span class="functionname">SeqToLily</span></a>&gt;
+</li><li>&lt;P/3:<a href="#entity471"><span class="functionname">SimToLily</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity467"><span class="functionname">MakeNoteToLily</span></a>&gt;
+</li><li>&lt;P/3:<a href="#entity468"><span class="functionname">MakeNoteToLily2</span></a>&gt;
 </li><li>&lt;P/2:<a href="#entity465"><span class="functionname">LilyMakePitch</span></a>&gt;
 </li><li>&lt;P/2:<a href="#entity466"><span class="functionname">LilyMakeFromMidiPitch</span></a>&gt;
-</li><li>&lt;P/2:<a href="#entity461"><span class="functionname">LilyMakeRhythms</span></a>&gt;
-</li><li>&lt;P/2:<a href="#entity462"><span class="functionname">LilyMakeRhythms2</span></a>&gt;
 </li><li>&lt;P/2:<a href="#entity463"><span class="functionname">LilyMakeMicroPitch</span></a>&gt;
 </li><li>&lt;P/2:<a href="#entity464"><span class="functionname">LilyMakeEt72MarkFromMidiPitch</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity470"><span class="functionname">PauseToLily</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity469"><span class="functionname">LilyRest</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity461"><span class="functionname">LilyMakeRhythms</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity462"><span class="functionname">LilyMakeRhythms2</span></a>&gt;
 </li><li>&lt;P/2:<a href="#entity475"><span class="functionname">IsOutmostSeq</span></a>&gt;
 </li><li>&lt;P/2:<a href="#entity477"><span class="functionname">IsSingleStaffPolyphony</span></a>&gt;
 </li><li>&lt;P/3:<a href="#entity478"><span class="functionname">SingleStaffPolyphonyToLily</span></a>&gt;
 </li><li>&lt;P/2:<a href="#entity472"><span class="functionname">IsLilyChord</span></a>&gt;
 </li><li>&lt;P/2:<a href="#entity473"><span class="functionname">SimToLilyChord</span></a>&gt;
 </li><li>&lt;P/2:<a href="#entity476"><span class="functionname">GetUserLily</span></a>&gt;
-</li><li>&lt;P/2:<a href="#entity467"><span class="functionname">MakeNoteToLily</span></a>&gt;
-</li><li>&lt;P/3:<a href="#entity468"><span class="functionname">MakeNoteToLily2</span></a>&gt;
-</li><li>&lt;P/2:<a href="#entity470"><span class="functionname">PauseToLily</span></a>&gt;
-</li><li>&lt;P/2:<a href="#entity469"><span class="functionname">LilyRest</span></a>&gt;
-</li><li>&lt;P/2:<a href="#entity479"><span class="functionname">MakeLilyTupletClauses</span></a>&gt;
-</li><li>&lt;P/3:<a href="#entity474"><span class="functionname">SeqToLily</span></a>&gt;
-</li><li>&lt;P/3:<a href="#entity471"><span class="functionname">SimToLily</span></a>&gt;
 </li><li>&lt;P/3:<a href="#entity489"><span class="functionname">OutputSCScore</span></a>&gt;
 </li><li>&lt;P/5:<a href="#entity488"><span class="functionname">MakeSCScore</span></a>&gt;
 </li><li>&lt;P/2:<a href="#entity487"><span class="functionname">MakeSCEventOutFn</span></a>&gt;
@@ -442,7 +442,7 @@ clearInterval(drawit)
 <code>
 <a name="entity480">
 <span class="keyword">fun</span>{<span class="functionname">ToLilypond2</span> MyScore Args}<br>
-<span class="string"> [For experts only] like ToLilypond, except only the bare lilypond score is created. That is, no Lilypond version number is inserted in the output, nor is the wrapper Lilypond code inserted (see wrapper argument of ToLilypond).<BR>
+<span class="string"> [For experts only] like ToLilypond, except only the bare Lilypond score is created. That is, no Lilypond version number is inserted in the output, nor is the wrapper Lilypond code inserted (see wrapper argument of ToLilypond).<BR>
 <BR>
 </span>
 </code><br>
@@ -450,7 +450,7 @@ clearInterval(drawit)
 <code>
 <a name="entity482">
 <span class="keyword">proc</span>{<span class="functionname">OutputLilypond</span> MyScore Args}<br>
-<span class="string"> Transforms MyScore into a Lilypond score and writes it to a file. The defaults values for the optional arguments are shown below. See the documentation of ToLilypond for an explanation of additional arguments.<BR>
+<span class="string"> Transforms MyScore into a Lilypond score and writes it to a file. The default values for the optional arguments are shown below. See the documentation of ToLilypond for an explanation of additional arguments.<BR>
    <BR>
    unit(dir: {Init.getStrasheelaEnv defaultLilypondDir}<BR>
 	file: "test" % !! file name without extention<BR>
@@ -462,8 +462,8 @@ clearInterval(drawit)
 
 <code>
 <a name="entity483">
-<span class="keyword">proc</span>{<span class="functionname">CallLilypond</span> Spec}<br>
-<span class="string"> Calls lilypond on a lilypond file specified by Spec. The defaults of Spec are:<BR>
+<span class="keyword">proc</span>{<span class="functionname">CallLilypond</span> Args}<br>
+<span class="string"> Calls Lilypond on a Lilypond file specified by Args. The defaults of Args are:<BR>
    unit(dir: {Init.getStrasheelaEnv defaultLilypondDir}<BR>
 	file: test) % !! file name without extention<BR>
 <BR>
@@ -472,17 +472,19 @@ clearInterval(drawit)
 
 <code>
 <a name="entity484">
-<span class="keyword">proc</span>{<span class="functionname">ViewPDF</span> Spec}<br>
-<span class="string"> Calls ghostview on a postscript file specified by Spec. The name of the lilypond file is given without extension. The defaults of Spec are:<BR>
+<span class="keyword">proc</span>{<span class="functionname">ViewPDF</span> Args}<br>
+<span class="string"> Calls a PDF viewer on a PDF file specified by Args. The name of the PDF file is given without extension. The PDF viewer application defaults to the value of the Strasheela environment variable pdfViewer. The defaults of Spec are:<BR>
    unit(dir: {Init.getStrasheelaEnv defaultLilypondDir}<BR>
-	file: test)<BR>
+	file: test<BR>
+	pdfViewer: {Init.getStrasheelaEnv pdfViewer}<BR>
+	extension:".pdf")<BR>
 <BR>
 </span>
 </code><br>
 
 <code>
 <a name="entity486">
-<span class="keyword">proc</span>{<span class="functionname">RenderLilypond</span> MyScore Spec}<br>
+<span class="keyword">proc</span>{<span class="functionname">RenderLilypond</span> MyScore Args}<br>
 <span class="string"> Outputs a Lilypond file for MyScore and calls Lilypond to process it. See ToLilypond, OutputLilypond and CallLilypond for details on Spec.<BR>
 <BR>
 </span>
@@ -490,95 +492,35 @@ clearInterval(drawit)
 
 <code>
 <a name="entity485">
-<span class="keyword">proc</span>{<span class="functionname">RenderAndShowLilypond</span> MyScore Spec}<br>
-<span class="string"> Outputs a Lilypond file for MyScore, calls Lilypond to process it, and calls the PDF viewer with the result. See ToLilypond, OutputLilypond, CallLilypond, and ViewPDF for details on Spec.<BR>
+<span class="keyword">proc</span>{<span class="functionname">RenderAndShowLilypond</span> MyScore Args}<br>
+<span class="string"> Outputs a Lilypond file for MyScore, calls Lilypond to process it, and calls the PDF viewer with the result. See ToLilypond, OutputLilypond, CallLilypond, and ViewPDF for details on Args.<BR>
 <BR>
 </span>
 </code><br>
 
 <code>
-<a name="entity465">
-<span class="keyword">fun</span>{<span class="functionname">LilyMakePitch</span> PitchParam}<br>
-<span class="string"> [For experts only] creates lilypond pitch output (a VS) for a pitch parameter.<BR>
+<a name="entity479">
+<span class="keyword">fun</span>{<span class="functionname">MakeLilyTupletClauses</span> Fractions}<br>
+<span class="string"> MakeLilyTupletClauses creates a list of Lilypond clauses for tuplet output. Fractions is a list of pairs Numerator#Denominator indicating the fractions of the tuplets. For example, clauses for triplets are created with he fraction 2#3 and clauses for quintuplets with the fraction 2#5. Tuplets are recognised automatically in the score by the duration of score elements (notes and pause objects). The time unit must be set to beats(N), where N is some quarter note division which allows to express all required durations. For example, if the time unit is beats(60) then the duration 60 indicates a quarter note, 30 indicates an eigth note, three notes of duration 20 form an eigth note triplet and 5 notes of duration 6 form a sixteenth note quintuplet.   <BR>
+ LIMITATIONS: Rests must be expressed explicitly with pause objects, rests expressed by the offset time of score objects are not notated correctly if their duration should be part of a tuplet. Dotted notes at the beginning of a tuplet do not work. Tuplets only work correctly for score elements within a single sequential container: a tuplet must not extend across container boundaries. Also, tuplets cannot be nested. Due to these shortcomings, the default Lilypond output does not support tuplets.<BR>
 <BR>
 </span>
 </code><br>
 
 <code>
-<a name="entity466">
-<span class="keyword">fun</span>{<span class="functionname">LilyMakeFromMidiPitch</span> MidiPitch}<br>
-<span class="string"> [For experts only] creates lilypond pitch output (a VS) for a midi pitch value (an integer).<BR>
+<a name="entity474">
+<span class="keyword">fun</span>{<span class="functionname">SeqToLily</span> Seq Args}<br>
+<span class="string"> [For experts only] creates Lilypond output (a VS) for a sequential container. Args is a record of optional args (clauses and implicitStaffs).<BR>
+ Default Lilypond output uses this definition. Using this function may simplify writing custom output clauses which overwrite the default output.<BR>
 <BR>
 </span>
 </code><br>
 
 <code>
-<a name="entity461">
-<span class="keyword">fun</span>{<span class="functionname">LilyMakeRhythms</span> DurationParam}<br>
-<span class="string"> [For experts only] creates lilypond duration output (a list of Lilypond rhythm values, which in the end are tied together) for a duration parameter.<BR>
-<BR>
-</span>
-</code><br>
-
-<code>
-<a name="entity462">
-<span class="keyword">fun</span>{<span class="functionname">LilyMakeRhythms2</span> DurationInBeats}<br>
-<span class="string"> [For experts only] creates lilypond duration output (a list of Lilypond rhythm values, which in the end are tied together) for a duration measured in beats (a float).<BR>
-<BR>
-</span>
-</code><br>
-
-<code>
-<a name="entity463">
-<span class="keyword">fun</span>{<span class="functionname">LilyMakeMicroPitch</span> PitchParam}<br>
-<span class="string"> [For experts only] creates lilypond microtonal pitch output (a VS) for a pitch parameter. Note: works only if the pitch unit is et72.<BR>
-<BR>
-</span>
-</code><br>
-
-<code>
-<a name="entity464">
-<span class="keyword">fun</span>{<span class="functionname">LilyMakeEt72MarkFromMidiPitch</span> MidiPitch}<br>
-<span class="string"> [For experts only] Returns a Lily fingering mark (a virtual string) which represents a micro-tonal tuning deviation in 72ET temperament.<BR>
-<BR>
-</span>
-</code><br>
-
-<code>
-<a name="entity475">
-<span class="keyword">fun</span>{<span class="functionname">IsOutmostSeq</span> X}<br>
-<span class="string"> An outmost sequential implicitly creates a staff. Outmost sequential here means a sequential container which has no direct or indirect temporal container which is a sequential container. Also, it either top-level container, or (the most common case) contained in a top-level simultaneous container.  <BR>
-<BR>
-</span>
-</code><br>
-
-<code>
-<a name="entity477">
-<span class="keyword">fun</span>{<span class="functionname">IsSingleStaffPolyphony</span> X}
-</code><br>
-
-<code>
-<a name="entity478">
-<span class="keyword">fun</span>{<span class="functionname">SingleStaffPolyphonyToLily</span> Sim Args}<br>
-<span class="string"> Outputs X (fulfilling IsSingleStaffPolyphony) as single staff Lily VS. <BR>
-<BR>
-</span>
-</code><br>
-
-<code>
-<a name="entity472">
-<span class="keyword">fun</span>{<span class="functionname">IsLilyChord</span> X}
-</code><br>
-
-<code>
-<a name="entity473">
-<span class="keyword">fun</span>{<span class="functionname">SimToLilyChord</span> Sim}
-</code><br>
-
-<code>
-<a name="entity476">
-<span class="keyword">fun</span>{<span class="functionname">GetUserLily</span> X}<br>
-<span class="string"> Accesses tuple with label 'lily' in info feature of X, and returns VS. The lily tuple must only contain VSs.<BR>
+<a name="entity471">
+<span class="keyword">fun</span>{<span class="functionname">SimToLily</span> Sim Args}<br>
+<span class="string"> [For experts only] creates Lilypond output (a VS) for a simultaneous container. Args is a record of optional args (clauses and implicitStaffs).<BR>
+ Default Lilypond output uses this definition. Using this function may simplify writing custom output clauses which overwrite the default output.<BR>
 <BR>
 </span>
 </code><br>
@@ -586,7 +528,7 @@ clearInterval(drawit)
 <code>
 <a name="entity467">
 <span class="keyword">fun</span>{<span class="functionname">MakeNoteToLily</span> MakeAddedSigns}<br>
-<span class="string"> [For experts only] Returns unary function expecting note object and returning a lilypond note output (a VS). MakeAddedSigns is unary fun expecting the note and returning a VS of arbitrary added signs (e.g. fingering marks, articulation marks etc.)<BR>
+<span class="string"> [For experts only] Returns unary function which expects a note object and returns a Lilypond note output (a VS). Simplified version of MakeNoteToLily2.<BR>
 <BR>
 </span>
 </code><br>
@@ -594,7 +536,39 @@ clearInterval(drawit)
 <code>
 <a name="entity468">
 <span class="keyword">fun</span>{<span class="functionname">MakeNoteToLily2</span> MakePitch MakeAddedSigns}<br>
-<span class="string"> [For experts only] Returns unary function expecting note object and returning a lilypond note output (a VS). MakePitch is a unary function expecting the note and returning a Lilypond pitch (a VS). MakeAddedSigns is unary function expecting the note and returning a VS of arbitrary added signs (e.g. fingering marks, articulation marks etc.). MakeNoteToLily2 adds the rhythmic information and cares for ties.<BR>
+<span class="string"> [For experts only] Returns unary function which expects a note object and returns a Lilypond note output (a VS). MakePitch is a unary function expecting the note and returning a Lilypond pitch (a VS). MakeAddedSigns is unary function expecting the note and returning a VS of arbitrary added signs (e.g. fingering marks, articulation marks etc.). MakeNoteToLily2 adds the rhythmic information and cares for ties.<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity465">
+<span class="keyword">fun</span>{<span class="functionname">LilyMakePitch</span> PitchParam}<br>
+<span class="string"> [For experts only] creates Lilypond pitch output (a VS) for a pitch parameter.<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity466">
+<span class="keyword">fun</span>{<span class="functionname">LilyMakeFromMidiPitch</span> MidiPitch}<br>
+<span class="string"> [For experts only] creates Lilypond pitch output (a VS) for a midi pitch value (an integer).<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity463">
+<span class="keyword">fun</span>{<span class="functionname">LilyMakeMicroPitch</span> PitchParam}<br>
+<span class="string"> [For experts only] creates Lilypond 72 ET microtonal pitch output (a VS) for a pitch parameter. Note: works only if the pitch unit is et72.<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity464">
+<span class="keyword">fun</span>{<span class="functionname">LilyMakeEt72MarkFromMidiPitch</span> MidiPitch}<br>
+<span class="string"> [For experts only] Returns a Lily fingering mark (a virtual string) which represents a micro-tonal tuning deviation in 72 ET temperament.<BR>
 <BR>
 </span>
 </code><br>
@@ -616,28 +590,66 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity479">
-<span class="keyword">fun</span>{<span class="functionname">MakeLilyTupletClauses</span> Fractions}<br>
-<span class="string"> MakeLilyTupletClauses creates a list of lilypond clauses for tuplet output. Fractions is a list of pairs Numerator#Denominator indicating the fractions of the tuplets. For example, clauses for triplets are created with he fraction 2#3 and clauses for quintuplets with the fraction 2#5. Tuplets are recognised automatically in the score by the duration of score elements (notes and pause objects). The time unit must be set to beats(N), where N is some quarter note division which allows to express all required durations. For example, if the time unit is beats(60) then the duration 60 indicates a quarter note, 30 indicates an eigth note, three notes of duration 20 form an eigth note triplet and 5 notes of duration 6 form a sixteenth note quintuplet.   <BR>
- LIMITATIONS: Rests must be expressed explicitly with pause objects, rests expressed by the offset time of score objects are not notated correctly if their duration should be part of a tuplet. Dotted notes at the beginning of a tuplet do not work. Tuplets only work correctly for score elements within a single sequential container, a tuplet must not extend across container boundaries. Also, tuplets cannot be nested. Due to these shortcomings, the default Lilypond output does not support tuplets.<BR>
+<a name="entity461">
+<span class="keyword">fun</span>{<span class="functionname">LilyMakeRhythms</span> DurationParam}<br>
+<span class="string"> [For experts only] creates Lilypond duration output (a list of Lilypond rhythm values, which in the end are tied together) for a duration parameter.<BR>
 <BR>
 </span>
 </code><br>
 
 <code>
-<a name="entity474">
-<span class="keyword">fun</span>{<span class="functionname">SeqToLily</span> Seq Args}<br>
-<span class="string"> [For experts only] creates lilypond output (a VS) for a sequential container. Args is a record of optional args (clauses and implicitStaffs).<BR>
- Default Lilypond output uses this definition. Using this function may simplify writing custom output clauses which overwrite the default output.<BR>
+<a name="entity462">
+<span class="keyword">fun</span>{<span class="functionname">LilyMakeRhythms2</span> DurationInBeats}<br>
+<span class="string"> [For experts only] creates Lilypond duration output (a list of Lilypond rhythm values, which in the end are tied together) for a duration measured in beats (a float).<BR>
 <BR>
 </span>
 </code><br>
 
 <code>
-<a name="entity471">
-<span class="keyword">fun</span>{<span class="functionname">SimToLily</span> Sim Args}<br>
-<span class="string"> [For experts only] creates lilypond output (a VS) for a simultaneous container. Args is a record of optional args (clauses and implicitStaffs).<BR>
- Default Lilypond output uses this definition. Using this function may simplify writing custom output clauses which overwrite the default output.<BR>
+<a name="entity475">
+<span class="keyword">fun</span>{<span class="functionname">IsOutmostSeq</span> X}<br>
+<span class="string"> [For experts only] Tests whether X is an Outmost sequential container, i.e. a container which has no direct or indirect temporal container which is also a sequential container. X is either the top-level container, or (the most common case) contained in a top-level simultaneous container.<BR>
+ An outmost sequential implicitly creates a staff by default. 			%%<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity477">
+<span class="keyword">fun</span>{<span class="functionname">IsSingleStaffPolyphony</span> X}<br>
+<span class="string"> [For experts only] Returns true if X is a simultaneous container which containes multiple voices; each voice is a sequential which contains only (i) notes, (ii) simultaneous containers which are chords or (iii) sequentials which in turn contain only notes or chords.<BR>
+ By default, such a simultaneous container creates a single staff polyphony.<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity478">
+<span class="keyword">fun</span>{<span class="functionname">SingleStaffPolyphonyToLily</span> Sim Args}<br>
+<span class="string"> [For experts only] Outputs X (for which IsSingleStaffPolyphony must return true) as a single staff polyphony Lily VS. <BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity472">
+<span class="keyword">fun</span>{<span class="functionname">IsLilyChord</span> X}<br>
+<span class="string"> [For experts only] Returns true if X can be notated as a chord, i.e. X is a simultaneous which contains only notes with equal offset time, start and end times<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity473">
+<span class="keyword">fun</span>{<span class="functionname">SimToLilyChord</span> Sim}<br>
+<span class="string"> [For experts only] Outputs Sim (for which IsLilyChord must return true) as a Lilypond chord VS. <BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity476">
+<span class="keyword">fun</span>{<span class="functionname">GetUserLily</span> X}<br>
+<span class="string"> [For experts only] Accesses tuple with label 'lily' in info feature of X, and returns VS (concatenating all lily tuple elements). The lily tuple must only contain VSs.<BR>
 <BR>
 </span>
 </code><br>
