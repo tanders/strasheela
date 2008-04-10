@@ -2514,10 +2514,10 @@ define
 	 end
       in
 	 proc {$ /* MyScript */ MyScore}
-	    Cs = {Map ChordSpecs MakeChord}
+	    Chords = {Map ChordSpecs MakeChord}
 	    %% list of list of simultaneous note and chord objects 
-	    ChordNotes = {Map Cs
-			  proc {$ C ?Result}
+	    ChordNotess = {Map Chords
+			  proc {$ C ?Notes}
 			     Dur = {C getDuration($)}
 			     %% Pairs of note objects and
 			     %% singletons sets with the note's
@@ -2540,10 +2540,10 @@ define
 					       %% return result
 					       N#PC_FS
 					    end}
-			     Notes = {Map NotesAndPCs fun {$ N#_} N end}
 			     PC_FSs = {Map NotesAndPCs fun {$ _#PC_FS} PC_FS end}
 			  in
-			     Result = {Append Notes [C]}
+			     Notes = {Map NotesAndPCs fun {$ N#_} N end}
+%			     Result = {Append Notes [C]}
 			     %% no voice crossing (but unison doublings are OK)
 			     {Pattern.continuous
 			      {Map Notes fun {$ N} {N getPitch($)} end}
@@ -2573,20 +2573,15 @@ define
 	 in
 	    MyScore
 	    = {Score.makeScore
-	       sim(items:{Map
-			  %% returns lists of notes/chords belonging into a single staff
-			  {LUtils.matTrans ChordNotes}
-			  fun {$ Xs}
-			     if {IsChord Xs.1}
-				%% mark staff with chords
-			     then seq(info:lily('\\set Staff.instrumentName = "Analysis"')
-				      items:Xs)
-			     else seq(items:Xs)
-			     end
-			  end}
+	       sim(items:[seq(items:{Map ChordNotess
+				     fun {$ ChordNotes}
+					sim(items:ChordNotes)
+				      end})
+			  seq(info:lily('\\set Staff.instrumentName = "Analysis"')
+			      items:Chords)]
 		   startTime:0
 		   %% implicit
-%		timeUnit:{Cs.1 getTimeUnit($)}
+%		timeUnit:{Chords.1 getTimeUnit($)}
 		  )
 	       unit}
 	 end	 
