@@ -1074,40 +1074,16 @@ define
    in
       LilyPCs.PC#LilyOctaves.Oct
    end
-   %% !! What about notating Events (e.g. percussion notation)
-   %% !! Notate explicite Pauses.
-   %% !! TODO: angleichen die verschiedenen Funs
+
    /** %% [For experts only] Returns unary function expecting note object and returning a lilypond note output (a VS). MakeAddedSigns is unary fun expecting the note and returning a VS of arbitrary added signs (e.g. fingering marks, articulation marks etc.)
    %% */
    fun {MakeNoteToLily MakeAddedSigns}
-      fun {$ Note}
-	 Rhythms = {LilyMakeRhythms {Note getDurationParameter($)}}
-      in
-	 if Rhythms == nil
-	 then ''
-	 else  
-	    Pitch = {LilyMakePitch {Note getPitchParameter($)}}
-	    AddedSigns = {MakeAddedSigns Note}
-	    FirstNote = Pitch#Rhythms.1#AddedSigns#{GetUserLily Note}
-	    % MicroPitch = {LilyMakeMicroPitch {Note getPitchParameter($)}}  % ?? temp fix?
-	    % FirstNote = Pitch#Rhythms.1#MicroPitch
-	 in
-	    %% !! ?? generalise (needed elsewhere)
-	    if {Length Rhythms} == 1
-	    then FirstNote
-	       %% all values in Rhythm.2 are tied to predecessor
-	    else FirstNote#{ListToVS
-			    {Map Rhythms.2
-			     fun {$ R}
-				" ~ "#Pitch#R#AddedSigns
-				%" ~ "#Pitch#R#MicroPitch
-			     end}
-			    " "}
-	    end
-	 end
-      end
+      {MakeNoteToLily2 fun {$ N} {LilyMakePitch {N getPitchParameter($)}} end
+       MakeAddedSigns}
    end
-   
+
+   %% !! What about notating Events (e.g. percussion notation)
+   %% !! TODO: angleichen die verschiedenen Funs   
    /** %% [For experts only] Returns unary function expecting note object and returning a lilypond note output (a VS). MakePitch is a unary function expecting the note and returning a Lilypond pitch (a VS). MakeAddedSigns is unary function expecting the note and returning a VS of arbitrary added signs (e.g. fingering marks, articulation marks etc.). MakeNoteToLily2 adds the rhythmic information and cares for ties.
    %% */
    fun {MakeNoteToLily2 MakePitch MakeAddedSigns}
@@ -1119,7 +1095,11 @@ define
 	 else  
 	    Pitch = {MakePitch Note}
 	    AddedSigns = {MakeAddedSigns Note}
-	    FirstNote = Pitch#Rhythms.1#AddedSigns#{GetUserLily Note}
+	    FirstNote = {ListToVS [{OffsetToLilyRest Note} " "
+				   Pitch Rhythms.1
+				   AddedSigns
+				   {GetUserLily Note}]
+			 ""}
 	    % MicroPitch = {LilyMakeMicroPitch {Note getPitchParameter($)}}  % ?? temp fix?
 	    % FirstNote = Pitch#Rhythms.1#MicroPitch
 	 in
@@ -1153,7 +1133,7 @@ define
       then '' % omit pause
 	 %% otherwise output VS of Lily pause(s)
       else {ListToVS {Map Rhythms fun {$ R} r#R end}
-	    " "}#" "
+	    " "}
       end
    end
 
@@ -1200,16 +1180,15 @@ define
    fun {SimToLily Sim Args}
       {ListToVS
        {GetUserLily Sim} |
-       "\n <<" |
+       "\n << " | 
+       {OffsetToLilyRest Sim} |
        {Append {Map {Sim getItems($)}
-		fun {$ X}
-		   {OffsetToLilyRest X}#{ToLilypond2 X Args}
-		end}
+		fun {$ X} {ToLilypond2 X Args} end}
 	["\n>>"]}
        " "}
    end
 
-   %% Returns true if X is chord, i.e. a simultaneous which contains only notes with equal start and end times 
+   %% Returns true if X is chord, i.e. a simultaneous which contains only notes with equal offset time, start and end times 
    fun {IsLilyChord X}
       if {X isSimultaneous($)} 
       then Items = {X getItems($)} in 
@@ -1218,6 +1197,7 @@ define
 		  fun {$ Y}
 		     {Y getStartTime($)} == {Items.1 getStartTime($)}
 		     andthen {Y getEndTime($)} == {Items.1 getEndTime($)}
+		     andthen {Y getOffsetTime($)} == {Items.1 getOffsetTime($)}
 		  end}
       else false
       end
@@ -1235,7 +1215,13 @@ define
 		 " "}
       Rhythms = {LilyMakeRhythms
 		 {Items.1 getDurationParameter($)}}
-      FirstChord = {GetUserLily Sim}#"\n <"#Pitches#">"#Rhythms.1
+      FirstChord = {ListToVS
+		    [{GetUserLily Sim}
+		     {OffsetToLilyRest Sim}
+		     {OffsetToLilyRest Items.1}
+		     "\n <" Pitches ">"
+		     Rhythms.1]
+		    " "}
    in
       if {Length Rhythms} == 1
       then FirstChord
@@ -1254,8 +1240,9 @@ define
       {ListToVS
        {GetUserLily Seq} |
        "\n {\n" |
+       {OffsetToLilyRest Seq} | 
        {Append {Map {Seq getItems($)}
-		fun {$ X}  {OffsetToLilyRest X}#{ToLilypond2 X Args} end}
+		fun {$ X}  {ToLilypond2 X Args} end}
 	["\n}"]}
        " "}
    end
@@ -1354,9 +1341,10 @@ define
    fun {SingleStaffPolyphonyToLily Sim Args}
       {ListToVS
        {GetUserLily Sim} |
+       {OffsetToLilyRest Sim} | 
        "\n <<" |
        {ListToVS {Map {Sim getItems($)}
-		  fun {$ X} {OffsetToLilyRest X}#{ToLilypond2 X Args} end}
+		  fun {$ X} {ToLilypond2 X Args} end}
 	"\\\\"} |
 	["\n>>"]
        " "}
@@ -1517,6 +1505,7 @@ define
    %% By default, Strasheela supports the following cases for Lilypond score output. Strasheela temporal containers are transformed into their Lilypond counterpart. A simultaneous container becomes "<< .. >>" and a sequential container becomes "{ ... }". Nevertheless, there are a few special cases supported by default.
    %% By default, a staff is implicitly created for a sequential container which is either at the top-level or contained in a top-level simultaneous container. In typical Strasheela score topology for Lilypond output, a simultaneous is the top-level container and its items are sequential containers corresponding to staffs. If top-level is a sequential, then there is only a single staff. You can define arbitrary other nestings, but in such cases you should explicitly specify which container corresponds to a staff using the lily info-tag (see below). Moreover, you can also explicitly create staff or staff groups which last for the duration of their container only with the lily info-tag. The implicit staff creation can be switched off entirely by setting the optional argument 'implicitStaffs' to false.
    %% A simultaneous container within a staff containing only notes with common start and end times result in a chord (notes on a single staff sharing a stem). Single staff polyphony is supported: multiple (nested) sequentials and simultaneous container representing chords which are contained in a simultaneous (and which corresponds to or is situated in a staff) are output as single staff polyphony. Note that the description of these special cases is slightly simplified in this explanation, see the clause test function sources in Output.oz, when exactly these clauses apply.
+   %% Note and pause objects (rests) are notated as expected, including ties for complex durations. However, their duration must exceed the minimum duration value supported (a 64th), shorted durations (or shorter tired fractions) are ignored. Also, offset times of score objects are notated as rests in front of the objects (again, except its duration is less than the minimum duration value supported (offset time notation is not supported by default for a top-level simultaneous container). 
    %% Enharmonic notation is supported for enharmonic note objects (subclasses of HS.score.enharmonicSpellingMixinForNote such as HS.score.enharmonicNote). Tuplet output is supported via clauses conveniently created with the function MakeLilyTupletClauses (see there).
    %% 
    %% ToLilypond expects the following further arguments. The optional argument 'clauses' provides much control on how the Lilypond output is conducted. Internally, almost all functionality of ToLilypond is also defined by such clauses: further special cases (as described above) can be defined, or the default ones overwritten. 'clauses' expects a list of the form [Test1#ProcessingFun1 ...]. TestN and ProcessingFunN are both unary functions expecting a score object (an item instance such as notes or containers). If the Boolean function TestN is the first clause test which returns true for a score object in MyScore, then ProcessingFunN will create the Lilypond VS for this object. For example, the user may define a subclass of Score.note with an additional articulation attribute (e.g. values may be staccato, tenuto etc.) and the user then defines a clause which causes Lilypond to show the articulation by its common sign in the printed score.
