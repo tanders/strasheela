@@ -187,33 +187,54 @@ define
 	  MyNote}
       end
 
-      /** %% Returns the chord comment.
-      %% */
-      proc {MakeChordComment MyChord ?Result}
-	 ChordComment = {HS.db.getInternalChordDB}.comment.{MyChord getIndex($)}
+      
+      fun {SimTo31LilyChord Sim}
+	 Items = {Sim getItems($)}
+	 Pitches = {Out.listToVS
+		    {Map Items
+		     fun {$ N} {ET31PitchToLily {N getPitch($)}} end}
+		    " "}
+	 Rhythms = {Out.lilyMakeRhythms
+		    {Items.1 getDurationParameter($)}}
+	 FirstChord = {Out.getUserLily Sim}#"\n <"#Pitches#">"#Rhythms.1
       in
-	 Result = '#'('\\column < '
-		      if {IsRecord ChordComment} andthen {HasFeature ChordComment comment}
-		      then ChordComment.comment
-		      else ChordComment
-		      end
-		      ' > ')
-	 %% 
-	 if {Not {IsVirtualString Result}}
-	 then raise noVS(Result) end
+	 if {Length Rhythms} == 1
+	 then FirstChord
+	 else FirstChord#{Out.listToVS
+			  {Map Rhythms.2
+			   fun {$ R} " ~ <"#Pitches#">"#R end}
+			  " "}
 	 end
       end
+
+
+%       /** %% Returns the chord comment.
+%       %% */
+%       proc {MakeChordComment MyChord ?Result}
+% 	 ChordComment = {HS.db.getInternalChordDB}.comment.{MyChord getIndex($)}
+%       in
+% 	 Result = '#'('\\column { '
+% 		      if {IsRecord ChordComment} andthen {HasFeature ChordComment comment}
+% 		      then ChordComment.comment
+% 		      else ChordComment
+% 		      end
+% 		      ' } ')
+% 	 %% 
+% 	 if {Not {IsVirtualString Result}}
+% 	 then raise noVS(Result) end
+% 	 end
+%       end
       /* %% Returns the chord as ratio spec: Transposition x untransposed PCs (a VS).
       %% */
       proc {MakeChordRatios MyChord ?Result}
-	 Result = '#'('\\column < '
+	 Result = '#'('\\column { '
 		      {PC2RatioVS {MyChord getTransposition($)}}
 		      ' x ('
 		      {Out.listToVS {Map {FS.reflect.lowerBoundList
 					  {MyChord getUntransposedPitchClasses($)}}
 				     PC2RatioVS}
 		       ' '}
-		      ') >')
+		      ') }')
 	 %% 
 	 if {Not {IsVirtualString Result}}
 	 then raise noVS(Result) end
@@ -251,7 +272,8 @@ define
       %% Please note that this support is defined by the argument Clauses (see Out.renderAndShowLilypond) -- additional clauses are still possible, but adding new note/chord clauses will overwrite the support for 31 ET.
       %% */
       proc {RenderAndShowLilypond MyScore Args}
-	 AddedClauses = [IsEt31Note#NoteEt31ToLily
+	 AddedClauses = [Out.isLilyChord#SimTo31LilyChord
+			 IsEt31Note#NoteEt31ToLily
 			 IsEt31Chord#ChordEt31ToLily]
 	 AddedArgs = unit(clauses:if {HasFeature Args clauses}
 				  then {Append Args.clauses AddedClauses}
