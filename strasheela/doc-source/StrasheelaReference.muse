@@ -41,7 +41,12 @@ These extensions simplify the definition of specific musical CSP classes (e.g. s
 
   [[../contributions/anders/HarmonisedScore/doc/node1.html][HS (HarmonisedScore)]] -- constrainable harmony model 
 
-  [[../contributions/anders/ET31/doc/node1.html][ET31]] -- composition in [[http://en.wikipedia.org/wiki/31_equal_temperament][31-tone equal temperament]]
+  [[../contributions/anders/ET31/doc/node1.html][ET31]] -- composition in [[http://en.wikipedia.org/wiki/31_equal_temperament][31-tone equal temperament]], extends HS
+
+  [[../contributions/anders/ET22/doc/node1.html][ET22]] -- composition in [[http://en.wikipedia.org/wiki/22_equal_temperament][22-tone equal temperament]], extends HS
+
+  [[../contributions/anders/ET12/doc/node1.html][ET12]] -- simplified pitch notation for the common 12-tone equal temperament 
+
 
   [[../contributions/anders/ConstrainTimingTree/doc/node1.html][CTT (ConstrainTimingTree)]] -- constrain the shape of a tree of temporal items
 
