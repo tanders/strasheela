@@ -37,6 +37,7 @@
     - HS.rule: added constraints DiatonicChord NoteInPCCollection
     - HS.score: added classes FullChord, ChordNote, ScaleNote
     - Added LUtils.lastN
+    - Out: Added IsOutmostSeq IsSingleStaffPolyphony SingleStaffPolyphonyToLily IsLilyChord SimToLilyChord GetUserLily 
     - Fixed bugs in examples/05-MicrotonalChordProgression.oz (harmony database specification and accessing score object info attribute were obsolete)  
     - HS.rules.schoenberg: fixed ResolveDescendingProgressions (no root repetition by default), added ConstantProgressionR
     - HS.score.chordsToScore: fixed distribution strategy (was extremely slow if note octave was more restricted than pitch class)
