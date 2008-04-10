@@ -79,6 +79,7 @@ export
    %% ?? temp export these ? clean things up once..
    LilyMakePitch LilyMakeFromMidiPitch
    LilyMakeRhythms LilyMakeRhythms2 LilyMakeMicroPitch LilyMakeEt72MarkFromMidiPitch
+   IsOutmostSeq IsSingleStaffPolyphony SingleStaffPolyphonyToLily IsLilyChord SimToLilyChord GetUserLily
    MakeNoteToLily MakeNoteToLily2
    PauseToLily MakeLilyTupletClauses
    SeqToLily SimToLily % OutmostSimToLily
@@ -1230,7 +1231,7 @@ define
       end
    end
    
-   fun {SimToChord Sim}
+   fun {SimToLilyChord Sim}
       Items = {Sim getItems($)}
       Pitches = {ListToVS
 		 {Map Items
@@ -1473,7 +1474,7 @@ define
 
 	  IsSingleStaffPolyphony#fun {$ X} {SingleStaffPolyphonyToLily X As} end
 	 
-	  IsLilyChord#SimToChord
+	  IsLilyChord#SimToLilyChord
 
 	  isSimultaneous#fun {$ X} {SimToLily X As} end
 	 
@@ -1531,14 +1532,14 @@ define
    %% The argument defaults are shown below. 
    
    unit(clauses:nil
-	wrapper:["\\paper {}\n\n{\n" %% empty paper def
+	wrapper:["\\paper {}\n\n\\score{" %% empty paper def
 		 "\n}"]
 	implicitStaffs:true)
 
    %% */
    fun {ToLilypond MyScore Args}
       Default =  unit(clauses:nil
-		      wrapper:["\\paper {}\n\n{\n" %% empty paper def
+		      wrapper:["\\paper {}\n\n\\score{" %% empty paper def
 			       "\n}"]
 		      implicitStaffs:true)
       As = {Adjoin Default Args}
