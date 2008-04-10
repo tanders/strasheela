@@ -1,7 +1,11 @@
 
 %%
 %% This files defines a number of harmonic progression CSPs. All CSPs
-%% are defined in 31 ET (meantone temperament). 
+%% are defined in 31 ET (meantone temperament). Note that these CSPs
+%% focus on the actual chord progression (chord 'type' and root), the
+%% voicing the done less carefully. The idea here is that the chord
+%% sequences (without the action notes) could be used in other CSPs
+%% later.
 %% 
 %% Several examples provide different options to select (e.g., a
 %% different scale to use such as major or minor). These options are
@@ -46,10 +50,10 @@ declare
 
 declare
 %% SELECT scale. 
-MyScale = {Score.makeScore scale(% index:{HS.db.getScaleIndex 'major'}
+MyScale = {Score.makeScore scale(index:{HS.db.getScaleIndex 'major'}
 				 % index:{HS.db.getScaleIndex 'natural minor'}
-				 %% no solution if superstrong progressions are not allowed
-				  index:{HS.db.getScaleIndex 'harmonic minor'}
+				 %% no solution if superstrong progressions are not allowed and no 'harmonic diminished' chords are premitted
+				 % index:{HS.db.getScaleIndex 'harmonic minor'}
 				 transposition:{ET31.pc 'C'})
            unit(scale:HS.score.scale)}
 %%
