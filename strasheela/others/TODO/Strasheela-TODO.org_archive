@@ -507,6 +507,194 @@ Problem: should that be called automatically when certain tests are executed? Wh
 ** DONE Example creating staffs which last only for container duration
    CLOSED: [2008-04-10 Thu 13:39]
 
+* DONE ET22 example
+  CLOSED: [2008-04-11 Fri 13:27]
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2008-04-11 Fri 13:27
+  :ARCHIVE_FILE: ~/oz/music/Strasheela/strasheela/trunk/strasheela/others/TODO/Strasheela-TODO.org
+  :ARCHIVE_OLPATH: Strasheela release
+  :ARCHIVE_CATEGORY: Strasheela
+  :ARCHIVE_TODO: DONE
+  :END:
+
+  modify ET31 chord progression
+
+
+* DONE Create clause for multiple voices in single staff
+  CLOSED: [2008-04-08 Tue 22:54]
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2008-04-11 Fri 13:36
+  :ARCHIVE_FILE: ~/oz/music/Strasheela/strasheela/trunk/strasheela/others/TODO/Strasheela-TODO.org
+  :ARCHIVE_OLPATH: Strasheela design/Update Lilypond output
+  :ARCHIVE_CATEGORY: Strasheela
+  :ARCHIVE_TODO: DONE
+  :ARCHIVE_ITAGS: STRASHEELA NEXT
+  :END:
+
+  Test for sim which contains only seq, which in turn contain only notes or lily chords
+ 
+  If seqs in sim, and there are further higher-level containers, only notes and sims expressing chords (i.e. sim expresses muliple voices in single staff), and the seqs contain only notes (needed condition?),
+  then separate multiple seqs with // as in 
+
+  <<
+     { a4 g2 f4~ f4 } \\
+     { r4 g4 f2 f4 }
+   >>
+
+   Note: having a slash too much at the end does not hurt..
+
+  http://lilypond.org/doc/v2.11/Documentation/user/lilypond-learning/Single-staff-polyphony#Single-staff-polyphony
+
+
+* DONE Check what OffsetToPauses does
+  CLOSED: [2008-04-11 Fri 13:27]
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2008-04-11 Fri 13:36
+  :ARCHIVE_FILE: ~/oz/music/Strasheela/strasheela/trunk/strasheela/others/TODO/Strasheela-TODO.org
+  :ARCHIVE_OLPATH: Strasheela design/Update Lilypond output
+  :ARCHIVE_CATEGORY: Strasheela
+  :ARCHIVE_TODO: DONE
+  :ARCHIVE_ITAGS: STRASHEELA NEXT
+  :END:
+
+  SeqToLily and SimToLily claim that offsets are ignored, but they use function OffsetToPauses..
+
+
+* DONE Update version tag to "2.10.0"
+  CLOSED: [2008-04-06 Sun 20:58]
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2008-04-11 Fri 13:36
+  :ARCHIVE_FILE: ~/oz/music/Strasheela/strasheela/trunk/strasheela/others/TODO/Strasheela-TODO.org
+  :ARCHIVE_OLPATH: Strasheela design/Update Lilypond output
+  :ARCHIVE_CATEGORY: Strasheela
+  :ARCHIVE_TODO: DONE
+  :ARCHIVE_ITAGS: STRASHEELA NEXT
+  :END:
+
+
+* DONE Remove OuterSimBound
+  CLOSED: [2008-04-06 Sun 23:55]
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2008-04-11 Fri 13:36
+  :ARCHIVE_FILE: ~/oz/music/Strasheela/strasheela/trunk/strasheela/others/TODO/Strasheela-TODO.org
+  :ARCHIVE_OLPATH: Strasheela design/Update Lilypond output
+  :ARCHIVE_CATEGORY: Strasheela
+  :ARCHIVE_TODO: DONE
+  :ARCHIVE_ITAGS: STRASHEELA NEXT
+  :END:
+
+
+* DONE Only outmost sequential container creates a staff
+  CLOSED: [2008-04-06 Sun 23:30]
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2008-04-11 Fri 13:36
+  :ARCHIVE_FILE: ~/oz/music/Strasheela/strasheela/trunk/strasheela/others/TODO/Strasheela-TODO.org
+  :ARCHIVE_OLPATH: Strasheela design/Update Lilypond output
+  :ARCHIVE_CATEGORY: Strasheela
+  :ARCHIVE_TODO: DONE
+  :ARCHIVE_ITAGS: STRASHEELA NEXT
+  :END:
+
+  NB: Upmost sim container does _not_ always create staffs  
+
+  Revise: each top-level sequential creates a staff. Top-level here means a sequential container which has no direct or indirect temporal container which is a sequential container 
+
+  Use decide clef! 
+
+  -----
+
+  Note: in typical Lily-suitable score topology, a sim is top-level container and its items are seq containers corresponding to the instruments 
+  If top-level is a seq, then there is only a single staff. However, I can always explicitly create staffs in subcontainers (when then last for a short time only)
+
+
+
+* DONE Create clause for chords
+  CLOSED: [2008-04-06 Sun 23:54]
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2008-04-11 Fri 13:37
+  :ARCHIVE_FILE: ~/oz/music/Strasheela/strasheela/trunk/strasheela/others/TODO/Strasheela-TODO.org
+  :ARCHIVE_OLPATH: Strasheela design/Update Lilypond output
+  :ARCHIVE_CATEGORY: Strasheela
+  :ARCHIVE_TODO: DONE
+  :ARCHIVE_ITAGS: STRASHEELA NEXT
+  :END:
+  
+  do test: if sim and only notes of same start and end time are contained: then print chord (almost equivalent to single note in notation: only single stem, common ties etc)
+
+  Remove corresponding code section in SimToLily
+
+
+* DONE Disable call of convert-ly
+  CLOSED: [2008-04-06 Sun 21:00]
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2008-04-11 Fri 13:37
+  :ARCHIVE_FILE: ~/oz/music/Strasheela/strasheela/trunk/strasheela/others/TODO/Strasheela-TODO.org
+  :ARCHIVE_OLPATH: Strasheela design/Update Lilypond output
+  :ARCHIVE_CATEGORY: Strasheela
+  :ARCHIVE_TODO: DONE
+  :ARCHIVE_ITAGS: STRASHEELA NEXT
+  :END:
+
+
+* DONE Old todo for Lilypond output 
+  CLOSED: [2008-04-11 Fri 13:37]
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2008-04-11 Fri 13:37
+  :ARCHIVE_FILE: ~/oz/music/Strasheela/strasheela/trunk/strasheela/others/TODO/Strasheela-TODO.org
+  :ARCHIVE_OLPATH: Strasheela design/Update Lilypond output
+  :ARCHIVE_CATEGORY: Strasheela
+  :ARCHIVE_TODO: DONE
+  :ARCHIVE_ITAGS: STRASHEELA NEXT
+  :END:
+
+  Lilypond export outputs only rather old version. Meanwhile, Lilypond handles nested scores (quasi sim/seq containers) better than old version, but behaviour of old version is pertained when using Lily's conversion script. So, I should update my Lily output to a more Lily syntax version
+
+
+
+  
+** TODO Create SVN branch
+
+** Understand what format Strasheela presently outputs and compare with recent Lily doc
+
+*** TODO Decide for target Lilypond version 
+
+    There are presently only few Strasheela users, so I might ask/force them all to switch to the latest Lilypond development version.
+
+**** Ueberlegung
+
+     Are there the syntax differences between Lily 2.10 (stable) and Lily 2.11 (development)?
+
+     The output of convert-ly indicates that there have been changes in the syntax in version 2.11. 
+
+> convert-ly -e out2-1.ly
+convert-ly (GNU LilyPond) 2.11.43
+Processing `out2-1.ly'... 
+Applying conversion: 2.5.0, 2.5.1, 2.5.2, 2.5.3, 2.5.12, 2.5.13, 2.5.17, 2.5.18, 2.5.21, 2.5.25, 2.6.0, 2.7.0, 2.7.1, 2.7.2, 2.7.4, 2.7.6, 2.7.10, 2.7.11, 2.7.12, 2.7.13, 2.7.14, 2.7.15, 2.7.22, 2.7.24, 2.7.28, 2.7.29, 2.7.30, 2.7.31, 2.7.32, 2.7.32, 2.7.36, 2.7.40, 2.9.4, 2.9.6, 2.9.9, 2.9.11, 2.9.13, 2.9.16, 2.9.19, 2.10.0, 2.11.2, 2.11.5, 2.11.6, 2.11.10, 2.11.11, 2.11.13, 2.11.15, 2.11.23, 2.11.35, 2.11.38
+
+
+*** TODO Compare current Strasheela output and desired output 
+
+    - Create relatively complex nested Strasheela determined score: sim(seq(sim(note+)+)+)
+    - Create one old format output with Out.outputLilypond and one new format output (using convert-ly -e on a copy of the output)
+    - Simplify convert-ly output (Lilypond then reduces the number of staffs) -- but keep/enter explicit sim/seq nesting in Lily output
+    - Compare orig Strasheela output and new format with diff
+    - Adjust Strasheela lilypond output generation accordingly
+
+*** With the new version test the following cases
+**** Hierarchic nesting (sim and seq containers)
+**** Note object output
+**** ?? Chord output 
+**** My extensions
+
+
+
+
+
+
+
+
+
+
 
 
 
