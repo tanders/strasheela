@@ -967,12 +967,12 @@ define
    LilyRhythmIdxs = {Map [16.0 8.0 4.0 2.0 1.0 0.5 0.25 0.125] BeatSpecToIdx}
    SmallesRhythmIdxs = {BeatSpecToIdx 0.125}
    
-   /** %% [For experts only] creates Lilypond duration output (a list of Lilypond rhythm values, which in the end are tied together) for a duration parameter.
+   /** %% [for clause definitions] creates Lilypond duration output (a list of Lilypond rhythm values, which in the end are tied together) for a duration parameter.
    %% */
    fun {LilyMakeRhythms DurationParam}
       {LilyMakeRhythms2 {DurationParam getValueInBeats($)}}
    end
-   /** %% [For experts only] creates Lilypond duration output (a list of Lilypond rhythm values, which in the end are tied together) for a duration measured in beats (a float).
+   /** %% [for clause definitions] creates Lilypond duration output (a list of Lilypond rhythm values, which in the end are tied together) for a duration measured in beats (a float).
    %% */
    fun {LilyMakeRhythms2 DurationInBeats}
       {MakeRhythmsAux {BeatsToIdx DurationInBeats}}
@@ -991,7 +991,7 @@ define
 	 LilyRhythms.BiggestSubRhythm | {MakeRhythmsAux BeatIdx-BiggestSubRhythm}
       end
    end
-   /** %% [For experts only] creates Lilypond 72 ET microtonal pitch output (a VS) for a pitch parameter. Note: works only if the pitch unit is et72.
+   /** %% [for clause definitions] creates Lilypond 72 ET microtonal pitch output (a VS) for a pitch parameter. Note: works only if the pitch unit is et72.
    %% */
    %% !!?? temp fix
    fun {LilyMakeMicroPitch PitchParam}
@@ -1010,7 +1010,7 @@ define
 %    in
 %       Marks.Micro
 %    end
-   /** %% [For experts only] Returns a Lily fingering mark (a virtual string) which represents a micro-tonal tuning deviation in 72 ET temperament.
+   /** %% [for clause definitions] Returns a Lily fingering mark (a virtual string) which represents a micro-tonal tuning deviation in 72 ET temperament.
    %% */
    fun {LilyMakeEt72MarkFromMidiPitch MidiPitch}
       Marks = unit(%% !!?? alternative sign for quarter note flat?
@@ -1045,7 +1045,7 @@ define
       Marks.Micro
    end
    
-   /** %% [For experts only] creates Lilypond pitch output (a VS) for a pitch parameter.
+   /** %% [for clause definitions] creates Lilypond pitch output (a VS) for a pitch parameter.
    %% */
    fun {LilyMakePitch PitchParam}
       %% create pitchClass and octave expression
@@ -1054,7 +1054,7 @@ define
    in
       {LilyMakeFromMidiPitch MidiPitch}
    end
-   /** %% [For experts only] creates Lilypond pitch output (a VS) for a midi pitch value (an integer).
+   /** %% [for clause definitions] creates Lilypond pitch output (a VS) for a midi pitch value (an integer).
    %% */
    fun {LilyMakeFromMidiPitch MidiPitch}
       PC = {Int.'mod' MidiPitch 12} + 1
@@ -1063,7 +1063,7 @@ define
       LilyPCs.PC#LilyOctaves.Oct
    end
 
-   /** %% [For experts only] Returns unary function which expects a note object and returns a Lilypond note output (a VS). Simplified version of MakeNoteToLily2.
+   /** %% [for clause definitions] Returns unary function which expects a note object and returns a Lilypond note output (a VS). Simplified version of MakeNoteToLily2.
    %% */
    fun {MakeNoteToLily MakeAddedSigns}
       {MakeNoteToLily2 fun {$ N} {LilyMakePitch {N getPitchParameter($)}} end
@@ -1072,7 +1072,7 @@ define
 
    %% !! TODO: What about notating other Events (e.g. percussion notation)?
    %% !! TODO: angleichen die verschiedenen Funs   
-   /** %% [For experts only] Returns unary function which expects a note object and returns a Lilypond note output (a VS). MakePitch is a unary function expecting the note and returning a Lilypond pitch (a VS). MakeAddedSigns is unary function expecting the note and returning a VS of arbitrary added signs (e.g. fingering marks, articulation marks etc.). MakeNoteToLily2 adds the rhythmic information and cares for ties.
+   /** %% [for clause definitions] Returns unary function which expects a note object and returns a Lilypond note output (a VS). MakePitch is a unary function expecting the note and returning a Lilypond pitch (a VS). MakeAddedSigns is unary function expecting the note and returning a VS of arbitrary added signs (e.g. fingering marks, articulation marks etc.). MakeNoteToLily2 adds the rhythmic information and cares for ties.
    %% */
    fun {MakeNoteToLily2 MakePitch MakeAddedSigns}
       fun {$ Note}
@@ -1107,7 +1107,7 @@ define
       end
    end
 
-   /** %% [For experts only] Expects a pause duration in beats (a float) and returns a Lilypond rest (a VS).  
+   /** %% [for clause definitions] Expects a pause duration in beats (a float) and returns a Lilypond rest (a VS).  
    %% */
    fun {LilyRest PauseDurInBeats}
       %%  returns a list of Lilypond rhythm
@@ -1125,7 +1125,7 @@ define
       end
    end
 
-   /** %% [For experts only] Expects a pause object and returns a Lilypond rest (a VS).
+   /** %% [for clause definitions] Expects a pause object and returns a Lilypond rest (a VS).
    %% */
    fun {PauseToLily MyPause}
       {LilyRest {MyPause getDurationInBeats($)}}
@@ -1138,7 +1138,7 @@ define
    end
 
    
-   /** %% [For experts only] creates Lilypond output (a VS) for a simultaneous container. Args is a record of optional args (clauses and implicitStaffs).
+   /** %% [for clause definitions] creates Lilypond output (a VS) for a simultaneous container. Args is a record of optional args (clauses and implicitStaffs).
    %% Default Lilypond output uses this definition. Using this function may simplify writing custom output clauses which overwrite the default output.
    %% */
    fun {SimToLily Sim Args}
@@ -1152,7 +1152,7 @@ define
        " "}
    end
 
-   /** %% [For experts only] Returns true if X can be notated as a chord, i.e. X is a simultaneous which contains only notes with equal offset time, start and end times
+   /** %% [for clause definitions] Returns true if X can be notated as a chord, i.e. X is a simultaneous which contains only notes with equal offset time, start and end times
    %% */
    fun {IsLilyChord X}
       if {X isSimultaneous($)} 
@@ -1168,7 +1168,7 @@ define
       end
    end
 
-   /** %% [For experts only] Outputs Sim (for which IsLilyChord must return true) as a Lilypond chord VS. 
+   /** %% [for clause definitions] Outputs Sim (for which IsLilyChord must return true) as a Lilypond chord VS. 
    %% */
    fun {SimToLilyChord Sim}
       Items = {Sim getItems($)}
@@ -1199,7 +1199,7 @@ define
       end
    end
    
-   /** %% [For experts only] creates Lilypond output (a VS) for a sequential container. Args is a record of optional args (clauses and implicitStaffs).
+   /** %% [for clause definitions] creates Lilypond output (a VS) for a sequential container. Args is a record of optional args (clauses and implicitStaffs).
    %% Default Lilypond output uses this definition. Using this function may simplify writing custom output clauses which overwrite the default output.
    %% */
    fun {SeqToLily Seq Args}
@@ -1214,7 +1214,7 @@ define
    end
 
    
-   /** %% [For experts only] Tests whether X is an Outmost sequential container, i.e. a container which has no direct or indirect temporal container which is also a sequential container. X is either the top-level container, or (the most common case) contained in a top-level simultaneous container.
+   /** %% [for clause definitions] Tests whether X is an Outmost sequential container, i.e. a container which has no direct or indirect temporal container which is also a sequential container. X is either the top-level container, or (the most common case) contained in a top-level simultaneous container.
    %% An outmost sequential implicitly creates a staff by default. 			%% */
    fun {IsOutmostSeq X}
       %% Returns true if Y has a sequential as either direct or indirect container
@@ -1271,7 +1271,7 @@ define
       end
    end
 
-   /** %% [For experts only] Accesses tuple with label 'lily' in info feature of X, and returns VS (concatenating all lily tuple elements). The lily tuple must only contain VSs.
+   /** %% [for clause definitions] Accesses tuple with label 'lily' in info feature of X, and returns VS (concatenating all lily tuple elements). The lily tuple must only contain VSs.
    %% */
    fun {GetUserLily X}
       Lily = {X getInfoRecord($ lily)}
@@ -1288,7 +1288,7 @@ define
 	 ({X isSequential($)} andthen {All {X getItems($)} IsVoiceContent})
       end
    in
-      /** %% [For experts only] Returns true if X is a simultaneous container which containes multiple voices; each voice is a sequential which contains only (i) notes, (ii) simultaneous containers which are chords or (iii) sequentials which in turn contain only notes or chords.
+      /** %% [for clause definitions] Returns true if X is a simultaneous container which containes multiple voices; each voice is a sequential which contains only (i) notes, (ii) simultaneous containers which are chords or (iii) sequentials which in turn contain only notes or chords.
       %% By default, such a simultaneous container creates a single staff polyphony.
       %% */
       fun {IsSingleStaffPolyphony X}
@@ -1303,7 +1303,7 @@ define
 	 end
       end
    end
-   /** %% [For experts only] Outputs X (for which IsSingleStaffPolyphony must return true) as a single staff polyphony Lily VS. 
+   /** %% [for clause definitions] Outputs X (for which IsSingleStaffPolyphony must return true) as a single staff polyphony Lily VS. 
    %% */
    fun {SingleStaffPolyphonyToLily Sim Args}
       {ListToVS
@@ -1361,7 +1361,7 @@ define
 	 end 
       end
    in
-      /** %% MakeLilyTupletClauses creates a list of Lilypond clauses for tuplet output. Fractions is a list of pairs Numerator#Denominator indicating the fractions of the tuplets. For example, clauses for triplets are created with he fraction 2#3 and clauses for quintuplets with the fraction 2#5. Tuplets are recognised automatically in the score by the duration of score elements (notes and pause objects). The time unit must be set to beats(N), where N is some quarter note division which allows to express all required durations. For example, if the time unit is beats(60) then the duration 60 indicates a quarter note, 30 indicates an eigth note, three notes of duration 20 form an eigth note triplet and 5 notes of duration 6 form a sixteenth note quintuplet.   
+      /** %% [for clause definitions] MakeLilyTupletClauses creates a list of Lilypond clauses for tuplet output. Fractions is a list of pairs Numerator#Denominator indicating the fractions of the tuplets. For example, clauses for triplets are created with he fraction 2#3 and clauses for quintuplets with the fraction 2#5. Tuplets are recognised automatically in the score by the duration of score elements (notes and pause objects). The time unit must be set to beats(N), where N is some quarter note division which allows to express all required durations. For example, if the time unit is beats(60) then the duration 60 indicates a quarter note, 30 indicates an eigth note, three notes of duration 20 form an eigth note triplet and 5 notes of duration 6 form a sixteenth note quintuplet.   
       %% LIMITATIONS: Rests must be expressed explicitly with pause objects, rests expressed by the offset time of score objects are not notated correctly if their duration should be part of a tuplet. Dotted notes at the beginning of a tuplet do not work. Tuplets only work correctly for score elements within a single sequential container: a tuplet must not extend across container boundaries. Also, tuplets cannot be nested. Due to these shortcomings, the default Lilypond output does not support tuplets.
       %% */
       fun {MakeLilyTupletClauses Fractions}
@@ -1403,7 +1403,7 @@ define
    
 
 
-   /** %% [For experts only] like ToLilypond, except only the bare Lilypond score is created. That is, no Lilypond version number is inserted in the output, nor is the wrapper Lilypond code inserted (see wrapper argument of ToLilypond).
+   /** %% [for clause definitions] like ToLilypond, except only the bare Lilypond score is created. That is, no Lilypond version number is inserted in the output, nor is the wrapper Lilypond code inserted (see wrapper argument of ToLilypond).
    %% */ 
    fun {ToLilypond2 MyScore Args}
       Clauses
