@@ -642,9 +642,9 @@ define
       Dict.Direction
    end
 
-   %% Dir is constrained to the direction of the interval between X1 and X2. An interval 'upwards' (the predecessor is smaller than the successor) is represented by 2, an 'horizontal' interval (the predecessor and the successor are equal) is represented by 1, and an interval 'downwards' by 0.
-   %% X1, X2, and Dir are all FD integers.
-   %%
+   /** %% Dir is constrained to the direction of the interval between X1 and X2. An interval 'upwards' (the predecessor is smaller than the successor) is represented by 2, an 'horizontal' interval (the predecessor and the successor are equal) is represented by 1, and an interval 'downwards' by 0.
+   %% X1, X2, and Dir are all FD integers, Dir is implicitly declared.
+   %% */
    %% !! Does not propagate well: e.g. Dir = {FD.int [0 1]} propagates, but Dir = {FD.int [1 2]} does not
    %% !! Determined Dir (upwards or downwards) does not propagate (i.e. does not remove domain values in X1 and/or X2 which are not upwards respectively downwards).
    %%
