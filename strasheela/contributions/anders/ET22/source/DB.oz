@@ -2,7 +2,7 @@
 /** %% Defines databases for chords, scales and intervals in 22 equal temperament. 
 %% Internally, database entries are often defined by ratios (using notation X#Y for X/Y) to make them more comprehensible and portable to other temperaments. Alternatively, chords and scales are notated with conventional symbolic note names (see function PC). In any case, the databases focus on chords, scales and intervals which are close to just intonation in 22 ET.
 %%
-%% Please visit the source as ../source/DB.oz or browse/inspect the value of ET22.db.fullDB to read the actual databases. 
+%% Please visit the source at ../source/DB.oz or browse/inspect the value of ET22.db.fullDB to read the actual databases. 
 %% */
 
 
