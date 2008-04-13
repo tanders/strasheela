@@ -1269,8 +1269,12 @@ define
 		 then "\\new Staff "#"{ \\clef "#{DecideClef Seq}
 		 else ""
 		 end
+	 Closing = if Args.implicitStaffs
+		 then " }"
+		 else ""
+		 end
       in
-	 "\n "#Staff#" "#{SeqToLily Seq Args}#" }"
+	 "\n "#Staff#" "#{SeqToLily Seq Args}#Closing
       end
    end
 
