@@ -399,7 +399,8 @@ define
 	 fun {$ X} true end
 	 #fun {$ X} 
 	     %%raise unsupportedClass(Score MakeHierarchicVSScore) end
-	     {Browse warn#unsupportedClass(Score MakeHierarchicVSScore)}
+	     {GUtils.warnGUI "Score contains object for which no clause was defined!"}
+%	     {Browse warn#unsupportedClass(Score MakeHierarchicVSScore)}
 	     ''
 	  end]}}
    end
@@ -921,7 +922,9 @@ define
       if Events \= nil then
 	 {RenderCsound MyScore MySpec}
 	 {PlaySound {Adjoin MySpec unit(extension: MySpec.soundExtension)}}
-      else {System.showInfo "Warning: no events in Csound score. Are events fully determined?"}
+      else
+	 {GUtils.warnGUI "No events in resulting Csound score. Is score fully determined?"}
+%	 {System.showInfo "Warning: no events in Csound score. Are events fully determined?"}
       end
    end
 
@@ -1461,7 +1464,8 @@ define
 	   % Otherwise clause
 	  fun {$ X} true end
 	  #fun {$ X}
-	      {Browse warn#unsupportedClass(X ToLilypond2)}
+	      {GUtils.warnGUI "Score contains object for which no clause for Lilypond output was defined!"}
+%	      {Browse warn#unsupportedClass(X ToLilypond2)}
 	      ''
 	   end]}
       
@@ -1494,6 +1498,10 @@ define
 		      version:"2.10.0")
       As = {Adjoin Default Args}
    in
+      if {Not {MyScore isDet($)}} then
+	 {GUtils.warnGUI "Lilypond output may block -- score not fully determined!"}
+% 	 {System.showInfo "Warning: Lilypond output may block -- score not fully determined!"}
+      end
       {ListToVS ["%%% created by Strasheela at "#{GUtils.timeVString}
 		 "\n\\version \""#As.version#"\"\n"
 		 As.wrapper.1
