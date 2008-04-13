@@ -16,7 +16,8 @@
 
 functor
 import
-   Module OS Combinator Property Tk FS
+   Module OS Combinator Property QTk at 'x-oz://system/wp/QTk.ozf' % Tk
+   FS
    LUtils at 'ListUtils.ozf'
    Browser(browse:Browse) % temp for debugging
 export
@@ -407,31 +408,59 @@ define
    %%
    
    /** %% Opens a warning dialog which displays VS.
-   %% NB: blocks, until OK buttom is pressed, and a surrounding thread does not help against this.
    %% */
    proc {WarnGUI VS}
-	 %% returns ok if ok button is pressed..
-	 _ = {Tk.return tk_messageBox(icon:warning
-				      type:ok
-				      message:VS)}
+      Window = {QTk.build td(text(init:"WARNING: "#VS
+				  height:5
+				  width:50
+				  wrap:word
+				  background:yellow)
+			     button(text:"OK" 
+				    action:toplevel#close))}
+   in
+      {Window show}
+      %%
+      %% NB: blocks, until OK buttom is pressed, and a surrounding thread does not help against this.
+% 	 %% returns ok if ok button is pressed..
+% 	 _ = {Tk.return tk_messageBox(icon:warning
+% 				      type:ok
+% 				      message:VS)}
    end   
    /** %% Opens a warning dialog which displays VS. 
-   %% NB: blocks, until OK buttom is pressed, and a surrounding thread does not help against this.
    %% */
    proc {InfoGUI VS}
-	 %% returns ok if ok button is pressed..
-	 _ = {Tk.return tk_messageBox(icon:info
-				      type:ok
-				      message:VS)}
+      Window = {QTk.build td(text(init:"INFO: "#VS
+				  height:5
+				  width:50
+				  wrap:word)
+			     button(text:"OK" 
+				    action:toplevel#close))}
+   in
+      {Window show}
+%       %% NB: blocks, until OK buttom is pressed, and a surrounding thread does not help against this.
+% 	 %% returns ok if ok button is pressed..
+% 	 _ = {Tk.return tk_messageBox(icon:info
+% 				      type:ok
+% 				      message:VS)}
    end
       
    /** %% Opens an error dialog which displays VS. 
-   %% NB: blocks, until OK buttom is pressed, and a surrounding thread does not help against this.
    %% */
    proc {ErrorGUI VS}
-	 _ = {Tk.return tk_messageBox(icon:error
-				      type:ok
-				      message:VS)}
+      Window = {QTk.build td(text(init:"ERROR: "#VS
+				  height:5
+				  width:50
+				  wrap:word
+				  %% light red color
+				  background:c(255 150 150))
+			     button(text:"OK" 
+				    action:toplevel#close))}
+   in
+      {Window show}
+%       %% NB: blocks, until OK buttom is pressed, and a surrounding thread does not help against this.
+% 	 _ = {Tk.return tk_messageBox(icon:error
+% 				      type:ok
+% 				      message:VS)}
    end
 
 end
