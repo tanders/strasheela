@@ -1460,6 +1460,8 @@ define
 	 %% created in the top-level, i.e. without search (but
 	 %% checking for Space to be stable causes this to block
 	 %% completely in the top-level...)
+	 %% ?? Possibly that's OK: constraint propagation simply needs
+	 %% a little time, also at top-level space.
 	 B = {All {self getParameters($)}
 	      fun {$ X} {IsDet {X getValue($)}} end}
       end
