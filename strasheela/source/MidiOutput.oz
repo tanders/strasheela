@@ -61,7 +61,7 @@ csv(track:1 time:0 type:'Title_t' parameters:['\"This is my Title\"'])
 
 functor
 import
-   
+%   System
    GUtils at 'GeneralUtils.ozf'
    LUtils at 'ListUtils.ozf'
    Out at 'Output.ozf'
@@ -491,12 +491,17 @@ define
 	     removeQuestionableNoteoffs: true
 	     scoreToEventsArgs: unit)
       MySpec = {Adjoin DefaultSpec Spec}
+      CVSEvents
+   in
+      if {Not {MyScore isDet($)}} then
+	 {GUtils.warnGUI "MIDI output may block or cause an error -- score not fully determined!"}
+%	 {System.showInfo "Warning: MIDI output may block -- score not fully determined!"}
+      end
       CVSEvents = {Append MySpec.headerEvents
 		   if MySpec.removeQuestionableNoteoffs
 		   then {ScoreToEvents_Midi MyScore MySpec.clauses MySpec.scoreToEventsArgs}
 		   else {Out.scoreToEvents MyScore MySpec.clauses MySpec.scoreToEventsArgs}
 		   end}
-   in
       {OutputCSVScore CVSEvents MySpec}
       {RenderMidiFile MySpec}
    end
