@@ -50,9 +50,12 @@ MyScore = {Score.makeScore seq(items:[note(duration:4
 %% WARNING: a score must be fully determined for Lilypond output (as
 %% for other output formats, like Csound or MIDI). The following
 %% example blocks (does nothing!), because some parameter values are
-%% not determined.
+%% not determined -- the note pitch is missing!
 %%
-
+%% Nevertheless, a warning is printed at standard out, which is shown
+%% in the emulator (in the Oz menu, select Show/Hide -> Emulator, or
+%% use the shortcut C-. e)
+%%
 
 declare
 MyScore = {Score.makeScore note(duration:4
@@ -64,6 +67,31 @@ MyScore = {Score.makeScore note(duration:4
 	   unit}
 {Out.renderAndShowLilypond MyScore
  unit(file:blockingTest)}
+
+
+%%
+%% Note this warning is also shown for the other examples in this
+%% file, because no note amplitude is set in these examples. Lilypond
+%% does not need the note amplitude, so it creates its output
+%% nevertheles, but outputting to MIDI or Csound would block for these
+%% examples. Also, on the top-level (outside a constraint script) it
+%% might be necessary to wait until constraint propagation finishes
+%% (e.g., the note start times are often not set explicitly but
+%% derived by constraint propagation). Use the method wait for these
+%% purposes, which will cause a tiny delay to propagate all
+%% constraints. Try not setting, e.g., the note's amplite: waiting
+%% will never stop in that case!
+%%
+
+declare
+MyScore = {Score.makeScore note(duration:4
+				pitch:60
+				amplitude:64 
+				startTime:0
+				timeUnit:beats)
+	   unit}
+{MyScore wait}
+{Browse waitingFinished} 
 
 
 
