@@ -45,6 +45,7 @@
 
 functor 
 import
+%   System
    FD FS RecordC % Space
    Boot_Object at 'x-oz://boot/Object'
    Boot_Name at 'x-oz://boot/Name'
@@ -295,7 +296,11 @@ define
 		 end
 	 %% hands arbitrary init arguments to instance attributes
 	 {Record.forAllInd {Record.subtractList M [info handle]}
-	  proc {$ Attr X} @Attr = X end}
+	  proc {$ Attr X}
+	     {GUtils.warnGUI "Setting "#{Value.toVirtualString self 100 100}#"'s attribute '"#Attr#"' directly to "#{Value.toVirtualString X 100 100}#". Possibly, this attribute does not exist in this object!"}
+	     % {System.showInfo "Warning: setting "#{Value.toVirtualString 100 100}#"'s attribute "#Attr#" directly to "#X#". Possibly, this attribute does not exist in this object!"}
+	     @Attr = X
+	  end}
       end
       meth isScoreObject(?B) B=true end
       meth getID(?X) X=@id end
@@ -1114,6 +1119,8 @@ define
       fun {GetPitchesPerOctave EtPitchUnit}
 	 {StringToInt {List.drop {AtomToString EtPitchUnit} 2}}
       end
+
+      LastNonmatchingPitchunit = {NewCell midi}
    in
       /** %% [concrete class] 
       %%*/
@@ -1125,40 +1132,63 @@ define
 % 	 X={self convertTo($ Unit)}
 %       end
 	 /** %% Returns the parameter value translated to a float representing a Midi keynumber (i.e. 60.5 is a quarternote above middle c). The translation uses the parameter unit which must be bound (otherwise the method suspends, but warns also). Supported units are (represented by these atoms): midi/keynumber, midicent/midic, frequency/freq/hz and et72 (equal temperament with 72 steps per octave).
+	 %% A tuning table is used if such a table was either defined with Init.setTuningTable or was specified as optional argument table. 
 	 %% */
-	 meth getValueInMidi(?X)
+	 meth getValueInMidi(?X table:Table<=nil)
 	    Unit = {self getUnit($)}
 	    Value = {IntToFloat {self getValue($)}}
+	    FullTable = if Table==nil
+			then {Init.getTuningTable}
+			else {MUtils.fullTuningTable Table}
+			end
 	 in
-	    %% !! IsDet does not wait for binding -- quasi side effect. 
-	    if {Not {IsDet Unit}}
-	    then {GUtils.warnGUI 'pitch unit unbound'}
-	    end
-	    %% !!?? remove redundancy for e.g. midi or keynumber
-	    X = case Unit
-		of midi then Value
-		[] keynumber then Value
+	    if FullTable == nil 
+	    then 
+	       %% !! IsDet does not wait for binding -- quasi side effect. 
+	       if {Not {IsDet Unit}}
+	       then {GUtils.warnGUI 'pitch unit unbound'}
+	       end
+	       %% !!?? remove redundancy for e.g. midi or keynumber
+	       X = case Unit
+		   of midi then Value
+		   [] keynumber then Value
 % 		[] et72 then Value / 6.0 % * 12.0 / 72.0
 % 		[] et31 then Value * 12.0 / 31.0 
 % 		[] et22 then Value * 12.0 / 22.0 
-		[] midicent then Value / 100.0
-		[] midic then Value / 100.0
-		[] millimidicent then Value / 10000.0
-		[] frequency then {MUtils.freqToKeynum Value 12.0}
-		[] freq then {MUtils.freqToKeynum Value 12.0}
-		[] hz then {MUtils.freqToKeynum Value 12.0}
-		else
-		   if {IsET Unit}
-		   then Value * 12.0 / {IntToFloat {GetPitchesPerOctave Unit}}
-		   else 
-		   {Exception.raiseError
-		    strasheela(illParameterUnit Unit self
-			       "Supported units are midi, keynumber, et22, et31, et72, midicent (or midic), frequency (or freq), and hz."
+		   [] midicent then Value / 100.0
+		   [] midic then Value / 100.0
+		   [] millimidicent then Value / 10000.0
+		   [] frequency then {MUtils.freqToKeynum Value 12.0}
+		   [] freq then {MUtils.freqToKeynum Value 12.0}
+		   [] hz then {MUtils.freqToKeynum Value 12.0}
+		   else
+		      if {IsET Unit}
+		      then Value * 12.0 / {IntToFloat {GetPitchesPerOctave Unit}}
+		      else 
+			 {Exception.raiseError
+			  strasheela(illParameterUnit Unit self
+				     "Supported units are midi, keynumber, et22, et31, et72, midicent (or midic), frequency (or freq), and hz."
 			    % "Unsupported pitch unit."
-			      )}
-		      unit		% never returned
+				    )}
+			 unit		% never returned
+		      end
 		   end
-		end
+	    else 
+	       PC = {self getValue($)} mod FullTable.size
+	       Octave = {self getValue($)} div FullTable.size
+	    in
+	       %% warn if pitch unit and tuning table size don't
+	       %% match, but only once until a new pitch unit was
+	       %% found.
+	       if Unit \= @LastNonmatchingPitchunit andthen 
+		  {IsET Unit} andthen 
+		  FullTable.size \= {GetPitchesPerOctave Unit}
+	       then LastNonmatchingPitchunit := Unit
+		  {GUtils.warnGUI
+		   "Conflict between size of tuning table ("#FullTable.size#") and pitch unit ("#Unit#")!"}
+	       end
+	       X = (FullTable.period * {IntToFloat Octave} + FullTable.(PC + 1)) / 100.0
+	    end
 	 end
       end
    end
@@ -2023,8 +2053,13 @@ define
 	 {self bilinkParameters([@pitch])}
       end	
       meth isNote(?B) B=true end
-      meth getPitch(?X) X={@pitch getValue($)} end 
-      meth getPitchInMidi(?X) X={@pitch getValueInMidi($)} end 
+      meth getPitch(?X) X={@pitch getValue($)} end
+      /** %% Returns the pitch of self measured as a MIDI float (e.g., for 12 pitches per octave, 60.5 is a quartertone above the equally tempered middle C). The pitch value depends on the pitchUnit. Additionally, it can be affected by a tuning table. A tuning table is either defined globally with Init.setTuningTable or with the optional Table argument, which expects a table in the same format as Init.setTuningTable.   
+      %% */
+      %% NOTE: default of Table set again here
+      meth getPitchInMidi(?X table:Table<=nil)
+	 X={@pitch getValueInMidi($ table:Table)}
+      end 
       meth getPitchParameter(?X) X=@pitch end 
       meth getPitchUnit(?X) X={@pitch getUnit($)} end 
 %      meth getAttributes(?X)
