@@ -437,50 +437,95 @@ declare
 			  1090.33000
 			  1131.30000
 			  1196.90000)}
-%%
-%% pitch classes of Erlich's 'standard pentachordal major'
-PCs = [0 2 4 7 9 11 13 16 18 20]
-Is = {List.number 0 9 1}
-fun {GetPC I Offset}
-   {Nth PCs (I+Offset) mod 10 + 1}
-end
-PitchOffset = 22 * 5
-MyScore = {Score.makeScore sim(items:[seq(items:{Map Is 
-						fun {$ I}
-						   note(duration:4
-							pitch:{GetPC I 0}+PitchOffset
-							pitchUnit:et22
-							channel:0
-							amplitude:64)
-						end})
-				      seq(items:{Map Is 
-						 fun {$ I}
-						    note(duration:4
-							 pitch:{GetPC I 3}+PitchOffset
-							 pitchUnit:et22
-							channel:1
-							 amplitude:64)
-						 end})
-				      seq(items:{Map Is 
-						 fun {$ I}
-						    note(duration:4
-							 pitch:{GetPC I 6}+PitchOffset
-							 pitchUnit:et22
-							 channel:2
-							 amplitude:64)
-						 end})
-				      seq(items:{Map Is 
-						 fun {$ I}
-						    note(duration:4
-							 pitch:{GetPC I 8}+PitchOffset
-							 pitchUnit:et22
-							 channel:3
-							 amplitude:64)
-						 end})]
+%% 
+MyScore = {Score.makeScore seq(items:[sim(items:[note(duration:2
+						      pitch:{ET22.pitch 'C'#4}
+						      pitchUnit:et22
+						      channel:0
+						      amplitude:64)
+						 note(duration:2
+						      pitch:{ET22.pitch 'E\\'#4}
+						      pitchUnit:et22
+						      channel:1
+						      amplitude:64)
+						 note(duration:2
+						      pitch:{ET22.pitch 'G'#4}
+						      pitchUnit:et22
+						      channel:2
+						      amplitude:64)
+						 note(duration:2
+						      pitch:{ET22.pitch 'Bb'#4}
+						      pitchUnit:et22
+						      channel:3
+						      amplitude:64)])
+				      sim(items:[note(duration:2
+						      pitch:{ET22.pitch 'F'#4}
+						      pitchUnit:et22
+						      channel:0
+						      amplitude:64)
+						note(duration:2
+						     pitch:{ET22.pitch 'Ab/'#3}
+						      pitchUnit:et22
+						      channel:0
+						     amplitude:64)
+						note(duration:2
+						     pitch:{ET22.pitch 'C'#4}
+						      pitchUnit:et22
+						      channel:0
+						     amplitude:64)
+						note(duration:2
+						     pitch:{ET22.pitch 'D'#4}
+						      pitchUnit:et22
+						      channel:0
+						     amplitude:64)])
+				      sim(items:[note(duration:2
+						      pitch:{ET22.pitch 'G'#3}
+						      pitchUnit:et22
+						      channel:0
+						      amplitude:64)
+						note(duration:2
+						     pitch:{ET22.pitch 'B\\'#3}
+						      pitchUnit:et22
+						      channel:0
+						     amplitude:64)
+						note(duration:2
+						     pitch:{ET22.pitch 'D'#4}
+						      pitchUnit:et22
+						      channel:0
+						     amplitude:64)
+						note(duration:2
+						     pitch:{ET22.pitch 'F'#4}
+						      pitchUnit:et22
+						      channel:0
+						     amplitude:64)])
+				      sim(items:[note(duration:2
+						      pitch:{ET22.pitch 'C'#3}
+						      pitchUnit:et22
+						      channel:0
+						      amplitude:64)
+						 note(duration:2
+						      pitch:{ET22.pitch 'E\\'#4}
+						      pitchUnit:et22
+						      channel:1
+						      amplitude:64)
+						 note(duration:2
+						      pitch:{ET22.pitch 'G'#3}
+						      pitchUnit:et22
+						      channel:2
+						      amplitude:64)
+						 note(duration:2
+						      pitch:{ET22.pitch 'Bb'#3}
+						      pitchUnit:et22
+						      channel:3
+						      amplitude:64)])]
 			       startTime:0
-			       timeUnit:beats(4))
+			       timeUnit:beats)
 	   add(note:Out.midi.midiNote)}
 {MyScore wait}
+%% For confirmation: show chord sequence with Lilypond (enharmonically not correct..)
+{ET22.out.renderAndShowLilypond MyScore
+ unit(file:chordSeq_22ET)}
+%%
 {Init.setTempo 60.0}
 {Out.midi.renderAndPlayMidiFile MyScore
  unit(file:chords_Pajara
