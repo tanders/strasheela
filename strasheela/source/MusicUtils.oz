@@ -21,6 +21,7 @@ export
    KeynumToFreq FreqToKeynum RatioToKeynumInterval KeynumToPC
    LevelToDB DBToLevel
    Freq0
+   FullTuningTable
 define
    /** %% freq at keynum 0, keynum 69 = 440 Hz
    %% */
@@ -48,6 +49,7 @@ define
       else {FreqToKeynum (Ratio * Freq0) KeysPerOctave}
       end
    end
+   
    /** %% Transforms a keynumber (a float) in an equally tempered scale with KeysPerOctave (a float) into its corresponding pitch class (a float) in [0, PitchesPerOctave).
 % %% */
    fun {KeynumToPC Keynum PitchesPerOctave}
@@ -63,6 +65,24 @@ define
    %% */
    fun {DBToLevel DB LRel}
       LRel * {Pow  10.0 (DB / 20.0)}
+   end
+
+   /** %% Expects a tuning table declaration (see Init.setTuningTable for format) and returns a full tuning table used for pitch computation. The returned full table is a record which contains only pitches measured in cent, has 0.0 added as first table value, and has the two features size and period added.   
+   %% */
+   fun {FullTuningTable TuningTable}
+      Size = {Width TuningTable}
+      FullTable =  {List.toTuple unit
+		    0.0 | {Map {Record.toList TuningTable}
+			   fun {$ X}
+			      case X of _#_ 
+			      then {RatioToKeynumInterval X 1200.0}
+			      else X
+			      end
+			   end}}
+   in
+      {Adjoin FullTable
+       unit(size:Size
+	    period:FullTable.(Size+1))}
    end
    
 end
