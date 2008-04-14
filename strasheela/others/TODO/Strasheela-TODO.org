@@ -1033,6 +1033,9 @@ See ../../testing/zy_Efficiency/KeepMusicRepresentationOutsideComputationalSpace
 
 ** Support for alternate tunings					  :NEXT:
 
+   Kenrfunktionalitaet schoen hier:
+   see [[file:~/oz/music/Strasheela/strasheela/trunk/strasheela/examples/Microtonal-MIDI-examples.oz::fun%20TunedPitch%20Pitch%20TuningTable][file:~/oz/music/Strasheela/strasheela/trunk/strasheela/examples/Microtonal-MIDI-examples.oz::fun TunedPitch Pitch TuningTable]]
+
 *** TODO Define pair of (internally stateful) procs like {Init.setTuningTable Table} and {Init.getTuningTable ?Table}
 
 *** TODO Modify getPitchInMidi to use tuning table if one is set
