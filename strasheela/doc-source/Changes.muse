@@ -3,6 +3,28 @@
 ; #author Torsten Anders
 
 
+* Changes in Version 0.9.5 (no date yet)
+
+
+  - Additions 
+    - The actual playback pitches of notes can be defined by tuning tables (e.g. for Csound or MIDI output). These tables (Oz tuples) have a format similar to the [[http://www.xs4all.nl/~huygensf/scala/scl_format.html][scale format]] of [[http://www.xs4all.nl/~huygensf/scala][Scala]] (Scala scale file format import is on the TODO list). New procedures in Init: SetTuningTable, UnsetTuningTable. Affected methods getValueInMidi (Score.pitch) and getPitchInMidi (Score.note).
+
+  - Documentation
+
+    - Examples demonstrating different approaches for microtonal MIDI output 
+      ../examples/Microtonal-MIDI-examples.oz
+    - Edited documentation, e.g., of HS to reflect the new options with tuning tables
+
+
+  - Fixes and minor changes
+
+    - Lilypond output: setting the optional argument to false resulted in invalid lilypond code, an unbalanced "}" (thanks Graham for reporting and fixing)
+    - Output to Lilypond, MIDI and Csound of a not fully determined score now results in a warning window
+
+
+  - For further fixes see the [[../CHANGELOG.txt]].
+
+
 * Changes in Version 0.9.4 (10 April 2008)
 
   - Revised Lilypond output ([[../doc/api/node9.html][Out]]) 

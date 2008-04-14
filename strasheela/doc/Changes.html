@@ -25,6 +25,42 @@
 
 
 
+<h2>Changes in Version 0.9.5 (no date yet)</h2>
+
+
+<ul>
+<li>Additions
+
+<ul>
+<li>The actual playback pitches of notes can be defined by tuning tables (e.g. for Csound or MIDI output). These tables (Oz tuples) have a format similar to the <a href="http://www.xs4all.nl/~huygensf/scala/scl_format.html">scale format</a> of <a href="http://www.xs4all.nl/~huygensf/scala">Scala</a> (Scala scale file format import is on the TODO list). New procedures in Init: SetTuningTable, UnsetTuningTable. Affected methods getValueInMidi (Score.pitch) and getPitchInMidi (Score.note).</li>
+</ul></li>
+
+<li>Documentation
+
+<ul>
+<li>Examples demonstrating different approaches for microtonal MIDI output
+../examples/Microtonal-MIDI-examples.oz</li>
+<li>Edited documentation, e.g., of HS to reflect the new options with tuning tables</li>
+</ul></li>
+</ul>
+
+
+<ul>
+<li>Fixes and minor changes
+
+<ul>
+<li>Lilypond output: setting the optional argument to false resulted in invalid lilypond code, an unbalanced &quot;}&quot; (thanks Graham for reporting and fixing)</li>
+<li>Output to Lilypond, MIDI and Csound of a not fully determined score now results in a warning window</li>
+</ul></li>
+</ul>
+
+
+<ul>
+<li>For further fixes see the <a href="../CHANGELOG.txt">../CHANGELOG.txt</a>.</li>
+</ul>
+
+
+
 <h2>Changes in Version 0.9.4 (10 April 2008)</h2>
 
 <ul>
@@ -63,9 +99,9 @@
 <li>Further Documentation
 
 <ul>
-<li>Added multiple tonal <a href="../examples/HarmonicProgressions-31ET.oz">chord progression example CSPs</a> in 31 ET, partly demonstrating the new cadence constraint and the Schoenberg constraints (introduced in the previous release):</li>
+<li>Added multiple tonal <a href="../examples/HarmonicProgressions-31ET.oz">chord progression example CSPs</a> in 31 ET, partly demonstrating the new cadence constraint and the Schoenberg constraints (introduced in the previous release)</li>
 <li>Added <a href="../examples/HarmonicProgressions-22ET.oz">chord progression example CSPs</a> in 22 ET</li>
-<li><a href="../examples/02-Fuxian-firstSpecies-Counterpoint.oz">Fuxian counterpoint example</a> revised (now follows Fux' cadence rule): [file]</li>
+<li><a href="../examples/02-Fuxian-firstSpecies-Counterpoint.oz">Fuxian counterpoint example</a> revised (now follows Fux' cadence rule)</li>
 <li><a href="../contributions/anders/HarmonisedScore/examples/HS/Fuxian-Counterpoint-with-Scale.oz">Generalised Fuxian counterpoint example</a>: the user can specify the cantus firmus, even in different modes. Also, this example demonstrates the use of scale objects together with note objects.</li>
 </ul></li>
 </ul>
@@ -402,7 +438,7 @@ See the documentation for <a href="../contributions/anders/HarmonisedScore/doc/n
 <div id="footer">
 <div id="author">&copy; 
 Torsten Anders</div>
-<div id="date">Last time edited: 2008.04.10</div>
+<div id="date">Last time edited: 2008.04.14</div>
 </div>
   </body>
 </html>
