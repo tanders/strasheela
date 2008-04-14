@@ -1032,13 +1032,11 @@ See ../../testing/zy_Efficiency/KeepMusicRepresentationOutsideComputationalSpace
 
 
 ** Support for alternate tunings					  :NEXT:
+*** DONE Define pair of (internally stateful) procs like {Init.setTuningTable Table} and {Init.getTuningTable ?Table}
+    CLOSED: [2008-04-14 Mon 16:25]
 
-   Kenrfunktionalitaet schoen hier:
-   see [[file:~/oz/music/Strasheela/strasheela/trunk/strasheela/examples/Microtonal-MIDI-examples.oz::fun%20TunedPitch%20Pitch%20TuningTable][file:~/oz/music/Strasheela/strasheela/trunk/strasheela/examples/Microtonal-MIDI-examples.oz::fun TunedPitch Pitch TuningTable]]
-
-*** TODO Define pair of (internally stateful) procs like {Init.setTuningTable Table} and {Init.getTuningTable ?Table}
-
-*** TODO Modify getPitchInMidi to use tuning table if one is set
+*** DONE Modify getPitchInMidi to use tuning table if one is set
+    CLOSED: [2008-04-14 Mon 16:25]
 
 *** Provide Scala scale format support 
 
@@ -1068,9 +1066,10 @@ See ../../testing/zy_Efficiency/KeepMusicRepresentationOutsideComputationalSpace
      When loading a scala file, a warning a shown if the present number of notes per octave and the number of scale notes does conflict
 
 
-*** Define some simple tuning table generation functions 
+*** Define some simple tuning table generation functions		 :MAYBE:
 
-**** TODO Define transformation of a tuning spec for an octave to a full tuning table by octave transpositions
+**** DONE Define transformation of a tuning spec for an octave to a full tuning table by octave transpositions
+     CLOSED: [2008-04-14 Mon 16:26]
      
 **** TODO Define program for creating regular temperaments, expecting generator and period intervals
 
