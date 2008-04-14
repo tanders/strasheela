@@ -233,6 +233,34 @@ Clauses = [isNote#fun {$ MyNote}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%
+%% CentToPitchbend
+%%
+
+{Out.midi.centToPitchbend ~100.0 1}
+% 0
+
+{Out.midi.centToPitchbend ~100.0 2}
+% 4095
+
+{Out.midi.centToPitchbend ~100.0 4}
+
+{Out.midi.centToPitchbend 0.0 1}
+% 8191
+
+{Out.midi.centToPitchbend 0.0 4}
+% 8191
+
+%% rounding error of 1!
+{Out.midi.centToPitchbend 100.0 1}
+% 16382 % instead of 16383
+
+{Out.midi.centToPitchbend 100.0 2}
+
+{Out.midi.centToPitchbend ~100.0 4}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
 %% internal stuff
 %%
 
