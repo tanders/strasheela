@@ -24,16 +24,16 @@
 %% ============
 %%
 %% pitch:
-%% absolute pitch number. If pitchesPerOctave=12 (default), pitch is the common MIDI note number. The pitches per octave setting denotes any equidistant tuning (e.g. pitchesPerOctave=1200 results in a MIDIcent pitch unit). Among all such settings, the pitch 0 is always the same pitch (thus the MIDI pitch 60 and the MIDIcent pitch 6000 are equal).
-%% Here, 'absolute pitch' means that the pitch is independent of any chord or scale in the piece. Nonetheless, the pitch depends of course on the general tuning of the concert pitch.
+%% Pitches are integers and they are hence evenly spaced. The user can freely specify the number of pitches per octave. If PitchesPerOctave=12 (the default), pitch is the common MIDI note number. PitchesPerOctave=1200, on the other hand, results in a MIDIcent pitch unit. 
+%% By default, the pitches per octave setting denotes an equidistant tuning. In addition, the user can specify a tuning table (e.g., globally set with Init.setTuningTable) which affects the pitches used during playback. Nevertheless, the pitches in a CSP are still integer. For example, the user can specify PitchesPerOctave=12 (i.e. the pitch unit is et12) where the pitch 60 denotes 'C4' and 64 denotes 'E4'. However, the global tuning table might be set to meantone temperament, that is, the MIDI pitch 64 playback is tuned to a just major third, the MIDI float 63.863.   
 %%
 %%
 %% This pitch information can be expressed more elaborated by a compound representation consisting in a pitchClass and an octave. 
 %%
 %%
 %% pitchClass:
-%% absolute pitch number without octave component. If pitchesPerOctave=12, the meaning of pitchClass is defined as by Allen Forte (e.g. c# = 1). The range of possible pitchClasses is always in the interval [0, pitchesPerOctave-1]. However, for other pitches per octave settings, the pitchClass value 1 does not mean c# as in Forte's definition anymore. For instance, for pitchesPerOctave=1200 the pitchClass value 1 means c raised by 1 cent instead.
-%% See also HS.score.pitchClassToPitch.
+%% a pitch without octave component. Like all other parameters defined by this functor, the pitch class is an integer. If pitchesPerOctave=12, the meaning of pitchClass is defined as by Allen Forte (e.g. c# = 1). The range of possible pitchClasses is always in the interval [0, pitchesPerOctave-1]. However, for other pitches per octave settings, the pitchClass value 1 does not mean c# as in Forte's definition anymore. For instance, for pitchesPerOctave=1200 the pitchClass value 1 means c raised by 1 cent instead.
+%% Note that the playback of a pitch class (plus octave) can depend on a tuning table (see above). See also HS.score.pitchClassToPitch.
 %%
 %% octave:
 %% number of octave to which a pitch belongs. Every transposition of c starts a new octave. Middle c has octave 4, according to conventions (cf. http://en.wikipedia.org/wiki/Scientific_pitch_notation), and thus octave 0 (the lowest octave) starts with pitch 12. Also an interval can be represented by a pitch class and an octave, but for an interval the octave 0 starts with the interval's pitch distance 0 (i.e. the pitch distance 12 has the octave 1 and differs in that respect from a pitch octave). 
