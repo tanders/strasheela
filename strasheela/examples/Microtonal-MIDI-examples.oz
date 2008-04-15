@@ -106,7 +106,7 @@ MyScore = {Score.makeScore seq(items:{Map PCs
 %% NB: wait until constraint propagation determines all parameters in score (e.g. the note start times are not given explicitly but derived by constraint propagation). This explicit waiting is not necessary in a constraint problem (it is always done implicitly by the search process).
 {MyScore wait}
 {Init.setTempo 60.0}
-%% For confirmation: show scale with Lilypond
+%% For confirmation: show scale with Lilypond (requires Lilypond 2.11.43 or later)
 {ET22.out.renderAndShowLilypond MyScore
  unit(file:noteSeq_22ET)}
 %% Create and play Midi file 
@@ -371,6 +371,7 @@ MyScore = {Score.makeScore seq(items:[sim(items:[note(duration:2
 			      timeUnit:beats)
 	   unit}
 {MyScore wait}
+{Init.setTempo 50.0}
 %% play cadence
 {Out.midi.renderAndPlayMidiFile MyScore
  unit(file:cadenceMeantone
@@ -388,6 +389,7 @@ MyScore = {Score.makeScore seq(items:[sim(items:[note(duration:2
 %% Set the tuning back to the default equal temperament and play the cadence again
 {Init.unsetTuningTable}
 %% 
+{Init.setTempo 50.0}
 {Out.midi.renderAndPlayMidiFile MyScore
  unit(file:cadence12ET
       clauses:[isNote
