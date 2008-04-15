@@ -7,12 +7,11 @@
 
 
   - Additions 
-    - The actual playback pitches of notes can be defined by tuning tables (e.g. for Csound or MIDI output). These tables (Oz tuples) have a format similar to the [[http://www.xs4all.nl/~huygensf/scala/scl_format.html][scale format]] of [[http://www.xs4all.nl/~huygensf/scala][Scala]] (Scala scale file format import is on the TODO list). New procedures in Init: SetTuningTable, UnsetTuningTable. Affected methods getValueInMidi (Score.pitch) and getPitchInMidi (Score.note).
+    - The actual playback pitches of notes can be defined by tuning tables (e.g., for Csound or MIDI output). These tables (Oz tuples) have a format similar to the [[http://www.xs4all.nl/~huygensf/scala/scl_format.html][scale format]] of [[http://www.xs4all.nl/~huygensf/scala][Scala]] (Scala scale file format import is on the TODO list). New procedures in Init: SetTuningTable, UnsetTuningTable. Affected methods getValueInMidi (Score.pitch) and getPitchInMidi (Score.note).
 
   - Documentation
 
-    - Examples demonstrating different approaches for microtonal MIDI output 
-      ../examples/Microtonal-MIDI-examples.oz
+    - [[../examples/Microtonal-MIDI-examples.oz][Examples]] demonstrating different approaches for microtonal MIDI output 
     - Edited documentation, e.g., of HS to reflect the new options with tuning tables
 
 
@@ -20,6 +19,7 @@
 
     - Lilypond output: setting the optional argument to false resulted in invalid lilypond code, an unbalanced "}" (thanks Graham for reporting and fixing)
     - Output to Lilypond, MIDI and Csound of a not fully determined score now results in a warning window
+    - Out.midi: added NoteToUserEvent, NoteToPitchbend
     - Refactored Score.item method collect. Tree traversal is now stateless internally (graph traversal still uses state for marking visited objects).
 
 
