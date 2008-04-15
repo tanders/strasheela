@@ -20,6 +20,7 @@
 
     - Lilypond output: setting the optional argument to false resulted in invalid lilypond code, an unbalanced "}" (thanks Graham for reporting and fixing)
     - Output to Lilypond, MIDI and Csound of a not fully determined score now results in a warning window
+    - Refactored Score.item method collect. Tree traversal is now stateless internally (graph traversal still uses state for marking visited objects).
 
 
   - For further fixes see the [[../CHANGELOG.txt]].
