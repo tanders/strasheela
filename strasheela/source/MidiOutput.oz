@@ -892,7 +892,7 @@ define
 	  Velocity = {FloatToInt {MyNote getAmplitudeInVelocity($)}}
        in
 	  %% output a list of MIDI events 
-	  [{MakeNoteOn Track StartTime Channel Pitch Velocity}
+	  [{MakeNoteOn Track Start Channel Pitch Velocity}
 	   {MakeNoteOff Track EndTime Channel Pitch As.noteOffVelocity}]
        end
        Args}
@@ -936,7 +936,7 @@ define
 		else DefaultMidiChan
 		end
    in
-      {Fn Track Start Channel} 
+      {Fn As.track Start Channel} 
    end
 
 %       /* %% Expects a note object and returns a list with corresponding MIDI note-on and note-off events. Optional args are track, channel (only used when MyNote does not inherit from MidiNoteMixin), and noteOffVelocity. The defaults are
