@@ -120,19 +120,19 @@ clearInterval(drawit)
 
 <div style="margin-left:160px"><p align="right" class="margin"><div align="right">inheritance tree</div></p>
 <pre>
- <a class="pre" href="node6.html#entity227">NonType</a> <a class="pre" href="node6.html#entity228">Reflection</a>
+ <a class="pre" href="node6.html#entity235">NonType</a> <a class="pre" href="node6.html#entity236">Reflection</a>
     |        |
     `-----+--'
           |
-     <a class="pre" href="node6.html#entity229">ScoreObject</a>
+     <a class="pre" href="node6.html#entity237">ScoreObject</a>
           |
           |
           |
-      <a class="pre" href="node6.html#entity231">Parameter</a>
+      <a class="pre" href="node6.html#entity239">Parameter</a>
           |
           |
           |
-        <a class="pre" href="node6.html#entity238">Pitch</a>
+        <a class="pre" href="node6.html#entity246">Pitch</a>
 </pre>
 <hr><p class="margin"><div align="right">class definition</div></p>
 <code>
@@ -418,7 +418,7 @@ clearInterval(drawit)
 
 </tr></table>
 <span class="string"></span>
-</li><li><span class="functionname">getValueInMidi</span>(X)<br>
+</li><li><span class="functionname">getValueInMidi</span>(X table:Table)<br>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
 
@@ -427,6 +427,7 @@ clearInterval(drawit)
 
 </tr></table>
 <span class="string"> Returns the parameter value translated to a float representing a Midi keynumber (i.e. 60.5 is a quarternote above middle c). The translation uses the parameter unit which must be bound (otherwise the method suspends, but warns also). Supported units are (represented by these atoms): midi/keynumber, midicent/midic, frequency/freq/hz and et72 (equal temperament with 72 steps per octave).<BR>
+ A tuning table is used if such a table was either defined with Init.setTuningTable or was specified as optional argument table. <BR>
 <BR>
 </span>
 </li><li><span class="functionname">hasThisInfo</span>(B Info)<br>

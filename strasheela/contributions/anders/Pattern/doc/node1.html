@@ -908,7 +908,11 @@ clearInterval(drawit)
 
 <code>
 <a name="entity52">
-<span class="keyword">proc</span>{<span class="functionname">Direction</span> X1 X2 Dir}
+<span class="keyword">proc</span>{<span class="functionname">Direction</span> X1 X2 Dir}<br>
+<span class="string"> Dir is constrained to the direction of the interval between X1 and X2. An interval 'upwards' (the predecessor is smaller than the successor) is represented by 2, an 'horizontal' interval (the predecessor and the successor are equal) is represented by 1, and an interval 'downwards' by 0.<BR>
+ X1, X2, and Dir are all FD integers, Dir is implicitly declared.<BR>
+<BR>
+</span>
 </code><br>
 
 <code>

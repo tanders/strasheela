@@ -136,9 +136,10 @@ clearInterval(drawit)
 <code><ul><li>OS</li><li>Path at "<span class="string">x-ozlib://anders/tmp/Path/Path.ozf"
 </span></li></ul></code>
 <h3>Import</h3>
-<code><ul><li>Browser(browse:Browse)</li><li>Inspector(inspect:Inspect)</li><li>Pickle</li><li>Explorer</li><li>Error</li><li>Resolve</li><li>IOzSeF at "<span class="string">x-ozlib://tack/iozsef/iozsef.ozf"
+<code><ul><li>Browser(browse:Browse)</li><li>Pickle</li><li>Explorer</li><li>Error</li><li>Resolve</li><li>IOzSeF at "<span class="string">x-ozlib://tack/iozsef/iozsef.ozf"
 </span></li><li><a href="node10.html">Strasheela</a> at "<span class="string">../Strasheela.ozf"
 </span></li><li><a href="node3.html">GUtils</a> at "<span class="string">GeneralUtils.ozf"
+</span></li><li><a href="node5.html">MUtils</a> at "<span class="string">MusicUtils.ozf"
 </span></li><li><a href="node6.html">Score</a> at "<span class="string">ScoreCore.ozf"
 </span></li><li><a href="node9.html">Out</a> at "<span class="string">Output.ozf"
 </span></li><li>ScoreInspector at "<span class="string">x-ozlib://anders/strasheela/ScoreInspector/ScoreInspector.ozf"
@@ -154,9 +155,12 @@ clearInterval(drawit)
 </li><li>&lt;P/1:<a href="#entity49"><span class="functionname">SetBeatDuration</span></a>&gt;
 </li><li>&lt;P/1:<a href="#entity48"><span class="functionname">GetTempo</span></a>&gt;
 </li><li>&lt;P/1:<a href="#entity50"><span class="functionname">SetTempo</span></a>&gt;
-</li><li>&lt;P/0:<a href="#entity51"><span class="functionname">AddExplorerOuts_Standard</span></a>&gt;
-</li><li>&lt;P/0:<a href="#entity52"><span class="functionname">AddExplorerOuts_Extended</span></a>&gt;
-</li><li>&lt;P/0:<a href="#entity53"><span class="functionname">AddIOzSeFOuts</span></a>&gt;
+</li><li>&lt;P/1:<a href="#entity51"><span class="functionname">SetTuningTable</span></a>&gt;
+</li><li>&lt;P/0:<a href="#entity52"><span class="functionname">UnsetTuningTable</span></a>&gt;
+</li><li>&lt;P/1:<a href="#entity53"><span class="functionname">GetTuningTable</span></a>&gt;
+</li><li>&lt;P/0:<a href="#entity54"><span class="functionname">AddExplorerOuts_Standard</span></a>&gt;
+</li><li>&lt;P/0:<a href="#entity55"><span class="functionname">AddExplorerOuts_Extended</span></a>&gt;
+</li><li>&lt;P/0:<a href="#entity56"><span class="functionname">AddIOzSeFOuts</span></a>&gt;
 </li><li><span class="variablename">StrasheelaSourceDir</span>
 </li><li><span class="variablename">StrasheelaInstallDir</span>
 </li></ul></code>
@@ -244,6 +248,31 @@ clearInterval(drawit)
 
 <code>
 <a name="entity51">
+<span class="keyword">proc</span>{<span class="functionname">SetTuningTable</span> Table}<br>
+<span class="string"> Globally sets the tuning table to Table. The tuning table is used by all output formats which use the (full) float returned by the pitch parameter method getValueInMidi (e.g. the note method getPitchInMidi, which is used by default by Csound and microtonal MIDI output). The format of the tuning table declaration is somewhat similar to the Scala scale file format (cf. http://www.xs4all.nl/~huygensf/scala/scl_format.html). Table is a tuple of pitch specs. A pitch spec is either a float (measured in cent) or a ratio notated Nom#Den. The first degree is implict (always 1/1 or 0.0). Also the size is implicit (the width of the tuple), in contrast to the Scala scale file format. The last table value is the period interval.<BR>
+ It is recommended to set the pitchUnit of notes to a value matching the size of the tuning table so that constraints on pitch classes etc work as expected (e.g., for a tuning table with 31 pitches per octave/period, the pitchUnit et31 is recommended).<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity52">
+<span class="keyword">proc</span>{<span class="functionname">UnsetTuningTable</span> }<br>
+<span class="string"> By default, no tuning table is set and methods like getPitchInMidi return pitches corresponding to an equal-tempered scale. UnsetTuningTable sets this default behaviour back. <BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity53">
+<span class="keyword">proc</span>{<span class="functionname">GetTuningTable</span> Table}<br>
+<span class="string"> [aux def, not intended for user] Returns a full tuning table (cf. MUtils.fullTuningTable for the format). <BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity54">
 <span class="keyword">proc</span>{<span class="functionname">AddExplorerOuts_Standard</span> }<br>
 <span class="string"> Extends the Explorer menu "Notes -> Information Action" by a few entries to output scores into various formats just by clicking the solution nodes in the Explorer.<BR>
  This procedure adds standard output formats like Csound, Lilypond, and MIDI.<BR>
@@ -252,7 +281,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity52">
+<a name="entity55">
 <span class="keyword">proc</span>{<span class="functionname">AddExplorerOuts_Extended</span> }<br>
 <span class="string"> Extends the Explorer menu "Notes -> Information Action" by a few entries to output scores into various formats just by clicking the solution nodes in the Explorer. <BR>
  This procedure complements the formats of AddExplorerOuts_Standard by further formats like ENP and Fomus.<BR>
@@ -263,7 +292,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity53">
+<a name="entity56">
 <span class="keyword">proc</span>{<span class="functionname">AddIOzSeFOuts</span> }<br>
 <span class="string"> Extends the IOzSeF menu "Options -> Information Action" by a few entries to output scores into various formats just by clicking the solution nodes in the Explorer. This procedure adds standard output formats like Csound, Lilypond, and MIDI, as well as further formats like ENP and Fomus.<BR>
 <BR>

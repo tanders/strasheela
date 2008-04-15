@@ -136,18 +136,19 @@ clearInterval(drawit)
 <code><ul><li><a href="node3.html">GUtils</a> at "<span class="string">GeneralUtils.ozf"
 </span></li></ul></code>
 <h3>Export</h3>
-<code><ul><li>&lt;P/3:<a href="#entity202"><span class="functionname">KeynumToFreq</span></a>&gt;
-</li><li>&lt;P/3:<a href="#entity203"><span class="functionname">FreqToKeynum</span></a>&gt;
-</li><li>&lt;P/3:<a href="#entity204"><span class="functionname">RatioToKeynumInterval</span></a>&gt;
-</li><li>&lt;P/3:<a href="#entity205"><span class="functionname">KeynumToPC</span></a>&gt;
-</li><li>&lt;P/3:<a href="#entity206"><span class="functionname">LevelToDB</span></a>&gt;
-</li><li>&lt;P/3:<a href="#entity207"><span class="functionname">DBToLevel</span></a>&gt;
+<code><ul><li>&lt;P/3:<a href="#entity208"><span class="functionname">KeynumToFreq</span></a>&gt;
+</li><li>&lt;P/3:<a href="#entity209"><span class="functionname">FreqToKeynum</span></a>&gt;
+</li><li>&lt;P/3:<a href="#entity210"><span class="functionname">RatioToKeynumInterval</span></a>&gt;
+</li><li>&lt;P/3:<a href="#entity211"><span class="functionname">KeynumToPC</span></a>&gt;
+</li><li>&lt;P/3:<a href="#entity212"><span class="functionname">LevelToDB</span></a>&gt;
+</li><li>&lt;P/3:<a href="#entity213"><span class="functionname">DBToLevel</span></a>&gt;
 </li><li><span class="variablename">Freq0</span>
+</li><li>&lt;P/2:<a href="#entity214"><span class="functionname">FullTuningTable</span></a>&gt;
 </li></ul></code>
 <h3>Define</h3>
 
 <code>
-<a name="entity202">
+<a name="entity208">
 <span class="keyword">fun</span>{<span class="functionname">KeynumToFreq</span> Keynum KeysPerOctave}<br>
 <span class="string"> Transforms a Keynum into the corresponding frequency in an equally tempered scale with KeysPerOctave keys per octave. The function is 'tuned' such that {KeynumToFreq 69.0 12.0} returns 440.0 Hz. All arguments must be floats and a float is returned.<BR>
  NB: The term Keynum here is not limited to a MIDI keynumber but denotes a keynumber in any equidistant tuning. For instance, if KeysPerOctave=1200.0 then Keynum denotes cent values.<BR>
@@ -156,7 +157,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity203">
+<a name="entity209">
 <span class="keyword">fun</span>{<span class="functionname">FreqToKeynum</span> Freq KeysPerOctave}<br>
 <span class="string"> Transforms Freq into the corresponding keynum in an equally tempered scale with KeysPerOctave keys per octave. The function is 'tuned' such that {FreqToKeynum 440.0 12.0} returns 69.0. All arguments must be floats and a float is returned.<BR>
  NB: The term Keynum here is not limited to a MIDI keynumber but denotes a keynumber in any equidistant tuning. For instance, if KeysPerOctave=1200.0 then Keynum denotes cent values.<BR>
@@ -165,7 +166,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity204">
+<a name="entity210">
 <span class="keyword">fun</span>{<span class="functionname">RatioToKeynumInterval</span> Ratio KeysPerOctave}<br>
 <span class="string"> Transforms Ratio (either a float or a fraction specification in the form <Int>#<Int>) into the corresponding keynumber interval in an equally tempered scale with KeysPerOctave (a float) keys per octave. Returns a float.<BR>
  For example, {RatioToKeynumInteval 1.0 12.0}=0.0 or {RatioToKeynum 1.5 12.0}=7.01955). <BR>
@@ -175,7 +176,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity205">
+<a name="entity211">
 <span class="keyword">fun</span>{<span class="functionname">KeynumToPC</span> Keynum PitchesPerOctave}<br>
 <span class="string"> Transforms a keynumber (a float) in an equally tempered scale with KeysPerOctave (a float) into its corresponding pitch class (a float) in [0, PitchesPerOctave).<BR>
 <BR>
@@ -183,7 +184,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity206">
+<a name="entity212">
 <span class="keyword">fun</span>{<span class="functionname">LevelToDB</span> L LRel}<br>
 <span class="string"> Converts a linear amplitude level L into an logarithmic amplitude (decibels).  LRel is the relativ full level.<BR>
 <BR>
@@ -191,9 +192,17 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity207">
+<a name="entity213">
 <span class="keyword">fun</span>{<span class="functionname">DBToLevel</span> DB LRel}<br>
 <span class="string">  Converts a logarithmic amplitude DB (decibels) into a linear amplitude level.  LRel is the relativ full level.<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity214">
+<span class="keyword">fun</span>{<span class="functionname">FullTuningTable</span> TuningTable}<br>
+<span class="string"> Expects a tuning table declaration (see Init.setTuningTable for format) and returns a full tuning table used for pitch computation. The returned full table is a record which contains only pitches measured in cent, has 0.0 added as first table value, and has the two features size and period added.   <BR>
 <BR>
 </span>
 </code><br>

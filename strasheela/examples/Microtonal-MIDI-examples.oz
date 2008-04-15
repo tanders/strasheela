@@ -303,8 +303,9 @@ MyScore = {Score.makeScore sim(items:[seq(items:{Map Is
 %%
 %% The example plays a plain cadence in Meantone temperament.
 %%
-%% Keep in mind that for tunings with 12 pitches per octave it might
-%% be more easy to tune your MIDI device instead of the MIDI file.
+%% Keep in mind that for tunings with up to 12 pitches per octave it
+%% might be fitting easy to tune your MIDI device instead of the MIDI
+%% file, so your MIDI file can use more independent MIDI channels.
 %%
 
 /*

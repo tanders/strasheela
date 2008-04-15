@@ -120,35 +120,35 @@ clearInterval(drawit)
 
 <div style="margin-left:160px"><p align="right" class="margin"><div align="right">inheritance tree</div></p>
 <pre>
- <a class="pre" href="node6.html#entity227">NonType</a> <a class="pre" href="node6.html#entity228">Reflection</a>         <a class="pre" href="node7.html#entity305">FlagsMixin</a>
+ <a class="pre" href="node6.html#entity235">NonType</a> <a class="pre" href="node6.html#entity236">Reflection</a>         <a class="pre" href="node7.html#entity313">FlagsMixin</a>
     |        |                  |
     `-----+--'                  |
           |                     |
-     <a class="pre" href="node6.html#entity229">ScoreObject</a>    <a class="pre" href="node7.html#entity306">ScoreMapping.mappingMixin</a>
+     <a class="pre" href="node6.html#entity237">ScoreObject</a>    <a class="pre" href="node7.html#entity314">ScoreMapping.mappingMixin</a>
           |                     |
           `-----------+---------'
                       |
-                     <a class="pre" href="node6.html#entity240">Item</a>
+                     <a class="pre" href="node6.html#entity248">Item</a>
                       |
                       `+
                        |
-                    <a class="pre" href="node6.html#entity247">Element</a>                   <a class="pre" href="node6.html#entity230">TimeMixin</a>
+                    <a class="pre" href="node6.html#entity255">Element</a>                   <a class="pre" href="node6.html#entity238">TimeMixin</a>
                        |                          |
                        `----+---------------------'
                             |
-                     <a class="pre" href="node6.html#entity249">TemporalElement</a>
+                     <a class="pre" href="node6.html#entity257">TemporalElement</a>
                             |
                             |
                             |
-                          <a class="pre" href="node6.html#entity251">Event</a>
+                          <a class="pre" href="node6.html#entity259">Event</a>
                             |
                             |
                             |
-                          <a class="pre" href="node6.html#entity252">Note2</a>
+                          <a class="pre" href="node6.html#entity260">Note2</a>
                             |
                            +'
                            |
-                          <a class="pre" href="node6.html#entity253">Note</a>
+                          <a class="pre" href="node6.html#entity261">Note</a>
 </pre>
 <hr><p class="margin"><div align="right">class definition</div></p>
 <code>
@@ -798,7 +798,7 @@ clearInterval(drawit)
 
 </tr></table>
 <span class="string"></span>
-</li><li><span class="functionname">getPitchInMidi</span>(X)<br>
+</li><li><span class="functionname">getPitchInMidi</span>(X table:Table)<br>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
 
@@ -806,7 +806,9 @@ clearInterval(drawit)
 
 
 </tr></table>
-<span class="string"></span>
+<span class="string"> Returns the pitch of self measured as a MIDI float (e.g., for 12 pitches per octave, 60.5 is a quartertone above the equally tempered middle C). The pitch value depends on the pitchUnit. Additionally, it can be affected by a tuning table. A tuning table is either defined globally with Init.setTuningTable or with the optional Table argument, which expects a table in the same format as Init.setTuningTable.   <BR>
+<BR>
+</span>
 </li><li><span class="functionname">getPitchParameter</span>(X)<br>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
