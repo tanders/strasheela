@@ -94,6 +94,7 @@ export
   
    MidiNoteMixin IsMidiNoteMixin MidiNote
    Note2Midi NoteToPitchbend
+   NoteToUserEvent
 
    SetDivision
 
@@ -870,61 +871,134 @@ define
       end
    end
 
-   /* %% Expects a note object and returns a list with corresponding MIDI note-on and note-off events. Optional args are track, channel (only used when MyNote does not inherit from MidiNoteMixin), and noteOffVelocity. The defaults are
-   unit(track:2
-	channel:0
-	noteOffVelocity:0)
-   %% Note that the pitch is always rounded down -- if you want to add pitch class messages etc. use the difference to the actual pitch (e.g., with CentToPitchbend), with is never below the pitch Note2Midi returned.
-   %% Also, note that Note2Midi creates only a pair of note-on/note-off messages (i.e. no implicit pitchbend, continuous controllers etc -- such additional output is defined extra).  
+
+
+   /* %% Expects a note object and returns a list with corresponding MIDI note-on and note-off events. Note2Midi creates only a pair of note-on/note-off events. For additional output (e.g. pitch bend) append the result of other functions (e.g. NoteToPitchbend) to the result of Note2Midi. 
+   %% Note that Note2Midi always rounds down the pitch.
+   %% The Args defaults are
+   unit(noteOffVelocity:0)
+   %% See NoteToUserEvent for further arguments and their meaning.
    %% */
    fun {Note2Midi MyNote Args}
-      Defaults = unit(track:2
-		      channel:0
-		      noteOffVelocity:0)
+      Defaults = unit(noteOffVelocity:0)
       As = {Adjoin Defaults Args}
-      Track = As.track % fixed track
-      StartTime = {BeatsToTicks
-		   {MyNote getStartTimeInSeconds($)}}
-      EndTime = {BeatsToTicks
-		 {MyNote getEndTimeInSeconds($)}}
-      Channel = if {IsMidiNoteMixin MyNote}
-		then {MyNote getChannel($)}
-		else As.channel % default for all non-midi notes
-		end
-      %% NOTE: always use floor of pitch
-      Pitch = {FloatToInt {Floor {MyNote getPitchInMidi($)}}}
-      Velocity = {FloatToInt {MyNote getAmplitudeInVelocity($)}}
    in
-      %% output a list of MIDI events 
-      [{MakeNoteOn Track StartTime Channel Pitch Velocity}
-       {MakeNoteOff Track EndTime Channel Pitch As.noteOffVelocity}]
+      {NoteToUserEvent MyNote
+       fun {$ Track Start Channel}
+	  EndTime = {BeatsToTicks
+		     {MyNote getEndTimeInSeconds($)}}
+	  %% NOTE: always use floor of pitch
+	  Pitch = {FloatToInt {Floor {MyNote getPitchInMidi($)}}}
+	  Velocity = {FloatToInt {MyNote getAmplitudeInVelocity($)}}
+       in
+	  %% output a list of MIDI events 
+	  [{MakeNoteOn Track StartTime Channel Pitch Velocity}
+	   {MakeNoteOff Track EndTime Channel Pitch As.noteOffVelocity}]
+       end
+       Args}
    end
 
+   /** %% Expects a note object and returns a pitch class event to tune the MIDI output of MyNote correctly. The pitch bend resolution is set via the optional argument in semitones. Its default value 2 corresponds to the standard pitch bend range of -2..2 semitones, i.e., 4096 steps/100 cents. 
+   %% For simplicity, NoteToPitchbend always creates pitchbend values which tune a pitch up. Hence, for a correct tuning the note event pitch must be always rounded down the MIDI pitch of MyNote. NoteToPitchbend does this and can thus be directly combined with Note2Midi.
+   %% See NoteToUserEvent for further arguments and their meaning.
+   %% */
+   fun {NoteToPitchbend MyNote Args}
+      Defaults = unit(resolution:2)
+      As = {Adjoin Defaults Args}
+   in
+      {NoteToUserEvent MyNote
+       fun {$ Track Start Channel}
+	  Pitch = {MyNote getPitchInMidi($)} % float
+	  CentDeviation = (Pitch - {Floor Pitch}) * 100.0
+	  PitchBend = {CentToPitchbend CentDeviation As.resolution}
+       in
+	  {MakePitchBend Track Start Channel PitchBend}
+       end
+       Args}
+   end
    
-/** %% Expects a note object and returns a pitch class event to tune the MIDI output of MyNote correctly. Optional args are track, channel (only used when MyNote does not inherit from MidiNoteMixin), and resolution (its default 2 corresponds to the standard pitch bend range of -2..2 semitones, i.e., 4096 steps/100 cents). The defaults are
+   /** %% Simplifies the transformation of a note object MyNote to MIDI events (avoids some code doubling). Fn is a function {Fn Track Start Channel} -- NoteToUserEvent provides these arguments Track Start Channel. Optional Args are track, and channel. If MyNote is a midi note (inherits from MidiNoteMixin), then the channel is taken from MyNote. If a channel is given as argument to NoteToUserEvent, then this channel is used regardless whether MyNote is a midi note or not (i.e. the channel of a MIDI note is overwritten). Otherwise the default channel 0 is used. 
+   %% The defaults are
    unit(track:2
-	channel:0
-	noteOffVelocity:0)
-%% Note for a correct tuning the note event pitch must be always round down the MIDI pitch of MyNote. NoteToPitchbend always creats pitchbend values which tune a pitch up.
-%% NoteToPitchbend can be directly combined with Note2Midi.
-%% */
-fun {NoteToPitchbend MyNote Args}
-   Defaults = unit(track:2
-		   channel:0
-		   resolution:2)
-   As = {Adjoin Defaults Args}
-   Start = {BeatsToTicks {MyNote getStartTimeInSeconds($)}}
-   Pitch = {MyNote getPitchInMidi($)} % float
-   CentDeviation = (Pitch - {Floor Pitch}) * 100.0
-   PitchBend = {CentToPitchbend CentDeviation As.resolution}
-   Channel = if {IsMidiNoteMixin MyNote}
-	     then {MyNote getChannel($)}
-	     else As.channel % default for all non-midi notes
-	     end
-in
-   {Out.midi.makePitchBend As.track Start Channel PitchBend}
-end
+	channel:nil)
+   %% 
+   %% */
+   fun {NoteToUserEvent MyNote Fn Args}
+      Defaults = unit(track:2
+		      channel:nil)
+      As = {Adjoin Defaults Args}
+      DefaultMidiChan = 0
+      Start = {BeatsToTicks {MyNote getStartTimeInSeconds($)}}
+      Channel = if  As.channel \= nil
+		then As.channel
+		elseif {IsMidiNoteMixin MyNote}
+		then {MyNote getChannel($)}
+		else DefaultMidiChan
+		end
+   in
+      {Fn Track Start Channel} 
+   end
 
+%       /* %% Expects a note object and returns a list with corresponding MIDI note-on and note-off events. Optional args are track, channel (only used when MyNote does not inherit from MidiNoteMixin), and noteOffVelocity. The defaults are
+%    unit(track:2
+% 	channel:nil
+% 	noteOffVelocity:0)
+%    %% If MyNote is a midi note (inherits from MidiNoteMixin), then the channel is taken from MyNote. If a channel is given as argument to Note2Midi, then this channel is used regardless whether MyNote is a midi note or not. Otherwise the default channel 0 is used. 
+%    %% Note that the pitch is always rounded down -- if you want to add pitch class messages etc. use the difference to the actual pitch (e.g., with CentToPitchbend), with is never below the pitch Note2Midi returned.
+%    %% Also, note that Note2Midi creates only a pair of note-on/note-off messages (i.e. no implicit pitchbend, continuous controllers etc -- such additional output is defined extra).  
+%    %% */
+%    fun {Note2Midi MyNote Args}
+%       Defaults = unit(track:2
+% 		      channel:nil
+% 		      noteOffVelocity:0)
+%       As = {Adjoin Defaults Args}
+%       DefaultMidiChan = 0
+%       Track = As.track % fixed track
+%       StartTime = {BeatsToTicks
+% 		   {MyNote getStartTimeInSeconds($)}}
+%       EndTime = {BeatsToTicks
+% 		 {MyNote getEndTimeInSeconds($)}}
+%       Channel = if  As.channel \= nil
+% 		then As.channel
+% 		elseif {IsMidiNoteMixin MyNote}
+% 		then {MyNote getChannel($)}
+% 		else DefaultMidiChan
+% 		end
+%       Pitch = {FloatToInt {Floor {MyNote getPitchInMidi($)}}}
+%       Velocity = {FloatToInt {MyNote getAmplitudeInVelocity($)}}
+%    in
+%       %% output a list of MIDI events 
+%       [{MakeNoteOn Track StartTime Channel Pitch Velocity}
+%        {MakeNoteOff Track EndTime Channel Pitch As.noteOffVelocity}]
+%    end
+
+   
+%    /** %% Expects a note object and returns a pitch class event to tune the MIDI output of MyNote correctly. Optional args are track, channel (only used when MyNote does not inherit from MidiNoteMixin), and resolution (its default 2 corresponds to the standard pitch bend range of -2..2 semitones, i.e., 4096 steps/100 cents). The defaults are
+%    unit(track:2
+% 	channel:nil
+% 	noteOffVelocity:0)
+%    %% Note for a correct tuning the note event pitch must be always round down the MIDI pitch of MyNote. NoteToPitchbend always creats pitchbend values which tune a pitch up.
+%    %% NoteToPitchbend can be directly combined with Note2Midi.
+%    %% */
+%    fun {NoteToPitchbend MyNote Args}
+%       Defaults = unit(track:2
+% 		      channel:nil
+% 		      resolution:2)
+%       As = {Adjoin Defaults Args}
+%       DefaultMidiChan = 0
+%       Start = {BeatsToTicks {MyNote getStartTimeInSeconds($)}}
+%       Pitch = {MyNote getPitchInMidi($)} % float
+%       CentDeviation = (Pitch - {Floor Pitch}) * 100.0
+%       PitchBend = {CentToPitchbend CentDeviation As.resolution}
+%       Channel = if  As.channel \= nil
+% 		then As.channel
+% 		elseif {IsMidiNoteMixin MyNote}
+% 		then {MyNote getChannel($)}
+% 		else DefaultMidiChan
+% 		end
+%    in
+%       {MakePitchBend As.track Start Channel PitchBend}
+%    end
    
 
 end
