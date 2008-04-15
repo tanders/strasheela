@@ -417,6 +417,8 @@ MyScore = {Score.makeScore seq(items:[sim(items:[note(duration:2
 /*
 
 declare
+[ET22] = {ModuleLink ['x-ozlib://anders/strasheela/ET22/ET22.ozf']}
+{HS.db.setDB ET22.db.fullDB}
 %% Pajara TOP tuning
 {Init.setTuningTable unit(65.60000
 			  106.57000
