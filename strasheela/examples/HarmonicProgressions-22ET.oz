@@ -19,9 +19,9 @@ declare
 %% the actual notes). The Explorer output action itself then creates a
 %% CSP with expects a chord sequence and returns a homophonic chord
 %% progression. The arguments of the action affect this CSP for the
-%% homophonic chord progression. The result is transformed into
-%% music notation (with Lilypond), sound (with Csound), and Strasheela
-%% code (archived score objects).
+%% homophonic chord progression. The result is transformed into music
+%% notation (with Lilypond, requires Lilypond 2.11.43 or later), sound
+%% (with Csound), and Strasheela code (archived score objects).
 {ET22.out.addExplorerOut_ChordsToScore
  unit(outname:"ChordsToScore"
       voices:5
