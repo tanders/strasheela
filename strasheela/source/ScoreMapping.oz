@@ -97,25 +97,36 @@ define
       proc {UnFlagAll Xs Flag} 
 	 {ForAll Xs proc {$ X} {X removeFlag(Flag)} end} 
       end
-      proc {GetContainers X Mode Level Flag ?Containers}
+
+      %% GetContainers only required for graph case
+      proc {GetContainers_Graph X Level Flag ?Containers}
 	    % bind Containers with containers of X to traverse
-	 if Mode==graph andthen 
-	    (Level==all orelse ({IsInt Level} andthen Level>0))
+	 if (Level==all orelse ({IsInt Level} andthen Level>0))
 	 then 
 	    Containers = {RemoveFlaggedItems {X getContainers($)} Flag}
 	    {FlagAll Containers Flag}
-	 elseif Mode==tree orelse {X isTopLevel($)}
+	 elseif {X isTopLevel($)}
 	 then Containers = nil
 	 end
-      end
-      proc {GetItems X Mode Level Flag ?Items}
+      end   
+
+      proc {GetItems_Graph X Level Flag ?Items}
 	    % bind Items with items of X to traverse
 	 if {X isContainer($)} andthen 
-	    (Level==all orelse ({IsInt Level} andthen Level>0))
+	    (Level==all orelse Level>0)
 	 then 
 	    Items = {RemoveFlaggedItems {X getItems($)} Flag}
 	    {FlagAll Items Flag}
 	 else Items = nil 
+	 end
+      end
+      %% no flag required for tree case
+      fun {GetItems_Tree X Level}
+	    % bind Items with items of X to traverse
+	 if {X isContainer($)} andthen 
+	    (Level==all orelse Level>0)
+	 then {X getItems($)}
+	 else nil 
 	 end
       end
       fun {DecrLevel Level}
@@ -124,29 +135,36 @@ define
 	 else Level=all 	% 'tests' and returns level 
 	 end
       end
-      fun {CollectAux X Mode Level Test Flag} 
-	 Containers = {GetContainers X Mode Level Flag}
-	 Items = {GetItems X Mode Level Flag}	 
-	 %% !! Append needs determined sublists (I thought about
-	 %% streams bound to container attr items
-	 %% Xs={Append Containers Items} 
+
+      fun {CollectAux_Graph X Level Test Flag}	 
+	 Containers = {GetContainers_Graph X Level Flag}
+	 Items = {GetItems_Graph X Level Flag}
 	 AllItems = {Append Containers Items}
-	 AllObjects = {Append AllItems
-		       {Append 
-			{LUtils.mappend Containers 
-			 fun {$ X} {X getParameters($)} end}
-			{LUtils.mappend Items 
-			 fun {$ X} {X getParameters($)} end}}}
+	 AllObjects = {LUtils.accum [AllItems
+				     {LUtils.mappend Containers 
+				      fun {$ X} {X getParameters($)} end}
+				     {LUtils.mappend Items 
+				      fun {$ X} {X getParameters($)} end}]
+		       Append}
       in  
-% 	 Xs={FoldL [Containers Items 
-% 		    {LUtils.mappend Containers fun {$ X} {X getParameters($)} end}
-% 		    {LUtils.mappend Items fun {$ X} {X getParameters($)} end}]
-% 	     Append nil}
 	 %% traverse and return
 	 {Append {Filter AllObjects Test} % only collect objects fulfilling test
 	  {LUtils.mappend AllItems
-	   fun {$ X} {CollectAux X Mode {DecrLevel Level} Test Flag} end}}
+	   fun {$ X} {CollectAux_Graph X {DecrLevel Level} Test Flag} end}}
       end
+      
+      fun {CollectAux_Tree X Level Test}	 
+	 Items = {GetItems_Tree X Level}
+	 AllObjects = {Append Items
+		       {LUtils.mappend Items 
+			 fun {$ X} {X getParameters($)} end}}
+      in  
+	 %% traverse and return
+	 {Append {Filter AllObjects Test} % only collect objects fulfilling test
+	  {LUtils.mappend Items
+	   fun {$ X} {CollectAux_Tree X {DecrLevel Level} Test} end}}
+      end      
+      
       %%
       proc {ForAllThreadedAux X Proc Test Mode Level Flag}
 	 %% traverses X and all objects related to X (i.e. containers,
@@ -228,26 +246,31 @@ define
 	 %% @1=?Xs	
 	 meth collect(?Xs mode:Mode<=tree level:Level<=all
 		      test:Test<=fun {$ X} true end)
-	    Flag = {Name.new}
 	    TestFn = {GUtils.toFun Test}
-	 in
-	    %% !! unefficient: performs checks for Test, Level etc. even
+	    %% !! unefficient: performs checks for Test and Level even
 	    %% if they are not given/needed. Also order of test may be
 	    %% unefficient
-	    %% TODO: select appropriate function depending to args
-	    %% (e.g. mode) for efficiency
-	    %% !! return of parameters added later: cluttered code
-	    {self addFlag(Flag)} % exclude self, ...
-	    Xs = {Append 
-		  %% ..., but collect params of self
-		  {Filter {self getParameters($)} TestFn} 
-		  {CollectAux self Mode Level TestFn Flag}}
-	    %% BUG: only unflags object in result Xs, but not other flagged items.. (instead, I would need to fully traverse hierarchic structure again).
-	    %% Trick for reducing flags: only flag at all if Mode==graph.
-	    {UnFlagAll 
-	     %% params are never flagged 
-	     self | {Filter Xs fun {$ X} {Not {X isParameter($)}} end} 
-	     Flag}   
+	 in
+	    case Mode
+	    of graph then
+	       Flag = {Name.new}
+	    in
+	       {self addFlag(Flag)} % exclude self, ...
+	       Xs = {Append 
+		     %% ..., but collect params of self
+		     {Filter {self getParameters($)} TestFn} 
+		     {CollectAux_Graph self Level TestFn Flag}}
+	       %% BUG: only unflags object in result Xs, but not other flagged items.. (instead, I would need to fully traverse hierarchic structure again).
+	       {UnFlagAll 
+		%% params are never flagged 
+		self | {Filter Xs fun {$ X} {Not {X isParameter($)}} end} 
+		Flag}   
+	    [] tree then
+	       Xs = {Append 
+		     %% collect params of self
+		     {Filter {self getParameters($)} TestFn} 
+		     {CollectAux_Tree self Level TestFn}}
+	    end
 	 end
 	 /** %% The method forAll maps the procedure Proc to a number of collected score objects. Proc may also be an atom representing a method of no arguments and understood by all objects in self fulfilling Test. The method supports the features <code> mode</code>, <code> level</code>, and <code> test</code>. These features have the same meaning as in the method collect.
 	 % */
