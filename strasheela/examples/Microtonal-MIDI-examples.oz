@@ -311,7 +311,7 @@ MyScore = {Score.makeScore sim(items:[seq(items:{Map Is
 /*
 
 declare
-%% Set the tuning to Meantone temperament 
+%% Set the tuning to Meantone temperament. The table contains pitches specified in cent (floats) and just intonation ratios (specified as pair Num#Denom) 
 {Init.setTuningTable unit(76.04900
 			  193.15686
 			  310.26471
@@ -385,7 +385,7 @@ MyScore = {Score.makeScore seq(items:[sim(items:[note(duration:2
 
 
 
-
+%% Double-checking ;-) 
 %% Set the tuning back to the default equal temperament and play the cadence again
 {Init.unsetTuningTable}
 %% 
