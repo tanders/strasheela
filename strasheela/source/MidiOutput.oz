@@ -13,6 +13,8 @@
 
 /** %% This functor defines means to output MIDI files. To this end, it makes use of csvmidi (see http://www.fourmilab.ch/webtools/midicsv/). A text file in midicsv file format is output which is transformed into a MIDI file by csvmidi.
 %%
+%% The top-level definitions exported by this functor are procedures like OutputMidiFile, RenderMidiFile, PlayMidiFile, and RenderAndPlayMidiFile. Like Strasheela output into other formats (e.g., Csound or Lilypond), the output into MIDI files is primarily customised by clauses which define how certain score objects are transformed into MIDI events. This functor provides low-level functions for outputting virtually every MIDI event possible (e.g., MakeNoteOn, MakeNoteOff, MakeCC) and some higher level functions which simplify the definition of clauses (e.g., NoteToUserEvent, Note2Midi, NoteToPitchbend). Further functionality is also provided. These include the class MidiNote, some Boolean functions (e.g., HasType, IsNoteOn, HasChannel), and conversion functions (e.g., BeatsToTicks, CentToPitchbend). Several examples demonstrate these procedures (e.g., in strasheela/examples/ the files ContinuousCOntrollersInScore-MidiOutput.oz and Microtonal-MIDI-examples.oz).
+%%
 %% The documentation of the lower-level functions in this functor often quotes the documentation of csvmidi for the csv / MIDI event the function creates.
 %%
 %% General typing information:
@@ -449,10 +451,11 @@ define
 
 
 
-   /** %% Creates a MIDI file from MyScore as defined in Spec (see below). OutputMidiFile creates a CSV/MIDI file like an event list (i.e. only a single track is supported).
-   %% The user can control the transformation process by specifing transformation clauses (cf. doc of Out.scoreToEvents). Each transformation function must return a list of Midi events. There must be only a single noteOn in the list of returned events and it must be coupled with a corresponding noteOff event (at least when removeQuestionableNoteoffs is set of true, which is recommended; see the doc of ScoreToEvents_Midi for the meaning of this option). Nevertheless, additional events (e.g. CC events) can be present in the same list. 
-   %% The argument clauses defaults to a transformation where only notes (either instances of Score.note, MidiNote, MidiNoteMixin or any subclasses) are considered for the MIDI file.
-   %% The argument scoreToEventsArgs expects a record of arguments for the proc Out.scoreToEvents/ScoreToEvents_Midi called internally. This allows to control which score objects are considered at all for output (see the Out.scoreToEvents doc for details).
+   /** %% Creates a MIDI file from MyScore as defined in Spec (see below). OutputMidiFile creates a CSV file which is like an event list (i.e. only a single track is supported) and this file is then transformed into a MIDI file by csvmidi.
+   %% The user can control the transformation process by specifing transformation clauses. The format of such clauses is explain in the documentation of Out.scoreToEvents. In OutputMidiFile, the transformation function of each clause must return a list of MIDI events, which are created with functions like MakeNoteOn or MakeCC. This list can contain any MIDI events which correspond to the score object matching the clause (e.g., for a note, the returned MIDI events may include note-on and note-off events, pitchbend, aftertouch, and CC events etc.). However, if the argument removeQuestionableNoteoffs is true (which is recommended) then there must be at maximum a single noteOn event is present in this list and that it is coupled with a corresponding noteOff event. See the documentation of ScoreToEvents_Midi for information on the meaning of removeQuestionableNoteoffs.
+   %% The argument 'clauses' defaults to a transformation where only notes (either instances of Score.note or any subclasses such as MidiNote) are output.
+   %% 
+   %% The argument 'scoreToEventsArgs' expects a record of arguments for the procedure Out.scoreToEvents/ScoreToEvents_Midi called internally. This argument controls which score objects are considered at all for output (see the Out.scoreToEvents documentation for details).
    %%
    %% Spec defaults to 
    unit(file:"test"
@@ -469,7 +472,7 @@ define
 	removeQuestionableNoteoffs: true
 	scoreToEventsArgs: unit)
 
-   %% where the following variables are defined and exported by the present functor BeatsToTicks, IsMidiNoteMixin, MakeNoteOn and MakeNoteOff (e.g., they can be accessed as Out.midi.beatsToTicks, if the Output module is bound to Out).
+   %% In this default setting, the variables BeatsToTicks, IsMidiNoteMixin, MakeNoteOn and MakeNoteOff are defined and exported by the present functor.
    %% */
    %% !! The present implementation interprests score as an event list (thus only a single track). An alternative definition could interpret the hierarchic structure to deduce tracks. But how should that be done? Shall the score have some fixed hierarchic structure for this purpose (e.g. an obligatory sim container as toplevel)? This can probably be done by a special clauses def which processes the containers instead of the midi notes.. 
    %%
