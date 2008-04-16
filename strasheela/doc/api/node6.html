@@ -184,11 +184,12 @@ clearInterval(drawit)
 </li><li>&lt;P/3:<a href="#entity266"><span class="functionname">MakeScore2</span></a>&gt;
 </li><li>&lt;P/1:<a href="#entity265"><span class="functionname">InitScore</span></a>&gt;
 </li><li>make:&lt;P/3:<a href="#entity267"><span class="functionname">MakeScore</span></a>&gt;
-</li><li>&lt;P/2:<a href="#entity268"><span class="functionname">CopyScore</span></a>&gt;
-</li><li>&lt;P/4:<a href="#entity269"><span class="functionname">MakeContainer</span></a>&gt;
-</li><li>&lt;P/3:<a href="#entity270"><span class="functionname">MakeSim</span></a>&gt;
-</li><li>&lt;P/3:<a href="#entity271"><span class="functionname">MakeSeq</span></a>&gt;
-</li><li>&lt;P/4:<a href="#entity272"><span class="functionname">MakeClass</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity269"><span class="functionname">CopyScore</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity268"><span class="functionname">CopyScore2</span></a>&gt;
+</li><li>&lt;P/4:<a href="#entity270"><span class="functionname">MakeContainer</span></a>&gt;
+</li><li>&lt;P/3:<a href="#entity271"><span class="functionname">MakeSim</span></a>&gt;
+</li><li>&lt;P/3:<a href="#entity272"><span class="functionname">MakeSeq</span></a>&gt;
+</li><li>&lt;P/4:<a href="#entity273"><span class="functionname">MakeClass</span></a>&gt;
 </li></ul></code>
 <h3>Define</h3>
 
@@ -210,7 +211,7 @@ clearInterval(drawit)
 <span class="keyword">class</span> <span class="type">ScoreObject</span>&nbsp;<span class="keyword">from</span>&nbsp;<a href="#entity235">NonType</a>&nbsp;<a href="#entity236">Reflection</a>
 <br>&nbsp;&nbsp;&nbsp;<span class="keyword">feat</span>&nbsp;!ScoreObjectType&nbsp;label
 
-<ul><li><span class="functionname">init</span>(handle:H info:Info&nbsp;...)<br>
+<ul><li><span class="functionname">init</span>(handle:H id:ID info:Info&nbsp;...)<br>
 </li><li><span class="functionname">isScoreObject</span>(B)<br>
 </li><li><span class="functionname">getID</span>(X)<br>
 </li><li><span class="functionname">getInfo</span>(X)<br>
@@ -484,7 +485,7 @@ clearInterval(drawit)
 <span class="string"> [abstract class] An item is a generalization of score containers and elements. An item can be contained in one or more containers, the feature containers points to them.<BR>
 <BR>
 </span>
-<span class="keyword">class</span> <span class="type">Item</span>&nbsp;<span class="keyword">from</span>&nbsp;<a href="#entity237">ScoreObject</a>&nbsp;<span class="reference"><a href="node7.html#entity314">ScoreMapping.mappingMixin</a></span>
+<span class="keyword">class</span> <span class="type">Item</span>&nbsp;<span class="keyword">from</span>&nbsp;<a href="#entity237">ScoreObject</a>&nbsp;<span class="reference"><a href="node7.html#entity316">ScoreMapping.mappingMixin</a></span>
 <br>&nbsp;&nbsp;&nbsp;<span class="keyword">feat</span>&nbsp;label
 
 <ul><li><span class="functionname">init</span>(addParameters:AddParams containers:Containers&nbsp;...)<br>
@@ -990,12 +991,25 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity268">
-<span class="keyword">fun</span>{<span class="functionname">CopyScore</span> MyScore}
+<a name="entity269">
+<span class="keyword">proc</span>{<span class="functionname">CopyScore</span> MyScore MyCopy}<br>
+<span class="string"> CopyScore returns a deep copy of MyScore. The resulting MyCopy has the same score topology and its objects are created from the same classes as MyScore. However, undetermined variables in MyScore are replaced by fresh variables with the same domain. <BR>
+ NB: CopyScore internally uses toInitRecord. Therefore, all present restrictions of toInitRecord apply: getInitInfo must be defined correctly for all classes and only tree-form score topologys are supported.<BR>
+ !!! NB: if the output of toInitRecord contains stateful data, then this data is not copied but used as is (i.e. such stateful data is shared between the copies). <BR>
+<BR>
+</span>
 </code><br>
 
 <code>
-<a name="entity269">
+<a name="entity268">
+<span class="keyword">fun</span>{<span class="functionname">CopyScore2</span> MyScore}<br>
+<span class="string"> Like CopyScore, but MyScore is not fully initialised (cf. MakeScore2 vs. MakeScore).<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity270">
 <span class="keyword">proc</span>{<span class="functionname">MakeContainer</span> ContainerClass Items Args MyScore}<br>
 <span class="string"> Returns a container of ContainerClass containing Items. Args is a record of optional container init arguments.<BR>
  A MakeContainer call may specify more container init-arguments than specified as default arguments.<BR>
@@ -1005,17 +1019,17 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity270">
+<a name="entity271">
 <span class="keyword">fun</span>{<span class="functionname">MakeSim</span> Items Args}
 </code><br>
 
 <code>
-<a name="entity271">
+<a name="entity272">
 <span class="keyword">fun</span>{<span class="functionname">MakeSeq</span> Items Args}
 </code><br>
 
 <code>
-<a name="entity272">
+<a name="entity273">
 <span class="keyword">fun</span>{<span class="functionname">MakeClass</span> Super FeatT Args}<br>
 <span class="string"> MakeClass returns a subclass of the (score object) class Super. FeatT is a tuple with the additional subclass features, the label of FeatT defines the value at the feature 'label' of the new class. Args supports optional arguments, the defaults are:<BR>
    unit(initRecord:init<BR>

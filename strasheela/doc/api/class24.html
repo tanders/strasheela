@@ -120,11 +120,11 @@ clearInterval(drawit)
 
 <div style="margin-left:160px"><p align="right" class="margin"><div align="right">inheritance tree</div></p>
 <pre>
- <a class="pre" href="node6.html#entity235">NonType</a> <a class="pre" href="node6.html#entity236">Reflection</a>         <a class="pre" href="node7.html#entity313">FlagsMixin</a>
+ <a class="pre" href="node6.html#entity235">NonType</a> <a class="pre" href="node6.html#entity236">Reflection</a>         <a class="pre" href="node7.html#entity315">FlagsMixin</a>
     |        |                  |
     `-----+--'                  |
           |                     |
-     <a class="pre" href="node6.html#entity237">ScoreObject</a>    <a class="pre" href="node7.html#entity314">ScoreMapping.mappingMixin</a>
+     <a class="pre" href="node6.html#entity237">ScoreObject</a>    <a class="pre" href="node7.html#entity316">ScoreMapping.mappingMixin</a>
           |                     |
           `-----------+---------'
                       |
@@ -249,7 +249,7 @@ clearInterval(drawit)
 <span class="string"> After instantiating and initialising score objects to form a score hierarchy, the hierarchy is still extendable (i.e. the user can add items to containers and containers to items). The method closeScoreHierarchy makes a score hierarchy unextendable, which is necessary to prevent various procedures/methods from blocking.<BR>
 <BR>
 </span>
-</li><li><span class="functionname">collect</span>(?Xs level:Level mode:Mode test:Test)<br>
+</li><li><span class="functionname">collect</span>(?Xs excludeSelf:ExcludeSelf level:Level mode:Mode test:Test)<br>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
 
@@ -257,13 +257,15 @@ clearInterval(drawit)
 
 
 </tr></table>
-<span class="string"> The collect methods collects (possibly all) score objects in a list to make them accessible for, e.g., various list mapping functions. The method collects objects related to self (an item) by the value of the item attributes containers, parameters and the container attribute items. However, collect never collects self itself (self can easily be added, but removing self requires traversing the full result list). The methods supports a few features to control the collecting. <BR>
+<span class="string"> The collect methods collects (possibly all) score objects in a list to make them accessible for, e.g., various list mapping functions. The method collects objects related to self (an item) by the value of the item attributes containers, parameters and the container attribute items. The methods supports a few features to control the collecting. <BR>
 <BR>
  If feature <code> mode </code> is set to <code> tree </code> (the default), collect recursively collects the score objects and subobjects contained in self (i.e. both the attributes items and parameters are traversed). If <code> mode </code> is set to <code> graph</code>, both objects contained in self and containers self is contained in are collected (i.e. all three attributes items, parameters, and containers are traversed).<BR>
 <BR>
  If feature <code> level </code> is set to <code> all </code> (the default), collect collects score objects recursively into arbitrary depth. However, the depth can be controlled by specifying an integer value for <code> level</code>.<BR>
 <BR>
  The feature <code> test </code> expects a unary function returning a boolean or an atom representing a boolean unary method understood by all objects in self. The method collect only collects score objects fulfilling the test function/method.<BR>
+<BR>
+ The feature <code> excludeSelf </code> expects a Boolean. If true (the default), self is not included in the result.<BR>
 <BR>
  collect visits containers in depth-first fashion from left to right which affects the order of the objects in the returned list. E.g., collecting all events in a few nested sequentials in tree mode returns a list with all events ordered by start time.<BR>
 <BR>
@@ -281,7 +283,7 @@ clearInterval(drawit)
 <span class="string"> After full creation of score hierarchy, method must be called with every TimeMixin subclass instance in score to init the timing attributes/features <BR>
 <BR>
 </span>
-</li><li><span class="functionname">count</span>(?N level:Level mode:Mode test:Test)<br>
+</li><li><span class="functionname">count</span>(?N excludeSelf:ExcludeSelf level:Level mode:Mode test:Test)<br>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
 
@@ -289,10 +291,10 @@ clearInterval(drawit)
 
 
 </tr></table>
-<span class="string"> The method count counts a number of collected score objects. The method supports the features <code> mode</code>, <code> level</code>, and <code> test</code>. These features have the same meaning as in the method collect.<BR>
+<span class="string"> The method count counts a number of collected score objects. The method supports the features <code> mode</code>, <code> level</code>, <code> test</code>, and <code> excludeSelf</code>. These features have the same meaning as in the method collect.<BR>
 <BR>
 </span>
-</li><li><span class="functionname">filter</span>(?Xs Fn level:Level mode:Mode)<br>
+</li><li><span class="functionname">filter</span>(?Xs Fn excludeSelf:ExcludeSelf level:Level mode:Mode)<br>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
 
@@ -300,7 +302,7 @@ clearInterval(drawit)
 
 
 </tr></table>
-<span class="string"> The method filter collects a number of score objects fulfilling Fn, a the unary function returning a boolean. The method supports the features <code> mode</code>, and <code> level</code>. These features have the same meaning as in the method collect.<BR>
+<span class="string"> The method filter collects a number of score objects fulfilling Fn, a the unary function returning a boolean. The method supports the features <code> mode</code>, <code> test</code>, and <code> excludeSelf</code>. These features have the same meaning as in the method collect.<BR>
 <BR>
 </span>
 </li><li><span class="functionname">filterContainers</span>(Xs Fn)<br>
@@ -325,7 +327,7 @@ clearInterval(drawit)
 <span class="string"> Return a list of all direct parameters of self for which Fn (unary function or method) returns true.<BR>
 <BR>
 </span>
-</li><li><span class="functionname">find</span>(?Xs Fn level:Level mode:Mode)<br>
+</li><li><span class="functionname">find</span>(?Xs Fn excludeSelf:ExcludeSelf level:Level mode:Mode)<br>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
 
@@ -333,7 +335,7 @@ clearInterval(drawit)
 
 
 </tr></table>
-<span class="string"> The method find returns the first score object in self fulfilling Fn, a the unary function returning a boolean. The method supports the features <code> mode</code>, and <code> level</code>. These features have the same meaning as in the method collect.<BR>
+<span class="string"> The method find returns the first score object in self fulfilling Fn, a the unary function returning a boolean. The method supports the features <code> mode</code>, <code> level</code>, and <code> excludeSelf</code>. These features have the same meaning as in the method collect.<BR>
 <BR>
  NB: this implementation is inefficient (first collects all score objects).<BR>
 <BR>
@@ -360,7 +362,7 @@ clearInterval(drawit)
 <span class="string"> Returns the first direct parameter of self which fulfils the boolean function or method Test.<BR>
 <BR>
 </span>
-</li><li><span class="functionname">forAll</span>(Proc level:Level mode:Mode test:Test)<br>
+</li><li><span class="functionname">forAll</span>(Proc excludeSelf:ExcludeSelf level:Level mode:Mode test:Test)<br>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
 
@@ -368,7 +370,7 @@ clearInterval(drawit)
 
 
 </tr></table>
-<span class="string"> The method forAll maps the procedure Proc to a number of collected score objects. Proc may also be an atom representing a method of no arguments and understood by all objects in self fulfilling Test. The method supports the features <code> mode</code>, <code> level</code>, and <code> test</code>. These features have the same meaning as in the method collect.<BR>
+<span class="string"> The method forAll maps the procedure Proc to a number of collected score objects. Proc may also be an atom representing a method of no arguments and understood by all objects in self fulfilling Test. The method supports the features <code> mode</code>, <code> level</code>,  <code> test</code>, and <code> excludeSelf</code>. These features have the same meaning as in the method collect.<BR>
 <BR>
 </span>
 </li><li><span class="functionname">forAllContainers</span>(Proc)<br>
@@ -393,7 +395,7 @@ clearInterval(drawit)
 <span class="string"> Applies Proc (unary procedure or method) on all direct parameters in self.<BR>
 <BR>
 </span>
-</li><li><span class="functionname">forAllThreaded</span>(Proc level:Level mode:Mode test:Test)<br>
+</li><li><span class="functionname">forAllThreaded</span>(Proc excludeSelf:ExcludeSelf level:Level mode:Mode test:Test)<br>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
 
@@ -1339,7 +1341,7 @@ clearInterval(drawit)
  Usually, the record feature is just bound to the value at the features/attributes of self. However, for certain features/attributes there are special access functions defined. The return value of these functions will be bound to the record features. These features and their functions are either given in a record to the optional method feature functions. Other features and their functions are predefined in the variable PPrintRecordFns.<BR>
 <BR>
 </span>
-</li><li><span class="functionname">map</span>(?Xs Fn level:Level mode:Mode test:Test)<br>
+</li><li><span class="functionname">map</span>(?Xs Fn excludeSelf:ExcludeSelf level:Level mode:Mode test:Test)<br>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
 
@@ -1347,7 +1349,7 @@ clearInterval(drawit)
 
 
 </tr></table>
-<span class="string"> The method map maps the function Fn to a number of collected score objects and returns a list with all results. Fn may also be an atom representing a unary method understood by all objects in self fulfilling Test. The method supports the features <code> mode</code>, <code> level</code>, and <code> test</code>. These features have the same meaning as in the method collect.<BR>
+<span class="string"> The method map maps the function Fn to a number of collected score objects and returns a list with all results. Fn may also be an atom representing a unary method understood by all objects in self fulfilling Test. The method supports the features <code> mode</code>, <code> level</code>, <code> test</code>, and <code> excludeSelf</code>. These features have the same meaning as in the method collect.<BR>
 <BR>
 </span>
 </li><li><span class="functionname">mapContainers</span>(Xs Fn)<br>
@@ -1372,7 +1374,7 @@ clearInterval(drawit)
 <span class="string"> Maps Fn (unary function or method) over all direct parameters in self.<BR>
 <BR>
 </span>
-</li><li><span class="functionname">mappend</span>(?Xs Fn level:Level mode:Mode test:Test)<br>
+</li><li><span class="functionname">mappend</span>(?Xs Fn excludeSelf:ExcludeSelf level:Level mode:Mode test:Test)<br>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
 
@@ -1380,7 +1382,7 @@ clearInterval(drawit)
 
 
 </tr></table>
-<span class="string"> The method map maps the function Fn (which must return a list) to a number of collected score objects and returns a list with all results appended. Fn may also be an atom representing a unary method understood by all objects in self fulfilling Test. The method supports the features <code> mode</code>, <code> level</code>, and <code> test</code>. These features have the same meaning as in the method collect.<BR>
+<span class="string"> The method map maps the function Fn (which must return a list) to a number of collected score objects and returns a list with all results appended. Fn may also be an atom representing a unary method understood by all objects in self fulfilling Test. The method supports the features <code> mode</code>, <code> level</code>, <code> test</code>, and <code> excludeSelf</code>. These features have the same meaning as in the method collect.<BR>
 <BR>
 </span>
 </li><li><span class="functionname">pmApply</span>(Xs PatternMatchingExpr P)<br>
