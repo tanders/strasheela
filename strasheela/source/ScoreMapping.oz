@@ -231,7 +231,7 @@ define
       /** %% [abstract class] A mixin class for various traversing and mapping methods on the whole score hierarchy.
       */
       class MappingMixin from FlagsMixin
-	 /** %% The collect methods collects (possibly all) score objects in a list to make them accessible for, e.g., various list mapping functions. The method collects objects related to self (an item) by the value of the item attributes containers, parameters and the container attribute items. However, collect never collects self itself (self can easily be added, but removing self requires traversing the full result list). The methods supports a few features to control the collecting. 
+	 /** %% The collect methods collects (possibly all) score objects in a list to make them accessible for, e.g., various list mapping functions. The method collects objects related to self (an item) by the value of the item attributes containers, parameters and the container attribute items. The methods supports a few features to control the collecting. 
 	 %%
 	 %% If feature <code> mode </code> is set to <code> tree </code> (the default), collect recursively collects the score objects and subobjects contained in self (i.e. both the attributes items and parameters are traversed). If <code> mode </code> is set to <code> graph</code>, both objects contained in self and containers self is contained in are collected (i.e. all three attributes items, parameters, and containers are traversed).
 	 %%
@@ -239,13 +239,16 @@ define
 	 %%
 	 %% The feature <code> test </code> expects a unary function returning a boolean or an atom representing a boolean unary method understood by all objects in self. The method collect only collects score objects fulfilling the test function/method.
 	 %%
+	 %% The feature <code> excludeSelf </code> expects a Boolean. If true (the default), self is not included in the result.
+	 %%
 	 %% collect visits containers in depth-first fashion from left to right which affects the order of the objects in the returned list. E.g., collecting all events in a few nested sequentials in tree mode returns a list with all events ordered by start time.
 	 %%
 	 %% NB: collect blocks if self is not fully initialised (e.g. created by Score.makeScore2) or if Test blocks at some object in self (e.g. because the object is only partially determined).
 	 %%*/
 	 %% @1=?Xs	
 	 meth collect(?Xs mode:Mode<=tree level:Level<=all
-		      test:Test<=fun {$ X} true end)
+		      test:Test<=fun {$ X} true end
+		      excludeSelf:ExcludeSelf<=true)
 	    TestFn = {GUtils.toFun Test}
 	    %% !! unefficient: performs checks for Test and Level even
 	    %% if they are not given/needed. Also order of test may be
@@ -255,29 +258,41 @@ define
 	    of graph then
 	       Flag = {Name.new}
 	    in
-	       {self addFlag(Flag)} % exclude self, ...
-	       Xs = {Append 
-		     %% ..., but collect params of self
-		     {Filter {self getParameters($)} TestFn} 
-		     {CollectAux_Graph self Level TestFn Flag}}
+	       {self addFlag(Flag)} 
+	       Xs = {LUtils.accum
+		     [if ExcludeSelf
+		      then nil
+		      else {Filter [self] TestFn}
+		      end
+		      %% collect params of self
+		      {Filter {self getParameters($)} TestFn} 
+		      {CollectAux_Graph self Level TestFn Flag}]
+		     Append}
 	       %% BUG: only unflags object in result Xs, but not other flagged items.. (instead, I would need to fully traverse hierarchic structure again).
 	       {UnFlagAll 
 		%% params are never flagged 
 		self | {Filter Xs fun {$ X} {Not {X isParameter($)}} end} 
 		Flag}   
 	    [] tree then
-	       Xs = {Append 
-		     %% collect params of self
-		     {Filter {self getParameters($)} TestFn} 
-		     {CollectAux_Tree self Level TestFn}}
+	       Xs = {LUtils.accum
+		     [if ExcludeSelf
+		      then nil
+		      else {Filter [self] TestFn}
+		      end
+		      %% collect params of self
+		      {Filter {self getParameters($)} TestFn} 
+		      {CollectAux_Tree self Level TestFn}]
+		     Append}
 	    end
 	 end
-	 /** %% The method forAll maps the procedure Proc to a number of collected score objects. Proc may also be an atom representing a method of no arguments and understood by all objects in self fulfilling Test. The method supports the features <code> mode</code>, <code> level</code>, and <code> test</code>. These features have the same meaning as in the method collect.
+	 /** %% The method forAll maps the procedure Proc to a number of collected score objects. Proc may also be an atom representing a method of no arguments and understood by all objects in self fulfilling Test. The method supports the features <code> mode</code>, <code> level</code>,  <code> test</code>, and <code> excludeSelf</code>. These features have the same meaning as in the method collect.
 	 % */
 	 % !! ?? rewrite all collect code -- calling collect may suspend, but a 'threaded' forAll can reach (every ?) score object anyway... 
 	 meth forAll(Proc mode:Mode<=tree level:Level<=all
-		     test:Test<=fun {$ X} true end)
-	    {ForAll {self collect($ mode:Mode level:Level test:Test)}
+		     test:Test<=fun {$ X} true end
+		     excludeSelf:ExcludeSelf<=true)
+	    {ForAll {self collect($ mode:Mode level:Level test:Test
+				  excludeSelf:ExcludeSelf)}
 	     {GUtils.toProc Proc}}
 	 end
 	 /** %% The method traverses all score objects in self (i.e. items and parameters) and applies unary procedure (or null-ary method) Proc on every object returning true for the unary function (or unary method) Test. However, the method does not effect the object self itself -- only the parameters and (if self is a container) items of self are effected recursively. Traversing happens concurrently -- the method does not suspend even if the result of getItems or getParameters is not yet fully determined.
@@ -285,56 +300,69 @@ define
 	 %% !! shall I do more fine grained 'threadening' (e.g. not only processing of all parameters/items of an item/container in an own thread, but instead the processing of each object in a thread) ?? shall the degree of threadening be user-controllable
 	 %% I can do the process of each object in a thread by defining a thread in Proc
 	 meth forAllThreaded(Proc mode:Mode<=tree level:Level<=all
-			     test:Test<=fun {$ X} true end)
+			     test:Test<=fun {$ X} true end
+			     excludeSelf:ExcludeSelf<=true)
 	    Proc1 = {GUtils.toProc Proc}
-	    Test1 = {GUtils.toFun Test}
+	    TestFn = {GUtils.toFun Test}
 	    Flag = {Name.new}
 	 in
 	    %% !! code doubling (see ProcessThreaded) to avoid
 	    %% processing self (if necessary, self can easily
 	    %% processed directly)
 	    thread 		% process self parameters
-	       {ForAll {self getParameters($)} 
-		proc {$ X} if {Test1 X} then {Proc1 X} end end}	       
+	       {ForAll {Append if ExcludeSelf
+			       then nil
+			       else {Filter [self] TestFn}
+			       end
+			{self getParameters($)}}
+		proc {$ X} if {TestFn X} then {Proc1 X} end end}	       
 	    end
 	    {self addFlag(Flag)}
-	    {ForAllThreadedAux self Proc1 Test1 Mode Level Flag}
+	    {ForAllThreadedAux self Proc1 TestFn Mode Level Flag}
 	    %% BUG: Flags are never removed from objects? Trick: only
 	    %% flag at all if Mode==graph.  see method collect for
 	    %% more discussion..
 	 end
-	 /** %% The method map maps the function Fn to a number of collected score objects and returns a list with all results. Fn may also be an atom representing a unary method understood by all objects in self fulfilling Test. The method supports the features <code> mode</code>, <code> level</code>, and <code> test</code>. These features have the same meaning as in the method collect.
+	 /** %% The method map maps the function Fn to a number of collected score objects and returns a list with all results. Fn may also be an atom representing a unary method understood by all objects in self fulfilling Test. The method supports the features <code> mode</code>, <code> level</code>, <code> test</code>, and <code> excludeSelf</code>. These features have the same meaning as in the method collect.
 	 %*/
 	 %% @1=?Xs
 	 meth map(?Xs Fn mode:Mode<=tree level:Level<=all
-		  test:Test<=fun {$ X} true end)
-	    Xs = {Map {self collect($ mode:Mode level:Level test:Test)}
+		  test:Test<=fun {$ X} true end
+		  excludeSelf:ExcludeSelf<=true)
+	    Xs = {Map {self collect($ mode:Mode level:Level test:Test
+				    excludeSelf:ExcludeSelf)}
 		  {GUtils.toFun Fn}}
 	 end
-	 /** %% The method map maps the function Fn (which must return a list) to a number of collected score objects and returns a list with all results appended. Fn may also be an atom representing a unary method understood by all objects in self fulfilling Test. The method supports the features <code> mode</code>, <code> level</code>, and <code> test</code>. These features have the same meaning as in the method collect.
+	 /** %% The method map maps the function Fn (which must return a list) to a number of collected score objects and returns a list with all results appended. Fn may also be an atom representing a unary method understood by all objects in self fulfilling Test. The method supports the features <code> mode</code>, <code> level</code>, <code> test</code>, and <code> excludeSelf</code>. These features have the same meaning as in the method collect.
 	 %*/
 	 %% @1=?Xs
 	 meth mappend(?Xs Fn mode:Mode<=tree level:Level<=all
-		      test:Test<=fun {$ X} true end)
-	    Xs = {LUtils.mappend {self collect($ mode:Mode level:Level test:Test)}
+		      test:Test<=fun {$ X} true end
+		      excludeSelf:ExcludeSelf<=true)
+	    Xs = {LUtils.mappend {self collect($ mode:Mode level:Level test:Test
+				  excludeSelf:ExcludeSelf)}
 		  {GUtils.toFun Fn}}
 	 end
-	 /** %% The method count counts a number of collected score objects. The method supports the features <code> mode</code>, <code> level</code>, and <code> test</code>. These features have the same meaning as in the method collect.
+	 /** %% The method count counts a number of collected score objects. The method supports the features <code> mode</code>, <code> level</code>, <code> test</code>, and <code> excludeSelf</code>. These features have the same meaning as in the method collect.
 	 %*/
 	 %% @1=?N
 	 meth count(?N  mode:Mode<=tree level:Level<=all
-		    test:Test<=fun {$ X} true end)
-	    N = {Length {self collect($ mode:Mode level:Level test:Test)}}
+		    test:Test<=fun {$ X} true end
+		    excludeSelf:ExcludeSelf<=true)
+	    N = {Length {self collect($ mode:Mode level:Level test:Test
+				      excludeSelf:ExcludeSelf)}}
 	 end
-	 /** %% The method filter collects a number of score objects fulfilling Fn, a the unary function returning a boolean. The method supports the features <code> mode</code>, and <code> level</code>. These features have the same meaning as in the method collect.
+	 /** %% The method filter collects a number of score objects fulfilling Fn, a the unary function returning a boolean. The method supports the features <code> mode</code>, <code> test</code>, and <code> excludeSelf</code>. These features have the same meaning as in the method collect.
 	 %*/
 	 %% NB: filter must traverse all objects, therefore using collect in the definition is OK.
 	 %% ?? order of args
 	 %% @1=?Xs
-	 meth filter(?Xs Fn mode:Mode<=tree level:Level<=all)
-	    Xs = {self collect($ mode:Mode level:Level test:Fn)}
+	 meth filter(?Xs Fn mode:Mode<=tree level:Level<=all
+		     excludeSelf:ExcludeSelf<=true)
+	    Xs = {self collect($ mode:Mode level:Level test:Fn
+			       excludeSelf:ExcludeSelf)}
 	 end
-	 /** %% The method find returns the first score object in self fulfilling Fn, a the unary function returning a boolean. The method supports the features <code> mode</code>, and <code> level</code>. These features have the same meaning as in the method collect.
+	 /** %% The method find returns the first score object in self fulfilling Fn, a the unary function returning a boolean. The method supports the features <code> mode</code>, <code> level</code>, and <code> excludeSelf</code>. These features have the same meaning as in the method collect.
 	 %%
 	 %% NB: this implementation is inefficient (first collects all score objects).
 	 %*/
@@ -342,8 +370,10 @@ define
 	 %% @1=?Xs
 	 %%
 	 %% !! implementation inefficient: I first collect all...
-	 meth find(?X Fn mode:Mode<=tree level:Level<=all)
-	    Temp = {self collect($ mode:Mode level:Level test:Fn)}
+	 meth find(?X Fn mode:Mode<=tree level:Level<=all
+		   excludeSelf:ExcludeSelf<=true)
+	    Temp = {self collect($ mode:Mode level:Level test:Fn
+				 excludeSelf:ExcludeSelf)}
 	 in
 	    if Temp==nil
 	    then X = nil
@@ -374,9 +404,11 @@ define
 	 %%
 	 %% The method find returns the first score object in self for which Fn -- a unary function returning a boolean -- returns true. The search is conducted concurrently: the result score object naturally must be determined enough that Fn does not block on it, but other objects in the score can even be partially bound only and cause Fn to block.
 	 %% If Fn would return true for multiple objects in self, it is undetermined which object is returned. 
-	 %% The method supports the features <code>mode</code>, <code>level</code>, and  <code>test</code>. These features have the same meaning as in the method collect.
+	 %% The method supports the features <code>mode</code>, <code>level</code>, <code> test</code>, and <code> excludeSelf</code>.. These features have the same meaning as in the method collect.
 	 %% 
-	 meth findThreaded(?X Fn mode:Mode<=tree level:Level<=all test:Test<=fun {$ X} true end)
+	 meth findThreaded(?X Fn mode:Mode<=tree level:Level<=all
+			   test:Test<=fun {$ X} true end
+			   excludeSelf:ExcludeSelf<=true)
 	    ObjectFound
 	    MyLock = {NewLock}
 	    %% As soon as ObjectFound is bound and if DontKillMe is unbound, then
@@ -405,7 +437,7 @@ define
 				       end
 				    end
 				 end
-				 mode:Mode level:Level test:Test)}
+				 mode:Mode level:Level test:Test excludeSelf:ExcludeSelf)}
 	 end
 	 */
 	 
