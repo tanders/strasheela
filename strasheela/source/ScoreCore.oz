@@ -69,7 +69,7 @@ export
    IsScoreObject IsTemporalItem IsTemporalContainer
    MakeScore MakeScore2 InitScore
    make: MakeScore
-   CopyScore
+   CopyScore CopyScore2
    MakeContainer MakeSim MakeSeq 
    % ResolveRepeats
    MakeClass
@@ -287,15 +287,17 @@ define
       attr id info
 	 /** %% The argument handle is bound to the score object itself (cf. the handle in QTk). The argument info is either a list of infos or a single info (arbitrary value, usually is each info an atom)
 	 %% */
-      meth init(handle:?H<=_ info:Info<=nil ...) = M
+      meth init(handle:?H<=_ info:Info<=nil id:ID<=_ ...) = M
 	 %{self initFlags}
 	 H = self
 	 @info = if {IsList Info}
 		 then Info
 		 else Info|nil
 		 end
+	 @id = ID
+	 
 	 %% hands arbitrary init arguments to instance attributes
-	 {Record.forAllInd {Record.subtractList M [info handle]}
+	 {Record.forAllInd {Record.subtractList M [info handle id]}
 	  proc {$ Attr X}
 	     {GUtils.warnGUI "Setting "#{Value.toVirtualString self 100 100}#"'s attribute '"#Attr#"' directly to "#{Value.toVirtualString X 100 100}#". Possibly, this attribute does not exist in this object!"}
 	     % {System.showInfo "Warning: setting "#{Value.toVirtualString 100 100}#"'s attribute "#Attr#" directly to "#X#". Possibly, this attribute does not exist in this object!"}
@@ -2392,11 +2394,7 @@ define
    end
 
 
-   /** %% CopyScore returns a deep copy of MyScore.
-   %% NB: CopyScore internally uses toInitRecord. Therefore, all present restrictions of toInitRecord apply: getInitInfo must be defined correctly for all classes and only tree-form score topologys are supported.
-   %% !!! NB: if the output of toInitRecord contains stateful data, then this data is not copied but used as is (i.e. such stateful data is shared between the copies). 
-   %% */
-   %% !! could I use functionality defined for spaces instead?
+ 
    local
       fun {CopyVars R}
 	 if {IsFree R}
@@ -2418,9 +2416,20 @@ define
 	 end
       end
    in
-      fun {CopyScore MyScore}
-	 {MakeScore {CopyVars {MyScore toInitRecord($)}}
+      /** %% Like CopyScore, but MyScore is not fully initialised (cf. MakeScore2 vs. MakeScore).
+      %% */ 
+      fun {CopyScore2 MyScore}
+	 {MakeScore2 {CopyVars {MyScore toInitRecord($)}}
 	  {MyScore getInitClasses($)}}
+      end
+      /** %% CopyScore returns a deep copy of MyScore. The resulting MyCopy has the same score topology and its objects are created from the same classes as MyScore. However, undetermined variables in MyScore are replaced by fresh variables with the same domain. 
+      %% NB: CopyScore internally uses toInitRecord. Therefore, all present restrictions of toInitRecord apply: getInitInfo must be defined correctly for all classes and only tree-form score topologys are supported.
+      %% !!! NB: if the output of toInitRecord contains stateful data, then this data is not copied but used as is (i.e. such stateful data is shared between the copies). 
+      %% */
+      %% !! could I use copying functionality defined for spaces instead to make implementation more stable without dependency on getInitInfo?
+      proc {CopyScore MyScore ?MyCopy}
+	 {CopyScore2 MyScore MyCopy}
+	 {InitScore MyCopy}
       end
    end
    
