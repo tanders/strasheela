@@ -3,24 +3,31 @@
 ; #author Torsten Anders
 
 
-* Changes in Version 0.9.5 (no date yet)
+* Changes in Version 0.9.5 (16 April 2008)
 
 
-  - Additions 
-    - The actual playback pitches of notes can be defined by tuning tables (e.g., for Csound or MIDI output). These tables (Oz tuples) have a format similar to the [[http://www.xs4all.nl/~huygensf/scala/scl_format.html][scale format]] of [[http://www.xs4all.nl/~huygensf/scala][Scala]] (Scala scale file format import is on the TODO list). New procedures in Init: SetTuningTable, UnsetTuningTable. Affected methods getValueInMidi (Score.pitch) and getPitchInMidi (Score.note).
+  - Main addition 
+ 
+    - The actual playback pitches of notes can be defined by tuning tables for sound synthesis formats such as Csound or MIDI. These tables (Oz tuples) have a format similar to the [[http://www.xs4all.nl/~huygensf/scala/scl_format.html][scale format]] of [[http://www.xs4all.nl/~huygensf/scala][Scala]] (Scala scale file format import is on the TODO list). 
+      
+      New procedures in [[../doc/api/node2.html][Init]]: SetTuningTable, UnsetTuningTable. Affected methods getValueInMidi ([[../doc/api/node6.html][Score]].pitch) and getPitchInMidi ([[../doc/api/node6.html][Score]].note).
+
 
   - Documentation
 
-    - [[../examples/Microtonal-MIDI-examples.oz][Examples]] demonstrating different approaches for microtonal MIDI output 
-    - Edited documentation, e.g., of HS to reflect the new options with tuning tables
+    - [[../examples/Microtonal-MIDI-examples.oz][Examples]] demonstrating different approaches for creating microtonal MIDI output (e.g., distributing notes over multiple MIDI channels in a round-robin fashion for detuning with pitchbend, and alternatively assigning each monophonic voice its own MIDI channel). Also, the use of tuning tables is demonstrated in these examples.
+    - Edited documentation, e.g., of [[../contributions/anders/HarmonisedScore/doc/node1.html][HS]] to reflect the new options with tuning tables
+    - Slightly revised and extended the [[../doc/api/node11.html][Out.midi]] documentation 
 
 
   - Fixes and minor changes
 
-    - Lilypond output: setting the optional argument to false resulted in invalid lilypond code, an unbalanced "}" (thanks Graham for reporting and fixing)
-    - Output to Lilypond, MIDI and Csound of a not fully determined score now results in a warning window
-    - Out.midi: added NoteToUserEvent, NoteToPitchbend
-    - Refactored Score.item method collect. Tree traversal is now stateless internally (graph traversal still uses state for marking visited objects).
+    - Lilypond output: setting the optional argument to false resulted in invalid lilypond code, an unbalanced "}" (thanks Graham for the patch!)
+    - New warning: outputting a score which is not fully determined to Lilypond, MIDI or Csound now results in a warning that the output may block or fail
+    - [[../doc/api/node11.html][Out.midi]]: added functions NoteToUserEvent, NoteToPitchbend, CentToPitchbend for MIDI output clause definitions
+    - [[../doc/api/node7.html][SMapping]]: added argument excludeSelf to methods collect, forAll, forAllThreaded, mappend, mappend, count, filter, find (these methods are inherited by all score items such as notes and containers) 
+    - [[../doc/api/node7.html][SMapping]]: Refactored method collect. Tree traversal is now stateless internally (graph traversal still uses state for marking visited objects)
+    - [[../doc/api/node6.html][Score]] Score.copyScore2
 
 
   - For further fixes see the [[../CHANGELOG.txt]].

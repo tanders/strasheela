@@ -25,22 +25,27 @@
 
 
 
-<h2>Changes in Version 0.9.5 (no date yet)</h2>
+<h2>Changes in Version 0.9.5 (16 April 2008)</h2>
 
 
 <ul>
-<li>Additions
+<li>Main addition
 
 <ul>
-<li>The actual playback pitches of notes can be defined by tuning tables (e.g. for Csound or MIDI output). These tables (Oz tuples) have a format similar to the <a href="http://www.xs4all.nl/~huygensf/scala/scl_format.html">scale format</a> of <a href="http://www.xs4all.nl/~huygensf/scala">Scala</a> (Scala scale file format import is on the TODO list). New procedures in Init: SetTuningTable, UnsetTuningTable. Affected methods getValueInMidi (Score.pitch) and getPitchInMidi (Score.note).</li>
+<li>The actual playback pitches of notes can be defined by tuning tables for sound synthesis formats such as Csound or MIDI. These tables (Oz tuples) have a format similar to the <a href="http://www.xs4all.nl/~huygensf/scala/scl_format.html">scale format</a> of <a href="http://www.xs4all.nl/~huygensf/scala">Scala</a> (Scala scale file format import is on the TODO list).
+
+<p>New procedures in <a href="../doc/api/node2.html">Init</a>: SetTuningTable, UnsetTuningTable. Affected methods getValueInMidi (<a href="../doc/api/node6.html">Score</a>.pitch) and getPitchInMidi (<a href="../doc/api/node6.html">Score</a>.note).</p></li>
 </ul></li>
+</ul>
 
+
+<ul>
 <li>Documentation
 
 <ul>
-<li>Examples demonstrating different approaches for microtonal MIDI output
-../examples/Microtonal-MIDI-examples.oz</li>
-<li>Edited documentation, e.g., of HS to reflect the new options with tuning tables</li>
+<li><a href="../examples/Microtonal-MIDI-examples.oz">Examples</a> demonstrating different approaches for creating microtonal MIDI output (e.g., distributing notes over multiple MIDI channels in a round-robin fashion for detuning with pitchbend, and alternatively assigning each monophonic voice its own MIDI channel). Also, the use of tuning tables is demonstrated in these examples.</li>
+<li>Edited documentation, e.g., of <a href="../contributions/anders/HarmonisedScore/doc/node1.html">HS</a> to reflect the new options with tuning tables</li>
+<li>Slightly revised and extended the <a href="../doc/api/node11.html">Out.midi</a> documentation</li>
 </ul></li>
 </ul>
 
@@ -49,8 +54,12 @@
 <li>Fixes and minor changes
 
 <ul>
-<li>Lilypond output: setting the optional argument to false resulted in invalid lilypond code, an unbalanced &quot;}&quot; (thanks Graham for reporting and fixing)</li>
-<li>Output to Lilypond, MIDI and Csound of a not fully determined score now results in a warning window</li>
+<li>Lilypond output: setting the optional argument to false resulted in invalid lilypond code, an unbalanced &quot;}&quot; (thanks Graham for the patch!)</li>
+<li>New warning: outputting a score which is not fully determined to Lilypond, MIDI or Csound now results in a warning that the output may block or fail</li>
+<li><a href="../doc/api/node11.html">Out.midi</a>: added functions NoteToUserEvent, NoteToPitchbend, CentToPitchbend for MIDI output clause definitions</li>
+<li><a href="../doc/api/node7.html">SMapping</a>: added argument excludeSelf to methods collect, forAll, forAllThreaded, mappend, mappend, count, filter, find (these methods are inherited by all score items such as notes and containers)</li>
+<li><a href="../doc/api/node7.html">SMapping</a>: Refactored method collect. Tree traversal is now stateless internally (graph traversal still uses state for marking visited objects)</li>
+<li><a href="../doc/api/node6.html">Score</a> Score.copyScore2</li>
 </ul></li>
 </ul>
 
@@ -438,7 +447,7 @@ See the documentation for <a href="../contributions/anders/HarmonisedScore/doc/n
 <div id="footer">
 <div id="author">&copy; 
 Torsten Anders</div>
-<div id="date">Last time edited: 2008.04.14</div>
+<div id="date">Last time edited: 2008.04.16</div>
 </div>
   </body>
 </html>
