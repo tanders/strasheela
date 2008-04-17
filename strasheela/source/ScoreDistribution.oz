@@ -105,7 +105,7 @@ define
 			 =<
 			 {FD.reflect.width {Y getValue($)}}
 		      end
-	       %% Choose the constraint on which most propagators are suspended (i.e. constraints are applied), an in case this is equal then take the variable with the smallest domain. 
+	       %% Choose the variable on which most propagators are suspended (i.e. constraints are applied), an in case this is equal then take the variable with the smallest domain. 
 	       %% This mirrors the default nbSusps implementation in Mozart.
 	       nbSusps: fun {$ X Y}
 			   L1 = {FD.reflect.nbSusps {X getValue($)}}
@@ -117,6 +117,17 @@ define
 			    =<
 			    {FD.reflect.size {Y getValue($)}})
 			end
+	       %% First fail variant: choose variable with smallest domain and in case of ties the variable to which most constraints are applied
+	       'dom+deg':fun {$ X Y}
+			    L1 = {FD.reflect.size {X getValue($)}}
+			    L2 = {FD.reflect.size {Y getValue($)}}
+			 in
+			    L1<L2 orelse
+			    (L1==L2 andthen
+			     {FD.reflect.nbSusps {X getValue($)}}
+			     >=
+			     {FD.reflect.nbSusps {Y getValue($)}})
+			 end
 	       %% First fail variant: quotient of domain size and number of constraints applied
 	       'dom/deg':local Factor = 1000000 in
 				 fun {$ X Y}
@@ -313,7 +324,8 @@ define
 %    naive: Selects the first parameter object.
 %    size: Selects the first parameter, whose value domain has the smallest size.
 %    width: Select the first parameter with the smallest difference between the domain bounds of its value. 
-%    nbSusps: Selects a parameter with the largest number of suspensions on its value, i.e., with the larges number of constraint propagators applied to it. In in case this is equal for several parameters with most suspended propagators, then take the first parameter with the smallest value domain.
+%    nbSusps: Selects a parameter with the largest number of suspensions on its value, i.e., with the larges number of constraint propagators applied to it. In in case of ties (i.e. this is equal for several parameters), then take the first parameter with the smallest value domain.
+%    'dom+deg': Selects the first parameter, whose value domain has the smallest size. In case of ties take the first parameter with the larges number of constraints applied to it.
 %    'dom/deg': Selects the first parameter for which the quotient of domain size and number of suspended propagators is maximum. 
 %    min: Selects the first parameter, whose value's lower bound is minimal.
 %    max: Selects the first parameter, whose value's lower bound is maximal.
