@@ -1,4 +1,381 @@
 ------------------------------------------------------------------------
+r1074 | t-anders | 2008-04-16 23:19:06 +0100 (Wed, 16 Apr 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/doc/api/class12.html
+   M /trunk/strasheela/doc/api/class13.html
+   M /trunk/strasheela/doc/api/class14.html
+   M /trunk/strasheela/doc/api/class15.html
+   M /trunk/strasheela/doc/api/class16.html
+   M /trunk/strasheela/doc/api/class18.html
+   M /trunk/strasheela/doc/api/class19.html
+   M /trunk/strasheela/doc/api/class2.html
+   M /trunk/strasheela/doc/api/class20.html
+   M /trunk/strasheela/doc/api/class21.html
+   M /trunk/strasheela/doc/api/class22.html
+   M /trunk/strasheela/doc/api/class23.html
+   M /trunk/strasheela/doc/api/class24.html
+   M /trunk/strasheela/doc/api/class25.html
+   M /trunk/strasheela/doc/api/class26.html
+   M /trunk/strasheela/doc/api/class27.html
+   M /trunk/strasheela/doc/api/class28.html
+   M /trunk/strasheela/doc/api/class29.html
+   M /trunk/strasheela/doc/api/class30.html
+   M /trunk/strasheela/doc/api/class31.html
+   M /trunk/strasheela/doc/api/node11.html
+   M /trunk/strasheela/doc/api/node6.html
+   M /trunk/strasheela/doc/api/node7.html
+   M /trunk/strasheela/doc/api/node8.html
+   M /trunk/strasheela/doc/api/node9.html
+
+Update doc
+
+------------------------------------------------------------------------
+r1073 | t-anders | 2008-04-16 23:17:46 +0100 (Wed, 16 Apr 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/doc/index.html
+   M /trunk/strasheela/doc-source/index.muse
+
+Added new release info
+
+------------------------------------------------------------------------
+r1072 | t-anders | 2008-04-16 23:17:07 +0100 (Wed, 16 Apr 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/doc/Changes.html
+   M /trunk/strasheela/doc-source/Changes.muse
+
+Updated list of changes
+
+------------------------------------------------------------------------
+r1071 | t-anders | 2008-04-16 23:16:23 +0100 (Wed, 16 Apr 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/source/MidiOutput.oz
+
+Revised documentation
+
+------------------------------------------------------------------------
+r1070 | t-anders | 2008-04-16 23:15:54 +0100 (Wed, 16 Apr 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/examples/Microtonal-MIDI-examples.oz
+
+Minor doc editing
+
+------------------------------------------------------------------------
+r1069 | t-anders | 2008-04-16 21:09:12 +0100 (Wed, 16 Apr 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/source/ScoreMapping.oz
+
+Added arg excludeSelf to methods collect, forAll, forAllThreaded, mappend, mappend, count, filter, find
+
+------------------------------------------------------------------------
+r1068 | t-anders | 2008-04-16 21:07:59 +0100 (Wed, 16 Apr 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/source/ScoreCore.oz
+
+Added CopyScore2; refactored ScoreObject: now with explicit argument id
+
+------------------------------------------------------------------------
+r1067 | t-anders | 2008-04-15 20:54:50 +0100 (Tue, 15 Apr 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/doc-source/Changes.muse
+
+Updated list of changes
+
+------------------------------------------------------------------------
+r1066 | t-anders | 2008-04-15 20:52:39 +0100 (Tue, 15 Apr 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/doc-source/Changes.muse
+
+Edited list of changes
+
+------------------------------------------------------------------------
+r1065 | t-anders | 2008-04-15 20:52:08 +0100 (Tue, 15 Apr 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/source/ScoreMapping.oz
+
+Refactored collect method: tree mode now stateless: several procs where renamed and edited (GetContainers->GetContainers_Graph, GetItems split into GetItems_Grap/GetItems_Tree, CollectAux split int CollectAux_Graph/CollectAux_Tree)
+
+------------------------------------------------------------------------
+r1064 | t-anders | 2008-04-15 20:49:19 +0100 (Tue, 15 Apr 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/source/MidiOutput.oz
+
+Fix StartTime -> Start, Track -> As.track
+
+------------------------------------------------------------------------
+r1063 | t-anders | 2008-04-15 20:48:26 +0100 (Tue, 15 Apr 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/examples/Microtonal-MIDI-examples.oz
+
+Minor editing
+
+------------------------------------------------------------------------
+r1062 | t-anders | 2008-04-15 20:48:03 +0100 (Tue, 15 Apr 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/examples/HarmonicProgressions-22ET.oz
+
+Comment editing
+
+------------------------------------------------------------------------
+r1061 | t-anders | 2008-04-15 12:17:04 +0100 (Tue, 15 Apr 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/contributions/anders/ET22/doc/node2.html
+   M /trunk/strasheela/contributions/anders/ET31/doc/node2.html
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/doc/node1.html
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/doc/node15.html
+   M /trunk/strasheela/contributions/anders/Pattern/doc/node1.html
+   M /trunk/strasheela/doc/api/class1.html
+   M /trunk/strasheela/doc/api/class10.html
+   M /trunk/strasheela/doc/api/class11.html
+   M /trunk/strasheela/doc/api/class12.html
+   M /trunk/strasheela/doc/api/class13.html
+   M /trunk/strasheela/doc/api/class14.html
+   M /trunk/strasheela/doc/api/class15.html
+   M /trunk/strasheela/doc/api/class16.html
+   M /trunk/strasheela/doc/api/class17.html
+   M /trunk/strasheela/doc/api/class18.html
+   M /trunk/strasheela/doc/api/class19.html
+   M /trunk/strasheela/doc/api/class2.html
+   M /trunk/strasheela/doc/api/class20.html
+   M /trunk/strasheela/doc/api/class21.html
+   M /trunk/strasheela/doc/api/class22.html
+   M /trunk/strasheela/doc/api/class23.html
+   M /trunk/strasheela/doc/api/class24.html
+   M /trunk/strasheela/doc/api/class25.html
+   M /trunk/strasheela/doc/api/class26.html
+   M /trunk/strasheela/doc/api/class27.html
+   M /trunk/strasheela/doc/api/class28.html
+   M /trunk/strasheela/doc/api/class29.html
+   M /trunk/strasheela/doc/api/class3.html
+   M /trunk/strasheela/doc/api/class30.html
+   M /trunk/strasheela/doc/api/class31.html
+   M /trunk/strasheela/doc/api/class4.html
+   M /trunk/strasheela/doc/api/class5.html
+   M /trunk/strasheela/doc/api/class6.html
+   M /trunk/strasheela/doc/api/class7.html
+   M /trunk/strasheela/doc/api/class8.html
+   M /trunk/strasheela/doc/api/class9.html
+   M /trunk/strasheela/doc/api/node11.html
+   M /trunk/strasheela/doc/api/node2.html
+   M /trunk/strasheela/doc/api/node3.html
+   M /trunk/strasheela/doc/api/node4.html
+   M /trunk/strasheela/doc/api/node5.html
+   M /trunk/strasheela/doc/api/node6.html
+   M /trunk/strasheela/doc/api/node7.html
+   M /trunk/strasheela/doc/api/node8.html
+   M /trunk/strasheela/doc/api/node9.html
+   M /trunk/strasheela/examples/Microtonal-MIDI-examples.oz
+
+Update doc
+
+------------------------------------------------------------------------
+r1060 | t-anders | 2008-04-15 10:16:29 +0100 (Tue, 15 Apr 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/examples/Microtonal-MIDI-examples.oz
+
+Minor editing
+
+------------------------------------------------------------------------
+r1059 | t-anders | 2008-04-15 10:14:28 +0100 (Tue, 15 Apr 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/examples/Microtonal-MIDI-examples.oz
+
+Added comment
+
+------------------------------------------------------------------------
+r1058 | t-anders | 2008-04-15 10:12:49 +0100 (Tue, 15 Apr 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/source/MidiOutput.oz
+
+Added NoteToUserEvent and refactored NoteToPitchbend and Note2Midi with it
+
+------------------------------------------------------------------------
+r1057 | t-anders | 2008-04-14 16:50:09 +0100 (Mon, 14 Apr 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/examples/Microtonal-MIDI-examples.oz
+
+Pajara example now cadence
+
+------------------------------------------------------------------------
+r1056 | t-anders | 2008-04-14 16:26:39 +0100 (Mon, 14 Apr 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/others/TODO/Strasheela-TODO.org
+
+Update todo list
+
+------------------------------------------------------------------------
+r1055 | t-anders | 2008-04-14 16:25:07 +0100 (Mon, 14 Apr 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/doc/Changes.html
+   M /trunk/strasheela/doc-source/Changes.muse
+
+Update list of changes
+
+------------------------------------------------------------------------
+r1054 | t-anders | 2008-04-14 16:24:40 +0100 (Mon, 14 Apr 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/others/TODO/Strasheela-TODO.org
+
+Update todo list
+
+------------------------------------------------------------------------
+r1053 | t-anders | 2008-04-14 16:23:59 +0100 (Mon, 14 Apr 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/testing/MidiOutput-test.oz
+
+Test CentToPitchbend
+
+------------------------------------------------------------------------
+r1052 | t-anders | 2008-04-14 16:23:33 +0100 (Mon, 14 Apr 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/source/ScoreCore.oz
+
+Methods Pitch, getValueInMidi and Note, getPitchInMidi: added support for tuning table; added warning in init if attr is set directly
+
+------------------------------------------------------------------------
+r1051 | t-anders | 2008-04-14 16:21:02 +0100 (Mon, 14 Apr 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/source/MusicUtils.oz
+
+Added FullTuningTable
+
+------------------------------------------------------------------------
+r1050 | t-anders | 2008-04-14 16:20:32 +0100 (Mon, 14 Apr 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/source/MidiOutput.oz
+
+Added NoteToPitchbend CentToPitchbend and doc editing
+
+------------------------------------------------------------------------
+r1049 | t-anders | 2008-04-14 16:19:23 +0100 (Mon, 14 Apr 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/source/Init.oz
+
+Added SetTuningTable UnsetTuningTable GetTuningTable
+
+------------------------------------------------------------------------
+r1048 | t-anders | 2008-04-14 16:18:35 +0100 (Mon, 14 Apr 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/HarmonisedScore.oz
+
+Edited doc
+
+------------------------------------------------------------------------
+r1047 | t-anders | 2008-04-14 16:18:01 +0100 (Mon, 14 Apr 2008) | 2 lines
+Changed paths:
+   A /trunk/strasheela/examples/Microtonal-MIDI-examples.oz
+
+Added microtonal MIDI examples
+
+------------------------------------------------------------------------
+r1046 | t-anders | 2008-04-13 19:10:44 +0100 (Sun, 13 Apr 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/source/Output.oz
+
+No closing } if implicitStaff is false (thanks Graham!)
+
+------------------------------------------------------------------------
+r1045 | t-anders | 2008-04-13 14:49:40 +0100 (Sun, 13 Apr 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/examples/Lilypond-Examples.oz
+
+Revised blocking example (added doc)
+
+------------------------------------------------------------------------
+r1044 | t-anders | 2008-04-13 14:49:03 +0100 (Sun, 13 Apr 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/source/ScoreCore.oz
+
+Comment editing
+
+------------------------------------------------------------------------
+r1043 | t-anders | 2008-04-13 14:48:39 +0100 (Sun, 13 Apr 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/source/Output.oz
+
+Create warn GUI for undetermined score for Lily out, replaced other stdout warnings by warn GUI
+
+------------------------------------------------------------------------
+r1042 | t-anders | 2008-04-13 14:46:59 +0100 (Sun, 13 Apr 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/source/MidiOutput.oz
+
+Undetermined score creates warning
+
+------------------------------------------------------------------------
+r1041 | t-anders | 2008-04-13 14:46:33 +0100 (Sun, 13 Apr 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/source/GeneralUtils.oz
+
+Warn etc GUI proc don't block anymore (define simple QTk window)
+
+------------------------------------------------------------------------
+r1040 | t-anders | 2008-04-12 13:03:33 +0100 (Sat, 12 Apr 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/others/TODO/Strasheela-TODO.org
+   M /trunk/strasheela/others/TODO/Strasheela-TODO.org_archive
+
+Update todo list
+
+------------------------------------------------------------------------
+r1039 | t-anders | 2008-04-12 13:03:00 +0100 (Sat, 12 Apr 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/contributions/anders/ET22/source/DB.oz
+   M /trunk/strasheela/contributions/anders/ET31/source/DB.oz
+
+Doc editing
+
+------------------------------------------------------------------------
+r1038 | t-anders | 2008-04-12 13:02:38 +0100 (Sat, 12 Apr 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/contributions/anders/Pattern/Pattern.oz
+
+Doc editing
+
+------------------------------------------------------------------------
+r1037 | t-anders | 2008-04-12 13:02:17 +0100 (Sat, 12 Apr 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/source/Output.oz
+
+Doc editing
+
+------------------------------------------------------------------------
+r1036 | gperciva | 2008-04-11 04:47:44 +0100 (Fri, 11 Apr 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/contributions/anders/Tutorial/TheExamples/01-Oz/ConstraintProgramming.tut
+
+Compile fix for example.
+
+------------------------------------------------------------------------
+r1035 | t-anders | 2008-04-10 21:44:46 +0100 (Thu, 10 Apr 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/CHANGELOG.txt
+
+Update changelog
+
+------------------------------------------------------------------------
+r1034 | t-anders | 2008-04-10 21:43:30 +0100 (Thu, 10 Apr 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/contributions/anders/ET22/makefile.oz
+   M /trunk/strasheela/contributions/anders/ET22/source/Output.oz
+
+Renamed to Lilyheader.ly.data
+
+------------------------------------------------------------------------
+r1033 | t-anders | 2008-04-10 21:42:46 +0100 (Thu, 10 Apr 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/scripts/release-strasheela.sh
+
+Even in release without sounds include *.ly and *.midi files
+
+------------------------------------------------------------------------
+r1032 | t-anders | 2008-04-10 21:31:58 +0100 (Thu, 10 Apr 2008) | 2 lines
+Changed paths:
+   D /trunk/strasheela/contributions/anders/ET22/source/Lilyheader.ly
+   A /trunk/strasheela/contributions/anders/ET22/source/Lilyheader.ly.data (from /trunk/strasheela/contributions/anders/ET22/source/Lilyheader.ly:1030)
+
+Renamed to Lilyheader.ly.data
+
+------------------------------------------------------------------------
 r1030 | t-anders | 2008-04-10 20:49:10 +0100 (Thu, 10 Apr 2008) | 2 lines
 Changed paths:
    M /trunk/strasheela/doc/OldNews.html
