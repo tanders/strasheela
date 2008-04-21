@@ -687,6 +687,35 @@ Applying conversion: 2.5.0, 2.5.1, 2.5.2, 2.5.3, 2.5.12, 2.5.13, 2.5.17, 2.5.18,
 **** My extensions
 
 
+* DONE Complement existing general variable and value orderings for Strasheela :NEXT:
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2008-04-21 Mon 18:20
+  :ARCHIVE_FILE: ~/oz/music/Strasheela/strasheela/trunk/strasheela/others/TODO/Strasheela-TODO.org
+  :ARCHIVE_OLPATH: Strasheela design
+  :ARCHIVE_CATEGORY: Strasheela
+  :ARCHIVE_ITAGS: STRASHEELA
+  :END:
+
+  strasheela source 
+   [[file:~/oz/music/Strasheela/strasheela/trunk/strasheela/source/ScoreDistribution.oz::order]]
+
+** DONE Check literature for variable and value orderings 
+   CLOSED: [2008-04-21 Mon 18:19]
+
+   van Beek in Constraint Handbook
+
+   Bessiere and Regin article
+
+   etc
+
+** DONE Double-check Mozart source
+   CLOSED: [2008-04-21 Mon 18:19]
+
+   Mozart distro source
+   [[file:~/oz/mozart/trunk/mozart/share/lib/cp/FD.oz::Generic%20only][file:~/oz/mozart/trunk/mozart/share/lib/cp/FD.oz::Generic only]]
+
+
+
 
 
 

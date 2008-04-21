@@ -3,8 +3,9 @@
 * Strasheela release
 
 
-* Strasheela examples						    :STRASHEELA:
+   
 
+* Strasheela examples						    :STRASHEELA:
 
 ** TODO Go through test files and collect examples there in files in examples folder 
 
@@ -521,6 +522,96 @@ configure: error: ozinstall not found
 *** Define example (see above)
 
 
+
+** Length-independend pattern constraints like contour
+
+   Some constraint which expects two lists of FD ints (i.e. length of lists is determined) and constraints that all elements of the shorter list (first arg?) are contained *in their order* in the longer list (second arg?), but that the longer list might contain intermediate elements (i.e. neighbouring elements of the shorter list are not necessarily neighbours in the longer list, their might be one or more elements in between).
+   The constraint allows for multiple solutions for the longer list (e.g. where the additional elements are inserted), but should not necessarily insert any additional choice point. Can I define such a constraint with or? 
+   Optional additional arg constraint (proc) expects list {$ [OrigVar1 NewVar1 .. OrigVar2]} where OrigVar are also elements in the shorter list and allows to apply additional constraints to the inserted elements.  
+   
+   This constraint can be used, e.g., to constrain two pitch sequences to the same contour, even if they are of different length. The optional constraint arg allows to specify, e.g., that inserted elements "follow the same contour".
+   E.g., if the orig contour is the following (example determined and uses symbols for simplicity)
+
+   [+ + - = - +] 
+   
+   The one might constrain that inserted elements are the same as their predecessing org element. So, the following may be a longer list, a contour with inserted elements 
+
+   [+ + + - - = - - +]
+
+
+** Define InCriticalBandR Constraint
+
+   {InCriticalBandR Pitch1 Pitch2 B}
+
+   Pitch1 and Pitch2 are FD int, B is 0/1 int 
+   InCriticalBandR depends on PitchesPerOctaves and frequency def of pitch 0
+
+   Add to HS.rules 
+
+   I once had a definition in Arno for this, but I cannot find it
+
+   There is a graphics in Doty "JI Primer", p. 13
+
+
+** Create chord, scale and interval database for JI 
+
+   Database defined with ratios Num#Denom
+
+*** Info
+
+    Exports getter functions which expect arg PitchesPerOctave. Returned databases are filtered such that pitch classes / intervals which would be the same for an ET depending on PitchesPerOctave are [zusammengefasst]. 
+
+    Problem dabei: I might want to use an alternative non-ET tuning later where different pitch classes / intervals would be tempered out. Fixing this problem would require to rewrite HS such that it is not based on ET tunings. Instead, you better use a higher value for PitchesPerOctave so that all your ratios are assigned to unique pitch class integers. The tuning table could then indeed temper out some intervals by assigning multiple PCs the same pitch in cent.  
+
+    
+*** TODO Define Tenney Distance for JI ratio 
+
+    for ratio Nom#Denom the Tenney harmonic distance is 
+
+    log(Nom * Denom) 
+
+
+*** TODO Create JI interval DB automatically (from given args for a lattice: prime limits and factors for them)
+
+    If I create interval DBs with functions, then things like consonance measurements from Scala are not included 
+
+    Include odd-limit, prime-limit, Tenney harmonic distance  
+    and possibly further measurements 
+
+*** TODO Collect chords and scales from Doty in this DB
+
+    Chord 7-9-11 rather consonant 
+    ?? only in JI?
+
+*** TODO Port JI chords from ET22 etc into this database 
+
+*** TODO Collect chords from Scala chord database 
+
+*** TODO ?? Collect scales from Scala  
+
+    Hm, how can I do that? The Scala modi are scale dependend, and the Scala scales are way too much.
+
+    I could search through the Scala .scl files for files which 
+    - contain only up to a given max pitch number 
+    - contain only ratios
+
+    Still, I would find too many scales (e.g. well-temperaments specified with ratios).
+
+    Can I somehow automate a search for 7-limit scales? Several scale files explicitly contain the term "7-limit" :) 
+
+    cd /Applications/Scala/scl
+    grep '7-limit' *
+
+
+*** TODO Search for further condissonant chords in 7-limit, 9-limit and higher limits
+
+*** ?? some web search for further chords? 
+
+*** TODO Use this databases in ET databases like ET22 and ET31 
+
+    Complement by temperament-specific entries 
+
+
 ** Edit chord, scale and interval database (22 pitches per octave)
 
     [[file:~/oz/music/Strasheela/private/0-privateContributions/ET22/source/DB.oz::functor]]
@@ -847,6 +938,32 @@ configure: error: ozinstall not found
 *** Add additional diatonic scales 					 :MAYBE:
 
 
+
+** Dissonance degree of absolute intervals
+
+   The dissonance degree of intervals (and consequently chords constructed from these intervals) cannot be sufficiently described by pitch classes alone. Example maj third + octave is more consonant than third, 13:8 + octave is consonant but 13:8 is not. 7:5 is consonant, but 7:5 + octave is only weakly consonant (Doty, p. 24 + p. 51). 
+
+   I should extend interval database such that I can include consonance measurements for different octave extensions of a specific interval. 
+
+   I then need constraint {$ Pitch DissonanceDegree} which works on an absolute pitch (or pitch class + octave), and finds the correct "consonance/dissonance degree" depending on an absolute pitch
+
+*** TODO Find out where I can get octave-dependend "consonance/dissonance degree""consonance/dissonance degree" (harmonicity distance, whatever) from Scala or else
+
+*** TODO Define constraint which extends selection constraint of a interval database entry field to use interval + octave
+
+
+
+** Define Monzo constraint for pitch class				 :MAYBE:
+
+   Constraint which specifies relation between a pitch class (FD integer) and a vector (list of FD ints) of prime factor exponents (a "monzo")
+
+   Definition internally depends on an n-dimensional lattice which maps positions in lattice (and that way prime exponents) to pitch classes. This lattice can be created with same fun which creates lattice for JI interval DB 
+
+   for ideas cf. also [[file:~/oz/music/Strasheela/strasheela/trunk/strasheela/contributions/anders/HarmonisedScore/testing/Score-test.oz::HS%20score%20degreeToPC%20used%20to%20express%20monzos][file:~/oz/music/Strasheela/strasheela/trunk/strasheela/contributions/anders/HarmonisedScore/testing/Score-test.oz::HS score degreeToPC used to express monzos]]
+
+   
+
+
 ** Score transformation
 
    see [[file:~/oz/music/Strasheela/private/WorkInProgress/ScoreTransformation/ScoreTransformation.oz]]
@@ -858,25 +975,6 @@ configure: error: ozinstall not found
 
    see [[file:~/oz/music/Strasheela/private/WorkInProgress/ScoreTransformation/ScoreTransformation.oz]]
    and [[file:~/oz/musi
-
-
-** Complement existing general variable and value orderings for Strasheela :NEXT:
-
-   strasheela source 
-    [[file:~/oz/music/Strasheela/strasheela/trunk/strasheela/source/ScoreDistribution.oz::order]]
-
-*** TODO Check literature for variable and value orderings 
-
-    van Beek in Constraint Handbook
-
-    Bessiere and Regin article
-
-    etc
-
-*** TODO Double-check Mozart source
-
-    Mozart distro source
-    [[file:~/oz/mozart/trunk/mozart/share/lib/cp/FD.oz::Generic%20only][file:~/oz/mozart/trunk/mozart/share/lib/cp/FD.oz::Generic only]]
 
 
 ** Idea: user-guided search process: preserve already satisfying sections in output :WAIT:
@@ -930,24 +1028,21 @@ archive init record.
      
 
 
-** Update Lilypond output						  :NEXT:
+** Refactor Lilypond output of ET31 and ET22
 
+   These functors share code doublications: reduce those and change (generalise/add) definitions to source/Output.oz if required. 
+   
+*** TODO Generalise Out.simToLilyChord 
 
-*** Refactor Lilypond output of ET31 and ET22
+    ET22 and ET31 don't use Out.simToLilyChord because this function is not general enough (instead they define it from scratch).
 
-    These functors share code doublications: reduce those and change (generalise/add) definitions to source/Output.oz if required. 
-    
-**** TODO Generalise Out.simToLilyChord 
+*** TODO Refactor ET31/ET22 MakeChordComment and MakeChordRatio and move into Output.oz
 
-     ET22 and ET31 don't use Out.simToLilyChord because this function is not general enough (instead they define it from scratch).
+    Then use this def in ET22, ET31, and ~/.ozrc
 
-**** TODO Refactor ET31/ET22 MakeChordComment and MakeChordRatio and move into Output.oz
+*** TODO Refactor ET31 / ET22 ChordEt22ToLily and move into Output.oz
 
-     Then use this def in ET22, ET31, and ~/.ozrc
-
-**** TODO Refactor ET31 / ET22 ChordEt22ToLily and move into Output.oz
-
-     Then use this def in ET22, ET31
+    Then use this def in ET22, ET31
 
 
 ** Efficiency
@@ -1031,7 +1126,8 @@ See ../../testing/zy_Efficiency/KeepMusicRepresentationOutsideComputationalSpace
 
 
 
-** Support for alternate tunings					  :NEXT:
+** Support for alternate tunings
+
 *** DONE Define pair of (internally stateful) procs like {Init.setTuningTable Table} and {Init.getTuningTable ?Table}
     CLOSED: [2008-04-14 Mon 16:25]
 
@@ -1247,11 +1343,18 @@ See ../../testing/zy_Efficiency/KeepMusicRepresentationOutsideComputationalSpace
 
 * Strasheela installation
 
+
 ** Test release on Linux Ubuntu (home PC)				 :MAYBE:
 
 ** Test Suse rpms on Suse (in new Parallels VM)				 :MAYBE:
 
+
 * Strasheela Bugs
+
+** Revise collect method (graph mode)					 :MAYBE:
+
+   There are [ueberfluessige] names left in score after traversing score 
+ 
 
 ** ScoreInspector hangs on determined FS vars
 
