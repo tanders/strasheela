@@ -105,7 +105,7 @@ Test1 = {Score.makeScore
 			 ProgNumber = {GUtils.random 127}
 			 ProgChange = {Out.midi.makeProgramChange Track Time Channel ProgNumber}
 			 %% Create list of note-on and note-off events for MyNote 
-			 NoteEvents = {Out.midi.note2Midi MyNote unit(track:Track
+			 NoteEvents = {Out.midi.noteToMidi MyNote unit(track:Track
 								      channel:Channel)}
 		      in
 			 %% output a list of MIDI events
@@ -214,7 +214,7 @@ Test2 = {Score.makeScore
 			 PBEvents = {Fenv.itemFenvToMidiCC Fenvs.pitchBend 100 Track MyNote Channel
 				     pitchbend}
 			 %% Create list of note-on and note-off events for MyNote 
-			 NoteEvents = {Out.midi.note2Midi MyNote unit(track:Track)}
+			 NoteEvents = {Out.midi.noteToMidi MyNote unit(track:Track)}
 		      in
 			 %% append all given sublists 
 			 {LUtils.accum [VolEvents PBEvents NoteEvents]
@@ -275,7 +275,7 @@ Test3 = {Score.makeScore
 				  end)
       %% clauses
       clauses:[%% Default note output
-	       isNote#fun {$ MyNote} {Out.midi.note2Midi MyNote unit} end
+	       isNote#fun {$ MyNote} {Out.midi.noteToMidi MyNote unit} end
 	       %% Defines output for sequential containers which are
 	       %% marked with info 'voice'
 	       fun {$ X}
@@ -412,7 +412,7 @@ Test5a = {Score.makeScore
       scoreToEventsArgs:ProcessEventsAndContainers
       %% clauses
       clauses:[%% Default note output
-	       isNote#fun {$ MyNote} {Out.midi.note2Midi MyNote unit} end
+	       isNote#fun {$ MyNote} {Out.midi.noteToMidi MyNote unit} end
 	       fun {$ X}
 		  {X isSequential($)} andthen {X hasThisInfo($ topLevel)}
 	       end#fun {$ MySeq}
