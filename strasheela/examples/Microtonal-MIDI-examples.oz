@@ -117,7 +117,7 @@ MyScore = {Score.makeScore seq(items:{Map PCs
 		   Chan = 0
 		in
 		   {Out.midi.noteToPitchbend N unit(channel:Chan)}
-		   | {Out.midi.note2Midi N unit(channel:Chan)}
+		   | {Out.midi.noteToMidi N unit(channel:Chan)}
 		end])}
 
 */
@@ -206,7 +206,7 @@ MyScore = {Score.makeScore sim(items:[seq(items:{Map Is
 		   Chan = {NextChan}
 		in
 		   {Out.midi.noteToPitchbend N unit(channel:Chan)}
-		   | {Out.midi.note2Midi N unit(channel:Chan)}
+		   | {Out.midi.noteToMidi N unit(channel:Chan)}
 		end])}
 %% For confirmation: show chord seq with Lilypond
 {ET22.out.renderAndShowLilypond MyScore
@@ -288,7 +288,7 @@ MyScore = {Score.makeScore sim(items:[seq(items:{Map Is
       clauses:[isNote
 	       #fun {$ N}
 		   {Out.midi.noteToPitchbend N unit}
-		   | {Out.midi.note2Midi N unit}
+		   | {Out.midi.noteToMidi N unit}
 		end])}
 
 */
@@ -380,7 +380,7 @@ MyScore = {Score.makeScore seq(items:[sim(items:[note(duration:2
 		   Chan = {NextChan}
 		in
 		   {Out.midi.noteToPitchbend N unit(channel:Chan)}
-		   | {Out.midi.note2Midi N unit(channel:Chan)}
+		   | {Out.midi.noteToMidi N unit(channel:Chan)}
 		end])}
 
 
@@ -397,7 +397,7 @@ MyScore = {Score.makeScore seq(items:[sim(items:[note(duration:2
 		   Chan = {NextChan}
 		in
 		   {Out.midi.noteToPitchbend N unit(channel:Chan)}
-		   | {Out.midi.note2Midi N unit(channel:Chan)}
+		   | {Out.midi.noteToMidi N unit(channel:Chan)}
 		end])}
 
 
@@ -540,7 +540,7 @@ MyScore = {Score.makeScore seq(items:[sim(items:[note(duration:2
       clauses:[isNote
 	       #fun {$ N}
 		   {Out.midi.noteToPitchbend N unit}
-		   | {Out.midi.note2Midi N unit}
+		   | {Out.midi.noteToMidi N unit}
 		end])}
 
 
@@ -552,7 +552,7 @@ MyScore = {Score.makeScore seq(items:[sim(items:[note(duration:2
       clauses:[isNote
 	       #fun {$ N}
 		   {Out.midi.noteToPitchbend N unit}
-		   | {Out.midi.note2Midi N unit}
+		   | {Out.midi.noteToMidi N unit}
 		end])}
 
 */
