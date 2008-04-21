@@ -28,6 +28,8 @@ Musical constraint satisfaction problems (CSP) usually have multiple solutions. 
 
 * [[Example-Realtime-SimpleCounterpoint][Realtime Constraint Programming: Counterpoint]] 
 
+* [[Example-More][More Examples]]
+
 
 Please note that most of these examples implement (parts of) music theories which are described in detail by the literature. 
 Implementations of such existing theories are obviously more easy to explain, because the reader can be pointed to the relevant literature -- and many will know this literature anyway. Moreover, such implementations demonstrate that Strasheela is capable of modelling `real-world music theories'.  
