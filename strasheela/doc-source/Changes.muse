@@ -3,6 +3,24 @@
 ; #author Torsten Anders
 
 
+* Changes in Version 0.9.6 (no date yet)
+
+  - Main additions 
+
+
+  - Documentation
+
+
+  - Fixes and minor changes
+
+    - Out.midi.note2Midi renamed into Out.midi.noteToMidi for consistency
+
+
+
+  - For further fixes see the [[../CHANGELOG.txt]].
+
+
+
 * Changes in Version 0.9.5 (16 April 2008)
 
 
