@@ -134,6 +134,16 @@ declare
 %%  information by analysis.
 %%
 
+%%
+%% Note: this example contains a bug. Feeding the buffer works only
+%% once, re-feeding results in an error (you can still call the solver
+%% multiple times). Before refeeding you must quit and then restart
+%% Oz.
+%% Reason: the Lilypond output creation changes the current working
+%% directory, and then linking the Aux functor with {OS.getCWD} does
+%% not work anymore.
+%%
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%
