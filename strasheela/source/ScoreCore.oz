@@ -710,7 +710,7 @@ define
 %       end
 
       /** %% Effectively unifies self and ScoreObject. Stateful data (including class instances) can not be unified in Oz. So, unify transforms self and ScoreObject to records (using toFullRecord) and unifies those.
-      %% !! Temp: NB: toFullRecord (and thus unify) only works properly on score trees (see doc of toFullRecord).Besides, the score topology of both objects must be determined and equal. 
+      %% !! Temp: NB: toFullRecord (and thus unify) only works properly on score trees (see doc of toFullRecord). Besides, the score topology of both objects must be determined and equal. 
       %% */ 
       meth unify(ScoreObject)
 	 % the flags attribute is only for internal use and is bound to some stateful data structure..
@@ -1030,7 +1030,7 @@ define
 	 %% often this is called for output and timeUnit is sometimes
 	 %% forgotten by user...
 	 if {Not {IsDet Unit}}
-	 then {Browse 'warn: timeUnit unbound'}
+	 then {GUtils.warnGUI "warn: timeUnit unbound"}
 	 end
 	 X = case Unit
 	     of seconds then Value / {Init.getBeatDuration}
@@ -1080,7 +1080,7 @@ define
       in
 	 %% !! IsDet does not wait for binding -- quasi side effect. 
 	 if {Not {IsDet Unit}}
-	 then {Browse 'warn: amplitude unit unbound'}
+	 then {GUtils.warnGUI "warn: amplitude unit unbound"}
 	 end
 	 X = case Unit
 	     of velocity then Value / 127.0
