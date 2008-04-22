@@ -140,7 +140,7 @@ declare
 /** %% Top-level script. Args: cantusFirmus: list of pitch integers, counterpointDomain: domain spec for the counterpoint note pitches.
 %% Note that pitch classes must all be in {0, 2, 4, 5, 7, 9, 11}, that butlast note must be II scale/mode degree (e.g., E if mode is dorian) and last note must be root of mode. 
 %% */
-proc {Fux_FirstSpecies MyScore Args}
+proc {Fux_FirstSpecies Args ?MyScore}
    Defaults = unit(cantusFirmus: {Map ['D'#4 'F'#4 'E'#4 'D'#4
 				       'G'#4 'F'#4 'A'#4 'G'#4
 				       'F'#4 'E'#4 'D'#4]
