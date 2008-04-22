@@ -11,7 +11,7 @@ declare
 
 %%  A simple extended script (e.g., the script supports additional arguments besides the score as root variable). Moreover, for all arguments, defaults are defined.
 %% A sequential container with Args.n notes, each note with the pitch domain Args.pitchDomain, where the interval between the max and min pitch is Args.range. Also, the first and last seq note are neither max nor min pitch.
-proc {TestExtendedScript MyScore Args}
+proc {TestExtendedScript Args MyScore}
    Defaults = unit(n:11
 		   pitchDomain:55#79
 		   range:11)
@@ -211,7 +211,7 @@ end
 
 %% extended script (additional arg n, without default) and 100 msecs max search time 
 declare
-proc {MyScript MyScore Args}
+proc {MyScript Args MyScore}
    Pitches = {FD.list Args.n 60#72}
 in
    MyScore = {Score.makeScore 
@@ -251,7 +251,7 @@ MySearcher = {New RT.scoreSearcherWithTimeout
 
 %% script failure: returns nil and message printed at stout
 declare
-proc {MyScript MyScore _ /* ignored args */}
+proc {MyScript _ /* ignored args */ MyScore}
    Pitches = {FD.list 3 60#72}
 in
    MyScore = {Score.makeScore 
@@ -278,7 +278,7 @@ MySearcher = {New RT.scoreSearcherWithTimeout
 %% timeout: 1 msec search time is usually not enough (sometimes it works..)
 %% NB: Oz scheduling probably not to 1 msec exact anyway, max precision 10 msecs??
 declare
-proc {MyScript MyScore _ /* ignored args */}
+proc {MyScript _ /* ignored args */ MyScore}
    Pitches = {FD.list 3 60#72}
 in
    MyScore = {Score.makeScore 
@@ -302,7 +302,7 @@ MySearcher = {New RT.scoreSearcherWithTimeout
 %% constrain output with respect to previous output
 %% Script outputs note seq with increasing pitches, where the interval between the first pitch of the new and the previous output is a minor or a major second
 declare
-proc {MyScript MyScore Args}
+proc {MyScript Args MyScore}
    N = Args.n
    Predecessor = Args.outputScores.1
    PredecessorPitch1 = {{Predecessor getItems($)}.1 getPitch($)}
@@ -346,7 +346,7 @@ MySearcher = {New RT.scoreSearcherWithTimeout
 %% same as before, but this time with scheduler: output simply in Browser for now
 %% Every second, the solver is called and has 10 msecs max to output solution (the repeater action proc browses bang when solver is called to show this delay)
 declare
-proc {MyScript MyScore Args}
+proc {MyScript Args MyScore}
    N = Args.n
    Predecessor = Args.outputScores.1
    PredecessorPitch1 = {{Predecessor getItems($)}.1 getPitch($)}

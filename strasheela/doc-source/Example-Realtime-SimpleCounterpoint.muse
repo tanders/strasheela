@@ -244,12 +244,12 @@ end
 
 This section finally shows the most interesting part of the example: how a constraint solver is called in realtime. We first define the constraint script, then create a constraint solver object for the script, and finally define an OSC responder which generates the next counterpoint note whenever it receives a cantus firmus note by calling the solver with its script again. 
 
-The structure of the following script definition is very similar to the scripts of non-realtime CSPs shown by other examples before. New is only the second script argument =Args=, which is a record providing the script with multiple CSP parameters. The arguments of the procedure =MyScript= are its solution (here a single note =NewNote=) and a record of script parameters. We may call a script with two arguments an 'extended script'.
+The structure of the following script definition is very similar to the scripts of non-realtime CSPs shown by other examples before. New is only the script argument =Args=, which is a record providing the script with multiple CSP parameters. The arguments of the procedure =MyScript= are its solution (here a single note =NewNote=) and a record of script parameters. We may call a script with two arguments an 'extended script'.
 
 =MyScript= accesses two arguments from =Args=: the note which is simultaneous to =NewNote= and the melodic predecessor of =NewNote=. The simultaneous note is the note coming from Supercollider: the OSC responder hands this note to the scripts argument =Args.inputScore= (see below). The melodic predecessor note is the solution of the previous call of the CSP. Previous solutions (and previous input) are collected automatically by the solver and are made available in reverse order at the scripts argument =Args.outputScores= (respectively =Args.inputScores=).[2]
 
 <src lang="oz">
-proc {MyScript NewNote Args}
+proc {MyScript Args NewNote}
    SimNote = Args.inputScore
    %% PrevNote can be nil (for first note and in case of no solution)
    PrevNote = Args.outputScores.1 % immediate predecessor of NewNote

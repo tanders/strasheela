@@ -138,7 +138,7 @@ fun {MakeOSCNote MyNote}
 end
 %%
 %% extended script for score search
-proc {MyScript NewNote Args}
+proc {MyScript Args NewNote}
    SimNote = Args.inputScore
    %% NOTE: in case of no solution, the next PrevNote1 is defaultSolution (nil)
    PrevNote1 = Args.outputScores.1 % immediate predecessor of NewNote

@@ -224,7 +224,7 @@ end
 %% Result is a score, created inside script. This allows for random
 %% distribution.
 declare
-proc {MyScript MyScore _ /* Args */}
+proc {MyScript _ /* Args */ MyScore}
    PitchClasses in
    {AllIntervalSeries 12 _ /* Intervals */ PitchClasses}
    MyScore = {MakeSeriesScore {Map PitchClasses
