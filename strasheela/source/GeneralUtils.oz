@@ -292,14 +292,12 @@ define
    proc {BinarySkip X Y} skip end
 
 
-   /** %% Convenience function for parameterised CSP scripts. An extended script is a binary procedure, i.e., a script where the first argument is the usual root, and further arguments to the script are handed over in the second argument (e.g., a record). 
+   /** %% Convenience function for parameterised CSP scripts. An extended script is a binary procedure, i.e., a script where the first argument is a record of arguments expected by the script and the second argument is the script root variable. 
    %% ExtendedScriptToScript expects an extended script plus its Args, and returns a plain script (i.e. a unary procedure).
    %% */
    %% !!?? put into ScoreDistro.oz?
    fun {ExtendedScriptToScript MyExtendedScript Args}
-      proc {$ Sol}
-	 Sol = {MyExtendedScript $ Args}
-      end
+      proc {$ Sol} Sol = {MyExtendedScript Args} end
    end
    
    
