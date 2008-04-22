@@ -162,6 +162,10 @@ UndetFS = {FS.var.decl}
 %% GUtils.warnGUI
 %%
 
+%%
+%% this is longer than what can is shown by the warning GUI..
+%%
+
 {GUtils.warnGUI "This is a test with a rather long text. The is also a singleverylongwordhere. The test text continues. This is a test with a rather long text. The is also a singlverylongwordheresinglverylongwordheresinglverylongwordhere. The test text continues. This is a test with a rather long text. The is also a singleverylongwordhere. The test text continues. This is a test with a rather long text. The is also a singleverylongwordhere. The test text continues. This is a test with a rather long text. The is also a singlverylongwordheresinglverylongwordheresinglverylongwordhere. The test text continues. This is a test with a rather long text. The is also a singleverylongwordhere. The test text continues."}
 
 
