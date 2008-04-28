@@ -120,31 +120,31 @@ clearInterval(drawit)
 
 <div style="margin-left:160px"><p align="right" class="margin"><div align="right">inheritance tree</div></p>
 <pre>
- <a class="pre" href="node6.html#entity235">NonType</a> <a class="pre" href="node6.html#entity236">Reflection</a>         <a class="pre" href="node7.html#entity315">FlagsMixin</a>
+ <a class="pre" href="node6.html#entity236">NonType</a> <a class="pre" href="node6.html#entity237">Reflection</a>         <a class="pre" href="node7.html#entity316">FlagsMixin</a>
     |        |                  |
     `-----+--'                  |
           |                     |
-     <a class="pre" href="node6.html#entity237">ScoreObject</a>    <a class="pre" href="node7.html#entity316">ScoreMapping.mappingMixin</a>
+     <a class="pre" href="node6.html#entity238">ScoreObject</a>    <a class="pre" href="node7.html#entity317">ScoreMapping.mappingMixin</a>
           |                     |
           `-----------+---------'
                       |
-                     <a class="pre" href="node6.html#entity248">Item</a>
+                     <a class="pre" href="node6.html#entity249">Item</a>
                       |
                       `+
                        |
-                   <a class="pre" href="node6.html#entity249">Container</a>
+                   <a class="pre" href="node6.html#entity250">Container</a>
                        |
                       +'
                       |
-                    <a class="pre" href="node6.html#entity251">Aspect</a>                    <a class="pre" href="node6.html#entity238">TimeMixin</a>
+                    <a class="pre" href="node6.html#entity252">Aspect</a>                    <a class="pre" href="node6.html#entity239">TimeMixin</a>
                       |                           |
                       `----+----------------------'
                            |
-                     <a class="pre" href="node6.html#entity252">TemporalAspect</a>
+                     <a class="pre" href="node6.html#entity253">TemporalAspect</a>
                            |
                            |
                            |
-                      <a class="pre" href="node6.html#entity254">Simultaneous</a>
+                      <a class="pre" href="node6.html#entity255">Simultaneous</a>
 </pre>
 <hr><p class="margin"><div align="right">class definition</div></p>
 <code>
@@ -1642,7 +1642,7 @@ clearInterval(drawit)
 
 </tr></table>
 <span class="string"> Effectively unifies self and ScoreObject. Stateful data (including class instances) can not be unified in Oz. So, unify transforms self and ScoreObject to records (using toFullRecord) and unifies those.<BR>
- !! Temp: NB: toFullRecord (and thus unify) only works properly on score trees (see doc of toFullRecord).Besides, the score topology of both objects must be determined and equal. <BR>
+ !! Temp: NB: toFullRecord (and thus unify) only works properly on score trees (see doc of toFullRecord). Besides, the score topology of both objects must be determined and equal. <BR>
 <BR>
 </span>
 </li><li><span class="functionname">wait</span>(unless:Unless)<br>
