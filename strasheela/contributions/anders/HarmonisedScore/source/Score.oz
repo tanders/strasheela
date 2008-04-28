@@ -962,6 +962,7 @@ define
 			 dbFeatures#fun {$ X } {Arity {X getDBFeatures($)}} end#nil
 			]})
 	 end
+
 	 
       end
    end
@@ -969,14 +970,14 @@ define
       {Object.is X} andthen {HasFeature X PitchClassCollectionType}
    end
 
-   
+
 
    /** %% Chord represents an analytical chord, i.e. a chord which is silent when the score is played but is used to constrain notes simultaneous with the chord. For example, Chord instances can be used to express a roman numeral or functional analysis of the music.
    %% For further information see doc of PitchClassCollection.
    %% */
    class Chord from PitchClassCollection
       feat !ChordType:unit
-	 label:chord
+	 label:chord 
 	 /** %% The chord database is defined by DB.setDB. getDB returns the internal representation of this database (see the DB.setDB for more details).
 	 %% */
       meth getDB(?X)
@@ -2547,7 +2548,7 @@ define
 			     %% no voice crossing (but unison doublings are OK)
 			     {Pattern.continuous
 			      {Map Notes fun {$ N} {N getPitch($)} end}
-			      '>=:'}
+			      '=<:'}
 			     %% QUATSCH (diese def fuer enge lage)
 % 			  %% sim intervals between neighbouring voices
 % 			  %% all > than an octave
