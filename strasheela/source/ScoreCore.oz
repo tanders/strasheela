@@ -45,7 +45,7 @@
 
 functor 
 import
-%   System
+   System
    FD FS RecordC % Space
    Boot_Object at 'x-oz://boot/Object'
    Boot_Name at 'x-oz://boot/Name'
@@ -299,10 +299,12 @@ define
 	 %% hands arbitrary init arguments to instance attributes
 	 {Record.forAllInd {Record.subtractList M [info handle id]}
 	  proc {$ Attr X}
-	     {GUtils.warnGUI "Setting "#{Value.toVirtualString self 100 100}#"'s attribute '"#Attr#"' directly to "#{Value.toVirtualString X 100 100}#". Possibly, this attribute does not exist in this object!"}
-	     % {System.showInfo "Warning: setting "#{Value.toVirtualString 100 100}#"'s attribute "#Attr#" directly to "#X#". Possibly, this attribute does not exist in this object!"}
+	     %% Note: GUI causes space hierarchy from within local space
+	     % {GUtils.warnGUI "Setting "#{Value.toVirtualString self 100 100}#"'s attribute '"#Attr#"' directly to "#{Value.toVirtualString X 100 100}#". Possibly, this attribute does not exist in this object!"}
+	     {System.showInfo "Warning: setting "#{Value.toVirtualString self 100 100}#"'s attribute "#Attr#" directly to "#X#". Possibly, this attribute does not exist in this object!"}
 	     @Attr = X
 	  end}
+	 
       end
       meth isScoreObject(?B) B=true end
       meth getID(?X) X=@id end
@@ -340,6 +342,8 @@ define
 	 {LUtils.find {self getInfo($)}
 	  fun {$ X} {IsRecord X} andthen {Label X} == L end}
       end
+
+      
       /** %% [aux method for toPPrintRecord] Returns a record with the label of self (the value at the feature label of self) and the values of selected features/attributes of self at record labels. All atoms in the list Features which are member in the list Slots are features of the returned record. 
       %% Usually, the record feature is just bound to the value at the features/attributes of self. However, for certain features/attributes there are special access functions defined. The return value of these functions will be bound to the record features. These features and their functions are either given in a record to the optional method feature functions. Other features and their functions are predefined in the variable PPrintRecordFns.
       %% */
@@ -2423,7 +2427,7 @@ define
 	  {MyScore getInitClasses($)}}
       end
       /** %% CopyScore returns a deep copy of MyScore. The resulting MyCopy has the same score topology and its objects are created from the same classes as MyScore. However, undetermined variables in MyScore are replaced by fresh variables with the same domain. 
-      %% NB: CopyScore internally uses toInitRecord. Therefore, all present restrictions of toInitRecord apply: getInitInfo must be defined correctly for all classes and only tree-form score topologys are supported.
+      %% NB: CopyScore internally uses toInitRecord. Therefore, all present restrictions of toInitRecord apply: getInitInfo must be defined correctly for all classes and only tree-form score topologies are supported.
       %% !!! NB: if the output of toInitRecord contains stateful data, then this data is not copied but used as is (i.e. such stateful data is shared between the copies). 
       %% */
       %% !! could I use copying functionality defined for spaces instead to make implementation more stable without dependency on getInitInfo?
