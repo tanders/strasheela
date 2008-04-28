@@ -421,6 +421,28 @@ proc {$ X} {Browse elseCase#X} end}
  proc {$} {Browse elseCase} end}
 
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%% MapScore
+%%
 
+declare
+MyScore = seq(info:test
+	      items:[note(duration:4
+			  pitch:60)
+		    note(duration:4
+			 pitch:62)
+		    note(duration:4
+			  pitch:64)]
+	      startTime:0
+	      timeUnit:beats(4)
+	     )
 
+%% no processing
+{Browse {SMapping.mapScore MyScore
+	 fun {$ X} X end}}
 
+%% add feat bla
+%% Note: all score objects get it added, but not beats(4) 
+{Browse {SMapping.mapScore MyScore
+	 fun {$ X} {Adjoin unit(bla:hallo) X} end}}
