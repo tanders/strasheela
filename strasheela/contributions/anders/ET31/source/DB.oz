@@ -62,7 +62,7 @@ define
 		   %%
 
 		   chord(pitchClasses:[6#6 6#5 6#4] % 'C' 'Es' 'G'
-			 roots:[6#6] % 6#6
+			 roots:[6#6] 
 %				dissonanceDegree:2
 			 comment:'minor')
 		   chord(pitchClasses:[4#4 5#4 6#4] % 'C' 'E' 'G'
@@ -84,7 +84,7 @@ define
 %				dissonanceDegree:2
 			 comment:'harmonic diminished')		   
 		   chord(pitchClasses:[7#7 7#6 7#5] % ['C' 'D#' 'F#']
-			 roots:[7#7]
+			 roots:[7#7] 
 %				dissonanceDegree:2
 			 comment:'utonal diminished') % reversed harmonic diminished
 		   %% relatively high tuning error of 'tritone'
@@ -187,6 +187,66 @@ define
 %				dissonanceDegree:2
 			 comment:'minor 7th')
 
+		   
+		   chord(pitchClasses:[1#1 3#1 5#1 15#1]
+			 roots:[1#1]  
+%				dissonanceDegree:2
+			 comment:'major 7th')
+
+		   chord(pitchClasses:[1#1 3#1 5#1 15#1 9#1]
+			 roots:[1#1]  
+%				dissonanceDegree:2
+			 comment:'major 9th')
+		   chord(pitchClasses:[1#1 3#1 5#1 15#1 5#3]
+			 roots:[1#1]  
+%				dissonanceDegree:2
+			 comment:'minor 9th')
+
+
+		   
+		   %%
+		   %% added after Doty: TODO: double-check that there are no doublicates here to the above
+		   %%
+		   
+		   chord(pitchClasses:[1#1 3#1 5#1 7#1 9#1]
+			 roots:[1#1]  
+%				dissonanceDegree:2
+			 comment:'harmonic 9th')
+
+		   chord(pitchClasses:[3#1 5#1 7#1 9#1]
+			 roots:[3#1]  
+%				dissonanceDegree:2
+			 comment:'harmonic half-diminished 7th')
+		   %% !! 
+		   chord(pitchClasses:[1#1 3#1 7#1]
+			 roots:[1#1]  
+%				dissonanceDegree:2
+			 comment:'4-6-7')
+		   chord(pitchClasses:[5#1 7#1 9#1]
+			 roots:[5#1]  
+%				dissonanceDegree:2
+			 comment:'5-7-9')
+		   chord(pitchClasses:[1#1 3#1 5#1 9#1]
+			 roots:[1#1]  
+%				dissonanceDegree:2
+			 comment:'added-2nd')
+
+
+		   chord(pitchClasses:[2#1 4#3 8#7]
+			 roots:[4#3]  
+%				dissonanceDegree:2
+			 comment:'subharmonic 4-6-7')
+
+		   
+		   chord(pitchClasses:[3#1 7#1 9#1 21#1]
+			 roots:[3#1]  
+%				dissonanceDegree:2
+			 comment:'subminor 7th')
+		   
+		   chord(pitchClasses:[9#1 7#1 27#1 21#1]
+			 roots:[7#1] %% ??  
+%				dissonanceDegree:2
+			 comment:'submajor 7th')
 		   
 		   %%
 		   %% more chords (not all of these are really suitable) 
