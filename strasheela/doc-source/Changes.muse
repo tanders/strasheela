@@ -7,13 +7,20 @@
 
   - Main additions 
 
-
   - Documentation
+
+    - Added examples to HarmonicProgressions-31ET.oz: chord progression with 7-limit triads in septimal minor, chord progression in extended tonality with 7-limit tetrads, and chord progression with 7-limit tetrads forming a sequence (repetition of the sub-chord progressions at different pitches)
 
 
   - Fixes and minor changes
 
+    - SMapping: added MapScore
     - Out.midi.note2Midi renamed into Out.midi.noteToMidi for consistency
+    - GUtils.extendedScriptToScript: the argument order for extended scripts is swapped, so that extended scripts can be used conveniently as score creator functions in Score.makeScore. All code which uses extended scripts has been adapted (e.g., RT.scoreSearcherWithTimeout and all examples which use that class).
+    - Fixed HS.score.chordsToScore bug: arg minIntervalToBass did constrain interval between soprano an next lower voice instead between bass and next higher
+    - Fixed ScoreObject method init bug: replaced GUI warning again by stdout warning as GUI warning causes exception from within space 
+
+
 
 
 
