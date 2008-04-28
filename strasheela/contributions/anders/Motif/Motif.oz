@@ -34,6 +34,8 @@ motif(durations:[2 2 2 8] pitchContour:[1 1 0] comment:beethovensFifth)
 
 %% Of course, arbitrary parameters can be constrained in a motif. For instance, to model pauses before or between motif notes, the note offsetTimes may be constrained.
 
+%% Note that there also exists another motif model in Strasheela. See contributions/anders/PrototypeMotif for details. The two motif models are also compared there.
+
 %% */
 
 
