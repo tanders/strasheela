@@ -307,6 +307,8 @@ define
    /** %% Constraints the union of the pitch classes of Chords (a list of chord objects) to be the same set as the set of pitch classes of MyScale (a scale object). In other words, all chords only use scale tones (diatonic chords) and all scale tones are played.  Also, the root of the last chord is constrained to the root of the scale.
    %% In common usage, Chords has length three and is applied to the last three chords of a progression.
    %% This constraint goes well with HS.rules.schoenberg.ascendingProgressionR and frieds (results in the common cadences for major in 12 ET, and plagal cadences for natural minor).
+   %%
+   %% Note: this constraint implements a particular strict notion of a cadence, were all scale notes must sound. A less strict version would require that only pitch classes which distinguish a scale among all other likely scales are sufficient (e.g., the pitch classes G, B, and F are sufficient to distinguish C-major between all major scales). However, such a constraint is more context dependent and requires information on all scales which are alternatively possible (e.g., G, B, and F are not sufficient to confirm C-major if the scale could also be Dorian). 
    %% */
    proc {Cadence MyScale Chords}
       {MyScale getPitchClasses($)} = {FS.unionN
