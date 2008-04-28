@@ -269,26 +269,92 @@ configure: error: ozinstall not found
     Accessor methods like getDurationInSeconds or getPitchInMidi must be generalised to support either FD ints or XRI vars
 
 
-** DONE Introduce some generalised concept of 'cadence'		       :ARCHIVE:
-   CLOSED: [2008-04-08 Tue 17:10]
-
-   =======
-
-   Example: {Cadence Chords Scale} constraints that union of all pitch classes in Chords (list of N chords) contains all pitchclasses of Scale. Additional arguments (some FD int?) may allow to specify whether cadence ends in I or some form of deceptive cadence occurs. 
-   Combined with disallowing of weak harmonic steps with ProgressionStrength this should result in classical cadence (doublecheck ??)
+** Introduce some generalised concept of 'cadence'
  
    What generalised notions are there in the literature for a cadence?
    My problem: I would like to have a cadence concept which also works, e.g., for music in extended just intonation and is not simply something like II V I... I would like to structure [unconventional] music. Does this problem occur in literature? How do they do this in Jazz, for example?
 
-*** DONE Check literature for cadence concepts
-    CLOSED: [2008-04-08 Tue 17:10]
+   See GTD folder "cadence sets"
+
+*** TODO Check literature for cadence concepts
 
     Is there anything like a generalised concept proposed already
 
-*** Define constraint 
+
+**** Mazzola: cadencial set 
+
+***** [info] What is a cadencial set?
+
+     file:///Users/t/Desktop/mamufaq.html#Q_cadencialset
+
+A cadencial set, or cadence-set, is Mazzola's terminology for a set of vertical sonorities that determine a key completely. E.G., the chords IV and V uniquely fix a certain major key, as well as the chords V7 and I - which may be one of the reasons that these became popular as parts of cadences.
+Note that the property is based on sets, not on progressions - it is "purely vertical" and does not include the time component. Hence it is not sufficient for musical styles where beginning notes or chords are distinctive marks (such as the system of modes in medieval and renaissance music).
+If a certain set is cadencial, then every set containing it is cadencial, too. So the really interesting things are minimal cadencial sets.
+From this viewpoint, there is an interesting polarity between major and harmonic minor. From the 7 triads of the diatonic major scale we can build the following 5 minimal cadencial sets: {II, III}, {III, IV}, {IV, V}, {II, V} and {VII} - whereas in harmonic minor, every pair of triads forms a minimal cadence-set. Hence we have 21 unique minimal ways to fix a certain minor key - which is, BTW, the absolute maximum obtainable with 7 3-element sonorities.
 
 
-    
+**** Rothenberg "A Model for Pattern Perception with Musical Applications"
+     
+     Part II, p. 369: minimal set to identify C major among all major scales is G B F
+
+     OK, that makes sense, but that only works as minimal set if (i) there are only major scales and (ii) the listener does know that there are only major scales and knows this scale well
+
+     So, for my purposes it might be sufficient to require that all pitches are sounded in a cadence. 
+
+
+*** TODO Define cadence constraint for [cadencial set] (only required pitches)
+
+    The strict cadence constraint requires that *all* scale notes are contained in Chords. However, some theorists (Mazzola, Rothenberg) suggest that it may be sufficient to bring only those pitches which make it unmistakable which key we are in.
+
+
+**** Idea (Strasheela code sketch)
+
+     ContextScales is the set of all scales which form the context of our musical universe  
+     MyScale is a particular scale from our musical universe 
+     We are looking for the minimum subset of MyScale which is not contained in any of the other context scales. 
+
+
+    Example: 
+    ContextScales is the major scale in all its 12 ET transpositions
+    MyScale is C major scale
+    MinimumSet = {G, B, F}
+    Note: this set is not sufficient if ContextScales contain, e.g., dorian scales as well, because G dorian also contains these pitches. 
+
+
+     SufficientSet = {FS.var.decl}
+     {FS.subset SufficientSet {MyScale getPitchClasses($)}}
+     {ForAll {LUtils.remove ContextScales fun {$ X} X == MyScale end}
+      proc {$ ContextScale} 
+       	{FD.nega 
+         {Combinator.'reify' 
+	  proc {$} {FS.subset SufficientSet {ContextScale getPitchClasses($)}} end}
+	 1}
+      end}
+
+    for MinimumSet minimise SufficientSet
+
+
+
+*** TODO Define abstraction (constraint?) which checks whether a set of pitch classes is cadencial for a certain scale 
+
+    The literature may discuss how this is done for the diatonic scales. But is there also a more general way which would would for, say, Erlich's decatonic scales?
+
+
+*** ?? Define cadence model of mediaval / renaisssance music
+
+    Not based on cadencial set. Instead, additional pitches are introduced to confirm root key with semitone step 
+
+
+
+*** DONE Define strict constraint 
+    CLOSED: [2008-04-24 Thu 18:26]
+
+   Example: {Cadence Chords Scale} constraints that union of all pitch classes in Chords (list of N chords) contains all pitchclasses of Scale. Additional arguments (some FD int?) may allow to specify whether cadence ends in I or some form of deceptive cadence occurs. 
+   Combined with disallowing of weak harmonic steps with ProgressionStrength this should result in classical cadence (doublecheck ??)
+
+
+
+   
 ** Introduce some generalised concept of resolution of dissonances
 
 *** Extend chord music representation: which chord notes are dissonant?
@@ -360,9 +426,35 @@ configure: error: ozinstall not found
    
 
 
-** Harmonic constraint ProgressionStrength			  :NEXT:ARCHIVE:
+** Harmonic constraint ProgressionStrength
 
-   see [[file:~/oz/music/Strasheela/tmp.oz::functor%20SchoenbergF][file:~/oz/music/Strasheela/tmp.oz::functor SchoenbergF]]
+*** Superstrong progressions reconsidered
+
+    [wait until cadencial set constraint/proc is defined]
+
+    Alternative definition: superstrong progressions are cadencial (the union of their pitch classes contains all pitches which define a key)
+    -> According to this def, progressions like V->VI or even V->VIb (which certainly are superstong according to Schoenberg) are not superstrong anymore but don't fall into any category.
+    I may consider creating an additional definition based on the notion of cadencial sets. 
+
+
+**** Info
+     
+     file:///Users/t/Desktop/mamufaq.html#Q_superstrong
+     What is special in the chord progression IV-V?
+     
+     From: Inotmark <inotmark@aol.comnospam>.
+     It is strong for a number of reasons:
+     1) it has no tones in common
+     2) it has a tritone between root of IV and third of V
+     3) it is sufficient to define a key without the tonic chord appearing.
+       	Schönberg calling it superstrong may be due to 3 above.
+       	
+       	Connection to MaMuTh:
+       	Property (3) means, in Mazzola's terminology, that the chord set {IV, V} is cadencial.
+
+*** TODO Implement Schoenbergs orig defs				 :MAYBE:
+
+    Based on root PC intervals 
 
 *** DONE Move definitions from Strasheela/tmp.oz into HS.rules 
     CLOSED: [2008-04-08 Tue 17:09]
@@ -389,10 +481,6 @@ configure: error: ozinstall not found
     Missing is only ResolveDescendingProgressions
 
     [[file:~/oz/music/Strasheela/strasheela/trunk/strasheela/contributions/anders/HarmonisedScore/testing/Rules-test.oz::TODO%20ResolveDescendingProgressions][file:~/oz/music/Strasheela/strasheela/trunk/strasheela/contributions/anders/HarmonisedScore/testing/Rules-test.oz::TODO ResolveDescendingProgressions]]
-
-*** TODO Implement Schoenbergs orig defs				 :MAYBE:
-
-    Based on root PC intervals 
 
 *** DONE Create example(s)
     CLOSED: [2008-04-08 Tue 17:09]
@@ -457,16 +545,40 @@ configure: error: ozinstall not found
 
 ** New prototype-based motif model					  :NEXT:
 
-   see [[file:~/oz/music/Strasheela/private/WorkInProgress/PrototypeMotif/Ideas.org]]
-   und GTD folder 
+   see [[file:~/oz/music/Strasheela/strasheela/trunk/strasheela/contributions/anders/PrototypeMotif/PrototypeMotif.oz]]
+   und (aelteres) im GTD folder 
 
-*** TODO Brainstorming fuer mini language
-
-    see handgeschriebene Notizen in GTD folder "Motif model: prototype based"
-
-*** TODO Brainstorming fuer constraints between motif instances 
+*** Debugging 
     
-*** TODO Formalisieren der Ideen 
+    [[file:~/oz/music/Strasheela/strasheela/trunk/strasheela/contributions/anders/PrototypeMotif/PrototypeMotif.oz]]
+
+**** TODO Chord example below blocks: debug
+     
+**** TODO NestedScript example below blocks: debug
+       
+     
+
+*** TODO Create functor and commit svn
+
+*** Create small-scale examples with this model 
+
+    Make sure it works 
+    As documentation 
+
+    
+*** For further TODOs see in source file 
+
+    [[file:~/oz/music/Strasheela/strasheela/trunk/strasheela/contributions/anders/PrototypeMotif/PrototypeMotif.oz]]
+
+
+*** Older
+
+**** Brainstorming fuer mini language
+
+     see handgeschriebene Notizen in GTD folder "Motif model: prototype based"
+
+**** Brainstorming fuer constraints between motif instances      
+**** Formalisieren der Ideen 
 
 
 ** Time curves etc [[file:~/oz/music/Strasheela/private/examples/forOlleRomo/TempoCurves-etc.oz][TempoCurves-etc.oz]]					  :NEXT:
@@ -523,7 +635,7 @@ configure: error: ozinstall not found
 
 
 
-** Length-independend pattern constraints like contour
+** TODO Length-independend pattern constraints like contour
 
    Some constraint which expects two lists of FD ints (i.e. length of lists is determined) and constraints that all elements of the shorter list (first arg?) are contained *in their order* in the longer list (second arg?), but that the longer list might contain intermediate elements (i.e. neighbouring elements of the shorter list are not necessarily neighbours in the longer list, their might be one or more elements in between).
    The constraint allows for multiple solutions for the longer list (e.g. where the additional elements are inserted), but should not necessarily insert any additional choice point. Can I define such a constraint with or? 
@@ -539,7 +651,7 @@ configure: error: ozinstall not found
    [+ + + - - = - - +]
 
 
-** Define InCriticalBandR Constraint
+** TODO Define InCriticalBandR Constraint
 
    {InCriticalBandR Pitch1 Pitch2 B}
 
@@ -553,6 +665,13 @@ configure: error: ozinstall not found
    There is a graphics in Doty "JI Primer", p. 13
 
 
+** TODO Define variant of Schoenberg using chord primes			  :WAIT:
+
+   [wait until I have DB with primes define]
+
+   Chord progression constraints currently use concept root. Define a variant which uses chord primes/fundaments (1/1) instead as an alternative.  
+
+
 ** Create chord, scale and interval database for JI 
 
    Database defined with ratios Num#Denom
@@ -563,13 +682,15 @@ configure: error: ozinstall not found
 
     Problem dabei: I might want to use an alternative non-ET tuning later where different pitch classes / intervals would be tempered out. Fixing this problem would require to rewrite HS such that it is not based on ET tunings. Instead, you better use a higher value for PitchesPerOctave so that all your ratios are assigned to unique pitch class integers. The tuning table could then indeed temper out some intervals by assigning multiple PCs the same pitch in cent.  
 
-    
-*** TODO Define Tenney Distance for JI ratio 
+
+
+*** TODO Define Tenney Distance for JI ratios in interval DB  
 
     for ratio Nom#Denom the Tenney harmonic distance is 
 
-    log(Nom * Denom) 
+    log2(Nom * Denom) 
 
+    define distance as integers (e.g., {Round Distance * 1000.0})
 
 *** TODO Create JI interval DB automatically (from given args for a lattice: prime limits and factors for them)
 
@@ -610,6 +731,9 @@ configure: error: ozinstall not found
 *** TODO Use this databases in ET databases like ET22 and ET31 
 
     Complement by temperament-specific entries 
+
+    
+*** TODO Besides root, add feature for fundamental/prime (1/1)
 
 
 ** Edit chord, scale and interval database (22 pitches per octave)
@@ -950,7 +1074,7 @@ configure: error: ozinstall not found
 *** TODO Find out where I can get octave-dependend "consonance/dissonance degree""consonance/dissonance degree" (harmonicity distance, whatever) from Scala or else
 
 *** TODO Define constraint which extends selection constraint of a interval database entry field to use interval + octave
-
+§
 
 
 ** Define Monzo constraint for pitch class				 :MAYBE:
@@ -963,6 +1087,29 @@ configure: error: ozinstall not found
 
    
 
+
+** Chord pair constraint: Define Carl Lumma's "modulation strength" (Tenney distance between two chords)
+
+   [wait until I have interval DB with Tenney distances]
+
+   {ModulationStrength Chord1 Chord2 ?X}
+
+   See explanation in GTD folder "Lumma: chord distances"
+
+   Use Tenney distance of intervals 
+
+** Chord pair constraint: Define voice leading distance 
+
+   ?? {VoiceLeadingDistance Chord1 Chord2 ?X}
+
+   ?? {VoiceLeadingDistance Chord1 Chord2 ?X PitchPairs} 
+   PitchPairs is grouping all pairs of pitch classes in Chord1 and Chord2 whose distance is minimal (including liegenbleibender Toene?, and what if number of notes in both chords differs?). 
+   Problem: how can I express PitchPairs as variable if I don't know how many pairs their are? 
+
+
+   See explanation in GTD folder "Lumma: chord distances"
+
+   
 
 ** Score transformation
 
@@ -1342,6 +1489,30 @@ See ../../testing/zy_Efficiency/KeepMusicRepresentationOutsideComputationalSpace
 
 
 * Strasheela installation
+
+
+** Include installation of Mozart extensions in install-all.sh 		 :MAYBE:
+
+   I could install selection constraints and [Iozsef] via install-all.sh and then also consequently deinstall these with uninstall-all.sh 
+
+
+*** TODO Test what happens if there is no network connection
+
+    the script should not block altogether or report confusing error messages
+
+*** TODO Decide whether I should make script interactive
+
+   Problem: what happens if some people already have (some of) these Mozart extensions installed -- they certainly don't want me to deinstall them 
+   -> I could interactively ask whether these extensions shall be installed / deinstalled 
+
+
+   Problem: making it interactive could cause problems for package providers -- for them I should then introduce script arguments which allow to set this decision before the script runs 
+
+
+   BTW: I definitely should not make update-all interactive nor include anything Mozart extension related
+
+
+*** Write the script 
 
 
 ** Test release on Linux Ubuntu (home PC)				 :MAYBE:
