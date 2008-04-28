@@ -51,6 +51,8 @@ export
    PatternMatchingApply PatternMatchingApply2
    ForNumericRange ForNumericRange2 ForNumericRangeArgs
    
+   MapScore
+   
 define
 
    
@@ -775,5 +777,24 @@ define
 	  end
        end}
    end
+
+   
+   /** %% Expects a _textual_ score MyScore (a record) and applies Fn to every contained textual score object. Returns a score where the score object are replaced by the results of Fn. However, any 'items' features are ignored in the result of Fn. Instead, the original nesting is preserved. 
+   %% NB: presently, only tree topology is supported
+   %% */
+   fun {MapScore MyScore Fn}
+      fun {MapItems X}
+	 if {HasFeature X items}
+	 then {Adjoin unit(items:{Map X.items
+				  fun {$ Y} {MapScore Y Fn} end})
+	       %% keep orig label
+	       {Label X}}
+	 else {Label X}
+	 end
+      end
+   in
+      {Adjoin {Fn MyScore} {MapItems MyScore}}
+   end
+
    
 end
