@@ -52,7 +52,7 @@ declare
 %% SELECT scale. 
 MyScale = {Score.makeScore scale(index:{HS.db.getScaleIndex 'major'}
 				 % index:{HS.db.getScaleIndex 'natural minor'}
-				 %% no solution if superstrong progressions are not allowed and no 'harmonic diminished' chords are premitted
+				 %% no solution if no 'harmonic diminished' chords are premitted
 				 % index:{HS.db.getScaleIndex 'harmonic minor'}
 				 transposition:{ET31.pc 'C'})
            unit(scale:HS.score.scale)}
@@ -87,7 +87,10 @@ in
    ChordSeq = {Score.makeScore seq(items:Chords
 				   startTime:0)
 	       unit}
-   %% Good progression: ascending or descending progression only as 'passing chords'
+   %% tmp: only ascending progressions
+%   {Pattern.for2Neighbours Chords
+%    proc {$ C1 C2} {HS.rules.schoenberg.ascendingProgressionR C1 C2 1} end}
+   %% Good progression: descending progression only as 'passing chords'
    {HS.rules.schoenberg.resolveDescendingProgressions Chords unit}
    %% no super strong progression in such a simple progression
    {Pattern.for2Neighbours Chords
@@ -209,6 +212,84 @@ end
 
 
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%% Diatonic chord progression which allows for 7-limit chords.
+%%
+
+/*
+
+declare
+%% SELECT scale. 
+MyScale = {Score.makeScore scale(% index:{HS.db.getScaleIndex 'major'}
+				 % index:{HS.db.getScaleIndex 'natural minor'}
+				 %% no solution if no 'harmonic diminished' chords are premitted
+				 % index:{HS.db.getScaleIndex 'harmonic minor'}
+				 index:{HS.db.getScaleIndex 'septimal natural minor'}
+				 transposition:{ET31.pc 'C'})
+           unit(scale:HS.score.scale)}
+%%
+/** %% CSP with chord sequence solution. Only diatonic chords, follow Schoebergs recommendation on good roor progression, end in cadence. 
+%% */
+proc {MyScript ChordSeq}
+   %% settings
+   N = 5			% number of chords
+   Dur = 2			% dur of each chord
+   %% SELECT chords
+   %% only specified chord types are used 
+   ChordIndices = {Map [% 'major'
+			% 'minor'
+			'harmonic diminished'
+			% 'augmented'
+			'utonal diminished'
+			'subminor'
+			'supermajor'
+		       ]
+		   HS.db.getChordIndex}
+   %% create chord objects
+   Chords = {LUtils.collectN N
+	     fun {$}
+		{Score.makeScore2 chord(index:{FD.int ChordIndices}
+					duration:Dur
+					%% just to remove symmetries 
+					sopranoChordDegree:1
+					timeUnit:beats)
+		 %% label can be either chord or inversionChord
+		 unit(chord:HS.score.inversionChord)}
+	     end} 
+in
+   %% create music representation for solution
+   ChordSeq = {Score.makeScore seq(items:Chords
+				   startTime:0)
+	       unit}
+   %% tmp: only ascending progressions
+   {Pattern.for2Neighbours Chords
+    proc {$ C1 C2} {HS.rules.schoenberg.ascendingProgressionR C1 C2 1} end}
+   %% Good progression: descending progression only as 'passing chords'
+   {HS.rules.schoenberg.resolveDescendingProgressions Chords unit}
+   %% no super strong progression in such a simple progression
+   {Pattern.for2Neighbours Chords
+    proc {$ C1 C2} {HS.rules.schoenberg.superstrongProgressionR C1 C2 0} end}
+   %% First and last chords are equal (neither index nor transposition are distinct)
+   {HS.rules.distinctR Chords.1 {List.last Chords} 0}
+   %% All chords are in root position. 
+   {ForAll Chords proc {$ C} {C getBassChordDegree($)} = 1 end}
+   %% only diatonic chords
+   {ForAll Chords proc {$ C} {HS.rules.diatonicChord C MyScale} end}
+   %% last three chords form cadence
+   {HS.rules.cadence MyScale {LUtils.lastN Chords 3}}
+end
+%% sed random seed to date
+{GUtils.setRandomGeneratorSeed 0}
+{SDistro.exploreAll MyScript unit(order:startTime
+				  value:random
+				  % value:mid
+				 )}
+
+*/
+
+
+
 
 
 
@@ -219,6 +300,8 @@ end
 %% (cycle pattern of root intervals, chord indicess etc).
 %%
 %% Uncommon but nice progressions result :) 
+%%
+%% These progressions use simple triads, the next example is similar but uses more complex tetrads
 %%
 
 /*
@@ -314,6 +397,234 @@ end
 
 */
 
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%% Chord progression in extended tonality (not simply diatonic), with only ascending progressions of various tetrads. Ending with cadend in C. 
+%%
+%% Uncommon but nice progressions result :) 
+%%
+
+/*
+
+declare
+{ET31.out.addExplorerOut_ChordsToScore
+ unit(outname:"ChordsToScore"
+      voices:5
+      pitchDomain:{ET31.pitch 'C'#3}#{ET31.pitch 'C'#6}
+%      value:random
+      value: min % mid
+      ignoreSopranoChordDegree:true
+      minIntervalToBass: {ET31.pc 'F'}
+     )}
+MyScale = {Score.makeScore scale(index:{HS.db.getScaleIndex 'major'}
+				 transposition:{ET31.pc 'C'})
+           unit(scale:HS.score.scale)}
+/** %% Constraints the pitch class interval between the bass PCs of the chords C1 and C2 to IntervalPC. IntervalPC is implicitly declared an FD int. 
+%% */
+proc {TransposeBassPC C1 C2 ?IntervalPC}
+   {HS.score.transposePC {C1 getBassPitchClass($)} IntervalPC
+    {C2 getBassPitchClass($)}}
+end
+%%
+/** %% CSP with chord sequence solution.
+%% */
+proc {MyScript ChordSeq}
+   %% settings
+   N = 9			% number of chords
+   Dur = 2			% dur of each chord
+   %% only specified chord types are used 
+   ChordIndices = {Map [
+% 			'dominant 7th'
+ 			'minor 6th'
+ 			'subminor 6th'
+ 			'harmonic 7th'
+ 			'subharmonic 6th'
+ 			'mix of plain and reversed harmonic dominant 7th'
+ 			'minor 7th'
+ 			'sixte ajoutee'
+			%% 
+			'major 7th'
+			'major 9th'
+			'minor 9th'
+			'harmonic 9th'
+			'harmonic half-diminished 7th'
+%			'added-2nd'
+			'subminor 7th'			
+		       ]
+		   HS.db.getChordIndex}
+   %% create chord objects
+   Chords = {LUtils.collectN N
+	     fun {$} 
+		{Score.makeScore2 chord(index:{FD.int ChordIndices}
+					duration:Dur
+					%% just to remove symmetries 
+					sopranoChordDegree:1
+					timeUnit:beats)
+		 %% label can be either chord or inversionChord
+		 unit(chord:HS.score.inversionChord)}
+	     end} 
+in
+   %% create music representation for solution
+   ChordSeq = {Score.makeScore seq(items:Chords
+				   startTime:0)
+	       unit}
+   %% only ascending progressions
+   {Pattern.for2Neighbours Chords 
+    proc {$ C1 C2} {HS.rules.schoenberg.ascendingProgressionR C1 C2 1} end}
+   {HS.rules.distinctR Chords.1 {List.last Chords} 0}
+   %% no 6/4 chords (no 2nd inversion)
+   {ForAll Chords proc {$ C} ({C getBassChordDegree($)} =: 3) = 0 end}
+   %% Most chords are in root positon, some are in second inversion
+   {Pattern.percentTrue_Range {Map Chords fun {$ C} ({C getBassChordDegree($)} =: 1) end}
+    60 85}
+   %% Sometimes bass progresses stepwise 
+   {Pattern.percentTrue_Range
+    {Pattern.map2Neighbours Chords
+     fun {$ C1 C2} ({TransposeBassPC C1 C2} =<: {ET31.pc 'D|'}) end}
+   30 70}
+   %% last three chords form cadence
+   {HS.rules.cadence MyScale {LUtils.lastN Chords 3}}
+end
+%% sed random seed to date
+{GUtils.setRandomGeneratorSeed 0}
+{SDistro.exploreOne MyScript unit(order:startTime
+				  value:random
+				  % value:mid
+				 )}
+
+
+*/
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%% Chord progression in extended tonality (not simply diatonic),
+%% however ending with cadend in C. Progression forms a sequence
+%% (cycle pattern of root intervals, chord indicess etc). Only
+%% ascending chord progressions.
+%%
+%% Uncommon but nice progressions result :) 
+%%
+
+/*
+
+declare
+{ET31.out.addExplorerOut_ChordsToScore
+ unit(outname:"ChordProgressions-withSequences"
+      voices:5
+      pitchDomain:{ET31.pitch 'C'#3}#{ET31.pitch 'C'#6}
+%      value:random
+      value: min % mid
+      ignoreSopranoChordDegree:true
+      minIntervalToBass: {ET31.pc 'F'}
+     )}
+MyScale = {Score.makeScore scale(index:{HS.db.getScaleIndex 'major'}
+				 transposition:{ET31.pc 'C'})
+           unit(scale:HS.score.scale)}
+/** %% Constraints the pitch class interval between the bass PCs of the chords C1 and C2 to IntervalPC. IntervalPC is implicitly declared an FD int. 
+%% */
+proc {TransposeBassPC C1 C2 ?IntervalPC}
+   {HS.score.transposePC {C1 getBassPitchClass($)} IntervalPC
+    {C2 getBassPitchClass($)}}
+end
+%%
+/** %% CSP with chord sequence solution.
+%% */
+proc {MyScript ChordSeq}
+   %% settings
+   %% TMP comment
+   N = 19			% number of chords
+   Dur = 2			% dur of each chord
+   %% only specified chord types are used 
+   ChordIndices = {Map [
+% 			'dominant 7th'
+ 			'minor 6th'
+ 			'subminor 6th'
+ 			'harmonic 7th'
+ 			'subharmonic 6th'
+ 			'mix of plain and reversed harmonic dominant 7th'
+ 			'minor 7th'
+ 			'sixte ajoutee'
+			%% 
+			'major 7th'
+			'major 9th'
+			'minor 9th'
+			'harmonic 9th'
+			'harmonic half-diminished 7th'
+%			'added-2nd'
+			'subminor 7th'			
+		       ]
+		   HS.db.getChordIndex}
+   %% create chord objects
+   Chords = {LUtils.collectN N
+	     fun {$} 
+		{Score.makeScore2 chord(index:{FD.int ChordIndices}
+					duration:Dur
+					%% just to remove symmetries 
+					sopranoChordDegree:1
+					timeUnit:beats)
+		 %% label can be either chord or inversionChord
+		 unit(chord:HS.score.inversionChord)}
+	     end} 
+in
+   %% create music representation for solution
+   ChordSeq = {Score.makeScore seq(items:Chords
+				   startTime:0)
+	       unit}
+   %% only ascending progressions
+   {Pattern.for2Neighbours Chords 
+    proc {$ C1 C2} {HS.rules.schoenberg.ascendingProgressionR C1 C2 1} end}
+%    %% Good progression: ascending or descending progression only as 'passing chords'
+%    {HS.rules.schoenberg.resolveDescendingProgressions Chords unit}
+%    %% no super strong progression in such a simple progression
+%    {Pattern.for2Neighbours Chords 
+%     proc {$ C1 C2} {HS.rules.schoenberg.superstrongProgressionR C1 C2 0} end}
+   %% First and last chords are equal (neither index nor transposition are distinct)
+   {HS.rules.distinctR Chords.1 {List.last Chords} 0}
+   %% no 6/4 chords (no 2nd inversion)
+   {ForAll Chords proc {$ C} ({C getBassChordDegree($)} =: 3) = 0 end}
+   %% Most chords are in root positon, some are in second inversion
+   {Pattern.percentTrue_Range {Map Chords fun {$ C} ({C getBassChordDegree($)} =: 1) end}
+    60 85}
+   %% Sometimes bass progresses stepwise 
+   {Pattern.percentTrue_Range
+    {Pattern.map2Neighbours Chords
+     fun {$ C1 C2} ({TransposeBassPC C1 C2} =<: {ET31.pc 'D|'}) end}
+   30 70}
+   %% last three chords form cadence
+   {HS.rules.cadence MyScale {LUtils.lastN Chords 3}}
+   %% The chord root intervals and the absolute indices form a non-overlapping cycle pattern 
+   %% TMP comment
+   {Pattern.for2Neighbours
+    {Map {LUtils.sublists Chords [1#5
+				  5#9
+				  9#13
+				  13#17]}
+     %% returns pair of chord root intervals, chord indices plus bass chord degrees (inversion), and interval between the first chords of two neighbouring pattern instances 
+     fun {$ Cs}
+	{Pattern.map2Neighbours {LUtils.butLast Cs}
+	 proc {$ C1 C2 ?RootInterval}
+	    {HS.score.transposePC {C1 getRoot($)} RootInterval {C2 getRoot($)}}
+	 end}
+	# {Map {LUtils.butLast Cs} fun {$ C} {C getIndex($)} # {C getBassChordDegree($)} end}
+	# {HS.score.transposePC {Cs.1 getRoot($)} $ {{List.last Cs} getRoot($)}}
+     end}
+    proc {$ Data1 Data2} Data1 = Data2 end}
+end
+%% sed random seed to date
+{GUtils.setRandomGeneratorSeed 0}
+{SDistro.exploreOne MyScript unit(order:startTime
+				  value:random
+				  % value:mid
+				 )}
+
+
+*/
 
 
 
