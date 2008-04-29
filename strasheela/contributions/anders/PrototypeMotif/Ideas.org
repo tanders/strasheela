@@ -1,0 +1,121 @@
+
+* Goal
+
+  I want abstractions which simplify the creation of motifs, e.g., for accompaniment
+
+  Creation of [gestalts / pattern] which express harmony 
+  Examples: arpeggios, [Alberti Baesse] 
+  
+  Approach should be general enough to be useful for my own compositions. 
+
+ 
+** Task
+
+   - Creation of similar score segments (motifs). User conveniently specifies features shared by motifs with prototype, and defines how motif creation generalises / varies this prototype by constraints between prototype and created motif instances.  
+
+   - Different motifs can be created easily from different prototypes (or even the same prototype with different constraints).
+
+   - Besides the prototype, motif instances depend on arguments given to their creation proc and further constraints (possibly applied outside of creation proc)
+
+   - It is easy to access the chord sequence and scale(s) which a motif instance expresses in order to further constrain them
+     
+
+   - Either scale(s) and chord sequence are part of the motif (i.e. contribute to motif identity) or they are not (i.e., the motif is a more general building block, e.g., an ornament, a highly common accompaniment figure..)
+     Both cases should be conveniently supported. 
+
+       - Scale(s) and chord sequence part of motif: they are part of prototype and prototype mini language specifies how they are varied (e.g., rhythmical structure of chord seq, chord root intervals and chord indices might be fixed)
+       - Scales and chords are not part of the prototype, but prototype defines relation to these objects (e.g., defines getChords function to access sim chord -- with LUtils.cFind)
+
+   - Typical (default?) harmonic constraints (define reusable constraint proc for this) 
+     - All note pitches express only scale notes 
+     - All chords express only scale notes 
+     - If notes are *not* chord notes then they must progress step-wise
+
+
+
+* CSP definition by providing an example (user-defined motif prototype) 
+
+  Important characteristics of motif instances are defined conveniently by a musical example, the motif prototype. The prototype is a fully determined (?) score object (e.g., a sequential containing notes or any more complex score topology). 
+
+  Is prototype given as score object or in textual representation as nested record. Advantage of latter case: I can leave out parameters and these are then not at all constrained by prototype
+
+** Return value of new abstraction: either extended script or function returning extended script  
+
+   In the end, my new abstraction creates a MotifScript, an extended script (script with additional arguments). This script implicitly applies constraints to shape motif, additional arguments can effect it (e.g., the number of notes created might be specified). The script can be easily tested individually and also used in the context of a larger CSP. 
+   However, multiple script calls (multiple motif instances) might share undetermined variables (e.g., some parameters of prototype are undetermined but all motif instances should share same parameters). All variables must be local to CSP, but shared variables must be stored outside the script itself.   
+   
+   If prototype is fully determined and all variables shared by multiple calls of a MotifScript are determined, then the MotifScript can be created fully outside the CSP (of course it is used only either as a script itself or inside a script). 
+   If the prototype is determined but the  variables shared by multiple calls of a MotifScript are not determined (e.g., prototype is defined textually and some paramters are omitted defaulting to undetermined vars), then the MotifScript must be created and applied inside a CSP (the MotifScript cannot be tested individually). If MotifScript should be defined outside (e.g. in some aux functor) then my new abstractionmy new abstraction must create function which returns MotifScript -- this function is then called in CSP.
+   If prototype itself is not fully determined, then the MotifScript must be created completely inside the CSP, so all prototype variables are local. Prototype itself can be created outside script, but creation must be encapsulated in function. 
+
+
+** What does extended script define 
+
+*** Music representation similar to prototype
+
+    Mini language specifies whether differences can occur (e.g. whether the number of notes of a motif can differ), and in these cases do extended script arguments specify these music representation details. All arguments have default values (default is value of orig music representation?). 
+    
+    In case of nested motifs, I need some general approach to provide args for nested extended scripts 
+
+*** Constraints defining relation between motif instance and prototype
+
+    Many of these constraints are defined best by aux variables. Example: motif instances are constrained to follow pitch contour of prototype: we then need contour variables.  
+
+    Mini language defines these relations, and these relations can be influenced further by args to extended script. All arguments have default values (default is value of orig music representation?). 
+
+    In case of nested motifs, I need some general approach to provide args for nested extended scripts 
+
+**** Exkurs: More complex case: constrain aux vars of parameters undetermined in prototype
+
+     Note: if prototype is fully determined, then the aux vars which generalise prototype should also be determined (e.g., contour of determined pitch sequence is determined)
+
+     ?? some additional constraints might be applied best to these aux variables. Example: prototype rhythm is determined, but pitches are undetermined. Nevertheless, we want all motif instances to share the same (undetermined) pitch contour. We then want to apply some additional constraint on the pitch contour. 
+     ?? How important is this case for my purposes now? Shall I simply ignore it in order to keep things simple. The more complex [old] motif model already supports this and one could define some abstractions to create a motif DB from user-defined motif prototypes..
+
+     
+
+** Nesting of motifs
+
+   !! A motif instance can be used conveniently for creating new motif prototypes and all constraints of the sub-motif are 'inherited'. Example: a simple raising third (sub-CSP constraining scale degrees to third) can be used for creating sequence of raising thirds where the interval between the raising thirds is constrained less stricty (e.g. any interval up to a whole tone up or down)
+   -> this requires that motif instance 'knows' which motif creation proc did create it (e.g. stored in info of motif top-level) 
+
+
+
+* Mini language for specifying relation of prototype to motif instances
+
+  New Idea: allow that some data of a motif instance (e.g. parameter
+  values or iinfo tags) are created by functions for which arguments
+  can be given to its extended script
+
+
+* Constraints between motif instances 
+
+
+
+
+* Differences to existing Motif model
+
+** Advantages of new approach
+
+   Motif [prototypes] are easily / conveniently specified by examples 
+
+   Single motif instance can be complex nested score object and different motifs can differ in their score topology and the number of contained score objects
+
+   Additional score information (e.g., timing function, sound synthesis details) shared by all instances of a single motif can be added conveniently 
+
+   hierarchic nesting easy
+
+   adding motif-specific info tags (e.g., continuos controllers) is easy
+
+** Missing in new approach
+
+   Motif identity itself is not constrainable (will be either composed by hand or with deterministic algo comp techniques)
+
+   No distinction between motif identity and variation
+
+
+
+
+
+
+
