@@ -552,13 +552,16 @@ From this viewpoint, there is an interesting polarity between major and harmonic
     
     [[file:~/oz/music/Strasheela/strasheela/trunk/strasheela/contributions/anders/PrototypeMotif/PrototypeMotif.oz]]
 
-**** TODO Chord example below blocks: debug
+**** DONE Chord example below blocks: debug
+     CLOSED: [2008-04-29 Tue 20:30]
      
-**** TODO NestedScript example below blocks: debug
+**** DONE NestedScript example below blocks: debug
+     CLOSED: [2008-04-29 Tue 21:05]
        
      
 
-*** TODO Create functor and commit svn
+*** DONE Create functor and commit svn
+    CLOSED: [2008-04-29 Tue 20:30]
 
 *** Create small-scale examples with this model 
 
