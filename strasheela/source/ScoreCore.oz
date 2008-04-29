@@ -2142,6 +2142,7 @@ define
    /** %% Returns a boolean whether X is an Object with the class/superclass ScoreObject. 
    %%*/
    fun {IsScoreObject X}
+      {Not {GUtils.isFS X}} andthen % undetermined FS vars block on Object.is
       {Object.is X} andthen {HasFeature X ScoreObjectType}
    end
    /** %% Returns a boolean whether X is an item which inherits from TimeMixin (i.e. X is either a TemporalElement or a TemporalAspect). 
