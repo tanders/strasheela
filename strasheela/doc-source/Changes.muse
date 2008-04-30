@@ -2,7 +2,6 @@
 #title Changes 
 ; #author Torsten Anders
 
-
 * Changes in Version 0.9.6 (no date yet)
 
   - Main additions 
@@ -14,6 +13,7 @@
 
   - Fixes and minor changes
 
+    - [[../doc/api/node8.html][SDistro]].makeSearchScript (and all Strasheela search engines): Added generic variable ordering 'dom+deg'
     - SMapping: added MapScore
     - Out.midi.note2Midi renamed into Out.midi.noteToMidi for consistency
     - GUtils.extendedScriptToScript: the argument order for extended scripts is swapped, so that extended scripts can be used conveniently as score creator functions in Score.makeScore. All code which uses extended scripts has been adapted (e.g., RT.scoreSearcherWithTimeout and all examples which use that class).
@@ -21,11 +21,7 @@
     - Fixed ScoreObject method init bug: replaced GUI warning again by stdout warning as GUI warning causes exception from within space 
 
 
-
-
-
   - For further fixes see the [[../CHANGELOG.txt]].
-
 
 
 * Changes in Version 0.9.5 (16 April 2008)
