@@ -46,6 +46,16 @@ define
 	  {Nth X 1} \=: {Nth X 2}
        end}
 
+      %% cannot have octaves -- required for analysis
+%% FIXME: make this more general
+      {Pattern.forNeighbours
+       Pitches
+       2
+       proc {$ X}
+	  {Nth X 1} \=: {Nth X 2} + 12
+	  {Nth X 1} \=: {Nth X 2} - 12
+       end}
+
    end
 
    proc {ToScore Pitches Lily ?ScoreInstance}
@@ -90,6 +100,7 @@ fun {$ Pitch}
       {Out.outputLilypond
        MyScore
        unit(file:Filename
+	    implicitStaffs:false
 	    wrapper:"\\score{\n {"#(" }\n \\layout{}\n \\midi{}\n}\n"#"")
 	    unit)}
       C:=@C+1

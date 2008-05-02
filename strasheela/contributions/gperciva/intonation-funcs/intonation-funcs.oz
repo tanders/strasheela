@@ -3,8 +3,8 @@
 functor
 import
    FD
-%   LUtils at 'x-ozlib://anders/strasheela/source/ListUtils.ozf'
-%   Pattern at 'x-ozlib://anders/strasheela/Pattern/Pattern.ozf'
+   LUtils at 'x-ozlib://anders/strasheela/source/ListUtils.ozf'
+   Pattern at 'x-ozlib://anders/strasheela/Pattern/Pattern.ozf'
    %% for debug
 %   Browser
 
@@ -13,9 +13,13 @@ export
    inMinorKey: InMinorKey
    firstPos: FirstPosition
    changeToOpenString: ChangeToOpenString
+   changeOneString: ChangeOneString
+   noFingeredFifths: NoFingeredFifths
    noFourOpen: NoFourOpen
-   atLeastEqual: AtLeastEqual
-   atLeastEqualTwo: AtLeastEqualTwo
+   atLeast: AtLeast
+   atLeastTwin: AtLeastTwin
+   atMost: AtMost
+   minChanges: MinChanges
 
 define
    proc {InMajorKey Pitches Tonic}
@@ -66,6 +70,35 @@ define
       end
    end
 
+   proc {ChangeOneString Strings}
+      for X in 1..({Length Strings}-1) do
+	 SA = {Nth Strings X}
+	 SB = {Nth Strings X+1}
+      in
+	 {FD.distance SA SB '=<:' 1}
+      end
+   end
+
+   proc {NoFingeredFifths Strings Fingers}
+      for X in 1..({Length Strings}-1) do
+	 SA = {Nth Strings X}
+	 SB = {Nth Strings X+1}
+	 FA = {Nth Fingers X} 
+	 FB = {Nth Fingers X+1}
+      in 
+	 {FD.impl
+	  (SA \=: SB) 
+	  {FD.disj
+	   {FD.disj
+	    (FA =: 0) 
+	    (FB =: 0)}
+	   (FA \=: FB)
+	  }
+	  1}
+      end
+   end
+
+   %% FIXME: allow 4 lower-stirng
    proc {NoFourOpen Strings Fingers}
       for X in 1..({Length Strings}-1) do
 	 SA = {Nth Strings X}
@@ -83,18 +116,39 @@ define
    end
 
 
-   proc {AtLeastEqual List Is Number}
-      {FD.sum {Map List fun {$ X} (X =: Is) end} '>=:' Number}
+   proc {AtLeast List Is Number}
+      {FD.sum {Map
+	       {LUtils.butLast List}
+	       fun {$ X} (X =: Is) end} '>=:' Number}
    end
 
-   proc {AtLeastEqualTwo ListOne IsOne ListTwo IsTwo Number}
-      {FD.sum {List.zip ListOne ListTwo
+   proc {AtLeastTwin ListOne IsOne ListTwo IsTwo Number}
+      {FD.sum {List.zip
+	       {LUtils.butLast ListOne}
+	       {LUtils.butLast ListTwo}
 	       fun {$ O T}
 		  {FD.conj
 		   (O =: IsOne)
 		   (T =: IsTwo)
 		  }
 	       end} '>=:' Number}
+   end
+
+   proc {AtMost List Is Number}
+      {FD.sum {Map
+	       {LUtils.butLast List}
+	       fun {$ X} (X =: Is) end} '=<:' Number}
+   end
+
+   proc {MinChanges List Number}
+      {FD.sum {Pattern.mapNeighbours
+	       {LUtils.butLast List}
+	       2
+	       fun {$ X}
+		  ({Nth X 1} \=: {Nth X 2})
+	       end}
+       '>=:' Number}
+
    end
 
 

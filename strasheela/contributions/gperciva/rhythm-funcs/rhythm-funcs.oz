@@ -17,6 +17,8 @@ export
    noThreeIdenticalAdjacentBeats: NoThreeIdenticalAdjacentBeats
    minDursOnBeats: MinDursOnBeats
    minDurs: MinDurs
+   maxDurs: MaxDurs
+   atLeastTwin: AtLeastTwin
    noAdjacentRests: NoAdjacentRests
 
 define
@@ -90,6 +92,10 @@ define
       {FD.sum {Map Durs fun {$ X} (X=:DurValue) end} '>=:' NumDurs}
    end
 
+   proc {MaxDurs Durs DurValue NumDurs}
+      {FD.sum {Map Durs fun {$ X} (X=:DurValue) end} '=<:' NumDurs}
+   end
+
 
   %% only does 1-6 durations!
   proc {NoAdjacentRests Events Durs}
@@ -149,5 +155,18 @@ define
        1}
    end
   end
+
+ proc {AtLeastTwin ListOne IsOne ListTwo IsTwo Number}
+      {FD.sum {List.zip
+	       {LUtils.butLast ListOne}
+	       {LUtils.butLast ListTwo}
+	       fun {$ O T}
+		  {FD.conj
+		   (O =: IsOne)
+		   (T =: IsTwo)
+		  }
+	       end} '>=:' Number}
+   end
+
 
 end

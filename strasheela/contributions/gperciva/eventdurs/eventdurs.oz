@@ -150,6 +150,7 @@ NB: it does not yet support other tuplets, although since this
 			  {Out.outputLilypond
 			   MyScore
 			   unit(file:Filename clauses:OutClauses
+				implicitStaffs:false
 				wrapper:"\\score{"#(" \\layout{}\n \\midi{}\n}\n"#"")
 				unit)}
 			  C:=@C+1
