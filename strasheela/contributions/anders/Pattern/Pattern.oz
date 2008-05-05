@@ -55,6 +55,9 @@ export
    InInterval
    Cycle Cycle2 Rotation Heap Random Palindrome Line Accumulation
    ArithmeticSeries GeometricSeries Max Min ArithmeticMean Range
+
+   UseMotifs
+   
    MarkovChain MarkovChain_1
    MakeLSystem MakeLSystem2
    OneOverFNoise OneOverFNoiseDeterm 
@@ -72,6 +75,7 @@ export
    Zip
    TransformDisj
    SelectList SelectMultiple ApplyToN
+   
    HowManyDistinct
    HowManyAs
    HowMany Once
@@ -352,6 +356,82 @@ define
       {FD.distance {Max Xs} {Min Xs} A Y}
    end
 
+
+
+   
+   /** %% UseMotifs constrains the list Xs to consist only of "motif instances" declared in the list Motifs. Elements in Motifs can differ in length. More specifically, UseMotifs constrains that Xs is quasi the result of elements in Motifs appended in any order and possibly with repetitions. However, UseMotifs is a constraint -- the order of Motifs elements in Xs is free.
+   %% Xs can be a list of FD ints, in which case Motifs must be a list of list of FD its. For example, Xs can be the list of note pitches of a voice and Motifs defines possible "pitch motifs". Alternatively, Xs can be the list of intervals between note pitches and Motifs defines "interval motifs" which are transposable. Or Xs is a list of duration factors instead of durations and Motifs defines "duration factor motifs" which can be "stretched".
+   %% However, Xs must not be a list of FD ints. For example, elements in Motifs can be pairs of Pitch#Duration in which case Xs would be a list of FD integer pairs. Although the motifs can differ in length, all elements of Xs and all elements of each motif must be equally nested an only differ in constrained variables so that they can be unified. 
+   %% UseMotifs expects the following optional arguments
+   %% 'workOutEven': If 'workOutEven' is false (the default), then the end of Xs may only contain the beginning of a Motifs element. By contrast, Xs contains only full elements of Motifs if 'workOutEven' is true.
+   %% 'indices': an optional return value, a list of FD ints. For each element in Xs, indices contains an FD int which specifies to which motif index (e.g. position of its motif in Motifs) the Xs element belongs. These variables can be used, for example, to constrain that certain motifs should follow each other or to constrain how often some motif occurs.
+   %% Note that the argument 'indices' is particular important in case the elements in Motifs do exclude each other, that is some element in Motifs is fully contained as the beginning in another element of Motifs. For example, if Motifs contains [1 2] and also [1 2 2]. In this case, UseMotif would block internally as it could not decide for any motif and would not apply motif constraints anymore. This behaviour is avoided when the variables at the argument 'indices' are propagated (e.g., add a parameter to the notes to which the parameter values in Xs belong).
+   %%
+   %% Note that this constraint processes the elements of Xs "from left to right". Constraining the next motif is always delayed until the previous motif is known, because it depends on the length of the previous motif where the next motif starts. Consequently, the distribution strategy should determine variables in that order.  
+   %% */
+   %% TODO: more efficient variant of this proc using selection constraints would support propagation. Less generic though -- Xs must be list of FD ints.
+   %% TODO: allow for motif value which is ignored -- no unification happens, so non-motific sections are possible (not supported yet). Possibly, this would not be a good idea -- then anything can be a solution and I can leave this constraint off entirely..
+   %% ?? Could I constrain how often each element in Motifs is used? Then I could also allow for "free" Motif (e.g., I may constrain that 10-30% of Xs elements are non-motif values). Also, could I define which motif follows which like in a markov chain?
+   proc {UseMotifs Xs Motifs Args}
+      Defaults = unit(workOutEven:false
+		      indices:_)
+      As = {Adjoin Defaults Args}
+      %% If indices return value is requested, then create a list of FD ints and process it..
+      IndicesRequired = {HasFeature Args indices}
+      proc {UnifyLists Xs Ys}
+	 if Xs == nil orelse Ys == nil
+	 then skip
+	 else Xs.1 = Ys.1 {UnifyLists Xs.2 Ys.2}
+	 end
+      end
+      proc {Constrain I MyMotif Xs Indices N}
+	 XsPart
+      in
+	 N = {Length MyMotif}
+	 XsPart = {List.take Xs N}
+	 %% if motifs shall work out even, then there are enough elements
+	 %% in Xs to bring full motif
+	 if As.workOutEven
+	 then N = {Length XsPart}
+	 end
+	 %% bind Indices if requested
+	 if IndicesRequired
+	 then {ForAll {List.take Indices N} proc {$ Index} Index=I end}
+	 end
+	 {UnifyLists MyMotif XsPart}
+      end
+      proc {Aux Xs Indices}
+	 if Xs \= nil
+	 then 
+	    N 
+	 in
+	    %% Unify the next N elements in Xs with one of the motif elements
+	    %% Blocks until a decision can be made without search -- decisions must be done outside..
+	    {Combinator.'or' {List.toTuple '#'
+			      {List.mapInd Motifs
+			       fun {$ I MyMotif}
+				  proc {$}
+				     {Constrain I MyMotif Xs Indices N}
+				  end
+			       end}}}
+	    %% bind Indices if requested
+	    if IndicesRequired
+	    then {Aux {List.drop Xs N} {List.drop Indices N}}
+	    else {Aux {List.drop Xs N} unit}
+	    end
+	 end
+      end
+   in
+      if IndicesRequired
+      then
+	 As.indices = {FD.list {Length Xs} 1#{Length Motifs}}
+	 thread {Aux Xs As.indices} end
+      else thread {Aux Xs unit} end
+      end
+   end
+
+
+   
    local
       %% Decls is the left-hand expression of the markov chain Decl, which possibly contains the wildcard 'x'
       proc {MatchesR Decls Xs B}
@@ -1163,6 +1243,8 @@ define
 
    /** %% Ys is some transformation of Xs. Fns is a list of binary procedures (both arguments are lists) which represent possible transformations. I (an argument which may be interesting as an output) is an index into Fns, a decision for I is equivalent with a decision for a certain transformation function. The domain of I is implicitly constrained to 1#{Length Fns}. 
    %% The length of the two arguments of each Fn must correspond with the lengths of Xs and Ys for a success. A mismatch causes the respective Fn to be ruled out in the disjuction.
+   %%
+   %% See also GUtils.applySelected.
    %% */
    %% !! I may redefine this proc with the help of GUtils.applySelected
    proc {TransformDisj Xs Fns I Ys}
@@ -1229,7 +1311,6 @@ define
       {SelectMultiple Xs Is Ys} 
       {P Ys}
    end
-
    
    
    
