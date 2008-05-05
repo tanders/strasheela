@@ -19,7 +19,8 @@
 %%
 %% - Define nestable prototype defs (motif created functions - extended script - is used when score is transformed back into textual form and then again into score object) 
 %%
-%% - Make number of score objects in motif instance controllable by arg. 
+%% - ?? Make number of score objects in motif instance controllable by arg.
+%%   ?? shall I really do this? In many cases, it is more simple to define different prototypes with different note numbers (and then I may control how number affects rhythm etc)
 %%    Relatively simple approach: I can statefully change the score hierarchy of AuxScore in MyScript. It would require that I know *where* to add or remove *how many* score objects of *what class and which what init args* 
 %%    How can I hand over this information as extended script arg(s)?
 %%   ? only allow this for more simple topology (e.g. container with elements and number of elements is user controllable with script arg N). For the latter case, more complex topologies again possible via nesting
