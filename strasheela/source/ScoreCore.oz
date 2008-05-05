@@ -982,7 +982,7 @@ define
    /** %% Returns true if X inherits from LeaveUninitialisedParameterMixin (or is an instance of LeaveUninitialisedParameterMixin), and false otherwise. 
    %% */
    fun {IsLeaveUninitialisedParameter X}
-      {Object.is X} andthen {HasFeature X LeaveUninitialisedParameterMixinType}
+      {IsScoreObject X} andthen {HasFeature X LeaveUninitialisedParameterMixinType}
    end
 
    class TimeParameter from Parameter

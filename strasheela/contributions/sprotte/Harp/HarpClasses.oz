@@ -43,6 +43,6 @@ define
       end
    end
    fun {IsHarpNote X}
-      {Object.is X} andthen {HasFeature X HarpNoteType}
+      {Score.isScoreObject X} andthen {HasFeature X HarpNoteType}
    end
 end

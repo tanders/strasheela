@@ -851,7 +851,7 @@ define
       end
    end
    fun {IsMidiNoteMixin X}
-      {Object.is X} andthen {HasFeature X MidiNoteMixinType}
+      {Score.isScoreObject X} andthen {HasFeature X MidiNoteMixinType}
    end
    /** %% Extends Score.note by the additional attribute channel.
    %% */

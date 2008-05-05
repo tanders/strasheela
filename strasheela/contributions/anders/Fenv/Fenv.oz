@@ -141,6 +141,7 @@ define
    /** %% Returns true if X is a Fenv instance and false otherwise.
    %% */
    fun {IsFenv X}
+      {Not {GUtils.isFS X}} andthen % undetermined FS vars block on Object.is
       {Object.is X} andthen {HasFeature X FenvType}
    end
 

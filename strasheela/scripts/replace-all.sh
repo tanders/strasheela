@@ -9,6 +9,9 @@
 #
 # NB: sed special characters (e.g. '/') must be escaped (e.g. '\/')
 
+#
+# IMPORTANT: use script on svn reposity with no changes compared with central reposity. Then you can always undo..
+#
 
 # set expressions to replace
 OLDEXPR=$1

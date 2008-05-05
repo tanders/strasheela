@@ -622,7 +622,7 @@ define
       end
    end
    fun {IsInterval X}
-      {Object.is X} andthen {HasFeature X IntervalType}
+      {Score.isScoreObject X} andthen {HasFeature X IntervalType}
    end
 
    /** %% Expects two note objects and returns the interval between the two notes. If the Note1 is higher than Note2, then the intervals direction is downwards (i.e. 0).
@@ -721,7 +721,7 @@ define
 	 !PitchClassType:unit
    end
    fun {IsPitchClass X}
-      {Object.is X} andthen {HasFeature X PitchClassType}
+      {Score.isScoreObject X} andthen {HasFeature X PitchClassType}
    end
 		       
    local
@@ -967,7 +967,7 @@ define
       end
    end
    fun {IsPitchClassCollection X}
-      {Object.is X} andthen {HasFeature X PitchClassCollectionType}
+      {Score.isScoreObject X} andthen {HasFeature X PitchClassCollectionType}
    end
 
 
@@ -985,7 +985,7 @@ define
       end
    end
    fun {IsChord X}
-      {Object.is X} andthen {HasFeature X ChordType}
+      {Score.isScoreObject X} andthen {HasFeature X ChordType}
    end
    
    /** %% Scale represents an analytical scale, i.e. a scale which is silent when the score is played but is used to constrain notes simultaneous with the scale. For example, Scale instances can be used to express a modulation.
@@ -1001,7 +1001,7 @@ define
       end
    end
    fun {IsScale X}
-      {Object.is X} andthen {HasFeature X ScaleType}
+      {Score.isScoreObject X} andthen {HasFeature X ScaleType}
    end
 
    %% !! definition mirrors InitConstrain of InChordMixinForNote -- some code repetition with different arg etc names.
@@ -1141,7 +1141,7 @@ define
       end
    end
    fun {IsInScaleMixinForChord X}
-      {Object.is X} andthen {HasFeature X InScaleMixinForChordType}
+      {Score.isScoreObject X} andthen {HasFeature X InScaleMixinForChordType}
    end
 
    /** %% [concrete class] Defines a Chord which relates to a Scale (the Scale is defined by getScales and isRelatedScale). When the parameter value of inScaleB (a 0/1 integer) = 1, then all Chord pitch classes are diatonic, i.e. they are also pitch classes of the related Scale. 
@@ -1271,7 +1271,7 @@ define
       end
    end
    fun {IsScaleDegreeMixinForChord X}
-      {Object.is X} andthen {HasFeature X ScaleDegreeMixinForChordType}
+      {Score.isScoreObject X} andthen {HasFeature X ScaleDegreeMixinForChordType}
    end
 
    /** %% [concrete class] ScaleDegreeChord is a chord related to a scale (see DiatonicChord) whose root is additionally expressed in terms of a scale degree with respect to that scale. See the doc of the superclasses DiatonicChord and ScaleDegreeMixinForChord for details.
@@ -1402,7 +1402,7 @@ define
       end
    end
    fun {IsInversionMixinForChord X}
-      {Object.is X} andthen {HasFeature X InversionMixinForChordType}
+      {Score.isScoreObject X} andthen {HasFeature X InversionMixinForChordType}
    end
    
    /** %% Expects a chord class and returns a subclass which inherits from this chord class and InversionMixinForChord. 
@@ -1657,7 +1657,7 @@ define
       end
    end  
    fun {IsPitchClassMixin X}
-      {Object.is X} andthen {HasFeature X PitchClassMixinType}
+      {Score.isScoreObject X} andthen {HasFeature X PitchClassMixinType}
    end
 
       
@@ -1796,7 +1796,7 @@ define
       end
    end
    fun {IsInChordMixinForNote X}
-      {Object.is X} andthen {HasFeature X InChordMixinForNoteType}
+      {Score.isScoreObject X} andthen {HasFeature X InChordMixinForNoteType}
    end
    
    %% !! definition mirrors chord relation above as scale relation -- much code repetition with different arg etc names.
@@ -1903,7 +1903,7 @@ define
       end	 
    end
    fun {IsInScaleMixinForNote X}
-      {Object.is X} andthen {HasFeature X InScaleMixinForNoteType}
+      {Score.isScoreObject X} andthen {HasFeature X InScaleMixinForNoteType}
    end
 
    
@@ -1973,7 +1973,7 @@ define
       end
    end
    fun {IsEnharmonicSpellingMixinForNote X}
-      {Object.is X} andthen {HasFeature X EnharmonicSpellingMixinForNoteType}
+      {Score.isScoreObject X} andthen {HasFeature X EnharmonicSpellingMixinForNoteType}
    end
 
    local
@@ -2054,7 +2054,7 @@ define
       end
    end
    fun {IsScaleDegreeMixinForNote X}
-      {Object.is X} andthen {HasFeature X ScaleDegreeMixinForNoteType}
+      {Score.isScoreObject X} andthen {HasFeature X ScaleDegreeMixinForNoteType}
    end
 
 
@@ -2135,7 +2135,7 @@ define
       end
    end      
    fun {IsChordDegreeMixinForNote X}
-      {Object.is X} andthen {HasFeature X ChordDegreeMixinForNoteType}
+      {Score.isScoreObject X} andthen {HasFeature X ChordDegreeMixinForNoteType}
    end
 
 

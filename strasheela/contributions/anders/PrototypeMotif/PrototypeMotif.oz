@@ -150,7 +150,7 @@ define
       MotifName = {NewName}
    in
       fun {As.motifTest X}
-	 {Object.is X}
+	 {Score.isScoreObject X}
 	 andthen {MyProto getClass($)} == {X getClass($)}
 	 andthen {X hasFlag($ MotifName)}
       end
@@ -356,7 +356,7 @@ define
       MotifName = {NewName}
    in
       fun {As.motifTest X}
-	 {Object.is X}
+	 {Score.isScoreObject X}
 	 %% NOTE: I assume nested motifs are always containers, should I do isItems insteaad?
 	 andthen {X isContainer($)} 
 	 andthen {X hasFlag($ MotifName)}

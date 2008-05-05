@@ -213,7 +213,7 @@ define
    end
 
    fun {IsMeasure X}
-      {Object.is X} andthen {HasFeature X MeasureType}
+      {Score.isScoreObject X} andthen {HasFeature X MeasureType}
    end 
 
    
@@ -315,7 +315,7 @@ define
 %       end
 %    end
 %    fun {IsMeasureSeq X}
-%       {Object.is X} andthen {HasFeature X MeasureSeqType}
+%       {Score.isScoreObject X} andthen {HasFeature X MeasureSeqType}
 %    end 
 
 
@@ -578,7 +578,7 @@ define
    end
 %   end
    fun {IsUniformMeasures X}
-      {Object.is X} andthen {HasFeature X UniformMeasuresType}
+      {Score.isScoreObject X} andthen {HasFeature X UniformMeasuresType}
    end 
 
    

@@ -72,7 +72,7 @@ define
    /** %% Type checker.
    %% */
    fun {IsTestClass X}
-      {Object.is X} andthen {HasFeature X TestClassType}
+      {Score.isScoreObject X} andthen {HasFeature X TestClassType}
    end
 
 end

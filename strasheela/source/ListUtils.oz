@@ -17,6 +17,8 @@
 functor 
 import
    System
+   GUtils at 'GeneralUtils.ozf'
+   
 export
    Mappend
    CollectN RepeatN
@@ -482,6 +484,7 @@ define
    /** %% Returns a boolean whether X is an ExtendableList
    %%*/
    fun {IsExtendableList X}
+      {Not {GUtils.isFS X}} andthen % undetermined FS vars block on Object.is
       {Object.is X} andthen {HasFeature X ExtendableListType}
    end
 end

@@ -416,6 +416,7 @@ class VarPointer
    end
 end
 fun {IsVarPointer X}
+   {Not {GUtils.isFS X}} andthen % undetermined FS vars block on Object.is
    {Object.is X} andthen {HasFeature X VarPointerType}
 end
 /** %% Processes a list of VarPointers: returns a list with variable declarations of the VarPointers in the form Domain#dom(InitDomain). As a side-effect, it also determines the indices of the VarPointers (corresponds to the position of the variable decl in the returned list).

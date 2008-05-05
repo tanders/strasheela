@@ -80,6 +80,7 @@ define
       meth getMotifVariationDB(?X) X = @motifVariationDB end
    end  
    fun {IsDatabase X}
+      {Not {GUtils.isFS X}} andthen % undetermined FS vars block on Object.is
       {Object.is X} andthen {HasFeature X DatabaseType}
    end
    
@@ -137,7 +138,7 @@ define
    end
    
    fun {IsMotif X}
-      {Object.is X} andthen {HasFeature X MotifType}
+      {Score.isScoreObject X} andthen {HasFeature X MotifType}
    end
    
 %    %% Some container of X is a motif.
