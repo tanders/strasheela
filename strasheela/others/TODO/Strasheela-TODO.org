@@ -1196,7 +1196,15 @@ archive init record.
 
 
 ** Efficiency
-   
+
+*** TODO Define extendable left-to-right distro strategy		  :NEXT:
+
+    left to right variable ordering
+    breaking ties: types in order (e.g., temporal params, pitch classes + octaves, pitches..)
+    again breaking ties: first fail, e.g., dom or dom/deg
+    
+    Should one of these become default??
+
 *** [#A] check out performance with adaptive recomputation		  :NEXT:
 
   Adaptive recomputation is highly recommended by Schulte, so I should possibly do this before investigating other approaches to improve efficiency (memory and run time)    
@@ -1481,6 +1489,24 @@ See ../../testing/zy_Efficiency/KeepMusicRepresentationOutsideComputationalSpace
     Eric S. Raymond <esr@thyrsus.com>
 
 
+** Read Strasheela doc							  :EASY:
+
+   know your system, e.g., know all my Patterns 
+
+** Develop new expressive patterns					 :MAYBE:
+
+   UseMotifs pattern generalises cycle pattern by introducing multiple alternatives. Can I generalise or variate other pattern constraints similarily. Goal is to create "interestingly" shaped sequences of FD ints and FD int combinations (e.g. pairs) 
+
+   Rough idea: generalise functions like Map/ForAll or MapNeighbours/ForNeighbours to expect a list of functions/procedures from which it selects freely one for each function/procedure application. 
+
+
+** Instrumentation constraints 
+
+*** Constrainable instrumentation representation 
+
+    For first idea see GTD folder "instrumentation constraints"
+
+
 * Strasheela documentation					    :STRASHEELA:
 
 ** Strasheela tutorial
@@ -1524,6 +1550,7 @@ See ../../testing/zy_Efficiency/KeepMusicRepresentationOutsideComputationalSpace
 
 
 * Strasheela Bugs
+
 
 ** Revise collect method (graph mode)					 :MAYBE:
 

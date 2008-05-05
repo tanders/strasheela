@@ -715,6 +715,27 @@ Applying conversion: 2.5.0, 2.5.1, 2.5.2, 2.5.3, 2.5.12, 2.5.13, 2.5.17, 2.5.18,
    [[file:~/oz/mozart/trunk/mozart/share/lib/cp/FD.oz::Generic%20only][file:~/oz/mozart/trunk/mozart/share/lib/cp/FD.oz::Generic only]]
 
 
+  
+* DONE Pattern.useMotifs: 
+  CLOSED: [2008-05-04 Sun 22:20]
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2008-05-04 Sun 22:20
+  :ARCHIVE_FILE: ~/oz/music/Strasheela/strasheela/trunk/strasheela/others/TODO/Strasheela-TODO.org
+  :ARCHIVE_OLPATH: Strasheela Bugs
+  :ARCHIVE_CATEGORY: Strasheela
+  :ARCHIVE_TODO: DONE
+  :END:
+  
+  [[file:~/oz/music/Strasheela/strasheela/trunk/strasheela/contributions/anders/Pattern/Pattern.oz::proc%20UseMotifs%20Xs%20Motifs%20Args][file:~/oz/music/Strasheela/strasheela/trunk/strasheela/contributions/anders/Pattern/Pattern.oz::proc UseMotifs Xs Motifs Args]]
+
+  BUGS: the elements in Motifs must exclude each other, that is no element in Motifs must be fully contained as the beginning in another element of Motifs. Otherwise UseMotif blocks internally and does not apply motif constraints anymore.
+
+  This is a principle "problem" of or statement -- it does not search by itself, it blocks as long as multiple or-clauses are possible and does not force any decision. 
+
+  Possible solution: output a list of motif indices for each Xs (i.e. the same motif index value for each motif "note"). Then I can determine these values outside, e.g., via distribution ..
+
+
+
 
 
 

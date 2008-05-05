@@ -40,6 +40,28 @@ see Strasheela/private/WorkInProgress/NonmensuralENP->mensuralENP
 
 
 
+** Graphical interface 
+
+*** Score Interface for interactive music constraint programming
+    
+    See future work section of my applications etc for details
+
+    ?? Use PWGL score editor, ENP notation?
+
+
+*** ?? Algocomp GUI like AlgoScore
+
+    AlgoScore
+    http://www.bitminds.net/kymatica/index.php/Software/AlgoScore
+
+
+    I could create input for determined values with such a GUI, e.g., enter args (numbers and controller data) for sub-CSPs, e.g., created by my prototype motif model. 
+    Possibly easy approach: just output Csound score from AlgoScore, and then parse that Csound score with Strasheela to get the data. Alternatively, the supported Nasal scripting language seems to have a UNIX pipe interface, so I could use my OzServer in the background
+
+    Anyway, just an idea, not sure how much I really like such an interface and how much it really is an improvement over plain text. 
+
+
+
 ** Extend meter model [[file:~/oz/music/Strasheela/strasheela/trunk/strasheela/contributions/anders/Measure/Measure.oz][Measure.oz]]
 
    Do this if you actually need it..
