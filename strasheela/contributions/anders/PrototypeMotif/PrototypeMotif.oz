@@ -11,6 +11,8 @@
 %%
 %% - MakeScript: currently it is possible to either define script arg for constraining instance ('scriptArgs') or to constrain relation between instance and prototype ('prototypeDependencies'). Why no arg defining dependency between prototype and motif instance which can expect script args (e.g. the constraint such as Patter.contour may be expected as script arg)
 %%
+%% - ?? MakeScript, arg unset: simplification: parameters must be list (currently, a plain single param can be specified as well)
+%%
 %% - extend ChoiceScript so that its arg 'choose' can be set to nil which returns an 'empty' score object. This makes it possible to specify the topology of a nested script -- withing string limits of course..  
 %%
 %% - create easy-to-use abstractions and arguments for common MakeScript calls (i.e. easy to use Args).
