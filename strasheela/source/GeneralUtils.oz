@@ -171,7 +171,9 @@ define
 %    end
   
    /** %% The Ith element in Procs is applied. Procs is list of null-ary procedures. I is a FD integer, the domain of I is implicitly reduced to 1#{Length Procs}.
-   %% This is quasi a selection constraint, however, there are no constraint propagators created by ApplySelected. Instead, ApplySelected uses the deep-guard combinator Combinator.'or' instead, i.e. a backtracking-free disjunction. ApplySelected suspends until a decision is made elsewhere (e.g. by determining I or by ruling out the cause of the application of all but one procedure in Procs).
+   %% This is quasi a selection constraint, however, there are no constraint propagators created by ApplySelected. Instead, ApplySelected uses the deep-guard combinator Combinator.'or', i.e. a backtracking-free disjunction. ApplySelected suspends until a decision is made elsewhere (e.g. by determining I or by ruling out the cause of the application of all but one procedure in Procs).
+   %%
+   %% See also Pattern.transformDisj
    %% */
    %% !!?? shall this go into extra Constraints functor?
    proc {ApplySelected Procs I}
