@@ -5,6 +5,8 @@
 * Changes in Version 0.9.6 (no date yet)
 
   - Main additions 
+    - PrototypeMotif contribution: ..
+    - Pattern.useMotifs: a flexible pattern constraint for motifs 
 
   - Documentation
 
@@ -18,7 +20,8 @@
     - Out.midi.note2Midi renamed into Out.midi.noteToMidi for consistency
     - GUtils.extendedScriptToScript: the argument order for extended scripts is swapped, so that extended scripts can be used conveniently as score creator functions in Score.makeScore. All code which uses extended scripts has been adapted (e.g., RT.scoreSearcherWithTimeout and all examples which use that class).
     - Fixed HS.score.chordsToScore bug: arg minIntervalToBass did constrain interval between soprano an next lower voice instead between bass and next higher
-    - Fixed ScoreObject method init bug: replaced GUI warning again by stdout warning as GUI warning causes exception from within space 
+    - Fixed Score.scoreObject method init bug: replaced GUI warning again by stdout warning as GUI warning causes exception from within space 
+    - Score.isScoreObject blocked for undetermined FS variables 
 
 
   - For further fixes see the [[../CHANGELOG.txt]].
