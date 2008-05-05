@@ -27,6 +27,9 @@ MyScore = {Score.makeScore measures(n:3 %{FD.int 1#3}
 				    timeUnit:beats(4))
 	   add(measures:Measure.uniformMeasures)}
 
+
+{MyScore toInitRecord($)}
+
 {MyScore toFullRecord($)}
 
 {MyScore getBeatNumber($)} = 2
