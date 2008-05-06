@@ -55,10 +55,10 @@ define
       [] 2 then "-1"
       [] 3 then "-2"
       [] 4 then "-2"
-      [] 5 then nil
-      [] 6 then "-3"
-      [] 7 then nil
-      [] 8 then "-4"
+      [] 5 then "-3"
+      [] 6 then nil
+      [] 7 then "-4"
+      [] 8 then nil
       else nil
       end
    end
