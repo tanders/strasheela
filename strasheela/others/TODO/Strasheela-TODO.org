@@ -1284,6 +1284,15 @@ See ../../testing/zy_Efficiency/KeepMusicRepresentationOutsideComputationalSpace
 
 
 
+*** "Promise" value heuristic						 :MAYBE:
+    
+    Example: "promise" heuristic [ref Ginsberg or ref Geelen]
+    value which is most likely to succeed: value which causes domains of other variables reduced least, more specifically the value for which the product of the remaining domain sizes is maximised
+    
+    no principle problem to do that in Oz: for each domain value of given var create a new space which copies current space. Within that space copy determine variable to space-specific domain value. Wait until space is stable. Then traverse all variables in CSP, collect their domain sizes and compute product. Return this product to value ordering algo which selects minimum
+    Important: make sure that this computation is done only once per domain value. Also, best keep the space with the selected domain value, so that it must not be created again etc.
+    
+
 ** Support for alternate tunings
 
 *** DONE Define pair of (internally stateful) procs like {Init.setTuningTable Table} and {Init.getTuningTable ?Table}
