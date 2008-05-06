@@ -38,57 +38,68 @@ define
 	 Pitch =: 81 - (7*String) + Position + Finger
       end
 
-      %% cannot repeat notes -- required for analysis
+      %% cannot repeat notes or have octaves
+      %% required for pitch analysis
       {Pattern.forNeighbours
        Pitches
        2
        proc {$ X}
-	  {Nth X 1} \=: {Nth X 2}
+	{FD.modI {Nth X 1} 12} \=: {FD.modI {Nth X 2} 12}
        end}
-
-      %% cannot have octaves -- required for analysis
-%% FIXME: make this more general
-      {Pattern.forNeighbours
-       Pitches
-       2
-       proc {$ X}
-	  {Nth X 1} \=: {Nth X 2} + 12
-	  {Nth X 1} \=: {Nth X 2} - 12
-       end}
-
    end
 
-   proc {ToScore Pitches Lily ?ScoreInstance}
+   fun {FingerToActualFinger Finger}
+      case Finger of
+	 0 then "-0"
+      [] 1 then "-1"
+      [] 2 then "-1"
+      [] 3 then "-2"
+      [] 4 then "-2"
+      [] 5 then nil
+      [] 6 then "-3"
+      [] 7 then nil
+      [] 8 then "-4"
+      else nil
+      end
+   end
+
+   proc {ToScore Pitches Fingers Lily ?ScoreInstance}
       {Score.makeScore
        seq(info:[lily(" "#Lily)]
-           items:
-	     {Map
-{LUtils.butLast Pitches}
-fun {$ Pitch}
-			     if (Pitch>0) then
-				note(duration:4
-				     pitch:Pitch
-				     amplitude:64)
-			     else
-				pause(duration:4)
-			     end
-			  end}
-	  startTime:0
-	  timeUnit:beats(4))
+	   items:
+	      {List.zip {LUtils.butLast Pitches} {LUtils.butLast Fingers}
+	       fun {$ Pitch Finger}
+		  if (Pitch>0) then
+		     note(duration:4
+			  pitch:Pitch
+			  amplitude:64
+			  info:lily({FingerToActualFinger
+				     Finger})
+			 )
+		  else
+		     pause(duration:4)
+		  end
+	       end}
+	   startTime:0
+	   timeUnit:beats(4))
        unit ScoreInstance}
       {ScoreInstance wait}
    end
 
    /* %% doubles the number of pitches, and outputs a Score
    * object. */
-   proc {ToScoreDouble Pitches Lily ?ScoreInstance}
+   proc {ToScoreDouble Pitches Fingers Lily ?ScoreInstance}
       %% play games to avoid duplicating the "extra note"
       DoubledPitches = {Append {Append
-{LUtils.butLast Pitches}
-{LUtils.butLast Pitches}
-		      } [{Nth Pitches 1}]}
+				{LUtils.butLast Pitches}
+				{LUtils.butLast Pitches}
+			       } [{Nth Pitches 1}]}
+      DoubledFingers = {Append {Append
+				{LUtils.butLast Fingers}
+				{LUtils.butLast Fingers}
+			       } [{Nth Fingers 1}]}
    in
-      ScoreInstance = {ToScore DoubledPitches Lily}
+      ScoreInstance = {ToScore DoubledPitches DoubledFingers Lily}
    end
 
 

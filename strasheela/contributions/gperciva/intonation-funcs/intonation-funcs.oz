@@ -15,7 +15,6 @@ export
    changeToOpenString: ChangeToOpenString
    changeOneString: ChangeOneString
    noFingeredFifths: NoFingeredFifths
-   noFourOpen: NoFourOpen
    atLeast: AtLeast
    atLeastTwin: AtLeastTwin
    atMost: AtMost
@@ -94,23 +93,6 @@ define
 	    (FB =: 0)}
 	   (FA \=: FB)
 	  }
-	  1}
-      end
-   end
-
-   %% FIXME: allow 4 lower-stirng
-   proc {NoFourOpen Strings Fingers}
-      for X in 1..({Length Strings}-1) do
-	 SA = {Nth Strings X}
-	 SB = {Nth Strings X+1}
-	 FA = {Nth Fingers X} 
-	 FB = {Nth Fingers X+1}
-      in 
-	 {FD.impl
-	  (FA =: 7)
-	  {FD.disj
-	   (SB \=: SA)
-	   (FB \=: 0)}
 	  1}
       end
    end
