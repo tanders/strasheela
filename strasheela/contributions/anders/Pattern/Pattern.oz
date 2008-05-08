@@ -85,7 +85,7 @@ export
    WhichTrue
    SymbolToDirection DirectionToSymbol
    Direction DirectionR Contour InverseContour ContourMatrix
-   DirectionChangeR
+   DirectionChangeR LocalMaxR
    FdInts FdRanges
    
    MkUniqueSeq MkUniqueIntervalSeq
@@ -706,6 +706,11 @@ define
        B}
    end
 
+   /** %%  Returns 0/1-int in B whether Y is the maximum in [X, Y, Z]. X, Y, Z and B are FD integers.
+   %% */
+   proc {LocalMaxR X Y Z ?B}
+      B = {FD.conj (X <: Y) (Y >: Z)}
+   end
    
    /** %% Transforms one of the three direction symbols '-', '=' and '+' to the corresponding integer from 0, 1, or 2 representing a direction as used by constraints such as Direction and Contour. 
    %% */
