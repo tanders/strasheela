@@ -617,43 +617,6 @@ From this viewpoint, there is an interesting polarity between major and harmonic
 
 
 
-** Soft contour constraint
-
-   Idea: most intervals follow given contour, but not all. Combines
-   Contour and PercentTrue (percentage specified as range)
-
-   Applications: 
-
-   - Contour of melody follows simple shape in general (e.g. first ascending then
-     decending), but there are exceptions
-
-     -> I got this idea while listening to some non-Western music..
-
-     Option: additionally, the overall direction of the melody is
-     constrained by constraining specific intervals (e.g. between
-     first and last pitch)
-
-*** TODO Define constraint InpreciseContour (name?)
-*** Define example (see above)
-
-
-
-** TODO Length-independend pattern constraints like contour
-
-   Some constraint which expects two lists of FD ints (i.e. length of lists is determined) and constraints that all elements of the shorter list (first arg?) are contained *in their order* in the longer list (second arg?), but that the longer list might contain intermediate elements (i.e. neighbouring elements of the shorter list are not necessarily neighbours in the longer list, their might be one or more elements in between).
-   The constraint allows for multiple solutions for the longer list (e.g. where the additional elements are inserted), but should not necessarily insert any additional choice point. Can I define such a constraint with or? 
-   Optional additional arg constraint (proc) expects list {$ [OrigVar1 NewVar1 .. OrigVar2]} where OrigVar are also elements in the shorter list and allows to apply additional constraints to the inserted elements.  
-   
-   This constraint can be used, e.g., to constrain two pitch sequences to the same contour, even if they are of different length. The optional constraint arg allows to specify, e.g., that inserted elements "follow the same contour".
-   E.g., if the orig contour is the following (example determined and uses symbols for simplicity)
-
-   [+ + - = - +] 
-   
-   The one might constrain that inserted elements are the same as their predecessing org element. So, the following may be a longer list, a contour with inserted elements 
-
-   [+ + + - - = - - +]
-
-
 ** TODO Define InCriticalBandR Constraint
 
    {InCriticalBandR Pitch1 Pitch2 B}
@@ -1195,6 +1158,16 @@ archive init record.
     Then use this def in ET22, ET31
 
 
+** Small Refactoring: Chord/Scale/Note args like getChord / getScale
+
+   the init args getChords, getScales etc for classes in HS.score are highly generic. However, this genericity is not always needed and if not needed then these args are cumbersome
+
+*** TODO Implement alternative init arg which expects chord / scale directly
+
+    Idea: in case I already know which chord/scale some object is related to I can hand this chord / scale directly over as init arg (using both init args chord and getChords must be permitted)
+
+    First rethink whether I simply add such alternative args or wether there are better alternative ideas.. 
+
 ** Efficiency
 
 *** TODO Define extendable left-to-right distro strategy		  :NEXT:
@@ -1506,7 +1479,72 @@ See ../../testing/zy_Efficiency/KeepMusicRepresentationOutsideComputationalSpace
 
    UseMotifs pattern generalises cycle pattern by introducing multiple alternatives. Can I generalise or variate other pattern constraints similarily. Goal is to create "interestingly" shaped sequences of FD ints and FD int combinations (e.g. pairs) 
 
-   Rough idea: generalise functions like Map/ForAll or MapNeighbours/ForNeighbours to expect a list of functions/procedures from which it selects freely one for each function/procedure application. 
+*** Higher order functions like Map selecting from multiple function alternatives
+
+    Rough idea: generalise functions like Map/ForAll or MapNeighbours/ForNeighbours to expect a list of functions/procedures from which it selects freely one for each function/procedure application. 
+
+
+*** Soft cycle patterns 
+    
+**** TODO define cycle pattern where the cycle period is FD int and constrainable
+
+**** TODO Define reified cycle pattern CycleRs 
+
+     {CycleRs Xs Bs Period}
+
+     Xs is list of FD ints which is constrained to follow cycle, Period is period length of the cycle (an FD int), and Bs is list of 0/1 ints of same length as Xs. For each Xs element which does indeed follow the cycle its corresponding Bs element is 1 and 0 otherwise
+     Application example: constrain Bs with Pattern.percentTrue_Range so that, e.g., 60-90% of the Bs follow the cycle pattern and the rest does not
+
+**** Cycle variant where non-cycle elements are possibly inserted
+
+     {DiscontinuousCycleRs Xs Ys Bs}
+
+     Xs is list of FD ints. Ys is list of FD ints which is quasi a sublist of Xs, but neighbours in Ys are not necessarily neighbours in Ys. Bs is a list of 0/1 ints of length Xs, specifying whether the corresponding Xs element is an element of Ys and thus part of the cycle or not. If the Xs elements for which Bs element is 0 are ignored, then the remaining Xs elements form a strict cycle pattern (i.e. occur in the order they are in Y, plus wrapping at the end of Ys).
+
+
+
+
+*** Soft contour constraint
+
+    Idea: most intervals follow given contour, but not all. Combines
+    Contour and Pattern.percentTrue_Range (percentage specified as range)
+
+    Applications: 
+
+    - Contour of melody follows simple shape in general (e.g. first ascending then
+      decending), but there are exceptions
+
+      -> I got this idea while listening to some non-Western music..
+
+      Option: additionally, the overall direction of the melody is
+      constrained by constraining specific intervals (e.g. between
+      first and last pitch)
+
+**** TODO Define constraint InpreciseContour (name?)
+**** Define example (see above)
+
+
+*** TODO Length-independend pattern constraints like contour
+
+    Some constraint which expects two lists of FD ints (i.e. length of lists is determined) and constraints that all elements of the shorter list (first arg?) are contained *in their order* in the longer list (second arg?), but that the longer list might contain intermediate elements (i.e. neighbouring elements of the shorter list are not necessarily neighbours in the longer list, their might be one or more elements in between).
+    The constraint allows for multiple solutions for the longer list (e.g. where the additional elements are inserted), but should not necessarily insert any additional choice point. Can I define such a constraint with or? 
+    Optional additional arg constraint (proc) expects list {$ [OrigVar1 NewVar1 .. OrigVar2]} where OrigVar are also elements in the shorter list and allows to apply additional constraints to the inserted elements.  
+    
+    This constraint can be used, e.g., to constrain two pitch sequences to the same contour, even if they are of different length. The optional constraint arg allows to specify, e.g., that inserted elements "follow the same contour".
+    E.g., if the orig contour is the following (example determined and uses symbols for simplicity)
+
+    [+ + - = - +] 
+    
+    The one might constrain that inserted elements are the same as their predecessing org element. So, the following may be a longer list, a contour with inserted elements 
+
+    [+ + + - - = - - +]
+
+
+
+
+*** Constraint on list of 0/1 variables how evenly these are distributed
+
+    e.g., I may want to specify that no two 1 (or two 0) follow each other, or that the sum of N neighbouring elements tends to be the same throughout the list 
 
 
 ** Instrumentation constraints 
