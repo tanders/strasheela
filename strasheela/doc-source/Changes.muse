@@ -15,13 +15,14 @@
 
   - Fixes and minor changes
 
+    - Pattern.localMaxR added
     - [[../doc/api/node8.html][SDistro]].makeSearchScript (and all Strasheela search engines): Added generic variable ordering 'dom+deg'
     - SMapping: added MapScore
     - Out.midi.note2Midi renamed into Out.midi.noteToMidi for consistency
     - GUtils.extendedScriptToScript: the argument order for extended scripts is swapped, so that extended scripts can be used conveniently as score creator functions in Score.makeScore. All code which uses extended scripts has been adapted (e.g., RT.scoreSearcherWithTimeout and all examples which use that class).
     - Fixed HS.score.chordsToScore bug: arg minIntervalToBass did constrain interval between soprano an next lower voice instead between bass and next higher
     - Fixed Score.scoreObject method init bug: replaced GUI warning again by stdout warning as GUI warning causes exception from within space 
-    - Score.isScoreObject blocked for undetermined FS variables 
+    - Oz primitive Object.is blocks on undetermined FS vars: refactored all calls to it to check for FS vars first (e.g., various type checking functions)
 
 
   - For further fixes see the [[../CHANGELOG.txt]].
