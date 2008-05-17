@@ -59,7 +59,7 @@ export
    UseMotifs
    
    MarkovChain MarkovChain_1
-   MakeLSystem MakeLSystem2
+   MakeLSystem MakeLSystem_B MakeLSystem2
    OneOverFNoise OneOverFNoiseDeterm 
    %% combining patterns
    MapTail MapTailInd MapTailN ForTail ForTailInd ForTailN
@@ -560,12 +560,12 @@ define
    
 
    /*
-    %% B=1 <-> X = Y
+   %% B=1 <-> X = Y
    %% 
    proc {UnifyR X Y B}
       B = {Combinator.'reify' proc {$} X = Y end} 
    end
-    %% X (any unifiable value) occures N (FD int) times in Xs (list of unifiable values).
+   %% X (any unifiable value) occures N (FD int) times in Xs (list of unifiable values).
    %% 
    proc {HowMany2 X Xs N}
       {FD.sum {Map Xs
@@ -587,7 +587,7 @@ define
    /** %% Constraint Fn (a unary function returning an 0/1 int) holds for between Min and Max percent. Min and Max are (determined) integers.
    %% */
    proc {ForPercent Xs Fn Min Max}
-       {PercentTrue_Range {Map Xs Fn} Min Max}      
+      {PercentTrue_Range {Map Xs Fn} Min Max}      
 %       L = {IntToFloat {Length Xs}}
 %       MinDomain = {FloatToInt L * {IntToFloat Min} / {IntToFloat 100}}
 %       MaxDomain = {FloatToInt L * {IntToFloat Max} / {IntToFloat 100}}
@@ -1344,29 +1344,60 @@ define
        end}
    end
 
-   /** %% Returns a list of determined values sorted according to an L-system. Start is the first pattern period (a list) and N is number of periods (an integer). Rules is unary fun, arg is the last pattern value and output is the next period (a list). Rules can be defined, e.g., by a case expression.  
-   %% NB: MakeLSystem works best with determined values and is thus no pattern rule which constraints values in a list as most other definitions in this functor. Nevertheless, symbols of the L-system can be replaced by variables (e.g. using LUtils.replace). See ./testing/Pattern-test.oz for examples.
+   /** %% Returns a list of determined values sorted according to an L-system. Axiom is the first pattern period (a list) and N is the number of periods (an integer). N=0 results in the axiom. Rules is a unary function, whose argument is the last pattern value and which returns the next period (a list). Rules can be defined, e.g., by a case expression.  
+   %% NB: MakeLSystem works best with determined values and is thus no constraint as many other definitions in this functor. Nevertheless, symbols of the L-system can be replaced by variables (e.g. using LUtils.replace). See ./testing/Pattern-test.oz for examples.
    %% */
    %%
-   %% !! This is not consistent with other pattern defs. I can not
+   %% !! This is not consistent with other pattern defs. I cannot
    %% easily use undetermined variables here (instead of
    %% e.g. symbols). Shall I perhaps change the defs of other patterns
    %% accordingly?
    %%
    %% !! CM: arg generations sets number of rewrite generations, after that pattern repeats last generation like a cycle pattern. 
-   fun {MakeLSystem Start N Rules}
+   fun {MakeLSystem Axiom N Rules}
       fun {Aux Xs N}
-	 if N==0 then nil
+	 if N=<0 then nil
 	 else Next = {LUtils.mappend Xs Rules}
 	 in {Append Next {Aux Next N-1}}
 	 end
       end
    in
-      {Append Start {Aux Start N-1}}
+      {Append Axiom {Aux Axiom N}}
    end
 
-   /** %% Returns a list of determined values sorted according to an L-system. Similar to MakeLSystem, however MakeLSystem2 allows the definition of context sensitive L-systems, systems which look not only at single values, but also at predecessors and/or successors (in the former period/generation). Rules is function of three arguments:  whole pattern so far in reverse order (i.e. a list with direct predecessor first), the current value and the succeeding values (list). Rules may, e.g., define an if or a case statement and can freely access all its arguments (e.g. to define the current element is x and the butfirst is y). The first arg of Rules is list with all predecessors of X in proceeding generation (and in reverse order) including earlier generations. This arg is nil in the vedry first iteration. The third arg of Rules is list with successors of X in proceeding generation (normal order) excluding later generations. This arg is nil at any end of a period. 
-   %% NB: MakeLSystem works best with determined values and is thus no pattern rule which constraints values in a list as most other definitions in this functor. Nevertheless, symbols of the L-system can be replaced by variables (e.g. using LUtils.replace). See ./testing/Pattern-test.oz for examples.
+   /** %% This function is a variant of MakeLSystem which is more convenient to use. It also returns a list of determined values sorted according to an L-system. As in MakeLSystem, Axiom first pattern period (a list) and N is the number of periods (an integer). In contrast to MakeLSystem, Rules is a record which defines a mapping how a symbol is replaced in the following generation. The features in the record denote the L-system symbols for each mapping. The values at these features are typically unary functions. The function returns a list with the symbols of the next generation. For example, the Algae example (example 1 at http://en.wikipedia.org/wiki/Lindenmayer_system) is defined as follows.
+   {MakeLSystem_B [a] 5 unit(a: fun {$ _} [a b] end
+			     b: fun {$ _} [a] end)}
+   %% 
+   %% The function expects the symbol it replaces as argument. This can be used, for example to hand over symbol arguments in parameterised L-systems. In case this function argument is not required, it is possibly for convenience to replace the function by its return value. The next example demonstrates a simple parameterised L-system.
+   {MakeLSystem_B [a(1)] 5 unit(a: fun {$ a(I)} [a(I+1) b] end
+				b: [a(1)])}
+   %% 
+   %% */
+   fun {MakeLSystem_B Axiom N Rules}
+      %% Each L-system generation is terminated by the symbol '|'. The function Pattern.makeLSystem all N generations in a single list. The symbol '|' at the end of each generation with is then used for a generation-wise splitting in order to return only the last generation.
+      {List.last
+       {LUtils.split
+	{MakeLSystem {Append Axiom ['|']} N
+	 fun {$ R}
+	    L = {Label R}
+	 in
+	    if {HasFeature Rules L}
+	    then
+	       if {IsProcedure Rules.L}
+	       then {Rules.L R}
+	       else Rules.L
+	       end
+	       %% otherwise rule (for '|') 
+	    else [R]
+	    end
+	 end}
+	'|'}}
+   end
+
+
+   /** %% Returns a list of determined values sorted according to an L-system. Similar to MakeLSystem, however MakeLSystem2 allows the definition of context sensitive L-systems, systems which look not only at single values, but also at predecessors and/or successors (in the former period/generation). Rules is function of three arguments: the whole pattern so far in reverse order (i.e. a list with the direct predecessor first), the current value and the succeeding values (a list). The first argument is nil in the very first iteration. The third arg of Rules is list with successors of X in proceeding generation (normal order) excluding later generations. This arg is nil at any end of a period. Rules may, e.g., define an if or a case statement and can freely access all its arguments (e.g. to define the current element is x and the butfirst is y).
+   %% NB: MakeLSystem works best with determined values and is no constraint as most other definitions in this functor. Nevertheless, symbols of the L-system can be replaced by variables (e.g. using LUtils.replace). See ./testing/Pattern-test.oz for examples.
    %% */
    fun {MakeLSystem2 Start N Rules}
       Result = {Cell.new nil}
