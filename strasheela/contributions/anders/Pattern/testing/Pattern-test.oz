@@ -397,8 +397,43 @@ Zs = {FD.list 6 1#30}
 Xs = [10 20]
 
 Ys = [1 2 3]
+
+
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%% L-system def 
+%%
+
+
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
+%%
+%% L-system: Pattern.makeLSystem_B is more convenient to use than Pattern.makeLSystem.
+
+
+%% Koch curve
+{Pattern.makeLSystem_B 2 ['+' '-'] [f] 
+ unit(f: [f '+' f '-' f '-' f '+' f])}
+
+
+%% Simple parameterised L system
+{Pattern.makeLSystem_B 5 nil [a(1)] 
+ unit(a: fun {$ a(I)} [a(I+1) b] end
+      b: [a(1)])}
+
+
+%%
+%% Pattern.lSystemConstsToParams
+%%
+
+%% Koch curve: using params
+{Pattern.lSystemConstsToParams {Pattern.makeLSystem_B 2 ['+' '-'] [f] 
+				unit(f: [f '+' f '-' f '-' f '+' f])}
+ [f]}
+
+
+%%%%%%%%%%%%%%%%%%%
 
 %% L-system: Pattern.makeLSystem
 declare
@@ -550,6 +585,7 @@ end
 %       '|': fun {$ X}
 % 	      ['|']
 % 	   end}
+
 
 
 
