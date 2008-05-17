@@ -1,4 +1,25 @@
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%% BUGS 
+%%
+
+https://sourceforge.net/tracker/index.php?func=detail&aid=1767645&group_id=167225&atid=842098
+%% arguments like inChordB default randomly
+%% either to 0 or to {FD.int 0#1}
+
+local
+MyNote = {Score.makeScore note(startTime:0
+			       duration:4
+			       pitchClass:7
+			       pitch:{FD.int 48#72})
+	  unit(note:HS.score.note)}
+in
+   {Inspect {MyNote toInitRecord($)}}
+end
+
+
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 /*
