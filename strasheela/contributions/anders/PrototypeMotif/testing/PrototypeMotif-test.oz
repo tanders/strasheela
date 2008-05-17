@@ -8,7 +8,7 @@
 
 declare
 
-[PM] = {ModuleLink ['x-ozlib://anders/strasheela/PrototypeMotif/PrototypeMotif.ozf']}
+[PMotif] = {ModuleLink ['x-ozlib://anders/strasheela/PrototypeMotif/PrototypeMotif.ozf']}
 
 
 
@@ -42,7 +42,7 @@ Motif_A_P = {Score.makeScore seq(info:topLevel
 
 IsMotif_A
 Motif_A
-= {PM.makeScript Motif_A_P
+= {PMotif.makeScript Motif_A_P
    unit(
       %% unset all note pitches
       unset: [isNote#pitch]
@@ -71,7 +71,7 @@ Motif_A
       prototypeDependencies:
 	 [%% Constrain each motif instance to follow the
 	  %% same contour as the orig etc.
-	  isContainer#{PM.unifyDependency
+	  isContainer#{PMotif.unifyDependency
 		       fun {$ X}
 			  {Pattern.contour {X map($ getPitch test:isNote)}}
 		       end}
@@ -193,10 +193,10 @@ InternalChordVars = [root untransposedRoot pitchClasses untransposedPitchClasses
 %% Chord motif instances share the indices and the absolute transposition intervals as prototype, but transposition is unset
 IsChord_Motif
 Chord_Motif
-= {PM.makeScript Chord_Motif_P
+= {PMotif.makeScript Chord_Motif_P
    unit(unset: [HS.score.isChord # (transposition | InternalChordVars)]
 	prototypeDependencies:
-	   [isContainer#{PM.unifyDependency
+	   [isContainer#{PMotif.unifyDependency
 			 fun {$ X}
 			    {Pattern.map2Neighbours {X map($ getTransposition
 							   test:HS.score.isChord)}
@@ -248,21 +248,21 @@ NestedMotif_AA_P = seq(info:[topLevel
 		       % startTime:0
 		      )
 NestedMotif_AA
-= {PM.nestedScript NestedMotif_AA_P
+= {PMotif.nestedScript NestedMotif_AA_P
    unit(
 %       constraints:
 % 	 [fun {$ X} {X hasThisInfo($ topLevel)}
 % 	  end#proc {$ C}
 % 		 %% NOTE: only works for 2 motifs, but thats exactly
 % 		 %% what NestedMotif_AA_P defines
-% 		 {Pattern.contour {C map($ PM.getHighestPitch test:IsMotif_A)}}
+% 		 {Pattern.contour {C map($ PMotif.getHighestPitch test:IsMotif_A)}}
 % 		 = {Pattern.contour [3 2 1]} % ascending
 % 	      end
 % 	 ]
       scriptArgs:unit(
 		    %% contour specified by an example
 		    contour:proc {$ C Default}
-			       {Pattern.contour {C map($ PM.getHighestPitch
+			       {Pattern.contour {C map($ PMotif.getHighestPitch
 						       test:IsMotif_A)}}
 			       = {Pattern.contour Default}
 			    end # [1 2 1]
@@ -309,12 +309,12 @@ NestedMotif_AA_P = seq(info:topLevel
 			      motif_A(info:id(z)
 				      pitchDomain:dom(62#67))])
 NestedMotif_AA
-= {PM.nestedScript NestedMotif_AA_P
+= {PMotif.nestedScript NestedMotif_AA_P
    unit(
       scriptArgs:unit(
 		    %% contour specified by an example
 		    contour:proc {$ C Default}
-			       {Pattern.contour {C map($ PM.getHighestPitch
+			       {Pattern.contour {C map($ PMotif.getHighestPitch
 						       test:IsMotif_A)}}
 			       = {Pattern.contour Default}
 			    end # [1 2]
