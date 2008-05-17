@@ -59,7 +59,7 @@ export
    UseMotifs
    
    MarkovChain MarkovChain_1
-   MakeLSystem MakeLSystem_B MakeLSystem2
+   MakeLSystem MakeLSystem_B MakeLSystem2 LSystemConstsToParams
    OneOverFNoise OneOverFNoiseDeterm 
    %% combining patterns
    MapTail MapTailInd MapTailN ForTail ForTailInd ForTailN
@@ -1365,16 +1365,19 @@ define
       {Append Axiom {Aux Axiom N}}
    end
 
-   /** %% This function is a variant of MakeLSystem which is more convenient to use. It also returns a list of determined values sorted according to an L-system. As in MakeLSystem, Axiom first pattern period (a list) and N is the number of periods (an integer). In contrast to MakeLSystem, Rules is a record which defines a mapping how a symbol is replaced in the following generation. The features in the record denote the L-system symbols for each mapping. The values at these features are typically unary functions. The function returns a list with the symbols of the next generation. For example, the Algae example (example 1 at http://en.wikipedia.org/wiki/Lindenmayer_system) is defined as follows.
-   {MakeLSystem_B [a] 5 unit(a: fun {$ _} [a b] end
-			     b: fun {$ _} [a] end)}
+   /** %% This function is a variant of MakeLSystem which is more convenient to use. It also returns a list of determined values sorted according to an L-system. As in MakeLSystem, N is the number of periods (an integer) and Axiom is the first pattern period (a list). Constants is a list of symbols which always remain fixed (a list of atoms). In contrast to MakeLSystem, Rules is a record which defines a mapping how a symbol is replaced in the following generation. The features in the record denote the L-system symbols for each mapping. The values at these features are typically unary functions. The function returns a list with the symbols of the next generation. For example, the Algae example (example 1 at http://en.wikipedia.org/wiki/Lindenmayer_system) is defined as follows.
+   {MakeLSystem_B 5 nil [a] unit(a: fun {$ _} [a b] end
+				 b: fun {$ _} [a] end)}
    %% 
    %% The function expects the symbol it replaces as argument. This can be used, for example to hand over symbol arguments in parameterised L-systems. In case this function argument is not required, it is possibly for convenience to replace the function by its return value. The next example demonstrates a simple parameterised L-system.
-   {MakeLSystem_B [a(1)] 5 unit(a: fun {$ a(I)} [a(I+1) b] end
-				b: [a(1)])}
+   {MakeLSystem_B 5 nil [a(1)] unit(a: fun {$ a(I)} [a(I+1) b] end
+				    b: [a(1)])}
    %% 
    %% */
-   fun {MakeLSystem_B Axiom N Rules}
+   fun {MakeLSystem_B N Constants Axiom Rules}
+      FullRules = {Adjoin Rules
+		   {List.toRecord unit {Map Constants fun {$ X} X#[X] end}}}
+   in
       %% Each L-system generation is terminated by the symbol '|'. The function Pattern.makeLSystem all N generations in a single list. The symbol '|' at the end of each generation with is then used for a generation-wise splitting in order to return only the last generation.
       {List.last
        {LUtils.split
@@ -1382,11 +1385,11 @@ define
 	 fun {$ R}
 	    L = {Label R}
 	 in
-	    if {HasFeature Rules L}
+	    if {HasFeature FullRules L}
 	    then
-	       if {IsProcedure Rules.L}
-	       then {Rules.L R}
-	       else Rules.L
+	       if {IsProcedure FullRules.L}
+	       then {FullRules.L R}
+	       else FullRules.L
 	       end
 	       %% otherwise rule (for '|') 
 	    else [R]
@@ -1424,6 +1427,32 @@ define
       {AddToResult Start}
       {Aux Start N-1}
       {Reverse {Cell.access Result}}
+   end
+
+   /** %% [Convenience for L-systems] Transform the result of an L-system (Xs, a list of atoms or records) which contain constants into a result with parameters. Put differently, collects the constant symbols (atoms) as parameters into their preceeding L-system variable symbol (atom or record). The resulting parameterised L-system variables are records whose features are the constants following them before the next L-system variable. The feature values specify how often this constant occured before the next non-constant. The L-system variable labels are specified in Vars (a list of atoms), everything else is considered a constant.
+   %% Note that this function requires that the first element is always an L-system variable. 
+   %% */
+   fun {LSystemConstsToParams Xs Vars}
+      case Xs of nil then nil
+      else
+	 fun {MakeFullVar ThisVar VarConsts}
+	    Dict = {NewDictionary}
+	 in
+	    {ForAll VarConsts proc {$ X}  {Dictionary.put Dict X {Dictionary.condGet Dict X 0}+1} end}
+	    {Adjoin {Dictionary.toRecord {Label ThisVar} Dict}
+	     ThisVar}
+	 end
+	 ThisVar = Xs.1
+	 NextVarPos = {LUtils.findPosition Xs.2 fun {$ X} {Member {Label X} Vars} end} 
+      in
+	 case NextVarPos of nil
+	    %% Xs.1 is last var
+	 then {MakeFullVar ThisVar Xs.2} | nil
+	 else 
+	    {MakeFullVar ThisVar {List.take Xs.2 NextVarPos-1}}
+	    | {LSystemConstsToParams {List.drop Xs.2 NextVarPos-1} Vars}
+	 end
+      end
    end
 
    
