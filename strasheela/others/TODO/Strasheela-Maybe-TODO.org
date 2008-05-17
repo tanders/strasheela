@@ -84,7 +84,6 @@ see Strasheela/private/WorkInProgress/NonmensuralENP->mensuralENP
 
      E.g., 
 
-
     - !!?? there was some idea of "Orjan which I wanted to incorporate to Strasheela and for which I needed this delayed constraints approach..? 
       Was it harmony rule depending on metric structure? For example, no non-chord tones on strong beat
 
@@ -132,13 +131,12 @@ see Strasheela/private/WorkInProgress/NonmensuralENP->mensuralENP
 
 **** Harmony model: Clean up doc					 :MAYBE:
 
-
 **** Output to lilypond etc: make extension for outputting specific score information (more) reusable :MAYBE:
 
-E.g. for outputting information such as meter, key, motif boundaries... 
+     E.g. for outputting information such as meter, key, motif boundaries... 
 
 
-**** !!?? Some means to define rules in a more modular/generic way -- currently, e.g., more complex counterpoint rules, can not be used in other CSP as they rely on the specific score representation (e.g. extensions to Note) :MAYBE:
+**** !!?? Some means to define rules in a more modular/generic way -- currently, e.g., more complex counterpoint rules, cannot be used in other CSP as they rely on the specific score representation (e.g. extensions to Note)  :MAYBE:
 
    -> Better solution: use memoization instead of extending the music representation ad hoc
    However, memoization can be computationally expensive

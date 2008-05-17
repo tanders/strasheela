@@ -111,7 +111,7 @@
 
 *** Read literature on soft constraints					 :@READ:
 
-**** TODO [#A] [50%] Read soft constraints article in "Handbook of Constraint Programming"
+**** TOD±O [#A] [50%] Read soft constraints article in "Handbook of Constraint Programming"
 **** DONE Read Bartak soft constraints survey
      CLOSED: [2008-03-17 Mon 18:33]
 
@@ -1554,6 +1554,23 @@ See ../../testing/zy_Efficiency/KeepMusicRepresentationOutsideComputationalSpace
     For first idea see GTD folder "instrumentation constraints"
 
 
+** Output to K Sprottes PWGL simple format 
+
+   This format is easily created in Strasheela (similar to fomus..) 
+   And it can be transformed into a proportional ENP score
+
+   Advantage: I could edit resulting scores in the ENP score editor
+   If I later want to translate the score back to Strasheela, then I possibly need to keep some info on the orig nesting etc. But that would be less important in the beginning.
+
+   I could also edit the tempo curves etc in ENP, even in algorithmic ways. 
+   I would need some 'info' slot to keep arbitrary additional info on score objects (e.g., where some motif starts and ends), if I want to do that adaequately 
+
+
+** Enharmonic spelling
+
+   Simple approach for creating enharmonic spelling for simple 12 ET cases: just use a database (record) which maps each pitch class to an enharmonic pitch. This spec should be user-settable, e.g., via in Init proc (similar to tuning setting..). 
+
+
 * Strasheela documentation					    :STRASHEELA:
 
 ** Strasheela tutorial
@@ -1596,8 +1613,61 @@ See ../../testing/zy_Efficiency/KeepMusicRepresentationOutsideComputationalSpace
 ** Test Suse rpms on Suse (in new Parallels VM)				 :MAYBE:
 
 
-* Strasheela Bugs
+* Strasheela on Cluster
 
+** DONE Test Strasheela installation on cluster fotcluster1.fot.plymouth.ac.uk :@OFFICE:URGENT:
+   CLOSED: [2008-05-15 Thu 17:56]
+
+*** OLD
+
+    On 26 Febr, I told Marc that we better wait for the upcoming Mozart release
+    
+    M.Flamank@plymouth.ac.uk
+
+**** Installation instruction
+
+
+I understood from Kurt that the cluster's operating system is based
+on Redhat, and that RPMs are preferred for an easy reinstallation of
+the cluster nodes. Mozart RPMs are available at
+
+   http://www.mozart-oz.org/download/view.cgi?action=rpm&version=1.3.2
+
+I assume we should use the source RPM package and compile it. We only
+need the core RPM (i.e., neither the GTK extensions nor documentation
+is needed):
+
+   http://www.mozart-oz.org/download/mozart-ftp/store/
+1.3.2-2006-06-15-GENERIC-i386/mozart-1.3.2.20060615-4.src.rpm
+
+The compilation then happens with
+
+   rpmbuild --rebuild mozart-1.3.2.20060615-4.src.rpm
+
+However, Mozart depends on the following libraries: gmp, GNU gdbm
+1.8.3, and GNU regex 0.12. Additionally, Emacs is required.
+
+
+On Feb 26, 2008, at 1:57 PM, Marc Flamank wrote:
+Tried "rpmbuild -v --rebuild mozart-1.3.2.20060615-4.src.rpm"
+
+failed on gpm then on gdbm but worked once I got them into /usr/local.  (The .h's were not installed!!)
+
+Even though it exits 0 there is no oz on the file system.
+
+Looking through the output the build seems to have done things in the source, in /var/tmp, in /usr/src/redhat/BUILD/ then deleted them without actually installing anything.  Am I missing something?
+
+
+-----
+
+rpmbuild will typically create binary RPMs in the usual system-specific location, e.g., a file mozart-1.3.2.20060615-4.i386.rpm in /usr/src/redhat/RPMS/i386. After the compilation finished, indeed nothing is installed. The resulting RPMs are then installed, e.g., by doing   
+
+  rpm -i mozart-$VERSION.$PLATFORM.rpm
+  
+
+
+
+* Strasheela Bugs
 
 ** Revise collect method (graph mode)					 :MAYBE:
 
@@ -1734,6 +1804,8 @@ InspectorObject = {Inspector.new unit}
     this does already work in principle, but I need 'to prefix' the functor variable before each TAGS entry
     
     [[file:~/oz/music/Strasheela/strasheela/trunk/strasheela/scripts/generate-TAGS.sh::fun%20Foo%20Foo56%201566][file:~/oz/music/Strasheela/strasheela/trunk/strasheela/scripts/generate-TAGS.sh::fun Foo Foo56 1566]]
+
+
 
 
 
