@@ -79,27 +79,6 @@
 
 
 
-** Muzak Beispiel mit Kilian						 :MAYBE:
-
-   see 
-   [[file:/Users/t/texte/CollaborationWithKilian/Muzaks/]]
-   
-*** TODO Recapitulate definition: how is resulting value seq organised
-*** Port Lisp to Oz
-*** Redefine as constraint 
-
-** Josquin counterpoint example						 :MAYBE:
-
-   See description at [[file:~/oz/music/Strasheela/private/examples/Josquin/PlanningAndThinking/JosquinCounterpoint-MusikTheorie.txt]]
-
-** Schoenberg Harmony							 :MAYBE:
-
-   See [[file:~/oz/music/Strasheela/private/examples/Schoenberg/PlanningAndThinking/SchoenbergHarmony.oz]]
-
-** Inventio								 :MAYBE:
-
-   See [[file:/Users/t/oz/music/Strasheela/private/examples/Inventio/]]
-
 
 * Strasheela design						    :STRASHEELA:
 

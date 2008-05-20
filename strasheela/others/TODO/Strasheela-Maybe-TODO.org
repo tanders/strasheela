@@ -9,7 +9,34 @@
 https://sourceforge.net/tracker/index.php?func=detail&aid=1883454&group_id=167225&atid=842099
 
 
-** Inventio example 							 :MAYBE:
+** Realtime example with Ppmpd
+
+   For first idea see GTD folder "Realtime Strasheela Example"
+
+** Muzak Beispiel mit Kilian						 :MAYBE:
+
+   see 
+   [[file:/Users/t/texte/CollaborationWithKilian/Muzaks/]]
+   
+*** TODO Recapitulate definition: how is resulting value seq organised
+*** Port Lisp to Oz
+*** Redefine as constraint 
+
+
+** Josquin counterpoint example						 :MAYBE:
+
+   See description at [[file:~/oz/music/Strasheela/private/examples/Josquin/PlanningAndThinking/JosquinCounterpoint-MusikTheorie.txt]]
+   Work in progress: [[file:~/oz/music/Strasheela/strasheela/trunk/strasheela/examples/FloridCounterpoint-Canon-revised.oz]]
+
+   GTD folder "Josquin cp"
+
+** Schoenberg Harmony							 :MAYBE:
+
+   See [[file:~/oz/music/Strasheela/private/examples/Schoenberg/PlanningAndThinking/SchoenbergHarmony.oz]]
+   
+** Inventio								 :MAYBE:
+
+   See [[file:/Users/t/oz/music/Strasheela/private/examples/Inventio/]]
 
 *** harmonic etc analysis of inventio 1
 
