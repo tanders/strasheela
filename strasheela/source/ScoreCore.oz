@@ -90,7 +90,9 @@ define
    /** %% Default features excluded by method toInitRecord
    %% */
 %   DefaultInitRecordExcluded = [startTime endTime]
-   DefaultInitRecordExcluded = [endTime]
+   DefaultInitRecordExcluded = [endTime
+				%% HS.score.note args
+				getChords isRelatedChord getScales isRelatedScale]
    %
    %  aux mixin classes 
    %
@@ -301,7 +303,7 @@ define
 	  proc {$ Attr X}
 	     %% Note: GUI causes space hierarchy from within local space
 	     % {GUtils.warnGUI "Setting "#{Value.toVirtualString self 100 100}#"'s attribute '"#Attr#"' directly to "#{Value.toVirtualString X 100 100}#". Possibly, this attribute does not exist in this object!"}
-	     {System.showInfo "Warning: setting "#{Value.toVirtualString self 100 100}#"'s attribute "#Attr#" directly to "#X#". Possibly, this attribute does not exist in this object!"}
+	     {System.showInfo "Warning: setting "#{Value.toVirtualString self 100 100}#"'s attribute "#Attr#" directly to "#{Value.toVirtualString X 100 100}#". Possibly, this attribute does not exist in this object!"}
 	     @Attr = X
 	  end}
 	 
@@ -2424,7 +2426,7 @@ define
       /** %% Like CopyScore, but MyScore is not fully initialised (cf. MakeScore2 vs. MakeScore).
       %% */ 
       fun {CopyScore2 MyScore}
-	 {MakeScore2 {CopyVars {MyScore toInitRecord($)}}
+	 {MakeScore2 {CopyVars {MyScore toInitRecord($ exclude:nil)}}
 	  {MyScore getInitClasses($)}}
       end
       /** %% CopyScore returns a deep copy of MyScore. The resulting MyCopy has the same score topology and its objects are created from the same classes as MyScore. However, undetermined variables in MyScore are replaced by fresh variables with the same domain. 
