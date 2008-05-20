@@ -1060,7 +1060,7 @@ define
        end}
       {List.drop Zs {Length Xs}*LYs} = nil % determine tail
    end
-   /** %% Applies the binary function P on all pairwise combinations of Xs, i.e. {P Xs1 Xs2} .. {P Xs1 XsN} {P Xs2 Xs3} .. {P XsN-1 XsN}.
+   /** %% Applies the binary procedure P on all pairwise combinations of Xs, i.e. {P Xs1 Xs2} .. {P Xs1 XsN} {P Xs2 Xs3} .. {P XsN-1 XsN}.
    %% */
    proc {ForPairwise Xs P}
       case Xs of nil then skip
