@@ -141,7 +141,7 @@ define
 		      motifTest:_)
       As = {Adjoin Defaults Args}      
       fun {CopyScore2 Orig Args}
-	 OrigR = {Orig toInitRecord($)}
+	 OrigR = {Orig toInitRecord($ exclude:nil)}
       in
 	 {Score.makeScore2
 	  %% Add Args for top-level given directly to script 
