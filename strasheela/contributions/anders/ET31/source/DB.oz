@@ -324,6 +324,14 @@ define
 %				dissonanceDegree:2
 			   comment:'harmonic series') % name nicht eindeutig
 
+
+		   %% Decatonic scale with all 6 commas
+		   %% NOTE: 4#3 is a comma away from 21#16, so I may have the latter instead! 
+		   scale(pitchClasses:[1#1 21#20 15#14 7#6 25#21 5#4 21#16 4#3
+				       7#5 10#7 3#2 5#3 7#4 25#14 15#8 40#21]
+			 roots:[1#1] 
+			   comment:'full dynamic symmetrical major')
+		   
 		  )
 
    %%
