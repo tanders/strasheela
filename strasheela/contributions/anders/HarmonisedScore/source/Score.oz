@@ -1727,6 +1727,8 @@ define
 	    chords  % list of chord candidate objects
 	    relatedChordBs % list of 0/1-ints matching chord candidate objects
 	    % !!?? args and their default go directly into method 'header' record (=M)
+	    getChords		% init proc
+	    isRelatedChord	% init proc
 	 meth initInChordMixinForNote(...) = M
 	    Defaults = unit(inChordB:_
 			    getChords:proc {$ Self Chords} Chords=nil end
@@ -1742,6 +1744,8 @@ define
 	       @chords = {Args.getChords self} 
 	       {InitConstrain self Args}
 	    end
+	    @getChords = Args.getChords
+	    @isRelatedChord = Args.isRelatedChord
 	 end
 	 /** %% Returns an 0/1-int which states whether or not the pitch class of self is included in the pitch classes of its related chord. This definition is an alias for getInChordB.
 	 %% */
@@ -1842,6 +1846,8 @@ define
 	 attr inScaleB
 	    scales % list of scale candidate objects
 	    relatedScaleBs % list of 0/1-ints matching scale candidate objects
+	    getScales     % init proc
+	    isRelatedScale % init proc
 	 meth initInScaleMixinForNote(...) = M
 	    Defaults = unit(inScaleB:_
 			    getScales:proc {$ Self Scales} Scales=nil end
@@ -1858,6 +1864,8 @@ define
 	       @scales = {Args.getScales self} 
 	       {InitConstrain self Args}
 	    end
+	    @getScales = Args.getScales
+	    @isRelatedScale = Args.isRelatedScale
 	 end
 	 /** %% see doc isInChord
 	 %% */
@@ -2243,12 +2251,11 @@ define
 	 unit(superclass:Note2
 	      args:[inChordB#getInChordB#{FD.int 0#1}
 		    inScaleB#getInScaleB#{FD.int 0#1}
-		    %% !!?? what to do with init args which get procs
-		    %%
-		    %% getChords
-		    %% isRelatedChord
-		    %% getScales
-		    %% isRelatedScale
+		    %% init args which get procs are excluded my default
+		    getChords#fun {$ _} @getChords end#noMatch
+		    isRelatedChord#fun {$ _} @isRelatedChord end#noMatch
+		    getScales#fun {$ _} @getScales end#noMatch
+		    isRelatedScale#fun {$ _} @isRelatedScale end#noMatch
 		   ])
       end
    end
