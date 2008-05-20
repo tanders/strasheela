@@ -23,7 +23,8 @@
     - Fixed HS.score.chordsToScore bug: arg minIntervalToBass did constrain interval between soprano an next lower voice instead between bass and next higher
     - Fixed Score.scoreObject method init bug: replaced GUI warning again by stdout warning as GUI warning causes exception from within space 
     - Oz primitive Object.is blocks on undetermined FS vars: refactored all calls to it to check for FS vars first (e.g., various type checking functions)
-    - Pattern.makeLSystem: fixed bug for N =< 0 (caused infinite loop), 
+    - Pattern.makeLSystem: fixed bug for N =< 0 (caused infinite loop)
+    - Refactored method toInitRecord for class HS.score.note. It now potientially includes the initialisation arguments getChords, isRelatedChord, getScales, isRelatedScale (which are procedures). Nevertheless, by default these are skipped.
 
 
   - For further fixes see the [[../CHANGELOG.txt]].
