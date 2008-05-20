@@ -183,7 +183,13 @@ define
       fun {NoteEt31ToLily MyNote}
 	 {{Out.makeNoteToLily2
 	   fun {$ N} {ET31PitchToLily {N getPitch($)}} end
-	   fun {$ _} nil end}
+	   fun {$ N}
+	      if {HS.score.isInChordMixinForNote N}
+		 andthen {N isInChord($)} == 0
+	      then "^x"
+	      else ""
+	      end
+	   end}
 	  MyNote}
       end
 
