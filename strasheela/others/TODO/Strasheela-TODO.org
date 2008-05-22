@@ -1550,6 +1550,17 @@ See ../../testing/zy_Efficiency/KeepMusicRepresentationOutsideComputationalSpace
    Simple approach for creating enharmonic spelling for simple 12 ET cases: just use a database (record) which maps each pitch class to an enharmonic pitch. This spec should be user-settable, e.g., via in Init proc (similar to tuning setting..). 
 
 
+** Refactor Lilypond output further					 :MAYBE:
+
+   extend info tag lily in order to make it more general
+
+   additional features (currently, lily info tag is a tuple and not a record)
+   before: VS: lily code to put before score object 
+   after: VS: lily code to put after score object
+   implicitStaffs: Bool: specify for this container, whether possibly an implicit staff is created 
+
+   Lilypond output must be adapted accordingly
+
 * Strasheela documentation					    :STRASHEELA:
 
 ** Strasheela tutorial

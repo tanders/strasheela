@@ -50,6 +50,27 @@ Abstract applied constraint, so the effect is controllable
 
 * Strasheela design					      :MAYBE:STRASHEELA:
 
+
+** Refactor ChordsToScore
+
+   implement additional constraints for homophonic chord progression such as "harmonisches band bleibt liegen"
+
+   see 
+   [[file:~/oz/music/Strasheela/tmp.oz::fun%20ChordsToScore_Script%20ChordSpecs%20Args][file:~/oz/music/Strasheela/tmp.oz::fun ChordsToScore_Script ChordSpecs Args]]
+
+
+*** TODO Decide how additional constraints are represented/stored 
+
+    Approaches 
+    - as present: constraints are already part of def and controlled by arguments
+    - have instead arg 'constraints' for constraining top-level score object: all present and further constraints are handed over by this arg. Predefined constraints are stored, e.g., in HS.rules
+    - have a combination of constraints given to 'constraints' args and 'buildin' constraints controlled by additional args
+
+*** TODO According to this decision, implement the additional constraints    
+
+
+
+
 ** Oz Module.link / Module.apply: why did I need it 			 :MAYBE:
 
 See ~/oz/music/Strasheela/private/test/OtherFunctors/ModuleLinkingTest
