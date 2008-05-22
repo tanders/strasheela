@@ -1577,3 +1577,16 @@ Xs.2.1 = 5
     {FD.distribute naive {Append Indices Root}}
  end}
 
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%% Pattern.rotateSublists
+%%
+
+
+declare
+Xs = [a b c d e f g h i]
+
+{Pattern.rotateSublists Xs 3 1}
+

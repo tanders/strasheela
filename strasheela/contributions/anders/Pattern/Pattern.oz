@@ -75,6 +75,8 @@ export
    Zip
    TransformDisj
    SelectList SelectMultiple ApplyToN
+
+   RotateList RotateSublists
    
    HowManyDistinct
    HowManyAs
@@ -1343,6 +1345,26 @@ define
 	  {Cell.assign Heap NewHeap}
        end}
    end
+
+   
+   
+   /** %% Rotates Xs (a list of arbitrary elements) I times: each time the first element of Xs is put at the end of Xs.
+   %% */
+   fun {RotateList Xs I}
+      if I =< 0
+      then Xs
+      else {RotateList {Append Xs.2 [Xs.1]} I-1}
+      end
+   end
+   /** %% Expects a list Xs and returns a variant in which every Nth sublist is rotated. For example, if N=2 then every two elements are swapped. I specifies how far the rotation conducted. For example, if N=3 and I=1 then every sublist triple is rearranged such that the first in the triple becomes the last. If I=2 then this operation is done twice (in effect the last in the triple becomes the first). 
+   %% */
+   fun {RotateSublists Xs N I}
+      {Flatten
+       {Map {AdjoinedSublists Xs N}
+	fun {$ Ys} {RotateList Ys I} end}}
+   end
+
+   
 
    /** %% Returns a list of determined values sorted according to an L-system. Axiom is the first pattern period (a list) and N is the number of periods (an integer). N=0 results in the axiom. Rules is a unary function, whose argument is the last pattern value and which returns the next period (a list). Rules can be defined, e.g., by a case expression.  
    %% NB: MakeLSystem works best with determined values and is thus no constraint as many other definitions in this functor. Nevertheless, symbols of the L-system can be replaced by variables (e.g. using LUtils.replace). See ./testing/Pattern-test.oz for examples.
