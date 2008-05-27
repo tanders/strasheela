@@ -189,7 +189,7 @@ in
 % 	({TransposeBassPC C1 C2} =<: {ET31.pc 'D|'})
 % 	1}
 %     end}
-   %% Most chords are in root posiiton, some are in second inversion
+   %% Most chords are in root positon, some are in second inversion
    {Pattern.percentTrue_Range {Map Chords fun {$ C} ({C getBassChordDegree($)} =: 1) end}
     60 85}
    %% Sometimes bass progresses stepwise 
