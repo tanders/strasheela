@@ -1585,8 +1585,9 @@ Xs.2.1 = 5
 %%
 
 
-declare
-Xs = [a b c d e f g h i]
+{Pattern.rotateSublists [a b c d e f g h i] 3 1}
 
-{Pattern.rotateSublists Xs 3 1}
+
+{Map [[a b c d] [e f] [g h i]]
+ fun {$ Xs} {Pattern.rotateList Xs 1} end}
 
