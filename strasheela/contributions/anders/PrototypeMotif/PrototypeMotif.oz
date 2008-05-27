@@ -108,7 +108,7 @@ define
    %% 'prototypeDependencies': this argument defines constraints between 'unset' variables of the resulting motif instance and the prototype. The argument expects a list of pairs TestI#ConstraintI. TestI is a Boolean function or method. ConstraintI is a procedure with the interface {$ MyPrototype MyInstance} which expects the motif protoype and the motif instance returned by the script as arguments. The following dummy example dependency constrains all motif instance pitches to be higher than their corresponding prototype pitch.
 
    prototypeDependencies: [isNote#proc {$ Proto Inst}
-				     {Proto getPitch($)} = {Inst getPitch($)}
+				     {Proto getPitch($)} <: {Inst getPitch($)}
 				  end]
 
    %% NB: 'prototypeDependencies' (currently) requires that the protytype and the motif instance have the same score topology including the same number of score objects. 
@@ -416,15 +416,20 @@ define
    end
 
    
-   /** %% Expects Scripts, a record of extended scripts, and returns a new extended script by which one of the scripts in Scripts can be selected. The new script expects all arguments of the scripts in Scripts and an additional optional argument 'choose' expecting a feature of Scripts. The corresponding script will then be selected. The arg 'choose' defaults to the first script in Scripts (first of its arity).
-   %% It is recommended that all scripts in Scripts expect the same arguments, so that the arguments of the returned script don't depend on the value of its arg 'choose'.
+   /** %% Expects Scripts, a record of extended scripts, and returns a new extended script by which one of the scripts in Scripts can be selected. The new script expects all arguments of the scripts in Scripts and an additional optional argument. The name of this additional argument is set by the ChoiceArgs feature choiceArg. ChoiceArgs default is
+   unit(choiceArg:choose)
+   %% The additional argument itself defaults to the first script in Scripts (first of its arity).
+   %% It is recommended that all scripts in Scripts expect the same arguments, so that the arguments of the returned script don't depend on the selected script.
    %% */
-   proc {ChoiceScript Scripts ?MyScript}
+   proc {ChoiceScript Scripts ChoiceArgs ?MyScript}
+      Default = unit(choiceArg:choose)
+      As = {Adjoin Default ChoiceArgs}
+   in 
       proc {MyScript Args ?MyScore}
-	 Default = unit(choose:{Arity Args}.1)
-	 As = {Adjoin Default Args}
+	 DefaultScript = {Arity Scripts}.1
       in
-	 MyScore = {Scripts.(As.choose) {Record.subtractList Args {Arity Default}}}
+	 MyScore = {Scripts.{CondSelect Args (As.choiceArg) DefaultScript}
+		    {Record.subtractList Args {Arity Default}}}
       end
    end
 
@@ -446,13 +451,18 @@ define
       end
    end
 
+
+
+   
    /** %% [convenience definition] Expects a motif instance and returns the first note contained, regardless of nesting depth (returns the first note returned by the collect method).  
    %% */
+   %% Decide: remove this def?
    fun {GetFirstNote MyMotif}
-      {MyMotif collect($ test:isNote)}.1
+      {MyMotif find($ test:isNote)}
    end
    /** %% [convenience definition] Expects a motif instance and returns the pitch of the highest motif note (regardless of nesting depth).
    %% */
+   %% Decide: remove this def?
    proc {GetHighestPitch MyMotif ?MaxPitch}
       Ps = {MyMotif map($ getPitch test:isNote)}
    in
