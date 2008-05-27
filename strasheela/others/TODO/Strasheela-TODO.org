@@ -11,7 +11,7 @@
 
    In particular, collect example files in contribution examples subfolders centrally in srasheela/examples (possibly in subfolders there)
 
-** TODO Create decatonic test chord progression				  :NEXT:
+** TODO Create decatonic test chord progression				  :SOON:
 
    Check chord progression CSPs I did for 31 ET and adapt them for
    22 ET with decatonic scales
@@ -45,7 +45,7 @@
 *** Implement description
 
 
-** Create small-scale musical example which demonstrates the effect of LUtils.cFilter and LUtils.cFind :NEXT:
+** Create small-scale musical example which demonstrates the effect of LUtils.cFilter and LUtils.cFind :SOON:
    
 *** TODO Sketch a small-scale music theory in plain English  
 
@@ -82,7 +82,7 @@
 
 * Strasheela design						    :STRASHEELA:
 
-** CSPs with soft constraints 						  :NEXT:
+** CSPs with soft constraints						  :SOON:
    
    How can I model soft constraints with the means available in Oz, e.g.,
    - reified constraints
@@ -468,7 +468,7 @@ From this viewpoint, there is an interesting polarity between major and harmonic
 
 
 
-** Morphology analysis constraints					  :NEXT:
+** Morphology analysis constraints					  :SOON:
 
    see  [[file:~/oz/music/Strasheela/private/WorkInProgress/Morphology/Morphology.oz]]
 
@@ -527,7 +527,15 @@ From this viewpoint, there is an interesting polarity between major and harmonic
    see [[file:~/oz/music/Strasheela/strasheela/trunk/strasheela/contributions/anders/PrototypeMotif/PrototypeMotif.oz]]
    und (aelteres) im GTD folder 
 
-*** Debugging 
+*** TODO Generalise Arg prototypeDependencies:    
+     
+    presently it is required that prototype and score instance have same topolgy 
+
+*** TODO For further TODOs see in source file     
+
+    [[file:~/oz/music/Strasheela/strasheela/trunk/strasheela/contributions/anders/PrototypeMotif/PrototypeMotif.oz]]
+
+*** Debugging							       :ARCHIVE:
     
     [[file:~/oz/music/Strasheela/strasheela/trunk/strasheela/contributions/anders/PrototypeMotif/PrototypeMotif.oz]]
 
@@ -539,18 +547,15 @@ From this viewpoint, there is an interesting polarity between major and harmonic
        
      
 
-*** DONE Create functor and commit svn
+
+*** DONE Create functor and commit svn				       :ARCHIVE:
     CLOSED: [2008-04-29 Tue 20:30]
+
 
 *** Create small-scale examples with this model 
 
     Make sure it works 
     As documentation 
-
-    
-*** For further TODOs see in source file 
-
-    [[file:~/oz/music/Strasheela/strasheela/trunk/strasheela/contributions/anders/PrototypeMotif/PrototypeMotif.oz]]
 
 
 *** Older
@@ -563,7 +568,7 @@ From this viewpoint, there is an interesting polarity between major and harmonic
 **** Formalisieren der Ideen 
 
 
-** Time curves etc [[file:~/oz/music/Strasheela/private/examples/forOlleRomo/TempoCurves-etc.oz][TempoCurves-etc.oz]]					  :NEXT:
+** Time curves etc [[file:~/oz/music/Strasheela/private/examples/forOlleRomo/TempoCurves-etc.oz][TempoCurves-etc.oz]]					  :SOON:
 
    [[file:~/oz/music/Strasheela/strasheela/trunk/strasheela/examples/ContinuousControllersInScore-MidiOutput.oz]]
    [[file:~/oz/music/Strasheela/private/examples/forOlleRomo/TempoCurves-etc.oz]]
@@ -766,7 +771,7 @@ From this viewpoint, there is an interesting polarity between major and harmonic
      There are many other scales in Scala which fit into 22 ET
 
      
-*** Create Midi output for 22 ET					  :NEXT:
+*** Create Midi output for 22 ET					  :SOON:
 
 **** TODO For my Kontakt scripting
 
