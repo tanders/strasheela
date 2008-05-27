@@ -65,6 +65,7 @@ import
    HS at 'x-ozlib://anders/strasheela/HarmonisedScore/HarmonisedScore.ozf'
    
 export
+   Show
    WriteToFile ReadFromFile
    RecordToVS ListToVS ListToLines % ListToVS2 ListToVS3 
    MakeEventlist OutputEventlist
@@ -107,6 +108,13 @@ define
 %%%
 %%% General stuff
 %%%
+
+   /** %% Simple tool for showing results in the emulator. The idea is, that sometimes we need to copy/paste results. Note that values without a print-representation (e.g., FD ints, procedures, objects) are *not* transformed into any contructor call, but output similarily to how they would be shown in the Browser.
+   %% */
+   proc {Show X}
+      {System.showInfo {Value.toVirtualString X
+			1000000 1000000}}
+   end
 
    /** %% Writes/overwrites Output (a virtual string) to file at Path.
    %% */
