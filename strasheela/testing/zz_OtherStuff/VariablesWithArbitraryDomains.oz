@@ -6,7 +6,7 @@
 
 declare
 MyName = {NewName}
-functor ArbitraryDomain
+functor UniversalDomain
 export
    make:MakeVariable
    IsVar
@@ -83,43 +83,43 @@ define
       end
    end 
 end
-[AD]={Module.apply [ArbitraryDomain]}
+[UD]={Module.apply [UniversalDomain]}
 
 %% demo CSP 
 {ExploreOne proc{$ Sol}
-	       A = {AD.make [~1.0 ~0.5 0.0 0.5 1.0 1.5 2.0 2.5 3.0]}
-	       B = {AD.make [~1.0 ~0.5 0.0 0.5 1.0 1.5 2.0 2.5 3.0]}
+	       A = {UD.make [~1.0 ~0.5 0.0 0.5 1.0 1.5 2.0 2.5 3.0]}
+	       B = {UD.make [~1.0 ~0.5 0.0 0.5 1.0 1.5 2.0 2.5 3.0]}
 	    in
 	       %% define some Explorer information action to look inside the var domain..
 	       Sol = [A B]
 	       %% Constraint
-	       {AD.add A B 2.0}
+	       {UD.add A B 2.0}
 	       %% naive distribution
-	       {AD.distribute
+	       {UD.distribute
 		fun {$ Var1 Var2} true end
-		fun {$ Var} {AD.getDom Var}.1 end
+		fun {$ Var} {UD.getDom Var}.1 end
 		[A B]}
 	    end}
 
 
-%% variant with AD.number.'+'
+%% variant with UD.number.'+'
 {ExploreOne proc{$ Sol}
-	       A = {AD.make [~1.0 ~0.5 0.0 0.5 1.0 1.5 2.0 2.5 3.0]}
-	       B = {AD.make [~1.0 ~0.5 0.0 0.5 1.0 1.5 2.0 2.5 3.0]}
+	       A = {UD.make [~1.0 ~0.5 0.0 0.5 1.0 1.5 2.0 2.5 3.0]}
+	       B = {UD.make [~1.0 ~0.5 0.0 0.5 1.0 1.5 2.0 2.5 3.0]}
 	    in
 	       %% define some Explorer information action to look inside the var domain..
 	       Sol = [A B]
 	       %% Constraint
-	       {AD.number.'+' [A B 2.0]}
+	       {UD.number.'+' [A B 2.0]}
 	       %% naive distribution
-	       {AD.distribute
+	       {UD.distribute
 		fun {$ Var1 Var2} true end
-		fun {$ Var} {AD.getDom Var}.1 end
+		fun {$ Var} {UD.getDom Var}.1 end
 		[A B]}
 	    end}
 
 
-%% TODO: define a more complex CSP for floats using the propagators in AD.number and AD.float ...
+%% TODO: define a more complex CSP for floats using the propagators in UD.number and UD.float ...
 %% To repeat fundamental problem of this approach: domain for float constraints like sin or log has often to be ridiculously large because the exact result must be in domain
 
 
