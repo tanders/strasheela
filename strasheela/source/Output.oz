@@ -112,8 +112,11 @@ define
    /** %% Simple tool for showing results in the emulator. The idea is, that sometimes we need to copy/paste results. Note that values without a print-representation (e.g., FD ints, procedures, objects) are *not* transformed into any contructor call, but output similarily to how they would be shown in the Browser.
    %% */
    proc {Show X}
-      {System.showInfo {Value.toVirtualString X
-			1000000 1000000}}
+      {System.showInfo
+       if {IsVirtualString X}
+       then X
+       else {Value.toVirtualString X 1000000 1000000}
+       end}
    end
 
    /** %% Writes/overwrites Output (a virtual string) to file at Path.
