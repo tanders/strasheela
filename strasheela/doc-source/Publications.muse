@@ -3,19 +3,19 @@
 
 The following publications describe concepts of Strasheela.
 
-  Torsten Anders, Eduardo R. Miranda (submitted). Higher-Order Constraint Applicators for Music Constraint Programming. In *Proceedings of the 2008 International Computer Music Conference*. Belfast, UK.  
+  Torsten Anders, Eduardo R. Miranda (2008). [[http://cmr.soc.plymouth.ac.uk/tanders/publications/Anders-ConstraintApplicators-ICMC2008.pdf][Higher-Order Constraint Applicators for Music Constraint Programming]]. In *Proceedings of the 2008 International Computer Music Conference*. Belfast, UK.  
 
-  Torsten Anders, Eduardo R. Miranda (submitted). Constraint-Based Composition in Realtime. In *Proceedings of the 2008 International Computer Music Conference*. Belfast, UK.  
+  Torsten Anders, Eduardo R. Miranda (2008). [[http://cmr.soc.plymouth.ac.uk/tanders/publications/Anders-RealtimeCP-ICMC2008.pdf][Constraint-Based Composition in Realtime]]. In *Proceedings of the 2008 International Computer Music Conference*. Belfast, UK.  
 
-;  Graham Percival, Torsten Anders, George Tzanetakis (submitted). Generating Targeted Rhythmic Exercises for Music Students with Constraint Satisfaction Programming. In *Proceedings of the 2008 International Computer Music Conference*. Belfast, UK.  
+;  Graham Percival, Torsten Anders, George Tzanetakis (2008). [[http://cmr.soc.plymouth.ac.uk/tanders/publications/Percival-icmc08.pdf][Generating Targeted Rhythmic Exercises for Music Students with Constraint Satisfaction Programming]]. In *Proceedings of the 2008 International Computer Music Conference*. Belfast, UK.  
 
   Torsten Anders (2007). [[http://cmr.soc.plymouth.ac.uk/tanders/publications/TorstenAnders-MotifModel-MCM2007.pdf][A Model of Musical Motifs]]. In *International Conference Mathematics and Computation in Music*. Berlin, Germany.
 
   Torsten Anders (2007). [[http://strasheela.sourceforge.net/documents/TorstenAnders-PhDThesis.pdf][Composing Music by Composing Rules: Design and Usage of a Generic Music Constraint System]]. PhD thesis, Queen's University, Belfast. 
 
-  Torsten Anders, Christina Anagnostopoulou, and Michael Alcorn (2005). [[http://www.sarc.qub.ac.uk/~tanders/publications/TorstenAnders-MOZ2004.pdf][Strasheela: Design and Usage of a Music Composition Environment Based on the Oz Programming Model]]. In Peter van Roy, editor, *Multiparadigm Programming in Mozart/OZ: Second International Conference, MOZ 2004*, LNCS 3389. Springer-Verlag.
+  Torsten Anders, Christina Anagnostopoulou, and Michael Alcorn (2005). [[http://cmr.soc.plymouth.ac.uk/tanders/publications/TorstenAnders-MOZ2004.pdf][Strasheela: Design and Usage of a Music Composition Environment Based on the Oz Programming Model]]. In Peter van Roy, editor, *Multiparadigm Programming in Mozart/OZ: Second International Conference, MOZ 2004*, LNCS 3389. Springer-Verlag.
   
-  Torsten Anders (2002). [[http://www.sarc.qub.ac.uk/~tanders/publications/TorstenAnders-ICMC2002.pdf][A wizard's aid: efficient music constraint programming with Oz]]. In *Proceedings of the 2002 International Computer Music Conference*. Goteborg, Sweden.
+  Torsten Anders (2002). [[http://cmr.soc.plymouth.ac.uk/tanders/publications/TorstenAnders-ICMC2002.pdf][A wizard's aid: efficient music constraint programming with Oz]]. In *Proceedings of the 2002 International Computer Music Conference*. Goteborg, Sweden.
 
 
 #presentations
