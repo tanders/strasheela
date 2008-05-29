@@ -735,6 +735,94 @@ Applying conversion: 2.5.0, 2.5.1, 2.5.2, 2.5.3, 2.5.12, 2.5.13, 2.5.17, 2.5.18,
   Possible solution: output a list of motif indices for each Xs (i.e. the same motif index value for each motif "note"). Then I can determine these values outside, e.g., via distribution ..
 
 
+* DONE Create decatonic test chord progression				  :NEXT:
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2008-05-27 Tue 18:22
+  :ARCHIVE_FILE: ~/oz/music/Strasheela/strasheela/trunk/strasheela/others/TODO/Strasheela-TODO.org
+  :ARCHIVE_OLPATH: Strasheela examples
+  :ARCHIVE_CATEGORY: Strasheela
+  :ARCHIVE_TODO: TODO
+  :ARCHIVE_ITAGS: STRASHEELA
+  :END:
+
+  Check chord progression CSPs I did for 31 ET, see
+  [[file:~/oz/music/Strasheela/strasheela/trunk/strasheela/examples/HarmonicProgressions-31ET.oz]]
+
+  and adapt them for 22 ET with decatonic scales
+  Put into file
+  [[file:~/oz/music/Strasheela/strasheela/trunk/strasheela/examples/HarmonicProgressions-22ET.oz]]
+
+  
+** Further ideas for rules 
+
+   - Only decatonic chords
+   - Strong chord progressions (Schoenberg rule)
+   - ?? Finish with cadence (needs def what cadence is)
+   - ?? Constrain chord identity with morphology constraints to roughly follow "orgiastic curve"
+
+   - ?? resolve dissonances
+   - ?? control degree of dissonances (e.g., either only gradually increasing and decreasing of dissonance or use of dissonance where [betonung] is needed)
+   - ?? 'harmonic motifs': short chord sequences which are repetitions of previous sequences but on different degree (possibly even extending tonality..)
+
+* DONE Test Strasheela installation on cluster fotcluster1.fot.plymouth.ac.uk :@OFFICE:URGENT:
+  CLOSED: [2008-05-15 Thu 17:56]
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2008-05-27 Tue 18:54
+  :ARCHIVE_FILE: ~/oz/music/Strasheela/strasheela/trunk/strasheela/others/TODO/Strasheela-TODO.org
+  :ARCHIVE_OLPATH: Strasheela on Cluster
+  :ARCHIVE_CATEGORY: Strasheela
+  :ARCHIVE_TODO: DONE
+  :END:
+
+** OLD
+
+   On 26 Febr, I told Marc that we better wait for the upcoming Mozart release
+   
+   M.Flamank@plymouth.ac.uk
+
+*** Installation instruction
+
+
+I understood from Kurt that the cluster's operating system is based
+on Redhat, and that RPMs are preferred for an easy reinstallation of
+the cluster nodes. Mozart RPMs are available at
+
+   http://www.mozart-oz.org/download/view.cgi?action=rpm&version=1.3.2
+
+I assume we should use the source RPM package and compile it. We only
+need the core RPM (i.e., neither the GTK extensions nor documentation
+is needed):
+
+   http://www.mozart-oz.org/download/mozart-ftp/store/
+1.3.2-2006-06-15-GENERIC-i386/mozart-1.3.2.20060615-4.src.rpm
+
+The compilation then happens with
+
+   rpmbuild --rebuild mozart-1.3.2.20060615-4.src.rpm
+
+However, Mozart depends on the following libraries: gmp, GNU gdbm
+1.8.3, and GNU regex 0.12. Additionally, Emacs is required.
+
+
+On Feb 26, 2008, at 1:57 PM, Marc Flamank wrote:
+Tried "rpmbuild -v --rebuild mozart-1.3.2.20060615-4.src.rpm"
+
+failed on gpm then on gdbm but worked once I got them into /usr/local.  (The .h's were not installed!!)
+
+Even though it exits 0 there is no oz on the file system.
+
+Looking through the output the build seems to have done things in the source, in /var/tmp, in /usr/src/redhat/BUILD/ then deleted them without actually installing anything.  Am I missing something?
+
+
+-----
+
+rpmbuild will typically create binary RPMs in the usual system-specific location, e.g., a file mozart-1.3.2.20060615-4.i386.rpm in /usr/src/redhat/RPMS/i386. After the compilation finished, indeed nothing is installed. The resulting RPMs are then installed, e.g., by doing   
+
+  rpm -i mozart-$VERSION.$PLATFORM.rpm
+
+
+
+
 
 
 

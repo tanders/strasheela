@@ -2,6 +2,7 @@
 
 * Strasheela examples					      :MAYBE:STRASHEELA:
   
+
 ** Groove templates					    :MAYBE:
 
   an example for Olle Romo
@@ -12,6 +13,7 @@ https://sourceforge.net/tracker/index.php?func=detail&aid=1883454&group_id=16722
 ** Realtime example with Ppmpd
 
    For first idea see GTD folder "Realtime Strasheela Example"
+
 
 ** Muzak Beispiel mit Kilian						 :MAYBE:
 
@@ -24,16 +26,164 @@ https://sourceforge.net/tracker/index.php?func=detail&aid=1883454&group_id=16722
 
 
 ** Josquin counterpoint example						 :MAYBE:
+  
+   [Problem: this example can be highly complex to define -- is it worth the effort? Better spend that time on something you will reuse for a composition]
 
-   See description at [[file:~/oz/music/Strasheela/private/examples/Josquin/PlanningAndThinking/JosquinCounterpoint-MusikTheorie.txt]]
-   Work in progress: [[file:~/oz/music/Strasheela/strasheela/trunk/strasheela/examples/FloridCounterpoint-Canon-revised.oz]]
+   [[file:~/oz/music/Strasheela/strasheela/trunk/strasheela/examples/FloridCounterpoint-Canon-revised.oz]]
 
-   GTD folder "Josquin cp"
+   more full rule set at 
+   [[file:~/oz/music/Strasheela/private/examples/Josquin/PlanningAndThinking/JosquinCounterpoint-MusikTheorie.txt]]
 
-** Schoenberg Harmony							 :MAYBE:
+   also, GTD folder "Josquin cp"
 
-   See [[file:~/oz/music/Strasheela/private/examples/Schoenberg/PlanningAndThinking/SchoenbergHarmony.oz]]
-   
+*** [80%] Constrain rhythm of single voice       
+**** TODO Fix TreatNoteOverlappingBarline (too strict or buggy..)	
+**** TODO Clearly mark which rules give advantage to left-to-right var ordering	
+
+     Rhythmic motif rules..
+     
+**** TODO Improve rhythmic motifs (was only tmp motif set)	
+*** Constrain pitch structure of single voice
+**** TODO Make scale root constrainable (enter in DB Dorian, Phrygian...)	
+**** TODO Better treat accidentals 
+     Find rules which result in accidentals only in cadences, allow for accidentals only into scale root, and disallow [querstand] 
+     
+     ?? Disallow accidentals at beginning (of phrase or piece)
+     ?? use root of scale (see above)
+
+**** Hide tritonus 
+
+     No tritonus
+     - between Richtungswechsel
+     - between two neighbouring notes (OK)
+     - between two notes with only a single note in between
+
+**** ?? restrict first pitch of voice to to scale root or fifth??
+**** ?? Define abstraction for pitch domain per voice 
+
+*** Combine rhythm and pitch structure for single voice
+**** TODO Define rule(s) for quarter notes: only stepwise into one direction	
+
+*** Combine multiple voices 
+
+**** Consonances between sim notes + Dissonance treatment
+
+     Decide: counterpoint for two or more voices (I would like to do more...)
+
+     [[file:~/oz/music/Strasheela/private/examples/Josquin/PlanningAndThinking/JosquinCounterpoint-MusikTheorie.txt::Dissonanzbehandlung%20Zusammenklang][file:~/oz/music/Strasheela/private/examples/Josquin/PlanningAndThinking/JosquinCounterpoint-MusikTheorie.txt::Dissonanzbehandlung Zusammenklang]]
+
+***** Passing tone (Durchgang)
+***** Suspension (Vorhalt)
+***** Auxiliary note (Wechselnote)
+
+**** Start and end in perfect consonance (Josquin sometimes does triad in root position, mostly minor)
+
+**** DONE Parallels treatment: 	
+      CLOSED: [2008-05-14 Wed 17:25]
+
+      rule disabeling open parallels exist already
+
+*** Cadence
+
+**** Info: Music theory
+
+     NOTE: cadences at the end are typical, but not necessary -- there exist closes without! 
+     So, don't overestimate the importance of this matter...
+
+***** Idea of general cadence rule 
+
+      Tries to generalise the cases in de la Motte p. 111
+
+      [Note: just an idea, possibly too general]
+      
+      - There does exist some dissonance between I and II mode degree (usual seventh, sometimes ninth) when the last whole  before the end starts [excludes case 3 where diss is more early]
+      - The leading tone of the mode is played somewhen during last whole  before the end (and no chromatic variant of its mode degree)
+      - last interval between both voices is octave
+      - Only stepwise progression after last whole  before the end [excludes case 6 [Unterterzclausel]]
+
+***** Possibly simplest approach: Restrict to [Diskantklausel]
+
+      cf. de la Motte p. 111
+      
+****** Rhythm between two voices
+
+       ... whole halve | longNote
+       ... whole | longNote
+      
+****** Pitches:
+
+       Intervals between the note durations above
+
+       min 2nd v min 2nd ^
+	      maj 2nd v
+
+****** Dissonances:
+
+       Dissonance when whole of second voice starts
+
+
+*** Optional: canon or imitation
+
+*** Search considerations
+
+    Constrained inaccessible context: simultaneous notes 
+    Distribution strategies to test: first fail, left-to-right, other? 
+    
+*** OLD 
+
+**** Revise example
+
+     Presentation may suggest that we only need flexible/extendible left-to-right variable ordering, find convincing example (with performance figures) which demonstrates usefulness of really "programmable" variable ordering (e.g., example with highly complex rhythmical structure, where the rhythmical structure is the searched for first)  
+
+***** TODO Revise rule set
+
+      check existing rule set
+      http://strasheela.sourceforge.net/strasheela/doc/Example-FloridCounterpoint.html
+
+      compare with more true rule set at 
+      [[file:~/oz/music/Strasheela/private/examples/Josquin/PlanningAndThinking/JosquinCounterpoint-MusikTheorie.txt]]
+
+      Work out how you can improve the existing rule set (and musical results) without causing too much work 
+
+       BTW: Fuxian counterpoint example takes only msecs, so this example make be more complex
+
+	- ?? Introduce music representation for scale degree, so you can allow for accidentals and resolve them correctly
+	- ?? cadence rules? (de la Motte, S. 111)
+
+      Idea: you could use 31 ET for this example (Renaisances meantone): simple way to get enharmonic notation
+
+****** Ideas: Improve melodic rules
+
+       Revise the following rules
+
+       - Each note has a diatonic pitch in the C major scale.
+	 TODO: Generalise with constraint HS.rules.noteInPCCollection 
+
+       - The first and last note of Voice1 must start and end with the scale root.
+	 Revised rule: all voices finish in [chord] with root of modus: either open octave, open fifth, or triad (minor more likely than major) 
+
+       - The melodic interval between neighbouring pitches in a voice is limited to a minor third at maximum (i.e. less than in the Fuxian example).
+	 TODO: bellistic curve rule
+
+       - The maximum and minimum pitch in a phrase (its melodic peak and 'valley') occurs exactly once and it is not the first or last note of the phrase. In this example, a phrase is defined simply as half a melody.
+	 ?? 
+
+       - The pitch maxima and minima of phrases must differ.
+	 ?? generalise? 
+
+
+
+
+*** ?? Alternative idea: Reduce florid counterpoint to mini example 
+
+    Simple rhythmic rule(s)
+    !! Melodic rules: resolve skips
+    No parallels
+    Canon
+    ?? max min/max pitch only once
+
+
+
 ** Inventio								 :MAYBE:
 
    See [[file:/Users/t/oz/music/Strasheela/private/examples/Inventio/]]
@@ -49,6 +199,71 @@ Abstract applied constraint, so the effect is controllable
 
 
 * Strasheela design					      :MAYBE:STRASHEELA:
+
+
+** [90%] Harmonic constraint ProgressionStrength 			 :MAYBE:
+
+*** Superstrong progressions reconsidered
+
+    [wait until cadencial set constraint/proc is defined]
+
+    Alternative definition: superstrong progressions are cadencial (the union of their pitch classes contains all pitches which define a key)
+    -> According to this def, progressions like V->VI or even V->VIb (which certainly are superstong according to Schoenberg) are not superstrong anymore but don't fall into any category.
+    I may consider creating an additional definition based on the notion of cadencial sets. 
+
+
+**** Info
+     
+     file:///Users/t/Desktop/mamufaq.html#Q_superstrong
+     What is special in the chord progression IV-V?
+     
+     From: Inotmark <inotmark@aol.comnospam>.
+     It is strong for a number of reasons:
+     1) it has no tones in common
+     2) it has a tritone between root of IV and third of V
+     3) it is sufficient to define a key without the tonic chord appearing.
+       	Schönberg calling it superstrong may be due to 3 above.
+       	
+       	Connection to MaMuTh:
+       	Property (3) means, in Mazzola's terminology, that the chord set {IV, V} is cadencial.
+
+*** TODO Implement Schoenbergs orig defs				 :MAYBE:
+
+    Based on root PC intervals 
+
+*** DONE Move definitions from Strasheela/tmp.oz into HS.rules 
+    CLOSED: [2008-04-08 Tue 17:09]
+
+    As subfunctor?
+
+*** DONE Implement constraint for strong, weak and superstrong
+    CLOSED: [2008-03-17 Mon 14:03]
+
+    As reified constraints?
+
+*** DONE Combine these constraints to single rating
+    CLOSED: [2008-03-17 Mon 14:03]
+
+    With reified constraints?
+
+*** DONE Combine this single rating with secondary rating based on number of common pitch classes 
+    CLOSED: [2008-03-17 Mon 14:04]
+
+    
+*** DONE Write test suite for testing all constraints 
+    CLOSED: [2008-04-08 Tue 17:37]
+
+    Missing is only ResolveDescendingProgressions
+
+    [[file:~/oz/music/Strasheela/strasheela/trunk/strasheela/contributions/anders/HarmonisedScore/testing/Rules-test.oz::TODO%20ResolveDescendingProgressions][file:~/oz/music/Strasheela/strasheela/trunk/strasheela/contributions/anders/HarmonisedScore/testing/Rules-test.oz::TODO ResolveDescendingProgressions]]
+
+*** DONE Create example(s)
+    CLOSED: [2008-04-08 Tue 17:09]
+*** DONE Create Documentation 						  
+    CLOSED: [2008-04-08 Tue 17:10]
+
+
+
 
 
 ** Refactor ChordsToScore

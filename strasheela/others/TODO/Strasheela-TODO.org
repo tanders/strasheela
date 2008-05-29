@@ -1,31 +1,13 @@
 #+CATEGORY: Strasheela
 
 * Strasheela release
-
-
    
 
 * Strasheela examples						    :STRASHEELA:
 
-** TODO Go through test files and collect examples there in files in examples folder 
+** TODO Go through test files and collect examples there in files in examples folder :MAYBE:
 
    In particular, collect example files in contribution examples subfolders centrally in srasheela/examples (possibly in subfolders there)
-
-** TODO Create decatonic test chord progression				  :SOON:
-
-   Check chord progression CSPs I did for 31 ET and adapt them for
-   22 ET with decatonic scales
-   
-*** Further ideas for rules 
-
-    - Only decatonic chords
-    - Strong chord progressions (Schoenberg rule)
-    - ?? Finish with cadence (needs def what cadence is)
-    - ?? Constrain chord identity with morphology constraints to roughly follow "orgiastic curve"
-
-    - ?? resolve dissonances
-    - ?? control degree of dissonances (e.g., either only gradually increasing and decreasing of dissonance or use of dissonance where [betonung] is needed)
-    - ?? 'harmonic motifs': short chord sequences which are repetitions of previous sequences but on different degree (possibly even extending tonality..)
 
 
 ** 'Interesting arpeggio' example [[file:~/oz/music/Strasheela/private/examples/forOlleRomo/Arpeggio.oz][Arpeggio.oz]]				  :SOON:
@@ -78,6 +60,158 @@
     E.g., I could use a method filterThreaded for a better definition of getSimultaneousItems
 
 
+
+
+** Schoenberg Harmony							  :WAIT:
+
+   [wait until needed for publica]
+
+   See 
+   [[file:~/oz/music/Strasheela/strasheela/trunk/strasheela/examples/HomophonicChordProgression.oz]]
+   [[file:~/oz/music/Strasheela/private/examples/Schoenberg/PlanningAndThinking/SchoenbergHarmony.oz]]
+   
+   
+   Implement subset of Schoenberg's Theory of Harmony
+   
+   see also
+   [[file:~/oz/music/Strasheela/private/examples/Schoenberg/PlanningAndThinking/SchoenbergHarmony.oz]]
+   
+*** TODO Read my Schoenberg rule collection 
+
+    What important constraints are missing from this ruleset 
+   [[file:~/oz/music/Strasheela/private/examples/Schoenberg/PlanningAndThinking/SchoenbergHarmony.oz]]
+
+
+*** TODO ?? Sopran keine Tonwiederholung?
+
+*** TODO Allow for non-root inversion       
+
+    - rules on bass if 6/4
+
+
+*** !! Constraint dissonance treatment
+
+    Easy alternative: add to database only whether chord is condissonant. In that case, root progression fourth up
+
+**** TODO Add dissonant pitch classes to ET31 chord database entries	
+
+     Do I need this for all entries at once?
+
+**** TODO Test: is FS of disonant pitch classes accessible in chord object	
+
+**** Constrain that dissonance is always prepared and resolved
+
+***** TODO Formalise this rule
+***** TODO Implement rule 	 
+
+
+*** TODO Implement Minor       
+
+
+    - In case of major, all ScaleDegreeAccidentals must be neutral
+    
+    - In case of minor 
+      - Use ScaleDegreeNotes and just minor scale 
+      - The VI and VII ScaleDegreeAccidentals can be neutral or sharp
+      - Implement Schoenberg's [Wendepunktgesetze] on notes directly (not the chord objects)
+
+    -> with [Wendepunktgesetze], distribution stategy "first chords, then notes" will not work properly anymore -- likely needs left-to-right with ties broken by "type"  
+
+
+*** TODO Implement modulation       
+
+    - scales parallel to chords and scales can overlap
+
+    - chords only contain pitch classes which are contained in *all* sim scales (neutral chords...)
+
+    - After "old" scale ends there happens a cadence (in the new scale)
+    - Alternative: after "old" scale ends the new scale is expressed [eindeutig] with chord which contains pitches which have not been in old scale (and which [eindeutig] express new scale)
+
+
+*** ?? Restrict pitch doubling						 :MAYBE:
+
+    ?? Only octave (root) doubling
+
+      
+
+
+*** DONE Stimmabstaende
+    CLOSED: [2008-05-22 Thu 21:16]
+
+    Zwischen Oberstimmen max octave abstand
+
+*** DONE Create top-level def and music representation
+    CLOSED: [2008-05-22 Thu 19:21]
+
+
+    ET31 for enharmonic notation
+
+    Specify which chords to allow 
+    (or define chord database which is subset of the ET31 DB
+    
+
+*** DONE constrain chords to diatonic chords       
+    CLOSED: [2008-05-22 Thu 19:21]
+
+    Specify scale 
+    Chords are only diatonic chords in this scale
+
+    ?? Can I make this optional
+    I would like to show: either diatonic or [wandernd]
+    -> is this relevant for this article. I can put this in an extra acticle
+
+    ?? Also, try to allow for modulations as an extension
+
+*** DONE Copy constraints on chord sequence        
+    CLOSED: [2008-05-22 Thu 19:22]
+
+    Start with some exiting example in 
+    [[file:~/oz/music/Strasheela/strasheela/trunk/strasheela/examples/HarmonicProgressions-31ET.oz]]
+
+    e.g.,
+    - only ascending chord progressions
+    - end in cadence
+    - diatonic
+
+*** DONE Copy Constrain "harmonisches Band bleibt liegen" and NoParallels      
+    CLOSED: [2008-05-22 Thu 19:22]
+
+    see [[file:~/oz/music/Strasheela/tmp.oz::proc%20CommonPitchesHeldOver%20C1%20C2%20NotePairs][file:~/oz/music/Strasheela/tmp.oz::proc CommonPitchesHeldOver C1 C2 NotePairs]]
+
+
+*** DONE Add some simple melodic constraints        
+    CLOSED: [2008-05-22 Thu 19:23]
+
+    - ?? only step or small skip (up to fifth) in upper voices (larger skip in bass OK)
+    - ?? restrict total sum of melodic intervals between two chords to be lower than specified amount (except bass?)
+    - most melodic intervals should be steps (in particular in the soprano)
+    - no succession of melodic skips/leaps
+     
+
+
+*** Old 
+
+**** TODO Add accompaniment figuration with prototype motif(s)        
+
+**** TODO Define/finetune suitable figuration prototype motif(s)        
+
+
+
+*** Info
+
+    Constrained inaccessible context: harmonic context of notes 
+    Distribution strategies to test: first fail, left-to-right, order depending on parameter types 
+
+**** Nachdenken: 
+
+     Express chords with accompaniment figuration
+   
+     Why accompaniment figuration: 
+     - Avoid voice leading rules
+     - More realistic musical situation
+
+
+      ?? Could this be also Olle Romo's example?
 
 
 * Strasheela design						    :STRASHEELA:
@@ -353,7 +487,6 @@ From this viewpoint, there is an interesting polarity between major and harmonic
      whether PitchClass (or scale degree?) is specified to be
      dissonant in related chord
 
-
 *** TODO Define constraint {IsDissonanceR MyPitchClass B}
 
     Constraint needed to define rules of resolving dissonances: 
@@ -403,69 +536,6 @@ From this viewpoint, there is an interesting polarity between major and harmonic
    Are there other ways: using overlapping scale objects effectively results in CSP which constraints hierarchic structure
 
    
-
-
-** Harmonic constraint ProgressionStrength
-
-*** Superstrong progressions reconsidered
-
-    [wait until cadencial set constraint/proc is defined]
-
-    Alternative definition: superstrong progressions are cadencial (the union of their pitch classes contains all pitches which define a key)
-    -> According to this def, progressions like V->VI or even V->VIb (which certainly are superstong according to Schoenberg) are not superstrong anymore but don't fall into any category.
-    I may consider creating an additional definition based on the notion of cadencial sets. 
-
-
-**** Info
-     
-     file:///Users/t/Desktop/mamufaq.html#Q_superstrong
-     What is special in the chord progression IV-V?
-     
-     From: Inotmark <inotmark@aol.comnospam>.
-     It is strong for a number of reasons:
-     1) it has no tones in common
-     2) it has a tritone between root of IV and third of V
-     3) it is sufficient to define a key without the tonic chord appearing.
-       	Schönberg calling it superstrong may be due to 3 above.
-       	
-       	Connection to MaMuTh:
-       	Property (3) means, in Mazzola's terminology, that the chord set {IV, V} is cadencial.
-
-*** TODO Implement Schoenbergs orig defs				 :MAYBE:
-
-    Based on root PC intervals 
-
-*** DONE Move definitions from Strasheela/tmp.oz into HS.rules 
-    CLOSED: [2008-04-08 Tue 17:09]
-
-    As subfunctor?
-
-*** DONE Implement constraint for strong, weak and superstrong
-    CLOSED: [2008-03-17 Mon 14:03]
-
-    As reified constraints?
-
-*** DONE Combine these constraints to single rating
-    CLOSED: [2008-03-17 Mon 14:03]
-
-    With reified constraints?
-
-*** DONE Combine this single rating with secondary rating based on number of common pitch classes 
-    CLOSED: [2008-03-17 Mon 14:04]
-
-    
-*** DONE Write test suite for testing all constraints 
-    CLOSED: [2008-04-08 Tue 17:37]
-
-    Missing is only ResolveDescendingProgressions
-
-    [[file:~/oz/music/Strasheela/strasheela/trunk/strasheela/contributions/anders/HarmonisedScore/testing/Rules-test.oz::TODO%20ResolveDescendingProgressions][file:~/oz/music/Strasheela/strasheela/trunk/strasheela/contributions/anders/HarmonisedScore/testing/Rules-test.oz::TODO ResolveDescendingProgressions]]
-
-*** DONE Create example(s)
-    CLOSED: [2008-04-08 Tue 17:09]
-*** DONE Create Documentation 						  
-    CLOSED: [2008-04-08 Tue 17:10]
-
 
 
 ** Morphology analysis constraints					  :SOON:
@@ -527,13 +597,18 @@ From this viewpoint, there is an interesting polarity between major and harmonic
    see [[file:~/oz/music/Strasheela/strasheela/trunk/strasheela/contributions/anders/PrototypeMotif/PrototypeMotif.oz]]
    und (aelteres) im GTD folder 
 
-*** TODO Generalise Arg prototypeDependencies:    
-     
-    presently it is required that prototype and score instance have same topolgy 
-
 *** TODO For further TODOs see in source file     
 
+    Note: none of these TODOs is obligatory, Strasheela release possible before
+
     [[file:~/oz/music/Strasheela/strasheela/trunk/strasheela/contributions/anders/PrototypeMotif/PrototypeMotif.oz]]
+
+
+*** TODO Generalise Arg prototypeDependencies:				 :MAYBE:
+     
+    presently it is required that prototype and score instance have same topolgy 
+    generalising this is likely hard! 
+
 
 *** Debugging							       :ARCHIVE:
     
@@ -615,7 +690,7 @@ From this viewpoint, there is an interesting polarity between major and harmonic
    There is a graphics in Doty "JI Primer", p. 13
 
 
-** TODO Define variant of Schoenberg using chord primes			  :WAIT:
+** TODO Define variant of Schoenberg root progression rules using chord primes  :WAIT:
 
    [wait until I have DB with primes define]
 
@@ -1027,7 +1102,7 @@ From this viewpoint, there is an interesting polarity between major and harmonic
 §
 
 
-** Define Monzo constraint for pitch class				 :MAYBE:
+** Define constraint for pitch class prime factor exponents (monzos) 	 :MAYBE:
 
    Constraint which specifies relation between a pitch class (FD integer) and a vector (list of FD ints) of prime factor exponents (a "monzo")
 
@@ -1035,10 +1110,9 @@ From this viewpoint, there is an interesting polarity between major and harmonic
 
    for ideas cf. also [[file:~/oz/music/Strasheela/strasheela/trunk/strasheela/contributions/anders/HarmonisedScore/testing/Score-test.oz::HS%20score%20degreeToPC%20used%20to%20express%20monzos][file:~/oz/music/Strasheela/strasheela/trunk/strasheela/contributions/anders/HarmonisedScore/testing/Score-test.oz::HS score degreeToPC used to express monzos]]
 
-   
 
 
-** Chord pair constraint: Define Carl Lumma's "modulation strength" (Tenney distance between two chords)
+** Chord pair constraint: Define Carl Lumma's "modulation strength" (Tenney distance between two chords) :MAYBE:
 
    [wait until I have interval DB with Tenney distances]
 
@@ -1048,7 +1122,8 @@ From this viewpoint, there is an interesting polarity between major and harmonic
 
    Use Tenney distance of intervals 
 
-** Chord pair constraint: Define voice leading distance 
+
+** Chord pair constraint: Define voice leading distance			 :MAYBE:
 
    ?? {VoiceLeadingDistance Chord1 Chord2 ?X}
 
@@ -1152,6 +1227,7 @@ archive init record.
 
     First rethink whether I simply add such alternative args or wether there are better alternative ideas.. 
 
+
 ** Efficiency
 
 *** TODO Define extendable left-to-right distro strategy		  :NEXT:
@@ -1162,7 +1238,7 @@ archive init record.
     
     Should one of these become default??
 
-*** [#A] check out performance with adaptive recomputation		  :NEXT:
+*** Check out performance with adaptive recomputation 			  :NEXT:
 
   Adaptive recomputation is highly recommended by Schulte, so I should possibly do this before investigating other approaches to improve efficiency (memory and run time)    
 
@@ -1182,10 +1258,9 @@ archive init record.
      see [[file:~/texte/0-Publications/Publications-TODO.org::*Create%20benchmark%20suite%20of%20musical%20CSPs%20which%20require%20special%20score%20distribution%20strategies][file:~/texte/0-Publications/Publications-TODO.org::*Create benchmark suite of musical CSPs which require special score distribution strategies]]
 
 
-
-
 # <<ScoreOutsideScript>> 
-*** [#A] Does score outside script/space save memory. If so, define abstractions/templates for having the score outside the script
+
+*** Does score outside script/space save memory. If so, define abstractions/templates for having the score outside the script :MAYBE:
 
     First carefully evaluated what I can gain from recomputation and adaptive recomputation. Only if I feel it is necessary, I will then further improve memory (also a bit runtime) efficiency by having (most data of) the music representation stored in the top-level space only
 
@@ -1250,7 +1325,7 @@ See ../../testing/zy_Efficiency/KeepMusicRepresentationOutsideComputationalSpace
     Important: make sure that this computation is done only once per domain value. Also, best keep the space with the selected domain value, so that it must not be created again etc.
     
 
-** Support for alternate tunings
+** [important part done] Support for alternate tunings 			 :MAYBE:
 
 *** DONE Define pair of (internally stateful) procs like {Init.setTuningTable Table} and {Init.getTuningTable ?Table}
     CLOSED: [2008-04-14 Mon 16:25]
@@ -1455,9 +1530,10 @@ See ../../testing/zy_Efficiency/KeepMusicRepresentationOutsideComputationalSpace
     Eric S. Raymond <esr@thyrsus.com>
 
 
-** Read Strasheela doc							  :EASY:
+** Read Strasheela doc						     :SOON:EASY:
 
    know your system, e.g., know all my Patterns 
+
 
 ** Develop new expressive patterns					 :MAYBE:
 
@@ -1531,14 +1607,14 @@ See ../../testing/zy_Efficiency/KeepMusicRepresentationOutsideComputationalSpace
     e.g., I may want to specify that no two 1 (or two 0) follow each other, or that the sum of N neighbouring elements tends to be the same throughout the list 
 
 
-** Instrumentation constraints 
+** Instrumentation constraints						 :MAYBE:
 
 *** Constrainable instrumentation representation 
 
     For first idea see GTD folder "instrumentation constraints"
 
 
-** Output to K Sprottes PWGL simple format 
+** Output to K Sprottes PWGL simple format				 :MAYBE:
 
    This format is easily created in Strasheela (similar to fomus..) 
    And it can be transformed into a proportional ENP score
@@ -1550,7 +1626,7 @@ See ../../testing/zy_Efficiency/KeepMusicRepresentationOutsideComputationalSpace
    I would need some 'info' slot to keep arbitrary additional info on score objects (e.g., where some motif starts and ends), if I want to do that adaequately 
 
 
-** Enharmonic spelling
+** Enharmonic spelling [simple mapping]					 :MAYBE:
 
    Simple approach for creating enharmonic spelling for simple 12 ET cases: just use a database (record) which maps each pitch class to an enharmonic pitch. This spec should be user-settable, e.g., via in Init proc (similar to tuning setting..). 
 
@@ -1566,6 +1642,7 @@ See ../../testing/zy_Efficiency/KeepMusicRepresentationOutsideComputationalSpace
 
    Lilypond output must be adapted accordingly
 
+
 * Strasheela documentation					    :STRASHEELA:
 
 ** Strasheela tutorial
@@ -1577,7 +1654,6 @@ See ../../testing/zy_Efficiency/KeepMusicRepresentationOutsideComputationalSpace
 
 
 * Strasheela installation
-
 
 ** Include installation of Mozart extensions in install-all.sh 		 :MAYBE:
 
@@ -1609,58 +1685,6 @@ See ../../testing/zy_Efficiency/KeepMusicRepresentationOutsideComputationalSpace
 
 
 * Strasheela on Cluster
-
-** DONE Test Strasheela installation on cluster fotcluster1.fot.plymouth.ac.uk :@OFFICE:URGENT:
-   CLOSED: [2008-05-15 Thu 17:56]
-
-*** OLD
-
-    On 26 Febr, I told Marc that we better wait for the upcoming Mozart release
-    
-    M.Flamank@plymouth.ac.uk
-
-**** Installation instruction
-
-
-I understood from Kurt that the cluster's operating system is based
-on Redhat, and that RPMs are preferred for an easy reinstallation of
-the cluster nodes. Mozart RPMs are available at
-
-   http://www.mozart-oz.org/download/view.cgi?action=rpm&version=1.3.2
-
-I assume we should use the source RPM package and compile it. We only
-need the core RPM (i.e., neither the GTK extensions nor documentation
-is needed):
-
-   http://www.mozart-oz.org/download/mozart-ftp/store/
-1.3.2-2006-06-15-GENERIC-i386/mozart-1.3.2.20060615-4.src.rpm
-
-The compilation then happens with
-
-   rpmbuild --rebuild mozart-1.3.2.20060615-4.src.rpm
-
-However, Mozart depends on the following libraries: gmp, GNU gdbm
-1.8.3, and GNU regex 0.12. Additionally, Emacs is required.
-
-
-On Feb 26, 2008, at 1:57 PM, Marc Flamank wrote:
-Tried "rpmbuild -v --rebuild mozart-1.3.2.20060615-4.src.rpm"
-
-failed on gpm then on gdbm but worked once I got them into /usr/local.  (The .h's were not installed!!)
-
-Even though it exits 0 there is no oz on the file system.
-
-Looking through the output the build seems to have done things in the source, in /var/tmp, in /usr/src/redhat/BUILD/ then deleted them without actually installing anything.  Am I missing something?
-
-
------
-
-rpmbuild will typically create binary RPMs in the usual system-specific location, e.g., a file mozart-1.3.2.20060615-4.i386.rpm in /usr/src/redhat/RPMS/i386. After the compilation finished, indeed nothing is installed. The resulting RPMs are then installed, e.g., by doing   
-
-  rpm -i mozart-$VERSION.$PLATFORM.rpm
-  
-
-
 
 * Strasheela Bugs
 
