@@ -86,6 +86,9 @@ in
 	       unit}
    %% Good chord root progression 
    {HS.rules.schoenberg.resolveDescendingProgressions Chords unit}
+   %% tmp: only ascending progressions
+%   {Pattern.for2Neighbours Chords
+%    proc {$ C1 C2} {HS.rules.schoenberg.ascendingProgressionR C1 C2 1} end}
    %% no super strong progression
 %   {Pattern.for2Neighbours Chords
 %    proc {$ C1 C2} {HS.rules.schoenberg.superstrongProgressionR C1 C2 0} end}
@@ -189,6 +192,9 @@ end
 {Browse {Width {HS.db.getEditChordDB}}}
 
 */
+
+
+
 
 
 
