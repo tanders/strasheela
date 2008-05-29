@@ -7,13 +7,14 @@
 %% - NestedScript: test handing arguments to sub-sub motifs 
 %%
 %% - Fenv processing: assume that some motif prototype defines some fenvs for various parameters. How can I variate these fenvs in the resulting motif instances?
+%%   Bessere Idee: fenvs are defined individually with script args, expecting either a fenv or some number of somehow processing fenv. There is no fenv defined in prototype, but in arg proc.
 %%   Erste idee: Fenv in prototype bleibt unveraendert und wird von instances "geerbt". Aber ich fuege in instances weitere info-tags hinzu mit Funktionen, die diese Fenvs mit Fenv-operationen umformen. Problem dabei: ich erhalte immer mehr info-tags -- ich kann nicht beliebig mehr und mehr transformationen definieren. Ausserdem: wenn Fenvs in info record zusammengefasst werden (z.B. mit Label fenvs), wie kann ich dann weitere Fenvs (unabhaengig von den schon bestehenden) hinzufuegen -- sollte ich neue method addInfoToRecord(MyInfo MyLabel) einfuehren, die bestehende info-Records erweitert? Dann kann ich auch gleich stateful transformation von info records definieren: Fenv-transformationen sind dann einfach stateful operations die alte Fenvs durch transformierte fenvs ersetzen. Vielleicht ist das wirklich der einfachste Weg. Aber das funktioniert natuerlich nur innerhalb desselben space...
 %%
 %% - MakeScript: currently it is possible to either define script arg for constraining instance ('scriptArgs') or to constrain relation between instance and prototype ('prototypeDependencies'). Why no arg defining dependency between prototype and motif instance which can expect script args (e.g. the constraint such as Patter.contour may be expected as script arg)
 %%
 %% - ?? MakeScript, arg unset: simplification: parameters must be list (currently, a plain single param can be specified as well)
 %%
-%% - extend ChoiceScript so that its arg 'choose' can be set to nil which returns an 'empty' score object. This makes it possible to specify the topology of a nested script -- withing string limits of course..  
+%% - extend ChoiceScript so that its arg 'choose' can be set to nil which returns an 'empty' score object. This makes it possible to specify the topology of a nested script -- withing strict limits of course..  
 %%
 %% - create easy-to-use abstractions and arguments for common MakeScript calls (i.e. easy to use Args).
 %%    - by default, unset all startTime and endTime parameters. Make this an extra Boolean arg whether these are unset or not?   
@@ -111,7 +112,7 @@ define
 				     {Proto getPitch($)} <: {Inst getPitch($)}
 				  end]
 
-   %% NB: 'prototypeDependencies' (currently) requires that the protytype and the motif instance have the same score topology including the same number of score objects. 
+   %% NB: 'prototypeDependencies' (currently) requires that the protytype and the motif instance have the same score topology, i.e. method collect with given Test must return corresponding objects (if the protytype and the motif instance differ in the number of score objects, then score objects can only be removed at the end -- score objects returned by collect for both prototype and motif instance must still correspond).
    %%
    %%
    %% 'constraints': this argument defines additional constraints applied to the resulting motif instance. It expects a list of pairs TestI # ConstraintI. TestI is a Boolean function or method. ConstraintI is a procedure with the interface {$ MyInstance} which expects the motif instance. The following example constraints the domain of all notes in the motif.
@@ -232,12 +233,15 @@ define
 	    %% prototypeDependencies processing
 	    {ForAll As.prototypeDependencies
 	     proc {$ Test#Constraint}
-		%% !!! NOTE: [vorlaeufig] def: problem: MyProtoObjs and MyScoreObjs must correspond, prototype and motif instance must have same topolgy
+		%% !!! NOTE: MyProtoObjs and MyScoreObjs must correspond
 		MyProtoObjs = {MyProto collect($ test:Test excludeSelf:false)}
 		MyScoreObjs = {MyScore collect($ test:Test excludeSelf:false)}
 	     in
-		{ForAll {LUtils.matTrans [MyProtoObjs MyScoreObjs]}
-		 proc {$ [MyProtoObj MyScoreObj]} {Constraint MyProtoObj MyScoreObj} end}
+		for
+		   MyProtoObj in MyProtoObjs
+		   MyScoreObj in MyScoreObjs
+		do {Constraint MyProtoObj MyScoreObj}
+		end
 	     end}
 	    %% constraints processing 
 	    {ForAll As.constraints
@@ -428,8 +432,8 @@ define
       proc {MyScript Args ?MyScore}
 	 DefaultScript = {Arity Scripts}.1
       in
-	 MyScore = {Scripts.{CondSelect Args (As.choiceArg) DefaultScript}
-		    {Record.subtractList Args {Arity Default}}}
+	 MyScore = {Scripts.{CondSelect Args As.choiceArg DefaultScript}
+		    {Record.subtract Args As.choiceArg}}
       end
    end
 
