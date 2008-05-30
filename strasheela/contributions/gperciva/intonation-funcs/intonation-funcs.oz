@@ -86,12 +86,33 @@ define
 	 FB = {Nth Fingers X+1}
       in 
 	 {FD.impl
-	  (SA \=: SB) 
+	  % if not the same strings
+	  (SA \=: SB)
 	  {FD.disj
+	  % we need either an open string,
 	   {FD.disj
 	    (FA =: 0) 
 	    (FB =: 0)}
-	   (FA \=: FB)
+	  % different fingers,
+	   {FD.conj
+	    (FA \=: FB)
+	  % but not 1+2 or 3+4
+	    {FD.conj
+	     {FD.conj
+	      {FD.impl
+	       (FA =: 1)
+	       (FB \=: 2)}
+	      {FD.impl
+	       (FA =: 2)
+	       (FB \=: 1)}}
+	     {FD.conj
+	      {FD.impl
+	       (FA =: 3)
+	       (FB \=: 4)}
+	      {FD.impl
+	       (FA =: 4)
+	       (FB \=: 3)}}
+	    }}
 	  }
 	  1}
       end
