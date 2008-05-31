@@ -6,7 +6,7 @@ import
    LUtils at 'x-ozlib://anders/strasheela/source/ListUtils.ozf'
    Pattern at 'x-ozlib://anders/strasheela/Pattern/Pattern.ozf'
    %% for debug
-%   Browser
+   %Browser
 
 export
    inMajorKey: InMajorKey
@@ -14,6 +14,8 @@ export
    firstPos: FirstPosition
    changeToOpenString: ChangeToOpenString
    changeOneString: ChangeOneString
+   changeTwoOpen: ChangeTwoOpen
+   changeFingerOrPosition: ChangeFingerOrPosition
    noFingeredFifths: NoFingeredFifths
    atLeast: AtLeast
    atLeastTwin: AtLeastTwin
@@ -77,6 +79,93 @@ define
 	 {FD.distance SA SB '=<:' 1}
       end
    end
+
+   %% if changing by two strings, it must be an open
+   %% string.  Can't change by three strings.
+   proc {ChangeTwoOpen Strings Fingers}
+      for X in 1..({Length Strings}-1) do
+	 SA = {Nth Strings X}
+	 SB = {Nth Strings X+1}
+	 FB = {Nth Fingers X+1}
+      in
+	 {FD.distance SA SB '=<:' 2}
+	 {FD.impl
+	  {FD.reified.distance SA SB '=:' 2}
+	  (FB =: 0)
+	  1}
+      end
+   end
+
+   %% must change to a specific finger, or an open string
+   proc {ChangeFingerOrPosition Fingers Positions Strings}
+      for X in 1..({Length Fingers}-1) do
+	 FA = {Nth Fingers X}
+	 FB = {Nth Fingers X+1}
+	 PA = {Nth Positions X}
+	 PB = {Nth Positions X+1}
+	 SA = {Nth Strings X}
+	 SB = {Nth Strings X+1}
+      in
+	 {FD.impl
+	  (PA \=: PB)
+	  {FD.disj
+	   (FB =: 0)
+	   {FD.conj
+	    {FD.conj
+	     (SA =: SB)
+             (FA \=: 0)}
+	    {FD.impl
+	     (FA \=: FB)
+	     {FD.disj
+	      {FD.disj
+	       {FD.disj
+		{FD.conj
+		 (FA =: 1)
+		 (FB =: 2)}
+		{FD.conj
+		 (FA =: 2)
+		 (FB =: 1)}}
+	       {FD.disj
+		{FD.conj
+		 (FA =: 3)
+		 (FB =: 4)}
+		{FD.conj
+		 (FA =: 4)
+		 (FB =: 3)}}
+	      }
+	      {FD.disj
+	       {FD.disj
+		{FD.conj
+		 (FA =: 5)
+		 (FB =: 6)}
+		{FD.conj
+		 (FA =: 6)
+		 (FB =: 5)}}
+	       {FD.disj
+		{FD.conj
+		 (FA =: 7)
+		 (FB =: 8)}
+		{FD.conj
+		 (FA =: 8)
+		 (FB =: 7)}}
+}
+/*
+	       {FD.disj
+		{FD.conj
+		 (FA =: 7)
+		 (FB =: 6)}
+		{FD.conj
+		 (FA =: 6)
+		 (FB =: 7)}}
+	      }
+*/
+	     }
+	    }
+	   }}
+	  1}
+      end
+   end
+%zz
 
    proc {NoFingeredFifths Strings Fingers}
       for X in 1..({Length Strings}-1) do

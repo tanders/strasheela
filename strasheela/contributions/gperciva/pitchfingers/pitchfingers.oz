@@ -34,8 +34,10 @@ define
 	 String = {Nth Strings X}
 	 Position = {Nth Positions X}
 	 Finger = {Nth Fingers X}
+         NotOpen
       in
-	 Pitch =: 81 - (7*String) + Position + Finger
+	 NotOpen = (Finger >: 0)
+	 Pitch =: 83 - (7*String) + NotOpen*(Position-2) + Finger
       end
 
       %% cannot repeat notes or have octaves
@@ -56,9 +58,9 @@ define
       [] 3 then "-2"
       [] 4 then "-2"
       [] 5 then "-3"
-      [] 6 then nil
+      [] 6 then "-3"
       [] 7 then "-4"
-      [] 8 then nil
+      [] 8 then "-4"
       else nil
       end
    end
