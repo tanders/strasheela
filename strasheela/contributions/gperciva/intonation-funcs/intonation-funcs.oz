@@ -11,6 +11,7 @@ import
 export
    inMajorKey: InMajorKey
    inMinorKey: InMinorKey
+   hasMinor: HasMinor
    firstPos: FirstPosition
    changeToOpenString: ChangeToOpenString
    changeOneString: ChangeOneString
@@ -28,13 +29,11 @@ define
    in
       {ForAll Pitches
        proc {$ X}
-	  for Oct in 1..9 do
-	     X \=: 12*Oct+BaseTonic+1
-	     X \=: 12*Oct+BaseTonic+3
-	     X \=: 12*Oct+BaseTonic+6
-	     X \=: 12*Oct+BaseTonic+8
-	     X \=: 12*Oct+BaseTonic+10
-	  end
+	{FD.modI X 12} \=: {Int.'mod' (BaseTonic+1) 12}
+	{FD.modI X 12} \=: {Int.'mod' (BaseTonic+3) 12}
+	{FD.modI X 12} \=: {Int.'mod' (BaseTonic+6) 12}
+	{FD.modI X 12} \=: {Int.'mod' (BaseTonic+8) 12}
+	{FD.modI X 12} \=: {Int.'mod' (BaseTonic+10) 12}
        end}
    end
 
@@ -43,14 +42,27 @@ define
    in
       {ForAll Pitches
        proc {$ X}
-	  for Oct in 1..9 do
-	     X \=: 12*Oct+BaseTonic+1
-	     X \=: 12*Oct+BaseTonic+4
-	     X \=: 12*Oct+BaseTonic+6
-	     X \=: 12*Oct+BaseTonic+9
-	     X \=: 12*Oct+BaseTonic+11
-	  end
+	{FD.modI X 12} \=: {Int.'mod' (BaseTonic+1) 12}
+	{FD.modI X 12} \=: {Int.'mod' (BaseTonic+4) 12}
+	{FD.modI X 12} \=: {Int.'mod' (BaseTonic+6) 12}
+	{FD.modI X 12} \=: {Int.'mod' (BaseTonic+9) 12}
+	{FD.modI X 12} \=: {Int.'mod' (BaseTonic+11) 12}
        end}
+   end
+
+   proc {HasMinor Pitches Tonic}
+      BaseTonic = {Int.'mod' Tonic 12}
+   in
+      {FD.sum {Map
+	       {LUtils.butLast Pitches}
+	       fun {$ X}
+{FD.disj
+	{FD.modI X 12} =: {Int.'mod' (BaseTonic+3) 12}
+{FD.disj
+	{FD.modI X 12} =: {Int.'mod' (BaseTonic+8) 12}
+	{FD.modI X 12} =: {Int.'mod' (BaseTonic+10) 12}
+}}
+	end} '>:' 0}
    end
 
    proc {FirstPosition Positions}
@@ -174,39 +186,18 @@ define
 	 FA = {Nth Fingers X} 
 	 FB = {Nth Fingers X+1}
       in 
-	 {FD.impl
+	{FD.impl
 	  % if not the same strings
 	  (SA \=: SB)
-	  {FD.disj
-	  % we need either an open string,
 	   {FD.disj
+	    {FD.disj
 	    (FA =: 0) 
 	    (FB =: 0)}
 	  % different fingers,
-	   {FD.conj
-	    (FA \=: FB)
-	  % but not 1+2 or 3+4
-	    {FD.conj
-	     {FD.conj
-	      {FD.impl
-	       (FA =: 1)
-	       (FB \=: 2)}
-	      {FD.impl
-	       (FA =: 2)
-	       (FB \=: 1)}}
-	     {FD.conj
-	      {FD.impl
-	       (FA =: 3)
-	       (FB \=: 4)}
-	      {FD.impl
-	       (FA =: 4)
-	       (FB \=: 3)}}
-	    }}
-	  }
-	  1}
+	    (FA \=: FB)}
+	1}
       end
    end
-
 
    proc {AtLeast List Is Number}
       {FD.sum {Map

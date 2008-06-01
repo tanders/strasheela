@@ -8,7 +8,7 @@ import
    Score at 'x-ozlib://anders/strasheela/source/ScoreCore.ozf'
    Out at 'x-ozlib://anders/strasheela/source/Output.ozf'
 
-   Browser(browse:Browse) % temp for debugging
+%   Browser(browse:Browse) % temp for debugging
 export
    setup: Setup
    toScore: ToScore
@@ -21,7 +21,7 @@ define
       Pitches = {FD.list NumNotes+1 0#127}
       Strings = {FD.list NumNotes+1 1#4}
       Positions = {FD.list NumNotes+1 1#8}
-      Fingers = {FD.list NumNotes+1 0#8}
+      Fingers = {FD.list NumNotes+1 0#4}
 
       {Nth Pitches NumNotes+1} =: {Nth Pitches 1}
       {Nth Strings NumNotes+1} =: {Nth Strings 1}
@@ -34,35 +34,50 @@ define
 	 String = {Nth Strings X}
 	 Position = {Nth Positions X}
 	 Finger = {Nth Fingers X}
-         NotOpen
+	 NotOpen
+	 FingerPitch = {FD.int 0#8}
       in
 	 NotOpen = (Finger >: 0)
-	 Pitch =: 83 - (7*String) + NotOpen*(Position-2) + Finger
+
+	 {FD.equi
+	  (Finger =: 0)
+	  (FingerPitch =: 0)
+	  1}
+	 {FD.equi
+	  (Finger =: 1)
+	  {FD.disj
+	   (FingerPitch =: 1)
+	   (FingerPitch =: 2)}
+	  1}
+	 {FD.equi
+	  (Finger =: 2)
+	  {FD.disj
+	   (FingerPitch =: 3)
+	   (FingerPitch =: 4)}
+	  1}
+	 {FD.equi
+	  (Finger =: 3)
+	  {FD.disj
+	   (FingerPitch =: 5)
+	   (FingerPitch =: 6)}
+	  1}
+	 {FD.equi
+	  (Finger =: 4)
+	  {FD.disj
+	   (FingerPitch =: 7)
+	   (FingerPitch =: 8)}
+	  1}
+
+	 Pitch =: 83 - (7*String) + NotOpen*(Position-2) + FingerPitch
       end
 
-      %% cannot repeat notes or have octaves
-      %% required for pitch analysis
+      %% cannot repeat notes (required for pitch analysis)
       {Pattern.forNeighbours
        Pitches
        2
        proc {$ X}
-	{FD.modI {Nth X 1} 12} \=: {FD.modI {Nth X 2} 12}
+	  {Nth X 1} \=: {Nth X 2}
        end}
-   end
-
-   fun {FingerToActualFinger Finger}
-      case Finger of
-	 0 then "-0"
-      [] 1 then "-1"
-      [] 2 then "-1"
-      [] 3 then "-2"
-      [] 4 then "-2"
-      [] 5 then "-3"
-      [] 6 then "-3"
-      [] 7 then "-4"
-      [] 8 then "-4"
-      else nil
-      end
    end
 
    proc {ToScore Pitches Fingers Lily ?ScoreInstance}
@@ -75,8 +90,7 @@ define
 		     note(duration:4
 			  pitch:Pitch
 			  amplitude:64
-			  info:lily({FingerToActualFinger
-				     Finger})
+			  info:lily("-"#Finger)
 			 )
 		  else
 		     pause(duration:4)
