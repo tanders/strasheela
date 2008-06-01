@@ -22,6 +22,7 @@ export
    atLeastTwin: AtLeastTwin
    atMost: AtMost
    minChanges: MinChanges
+   thirdPositionNoStretchBack: ThirdPositionNoStretchBack
 
 define
    proc {InMajorKey Pitches Tonic}
@@ -121,59 +122,13 @@ define
 	 {FD.impl
 	  (PA \=: PB)
 	  {FD.disj
-	   (FB =: 0)
-	   {FD.conj
-	    {FD.conj
-	     (SA =: SB)
-             (FA \=: 0)}
-	    {FD.impl
-	     (FA \=: FB)
-	     {FD.disj
-	      {FD.disj
-	       {FD.disj
-		{FD.conj
-		 (FA =: 1)
-		 (FB =: 2)}
-		{FD.conj
-		 (FA =: 2)
-		 (FB =: 1)}}
-	       {FD.disj
-		{FD.conj
-		 (FA =: 3)
-		 (FB =: 4)}
-		{FD.conj
-		 (FA =: 4)
-		 (FB =: 3)}}
-	      }
-	      {FD.disj
-	       {FD.disj
-		{FD.conj
-		 (FA =: 5)
-		 (FB =: 6)}
-		{FD.conj
-		 (FA =: 6)
-		 (FB =: 5)}}
-	       {FD.disj
-		{FD.conj
-		 (FA =: 7)
-		 (FB =: 8)}
-		{FD.conj
-		 (FA =: 8)
-		 (FB =: 7)}}
-}
-/*
-	       {FD.disj
-		{FD.conj
-		 (FA =: 7)
-		 (FB =: 6)}
-		{FD.conj
-		 (FA =: 6)
-		 (FB =: 7)}}
-	      }
-*/
-	     }
-	    }
-	   }}
+	   {FD.disj
+	    (FB =: 0)
+	    (FA =: 0)}
+	   {FD.disj
+	    (SA =: SB)
+            (FA =: FB)}
+	   }
 	  1}
       end
    end
@@ -234,5 +189,21 @@ define
 
    end
 
+   proc {ThirdPositionNoStretchBack Pitches Positions Fingers}
+      for X in 1..({Length Pitches}-1) do
+	 A = {Nth Pitches X}
+	 PA = {Nth Positions X}
+	 FA = {Nth Fingers X}
+      in
+         {FD.impl
+          {FD.conj
+ (PA =: 5)
+ (FA =: 1)}
+ (A =: 74)
+ 1}
+   end
+
+   end
 
 end
+

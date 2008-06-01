@@ -35,7 +35,8 @@ define
 	 Position = {Nth Positions X}
 	 Finger = {Nth Fingers X}
 	 NotOpen
-	 FingerPitch = {FD.int 0#8}
+% TODO: what about extended 4?
+	 FingerPitch = {FD.int 0#7}
       in
 	 NotOpen = (Finger >: 0)
 
@@ -63,9 +64,11 @@ define
 	  1}
 	 {FD.equi
 	  (Finger =: 4)
-	  {FD.disj
-	   (FingerPitch =: 7)
-	   (FingerPitch =: 8)}
+	  (FingerPitch =: 7)
+% TODO: what about extended 4?
+	  %{FD.disj
+	  % (FingerPitch =: 7)
+	  % (FingerPitch =: 8)}
 	  1}
 
 	 Pitch =: 83 - (7*String) + NotOpen*(Position-2) + FingerPitch
