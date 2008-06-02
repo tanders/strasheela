@@ -5,7 +5,6 @@
 
 This page provides installation instructions for Strasheela, a constraint-based computer aided composition environment. To install Strasheela on either Linux, Windows, or MacOS X conduct the following installation steps.
 
-
 * Install Emacs 
 
 On Linux it is is probably already there. 
