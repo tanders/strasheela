@@ -141,7 +141,7 @@ define
 			 comment:'major')
 		   scale(pitchClasses:[0 2 3 5 7 8 10]
 			 roots:[0] 
-			 comment:'minorPure')
+			 comment:'natural minor')
 		   %% !! such extended scale def with 'alternative' scale degrees as 10 or 11 makes correct recognition of scale degree impossible -- better introduce 'alternatives' by explicit accidentals 
 % 				    scale(pitchClasses:[0 2 3 5 7 8 9 10 11]
 % 					  roots:[0] 
