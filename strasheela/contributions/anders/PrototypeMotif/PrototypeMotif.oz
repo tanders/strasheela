@@ -22,12 +22,16 @@
 %%
 %% - Define nestable prototype defs (motif created functions - extended script - is used when score is transformed back into textual form and then again into score object) 
 %%
-%% - ?? Make number of score objects in motif instance controllable by arg.
+%% - ?? Make number of score objects in motif instance deterministically controllable by arg.
 %%   ?? shall I really do this? In many cases, it is more simple to define different prototypes with different note numbers (and then I may control how number affects rhythm etc)
 %%    Relatively simple approach: I can statefully change the score hierarchy of AuxScore in MyScript. It would require that I know *where* to add or remove *how many* score objects of *what class and which what init args* 
 %%    How can I hand over this information as extended script arg(s)?
 %%   ? only allow this for more simple topology (e.g. container with elements and number of elements is user controllable with script arg N). For the latter case, more complex topologies again possible via nesting
-%%   !! if I do this, then fix prototypeDependencies processing, it currently requires that score topology of motif prototype and instance are equal 
+%%   !! if I do this, then fix prototypeDependencies processing, it currently requires that score topology of motif prototype and instance are equal
+%%
+%% - !! Idea for making number of score objects in motif instance constrainable: motif instance can have less notes than prototype: the duration of notes at the end can be 0, and such notes are regarded as non-existent. A more flexible approach would allow that the duration of any note in the motif can be 0 (there are no symmetries here, so its no problem to have notes of duration 0 anywhere in the motif). Possibly, some minilanguage spec (special info tags) could indicate wich notes can have duration 0 (and which not).
+%%    Only problem with this approach: all constraints to the notes must check whether the note exists or not..
+%%
 %%
 %% - Some vars are always undetermined (Explorer node of solution is light green)
 %%   - Find out which vars are left undetermined
