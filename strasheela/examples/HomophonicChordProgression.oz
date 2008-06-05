@@ -8,6 +8,11 @@
 %% file:~/oz/music/Strasheela/private/examples/Schoenberg/PlanningAndThinking/SchoenbergHarmony.oz
 %% 
 
+%%
+%% TODO:
+%%
+%% - I may notate the chord scale degrees with Roman numerals. Seems this is not predefined in lily. So, I would have to specify that the chord seq is ignored in Lily, and then define a special output for the bass notes which accesses the sim chords, translates their scale degree into a text string and prints that with a text markup.
+%%
 
 declare
 
@@ -25,7 +30,7 @@ declare
 %%
 
 %% Explorer output 
-proc {RenderLilypond I X}
+proc {RenderLilypondAndCsound I X}
    if {Score.isScoreObject X}
    then 
       FileName = out#{GUtils.getCounterAndIncr}#'-'#I#'-'#{OS.rand}
@@ -37,7 +42,7 @@ proc {RenderLilypond I X}
    end
 end
 {Explorer.object
- add(information RenderLilypond
+ add(information RenderLilypondAndCsound
      label: 'to Lily + Csound: Homophonic Chord Progression')}
 
 
@@ -160,7 +165,7 @@ sim(sim(seq(note+)   % soprano
 %% TODO: make some of the constraints controllable by args for flexibility
 proc {MyScript Args ?MyScore}
    Defaults = unit(n:7		% number of chords
-		   duration:2	% duration of all notes and chords
+		   duration:2	% duration of each note and chord
 		   timeUnit:beats
 		   %% pair TranspositionName#IndexName
 		   key:'C'#'major'
