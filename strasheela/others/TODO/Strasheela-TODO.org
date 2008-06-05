@@ -5,6 +5,40 @@
 
 * Strasheela examples						    :STRASHEELA:
 
+
+** Brain-Computer interface example: homphonic chord progression	:URGENT:
+   DEADLINE: <2008-07-11 Fri>
+
+   [Example for/with Eduardo]
+   
+   Eduardo needs this example by 25th July 
+
+*** DONE Describe CSP in English    
+    CLOSED: [2008-06-03 Tue 12:25]
+
+    see 
+    [[file:~/oz/music/Strasheela/private/mitEduardo/BrainComputerInterfaceDemo.org::*Overview]]
+
+
+*** Implement CSP in non-realtime
+
+    see description at 
+    [[file:~/oz/music/Strasheela/private/mitEduardo/BrainComputerInterfaceDemo.org::*Overview]]
+
+    
+    Use existing definitions, e.g.,
+    [[file:~/oz/music/Strasheela/strasheela/trunk/strasheela/examples/HomophonicChordProgression.oz::declare]]
+    
+    
+**** TODO Implement cadence case     
+
+**** TODO Implement non-key case     
+
+
+
+*** Explain how this application works in English
+
+
 ** TODO Go through test files and collect examples there in files in examples folder :MAYBE:
 
    In particular, collect example files in contribution examples subfolders centrally in srasheela/examples (possibly in subfolders there)
@@ -84,6 +118,7 @@
 
 *** TODO ?? Sopran keine Tonwiederholung?
 
+
 *** TODO Allow for non-root inversion       
 
     - rules on bass if 6/4
@@ -93,15 +128,30 @@
 
     Easy alternative: add to database only whether chord is condissonant. In that case, root progression fourth up
 
-**** TODO Add dissonant pitch classes to ET31 chord database entries	
 
-     Do I need this for all entries at once?
+**** Extend Music Representation 
+
+***** TODO Add dissonant pitch classes to ET31 chord database entries	
+      
+      Introduce a special chord feature 'dissonances' (list in spec, FS in object)
+    
+      Do I need this for all entries at once?
+      
+***** Add method / reified constraint: {IsCondissonant MyChord B}
+
+      B=1 <-> cardiality of the 'dissonances' FS > 0
+
 
 **** TODO Test: is FS of disonant pitch classes accessible in chord object	
 
 **** Constrain that dissonance is always prepared and resolved
 
 ***** TODO Formalise this rule
+      
+      Simplified approach: if chord is condissonant, then resolve by strong root progression (e.g. fourth upwards fundament)
+      Constraint interface: {ResolveDissonance Chord1 Chord2}
+
+
 ***** TODO Implement rule 	 
 
 

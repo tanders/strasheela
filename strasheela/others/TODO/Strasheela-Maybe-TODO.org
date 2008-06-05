@@ -29,6 +29,10 @@ https://sourceforge.net/tracker/index.php?func=detail&aid=1883454&group_id=16722
   
    [Problem: this example can be highly complex to define -- is it worth the effort? Better spend that time on something you will reuse for a composition]
 
+   I may publish it in a music theory Journal 
+   Main message: we would like to better understand how Renaissance music [Josquin counterpoint] works and we do so by formalising and implementing a music theory for florid counterpoint. The rules are inspired by counterpoint textbooks and also [originally] developed  
+   Discussion then: where did we succeed and where did we fail in modelling Josquin counterpoint
+ 
    [[file:~/oz/music/Strasheela/strasheela/trunk/strasheela/examples/FloridCounterpoint-Canon-revised.oz]]
 
    more full rule set at 
