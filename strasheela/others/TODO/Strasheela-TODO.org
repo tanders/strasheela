@@ -30,11 +30,19 @@
     [[file:~/oz/music/Strasheela/strasheela/trunk/strasheela/examples/HomophonicChordProgression.oz::declare]]
     
     
-**** TODO Implement cadence case     
+**** DONE Implement cadence case     
+     CLOSED: [2008-06-06 Fri 16:13]
 
-**** TODO Implement non-key case     
+**** DONE Implement non-key case     
+     CLOSED: [2008-06-06 Fri 16:13]
 
 
+
+*** DONE Implement in non-realtime    
+    CLOSED: [2008-06-06 Fri 16:13]
+
+*** TODO Implement output to SuperCollider (via OSC)    
+*** TODO Implement output to MIDI (via SC)    
 
 *** Explain how this application works in English
 
@@ -1736,6 +1744,7 @@ See ../../testing/zy_Efficiency/KeepMusicRepresentationOutsideComputationalSpace
 
 * Strasheela on Cluster
 
+
 * Strasheela Bugs
 
 ** Revise collect method (graph mode)					 :MAYBE:
@@ -1782,6 +1791,12 @@ InspectorObject = {Inspector.new unit}
     If not, then adopt OZRC templates and Tutorial accordingly.
 
 
+
+** Lilypond output (ET22 and ET31 defs): Clash between grace note and Staff.instrumentName :WAIT:
+
+   [wait until I need score with analytical information using grace notes and Staff.instrumentName]
+
+   Lilypond notation problem: using grace notes (for showing chord and scale notes) seems to disable the Staff.instrumentName display for multiple staffs (it still works for the last staff). It is possible that this has to do with the missing \score at the beginning of lilypond 22 ET score data. Yet, setting this causes an error related to the \override of Score.Accidental and Score.KeySignature #'glyph-name-alist for 22 ET. For now, I leave it like this -- either I show Staff.instrumentName or scale/chord pitch classes with grace notes. If I want to publish a score with analytical information using grace notes, I will again look into this matter. 
 
 * Collecting new ideas
 
