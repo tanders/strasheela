@@ -1,4 +1,6 @@
 /** %% This functor defines Lilypond output (using semitone and quartertone accidentals) and Explorer output actions for 22 ET.
+%%
+%% BUG: Lilypond notation problem: using grace notes (for showing chord and scale notes) seems to disable the Staff.instrumentName display. It is possible that this has to do with the missing \score at the beginning of lilypond 22 ET score data. Yet, setting this causes an error related to the \override of Score.Accidental and Score.KeySignature #'glyph-name-alist for 22 ET. For now, I leave it like this -- either I show Staff.instrumentName or scale/chord pitch classes with grace notes. If I want to publish a score with analytical information using grace notes, I will again look into this matter. 
 %% */ 
 functor
 import
@@ -123,6 +125,10 @@ define
 	 {HS.score.isChord X} andthen 
 	 {{X getRootParameter($)} getUnit($)} == et22
       end
+      fun {IsEt22Scale X}
+	 {HS.score.isScale X} andthen 
+	 {{X getRootParameter($)} getUnit($)} == et22
+      end
 
       %% Using my user-def note names. 
       %%  C = c, C/ = cu (comma up), C#\ = cscd (c sharp, comma down),  C# = cs, C\ = ccd, Cb/ = cfcu, Cb = cf
@@ -179,7 +185,7 @@ define
 	 end
       end
       
-      /** %% Returns the chord comment.
+      /** %% Returns the chord comment (also works for scale). 
       %% */
       proc {MakeChordComment MyChord ?Result}
 	 ChordComment = {HS.db.getInternalChordDB}.comment.{MyChord getIndex($)}
@@ -188,6 +194,22 @@ define
 		      if {IsRecord ChordComment} andthen {HasFeature ChordComment comment}
 		      then ChordComment.comment
 		      else ChordComment
+		      end
+		      ' } ')
+	 %% 
+	 if {Not {IsVirtualString Result}}
+	 then raise noVS(Result) end
+	 end
+      end
+      /** %% Returns the scale comment. 
+      %% */
+      proc {MakeScaleComment MyScale ?Result}
+	 ScaleComment = {HS.db.getInternalScaleDB}.comment.{MyScale getIndex($)}
+      in
+	 Result = '#'('\\column {'
+		      if {IsRecord ScaleComment} andthen {HasFeature ScaleComment comment}
+		      then ScaleComment.comment
+		      else ScaleComment
 		      end
 		      ' } ')
 	 %% 
@@ -209,18 +231,56 @@ define
 	 if Rhythms == nil
 	 then ''
 	 else  
-	    MyPitch = {ET22PitchToLily {MyChord getRoot($)}}
-	    FirstChord = MyPitch#Rhythms.1#AddedSigns
+	    MyRoot = {ET22PitchToLily {MyChord getRoot($)}}
+	    MyPitches = "\\grace {"#{Out.listToVS {Map {HS.score.pcSetToSequence
+						       {MyChord getPitchClasses($)}
+						       {MyChord getRoot($)}}
+						   ET22PitchToLily}
+				     %% set Lily grace note duration to quarter notes (4)
+				     "4 "}#"} "
+	    FirstChord = MyPitches#MyRoot#Rhythms.1#AddedSigns
 	 in
 	    if {Length Rhythms} == 1 % is tied chord?
 	    then FirstChord
 	       %% tied chord
 	    else FirstChord#{Out.listToVS {Map Rhythms.2
-					   fun {$ R} " ~ "#MyPitch#R end}
+					   fun {$ R} " ~ "#MyRoot#R end}
 			     " "}
 	    end
 	 end
       end
+
+      
+      %% Notate all scale pitches as grace notes first, then indicate duration of scale by scale root only 
+      fun {ScaleEt22ToLily MyScale}
+	 Rhythms = {Out.lilyMakeRhythms {MyScale getDurationParameter($)}}
+	 ScaleDescr = {MakeScaleComment MyScale}
+	 AddedSigns = '_\\markup{'#ScaleDescr#'}'
+      in
+	 %% if MyChord is shorter than 64th then skip it (Out.lilyMakeRhythms
+	 %% then returns nil)
+	 if Rhythms == nil
+	 then ''
+	 else
+	    MyRoot = {ET22PitchToLily {MyScale getRoot($)}}
+	    MyPitches = "\\grace {"#{Out.listToVS {Map {HS.score.pcSetToSequence
+						       {MyScale getPitchClasses($)}
+						       {MyScale getRoot($)}}
+						   ET22PitchToLily}
+				     %% set Lily grace note duration to 4
+				     "4 "}#"} "
+	    FirstScale = MyPitches#MyRoot#Rhythms.1#AddedSigns
+	 in
+	    if {Length Rhythms} == 1 % is tied scale?
+	    then FirstScale
+	       %% tied scale
+	    else FirstScale#{Out.listToVS {Map Rhythms.2
+					   fun {$ R} " ~ "#MyRoot#R end}
+			     " "}
+	    end
+	 end
+      end
+
 
       %% code to insert at beginning and end of Lilypond score, defines ET notation 
       LilyHeader = {Out.readFromFile
@@ -238,7 +298,8 @@ define
       proc {RenderAndShowLilypond MyScore Args}
 	 AddedClauses = [Out.isLilyChord#SimTo22LilyChord
 			 IsEt22Note#NoteEt22ToLily
-			 IsEt22Chord#ChordEt22ToLily]
+			 IsEt22Chord#ChordEt22ToLily
+			 IsEt22Scale#ScaleEt22ToLily]
 	 ET22Wrapper = [LilyHeader LilyFooter]
 	 AddedArgs = unit(wrapper:if {HasFeature Args wrapper}
 				  then [H T] = Args.wrapper in 
