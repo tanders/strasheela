@@ -26,7 +26,7 @@
     - Pattern.makeLSystem: fixed bug for N =< 0 (caused infinite loop)
     - Refactored method toInitRecord for class HS.score.note. It now potientially includes the initialisation arguments getChords, isRelatedChord, getScales, isRelatedScale (which are procedures). Nevertheless, by default these are skipped.
     - Pattern: added RotateList, RotateSublists
-
+    - ET22.out/ET31.out: Lilypond notation of scale and chord objects (analytical score objects) refined: if scale/note objects are part of the score, then all their pitch classes are first notated as grace notes. A commonly notated single notes (the chord/scale root) then indicates the duration of the chord/scale. 
 
   - For further fixes see the [[../CHANGELOG.txt]].
 
