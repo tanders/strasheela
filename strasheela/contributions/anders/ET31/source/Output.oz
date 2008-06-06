@@ -147,6 +147,10 @@ define
 	 {HS.score.isChord X} andthen 
 	 {{X getRootParameter($)} getUnit($)} == et31
       end
+      fun {IsEt31Scale X}
+	 {HS.score.isScale X} andthen 
+	 {{X getRootParameter($)} getUnit($)} == et31
+      end
 
       %% using semitone and quartertone accidentals 
       LilyEt31PCs = pcs(c cih cis des deh 
@@ -246,6 +250,22 @@ define
 	 then raise noVS(Result) end
 	 end
       end
+      /** %% Returns the scale comment. 
+      %% */
+      proc {MakeScaleComment MyScale ?Result}
+	 ScaleComment = {HS.db.getInternalScaleDB}.comment.{MyScale getIndex($)}
+      in
+	 Result = '#'('\\column {'
+		      if {IsRecord ScaleComment} andthen {HasFeature ScaleComment comment}
+		      then ScaleComment.comment
+		      else ScaleComment
+		      end
+		      ' } ')
+	 %% 
+	 if {Not {IsVirtualString Result}}
+	 then raise noVS(Result) end
+	 end
+      end
 
       %% NB: much code repetition to NoteEt31ToLily and similar definitions
       %%
@@ -260,18 +280,56 @@ define
 	 if Rhythms == nil
 	 then ''
 	 else  
-	    MyPitch = {ET31PitchToLily {MyChord getRoot($)}}
-	    FirstChord = MyPitch#Rhythms.1#AddedSigns
+	    MyRoot = {ET31PitchToLily {MyChord getRoot($)}}
+	    MyPitches = "\\grace {"#{Out.listToVS {Map {HS.score.pcSetToSequence
+						       {MyChord getPitchClasses($)}
+						       {MyChord getRoot($)}}
+						   ET31PitchToLily}
+				     %% set Lily grace note duration to quarter notes (4)
+				     "4 "}#"} "
+	    FirstChord = MyPitches#MyRoot#Rhythms.1#AddedSigns
 	 in
 	    if {Length Rhythms} == 1 % is tied chord?
 	    then FirstChord
 	       %% tied chord
 	    else FirstChord#{Out.listToVS {Map Rhythms.2
-					   fun {$ R} " ~ "#MyPitch#R end}
+					   fun {$ R} " ~ "#MyRoot#R end}
 			     " "}
 	    end
 	 end
       end
+
+      
+      %% Notate all scale pitches as grace notes first, then indicate duration of scale by scale root only 
+      fun {ScaleEt31ToLily MyScale}
+	 Rhythms = {Out.lilyMakeRhythms {MyScale getDurationParameter($)}}
+	 ScaleDescr = {MakeScaleComment MyScale}
+	 AddedSigns = '_\\markup{'#ScaleDescr#'}'
+      in
+	 %% if MyChord is shorter than 64th then skip it (Out.lilyMakeRhythms
+	 %% then returns nil)
+	 if Rhythms == nil
+	 then ''
+	 else
+	    MyRoot = {ET31PitchToLily {MyScale getRoot($)}}
+	    MyPitches = "\\grace {"#{Out.listToVS {Map {HS.score.pcSetToSequence
+						       {MyScale getPitchClasses($)}
+						       {MyScale getRoot($)}}
+						   ET31PitchToLily}
+				     %% set Lily grace note duration to 4
+				     "4 "}#"} "
+	    FirstScale = MyPitches#MyRoot#Rhythms.1#AddedSigns
+	 in
+	    if {Length Rhythms} == 1 % is tied scale?
+	    then FirstScale
+	       %% tied scale
+	    else FirstScale#{Out.listToVS {Map Rhythms.2
+					   fun {$ R} " ~ "#MyRoot#R end}
+			     " "}
+	    end
+	 end
+      end
+
 
    in
       /** %% Proc is like Out.renderAndShowLilypond, but provides buildin support for notes and chords with pitch units in et31.
@@ -280,7 +338,8 @@ define
       proc {RenderAndShowLilypond MyScore Args}
 	 AddedClauses = [Out.isLilyChord#SimTo31LilyChord
 			 IsEt31Note#NoteEt31ToLily
-			 IsEt31Chord#ChordEt31ToLily]
+			 IsEt31Chord#ChordEt31ToLily
+			 IsEt31Scale#ScaleEt31ToLily]
 	 AddedArgs = unit(clauses:if {HasFeature Args clauses}
 				  then {Append Args.clauses AddedClauses}
 				  else AddedClauses
