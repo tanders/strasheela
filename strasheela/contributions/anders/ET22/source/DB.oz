@@ -20,6 +20,7 @@
 %% - ?? mark dissonant chord tones (e.g., in 4:5:25 the 25 is dissonant)
 %% - ?? add 'silent' roots (e.g., 5:6:7 and 6:7:9 both have silent root 4) 
 %%
+%% - revise chord feature essentialPitchClasses: I simply removed the fifth in common chords. But some may be wrong, and many chords I left as they are for now. 
 %%
 %% 
 %% Howto get harmonicity measurements from Scala
@@ -62,7 +63,7 @@ define
    %% of a chord the ratio perception is less ambiguous. Consequently,
    %% harmonicity measurements can be taken.
    %%
-   
+
    Chords = chords(
    
 	       %%
@@ -70,33 +71,40 @@ define
 	       %%
    
 	       chord(pitchClasses:[4#1 5#1 6#1]
-		     roots:[4#1]    
+		     roots:[4#1]
+		     essentialPitchClasses:[4#1 5#1]
 %				dissonanceDegree:2
 		     comment:'major')
 	       chord(pitchClasses:[1#6 1#5 1#4]
 		     roots:[1#6]    
 %				dissonanceDegree:2
+		     essentialPitchClasses:[1#6 1#5]
 		     comment:'minor')  
 	       chord(pitchClasses:[5#1 6#1 7#1]
 		     roots:[5#1]    
 %				dissonanceDegree:2
+		     essentialPitchClasses:[5#1 6#1 7#1]
 		     comment:'otonal subdiminished')  
 	       chord(pitchClasses:[1#5 1#6 1#7]
 		     roots:[1#7]    
 %				dissonanceDegree:2
+		     essentialPitchClasses:[1#5 1#6 1#7]
 		     comment:'utonal subdiminished')  
 	       chord(pitchClasses:[4#1 5#1 25#4]
 		     roots:[4#1]    
 %				dissonanceDegree:2
+		     essentialPitchClasses:[4#1 5#1 25#4]
 		     comment:'augmented')
 	       %% !!
 	       chord(pitchClasses:[6#1 7#1 9#1]
 		     roots:[6#1]    
 %				dissonanceDegree:2
+		     essentialPitchClasses:[6#1 7#1]
 		     comment:'subminor')  
 	       chord(pitchClasses:[1#6 1#7 1#9]
 		     roots:[1#9]    
 %				dissonanceDegree:2
+		     essentialPitchClasses:[1#6 1#7 1#9]
 		     comment:'supermajor')
 	       
 	       %% alt names:
@@ -104,6 +112,7 @@ define
 	       chord(pitchClasses:[4#1 5#1 7#1]
 		     roots:[4#1]    
 %				dissonanceDegree:2
+		     essentialPitchClasses:[4#1 5#1 7#1]
 		     comment:'harmonic 7th no 5')  
 
 
@@ -115,110 +124,133 @@ define
 	       chord(pitchClasses:[4#1 5#1 6#1 15#2]
 		     roots:[4#1]    
 %				dissonanceDegree:2
+		     essentialPitchClasses:[4#1 5#1 15#2]
 		     comment:'major 7th')
 	       %% same as minor 6th, only root differs
 	       chord(pitchClasses:[1#6 1#5 1#4 3#10]
 		     roots:[1#6]    
 %				dissonanceDegree:2
+		     essentialPitchClasses:[1#6 1#5 3#10]
 		     comment:'minor 7th')  
 	       %% same as minor 7th, only root differs
 	       chord(pitchClasses:[4#1 5#1 6#1 10#3]
 		     roots:[4#1]    
 %				dissonanceDegree:2
+		     essentialPitchClasses:[4#1 5#1 6#1 10#3]
 		     comment:'minor 6th')  
-	       chord(pitchClasses:[5#1 6#1 7#1 42#5] 
-		       roots:[5#1]    
+	       chord(pitchClasses:[4#1 5#1 6#1 10#3]
+		     roots:[5#1]    
 %				dissonanceDegree:2
-		       comment:'subdiminished 7th (1)')  
+		     essentialPitchClasses:[4#1 5#1 6#1 10#3]
+		     comment:'subdiminished 7th (1)')  
 	       chord(pitchClasses:[1#7 1#6 1#5 7#30]
-		       roots:[1#7]    
+		     roots:[1#7]    
 %				dissonanceDegree:2
+		     essentialPitchClasses:[1#7 1#6 1#5 7#30]
 		     comment:'subdiminished 7th (2)')
 	       %% alt name:
 	       %% 'French augmented'
 	       chord(pitchClasses:[4#1 5#1 40#7 50#7]
-		       roots:[4#1]    
+		     roots:[4#1]    
 %				dissonanceDegree:2
-		       comment:'major subdiminished')  
+		     essentialPitchClasses:[4#1 5#1 40#7 50#7]
+		     comment:'major subdiminished')  
 	       chord(pitchClasses:[4#1 5#1 7#1 40#7]
-		       roots:[4#1]    
+		     roots:[4#1]    
 %				dissonanceDegree:2
+		     essentialPitchClasses:[4#1 5#1 7#1 40#7]
 		     comment:'subminor 7th')
 	       %% alt names:
 	       %% 'major subminor 7th', 'German augmented 6th'
 	       chord(pitchClasses:[4#1 5#1 6#1 7#1]
-		       roots:[4#1]    
+		     roots:[4#1]    
 %				dissonanceDegree:2
+		     essentialPitchClasses:[4#1 5#1 7#1]
 		     comment:'harmonic 7th')
 	       %% alt names:
 	       %% 'minor supermajor 6th', 'minor diminished 7th'
 	       chord(pitchClasses:[1#4 1#5 1#6 2#7]
-		       roots:[1#6]    
+		     roots:[1#6]    
 %				dissonanceDegree:2
-		       comment:'subharmonic 6th')
+		     essentialPitchClasses:[1#4 1#5 2#7]
+		     comment:'subharmonic 6th')
 	       chord(pitchClasses:[1#4 1#5 1#6 1#7]
-		       roots:[1#7]    
+		     roots:[1#7]    
 %				dissonanceDegree:2
-		       comment:'half subdiminished 7th')  
+		     essentialPitchClasses:[1#4 1#5 1#6 1#7]
+		     comment:'half subdiminished 7th')  
 	       chord(pitchClasses:[6#1 7#1 9#1 10#1]
-		       roots:[6#1]    
+		     roots:[6#1]    
 %				dissonanceDegree:2
-		       comment:'subminor major 6th')  
+		     essentialPitchClasses:[6#1 7#1 9#1 10#1]
+		     comment:'subminor major 6th')  
 	       chord(pitchClasses:[5#1 6#1 7#1 9#1]
-		       roots:[1#9]    
+		     roots:[1#9]    
 %				dissonanceDegree:2
+		     essentialPitchClasses:[5#1 6#1 7#1 9#1]
 		     comment:'supermajor minor 7th')
 	       %% alt name
 	       %% 'major subminor 7th 9th' 
 	       chord(pitchClasses:[4#1 5#1 6#1 7#1 9#1]
-		       roots:[4#1]    
+		     roots:[4#1]    
 %				dissonanceDegree:2
+		     essentialPitchClasses:[4#1 5#1 7#1 9#1]
 		     comment:'harmonic 9th')
 	       %% alt name
 	       %% 'supermajor minor 7th 9th'
 	       chord(pitchClasses:[1#4 1#5 1#6 1#7 1#9]
-		       roots:[1#9]    
+		     roots:[1#9]    
 %				dissonanceDegree:2
-		       comment:'subharmonic 9th')  
+		     essentialPitchClasses:[1#4 1#5 1#6 1#7 1#9]
+		     comment:'subharmonic 9th')  
 	       chord(pitchClasses:[6#1 7#1 9#1 21#2]
-		       roots:[6#1]    
+		     roots:[6#1]    
 %				dissonanceDegree:2
-		       comment:'subminor 7th')  
+		     essentialPitchClasses:[6#1 7#1 9#1 21#2]
+		     comment:'subminor 7th')  
 	       chord(pitchClasses:[1#6 1#7 1#9 2#21]
-		       roots:[1#9]    
+		     roots:[1#9]    
 %				dissonanceDegree:2
-		       comment:'supermajor 6th')  
+		     essentialPitchClasses:[1#6 1#7 1#9 2#21]
+		     comment:'supermajor 6th')  
 	       chord(pitchClasses:[16#3 4#1 6#1 7#1]
-		       roots:[4#1]    
+		     roots:[4#1]    
 %				dissonanceDegree:2
-		       comment:'subminor 7th suspended 4th')  
+		     essentialPitchClasses:[16#3 4#1 6#1 7#1]
+		     comment:'subminor 7th suspended 4th')  
 	       chord(pitchClasses:[1#6 1#4 3#16 2#7]
-		       roots:[1#6]    
+		     roots:[1#6]    
 %				dissonanceDegree:2
-		       comment:'supermajor 6th suspended 2nd')
+		     essentialPitchClasses:[1#6 1#4 3#16 2#7]
+		     comment:'supermajor 6th suspended 2nd')
 	       chord(pitchClasses:[4#1 6#1 7#1 9#2]
-		       roots:[4#1]    
+		     roots:[4#1]    
 %				dissonanceDegree:2
+		     essentialPitchClasses:[4#1 6#1 7#1 9#2]
 		     comment:'subminor 7th suspended 2nd')  
 	       chord(pitchClasses:[1#4 1#6 2#7 2#9]
-		       roots:[1#6]    
+		     roots:[1#6]    
 %				dissonanceDegree:2
+		     essentialPitchClasses:[1#4 1#6 2#7 2#9]
 		     comment:'supermajor 6th suspended 4th')
 
 	       
 	       chord(pitchClasses:['C' 'E\\' 'G' 'Bb' 'Eb']
-		       roots:['C']    
+		     roots:['C']    
 %				dissonanceDegree:2
-		       comment:'')  
+		     essentialPitchClasses:['C' 'E\\' 'G' 'Bb' 'Eb']
+		     comment:'')  
 	       chord(pitchClasses:['C' 'D#\\' 'G' 'A' 'D']
-		       roots:['C']    
+		     roots:['C']    
 %				dissonanceDegree:2
+		     essentialPitchClasses:['C' 'D#\\' 'G' 'A' 'D']
 		     comment:'')
 	       
 	       chord(pitchClasses:['C' 'E\\' 'G' 'A' 'D']
-		       roots:['C']    
+		     roots:['C']    
 %				dissonanceDegree:2
-		       comment:'')  
+		     essentialPitchClasses:['C' 'E\\' 'G' 'A' 'D']
+		     comment:'')  
 	       )
    
    %%
@@ -353,10 +385,10 @@ define
       fun {ToStandardDeclaration Decl}
 	 {Record.mapInd Decl
 	  fun {$ Feat X}
-	     case Feat of pitchClasses then
-		{Map X Transform}
-	     [] roots then
-		{Map X Transform}
+	     case Feat
+	     of pitchClasses then {Map X Transform}
+	     [] essentialPitchClasses then {Map X Transform}
+	     [] roots then {Map X Transform}
 	     else X
 	     end
 	  end}
