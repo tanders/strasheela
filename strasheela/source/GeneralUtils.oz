@@ -23,7 +23,7 @@ import
 export
    Pi
    XOr Cases
-   IsFS
+   IsFS MakeSingletonSet IntsToFS
    Identity
    Random RandIntoRange
    MakeRandomGenerator SetRandomGeneratorSeed
@@ -86,6 +86,26 @@ define
       else {FS.var.is X}
       end
    end
+
+   
+   /** %% Expects D (a FD int) and returns a singleton FS which contains only D.
+   %% */
+   proc {MakeSingletonSet D ?MyFS}
+      MyFS = {FS.var.decl}
+      {FS.include D MyFS}
+      {FS.card MyFS 1}
+   end
+   
+   /** %% Constraints that Ds (a list of FD ints) are all contained in MyFS (a FS, implicitly declared), but no other integer. This definition is similar to FS.int.match, but Ds must not be in increasing order.
+   %% */
+   proc {IntsToFS Ds MyFS}
+      MyFS = {FS.var.decl}
+      %% not necessary, already derived anyway
+%   {FS.card MyFS} =<: {Length Ds}
+      {FS.unionN {Map Ds fun {$ D} {MakeSingletonSet D} end}
+       MyFS}
+   end
+
 
    /** %% The Identity function returns its argument.
    %% */
