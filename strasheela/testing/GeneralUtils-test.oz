@@ -157,6 +157,33 @@ UndetFS = {FS.var.decl}
 
 */
 
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%% GUtils.intsToFS
+%%
+
+declare
+X = {FD.int 1#10} 
+Y = {FD.int 1#10}
+Z = {FD.int 1#10}
+MyFS = {FS.var.decl} 
+
+
+{Browse MyFS#[X Y Z]}
+
+{GUtils.intsToFS [X Y Z] MyFS}
+
+%% Compare with FS.int.match
+MyFS = {FS.var.decl}
+{FS.int.match MyFS [X Y Z]}
+
+
+Y = 2
+
+
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%
 %% GUtils.warnGUI
