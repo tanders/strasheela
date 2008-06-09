@@ -896,6 +896,12 @@ From this viewpoint, there is an interesting polarity between major and harmonic
 **** TODO Extract remaining chords from hexad on picts by Dave Keenan (GTD folder "decatonic scales") :MAYBE:
      
 
+**** TODO Revise chord feature essentialPitchClasses     
+
+     I simply removed the fifth in common chords. But some may be wrong, and many chords I left as they are for now.  
+
+     I should play each chord on a scale instrument, and compare full pitch class set and essential pitch class set. 
+
 *** Scale database							 :MAYBE:
 
 
@@ -972,6 +978,7 @@ From this viewpoint, there is an interesting polarity between major and harmonic
      - ?? Use timing curve to create 'interpretation' (create variants for different motifs)
 
 	
+
 
 
 
