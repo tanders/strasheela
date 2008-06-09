@@ -17,7 +17,7 @@ import
 %   DB at 'DB.ozf'
    
 export
-   RenderAndShowLilypond
+   RenderAndShowLilypond SetEnharmonicNotationTable
    AddExplorerOut_ChordsToScore
    
 define
@@ -114,7 +114,75 @@ define
    %% combined.
    %% How about multiple clauses for, say, a plain note object..
    %%
+
    
+   local
+      EnharmonicNotationTable = {NewCell unit}
+      %% Using my user-def note names. 
+      %%  C = c, C/ = ccu (comma up), C#\ = cscd (c sharp, comma down),  C# = cs, C\ = ccd, Cb/ = cfcu, Cb = cf
+      TranslationTable = unit('C':c
+			      'C/':ccu   'Db':df
+			      'C#\\':cscd 'Db/':dfcu
+			      'C#':cs   'D\\':dcd
+			      'D':d
+			      'D/':dcu   'Eb':ef
+			      'D#\\':dscd 'Eb/':efcu
+			      'D#':ds   'E\\':ecd
+			      'E':e
+			      'F':f
+			      'F/':fcu   'Gb':gf
+			      'F#\\':fscd 'Gb/':gfcu
+			      'F#':fs   'G\\':gcd
+			      'G':g
+			      'G/':gcu   'Ab':af
+			      'G#\\':gscd 'Ab/':afcu
+			      'G#':gs   'A\\':acd
+			      'A':a
+			      'A/':acu   'Bb':bf
+			      'A#\\':ascd 'Bb/':bfcu
+			      'A#':as   'B\\':bcd
+			      'B':b)
+      fun {PitchnameToLily PitchName}
+	 TranslationTable.PitchName
+      end
+   in
+      /** %% The enharmonic notation for 22 ET can be customised by specifying for each numeric 22 ET pitch class how it is notated. Note that this setting will be fixed throughout the score though (e.g., pitch class 7 may be notated as 'E\\', but then it is never 'D#'). The enharmonic notation is specified by a record which maps pitch class integers to pitch names. See ET22.pc and friends for an explanation of the pitch names. The default are the default pitch names in Scala for 22 ET (using E22 notation system).
+      %% Note that the lowest feature in the table is 0 (i.e., 'C') and not 1 (i.e. Table is not a tuple if all pitch classes are specified, a tuple has no feature 0).
+      %% NB: an error will occur if you fail to specify a notation for a 22 ET pitch class in your scores, so Table should specify a notation for every 22 ET pitch class.
+      %% */
+      %% NOTE: shall I define a better default table.
+      proc {SetEnharmonicNotationTable Table}
+	 EnharmonicNotationTable := {Record.map Table PitchnameToLily}
+      end
+      fun {Et22PcToLily MyPC}
+	 @EnharmonicNotationTable.MyPC
+      end
+      %% set default table
+      {SetEnharmonicNotationTable
+       unit(0:'C' 
+	    1:'Db' 
+	    2:'C#\\' 
+	    3:'C#' 
+	    4:'D' 
+	    5:'Eb'
+	    6:'D#\\'
+	    7:'E\\'  
+	    8:'E' 
+	    9:'F' 
+	    10:'Gb' 
+	    11:'F#\\' 
+	    12:'F#' 
+	    13:'G'
+	    14:'Ab' 
+	    15:'G#\\' 
+	    16:'G#' 
+	    17:'A'
+	    18:'Bb'  
+	    19:'A#\\' 
+	    20:'B\\' 
+	    21:'B'  )}
+   end
+      
    local
    
       fun {IsEt22Note X}
@@ -130,23 +198,14 @@ define
 	 {{X getRootParameter($)} getUnit($)} == et22
       end
 
-      %% Using my user-def note names. 
-      %%  C = c, C/ = cu (comma up), C#\ = cscd (c sharp, comma down),  C# = cs, C\ = ccd, Cb/ = cfcu, Cb = cf
-      %% NOTE: no enharmonic notation for now
-      LilyEt22PCs = pcs(c ccu cscd cs
-			d dcu dscd ds
-			e
-			f fcu fscd fs
-			g gcu gscd gs
-			a acu ascd as
-			b)
+
       LilyOctaves = octs(",,,," ",,," ",," "," "" "'" "''" "'''" "''''")
       %% Transform a Pitch (an int) into the corresponding Lily code (a VS)
       fun {ET22PitchToLily MyPitch}
-	 MyPC = {Int.'mod' MyPitch 22} + 1
+	 MyPC = {Int.'mod' MyPitch 22}
 	 Oct = {Int.'div' MyPitch 22} + 1
       in
-	 LilyEt22PCs.MyPC # LilyOctaves.Oct
+	 {Et22PcToLily MyPC} # LilyOctaves.Oct
       end
       
       %% Expects a Strasheela note object and returns the corresponding
@@ -233,8 +292,8 @@ define
 	 else  
 	    MyRoot = {ET22PitchToLily {MyChord getRoot($)}}
 	    MyPitches = "\\grace {"#{Out.listToVS {Map {HS.score.pcSetToSequence
-						       {MyChord getPitchClasses($)}
-						       {MyChord getRoot($)}}
+							{MyChord getPitchClasses($)}
+							{MyChord getRoot($)}}
 						   ET22PitchToLily}
 				     %% set Lily grace note duration to quarter notes (4)
 				     "4 "}#"} "
@@ -264,8 +323,8 @@ define
 	 else
 	    MyRoot = {ET22PitchToLily {MyScale getRoot($)}}
 	    MyPitches = "\\grace {"#{Out.listToVS {Map {HS.score.pcSetToSequence
-						       {MyScale getPitchClasses($)}
-						       {MyScale getRoot($)}}
+							{MyScale getPitchClasses($)}
+							{MyScale getRoot($)}}
 						   ET22PitchToLily}
 				     %% set Lily grace note duration to 4
 				     "4 "}#"} "
