@@ -129,13 +129,16 @@
 functor
 import
    DB at 'source/Database.ozf'
-   Score at 'source/Score.ozf'
+   HSScore at 'source/Score.ozf'
    Rules at 'source/Rules.ozf'
    DBs at 'source/databases/Databases.ozf'
+   Distro at 'source/Distribution.ozf'
+   
 export
    db:DB
    dbs:DBs
-   score:Score
+   score:HSScore
    rules:Rules
+   distro:Distro
    
 end
