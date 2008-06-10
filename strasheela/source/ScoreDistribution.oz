@@ -1,6 +1,6 @@
 
 %%% *************************************************************
-%%% Copyright (C) 2002-2005 Torsten Anders (www.torsten-anders.de) 
+%%% Copyright (C) 2002-2008 Torsten Anders (www.torsten-anders.de) 
 %%% This program is free software; you can redistribute it and/or
 %%% modify it under the terms of the GNU General Public License
 %%% as published by the Free Software Foundation; either version 2
@@ -12,7 +12,15 @@
 %%% *************************************************************
 
 
-/** %% The functor defines solvers and distribution strategies tailored for a score search.
+/** %% This functor defines solvers and distribution strategies for a score search. The search process in Strasheela is highly customisable and the present functor makes such customisations concise and convenient. Score distribution strategies are discussed in my thesis "Composing Music by Composing Rules", chapter 7. For information on constraint solvers and distribution strategies in general see the Oz documentation (e.g., the "Finite Domain Constraint Programming" tutorial, http://www.mozart-oz.org/documentation/fdt/index.html), and for detailed background information C. Schulte's book "Programming Constraint Services".
+%%
+%% The solvers exported by this function are solvers customised for musical CSPs. Such score solvers (e.g., SearchOne or ExploreOne) expect a musical CSP (a script returning a solution score as its only argument), and optional arguments which define the distribution strategy. Note that this approach differs from the common solvers in Oz. Remember that in Oz the distribution strategy is part of the script, not an argument to the solver. Strasheela's approach separates script and distribution strategy, which is more convenient for complex distributions and in particular for scripts which contain of subscripts (CSP where subdefinitions, e.g., musical sections or the bare harmonic progression without the actual notes, can be solved on their own). 
+%% 
+%% The distribution strategy arguments of all score solvers are documented with the function MakeSearchScript (this function also helps you defining new solvers, see the solver definitions in the source). Particularly important aspects of a distribution strategy are its variable and value ordering (the optional arguments 'order' and 'value'). 
+%% 
+%% Several orderings (and other distribution args) are predefined and easily specified with an atom as distribution argument (e.g., by setting the distribution argument 'order' to 'size' or 'leftToRight', see the MakeSearchScript documentation for details). More complex variable orderings can be defined conveniently with the variable ordering constructors and plain variable orderings provided (e.g., a variable ordering which first visits time parameters but breaks ties -- where both its arguments are (are not) time parameters -- by visiting the parameter with the largest domain size first, such a variable ordering is concisely defined as follows: {MakeTimeParams Dom}. 
+%%
+%%
 %% */
 
 										    
@@ -60,30 +68,245 @@ import
    IOzSeF at 'x-ozlib://tack/iozsef/iozsef.ozf'
    % Score at 'ScoreCore.ozf'
    % Browser(browse:Browse) % temp for debugging
-export 
-   MakeFDDistribution % better use MakeSearchScript
-   MakeSearchScript
+   
+export
+   
+   %% solver defs
    SearchOne SearchAll SearchBest
    SearchOneDepth 
    ExploreOne ExploreAll ExploreBest
-
    IozsefInit IozsefInitBest
    IozsefExploreOne IozsefExploreAll IozsefExploreBest
    IozsefSearchOne IozsefSearchAll IozsefSearchBest
-   
-   MakeRandomDistributionValue
+
+   %% variable ordering defs
+   Naive Dom Width Deg DomDivDeg MakeDom MakeDeg MakeLeftToRight TimeParams MakeTimeParams
+   min: ReflectMin
+   max: ReflectMax
    MakeSetPreferredOrder MakeSetPreferredOrder2
+   %% value ordering defs 
+   MakeRandomDistributionValue
+   
+   %% score distro defs   
+   MakeSearchScript
+   MakeFDDistribution % better use MakeSearchScript
+   
 define
 
+   
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%
+%%% Distribution strategy defs: variable ordering defs  
+%%%
+   
+   /** %% [variable ordering (a score distribution strategy 'order' procedure)] naive variable ordering: visit first parameter first.
+   %% */
+   fun {Naive _ _} 
+      true
+   end
+   
+   /** %% [variable ordering] 'dom' score variable ordering: first visits score parameters with smallest domain size. In case of a tie (i.e. both domain sizes are equal), X is preferred.
+   %% */
+   fun {Dom X Y}
+      {FD.reflect.size {X getValue($)}}
+      =<
+      {FD.reflect.size {Y getValue($)}}
+   end
+   /** %% [variable ordering] 'width' score variable ordering: first visits score parameters with smallest domain width (the smallest difference between the domain bounds). In case of a tie, X is preferred.
+   %% */
+   fun {Width X Y}
+      {FD.reflect.width {X getValue($)}}
+      =<
+      {FD.reflect.width {Y getValue($)}}
+   end
+   /** %% [variable ordering] 'deg' score variable ordering: first visits score parameters with most constraints applied (i.e. most threads suspending on its variable). In case of a tie, X is preferred.
+   %% */
+   fun {Deg X Y}
+      {FD.reflect.nbSusps {X getValue($)}}
+      =<
+      {FD.reflect.nbSusps {Y getValue($)}}
+   end
+
+   /** %% [variable ordering] first visits score parameters with minimal lower domain boundary. In case of a tie, X is preferred.
+   %% */
+   fun {ReflectMin X Y}
+      {FD.reflect.min {X getValue($)}}
+      =<
+      {FD.reflect.min {Y getValue($)}}
+   end
+   /** %% [variable ordering] first visits score parameters with maximal upper domain boundary. In case of a tie, X is preferred.
+   %% */
+   fun {ReflectMax X Y}
+      {FD.reflect.max {X getValue($)}}
+      =<
+      {FD.reflect.max {Y getValue($)}}
+   end
+
+   local Factor = 1000000 in
+      /** %% [variable ordering] 'dom/deg' score variable ordering: first visits score parameters with the smallest quotient of domain size and number of constraints applied. In case of a tie, X is preferred.
+      %% */
+      fun {DomDivDeg X Y}
+	 %% factor added in order to avoid that integer quotient is often 0
+	 {FD.reflect.size {X getValue($)}} * Factor div {FD.reflect.nbSusps {X getValue($)}}
+	 =<
+	 {FD.reflect.size {Y getValue($)}} * Factor div {FD.reflect.nbSusps {Y getValue($)}}
+      end
+   end
+
+   /** %% [variable ordering constructor] Returns a 'dom' score variable ordering (a binary function expecting two parameter objects and returning a boolean value, a score distribution strategy 'order' procedure), i.e. an ordering which first visits score parameters with smallest domain size. It breaks ties (i.e. both domain sizes are equal) with the score variable ordering P.
+   %% */
+   fun {MakeDom P}
+      fun {$ X Y}
+	 L1 = {FD.reflect.size {X getValue($)}}
+	 L2 = {FD.reflect.size {Y getValue($)}}
+      in
+	 L1>L2 orelse
+	 %% if equal, break ties with P, otherwise false (prefer Y)
+	 (L1==L2 andthen {P X Y})
+      end
+   end
+
+   /** %% [variable ordering constructor] Returns a 'deg' score variable ordering (a binary function expecting two parameter objects and returning a boolean value), i.e. an ordering which first visits score parameters with the most constraints applied (i.e. most threads suspending on its variable). It breaks ties with the score variable ordering P.
+   %% */
+   fun {MakeDeg P}
+      fun {$ X Y}
+	 L1 = {FD.reflect.nbSusps {X getValue($)}}
+	 L2 = {FD.reflect.nbSusps {Y getValue($)}}
+      in
+	 L1>L2 orelse
+	 %% if equal, break ties with P, otherwise false (prefer Y)
+	 (L1==L2 andthen {P X Y})
+	 %% same meaning, but always needs two computation steps:
+%       if L1 == L2
+%       then {P X Y}
+%       else L1>L2
+%       end
+      end
+   end
+
+   /** %% [variable ordering constructor] Returns a left-to-right score variable ordering (a binary function expecting two parameter objects and returning a boolean value), i.e. an ordering which visits score parameters in the order of the start time of their associated score object. If only one start time is bound, then prefer the corresponding param (if none is bound prefer Y). In case of equal start times, temporal parameters are visited first. It breaks ties (equal start times and both X and Y are/are not time parameters) with the score variable ordering P.
    %%
-   %% General means to define score distribution strategies
+   %% NB: it is important for this variable ordering that time parameters are determined early so that other start times are determined. So, typically P is defined by {MakeTimeParams Q}, where Q is your actual tie-breaking ordering. The default leftToRight ordering is {MakeLeftToRight TimeParams}.
    %%
+   %% NB: P is only called if both start times are determined and equal. So, the overhead added should not be too high.
+   %% */
+   fun {MakeLeftToRight P}
+      fun {$ X Y}
+	 S1 = {{X getItem($)} getStartTime($)}
+	 S2 = {{Y getItem($)} getStartTime($)}
+	 IsS1Bound = ({FD.reflect.size S1}==1)
+      in
+	 %% if start time of both elements are bound
+	 if IsS1Bound andthen ({FD.reflect.size S2}==1)
+	 then
+	    S1 < S2 orelse
+	    %% if start times are equal, break ties with P, otherwise false (prefer Y)
+	    (S1 == S2 andthen {P X Y})
+	    %% same meaning, but always needs two computation steps:
+% 	 if S1==S2
+% 	 then {P X Y}
+% 	 else S1 =< S2	
+% 	 end
+	    %%
+	    %% if only one start time is bound, then prefer corresponding
+	    %% param (if none is bound the decision is arbitrary)
+	 else IsS1Bound
+	 end
+      end
+   end
+
+   /** %% [variable ordering] first visits time parameters. In case of a tie, Y is preferred.
+   %% */
+   fun {TimeParams X _} 
+      {X isTimeParameter($)}
+   end
+   
+   /** %% [variable ordering constructor] Returns a score variable ordering (a binary function expecting two parameter objects and returning a boolean value) which first visits time parameters. It breaks ties with the score variable ordering P.
+   %% */
+   fun {MakeTimeParams P}
+      fun {$ X Y}
+	 B =  {X isTimeParameter($)}
+      in
+	 if {GUtils.xOr B {Y isTimeParameter($)}}
+	 then B
+	 else {P X Y}
+	 end
+      end
+   end
 
    local
-      fun {IsTimeParameter X}
-	 %% ?? shall I test only for TimeInterval or for time point too?
-	 {X isTimeInterval($)} orelse {X isTimePoint($)}
+      fun {GetTestIndex Param Tests}
+	 {LUtils.findPosition Tests fun {$ Test} {Test Param} end}
       end
+   in
+      /** %% [variable ordering constructor] Returns a variable ordering which visits parameters in an order specified by test functions. Tests is a list of unary boolean funcs which expect a parameter. The variable ordering first visits the parameter for which a test with smaller index in Tests returns true.  In case of a tie (two parameters with equal 'test index'), the first argument of the variable ordering is preferred.
+      %% */
+      fun {MakeSetPreferredOrder2 Tests}
+	 %% append default (always returning true) at end
+	 AllTests = {Append Tests [fun {$ X} true end]}
+      in
+	 fun {$ X Y}
+	    XI = {GetTestIndex X AllTests}
+	    YI = {GetTestIndex Y AllTests}
+	 in
+	    XI =< YI
+	 end
+      end
+      /** %% [variable ordering constructor] More general variant of MakeSetPreferredOrder2. Returns a variable ordering which visits parameters in an order specified by test functions. Tests is a list of unary boolean funcs which expect a parameter. The variable ordering first visits the parameter for which a test with smaller index in Tests returns true. MakeSetPreferredOrder breaks ties with the score variable ordering P.
+      %% */
+      fun {MakeSetPreferredOrder Tests P}
+	 %% append default (always returning true) at end
+	 AllTests = {Append Tests [fun {$ X} true end]}
+      in
+	 fun {$ X Y}
+	    XI = {GetTestIndex X AllTests}
+	    YI = {GetTestIndex Y AllTests}
+	 in
+	    XI < YI orelse
+	    (YI == XI andthen {P X Y})
+	    %% same meaning, but always needs more computation steps:
+% 	    if XI < YI
+% 	    then true
+% 	    elseif YI == XI
+% 	    then {IfEqual X Y}
+% 	    else false
+% % 	    elseif YI < XI
+% % 	    then false
+% % 	    else {IfEqual X Y}
+%	    end
+	 end
+      end
+   end
+
+   
+   
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%
+%%% Distribution strategy defs: value ordering defs  
+%%%
+
+   /** %% Returns randomised value ordering, that is, a unary function for the argument 'value' of FD.distribute. The argument RandGen is a nullary function. If RandGen is created by GUtils.makeRandomGenerator, then the value ordering is randomised but still deterministic: re-executing the distribution will allways yield the same results. Consequently, such a randomised value ordering can be used for recomputation.
+   %% NB: this value ordering is conveniently applied by setting the distribution argument 'value' of any solver to 'random'.
+   %% */
+   fun {MakeRandomDistributionValue RandGen}
+      fun {$ X}
+	 Rand = {GUtils.randIntoRange  {RandGen} % pseudo-random number generated here
+		 {FD.reflect.min X} {FD.reflect.max X}}
+      in
+	 {FD.reflect.nextSmaller X Rand+1}
+      end
+   end
+
+
+   
+   
+   
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%
+%%%  Score distribution strategy def 
+%%%
+
+   local
       %% A number of predefined functions for FD.distribute -- the
       %% functions can be accessed by atoms to MakeFDDistribution.
       PredefinedFns =
@@ -92,80 +315,30 @@ define
 			      %{Browse undet}
 			    {FD.reflect.size {X getValue($)}} > 1
 			 end)
+	   
 	   order: 
 	      %% order function return boolean for sorting. 
 	   fns(naive: naive
-	       size: fun {$ X Y}
-			{FD.reflect.size {X getValue($)}}
-			=<
-			{FD.reflect.size {Y getValue($)}}
-		     end
-	       width: fun {$ X Y}
-			 {FD.reflect.width {X getValue($)}}
-			 =<
-			 {FD.reflect.width {Y getValue($)}}
-		      end
+	       size: Dom
+	       dom: Dom
+	       width: Width
 	       %% Choose the variable on which most propagators are suspended (i.e. constraints are applied), an in case this is equal then take the variable with the smallest domain. 
 	       %% This mirrors the default nbSusps implementation in Mozart.
-	       nbSusps: fun {$ X Y}
-			   L1 = {FD.reflect.nbSusps {X getValue($)}}
-			   L2 = {FD.reflect.nbSusps {Y getValue($)}}
-			in
-			   L1>L2 orelse
-			   (L1==L2 andthen
-			    {FD.reflect.size {X getValue($)}}
-			    =<
-			    {FD.reflect.size {Y getValue($)}})
-			end
+	       nbSusps: {MakeDeg Dom}
+	       'deg+dom': {MakeDeg Dom}
 	       %% First fail variant: choose variable with smallest domain and in case of ties the variable to which most constraints are applied
-	       'dom+deg':fun {$ X Y}
-			    L1 = {FD.reflect.size {X getValue($)}}
-			    L2 = {FD.reflect.size {Y getValue($)}}
-			 in
-			    L1<L2 orelse
-			    (L1==L2 andthen
-			     {FD.reflect.nbSusps {X getValue($)}}
-			     >=
-			     {FD.reflect.nbSusps {Y getValue($)}})
-			 end
+	       'dom+deg': {MakeDom Deg}
 	       %% First fail variant: quotient of domain size and number of constraints applied
-	       'dom/deg':local Factor = 1000000 in
-				 fun {$ X Y}
-				  %% factor added in order to avoid that integer quotient is often 0
-				  {FD.reflect.size {X getValue($)}} * Factor div {FD.reflect.nbSusps {X getValue($)}}
-				  =<
-				  {FD.reflect.size {Y getValue($)}} * Factor div {FD.reflect.nbSusps {Y getValue($)}}
-				 end
-			      end
-	       min: fun {$ X Y}
-		       {FD.reflect.min {X getValue($)}}
-		       =<
-		       {FD.reflect.min {Y getValue($)}}
-		    end
-	       max: fun {$ X Y}
-		       {FD.reflect.max {X getValue($)}}
-		       >=
-		       {FD.reflect.max {Y getValue($)}}
-		    end
-	       timeParams: fun {$ X _} 
-			      {IsTimeParameter X}
-			   end
+	       'dom/deg': DomDivDeg
+	       min: ReflectMin
+	       max: ReflectMax
+	       timeParams: TimeParams
 	       %% If only one of X or Y is timing parameters, then
 	       %% return boolean such that timing parameter is put 
 	       %% first. If both or non of X and Y are timing 
 	       %% parameters, then return boolean such that parameter
 	       %% with smaller domain size is preferred.
-	       timeParamsAndSize: fun {$ X Y}
-				     B =  {IsTimeParameter X}
-				  in
-				     if {GUtils.xOr B {IsTimeParameter Y}}
-				     then B
-				     else
-					{FD.reflect.size {X getValue($)}}
-					=<
-					{FD.reflect.size {Y getValue($)}}
-				     end
-				  end
+	       timeParamsAndSize: {MakeTimeParams Dom}
 	       %% select parameter with smalles startTime (and smallest domain) 
 	       %% (startTime parameters get bound by propagation)
 	       %%
@@ -176,34 +349,14 @@ define
 	       %% Important: for this distribution
 	       %% strategy, the outmost timing container needs a
 	       %% startTime predefined.
-	       startTime: fun {$ X Y}
-			     S1 = {{X getItem($)} getStartTime($)}
-			     S2 = {{Y getItem($)} getStartTime($)}
-			     IsS1Bound = ({FD.reflect.size S1}==1)
-			  in
-			     %% if start time of both elements are bound
-			     %%
-			     %% !! ?? andthen is not enough
-			     %%if {And IsS1Bound ({FD.reflect.size S2}==1)}
-			     if IsS1Bound andthen ({FD.reflect.size S2}==1)
-			     then
-				%% if start times are equal prefer
-				%% timing params, otherwise prefer
-				%% param whose item has smaller start
-				%% time
-				if S1==S2
-				then {X isTimeParameter($)}
-				   %% old:
-%				   {X isTimePoint($)} orelse
-%				   {X isTimeInterval($)} 
-				else S1 =< S2	
-				end
-			     else IsS1Bound
-			     end
-			  end)
+	       startTime: {MakeLeftToRight TimeParams}
+	       leftToRight: {MakeLeftToRight TimeParams}
+	      )
+
 	   select: 
 	      %% !! value feature to document 
 	   fns(value: fun {$ X} {X getValue($)} end)
+	   
 	   value: 
 	      fns(min: min %FD.reflect.min
 		  max: max %FD.reflect.max
@@ -286,7 +439,7 @@ define
 	       strasheela(failedRequirement
 			  Input
 			  "Value must be procedure, or is one element from the following list of atoms: "#{Value.toVirtualString {Arity PredefinedFns.Feature} 1000 1000})}
-		unit		% never returned
+	    unit		% never returned
 	 end
       end
    in
@@ -321,17 +474,17 @@ define
 %     unary Boolean function P: Considers only the parameter objects X, for which {P X} yields true. 
    %%
    %% order:
-%    naive: Selects the first parameter object.
-%    size: Selects the first parameter, whose value domain has the smallest size.
-%    width: Select the first parameter with the smallest difference between the domain bounds of its value. 
-%    nbSusps: Selects a parameter with the largest number of suspensions on its value, i.e., with the larges number of constraint propagators applied to it. In in case of ties (i.e. this is equal for several parameters), then take the first parameter with the smallest value domain.
+%    'naive': Selects the first parameter object.
+%    'size' or 'dom': Selects the first parameter, whose value domain has the smallest size.
+%    'width': Select the first parameter with the smallest difference between the domain bounds of its value. 
+%    'nbSusps' or 'deg+dom': Selects a parameter with the largest number of suspensions on its value, i.e., with the larges number of constraint propagators applied to it. In in case of ties (i.e. this is equal for several parameters), then take the first parameter with the smallest value domain.
 %    'dom+deg': Selects the first parameter, whose value domain has the smallest size. In case of ties take the first parameter with the larges number of constraints applied to it.
 %    'dom/deg': Selects the first parameter for which the quotient of domain size and number of suspended propagators is maximum. 
-%    min: Selects the first parameter, whose value's lower bound is minimal.
-%    max: Selects the first parameter, whose value's lower bound is maximal.
-%    timeParams: Selects the first temporal parameter object.
-%    timeParamsAndSize: Selects the first parameter, whose value domain has the smallest size, but always selects temporal parameter objects first.
-%    startTime: Left-to-right distribution: Selects a parameter object whose associated temporal item has the smallest start time. Temporal parameters are preferred over other parameters. Note: the outmost temporal container msut have a determined startTime.
+%    'min': Selects the first parameter, whose value's lower bound is minimal.
+%    'max': Selects the first parameter, whose value's lower bound is maximal.
+%    'timeParams': Selects the first temporal parameter object.
+%    'timeParamsAndSize': Selects the first parameter, whose value domain has the smallest size, but always selects temporal parameter objects first.
+%    'startTime' or 'leftToRight': Left-to-right distribution: Selects a parameter object whose associated temporal item has the smallest start time. Temporal parameters are preferred over other parameters. Note: the outmost temporal container msut have a determined startTime.
 %    binary Boolean function P: Selects the first parameter objects which is minimal with respect to the order relation P.   
    %%
    %% select: 
@@ -400,6 +553,13 @@ define
 	 end
       end
    end
+   
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%
+%%% Solver defs
+%%%
+
    
    /** %% Calls Search.base.one with a script created by MakeSearchScript. The meaning of the arguments ScoreScript and Args are the same as for MakeSearchScript.
    %% */
@@ -495,64 +655,7 @@ define
    end
    
    
-
-   /** %% Returns randomised value ordering, that is, a unary function for the argument 'value' of FD.distribute. The argument RandGen is a nullary function. If RandGen is created by GUtils.makeRandomGenerator, then the value ordering is randomised but still deterministic: re-executing the distribution will allways yield the same results. Consequently, such a randomised value ordering can be used for recomputation. 
-   %% */
-   fun {MakeRandomDistributionValue RandGen}
-      fun {$ X}
-	 Rand = {GUtils.randIntoRange  {RandGen} % pseudo-random number generated here
-		 {FD.reflect.min X} {FD.reflect.max X}}
-      in
-	 {FD.reflect.nextSmaller X Rand+1}
-      end
-   end
-
    
-   local
-      fun {GetTestIndex Param Tests}
-	 {LUtils.findPosition Tests fun {$ Test} {Test Param} end}
-      end
-   in
-      /** %% Returns a score distribution strategy 'order' procedure. Tests is a list of unary boolean funcs which expect a parameter. The distribution 'prefers' parameters for which a test with smaller index in Tests returns true. In case of two parameters with equal 'test index' the strategy decides for the first param.
-      %% */
-      fun {MakeSetPreferredOrder2 Tests}
-	 %% append default (always returning true) at end
-	 AllTests = {Append Tests [fun {$ X} true end]}
-      in
-	 fun {$ X Y}
-	    XI = {GetTestIndex X AllTests}
-	    YI = {GetTestIndex Y AllTests}
-	 in
-% 	    if XI =< YI
-% 	    then true
-% 	    else false
-% 	    end
-	    XI =< YI
-	 end
-      end
-      /** %% Returns a score distribution strategy 'order' procedure. Tests is a list of unary boolean funcs which expect a parameter. The distribution 'prefers' parameters for which a test with smaller index in Tests returns true. IfEqual is a binary boolean function which 'decides' in case for two parameters with equal 'test index'.
-      %% More general Variation of MakeSetPreferredOrder2. Which strategy variant is more efficient depends on the problem.. 
-      %% */
-      fun {MakeSetPreferredOrder Tests IfEqual}
-	 %% append default (always returning true) at end
-	 AllTests = {Append Tests [fun {$ X} true end]}
-      in
-	 fun {$ X Y}
-	    XI = {GetTestIndex X AllTests}
-	    YI = {GetTestIndex Y AllTests}
-	 in
-	    if XI < YI
-	    then true
-	    elseif YI == XI
-	    then {IfEqual X Y}
-	    else false
-% 	    elseif YI < XI
-% 	    then false
-% 	    else {IfEqual X Y}
-	    end
-	 end
-      end
-   end
 end				
 
 
