@@ -890,33 +890,48 @@ define
       in
 	 {FD.conj (Start1 =: Start2) (End1 =: End2) B}
       end
-      /** % [Deterministic method] Returns list of score objects simultaneous to self and fulfilling the optional boolean function or method test. (method uses deterministic method isSimultaneousItem)
-      %% NB: getSimultaneousItems suspends until the rhythmic structure of the whole score self is contained in is fully determined.
+      /** % [Deterministic method] Returns list of score objects simultaneous to self and fulfilling the optional boolean function or method test.
+      %% The implementation uses LUtils.cFilter and the reified constraints method isSimultaneousItemR. Items are returned as soon as the score contains enough information for all score objects in the score to tell whether or not their are simultaneous to self (i.e. rhythmic structure of the whole score must not necessarily be fully determined). 
       %%*/
       %% @1=?Xs	
       meth getSimultaneousItems(?Xs test:Test<=fun {$ X} true end)
-	 thread % isSimultaneousItem not necessarily known before search
-	    %% !! method should use concurrent mapping/filtering
-	    %% (i.e. collect fills stream by and by)
-	    %% instead of putting it into own thread
+	 thread 		% ?? NOTE: thread needed?
 	    TopLevel = {self getTopLevels($ test:fun {$ X} {X isTimeMixin($)} end)}.1
+	    ScoreObjects = {TopLevel collect($ test:Test)}
 	 in
-	    Xs = {TopLevel filter($ fun {$ X} 
-				       X \= self andthen
-				       {X isItem($)} andthen
-				       {X isSimultaneousItem($ self)} andthen
-				       {{GUtils.toFun Test} X}
-				    end)}
+	    Xs = {LUtils.cFilter ScoreObjects
+		  fun {$ X}
+		     X \= self andthen
+		     {X isItem($)} andthen
+		     ({self isSimultaneousItemR($ X)} == 1)
+		  end}
+% 	    Xs = {TopLevel filter($ fun {$ X} 
+% 				       X \= self andthen
+% 				       {X isItem($)} andthen
+% 				       {X isSimultaneousItem($ self)} andthen
+% 				       {{GUtils.toFun Test} X}
+% 				    end)}
 	 end
       end
-      /** % 
-      %%*/
-      %% @1=?Xs
- %      meth getSimultaneousItemsC(?Xs test:Test<=fun {$ X} true end)
-% 	 %% !!! unfinished
-% 	 %% ?? should I use selection constraints?
-% 	 raise undefinedMethod end
-%       end
+
+      /** %% [Deterministic method] Returns the first score object found which is simultaneous to self and fulfilling the optional boolean function or method test.
+      %% The implementation uses LUtils.cFind and the reified constraints method isSimultaneousItemR. X is return as soon as the score contains enough information to tell for any score object that it is simultaneous to self (i.e. rhythmic structure of the whole score must not necessarily be fully determined). 
+      %% */
+      meth findSimultaneousItem(?X test:Test<=fun {$ X} true end)
+	 thread 		% ?? NOTE: thread needed?
+	    TopLevel = {self getTopLevels($ test:fun {$ X} {X isTimeMixin($)} end)}.1
+	    ScoreObjects = {TopLevel collect($ test:Test)}
+	 in
+	    X = {LUtils.cFind ScoreObjects
+		  fun {$ X}
+		     X \= self andthen
+		     {X isItem($)} andthen
+		     ({self isSimultaneousItemR($ X)} == 1)
+		  end}
+	 end
+      end
+
+      
    end			% class
    
       
