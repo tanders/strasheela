@@ -4,9 +4,13 @@
 
 * Changes in Version 0.9.6 (no date yet)
 
-  - Main additions 
+  - Main additions and changes 
     - PrototypeMotif contribution: ..
     - Pattern.useMotifs: a flexible pattern constraint for motifs 
+    - SDistro: Refactored the definition of distribution strategies. More complex variable orderings are now conveniently defined with special constructor functions. The following procs are added to SDistro: Naive Dom Width Deg DomDivDeg MakeDom MakeDeg MakeLeftToRight TimeParams MakeTimeParams Min Max
+       The documentation of the functor is extended
+    - The performance of the temporal item method getSimultaneousItems is much improved (and a method findSimultaneousItem added). Before, it blocked until the whole rhythmical structure was determined, now the score only needs sufficient information whether some object is certainly simultaneous or not to the given object (their temporal parameters don't need to be determined). This speeds up the search process of CSPs which rely on this method (e.g., contrapuntual problems accessing sets of simultaneous notes and which also constrain the rhythmical structure).
+
 
   - Documentation
 
@@ -15,7 +19,6 @@
 
 
   - Fixes and minor changes
-
 
     - Convenient benchmark facilities for runtime and memory measurements of musical CSPs are added under testing/zy_Efficiency/benchmark
     - Pattern.localMaxR added
@@ -34,6 +37,7 @@
     - Added ET22.setEnharmonicNotationTable: enharmonic notation can be customised
     - GUtils.makeSingletonSet and GUtils.intsToFS added
     - ET22.db: Added feature 'essentialPitchClasses' to chord entries
+    - Added HS.distro: predefined distribution strategies for harmonic CSPs
 
 
   - For further fixes see the [[../CHANGELOG.txt]].
