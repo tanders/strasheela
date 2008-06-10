@@ -1,6 +1,6 @@
 
 %%% *************************************************************
-%%% Copyright (C) 2005-2007 Torsten Anders (www.torsten-anders.de) 
+%%% Copyright (C) 2005-2008 Torsten Anders (www.torsten-anders.de) 
 %%% This program is free software; you can redistribute it and/or
 %%% modify it under the terms of the GNU General Public License
 %%% as published by the Free Software Foundation; either version 2
