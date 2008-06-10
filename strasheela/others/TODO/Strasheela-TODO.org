@@ -5,7 +5,6 @@
 
 * Strasheela examples						    :STRASHEELA:
 
-
 ** Brain-Computer interface example: homphonic chord progression	:URGENT:
    DEADLINE: <2008-07-11 Fri>
 
@@ -19,8 +18,8 @@
     see 
     [[file:~/oz/music/Strasheela/private/mitEduardo/BrainComputerInterfaceDemo.org::*Overview]]
 
-
-*** Implement CSP in non-realtime
+*** DONE Implement CSP in non-realtime    
+    CLOSED: [2008-06-10 Tue 21:34]
 
     see description at 
     [[file:~/oz/music/Strasheela/private/mitEduardo/BrainComputerInterfaceDemo.org::*Overview]]
@@ -37,11 +36,11 @@
      CLOSED: [2008-06-06 Fri 16:13]
 
 
-
 *** DONE Implement in non-realtime    
     CLOSED: [2008-06-06 Fri 16:13]
 
-*** TODO Implement output to SuperCollider (via OSC)    
+*** DONE Implement output to SuperCollider (via OSC)    
+    CLOSED: [2008-06-10 Tue 21:34]
 *** TODO Implement output to MIDI (via SC)    
 
 *** Explain how this application works in English
@@ -67,41 +66,6 @@
   
 *** TODO Describe task in English, mentioning Strasheela techniques to use
 *** Implement description
-
-
-** Create small-scale musical example which demonstrates the effect of LUtils.cFilter and LUtils.cFind :SOON:
-   
-*** TODO Sketch a small-scale music theory in plain English  
-
-    Idea: modulation example: scale(s) related to each chord (and chords related to each note) are found with LUtils.cFilter/LUtils.cFind. 
-
-    Alternative idea:  
-    
-    map(filter(getAllNotes(myScore), isOnStrongBeat), 
-      f : f(n) := getPitchClass(n) \in getPitchClassSet(find(getChordProgression(myScore), 
-							     g : g(c) := isSimultaneous(n, c))))
-
-*** TODO Implement this theory
-
-    see LUtils-test.oz for a LUtils.cFilter and LUtils.cFind test
-
-
-*** More Info
-
-    NOTE: this matter could make it into a publication (part of a publication)! 
-
-    Related approach: find using filter + reified constraints as boolean tests is related but note the same. 
-
-    However, even if boolean test would return true for some datum already, find blocks if reified constraint blocks on some element before. This new approach works even when I don't know in which order variables are determined and thus in which order elements are added to the stream. 
-
-    Similar issue with filter: even with reified constraints as boolean tests, filter may block completely until enough information is available in all data. An concurrent filter would return data in a stream as soon as enough information is available on these data.
- 
-    Sufficient to have a filter which concurrently processes a list of objects. I only need to collect all data with collect (e.g., all data matching test function) and then do concurrent filter on this result list. 
-
-    A method filterThreaded would further improve the application of delayed constraints where filtering tests used reified constraints 
-    E.g., I could use a method filterThreaded for a better definition of getSimultaneousItems
-
-
 
 
 ** Schoenberg Harmony							  :WAIT:

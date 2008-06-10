@@ -821,6 +821,51 @@ rpmbuild will typically create binary RPMs in the usual system-specific location
   rpm -i mozart-$VERSION.$PLATFORM.rpm
 
 
+* DONE Create small-scale musical example which demonstrates the effect of LUtils.cFilter and LUtils.cFind :SOON:
+  CLOSED: [2008-06-10 Tue 21:34]
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2008-06-10 Tue 21:34
+  :ARCHIVE_FILE: ~/oz/music/Strasheela/strasheela/trunk/strasheela/others/TODO/Strasheela-TODO.org
+  :ARCHIVE_OLPATH: Strasheela examples
+  :ARCHIVE_CATEGORY: Strasheela
+  :ARCHIVE_TODO: DONE
+  :ARCHIVE_ITAGS: STRASHEELA
+  :END:
+
+  I instead defined getSimultaneousItems with these...
+  
+** TODO Sketch a small-scale music theory in plain English  
+
+   Idea: modulation example: scale(s) related to each chord (and chords related to each note) are found with LUtils.cFilter/LUtils.cFind. 
+
+   Alternative idea:  
+   
+   map(filter(getAllNotes(myScore), isOnStrongBeat), 
+     f : f(n) := getPitchClass(n) \in getPitchClassSet(find(getChordProgression(myScore), 
+							    g : g(c) := isSimultaneous(n, c))))
+
+** TODO Implement this theory
+
+   see LUtils-test.oz for a LUtils.cFilter and LUtils.cFind test
+
+
+** More Info
+
+   NOTE: this matter could make it into a publication (part of a publication)! 
+
+   Related approach: find using filter + reified constraints as boolean tests is related but note the same. 
+
+   However, even if boolean test would return true for some datum already, find blocks if reified constraint blocks on some element before. This new approach works even when I don't know in which order variables are determined and thus in which order elements are added to the stream. 
+
+   Similar issue with filter: even with reified constraints as boolean tests, filter may block completely until enough information is available in all data. An concurrent filter would return data in a stream as soon as enough information is available on these data.
+
+   Sufficient to have a filter which concurrently processes a list of objects. I only need to collect all data with collect (e.g., all data matching test function) and then do concurrent filter on this result list. 
+
+   A method filterThreaded would further improve the application of delayed constraints where filtering tests used reified constraints 
+   E.g., I could use a method filterThreaded for a better definition of getSimultaneousItems
+
+
+
 
 
 
