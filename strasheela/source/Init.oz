@@ -59,6 +59,7 @@ export
    SaveStrasheelaEnv LoadStrasheelaEnv
    GetBeatDuration SetBeatDuration GetTempo SetTempo
    SetTuningTable UnsetTuningTable GetTuningTable
+   SetMaxLilyRhythm
    AddExplorerOuts_Standard AddExplorerOuts_Extended
    AddIOzSeFOuts
 %   StrasheelaDir
@@ -267,6 +268,16 @@ define
 	Table = @TuningTable
       end
    end
+
+
+   /** %% When outputting a Lilypond file, Strasheela automatically splits very long notes (or other score objects notated by notes such as chords or scales) into multiple notes connected by ties. The maximum duration notated by a single note can be set with this porcedure. Dur is a float measured in quarternotes. For example, 2.0 indicates a halve note and 0.5 an eighth note. The maximum duration supported by Lilypond is a longa (16.0). The default is 4.0 (a whole note).
+   %% It is recommended to set Dur to the length of your bars (e.g., 4.0 for 4/4).
+   %%
+   %% Note: this definition is an alias for Out.setMaxLilyRhythm.
+   %% */ 
+   proc {SetMaxLilyRhythm Dur}
+      {Out.setMaxLilyRhythm Dur}
+   end
    
    
    local
@@ -338,6 +349,11 @@ define
 	 then {Browse {X toInitRecord($)}}
 	 end
       end
+%       proc {ShowInitRecord I X}
+% 	 if {Score.isScoreObject X}
+% 	 then {Out.show {X toInitRecord($)}}
+% 	 end
+%       end
 %       proc {ArchiveENPNonMensural I X}
 % 	 if {Score.isScoreObject X}
 % 	 then 
@@ -456,6 +472,9 @@ define
 	 {Explorer.object
 	  add(information BrowseInitRecord
 	      label: 'Browse initRecord')}
+% 	 {Explorer.object
+% 	  add(information ShowInitRecord
+% 	      label: 'Show initRecord')}
 	 {Explorer.object
 	  add(information RenderCsound
 	      label: 'to Csound')}
