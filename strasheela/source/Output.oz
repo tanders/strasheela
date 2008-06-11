@@ -85,6 +85,7 @@ export
    PauseToLily LilyRest
    LilyMakeRhythms LilyMakeRhythms2 
    IsOutmostSeq IsSingleStaffPolyphony SingleStaffPolyphonyToLily IsLilyChord SimToLilyChord GetUserLily
+   SetMaxLilyRhythm
    
    %% 
    OutputSCScore MakeSCScore MakeSCEventOutFn
@@ -977,10 +978,27 @@ define
       {ForAll Spec proc {$ [Feat Val]} Result.{BeatSpecToIdx Feat} = Val  end}
    end
    LilyRhythms = {MakeLilyRhythm}
-   %% all un-punctuated BeatIndices 
-   LilyRhythmIdxs = {Map [16.0 8.0 4.0 2.0 1.0 0.5 0.25 0.125] BeatSpecToIdx}
-   SmallesRhythmIdxs = {BeatSpecToIdx 0.125}
    
+   %% all un-punctuated and many single-punctuated BeatIndices 
+   LilyFullRhythmIdxs = {Map [16.0 8.0 6.0 4.0 3.0 2.0 1.5 1.0 0.75 0.5 0.375 0.25 0.125]
+			 BeatSpecToIdx}
+   SmallesRhythmIdxs = {BeatSpecToIdx 0.125}
+   local
+      LilyRhythmIdxs = {NewCell nil}
+   in
+      /** %% When outputting a Lilypond file, Strasheela automatically splits very long notes (or other score objects notated by notes such as chords or scales) into multiple notes connected by ties. The maximum duration notated by a single note can be set with this porcedure. Dur is a float measured in quarternotes. For example, 2.0 indicates a halve note and 0.5 an eighth note. The maximum duration supported by Lilypond is a longa (16.0). The default is 4.0 (a whole note).
+      %% It is recommended to set Dur to the length of your bars (e.g., 4.0 for 4/4).
+      %% */ 
+      proc {SetMaxLilyRhythm Dur}
+	 LilyRhythmIdxs := {Filter LilyFullRhythmIdxs
+			    fun {$ X} X =< {BeatSpecToIdx Dur} end}
+      end
+      proc {GetLilyRhythmIdxs Idxs}
+	Idxs = @LilyRhythmIdxs
+      end
+      {SetMaxLilyRhythm 4.0}
+   end
+      
    /** %% [for clause definitions] creates Lilypond duration output (a list of Lilypond rhythm values, which in the end are tied together) for a duration parameter.
    %% */
    fun {LilyMakeRhythms DurationParam}
@@ -999,7 +1017,7 @@ define
       then [ LilyRhythms.BeatIdx ]
       else				% tied notes: 
 	 %% find biggest LilyRhythms index smaller IdxBeat
-	 BiggestSubRhythm = {LUtils.find LilyRhythmIdxs
+	 BiggestSubRhythm = {LUtils.find {GetLilyRhythmIdxs}
 			     fun {$ X} BeatIdx > X end}
       in
 	 LilyRhythms.BiggestSubRhythm | {MakeRhythmsAux BeatIdx-BiggestSubRhythm}
