@@ -80,7 +80,7 @@ export
    IozsefSearchOne IozsefSearchAll IozsefSearchBest
 
    %% variable ordering defs
-   Naive Dom Width Deg DomDivDeg MakeDom MakeDeg MakeLeftToRight TimeParams MakeTimeParams
+   Naive Dom Width Deg DomDivDeg MakeDom MakeDeg MakeLeftToRight MakeRightToLeft TimeParams MakeTimeParams
    min: ReflectMin
    max: ReflectMax
    MakeSetPreferredOrder MakeSetPreferredOrder2
@@ -215,6 +215,36 @@ define
       end
    end
 
+
+
+   /** %% [variable ordering constructor] Returns a right-to-left score variable ordering, i.e. an ordering which visits score parameters in the decreasing order of the end time of their associated score object. If only one end time is bound, then prefer the corresponding param (if none is bound prefer Y). In case of equal end times, temporal parameters are visited first. It breaks ties (equal start times and both X and Y are/are not time parameters) with the score variable ordering P.
+   %%
+   %% NB: this variable ordering only works if the last end time (and thus usually the full score duration) is determined in the problem definition! It can be hard to reliably find a value (total duration) which works? Nevertheless, for some CSPs it is beneficial to work backwards (e.g., the final cadence may pose special problems).
+   %%
+   %% NB: it is important for this variable ordering that time parameters are determined early so that other end times are determined. So, typically P is defined by {MakeTimeParams Q}, where Q is your actual tie-breaking ordering.
+   %%
+   %% NB: P is only called if both end times are determined and equal. So, the overhead added should not be too high.
+   %% */
+   fun {MakeRightToLeft P}
+      fun {$ X Y}
+	 E1 = {{X getItem($)} getEndTime($)}
+	 E2 = {{Y getItem($)} getEndTime($)}
+	 IsE1Bound = ({FD.reflect.size E1}==1)
+      in
+	 %% if end time of both elements are bound
+	 if IsE1Bound andthen ({FD.reflect.size E2}==1)
+	 then
+	    E1 > E2 orelse
+	    %% if end times are equal, break ties with P, otherwise false (prefer Y)
+	    (E1 == E2 andthen {P X Y})
+	    %% if only one end time is bound, then prefer corresponding
+	    %% param (if none is bound the decision is arbitrary)
+	 else IsE1Bound
+	 end
+      end
+   end
+
+   
    /** %% [variable ordering] first visits time parameters. In case of a tie, Y is preferred.
    %% */
    fun {TimeParams X _} 
