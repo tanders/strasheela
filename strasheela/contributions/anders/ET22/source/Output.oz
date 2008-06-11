@@ -351,7 +351,7 @@ define
       
    in
       /** %% Proc is like Out.renderAndShowLilypond, but provides buildin support for notes and chords with pitch units in et22.
-      %% Please note that this support is defined by the argument clauses and wrapper (see Out.toLilypond) -- additional clauses are still possible, but adding new note/chord clauses will overwrite the support for 22 ET.
+      %% Please note that this support is defined by the argument clauses and wrapper (see Out.toLilypond) -- additional clauses are still possible, but adding new note/chord clauses will overwrite the support for 22 ET (the wrapper can be defined like for Out.renderAndShowLilypond).
       %% Also, note that convert-ly (which updates) sometimes breaks the 22 ET notation (e.g., when inserting new explicit staffs).
       %% */
       proc {RenderAndShowLilypond MyScore Args}
@@ -362,7 +362,7 @@ define
 	 ET22Wrapper = [LilyHeader LilyFooter]
 	 AddedArgs = unit(wrapper:if {HasFeature Args wrapper}
 				  then [H T] = Args.wrapper in 
-				     [ET22Wrapper.1#H T]
+				     [H#ET22Wrapper.1 T]
 				  else ET22Wrapper
 				  end
 			  clauses:if {HasFeature Args clauses}
