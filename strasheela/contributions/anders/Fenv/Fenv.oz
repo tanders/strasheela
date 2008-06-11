@@ -63,9 +63,10 @@ define
       attr env
 
 	 /** %% Builds a env from a given numeric function. Env is a unary numeric function which expects and returns a float. If RangeIsForArgumentFun is true, then the interval [0,1] of the resulting fenv is mapped to [min, max] of the argument function. Otherwise, the interval [min,max] of the resulting fenv is mapped to [0,1] of the argument function.
+	 %% NB: init blocks as long as Env is undetermined (Env is only an optional argument because the Score.scoreObject method getInitClassesVS requires this for score archiving).
 	 %% */
 	 %% !! accessing an envelope value outside its range is explicitly disabled here. Is that too strict? Is that too costly (done for every embedded env!)?
-      meth init(env:Env min:Mn<=0.0 max:Mx<=1.0
+      meth init(env:Env<=_ min:Mn<=0.0 max:Mx<=1.0
 		rangeIsForArgumentFun:RangeIsForArgumentFun<=true)
 	 if RangeIsForArgumentFun
 	 then 
