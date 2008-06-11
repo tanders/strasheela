@@ -1,8 +1,8 @@
 
-\paper {
-}
-\layout {  
-}
+% \paper {
+% }
+% \layout {  
+% }
 
 % Define 22 ET pitches simply as 1/6 tone alterations...
 #(define-public Comma 1/6)
