@@ -25,59 +25,18 @@ export
    MakeOrder_TimeScaleChordPitchclassOctave
    
    IsNoTimepointNorPitch 
-   TypewiseHSDistro
+   typewise: Typewise_Distro
+   leftToRight_TypewiseTieBreaking: LeftToRight_TypewiseTieBreaking_Distro
    
 define
 
 
-   /** %% Defines a full distribution strategy for harmonic CSPs, which visits parameters type-wise. As the distribution is a record, single aspects (e.g., the value ordering) can be overwritten, e.g., using Adjoin.
-   %%
-   %% Filtering: Parameters are filtered with IsNoTimepointNorPitch. 
-   %% Variable ordering: First the time parameters are determined, then scale, the chord and then pitch class parameters. Whenever a note pitch class parameter is determined, its corresponding octave is determined next.
-   %% Value ordering: min
-   %%
-   %% NB: defines a select function for marking octaves -- don't overwrite that.
-   %% */
-   %%
-   %% after determining a pitch class of a note, the next distribution
-   %% step has to determine the octave of that note! Such distribution
-   %% strategy results in clear performance increasing -- worth
-   %% discussion in thesis. Increases performance by factor 10 at least !!
-   %%
-   %% ?? Can I get the same effect with left-to-right breaking ties with these type checks?
-   %%
-   %% BUG: (i) octave is already marked, although pitch class is still undetermined, (ii) octave does not get distributed next anyway.
-   TypewiseHSDistro
-   = unit(
-	value:min
-	%% value:random % mid % min % 
-	select: fun {$ X}
-		   %% !! needs abstraction
-		   %%
-		   %% mark param to determine next
-		   if {HS_Score.isPitchClass X} andthen
-		      {{X getItem($)} isNote($)}
-		   then {{{X getItem($)} getOctaveParameter($)}
-			 addInfo(distributeNext)}
-		   end
-		   %% the ususal parameter value select
-		   {X getValue($)}
-		end
-	order:fun {$ X Y}
-		 %% !! needs abstraction
-		 %%
-		 %% always checking both vars: rather inefficient..
-		 if {X hasThisInfo($ distributeNext)}
-		 then true
-		 elseif {Y hasThisInfo($ distributeNext)}
-		 then false
-		    %% else do the usual distribution
-		 else {{MakeOrder_TimeScaleChordPitchclass SDistro.dom} X Y}
-		 end
-	      end
-	test: IsNoTimepointNorPitch)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%
+%%% Distribution strategy parts
+%%%
    
-   
+      
    /** %% [variable ordering constructor] Returns a score variable ordering. A variable ordering is a binary function expecting two parameter objects and returning a boolean value, which is given to the argument 'order' expected by score solvers. This variable ordering first visits time parameters, then scale, then chord, and then pitch class parameters. It breaks ties (i.e. both parameters are the same type or not one of these type) with the score variable ordering P. For example, P can be SDistro.dom.
    %% */
    fun {MakeOrder_TimeScaleChordPitchclass P}
@@ -127,5 +86,74 @@ define
 	{X hasThisInfo($ untransposedRoot)} orelse
 	{X hasThisInfo($ notePitch)})}
    end
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%
+%%% Full distribution strategies
+%%%
    
+
+   /** %% Defines a full distribution strategy for harmonic CSPs, which visits parameters type-wise. As the distribution is a record, single aspects (e.g., the value ordering) can be overwritten, e.g., using Adjoin.
+   %%
+   %% Filtering: Parameters are filtered with IsNoTimepointNorPitch. 
+   %% Variable ordering: First the time parameters are determined, then scale, the chord and then pitch class parameters. Whenever a note pitch class parameter is determined, its corresponding octave is determined next.
+   %% Value ordering: min
+   %%
+   %% NB: defines a select function for marking octaves -- don't overwrite that.
+   %% */
+   %%
+   %% after determining a pitch class of a note, the next distribution
+   %% step has to determine the octave of that note! Such distribution
+   %% strategy results in clear performance increasing -- worth
+   %% discussion in thesis. Increases performance by factor 10 at least !!
+   %%
+   %% ?? Can I get the same effect with left-to-right breaking ties with these type checks?
+   %%
+   %% BUG: (i) octave is already marked, although pitch class is still undetermined, (ii) octave does not get distributed next anyway.
+   Typewise_Distro
+   = unit(
+	value:min
+	%% value:random % mid % min % 
+	select: fun {$ X}
+		   %% !! needs abstraction
+		   %%
+		   %% mark param to determine next
+		   if {HS_Score.isPitchClass X} andthen
+		      {{X getItem($)} isNote($)}
+		   then {{{X getItem($)} getOctaveParameter($)}
+			 addInfo(distributeNext)}
+		   end
+		   %% the ususal parameter value select
+		   {X getValue($)}
+		end
+	order:fun {$ X Y}
+		 %% !! needs abstraction
+		 %%
+		 %% always checking both vars: rather inefficient..
+		 if {X hasThisInfo($ distributeNext)}
+		 then true
+		 elseif {Y hasThisInfo($ distributeNext)}
+		 then false
+		    %% else do the usual distribution
+		 else {{MakeOrder_TimeScaleChordPitchclass SDistro.dom} X Y}
+		 end
+	      end
+	test: IsNoTimepointNorPitch)
+
+   /** %% Defines a full distribution strategy for harmonic CSPs, where parameters are visited in the order of the start time of the associated items (left-to-right distribution), breaking ties by type checks.
+   %%
+   %% Filtering: Parameters are filtered with IsNoTimepointNorPitch. 
+   %% Variable ordering: parameters are visited in the order of the start time of the associated items (left-to-right distribution), breaking ties by type checks. This tie-breaking order is as follows: first the time parameters are determined, then scale, the chord, then pitch class parameters, and finally octaves. Again, if ties accur, the parameter with smallest domain size is determined first. 
+   %% Value ordering: min
+   %% */
+   LeftToRight_TypewiseTieBreaking_Distro
+   = unit(value:min
+	  order: {SDistro.makeLeftToRight
+		  {MakeOrder_TimeScaleChordPitchclassOctave
+		   SDistro.dom}}
+	  test: IsNoTimepointNorPitch
+	 )
+   
+
 end
