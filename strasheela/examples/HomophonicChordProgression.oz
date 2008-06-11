@@ -1,12 +1,9 @@
 
 %%
-%% This example implements a significant subset of Schoenberg's Theory of Harmony
-%%
-%%
-%%
-%% see also 
-%% file:~/oz/music/Strasheela/private/examples/Schoenberg/PlanningAndThinking/SchoenbergHarmony.oz
+%% This example implements a significant subset of Schoenberg's Theory of Harmony. Nevertheless, the example is created in 31 ET (not 12 ET) because this leads to a better enharmonic notation and intonation.
 %% 
+%% Usage: first feel buffer, then feed solver calls in comments are the end.
+%%
 
 %%
 %% TODO:
@@ -14,9 +11,9 @@
 %% - I may notate the chord scale degrees with Roman numerals. Seems this is not predefined in lily. So, I would have to specify that the chord seq is ignored in Lily, and then define a special output for the bass notes which accesses the sim chords, translates their scale degree into a text string and prints that with a text markup.
 %%
 
+
 declare
 
-%% 31 ET for enharmonic notation
 %% NOTE: Enharmonic modulation with 31 ET is less strait forward that with 12 ET. However, using 31 ET is more strait forward for enharmonic notation that using enharmonic notes are -- the chord database does not contain accidental information...
 %% BTW: 12 ET playback would be simple with 31 ET: just create a tuning table which maps 12 ET pitches on the 31 ET pitches :)  
 [ET31] = {ModuleLink ['x-ozlib://anders/strasheela/ET31/ET31.ozf']}
@@ -44,85 +41,6 @@ end
 {Explorer.object
  add(information RenderLilypondAndCsound
      label: 'to Lily + Csound: Homophonic Chord Progression')}
-
-
-
-%%
-%% NOTE: TMP Distribution strategy
-%%
-/** %% Suitable distribution strategy: first determine chords etc
-%% */
-PreferredOrder = {SDistro.makeSetPreferredOrder
-		  %% Preference order of distribution strategy
-		  [%% !!?? first always timing?
-		   fun {$ X} {X isTimeParameter($)} end
-		   %% first search for scales then for chords
-		   fun {$ X} {HS.score.isScale {X getItem($)}} end
-		   fun {$ X} {HS.score.isChord {X getItem($)}} end
-% 		      fun {$ X}
-% 			 {HS.score.isPitchClassCollection {X getItem($)}}
-% 		      %{HS.score.isChord {X getItem($)}} orelse
-% 		      %{HS.score.isScale {X getItem($)}}
-% 		      end
-		   %% prefer pitch class over octave (after a pitch class, always the octave is determined, see below)
-		   %% !!?? does this always make sense? Anyway, usually the pitch class is the more sensitive param. Besides, allowing a free order between pitch class and octave makes def to determine the respective pitch class / octave next much more difficult
-		   fun {$ X}
-		      %% only for note pitch classes: pitch classes in chord or scale are already more preferred by checking that item is isPitchClassCollection
-		      {HS.score.isPitchClass X}
-		      % {X hasThisInfo($ pitchClass)}
-		   end
-		  ]
-		  %% in case of params with same 'preference index'
-		  %% prefer var with smallest domain size
-		  fun {$ X Y}
-		     fun {GetDomSize X}
-			{FD.reflect.size {X getValue($)}}
-		     end
-		  in
-		     {GetDomSize X} < {GetDomSize Y}
-		  end}
-%%
-%% after determining a pitch class of a note, the next distribution
-%% step has to determine the octave of that note! Such distribution
-%% strategy results in clear performance increasing -- worth
-%% discussion in thesis. Increases performance by factor 10 at least !!
-%%
-%% Bug: (i) octave is already marked, although pitch class is still undetermined, (ii) octave does not get distributed next anyway.
-MyDistribution = unit(
-		    value:min
-		    % value:random % mid % min % 
-		      select: fun {$ X}
-				 %% !! needs abstraction
-				 %%
-				 %% mark param to determine next
-				 if {HS.score.isPitchClass X} andthen
-				    {{X getItem($)} isNote($)}
-				 then {{{X getItem($)} getOctaveParameter($)}
-				       addInfo(distributeNext)}
-				 end
-				 %% the ususal parameter value select
-				 {X getValue($)}
-			      end
-		      order:fun {$ X Y}
-			       %% !! needs abstraction
-			       %%
-			       %% always checking both vars: rather inefficient.. 
-			       if {X hasThisInfo($ distributeNext)}
-			       then true
-			       elseif {Y hasThisInfo($ distributeNext)}
-			       then false
-				  %% else do the usual distribution
-			       else {PreferredOrder X Y}
-			       end
-			    end
-		      test:fun {$ X}
-			      %% {Not {{X getItem($)} isContainer($)}} orelse
-			      {Not {X isTimePoint($)}} orelse
-			      {Not {X isPitch($)} andthen
-			       ({X hasThisInfo($ root)} orelse
-				{X hasThisInfo($ untransposedRoot)} orelse
-				{X hasThisInfo($ notePitch)})}
-			   end)
 
 
 
@@ -437,12 +355,40 @@ end
 
 /*
 
+
+
+%% left-to-right strategy with breaking ties by type
 {GUtils.setRandomGeneratorSeed 0}
 {SDistro.exploreOne {GUtils.extendedScriptToScript MyScript
 		     unit(key:'D'#'major'
-			  n:7)}
- {Adjoin MyDistribution
+			  n:13)}
+ {Adjoin HS.distro.leftToRight_TypewiseTieBreaking
   unit(value:random)}}
+
+
+*/
+
+
+
+
+/* %% compare performance of different distribution startegies
+
+%% left-to-right strategy with breaking ties by type
+{GUtils.setRandomGeneratorSeed 0}
+{SDistro.exploreOne {GUtils.extendedScriptToScript MyScript
+		     unit(key:'C'#'major'
+			  n:7)}
+ {Adjoin HS.distro.leftToRight_TypewiseTieBreaking
+  unit(value:min)}}
+
+
+%% type-wise distro
+{GUtils.setRandomGeneratorSeed 0}
+{SDistro.exploreOne {GUtils.extendedScriptToScript MyScript
+		     unit(key:'C'#'major'
+			  n:7)}
+ {Adjoin HS.distro.typewise
+  unit(value:min)}}
 
 */
 
