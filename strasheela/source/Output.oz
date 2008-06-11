@@ -156,7 +156,8 @@ define
 
    local
       fun {Domain2VS X}
-	 if {IsList X}
+	 if X == nil then "nil"
+	 elseif {IsList X}
 	 then "["#{ListToVS {Map X Domain2VS} ' '}#"]"
 	 else case X of A#B
 	      then A#"#"#B
