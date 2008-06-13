@@ -150,11 +150,12 @@ define
 		     comment:'subdiminished 7th (2)')
 	       %% alt name:
 	       %% 'French augmented'
-	       chord(pitchClasses:[4#1 5#1 40#7 50#7]
-		     roots:[4#1]    
-%				dissonanceDegree:2
-		     essentialPitchClasses:[4#1 5#1 40#7 50#7]
-		     comment:'major subdiminished')  
+	       %% NOTE: in 22 ET, this chord equals to 'subminor 7th'
+% 	       chord(pitchClasses:[4#1 5#1 40#7 50#7]
+% 		     roots:[4#1]    
+% %				dissonanceDegree:2
+% 		     essentialPitchClasses:[4#1 5#1 40#7 50#7]
+% 		     comment:'major subdiminished')  
 	       chord(pitchClasses:[4#1 5#1 7#1 40#7]
 		     roots:[4#1]    
 %				dissonanceDegree:2
