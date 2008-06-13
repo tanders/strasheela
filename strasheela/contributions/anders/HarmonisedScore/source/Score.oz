@@ -943,13 +943,14 @@ define
 % 		  Excluded}}
 % 	 end
 
-	 /** %% The parameter 'index' is included if it is undetermined, but it is omitted in case both the set of pitch classes and the transposition are determined. If the index is determined, then the set of pitch classes plus the transposition should be sufficient and the index can be derived from them. Omitting the index makes archived score solutions more stable. Even if the chord/scale database was edited  later (e.g., chords were added) so that the indices changed, the archived score will still work as long as the set of pitch classes for the original chords did not change.
-	 %% In principle, it is possible that there are two chords with the same pitchclasses and transposition but different index and different additional db features. However, that should be considered a bug in the database. In case alternative db feature values for a single chord/scale are needed, then these should be defined as variable domain values for a single db entry, not as additional entries.  
+	 /** %% The parameter 'index' is included if it is undetermined, but it is omitted in case the set of pitch classes, the transposition, and the index are determined. If the index is determined, then the set of pitch classes plus the transposition should be sufficient and the index can be derived from them. Omitting the index makes archived score solutions more stable. Even if the chord/scale database was edited  later (e.g., chords were added) so that the indices changed, the archived score will still work as long as the set of pitch classes for the original chords did not change.
+	 %% In principle, it is possible that there are two chords with the same pitchclasses and transposition but different additional db features. However, that should be considered a bug in the database. In case alternative db feature values for a single chord/scale are needed, then these should be defined as variable domain values for a single db entry, not as additional entries.  
 	 %% */
 	 meth getInitInfo($ exclude:Excluded)	    
 	    unit(superclass:Score.temporalElement
 		 args: {Append if {IsDet {self getPitchClasses($)}} andthen
-				  {IsDet {self getTransposition($)}}
+				  {IsDet {self getTransposition($)}} andthen
+				  {IsDet {self getIndex($)}}
 			       then nil
 			       else [index#getIndex#noMatch]
 			       end
