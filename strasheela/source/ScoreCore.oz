@@ -1508,15 +1508,9 @@ define
       end
       /** % Are all parameter values determined? NB: isDet can return false simply because constraint propagation did not finish to determine some parameter. You may want to use the method wait instead.
       % */
-      meth isDet(?B)
-	 %% !! This check sometimes returns false if the score is
-	 %% created in the top-level, i.e. without search (but
-	 %% checking for Space to be stable causes this to block
-	 %% completely in the top-level...)
-	 %% ?? Possibly that's OK: constraint propagation simply needs
-	 %% a little time, also at top-level space.
-	 B = {All {self getParameters($)}
-	      fun {$ X} {IsDet {X getValue($)}} end}
+      meth isDet($)
+	 {All {self getParameters($)}
+	  fun {$ X} {IsDet {X getValue($)}} end}
       end
       /** %% Wait (blocks) until all parameter values of self are determined. The only exception are parameters for which the optional arg Unless -- a boolean unary function -- returns true (per default, Unless always returns false).
       %% */
@@ -1663,7 +1657,16 @@ define
 	 {ScoreMapping.forNumericRange2 {self getItems($)}
 	  Decl P ElseP}
       end
+
       
+      /** % Are all parameter values determined, including nested score objects? NB: isDet can return false simply because constraint propagation did not finish to determine some parameter. You may want to use the method wait instead.
+      % */
+      meth isDet($)
+	 {All {Append
+	       {Map {self getParameters($)} fun {$ X} {IsDet {X getValue($)}} end}	 
+	       {self mapItems($ fun {$ O} {O isDet($)} end)}}
+	  fun {$ B} B==true end}
+      end
       /** %% Wait until all parameter values of self and of its (directly and indirectly) contained items are determined. The only exception are parameters for which the optional arg Unless -- a boolean unary function -- returns true (per default, Unless always returns false).
       %% */
       meth wait(unless:Unless<=fun {$ _} false end)
