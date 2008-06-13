@@ -291,17 +291,17 @@ define
 	 then ''
 	 else  
 	    MyRoot = {ET22PitchToLily {MyChord getRoot($)}}
-	    MyPitches = "\\grace {"#{Out.listToVS {Map {HS.score.pcSetToSequence
+	    MyPitches = "\\grace <"#{Out.listToVS {Map {HS.score.pcSetToSequence
 							{MyChord getPitchClasses($)}
 							{MyChord getRoot($)}}
 						   ET22PitchToLily}
 				     %% set Lily grace note duration to quarter notes (4)
-				     "4 "}#"} "
+				     " "}#">4 "
 	    FirstChord = MyPitches#MyRoot#Rhythms.1#AddedSigns
 	 in
 	    if {Length Rhythms} == 1 % is tied chord?
 	    then FirstChord
-	       %% tied chord
+	       %% tied roots
 	    else FirstChord#{Out.listToVS {Map Rhythms.2
 					   fun {$ R} " ~ "#MyRoot#R end}
 			     " "}
