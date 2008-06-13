@@ -736,9 +736,11 @@ define
 	    Index = {Self getIndex($)}
 	    Transposition = {Self getTransposition($)}
 	    TranspRoot = {Self getRoot($)}
-	    TranspPCs = {Self getPitchClasses($)}
+	    TranspPCs_FS = {Self getPitchClasses($)}
+% 	    TranspPCs_FDs = {Self getPitchClasses_FDs($)}
 	    UntranspRoot = {Self getUntransposedRoot($)}
-	    UntranspPCs = {Self getUntransposedPitchClasses($)}
+	    UntranspPCs_FS = {Self getUntransposedPitchClasses($)}
+% 	    UntranspPCs_FDs = {Self getUntransposedPitchClasses_FDs($)}
 	 in
 	    %%
 	    %% init domains
@@ -746,28 +748,60 @@ define
 	    Index = {FD.int 1#{Width PCFSs}}
 	    Transposition = {DB.makePitchClassFDInt}
 	    TranspRoot = {DB.makePitchClassFDInt}	 
-	    TranspPCs = {FS.var.upperBound 0#{DB.getPitchesPerOctave}-1} 
+	    TranspPCs_FS = {FS.var.upperBound 0#{DB.getPitchesPerOctave}-1} 
 	    UntranspRoot = {DB.makePitchClassFDInt}
 	    %% constrain chord to be from ChordFSs (reduces domain according
 	    %% to the DB)
-	    UntranspPCs = {Select.fs PCFSs Index} 
+	    UntranspPCs_FS = {Select.fs PCFSs Index}
 	    %%
 	    %% further constraints (e.g. transposition constraints)
 	    %%
-	    {FS.card UntranspPCs} = {FS.card TranspPCs}
+	    {FS.card UntranspPCs_FS} = {FS.card TranspPCs_FS}
 	    %% set of roots must not be empty -- which value should UntranspRoot have otherwise?
 	    {FS.include UntranspRoot {Select.fs MyDB.roots Index}}
 	    {TransposePC UntranspRoot Transposition TranspRoot}
-	    thread			
+
+	    
+	    %% alternative try of transposition constraints with GUtils.intsToFS instead of FS.forAllIn and possibly re-use of the FD variables for other user constraints
+	    %% This approach seems to work as well, but the FD variables are not necessarily determined, so the hoped for additional use is not really there. 
+% 	    thread
+% 	       %% NOTE: completely blocks until cardiality of the chord is known. Can I do better (def FD.list variant expecting an FD int for length and returning a stream always as long as lower bound?)
+% 	       TranspPCs_FDs = {FD.list {FS.card UntranspPCs_FS}
+% 				0#{DB.getPitchesPerOctave}-1}
+% 	       UntranspPCs_FDs = {FD.list {FS.card UntranspPCs_FS}
+% 				  0#{DB.getPitchesPerOctave}-1}
+% 	       {GUtils.intsToFS TranspPCs_FDs TranspPCs_FS}
+% 	       {GUtils.intsToFS UntranspPCs_FDs UntranspPCs_FS}
+% 	       %% problem: very weak propagation, because order of PCs in my FDs vars is free and this order is never determined. 
+% 	       {ForAll {LUtils.matTrans [TranspPCs_FDs UntranspPCs_FDs]}
+% 		proc {$ [TranspPC UntranspPC]}
+% 		   {TransposePC UntranspPC Transposition TranspPC}
+% 		end}
+% 	    end
+
+	    
+	    %% NOTE: each of these two FS.forAllIn constraints only works one way (e.g., either from from UntranspPCs_FS to TranspPCs_FS or the other way round. Therefore, I need both constraints.
+	    %% Often, not both are needed, so this doubling is inefficient. But it is so far the best definition I came up with...
+	    thread
 	       %% maps immediately over all known set members but suspends then
-	       {FS.forAllIn UntranspPCs
-		proc {$ UnTranspPC}
+	       {FS.forAllIn UntranspPCs_FS
+		proc {$ UntranspPC}
 		   TranspPC = {DB.makePitchClassFDInt}
 		in
-		   {TransposePC UnTranspPC Transposition TranspPC}
-		   {FS.include TranspPC TranspPCs}
+		   {TransposePC UntranspPC Transposition TranspPC}
+		   {FS.include TranspPC TranspPCs_FS}
 		end}
 	    end
+	    thread
+	       {FS.forAllIn TranspPCs_FS
+		proc {$ TranspPC}
+		   UntranspPC = {DB.makePitchClassFDInt}
+		in
+		   {TransposePC UntranspPC Transposition TranspPC}
+		   {FS.include UntranspPC UntranspPCs_FS}
+		end}
+	    end
+	    
 	    %% constrain all dbFeatures of Self to their value dependent
 	    %% on the Self index in the Db
 	    {Record.forAllInd {Self getDBFeatures($)}
@@ -803,9 +837,11 @@ define
 	    index 		% param with FD int
 	    transposition	% param with FD int
 	    pitchClasses	% FS
+% 	    pitchClasses_FDs	% list of FD ints, contains same numbers as pitchClasses. Undetermined until cardiality of chord is known.
 	    root		% pitch param with FD int
 	    %% aux: not necessarily needed by user:
 	    untransposedPitchClasses % FS
+% 	    untransposedPitchClasses_FDs % list of FD ints, contains same numbers as untransposedPitchClasses. Undetermined until cardiality of chord is known.
 	    untransposedRoot	     % pitch param with FD int
 	    dbFeatures		     % record of constrained vars (FD or FS). Features of the record are symbols in init arg dbFeatures.
 	 meth init(index:Index<=_
@@ -813,7 +849,9 @@ define
 		   root:Root<=_
 		   untransposedRoot:UntranspRoot<=_
 		   pitchClasses:PitchClasses<=_
+% 		   pitchClasses_FDs:PitchClasses_FDs<=_
 		   untransposedPitchClasses:UntransposedPitchClasses<=_
+% 		   untransposedPitchClasses_FDs:UntransposedPitchClasses_FDs<=_
 		   dbFeatures:DBFeats<=nil % arg list of symbols
 		   ...) = M
 	    Score.temporalElement, {Record.subtractList M
@@ -830,7 +868,9 @@ define
 				 init(value:UntranspRoot info:untransposedRoot
 				      'unit':{DB.getPitchUnit})}
 	    @pitchClasses = PitchClasses
+% 	    @pitchClasses_FDs = PitchClasses_FDs
 	    @untransposedPitchClasses = UntransposedPitchClasses
+% 	    @untransposedPitchClasses_FDs = UntransposedPitchClasses_FDs
 	    @dbFeatures = {Record.make unit DBFeats}
 	    {self bilinkParameters([@index @transposition @root @untransposedRoot])} 
 	    %% init domains and implicit constraints
@@ -863,9 +903,15 @@ define
 	 meth getPitchClasses(?X)
 	    X = @pitchClasses
 	 end
+% 	 meth getPitchClasses_FDs(?X)
+% 	    X = @pitchClasses_FDs
+% 	 end
 	 meth getUntransposedPitchClasses(?X)
 	    X = @untransposedPitchClasses
 	 end
+% 	 meth getUntransposedPitchClasses_FDs(?X)
+% 	    X = @untransposedPitchClasses_FDs
+% 	 end
 	 /** %% Returns a record with the additional features defined in the database and 'announced' to self with the init argument dbFeatures.
 	 %% */
 	 meth getDBFeatures(?X)
