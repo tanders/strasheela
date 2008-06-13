@@ -1506,7 +1506,7 @@ define
       meth hasSuccessor(?B Container)
 	 B = {Not {self isLastItem($ Container)}}
       end
-      /** % Are all parameter values determined? NB: isDet can return false simply because constraint propagation did not finish to determine some parameter. So, for a fully determined score you may want to delay this test by a few milliseconds.
+      /** % Are all parameter values determined? NB: isDet can return false simply because constraint propagation did not finish to determine some parameter. You may want to use the method wait instead.
       % */
       meth isDet(?B)
 	 %% !! This check sometimes returns false if the score is
@@ -1518,7 +1518,7 @@ define
 	 B = {All {self getParameters($)}
 	      fun {$ X} {IsDet {X getValue($)}} end}
       end
-      /** %% Wait until all parameter values of self are determined. The only exception are parameters for which the optional arg Unless -- a boolean unary function -- returns true (per default, Unless always returns false).
+      /** %% Wait (blocks) until all parameter values of self are determined. The only exception are parameters for which the optional arg Unless -- a boolean unary function -- returns true (per default, Unless always returns false).
       %% */
       meth wait(unless:Unless<=fun {$ _} false end)
 	 {ForAll {self getParameters($)}
