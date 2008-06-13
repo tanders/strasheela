@@ -47,8 +47,8 @@ MyScale = {Score.makeScore
 	   scale(
 	      %% SELECT scale
 % 	      index:{HS.db.getScaleIndex 'standard pentachordal major'}
- 	      index:{HS.db.getScaleIndex 'static symmetrical major'}
-% 	      index:{HS.db.getScaleIndex 'dynamic symmetrical major'}
+% 	      index:{HS.db.getScaleIndex 'static symmetrical major'}
+ 	      index:{HS.db.getScaleIndex 'dynamic symmetrical major'}
 % 	      index:{HS.db.getScaleIndex 'standard pentachordal minor'}
 % 	      index:{HS.db.getScaleIndex 'static symmetrical minor'}
 % 	      index:{HS.db.getScaleIndex 'dynamic symmetrical minor'}
@@ -59,13 +59,14 @@ MyScale = {Score.makeScore
 %% */
 proc {MyScript ChordSeq}
    %% settings
-   N = 5			% number of chords
+   N = 6			% number of chords
    Dur = 2			% dur of each chord
    %% SELECT chords (for further chord names check the chord database in contributions/anders/ET22/source/DB.oz)
    %% only specified chord types are used 
    ChordIndices = {Map ['harmonic 7th'
 			'subharmonic 6th'
-			'augmented'
+			%% TODO: constraint: two augmented should not follow each other. BTW: how to resolve augmented?
+			 'augmented'
 		       ]
 		   HS.db.getChordIndex}
    %% create chord objects
@@ -86,10 +87,10 @@ in
 	       unit}
    %% Good chord root progression 
    {HS.rules.schoenberg.resolveDescendingProgressions Chords unit}
-   %% tmp: only ascending progressions
+   %% NOTE: no solution with only ascending progressions
 %   {Pattern.for2Neighbours Chords
 %    proc {$ C1 C2} {HS.rules.schoenberg.ascendingProgressionR C1 C2 1} end}
-   %% no super strong progression
+   %% NOTE: no solution with no super strong progression (with no scale and the given three chords)
 %   {Pattern.for2Neighbours Chords
 %    proc {$ C1 C2} {HS.rules.schoenberg.superstrongProgressionR C1 C2 0} end}
    %% First and last chords are equal (neither index nor transposition are distinct)
@@ -192,6 +193,13 @@ end
 {Browse {Width {HS.db.getEditChordDB}}}
 
 */
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%% Simply list all scales in a musical examples 
+%%
 
 
 
