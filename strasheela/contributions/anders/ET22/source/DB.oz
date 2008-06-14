@@ -138,10 +138,10 @@ define
 %				dissonanceDegree:2
 		     essentialPitchClasses:[4#1 5#1 6#1 10#3]
 		     comment:'minor 6th')  
-	       chord(pitchClasses:[4#1 5#1 6#1 10#3]
+	       chord(pitchClasses:[5#1 6#1 7#1 42#5]
 		     roots:[5#1]    
 %				dissonanceDegree:2
-		     essentialPitchClasses:[4#1 5#1 6#1 10#3]
+		     essentialPitchClasses:[5#1 6#1 7#1 42#5]
 		     comment:'subdiminished 7th (1)')  
 	       chord(pitchClasses:[1#7 1#6 1#5 7#30]
 		     roots:[1#7]    
@@ -149,18 +149,16 @@ define
 		     essentialPitchClasses:[1#7 1#6 1#5 7#30]
 		     comment:'subdiminished 7th (2)')
 	       %% alt name:
-	       %% 'French augmented'
-	       %% NOTE: in 22 ET, this chord equals to 'subminor 7th'
+	       %% 'major subdiminished subminor 7th'
+	       %% NOTE: in 22 ET, this chord equals to 'subminor 7th', even the root equals
 % 	       chord(pitchClasses:[4#1 5#1 40#7 50#7]
-% 		     roots:[4#1]    
-% %				dissonanceDegree:2
+% 		     roots:[4#1]   
 % 		     essentialPitchClasses:[4#1 5#1 40#7 50#7]
-% 		     comment:'major subdiminished')  
+% 		     comment:'')  
 	       chord(pitchClasses:[4#1 5#1 7#1 40#7]
 		     roots:[4#1]    
-%				dissonanceDegree:2
 		     essentialPitchClasses:[4#1 5#1 7#1 40#7]
-		     comment:'subminor 7th')
+		     comment:'French augmented 6th')
 	       %% alt names:
 	       %% 'major subminor 7th', 'German augmented 6th'
 	       chord(pitchClasses:[4#1 5#1 6#1 7#1]
@@ -298,11 +296,12 @@ define
    %% Note: as the ratios corresponding to these intervals are
    %% ambiguous, no (ratio-based) harmonicity measurements were taken.
 
-   Intervals = intervals(interval(interval:0 
+   %% for ratios see Erlich "Tuning, Tonality, and Twenty-Two-Tone Temperament"
+   Intervals = intervals(interval(interval:0 % 1#1
 				  % dissonanceDegree:0
 				 )
 			 %% quartertone
-			 interval(interval:1
+			 interval(interval:1 % 32#31
 				  % dissonanceDegree:0
 				 )
 			 interval(interval:2 % 16#15 18#17 17#16 15#14
@@ -311,58 +310,58 @@ define
 			 interval(interval:3 % 10#9 12#11 11#10
 				  % dissonanceDegree:0
 				 )
-			 interval(interval:4
+			 interval(interval:4 % 8#7 9#8 17#15 
 				  % dissonanceDegree:0
 				 )
-			 interval(interval:5
+			 interval(interval:5 % 7#6 20#17
 				  % dissonanceDegree:0
 				 )
-			 interval(interval:6
+			 interval(interval:6 % 6#5 17#14 11#9
 				  % dissonanceDegree:0
 				 )
-			 interval(interval:7
+			 interval(interval:7 % 5#4 
 				  % dissonanceDegree:0
 				 )
-			 interval(interval:8
+			 interval(interval:8 % 9#7 14#11 22#17
 				  % dissonanceDegree:0
 				 )
-			 interval(interval:9
+			 interval(interval:9 % 4#3 
 				  % dissonanceDegree:0
 				 )
-			 interval(interval:10
+			 interval(interval:10 % 11#8 15#11 
 				  % dissonanceDegree:0
 				 )
-			 interval(interval:11
+			 interval(interval:11 % 7#5 10#7 24#17 17#12 
 				  % dissonanceDegree:0
 				 )
-			 interval(interval:12
+			 interval(interval:12 % 16#11 22#15
 				  % dissonanceDegree:0
 				 )
-			 interval(interval:13
+			 interval(interval:13 % 3#2 
 				  % dissonanceDegree:0
 				 )
-			 interval(interval:14
+			 interval(interval:14 % 17#11 14#9 11#7
 				  % dissonanceDegree:0
 				 )
-			 interval(interval:15
+			 interval(interval:15 % 8#5
 				  % dissonanceDegree:0
 				 )
-			 interval(interval:16
+			 interval(interval:16 % 5#3 18#11 28#17
 				  % dissonanceDegree:0
 				 )
-			 interval(interval:17
+			 interval(interval:17 % 12#7 17#10
 				  % dissonanceDegree:0
 				 )
-			 interval(interval:18
+			 interval(interval:18 % 7#4 30#17 16#9
 				  % dissonanceDegree:0
 				 )
-			 interval(interval:19
+			 interval(interval:19 % 9#5 20#11 11#6
 				  % dissonanceDegree:0
 				 )
-			 interval(interval:20
+			 interval(interval:20 % 15#8 28#15 32#17 17#9 
 				  % dissonanceDegree:0
 				 )
-			 interval(interval:21
+			 interval(interval:21 %
 				  % dissonanceDegree:0
 				 )
 			)
