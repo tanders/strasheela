@@ -1161,7 +1161,7 @@ define
    /** %% [for clause definitions] Expects a pause object and returns a Lilypond rest (a VS).
    %% */
    fun {PauseToLily MyPause}
-      {LilyRest {MyPause getDurationInBeats($)}}
+      {LilyRest {MyPause getDurationInBeats($)}}#{GetUserLily MyPause}
    end
    
 
