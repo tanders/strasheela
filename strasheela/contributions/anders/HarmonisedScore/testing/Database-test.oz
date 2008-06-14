@@ -168,3 +168,89 @@ end
 
 {HS.db.pc2Ratios 53 {HS.dbs.partch.getIntervals 72}}
 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%% test: access scale/chord.interval name 
+%%
+
+declare
+[ET22] = {ModuleLink ['x-ozlib://anders/strasheela/ET22/ET22.ozf']}
+{HS.db.setDB ET22.db.fullDB}
+
+declare
+MyScale = {Score.makeScore
+	   scale(index:{HS.db.getScaleIndex 'standard pentachordal major'}
+		 transposition:{ET22.pc 'C'}
+		 %% duration should be determined
+		 duration:4
+		 startTime:0
+		 timeUnit:beats)
+	   unit(scale:HS.score.scale)}
+MyChord = {Score.makeScore
+	   chord(index:{HS.db.getChordIndex 'harmonic 7th'}
+		 transposition:{ET22.pc 'C'}
+		 %% duration should be determined
+		 duration:4
+		 startTime:0
+		 timeUnit:beats)
+	   unit(chord:HS.score.chord)}
+MyInterval = {Score.makeScore
+	      interval(pitchClass:{ET22.pc 'G'}
+		       octave:0
+		       direction:2)
+	      unit(interval:HS.score.interval)}
+
+
+{HS.db.getName MyScale}
+
+{HS.db.getName MyChord}
+
+
+{HS.db.getName MyInterval}
+
+
+%%%
+
+declare
+[ET31] = {ModuleLink ['x-ozlib://anders/strasheela/ET31/ET31.ozf']}
+{HS.db.setDB ET31.db.fullDB}
+
+
+declare
+MyScale = {Score.makeScore
+	   scale(index:{HS.db.getScaleIndex 'major'}
+		 transposition:{ET31.pc 'C'}
+		 %% duration should be determined
+		 duration:4
+		 startTime:0
+		 timeUnit:beats)
+	   unit(scale:HS.score.scale)}
+MyChord = {Score.makeScore
+	   chord(index:{HS.db.getChordIndex 'major'}
+		 transposition:{ET31.pc 'C'}
+		 %% duration should be determined
+		 duration:4
+		 startTime:0
+		 timeUnit:beats)
+	   unit(chord:HS.score.chord)}
+MyInterval = {Score.makeScore
+	      interval(pitchClass:{ET31.pc 'G'}
+		       octave:0
+		       direction:2)
+	      unit(interval:HS.score.interval)}
+
+
+{HS.db.getName MyScale}
+
+{HS.db.getName MyChord}
+
+
+{HS.db.getName MyInterval}
+
+
+
+
