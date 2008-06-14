@@ -546,7 +546,7 @@ define
 		   dbFeatures:DBFeats<=nil % arg list of symbols
 		   ...) = M
 	    Score.abstractElement, {Record.subtractList M
-				    [distance direction octave pitchClass dbFeatures]} 
+				    [index distance direction octave pitchClass dbFeatures]} 
 	    @index = {New Score.parameter init(value:Index info:index)}
 	    @distance = {New Score.parameter init(value:Dist info:distance)}
 	    @direction = {New Score.parameter init(value:Dir info:direction)}
