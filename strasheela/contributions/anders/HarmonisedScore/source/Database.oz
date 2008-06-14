@@ -37,6 +37,7 @@ import
    LUtils at 'x-ozlib://anders/strasheela/source/ListUtils.ozf'
    MUtils at 'x-ozlib://anders/strasheela/source/MusicUtils.ozf'
    Out at 'x-ozlib://anders/strasheela/source/Output.ozf'
+   HS_Score at 'Score.ozf'
    DBs at 'databases/Databases.ozf'
    
 export
@@ -57,7 +58,8 @@ export
 
    Pc2Ratios
 
-   GetChordIndex GetScaleIndex GetIntervalIndex 
+   GetChordIndex GetScaleIndex GetIntervalIndex
+   GetComment GetName
    
 define
 
@@ -596,6 +598,41 @@ define
        fun {$ X} X.comment.interval.ratio end}
    end
 
+
+   /** %% Expects a chord, scale or interval object and returns the comment value in its internal database format.
+   %% Blocks until the index parameter is determined.
+   %% */
+   fun {GetComment X}
+      if {HS_Score.isScale X}
+      then {GetInternalScaleDB}.comment.{X getIndex($)}
+      elseif {HS_Score.isChord X}
+      then {GetInternalChordDB}.comment.{X getIndex($)}
+      elseif {HS_Score.isInterval X}
+      then {GetInternalIntervalDB}.comment.{X getIndex($)}
+      else {Exception.raiseError
+	    strasheela(failedRequirement X "must be interval, chord or scale object")}
+	 unit			% never returned
+      end
+   end
+   /** %% Returns the name of a chord, scale or interval specified in its database entry (a VS, usually an atom). Returns nil if no name was found.
+   %% Blocks until the index parameter is determined.
+   %%
+   %% The name is often specified as an atom at the 'comment' feature of a database entry. Alternatively, the entry defines a record at the 'comment' feature, and then the name is the value at the feature 'comment' in this subrecord.
+   %% */
+   %% NOTE: not fully fail-proof if name is specified at other feature (e.g. some new feature 'name' within the comment record. But OK as long as database entries stick to the format above.
+   fun {GetName X}
+      Comment = {GetComment X}
+   in
+      %% note: name must be virtual string
+      if {IsRecord Comment} andthen {HasFeature Comment comment} andthen {IsVirtualString Comment.comment}
+      then Comment.comment 
+      elseif {IsVirtualString Comment} 
+      then Comment
+      else nil
+      end
+   end
+
+   
    
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
    
