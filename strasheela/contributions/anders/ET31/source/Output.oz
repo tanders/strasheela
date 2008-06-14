@@ -121,7 +121,7 @@ define
    
    local
       /** %% Transforms the pitch class MyPC into a ratio VS. Alternative ratio transformations are given (written like 1/2|1/3). If no transformation existists, 'n/a' is output.
-      %% NB: transformation uses the interval specs defined for 31 ET, but because as a temperament just intonation intervals are [ambigious] the returned ratio may be missleading.. 
+      %% NB: transformation uses the interval specs defined for 31 ET, but because as a temperament just intonation intervals are ambiguous the returned ratio may be missleading.. 
       %% */
       fun {PC2RatioVS MyPC}
 	 IntervalDB = DB.fullDB.intervalDB
