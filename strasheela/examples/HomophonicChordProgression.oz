@@ -74,7 +74,7 @@ sim(sim(seq(note+)   % soprano
     sim(seq(note+)   % tenor
 	seq(note+))  % bass
     seq(chord+)
-    %% NOTE: postpone modulation... if needed, refactor MyScript so that different scale  settings can be used
+    %% NOTE: postpone modulation... if needed, refactor HomophonicChordProgression so that different scale  settings can be used
     %% ?? howto express overlapping for neutralising? ?? Use sim container + an easy to use constructor used like seq creation but which allows for negative offsetTimes (no problem for determined offsetTimes..).
     % seq/sim(scale+)
    )
@@ -82,7 +82,7 @@ sim(sim(seq(note+)   % soprano
 */
 
 %% TODO: make some of the constraints controllable by args for flexibility
-proc {MyScript Args ?MyScore}
+proc {HomophonicChordProgression Args ?MyScore}
    Defaults = unit(n:7		% number of chords
 		   duration:2	% duration of each note and chord
 		   timeUnit:beats
@@ -360,9 +360,9 @@ end
 
 %% left-to-right strategy with breaking ties by type
 {GUtils.setRandomGeneratorSeed 0}
-{SDistro.exploreOne {GUtils.extendedScriptToScript MyScript
-		     unit(key:'D'#'major'
-			  n:13)}
+{SDistro.exploreOne {GUtils.extendedScriptToScript HomophonicChordProgression
+		     unit(key:'Bb'#'major'
+			  n:9)}
  {Adjoin HS.distro.leftToRight_TypewiseTieBreaking
   unit(value:random)}}
 
@@ -376,7 +376,7 @@ end
 
 %% left-to-right strategy with breaking ties by type
 {GUtils.setRandomGeneratorSeed 0}
-{SDistro.exploreOne {GUtils.extendedScriptToScript MyScript
+{SDistro.exploreOne {GUtils.extendedScriptToScript HomophonicChordProgression
 		     unit(key:'C'#'major'
 			  n:7)}
  {Adjoin HS.distro.leftToRight_TypewiseTieBreaking
@@ -385,7 +385,7 @@ end
 
 %% type-wise distro
 {GUtils.setRandomGeneratorSeed 0}
-{SDistro.exploreOne {GUtils.extendedScriptToScript MyScript
+{SDistro.exploreOne {GUtils.extendedScriptToScript HomophonicChordProgression
 		     unit(key:'C'#'major'
 			  n:7)}
  {Adjoin HS.distro.typewise
