@@ -106,6 +106,11 @@ declare
 %%
 
 proc {Canon MyScore}
+   %% Number of notes per voice
+   NoteNo1 = 17
+   NoteNo2 = 15
+   %% how much later does second voice start
+   OffsetTime = {List.last Durations}*2
    EndTime Voice1 Voice2
  in
    MyScore =
@@ -117,7 +122,7 @@ proc {Canon MyScore}
                     %% sequential object to which this arg handle
                     %% belongs
 		    handle:Voice1  
-		    items: {LUtils.collectN 17
+		    items: {LUtils.collectN NoteNo1
 			    %% LUtils.collectN returns a list of 17
 			    %% note specs with individual variables at the
 			    %% parameters duration and pitch
@@ -130,7 +135,7 @@ proc {Canon MyScore}
 		    %% Voice1 and Voice2 end at the same time (unified end times)
 		    endTime:EndTime)
 		seq(handle:Voice2
-		    items: {LUtils.collectN 15
+		    items: {LUtils.collectN NoteNo2
 			    fun {$}
 			       note(duration: {FD.int Durations}
 				    pitch: {FD.int 53#72}
@@ -138,7 +143,7 @@ proc {Canon MyScore}
 			    end}
 		    %% start of Voice2 is delayed by {List.last
 		    %% Durations}*2 (i.e. a semibreve)
-		    offsetTime:{List.last Durations}*2
+		    offsetTime:OffsetTime
 		    endTime:EndTime)]
 	startTime: 0 
 	timeUnit:beats(4))  % a beat has length 4 (i.e. 1 denotes a sixteenth note)
@@ -162,10 +167,12 @@ proc {Canon MyScore}
 		  proc {$ Note}
 		     {StartAndEndWithFundamental Note}
 		  end)}
+   {EndInPerfectConsonance Voice1 Voice2}
+   {EndWithContraryMotion Voice1 Voice2}
    {MaxAndMinPitchOnlyOnce Voice1} {MaxAndMinPitchOnlyOnce Voice2}
    {ConstraintDissonance Voice1 Voice2}
    {NoParallels Voice1 Voice2}
-   {IsCanon Voice1 Voice2}
+   {IsCanon Voice1 Voice2 unit(interval:0)}
 end
 
 %%
@@ -312,12 +319,39 @@ end
 proc {IsConsonanceR Note1 Note2 B}
    Pitch1 = {Note1 getPitch($)}
    Pitch2 = {Note2 getPitch($)}
-   Consonances = {FS.value.make [0 3 4 7 8 9 12 15 16]}
-      %Consonances = {FS.value.make [0 3 4 7 8 9 15 16]}	% alternative: no octave
+   % Consonances = {FS.value.make [0 3 4 7 8 9 12 15 16]}
+   Consonances = {FS.value.make [0 3 4 7 8 9 15 16]}	% alternative: no octave
    Interval = {FD.decl}
 in   
    {FD.distance Pitch1 Pitch2 '=:' Interval}
    {FS.reified.include Interval Consonances B}
+end
+proc {PerfectConsonance Note1 Note2}
+   Pitch1 = {Note1 getPitch($)}
+   Pitch2 = {Note2 getPitch($)}
+   Interval = {FD.int [0 7 12]}
+in   
+   {FD.distance Pitch1 Pitch2 '=:' Interval}
+end
+/** %% Interval of the last two notes (which I already know are simultaneous) is consonant. 
+%% */
+proc {EndInPerfectConsonance Voice1 Voice2}
+   {PerfectConsonance {List.last {Voice1 getItems($)}} {List.last {Voice2 getItems($)}}}
+end
+/** %% Cadence constraint surrogate: at least the voices should move into last interval by contrary motion.
+%% */
+proc {EndWithContraryMotion Voice1 Voice2}
+   fun {GetLastTwoNotes MyVoice}
+      {List.drop {MyVoice getItems($)} {Length {MyVoice getItems($)}}-2}
+   end
+   LastNotes1 = {GetLastTwoNotes Voice1}
+   Dir1 = {Pattern.direction {LastNotes1.1 getPitch($)} {LastNotes1.2.1 getPitch($)}}
+   LastNotes2 = {GetLastTwoNotes Voice2}
+   Dir2 = {Pattern.direction {LastNotes2.1 getPitch($)} {LastNotes2.2.1 getPitch($)}}
+in
+   Dir1 \=: Dir2
+   Dir1 \=: {Pattern.symbolToDirection '='}
+   Dir2 \=: {Pattern.symbolToDirection '='}
 end
 proc {IsPassingNoteR Note2 B}
    Pitch1 = {{Note2 getPredecessor($ {Note2 getTemporalAspect($)})}
@@ -392,15 +426,19 @@ in
 	end}
     end}
 end
-proc {IsCanon Voice1 Voice2}
-   %% The first CanonNo notes of each voice form a canon in a fifth
-   CanonNo = 10
+proc {IsCanon Voice1 Voice2 Args}
+   Defaults = unit(
+		 %% The first CanonNo notes of each voice form a canon in a fifth
+		 canonNo: 10
+		 %% Interval by which second voice is transposed
+		 interval:0)
+   As = {Adjoin Defaults Args}
 in
    for
-      Note1 in {List.take {Voice1 getItems($)} CanonNo}
-      Note2 in {List.take {Voice2 getItems($)} CanonNo}
+      Note1 in {List.take {Voice1 getItems($)} As.canonNo}
+      Note2 in {List.take {Voice2 getItems($)} As.canonNo}
    do
-      {Note1 getPitch($)} + 7 =: {Note2 getPitch($)}
+      {Note1 getPitch($)} + As.interval =: {Note2 getPitch($)}
       {Note1 getDuration($)} =: {Note2 getDuration($)}
    end
 end
@@ -431,12 +469,11 @@ end
 
 
 %% Randomised solution
+{GUtils.setRandomGeneratorSeed 0}
 {SDistro.exploreOne Canon
  unit(order:startTime
       value:random)}
 
-%% change random seed
-{GUtils.setRandomGeneratorSeed 0}
 
 
 */
