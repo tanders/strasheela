@@ -6,6 +6,7 @@ functor
 import
    OS Explorer
    Resolve
+  Browser(browse:Browse)
    
    %% !! tmp functor until next release with debugged Path of stdlib
    Path at 'x-ozlib://anders/tmp/Path/Path.ozf'
@@ -211,7 +212,7 @@ define
       %% Expects a Strasheela note object and returns the corresponding
       %% Lilypond code (a VS). For simplicity, this transformation does not
       %% support any expessions (e.g. fingering marks, or articulation
-      %% marks).
+      %% marks). You could add these nevertheless as lily info tag.
       fun {NoteEt22ToLily MyNote}
 	 {{Out.makeNoteToLily2
 	   fun {$ N} {ET22PitchToLily {N getPitch($)}} end
