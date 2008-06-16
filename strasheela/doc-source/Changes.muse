@@ -16,6 +16,7 @@
 
     - Added example examples/HomophonicChordProgression.oz
     - Added examples to HarmonicProgressions-31ET.oz: chord progression with 7-limit triads in septimal minor, chord progression in extended tonality with 7-limit tetrads, and chord progression with 7-limit tetrads forming a sequence (repetition of the sub-chord progressions at different pitches)
+    - Revised florid counterpoint example. For example, it now features a simple cadence rule, and solutions differ more. Also, some constraints can be modified more easily (e.g., by arguments or setting specific variables).
 
 
   - Fixes and minor changes
