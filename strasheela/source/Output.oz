@@ -1113,7 +1113,7 @@ define
       in
 	 if Rhythms == nil
 	 then ''
-	 else  
+	 else
 	    Pitch = {MakePitch Note}
 	    AddedSigns = {MakeAddedSigns Note}
 	    FirstNote = {ListToVS [{OffsetToLilyRest Note} " "
