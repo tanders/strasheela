@@ -50,6 +50,7 @@
     - ET22.db: fixed bug in chord database: subdiminished 7th chord was completely wrong. Also the chord 'French augmented 6th' was wrongly called 'subminor 7th' 
     - HS.db: added GetComment GetName
     - Out: Fixed lily bug: pause objects did not support lily info tag
+    - Added example examples/ShowHarmonicDatabases.oz
 
 
 
