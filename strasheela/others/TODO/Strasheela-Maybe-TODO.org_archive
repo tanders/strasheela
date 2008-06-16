@@ -1,0 +1,163 @@
+#    -*- mode: org -*-
+
+
+Archived entries from file /Users/t/oz/music/Strasheela/strasheela/trunk/strasheela/others/TODO/Strasheela-Maybe-TODO.org
+
+
+* DONE Schoenberg Harmony
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2008-05-27 Tue 19:14
+  :ARCHIVE_FILE: ~/oz/music/Strasheela/strasheela/trunk/strasheela/others/TODO/Strasheela-Maybe-TODO.org
+  :ARCHIVE_OLPATH: Strasheela examples
+  :ARCHIVE_CATEGORY: Strasheela
+  :ARCHIVE_ITAGS: MAYBE STRASHEELA
+  :END:
+
+  See 
+  [[file:~/oz/music/Strasheela/strasheela/trunk/strasheela/examples/HomophonicChordProgression.oz]]
+  [[file:~/oz/music/Strasheela/private/examples/Schoenberg/PlanningAndThinking/SchoenbergHarmony.oz]]
+  
+  
+  Implement subset of Schoenberg's Theory of Harmony
+  
+  see also
+  [[file:~/oz/music/Strasheela/private/examples/Schoenberg/PlanningAndThinking/SchoenbergHarmony.oz]]
+  
+** TODO Read my Schoenberg rule collection 
+
+   What important constraints are missing from this ruleset 
+  [[file:~/oz/music/Strasheela/private/examples/Schoenberg/PlanningAndThinking/SchoenbergHarmony.oz]]
+
+
+** TODO ?? Sopran keine Tonwiederholung?
+
+** TODO Allow for non-root inversion       
+
+   - rules on bass if 6/4
+
+
+** !! Constraint dissonance treatment
+
+   Easy alternative: add to database only whether chord is condissonant. In that case, root progression fourth up
+
+*** TODO Add dissonant pitch classes to ET31 chord database entries	
+
+    Do I need this for all entries at once?
+
+*** TODO Test: is FS of disonant pitch classes accessible in chord object	
+
+*** Constrain that dissonance is always prepared and resolved
+
+**** TODO Formalise this rule
+**** TODO Implement rule 	 
+
+
+** TODO Implement Minor       
+
+
+   - In case of major, all ScaleDegreeAccidentals must be neutral
+   
+   - In case of minor 
+     - Use ScaleDegreeNotes and just minor scale 
+     - The VI and VII ScaleDegreeAccidentals can be neutral or sharp
+     - Implement Schoenberg's [Wendepunktgesetze] on notes directly (not the chord objects)
+
+   -> with [Wendepunktgesetze], distribution stategy "first chords, then notes" will not work properly anymore -- likely needs left-to-right with ties broken by "type"  
+
+
+** TODO Implement modulation       
+
+   - scales parallel to chords and scales can overlap
+
+   - chords only contain pitch classes which are contained in *all* sim scales (neutral chords...)
+
+   - After "old" scale ends there happens a cadence (in the new scale)
+   - Alternative: after "old" scale ends the new scale is expressed [eindeutig] with chord which contains pitches which have not been in old scale (and which [eindeutig] express new scale)
+
+
+** ?? Restrict pitch doubling						 :MAYBE:
+
+   ?? Only octave (root) doubling
+
+     
+
+
+** DONE Stimmabstaende
+   CLOSED: [2008-05-22 Thu 21:16]
+
+   Zwischen Oberstimmen max octave abstand
+
+** DONE Create top-level def and music representation
+   CLOSED: [2008-05-22 Thu 19:21]
+
+
+   ET31 for enharmonic notation
+
+   Specify which chords to allow 
+   (or define chord database which is subset of the ET31 DB
+   
+
+** DONE constrain chords to diatonic chords       
+   CLOSED: [2008-05-22 Thu 19:21]
+
+   Specify scale 
+   Chords are only diatonic chords in this scale
+
+   ?? Can I make this optional
+   I would like to show: either diatonic or [wandernd]
+   -> is this relevant for this article. I can put this in an extra acticle
+
+   ?? Also, try to allow for modulations as an extension
+
+** DONE Copy constraints on chord sequence        
+   CLOSED: [2008-05-22 Thu 19:22]
+
+   Start with some exiting example in 
+   [[file:~/oz/music/Strasheela/strasheela/trunk/strasheela/examples/HarmonicProgressions-31ET.oz]]
+
+   e.g.,
+   - only ascending chord progressions
+   - end in cadence
+   - diatonic
+
+** DONE Copy Constrain "harmonisches Band bleibt liegen" and NoParallels      
+   CLOSED: [2008-05-22 Thu 19:22]
+
+   see [[file:~/oz/music/Strasheela/tmp.oz::proc%20CommonPitchesHeldOver%20C1%20C2%20NotePairs][file:~/oz/music/Strasheela/tmp.oz::proc CommonPitchesHeldOver C1 C2 NotePairs]]
+
+
+** DONE Add some simple melodic constraints        
+   CLOSED: [2008-05-22 Thu 19:23]
+
+   - ?? only step or small skip (up to fifth) in upper voices (larger skip in bass OK)
+   - ?? restrict total sum of melodic intervals between two chords to be lower than specified amount (except bass?)
+   - most melodic intervals should be steps (in particular in the soprano)
+   - no succession of melodic skips/leaps
+    
+
+
+** Old 
+
+*** TODO Add accompaniment figuration with prototype motif(s)        
+
+*** TODO Define/finetune suitable figuration prototype motif(s)        
+
+
+
+** Info
+
+   Constrained inaccessible context: harmonic context of notes 
+   Distribution strategies to test: first fail, left-to-right, order depending on parameter types 
+
+*** Nachdenken: 
+
+    Express chords with accompaniment figuration
+  
+    Why accompaniment figuration: 
+    - Avoid voice leading rules
+    - More realistic musical situation
+
+
+     ?? Could this be also Olle Romo's example?
+
+
