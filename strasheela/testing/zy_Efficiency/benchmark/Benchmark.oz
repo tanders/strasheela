@@ -23,7 +23,7 @@ import
 export
 
    TestRuntimes TestMemories
-   MakeFixedRecomputationSolver
+   MakeFixedRecomputationSolver SearchOne
 
    %% export for testing
    TestRuntime TestMemoryOnce TestMemory MakeGetHeapIncrement
@@ -212,16 +212,23 @@ define
       end
    end
 
-   /** %% [for convenience] Creates a depth-first search solver for fixed recomputation with the given RecomputationDistance.
+   /** %% [for convenience] Creates a depth-first search solver for fixed recomputation with the given RecomputationDistance. Solver always first initialises the random seed (so different search runs with random value ordering differ).
    %% */
    fun {MakeFixedRecomputationSolver RecomputationDistance}
       fun {$ MyScript Args}
+	 {GUtils.setRandomGeneratorSeed 0}
 	 {SDistro.searchOneDepth MyScript RecomputationDistance
 	  Args _}
       end
    end
 
    
+   /** %% Depth-first solver which first initialises the random seed (so different search runs with random value ordering differ).
+   %% */
+   fun {SearchOne MyScript Args}
+      {GUtils.setRandomGeneratorSeed 0}
+      {SDistro.searchOne MyScript Args}
+   end
    
 end
 
