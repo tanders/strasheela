@@ -2,7 +2,16 @@
 /** %% Defines databases for chords, scales and intervals in 22 equal temperament. 
 %% Internally, database entries are often defined by ratios (using notation X#Y for X/Y) to make them more comprehensible and portable to other temperaments. Alternatively, chords and scales are notated with conventional symbolic note names (see function PC). In any case, the databases focus on chords, scales and intervals which are close to just intonation in 22 ET.
 %%
-%% Please visit the source at ../source/DB.oz or browse/inspect the value of ET22.db.fullDB to read the actual databases. 
+%% The entries of these databases are show in common music notation in PDF files in the folder <a href="../doc-DB">../doc-DB</a>. For further details,please visit the source at ../source/DB.oz or browse/inspect the value of ET22.db.fullDB to read the actual databases.
+%%
+%% Note: some chords share the same pitch classes, but differ in their root. Nevertheless, these have different database entries, as they can also differ in other respects (e.g., different names, different set of 'essentialPitchClasses' or different set of 'dissonances'). The following chord pairs only differ in their root: 'minor 7th'/'minor 6th', 'subdiminished 7th (1)'/'subdiminished 7th (2)', 'subharmonic 6th'/'half subdiminished 7th', 'subminor 7th'/'supermajor 6th', 'subminor 7th suspended 4th'/'supermajor 6th suspended 2nd'
+%%
+%% Note: some chords are subsets of others. These are listed in the following, using < to denote subset relations.
+%% 'major' < 'harmonic 7th no 5' < 'harmonic 7th' < 'harmonic 9th', ....
+%% [there are more, which are not yet listed here]
+%%
+%% Note: most chords have names, and their index can be generated with {HS.db.getChordIndex 'my name'}. Yet, some are without names and can only be referred to via their index.
+%%
 %% */
 
 
@@ -137,7 +146,8 @@ define
 		     roots:[4#1]    
 %				dissonanceDegree:2
 		     essentialPitchClasses:[4#1 5#1 6#1 10#3]
-		     comment:'minor 6th')  
+		     comment:'minor 6th')
+	       %% same as 'subdiminished 7th (2)', only root differs
 	       chord(pitchClasses:[5#1 6#1 7#1 42#5]
 		     roots:[5#1]    
 %				dissonanceDegree:2
@@ -168,6 +178,7 @@ define
 		     comment:'harmonic 7th')
 	       %% alt names:
 	       %% 'minor supermajor 6th', 'minor diminished 7th'
+	       %% same as 'half subdiminished 7th', only root differs
 	       chord(pitchClasses:[1#4 1#5 1#6 2#7]
 		     roots:[1#6]    
 %				dissonanceDegree:2
@@ -216,7 +227,13 @@ define
 		     roots:[4#1]    
 %				dissonanceDegree:2
 		     essentialPitchClasses:[16#3 4#1 6#1 7#1]
-		     comment:'subminor 7th suspended 4th')  
+		     comment:'subminor 7th suspended 4th')
+	       %% following is same as above
+% 	       chord(pitchClasses:[4#1 6#1 7#1 21#4]
+% 		     roots:[4#1]    
+% %				dissonanceDegree:2
+% 		     essentialPitchClasses:[4#1 6#1 7#1 21#4]
+% 		     comment:'subminor 7th suspended 4th (2)')  
 	       chord(pitchClasses:[1#6 1#4 3#16 2#7]
 		     roots:[1#6]    
 %				dissonanceDegree:2
