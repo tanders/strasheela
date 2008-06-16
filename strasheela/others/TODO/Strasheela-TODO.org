@@ -836,7 +836,7 @@ From this viewpoint, there is an interesting polarity between major and harmonic
      Quick solution before I have this extension: restrict to chord indices with max number of pitches (e.g., no triads which are contained in tetrads)
 
 **** TODO Add feature 'otonal/utonal'
-**** TODO ?? Add silent roots (e.g., 5:6:7 and 6:7:9 both have silent root 4)
+**** TODO ?? Add fundamentals / prime (e.g., 5:6:7 and 6:7:9 both have prime 4)
 
 **** TODO decide: shall I combine siblings which only differ in root into single chord: constraining chord index, e.g., with Morphology constraints may make more sense then. 
 
@@ -865,6 +865,7 @@ From this viewpoint, there is an interesting polarity between major and harmonic
      I simply removed the fifth in common chords. But some may be wrong, and many chords I left as they are for now.  
 
      I should play each chord on a scale instrument, and compare full pitch class set and essential pitch class set. 
+
 
 *** Scale database							 :MAYBE:
 
