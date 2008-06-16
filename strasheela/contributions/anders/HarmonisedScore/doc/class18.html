@@ -59,21 +59,22 @@ document.write('<div id="slidemenubar2" style="left:-144" onMouseover="pull()" o
 </script>
 <layer id="slidemenubar" onMouseover="pull()" onMouseout="draw()">
 <table border="0" cellpadding="0" cellspacing="0" width="161"><tr><td bgcolor="#009cff" width="144"><a href="index.html">Index</a>
-</td><td rowspan="16" valign="top" width="16"><img src="menu.gif" width="16"></td></tr><tr><td bgcolor="#009cff" width="144"><a href="node1.html">HarmonisedScore</a>
+</td><td rowspan="17" valign="top" width="16"><img src="menu.gif" width="16"></td></tr><tr><td bgcolor="#009cff" width="144"><a href="node1.html">HarmonisedScore</a>
 </td></tr><tr><td bgcolor="#009cff" width="144"><a href="node2.html">DB</a>
-</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node3.html">Score</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node3.html">HSScore</a>
 </td></tr><tr><td bgcolor="#009cff" width="144"><a href="node4.html">Rules</a>
 </td></tr><tr><td bgcolor="#009cff" width="144"><a href="node5.html">DBs</a>
-</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node6.html">Schoenberg</a>
-</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node7.html">Default</a>
-</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node8.html">Jazz</a>
-</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node9.html">Partch</a>
-</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node10.html">Johnston</a>
-</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node11.html">Harrison</a>
-</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node12.html">Chalmers</a>
-</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node13.html">Catler</a>
-</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node14.html">ArithmeticalSeriesChords</a>
-</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node15.html">HS</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node6.html">Distro</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node7.html">Schoenberg</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node8.html">Default</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node9.html">Jazz</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node10.html">Partch</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node11.html">Johnston</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node12.html">Harrison</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node13.html">Chalmers</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node14.html">Catler</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node15.html">ArithmeticalSeriesChords</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node16.html">HS</a>
 </td></tr></table></layer>
 <script language="JavaScript1.2">
 function regenerate(){
@@ -128,11 +129,11 @@ clearInterval(drawit)
            |
            |
            |
-  <a class="pre" href="node3.html#entity100">PitchClassCollection</a>
+  <a class="pre" href="node3.html#entity108">PitchClassCollection</a>
            |
            |
            |
-         <a class="pre" href="node3.html#entity104">Scale</a>
+         <a class="pre" href="node3.html#entity112">Scale</a>
 </pre>
 <hr><p class="margin"><div align="right">class definition</div></p>
 <code>
@@ -220,8 +221,8 @@ clearInterval(drawit)
 
 
 </tr></table>
-<span class="string"> The parameter 'index' is included if it is undetermined, but it is omitted in case both the set of pitch classes and the transposition are determined. If the index is determined, then the set of pitch classes plus the transposition should be sufficient and the index can be derived from them. Omitting the index makes archived score solutions more stable. Even if the chord/scale database was edited  later (e.g., chords were added) so that the indices changed, the archived score will still work as long as the set of pitch classes for the original chords did not change.<BR>
- In principle, it is possible that there are two chords with the same pitchclasses and transposition but different index and different additional db features. However, that should be considered a bug in the database. In case alternative db feature values for a single chord/scale are needed, then these should be defined as variable domain values for a single db entry, not as additional entries.  <BR>
+<span class="string"> The parameter 'index' is included if it is undetermined, but it is omitted in case the set of pitch classes, the transposition, and the index are determined. If the index is determined, then the set of pitch classes plus the transposition should be sufficient and the index can be derived from them. Omitting the index makes archived score solutions more stable. Even if the chord/scale database was edited  later (e.g., chords were added) so that the indices changed, the archived score will still work as long as the set of pitch classes for the original chords did not change.<BR>
+ In principle, it is possible that there are two chords with the same pitchclasses and transposition but different additional db features. However, that should be considered a bug in the database. In case alternative db feature values for a single chord/scale are needed, then these should be defined as variable domain values for a single db entry, not as additional entries.  <BR>
 <BR>
 </span>
 </li><li><span class="functionname">getPitchClasses</span>(X)<br>

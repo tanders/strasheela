@@ -119,7 +119,7 @@ clearInterval(drawit)
 <span class="string"> This functor defines abstractions for constraining the musical form. The fundamental idea here is the motif prototype concept. A motif prototype is a Strasheela score object (e.g., a container containing a few notes) which serves as a blueprint for motif instances in the final score. The motif prototype is usually fully determined (although this is not necessary, see MakeScript documentation). From this prototype, an extended script is created using the procedure MakeScript. This extended script expects some arguments and returns a motif instance which is similar to the prototype. For example, the rhythmical structure may be the same in the prototype and all motif instances, the actual pitches differ, but the pitch contour is also the same. In which way the prototype and the motif instances are similar is defined by the user, see the documentation of MakeScript for details. <BR>
  In general, an extended script is a function which expects some arguments and returns a score object to which constraints are applied. With the help of GUtils.extendedScriptToScript, an extended script can be directly given to the Strasheela solvers exported by SDistro. Alternatively, the exteneded script can be used inside a script to create a part of the final score. See the examples for both such uses.  <BR>
 <BR>
- Strasheela already defines another motif model (contributions/anders/Motif). Theses are the differences between the two motif models.<BR>
+ Strasheela already defines another motif model (contributions/anders/Motif). These are the differences between the two motif models.<BR>
 <BR>
  Advantages of the prototype-based motif model: The charateristic features of motifs are conveniently defined in the model by giving examples (the prototypes). In the [older] motif model, these features are defined in a more abstract way (although an extension of the older model might also allow defining these features by way of examples). Moreover, different motif instances in the same CSP can differ in their score topology in the prototype-based model (e.g., a melodic motif might be expressed as a sequential container with notes, whereas a chordal motif might additionally use simultaneous containers). This is not possible in the [older] motif model. In general, a hierarchically nested score is more easily defined in the prototype-based model. Also, additional score information (e.g., sound synthesis details such as continuos controllers or timing functions, both expressable by fenvs) which are shared by all motif instances are added conveniently in this model. <BR>
 <BR>
@@ -133,24 +133,24 @@ clearInterval(drawit)
 <h3>Functor</h3>
 <ul>PrototypeMotif ("<span class="string">PrototypeMotif.oz</span>")<br></ul>
 <h3>Import</h3>
-<code><ul><li>FD</li><li>GUtils at "<span class="string">x-ozlib://anders/strasheela/source/GeneralUtils.ozf"
+<code><ul><li>FD</li><li>Browser(browse:Browse)</li><li>GUtils at "<span class="string">x-ozlib://anders/strasheela/source/GeneralUtils.ozf"
 </span></li><li>LUtils at "<span class="string">x-ozlib://anders/strasheela/source/ListUtils.ozf"
 </span></li><li>Score at "<span class="string">x-ozlib://anders/strasheela/source/ScoreCore.ozf"
 </span></li><li>SMapping at "<span class="string">x-ozlib://anders/strasheela/source/ScoreMapping.ozf"
 </span></li><li>Pattern at "<span class="string">x-ozlib://anders/strasheela/Pattern/Pattern.ozf"
 </span></li></ul></code>
 <h3>Export</h3>
-<code><ul><li>&lt;P/3:<a href="#entity7"><span class="functionname">MakeScript</span></a>&gt;
-</li><li>&lt;P/3:<a href="#entity8"><span class="functionname">NestedScript</span></a>&gt;
-</li><li>&lt;P/2:<a href="#entity9"><span class="functionname">ChoiceScript</span></a>&gt;
-</li><li>&lt;P/2:<a href="#entity10"><span class="functionname">UnifyDependency</span></a>&gt;
-</li><li>&lt;P/2:<a href="#entity11"><span class="functionname">GetFirstNote</span></a>&gt;
-</li><li>&lt;P/2:<a href="#entity12"><span class="functionname">GetHighestPitch</span></a>&gt;
+<code><ul><li>&lt;P/3:<a href="#entity8"><span class="functionname">MakeScript</span></a>&gt;
+</li><li>&lt;P/3:<a href="#entity9"><span class="functionname">NestedScript</span></a>&gt;
+</li><li>&lt;P/3:<a href="#entity10"><span class="functionname">ChoiceScript</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity11"><span class="functionname">UnifyDependency</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity12"><span class="functionname">GetFirstNote</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity13"><span class="functionname">GetHighestPitch</span></a>&gt;
 </li></ul></code>
 <h3>Define</h3>
 
 <code>
-<a name="entity7">
+<a name="entity8">
 <span class="keyword">proc</span>{<span class="functionname">MakeScript</span> MyProto Args MyScript}<br>
 <span class="string"> MakeScript returns a (sub)-CSP for creating motif instances similar to a given prototype. MakeScript expects a prototype motif MyProto (a score object, usually a container with other score objects) and some optional arguments. MakeScript returns an extended script, that is a binary procedure with the interface {MyScript Args MyScore} (for details see GUtils.extendedScriptToScript). <BR>
  The returned script expects the following optional arguments. 'initScore' (defaults to false) specifies whether the resulting score is fully initialised implicitly. Ignore this argument if the returned motif instance is nested into other containers and that way only a part of a score, but set it to true if the returned motif instance is the full score (e.g., for testing). For further details on score initialisation see Score.initScore.<BR>
@@ -167,10 +167,10 @@ clearInterval(drawit)
  'prototypeDependencies': this argument defines constraints between 'unset' variables of the resulting motif instance and the prototype. The argument expects a list of pairs TestI#ConstraintI. TestI is a Boolean function or method. ConstraintI is a procedure with the interface {$ MyPrototype MyInstance} which expects the motif protoype and the motif instance returned by the script as arguments. The following dummy example dependency constrains all motif instance pitches to be higher than their corresponding prototype pitch.<BR>
 <BR>
    prototypeDependencies: [isNote#proc {$ Proto Inst}<BR>
-				     {Proto getPitch($)} = {Inst getPitch($)}<BR>
+				     {Proto getPitch($)} <: {Inst getPitch($)}<BR>
 				  end]<BR>
 <BR>
- NB: 'prototypeDependencies' (currently) requires that the protytype and the motif instance have the same score topology including the same number of score objects. <BR>
+ NB: 'prototypeDependencies' (currently) requires that the protytype and the motif instance have the same score topology, i.e. method collect with given Test must return corresponding objects (if the protytype and the motif instance differ in the number of score objects, then score objects can only be removed at the end -- score objects returned by collect for both prototype and motif instance must still correspond).<BR>
 <BR>
 <BR>
  'constraints': this argument defines additional constraints applied to the resulting motif instance. It expects a list of pairs TestI # ConstraintI. TestI is a Boolean function or method. ConstraintI is a procedure with the interface {$ MyInstance} which expects the motif instance. The following example constraints the domain of all notes in the motif.<BR>
@@ -195,7 +195,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity8">
+<a name="entity9">
 <span class="keyword">proc</span>{<span class="functionname">NestedScript</span> MyTextScore Args MyScript}<br>
 <span class="string"> NestedScript returns a (sub)-CSP for creating nested motif instances which consist in multiple sub-motifs. NestedScript expects a score MyTextScore and some optional arguments. MyTextScore is a textual score (a record) which specifies the motif score topology. MyTextScore typically contains motif instance declations created with MakeScript or other NestedScript calls. Note that NestedScript expects a score in textual format, in contrast to MakeScript which expects a score object. MakeScript returns an extended script, that is a binary procedure with the interface {MyScript Args MyScore} (for details see GUtils.extendedScriptToScript).<BR>
  The returned script expects the following optional arguments. The argument 'initScore' (defaults to false) specifies whether the resulting score is fully initialised implicitly. Ignore this argument if the returned motif instance is nested into other containers and that way only a part of a score, but set it to true if the returned motif instance is the full score (e.g., for testing). For further details on score initialisation see Score.initScore.<BR>
@@ -225,18 +225,20 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity9">
-<span class="keyword">proc</span>{<span class="functionname">ChoiceScript</span> Scripts MyScript}<br>
-<span class="string"> Expects Scripts, a record of extended scripts, and returns a new extended script by which one of the scripts in Scripts can be selected. The new script expects all arguments of the scripts in Scripts and an additional optional argument 'choose' expecting a feature of Scripts. The corresponding script will then be selected. The arg 'choose' defaults to the first script in Scripts (first of its arity).<BR>
- It is recommended that all scripts in Scripts expect the same arguments, so that the arguments of the returned script don't depend on the value of its arg 'choose'.<BR>
+<a name="entity10">
+<span class="keyword">proc</span>{<span class="functionname">ChoiceScript</span> Scripts ChoiceArgs MyScript}<br>
+<span class="string"> Expects Scripts, a record of extended scripts, and returns a new extended script by which one of the scripts in Scripts can be selected. The new script expects all arguments of the scripts in Scripts and an additional optional argument. The name of this additional argument is set by the ChoiceArgs feature choiceArg. ChoiceArgs default is<BR>
+   unit(choiceArg:choose)<BR>
+ The additional argument itself defaults to the first script in Scripts (first of its arity).<BR>
+ It is recommended that all scripts in Scripts expect the same arguments, so that the arguments of the returned script don't depend on the selected script.<BR>
 <BR>
 </span>
 </code><br>
 
 <code>
-<a name="entity10">
+<a name="entity11">
 <span class="keyword">fun</span>{<span class="functionname">UnifyDependency</span> Fn}<br>
-<span class="string"> Function for the convenient definition of dependency between motif instance and prototype. The unary function Fn is applied to the prototype and the motif instance and the results are unified. The following example is a pair given to the MakeScript argument prototypeDependencies which constrains that the prototype and the motif instance feature the same pitch contour. <BR>
+<span class="string"> [convenience definition] Function for defining a dependency between a motif instance and a prototype. The unary function Fn is applied to the prototype and the motif instance and the results are unified. The following example is a pair given to the MakeScript argument prototypeDependencies which constrains that the prototype and the motif instance feature the same pitch contour. <BR>
 <BR>
    prototypeDependencies:<BR>
       [isContainer#{PM.unifyDependency<BR>
@@ -246,17 +248,17 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity11">
+<a name="entity12">
 <span class="keyword">fun</span>{<span class="functionname">GetFirstNote</span> MyMotif}<br>
-<span class="string"> Expects a motif instance and returns the first note contained, regardless of nesting depth (returns the first note returned by the collect method).  <BR>
+<span class="string"> [convenience definition] Expects a motif instance and returns the first note contained, regardless of nesting depth (returns the first note returned by the collect method).  <BR>
 <BR>
 </span>
 </code><br>
 
 <code>
-<a name="entity12">
+<a name="entity13">
 <span class="keyword">proc</span>{<span class="functionname">GetHighestPitch</span> MyMotif MaxPitch}<br>
-<span class="string"> Expects a motif instance and returns the pitch of the highest motif note (regardless of nesting depth).<BR>
+<span class="string"> [convenience definition] Expects a motif instance and returns the pitch of the highest motif note (regardless of nesting depth).<BR>
 <BR>
 </span>
 </code><br>

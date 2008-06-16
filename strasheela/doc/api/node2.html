@@ -158,9 +158,10 @@ clearInterval(drawit)
 </li><li>&lt;P/1:<a href="#entity51"><span class="functionname">SetTuningTable</span></a>&gt;
 </li><li>&lt;P/0:<a href="#entity52"><span class="functionname">UnsetTuningTable</span></a>&gt;
 </li><li>&lt;P/1:<a href="#entity53"><span class="functionname">GetTuningTable</span></a>&gt;
-</li><li>&lt;P/0:<a href="#entity54"><span class="functionname">AddExplorerOuts_Standard</span></a>&gt;
-</li><li>&lt;P/0:<a href="#entity55"><span class="functionname">AddExplorerOuts_Extended</span></a>&gt;
-</li><li>&lt;P/0:<a href="#entity56"><span class="functionname">AddIOzSeFOuts</span></a>&gt;
+</li><li>&lt;P/1:<a href="#entity54"><span class="functionname">SetMaxLilyRhythm</span></a>&gt;
+</li><li>&lt;P/0:<a href="#entity55"><span class="functionname">AddExplorerOuts_Standard</span></a>&gt;
+</li><li>&lt;P/0:<a href="#entity56"><span class="functionname">AddExplorerOuts_Extended</span></a>&gt;
+</li><li>&lt;P/0:<a href="#entity57"><span class="functionname">AddIOzSeFOuts</span></a>&gt;
 </li><li><span class="variablename">StrasheelaSourceDir</span>
 </li><li><span class="variablename">StrasheelaInstallDir</span>
 </li></ul></code>
@@ -273,6 +274,17 @@ clearInterval(drawit)
 
 <code>
 <a name="entity54">
+<span class="keyword">proc</span>{<span class="functionname">SetMaxLilyRhythm</span> Dur}<br>
+<span class="string"> When outputting a Lilypond file, Strasheela automatically splits very long notes (or other score objects notated by notes such as chords or scales) into multiple notes connected by ties. The maximum duration notated by a single note can be set with this porcedure. Dur is a float measured in quarternotes. For example, 2.0 indicates a halve note and 0.5 an eighth note. The maximum duration supported by Lilypond is a longa (16.0). The default is 4.0 (a whole note).<BR>
+ It is recommended to set Dur to the length of your bars (e.g., 4.0 for 4/4).<BR>
+<BR>
+ Note: this definition is an alias for Out.setMaxLilyRhythm.<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity55">
 <span class="keyword">proc</span>{<span class="functionname">AddExplorerOuts_Standard</span> }<br>
 <span class="string"> Extends the Explorer menu "Notes -> Information Action" by a few entries to output scores into various formats just by clicking the solution nodes in the Explorer.<BR>
  This procedure adds standard output formats like Csound, Lilypond, and MIDI.<BR>
@@ -281,7 +293,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity55">
+<a name="entity56">
 <span class="keyword">proc</span>{<span class="functionname">AddExplorerOuts_Extended</span> }<br>
 <span class="string"> Extends the Explorer menu "Notes -> Information Action" by a few entries to output scores into various formats just by clicking the solution nodes in the Explorer. <BR>
  This procedure complements the formats of AddExplorerOuts_Standard by further formats like ENP and Fomus.<BR>
@@ -292,7 +304,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity56">
+<a name="entity57">
 <span class="keyword">proc</span>{<span class="functionname">AddIOzSeFOuts</span> }<br>
 <span class="string"> Extends the IOzSeF menu "Options -> Information Action" by a few entries to output scores into various formats just by clicking the solution nodes in the Explorer. This procedure adds standard output formats like Csound, Lilypond, and MIDI, as well as further formats like ENP and Fomus.<BR>
 <BR>

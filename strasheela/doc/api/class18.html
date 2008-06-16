@@ -120,31 +120,31 @@ clearInterval(drawit)
 
 <div style="margin-left:160px"><p align="right" class="margin"><div align="right">inheritance tree</div></p>
 <pre>
- <a class="pre" href="node6.html#entity236">NonType</a> <a class="pre" href="node6.html#entity237">Reflection</a>         <a class="pre" href="node7.html#entity316">FlagsMixin</a>
+ <a class="pre" href="node6.html#entity243">NonType</a> <a class="pre" href="node6.html#entity244">Reflection</a>         <a class="pre" href="node7.html#entity323">FlagsMixin</a>
     |        |                  |
     `-----+--'                  |
           |                     |
-     <a class="pre" href="node6.html#entity238">ScoreObject</a>    <a class="pre" href="node7.html#entity317">ScoreMapping.mappingMixin</a>
+     <a class="pre" href="node6.html#entity245">ScoreObject</a>    <a class="pre" href="node7.html#entity324">ScoreMapping.mappingMixin</a>
           |                     |
           `-----------+---------'
                       |
-                     <a class="pre" href="node6.html#entity249">Item</a>
+                     <a class="pre" href="node6.html#entity256">Item</a>
                       |
                       `+
                        |
-                   <a class="pre" href="node6.html#entity250">Container</a>
+                   <a class="pre" href="node6.html#entity257">Container</a>
                        |
                       +'
                       |
-                    <a class="pre" href="node6.html#entity252">Aspect</a>                    <a class="pre" href="node6.html#entity239">TimeMixin</a>
+                    <a class="pre" href="node6.html#entity259">Aspect</a>                    <a class="pre" href="node6.html#entity246">TimeMixin</a>
                       |                           |
                       `----+----------------------'
                            |
-                     <a class="pre" href="node6.html#entity253">TemporalAspect</a>
+                     <a class="pre" href="node6.html#entity260">TemporalAspect</a>
                            |
                            |
                            |
-                       <a class="pre" href="node6.html#entity254">Sequential</a>
+                       <a class="pre" href="node6.html#entity261">Sequential</a>
 </pre>
 <hr><p class="margin"><div align="right">class definition</div></p>
 <code>
@@ -416,6 +416,18 @@ clearInterval(drawit)
 
 </tr></table>
 <span class="string"> Returns the first direct parameter of self which fulfils the boolean function or method Test.<BR>
+<BR>
+</span>
+</li><li><span class="functionname">findSimultaneousItem</span>(X test:Test)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> [Deterministic method] Returns the first score object found which is simultaneous to self and fulfilling the optional boolean function or method test.<BR>
+ The implementation uses LUtils.cFind and the reified constraints method isSimultaneousItemR. X is return as soon as the score contains enough information to tell for any score object that it is simultaneous to self (i.e. rhythmic structure of the whole score must not necessarily be fully determined). <BR>
 <BR>
 </span>
 </li><li><span class="functionname">forAll</span>(Proc excludeSelf:ExcludeSelf level:Level mode:Mode test:Test)<br>
@@ -886,8 +898,8 @@ clearInterval(drawit)
 
 
 </tr></table>
-<span class="string"> [Deterministic method] Returns list of score objects simultaneous to self and fulfilling the optional boolean function or method test. (method uses deterministic method isSimultaneousItem)<BR>
- NB: getSimultaneousItems suspends until the rhythmic structure of the whole score self is contained in is fully determined.<BR>
+<span class="string"> [Deterministic method] Returns list of score objects simultaneous to self and fulfilling the optional boolean function or method test.<BR>
+ The implementation uses LUtils.cFilter and the reified constraints method isSimultaneousItemR. Items are returned as soon as the score contains enough information for all score objects in the score to tell whether or not their are simultaneous to self (i.e. rhythmic structure of the whole score must not necessarily be fully determined). <BR>
 <BR>
 </span>
 </li><li><span class="functionname">getStartTime</span>(X)<br>
@@ -1192,7 +1204,7 @@ clearInterval(drawit)
 
 </tr></table>
 <span class="string"></span>
-</li><li><span class="functionname">isDet</span>(B)<br>
+</li><li><span class="functionname">isDet</span>($)<br>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
 
@@ -1200,7 +1212,7 @@ clearInterval(drawit)
 
 
 </tr></table>
-<span class="string"> Are all parameter values determined? NB: isDet can return false simply because constraint propagation did not finish to determine some parameter. So, for a fully determined score you may want to delay this test by a few milliseconds.<BR>
+<span class="string"> Are all parameter values determined, including nested score objects? NB: isDet can return false simply because constraint propagation did not finish to determine some parameter. You may want to use the method wait instead.<BR>
 <BR>
 </span>
 </li><li><span class="functionname">isElement</span>(B)<br>

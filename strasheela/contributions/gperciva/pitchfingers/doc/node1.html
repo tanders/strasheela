@@ -126,32 +126,32 @@ clearInterval(drawit)
 </span></li><li>Pattern at "<span class="string">x-ozlib://anders/strasheela/Pattern/Pattern.ozf"
 </span></li><li>Score at "<span class="string">x-ozlib://anders/strasheela/source/ScoreCore.ozf"
 </span></li><li>Out at "<span class="string">x-ozlib://anders/strasheela/source/Output.ozf"
-</span></li><li>Browser(browse:Browse)</li></ul></code>
+</span></li></ul></code>
 <h3>Export</h3>
-<code><ul><li>setup:&lt;P/5:<a href="#entity7"><span class="functionname">Setup</span></a>&gt;
-</li><li>toScore:&lt;P/3:<a href="#entity8"><span class="functionname">ToScore</span></a>&gt;
-</li><li>toScoreDouble:&lt;P/3:<a href="#entity9"><span class="functionname">ToScoreDouble</span></a>&gt;
-</li><li>writeLilyFile:&lt;P/2:<a href="#entity10"><span class="functionname">WriteLilyFile</span></a>&gt;
+<code><ul><li>setup:&lt;P/5:<a href="#entity6"><span class="functionname">Setup</span></a>&gt;
+</li><li>toScore:&lt;P/4:<a href="#entity7"><span class="functionname">ToScore</span></a>&gt;
+</li><li>toScoreDouble:&lt;P/4:<a href="#entity8"><span class="functionname">ToScoreDouble</span></a>&gt;
+</li><li>writeLilyFile:&lt;P/2:<a href="#entity9"><span class="functionname">WriteLilyFile</span></a>&gt;
 </li></ul></code>
 <h3>Define</h3>
 
 <code>
-<a name="entity7">
+<a name="entity6">
 <span class="keyword">proc</span>{<span class="functionname">Setup</span> NumNotes Pitches Strings Positions Fingers}
 </code><br>
 
 <code>
+<a name="entity7">
+<span class="keyword">proc</span>{<span class="functionname">ToScore</span> Pitches Fingers Lily ScoreInstance}
+</code><br>
+
+<code>
 <a name="entity8">
-<span class="keyword">proc</span>{<span class="functionname">ToScore</span> Pitches Lily ScoreInstance}
+<span class="keyword">proc</span>{<span class="functionname">ToScoreDouble</span> Pitches Fingers Lily ScoreInstance}
 </code><br>
 
 <code>
 <a name="entity9">
-<span class="keyword">proc</span>{<span class="functionname">ToScoreDouble</span> Pitches Lily ScoreInstance}
-</code><br>
-
-<code>
-<a name="entity10">
 <span class="keyword">proc</span>{<span class="functionname">WriteLilyFile</span> BaseFilename MyScore}
 </code><br>
 <h3>End</h3>

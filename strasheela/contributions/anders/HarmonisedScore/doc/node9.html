@@ -1,7 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
 <html>
  <head>
-  <title>Partch</title>
+  <title>Jazz</title>
   <style>BODY {
  background: url(page.gif) repeat-y white;
 }
@@ -59,21 +59,22 @@ document.write('<div id="slidemenubar2" style="left:-144" onMouseover="pull()" o
 </script>
 <layer id="slidemenubar" onMouseover="pull()" onMouseout="draw()">
 <table border="0" cellpadding="0" cellspacing="0" width="161"><tr><td bgcolor="#009cff" width="144"><a href="index.html">Index</a>
-</td><td rowspan="16" valign="top" width="16"><img src="menu.gif" width="16"></td></tr><tr><td bgcolor="#009cff" width="144"><a href="node1.html">HarmonisedScore</a>
+</td><td rowspan="17" valign="top" width="16"><img src="menu.gif" width="16"></td></tr><tr><td bgcolor="#009cff" width="144"><a href="node1.html">HarmonisedScore</a>
 </td></tr><tr><td bgcolor="#009cff" width="144"><a href="node2.html">DB</a>
-</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node3.html">Score</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node3.html">HSScore</a>
 </td></tr><tr><td bgcolor="#009cff" width="144"><a href="node4.html">Rules</a>
 </td></tr><tr><td bgcolor="#009cff" width="144"><a href="node5.html">DBs</a>
-</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node6.html">Schoenberg</a>
-</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node7.html">Default</a>
-</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node8.html">Jazz</a>
-</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node9.html">Partch</a>
-</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node10.html">Johnston</a>
-</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node11.html">Harrison</a>
-</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node12.html">Chalmers</a>
-</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node13.html">Catler</a>
-</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node14.html">ArithmeticalSeriesChords</a>
-</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node15.html">HS</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node6.html">Distro</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node7.html">Schoenberg</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node8.html">Default</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node9.html">Jazz</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node10.html">Partch</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node11.html">Johnston</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node12.html">Harrison</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node13.html">Chalmers</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node14.html">Catler</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node15.html">ArithmeticalSeriesChords</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node16.html">HS</a>
 </td></tr></table></layer>
 <script language="JavaScript1.2">
 function regenerate(){
@@ -130,49 +131,27 @@ clearInterval(drawit)
 
 
 </tr></table>
-<span class="string"></span>
+<span class="string"> This database contains a chord database as defined by \cite{Burbat:HarmonikJazz:1988}.<BR>
+<BR>
+ All databases here are for 12 pitches per octave.<BR>
+<BR>
+<BR>
+</span>
 </span>
 <h3>Functor</h3>
-<ul>Partch ("<span class="string">/Users/t/oz/music/Strasheela/strasheela/trunk/strasheela/contributions/anders/HarmonisedScore/source/databases/Partch.oz</span>")<br></ul>
+<ul>Jazz ("<span class="string">/Users/t/oz/music/Strasheela/strasheela/trunk/strasheela/contributions/anders/HarmonisedScore/source/databases/Jazz.oz</span>")<br></ul>
 <h3>Import</h3>
-<code><ul><li><a href="node15.html">HS</a> at "<span class="string">../../HarmonisedScore.ozf"
+<code><ul><li><a href="node8.html">Default</a> at "<span class="string">Default.ozf"
 </span></li></ul></code>
 <h3>Export</h3>
-<code><ul><li>&lt;P/2:<a href="#entity342"><span class="functionname">GetIntervals</span></a>&gt;
-</li><li>&lt;P/2:<a href="#entity339"><span class="functionname">Get11LimitDiamondChords</span></a>&gt;
-</li><li>&lt;P/2:<a href="#entity340"><span class="functionname">Get7LimitDiamondChords</span></a>&gt;
-</li><li>&lt;P/2:<a href="#entity341"><span class="functionname">Get5LimitDiamondChords</span></a>&gt;
+<code><ul><li><span class="variablename">Vierklaenge</span>
+</li><li>tetrads:<span class="variablename">Vierklaenge</span>
+</li><li><span class="variablename">Scales</span>
+</li><li><span class="variablename">PitchesPerOctave</span>
+</li><li><span class="variablename">AccidentalOffset</span>
+</li><li><span class="variablename">BurbatVierklaenge</span>
 </li></ul></code>
 <h3>Define</h3>
-
-<code>
-<a name="entity342">
-<span class="keyword">fun</span>{<span class="functionname">GetIntervals</span> KeysPerOctave}<br>
-<span class="string"> Returns a database with the Partch intervals. For usage in HS, the intervals are rounded to the nearest pitch class interval depending on KeysPerOctave (an int).<BR>
-<BR>
-</span>
-</code><br>
-
-<code>
-<a name="entity339">
-<span class="keyword">fun</span>{<span class="functionname">Get11LimitDiamondChords</span> KeysPerOctave}<br>
-<span class="string"> Returns a database with the two chords which constitute the 11-limit tonality diamond. All other <code>6*6-2=34</code> chords of this diamond are transpositions of these two by the proportions of the other.<BR>
- For usage in HS, each chord's pitchclasses and root are rounded to the nearest pitch class depending on KeysPerOctave (an int).<BR>
-<BR>
- NB: two possible roots are specified for the Utonality chords: 1/1 (the 'mirror-root') and 4/3 (following convention and Hindemiths root definition). For example, in C-minor 1/1 is g and 4/3 is c. <BR>
-<BR>
-</span>
-</code><br>
-
-<code>
-<a name="entity340">
-<span class="keyword">fun</span>{<span class="functionname">Get7LimitDiamondChords</span> KeysPerOctave}
-</code><br>
-
-<code>
-<a name="entity341">
-<span class="keyword">fun</span>{<span class="functionname">Get5LimitDiamondChords</span> KeysPerOctave}
-</code><br>
 <h3>End</h3>
 </div></body>
 </html>

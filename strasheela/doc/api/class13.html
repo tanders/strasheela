@@ -120,19 +120,19 @@ clearInterval(drawit)
 
 <div style="margin-left:160px"><p align="right" class="margin"><div align="right">inheritance tree</div></p>
 <pre>
- <a class="pre" href="node6.html#entity236">NonType</a> <a class="pre" href="node6.html#entity237">Reflection</a>         <a class="pre" href="node7.html#entity316">FlagsMixin</a>
+ <a class="pre" href="node6.html#entity243">NonType</a> <a class="pre" href="node6.html#entity244">Reflection</a>         <a class="pre" href="node7.html#entity323">FlagsMixin</a>
     |        |                  |
     `-----+--'                  |
           |                     |
-     <a class="pre" href="node6.html#entity238">ScoreObject</a>    <a class="pre" href="node7.html#entity317">ScoreMapping.mappingMixin</a>
+     <a class="pre" href="node6.html#entity245">ScoreObject</a>    <a class="pre" href="node7.html#entity324">ScoreMapping.mappingMixin</a>
           |                     |
           `-----------+---------'
                       |
-                     <a class="pre" href="node6.html#entity249">Item</a>
+                     <a class="pre" href="node6.html#entity256">Item</a>
                       |
                       `+
                        |
-                   <a class="pre" href="node6.html#entity250">Container</a>
+                   <a class="pre" href="node6.html#entity257">Container</a>
 </pre>
 <hr><p class="margin"><div align="right">class definition</div></p>
 <code>
@@ -980,7 +980,7 @@ clearInterval(drawit)
 
 </tr></table>
 <span class="string"></span>
-</li><li><span class="functionname">isDet</span>(B)<br>
+</li><li><span class="functionname">isDet</span>($)<br>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
 
@@ -988,7 +988,7 @@ clearInterval(drawit)
 
 
 </tr></table>
-<span class="string"> Are all parameter values determined? NB: isDet can return false simply because constraint propagation did not finish to determine some parameter. So, for a fully determined score you may want to delay this test by a few milliseconds.<BR>
+<span class="string"> Are all parameter values determined, including nested score objects? NB: isDet can return false simply because constraint propagation did not finish to determine some parameter. You may want to use the method wait instead.<BR>
 <BR>
 </span>
 </li><li><span class="functionname">isElement</span>(B)<br>

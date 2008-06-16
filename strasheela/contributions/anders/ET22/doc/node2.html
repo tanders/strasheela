@@ -124,7 +124,15 @@ clearInterval(drawit)
 <span class="string"> Defines databases for chords, scales and intervals in 22 equal temperament. <BR>
  Internally, database entries are often defined by ratios (using notation X#Y for X/Y) to make them more comprehensible and portable to other temperaments. Alternatively, chords and scales are notated with conventional symbolic note names (see function PC). In any case, the databases focus on chords, scales and intervals which are close to just intonation in 22 ET.<BR>
 <BR>
- Please visit the source at ../source/DB.oz or browse/inspect the value of ET22.db.fullDB to read the actual databases. <BR>
+ The entries of these databases are show in common music notation in different files in the folder <a href="../doc-DB">../doc-DB</a>. For further details,please visit the source at ../source/DB.oz or browse/inspect the value of ET22.db.fullDB to read the actual databases.<BR>
+<BR>
+ Note: some chords share the same pitch classes, but differ in their root. Nevertheless, these have different database entries, as they can also differ in other respects (e.g., different names, different set of 'essentialPitchClasses' or different set of 'dissonances'). The following chord pairs only differ in their root: 'minor 7th'/'minor 6th', 'subdiminished 7th (1)'/'subdiminished 7th (2)', 'subharmonic 6th'/'half subdiminished 7th', 'subminor 7th'/'supermajor 6th', 'subminor 7th suspended 4th (1)'/'subminor 7th suspended 4th (2)'/'supermajor 6th suspended 2nd'<BR>
+<BR>
+ Note: some chords are subsets of others. These are listed in the following, using < to denote subset.<BR>
+ 'major' < 'harmonic 7th no 5' < 'harmonic 7th' < 'harmonic 9th', ....<BR>
+<BR>
+ Note: most chords have names, and their index can be generated with {HS.db.getChordIndex 'my name'}. Yet, some are without names and can only be referred to via their index.<BR>
+<BR>
 <BR>
 </span>
 </span>

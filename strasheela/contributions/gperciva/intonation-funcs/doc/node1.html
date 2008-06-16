@@ -122,51 +122,95 @@ clearInterval(drawit)
 <h3>Functor</h3>
 <ul>intonation-funcs ("<span class="string">intonation-funcs.oz</span>")<br></ul>
 <h3>Import</h3>
-<code><ul><li>FD</li></ul></code>
+<code><ul><li>FD</li><li>LUtils at "<span class="string">x-ozlib://anders/strasheela/source/ListUtils.ozf"
+</span></li><li>Pattern at "<span class="string">x-ozlib://anders/strasheela/Pattern/Pattern.ozf"
+</span></li></ul></code>
 <h3>Export</h3>
-<code><ul><li>inMajorKey:&lt;P/2:<a href="#entity2"><span class="functionname">InMajorKey</span></a>&gt;
-</li><li>inMinorKey:&lt;P/2:<a href="#entity3"><span class="functionname">InMinorKey</span></a>&gt;
-</li><li>firstPos:&lt;P/1:<a href="#entity4"><span class="functionname">FirstPosition</span></a>&gt;
-</li><li>changeToOpenString:&lt;P/2:<a href="#entity5"><span class="functionname">ChangeToOpenString</span></a>&gt;
-</li><li>noFourOpen:&lt;P/2:<a href="#entity6"><span class="functionname">NoFourOpen</span></a>&gt;
-</li><li>atLeastEqual:&lt;P/3:<a href="#entity7"><span class="functionname">AtLeastEqual</span></a>&gt;
-</li><li>atLeastEqualTwo:&lt;P/5:<a href="#entity8"><span class="functionname">AtLeastEqualTwo</span></a>&gt;
+<code><ul><li>inMajorKey:&lt;P/2:<a href="#entity4"><span class="functionname">InMajorKey</span></a>&gt;
+</li><li>inMinorKey:&lt;P/2:<a href="#entity5"><span class="functionname">InMinorKey</span></a>&gt;
+</li><li>hasMinor:&lt;P/2:<a href="#entity6"><span class="functionname">HasMinor</span></a>&gt;
+</li><li>firstPos:&lt;P/1:<a href="#entity7"><span class="functionname">FirstPosition</span></a>&gt;
+</li><li>changeToOpenString:&lt;P/2:<a href="#entity8"><span class="functionname">ChangeToOpenString</span></a>&gt;
+</li><li>changeOneString:&lt;P/1:<a href="#entity9"><span class="functionname">ChangeOneString</span></a>&gt;
+</li><li>changeTwoOpen:&lt;P/2:<a href="#entity10"><span class="functionname">ChangeTwoOpen</span></a>&gt;
+</li><li>changeFingerOrPosition:&lt;P/3:<a href="#entity11"><span class="functionname">ChangeFingerOrPosition</span></a>&gt;
+</li><li>noFingeredFifths:&lt;P/2:<a href="#entity12"><span class="functionname">NoFingeredFifths</span></a>&gt;
+</li><li>atLeast:&lt;P/3:<a href="#entity13"><span class="functionname">AtLeast</span></a>&gt;
+</li><li>atLeastTwin:&lt;P/5:<a href="#entity14"><span class="functionname">AtLeastTwin</span></a>&gt;
+</li><li>atMost:&lt;P/3:<a href="#entity15"><span class="functionname">AtMost</span></a>&gt;
+</li><li>minChanges:&lt;P/2:<a href="#entity16"><span class="functionname">MinChanges</span></a>&gt;
+</li><li>thirdPositionNoStretchBack:&lt;P/3:<a href="#entity17"><span class="functionname">ThirdPositionNoStretchBack</span></a>&gt;
 </li></ul></code>
 <h3>Define</h3>
 
 <code>
-<a name="entity2">
+<a name="entity4">
 <span class="keyword">proc</span>{<span class="functionname">InMajorKey</span> Pitches Tonic}
 </code><br>
 
 <code>
-<a name="entity3">
+<a name="entity5">
 <span class="keyword">proc</span>{<span class="functionname">InMinorKey</span> Pitches Tonic}
 </code><br>
 
 <code>
-<a name="entity4">
-<span class="keyword">proc</span>{<span class="functionname">FirstPosition</span> Positions}
-</code><br>
-
-<code>
-<a name="entity5">
-<span class="keyword">proc</span>{<span class="functionname">ChangeToOpenString</span> Strings Fingers}
-</code><br>
-
-<code>
 <a name="entity6">
-<span class="keyword">proc</span>{<span class="functionname">NoFourOpen</span> Strings Fingers}
+<span class="keyword">proc</span>{<span class="functionname">HasMinor</span> Pitches Tonic}
 </code><br>
 
 <code>
 <a name="entity7">
-<span class="keyword">proc</span>{<span class="functionname">AtLeastEqual</span> List Is Number}
+<span class="keyword">proc</span>{<span class="functionname">FirstPosition</span> Positions}
 </code><br>
 
 <code>
 <a name="entity8">
-<span class="keyword">proc</span>{<span class="functionname">AtLeastEqualTwo</span> ListOne IsOne ListTwo IsTwo Number}
+<span class="keyword">proc</span>{<span class="functionname">ChangeToOpenString</span> Strings Fingers}
+</code><br>
+
+<code>
+<a name="entity9">
+<span class="keyword">proc</span>{<span class="functionname">ChangeOneString</span> Strings}
+</code><br>
+
+<code>
+<a name="entity10">
+<span class="keyword">proc</span>{<span class="functionname">ChangeTwoOpen</span> Strings Fingers}
+</code><br>
+
+<code>
+<a name="entity11">
+<span class="keyword">proc</span>{<span class="functionname">ChangeFingerOrPosition</span> Fingers Positions Strings}
+</code><br>
+
+<code>
+<a name="entity12">
+<span class="keyword">proc</span>{<span class="functionname">NoFingeredFifths</span> Strings Fingers}
+</code><br>
+
+<code>
+<a name="entity13">
+<span class="keyword">proc</span>{<span class="functionname">AtLeast</span> List Is Number}
+</code><br>
+
+<code>
+<a name="entity14">
+<span class="keyword">proc</span>{<span class="functionname">AtLeastTwin</span> ListOne IsOne ListTwo IsTwo Number}
+</code><br>
+
+<code>
+<a name="entity15">
+<span class="keyword">proc</span>{<span class="functionname">AtMost</span> List Is Number}
+</code><br>
+
+<code>
+<a name="entity16">
+<span class="keyword">proc</span>{<span class="functionname">MinChanges</span> List Number}
+</code><br>
+
+<code>
+<a name="entity17">
+<span class="keyword">proc</span>{<span class="functionname">ThirdPositionNoStretchBack</span> Pitches Positions Fingers}
 </code><br>
 <h3>End</h3>
 </div></body>

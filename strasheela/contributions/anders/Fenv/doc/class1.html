@@ -149,6 +149,7 @@ clearInterval(drawit)
 
 </tr></table>
 <span class="string"> Builds a env from a given numeric function. Env is a unary numeric function which expects and returns a float. If RangeIsForArgumentFun is true, then the interval [0,1] of the resulting fenv is mapped to [min, max] of the argument function. Otherwise, the interval [min,max] of the resulting fenv is mapped to [0,1] of the argument function.<BR>
+ NB: init blocks as long as Env is undetermined (Env is only an optional argument because the Score.scoreObject method getInitClassesVS requires this for score archiving).<BR>
 <BR>
 </span>
 </li><li><span class="functionname">plot</span>(n:N&nbsp;...)<br>

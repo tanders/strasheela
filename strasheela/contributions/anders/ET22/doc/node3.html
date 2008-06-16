@@ -123,6 +123,8 @@ clearInterval(drawit)
 </tr></table>
 <span class="string"> This functor defines Lilypond output (using semitone and quartertone accidentals) and Explorer output actions for 22 ET.<BR>
 <BR>
+ BUG: Lilypond notation problem: using grace notes (for showing chord and scale notes) seems to disable the Staff.instrumentName display. It is possible that this has to do with the missing \score at the beginning of lilypond 22 ET score data. Yet, setting this causes an error related to the \override of Score.Accidental and Score.KeySignature #'glyph-name-alist for 22 ET. For now, I leave it like this -- either I show Staff.instrumentName or scale/chord pitch classes with grace notes. If I want to publish a score with analytical information using grace notes, I will again look into this matter. <BR>
+<BR>
 </span>
 </span>
 <h3>Functor</h3>
@@ -135,17 +137,28 @@ clearInterval(drawit)
 </span></li><li><a href="node6.html">ET22</a> at "<span class="string">../ET22.ozf"
 </span></li></ul></code>
 <h3>Export</h3>
-<code><ul><li>&lt;P/2:<a href="#entity35"><span class="functionname">RenderAndShowLilypond</span></a>&gt;
+<code><ul><li>&lt;P/2:<a href="#entity36"><span class="functionname">RenderAndShowLilypond</span></a>&gt;
+</li><li>&lt;P/1:<a href="#entity35"><span class="functionname">SetEnharmonicNotationTable</span></a>&gt;
 </li><li>&lt;P/1:<a href="#entity34"><span class="functionname">AddExplorerOut_ChordsToScore</span></a>&gt;
 </li></ul></code>
 <h3>Define</h3>
 
 <code>
-<a name="entity35">
+<a name="entity36">
 <span class="keyword">proc</span>{<span class="functionname">RenderAndShowLilypond</span> MyScore Args}<br>
 <span class="string"> Proc is like Out.renderAndShowLilypond, but provides buildin support for notes and chords with pitch units in et22.<BR>
- Please note that this support is defined by the argument clauses and wrapper (see Out.toLilypond) -- additional clauses are still possible, but adding new note/chord clauses will overwrite the support for 22 ET.<BR>
+ Please note that this support is defined by the argument clauses and wrapper (see Out.toLilypond) -- additional clauses are still possible, but adding new note/chord clauses will overwrite the support for 22 ET (the wrapper can be defined like for Out.renderAndShowLilypond).<BR>
  Also, note that convert-ly (which updates) sometimes breaks the 22 ET notation (e.g., when inserting new explicit staffs).<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity35">
+<span class="keyword">proc</span>{<span class="functionname">SetEnharmonicNotationTable</span> Table}<br>
+<span class="string"> The enharmonic notation for 22 ET can be customised by specifying for each numeric 22 ET pitch class how it is notated. Note that this setting will be fixed throughout the score though (e.g., pitch class 7 may be notated as 'E\\', but then it is never 'D#'). The enharmonic notation is specified by a record which maps pitch class integers to pitch names. See ET22.pc and friends for an explanation of the pitch names. The default are the default pitch names in Scala for 22 ET (using E22 notation system).<BR>
+ Note that the lowest feature in the table is 0 (i.e., 'C') and not 1 (i.e. Table is not a tuple if all pitch classes are specified, a tuple has no feature 0).<BR>
+ NB: an error will occur if you fail to specify a notation for a 22 ET pitch class in your scores, so Table should specify a notation for every 22 ET pitch class.<BR>
 <BR>
 </span>
 </code><br>
