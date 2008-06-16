@@ -105,12 +105,18 @@ declare
 %% Top-level definition (defines constraint script) 
 %%
 
-proc {Canon MyScore}
-   %% Number of notes per voice
-   NoteNo1 = 17
-   NoteNo2 = 15
-   %% how much later does second voice start
-   OffsetTime = {List.last Durations}*2
+proc {Canon Args MyScore}
+   Defaults = unit(%% Number of notes per voice
+		   voice1NoteNo: 17 
+		   voice2NoteNo: 15 
+		   %% how much later does second voice start
+		   voice2OffsetTime: {List.last Durations}*2 % (a semibreve)
+		   %% interval by which the second voice transposes the first voice (in canon) 
+		   transpositionInterval: 0
+		   voice1PitchDomain: 53#67
+		   voice2PitchDomain: 53#72
+		  )
+   As = {Adjoin Defaults Args}
    EndTime Voice1 Voice2
  in
    MyScore =
@@ -122,28 +128,27 @@ proc {Canon MyScore}
                     %% sequential object to which this arg handle
                     %% belongs
 		    handle:Voice1  
-		    items: {LUtils.collectN NoteNo1
+		    items: {LUtils.collectN As.voice1NoteNo
 			    %% LUtils.collectN returns a list of 17
 			    %% note specs with individual variables at the
 			    %% parameters duration and pitch
 			    fun {$}
 			       note(duration: {FD.int Durations}
-				    pitch: {FD.int 53#67}
+				    pitch: {FD.int As.voice1PitchDomain}
 				    amplitude: 80)
 			    end}
 		    offsetTime:0
 		    %% Voice1 and Voice2 end at the same time (unified end times)
 		    endTime:EndTime)
 		seq(handle:Voice2
-		    items: {LUtils.collectN NoteNo2
+		    items: {LUtils.collectN As.voice2NoteNo
 			    fun {$}
 			       note(duration: {FD.int Durations}
-				    pitch: {FD.int 53#72}
+				    pitch: {FD.int As.voice2PitchDomain}
 				    amplitude: 80)
 			    end}
-		    %% start of Voice2 is delayed by {List.last
-		    %% Durations}*2 (i.e. a semibreve)
-		    offsetTime:OffsetTime
+		    %% start of Voice2 is delayed by As.voice2OffsetTime
+		    offsetTime:As.voice2OffsetTime
 		    endTime:EndTime)]
 	startTime: 0 
 	timeUnit:beats(4))  % a beat has length 4 (i.e. 1 denotes a sixteenth note)
@@ -172,7 +177,7 @@ proc {Canon MyScore}
    {MaxAndMinPitchOnlyOnce Voice1} {MaxAndMinPitchOnlyOnce Voice2}
    {ConstraintDissonance Voice1 Voice2}
    {NoParallels Voice1 Voice2}
-   {IsCanon Voice1 Voice2 unit(interval:0)}
+   {IsCanon Voice1 Voice2 unit(interval:As.transpositionInterval)}
 end
 
 %%
@@ -426,6 +431,8 @@ in
 	end}
     end}
 end
+
+%% NOTE: with present constraint set, no solution with interval = 7.
 proc {IsCanon Voice1 Voice2 Args}
    Defaults = unit(
 		 %% The first CanonNo notes of each voice form a canon in a fifth
@@ -453,27 +460,33 @@ end
 
 {Init.setTempo 100.0}
 
-%% This special score distribution strategy takes about 4 secs on my machine (Pentium 4, 3.2 GHz machine with 512 MB RAM running Mozart 1.3.1 on Fedora Core 3) to find a solution
-%% (slighly less than 2 secs without rule MaxAndMinPitchOnlyOnce).
-{SDistro.exploreOne Canon
+{SDistro.exploreOne {GUtils.extendedScriptToScript Canon
+		     unit}
  unit(order:startTime
       value:mid)}
 
-
-%% For full CSP, this standard distribution strategy (i.e. no special
-%% score search) finds NO solution within 1 h of search! (about 14
-%% secs without MaxAndMinPitchOnlyOnce)
-{SDistro.exploreOne Canon
+{SDistro.exploreOne {GUtils.extendedScriptToScript Canon
+		     unit}
  unit(order:size
-      value:mid)}
-
+      value:random)}
 
 %% Randomised solution
 {GUtils.setRandomGeneratorSeed 0}
-{SDistro.exploreOne Canon
+{SDistro.exploreOne {GUtils.extendedScriptToScript Canon
+		     unit}
  unit(order:startTime
       value:random)}
 
+
+
+%% different args 
+{GUtils.setRandomGeneratorSeed 0}
+{SDistro.exploreOne {GUtils.extendedScriptToScript Canon
+		     unit(voice1NoteNo: 17+6 
+			  voice2NoteNo: 15+6
+			  transpositionInterval: 7)}
+ unit(order:startTime
+      value:random)}
 
 
 */
