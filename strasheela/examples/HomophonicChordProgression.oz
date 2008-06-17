@@ -232,7 +232,7 @@ proc {ConstrainUpperVoiceDistance Notes}
 end
 
 
-/** %% [Strict constraint for homophonic chord progression] If the two consecutive chords C1 and C2 share common pitches (harmonic band), then these occur occur in the same voice and octave (Schoenberg: harmonischen Band bleibt liegen). NotePairs is a list of two-note-pairs. Each pair consists of consecutive notes in the same voice and NotePairs together expresses C1 and C2. However, the bass notes are excluded. The voices in NotePairs are ordered increasing, so the bass is the first pair which is ignored. 
+/** %% [Strict constraint for homophonic chord progression] If two consecutive chords C1 and C2 share common pitches (harmonic band), then these occur in the same voice and octave (Schoenberg: harmonischen Band bleibt liegen). NotePairs is a list of two-note-pairs. Each pair consists of consecutive notes in the same voice and NotePairs together expresses C1 and C2. However, the bass notes are excluded. The voices in NotePairs are ordered increasing, so the bass is the first pair which is ignored. 
 %% */
 proc {CommonPitchesHeldOver C1#C2 NotePairs}
    HarmonicBandFS = {FS.var.decl}
