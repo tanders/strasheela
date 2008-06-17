@@ -99,7 +99,7 @@ define
            + PitchesPerOct * 2 * SuperB
    end
 
-   /** %% Expects a list of chord/scale objects and constrains them according to Schoenberg's recommendation. For any three successive chords/scales, if the first two chords form a descending progression, then the progression from the first to the third chord forms a strong/superstrong progression (so the middle chord is quasi a 'passing chord'). Also, the last chord/scale pair forms always a strong progression.
+   /** %% Expects a list of chord/scale objects and constrains them according to Schoenberg's recommendation. For any three successive chords/scales, if the first two chords form a descending progression, then the progression from the first to the third chord forms a strong progression (so the middle chord is quasi a 'passing chord'). Also, the last chord/scale pair forms always a strong progression.
    %% Optional Args: allowInterchangeProgression (default is false). If true, then mere interchange progressions (e.g., I V I), are permitted as well. In any case, no two descending progression must follow each other. allowRepetition: if true, two neighbouring chords can have the same root. Defaults to false.
    %% */ 
    proc {ResolveDescendingProgressions Xs Args}
@@ -117,8 +117,9 @@ define
       else {Pattern.forNeighbours Xs 3
 	    proc {$ [X Y Z]}
 	       {FD.impl {DescendingProgressionR X Y}
-		{FD.disj {AscendingProgressionR X Z}
-		 {SuperstrongProgressionR X Z}}
+		{AscendingProgressionR X Z}
+% 		{FD.disj {AscendingProgressionR X Z}
+% 		 {SuperstrongProgressionR X Z}}
 		1}
 	    end}
       end
