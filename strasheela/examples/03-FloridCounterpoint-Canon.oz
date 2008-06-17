@@ -324,8 +324,8 @@ end
 proc {IsConsonanceR Note1 Note2 B}
    Pitch1 = {Note1 getPitch($)}
    Pitch2 = {Note2 getPitch($)}
-   % Consonances = {FS.value.make [0 3 4 7 8 9 12 15 16]}
-   Consonances = {FS.value.make [0 3 4 7 8 9 15 16]}	% alternative: no octave
+   Consonances = {FS.value.make [0 3 4 7 8 9 12 15 16]}
+   % Consonances = {FS.value.make [0 3 4 7 8 9 15 16]}	% alternative: no octave
    Interval = {FD.decl}
 in   
    {FD.distance Pitch1 Pitch2 '=:' Interval}
