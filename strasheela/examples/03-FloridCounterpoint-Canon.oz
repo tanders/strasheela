@@ -110,7 +110,7 @@ proc {Canon Args MyScore}
 		   voice1NoteNo: 17 
 		   voice2NoteNo: 15 
 		   %% how much later does second voice start
-		   voice2OffsetTime: {List.last Durations}*2 % (a semibreve)
+		   voice2OffsetTime: MaxDur*2 % (a semibreve)
 		   %% interval by which the second voice transposes the first voice (in canon) 
 		   transpositionInterval: 0
 		   voice1PitchDomain: 53#67
@@ -118,22 +118,22 @@ proc {Canon Args MyScore}
 		  )
    As = {Adjoin Defaults Args}
    EndTime Voice1 Voice2
- in
+in
    MyScore =
    %% Score.makeScore transforms textual music representation into
    %% nested score object
    {Score.makeScore
     sim(items: [seq(%% when MyScore is created from this textual
-                    %% representation, then Voice1 is bound to the
-                    %% sequential object to which this arg handle
-                    %% belongs
+		    %% representation, then Voice1 is bound to the
+		    %% sequential object to which this arg handle
+		    %% belongs
 		    handle:Voice1  
 		    items: {LUtils.collectN As.voice1NoteNo
 			    %% LUtils.collectN returns a list of 17
 			    %% note specs with individual variables at the
 			    %% parameters duration and pitch
 			    fun {$}
-			       note(duration: {FD.int Durations}
+			       note(duration: {FD.int DurDomain}
 				    pitch: {FD.int As.voice1PitchDomain}
 				    amplitude: 80)
 			    end}
@@ -143,7 +143,7 @@ proc {Canon Args MyScore}
 		seq(handle:Voice2
 		    items: {LUtils.collectN As.voice2NoteNo
 			    fun {$}
-			       note(duration: {FD.int Durations}
+			       note(duration: {FD.int DurDomain}
 				    pitch: {FD.int As.voice2PitchDomain}
 				    amplitude: 80)
 			    end}
@@ -162,19 +162,22 @@ proc {Canon Args MyScore}
    {MyScore forAll(test: isNote
 		   proc {$ Note}
 		      {InCMajor Note}
-		      {NoBigJump Note}
-		      {StartAndEndWithLongest Note}
-		      {EndOnFullBar Note}
-		      {SlowRhythmChanges Note}
 		   end)}
    %% rules for notes of first voice
-   {Voice1 forAll(test: isNote
-		  proc {$ Note}
-		     {StartAndEndWithFundamental Note}
-		  end)}
+   {StartInTonic Voice1}
+   %% rules applied to both voices
+   {ForAll [Voice1 Voice2]
+    proc {$ MyVoice}
+       {StartAndEndWithLongest MyVoice}
+       {EndOnFullBar MyVoice}
+       {SlowRhythmChanges MyVoice}
+       {NoBigJump MyVoice}
+       {MaxPitchOnlyOnce MyVoice}
+%        {MaxAndMinPitchOnlyOnce_AlsoForPhrases MyVoice} 
+    end}
    {EndInPerfectConsonance Voice1 Voice2}
    {EndWithContraryMotion Voice1 Voice2}
-   {MaxAndMinPitchOnlyOnce Voice1} {MaxAndMinPitchOnlyOnce Voice2}
+   %% NOTE: tmp comment
    {ConstraintDissonance Voice1 Voice2}
    {NoParallels Voice1 Voice2}
    {IsCanon Voice1 Voice2 unit(interval:As.transpositionInterval)}
@@ -184,70 +187,80 @@ end
 %% Rule definitions
 %%
 
-Durations = [2 4 8]
-proc {StartAndEndWithLongest Note}
-   C = {Note getTemporalAspect($)}
+/** %% Domain for durations
+%% */
+DurDomain = [8 4 2]
+%% largest duration 
+MaxDur = 8
+
+/** %% The first and last note's duration of MyVoice is the greatest duration domain value (a halve note).
+%% */
+proc {StartAndEndWithLongest MyVoice}
+   FirstNote = {MyVoice getItems($)}.1
+   LastNote = {List.last {MyVoice getItems($)}}
 in
-   if {Note isFirstItem($ C)} orelse
-      {Note isLastItem($ C)}
-   then
-      {Note getDuration($)} = {List.last Durations}
-   end
+   {FirstNote getDuration($)} = {LastNote getDuration($)} = MaxDur
 end
-proc {EndOnFullBar Note}
-   C = {Note getTemporalAspect($)}
+
+/** %% The last note of MyVoice starts on a full halve note (the greatest duration domain value), that is at the beginning or the middle of a 4/4 bar. 
+%% */
+proc {EndOnFullBar MyVoice}
+   LastNote = {List.last {MyVoice getItems($)}}
 in
-   if {Note isLastItem($ C)}
-   then
-      {FD.modI {Note getStartTime($)} {List.last Durations}} = 0
-   end
+   {FD.modI {LastNote getStartTime($)} MaxDur} = 0
 end
-proc {SlowRhythmChanges Note}
-   C = {Note getTemporalAspect($)}
-in
-   if {Note hasPredecessor($ C)}
-   then
-      Dur1 = {{Note getPredecessor($ C)} getDuration($)}
-      Dur2 = {Note getDuration($)}
-      HalveDur1 
-   in
-      {FD.times HalveDur1 2 Dur1}
-      {FD.times HalveDur1 {FD.int [1 2 4]} Dur2}
-   end
+
+/** %% Two neighbouring notes in MyVoice either have the same duration, or they differ by their halve duration value (e.g., a halve note can be followed by a quarter but not by an eighth note).
+%% */
+proc {SlowRhythmChanges MyVoice}
+   {Pattern.for2Neighbours {MyVoice mapItems($ getDuration test:isNote)}
+    proc {$ Dur1 Dur2}
+       HalveDur1 
+    in
+       {FD.times HalveDur1 2 Dur1}
+       {FD.times HalveDur1 {FD.int [1 2 4]} Dur2}
+    end}
 end
+
 %% MIDI pitch domain reduction: only 'white keys' (c major)
 proc {InCMajor Note}
+   PitchClass = {FD.int [0 2 4 5 7 9 11]}
+in
    PitchClass = {FD.modI {Note getPitch($)} 12}
-in
-   {List.forAll [1 3 6 8 10]	% list of 'black key' pitch classes (c=0)
-    proc {$ BlackKey} PitchClass \=: BlackKey end}
 end
-proc {StartAndEndWithFundamental Note}
-   C = {Note getTemporalAspect($)}
+% proc {StartAndEndWithFundamental Note}
+%    C = {Note getTemporalAspect($)}
+% in
+%    if {Note isFirstItem($ C)} orelse
+%       {Note isLastItem($ C)}
+%    then
+%       {Note getPitch($)} = 60
+%    end
+% end
+
+/** %% The first note of MyVoice is either C, E or G.
+%% */
+proc {StartInTonic MyVoice}
+   PitchClass = {FD.int [0 4 7]}
 in
-   if {Note isFirstItem($ C)} orelse
-      {Note isLastItem($ C)}
-   then
-      {Note getPitch($)} = 60
-   end
+   PitchClass = {FD.modI {{MyVoice getItems($)}.1 getPitch($)} 12}
 end
+
 %% voice leading: only intervals up to a fifth, no pitch repetition
 %% (context dependent constraint -- getPredecessor -- but this
 %% context is predetermined by predetermined hierarchic structure)
-proc {NoBigJump Note}
-   C = {Note getTemporalAspect($)}
-in
-   if {Note hasPredecessor($ C)}
-   then
-      Pitch1 = {{Note getPredecessor($ C)} getPitch($)}
-      Pitch2 = {Note getPitch($)}
-   in
-      %% all intervals between minor second and minor third are allowed
-      {FD.distance Pitch1 Pitch2 '>:' 0}
-      {FD.distance Pitch1 Pitch2 '<:' 4}
-   end
+proc {NoBigJump MyVoice}
+   {Pattern.for2Neighbours {MyVoice mapItems($ getPitch test:isNote)}
+    proc {$ Pitch1 Pitch2}
+       %% all intervals between minor second and minor third are allowed
+       {FD.distance Pitch1 Pitch2 '>:' 0}
+       {FD.distance Pitch1 Pitch2 '<:' 4}
+    end}
 end
-proc {MaxAndMinPitchOnlyOnce Voice}
+
+/** %% 
+%% */
+proc {MaxAndMinPitchOnlyOnce_AlsoForPhrases Voice}
    proc {Aux Pitches}
       Max = {Pattern.max Pitches}
       Min = {Pattern.min Pitches}
@@ -281,6 +294,28 @@ in
    %% to constraint max values of lower level
    {Aux Pitches} {Aux FirstHalfPitches} {Aux SecondhalfPitches} 
 end
+
+/** %%
+%% */
+proc {MaxPitchOnlyOnce MyVoice}
+   proc {Aux Pitches}
+      Max = {Pattern.max Pitches}
+   in
+      %% the max pitch value occurs exactly once
+      {FD.sum {Map Pitches
+	       proc {$ X B}
+		  B = (X =: Max)
+	       end}
+       '=:' 1}
+      %% the first and last pitches are not max
+      Pitches.1 \=: Max
+      {List.last Pitches} \=: Max
+   end
+   Pitches = {MyVoice map($ getPitch test:isNote)}
+in
+   {Aux Pitches} 
+end
+
 proc {ConstraintDissonance Voice1 Voice2}
    FirstVoiceNotes = {Voice1 getItems($)}
    SecondVoiceNotes = {Voice2 getItems($)}
@@ -338,10 +373,17 @@ proc {PerfectConsonance Note1 Note2}
 in   
    {FD.distance Pitch1 Pitch2 '=:' Interval}
 end
-/** %% Interval of the last two notes (which I already know are simultaneous) is consonant. 
+/** %% Interval of the last two notes (which I already know are simultaneous) is consonant. The lower note is the root.
 %% */
 proc {EndInPerfectConsonance Voice1 Voice2}
-   {PerfectConsonance {List.last {Voice1 getItems($)}} {List.last {Voice2 getItems($)}}}
+   Last1 = {List.last {Voice1 getItems($)}}
+   Last2 = {List.last {Voice2 getItems($)}}
+   MinPitch = {FD.decl}
+in 
+   {PerfectConsonance Last1 Last2}
+   %% lower note is root 'C'
+   {FD.min {Last1 getPitch($)} {Last2 getPitch($)} MinPitch}
+   {FD.modI MinPitch 12} = 0
 end
 /** %% Cadence constraint surrogate: at least the voices should move into last interval by contrary motion.
 %% */
@@ -465,10 +507,6 @@ end
  unit(order:startTime
       value:mid)}
 
-{SDistro.exploreOne {GUtils.extendedScriptToScript Canon
-		     unit}
- unit(order:size
-      value:random)}
 
 %% Randomised solution
 {GUtils.setRandomGeneratorSeed 0}
@@ -488,6 +526,68 @@ end
  unit(order:startTime
       value:random)}
 
+
+
+%%%%%%%%%%%%%%%%
+
+%% First-fail with randomised solution
+{GUtils.setRandomGeneratorSeed 0}
+{SDistro.exploreOne {GUtils.extendedScriptToScript Canon
+		     unit}
+ unit(order:dom
+      value:random)}
+
+
+
+%% Randomised solution
+{GUtils.setRandomGeneratorSeed 0}
+{SDistro.exploreOne {GUtils.extendedScriptToScript Canon
+		     unit(voice1PitchDomain:55#72
+			  voice2PitchDomain:48#65)}
+ unit(order:startTime
+      value:random)}
+
+
+%%%%%%%%%%%%%%%%
+
+%% First-fail
+{SDistro.exploreOne {GUtils.extendedScriptToScript Canon
+		     unit}
+ unit(order:dom
+      value:mid)}
+
+
+
+%% 
+{SDistro.exploreOne {GUtils.extendedScriptToScript Canon
+		     unit}
+ unit(order:'dom/deg'
+      value:mid)}
+
+
+%% left to right
+{SDistro.exploreOne {GUtils.extendedScriptToScript Canon
+		     unit}
+ unit(order:startTime
+      value:mid)}
+
+
+%% explicitly type-wise: first rhythmic structure than pitches
+%% same performance as dom
+{SDistro.exploreOne {GUtils.extendedScriptToScript Canon
+		     unit}
+ unit(order:{SDistro.makeSetPreferredOrder
+	     [fun {$ X} {X isTimeParameter($)} end
+	      fun {$ X} {X isPitch($)} end]
+	     SDistro.dom}
+      value:mid)}
+
+
+%% even naive has reasonable performance..
+{SDistro.exploreOne {GUtils.extendedScriptToScript Canon
+		     unit}
+ unit(order:naive
+      value:mid)}
 
 */
 
