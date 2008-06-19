@@ -111,7 +111,9 @@ define
       then {Pattern.forNeighbours Xs 3
 	    proc {$ [X Y Z]}
 	       {FD.impl {DescendingProgressionR X Y}
-		{FD.nega {DescendingProgressionR X Z}}
+		{FD.disj {AscendingProgressionR X Z}
+		 {ConstantProgressionR X Z}}
+% 		{FD.nega {DescendingProgressionR X Z}}
 		1}
 	    end}
       else {Pattern.forNeighbours Xs 3
@@ -126,6 +128,10 @@ define
       if {Not As.allowRepetition}
       then {Pattern.for2Neighbours Xs
 	    proc {$ X Y} {ConstantProgressionR X Y} = 0 end}
+      end
+      if {Not As.allowInterchangeProgression}
+      then {Pattern.forNeighbours Xs 3
+	    proc {$ [X Y Z]} {ConstantProgressionR X Z} = 0 end}
       end
       %% the last two chords must form an ascending progression.
 %      {AscendingProgressionR {List.last Xs} {LUtils.butLast Xs}
