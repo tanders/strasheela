@@ -154,6 +154,12 @@ in
 %    %% no super strong progression in such a simple progression
 %    {Pattern.for2Neighbours Chords
 %     proc {$ C1 C2} {HS.rules.schoenberg.superstrongProgressionR C1 C2 0} end}
+   %% at max 20 percent superstrong progressions
+   %% NOTE: this rule makes the problem harder
+   {Pattern.percentTrue_Range
+    {Pattern.map2Neighbours Chords
+     fun {$ C1 C2} {HS.rules.schoenberg.superstrongProgressionR C1 C2} end}
+    0 20}
    %% First and last chords are root in root position
    {HS.rules.distinctR Chords.1 {List.last Chords} 0}
    {Chords.1 getRoot($)} = {MyScale getRoot($)}
@@ -375,7 +381,6 @@ end
 /* %% compare performance of different distribution startegies
 
 %% left-to-right strategy with breaking ties by type
-{GUtils.setRandomGeneratorSeed 0}
 {SDistro.exploreOne {GUtils.extendedScriptToScript HomophonicChordProgression
 		     unit(key:'C'#'major'
 			  n:7)}
@@ -390,6 +395,17 @@ end
 			  n:7)}
  {Adjoin HS.distro.typewise
   unit(value:min)}}
+
+
+
+%% left-to-right strategy with breaking ties by type
+{GUtils.setRandomGeneratorSeed 0}
+{SDistro.exploreOne {GUtils.extendedScriptToScript HomophonicChordProgression
+		     unit(key:'C'#'major'
+			  n:7)}
+ {Adjoin HS.distro.leftToRight_TypewiseTieBreaking
+  unit(value:random)}}
+
 
 */
 
