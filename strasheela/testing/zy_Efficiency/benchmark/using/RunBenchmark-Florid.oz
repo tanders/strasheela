@@ -51,9 +51,9 @@ MyDistros = [
 		  '0-doc':'left-to-right distribution, breaking ties with dom')
 	     unit(oder:'startTime'
 		  value:Value)
-	     unit(oder:'dom'
-		  value:Value)
 	     unit(oder:'dom/deg'
+		  value:Value)
+	     unit(oder:'dom'
 		  value:Value)
 	    ]
 
