@@ -56,19 +56,23 @@ define
       SolverDescr = if As.solverDescr == nil then nil
 		    else " ("#As.solverDescr#")"
 		    end
-      Reports = {Map MyDistros
-		 fun {$ MyDistro}
-		    Runtime = {TestRuntime MyScript MyDistro As.solver As.testNo}
-		 in
-		    "Runtime "#Runtime#" msec, distribution "#{Value.toVirtualString MyDistro 100 100}
-		 end}
-      FullReport = "\nRuntime (walltime) test for script "#{Value.toVirtualString MyScript 1 1}#ScriptDescr#",\n using solver "#{Value.toVirtualString As.solver 1 1}#SolverDescr#", each test run "#As.testNo#" times, at "#{GUtils.timeVString}#"\n"
-      # {Out.listToVS Reports "\n"}
+      PrintRecord = if As.logFile
+		    then fun {$ VS} {Out.writeToFile VS As.logFile} end
+		    else System.showInfo
+		    end
+      ReportHeader = "\nRuntime (walltime) test for script "#{Value.toVirtualString MyScript 1 1}#ScriptDescr#",\n using solver "#{Value.toVirtualString As.solver 1 1}#SolverDescr#", each test run "#As.testNo#" times, at "#{GUtils.timeVString}#"\n"
+%       FullReport = "\nRuntime (walltime) test for script "#{Value.toVirtualString MyScript 1 1}#ScriptDescr#",\n using solver "#{Value.toVirtualString As.solver 1 1}#SolverDescr#", each test run "#As.testNo#" times, at "#{GUtils.timeVString}#"\n"
+%       # {Out.listToVS Reports "\n"}
    in
-      if As.logFile
-      then {Out.writeToFile FullReport As.logFile}
-      else {System.showInfo FullReport}
-      end
+      {PrintRecord ReportHeader}
+      {ForAll MyDistros
+       proc {$ MyDistro}
+	  Runtime = {TestRuntime MyScript MyDistro As.solver As.testNo}
+       in
+	  {PrintRecord
+	   "Runtime "#Runtime#" msec, distribution "#{Value.toVirtualString MyDistro 100 100}}
+       end}
+      
    end
 
 
