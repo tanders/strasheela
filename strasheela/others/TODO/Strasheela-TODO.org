@@ -41,7 +41,7 @@
 
 *** DONE Implement output to SuperCollider (via OSC)    
     CLOSED: [2008-06-10 Tue 21:34]
-*** TODO Implement output to MIDI (via SC)    
+±*** TODO Implement output to MIDI (via SC)    
 
 *** Explain how this application works in English
 
@@ -1684,6 +1684,10 @@ See ../../testing/zy_Efficiency/KeepMusicRepresentationOutsideComputationalSpace
 
 
 * Strasheela installation
+
+** TODO simplify editing _ozrc file					  :NEXT:
+
+   Move all variables (for directories and applications) at the top of the script: just introduce new vars like TmpDir (or even TMPDIR) etc.
 
 ** Include installation of Mozart extensions in install-all.sh 		 :MAYBE:
 
