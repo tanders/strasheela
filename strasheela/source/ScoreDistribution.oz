@@ -348,7 +348,7 @@ define
 	   
 	   order: 
 	      %% order function return boolean for sorting. 
-	   fns(naive: naive
+	   fns(naive: Naive
 	       size: Dom
 	       dom: Dom
 	       width: Width
