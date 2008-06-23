@@ -44,7 +44,7 @@ import
    Browser(browse:Browse) % temp for debugging
 export
    
-   MappingMixin
+   FlagsMixin MappingMixin
    
    ApplyToContext ApplyToContext2 ApplyToContextR
    ForContexts MapContexts ForContextsR
@@ -56,9 +56,9 @@ export
 define
 
    
-   /** %% [auxiliary class] adds flag support to all score objects. 
+   /** %% [auxiliary class] adds flag support to score objects. 
    %% */
-   %% !!?? Bug: are all flags always cleanly removed?
+   %% !!?? BUG: are all flags always cleanly removed?
    class FlagsMixin
       attr flags 
 	 /** %% [aux method] Method must not be called by user. 
