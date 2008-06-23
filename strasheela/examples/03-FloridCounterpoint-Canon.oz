@@ -589,5 +589,44 @@ end
  unit(order:naive
       value:mid)}
 
+
+%%%%%%%%%%%%%%%%
+
+%%
+%% canon in fifth: variable ordering left-to-right is much faster than first-fail
+%%
+
+%%  
+{SDistro.exploreOne {GUtils.extendedScriptToScript Canon
+		     unit(transpositionInterval: 7)}
+ unit(order:startTime
+      value:mid)}
+
+
+%% 
+{SDistro.exploreOne {GUtils.extendedScriptToScript Canon
+		     unit(transpositionInterval: 7)}
+ unit(order:dom
+      value:mid)}
+
+
+
+
+{GUtils.setRandomGeneratorSeed 0}
+{SDistro.exploreOne {GUtils.extendedScriptToScript Canon
+		     unit(transpositionInterval: 7)}
+ unit(order:startTime
+      value:random)}
+
+
+{GUtils.setRandomGeneratorSeed 0}
+{SDistro.exploreOne {GUtils.extendedScriptToScript Canon
+		     unit(transpositionInterval: 7)}
+ unit(order:dom
+      value:random)}
+
+
+
+
 */
 
