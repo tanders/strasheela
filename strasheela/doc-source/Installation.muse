@@ -20,7 +20,7 @@ Simply get a package ready to install from the [[http://www.mozart-oz.org/downlo
 
 After successfully installing Mozart, you may want to test the installation. At a commandline (a terminal or a DOS box) type =oz=. This starts the Oz Programming Interface (OPI), which runs inside Emacs. The initial window is split in two text buffers (=Oz= and =*Oz Compiler*=). In the upper buffer type the following.
 
-   ={Browse hello}= 
+   ={Browse 'hello'}= 
 
 Select this text line with the mouse, then go to the Oz menu and select 'Feed Region'. This feeds the selected code to the system (i.e. executes it): it opens a window called Oz Browser which shows 'hello'. 
 
