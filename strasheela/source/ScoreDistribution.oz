@@ -84,6 +84,7 @@ export
    min: ReflectMin
    max: ReflectMax
    MakeSetPreferredOrder MakeSetPreferredOrder2
+   MakeMarkNextParam MakeVisitMarkedParamsFirst 
    %% value ordering defs 
    MakeRandomDistributionValue
    
@@ -309,6 +310,48 @@ define
    end
 
    
+   /** %% [variable ordering and selection constructor] Allows to mark one or more parameter objects which should be visited directly after specific parameters. For example, after a note's pitch class parameter one may want to visit directly afterwards its octave parameter. 
+   %% Clauses is a list of pairs in the form [Test1#ItemAccessors1 ...]. TestI is a Boolean function or method expecting a parameter object. If a test function returns true then that means that specific parameters somehow related to the present parameter object are visited directly afterwards. These parameters are accessed with ItemAccessorsI, which is a list of unary functions or methods returning a parameter object to be visited next. Each function/method of ItemAccessorsI expects the item of the present parameter for convenience (so {X getItem($)} must not be called every time). Note that multiple params can be marked with multiple ItemAccessorsI, but the order in which these are visited is not specified.
+   %%
+   %% MakeMarkNextParam returns a unary function for the distribution strategy argument 'select'. 
+   %% Note: use MarkNextParam always together with MakeVisitMarkedParamsFirst.
+   %% */
+   fun {MakeMarkNextParam Clauses}
+      fun {$ X}
+	 Params = {LUtils.mappend Clauses
+		   fun {$ Test#ItemAccessors}
+		      if {{GUtils.toFun Test} X}
+		      then {Map ItemAccessors
+			    fun {$ Acc} {{GUtils.toFun Acc} {X getItem($)}} end}
+		      else nil
+		      end
+		   end}
+      in
+	 %% NOTE: using info tags is relatively inefficient (hasThisInfo traverses list), but using flags instead seems to block (?? because of stateful operations on directory and directory is in parent space?)
+	 {ForAll Params proc {$ P} {P addInfo(distributeNext)} end}
+	 % proc {$ P} {P addFlag(distributeNext)} end}
+	 %% the ususal parameter value select
+	 {X getValue($)}
+      end
+   end
+   /** %% [variable ordering constructor]: Returns a variable ordering which visits parameters marked by MakeMarkNextParam first. MakeVisitMarkedParamsFirst returns a binary function for the distribution strategy argument 'order'. MakeVisitMarkedParamsFirst should be the outmost variable ordering constructor (i.e. it should not be used as argument to another variable ordering constructor).
+   %% If neither variable is marked, use the score variable ordering P.
+   %%
+   %% Note: use MakeVisitMarkedParamsFirst always together with MakeMarkNextParam.
+   %% */
+   fun {MakeVisitMarkedParamsFirst P}
+      fun {$ X Y}
+	 %% always checking both vars: rather inefficient..
+	 if {X hasThisInfo($ distributeNext)} % {X hasFlag($ distributeNext)}
+	 then true
+	 elseif {Y hasThisInfo($ distributeNext)} % {Y hasFlag($ distributeNext)}
+	 then false
+	    %% else do the given distribution
+	 else {P X Y}
+	 end
+      end
+   end
+
    
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%
