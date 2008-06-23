@@ -131,7 +131,7 @@ define
       end
       if {Not As.allowInterchangeProgression}
       then {Pattern.forNeighbours Xs 3
-	    proc {$ [X Y Z]} {ConstantProgressionR X Z} = 0 end}
+	    proc {$ [X _ Z]} {ConstantProgressionR X Z} = 0 end}
       end
       %% the last two chords must form an ascending progression.
 %      {AscendingProgressionR {List.last Xs} {LUtils.butLast Xs}
