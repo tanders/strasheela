@@ -56,7 +56,7 @@ define
    /** %% Defines exclusive or: XOr returns true if only B1 or B2 are true. XOr returns false if B1 and B2 are both false or both true.
    %%*/
    fun {XOr B1 B2}
-   % !!?? could this be more efficient?
+   % NOTE: !!?? could this be more efficient?
       {And
        {Or B1 B2}
        {Not {And B1 B2}}}
