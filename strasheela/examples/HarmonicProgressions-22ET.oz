@@ -113,6 +113,80 @@ end
 
 
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%% Decatonic and purely ascending chord progression.
+%%
+%% Note that this example does allow for all chords in the chord database (and there is no dissonance treatment)
+%%
+%% TODO: in a next example: somehow treat dissonances, e.g., slowly increase/decrease degree of dissonance or prepare/resolve dissonances.. 
+%% 
+
+/*
+
+declare
+%% SELECT scale. 
+MyScale = {Score.makeScore
+	   scale(
+	      %% SELECT scale
+ 	      index:{HS.db.getScaleIndex 'standard pentachordal major'}
+% 	      index:{HS.db.getScaleIndex 'static symmetrical major'}
+% 	      index:{HS.db.getScaleIndex 'dynamic symmetrical major'}
+% 	      index:{HS.db.getScaleIndex 'standard pentachordal minor'}
+% 	      index:{HS.db.getScaleIndex 'static symmetrical minor'}
+% 	      index:{HS.db.getScaleIndex 'dynamic symmetrical minor'}
+	      transposition:{ET22.pc 'C'})
+           unit(scale:HS.score.scale)}
+%%
+/** %% CSP with chord sequence solution. Only diatonic chords, follow Schoebergs recommendation on good roor progression, end in cadence. 
+%% */
+proc {MyScript ChordSeq}
+   %% settings
+   N = 6			% number of chords
+   Dur = 2			% dur of each chord
+   %% create chord objects
+   Chords = {LUtils.collectN N
+	     fun {$}
+		{Score.makeScore2 chord(%index:{FD.int ChordIndices}
+					duration:Dur
+					%% just to remove symmetries 
+					sopranoChordDegree:1
+					timeUnit:beats)
+		 %% label can be either chord or inversionChord
+		 unit(chord:HS.score.inversionChord)}
+	     end} 
+in
+   %% create music representation for solution
+   ChordSeq = {Score.makeScore seq(items:Chords
+				   startTime:0)
+	       unit}
+   %% Good chord root progression 
+%   {HS.rules.schoenberg.resolveDescendingProgressions Chords unit}
+   {Pattern.for2Neighbours Chords
+    proc {$ C1 C2} {HS.rules.schoenberg.ascendingProgressionR C1 C2 1} end}
+%   {Pattern.for2Neighbours Chords
+%    proc {$ C1 C2} {HS.rules.schoenberg.superstrongProgressionR C1 C2 0} end}
+   %% First and last chords are equal (neither index nor transposition are distinct)
+   {HS.rules.distinctR Chords.1 {List.last Chords} 0}
+   %% All chords are in root position. 
+   {ForAll Chords proc {$ C} {C getBassChordDegree($)} = 1 end}
+   %% only diatonic chords
+   {ForAll Chords proc {$ C} {HS.rules.diatonicChord C MyScale} end}
+   %% last three chords form cadence
+  {HS.rules.cadence MyScale {LUtils.lastN Chords 3}}
+end
+%% sed random seed to date
+{GUtils.setRandomGeneratorSeed 0}
+{SDistro.exploreOne MyScript unit(order:startTime
+				  value:random
+				  % value:mid
+				 )}
+
+*/
+
+
+
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%
 %% Better understand possibilities of decatonic scale. 
