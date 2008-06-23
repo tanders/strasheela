@@ -53,7 +53,7 @@ import
    GUtils at 'GeneralUtils.ozf'
    LUtils at 'ListUtils.ozf'
    MUtils at 'MusicUtils.ozf'
-   ScoreMapping at 'ScoreMapping.ozf'
+   SMapping at 'ScoreMapping.ozf'
    Out at 'Output.ozf'
    % Pattern at 'Pattern.ozf'
    % Applicator at 'RuleApplicator.ozf'
@@ -940,7 +940,7 @@ define
    %% PS: The attribute 'unit' is mainly used for output.
    %%*/
    %% Was doc: Because of limitations of the FD constraints in Oz, the parameter value is limited to integer values (planned: fractions). However, these values can be mapped to arbitrary other data (e.g. midicent integer to frequency float).
-   class Parameter from ScoreObject
+   class Parameter from ScoreObject % SMapping.flagsMixin
       feat %'class': Parameter
 	 label: parameter
       attr item value 'unit'
@@ -1219,7 +1219,7 @@ define
    /**
    %% [abstract class] An item is a generalization of score containers and elements. An item can be contained in one or more containers, the feature containers points to them.
    %%*/
-   class Item from ScoreObject ScoreMapping.mappingMixin % Applicator.applicatorMixin
+   class Item from ScoreObject SMapping.mappingMixin % Applicator.applicatorMixin
       prop locking		% !!?? locking needed? Everythink is stateless now
       feat %'class': Item
 	 label: item
@@ -1367,29 +1367,29 @@ define
       %% An exeception is raised in case self is not contained in Xs or there is no 'x' in PatternMatchingExpr.
       %%
       %% BTW: pmApply allows to easily apply rules across container bounderies. For instance, <code>local MyNotes={Flatten {MyMotifSeq mapItems($ getItems)}} in {ForAll MyNotes proc {$ N} {N pmApply(MyNotes [o x] MyRule)} end} end</code> applies MyRule to all neighbouring notes nested in a sequence of motifs.
-      %% See also ScoreMapping.patternMatchingApply.
+      %% See also SMapping.patternMatchingApply.
       %% */ 
       meth pmApply(Xs PatternMatchingExpr P)
-	 {ScoreMapping.patternMatchingApply self Xs PatternMatchingExpr P}
+	 {SMapping.patternMatchingApply self Xs PatternMatchingExpr P}
       end
       /** %% Generalised variant of pmApply: in case no sublist in Xs matches PatternMatchingExpr, PatternMatchingApply2 does _not_ reduce to skip (as pmApply) but instead applies the null-ary procedure ElseP.
-      %% See also ScoreMapping.patternMatchingApply2.
+      %% See also SMapping.patternMatchingApply2.
       %% */ 
       meth pmApply2(Xs PatternMatchingExpr P ElseP)
-	 {ScoreMapping.patternMatchingApply2 self Xs PatternMatchingExpr P ElseP}
+	 {SMapping.patternMatchingApply2 self Xs PatternMatchingExpr P ElseP}
       end
 
       /** %% Variant of pmApply: applies P to the sublist of the elements of the temporal aspect of self which match PatternMatchingExpr.
       %% */
       meth pmApplyTemporalAspect(PatternMatchingExpr P)
-	 {ScoreMapping.patternMatchingApply self {{self getTemporalAspect($)}
+	 {SMapping.patternMatchingApply self {{self getTemporalAspect($)}
 						  getItems($)}
 	  PatternMatchingExpr P}
       end
       /** %% Generalised variant of pmApplyTemporalAspect2: in case no sublist in Xs matches PatternMatchingExpr, PatternMatchingApply2 does _not_ reduce to skip (as pmApplyTemporalAspect2) but instead applies the null-ary procedure ElseP.
       %% */ 
       meth pmApplyTemporalAspect2(PatternMatchingExpr P ElseP)
-	 {ScoreMapping.patternMatchingApply2 self {{self getTemporalAspect($)}
+	 {SMapping.patternMatchingApply2 self {{self getTemporalAspect($)}
 						   getItems($)}
 	  PatternMatchingExpr P ElseP}
       end
@@ -1644,17 +1644,17 @@ define
       /** %% Applies unary procedure P to each item in self which index is expressed by Decl. Decl is a list which contains single index integers or index ranges of the form Min#Max (Min and Max are integers).
       %% BTW: ForNumericRange corresponds roughly to rule application mechanism of Situation.
       %%
-      %% See also ScoreMapping.forNumericRange 
+      %% See also SMapping.forNumericRange 
       %% */ 
       meth forNumericRangeTemporalAspect(Decl P)
-	 {ScoreMapping.forNumericRange {self getItems($)}
+	 {SMapping.forNumericRange {self getItems($)}
 	  Decl P}
       end
       /** %% Generalised variant of forNumericRangeTemporalAspect: to every item in self to which P is not applied, ElseP (a unary procedure) is applied instead.
-      %% See also ScoreMapping.forNumericRange2 
+      %% See also SMapping.forNumericRange2 
       %% */ 
       meth forNumericRangeTemporalAspect2(Decl P ElseP)
-	 {ScoreMapping.forNumericRange2 {self getItems($)}
+	 {SMapping.forNumericRange2 {self getItems($)}
 	  Decl P ElseP}
       end
 
