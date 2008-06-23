@@ -41,7 +41,7 @@
 
 *** DONE Implement output to SuperCollider (via OSC)    
     CLOSED: [2008-06-10 Tue 21:34]
-±*** TODO Implement output to MIDI (via SC)    
+*** TODO Implement output to MIDI (via SC)    
 
 *** Explain how this application works in English
 
