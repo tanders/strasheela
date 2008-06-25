@@ -44,6 +44,7 @@ import
    FD Combinator
    Browser(browse:Browse) % temp for debugging
    GUtils at 'x-ozlib://anders/strasheela/source/GeneralUtils.ozf'
+   LUtils at 'x-ozlib://anders/strasheela/source/ListUtils.ozf'
    Score at 'x-ozlib://anders/strasheela/source/ScoreCore.ozf'
    Pattern at 'x-ozlib://anders/strasheela/Pattern/Pattern.ozf'
 export
@@ -147,11 +148,12 @@ define
 %       {Some {X getContainers($)} IsMotif} 
 %    end
    
-   /** %% Is X contained in a motif and Test is true? Test is a boolean binary function fun {$ X MyMotif} <body> end.
+   /** %% Is X contained in a motif (directly or indirectly) and Test is true? Test is a boolean binary function fun {$ X MyMotif} <body> end.
    %% */
    %% !!?? generalise for container?
    fun {IsInMotif X Test}
-      MyMotif = {X findContainer($ IsMotif)}
+      MyMotif = {LUtils.find {X getContainersRecursively($)}
+		 IsMotif}
    in
       if MyMotif == nil then false
       else {Test X MyMotif}
