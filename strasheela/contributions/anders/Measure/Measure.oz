@@ -81,6 +81,7 @@ define
 					 %% no alternative: quintuple 2/4 + 3/4
 					 5:[1 4] % quintuple 3/4 + 2/4
 					 6:[1 4] % compound duple (6/2, 6/4, 6/8)
+% 					 8:[1 3 5 7]
 					 9:[1 4 7] % compound triple (9/4, 9/8)
 					 12:[1 4 7 10] % compound quadruple (12/4, 12/8, 12/16)
 					)
@@ -521,25 +522,29 @@ define
       end
 
       /** %% B=1 <-> Start and End fall in different measures.
-      %% !! seems to be buggy! and is expensive anyway.
       %% */
+      %% Note: End is in a new bar if End is at the beginning of a bar
       meth overlapsBarlineR(B Start End)
 	 %% !!?? expensive: some more efficient implementation? E.g., additional Var as arg?
 	 StartBar = {FD.decl} % index of bar of Start
 	 EndBar = {FD.decl}
 	 Dur = {FD.decl}
       in
-	 B = {FD.decl}
+	 B = {FD.int 0#1}
 	 {self getMeasureAt(StartBar Start)}
 	 {self getMeasureAt(EndBar End)}
 	 Dur =: End - Start
-	 %% StartBar and EndBar are different AND Start and End are not simply on the start times of two consequitive bars.
-	 B =: {FD.conj
-	       (StartBar \=: EndBar)
-	       {FD.nega		
-		{FD.conj
-		 (Dur =: {self getMeasureDuration($)})
-		 {self onMeasureStartR($ Start)}}}}
+	 %% If no bar-overlapping happens, then either Start and End are in the same bar, or End is at the beginning for the next bar and Dur is no more than the measure duration. 
+	 B =: {FD.nega {FD.disj (StartBar =: EndBar)
+			{FD.conj {self onMeasureStartR($ End)}
+			 (Dur =<: {self getMeasureDuration($)})}}}
+% 	 %% StartBar and EndBar are different AND Start and End are not simply on the start times of two consequitive bars.
+% 	 B =: {FD.conj
+% 	       (StartBar \=: EndBar)
+% 	       {FD.nega		
+% 		{FD.conj
+% 		 (Dur =: {self getMeasureDuration($)})
+% 		 {self onMeasureStartR($ Start)}}}}
       end
 
 %      meth getAttributes(?Xs)
