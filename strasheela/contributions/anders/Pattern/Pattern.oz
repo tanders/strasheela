@@ -382,11 +382,22 @@ define
       As = {Adjoin Defaults Args}
       %% If indices return value is requested, then create a list of FD ints and process it..
       IndicesRequired = {HasFeature Args indices}
-      proc {UnifyLists Xs Ys}
-	 if Xs == nil orelse Ys == nil then skip
-	 elseif Xs.1 == '_' then {UnifyLists Xs.2 Ys.2}
-	 else Xs.1 = Ys.1 {UnifyLists Xs.2 Ys.2}
+      proc {Unify X Y}
+ 	 if X == '_' then skip
+	 elseif {IsList X} then {UnifyLists X Y}
+	 elseif {IsRecord X} andthen {Not {IsAtom X}} then {Browse X} {UnifyRecord X Y}
+	 else X = Y
 	 end
+      end
+      proc {UnifyLists Xs Ys}
+	 {ForAll {LUtils.matTrans [Xs Ys]}
+	  proc {$ [X Y]} {Unify X Y} end}
+      end
+      proc {UnifyRecord Xs Ys}
+	 {ForAll {LUtils.matTrans
+		  [{Record.toList Xs}
+		   {Record.toList Ys}]}
+	  proc {$ [X Y]} {Unify X Y} end}
       end
       proc {Constrain I MyMotif Xs Indices N}
 	 XsPart
