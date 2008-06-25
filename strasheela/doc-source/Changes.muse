@@ -55,10 +55,10 @@
     - Added example examples/ShowHarmonicDatabases.oz
     - HS.rules.schoenberg: fixed ResolveDescendingProgressions: decending progression "resolved" only in ascending  progression (not superstrong), also fixed arg allowInterchangeProgression (added constraint)
     - Fixed bug in UniformMeasures method overlapsBarlineR (old def had logical error)
+    - Added Item method getContainersRecursively
 
 
-
-  - There have been various other small changes, see the [[../CHANGELOG.txt]].
+  - There have been many other small changes, see the [[../CHANGELOG.txt]].
 
 
 * Changes in Version 0.9.5 (16 April 2008)
