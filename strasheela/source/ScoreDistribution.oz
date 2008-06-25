@@ -341,7 +341,6 @@ define
    %% */
    fun {MakeVisitMarkedParamsFirst P}
       fun {$ X Y}
-	 %% always checking both vars: rather inefficient..
 	 if {X hasThisInfo($ distributeNext)} % {X hasFlag($ distributeNext)}
 	 then true
 	 elseif {Y hasThisInfo($ distributeNext)} % {Y hasFlag($ distributeNext)}
@@ -349,6 +348,11 @@ define
 	    %% else do the given distribution
 	 else {P X Y}
 	 end
+	 %% not more efficient, but less easy to comprehend
+% 	 {X hasThisInfo($ distributeNext)} orelse 
+% 	 (if {Y hasThisInfo($ distributeNext)} then false
+% 	  else {P X Y}
+% 	  end)
       end
    end
 
