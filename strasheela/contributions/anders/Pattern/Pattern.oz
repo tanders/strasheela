@@ -361,9 +361,11 @@ define
 
 
    
-   /** %% UseMotifs constrains the list Xs to consist only of "motif instances" declared in the list Motifs. Elements in Motifs can differ in length. More specifically, UseMotifs constrains that Xs is quasi the result of elements in Motifs appended in any order and possibly with repetitions. However, UseMotifs is a constraint -- the order of Motifs elements in Xs is free.
-   %% Xs can be a list of FD ints, in which case Motifs must be a list of list of FD its. For example, Xs can be the list of note pitches of a voice and Motifs defines possible "pitch motifs". Alternatively, Xs can be the list of intervals between note pitches and Motifs defines "interval motifs" which are transposable. Or Xs is a list of duration factors instead of durations and Motifs defines "duration factor motifs" which can be "stretched".
-   %% However, Xs must not be a list of FD ints. For example, elements in Motifs can be pairs of Pitch#Duration in which case Xs would be a list of FD integer pairs. Although the motifs can differ in length, all elements of Xs and all elements of each motif must be equally nested an only differ in constrained variables so that they can be unified. 
+   /** %% UseMotifs constrains the list Xs to consist only of "motif instances" declared in the list Motifs, a list of motif specs. More specifically, UseMotifs constrains that Xs is quasi the result of elements in Motifs appended in any order and possibly with repetitions. However, UseMotifs is a constraint -- the order of Motif elements in Xs is not fixed by UseMotifs.
+   %% Xs can be a list of FD ints. In this case, Motifs must be a list of list of FD its. Elements in Motifs can differ in length. For example, Xs can be the list of note pitches of a voice and Motifs defines possible "pitch motifs". Alternatively, Xs can be the list of intervals between note pitches and Motifs defines "interval motifs" which are transposable. Or Xs is a list of duration factors instead of durations and Motifs defines "duration factor motifs" which can be "stretched".
+   %% However, Xs is not limited to a list of FD ints, a list of other values is possible as well. For example, elements in Xs can be pairs of Pitch#Duration. In this case, an element in Motifs would also be a list of FD integer pairs. Although the motifs can differ in length, all elements of Xs and all elements of each motif must be equally nested and only differ in constrained variables so that they can be unified.
+   %% A motif spec can contain elements which should be ignored (i.e. don't result in any constraints). These elements are marked with '_'.
+   %%
    %% UseMotifs expects the following optional arguments
    %% 'workOutEven': If 'workOutEven' is false (the default), then the end of Xs may only contain the beginning of a Motifs element. By contrast, Xs contains only full elements of Motifs if 'workOutEven' is true.
    %% 'indices': an optional return value, a list of FD ints. For each element in Xs, indices contains an FD int which specifies to which motif index (e.g. position of its motif in Motifs) the Xs element belongs. These variables can be used, for example, to constrain that certain motifs should follow each other or to constrain how often some motif occurs.
@@ -381,8 +383,8 @@ define
       %% If indices return value is requested, then create a list of FD ints and process it..
       IndicesRequired = {HasFeature Args indices}
       proc {UnifyLists Xs Ys}
-	 if Xs == nil orelse Ys == nil
-	 then skip
+	 if Xs == nil orelse Ys == nil then skip
+	 elseif Xs.1 == '_' then {UnifyLists Xs.2 Ys.2}
 	 else Xs.1 = Ys.1 {UnifyLists Xs.2 Ys.2}
 	 end
       end
