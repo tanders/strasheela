@@ -1327,6 +1327,16 @@ define
 	 %X=@containers
 	 X = @containers.list
       end
+
+      /** %% Returns all direct and indirect containers of self. 
+      %% */
+      meth getContainersRecursively($) 
+	 Cs = @containers.list
+      in
+	 {Append Cs
+	  {LUtils.mappend Cs fun {$ C} {C getContainersRecursively($)} end}}
+      end
+      
       /** %% Applies Proc (unary procedure or method) on all direct containers in self.
       %% */
       meth forAllContainers(Proc)
