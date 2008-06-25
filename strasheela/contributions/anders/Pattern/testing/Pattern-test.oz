@@ -1470,7 +1470,7 @@ declare
 Motifs = [[1 2 3]
 	  [4 5]]
 Xs = {FD.list 10 0#20}
-{Pattern.useMotifs Xs Motifs}
+{Pattern.useMotifs Xs Motifs unit}
 {Browse ok}
 
 {Browse Xs}
@@ -1483,98 +1483,84 @@ Xs.2.1 = 5
 
 %% end can be incomplete motif
 {ExploreAll
- proc {$ Root}
+ proc {$ Solution}
     Motifs = [[1 2 3]
 	      [10 11 12 13]
 	      [4 5]]
  in
-    Root = {FD.list 10 0#20}
-    {Pattern.useMotifs Root Motifs unit(workOutEven:false)} 
-    {FD.distribute ff Root}
+    Solution = {FD.list 10 0#20}
+    {Pattern.useMotifs Solution Motifs unit(workOutEven:false)} 
+    {FD.distribute ff Solution}
  end}
 
 
 %% Solution must contain only full motifs -- less solutions (17 instead of 71)
 {ExploreAll
- proc {$ Root}
+ proc {$ Solution}
     Motifs = [[1 2 3]
 	      [10 11 12 13]
 	      [4 5]]
  in
-    Root = {FD.list 10 0#20}
-    {Pattern.useMotifs Root Motifs unit(workOutEven:true)} 
-    {FD.distribute ff Root}
+    Solution = {FD.list 10 0#20}
+    {Pattern.useMotifs Solution Motifs unit(workOutEven:true)} 
+    {FD.distribute ff Solution}
  end}
 
 
 %% multiple "parameters": list of sublists (could be pairs too)
 {ExploreOne
- proc {$ Root}
+ proc {$ Solution}
     Motifs = [[[1 11] [2 12] [3 13]]
 	      [[4 41] [5 51]]]
  in
-    Root = {List.make 10}
-    {ForAll Root  
+    Solution = {List.make 10}
+    {ForAll Solution  
      proc {$ X} X = [ {FD.decl} {FD.decl} ] end}
-    {Pattern.useMotifs Root Motifs unit} 
-    {FD.distribute ff {Flatten Root}}
+    {Pattern.useMotifs Solution Motifs unit} 
+    {FD.distribute ff {Flatten Solution}}
  end}
 
 
-%% NOTE: Motifs should not contain variables -- leads to symmetries but does not add any solutions.
-%% Why??
+%% Motifs can contain variables
 {ExploreOne
- proc {$ Root}
-    X = {FD.int 20#30}
+ proc {$ Solution}
+    X = {FD.int 10#13}
     Motifs = [[1 2 3]
 	      [4 5]
 	      [X]
 	     ]
  in
-    Root = {FD.list 10 0#6}
-    {Pattern.useMotifs Root Motifs unit(workOutEven:true)} 
-    {FD.distribute ff X|Root}
+    Solution = {FD.list 10 0#20}
+    {Pattern.useMotifs Solution Motifs unit(workOutEven:true)} 
+    {FD.distribute ff X|Solution}
  end}
 
-
-
-%% NOTE: Motifs should not contain variables -- leads to symmetries but does not add any solutions.
-%% Why??
-{ExploreOne
- proc {$ Root}
-    Motifs = [[1 2 3]
-	      [4 5]
-	      [10]]
- in
-    Root = {FD.list 10 0#10}
-    {Pattern.useMotifs Root Motifs unit(workOutEven:true)} 
-    {FD.distribute ff Root}
- end}
 
 %% NOTE: Pattern.useMotifs does not work as expected if some motifs are fully contained in the beginning of another. E.g., [1 2] is fully contained in the beginning of [1 2 2].
 %% Next example shows how to address this issue
 {ExploreOne
- proc {$ Root}
+ proc {$ Solution}
     Motifs = [[1 2]
 	      [1 2 2]]
     Indices
  in
-    Root = {FD.list 10 0#5}
-    {Pattern.useMotifs Root Motifs unit(workOutEven:true)} 
-    {FD.distribute naive Root}
+    Solution = {FD.list 10 0#5}
+    {Pattern.useMotifs Solution Motifs unit(workOutEven:true)} 
+    {FD.distribute naive Solution}
  end}
+
 
 %% Same as previous example, but here the motif indices are distributed and therefore the problem noticed before does not accur.
 {ExploreOne
- proc {$ Root}
+ proc {$ Solution}
     Motifs = [[1 2]
 	      [1 2 2]]
     Indices
  in
-    Root = {FD.list 10 0#5}
-    {Pattern.useMotifs Root Motifs unit(workOutEven:true
-					indices:Indices)} 
-    {FD.distribute naive {Append Indices Root}}
+    Solution = {FD.list 10 0#5}
+    {Pattern.useMotifs Solution Motifs unit(workOutEven:true
+					    indices:Indices)} 
+    {FD.distribute naive {Append Indices Solution}}
  end}
 
 
