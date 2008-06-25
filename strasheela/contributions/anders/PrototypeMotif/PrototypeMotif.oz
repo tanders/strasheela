@@ -84,6 +84,7 @@ import
 export 
 
    MakeScript
+   IsMotif IsInMotif
 
    NestedScript
    
@@ -95,8 +96,14 @@ export
    
    GetFirstNote
    GetHighestPitch
+
+prepare
+   %% Defined in 'prepare' to avoid re-evaluation.
+   GlobalMotifName = {NewName}
    
 define
+
+   
 
    /** %% MakeScript returns a (sub)-CSP for creating motif instances similar to a given prototype. MakeScript expects a prototype motif MyProto (a score object, usually a container with other score objects) and some optional arguments. MakeScript returns an extended script, that is a binary procedure with the interface {MyScript Args MyScore} (for details see GUtils.extendedScriptToScript). 
    %% The returned script expects the following optional arguments. 'initScore' (defaults to false) specifies whether the resulting score is fully initialised implicitly. Ignore this argument if the returned motif instance is nested into other containers and that way only a part of a score, but set it to true if the returned motif instance is the full score (e.g., for testing). For further details on score initialisation see Score.initScore.
@@ -209,6 +216,7 @@ define
 	 %% Create a copy of AuxScore, so all implicit constraints are applied by Score.makeScore
 	 MyScore = {CopyScore2 AuxScore TopLevelScoreObjArgs}
 	 %% add info tag for type checking
+	 {MyScore addFlag(GlobalMotifName)}
 	 {MyScore addFlag(MotifName)}
 	 
 	 if ScriptAs.initScore then {Score.initScore MyScore} end
@@ -259,6 +267,25 @@ define
    end
 
 
+   /** %% Returns true for any motif instance created by a script which was created by MakeScript. 
+   %% */
+   fun {IsMotif X}
+      {Score.isScoreObject X}
+      andthen {X hasFlag($ GlobalMotifName)}
+   end
+
+   /** %% Is X contained in a motif (directly or indirectly) and is Test true? Test is a boolean binary function with the interface {$ X MyMotif}.
+   %% */
+   %% !!?? generalise for container?
+   fun {IsInMotif X Test}
+      MyMotif = {LUtils.find {X getContainersRecursively($)}
+		 IsMotif}
+   in
+      if MyMotif == nil then false
+      else {Test X MyMotif}
+      end
+   end   
+   
    /** %% [Aux for MakeScript and NestedScript] Expects a textual score MyTextScore and the list of arguments given to script arg NestedArgs. Returns the textual score with the arguments added. For every object of which some info tag matches an id in the NestedArgs, the corresponding args of NestedArgs are added.
    %% MakeScript created-scripts just ignore arg nestedArgs (??)
    %% */
