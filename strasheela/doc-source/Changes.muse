@@ -54,6 +54,7 @@
     - Out: Fixed lily bug: pause objects did not support lily info tag
     - Added example examples/ShowHarmonicDatabases.oz
     - HS.rules.schoenberg: fixed ResolveDescendingProgressions: decending progression "resolved" only in ascending  progression (not superstrong), also fixed arg allowInterchangeProgression (added constraint)
+    - Fixed bug in UniformMeasures method overlapsBarlineR (old def had logical error)
 
 
 
