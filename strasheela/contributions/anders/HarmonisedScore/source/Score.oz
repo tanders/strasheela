@@ -115,7 +115,7 @@
 
 functor
 import
-   FD FS Combinator System
+   FD FS Combinator System Search
    Browser(browse:Browse) % temp for debugging
 %   Inspector(inspect:Inspect) % temp for debugging
    Select at 'x-ozlib://duchier/cp/Select.ozf'
@@ -128,6 +128,7 @@ import
    CTT at 'x-ozlib://anders/strasheela/ConstrainTimingTree/ConstrainTimingTree.ozf'
    DB at 'Database.ozf'
    Rules at 'Rules.ozf'
+   HS_Score at 'Score.ozf'
 
    
    % SDistro at 'x-ozlib://anders/strasheela/ScoreDistribution.ozf'
@@ -148,6 +149,8 @@ export
    TransposeDegree
    AbsoluteToOffsetAccidental OffsetToAbsoluteAccidental
    PcSetToSequence
+
+   MinimalCadentialSet MakeAllContextScales
 
    Interval
    IsInterval
@@ -435,6 +438,55 @@ define
       {Append Trailing Leading}
 %      end
    end
+
+
+   %%
+   %% minimal cadential sets
+   %% 
+   
+   /** %% Returns the list of all scales with the given scale indices and transpositions (two lists of integers), more specifically the cartesian product of all the scales with these parameters is created.
+   %% */
+   fun {MakeAllContextScales ScaleIndices Transpositions}
+      {Pattern.mapCartesianProduct ScaleIndices Transpositions
+       fun {$ Index Transposition}
+	  {Score.makeScore scale(index:Index
+				 transposition:Transposition)
+	   unit(scale:HS_Score.scale)}
+       end}
+   end
+   local
+      /** %% Returns a script which in turn returns a cadential set (a single FS) for MyScale (a determined scale object) and its ContextScales (a list of determined scale objects) which usually contains MyScale as well. The ContextScales are conveniently created with MakeAllContextScales. 
+      %% */
+      fun {MakeCadentialSetScript MyScale ContextScales}
+	 proc {$ SufficientSet}
+	    SufficientSet = {FS.var.decl}
+	    {FS.subset SufficientSet {MyScale getPitchClasses($)}}
+	    {ForAll {LUtils.remove ContextScales
+		     fun {$ X} {X getPitchClasses($)} == {MyScale getPitchClasses($)} end}
+	     proc {$ ContextScale} 
+		{FD.nega 
+		 {Combinator.'reify' 
+		  proc {$} {FS.subset SufficientSet {ContextScale getPitchClasses($)}} end}
+		 1}
+	     end}
+	    {FS.distribute generic [SufficientSet]}
+	 end
+      end
+      /** %% Comparison constraint for creating a minimal cadencial set by BAB search.
+      %% */
+      proc {MinimiseCardiality FS1 FS2}
+	 {FS.card FS1} >: {FS.card FS2}
+      end
+   in
+      /* %% Returns the minimal cadential set (a determined FS) for MyScale (a determined scale object) for the ContextScales (a list of determined scale objects), that is the set of pitch classes which unambiguously distinguishes MyScale among ContextScales. 
+      %% Note that MinimalCadentialSet internally performs a search.
+      %% */
+      fun {MinimalCadentialSet MyScale ContextScales}
+	 {Search.base.best {MakeCadentialSetScript MyScale ContextScales}
+	  MinimiseCardiality}
+      end
+   end
+   
    
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -2572,38 +2624,38 @@ define
 	    Chords = {Map ChordSpecs MakeChord}
 	    %% list of list of simultaneous note and chord objects 
 	    ChordNotess = {Map Chords
-			  proc {$ C ?Notes}
-			     Dur = {C getDuration($)}
-			     %% Pairs of note objects and
-			     %% singletons sets with the note's
-			     %% PC
-			     NotesAndPCs = {LUtils.collectN As.voices
-					    fun {$}
-					       N PC_FS
-					       PC = {DB.makePitchClassFDInt}
-					    in
-					       N = {Score.makeScore2
-						    note(duration:Dur
-							 pitchClass:PC
-							 pitch:{FD.int As.pitchDomain}
-							 amplitude:As.amp)
-						    unit(note:Note2)}
-					       %% N is chord note
-					       {FS.include PC {C getPitchClasses($)}}
-					       %% for constraining that all chord PC are expressed
-					       {MakeSingletonSet PC PC_FS}
-					       %% return result
-					       N#PC_FS
-					    end}
-			     PC_FSs = {Map NotesAndPCs fun {$ _#PC_FS} PC_FS end}
-			  in
-			     Notes = {Map NotesAndPCs fun {$ N#_} N end}
+			   proc {$ C ?Notes}
+			      Dur = {C getDuration($)}
+			      %% Pairs of note objects and
+			      %% singletons sets with the note's
+			      %% PC
+			      NotesAndPCs = {LUtils.collectN As.voices
+					     fun {$}
+						N PC_FS
+						PC = {DB.makePitchClassFDInt}
+					     in
+						N = {Score.makeScore2
+						     note(duration:Dur
+							  pitchClass:PC
+							  pitch:{FD.int As.pitchDomain}
+							  amplitude:As.amp)
+						     unit(note:Note2)}
+						%% N is chord note
+						{FS.include PC {C getPitchClasses($)}}
+						%% for constraining that all chord PC are expressed
+						{MakeSingletonSet PC PC_FS}
+						%% return result
+						N#PC_FS
+					     end}
+			      PC_FSs = {Map NotesAndPCs fun {$ _#PC_FS} PC_FS end}
+			   in
+			      Notes = {Map NotesAndPCs fun {$ N#_} N end}
 %			     Result = {Append Notes [C]}
-			     %% no voice crossing (but unison doublings are OK)
-			     {Pattern.continuous
-			      {Map Notes fun {$ N} {N getPitch($)} end}
-			      '=<:'}
-			     %% QUATSCH (diese def fuer enge lage)
+			      %% no voice crossing (but unison doublings are OK)
+			      {Pattern.continuous
+			       {Map Notes fun {$ N} {N getPitch($)} end}
+			       '=<:'}
+			      %% QUATSCH (diese def fuer enge lage)
 % 			  %% sim intervals between neighbouring voices
 % 			  %% all > than an octave
 % 			  if As.engeLage then
@@ -2613,25 +2665,25 @@ define
 % 				 P1 - P2 <: {HS.db.getPitchesPerOctave}
 % 			      end}
 % 			  end
-			     %% first and last Note PCs are bass and soprano of C
-			     if {Not As.ignoreSopranoChordDegree} then 
-				{Notes.1 getPitchClass($)} = {C getSopranoPitchClass($)}
-			     end
-			     {{List.last Notes} getPitchClass($)} = {C getBassPitchClass($)}
-			     %%
-			     if As.minIntervalToBass > 0 then 
-				{Notes.1 getPitchClass($)} - {{Nth Notes 2} getPitchClass($)} >=: As.minIntervalToBass
-			     end
-			     %% The note PCs together express all PCs of C (and no others)
-			     {FS.unionN PC_FSs {C getPitchClasses($)}}
-			  end}
+			      %% first and last Note PCs are bass and soprano of C
+			      if {Not As.ignoreSopranoChordDegree} then 
+				 {Notes.1 getPitchClass($)} = {C getSopranoPitchClass($)}
+			      end
+			      {{List.last Notes} getPitchClass($)} = {C getBassPitchClass($)}
+			      %%
+			      if As.minIntervalToBass > 0 then 
+				 {Notes.1 getPitchClass($)} - {{Nth Notes 2} getPitchClass($)} >=: As.minIntervalToBass
+			      end
+			      %% The note PCs together express all PCs of C (and no others)
+			      {FS.unionN PC_FSs {C getPitchClasses($)}}
+			   end}
 	 in
 	    MyScore
 	    = {Score.makeScore
 	       sim(items:[seq(items:{Map ChordNotess
 				     fun {$ ChordNotes}
 					sim(items:ChordNotes)
-				      end})
+				     end})
 			  seq(info:lily('\\set Staff.instrumentName = "Analysis"')
 			      items:Chords)]
 		   startTime:0
@@ -2668,17 +2720,17 @@ define
 			 %amp:30
 			 value:mid
 			 order:{SDistro.makeSetPreferredOrder
-			    %% order: time params, chord params, pitch classes, octaves, pitches
-			    [fun {$ X} {X isTimeParameter($)} end
-			     fun {$ X} {IsChord {X getItem($)}} end
-			     %% NOTE: searching for PCs before octaves can lead to massive increase of search size
+				%% order: time params, chord params, pitch classes, octaves, pitches
+				[fun {$ X} {X isTimeParameter($)} end
+				 fun {$ X} {IsChord {X getItem($)}} end
+				 %% NOTE: searching for PCs before octaves can lead to massive increase of search size
 			    % fun {$ X} {IsPitchClass X} end
 			    % fun {$ X} {X hasThisInfo($ octave)} end
-			    ]
-			    fun {$ X Y}
-			       fun {GetDomSize X} {FD.reflect.size {X getValue($)}} end
-			    in {GetDomSize X} < {GetDomSize Y}
-			    end}
+				]
+				fun {$ X Y}
+				   fun {GetDomSize X} {FD.reflect.size {X getValue($)}} end
+				in {GetDomSize X} < {GetDomSize Y}
+				end}
 			 %ignoreSopranoChordDegree:false
 			 %minIntervalToBass:0
 		         % engeLage:false
