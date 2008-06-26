@@ -450,6 +450,48 @@ Root = 11
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%
+%% minimal cadential sets
+%%
+
+
+% Example: 
+%    ContextScales is the major scale in all its 12 ET transpositions
+%    MyScale is C major scale
+%    MinimumSet = {G, B, F}
+%    Note: this set is not sufficient if ContextScales contain, e.g., dorian scales as well, because G dorian also contains these pitches. 
+				       
+
+declare
+MyScale = {Score.makeScore scale(index:{HS.db.getScaleIndex 'major'}
+				 transposition:0)
+	   unit(scale:HS.score.scale)}
+ContextScales = {HS.score.makeAllContextScales [{HS.db.getScaleIndex 'major'}]
+		 {List.number 0 11 1}}
+{Browse {HS.score.minimalCadentialSet MyScale ContextScales}}
+%% -> {0 5 11} % i.e. {G, B, F}
+
+
+%%
+%% Now for pentachordal major
+%%
+
+declare
+[ET22] = {ModuleLink ['x-ozlib://anders/strasheela/ET22/ET22.ozf']}
+{HS.db.setDB ET22.db.fullDB}
+MyScale = {Score.makeScore scale(index:{HS.db.getScaleIndex 'standard pentachordal major'}
+				 transposition:0)
+	   unit(scale:HS.score.scale)}
+ContextScales = {HS.score.makeAllContextScales [{HS.db.getScaleIndex 'standard pentachordal major'}]
+		 {List.number 0 11 1}}
+{Browse {HS.score.minimalCadentialSet MyScale ContextScales}}
+%% -> {2 16}
+
+%% 
+{MyScale getPitchClasses($)}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
 %% chord class
 %%
  
