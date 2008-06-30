@@ -428,6 +428,7 @@ declare
 [ET12] = {ModuleLink ['x-ozlib://anders/strasheela/ET12/ET12.ozf']}
 
 Beat = 4
+TimeUnit = beats(Beat)
 %% note duration names
 D16 = Beat div 4
 D8 = Beat div 2
@@ -517,7 +518,7 @@ proc {MakeNoteSeq Args ?MyScore}
 		   notesRule: proc {$ Notes} skip end
 		   %% Note class
 		   noteClass: Score.note
-		   timeUnit:beats(4)
+		   timeUnit:TimeUnit
 		   startTime:0
 		   initScore:true
 		  )
