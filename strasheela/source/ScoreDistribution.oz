@@ -270,7 +270,7 @@ define
 	 {LUtils.findPosition Tests fun {$ Test} {Test Param} end}
       end
    in
-      /** %% [variable ordering constructor] Returns a variable ordering which visits parameters in an order specified by test functions. Tests is a list of unary boolean funcs which expect a parameter. The variable ordering first visits the parameter for which a test with smaller index in Tests returns true.  In case of a tie (two parameters with equal 'test index'), the first argument of the variable ordering is preferred.
+      /** %% [variable ordering constructor] Returns a variable ordering which visits parameters in an order specified by test functions. Tests is a list of unary Boolean funcs which expect a parameter. Implicitly, a last Boolean function is added which always returns true (so parameters not matching any test are always rated lower). The variable ordering first visits the parameter for which a test with smaller index in Tests returns true. In case of a tie (two parameters with equal 'test index'), the first argument of the variable ordering is preferred (naive tie breaking).
       %% */
       fun {MakeSetPreferredOrder2 Tests}
 	 %% append default (always returning true) at end
@@ -283,7 +283,7 @@ define
 	    XI =< YI
 	 end
       end
-      /** %% [variable ordering constructor] More general variant of MakeSetPreferredOrder2. Returns a variable ordering which visits parameters in an order specified by test functions. Tests is a list of unary boolean funcs which expect a parameter. The variable ordering first visits the parameter for which a test with smaller index in Tests returns true. MakeSetPreferredOrder breaks ties with the score variable ordering P.
+      /** %% [variable ordering constructor] More general variant of MakeSetPreferredOrder2. Returns a variable ordering which visits parameters in an order specified by test functions. Tests is a list of unary boolean funcs which expect a parameter. Implicitly, a last Boolean function is added which always returns true (so parameters not matching any test are always rated lower). The variable ordering first visits the parameter for which a test with smaller index in Tests returns true. MakeSetPreferredOrder breaks ties with the score variable ordering P.
       %% */
       fun {MakeSetPreferredOrder Tests P}
 	 %% append default (always returning true) at end
@@ -295,7 +295,7 @@ define
 	 in
 	    XI < YI orelse
 	    (YI == XI andthen {P X Y})
-	    %% same meaning, but always needs more computation steps:
+	    %% same meaning, but needs more computation steps:
 % 	    if XI < YI
 % 	    then true
 % 	    elseif YI == XI
