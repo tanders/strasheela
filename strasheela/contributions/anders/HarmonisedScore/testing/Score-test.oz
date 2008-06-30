@@ -492,6 +492,19 @@ ContextScales = {HS.score.makeAllContextScales
 {MyScale getPitchClasses($)}
 
 
+%%
+%% HS.score.minimalCadentialSet2
+%%
+
+declare
+MyScaleFS = {FS.value.make [0 2 4 5 7 9 11]}
+ContextScaleFSs = {Map {HS.score.makeAllContextScales [{HS.db.getScaleIndex 'major'}]
+			{List.number 0 11 1}}
+		   fun {$ X} {X getPitchClasses($)} end}
+{Browse {HS.score.minimalCadentialSet2 MyScaleFS ContextScaleFSs}}
+%% -> {0 5 11} % i.e. {G, B, F}
+
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%
 %% chord class
