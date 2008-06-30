@@ -478,10 +478,12 @@ ContextScales = {HS.score.makeAllContextScales [{HS.db.getScaleIndex 'major'}]
 declare
 [ET22] = {ModuleLink ['x-ozlib://anders/strasheela/ET22/ET22.ozf']}
 {HS.db.setDB ET22.db.fullDB}
-MyScale = {Score.makeScore scale(index:{HS.db.getScaleIndex 'standard pentachordal major'}
+MyScale = {Score.makeScore scale(index:{HS.db.getScaleIndex
+					'standard pentachordal major'}
 				 transposition:0)
 	   unit(scale:HS.score.scale)}
-ContextScales = {HS.score.makeAllContextScales [{HS.db.getScaleIndex 'standard pentachordal major'}]
+ContextScales = {HS.score.makeAllContextScales
+		 [{HS.db.getScaleIndex 'standard pentachordal major'}]
 		 {List.number 0 11 1}}
 {Browse {HS.score.minimalCadentialSet MyScale ContextScales}}
 %% -> {2 16}
