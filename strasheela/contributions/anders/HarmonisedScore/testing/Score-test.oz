@@ -467,7 +467,7 @@ MyScale = {Score.makeScore scale(index:{HS.db.getScaleIndex 'major'}
 	   unit(scale:HS.score.scale)}
 ContextScales = {HS.score.makeAllContextScales [{HS.db.getScaleIndex 'major'}]
 		 {List.number 0 11 1}}
-{Browse {HS.score.minimalCadentialSet MyScale ContextScales}}
+{Browse {HS.score.minimalCadentialSets MyScale ContextScales}}
 %% -> {0 5 11} % i.e. {G, B, F}
 
 
@@ -481,8 +481,8 @@ ContextScales = {HS.score.makeAllContextScales [{HS.db.getScaleIndex 'major'}
 						{HS.db.getScaleIndex 'natural minor'}
 					       ]
 		 {List.number 0 11 1}}
-{Browse {HS.score.minimalCadentialSet MyScale ContextScales}}
-%% -> {0 5 11} % i.e. {G, B, F}
+{Browse {HS.score.minimalCadentialSets MyScale ContextScales}}
+%% -> {0 5 11} % i.e. {C, F, B}
 
 
 %%
@@ -499,8 +499,17 @@ MyScale = {Score.makeScore scale(index:{HS.db.getScaleIndex
 ContextScales = {HS.score.makeAllContextScales
 		 [{HS.db.getScaleIndex 'standard pentachordal major'}]
 		 {List.number 0 11 1}}
-{Browse {HS.score.minimalCadentialSet MyScale ContextScales}}
+Solutions = {HS.score.minimalCadentialSets MyScale ContextScales}
+{Browse Solutions}
 %% -> {2 16}
+{Browse 
+ {Map Solutions
+  fun {$ MyFS}
+     Xs = {FD.list {FS.card MyFS} 0#FD.sup}
+  in
+     {FS.int.match MyFS Xs}
+     {Map Xs ET22.pcName}
+  end}}
 
 %% 
 {MyScale getPitchClasses($)}
@@ -521,8 +530,9 @@ ContextScaleFSs = {Map {List.number 0 11 1}
 		       {Map [0 2 4 5 7 9 11]
 			fun {$ PC} {HS.score.transposePC PC I} end}}
 		   end}
-{Browse {HS.score.minimalCadentialSet2 MyScaleFS ContextScaleFSs}}
-%% -> {0 5 11} % i.e. {G, B, F}
+{Browse {HS.score.minimalCadentialSets2 MyScaleFS ContextScaleFSs}}
+%% -> {0 5 11} 
+
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
