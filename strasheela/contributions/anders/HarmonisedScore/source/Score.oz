@@ -150,7 +150,7 @@ export
    AbsoluteToOffsetAccidental OffsetToAbsoluteAccidental
    PcSetToSequence
 
-   MinimalCadentialSet MinimalCadentialSet2 MakeAllContextScales 
+   MinimalCadentialSets MinimalCadentialSets2 MakeAllContextScales 
 
    Interval
    IsInterval
@@ -455,9 +455,13 @@ define
        end}
    end
    local
-      /** %% Returns a script which in turn returns a cadential set (a single FS) for MyScaleFS (a determined FS) and its ContextScaleFSs (a list of determined FS) which can contain MyScaleFS as well. 
+      /** %% Returns a script which in turn returns a cadential set (a single FS) for MyScaleFS (a determined FS) and its ContextScaleFSs (a list of determined FS) which can contain MyScaleFS as well.
+      %% The optional argument 'card' expects an integer for the cardiality of the resulting FS. The default is false and no cardiality constraint is applied.
       %% */
-      fun {MakeCadentialSetScript MyScaleFS ContextScaleFSs}
+      fun {MakeCadentialSetScript MyScaleFS ContextScaleFSs Args}
+	 Default = unit(card:false)
+	 As = {Adjoin Default Args}
+      in
 	 proc {$ SufficientSet}
 	    SufficientSet = {FS.var.decl}
 	    {FS.subset SufficientSet MyScaleFS}
@@ -469,6 +473,9 @@ define
 		  proc {$} {FS.subset SufficientSet ContextScaleFS} end}
 		 1}
 	     end}
+	    if {IsInt As.card}
+	    then {FS.card SufficientSet As.card}
+	    end
 	    {FS.distribute generic [SufficientSet]}
 	 end
       end
@@ -478,21 +485,44 @@ define
 	 {FS.card FS1} >: {FS.card FS2}
       end
    in
-      /* %% Returns the minimal cadential set (a determined FS) for MyScale (a determined scale object) for the ContextScales (a list of determined scale objects), that is the set of pitch classes which unambiguously distinguishes MyScale among ContextScales. The ContextScales are conveniently created with MakeAllContextScales. 
-      %% Note that MinimalCadentialSet internally performs a search.
+      /* %% Returns all minimal cadential sets (a list of determined FSs) for MyScale (a determined scale object) for the ContextScales (a list of determined scale objects), that is the set of pitch classes which unambiguously distinguishes MyScale among ContextScales. The ContextScales are conveniently created with MakeAllContextScales. 
+      %% Note that MinimalCadentialSets internally performs a search. 
       %% */
-      fun {MinimalCadentialSet MyScale ContextScale}
-	 {MinimalCadentialSet2 {MyScale getPitchClasses($)}
+      fun {MinimalCadentialSets MyScale ContextScale}
+	 {MinimalCadentialSets2 {MyScale getPitchClasses($)}
 	  {Map ContextScale fun {$ X} {X getPitchClasses($)} end}}
       end
 
-      /* %% Returns the minimal cadential set (a determined FS) for MyScaleFS (a determined FS) for the ContextScaleFSs (a list of determined FS), that is the set of pitch classes which unambiguously distinguishes MyScaleFS among ContextScaleFSs. 
-      %% Note that MinimalCadentialSet internally performs a search.
+      /* %% Returns all minimal cadential sets (a list of determined FSs) for MyScaleFS (a determined FS) for the ContextScaleFSs (a list of determined FS), that is the set of pitch classes which unambiguously distinguishes MyScaleFS among ContextScaleFSs. 
+      %% Note that MinimalCadentialSets2 internally performs a search.
       %% */
-      fun {MinimalCadentialSet2 MyScaleFS ContextScaleFSs}
-	 {Search.base.best {MakeCadentialSetScript MyScaleFS ContextScaleFSs}
-	  MinimiseCardiality}
+      fun {MinimalCadentialSets2 MyScaleFS ContextScaleFSs}
+	 Sols = {Search.base.best {MakeCadentialSetScript MyScaleFS ContextScaleFSs unit}
+		MinimiseCardiality}
+      in
+	 if Sols \= nil then 
+	    {Search.base.all {MakeCadentialSetScript MyScaleFS ContextScaleFSs
+			      unit(card:{FS.card Sols.1})}}
+	 else nil
+	 end
       end
+      
+%        /* %% Returns  cadential set (a determined FS) for MyScale (a determined scale object) for the ContextScales (a list of determined scale objects), that is the set of pitch classes which unambiguously distinguishes MyScale among ContextScales. The ContextScales are conveniently created with MakeAllContextScales. 
+%       %% Note that MinimalCadentialSet internally performs a search. 
+%       %% */
+%       fun {AllCadentialSets_Card MyScale ContextScale Cardiality}
+% 	 {MinimalCadentialSet_Card2 {MyScale getPitchClasses($)}
+% 	  {Map ContextScale fun {$ X} {X getPitchClasses($)} end}
+% 	  Cardiality}
+%       end
+
+%       /* %% Returns the minimal cadential set (a determined FS) for MyScaleFS (a determined FS) for the ContextScaleFSs (a list of determined FS), that is the set of pitch classes which unambiguously distinguishes MyScaleFS among ContextScaleFSs. 
+%       %% Note that MinimalCadentialSet internally performs a search.
+%       %% */
+%       fun {AllCadentialSet_Card2 MyScaleFS ContextScaleFSs Cardiality}
+% 	 {Search.base.all {MakeCadentialSetScript MyScaleFS ContextScaleFSs
+% 			   unit(card:Cardiality)}}
+%       end
    end
    
    
