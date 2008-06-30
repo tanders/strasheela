@@ -472,21 +472,6 @@ define
 	    {FS.distribute generic [SufficientSet]}
 	 end
       end
-%       fun {MakeCadentialSetScript MyScale ContextScales}
-% 	 proc {$ SufficientSet}
-% 	    SufficientSet = {FS.var.decl}
-% 	    {FS.subset SufficientSet {MyScale getPitchClasses($)}}
-% 	    {ForAll {LUtils.remove ContextScales
-% 		     fun {$ X} {X getPitchClasses($)} == {MyScale getPitchClasses($)} end}
-% 	     proc {$ ContextScale} 
-% 		{FD.nega 
-% 		 {Combinator.'reify' 
-% 		  proc {$} {FS.subset SufficientSet {ContextScale getPitchClasses($)}} end}
-% 		 1}
-% 	     end}
-% 	    {FS.distribute generic [SufficientSet]}
-% 	 end
-%       end
       /** %% Comparison constraint for creating a minimal cadencial set by BAB search.
       %% */
       proc {MinimiseCardiality FS1 FS2}
@@ -497,7 +482,7 @@ define
       %% Note that MinimalCadentialSet internally performs a search.
       %% */
       fun {MinimalCadentialSet MyScale ContextScale}
-	 {MinimalCadentialSet {MyScale getPitchClasses($)}
+	 {MinimalCadentialSet2 {MyScale getPitchClasses($)}
 	  {Map ContextScale fun {$ X} {X getPitchClasses($)} end}}
       end
 
