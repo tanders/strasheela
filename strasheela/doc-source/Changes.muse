@@ -15,9 +15,12 @@
 
   - Documentation
 
-    - Added example examples/HomophonicChordProgression.oz
-    - Added examples to HarmonicProgressions-31ET.oz: chord progression with 7-limit triads in septimal minor, chord progression in extended tonality with 7-limit tetrads, and chord progression with 7-limit tetrads forming a sequence (repetition of the sub-chord progressions at different pitches)
-    - Revised florid counterpoint example. For example, it now features a simple cadence rule, and solutions differ more. Also, some constraints can be modified more easily by arguments to the script
+    - Added examples demonstrating the new motif pattern: examples/Form-Examples/MotifPattern-Examples.oz
+    - Added examples demonstrating the PrototypeMotif: examples/Form-Examples/PrototypeMotif-Examples.oz 
+    - Added example file examples/Harmony-Examples/HomophonicChordProgression.oz
+    - Added examples to  examples/Harmony-Examples/HarmonicProgressions-31ET.oz: chord progression with 7-limit triads in septimal minor, chord progression in extended tonality with 7-limit tetrads, and chord progression with 7-limit tetrads forming a sequence (repetition of the sub-chord progressions at different pitches)
+    - Revised examples/03-FloridCounterpoint-Canon.oz. For example, it now features a simple cadence rule, and solutions differ more. Also, some constraints can be modified more easily by arguments to the script
+    - All entries in the 22-ET database (chords, scales, intervals) are listed in common music notation and as sound in files in ../contributions/anders/ET22/doc-DB/
 
 
   - Fixes and minor changes
