@@ -471,6 +471,20 @@ ContextScales = {HS.score.makeAllContextScales [{HS.db.getScaleIndex 'major'}]
 %% -> {0 5 11} % i.e. {G, B, F}
 
 
+
+declare
+%% context is now major and minor -- result is the same??
+MyScale = {Score.makeScore scale(index:{HS.db.getScaleIndex 'major'}
+				 transposition:0)
+	   unit(scale:HS.score.scale)}
+ContextScales = {HS.score.makeAllContextScales [{HS.db.getScaleIndex 'major'}
+						{HS.db.getScaleIndex 'natural minor'}
+					       ]
+		 {List.number 0 11 1}}
+{Browse {HS.score.minimalCadentialSet MyScale ContextScales}}
+%% -> {0 5 11} % i.e. {G, B, F}
+
+
 %%
 %% Now for pentachordal major
 %%
@@ -497,10 +511,16 @@ ContextScales = {HS.score.makeAllContextScales
 %%
 
 declare
-MyScaleFS = {FS.value.make [0 2 4 5 7 9 11]}
-ContextScaleFSs = {Map {HS.score.makeAllContextScales [{HS.db.getScaleIndex 'major'}]
-			{List.number 0 11 1}}
-		   fun {$ X} {X getPitchClasses($)} end}
+{HS.db.setDB HS.dbs.default}
+C_Major = [0 2 4 5 7 9 11]
+MyScaleFS = {FS.value.make C_Major}
+%% Create all transpositions of C_Major
+ContextScaleFSs = {Map {List.number 0 11 1}
+		   fun {$ I}
+		      {FS.value.make
+		       {Map [0 2 4 5 7 9 11]
+			fun {$ PC} {HS.score.transposePC PC I} end}}
+		   end}
 {Browse {HS.score.minimalCadentialSet2 MyScaleFS ContextScaleFSs}}
 %% -> {0 5 11} % i.e. {G, B, F}
 
