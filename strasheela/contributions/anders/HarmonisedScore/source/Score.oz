@@ -150,7 +150,7 @@ export
    AbsoluteToOffsetAccidental OffsetToAbsoluteAccidental
    PcSetToSequence
 
-   MinimalCadentialSet MakeAllContextScales
+   MinimalCadentialSet MinimalCadentialSet2 MakeAllContextScales 
 
    Interval
    IsInterval
@@ -455,34 +455,57 @@ define
        end}
    end
    local
-      /** %% Returns a script which in turn returns a cadential set (a single FS) for MyScale (a determined scale object) and its ContextScales (a list of determined scale objects) which usually contains MyScale as well. The ContextScales are conveniently created with MakeAllContextScales. 
+      /** %% Returns a script which in turn returns a cadential set (a single FS) for MyScaleFS (a determined FS) and its ContextScaleFSs (a list of determined FS) which can contain MyScaleFS as well. 
       %% */
-      fun {MakeCadentialSetScript MyScale ContextScales}
+      fun {MakeCadentialSetScript MyScaleFS ContextScaleFSs}
 	 proc {$ SufficientSet}
 	    SufficientSet = {FS.var.decl}
-	    {FS.subset SufficientSet {MyScale getPitchClasses($)}}
-	    {ForAll {LUtils.remove ContextScales
-		     fun {$ X} {X getPitchClasses($)} == {MyScale getPitchClasses($)} end}
-	     proc {$ ContextScale} 
+	    {FS.subset SufficientSet MyScaleFS}
+	    {ForAll {LUtils.remove ContextScaleFSs
+		     fun {$ X} X == MyScaleFS end}
+	     proc {$ ContextScaleFS} 
 		{FD.nega 
 		 {Combinator.'reify' 
-		  proc {$} {FS.subset SufficientSet {ContextScale getPitchClasses($)}} end}
+		  proc {$} {FS.subset SufficientSet ContextScaleFS} end}
 		 1}
 	     end}
 	    {FS.distribute generic [SufficientSet]}
 	 end
       end
+%       fun {MakeCadentialSetScript MyScale ContextScales}
+% 	 proc {$ SufficientSet}
+% 	    SufficientSet = {FS.var.decl}
+% 	    {FS.subset SufficientSet {MyScale getPitchClasses($)}}
+% 	    {ForAll {LUtils.remove ContextScales
+% 		     fun {$ X} {X getPitchClasses($)} == {MyScale getPitchClasses($)} end}
+% 	     proc {$ ContextScale} 
+% 		{FD.nega 
+% 		 {Combinator.'reify' 
+% 		  proc {$} {FS.subset SufficientSet {ContextScale getPitchClasses($)}} end}
+% 		 1}
+% 	     end}
+% 	    {FS.distribute generic [SufficientSet]}
+% 	 end
+%       end
       /** %% Comparison constraint for creating a minimal cadencial set by BAB search.
       %% */
       proc {MinimiseCardiality FS1 FS2}
 	 {FS.card FS1} >: {FS.card FS2}
       end
    in
-      /* %% Returns the minimal cadential set (a determined FS) for MyScale (a determined scale object) for the ContextScales (a list of determined scale objects), that is the set of pitch classes which unambiguously distinguishes MyScale among ContextScales. 
+      /* %% Returns the minimal cadential set (a determined FS) for MyScale (a determined scale object) for the ContextScales (a list of determined scale objects), that is the set of pitch classes which unambiguously distinguishes MyScale among ContextScales. The ContextScales are conveniently created with MakeAllContextScales. 
       %% Note that MinimalCadentialSet internally performs a search.
       %% */
-      fun {MinimalCadentialSet MyScale ContextScales}
-	 {Search.base.best {MakeCadentialSetScript MyScale ContextScales}
+      fun {MinimalCadentialSet MyScale ContextScale}
+	 {MinimalCadentialSet {MyScale getPitchClasses($)}
+	  {Map ContextScale fun {$ X} {X getPitchClasses($)} end}}
+      end
+
+      /* %% Returns the minimal cadential set (a determined FS) for MyScaleFS (a determined FS) for the ContextScaleFSs (a list of determined FS), that is the set of pitch classes which unambiguously distinguishes MyScaleFS among ContextScaleFSs. 
+      %% Note that MinimalCadentialSet internally performs a search.
+      %% */
+      fun {MinimalCadentialSet2 MyScaleFS ContextScaleFSs}
+	 {Search.base.best {MakeCadentialSetScript MyScaleFS ContextScaleFSs}
 	  MinimiseCardiality}
       end
    end
