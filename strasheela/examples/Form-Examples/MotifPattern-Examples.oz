@@ -20,7 +20,6 @@
 %% Rhythm-motifs: similar in effect to "Orjan Sandreds motif domains
 %% No pitch constraints
 
-
 {GUtils.setRandomGeneratorSeed 0}
 {SDistro.exploreOne
  proc {$ MyScore}
@@ -111,8 +110,10 @@
 {SDistro.exploreOne
  proc {$ MyScore}
     X = {FD.decl}
-    Motifs = [[D4]
-	      [D8 D8 D4]]
+    Motifs = [[D8 D8 D4]
+	      [D2_ D4 D4]
+	      [D8 D8]
+	     ]
     NoteNo = 20
     %% Create music representation for 4/4 bars (see doc of Measure.uniformMeasures)
     %% Note: changing the time signature here does not change the time signature in Lilypond -- such a customisation has been left out here for simplicity
@@ -158,7 +159,10 @@
 		  unit(measure:Measure.uniformMeasures)}
  in
     MyScore = {MakeNoteSeq unit(n:NoteNo
-				makeNote:MakeMotifIndexNote)}
+				makeNote:fun {$}
+					    {Adjoin {MakeMotifIndexNote}
+					     note(duration:{FD.int D16#D1})}
+					 end)}
     %% 
     {UseMotifs {MyScore mapItems($ getDuration test:isNote)}
      Motifs MyScore unit(workOutEven:true)}
@@ -237,7 +241,7 @@ end
      unit(workOutEven:false
 	  indices:{MyScore mapItems($ GetMotifIndex test:isNote)}
 	 )}
-%     %% no syncopations (the start and end of each note are not in different measures)
+    %% no note overlaps bars
 %     {MyScore forAll(test:isNote
 % 		    proc {$ N}
 % 		       0 = {MyMeasures overlapsBarlineR($ {N getStartTime($)}
@@ -253,7 +257,6 @@ end
 
 /*
 
-
 %% All previous motif specs where determined. However, motif specs can also contain variables or be completely undetermined. In that case, parameters are constrained to form motifs, but the actual motif description is searched for as well.
 
 %% This example uses two rhythm motifs, but these are undetermined in the CSP (only their length is fixed).
@@ -263,7 +266,8 @@ end
 {SDistro.exploreOne
  proc {$ MyScore}
     %% NOTE: undetermined motifs of specified length 
-    Motifs = [{FD.list 3 0#FD.sup}
+    Motifs = [
+% 	      {FD.list 3 0#FD.sup}
 	      {FD.list 2 0#FD.sup}
 	     ]
     NoteNo = 20
@@ -338,7 +342,7 @@ end
 		 [D8 D8 D4]
 		 [D2_ D4 D4 D4]]
     PitchMotifs = [[74 73]
-		  [64 66 68]]
+		   [64 66 68]]
     NoteNo = 20
  in
     MyScore = {MakeNoteSeq unit(n:NoteNo
@@ -389,6 +393,15 @@ end
 	  indices:{MyScore mapItems($ GetMotifIndex test:isNote)})}
  end
  MyDistro}
+
+*/
+
+
+/*
+
+%%
+%% constrain harmonic structure
+%%
 
 */
 
