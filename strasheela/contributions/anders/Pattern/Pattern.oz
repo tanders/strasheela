@@ -383,10 +383,12 @@ define
       %% If indices return value is requested, then create a list of FD ints and process it..
       IndicesRequired = {HasFeature Args indices}
       proc {Unify X Y}
- 	 if X == '_' then skip
+	 if {FD.is X} then X = Y 
+	 elseif X == '_' then skip
 	 elseif {IsList X} then {UnifyLists X Y}
-	 elseif {IsRecord X} andthen {Not {IsAtom X}} then {Browse X} {UnifyRecord X Y}
-	 else X = Y
+	 elseif {IsRecord X} andthen {Not {IsAtom X}} then {UnifyRecord X Y}
+	 else {Exception.raiseError
+	       strasheela(failedRequirement X "must be an FD int, '_', a list or a record")}
 	 end
       end
       proc {UnifyLists Xs Ys}
