@@ -81,7 +81,7 @@ LilyHeader =
     }
   }"
 
-proc {RenderLily X Args}
+proc {RenderLily_ET22 X Args}
    {ET22.out.renderAndShowLilypond X
     {Adjoin unit(wrapper:[LilyHeader "\n}"])
      Args}}
@@ -93,7 +93,7 @@ proc {Render_ET22 I X}
    then 
       FileName = out#{GUtils.getCounterAndIncr}#'-'#I#'-'#{OS.rand}
    in
-      {RenderLily X unit(file: FileName)}
+      {RenderLily_ET22 X unit(file: FileName)}
       {Out.renderAndPlayCsound X unit(file: FileName)}
    end
 end
@@ -146,7 +146,7 @@ MyScore = {AllIntervals unit(pitchOffset: {ET22.pitch 'C'#4})}
 {MyScore wait}
 {Out.renderAndPlayCsound MyScore
  unit(file: "ET22-allIntervals")}
-{RenderLily MyScore
+{RenderLily_ET22 MyScore
  unit(file:"ET22-allIntervals")}
 
 {Browse {MyScore toInitRecord($)}}
@@ -242,7 +242,7 @@ declare
 MyScore_ChordsOnly = {AllChords unit(chordDuration:2)}
 
 {MyScore_ChordsOnly wait}
-{RenderLily MyScore_ChordsOnly
+{RenderLily_ET22 MyScore_ChordsOnly
  unit(file:"ET22-all-chords")}
 
 
@@ -256,7 +256,7 @@ MyScore_ChordNotes = {ExpressChords {MyScore_ChordsOnly
 {Init.setTempo 60.0}
 {Out.renderAndPlayCsound MyScore_ChordNotes
  unit(file: "ET22-all-chords-explicitNotes")}
-{RenderLily MyScore_ChordNotes
+{RenderLily_ET22 MyScore_ChordNotes
  unit(file:"ET22-all-chords-explicitNotes")}
 
 
@@ -347,7 +347,7 @@ declare
 MyScore_ScalesOnly = {AllScales unit(scaleDuration:2)}
 
 {MyScore_ScalesOnly wait}
-{RenderLily MyScore_ScalesOnly unit(file: "ET22-all-scales")}
+{RenderLily_ET22 MyScore_ScalesOnly unit(file: "ET22-all-scales")}
 
 declare
 MyScore_ScaleNotes = {ExpressScales {MyScore_ScalesOnly
@@ -358,7 +358,7 @@ MyScore_ScaleNotes = {ExpressScales {MyScore_ScalesOnly
 {MyScore_ScaleNotes wait}
 {Init.setTempo 70.0}
 %% Note: no scale names etc displayed in this Lily output
-{RenderLily MyScore_ScaleNotes
+{RenderLily_ET22 MyScore_ScaleNotes
  unit(file:"ET22-all-scales-explicitNotes")}
 {Out.renderAndPlayCsound MyScore_ScaleNotes
  unit(file: "ET22-all-scales-explicitNotes")}
@@ -482,7 +482,7 @@ proc {ProcessScale ScaleIndex OutFilenameStart Dir}
 in
    {MyScore_ChordNotes wait}
    %% render lily output (scale and chord objects)
-   {RenderLily MyScore_ChordsAtDegrees
+   {RenderLily_ET22 MyScore_ChordsAtDegrees
     unit(file:OutFilenameStart#"-ChordsAtScaleDegrees"
 	 dir:Dir)}
    {Init.setTempo 70.0}
@@ -490,7 +490,7 @@ in
     unit(file:OutFilenameStart#"-ChordsAtScaleDegrees-withNotes"
 	 soundDir:Dir)}
    %% render lily output (chord objects and notes)
-   {RenderLily MyScore_ChordNotes
+   {RenderLily_ET22 MyScore_ChordNotes
     unit(file:OutFilenameStart#"-ChordsAtScaleDegrees-withNotes"
 	 dir:Dir)}
 end
@@ -567,6 +567,137 @@ in
    {FS.int.match MyFS Ints}
    Ints
 end
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%% output another database 
+%%
+
+
+/*
+
+
+declare
+[ET31] = {ModuleLink ['x-ozlib://anders/strasheela/ET31/ET31.ozf']}
+{HS.db.setDB ET31.db.fullDB}
+%%
+proc {RenderLily_ET31 X Args}
+   {ET31.out.renderAndShowLilypond X
+    {Adjoin unit(wrapper:[LilyHeader "\n}"])
+     Args}}
+end
+
+%%
+%% all intervals
+%%
+
+{Init.setTempo 50.0}
+declare
+MyScore = {AllIntervals unit(pitchOffset: {ET31.pitch 'C'#4})}
+{MyScore wait}
+{RenderLily_ET31 MyScore
+ unit(file:"ET31-allIntervals")}
+{Out.renderAndPlayCsound MyScore
+ unit(file: "ET31-allIntervals")}
+
+
+%%
+%% all chords
+%%
+
+declare
+MyScore_ChordsOnly = {AllChords unit(chordDuration:2)}
+{MyScore_ChordsOnly wait}
+{RenderLily_ET31 MyScore_ChordsOnly
+ unit(file:"ET31-all-chords")}
+MyScore_ChordNotes = {ExpressChords {MyScore_ChordsOnly
+				     collect($ test:HS.score.isChord)}
+		      unit(pitchOffset:{ET31.pitch 'C'#3}
+			   noteDuration:4)}
+{MyScore_ChordNotes wait}
+{Init.setTempo 60.0}
+{Out.renderAndPlayCsound MyScore_ChordNotes
+ unit(file: "ET31-all-chords-explicitNotes")}
+{RenderLily_ET31 MyScore_ChordNotes
+ unit(file:"ET31-all-chords-explicitNotes")}
+
+{Browse {MyScore_ChordsOnly toInitRecord($)}}
+
+{Browse {MyScore_ChordNotes toInitRecord($)}}
+
+
+%%
+%% all scales
+%%
+
+declare
+MyScore_ScalesOnly = {AllScales unit(scaleDuration:2)}
+{MyScore_ScalesOnly wait}
+{RenderLily_ET31 MyScore_ScalesOnly unit(file: "ET31-all-scales")}
+MyScore_ScaleNotes = {ExpressScales {MyScore_ScalesOnly
+				     collect($ test:HS.score.isScale)}
+			  unit(pitchOffset:{ET31.pitch 'C'#4}
+			       scaleOffsetTime:1)}
+{MyScore_ScaleNotes wait}
+{Init.setTempo 70.0}
+%% Note: no scale names etc displayed in this Lily output
+{RenderLily_ET31 MyScore_ScaleNotes
+ unit(file:"ET31-all-scales-explicitNotes")}
+{Out.renderAndPlayCsound MyScore_ScaleNotes
+ unit(file: "ET31-all-scales-explicitNotes")}
+
+{Browse {MyScore_ScalesOnly toInitRecord($)}}
+
+
+%%
+%% For each scale and scale degree, all fitting chords
+%%
+
+
+declare
+proc {ProcessScale ScaleIndex OutFilenameStart Dir}
+   MyScale = {Score.makeScore
+	      scale(index:ScaleIndex
+		    transposition:{ET31.pc 'C'}
+		    %% duration should be determined
+		    duration:4
+		    startTime:0
+		    timeUnit:beats)
+	      unit(scale:HS.score.scale)}
+   MyScore_ChordsAtDegrees = {FindChordsAtAllScaleDegrees MyScale}
+   {MyScore_ChordsAtDegrees wait}
+   MyScore_ChordNotes = {ExpressChords {MyScore_ChordsAtDegrees
+					collect($ test:HS.score.isChord)}
+			 unit(pitchOffset:{ET31.pitch 'C'#3}
+			      noteDuration:4)}
+in
+   {MyScore_ChordNotes wait}
+   %% render lily output (scale and chord objects)
+   {RenderLily_ET31 MyScore_ChordsAtDegrees
+    unit(file:OutFilenameStart#"-ChordsAtScaleDegrees"
+	 dir:Dir)}
+   {Init.setTempo 70.0}
+   {Out.renderAndPlayCsound MyScore_ChordNotes
+    unit(file:OutFilenameStart#"-ChordsAtScaleDegrees-withNotes"
+	 soundDir:Dir)}
+   %% render lily output (chord objects and notes)
+   {RenderLily_ET31 MyScore_ChordNotes
+    unit(file:OutFilenameStart#"-ChordsAtScaleDegrees-withNotes"
+	 dir:Dir)}
+end
+
+
+{ProcessScale {HS.db.getScaleIndex 'major'}
+ "Major"
+ "/Users/t/oz/music/Strasheela/strasheela/trunk/strasheela/contributions/anders/ET31/doc-DB/"}
+
+%% TODO: same for other scales ... 
+
+
+*/
+
 
 
 
