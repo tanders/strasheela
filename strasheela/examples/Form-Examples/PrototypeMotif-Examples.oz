@@ -126,22 +126,23 @@ Motif_A = {PMotif.makeScript Motif_A_P
 %% keep the note durations, unset the pitches, but constrain relation of motif instance pitches to prototype
 %%
 
-/*
-
-%% motif instance follows pitch intervals of orig motifs, but motifs may be transposed
-
-declare
-%% aux var to avoid negative interval variables
-IntervalOffset = 100
 /** %% Returns the intervals between notes in MyMotif (list of implicitly declared FD ints).
 %% */
+%% aux var to avoid negative interval variables
+IntervalOffset = 100
 fun {GetPitchIntervals MyMotif}
-   {Pattern.map2Neighbours {X mapItems($ getPitch test:isNote)}
+   {Pattern.map2Neighbours {MyMotif mapItems($ getPitch test:isNote)}
     proc {$ Pitch1 Pitch2 ?Interval}
        Interval = {FD.decl}
        Pitch1 + Interval =: Pitch2 + IntervalOffset
     end}
 end
+
+/*
+
+%% motif instance follows pitch intervals of orig motifs, but motifs may be transposed
+
+declare
 Motif_A = {PMotif.makeScript Motif_A_P
 	   unit(
 	      unset: [isNote#pitch]
@@ -211,12 +212,155 @@ Motif_A = {PMotif.makeScript Motif_A_P
 */ 
 
 
+%%
+%% constrain relation between motifs
+%%
+%%
+%% see /Users/t/oz/music/Strasheela/private/CompositionPlans/MicrotonalCounterpoint/MotifCollection.oz
+%%
+
+
+/*
+
+%% Three motifs in sequence: constrain the highest pitch of each motif to be higher than the highest pitch of the preceeding motif
+
+declare
+Motif_A = {PMotif.makeScript Motif_A_P
+	   unit(
+	      unset: [isNote#pitch]
+	      scriptArgs:
+		 unit(pitchDomain: proc {$ MyMotif Dom}
+				     {ForAll {MyMotif collect($ test:isNote)}
+				      proc {$ N} {N getPitch($)} = {FD.int Dom.1} end}
+				   end # dom(60#72))
+	      prototypeDependencies:
+		 [isContainer#proc {$ Proto Instance}
+				 {GetPitchIntervals Proto}
+				 = {GetPitchIntervals Instance}
+			      end]
+	      )}
+{GUtils.setRandomGeneratorSeed 0}
+{SDistro.exploreOne
+ proc {$ MyScore}
+    MyScore = {Score.makeScore seq(items:[motif
+					  motif
+					  motif]
+				   startTime:0
+				   timeUnit:beats(4)
+				  )
+     add(motif:Motif_A)}
+    %% additional constraint
+    {Pattern.continuous {Map {MyScore getItems($)} PMotif.getHighestPitch}
+     '<:'}
+ end 
+ unit(value:random)}
+
+*/ 
+
+
 
 %%
 %% CSP consisting of two different motifs with no other constraints 
 %%
 
+%% Motif prototypes and instances can be polyphone 
+Motif_B_P = {Score.makeScore
+	     seq(items:[sim(items:[note(duration:4
+					pitch:67
+					amplitude:64)
+				   note(duration:4
+					pitch:59
+					amplitude:64)])
+			sim(items:[note(duration:8
+					pitch:67
+					amplitude:64)
+				   note(duration:8
+					pitch:60
+					amplitude:64)])]
+		 startTime:0
+		 timeUnit:beats(4))
+	     unit}
 
+
+/* % show Motif_B_P
+{Out.renderAndShowLilypond Motif_B_P unit}
+*/
+
+
+/*
+
+%% 
+
+declare
+%% Script creation for two prototypes with mapping
+[Motif_A Motif_B]
+= {Map [Motif_A_P Motif_B_P]
+   fun {$ Proto}
+      {PMotif.makeScript Proto
+       unit(unset: [isNote#pitch]
+	    scriptArgs:
+	       unit(pitchDomain: proc {$ MyMotif Dom}
+				    {ForAll {MyMotif collect($ test:isNote)}
+				     proc {$ N} {N getPitch($)} = {FD.int Dom.1} end}
+				 end # dom(60#72))
+	    prototypeDependencies:
+	       [%% NOTE: contour matrix instead of contour (equal pitches remain equal)
+		isContainer#{PMotif.unifyDependency
+			     fun {$ X}
+				{Pattern.contourMatrix {X map($ getPitch test:isNote)}}
+			     end}
+	       ])}
+   end}
+%% these two motifs in a sequence
+{GUtils.setRandomGeneratorSeed 0}
+{SDistro.exploreOne
+ fun {$}
+    {Score.makeScore seq(items:[motif_A(pitchDomain:dom(60#65))
+				motif_A(pitchDomain:dom(62#67))
+				motif_B(%% NOTE: implicitly defined arg
+					offsetTime:4 
+					pitchDomain:dom(57#72))
+				%% another score object..
+				pause(duration:8)
+				%%
+				motif_A(pitchDomain:dom(60#65))
+				motif_A(pitchDomain:dom(62#67))
+				motif_B(%% NOTE: implicitly defined arg
+					offsetTime:4
+					pitchDomain:dom(57#72))]
+			 startTime:0
+			 timeUnit:beats(4)
+			)
+     add(motif_A:Motif_A
+	 motif_B:Motif_B)}
+ end 
+ unit(value:random)}
+
+%% two motifs in a polyphonic setting
+{GUtils.setRandomGeneratorSeed 0}
+{SDistro.exploreOne
+ fun {$}
+    {Score.makeScore
+     sim(items:[%% voice 1
+		seq(items:[motif_A(pitchDomain:dom(60#72))
+			   motif_A(pitchDomain:dom(60#72))]
+		   )
+		%% voice 2
+		seq(items:[motif_B(offsetTime:4
+				   pitchDomain:dom(48#60))
+			   motif_B(offsetTime:4
+				   pitchDomain:dom(48#60))])
+	       ]
+	 startTime:0
+	 timeUnit:beats(4)
+	)
+     add(motif_A:Motif_A
+	 motif_B:Motif_B)}
+ end 
+ unit(value:random)}
+
+
+*/
 
 
 %%
@@ -224,11 +368,131 @@ Motif_A = {PMotif.makeScript Motif_A_P
 %%
 
 
+%%
+%% Re-define Motif_A_P and Motif_B_P with different note classes for harmonic CSP. Only the note constructor changed, everything else is as before.
+%%
+
+%% Returns a note object whose pitch class is implicitly constrained to express a pitch class of a simultaneous chord object
+fun {MakeChordNote Args}
+   {Score.makeScore2
+    {Adjoin note(inChordB:1	% only chord-tones permitted
+% 		 inChordB:{FD.int 0#1}
+		 getChords:
+		    fun {$ Self}
+		       %% note is related to simultaneous chord
+		       [{Self findSimultaneousItem($ test:HS.score.isChord)}]
+		    end)
+     Args}
+    unit(note:HS.score.note)}
+end
+Motif_A_P_HS = {Score.makeScore seq(items:[note(duration:6
+						pitch:60
+						amplitude:64)
+					   note(duration:2
+						pitch:62
+						amplitude:64)
+					   %% add lilypond articulations to note
+					   note(info:lily("\\downbow")
+						duration:8
+						pitch:64
+						amplitude:64)]
+				    startTime:0
+				    timeUnit:beats(4))
+		add(note:MakeChordNote)}
+Motif_B_P_HS = {Score.makeScore
+		seq(items:[sim(items:[note(duration:4
+					   pitch:67
+					   amplitude:64)
+				      note(duration:4
+					   pitch:59
+					   amplitude:64)])
+			   sim(items:[note(duration:8
+					   pitch:67
+					   amplitude:64)
+				      note(duration:8
+					   pitch:60
+					   amplitude:64)])]
+		    startTime:0
+		    timeUnit:beats(4))
+		add(note:MakeChordNote)}
+
+/*
+
+%% same example as before, but now the resulting harmony is controlled.
+%% Underlying chord progression is determined (G-7 C). Notes must be chord tones, but no further constraints for simplicity (e.g., no special constraints for bass notes or that chord is fully expressed) 
+
+%% TODO:
+%%
+%% ?? show chords in lily output
+
+declare
+% {HS.db.setDB HS.dbs.default.db}
+[Motif_A Motif_B]
+= {Map [Motif_A_P_HS Motif_B_P_HS]
+   fun {$ Proto}
+      {PMotif.makeScript Proto
+       unit(%% NOTE: besides the pitches, also the parameters pitchClass and octave are unset 
+	    unset: [isNote#[pitch pitchClass octave]]
+	    scriptArgs:
+	       unit(pitchDomain:
+		       proc {$ MyMotif Dom}
+			  {ForAll {MyMotif collect($ test:isNote)}
+			   proc {$ N} {N getPitch($)} = {FD.int Dom.1} end}
+		       end # dom(60#72))
+	    prototypeDependencies:
+	       [isContainer#{PMotif.unifyDependency
+			     fun {$ X}
+				{Pattern.contourMatrix {X map($ getPitch test:isNote)}}
+			     end}
+	       ])}
+   end}
+{GUtils.setRandomGeneratorSeed 0}
+{SDistro.exploreOne
+ fun {$}
+    {Score.makeScore
+     sim(items:[%% voice 1
+		seq(items:[motif_A(pitchDomain:dom(60#72))
+			   motif_A(pitchDomain:dom(60#72))]
+		   )
+		%% voice 2
+		seq(items:[motif_B(offsetTime:4
+				   pitchDomain:dom(48#60))
+			   motif_B(offsetTime:4
+				   pitchDomain:dom(48#60))])
+		%% chord objects
+		%% (note: showing chords in Lilypond output requires special customisation, left out here fore simplicity)
+		seq(items:[chord(duration:4*4
+				 index:{HS.db.getChordIndex 'dominant seventh'}
+				 root:7)
+			   chord(duration:4*4
+				 index:{HS.db.getChordIndex 'major'}
+				 root:0)])]
+	 startTime:0
+	 timeUnit:beats(4)
+	)
+     add(motif_A:Motif_A
+	 motif_B:Motif_B
+	 chord:HS.score.chord)}
+ end 
+ unit(value:random)}
+
+*/
+
+
+
 
 %%
-%% constrain relation between motifs
-%% see /Users/t/oz/music/Strasheela/private/CompositionPlans/MicrotonalCounterpoint/MotifCollection.oz
+%% motif affecting chord progression
 %%
+
+
+
+%%
+%% motif variations with motif arguments
+%% - show other arg defs
+%% - demonstrate PMotif.choiceScript
+%%
+
 
 
 %%
@@ -245,12 +509,100 @@ Motif_A = {PMotif.makeScript Motif_A_P
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%
-%% nested motifs
+%% nested motifs with NestedScript
 %%
 
+/*
+
+declare
+IsMotif_A
+Motif_A
+= {PMotif.makeScript Motif_A_P
+   unit(unset: [isNote#pitch]
+	scriptArgs:
+	   unit(pitchDomain: proc {$ MyMotif Dom}
+				{ForAll {MyMotif collect($ test:isNote)}
+				 proc {$ N} {N getPitch($)} = {FD.int Dom.1} end}
+			     end # dom(60#72))
+	prototypeDependencies:
+	   [isContainer#{PMotif.unifyDependency
+			 fun {$ X}
+			    {Pattern.contourMatrix
+			     {X map($ getPitch test:isNote)}}
+			 end}]
+	%% IsMotif_A is Boolean function which only returns true for results of Motif_A
+	motifTest:IsMotif_A)}
+%% Create a nested motif (also an extended script)
+NestedMotif
+= {PMotif.nestedScript
+   %% the nested motif is a sequence of two Motif_A instances
+   seq(info:nestedMotif
+       items:[motif_A(info:id(1))
+	      motif_A(info:id(2))]
+      )
+   unit(
+      %% Argument: set contour between the highest pitches of each motif
+      scriptArgs:unit(
+		    contour:proc {$ C Default}
+			       {Pattern.contour {C map($ PMotif.getHighestPitch
+						       test:IsMotif_A)}}
+			       = Default
+			    end # [{Pattern.symbolToDirection '+'}]
+		    )
+      %% Use Motif_A as constructor for motif_A records
+      constructors:add(motif_A:Motif_A)
+      )}
+{GUtils.setRandomGeneratorSeed 0}
+{SDistro.exploreOne
+ fun {$}
+    {Score.makeScore
+     seq(items:[nestedMotif(contour:[{Pattern.symbolToDirection '+'}])
+		nestedMotif(contour:[{Pattern.symbolToDirection '+'}])
+		pause(duration:8)
+		nestedMotif(contour:[{Pattern.symbolToDirection '-'}])]
+	 startTime:0
+	 timeUnit:beats(4)
+	)
+     add(nestedMotif:NestedMotif)}
+ end 
+ unit(value:random)}
 
 
-	   
+%% hand arguments to inner motifs
+{GUtils.setRandomGeneratorSeed 0}
+{SDistro.exploreOne
+ fun {$}
+    {Score.makeScore
+     seq(items:[nestedMotif(
+		   nestedArgs:[%% for first motif, switch to alto clef
+			       id(1)#unit(info:lily("\\clef alto"))
+			       %% insert rest before second inner motif 
+			       id(2)#unit(offsetTime:4)])
+		nestedMotif(
+		   %% insert pause before nested motif
+		   offsetTime:4
+		   nestedArgs:[id(1)#unit(info:lily("\\clef tenor"))])]
+	 startTime:0
+	 timeUnit:beats(4)
+	)
+     add(nestedMotif:NestedMotif)}
+ end 
+ unit(value:random)}
+
+
+*/
+
+
+/*
+
+%% NOTE: does not cause browsing..
+declare
+MyScore = {NestedMotif unit(contour:[{Pattern.symbolToDirection '-'}]
+			    initScore:true)}
+
+*/
+
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
