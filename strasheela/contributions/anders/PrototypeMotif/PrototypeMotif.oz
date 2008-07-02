@@ -400,7 +400,7 @@ define
       end
       proc {MyScript ScriptArgs ?MyScore}
 	 Defaults = unit(initScore:false
-			 nestedArgs:unit)
+			 nestedArgs:nil)
 	 ScriptAs = {Adjoin Defaults ScriptArgs}
 	 TopLevelScoreObjArgs = {Record.subtractList ScriptAs
 				 {Append {Arity Defaults} {Arity As.scriptArgs}}}
