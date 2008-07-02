@@ -508,6 +508,10 @@ define
        proc {$} B=0 end}
    end
 
+
+
+
+   
    
    /*
    %% ?? combining multiple  non-harmonic pitch conditions (e.g. for ornamental resolution)
