@@ -161,7 +161,7 @@ define
 			 comment:'harmonic 7th')
 		   %% !!!
 		   chord(pitchClasses:['C' 'D#' 'F#' 'A#']
-			 roots:['C' 'D#']
+			 roots:['D#'] % 'C'
 			 % silentRoots:['G#']
 %				dissonanceDegree:2
 %			 comment:'reversed harmonic dominant seventh'
@@ -296,7 +296,8 @@ define
 
 		   %% TODO: there are other chromatic scale variants possible
 		   scale(pitchClasses:['C' 'C#' 'D' 'Eb' 'E' 'F' 'F#' 'G' 'G#' 'A' 'Bb' 'B']
-			 roots:['C' 'C#' 'D' 'Eb' 'E' 'F' 'F#' 'G' 'G#' 'A' 'Bb' 'B'] % TODO: ??
+% 			 roots:['C' 'C#' 'D' 'Eb' 'E' 'F' 'F#' 'G' 'G#' 'A' 'Bb' 'B'] % TODO: ??
+			 roots:['C'] % TODO: ??
 			 comment:'Meantone Chromatic')
 
 		   
