@@ -273,8 +273,7 @@ NestedMotif_AA
 
 /*
 
-%% BUG: BLOCKS
-
+{GUtils.setRandomGeneratorSeed 0}
 {SDistro.exploreOne  {GUtils.extendedScriptToScript NestedMotif_AA
 		      unit(% startTime:0
 			   timeUnit:beats(4)
@@ -283,81 +282,12 @@ NestedMotif_AA
 					id(z) # unit(pitchDomain:dom(60#72))
 					%% test principle
 					topLevel # unit(startTime:0)]
-			  )}
- unit(value:random)}
-
-
-*/
-
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%
-%% NestedScript: minimum example for debugging the blocking
-%%
-
-declare
-VolFenv = {New Fenv.fenv
-	   init(env:fun {$ X} {Sin X} * 100.0 + 27.0 end
-		min:0.0
-		max:GUtils.pi)}
-NestedMotif_AA_P = seq(info:topLevel
-		       items:[motif_A(info:id(x)
-				      pitchDomain:dom(62#67))
-			      motif_A(info:id(y)
-				      pitchDomain:dom(62#67))
-			      motif_A(info:id(z)
-				      pitchDomain:dom(62#67))])
-NestedMotif_AA
-= {PMotif.nestedScript NestedMotif_AA_P
-   unit(
-      scriptArgs:unit(
-		    %% contour specified by an example
-		    contour:proc {$ C Default}
-			       {Pattern.contour {C map($ PMotif.getHighestPitch
-						       test:IsMotif_A)}}
-			       = {Pattern.contour Default}
-			    end # [1 2]
-		    )
-      constructors:add(motif_A:Motif_A)
-      )}
-
-
-/*
-
-%% create example directly
-declare
-MyNestedMotif = {NestedMotif_AA
-		 unit(% startTime:0
-		      timeUnit:beats(4)
-		      contour:[1 2 1]
-		      nestedArgs: [[id(x) id(y)] # unit(pitchDomain:dom(60#72))
-				   id(z) # unit(pitchDomain:dom(60#72))
-				   %% test principle
-				   topLevel # unit(startTime:0)
-				  ]
-		      initScore:true
-		     )}
-{Browse {MyNestedMotif toInitRecord($)}}
-
-
-%% 
-{SDistro.exploreOne  {GUtils.extendedScriptToScript NestedMotif_AA
-		      unit(% startTime:0   % as a test, startTime set by nestedArgs arg
-			   timeUnit:beats(4)
-			   contour:[1 2 1]
-			   nestedArgs: [[id(x) id(y)] # unit(pitchDomain:dom(60#72))
-					id(z) # unit(pitchDomain:dom(60#72))
-					%% test principle
-					topLevel # unit(startTime:0)]
+			   %% required if motif is top-level score object
 			   initScore:true
 			  )}
  unit(value:random)}
 
-
 */
-
-
 
 
 
