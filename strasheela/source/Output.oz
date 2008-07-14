@@ -1970,7 +1970,8 @@ define
    /** %% Exports TheScore (a Strasheela score) into a non-mensural ENP score (a VS). The ENP format is rather fixed, whereas the information contained in the Strasheela score format is highly user-customisable. Therefore, the export-process is also highly user-customisable. 
    %% An ENP score has a fixed topology. The non-mensural ENP has the following nesting: <code>score(part(voice(chord(note+)+)+)+)</code>. See the PWGL documentation for details. 
    %% Strasheela, on the other hand, supports various topologies. However, ToNonmensuralENP does not automatically perform a score topology transformation into the ENP topology. Instead, ToNonmensuralENP expects a number of optional accessor functions as arguments (e.g. getScore, getParts, getVoices) which allow for a user-defined topology transformation. These functions expect a (subpart of the) score and return the contained objects according to the ENP topology. For instance, the function getVoices expects a Strasheela object corresponding to an ENP part and returns a list of Strasheela object corresponding to ENP voices. The default values for these accessor functions require that the topology of TheScore fully corresponds with the ENP score topology. That is, for the default accessor functions, TheScore must have the following topology: <code>sim(sim(seq(sim(note+)+)+)+)</code>. The set of all supported accessor functions (together with their default values) is given below.
-   %% Any ENP attribute of a score object can be specified by the user. For this purpose, ToNonmensuralENP expects a number of optional attribute accessor functions (e.g. getScoreKeywords, getPartKeywords). These functions expect a Strasheela object corresponding to an ENP part and returns an Oz record whose features are the ENP keywords for this objects and the feature values are the values for these ENP keywords. See the default of getNoteKeywords for an example. 
+   %% Any ENP attribute of a score object can be specified by the user. For this purpose, ToNonmensuralENP expects a number of optional attribute accessor functions (e.g. getScoreKeywords, getPartKeywords). These functions expect a Strasheela object corresponding to an ENP part and returns an Oz record whose features are the ENP keywords for this objects and the feature values are the values for these ENP keywords. See the default of getNoteKeywords for an example.
+   %% In addition, enp syntax can be given directly to score objects via an info tag/record with the label 'enp' where the keywords are the record features with their associated values (e.g., enp(expression: [accent])). In case a keyword is defined both with an acessor function (e.g., getVoiceKeywords) and directly as an enp info tag, then the info tag is taken instead. 
    %%
    %% Default arguments: 
    unit(getScore:fun {$ X} X end
@@ -1994,6 +1995,9 @@ define
 			   %% put further ENP note keywords here
 			   unit('offset-time': {MyNote getOffsetTimeInSeconds($)})
 			end)
+   %%
+   %% Note: this function also works for the format expected by the simple format of the PWGL library KSQuant. You need to set the argument toKSQuant to true for this purpose.
+   %% 
    %% */
    %%
    %% NB: output unit of measurement of chord start times and note offset times hard-wired to seconds
@@ -2023,11 +2027,13 @@ define
 	     getNoteKeywords:fun {$ MyNote}
 				%% put further ENP note keywords here
 				unit('offset-time': {MyNote getOffsetTimeInSeconds($)})
-			     end)
+			     end
+	     toKSQuant:false)
       As = {Adjoin Defaults Args}
       fun {Object2Record MyObject
 	   GetSubObjects MakeSubObjectRecord GetKeywords}
-	 {Adjoin {GetKeywords MyObject}
+	 {Adjoin {Adjoin {GetKeywords MyObject}
+		  {MyObject getInfoRecord($ 'enp')}}
 	  {List.toTuple unit {Map {GetSubObjects MyObject}
 			      MakeSubObjectRecord}}}
       end
@@ -2040,8 +2046,20 @@ define
 	  As.getVoices MakeVoiceRecord As.getPartKeywords}
       end
       fun {MakeVoiceRecord MyVoice}
-	 {Object2Record MyVoice
-	  As.getChords MakeChordRecord As.getVoiceKeywords}
+	 if As.toKSQuant
+	 then
+	    %% for KSQuant we must add an explicit end time (as last start time)
+	    LastEndTime = {{List.last {As.getChords MyVoice}} getEndTimeInSeconds($)}
+	    VoiceRecord = {Object2Record MyVoice
+			   As.getChords MakeChordRecord As.getVoiceKeywords}
+	    LastPos = {Width VoiceRecord} + 1
+	 in
+	    {Adjoin VoiceRecord
+	     unit(LastPos: unit(LastEndTime))}
+	 else 
+	    {Object2Record MyVoice
+	     As.getChords MakeChordRecord As.getVoiceKeywords}
+	 end
       end
       fun {MakeChordRecord MyChord}
 	 {Adjoin
@@ -2053,7 +2071,7 @@ define
 			  unit(1:{MyNote getPitchInMidi($)})}
 		      end})}
       end
-   in      
+   in
       {RecordToLispKeywordList {MakeScoreRecord TheScore}}
    end
    
@@ -2408,20 +2426,26 @@ define
       {Pipe close}
    end
  
-   /** %% Provides an interface to interactive commandline programs like a shell or an interpreter. Start interactive program with the method init (see below), close it with the method close.
+   /** %% Provides an interface to interactive commandline programs like a shell or an interpreter. Start interactive program with the method init (see below), close it with the method close. The Shell object features cmd and args bind the respective init arguments.
+   %%
    %% More specialised classes (e.g. an interface to Common Lisp) may be obtained by subclasses..
    %% */
    %% Transformation of def by Christian Schulte in "Open Programming in Mozart"
    class Shell from Open.pipe Open.text
+      feat cmd args
 		  /** %% Start interactive program Cmd (VS) with Args (list of VSs). The default is the shell "sh" with args ["-s"] for reading from standard input. See the test file for examples for other interactive commands (e.g., the interactive ruby shell or a Common Lisp compiler). 
 		  %% */
-      meth init(cmd:Cmd<="sh" args:Args<=["-s"]) 
+      meth init(cmd:Cmd<="sh" args:Args<=["-s"])
+	 self.cmd = Cmd
+	 self.args = Args
+	 {System.showInfo "> "#Cmd#" "#{ListToVS Args " "}}
 	 Open.pipe,init(cmd:Cmd args:Args)  
       end
       /** %% Feed Cmd (a VS) to the interactive program. Use one of the output/show methods to retrieve results.
       %% Please note that the output/show methods are exclusive (i.e., once some result is output one way, it is output again.). 
       %% */
-      meth cmd(Cmd)  
+      meth cmd(Cmd)
+	 {System.showInfo "["#self.cmd#"] > "#Cmd}
 	 Open.text,putS(Cmd)  
       end 
       /** %% Show any results and output of each command fed to the shell at stdout. 
