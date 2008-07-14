@@ -498,7 +498,7 @@ MyScale = {Score.makeScore scale(index:{HS.db.getScaleIndex
 	   unit(scale:HS.score.scale)}
 ContextScales = {HS.score.makeAllContextScales
 		 [{HS.db.getScaleIndex 'standard pentachordal major'}]
-		 {List.number 0 11 1}}
+		 {List.number 0 21 1}}
 Solutions = {HS.score.minimalCadentialSets MyScale ContextScales}
 {Browse Solutions}
 %% -> {2 16}
