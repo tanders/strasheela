@@ -37,6 +37,7 @@ declare
 %      minIntervalToBass:{ET31.pc 'F'}
      )}
 
+% {Init.setTempo 60.0}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
