@@ -44,7 +44,8 @@ MotifDescriptionDB = [motif(
 		      motif(pitchContour:{Map ['+' '+' '+']
 					  Pattern.symbolToDirection}
 			    duration:[D4_ D16 D16 D2]
-			    offset:[0 0 0 0 0])]
+			    offset:[0 0 0 0 0]
+			   )]
 
 MotifVariationDB = [%% orig gestalt of the motif
 		    {Motif.makeVariation
@@ -72,7 +73,8 @@ MotifVariationDB = [%% orig gestalt of the motif
 			    in
 			       MyContour = {FD.list {Length MyPitches}-1 0#2}
 			       {Pattern.contour MyPitches MyInverseContour}
-			       {Pattern.inverseContour MyInverseContour MyContour} 
+			       {Pattern.inverseContour MyInverseContour
+				MyContour} 
 			    end
 			 duration:
 			    fun {$ MyMotif} {MyMotif mapItems($ getDuration)} end
@@ -101,25 +103,25 @@ MaxMotifNoteNr = 4		% depends on length of lists in MotifDescriptionDB
 %% A single motif description and two variations. Highly restricted pitch domain and thus only few possible solutions.
 {SDistro.exploreAll
  proc {$ MyScore}
-    MyDB = {New Motif.database
-	    %% NOTE: only first motif description selected
-	    init(motifDescriptionDB:[MotifDescriptionDB.1]
-		 motifVariationDB:MotifVariationDB)}
- in
     %% Score topology: motif containing MaxMotifNoteNr notes
     MyScore = {Score.makeScore
 	       motif(items:{LUtils.collectN MaxMotifNoteNr
 			    fun {$}
 			       note(offsetTime:{FD.decl}
 				    duration:{FD.decl}
+				    %% NOTE: only few pitches
 				    pitch:{FD.int [60 62 64]}
 				    amplitude:64)
 			    end}
 		     %% NOTE: motif database given to the individual motif instance
-		     database:MyDB
+		     database:{New Motif.database
+			       %% NOTE: only first motif description selected
+			       init(motifDescriptionDB:[MotifDescriptionDB.1]
+				    motifVariationDB:MotifVariationDB)}
 		     startTime:0
 		     timeUnit:TimeUnit)
-	       MyConstructors}
+	       unit(motif:Motif.sequential
+		    note:Score.note)}
  end
  MyDistro}
 
@@ -139,13 +141,14 @@ MaxMotifNoteNr = 4		% depends on length of lists in MotifDescriptionDB
 			    fun {$}
 			       note(offsetTime:{FD.decl}
 				    duration:{FD.decl}
-				    pitch:{FD.int [60 62 64 65]}
+				    pitch:{FD.int [60 62 64]}
 				    amplitude:64)
 			    end}
 		     database:MyDB
 		     startTime:0
 		     timeUnit:beats(4))
-	       MyConstructors}
+	       unit(motif:Motif.sequential
+		    note:Score.note)}
  end
  MyDistro}
 
@@ -166,24 +169,24 @@ MotifNo = 6
 {GUtils.setRandomGeneratorSeed 0}
 {SDistro.exploreOne
  proc {$ MyScore}
-    MyDB = {New Motif.database init(motifDescriptionDB:MotifDescriptionDB
-				    motifVariationDB:MotifVariationDB)}
- in
     MyScore = {Score.makeScore
 	       seq(items:{LUtils.collectN MotifNo
 			  fun {$}
 			     motif(items:{LUtils.collectN MaxMotifNoteNr
 					  fun {$}
-					     note(offsetTime:{FD.decl}
-						  duration:{FD.decl}
-						  pitch:{FD.int 60#72}
-						  amplitude:64)
+					     note(
+						offsetTime:{FD.decl}
+						duration:{FD.decl}
+						pitch:{FD.int 60#72}
+						amplitude:64)
 					  end}
-				   database:MyDB)
+				   database:{New Motif.database init(motifDescriptionDB:MotifDescriptionDB
+								     motifVariationDB:MotifVariationDB)})
 			  end}
 		   startTime:0
 		   timeUnit:beats(4))
-	       MyConstructors}
+	       add(motif:Motif.sequential
+		   note:Score.note)}
     %% Additional constraints
     %%
     %% The motif identity sequences forms a cycle pattern, and there occur different indices.
@@ -244,10 +247,6 @@ D8_ = D8+D16
 D4_ = D4+D8
 D2_ = D2+D4
 
-
-MyConstructors = unit(seq:Score.sequential
-		      motif:Motif.sequential
-		      note:Score.note)
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
