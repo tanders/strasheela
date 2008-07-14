@@ -29,15 +29,15 @@ declare
 %%
 
 %% A motif prototype is simply a ready-made score object. Motif instances copy or variate a motif protoype. 
-Motif_A_P = {Score.makeScore seq(items:[note(duration:6
+Motif_A_P = {Score.makeScore seq(items:[%% add lilypond articulations to note
+					note(info:lily("\\downbow")
+					     duration:6
 					     pitch:60
 					     amplitude:64)
 					note(duration:2
 					     pitch:62
 					     amplitude:64)
-					%% add lilypond articulations to note
-					note(info:lily("\\downbow")
-					     duration:8
+					note(duration:8
 					     pitch:64
 					     amplitude:64)]
 				 startTime:0
@@ -151,7 +151,6 @@ Motif_A = {PMotif.makeScript Motif_A_P
 				     {ForAll {MyMotif collect($ test:isNote)}
 				      proc {$ N} {N getPitch($)} = {FD.int Dom.1} end}
 				   end # dom(60#72))
-	      
 	      prototypeDependencies:
 		 [%% For every container in motif (there is only one top-level container), constrain the relation between prototype and the motif instance with given proc. This proc unifies the note pitch intervals of the prototype with the intervals of the motif instance
 		  isContainer#proc {$ Proto Instance}
@@ -215,14 +214,11 @@ Motif_A = {PMotif.makeScript Motif_A_P
 %%
 %% constrain relation between motifs
 %%
-%%
-%% see /Users/t/oz/music/Strasheela/private/CompositionPlans/MicrotonalCounterpoint/MotifCollection.oz
-%%
 
 
 /*
 
-%% Three motifs in sequence: constrain the highest pitch of each motif to be higher than the highest pitch of the preceeding motif
+%% Four motifs in sequence: constrain that the highest pitches of different motifs are never more than a major second apart, but is no repetition 
 
 declare
 Motif_A = {PMotif.makeScript Motif_A_P
@@ -244,14 +240,18 @@ Motif_A = {PMotif.makeScript Motif_A_P
  proc {$ MyScore}
     MyScore = {Score.makeScore seq(items:[motif
 					  motif
+					  motif
 					  motif]
 				   startTime:0
 				   timeUnit:beats(4)
 				  )
      add(motif:Motif_A)}
     %% additional constraint
-    {Pattern.continuous {Map {MyScore getItems($)} PMotif.getHighestPitch}
-     '<:'}
+    {Pattern.for2Neighbours {Map {MyScore getItems($)} PMotif.getHighestPitch}
+     proc {$ P1 P2}
+	{FD.distance P1 P2 '=<:' 2}
+	P1 \=: P2
+     end}
  end 
  unit(value:random)}
 
@@ -378,9 +378,9 @@ fun {MakeChordNote Args}
     {Adjoin note(inChordB:1	% only chord-tones permitted
 % 		 inChordB:{FD.int 0#1}
 		 getChords:
-		    fun {$ Self}
+		    fun {$ MyNote}
 		       %% note is related to simultaneous chord
-		       [{Self findSimultaneousItem($ test:HS.score.isChord)}]
+		       [{MyNote findSimultaneousItem($ test:HS.score.isChord)}]
 		    end)
      Args}
     unit(note:HS.score.note)}
@@ -512,95 +512,145 @@ declare
 %% nested motifs with NestedScript
 %%
 
+
+
+Motif_C_P = {Score.makeScore seq(items:[note(duration:12
+					     pitch:64
+					     amplitude:64)
+					note(duration:4
+					     pitch:62
+					     amplitude:64)
+					note(duration:8
+					     pitch:60
+					     amplitude:64)
+					%% any object can be part of the motif
+					pause(duration:8)
+% 					note(duration:2
+% 					     pitch:59
+% 					     amplitude:64)
+				       ]
+				 startTime:0
+				 timeUnit:beats(4))
+	     unit}
+
+
+/* % show Motif_C_P
+{Out.renderAndShowLilypond Motif_C_P unit}
+*/
+
 /*
 
 declare
-IsMotif_A
-Motif_A
-= {PMotif.makeScript Motif_A_P
-   unit(unset: [isNote#pitch]
-	scriptArgs:
-	   unit(pitchDomain: proc {$ MyMotif Dom}
-				{ForAll {MyMotif collect($ test:isNote)}
-				 proc {$ N} {N getPitch($)} = {FD.int Dom.1} end}
-			     end # dom(60#72))
-	prototypeDependencies:
-	   [isContainer#{PMotif.unifyDependency
-			 fun {$ X}
-			    {Pattern.contourMatrix
-			     {X map($ getPitch test:isNote)}}
-			 end}]
-	%% IsMotif_A is Boolean function which only returns true for results of Motif_A
-	motifTest:IsMotif_A)}
+[Motif_A Motif_B Motif_C]
+= {Map [Motif_A_P Motif_B_P Motif_C_P]
+   fun {$ Proto}
+      {PMotif.makeScript Proto
+       unit(unset: [isNote#pitch]
+	    scriptArgs:
+	       unit(pitchDomain: proc {$ MyMotif Dom}
+				    {ForAll {MyMotif collect($ test:isNote)}
+				     proc {$ N} {N getPitch($)} = {FD.int Dom.1} end}
+				 end # dom(60#72))
+	    prototypeDependencies:
+	       [isContainer#{PMotif.unifyDependency
+			     fun {$ X}
+				{Pattern.contourMatrix
+				 {X map($ getPitch test:isNote)}}
+			     end}])}
+   end}
 %% Create a nested motif (also an extended script)
 NestedMotif
 = {PMotif.nestedScript
    %% the nested motif is a sequence of two Motif_A instances
    seq(info:nestedMotif
        items:[motif_A(info:id(1))
-	      motif_A(info:id(2))]
+	      motif_A(info:id(2))
+ 	      motif_C(info:id(3))
+	     ]
       )
    unit(
+      % NOTE: TMP comment
       %% Argument: set contour between the highest pitches of each motif
       scriptArgs:unit(
-		    contour:proc {$ C Default}
-			       {Pattern.contour {C map($ PMotif.getHighestPitch
-						       test:IsMotif_A)}}
+		    contour:proc {$ MyNestedMotif Default}
+			       skip
+			       {Pattern.contour
+				{MyNestedMotif
+				 map($ PMotif.getHighestPitch
+				     %% PMotif.isMotif returns true for any motif created with a Prototype motif script
+				     test:PMotif.isMotif)}}
 			       = Default
-			    end # [{Pattern.symbolToDirection '+'}]
+			    end # {Map ['+' '+'] Pattern.symbolToDirection}
 		    )
-      %% Use Motif_A as constructor for motif_A records
-      constructors:add(motif_A:Motif_A)
+      %% Use Motif_A as constructor for motif_A records etc.
+      constructors:add(motif_A:Motif_A
+		       motif_C:Motif_C)
       )}
 {GUtils.setRandomGeneratorSeed 0}
 {SDistro.exploreOne
  fun {$}
     {Score.makeScore
-     seq(items:[nestedMotif(contour:[{Pattern.symbolToDirection '+'}])
-		nestedMotif(contour:[{Pattern.symbolToDirection '+'}])
-		pause(duration:8)
-		nestedMotif(contour:[{Pattern.symbolToDirection '-'}])]
+     seq(items:[nestedMotif
+		nestedMotif
+		motif_C
+	       ]
 	 startTime:0
 	 timeUnit:beats(4)
 	)
-     add(nestedMotif:NestedMotif)}
+     add(nestedMotif:NestedMotif
+	 motif_A:Motif_A
+	 motif_C:Motif_C)}
  end 
  unit(value:random)}
 
 
-%% hand arguments to inner motifs
+%% hand arguments to nested motif and inner motifs, and used in a nested context
 {GUtils.setRandomGeneratorSeed 0}
 {SDistro.exploreOne
  fun {$}
     {Score.makeScore
      seq(items:[nestedMotif(
-		   nestedArgs:[%% for first motif, switch to alto clef
-			       id(1)#unit(info:lily("\\clef alto"))
-			       %% insert rest before second inner motif 
-			       id(2)#unit(offsetTime:4)])
-		nestedMotif(
-		   %% insert pause before nested motif
-		   offsetTime:4
-		   nestedArgs:[id(1)#unit(info:lily("\\clef tenor"))])]
+			      contour:{Map ['-' '-'] Pattern.symbolToDirection}
+			      nestedArgs:[%% for first motif, switch to alto clef
+					  id(1)#unit(info:lily("\\clef alto"))
+					  %% insert rest before second inner motif 
+					  id(2)#unit(offsetTime:8)])
+			   nestedMotif(
+			      contour:{Map ['-' '-'] Pattern.symbolToDirection}
+			      nestedArgs:[id(1)#unit(info:lily("\\clef tenor"))])]
 	 startTime:0
 	 timeUnit:beats(4)
 	)
      add(nestedMotif:NestedMotif)}
  end 
- unit(value:random)}
+  unit(value:random)}
+
+
+
+%% nested motif in a further nested context
+{GUtils.setRandomGeneratorSeed 0}
+{SDistro.exploreOne
+ fun {$}
+    {Score.makeScore
+     sim(items:[seq(items:[nestedMotif(contour:{Map ['-' '-']
+						Pattern.symbolToDirection})])
+		seq(items:[motif_C
+			   motif_B(offsetTime:4)
+			   motif_B(offsetTime:4)
+			   ])]
+	 startTime:0
+	 timeUnit:beats(4)
+	)
+     add(nestedMotif:NestedMotif
+	 motif_B:Motif_B
+	 motif_C:Motif_C)}
+ end 
+  unit(value:random)}
 
 
 */
 
 
-/*
-
-%% NOTE: does not cause browsing..
-declare
-MyScore = {NestedMotif unit(contour:[{Pattern.symbolToDirection '-'}]
-			    initScore:true)}
-
-*/
 
 
 
@@ -631,6 +681,11 @@ proc {RenderLilypondAndCsound I X}
        unit(file: FileName
 	    clauses:[%% ignore measure objects
 		     Measure.isUniformMeasures#fun {$ _} nil end
+		     %% ignore chord sequences
+		     fun {$ X}
+			{X isContainer($)} andthen
+			{HS.score.isChord {X getItems($)}.1}
+		     end#fun {$ _} nil end
 		     %% Mark motifs with brackets
 		     %% Motif start
 		     fun {$ X}
