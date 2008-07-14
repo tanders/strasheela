@@ -270,8 +270,9 @@ define
    /** %% Returns true for any motif instance created by a script which was created by MakeScript. 
    %% */
    fun {IsMotif X}
-      {Score.isScoreObject X}
-      andthen {X hasFlag($ GlobalMotifName)}
+      {Score.isScoreObject X} andthen
+      {X isItem($)} andthen
+      {X hasFlag($ GlobalMotifName)}
    end
 
    /** %% Is X contained in a motif (directly or indirectly) and is Test true? Test is a boolean binary function with the interface {$ X MyMotif}.
