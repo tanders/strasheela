@@ -23,7 +23,10 @@
 %%
 %% Please note that this interface is only available for UNIX systems (e.g., MacOS and Linux), because sendOSC and dumpOSC are UNIX applications. Moreover, the original dumpOSC delays the printout of bundles (when called in a pipe as this interface does) and it is recommended to apply the dumpOSC patch available at ../others/dumpOSC/dumpOSC-patch.diff (or simply replace the original file dumpOSC.c with the already patched dumpOSC.c in the same directory before compiling dumpOSC).
 %%
-%% This interface calls dumpOSC in a terminal (xterm), and sends its output to Oz with netcat via a socket. Starting dumpOSC in a terminal is necessary, because for unkown reasons dumpOSC refuses to output anything when called by Oz directly in a pipe (for details, see postings in the mailing lists osc_dev@create.ucsb.edu, and users@mozart-oz.org, on the 7 Septermber 2007 and following days). This interface relies thus on the following applications, which must be installed, and should be specified in the Strasheela environment (if they are not in the PATH): sendOSC, dumpOSC, xterm, and netcat (nc). On most Unixes, xterm is already there. On MacOS, however, X11 must be installed in order to make xterm available, and the location of X11.app must be specified in the Strasheela environment. The respective Strasheela environment variables are sendOSC (its default value is 'sendOSC'), dumpOSC (default 'dumpOSC'), xterm (default 'xterm'), netcat (default 'nc'), and 'X11.app' (default '/Applications/Utilities/X11.app').  
+%% This interface calls dumpOSC in a terminal (xterm), and sends its output to Oz with netcat via a socket. Starting dumpOSC in a terminal is necessary, because for unkown reasons dumpOSC refuses to output anything when called by Oz directly in a pipe (for details, see postings in the mailing lists osc_dev@create.ucsb.edu, and users@mozart-oz.org, on the 7 Septermber 2007 and following days). This interface relies thus on the following applications, which must be installed, and should be specified in the Strasheela environment (if they are not in the PATH): sendOSC, dumpOSC, xterm, and netcat (nc). On most Unixes, xterm is already there. On MacOS, however, X11 must be installed in order to make xterm available, and the location of X11.app must be specified in the Strasheela environment. The respective Strasheela environment variables are sendOSC (its default value is 'sendOSC'), dumpOSC (default 'dumpOSC'), xterm (default 'xterm'), netcat (default 'nc'), and 'X11.app' (default '/Applications/Utilities/X11.app').
+%%
+%% Note that the netcat (nc) installed by default on MacOS version 10.5 (Leopard) does not work (it crashes with UDP). However, the the implementation ncat (http://sourceforge.net/projects/nmap-ncat/) has been tested successfully (remember also setting the Strasheela environment variable 'netcat' to this application). 
+%%
 %% */
 
 %%
@@ -54,7 +57,8 @@
 
 functor 
 import
-   System OS Open  
+   System OS Open
+   Browser(browse:Browse)
    LUtils at 'x-ozlib://anders/strasheela/source/ListUtils.ozf'
    Init at 'x-ozlib://anders/strasheela/source/Init.ozf'
    Out at 'x-ozlib://anders/strasheela/source/Output.ozf'
@@ -142,8 +146,8 @@ define
 					       end
 					    end}
 		      " "}
-	       %% FIXME: tmp exception
-	    else raise unrecognisedOSCPacket(Packet) end 
+	    else {Exception.raiseError
+		  strasheela(failedRequirement Packet "Unrecognised OSC package")}
 	    end	
 	 end
       in
@@ -331,8 +335,8 @@ define
 	       else {{Dictionary.get self.responders self.defaultResponderAddr}
 		     Timetag Msg}
 	       end
-	       %% FIXME: tmp exception
-	    else raise unrecognisedOSCPacket(Packet) end
+	    else {Exception.raiseError
+		  srasheela(failedRequirement Packet "Unrecognised OSC package")}
 	    end
 	 end
       in
