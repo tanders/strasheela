@@ -62,6 +62,7 @@
     - Added Item method getContainersRecursively
     - HS.score: added function for computing Mazzola's minimal cadential sets: MinimalCadentialSets, MinimalCadentialSets2, MakeAllContextScales
     - ET31.db: now only a single root defined for all chords and scales
+    - Out.toNonmensuralENP: now also supports PWGL library KSQuant format (which the KSQuant object simple2score transformed into the mensural ENP format)
 
 
   - There have been many other small changes, see the [[../CHANGELOG.txt]].
