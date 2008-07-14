@@ -34,7 +34,7 @@
 				makeNote:fun {$}
 					    %% constant pitch
 					    note(pitch:{ET12.pitch 'C'#4}
-						 duration:{FD.int 1#16}
+						 duration:{FD.int D16#D1}
 						 amplitude:64)
 					 end)}
     %% Constrain note durations to form motifs
@@ -151,7 +151,9 @@
     X = {FD.decl}
     Motifs = [[D2_ D4]
 	      [D8 D8 D4]
-	      ['_']]
+% 	      ['_']
+	      [D4 '_' D4]
+	     ]
     NoteNo = 20
     MyMeasures = {Score.makeScore measure(beatNumber:4 
 					  beatDuration:Beat
@@ -267,10 +269,11 @@ end
  proc {$ MyScore}
     %% NOTE: undetermined motifs of specified length 
     Motifs = [
-% 	      {FD.list 3 0#FD.sup}
+	      {FD.list 3 0#FD.sup}
 	      {FD.list 2 0#FD.sup}
 	     ]
     NoteNo = 20
+%     Motifs.1.1 = Motifs.2.1.1
     MyMeasures = {Score.makeScore measure(beatNumber:4 % 4/4 bar
 					  beatDuration:Beat
 					  startTime:0)
@@ -283,7 +286,7 @@ end
 						  duration:{FD.int [D16 D8 D8_ D4 D4_ D2 D2_ D1]})}
 					 end)}
     {UseMotifs {MyScore mapItems($ getDuration test:isNote)}
-     Motifs MyScore unit(workOutEven:true)}
+     Motifs MyScore unit(workOutEven:false)}
     %%
     %% Longer notes must start on an important beat
     {MyScore forAll(test:isNote
