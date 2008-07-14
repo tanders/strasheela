@@ -27,17 +27,32 @@
 <h2>Changes in Version 0.9.6 (no date yet)</h2>
 
 <ul>
-<li>Main additions
+<li>Main additions and changes
 
 <ul>
 <li>PrototypeMotif contribution: ..</li>
 <li>Pattern.useMotifs: a flexible pattern constraint for motifs</li>
+<li>SDistro: Refactored the definition of distribution strategies. More complex variable orderings are now conveniently defined with special constructor functions. The following procs are added to SDistro: Naive Dom Width Deg DomDivDeg MakeDom MakeDeg MakeLeftToRight MakeRightToLeft TimeParams MakeTimeParams Min Max
+<blockquote>
+<p class="quoted">Also added MakeMarkNextParam and MakeVisitMarkedParamsFirst
+The documentation of the functor is extended</p>
+</blockquote></li>
+<li>The performance of the temporal item method getSimultaneousItems is much improved (and a method findSimultaneousItem added). Before, it blocked until the whole rhythmical structure was determined, now the score only needs sufficient information whether some object is certainly simultaneous or not to the given object (their temporal parameters don't need to be determined). This speeds up the search process of CSPs which rely on this method (e.g., contrapuntual problems accessing sets of simultaneous notes and which also constrain the rhythmical structure).</li>
 </ul></li>
+</ul>
 
+
+<ul>
 <li>Documentation
 
 <ul>
-<li>Added examples to HarmonicProgressions-31ET.oz: chord progression with 7-limit triads in septimal minor, chord progression in extended tonality with 7-limit tetrads, and chord progression with 7-limit tetrads forming a sequence (repetition of the sub-chord progressions at different pitches)</li>
+<li>Added examples demonstrating the new motif pattern: examples/Form-Examples/MotifPattern-Examples.oz</li>
+<li>Added examples demonstrating the contribution PrototypeMotif: examples/Form-Examples/PrototypeMotif-Examples.oz</li>
+<li>Added examples demonstrating the contribution Motif: examples/Form-Examples/VariationMotif-Examples.oz</li>
+<li>Added example file examples/Harmony-Examples/HomophonicChordProgression.oz</li>
+<li>Added examples to  examples/Harmony-Examples/HarmonicProgressions-31ET.oz: chord progression with 7-limit triads in septimal minor, chord progression in extended tonality with 7-limit tetrads, and chord progression with 7-limit tetrads forming a sequence (repetition of the sub-chord progressions at different pitches)</li>
+<li>Revised examples/03-FloridCounterpoint-Canon.oz. For example, it now features a simple cadence rule, and solutions differ more. Also, some constraints can be modified more easily by arguments to the script</li>
+<li>All entries in the 22-ET database (chords, scales, intervals) are listed in common music notation and as sound in files in ../contributions/anders/ET22/doc-DB/</li>
 </ul></li>
 </ul>
 
@@ -46,6 +61,7 @@
 <li>Fixes and minor changes
 
 <ul>
+<li>Convenient benchmark facilities for runtime and memory measurements of musical CSPs are added under testing/zy_Efficiency/benchmark</li>
 <li>Pattern.localMaxR added</li>
 <li><a href="../doc/api/node8.html">SDistro</a>.makeSearchScript (and all Strasheela search engines): Added generic variable ordering 'dom+deg'</li>
 <li>SMapping: added MapScore</li>
@@ -57,12 +73,37 @@
 <li>Pattern.makeLSystem: fixed bug for N =&lt; 0 (caused infinite loop)</li>
 <li>Refactored method toInitRecord for class HS.score.note. It now potientially includes the initialisation arguments getChords, isRelatedChord, getScales, isRelatedScale (which are procedures). Nevertheless, by default these are skipped.</li>
 <li>Pattern: added RotateList, RotateSublists</li>
+<li>Renamed scale in HS.dbs.default into 'natural minor' (comment feature)</li>
+<li>ET22.out/ET31.out: Lilypond notation of scale and chord objects (analytical score objects) refined: if scale/note objects are part of the score, then all their pitch classes are first notated as grace notes. A 'normally' notated single note indicates the duration of the chord/scale and the chord/scale root.</li>
+<li>Added ET22.setEnharmonicNotationTable: enharmonic notation can be customised</li>
+<li>GUtils.makeSingletonSet and GUtils.intsToFS added</li>
+<li>ET22.db: Added feature 'essentialPitchClasses' to chord entries</li>
+<li>Added HS.distro: predefined distribution strategies for harmonic CSPs</li>
+<li>Archiving a score object as Strasheela code in a file (archive init record) was broken, now fixed</li>
+<li>Outputting a FS variable as code could result in [] instead of nil, fixed.</li>
+<li>ET22.out.renderAndShowLilypond: argument wrapper was broken, now fixed</li>
+<li>Init.setMaxLilyRhythm added (specifies maximum Lilypond note duration written without tie)</li>
+<li>Fixed method isDet: now also works recursivly for containers</li>
+<li>HS.score: fixed chord/scale implicit constraints: before determining the index constrained/determined the pitch class set, but not the other way round.</li>
+<li>ET22.db: removed chord 'major subdiminished', in 22 ET this chord equals 'subminor 7th'</li>
+<li>HS.score: fixed bug in class Interval: specifying index parameter in init method led to fail</li>
+<li>ET22.out: Lilypond notation of music in 22 ET greatly improved by special accidentals</li>
+<li>ET22.db: fixed bug in chord database: subdiminished 7th chord was completely wrong. Also the chord 'French augmented 6th' was wrongly called 'subminor 7th'</li>
+<li>HS.db: added GetComment GetName</li>
+<li>Out: Fixed lily bug: pause objects did not support lily info tag</li>
+<li>Added example examples/ShowHarmonicDatabases.oz</li>
+<li>HS.rules.schoenberg: fixed ResolveDescendingProgressions: decending progression &quot;resolved&quot; only in ascending  progression (not superstrong), also fixed arg allowInterchangeProgression (added constraint)</li>
+<li>Fixed bug in UniformMeasures method overlapsBarlineR (old def had logical error)</li>
+<li>Added Item method getContainersRecursively</li>
+<li>HS.score: added function for computing Mazzola's minimal cadential sets: MinimalCadentialSets, MinimalCadentialSets2, MakeAllContextScales</li>
+<li>ET31.db: now only a single root defined for all chords and scales</li>
+<li>Out.toNonmensuralENP: now also supports PWGL library KSQuant format (which the KSQuant object simple2score transformed into the mensural ENP format)</li>
 </ul></li>
 </ul>
 
 
 <ul>
-<li>For further fixes see the <a href="../CHANGELOG.txt">../CHANGELOG.txt</a>.</li>
+<li>There have been many other small changes, see the <a href="../CHANGELOG.txt">../CHANGELOG.txt</a>.</li>
 </ul>
 
 
@@ -489,7 +530,7 @@ See the documentation for <a href="../contributions/anders/HarmonisedScore/doc/n
 <div id="footer">
 <div id="author">&copy; 
 Torsten Anders</div>
-<div id="date">Last time edited: ; INVALID LISP CODE</div>
+<div id="date">Last time edited: 2008.07.14</div>
 </div>
   </body>
 </html>
