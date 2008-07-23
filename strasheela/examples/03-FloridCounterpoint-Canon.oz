@@ -528,6 +528,16 @@ end
 
 
 
+%% different args 
+{GUtils.setRandomGeneratorSeed 0}
+{SDistro.exploreOne {GUtils.extendedScriptToScript Canon
+		     unit(voice1NoteNo: 17+6 
+			  voice2NoteNo: 15+6
+			  transpositionInterval: 0)}
+ unit(order:startTime
+      value:random)}
+
+
 %%%%%%%%%%%%%%%%
 
 %% First-fail with randomised solution
