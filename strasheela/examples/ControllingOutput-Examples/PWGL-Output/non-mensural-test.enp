@@ -1,0 +1,5 @@
+((((0.2 :notes ((60 :offset-time -0.15) (71 :offset-time 0.15))
+        :duration 5.0
+        :expressions ((:crescendo/1 :initial-dynamics :p :end-dynamics :f)))
+   (0.5 :notes (77) :expressions (:crescendo/1)))))
+
