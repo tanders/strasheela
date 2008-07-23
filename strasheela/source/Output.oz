@@ -1874,7 +1874,7 @@ define
       %% float -> float: 1.0 -> 1.0  [exponential notation supported]
       %% atom -> symbol: abc -> abc 
       %% record -> keyword list: unit(a:1 b:2) -> (:a 1 :b 2 :record-label unit)
-      %% tuple -> keyword list: unit(a b) -> (a b :record-label unit)
+      %% tuple -> keyword list: test(a b) -> (a b :record-label test)
       %% list -> list: [a b c] -> (a b c)
       %% VS -> unaltered VS: "("#'some Test'#")" -> (some Test)
       %%
@@ -1882,6 +1882,7 @@ define
       %% string -> string: "Hi there" -> "Hi there"
       %%
       %% NB: Virtual strings are passed unaltered: the user is responsible that any (composite) VS results in a valid Lisp value.
+      %% NB: the keyword-value pair :record-label <label> is always the last two elements in a record/tuple list.
       %% 
       %% NB: OzToLisp is very similar to RecordToLispKeywordList. The main difference is that OzToLisp can handle more cases truely in Lisp syntax (e.g. outputs something as 'Hi there' as |Hi there|). Moreover, the values are transformed in such a way that no information is lost and backtransformation (LispToOz) would be possible as well (e.g. the label of a record is preserved and the presence of the label marks a difference to a plain list).
       %%
