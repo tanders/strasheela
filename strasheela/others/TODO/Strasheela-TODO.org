@@ -5,8 +5,8 @@
 
 * Strasheela examples						    :STRASHEELA:
 
-** Brain-Computer interface example: homphonic chord progression	:URGENT:
-   DEADLINE: <2008-07-11 Fri>
+** DONE Brain-Computer interface example: homphonic chord progression	:URGENT:
+   DEADLINE: <2008-07-11 Fri> CLOSED: [2008-07-21 Mon 11:25]
 
    [Example for/with Eduardo]
    
@@ -41,7 +41,8 @@
 
 *** DONE Implement output to SuperCollider (via OSC)    
     CLOSED: [2008-06-10 Tue 21:34]
-*** TODO Implement output to MIDI (via SC)    
+*** DONE Implement output to MIDI (via SC)    
+    CLOSED: [2008-07-21 Mon 11:25]
 
 *** Explain how this application works in English
 
