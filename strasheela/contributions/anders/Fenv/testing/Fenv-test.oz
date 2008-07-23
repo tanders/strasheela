@@ -6,6 +6,15 @@ declare
 
 {Browse {{New Fenv.fenv init(env:fun {$ X} X end)} toList($ 10)}}
 
+
+{Browse {{New Fenv.fenv init(env:fun {$ X} X end)} toList_Int($ 10)}}
+
+{Browse {{New Fenv.fenv init(env:fun {$ X} X end)}
+	 toList_Int($ 10
+		    mul:10.0
+		    add:1.0)}}
+
+
 %% NB: the last value is actually slighly larger than 1.0, due to the impreciseness of floats.
 {Browse 
  {List.last {{New Fenv.fenv init(env:fun {$ X} X end)} toList($ 10)}} - 1.0}
