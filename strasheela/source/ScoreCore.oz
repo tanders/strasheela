@@ -2121,13 +2121,14 @@ define
 
 
    /** %% [concrete class] Extends class Note2 by parameter amplitude. These two classes exist because an amplitude is usually needed if a sound synthesis format is output but may not be needed if only a music notation format is output.
+   %% NOTE: unlike most other arguments, the amplitude argument defaults to a determined number. 
    %% */
    class Note from Note2
       feat %'class': Note
 	 label: note
       attr amplitude
       meth init(%addParameters:AddParams<=nil 
-		amplitude:A<=_ amplitudeUnit:AU<=velocity 
+		amplitude:A<=64 amplitudeUnit:AU<=velocity 
 		...) = M 
 	 Note2, {Record.subtractList M
 		 [amplitude amplitudeUnit]}
