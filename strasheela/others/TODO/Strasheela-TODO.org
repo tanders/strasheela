@@ -239,6 +239,9 @@
 
 * Strasheela design						    :STRASHEELA:
 
+
+** TODO ENP output: change default Out.outputNonmensuralENP default args such that any Strasheela score topology creates some ENP score (i.e. it works for every Strasheela score topology)
+
 ** CSPs with soft constraints						  :SOON:
    
    How can I model soft constraints with the means available in Oz, e.g.,
