@@ -17,6 +17,9 @@
 %% the Strasheela installation instructions).
 %%
 
+%%
+%% Usage: don't feed whole file, just feed examples one by one.
+%%
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -24,23 +27,27 @@
 %% Mini example: single note output
 %%
 
+%% firste create the score
 declare
 MyScore = {Score.makeScore note(duration:4
 				pitch:60
 				startTime:0
 				timeUnit:beats)
 	   unit}
+
+%% then create the output 
 {Out.renderAndShowLilypond MyScore
  unit(file:firstTest)}
 
-%%
 
+%% note nested in a container
 declare
 MyScore = {Score.makeScore seq(items:[note(duration:4
 					   pitch:60)]
 			       startTime:0
 			       timeUnit:beats)
 	   unit}
+
 {Out.renderAndShowLilypond MyScore
  unit(file:test)}
 
@@ -69,26 +76,18 @@ MyScore = {Score.makeScore note(duration:4
  unit(file:blockingTest)}
 
 
-%%
-%% Note this warning is also shown for the other examples in this
-%% file, because no note amplitude is set in these examples. Lilypond
-%% does not need the note amplitude, so it creates its output
-%% nevertheles, but outputting to MIDI or Csound would block for these
-%% examples. Also, on the top-level (outside a constraint script) it
-%% might be necessary to wait until constraint propagation finishes
-%% (e.g., the note start times are often not set explicitly but
-%% derived by constraint propagation). Use the method wait for these
-%% purposes, which will cause a tiny delay to propagate all
-%% constraints. Try not setting, e.g., the note's amplite: waiting
-%% will never stop in that case!
-%%
-
+%% One can make sure that a score is determined by using the score
+%% method 'wait'. This method can also ensure that constraint
+%% propagation finished before the score is output (e.g., in the
+%% following example, the start times of the notes are determined by
+%% constraint propagation)
 declare
-MyScore = {Score.makeScore note(duration:4
-				pitch:60
-				amplitude:64 
-				startTime:0
-				timeUnit:beats)
+MyScore = {Score.makeScore seq(items:[note(duration:4
+					   pitch:60)
+				     note(duration:4
+					  pitch:60)]
+			       startTime:0
+			       timeUnit:beats)
 	   unit}
 {MyScore wait}
 {Browse waitingFinished} 
@@ -120,6 +119,7 @@ MyScore = {Score.makeScore
 	       startTime:0
 	       timeUnit:beats(4))
 	   unit}
+{MyScore wait}
 {Out.renderAndShowLilypond MyScore
  unit(file:defaultTopology)}
 
@@ -146,6 +146,7 @@ MyScore = {Score.makeScore
 	       startTime:0
 	       timeUnit:beats(4))
 	   unit}
+{MyScore wait}
 {Out.renderAndShowLilypond MyScore
  unit(file:defaultTopology2)}
 
@@ -176,6 +177,7 @@ MyScore = {Score.makeScore
 	       startTime:0
 	       timeUnit:beats(4))
 	   unit}
+{MyScore wait}
 {Out.renderAndShowLilypond MyScore
  unit(file:defaultTopology3)}
 
@@ -206,6 +208,7 @@ MyScore = {Score.makeScore
 	       startTime:0
 	       timeUnit:beats(4))
 	   unit}
+{MyScore wait}
 {Out.renderAndShowLilypond MyScore
  unit(file:defaultTopology4)}
 
@@ -223,7 +226,7 @@ MyScore = {Score.makeScore
 	   sim(items:[seq(info:[lily("\\key d \\major \\time 3/4" "\\clef alto")]
 			  items:[note(duration:8 pitch:64)
 				 note(duration:8 pitch:64)])
-		      seq(info:[lily("\\clef bass")]
+		      seq(info:[lily("\\clef bass \\key d \\major ")]
 			  items:[note(duration:4 pitch:60 info:lily("("))
 				 note(duration:4 pitch:59 info:lily("\\staccato"))
 				 note(duration:4 pitch:57 info:lily("\\mordent" "\\breathe"))
@@ -233,6 +236,7 @@ MyScore = {Score.makeScore
 	       startTime:0
 	       timeUnit:beats(4))
 	   unit}
+{MyScore wait}
 {Out.renderAndShowLilypond MyScore unit}
 
 
@@ -248,6 +252,7 @@ MyScore = {Score.makeScore seq(items:[note(duration:4
 			       startTime:0
 			       timeUnit:beats)
 	   unit}
+{MyScore wait}
 {Out.renderAndShowLilypond MyScore
  unit(wrapper:[%% header
 	       "\\paper {}"
@@ -286,6 +291,7 @@ MyScore = {Score.makeScore
 	       startTime:0
 	       timeUnit:beats(4))
 	   unit}
+{MyScore wait}
 {Out.renderAndShowLilypond MyScore
  unit}
 
@@ -318,6 +324,7 @@ MyScore = {Score.makeScore
 	       startTime:0
 	       timeUnit:beats(4))
 	   unit}
+{MyScore wait}
 {Out.renderAndShowLilypond MyScore
  unit}
 
@@ -354,6 +361,7 @@ MyScore = {Score.makeScore
 	       startTime:0
 	       timeUnit:beats(4))
 	   unit}
+{MyScore wait}
 {Out.renderAndShowLilypond MyScore
  unit}
 
@@ -388,6 +396,7 @@ MyScore = {Score.makeScore
 	       startTime:0
 	       timeUnit:beats(4))
 	   unit}
+{MyScore wait}
 {Out.renderAndShowLilypond MyScore
  unit(file:explicitStaff)}
 
@@ -452,6 +461,7 @@ MyScore = {Score.makeScore
 	       startTime:0
 	       timeUnit:beats(2))
 	   add(note:HS.score.enharmonicNote)}
+{MyScore wait}
 %%
 {Out.renderAndShowLilypond MyScore
  unit(file:enharmonicTest)}
@@ -500,6 +510,7 @@ declare
 Durations = [6 ~2 2 2 ~3 3 4 2]
 BeatDivision = 6
 MyScore = {MakeScore Durations BeatDivision}
+{MyScore wait}
 {Out.renderAndShowLilypond MyScore
  unit(file:'triplet-test'
       implicitStaffs:false
@@ -512,6 +523,7 @@ declare
 Durations = [6 ~2 2 2 3 3 4 2 9 3 6 2 4]
 BeatDivision = 6
 MyScore = {MakeScore Durations BeatDivision}
+{MyScore wait}
 {Out.renderAndShowLilypond MyScore
  unit(file:'triplet-test-2'
       implicitStaffs:false
@@ -523,6 +535,7 @@ declare
 Durations = [10 2 ~2 2 2 ~2 ~5 5 4 2 ~4]
 BeatDivision = 10
 MyScore = {MakeScore Durations BeatDivision}
+{MyScore wait}
 {Out.renderAndShowLilypond MyScore
  unit(file:'quintuplet-test'
       implicitStaffs:false
@@ -535,6 +548,7 @@ declare
 Durations = [60 20 20 ~20 30 30 12 12 12 12 12 6 6 6 ~12 10 20 60 120]
 BeatDivision = 60
 MyScore = {MakeScore Durations BeatDivision}
+{MyScore wait}
 {Out.renderAndShowLilypond MyScore
  unit(file:'triplet-and-quintuplet-test'
       implicitStaffs:false
