@@ -99,7 +99,7 @@ define
       %% */
       meth y($ X) {@env X} end
 
-      /** %% Samples the fenv from 0.0 to 1.0 (including) and collects samples in a list. N is the number of samples (an integer). If N=1, only the last env value is returned. 
+      /** %% Samples the fenv from 0.0 to 1.0 (including) and collects samples in a list. N is the number of samples (an integer). If N=1, only the last env value is returned. Returns a list of floats.
       %% */
       meth toList($ N<=100)
 	 if N==1 then {self y($ 1)}
@@ -109,6 +109,11 @@ define
 	       {C {self y($ {IntToFloat I}/N1)}}
 	    end 
 	 end
+      end
+      /** %% Same as toList, but rounds the results to integers. The output can be scaled (before the rounding) with the summand Add and factor Mul (both floats). 
+      %% */
+      meth toList_Int($ N<=100 add:Add<=0.0 mul:Mul<=1.0)
+	 {Map {self toList($ N)} fun {$ X} {FloatToInt X*Mul+Add} end}
       end
       /** %% Samples the fenv from 0.0 to 1.0 (including) and collects the x-y-pairs as sublists in a list: [[X1 Y1] ... [Xn Yn]]. N is the number of samples (an integer). If N=1, only the last env value is returned. 
       %% */
