@@ -21,8 +21,10 @@
     - Added example file examples/Harmony-Examples/HomophonicChordProgression.oz
     - Added examples to  examples/Harmony-Examples/HarmonicProgressions-31ET.oz: chord progression with 7-limit triads in septimal minor, chord progression in extended tonality with 7-limit tetrads, and chord progression with 7-limit tetrads forming a sequence (repetition of the sub-chord progressions at different pitches)
     - Revised examples/03-FloridCounterpoint-Canon.oz. For example, it now features a simple cadence rule, and solutions differ more. Also, some constraints can be modified more easily by arguments to the script
-    - All entries in the 22-ET database (chords, scales, intervals) are listed in common music notation and as sound in files in ../contributions/anders/ET22/doc-DB/
+    - All entries in the 22-ET and 31-ET databases (chords, scales, intervals) are listed in common music notation and as sound in files in ../contributions/anders/ET22/doc-DB/ and ../contributions/anders/ET31/doc-DB/
     - Added Example for Max/MSP <-> Strasheela communication via OSC in examples/Realtime-Examples/Max_OSC_test.*
+    - Added example examples/Harmony-Examples/SimpleHarmony.oz
+    - Added example for PWGL (ENP) output examples/ControllingOutput-Examples/PWGL-Output/*
 
 
   - Fixes and minor changes
@@ -66,6 +68,7 @@
     - Out.toNonmensuralENP: now also supports PWGL library KSQuant format (which the KSQuant object simple2score transformed into the mensural ENP format)
     - Fenv: added method toList_Int
     - Change default of note argument amplitude to determined value (velocity 64)
+    - Added Lisp code for translating Lisp values into Oz values: goodies/Lisp/Lisp2Oz.lisp
 
 
   - There have been many other small changes, see the [[../CHANGELOG.txt]].
