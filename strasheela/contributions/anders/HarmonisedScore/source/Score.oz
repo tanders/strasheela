@@ -126,6 +126,7 @@ import
    SDistro at 'x-ozlib://anders/strasheela/source/ScoreDistribution.ozf'
    Pattern at 'x-ozlib://anders/strasheela/Pattern/Pattern.ozf'
    CTT at 'x-ozlib://anders/strasheela/ConstrainTimingTree/ConstrainTimingTree.ozf'
+   Measure at 'x-ozlib://anders/strasheela/Measure/Measure.ozf'
    DB at 'Database.ozf'
    Rules at 'Rules.ozf'
    HS_Score at 'Score.ozf'
@@ -183,6 +184,7 @@ export
    PitchClass IsPitchClass
 
    HarmoniseScore HarmoniseScore2
+   HarmoniseMotifs
    
 %   ChordStartMixin Simultaneous Sequential
    
@@ -498,7 +500,7 @@ define
       %% */
       fun {MinimalCadentialSets2 MyScaleFS ContextScaleFSs}
 	 Sols = {Search.base.best {MakeCadentialSetScript MyScaleFS ContextScaleFSs unit}
-		MinimiseCardiality}
+		 MinimiseCardiality}
       in
 	 if Sols \= nil then 
 	    {Search.base.all {MakeCadentialSetScript MyScaleFS ContextScaleFSs
@@ -2569,6 +2571,119 @@ define
 		    chordAccidental#getChordAccidental#{DB.makeAccidentalFDInt}])
       end
    end
+
+
+   /** %% Like HarmoniseScore, HarmoniseMotifs simplifies the definition of harmonic CSPs (these two definitions are both designed for convenience, not generality, and they cover different cases). HarmoniseMotifs is an extended script and defines a harmonic CSP for a given list of motifs (arbitrary textual score object specifications, possibly nested). Most of the actual CSP is defined by arguments, but the top-level score topology defined by HarmoniseMotifs is as follows
+
+   sim(items:[seq(items:Motifs)
+	      seq(items:[Chord+])
+	      seq(items:[Scale+])
+	      MyMeasure
+	     ])
+
+   % MyMeasure (a Measure.uniformMeasures object) lasts over the full duration of the score, and so do the chord and scale sequences. The harmonic rhythm (and the "scale rhythm") is only affected by user constraints (args chordRule and scaleRule).
+   %%
+   %% HarmoniseMotifs expects the following arguments:
+   %% 
+   %% motifs: a list of motif specs (atoms or records). Note: any score objects can be defined here (not necessarily explicit motifs..). Polyphonic music is possible if 'motifs' are containers containing other motif specs. 
+   %% constructors: score constructors for motifs (see Score.makeScore doc)
+   %% chordNo: number of chords
+   %% makeChord: Chord constructor, can output textual score representation (must have label chord). If an object is returned instead of a textual score spec, the default chord class (HS.score.diatonicChord) is overwritten
+   %% chordsRule: unary prodecure, applied to list of all chords
+   %% scaleNo: number of scales
+   %% makeScale: Scale constructor, can output textual representation (must have label scale). If an object is returned instead of a textual score spec, the default scale class (HS.score.scale) is overwritten 
+   %% scaleRule: unary prodecure, applied to list of all scales
+   %% measure: Measure spec (a record). NOTE: params beatNumber and beatDuration must be determined in CSP def for simplicity (propagation otherwise blocks). Also, beatDuration depends on timeUnit (e.g., if timeUnit is beats(4), then a 3/4 bar has beatDuration 4). NOTE: if timeUnit is not beats(4), then the default measure value is wrong! 
+   %% lilyTimeSignature: Lilypond time signature code, should be set according to measure
+   %% measureRule: unary prodecure, applied to measure object
+   %%
+   %% The default arguments are as follows
+   unit(motifs:nil	
+	constructors:unit
+	chordNo:1	  
+	makeChord:fun {$}
+		     chord(duration:{FD.int 1#FD.sup}  % no non-existing chords of dur 0
+			   getScales: fun {$ Self}
+					 {Self getSimultaneousItems($ test:HS.score.isScale)}
+				      end
+			   inScaleB:1 % only scale pitches
+			  )
+		  end
+	chordsRule: proc {$ Chords} skip end
+	scaleNo:1
+	makeScale:fun {$} scale(transposition:0) end
+	scaleRule: proc {$ Scales} skip end
+	measure: measure(beatNumber:4 %% 4/4 beat. 
+			 beatDuration:4)
+	lilyTimeSignature: "\\time  4/4"
+	measureRule: proc {$ M} skip end
+       )
+   %%
+   %% NOTE: HarmoniseMotifs does not defined the timeUnit. It can be specified, for example, with the motifs.
+   %%
+   %% HarmoniseScore and HarmoniseMotifs show some similarities, but they also differ in a several ways. For example, in HarmoniseScore the start time of chords is specified with the input score specification. In HarmoniseMotifs, the harmonic rhythm is independent of the input score spec. There are more differences...
+   %%
+   %% */
+   %% TODO: use diatonic chord class ?
+   proc {HarmoniseMotifs Args ?MyScore}
+      Defaults = unit(motifs:nil	
+		      constructors:unit
+		      chordNo:1	     
+		      makeChord:fun {$}
+				   chord(duration:{FD.int 1#FD.sup}  
+					 getScales: fun {$ Self}
+						       {Self getSimultaneousItems($ test:HS_Score.isScale)}
+						    end
+					 inScaleB:1 
+					 %% just to remove symmetries (if inversion chord is used)
+					 %% sopranoChordDegree:1
+					)
+				end
+		      scaleNo:1
+		      makeScale:fun {$} scale(transposition:0) end
+		      measure: measure(beatNumber:4 %% 4/4 beat
+				       beatDuration:4
+				      )
+		      lilyTimeSignature: "\\time  3/4"
+		      chordsRule: proc {$ Chords} skip end
+		      scaleRule: proc {$ Scales} skip end
+		      measureRule: proc {$ M} skip end
+		     )
+      As = {Adjoin Defaults Args}
+      MainScore = {Score.makeScore2 seq(info:lily("\\set Staff.instrumentName = \"Main Score\" "#As.lilyTimeSignature)
+					items:As.motifs)
+		   As.constructors}
+      ChordSeq = {Score.makeScore2 seq(info:lily("\\set Staff.instrumentName = \"Chords\"")
+				       items:{LUtils.collectN As.chordNo
+					      As.makeChord})
+		  add(chord:HS_Score.diatonicChord
+		    % chord:HS.score.inversionChord
+		     )}
+      ScaleSeq = {Score.makeScore2 seq(info:lily("\\set Staff.instrumentName = \"Scale\"")
+				       items:{LUtils.collectN As.scaleNo
+					      As.makeScale})
+		  add(scale:HS_Score.scale)}
+      MyMeasure = {Score.makeScore2 As.measure
+		   unit(measure:Measure.uniformMeasures)}
+   in
+      MyScore = {Score.makeScore sim(items:[MainScore
+					    ChordSeq
+					    ScaleSeq
+					    MyMeasure
+					   ]
+				     startTime:0)
+		 As.constructors}
+      %% Constrain temporal structure. Start times are implicitly equal (if no offset time occurs)
+      {MainScore getEndTime($)} = {ChordSeq getEndTime($)}
+      {MainScore getEndTime($)} = {ScaleSeq getEndTime($)}
+      {MainScore getEndTime($)} = {MyMeasure getEndTime($)}
+      %% user-defined constraints 
+      {As.chordsRule {ChordSeq getItems($)}}
+      {As.scaleRule {ScaleSeq getItems($)}}
+      {As.measureRule MyMeasure}
+   end
+
+   
 
    local
       /** %% Expects list of chords and list of those items which are to start with a chord. Each of these items is constrained to start at the same time as the chord at the corresponding position. The number of Chords and the number of Items must be equal.
