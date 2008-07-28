@@ -52,7 +52,10 @@ The documentation of the functor is extended</p>
 <li>Added example file examples/Harmony-Examples/HomophonicChordProgression.oz</li>
 <li>Added examples to  examples/Harmony-Examples/HarmonicProgressions-31ET.oz: chord progression with 7-limit triads in septimal minor, chord progression in extended tonality with 7-limit tetrads, and chord progression with 7-limit tetrads forming a sequence (repetition of the sub-chord progressions at different pitches)</li>
 <li>Revised examples/03-FloridCounterpoint-Canon.oz. For example, it now features a simple cadence rule, and solutions differ more. Also, some constraints can be modified more easily by arguments to the script</li>
-<li>All entries in the 22-ET database (chords, scales, intervals) are listed in common music notation and as sound in files in ../contributions/anders/ET22/doc-DB/</li>
+<li>All entries in the 22-ET and 31-ET databases (chords, scales, intervals) are listed in common music notation and as sound in files in ../contributions/anders/ET22/doc-DB/ and ../contributions/anders/ET31/doc-DB/</li>
+<li>Added Example for Max/MSP &lt;-&gt; Strasheela communication via OSC in examples/Realtime-Examples/Max_OSC_test.*</li>
+<li>Added example examples/Harmony-Examples/SimpleHarmony.oz</li>
+<li>Added example for PWGL (ENP) output examples/ControllingOutput-Examples/PWGL-Output/*</li>
 </ul></li>
 </ul>
 
@@ -98,6 +101,12 @@ The documentation of the functor is extended</p>
 <li>HS.score: added function for computing Mazzola's minimal cadential sets: MinimalCadentialSets, MinimalCadentialSets2, MakeAllContextScales</li>
 <li>ET31.db: now only a single root defined for all chords and scales</li>
 <li>Out.toNonmensuralENP: now also supports PWGL library KSQuant format (which the KSQuant object simple2score transformed into the mensural ENP format)</li>
+<li>Fenv: added method toList_Int</li>
+<li>Change default of note argument amplitude to determined value (velocity 64)</li>
+<li>Added Lisp code for translating Lisp values into Oz values: goodies/Lisp/Lisp2Oz.lisp</li>
+<li>HS.score: added HarmoniseMotifs</li>
+<li>HS.rules: added ExpressAllChordPCs ExpressEssentialChordPCs ClearHarmonyAtChordBoundaries</li>
+<li>Realtime: Default realtime solvers now implicitly reset the random seed, so theyt always create a different solution</li>
 </ul></li>
 </ul>
 
@@ -530,7 +539,7 @@ See the documentation for <a href="../contributions/anders/HarmonisedScore/doc/n
 <div id="footer">
 <div id="author">&copy; 
 Torsten Anders</div>
-<div id="date">Last time edited: 2008.07.14</div>
+<div id="date">Last time edited: ; INVALID LISP CODE</div>
 </div>
   </body>
 </html>

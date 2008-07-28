@@ -68,7 +68,10 @@
 <a href="#sec11">Install the Software for which Strasheela Supports an Output Format</a>
 </dt>
 <dt>
-<a href="#sec12">Notes for Package Creators</a>
+<a href="#sec12">Using Strasheela in Realtime with OSC</a>
+</dt>
+<dt>
+<a href="#sec13">Notes for Package Creators</a>
 </dt>
 </dl>
 </div>
@@ -279,6 +282,32 @@ Install the Software for which Strasheela Supports an Output Format</h2>
 
 
 <h2><a name="sec12" id="sec12"></a>
+Using Strasheela in Realtime with OSC</h2>
+
+<p class="first">Strasheela provides an extension for music constraint programming in realtime, see the documentation of the <a href="../contributions/anders/Realtime/doc/node1.html">RT (realtime)</a> and <a href="../contributions/anders/OSC/doc/node1.html">OSC (Open Sound Control)</a> functor for detail. OSC is presently only supported on UNIX systems, and has so far been tested only on MacOS version 10.4.</p>
+
+<p>The OSC interface calls an X11 application (namely <code>xterm</code>). MacOS versions before 10.5 must be configured first to make that possible. Add the following to your <code>~/.profile</code> file.</p>
+
+<blockquote>
+<p class="quoted"></p>
+</blockquote> 
+
+<pre class="example">
+export DISPLAY=:0.0
+</pre>
+
+<p>Additionally, make sure that <code>xterm</code> is in your path. On MacOS, this is not necessarily the case, and you may want to add something like the following line to your <code>~/.profile</code> file.</p>
+
+<blockquote>
+<p class="quoted"></p>
+</blockquote> 
+
+<pre class="example">
+export PATH=/usr/X11R6/bin/:$PATH
+</pre>
+
+
+<h2><a name="sec13" id="sec13"></a>
 <a name="forPackageCreators" id="forPackageCreators"></a>Notes for Package Creators</h2>
 
 <p class="first">We highly welcome contributors of packages which simplify the Strasheela installation. For example, RPM files for SUSE Linux can be found <a href="http://packman.links2linux.de/package/strasheela/">here</a> (thank you Toni!).</p>
@@ -339,7 +368,11 @@ scripts/install-all.sh <span style="color: #bc8f8f;">\</span>
 <div id="footer">
 <div id="author">&copy; 
 Torsten Anders</div>
+<<<<<<< .mine
+<div id="date">Last time edited: ; INVALID LISP CODE</div>
+=======
 <div id="date">Last time edited: 2008.07.14</div>
+>>>>>>> .r1346
 </div>
   </body>
 </html>
