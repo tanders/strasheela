@@ -139,6 +139,18 @@ A number of output formats are already predefined. Most formats are supported by
   - Output to [[http://ccrma.stanford.edu/software/clm][CLM]] and [[http://www.audiosynth.com][SuperCollider]] is in development (currently, specific CLM instruments and a special SuperCollider score representation are supported). 
    
 
+* Using Strasheela in Realtime with OSC
+
+Strasheela provides an extension for music constraint programming in realtime, see the documentation of the [[../contributions/anders/Realtime/doc/node1.html][RT (realtime)]] and the [[../contributions/anders/OSC/doc/node1.html][OSC (Open Sound Control)]] functor for details. OSC is presently only supported on UNIX systems, and has so far been tested only on MacOS version 10.4. 
+
+The OSC interface calls an X11 application (namely =xterm=). MacOS versions before 10.5 must be configured first to make that possible. Add the following to your =~/.profile= file. 
+
+    <example>export DISPLAY=:0.0</example> 
+
+Additionally, make sure that =xterm= is in your path. On MacOS, this is not necessarily the case, and you may want to add something like the following line to your =~/.profile= file.  
+
+    <example>export PATH=/usr/X11R6/bin/:$PATH</example> 
+
 
 #forPackageCreators
 * Notes for Package Creators
