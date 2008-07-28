@@ -71,6 +71,7 @@
     - Added Lisp code for translating Lisp values into Oz values: goodies/Lisp/Lisp2Oz.lisp
     - HS.score: added HarmoniseMotifs
     - HS.rules: added ExpressAllChordPCs ExpressEssentialChordPCs ClearHarmonyAtChordBoundaries
+    - Realtime: Default realtime solvers now implicitly reset the random seed, so theyt always create a different solution 
 
 
   - There have been many other small changes, see the [[../CHANGELOG.txt]].
