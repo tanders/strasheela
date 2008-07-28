@@ -69,6 +69,8 @@
     - Fenv: added method toList_Int
     - Change default of note argument amplitude to determined value (velocity 64)
     - Added Lisp code for translating Lisp values into Oz values: goodies/Lisp/Lisp2Oz.lisp
+    - HS.score: added HarmoniseMotifs
+    - HS.rules: added ExpressAllChordPCs ExpressEssentialChordPCs ClearHarmonyAtChordBoundaries
 
 
   - There have been many other small changes, see the [[../CHANGELOG.txt]].
