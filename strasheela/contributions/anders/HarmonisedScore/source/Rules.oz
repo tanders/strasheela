@@ -106,7 +106,7 @@ import
    Browser(browse:Browse) % temp for debugging
    Select at 'x-ozlib://duchier/cp/Select.ozf'
    GUtils at 'x-ozlib://anders/strasheela/source/GeneralUtils.ozf'
-%   LUtils at 'x-ozlib://anders/strasheela/ListUtils.ozf'
+   LUtils at 'x-ozlib://anders/strasheela/ListUtils.ozf'
    SMapping at 'x-ozlib://anders/strasheela/source/ScoreMapping.ozf'
 %    Score at 'x-ozlib://anders/strasheela/ScoreCore.ozf'
    Pattern at 'x-ozlib://anders/strasheela/Pattern/Pattern.ozf'
@@ -350,7 +350,7 @@ define
 		fun {$ N} {N getPitchClass($)} end}
 	 PCsFS = {GUtils.intsToFS PCs}
       in
-	 {FS.subset {HS.rules.getFeature MyChord essentialPitchClasses} PCsFS}
+	 {FS.subset {GetFeature MyChord essentialPitchClasses} PCsFS}
       end
    end
 
