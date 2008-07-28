@@ -125,6 +125,8 @@ export
    Cadence
    DiatonicChord NoteInPCCollection
 
+   ExpressAllChordPCs ExpressEssentialChordPCs ClearHarmonyAtChordBoundaries
+
    %% melodic rules
    IsStep IsStepR
    ResolveStepwiseR
@@ -326,7 +328,59 @@ define
       {FS.include {MyNote getPitchClass($)} {MyPCCollection getPitchClasses($)}}
    end
    
-   
+
+   /** %% The union of the pitch classes of all notes notes simultaneous to MyChord fully expresses the pitch class set of this chord (more pitch classes are possibly, but all chord pitch classes must be played). 
+   %% */
+   proc {ExpressAllChordPCs MyChord}
+      thread	% waits until sim notes are accessible -- then often fails! 
+	 PCs = {Map {MyChord getSimultaneousItems($ test:isNote)}
+		fun {$ N} {N getPitchClass($)} end}
+	 PCsFS = {GUtils.intsToFS PCs}
+      in
+	 {FS.subset {MyChord getPitchClasses($)} PCsFS}
+      end
+   end
+
+   /** %% The union of the pitch classes of all notes notes simultaneous to MyChord fully express at least all essential pitch classes of this chord.
+   %% NB: the the essential pitch classes must be defined with the feature essentialPitchClasses in the chord DB.
+   %% */
+   proc {ExpressEssentialChordPCs MyChord}
+      thread	% waits until sim notes are accessible -- then often fails! 
+	 PCs = {Map {MyChord getSimultaneousItems($ test:isNote)}
+		fun {$ N} {N getPitchClass($)} end}
+	 PCsFS = {GUtils.intsToFS PCs}
+      in
+	 {FS.subset {HS.rules.getFeature MyChord essentialPitchClasses} PCsFS}
+      end
+   end
+
+
+
+   /** %% Defines melodic/harmonic constraint which implements proper suspension and other things. Chords is a list of chord objects and VoiceNotes a list of note objects which all belong to a single voice. At the border between two chords, the last voice note simultaneous to the preceeding chord and the first note simultaneous to the succeeding chord, these two notes should not be both non-chord tones (note: these two notes can be the same or different score objects, and have the same or different pitches).
+   %% If the first note of a chord is a non-chord tone, then it should have the same pitch as the last of the previous chord. In other words: if a chord starts with a non-chord tone, then it must be a suspension (suspension are of course less clear in a solo line...). 
+   %% NB: this constraint assumes that neighbouring chords differ (e.g., have a different root), otherwise it is too strict.
+   %% NB: this constraint does not define that non-chord tones are resolved stepwise, but it can be combined, e.g.., with ResolveNonharmonicNotes. 
+   %% */
+   proc {ClearHarmonyAtChordBoundaries Chords VoiceNotes}
+      {Pattern.for2Neighbours Chords 
+       proc {$ C1 C2}
+	  thread	% waits until sim notes are accessible
+	     C1_LastNote = {List.last {LUtils.cFilter VoiceNotes
+				       fun {$ N} ({C1 isSimultaneousItemR($ N)} == 1) end}}
+	     C2_FirstNote = {LUtils.cFilter VoiceNotes
+			     fun {$ N} ({C2 isSimultaneousItemR($ N)} == 1) end}.1
+	  in
+	     %% at least one is a chord tone
+	     {C1_LastNote getInChordB($)} + {C2_FirstNote getInChordB($)} >=: 1
+	     %% if a chord starts with a non-chord tone, then it must be a suspension
+	     {FD.impl {FD.nega {C2_FirstNote getInChordB($)}}
+	      ({C1_LastNote getPitch($)} =: {C2_FirstNote getPitch($)})
+	      1}
+	  end
+       end}
+   end
+
+
    
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%
@@ -439,10 +493,10 @@ define
        [o x o]			% apply to [Predecessor Note Successor]
        proc {$ [Note1 Note2 Note3]}
 	  B = {PassingNotePitchesR
-		    [{Note1 getPitch($)}
-		     {Note2 getPitch($)}
-		     {Note3 getPitch($)}]
-		    As.maxStep}
+	       [{Note1 getPitch($)}
+		{Note2 getPitch($)}
+		{Note3 getPitch($)}]
+	       As.maxStep}
 % 	  if {Note1 isNote($)} andthen {Note2 isNote($)} andthen {Note3 isNote($)}
 % 	  then B = {PassingNotePitchesR
 % 		    [{Note1 getPitch($)}
@@ -573,8 +627,8 @@ define
 end
 
    
-   %% !! Format of this rule not consistent with other rules in this functor -- I better provide general rule templates (e.g. {WithPredecessor X Proc}) elsewhere..
-   %%
+%% !! Format of this rule not consistent with other rules in this functor -- I better provide general rule templates (e.g. {WithPredecessor X Proc}) elsewhere..
+%%
 %    /** %% If X has a TemporalAspect predecessor then X has at least 1 common pitch class with this predecessor.
 %    %% */
 %    proc {CommonPCsWithPredecessor X}   
@@ -587,8 +641,8 @@ end
 
 
    
-   %% !! These two rules also need mainly a general rule template, e.g. {ForFirstAndLastItem Container Proc}
-   %%
+%% !! These two rules also need mainly a general rule template, e.g. {ForFirstAndLastItem Container Proc}
+%%
 %    /** %% Returns a unary rule for a chord: if MyChord is either the first or last element in its TemporalAspect then its Transposition is set to 0.
 %    %% */
 %    proc {StartAndEndSetTransposition0 MyChord}
@@ -612,8 +666,8 @@ end
 
    
    
-   %% !! Rules depend on interval DB (need predef. dissonance degree in interval DB) -- how can I generalise??
-   %%
+%% !! Rules depend on interval DB (need predef. dissonance degree in interval DB) -- how can I generalise??
+%%
 %    /** %% Returns a unary rule on a list of chords: the dissonance degree of the transposition interval between two neighboring chords is constrained to DissonanceDegree (FD int domain). [Dissonance degrees for intervals are specified in IntervalDB.oz for the Partch scale.]
 %    %% */
 %    %% !!?? rule introduces FD ints which are possibly not determined ?
@@ -626,9 +680,9 @@ end
 % 	  end}
 %       end
 %    end
-   %%
-   %% !! instead of transposition use chord/scale roots (see below, but use root parameter of course)
-   %%
+%%
+%% !! instead of transposition use chord/scale roots (see below, but use root parameter of course)
+%%
 %    /** %% Constraints the interval between the transpositions of Chord1 and Chord2 to DissonanceDegree (FD int) according to the dissonance degrees for intervals specified in IntervalDB.oz for the Partch scale.
 %    %% */
 %    proc {ChordTranspositionIntervalDissonanceDegree Chord1 Chord2 DissonanceDegree}
