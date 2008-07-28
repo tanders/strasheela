@@ -106,13 +106,18 @@ import
    Browser(browse:Browse) % temp for debugging
    Select at 'x-ozlib://duchier/cp/Select.ozf'
    GUtils at 'x-ozlib://anders/strasheela/source/GeneralUtils.ozf'
-   LUtils at 'x-ozlib://anders/strasheela/ListUtils.ozf'
+   LUtils at 'x-ozlib://anders/strasheela/source/ListUtils.ozf'
+   MUtils at 'x-ozlib://anders/strasheela/source/MusicUtils.ozf'
    SMapping at 'x-ozlib://anders/strasheela/source/ScoreMapping.ozf'
 %    Score at 'x-ozlib://anders/strasheela/ScoreCore.ozf'
    Pattern at 'x-ozlib://anders/strasheela/Pattern/Pattern.ozf'
    Schoenberg at 'Schoenberg.ozf'
+   DB at 'Database.ozf'
    
 export
+
+   %% subfunctors
+   Schoenberg
 
    %% chord / scale rules
    GetFeature
@@ -136,8 +141,11 @@ export
    IsAuxiliaryR
    IsBetweenStepsR
 
-   %% subfunctors
-   Schoenberg
+   ResolveNonharmonicNotesStepwise
+
+   %% aux constraints 
+   GetInterval
+   ConstrainMaxIntervalR
    
 define
 
@@ -359,7 +367,9 @@ define
    /** %% Defines melodic/harmonic constraint which implements proper suspension and other things. Chords is a list of chord objects and VoiceNotes a list of note objects which all belong to a single voice. At the border between two chords, the last voice note simultaneous to the preceeding chord and the first note simultaneous to the succeeding chord, these two notes should not be both non-chord tones (note: these two notes can be the same or different score objects, and have the same or different pitches).
    %% If the first note of a chord is a non-chord tone, then it should have the same pitch as the last of the previous chord. In other words: if a chord starts with a non-chord tone, then it must be a suspension (suspension are of course less clear in a solo line...). 
    %% NB: this constraint assumes that neighbouring chords differ (e.g., have a different root), otherwise it is too strict.
-   %% NB: this constraint does not define that non-chord tones are resolved stepwise, but it can be combined, e.g.., with ResolveNonharmonicNotes. 
+   %% NB: this constraint does not define that non-chord tones are resolved stepwise, but it can be combined, e.g.., with ResolveNonharmonicNotes.
+   %%
+   %% Internally, each chord accesses its first/last simultaneous note within VoiceNotes. 
    %% */
    proc {ClearHarmonyAtChordBoundaries Chords VoiceNotes}
       {Pattern.for2Neighbours Chords 
@@ -563,7 +573,110 @@ define
    end
 
 
+   /** %% Melodic constraint for list of Notes: non-chord tones are only permitted if they are reached and left by a step. The first and last element of Notes is constrained to a chord tone.
+   %%
+   %% Args:
+   %% 'maxInterval': an ratio spec for the maximum step-size permitted. Default is a septimal second (8#7). 
+   %% */
+   proc {ResolveNonharmonicNotesStepwise Notes Args}
+      Defaults = unit(maxInterval: 8#7)
+      As = {Adjoin Defaults Args}
+      MaxInterval = {FloatToInt {MUtils.ratioToKeynumInterval As.maxInterval
+				 {IntToFloat {DB.getPitchesPerOctave}}}}
+   in
+      {Pattern.forNeighbours Notes 3
+       proc {$ [N1 N2 N3]}
+	  /** %% B=1 <-> MyNote is entered and left by a step.
+	  %% */
+	  proc {Aux N2 B}
+	     B = {FD.int 0#1}		% needed?
+	     B = {FD.conj {ConstrainMaxIntervalR N1 N2 MaxInterval}
+		  {ConstrainMaxIntervalR N2 N3 MaxInterval}}
+	  end
+       in
+	  {N2 nonChordPCConditions([Aux])}
+       end}
+      %% Explicitly constrain that first and last note must be chord tones
+      {Notes.1 getInChordB($)} = 1
+      {{List.last Notes} getInChordB($)} = 1
+   end
+% /** %% Variant of ResolveNonharmonicNotesStepwise which accesses the predecessor and sucessor note from a given note explicitly. Non-chord tones are only permitted for MyNote if they are reached and left by a step. If no predecessor or successor is accessible for MyNote, then it must be a chord tone. 
+% %%
+% %% Args:
+% %% 'maxInterval': an integer specifying the maximum step-size permitted. Default is the interval corresponding to a septimal second (8/7). 
+% %% 'getPredecessor' and 'getSuccessor': unary function returning the predecessor/successor for the given note. Default are the methods getTemporalPredecessor/getTemporalSuccessor.
+% %% NOTE: If motifs are wrapped in containers, then the first (last) motif note has no predecessor (successor) and consequently must be a chord tone. This default behaviour can be changed using different 'getPredecessor' and 'getSuccessor' settings.
+% %% NOTE: the default 'getPredecessor' and 'getSuccessor' do allow for pauses between chord tones and non-harmonic tones. Classical music theory does this as well, but not completely unrestricted. Again, this can be changed by using different 'getPredecessor' and 'getSuccessor' settings.
+% %% */
+% proc {ResolveNonharmonicNotesStepwise2 MyNote Args}
+%    Defaults = unit(getPredecessor: fun {$ N}
+% 				      X = {N getTemporalPredecessor($)}
+% 				   in 
+% 				      %% replace X by comment if pauses should not occur between predecessor/successor and MyNote
+% 				      X
+% % 				      if X == nil orelse {X isPause($)} orelse ({N getOffsetTime} >: 0) == 1
+% % 				      then nil
+% % 				      else X
+% % 				      end
+% 				   end
+% 		   getSuccessor: fun {$ N}
+% 				    X = {N getTemporalSuccessor($)}
+% 				 in
+% 				    %% replace X by comment if pauses should not occur between predecessor/successor and MyNote
+% 				    X
+% % 				    if X == nil orelse {X isPause($)} orelse ({X getOffsetTime} >: 0) == 1
+% % 				    then nil
+% % 				    else X
+% % 				    end
+% 				 end
+% 		   %%
+% 		   maxInterval: SeptimalSecond
+% 		  )
+%    As = {Adjoin Defaults Args}
+%    /** %% B=1 <-> MyNote is entered and left by a step.
+%    %% */
+%    proc {Aux MyNote B}
+%       Pre = {As.getPredecessor MyNote}
+%       Succ = {As.getSuccessor MyNote}
+%    in
+%       B = {FD.int 0#1}		% needed?
+%       if Pre \= nil andthen Succ \= nil
+%       then
+% 	 B = {FD.conj {ConstrainMaxIntervalR Pre MyNote As.maxInterval}
+% 	      {ConstrainMaxIntervalR MyNote Succ As.maxInterval}}
+%       else B=0			% otherwise always a consonance
+%       end
+%    end
+% in
+%    thread			% accessors block
+%       {MyNote nonChordPCConditions([Aux])}
+%    end
+% end
 
+
+
+   
+   
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%
+%%% Aux Constraints 
+%%%
+
+   /** %% Returns the absolute pitch interval (a FD int) between the note objects Note1 and Note2. Interval is implicitly declared a FD int.
+   %% */
+   proc {GetInterval Note1 Note2 ?Interval}
+      Interval = {FD.decl}
+      {FD.distance {Note1 getPitch($)} {Note2 getPitch($)} '=:' Interval}
+   end
+   
+   
+   /** %% B=1 <-> constraints the absolute pitch interval between Note1 and Note2 (note objects) to MaxInterval (an integer) at most.
+   %% */
+   proc {ConstrainMaxIntervalR Note1 Note2 MaxInterval B}
+      B = {FD.int 0#1}
+      {FD.reified.distance {Note1 getPitch($)} {Note2 getPitch($)} '=<:' MaxInterval
+       B}
+   end
 
    
    
