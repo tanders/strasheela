@@ -2590,14 +2590,17 @@ define
    %% chordNo: number of chords
    %% makeChord: Chord constructor, can output textual score representation (must have label chord). If an object is returned instead of a textual score spec, the default chord class (HS.score.diatonicChord) is overwritten
    %% chordsRule: unary prodecure, applied to list of all chords
+   %% myChords: return argument for accessing the list of chords
    %% includeScales: whether any scales are used at all. If false, the chord class HS.score.chord is used by default, but makeChord must be specified 
    %% scaleNo: number of scales
    %% makeScale: Scale constructor, can output textual representation (must have label scale). If an object is returned instead of a textual score spec, the default scale class (HS.score.scale) is overwritten 
    %% scaleRule: unary prodecure, applied to list of all scales
    %% includeMeasure: whether a measure object is used
+   %% myScales: return argument for accessing the list of scales
    %% measure: Measure spec (a record). NOTE: params beatNumber and beatDuration must be determined in CSP def for simplicity (propagation otherwise blocks). Also, beatDuration depends on timeUnit (e.g., if timeUnit is beats(4), then a 3/4 bar has beatDuration 4). NOTE: if timeUnit is not beats(4), then the default measure value is wrong! 
    %% lilyTimeSignature: Lilypond time signature code, should be set according to measure
    %% measureRule: unary prodecure, applied to measure object
+   %% myMeasure: return argument for accessing the measure
    %%
    %% The default arguments are as follows
    unit(motifs:nil	
@@ -2644,16 +2647,19 @@ define
 					)
 				end
 		      chordsRule: proc {$ Chords} skip end
+		      myChords:_
 		      includeScales:true
 		      scaleNo:1
 		      makeScale:fun {$} scale(transposition:0) end
 		      scaleRule: proc {$ Scales} skip end
+		      myScales:_
 		      includeMeasure: true
 		      measure: measure(beatNumber:4 %% 4/4 beat
 				       beatDuration:4
 				      )
 		      lilyTimeSignature: "\\time  3/4"
 		      measureRule: proc {$ M} skip end
+		      myMeasure:_
 		     )
       As = {Adjoin Defaults Args}
       MainScore = {Score.makeScore2 seq(info:lily("\\set Staff.instrumentName = \"Main Score\" "#As.lilyTimeSignature)
@@ -2668,6 +2674,7 @@ define
 			    end
 		    % chord:HS.score.inversionChord
 		     )}
+      MyChords = {ChordSeq getItems($)}
       ScaleSeqL MyMeasureL
    in
       ScaleSeqL = if As.includeScales
@@ -2693,16 +2700,22 @@ define
       %% Constrain temporal structure. Start times are implicitly equal (if no offset time occurs)
       {MainScore getEndTime($)} = {ChordSeq getEndTime($)}
       %% apply user-def constaints
-      {As.chordsRule {ChordSeq getItems($)}}
+      thread {As.chordsRule MyChords} end
+      As.myChords = MyChords
+      %%
       if As.includeScales
-      then
+      then MyScales = {ScaleSeqL.1 getItems($)} in
 	 {MainScore getEndTime($)} = {ScaleSeqL.1 getEndTime($)}
-	 {As.scaleRule {ScaleSeqL.1 getItems($)}}
+	 thread {As.scaleRule MyScales} end
+	 As.myScales = MyScales
+      else As.myScales = nil
       end
       if As.includeMeasure
-      then
+      then MyMeasure = MyMeasureL.1 in
 	 {MainScore getEndTime($)} = {MyMeasureL.1 getEndTime($)}
-	 {As.measureRule MyMeasureL.1}
+	 thread {As.measureRule MyMeasure} end
+	 As.myMeasure = MyMeasure
+      else As.myMeasure = nil 
       end
    end
 
