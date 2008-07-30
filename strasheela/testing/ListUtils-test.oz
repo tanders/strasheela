@@ -175,6 +175,14 @@ thread Ys = {LUtils.cFilter Xs IsOdd} end
 {Nth Xs 4} = 5
 
 
+%%
+%% no results (nil returned)
+%%
+
+{LUtils.cFilter [1] fun {$ X} false end}
+
+{LUtils.cFilter nil fun {$ X} false end}
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%
@@ -193,6 +201,17 @@ Y = {LUtils.cFind Xs fun {$ X} X > 3 end}
 thread {Nth Xs 4} = 5 end
 thread {Nth Xs 2} = 6 end
 
+
+
+%%
+%% no results (nil returned)
+%%
+
+{LUtils.cFind [1] fun {$ X} false end}
+
+{LUtils.cFind nil fun {$ X} false end}
+
+{LUtils.cFind [1 3] IsEven}
 
 
 
