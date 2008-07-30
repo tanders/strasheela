@@ -421,6 +421,34 @@ proc {$ X} {Browse elseCase#X} end}
  proc {$} {Browse elseCase} end}
 
 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%% SMapping.forSimultaneousPairs / SMapping.mapSimultaneousPairs
+%% 
+
+declare
+N1 N2 
+MyScore = {Score.makeScore sim(items:[seq(items:[note(handle:N1
+						      info:n1
+						      duration:2)])
+				      seq(items:[note(handle:N2
+						      info:n2
+						      duration:2)])]
+			       startTime:0
+			       timeUnit:beats)
+	   unit}
+
+
+{SMapping.mapSimultaneousPairs [N1] fun {$ X Y} {X getInfo($)}#{Y getInfo($)} end isNote}
+%% -> nil
+
+{SMapping.mapSimultaneousPairs [N2] fun {$ X Y} {X getInfo($)}#{Y getInfo($)} end isNote}
+%% -> [[n2]#[n1]]
+
+
+
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%
 %% MapScore
@@ -446,3 +474,4 @@ MyScore = seq(info:test
 %% Note: all score objects get it added, but not beats(4) 
 {Browse {SMapping.mapScore MyScore
 	 fun {$ X} {Adjoin unit(bla:hallo) X} end}}
+
