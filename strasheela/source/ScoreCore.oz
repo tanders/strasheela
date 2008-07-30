@@ -204,14 +204,14 @@ define
       meth getMethNames($)
 	 {Dictionary.keys {self getClass($)}.{Boot_Name.newUnique 'ooMeth'}}
       end
-%       /** %% Alias for getMethNames.
+%       /* %% Alias for getMethNames.
 %       %% */
 %       meth getMethods($) {self getMethNames($)} end
       /* %% [TODO] Get the default arguments of the initialisation method... 
       %% */
 %      meth getInitArgs($) 
 %      end
-      /* %% Returns a record where the features are all supported arguments of the init method of self with their default as value (_ indicates that no default exist).
+      /** %% Returns a record where the features are all supported arguments of the init method of self with their default as value (_ indicates that no default exist).
       %% NB: this method relies on the correct implementation of the method getInitArgs for its class and all its superclasses. 
       %% */
       meth getInitArgDefaults($)
@@ -891,10 +891,12 @@ define
 	 {FD.conj (Start1 =: Start2) (End1 =: End2) B}
       end
       /** % [Deterministic method] Returns list of score objects simultaneous to self and fulfilling the optional boolean function or method test.
-      %% The implementation uses LUtils.cFilter and the reified constraints method isSimultaneousItemR. Items are returned as soon as the score contains enough information for all score objects in the score to tell whether or not their are simultaneous to self (i.e. rhythmic structure of the whole score must not necessarily be fully determined). 
+      %% The implementation uses LUtils.cFilter and the reified constraints method isSimultaneousItemR. Items are returned as soon as the score contains enough information for all score objects in the score to tell whether or not their are simultaneous to self (i.e. rhythmic structure of the whole score must not necessarily be fully determined).
+      %% NB: Test must be a deterministic function/method which does not block (e.g., checks on score object types or their position in the score topology are OK) and which is used for pre-filtering score objects. The argument CTest has the same format (optional boolean function or method), but it is applied at the end within the LUtils.cFilter test-function for post-filtering. Computationally very expensive tests are better used for post-filtering. 
       %%*/
       %% @1=?Xs	
-      meth getSimultaneousItems(?Xs test:Test<=fun {$ X} true end)
+      meth getSimultaneousItems(?Xs test:Test<=fun {$ X} true end
+			       cTest: CTest<=fun {$ X} true end)
 	 thread 		% ?? NOTE: thread needed?
 	    TopLevel = {self getTopLevels($ test:fun {$ X} {X isTimeMixin($)} end)}.1
 	    ScoreObjects = {TopLevel collect($ test:Test)}
@@ -903,21 +905,18 @@ define
 		  fun {$ X}
 		     X \= self andthen
 		     {X isItem($)} andthen
-		     ({self isSimultaneousItemR($ X)} == 1)
+		     ({self isSimultaneousItemR($ X)} == 1) andthen
+		     {{GUtils.toFun CTest} X}
 		  end}
-% 	    Xs = {TopLevel filter($ fun {$ X} 
-% 				       X \= self andthen
-% 				       {X isItem($)} andthen
-% 				       {X isSimultaneousItem($ self)} andthen
-% 				       {{GUtils.toFun Test} X}
-% 				    end)}
 	 end
       end
 
       /** %% [Deterministic method] Returns the first score object found which is simultaneous to self and fulfilling the optional boolean function or method test.
       %% The implementation uses LUtils.cFind and the reified constraints method isSimultaneousItemR. X is return as soon as the score contains enough information to tell for any score object that it is simultaneous to self (i.e. rhythmic structure of the whole score must not necessarily be fully determined). 
+      %% NB: Test must be a deterministic function/method which does not block (e.g., checks on score object types or their position in the score topology are OK) and which is used for pre-filtering score objects. The argument CTest has the same format (optional boolean function or method), but it is applied at the end within the LUtils.cFilter test-function for post-filtering. Computationally very expensive tests are better used for post-filtering. 
       %% */
-      meth findSimultaneousItem(?X test:Test<=fun {$ X} true end)
+      meth findSimultaneousItem(?X test:Test<=fun {$ X} true end
+			       cTest: CTest<=fun {$ X} true end)
 	 thread 		% ?? NOTE: thread needed?
 	    TopLevel = {self getTopLevels($ test:fun {$ X} {X isTimeMixin($)} end)}.1
 	    ScoreObjects = {TopLevel collect($ test:Test)}
@@ -926,7 +925,8 @@ define
 		  fun {$ X}
 		     X \= self andthen
 		     {X isItem($)} andthen
-		     ({self isSimultaneousItemR($ X)} == 1)
+		     ({self isSimultaneousItemR($ X)} == 1) andthen
+		     {{GUtils.toFun CTest} X}
 		  end}
 	 end
       end
@@ -1451,6 +1451,13 @@ define
 	 %% !!!! should I memorise position of self in Container?
 	 %% !!?? should I make position constrainable ?
 	 Pos={LUtils.position self {Container getItems($)}}
+      end
+      
+      /** %% Returns the index of self in its temporal container (temporal aspect).
+      %%*/
+      %% @1=?Pos
+      meth getTemporalPosition(?Pos)
+	 Pos = {self getPosition($ {self findContainer($ {GUtils.toFun isTemporalAspect})})}
       end
       /** %%Returns the item in Container which is the Nth in relation to self (i.e. self too is an item in Container). N may be a negative integer (returns an item before self) or a positive integer (returns an item after self). For example, {X positionOffset($ 1 C)} returns the item just after self in C.
       %%*/
