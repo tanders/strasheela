@@ -17,6 +17,7 @@
 functor 
 import
    System
+   Browser(browse:Browse)
    GUtils at 'GeneralUtils.ozf'
    
 export
@@ -169,33 +170,34 @@ define
    %% Less efficient than Filter (e.g., many threads are created).
    %% */ 
    proc {CFilter Xs F ?Result}
-      Result_XL = {New ExtendableList init}
-      %% Stream for notifying that F returned for an element of Xs
-      Finished_L
-      Finished_P = {NewPort Finished_L}
-      L = {Length Xs}
-   in
-      Result = Result_XL.list
-      {ForAll Xs proc {$ X}
-		    thread
-		       if {F X}
-		       then
-			  {Result_XL add(X)}
-			  {Send Finished_P unit}
-		       else {Send Finished_P unit}
-		       end
-		    end
-		 end}
-      %% Wait until F returned a value for all elements of Xs, then close list
-      thread
-	 proc {Aux Xs I}
-	    {Wait Xs.1}
-	    if I==L then {Result_XL close}
-	    else {Aux Xs.2 I+1}
-	    end
-	 end
+      case Xs of nil then Result = nil
+      else
+	 Result_XL = {New ExtendableList init}
+	 %% Stream for notifying that F returned for an element of Xs
+	 Finished_L
+	 Finished_P = {NewPort Finished_L}
+	 L = {Length Xs}
       in
-	 {Aux Finished_L 1} 
+	 Result = Result_XL.list
+	 {ForAll Xs proc {$ X}
+		       thread
+			  if {F X}
+			  then {Result_XL add(X)}
+			  end
+			  {Send Finished_P unit}
+		       end
+		    end}
+	 %% Wait until F returned a value for all elements of Xs, then close list
+	 thread
+	    proc {Aux Xs I}
+	       {Wait Xs.1}
+	       if I==L then {Result_XL close}
+	       else {Aux Xs.2 I+1}
+	       end
+	    end
+	 in
+	    {Aux Finished_L 1} 
+	 end
       end
    end
 
@@ -203,22 +205,61 @@ define
    %% Less efficient than Find (e.g., many threads are created).
    %% */
    proc {CFind Xs F ?Result}
-      %% use a port for collecting results to avoid race conditions and locks
-      S P={NewPort S}
-      Threads = {Map Xs proc {$ X T}
-			   thread
-			      T={Thread.this}
-			      if {F X} then {Send P X} end
-			      %% keep all threads running, so they can
-			      %% all be terminated without errors
-			      %% (catching the exception would not work
-			      %% from other threads..)
-			      {Wait _}
-			   end
-			end}
-   in
-      Result = S.1     % wait for first value sent
-      {ForAll Threads Thread.terminate}
+      case Xs of nil then Result = nil
+      else 
+	 %% use a port for collecting results to avoid race conditions and locks
+	 S
+	 P={NewPort S}
+	 %% Stream for notifying that F returned for an element of Xs
+	 Finished_S
+	 Finished_P = {NewPort Finished_S}
+	 L = {Length Xs}
+	 Threads = {Map Xs proc {$ X T}
+			      thread
+				 B = {F X}
+			      in 
+				 T={Thread.this}
+				 if B then {Send P X} end
+				 {Send Finished_P B}
+				 %% keep all threads running, so they can
+				 %% all be terminated without errors
+				 %% (catching the exception would not work
+				 %% from other threads..)
+				 {Wait _}
+			      end
+			   end}
+	 NilThread
+	 FirstFound FirstFoundThread 
+      in
+	 thread
+	    %% access to first result in extra thread because needed
+	    %% for WaitOr below and simple access can already block
+	    FirstFoundThread = {Thread.this}
+	    FirstFound = S.1
+	    {Wait _}
+	 end
+	 thread
+	    %% test whether F returns false for all Xs elements, in which case Result=nil
+	    proc {Aux Finished_S I}
+	       if Finished_S.1==false
+	       then if I==L 
+		    then Result=nil
+		    else {Aux Finished_S.2 I+1}
+		    end
+	       end
+	    end
+	 in
+	    NilThread = {Thread.this}
+	    {Aux Finished_S 1}
+	    {Wait _}
+	 end
+	 %% wait either for first found item or Result set in NilThread
+	 {WaitOr FirstFound Result}
+	 if {IsFree Result} 	% i.e. Result \= nil
+	 then Result = FirstFound
+	 end
+	 {ForAll FirstFoundThread|NilThread|Threads Thread.terminate}
+      end
    end
 
    
