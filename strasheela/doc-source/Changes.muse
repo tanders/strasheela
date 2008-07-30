@@ -72,6 +72,8 @@
     - HS.score: added HarmoniseMotifs
     - HS.rules: added ExpressAllChordPCs ExpressEssentialChordPCs ClearHarmonyAtChordBoundaries, ResolveNonharmonicNotesStepwise, GetInterval, ConstrainMaxIntervalR
     - Realtime: Default realtime solvers now implicitly reset the random seed, so theyt always create a different solution 
+    - LUtils: fixed bug in CFind/CFilter: blocked if result should be nil
+    - SMapping: added MapSimultaneousPairs and ForSimultaneousPairs
 
 
   - There have been many other small changes, see the [[../CHANGELOG.txt]].
