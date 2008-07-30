@@ -51,6 +51,8 @@ export
    PatternMatchingApply PatternMatchingApply2
    ForNumericRange ForNumericRange2 ForNumericRangeArgs
    
+   MapSimultaneousPairs ForSimultaneousPairs
+   
    MapScore
    
 define
@@ -777,6 +779,103 @@ define
 	  end
        end}
    end
+
+
+   local
+      /** %% [aux def] Returns the list of temporal containers in with X is recursively contained, starting with the most nested container (top-level container is last).
+      %% */
+      fun {GetTemporalContainersRecursively X}
+	 C = {X getTemporalContainer($)}
+      in
+	 case C of nil then nil
+	 else C | {GetTemporalContainersRecursively C}
+	 end
+      end
+      /** %% [aux def] For two score objects from the same score, find the outmost temporal score object in the score topologies by which their nesting differs and return the position of this object in its temporal container. Returns a pair of integers (the two positions). 
+      %% */
+      fun {FindHierarchicDifferencePosition X Y}
+	 fun {Aux X_Nestings Y_Nestings}
+	    if X_Nestings == nil orelse Y_Nestings == nil
+	    then {Exception.raiseError
+		  strasheela(failedRequirement X#Y
+			     "Score objects cannot have different \"hierarchic difference positions\" (e.g., this error occurs if one of the objects is the top-level container).")}
+	       unit % never returned..
+	    else
+	       if X_Nestings.1 == Y_Nestings.1
+	       then {Aux X_Nestings.2 Y_Nestings.2}
+		  %% first score objects in hierarchy by which X and Y differ: return their positions
+	       else {X_Nestings.1 getTemporalPosition($)}#{Y_Nestings.1 getTemporalPosition($)}
+	       end
+	    end
+	 end
+	 %% list of temporal containers and score object with top-level container first
+	 X_Nestings = {Reverse X | {GetTemporalContainersRecursively X}}
+	 Y_Nestings = {Reverse Y | {GetTemporalContainersRecursively Y}}
+      in
+	 {Aux X_Nestings Y_Nestings}
+      end
+   in
+      /** %% MapSimultaneousPairs traverses Xs (a list of score objects), applies the binary function Fn to pairs of simultaneous score objects, and returns the collected results. 
+      %% MapSimultaneousPairs applies {Fn X Y ?Result} to all pairs X and Y, where X is an element in Xs and Y is a score object which is simultaneous to X, but which is not necessarily contained in Xs. In order to avoid applying the same constraint twice in case both X and Y are contained in Xs, there is an additional restriction related to the hierarchic nesting of X and Y. Simplified, this restriction states that the container of Y must be at a lower position than the container of X -- which usually means that Y is in a higher voice than X. However, MapSimultaneousPairs is more general and works for arbitrary nesting.
+      %% Test is a Boolean function or method for pre-filtering potential Y values.
+      %%
+      %% Note that MapSimultaneousPairs even works if the rhythmical structure is indetermined in the CSP definition, but it will block until the rhythmic structure is determined enough to tell which score objects are simultaneous. Therefore, a distribution strategy which determines the rhythmical structure relatively early (e.g., left to right) is recommended.
+      %%
+      %% See ForSimPairs doc for an example. 
+      %% */
+      fun {MapSimultaneousPairs Xs Fn Test}
+	 {Flatten
+	  {Map Xs
+	   fun {$ X}
+	      {Map
+	       {X getSimultaneousItems($ 
+				       test:fun {$ Y}
+					       {{GUtils.toFun Test} Y} andthen
+					       Y \= X andthen 
+					       local 
+						  PosX#PosY = {FindHierarchicDifferencePosition
+							       X Y}
+					       in
+						  %% Y must be in "voice" with lower position, i.e. usually a higher voice (e.g. printed in an upper staff). Voice is in quotes, because this def works for arbitrary nestings
+						  PosX > PosY
+					       end
+					    end)}
+	       fun {$ Y} {Fn X Y} end}
+	   end}}
+      end
+      /** %% ForSimultaneousPairs traverses Xs (a list of score objects) and applies the binary procedure P to pairs of simultaneous score objects. 
+      %% ForSimultaneousPairs applies {Fn X Y} to all pairs X and Y, where X is an element in Xs and Y is a score object which is simultaneous to X, but which is not necessarily contained in Xs. In order to avoid applying the same constraint twice in case both X and Y are contained in Xs, there is an additional restriction related to the hierarchic nesting of X and Y. Simplified, this restriction states that the container of Y must be at a lower position than the container of X -- which usually means that Y is in a higher voice than X. However, ForSimultaneousPairs is more general and works for arbitrary nesting.
+      %% Test is a Boolean function or method for pre-filtering potential Y values.
+      %%
+      %% Note that ForSimultaneousPairs even works if the rhythmical structure is indetermined in the CSP definition, but it will block until the rhythmic structure is determined enough to tell which score objects are simultaneous. Therefore, a distribution strategy which determines the rhythmical structure relatively early (e.g., left to right) is recommended.
+      %%
+      %% Examples:
+      %% Application of a harmonic constraint to all pairs of simultaneous notes. This approach works for any number of voices and arbitrarily complex rhythmic structures. 
+      {ForSimPairs {MyScore collect($ test:isNote)} IsConsonant isNote}
+      %% Application of a harmonic constraint to all note pairs consisting of a bass note and a note from a higher voice. MyBass is a container which contains all the bass notes. 
+      {ForSimPairs {MyBass collect($ test:isNote)} IsConsonant isNote}
+      %% */
+      proc {ForSimultaneousPairs Xs P Test}
+	 {ForAll Xs
+	  proc {$ X}
+	     {ForAll
+	      {X getSimultaneousItems($ 
+				      test:fun {$ Y}
+					      {{GUtils.toFun Test} Y} andthen
+					       Y \= X andthen 
+					      local 
+						 PosX#PosY = {FindHierarchicDifferencePosition
+							      X Y}
+					      in
+						 %% Y must be in "voice" with lower position, i.e. usually a higher voice (e.g. printed in an upper staff). Voice is in quotes, because this def works for arbitrary nestings
+						 PosX > PosY
+					      end
+					   end)}
+	      proc {$ Y} {P X Y} end}
+	  end}
+      end
+   end
+
 
    
    /** %% Expects a _textual_ score MyScore (a record) and applies Fn to every contained textual score object. Returns a score where the score object are replaced by the results of Fn. However, any 'items' features are ignored in the result of Fn. Instead, the original nesting is preserved. 
