@@ -56,7 +56,7 @@ Durs = [1 1 1 1 1 1 1 2]
 %% A linear fenv from 27.0 to 127.0 (MIDI velocity values)
 AmpsF = {New Fenv.fenv init(env:fun {$ X} X * 100.0 + 27.0 end)}
 %% Sampling the fenv (8 values) 
-Amps = {Map {AmpsF toList($ 8)} FloatToInt}
+Amps = {AmpsF toList_Int($ 8)}
 %% Create score 
 Test1 = {Score.makeScore
 	 seq(items:{Map {LUtils.matTrans [Durs Pitches Amps]}
@@ -428,6 +428,9 @@ Test5a = {Score.makeScore
 
 
 %%%%%%%%%%%%%%%%%%%%%
+%%
+%% Example 5b
+%% 
 
 declare
 Pitches = 60|62|64|59|{List.make 13}
@@ -435,8 +438,9 @@ Pitches = 60|62|64|59|{List.make 13}
 Durs = 2|2|3|1|{List.make 13}
 {Pattern.cycle Durs 4}
 %% Tempo curve: y value 1 means score tempo (60 BPM), 0.5 means halve score tempo (30 BPM) etc.
-% TempoF = {Fenv.linearFenv [[0.0 0.1] [1.0 0.1]]}
+% TempoF = {Fenv.linearFenv [[0.0 0.5] [1.0 0.5]]}
 TempoF = {Fenv.linearFenv [[0.0 1.0] [1.0 1.0]]}
+% TempoF = {Fenv.linearFenv [[0.0 2.0] [1.0 0.5]]}
 %% transform the tempo curve into a time map
 %% (internally, this uses numeric integration)
 TimeMapF = {Fenv.tempoCurveToTimeMap TempoF 0.01}
@@ -463,38 +467,45 @@ Test5b = {Score.makeScore
 */
 
 
+
+
 %% Outputting the global tempo curve by adjusting the MIDI event times. 
-%% 
+%%
+declare
+/** %%
+%% */
+%% NOTE: timing information is not 100% exact. For example,
+%% NormScoreTime \= NormPerformanceTime, as it should be for tempo=1
+%% ??? However, these deviations are caused by my poor mans integration (increasing arg Step in Fenv.tempoCurveToTimeMap improves precision).
+fun {PerformanceTime TimeMapFenv Start Duration MyScoreTime}
+   %% NormScoreTime is in [0, 1]
+   NormScoreTime = (MyScoreTime-Start) / Duration
+   NormPerformanceTime = {TimeMapFenv y($ NormScoreTime)}
+   PerformanceTime = NormPerformanceTime * Duration + Start
+in
+   {Browse unit(scoreTime:MyScoreTime
+		normScoreTime:NormScoreTime
+		normPerformanceTime:NormPerformanceTime
+		performance:PerformanceTime
+		%% midi:{Out.midi.beatsToTicks PerformanceTime}
+	       )}
+   {Out.midi.beatsToTicks PerformanceTime}
+end
 {Out.midi.renderAndPlayMidiFile Test5b
  unit(file:"Test5b"
       scoreToEventsArgs:ProcessEventsAndContainers
       %% clauses
       clauses:[isNote#fun {$ MyNote}
-			 fun {PerformanceTime ScoreTime}
-			    %% NormScoreTime is in [0, 1]
-			    NormScoreTime = (ScoreTime-SeqStart) / SeqDur
-			    NormPerformanceTime = {TimeMapF y($ NormScoreTime)}
-			    PerformanceTime = NormPerformanceTime * SeqDur + SeqStart
-			 in
-			    %% BUG:
-			    %% Time values are not exact. For example,
-			    %% !! NormScoreTime \= NormPerformanceTime, as it should be for tempo=1
-			    {Browse unit(scoreTime:ScoreTime
-					 normScoreTime:NormScoreTime
-					 normPerformanceTime:NormPerformanceTime
-					 performance:PerformanceTime
-					% midi:{Out.midi.beatsToTicks PerformanceTime}
-					)}
-			    {Out.midi.beatsToTicks PerformanceTime}
-			 end
 			 MySeq = {MyNote getTemporalContainer($)}
 			 SeqStart = {MySeq getStartTimeInSeconds($)}
 			 SeqDur = {MySeq getDurationInSeconds($)}
 			 {Browse unit(seqStart:SeqStart seqDur:SeqDur)}
 			 TimeMapF = {MySeq getInfoRecord($ fenvs)}.timeMap
 			 %% 
-			 Start = {PerformanceTime {MyNote getStartTimeInSeconds($)}}
-			 End = {PerformanceTime {MyNote getEndTimeInSeconds($)}} 
+			 Start = {PerformanceTime TimeMapF SeqStart SeqDur
+				  {MyNote getStartTimeInSeconds($)}}
+			 End = {PerformanceTime TimeMapF SeqStart SeqDur
+				{MyNote getEndTimeInSeconds($)}} 
 			 Channel = {MyNote getChannel($)}
 			 Pitch = {FloatToInt {MyNote getPitchInMidi($)}}
 			 Velocity = {FloatToInt {MyNote getAmplitudeInVelocity($)}}
