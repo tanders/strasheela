@@ -571,7 +571,8 @@ define
    %% However, after the many attempts with memoization so far I am not sure whether this is worth the effort
    fun {Integrate MyFenv Step}
       %%  select approximation
-      MyDefIntegral = DefiniteIntegral_Trapezoidal
+%       MyDefIntegral = DefiniteIntegral_Trapezoidal
+      MyDefIntegral = DefiniteIntegral_Simpson
       F = {MyFenv getEnv($)}
       /** %% Returns the definite integral of function F in [A, B] (two floats), approximation uses Step (a float) size between A and B.
       %% */
@@ -628,12 +629,16 @@ define
    fun {DefiniteIntegral_Trapezoidal F A B}
       (B-A) * ({F A} + {F B}) / 2.0
    end
+   %% ?? NOTE: it appears that using Simpson's rule makes hardly any differences at times. I would have expected that now all segments are curved -- what am I missing?
+   fun {DefiniteIntegral_Simpson F A B}
+      (B-A) / 6.0 * ({F A} + (4.0 * {F (A + B)/2.0}) + {F B})
+   end
 
 
    
    /** %% Transforms a fenv expressing a normalised tempo curve into a fenv expressing a normalised time map. Step (a float) specifies the precision (and efficiency!) of the transformation, see Integrate's doc for details. A tempo curve expresses a tempo factor, i.e., f(x) = 1 results in no tempo change. A normalised time map maps score time to performance time. 
    %% Private Terminology: normalised time shift functions, time map functions and tempo curves: fenvs where x values denote the score time (usually of a temporal container) which is mapped into [0,1]: 0 corresponds to the container's start time, and 1 corresponds to the container's end time. See ContainerFenvY.
-   %% NB: a normalised time map fenvs cannot be combined by function combination (x values for fenvs are always in [0,1]). Instead, either combine tempo curve and time shift fenvs, or combine plain and un-normalised time map functions (i.e. no fenvs).
+   %% NB: normalised time map fenvs cannot be combined by function combination (x values for fenvs are always in [0,1]). Instead, either combine tempo curve and time shift fenvs, or combine plain and un-normalised time map functions (i.e. no fenvs).
    %% */
    fun {TempoCurveToTimeMap MyFenv Step}
       {Integrate {Reciprocal MyFenv}
@@ -642,7 +647,7 @@ define
 
    /** %% Expects a fenv representing a normalised time shift function and returns a fenv representing a normalised time map function. A time shift function expresses how much is added to a score time to yield a performance time, i.e., f(x) = 0 causes performance time to be score time. A normalised time map maps score time to performance time.
    %% Private Terminology: normalised time shift functions, time map functions and tempo curves: fenvs where x values denote the score time (usually of a temporal container) which is mapped into [0,1]: 0 corresponds to the container's start time, and 1 corresponds to the container's end time. See ContainerFenvY.
-   %% NB: a normalised time map fenvs cannot be combined by function combination (x values for fenvs are always in [0,1]). Instead, either combine tempo curve and time shift fenvs, or combine plain and un-normalised time map functions (i.e. no fenvs).  
+   %% NB: normalised time map fenvs cannot be combined by function combination (x values for fenvs are always in [0,1]). Instead, either combine tempo curve and time shift fenvs, or combine plain and un-normalised time map functions (i.e. no fenvs).  
    %% */
    fun {TimeShiftToTimeMap TS}
       {ScaleFenv TS unit(add:{New Fenv init(env:fun {$ X} X end)})}
@@ -681,7 +686,7 @@ define
       {MyFenv y($ FenvX)}
    end
    
-   /** %% Accesses the y-value of MyFenv which is associated with a temporal item MyItem. The fenv x-value 0.0 corresponds to the container start time and the fenv x-value 1.0 coresponds to the container end time. MyTime (a float) is any time between MyContainer's start and end time. MyTime is a score time measured in seconds.
+   /** %% Accesses the y-value of MyFenv which is associated with a temporal item MyItem. The fenv x-value 0.0 corresponds to the item's start time and the fenv x-value 1.0 coresponds to the item's end time. MyTime (a float) is any time between MyItem's start and end time. MyTime is a score time measured in seconds.
    %% */
    fun {ItemFenvY MyFenv MyItem MyTime}
       {TemporalFenvY MyFenv
