@@ -216,3 +216,13 @@ thread {Nth Xs 2} = 6 end
 
 
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%% LUtils.removeDupliates
+%%
+
+
+{LUtils.removeDuplicates[a b a c]}
+%% [a b c]
+
+
