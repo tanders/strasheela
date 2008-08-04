@@ -338,15 +338,16 @@ define
 
    
    /** % Returns a VS of the current time in the form
-   %% 'hour:min, day-month-year'.
+   %% 'hour:min:sec, day-month-year'.
    %% */
    %% !!?? Do I need this defined here (local def in Output.oz enough)?
    fun {TimeVString}
       Time = {OS.localTime}
    in
-      Time.hour#':'#Time.min#', '#Time.mDay#'-'#Time.mon+1#'-'#Time.year+1900
+      Time.hour#':'#Time.min#':'#Time.sec#', '#Time.mDay#'-'#Time.mon+1#'-'#Time.year+1900
    end
 
+ 
 
    local
       Counter = {Cell.new 1}
