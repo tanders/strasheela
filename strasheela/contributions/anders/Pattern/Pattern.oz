@@ -84,6 +84,7 @@ export
    ForN ForPercent NDifferences ForNEither
    AllTrue AllTrueR OneTrue OneTrueR SomeTrue SomeTrueR
    HowManyTrue HowManyTrueR PercentTrue PercentTrue_Range
+   PercentEqual_Range
    WhichTrue
    SymbolToDirection DirectionToSymbol
    Direction DirectionR Contour InverseContour ContourMatrix
@@ -703,6 +704,14 @@ define
    in
       MinPercent =<: Percent
       Percent =<: MaxPercent
+   end
+   
+   /** %% Constrains the percentage how many corresponding elements in Xs and Ys (lists of FD ints) are equal. The percentage is specifies by the range Min to Max (both FD ints, not implicitly declared).
+   %% */
+   proc {PercentEqual_Range Xs Ys Min Max}
+      Bs = {Map {LUtils.matTrans [Xs Ys]} fun {$ [X Y]} (X =: Y) end}
+   in
+      {PercentTrue_Range Bs Min Max}
    end
    
    /** %% WhichTrue constraints the Ith element in Bs to be true. Bs is a list of 0/1 integers and  I is a FD int. Only a single element of Bs is true (i.e. 1).
