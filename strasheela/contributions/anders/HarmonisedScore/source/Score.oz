@@ -2587,6 +2587,7 @@ define
    %% 
    %% motifs: a list of motif specs (atoms or records). Note: any score objects can be defined here (not necessarily explicit motifs..). Polyphonic music is possible if 'motifs' are containers containing other motif specs. 
    %% constructors: score constructors for motifs (see Score.makeScore doc)
+   %% motifsRule: unary prodecure, applied to list of all motifs
    %% chordNo: number of chords
    %% makeChord: Chord constructor, can output textual score representation (must have label chord). If an object is returned instead of a textual score spec, the default chord class (HS.score.diatonicChord) is overwritten
    %% chordsRule: unary prodecure, applied to list of all chords
@@ -2605,6 +2606,7 @@ define
    %% The default arguments are as follows
    unit(motifs:nil	
 	constructors:unit
+	motifsRule: proc {$ Motifs} skip end
 	chordNo:1	  
 	makeChord:fun {$}
 		     chord(duration:{FD.int 1#FD.sup}  % no non-existing chords of dur 0
@@ -2635,6 +2637,7 @@ define
    proc {HarmoniseMotifs Args ?MyScore}
       Defaults = unit(motifs:nil	
 		      constructors:unit
+		      motifsRule: proc {$ Motifs} skip end
 		      chordNo:1	     
 		      makeChord:fun {$}
 				   chord(duration:{FD.int 1#FD.sup}  
@@ -2697,9 +2700,11 @@ define
 					    Append}
 				     startTime:0)
 		 As.constructors}
+      %% apply user-def constaints
+      thread {As.motifsRule {MainScore getItems($)}} end
       %% Constrain temporal structure. Start times are implicitly equal (if no offset time occurs)
       {MainScore getEndTime($)} = {ChordSeq getEndTime($)}
-      %% apply user-def constaints
+      %%
       thread {As.chordsRule MyChords} end
       As.myChords = MyChords
       %%
