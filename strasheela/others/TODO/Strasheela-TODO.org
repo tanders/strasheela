@@ -239,8 +239,33 @@
 
 * Strasheela design						    :STRASHEELA:
 
+** Form constraint: how to constrain repetition				 :MAYBE:
+
+   literal repetition is important and useful means for improving [Fasslichkeit]. How can I implement that (and how general)?
+
+   E.g., using unification of two form segments. However, the score topology must be equal and the start times etc must not be unified
+
+   Could I have arg "repetition of predecessor" given to a prototype motif spec (which is the equal spec naturally but additionally constrained to really be a repetition)
+
+   Be careful, this constraint could contradict other things (e.g. harmony, if harmony is not part of the motifs themselves)
+
+
+** Pattern.useMotifs: add optional arg to mark motif starts 
+
+   Pattern.useMotifs defines already optional arg 'indices'
+
+   Now add optional arg 'startsMotifBs' which returns list of 0/1 vars: its 1 if the corresponding pattern value starts a new motif and 0 otherwise 
+
+
+** Variant for Out.saveScore using pickles
+
+   Some score objects (e.g., Fenvs which contain procs) cannot be translated into text (code), i.e. cannot be "archived". However, they could be picked! 
+
+   On the other hand, pickling not supported for undetermined values. Can I have an approach which works for both cases (translates undetermined vars into text/code which would be compiled into Oz values during loading.)
+
 
 ** TODO ENP output: change default Out.outputNonmensuralENP default args such that any Strasheela score topology creates some ENP score (i.e. it works for every Strasheela score topology)
+
 
 ** CSPs with soft constraints						  :SOON:
    
@@ -1677,6 +1702,36 @@ See ../../testing/zy_Efficiency/KeepMusicRepresentationOutsideComputationalSpace
    Lilypond output must be adapted accordingly
 
 
+** Refactoring: change functor name Motif into VariationMotif
+
+
+** Constraining the hierarchic nesting with record constraints		 :MAYBE:
+
+   Idea: define container class (and later subclasses like seq and sim) which use record constraints for hierarchic nesting. Container objects are wrapped in a tuple/record (instead of an [extendable] list) and score objects can be added [at the tail (?)] of the container during the search problem. 
+
+   Adding a score object to a container is a search step much like determining a FD int, and it also can lead to a fail (how?) 
+
+   Problem: suitable variable orderings -- how can I control when/where adding a score object to a container happens 
+
+   
+   ---
+
+   Nice additional effect: accessing contained score objects in a tuple/record requires only constant time access, more efficient than for a list. However, does that also work for "un-closed records"?
+
+
+
+** Lily output of ET31 and ET22
+
+ [ - Generalise these definitions as far as possible so that changes are only applied to one def (no code doubling) ]
+   - Notate chord objects as chords (without grace notes): mark root by some different layout (e.g., all other chord notes are smaller)
+   - Allow for changing display of notation by args (either chord/scale ratios or description, show scale/chord pitch classes or not, mark non-harmonic tones or not)
+
+
+** Adaptive tuning JI 
+
+   see GTD folder "Adaptive tuning"
+
+
 * Strasheela documentation					    :STRASHEELA:
 
 ** Strasheela tutorial
@@ -1726,6 +1781,17 @@ See ../../testing/zy_Efficiency/KeepMusicRepresentationOutsideComputationalSpace
 
 
 * Strasheela Bugs
+
+** Archiving score (e.g., with Out.saveScore) with strings: double quotes of strings are lost
+
+declare
+MyScore = {Score.makeScore note(info:"test")
+	   unit}
+
+{Out.saveScore MyScore unit}
+
+% then check output test file..
+
 
 ** Revise collect method (graph mode)					 :MAYBE:
 
@@ -1777,6 +1843,7 @@ InspectorObject = {Inspector.new unit}
    [wait until I need score with analytical information using grace notes and Staff.instrumentName]
 
    Lilypond notation problem: using grace notes (for showing chord and scale notes) seems to disable the Staff.instrumentName display for multiple staffs (it still works for the last staff). It is possible that this has to do with the missing \score at the beginning of lilypond 22 ET score data. Yet, setting this causes an error related to the \override of Score.Accidental and Score.KeySignature #'glyph-name-alist for 22 ET. For now, I leave it like this -- either I show Staff.instrumentName or scale/chord pitch classes with grace notes. If I want to publish a score with analytical information using grace notes, I will again look into this matter. 
+
 
 * Collecting new ideas
 
