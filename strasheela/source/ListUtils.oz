@@ -25,6 +25,7 @@ export
    CollectN RepeatN
    Contains
    Position Positions FindPosition FindPositions
+   RemoveDuplicates
    Remove
    Find
    CFilter CFind 
@@ -148,11 +149,31 @@ define
    in
       {Aux Xs 1 nil}
    end
+
+   
+   /** %% Removes any element in Xs (a list of arbitrary data) which occured already more early in X. Elements are compared with ==.
+   %% */
+   fun {RemoveDuplicates Xs}
+      fun {Aux Xs Accum}
+	 case Xs of nil then {Reverse Accum}
+	 else 
+	    if {Member Xs.1 Accum}
+	    then {Aux Xs.2 Accum}
+	    else {Aux Xs.2 Xs.1|Accum}
+	    end
+	 end
+      end
+   in
+      {Aux Xs nil}
+   end
+   
    /** %% Remove returns a list of the elements in Xs for which the application of the unary boolean function Fn yields false. In the output, the ordering in Xs is preserved. 
    %% */
    fun {Remove Xs Fn} 
       {Filter Xs fun {$ X} {Not {Fn X}} end}
    end
+
+   
    /** %% Find returns the first element in Xs for which the application of the unary boolean function Fn yields true. 
    %% */
    fun {Find Xs Fn}
