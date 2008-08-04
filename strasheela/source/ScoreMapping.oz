@@ -817,20 +817,27 @@ define
    in
       /** %% MapSimultaneousPairs traverses Xs (a list of score objects), applies the binary function Fn to pairs of simultaneous score objects, and returns the collected results. 
       %% MapSimultaneousPairs applies {Fn X Y ?Result} to all pairs X and Y, where X is an element in Xs and Y is a score object which is simultaneous to X, but which is not necessarily contained in Xs. In order to avoid applying the same constraint twice in case both X and Y are contained in Xs, there is an additional restriction related to the hierarchic nesting of X and Y. Simplified, this restriction states that the container of Y must be at a lower position than the container of X -- which usually means that Y is in a higher voice than X. However, MapSimultaneousPairs is more general and works for arbitrary nesting.
-      %% Test is a Boolean function or method for pre-filtering potential Y values.
+      %%
+      %% Args: 
+      %% 'test': a Boolean function or method for pre-filtering potential Y values.
+      %% 'cTest': a Boolean function or method applied within the concurrent filtering done for isSimultaneousItemR. See doc of the Score.item method getSimultaneousItems for details. 
       %%
       %% Note that MapSimultaneousPairs even works if the rhythmical structure is indetermined in the CSP definition, but it will block until the rhythmic structure is determined enough to tell which score objects are simultaneous. Therefore, a distribution strategy which determines the rhythmical structure relatively early (e.g., left to right) is recommended.
       %%
       %% See ForSimPairs doc for an example. 
       %% */
-      fun {MapSimultaneousPairs Xs Fn Test}
+      fun {MapSimultaneousPairs Xs Fn Args}
+	 Defaults = unit(test: fun {$ X} true end
+			 cTest: fun {$ X} true end)
+	 As = {Adjoin Defaults Args}
+      in
 	 {Flatten
 	  {Map Xs
 	   fun {$ X}
 	      {Map
-	       {X getSimultaneousItems($ 
+	       {X getSimultaneousItems($ cTest: {GUtils.toFun As.cTest}
 				       test:fun {$ Y}
-					       {{GUtils.toFun Test} Y} andthen
+					       {{GUtils.toFun As.test} Y} andthen
 					       Y \= X andthen 
 					       local 
 						  PosX#PosY = {FindHierarchicDifferencePosition
@@ -845,7 +852,10 @@ define
       end
       /** %% ForSimultaneousPairs traverses Xs (a list of score objects) and applies the binary procedure P to pairs of simultaneous score objects. 
       %% ForSimultaneousPairs applies {Fn X Y} to all pairs X and Y, where X is an element in Xs and Y is a score object which is simultaneous to X, but which is not necessarily contained in Xs. In order to avoid applying the same constraint twice in case both X and Y are contained in Xs, there is an additional restriction related to the hierarchic nesting of X and Y. Simplified, this restriction states that the container of Y must be at a lower position than the container of X -- which usually means that Y is in a higher voice than X. However, ForSimultaneousPairs is more general and works for arbitrary nesting.
-      %% Test is a Boolean function or method for pre-filtering potential Y values.
+      %%
+      %% Args: 
+      %% 'test': a Boolean function or method for pre-filtering potential Y values.
+      %% 'cTest': a Boolean function or method applied within the concurrent filtering done for isSimultaneousItemR. See doc of the Score.item method getSimultaneousItems for details. 
       %%
       %% Note that ForSimultaneousPairs even works if the rhythmical structure is indetermined in the CSP definition, but it will block until the rhythmic structure is determined enough to tell which score objects are simultaneous. Therefore, a distribution strategy which determines the rhythmical structure relatively early (e.g., left to right) is recommended.
       %%
@@ -855,14 +865,18 @@ define
       %% Application of a harmonic constraint to all note pairs consisting of a bass note and a note from a higher voice. MyBass is a container which contains all the bass notes. 
       {ForSimPairs {MyBass collect($ test:isNote)} IsConsonant isNote}
       %% */
-      proc {ForSimultaneousPairs Xs P Test}
+      proc {ForSimultaneousPairs Xs P Args}
+	 Defaults = unit(test: fun {$ X} true end
+			 cTest: fun {$ X} true end)
+	 As = {Adjoin Defaults Args}
+      in
 	 {ForAll Xs
 	  proc {$ X}
 	     {ForAll
-	      {X getSimultaneousItems($ 
+	      {X getSimultaneousItems($ cTest: {GUtils.toFun As.cTest}
 				      test:fun {$ Y}
-					      {{GUtils.toFun Test} Y} andthen
-					       Y \= X andthen 
+					      Y \= X andthen 
+					      {{GUtils.toFun As.test} Y} andthen
 					      local 
 						 PosX#PosY = {FindHierarchicDifferencePosition
 							      X Y}
