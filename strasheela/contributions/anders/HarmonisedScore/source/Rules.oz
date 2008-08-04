@@ -375,10 +375,8 @@ define
       {Pattern.for2Neighbours Chords 
        proc {$ C1 C2}
 	  thread	% waits until sim notes are accessible
-	     C1_LastNote = {List.last {LUtils.cFilter VoiceNotes
-				       fun {$ N} ({C1 isSimultaneousItemR($ N)} == 1) end}}
-	     C2_FirstNote = {LUtils.cFilter VoiceNotes
-			     fun {$ N} ({C2 isSimultaneousItemR($ N)} == 1) end}.1
+	     C1_LastNote = {List.last {SMapping.filterSimultaneous VoiceNotes C1}}
+	     C2_FirstNote = {SMapping.filterSimultaneous VoiceNotes C2}.1
 	  in
 	     %% at least one is a chord tone
 	     {C1_LastNote getInChordB($)} + {C2_FirstNote getInChordB($)} >=: 1
