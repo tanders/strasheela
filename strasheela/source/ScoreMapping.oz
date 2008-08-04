@@ -52,6 +52,7 @@ export
    ForNumericRange ForNumericRange2 ForNumericRangeArgs
    
    MapSimultaneousPairs ForSimultaneousPairs
+   FilterSimultaneous FindSimultaneous
    
    MapScore
    
@@ -890,7 +891,26 @@ define
       end
    end
 
-
+   /** %% Traverses Xs (a list of temporal items) and returns those from Xs which are simultaneous with Y (a temporal item).
+   %% Uses internally LUtils.cFilter, i.e. returns score objects as soon as enough information is available whether or not they are simultaneous, but not necessarily in their order in Xs.
+   %% Implicitly wraps filtering in a thread. 
+   %% */
+   fun {FilterSimultaneous Xs Y}
+      thread
+	 {LUtils.cFilter Xs
+	  fun {$ X} ({Y isSimultaneousItemR($ X)} == 1) end}
+      end
+   end
+   /** %% Traverses Xs (a list of temporal items) and returns the first which is simultaneous with Y (a temporal item).
+   %% Uses internally LUtils.cFind, i.e. returns score objects as soon as enough information is available whether or not they are simultaneous, but not necessarily in their order in Xs.
+   %% Implicitly wraps filtering in a thread. 
+   %% */
+   fun {FindSimultaneous Xs Y}
+      thread
+	 {LUtils.cFind Xs
+	  fun {$ X} ({Y isSimultaneousItemR($ X)} == 1) end}
+      end
+   end
    
    /** %% Expects a _textual_ score MyScore (a record) and applies Fn to every contained textual score object. Returns a score where the score object are replaced by the results of Fn. However, any 'items' features are ignored in the result of Fn. Instead, the original nesting is preserved. 
    %% NB: presently, only tree topology is supported
