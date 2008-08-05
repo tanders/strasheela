@@ -1529,6 +1529,17 @@ define
 	 {All {self getParameters($)}
 	  fun {$ X} {IsDet {X getValue($)}} end}
       end
+
+      /** %% Returns a float how many percent parameters of self and its contained items are determined. The Boolean function/method Exclude can be used to exclude parameters from considering. By default, time point parameters are excluded.
+      %% */
+      meth percentageIsDet($ exclude:Exclude<=isTimePoint)
+	Params = {self collect($ test:fun {$ X} {X isParameter($)} andthen {Not {{GUtils.toFun Exclude} X}} end)}
+	L = {Length Params}
+	DetParamsNo = {Length {Filter Params fun {$ P} {IsDet {P getValue($)}} end}}
+      in
+	 {IntToFloat DetParamsNo} / {IntToFloat L} * 100.0
+      end
+      
       /** %% Wait (blocks) until all parameter values of self are determined. The only exception are parameters for which the optional arg Unless -- a boolean unary function -- returns true (per default, Unless always returns false).
       %% */
       meth wait(unless:Unless<=fun {$ _} false end)
