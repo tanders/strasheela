@@ -130,7 +130,8 @@ export
    Cadence
    DiatonicChord NoteInPCCollection
 
-   ExpressAllChordPCs ExpressEssentialChordPCs ClearHarmonyAtChordBoundaries
+   ExpressAllChordPCs ExpressEssentialChordPCs ExpressEssentialPCs_AtChordStart
+   ClearHarmonyAtChordBoundaries
 
    %% melodic rules
    IsStep IsStepR
@@ -355,6 +356,21 @@ define
    proc {ExpressEssentialChordPCs MyChord}
       thread	% waits until sim notes are accessible -- then often fails! 
 	 PCs = {Map {MyChord getSimultaneousItems($ test:isNote)}
+		fun {$ N} {N getPitchClass($)} end}
+	 PCsFS = {GUtils.intsToFS PCs}
+      in
+	 {FS.subset {GetFeature MyChord essentialPitchClasses} PCsFS}
+      end
+   end
+   /** %% More strict variant of ExpressEssentialChordPCs: all essential pitch classes must sound when chord starts.
+   %% Because constraint application is not delayed so long, this more strict version can actuallyt be more efficient. 
+   %% */
+   proc {ExpressEssentialPCs_AtChordStart MyChord}
+      thread	% 
+	 PCs = {Map {MyChord getSimultaneousItems($ test:fun {$ X}
+							    {X isNote($)} andthen
+							    ({X getStartTime($)} =<: {MyChord getStartTime($)}) == 1
+							 end)}
 		fun {$ N} {N getPitchClass($)} end}
 	 PCsFS = {GUtils.intsToFS PCs}
       in
