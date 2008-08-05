@@ -45,7 +45,7 @@
     - ET22.out/ET31.out: Lilypond notation of scale and chord objects (analytical score objects) refined: if scale/note objects are part of the score, then all their pitch classes are first notated as grace notes. A 'normally' notated single note indicates the duration of the chord/scale and the chord/scale root. 
     - Added ET22.setEnharmonicNotationTable: enharmonic notation can be customised
     - GUtils.makeSingletonSet and GUtils.intsToFS added
-    - ET22.db: Added feature 'essentialPitchClasses' to chord entries
+    - ET22.db / ET31.db: Added feature 'essentialPitchClasses' to chord entries
     - Added HS.distro: predefined distribution strategies for harmonic CSPs
     - Archiving a score object as Strasheela code in a file (archive init record) was broken, now fixed 
     - Outputting a FS variable as code could result in [] instead of nil, fixed.
@@ -70,12 +70,13 @@
     - Change default of note argument amplitude to determined value (velocity 64)
     - Added Lisp code for translating Lisp values into Oz values: goodies/Lisp/Lisp2Oz.lisp
     - HS.score: added HarmoniseMotifs
-    - HS.rules: added ExpressAllChordPCs ExpressEssentialChordPCs ClearHarmonyAtChordBoundaries, ResolveNonharmonicNotesStepwise, GetInterval, ConstrainMaxIntervalR
+    - HS.rules: added ExpressAllChordPCs ExpressEssentialChordPCs ExpressEssentialPCs_AtChordStart ClearHarmonyAtChordBoundaries, ResolveNonharmonicNotesStepwise, GetInterval, ConstrainMaxIntervalR
     - Realtime: Default realtime solvers now implicitly reset the random seed, so theyt always create a different solution 
     - LUtils: fixed bug in CFind/CFilter: blocked if result should be nil
     - SMapping: added MapSimultaneousPairs and ForSimultaneousPairs, FilterSimultaneous, FindSimultaneous 
     - Pattern: added PercentEqual_Range
     - LUtils: added RemoveDuplicates
+    - Class Score.item: added method percentageIsDet
 
 
   - There have been many other small changes, see the [[../CHANGELOG.txt]].
