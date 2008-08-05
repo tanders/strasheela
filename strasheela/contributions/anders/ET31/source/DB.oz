@@ -62,16 +62,19 @@ define
 		   %%
 
 		   chord(pitchClasses:[6#6 6#5 6#4] % 'C' 'Es' 'G'
-			 roots:[6#6] 
+			 roots:[6#6]
+			 essentialPitchClasses:[6#6 6#5]
 %				dissonanceDegree:2
 			 comment:'minor')
 		   chord(pitchClasses:[4#4 5#4 6#4] % 'C' 'E' 'G'
 			 roots:[4#4]
+			 essentialPitchClasses:[4#1 5#1]
 %				dissonanceDegree:2
 			 comment:'major')
 		   
 		   chord(pitchClasses:[1#1 5#4 25#16] % 'C' 'E' 'G#'
 			 roots:[1#1]   % ??
+			 essentialPitchClasses:[1#1 5#4 25#16]
 %				dissonanceDegree:2
 			 comment:'augmented')
 
@@ -80,17 +83,20 @@ define
 		   %% !! nice :) 
 		   chord(pitchClasses:[5#5 6#5 7#5] % 'C' 'Eb' 'F#'
 			 roots:[5#5]
+			 essentialPitchClasses:[5#5 6#5 7#5]
 			 % silentRoots:[4#5]  % 'As'
 %				dissonanceDegree:2
 			 comment:'harmonic diminished')		   
 		   chord(pitchClasses:[7#7 7#6 7#5] % ['C' 'D#' 'F#']
 			 roots:[7#7] 
+			 essentialPitchClasses:[7#7 7#6 7#5]
 %				dissonanceDegree:2
 			 comment:'utonal diminished') % reversed harmonic diminished
 		   %% relatively high tuning error of 'tritone'
 		   %% (almost 12 cent), but sounds good enough
 		   chord(pitchClasses:[1#1 6#5 36#25] % 'C' 'Eb' 'Gb'
 			 roots:[1#1]  % ??
+			 essentialPitchClasses:[1#1 6#5 36#25]
 %				dissonanceDegree:2
 			 comment:'geometric diminished')
 		   
@@ -101,6 +107,7 @@ define
 		   %% !!
 		   chord(pitchClasses:[6#1 7#1 9#1] % 'C' 'Eb;' 'G'
 			 roots:[6#1]
+			 essentialPitchClasses:[6#1 7#1]
 			 % silentRoots:[4#1]   % ?? 'F'
 %				dissonanceDegree:2
 			 comment:'subminor')
@@ -116,12 +123,14 @@ define
 		   %% rather dissonant -- is this characteristic enough?
 		   chord(pitchClasses:['C' 'E;' 'G']
 			 roots:['C']  % ??
+			 essentialPitchClasses:['C' 'E;']
 %				dissonanceDegree:2
 			 comment:'neutral triad')
 		   %% ?? very harsh -- only suitable with more chord tones...
 		   %% utonal
 		   chord(pitchClasses:['C' 'E|' 'G']  % ?? 1#9 1#7 1#6 
 			 roots:['C']
+			 essentialPitchClasses:['C' 'E|']
 %				dissonanceDegree:2
 			 comment:'supermajor')
 
@@ -135,12 +144,14 @@ define
 
 
 		   chord(pitchClasses:['C' 'E' 'G' 'Bb']
-			 roots:['C']  
+			 roots:['C']
+			 essentialPitchClasses:['C' 'E' 'Bb']
 %				dissonanceDegree:2
 			 comment:'dominant 7th')
 		   chord(% pitchClasses:['C' 'Eb' 'Gb' 'Bb']
 			 pitchClasses:['C' 'Eb' 'G' 'A']
 			 roots:['C']  % ??
+			 essentialPitchClasses:['C' 'Eb' 'A']
 %				dissonanceDegree:2
 			 % comment:'reversed dominant seventh'
 			 comment:'minor 6th')
@@ -150,19 +161,22 @@ define
 		   chord(% pitchClasses:['C' 'Eb' 'F#' 'Bb'] % 5:6:7:9
 			 pitchClasses:['C' 'D#' 'G' 'A'] % 5:6:7:9
 			 roots:['C']
+			 essentialPitchClasses:['C' 'D#' 'A']
 			 % silentRoots:['F']  
 %				dissonanceDegree:2
 %			 comment:'harmonic halve-diminished seventh'
 			 comment:'subminor 6th')
 		   %% !!
 		   chord(pitchClasses:['C' 'E' 'G' 'Bb;']
-			 roots:['C']  
+			 roots:['C']
+			 essentialPitchClasses:['C' 'E' 'Bb;']
 %				dissonanceDegree:2
 			 comment:'harmonic 7th')
 		   %% !!!
 		   chord(pitchClasses:['C' 'D#' 'F#' 'A#']
 			 roots:['D#'] % 'C'
 			 % silentRoots:['G#']
+			 essentialPitchClasses:['C' 'D#' 'F#' 'A#']
 %				dissonanceDegree:2
 %			 comment:'reversed harmonic dominant seventh'
 			 comment:'subharmonic 6th'
@@ -171,34 +185,40 @@ define
 		   %% non-reversable chord (reversed chord is same chord)
 		   chord(pitchClasses:['C' 'E' 'F#' 'A#'] % [1#1 5#4 7#5 7#4] 
 			 roots:['C']  % ??
+			 essentialPitchClasses:['C' 'E' 'F#' 'A#']
 %				dissonanceDegree:2
 			 comment:'mix of plain and reversed harmonic dominant 7th')
 		   
 		   
 		   %% same as minor with minor seventh, but different root
 		   chord(pitchClasses:['C' 'E' 'G' 'A']
-			 roots:['C']  
+			 roots:['C']
+			 essentialPitchClasses:['C' 'E' 'G' 'A']
 %				dissonanceDegree:2
 			 comment:'sixte ajoutee')
 		   %% same as sixte ajoutee, but different root
 		   %% non-reversable chord
 		   chord(pitchClasses:['C' 'Eb' 'G' 'Bb']
-			 roots:['C']  
+			 roots:['C']
+			 essentialPitchClasses:['C' 'Eb' 'Bb']
 %				dissonanceDegree:2
 			 comment:'minor 7th')
 
 		   
 		   chord(pitchClasses:[1#1 3#1 5#1 15#1]
-			 roots:[1#1]  
+			 roots:[1#1]
+			 essentialPitchClasses:[1#1 5#1 15#1]
 %				dissonanceDegree:2
 			 comment:'major 7th')
 
 		   chord(pitchClasses:[1#1 3#1 5#1 15#1 9#1]
-			 roots:[1#1]  
+			 roots:[1#1]
+			 essentialPitchClasses:[1#1 5#1 15#1 9#1]
 %				dissonanceDegree:2
 			 comment:'major 9th')
 		   chord(pitchClasses:[1#1 3#1 5#1 15#1 5#3]
-			 roots:[1#1]  
+			 roots:[1#1]
+			 essentialPitchClasses:[1#1 5#1 15#1 5#3]
 %				dissonanceDegree:2
 			 comment:'minor 9th')
 
@@ -209,42 +229,50 @@ define
 		   %%
 		   
 		   chord(pitchClasses:[1#1 3#1 5#1 7#1 9#1]
-			 roots:[1#1]  
+			 roots:[1#1]
+			 essentialPitchClasses:[1#1 5#1 7#1 9#1]
 %				dissonanceDegree:2
 			 comment:'harmonic 9th')
 
 		   chord(pitchClasses:[3#1 5#1 7#1 9#1]
-			 roots:[3#1]  
+			 roots:[3#1]
+			 essentialPitchClasses:[3#1 5#1 7#1 9#1]
 %				dissonanceDegree:2
 			 comment:'harmonic half-diminished 7th')
 		   %% !! 
 		   chord(pitchClasses:[1#1 3#1 7#1]
-			 roots:[1#1]  
+			 roots:[1#1]
+			 essentialPitchClasses:[1#1 3#1 7#1]
 %				dissonanceDegree:2
 			 comment:'4-6-7')
 		   chord(pitchClasses:[5#1 7#1 9#1]
-			 roots:[5#1]  
+			 roots:[5#1]
+			 essentialPitchClasses:[5#1 7#1 9#1]
 %				dissonanceDegree:2
 			 comment:'5-7-9')
 		   chord(pitchClasses:[1#1 3#1 5#1 9#1]
-			 roots:[1#1]  
+			 roots:[1#1]
+			 essentialPitchClasses:[1#1 3#1 5#1 9#1]
 %				dissonanceDegree:2
 			 comment:'added-2nd')
 
 
 		   chord(pitchClasses:[2#1 4#3 8#7]
-			 roots:[4#3]  
+			 roots:[4#3]
+			 essentialPitchClasses:[2#1 4#3 8#7]
 %				dissonanceDegree:2
 			 comment:'subharmonic 4-6-7')
 
 		   
 		   chord(pitchClasses:[3#1 7#1 9#1 21#1]
-			 roots:[3#1]  
+			 roots:[3#1]
+			 essentialPitchClasses:[3#1 7#1 21#1]
 %				dissonanceDegree:2
 			 comment:'subminor 7th')
 		   
 		   chord(pitchClasses:[9#1 7#1 27#1 21#1]
-			 roots:[7#1] %% ??  
+			 roots:[7#1] %% ??
+			 essentialPitchClasses:[9#1 7#1 27#1 21#1]
 %				dissonanceDegree:2
 			 comment:'submajor 7th')
 		   
@@ -257,7 +285,8 @@ define
 
 		   %% NOTE: the orig version (transposed) is 'Bbb' 'Eb' 'G' 'C', which is much better than the [enge Lage] of this pitch class set 
 		   chord(pitchClasses:['C' 'Eb' 'G' 'Bbb']
-			 roots:['C']  
+			 roots:['C']
+			 essentialPitchClasses:['C' 'Eb' 'G' 'Bbb']
 %				dissonanceDegree:2
 			   comment:'Tristan chord')
 % 		   chord(pitchClasses:[]
@@ -493,10 +522,10 @@ define
       fun {ToStandardDeclaration Decl}
 	 {Record.mapInd Decl
 	  fun {$ Feat X}
-	     case Feat of pitchClasses then
-		{Map X Transform}
-	     [] roots then
-		{Map X Transform}
+	     case Feat
+	     of pitchClasses then {Map X Transform}
+	     [] essentialPitchClasses then {Map X Transform}
+	     [] roots then {Map X Transform}
 	     else X
 	     end
 	  end}
