@@ -20,18 +20,9 @@
 %%
 %% TODO
 %%
-%% (1) redefine find quasi as findThreaded -- a variant of forAllThreaded which traverses score hierarchy and immediately returns as soon as it finds a single objects which fulfills some test function/method
-%%   -> use a port to cummunicate between branches of the find score traversal: everyone reports a result to the common port, and as soon port got a result this is returned and all other traversal branches stop.
+%% - Mikaels chord slice context may come in handy at some stage :-) But it may hard realising a constraint applicator for it without an undetermined the rhythmic structure in the problem def..
 %%
-%%  -> this can be used, for example, to efficiently find the only chord or measure which is simultaneous to a given note. 
-%%  e.g. I can then define getFirstSimultaneousItem($ test:Test)
-%%  This method does not need to wait until the whole temporal structure is determined. Together with a smart distribution strategy (e.g. left-to-right with preference for chord and measure objects..) it can considerably simplify the definition of harmonic/metric CSPs -- I can delay rule application instead of using logical connectives..
-%%  NB: this only works for plain sequences of chords, measures, scales.. If I want to model modulation by overlapping scales then this will not work as I may need access to BOTH scales. 
-%%    
-%% -> for generality I may also define a collectThreaded which returns a stream. The subcomputations in collectThreaded can deliver their output via a common port.  
-%%
-%%
-%% (2) There seems to be some bug in the 'flagging' of score objects: there remain flages after collect returns.. 
+%% - There seems to be some bug in the 'flagging' of score objects: there remain flages after collect returns.. 
 %%
 
 functor 
