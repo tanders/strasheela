@@ -864,6 +864,56 @@ rpmbuild will typically create binary RPMs in the usual system-specific location
    A method filterThreaded would further improve the application of delayed constraints where filtering tests used reified constraints 
    E.g., I could use a method filterThreaded for a better definition of getSimultaneousItems
 
+* DONE Brain-Computer interface example: homphonic chord progression	:URGENT:
+  DEADLINE: <2008-07-11 Fri> CLOSED: [2008-07-21 Mon 11:25]
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2008-08-07 Thu 18:31
+  :ARCHIVE_FILE: ~/oz/music/Strasheela/strasheela/trunk/strasheela/others/TODO/Strasheela-TODO.org
+  :ARCHIVE_OLPATH: Strasheela examples
+  :ARCHIVE_CATEGORY: Strasheela
+  :ARCHIVE_TODO: DONE
+  :ARCHIVE_ITAGS: STRASHEELA
+  :END:
+
+  [Example for/with Eduardo]
+  
+  Eduardo needs this example by 25th July 
+
+** DONE Describe CSP in English    
+   CLOSED: [2008-06-03 Tue 12:25]
+
+   see 
+   [[file:~/oz/music/Strasheela/private/mitEduardo/BrainComputerInterfaceDemo.org::*Overview]]
+
+** DONE Implement CSP in non-realtime    
+   CLOSED: [2008-06-10 Tue 21:34]
+
+   see description at 
+   [[file:~/oz/music/Strasheela/private/mitEduardo/BrainComputerInterfaceDemo.org::*Overview]]
+
+   
+   Use existing definitions, e.g.,
+   [[file:~/oz/music/Strasheela/strasheela/trunk/strasheela/examples/HomophonicChordProgression.oz::declare]]
+   
+   
+*** DONE Implement cadence case     
+    CLOSED: [2008-06-06 Fri 16:13]
+
+*** DONE Implement non-key case     
+    CLOSED: [2008-06-06 Fri 16:13]
+
+
+** DONE Implement in non-realtime    
+   CLOSED: [2008-06-06 Fri 16:13]
+
+** DONE Implement output to SuperCollider (via OSC)    
+   CLOSED: [2008-06-10 Tue 21:34]
+** DONE Implement output to MIDI (via SC)    
+   CLOSED: [2008-07-21 Mon 11:25]
+
+** Explain how this application works in English
+
+
 
 
 

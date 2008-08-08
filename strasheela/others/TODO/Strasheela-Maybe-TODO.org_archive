@@ -161,3 +161,45 @@ Archived entries from file /Users/t/oz/music/Strasheela/strasheela/trunk/strashe
      ?? Could this be also Olle Romo's example?
 
 
+* DONE Output to K Sprottes PWGL simple format				 :MAYBE:
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2008-08-07 Thu 18:47
+  :ARCHIVE_FILE: ~/oz/music/Strasheela/strasheela/trunk/strasheela/others/TODO/Strasheela-Maybe-TODO.org
+  :ARCHIVE_OLPATH: Strasheela design
+  :ARCHIVE_CATEGORY: Strasheela
+  :ARCHIVE_ITAGS: STRASHEELA
+  :END:
+
+  This format is easily created in Strasheela (similar to fomus..) 
+  And it can be transformed into a proportional ENP score
+
+  Advantage: I could edit resulting scores in the ENP score editor
+  If I later want to translate the score back to Strasheela, then I possibly need to keep some info on the orig nesting etc. But that would be less important in the beginning.
+
+  I could also edit the tempo curves etc in ENP, even in algorithmic ways. 
+  I would need some 'info' slot to keep arbitrary additional info on score objects (e.g., where some motif starts and ends), if I want to do that adaequately 
+
+
+* DONE Output to K Sprottes PWGL simple format				 :MAYBE:
+  CLOSED: [2008-08-07 Thu 18:48]
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2008-08-07 Thu 18:48
+  :ARCHIVE_FILE: ~/oz/music/Strasheela/strasheela/trunk/strasheela/others/TODO/Strasheela-Maybe-TODO.org
+  :ARCHIVE_OLPATH: Strasheela design
+  :ARCHIVE_CATEGORY: Strasheela
+  :ARCHIVE_TODO: DONE
+  :ARCHIVE_ITAGS: STRASHEELA
+  :END:
+
+  This format is easily created in Strasheela (similar to fomus..) 
+  And it can be transformed into a proportional ENP score
+
+  Advantage: I could edit resulting scores in the ENP score editor
+  If I later want to translate the score back to Strasheela, then I possibly need to keep some info on the orig nesting etc. But that would be less important in the beginning.
+
+  I could also edit the tempo curves etc in ENP, even in algorithmic ways. 
+  I would need some 'info' slot to keep arbitrary additional info on score objects (e.g., where some motif starts and ends), if I want to do that adaequately 
+
+
+
+

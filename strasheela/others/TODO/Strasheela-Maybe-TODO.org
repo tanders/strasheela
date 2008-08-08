@@ -1,7 +1,197 @@
 #+CATEGORY: Strasheela
 
-* Strasheela examples					      :MAYBE:STRASHEELA:
+* Strasheela examples					      :MAYBE:STRASHEELA:  
+
+** Go through test files and collect examples there in files in examples folder :MAYBE:
+
+   In particular, collect example files in contribution examples subfolders centrally in srasheela/examples (possibly in subfolders there)
+
+
+** 'Interesting arpeggio' example [[file:~/oz/music/Strasheela/private/examples/forOlleRomo/Arpeggio.oz][Arpeggio.oz]]
+
+   [?? Wait until I have prototype-based motif model -- he wants to
+   shape duration and velo parameters with functions, I can do that
+   with fenvs, but is this consistent with new motifs idea?]
+
+  ?? Duration working time: 1d -- probably more :)
+
+  an example for Olle Romo, see description in strasheeela support tracker
   
+  https://sourceforge.net/tracker/index.php?func=detail&aid=1883452&group_id=167225&atid=842099
+  
+  
+*** Describe task in English, mentioning Strasheela techniques to use
+*** Implement description
+
+
+** Schoenberg Harmony							  :WAIT:
+
+   [wait until needed for publica]
+
+   See 
+   [[file:~/oz/music/Strasheela/strasheela/trunk/strasheela/examples/HomophonicChordProgression.oz]]
+   [[file:~/oz/music/Strasheela/private/examples/Schoenberg/PlanningAndThinking/SchoenbergHarmony.oz]]
+   
+   
+   Implement subset of Schoenberg's Theory of Harmony
+   
+   see also
+   [[file:~/oz/music/Strasheela/private/examples/Schoenberg/PlanningAndThinking/SchoenbergHarmony.oz]]
+   
+*** Read my Schoenberg rule collection 
+
+    What important constraints are missing from this ruleset 
+   [[file:~/oz/music/Strasheela/private/examples/Schoenberg/PlanningAndThinking/SchoenbergHarmony.oz]]
+
+
+*** ?? Sopran keine Tonwiederholung?
+
+
+*** Allow for non-root inversion       
+
+    - rules on bass if 6/4
+
+
+*** !! Constraint dissonance treatment
+
+    Easy alternative: add to database only whether chord is condissonant. In that case, root progression fourth up
+
+
+**** Extend Music Representation 
+
+***** Add dissonant pitch classes to ET31 chord database entries	
+      
+      Introduce a special chord feature 'dissonances' (list in spec, FS in object)
+    
+      Do I need this for all entries at once?
+      
+***** Add method / reified constraint: {IsCondissonant MyChord B}
+
+      B=1 <-> cardiality of the 'dissonances' FS > 0
+
+
+**** Test: is FS of disonant pitch classes accessible in chord object	
+
+**** Constrain that dissonance is always prepared and resolved
+
+***** Formalise this rule
+      
+      Simplified approach: if chord is condissonant, then resolve by strong root progression (e.g. fourth upwards fundament)
+      Constraint interface: {ResolveDissonance Chord1 Chord2}
+
+
+***** Implement rule 	 
+
+
+*** Implement Minor       
+
+
+    - In case of major, all ScaleDegreeAccidentals must be neutral
+    
+    - In case of minor 
+      - Use ScaleDegreeNotes and just minor scale 
+      - The VI and VII ScaleDegreeAccidentals can be neutral or sharp
+      - Implement Schoenberg's [Wendepunktgesetze] on notes directly (not the chord objects)
+
+    -> with [Wendepunktgesetze], distribution stategy "first chords, then notes" will not work properly anymore -- likely needs left-to-right with ties broken by "type"  
+
+
+*** Implement modulation       
+
+    - scales parallel to chords and scales can overlap
+
+    - chords only contain pitch classes which are contained in *all* sim scales (neutral chords...)
+
+    - After "old" scale ends there happens a cadence (in the new scale)
+    - Alternative: after "old" scale ends the new scale is expressed [eindeutig] with chord which contains pitches which have not been in old scale (and which [eindeutig] express new scale)
+
+
+*** ?? Restrict pitch doubling						 :MAYBE:
+
+    ?? Only octave (root) doubling
+
+      
+
+
+*** DONE Stimmabstaende
+    CLOSED: [2008-05-22 Thu 21:16]
+
+    Zwischen Oberstimmen max octave abstand
+
+*** DONE Create top-level def and music representation
+    CLOSED: [2008-05-22 Thu 19:21]
+
+
+    ET31 for enharmonic notation
+
+    Specify which chords to allow 
+    (or define chord database which is subset of the ET31 DB
+    
+
+*** DONE constrain chords to diatonic chords       
+    CLOSED: [2008-05-22 Thu 19:21]
+
+    Specify scale 
+    Chords are only diatonic chords in this scale
+
+    ?? Can I make this optional
+    I would like to show: either diatonic or [wandernd]
+    -> is this relevant for this article. I can put this in an extra acticle
+
+    ?? Also, try to allow for modulations as an extension
+
+*** DONE Copy constraints on chord sequence        
+    CLOSED: [2008-05-22 Thu 19:22]
+
+    Start with some exiting example in 
+    [[file:~/oz/music/Strasheela/strasheela/trunk/strasheela/examples/HarmonicProgressions-31ET.oz]]
+
+    e.g.,
+    - only ascending chord progressions
+    - end in cadence
+    - diatonic
+
+*** DONE Copy Constrain "harmonisches Band bleibt liegen" and NoParallels      
+    CLOSED: [2008-05-22 Thu 19:22]
+
+    see [[file:~/oz/music/Strasheela/tmp.oz::proc%20CommonPitchesHeldOver%20C1%20C2%20NotePairs][file:~/oz/music/Strasheela/tmp.oz::proc CommonPitchesHeldOver C1 C2 NotePairs]]
+
+
+*** DONE Add some simple melodic constraints        
+    CLOSED: [2008-05-22 Thu 19:23]
+
+    - ?? only step or small skip (up to fifth) in upper voices (larger skip in bass OK)
+    - ?? restrict total sum of melodic intervals between two chords to be lower than specified amount (except bass?)
+    - most melodic intervals should be steps (in particular in the soprano)
+    - no succession of melodic skips/leaps
+     
+
+
+*** Old 
+
+**** Add accompaniment figuration with prototype motif(s)        
+
+**** Define/finetune suitable figuration prototype motif(s)        
+
+
+
+*** Info
+
+    Constrained inaccessible context: harmonic context of notes 
+    Distribution strategies to test: first fail, left-to-right, order depending on parameter types 
+
+**** Nachdenken: 
+
+     Express chords with accompaniment figuration
+   
+     Why accompaniment figuration: 
+     - Avoid voice leading rules
+     - More realistic musical situation
+
+
+      ?? Could this be also Olle Romo's example?
+
+
 
 ** Groove templates					    :MAYBE:
 
@@ -20,7 +210,7 @@ https://sourceforge.net/tracker/index.php?func=detail&aid=1883454&group_id=16722
    see 
    [[file:/Users/t/texte/CollaborationWithKilian/Muzaks/]]
    
-*** TODO Recapitulate definition: how is resulting value seq organised
+*** Recapitulate definition: how is resulting value seq organised
 *** Port Lisp to Oz
 *** Redefine as constraint 
 
@@ -41,15 +231,15 @@ https://sourceforge.net/tracker/index.php?func=detail&aid=1883454&group_id=16722
    also, GTD folder "Josquin cp"
 
 *** [80%] Constrain rhythm of single voice       
-**** TODO Fix TreatNoteOverlappingBarline (too strict or buggy..)	
-**** TODO Clearly mark which rules give advantage to left-to-right var ordering	
+**** Fix TreatNoteOverlappingBarline (too strict or buggy..)	
+**** Clearly mark which rules give advantage to left-to-right var ordering	
 
      Rhythmic motif rules..
      
-**** TODO Improve rhythmic motifs (was only tmp motif set)	
+**** Improve rhythmic motifs (was only tmp motif set)	
 *** Constrain pitch structure of single voice
-**** TODO Make scale root constrainable (enter in DB Dorian, Phrygian...)	
-**** TODO Better treat accidentals 
+**** Make scale root constrainable (enter in DB Dorian, Phrygian...)	
+**** Better treat accidentals 
      Find rules which result in accidentals only in cadences, allow for accidentals only into scale root, and disallow [querstand] 
      
      ?? Disallow accidentals at beginning (of phrase or piece)
@@ -66,7 +256,7 @@ https://sourceforge.net/tracker/index.php?func=detail&aid=1883454&group_id=16722
 **** ?? Define abstraction for pitch domain per voice 
 
 *** Combine rhythm and pitch structure for single voice
-**** TODO Define rule(s) for quarter notes: only stepwise into one direction	
+**** Define rule(s) for quarter notes: only stepwise into one direction	
 
 *** Combine multiple voices 
 
@@ -139,7 +329,7 @@ https://sourceforge.net/tracker/index.php?func=detail&aid=1883454&group_id=16722
 
      Presentation may suggest that we only need flexible/extendible left-to-right variable ordering, find convincing example (with performance figures) which demonstrates usefulness of really "programmable" variable ordering (e.g., example with highly complex rhythmical structure, where the rhythmical structure is the searched for first)  
 
-***** TODO Revise rule set
+***** Revise rule set
 
       check existing rule set
       http://strasheela.sourceforge.net/strasheela/doc/Example-FloridCounterpoint.html
@@ -201,8 +391,1545 @@ https://sourceforge.net/tracker/index.php?func=detail&aid=1883454&group_id=16722
 Abstract applied constraint, so the effect is controllable
 
 
+* Strasheela Bugs							 :MAYBE:
+
+** Revise collect method (graph mode)					 :MAYBE:
+
+   There are [ueberfluessige] names left in score after traversing score 
+ 
+
+** ScoreInspector hangs on determined FS vars
+
+   [?? Mac problem only?]
+
+   More specifically, a newly created Inspector object without any further
+   configuration hangs on inspecting determined FS variables, whereas other values and undetermined FS variables work fine. 
+
+declare
+InspectorObject = {Inspector.new unit}
+
+%% hangs
+{InspectorObject inspect({FS.value.make [1 2 3]})}
+
+%% works fine
+{InspectorObject inspect({FS.var.decl})}
+{InspectorObject inspect(foo)}
+
+
+  It seems this is only a problem on Mac OS, On Mar 12, 2008, at 4:31
+  PM, Robert Van Dam reported on users@mozart-oz.org that the problem
+  above works fine on Linux.
+
+*** Check: which platform is affected
+
+    Is this only a MacOS issue?
+    
+
+*** Check whether I can fix problem of Inspector.new itself without too much hassle 
+
+    [[file:~/oz/mozart/trunk/mozart/share/tools/inspector/InspectorMain.oz::fun%20NewInspector%20Options][file:~/oz/mozart/trunk/mozart/share/tools/inspector/InspectorMain.oz::fun NewInspector Options]]
+
+*** Check whether I can/should configure default inspector instead of creating a new object
+
+    [[file:~/oz/music/Strasheela/strasheela/trunk/strasheela/contributions/anders/ScoreInspector/ScoreInspector.oz::proc%20ApplyMyConfiguration%20MyInspector][file:~/oz/music/Strasheela/strasheela/trunk/strasheela/contributions/anders/ScoreInspector/ScoreInspector.oz::proc ApplyMyConfiguration MyInspector]]
+
+
+*** Decide whether costomised Inspector should be Strasheela default
+
+    If not, then adopt OZRC templates and Tutorial accordingly.
+
+
+
+** Lilypond output (ET22 and ET31 defs): Clash between grace note and Staff.instrumentName :WAIT:
+
+   [wait until I need score with analytical information using grace notes and Staff.instrumentName]
+
+   Lilypond notation problem: using grace notes (for showing chord and scale notes) seems to disable the Staff.instrumentName display for multiple staffs (it still works for the last staff). It is possible that this has to do with the missing \score at the beginning of lilypond 22 ET score data. Yet, setting this causes an error related to the \override of Score.Accidental and Score.KeySignature #'glyph-name-alist for 22 ET. For now, I leave it like this -- either I show Staff.instrumentName or scale/chord pitch classes with grace notes. If I want to publish a score with analytical information using grace notes, I will again look into this matter. 
+
+
+
+
+* Strasheela documentation				      :MAYBE:STRASHEELA:
+
+** Strasheela tutorial
+
+*** Strasheela tutorial: do music constraint programming 'chapter'
+
+
+
+
+
 
 * Strasheela design					      :MAYBE:STRASHEELA:
+
+** Form constraint: how to constrain repetition				 :MAYBE:
+
+   literal repetition is important and useful means for improving [Fasslichkeit]. How can I implement that (and how general)?
+
+   E.g., using unification of two form segments. However, the score topology must be equal and the start times etc must not be unified
+
+   Could I have arg "repetition of predecessor" given to a prototype motif spec (which is the equal spec naturally but additionally constrained to really be a repetition)
+
+   Be careful, this constraint could contradict other things (e.g. harmony, if harmony is not part of the motifs themselves)
+
+
+** Pattern.useMotifs: add optional arg to mark motif starts 
+
+   Pattern.useMotifs defines already optional arg 'indices'
+
+   Now add optional arg 'startsMotifBs' which returns list of 0/1 vars: its 1 if the corresponding pattern value starts a new motif and 0 otherwise 
+
+
+** ENP output: change default Out.outputNonmensuralENP default args such that any Strasheela score topology creates some ENP score (i.e. it works for every Strasheela score topology)
+
+
+** CSPs with soft constraints						  :SOON:
+   
+   How can I model soft constraints with the means available in Oz, e.g.,
+   - reified constraints
+   - best solution search (BAB)
+
+*** Read literature on soft constraints					 :@READ:
+
+**** TOD±O [#A] [50%] Read soft constraints article in "Handbook of Constraint Programming"
+**** DONE Read Bartak soft constraints survey
+     CLOSED: [2008-03-17 Mon 18:33]
+
+
+**** Check further literature on weighted constraints
+
+     Sharpiro, Haralick (1981). Structural descriptions and inexact matchings. IEEE Transactions Pattern Analysis Machine Intelligence, 3:504-519. 
+
+     k-weighted constraints: J. Larrosa (2002). On arc and node consistency in weighted CSP. Proc of AAAI'02, pp. 48-53.  
+
+     Search web ...
+
+**** DONE Skim "Constraint Satisfaction with Preferences" 
+     CLOSED: [2008-03-17 Mon 18:45]
+
+@PHDTHESIS{Ru:thesis01,
+        TITLE = {{Constraint Satisfaction with Preferences}},
+        AUTHOR = "Hana Rudov{\'a}",
+        SCHOOL = {Faculty of Informatics, Masaryk University},
+        YEAR = 2001,
+        OPTURL = "http://www.fi.muni.cz/~hanka/phd.html",
+  OPTcomment = {survey on soft constraint approaches},
+  OPTpath = {programming/constraints/Rudova-phd.pdf},
+  OPTnote = 	 {},
+  OPTannote = 	 {file InMyLib}
+}
+
+
+
+*** Weighted constraints for Strasheela
+
+**** Revise my idea sketch on paper 
+
+     see folder "Strasheela: weighted constraints"
+
+***** Question: should I better use generic framework (e.g., semiring-based soft constraints) instead of only specific case weighted constraints
+
+      Counterargument: I can implement weighted constraints with FD ints, and I can transform all existing Strasheela constraints in soft weighted constraints with reification. Also, this will still work with GeOz
+      For all other frameworks I need at least real interval constraints (and who is maintaining them..)
+
+
+**** Write dummy CSP with weighted constraints 
+
+**** With the dummy example create abstractions for writing weighted constraint problems 
+
+     E.g., 
+     - How to easily collect and sum all weights (store sum FD int in info slot of top-level container, so comparison constraint of best solution search can easily access it?). 
+     - "Dynamic" soft constraints: what is my formalism? Idea: proc (constraint) returning cost as last arg. Can be applied easily with all mapping funs (e.g., MapNeighbours) and results are then added
+     - Soft variant of PercentTrue: returns cost how far constraint is violated
+       - Other soft variant of PercentTrue: allow for range spec (Min#Max)
+	 Less precise, but more simple (and more efficient -- no optimisation..)
+
+
+** Markov chain constraints which include probablilty			  :WAIT:
+
+   Wait for soft constraints support for Strasheela
+
+*** Recapitulate my simple Markov chain constraint
+    
+    MarkovChain, MarkovChain_1
+    [[file:~/oz/music/Strasheela/strasheela/trunk/strasheela/contributions/anders/Pattern/Pattern.oz::proc%20MarkovChain%20Xs%20Decl][file:~/oz/music/Strasheela/strasheela/trunk/strasheela/contributions/anders/Pattern/Pattern.oz::proc MarkovChain Xs Decl]]
+    
+
+*** Extend/Edit definition using PercentTrue (as soft constraint)
+
+    - Markov chain def 
+      - For each clause in Markov chain
+	- For each sublist of given list (sublist length depending on
+	  order, 0th order: sublist length is 1)
+	  - Apply reified constraint checking checking whether clause holds
+      - Check probability with soft PercentTrue, return cost/penalty FD int
+    - Return cost sum of all clauses: will be used for optimising with BAB 
+
+    The following values are vars: input list, clauses (value sequences and percentages).
+    Fixed: number of clauses and order.  
+    So, this approach can be used for generation and [engeschraenkt] for analysis.
+    ?? How can I make number of clauses constrainable? 
+    
+    ?? Use name MarkovChain for new constraint and give old defs
+    MarkovChain, MarkovChain_1 a new name
+
+
+
+** Add support for Real Interval constraints 
+
+*** Install XRI on MBP 
+
+**** Contact developers on failed installation attempt		 :@MAIL:
+
+    I tried to install XRI on MacOS 10.4, but the configure script failed. Below are the error messages (I filtered out all other messages). It appears the configure script somewhere hardwires the Mozart installation directory to /usr/lib/mozart and can therefore not find the Mozart installation on my system in /usr/local/oz. Setting OZHOME does not help. 
+
+
+
+$ ./configure > configure.log
+make: /usr/lib/mozart/bin/oztool: Command not found
+make: /usr/lib/mozart/bin/oztool: Command not found
+make: /usr/lib/mozart/bin/oztool: Command not found
+make: /usr/lib/mozart/bin/oztool: Command not found
+make: /usr/lib/mozart/bin/oztool: Command not found
+make: /usr/lib/mozart/bin/oztool: Command not found
+make: /usr/lib/mozart/bin/oztool: Command not found
+In file included from ri.hh:39,
+                 from propagators.hh:38,
+                 from reified-prop.hh:38,
+                 from reified-prop.cc:34:
+misc.hh:42:25: error: mozart_cpi.hh: No such file or directory
+In file included from ri.hh:39,
+                 from propagators.hh:38,
+                 from trig-prop.hh:38,
+                 from trig-prop.cc:35:
+misc.hh:42:25: error: mozart_cpi.hh: No such file or directory
+In file included from ri.hh:39,
+                 from propagators.hh:38,
+                 from propagators.cc:35:
+misc.hh:42:25: error: mozart_cpi.hh: No such file or directory
+In file included from ri.hh:39,
+                 from constraint.hh:39,
+                 from constraint.cc:34:
+misc.hh:42:25: error: mozart_cpi.hh: No such file or directory
+In file included from ri.hh:39,
+                 from ri.cc:36:
+misc.hh:42:25: error: mozart_cpi.hh: No such file or directory
+make: *** No rule to make target `ltmain.sh'.  Stop.
+configure: error: ozinstall not found
+
+
+
+
+
+*** Understand XRI 
+
+**** Read documentation and try examples
+
+***** Understand whether/how I can define a relation between XRI variables and FD variables
+
+      All I found was reflection (?) procedures like XRI.getUpperBound and XRI.getMidPoint, which return a corresponding float. I could then transform the float to a FD int. However, it appears XRI does not support any constraint which defines a direct relation (e.g., there is not constraint like {XRI.absRound XRI_var FD_var})
+
+
+*** Generalise Strasheela distribution Strategy for possible XRI 
+
+    XRI requires special distribution definitions. I somehow need to generalise the Strasheela distribution if parameter values should be either FD ints or XRI vars
+
+    TODO: specify next actions
+
+
+*** Define XRI temporal constraints
+
+    Presently, the temporal constraints are only defined for FD int startTimes, durations etc.
+
+    Possible generalisation: some flag (e.g., set in Init) specifies whether _all_ temporal variables are FD ints (the default) or XRI variables. The suitable constraints are then applied accordingly.
+ 
+
+*** Generalise accessors used for output
+
+    Accessor methods like getDurationInSeconds or getPitchInMidi must be generalised to support either FD ints or XRI vars
+
+
+** Introduce some generalised concept of 'cadence'
+ 
+   What generalised notions are there in the literature for a cadence?
+   My problem: I would like to have a cadence concept which also works, e.g., for music in extended just intonation and is not simply something like II V I... I would like to structure [unconventional] music. Does this problem occur in literature? How do they do this in Jazz, for example?
+
+   See GTD folder "cadence sets"
+
+*** Check literature for cadence concepts
+
+    Is there anything like a generalised concept proposed already
+
+
+**** Mazzola: cadencial set 
+
+***** [info] What is a cadencial set?
+
+     file:///Users/t/Desktop/mamufaq.html#Q_cadencialset
+
+A cadencial set, or cadence-set, is Mazzola's terminology for a set of vertical sonorities that determine a key completely. E.G., the chords IV and V uniquely fix a certain major key, as well as the chords V7 and I - which may be one of the reasons that these became popular as parts of cadences.
+Note that the property is based on sets, not on progressions - it is "purely vertical" and does not include the time component. Hence it is not sufficient for musical styles where beginning notes or chords are distinctive marks (such as the system of modes in medieval and renaissance music).
+If a certain set is cadencial, then every set containing it is cadencial, too. So the really interesting things are minimal cadencial sets.
+From this viewpoint, there is an interesting polarity between major and harmonic minor. From the 7 triads of the diatonic major scale we can build the following 5 minimal cadencial sets: {II, III}, {III, IV}, {IV, V}, {II, V} and {VII} - whereas in harmonic minor, every pair of triads forms a minimal cadence-set. Hence we have 21 unique minimal ways to fix a certain minor key - which is, BTW, the absolute maximum obtainable with 7 3-element sonorities.
+
+
+**** Rothenberg "A Model for Pattern Perception with Musical Applications"
+     
+     Part II, p. 369: minimal set to identify C major among all major scales is G B F
+
+     OK, that makes sense, but that only works as minimal set if (i) there are only major scales and (ii) the listener does know that there are only major scales and knows this scale well
+
+     So, for my purposes it might be sufficient to require that all pitches are sounded in a cadence. 
+
+
+*** Define cadence constraint for [cadencial set] (only required pitches)
+
+    The strict cadence constraint requires that *all* scale notes are contained in Chords. However, some theorists (Mazzola, Rothenberg) suggest that it may be sufficient to bring only those pitches which make it unmistakable which key we are in.
+
+
+**** Idea (Strasheela code sketch)
+
+     ContextScales is the set of all scales which form the context of our musical universe  
+     MyScale is a particular scale from our musical universe 
+     We are looking for the minimum subset of MyScale which is not contained in any of the other context scales. 
+
+
+    Example: 
+    ContextScales is the major scale in all its 12 ET transpositions
+    MyScale is C major scale
+    MinimumSet = {G, B, F}
+    Note: this set is not sufficient if ContextScales contain, e.g., dorian scales as well, because G dorian also contains these pitches. 
+
+
+     SufficientSet = {FS.var.decl}
+     {FS.subset SufficientSet {MyScale getPitchClasses($)}}
+     {ForAll {LUtils.remove ContextScales fun {$ X} X == MyScale end}
+      proc {$ ContextScale} 
+	{FD.nega 
+	 {Combinator.'reify' 
+	  proc {$} {FS.subset SufficientSet {ContextScale getPitchClasses($)}} end}
+	 1}
+      end}
+
+    for MinimumSet minimise SufficientSet
+
+
+
+*** Define abstraction (constraint?) which checks whether a set of pitch classes is cadencial for a certain scale 
+
+    The literature may discuss how this is done for the diatonic scales. But is there also a more general way which would would for, say, Erlich's decatonic scales?
+
+
+*** ?? Define cadence model of mediaval / renaisssance music
+
+    Not based on cadencial set. Instead, additional pitches are introduced to confirm root key with semitone step 
+
+
+
+*** DONE Define strict constraint 
+    CLOSED: [2008-04-24 Thu 18:26]
+
+   Example: {Cadence Chords Scale} constraints that union of all pitch classes in Chords (list of N chords) contains all pitchclasses of Scale. Additional arguments (some FD int?) may allow to specify whether cadence ends in I or some form of deceptive cadence occurs. 
+   Combined with disallowing of weak harmonic steps with ProgressionStrength this should result in classical cadence (doublecheck ??)
+
+
+
+   
+** Introduce some generalised concept of resolution of dissonances
+
+*** Extend chord music representation: which chord notes are dissonant?
+
+**** DONE Edit default database: which pitch classes are dissonant?
+     CLOSED: [2008-03-17 Mon 12:52]
+     
+**** Extend chord music representation (as mixin)
+
+     Chord representation similar to representation of chord pitch
+     classes: dissoance PCs in database, transposed by transposition
+     param
+
+**** Extend note music representation (as mixin)
+
+     Constraint method isDissonantChordNote(PitchClass B): tests
+     whether PitchClass (or scale degree?) is specified to be
+     dissonant in related chord
+
+*** Define constraint {IsDissonanceR MyPitchClass B}
+
+    Constraint needed to define rules of resolving dissonances: 
+
+    NOT(isChordNote(MyPitchClass)) OR isDissonantChordNote(MyPitchClass)
+
+    Where? In HS.rules?
+
+*** Define abstraction similar to {DissonanceResolvedR MyNote ResolveConditions} 
+
+    For ideas cf. meth nonChordPCConditions(Conditions)
+    [[file:~/oz/music/Strasheela/strasheela/trunk/strasheela/contributions/anders/HarmonisedScore/source/Score.oz::meth%20nonChordPCConditions%20Conditions][file:~/oz/music/Strasheela/strasheela/trunk/strasheela/contributions/anders/HarmonisedScore/source/Score.oz::meth nonChordPCConditions Conditions]]
+
+
+**** Rule ideas for resolving dissonances
+
+     Direct resolution: 
+
+     Strict case: next melodic note has pitch class one
+     semitone/wholetone below dissonant pitch class, which is consonant
+     
+     
+     Less strict case: next melodic note has consonant pitch class which
+     is at maximum a wholetone above or below the dissonant pitch class
+     (also pitch repetition is permitted)
+
+     Indirect resolution: 
+
+
+
+** Introduce some abstraction for modulation
+   
+   NOTE: unfinished action list -- project postponed
+
+*** Define constraints defining relations between chords and scales which result in expressing modulation
+    
+    Modulation expressed with chord sequence and sim sequence of scales which overlap
+
+    ?? Overlapping scales: chords should use only pitches occuring in both scales
+
+    After overlapping ends, new scale is clarified by some (form of) cadence
+
+    Re-read Schoenberg on this matter
+
+*** Think about other ways
+
+   Are there other ways: using overlapping scale objects effectively results in CSP which constraints hierarchic structure
+
+   
+
+
+** Morphology analysis constraints					  :SOON:
+
+   see  [[file:~/oz/music/Strasheela/private/WorkInProgress/Morphology/Morphology.oz]]
+
+*** 'whole FD numbers' (i.e. support of neg numbers)
+
+**** Integrate 'whole FD numbers' into Strasheela 
+     
+     ?? As contribution into contribution/anders?
+
+**** [50%] Test all constraints of functor Whole 
+
+     See [[file:~/oz/music/Strasheela/private/WorkInProgress/Morphology/WholeNumbers.oz::functor%20WholeF][file:~/oz/music/Strasheela/private/WorkInProgress/Morphology/WholeNumbers.oz::functor WholeF]]
+
+
+*** Finish implementation: NewOld_Analysis as constraint 
+
+    (deterministic implementation first?)
+
+*** Energy profile
+
+*** Extend: add support of FD lists as values for constrast constraint
+    
+    Map sequence of integers into single integer 
+    (see [[file:~/oz/music/Strasheela/private/WorkInProgress/Morphology/Morphology.oz]])
+
+*** Understand how they apply Morphology analysis to motif sequence (Sec Thematic construction)
+    
+     file:///Users/t/texte/variousDocs-and-Articles/music_etc/PRISMA/PRISMA-2004/PaoloAralla_Morph.An./index.html
+
+     file:/Users/t/texte/variousDocs-and-Articles/music_etc/PRISMA/Prisma-Jan2007/Jacopo/ 
+
+*** Integrate into Strasheela 
+
+    Where? Subfunctor of functor Pattern?
+
+*** Create example(s)
+*** Create Documentation						  :@NET:
+
+    Can I somewhere point to literature for further details? 
+
+    Lit cited by Paolo Aralla: 
+    - Baboni Schilingi, Jacopo and Voisin Frederic. 1997. Morphologie et structures musicales in Morphologie, Reference Manual. Paris: IRCAM.
+
+
+*** Extend: dirrent input sequence elements are of different importance
+
+    Example: Melody: some notes are longer or on stronger beat and therefore more important. 
+    Can I somehow grade the importance of sequence elements (e.g., with some factor per element?)?
+
+**** Brainstorm: ideas to express this			
+
+
+
+** New prototype-based motif model					  :NEXT:
+
+   see [[file:~/oz/music/Strasheela/strasheela/trunk/strasheela/contributions/anders/PrototypeMotif/PrototypeMotif.oz]]
+   und (aelteres) im GTD folder 
+
+*** For further TODOs see in source file     
+
+    Note: none of these TODOs is obligatory, Strasheela release possible before
+
+    [[file:~/oz/music/Strasheela/strasheela/trunk/strasheela/contributions/anders/PrototypeMotif/PrototypeMotif.oz]]
+
+
+*** Generalise Arg prototypeDependencies:				 :MAYBE:
+     
+    presently it is required that prototype and score instance have same topolgy 
+    generalising this is likely hard! 
+
+
+*** Debugging							       :ARCHIVE:
+    
+    [[file:~/oz/music/Strasheela/strasheela/trunk/strasheela/contributions/anders/PrototypeMotif/PrototypeMotif.oz]]
+
+**** DONE Chord example below blocks: debug
+     CLOSED: [2008-04-29 Tue 20:30]
+     
+**** DONE NestedScript example below blocks: debug
+     CLOSED: [2008-04-29 Tue 21:05]
+       
+     
+
+
+*** DONE Create functor and commit svn				       :ARCHIVE:
+    CLOSED: [2008-04-29 Tue 20:30]
+
+
+*** Create small-scale examples with this model 
+
+    Make sure it works 
+    As documentation 
+
+
+*** Older
+
+**** Brainstorming fuer mini language
+
+     see handgeschriebene Notizen in GTD folder "Motif model: prototype based"
+
+**** Brainstorming fuer constraints between motif instances      
+**** Formalisieren der Ideen 
+
+
+** Time curves etc [[file:~/oz/music/Strasheela/private/examples/forOlleRomo/TempoCurves-etc.oz][TempoCurves-etc.oz]]					  :SOON:
+
+   [[file:~/oz/music/Strasheela/strasheela/trunk/strasheela/examples/ContinuousControllersInScore-MidiOutput.oz]]
+   [[file:~/oz/music/Strasheela/private/examples/forOlleRomo/TempoCurves-etc.oz]]
+   [[file:~/oz/music/Strasheela/strasheela/trunk/strasheela/contributions/anders/Fenv/Fenv.oz]]
+   
+   Old Goal (unrealistic): user can freely define tempo curve and time shift curve for any temporal container in score 
+   
+   New reduced goal: user can freely define a single global tempo curve (possibly defining segments locally) and nested time shift functions for any temporal container in score 
+   I feel the building blocks are now there, but there are examples to do
+
+*** DONE ?? concatenate tempo curve fenvs with associated start and end times in seconds
+    CLOSED: [2008-02-20 Wed 10:30]
+
+*** Create example with single global tempo curve fenv
+
+    Example partly done at [[file:~/oz/music/Strasheela/strasheela/trunk/strasheela/examples/ContinuousControllersInScore-MidiOutput.oz::][ContinuousControllersInScore-MidiOutput.oz]], Example 5, 
+    but it still has bugs.
+    
+*** Create example with nested local time shift fenvs
+    First create abstraction to access and combine local time shift fenvs
+
+*** Create example with a global tempo curve derived from consecutive local tempo curves
+
+*** ?? Create tempo canon example
+
+*** Means to archive score with fenvs 
+
+    Transform with toInitRecord and then pickle with Score.saveScore
+
+
+
+
+** Define InCriticalBandR Constraint
+
+   {InCriticalBandR Pitch1 Pitch2 B}
+
+   Pitch1 and Pitch2 are FD int, B is 0/1 int 
+   InCriticalBandR depends on PitchesPerOctaves and frequency def of pitch 0
+
+   Add to HS.rules 
+
+   I once had a definition in Arno for this, but I cannot find it
+
+   There is a graphics in Doty "JI Primer", p. 13
+
+
+** Define variant of Schoenberg root progression rules using chord primes :WAIT:
+
+   [wait until I have DB with primes define]
+
+   Chord progression constraints currently use concept root. Define a variant which uses chord primes/fundaments (1/1) instead as an alternative.  
+
+
+** Create chord, scale and interval database for JI 
+
+   Database defined with ratios Num#Denom
+
+*** Info
+
+    Exports getter functions which expect arg PitchesPerOctave. Returned databases are filtered such that pitch classes / intervals which would be the same for an ET depending on PitchesPerOctave are [zusammengefasst]. 
+
+    Problem dabei: I might want to use an alternative non-ET tuning later where different pitch classes / intervals would be tempered out. Fixing this problem would require to rewrite HS such that it is not based on ET tunings. Instead, you better use a higher value for PitchesPerOctave so that all your ratios are assigned to unique pitch class integers. The tuning table could then indeed temper out some intervals by assigning multiple PCs the same pitch in cent.  
+
+
+
+*** Define Tenney Distance for JI ratios in interval DB  
+
+    for ratio Nom#Denom the Tenney harmonic distance is 
+
+    log2(Nom * Denom) 
+
+    define distance as integers (e.g., {Round Distance * 1000.0})
+
+*** Create JI interval DB automatically (from given args for a lattice: prime limits and factors for them)
+
+    If I create interval DBs with functions, then things like consonance measurements from Scala are not included 
+
+    Include odd-limit, prime-limit, Tenney harmonic distance  
+    and possibly further measurements 
+
+*** Collect chords and scales from Doty in this DB
+
+    Chord 7-9-11 rather consonant 
+    ?? only in JI?
+
+*** Port JI chords from ET22 etc into this database 
+
+*** Collect chords from Scala chord database 
+
+*** ?? Collect scales from Scala  
+
+    Hm, how can I do that? The Scala modi are scale dependend, and the Scala scales are way too much.
+
+    I could search through the Scala .scl files for files which 
+    - contain only up to a given max pitch number 
+    - contain only ratios
+
+    Still, I would find too many scales (e.g. well-temperaments specified with ratios).
+
+    Can I somehow automate a search for 7-limit scales? Several scale files explicitly contain the term "7-limit" :) 
+
+    cd /Applications/Scala/scl
+    grep '7-limit' *
+
+
+*** Search for further condissonant chords in 7-limit, 9-limit and higher limits
+
+*** ?? some web search for further chords? 
+
+*** Use this databases in ET databases like ET22 and ET31 
+
+    Complement by temperament-specific entries 
+
+    
+*** Besides root, add feature for fundamental/prime (1/1)
+
+
+** Edit chord, scale and interval database (22 pitches per octave)
+
+    [[file:~/oz/music/Strasheela/private/0-privateContributions/ET22/source/DB.oz::functor]]
+
+*** Better understand decatonic scales					  :NEXT:
+
+**** Analyse their intervals (incl JI interpretations)
+
+     See decatonic scales GTD folder: emails by Erlich with ratios,
+     his article with picts showing scales as periodicity block etc
+
+**** Understand which chords can be formed on which degree
+
+     I can do CSP for this: find all consonant decatonic chords
+     possible on degree X
+
+**** Understand close decatonic [regions]: what would be the septimal equivalent of mediants
+
+
+*** Chord database
+
+**** Manually add harmonicity measurements				  :EASY:
+
+     %% Howto get harmonicity measurements from Scala
+%%
+%        create scale (chord/intervals are also scales) from ratios in Scale (e.g., with new or edit scale), then do 
+%        SHOW DATA
+%
+%        extract the interesting numbers from the printout, e.g., 
+%        Euler's gradus suavitatis, Vogel's harmonic complexity, Sum of Tenney's harmonic distance, Wilson's harmonic complexity, Sum of Mann's harmonic distance
+%
+%        alternative for single intervals:
+%        SHOW/ATTRIBUTE pitch <pitch>
+%        Show the value of all attributes for the given pitch (regardless of scale context)
+%
+%        for single intervals I also wrote a litte script for showing a few measurements
+%        /Applications/Scala/T_Harmonicity.cmd
+%       
+%        NOTE: these values can only be computed from ratios! 
+
+**** Add feature 'dissonance'
+
+     extend music representation etc accordingly
+
+**** Add feature 'required' (pitch classes)
+
+     Otherwise, chord DB entries are redundant
+
+     ?? extend music representation etc accordingly
+
+     Quick solution before I have this extension: restrict to chord indices with max number of pitches (e.g., no triads which are contained in tetrads)
+
+**** Add feature 'otonal/utonal'
+**** ?? Add fundamentals / prime (e.g., 5:6:7 and 6:7:9 both have prime 4)
+
+**** decide: shall I combine siblings which only differ in root into single chord: constraining chord index, e.g., with Morphology constraints may make more sense then. 
+
+**** Verify chords
+
+     Note: look particularly for chord pairs on pict by Dave Keenan -- do they indeed only differ in root 
+
+
+***** Study lily output for all chords
+
+      common music notation with 22 ET accidentals, ratios, and chord name
+
+      see [[file:~/oz/music/Strasheela/strasheela/trunk/strasheela/contributions/anders/ET22/testing/DB-test.oz::Traverse%20all%20chords%20in%20database%20create%20a%20score%20whose%20notes%20express%20it%20and%20output%20Lilypond%20Csound][file:~/oz/music/Strasheela/strasheela/trunk/strasheela/contributions/anders/ET22/testing/DB-test.oz::Traverse all chords in database create a score whose notes express it and output Lilypond Csound]]
+
+***** listen: all consonant?
+      
+
+**** Search for further chords					 :MAYBE:
+
+
+**** Extract remaining chords from hexad on picts by Dave Keenan (GTD folder "decatonic scales") :MAYBE:
+     
+
+**** Revise chord feature essentialPitchClasses     
+
+     I simply removed the fifth in common chords. But some may be wrong, and many chords I left as they are for now.  
+
+     I should play each chord on a scale instrument, and compare full pitch class set and essential pitch class set. 
+
+
+*** Scale database							 :MAYBE:
+
+
+**** ?? Extend scale database						 :MAYBE:
+
+     There are many other scales in Scala which fit into 22 ET
+
+     
+*** Create Midi output for 22 ET					  :SOON:
+
+**** For my Kontakt scripting
+
+**** General MIDI out hack
+
+     Use 16 MIDI channel, add pitch bend value for each note (assuming 2 semitone range up and down), voice stealing: oldest note.
+     Note: this is a hack which does not always work (oldest note may still be sounding!). But it is a useful hack, and if added to Tutorial then users can adapt it at need.
+
+
+
+*** Different Temperaments 
+
+**** Create list with advantages / disadvantages of the different temperaments suggested for the decatonic scales
+    
+     Re-read the emails, check which basic intervals (3, 5, 7-limit)
+     are how well represented (read cent figures in Scala and listen
+     to intervals and chords)
+
+     Don't decide for a temperament at this stage. Instead, I better
+     make temperament easy to change. Then I can later just try
+     different temperaments and decide which I like most. I might even
+     use different temperaments for different sections
+
+
+*** Extend simple decatonic test theory of harmony			  :WAIT:
+
+    First finish DB and get preliminary examples running
+
+**** Understand the advantages of each decatonic scale 
+
+**** Create extended 'decatonic tonality'
+
+     What is septimal correspondant of mediant chords..?
+
+     Shall I in (the beginning?) handle "wendepunkte" as adviced by Schoenberg?
+
+**** Create modulation with 'decatonic tonality'
+
+
+*** Create little melodies						  :WAIT:
+
+    Wait until databases and first test are created.
+
+**** Melodic rules
+
+     - ?? Restrict melodic intervals
+     - Over given chord, all chord pitches are permitted and all non-chord pitches if they are resolved (step-wise progression)  
+       Better form for this??
+     - ?? Constrain pitch (class) sequence with morphology constraints (constrain contour of morphology analysis to roughly follow "orgiastic curve")
+       
+
+**** Melody using motifs (over chord progression)
+
+     For now monophonic melody (with simple accompaniment?), later polyphonic setting, e.g., harmonic counterpoint
+
+     Either use my motif model or (more simple?) sub-CSPs (extended
+     scripts), e.g., with algo comp technique like L-ystems.
+
+     Example rules for motifs:
+
+     - restrict melodic contour (only tendency? with something like PercentTrue_Range)
+     - restrict rhythm to something recognisable (i.e. motif instances are recognised)
+       Again, do this 'soft'. E.g., specify startTime (relative to motif start) and duration of important notes, without specifying the position of this note (i.e. number of notes can vary). Or specify the start time (relative to motif start) of local pitch maxima (again, number of notes can vary).
+
+     - ?? Use timing curve to create 'interpretation' (create variants for different motifs)
+
+	
+
+
+
+
+
+** Edit chord, scale and interval database (31 pitches per octave)	 :MAYBE:
+
+   See [[file:~/oz/music/Strasheela/private/0-privateContributions/ET31/source/DB.oz::Internally%20database%20entries%20are%20often%20defined%20by%20ratios%20using%20notation%20X%20Y%20for%20X%20Y%20to%20make%20them%20more%20comprehensible%20and%20portable%20to%20other%20temperaments%20Alternatively%20chords%20and%20scales%20are%20notated%20with%20conventional%20symbolic%20note%20names%20see%20function%20PC%20In%20any%20case%20the%20databases%20focus%20on%20chords%20scales%20and%20intervals%20which%20are%20close%20to%20just%20intonation%20in%2031%20ET][file:~/oz/music/Strasheela/private/0-privateContributions/ET31/source/DB.oz]]
+   and [[file:ET31/music-sketches/ChordTest.oz][file:~/oz/music/Strasheela/private/CompositionPlans/ET31/music-sketches/ChordTest.oz]]
+
+*** Add harmonic complexity / dissonance degree info
+
+    Use Scala software to get information about [dissonance degree] 
+    There are different measurements available (Vogler, Tenney?, Barlow?): use multiple in extra DB features? 
+
+**** Manually add harmonicity measurements to all DB entries 
+
+%% Howto get harmonicity measurements from Scala
+%%
+%        create scale (chord/intervals are also scales) from ratios in Scale (e.g., with new or edit scale), then do 
+%        SHOW DATA
+%
+%        extract the interesting numbers from the printout, e.g., 
+%        Euler's gradus suavitatis, Vogel's harmonic complexity, Sum of Tenney's harmonic distance, Wilson's harmonic complexity, Sum of Mann's harmonic distance
+%
+%        alternative for single intervals:
+%        SHOW/ATTRIBUTE pitch <pitch>
+%        Show the value of all attributes for the given pitch (regardless of scale context)
+%
+%        for single intervals I also wrote a litte script for showing a few measurements
+%        /Applications/Scala/T_Harmonicity.cmd
+%       
+%        NOTE: these values can only be computed from ratios! 
+
+
+***** chord / scale (works for intervals too)
+
+      create scale/chord from ratios in Scale (e.g., with new or edit scale), then do 
+      SHOW DATA
+
+      extract the interesting numbers from the printout, e.g., 
+      Euler's gradus suavitatis, Vogel's harmonic complexity, Sum of Tenney's harmonic distance, Wilson's harmonic complexity, Sum of Mann's harmonic distance    
+      
+      NOTE: these values can only be computed from ratios! 
+
+***** Single interval
+
+      First step: I wrote a litte script for showing a few measurements
+      [[file:/Applications/Scala/T_Harmonicity.cmd::Creates%20new%20scale%20from%20user%20input%20and%20returns%20harmonicity%20measurements][file:/Applications/Scala/T_Harmonicity.cmd::Creates new scale from user input and returns harmonicity measurements]]
+
+      Alternative:
+
+      Show/Attribute pitch <pitch>
+      Show the value of all attributes for the given pitch (regardless of scale context)
+
+      Does something similar for chords/scales exist?
+      
+***** Info
+
+      Add this info to DB, so I later know..  
+
+****** Transform ET scale into just scale
+
+       harmonicity calculations require JI ratios, not an ET scale... 
+
+       Note: this operation takes long time. 
+
+	 Approximate [LIMIT]
+
+       Hm, this completely changes the scale, probably a less good idea.
+       Instead, for every interval (chord/scale), I could do the approximation myself (already in ET31 database..), and then use these data for my queries
+
+****** Display interval info
+
+       First, change attribute displayed with commands like SHOW. See possible values below
+
+	 set attribute <VALUE>
+
+       Then display values, e.g.,
+
+	 Show
+	 Show/Attribute : Only displays attribute
+
+       Note: only works for JI ratios, not 31 ET
+
+
+       Values (http://www.xs4all.nl/~huygensf/scala/help.htm#SET): 
+       - GRADUS: the Gradus Suavitatis of Euler 
+       - HARMON: the Barlow harmonicity value 
+       - INV_HARMON: the absolute reciprocal of Barlow's harmonicity value
+       - VOGEL: the Vogel harmonic complexity value
+       - TENNEY: the Tenney harmonic distance value: log(num*den) 
+       - WILSON: the Wilson harmonic complexity value (sum of primes except 2)
+       - PERRY: the Perry harmonic complexity value 
+	 ... 
+
+	 There are various remarks in doc on these..
+
+****** Display scale info
+
+       Show data
+
+       Again, works for JI scale, not ET
+
+
+
+
+*** Add additional chords 
+
+**** Play around with Scala clavier to find additional chords 
+
+***** Find further septimal chords
+
+
+**** Check Scala chord database: which chords fit into 31 ET
+
+     I feel I did this already..
+
+
+**** Re-check written info on chords in articles in [meinen Unterlagen] 
+
+     I feel this is mostly done already
+
+
+*** Add scales suitable for chords which go beyond 5-limit (not simply diatonic scales)
+    
+    If I want to use melodic steps, then I likely must use non-harmonic notes. However, then I must introduce scales (so the non-harmonic notes are not arbitrary). These scales must match the chords. 
+
+**** DONE Get info: how can I construct suitable scales for given set of chords :ARCHIVE:
+     CLOSED: [2008-04-07 Mon 18:45]
+
+    Possible approaches (see new menu in Scale): create Euler-Fokker genus (lattice), create Fokker periodicity block, create poly chordal scale, create combination product set ...  
+
+    Use lattrice player for evaluating, testing, thinking about...
+
+
+
+**** Scale: After creating 31 ET scale check available scales (modes)
+
+     Evaluate these scales for 7-limit harmony. Even if they are inverior to Erlich's decatonic scales, consider using them in a restricted way where scales change all the time togethere with the chords. 
+
+     There are e.g. the following scales 
+
+     - Octatonic
+     - Lumma Decatonic
+     - Hahn symmetric pentachordal
+     - Hahn pentachordal
+
+     Note that these scales are inverior to Erlich's decatonic scales
+
+     - Melodically less convincing
+     - Harmonically less flexible
+       Less consonant intervals and chords are available 
+       Example: 
+       - In Erlich's scale there are 8 usable chords with same key pattern (2 not usable)
+       - Lumma Decatonic: only 4 5th, 5 3rds (diatonically speaking)
+       - Hahn summ pentachordal: 4 5th, 4 3th
+       - Hahn pentachordal: 5 5th
+       - Octatonic: 6 kl 3th
+
+
+*** Edit/Doublecheck the naming of chords, scales, and intervals
+
+    Use Scala as a reference 
+
+    Make names short enough that they are [eindeutig] in 31 ET
+
+*** Add abbrevations as alternative naming scheme			 :MAYBE:
+
+    Edit HS.db.getChordIndex and friends accordingly
+
+*** Add additional diatonic scales					 :MAYBE:
+
+
+
+** Dissonance degree of absolute intervals
+
+   The dissonance degree of intervals (and consequently chords constructed from these intervals) cannot be sufficiently described by pitch classes alone. Example maj third + octave is more consonant than third, 13:8 + octave is consonant but 13:8 is not. 7:5 is consonant, but 7:5 + octave is only weakly consonant (Doty, p. 24 + p. 51). 
+
+   I should extend interval database such that I can include consonance measurements for different octave extensions of a specific interval. 
+
+   I then need constraint {$ Pitch DissonanceDegree} which works on an absolute pitch (or pitch class + octave), and finds the correct "consonance/dissonance degree" depending on an absolute pitch
+
+*** Find out where I can get octave-dependend "consonance/dissonance degree""consonance/dissonance degree" (harmonicity distance, whatever) from Scala or else
+
+*** Define constraint which extends selection constraint of a interval database entry field to use interval + octave
+§
+
+
+** Define constraint for pitch class prime factor exponents (monzos)	 :MAYBE:
+
+   Constraint which specifies relation between a pitch class (FD integer) and a vector (list of FD ints) of prime factor exponents (a "monzo")
+
+   Definition internally depends on an n-dimensional lattice which maps positions in lattice (and that way prime exponents) to pitch classes. This lattice can be created with same fun which creates lattice for JI interval DB 
+
+   for ideas cf. also [[file:~/oz/music/Strasheela/strasheela/trunk/strasheela/contributions/anders/HarmonisedScore/testing/Score-test.oz::HS%20score%20degreeToPC%20used%20to%20express%20monzos][file:~/oz/music/Strasheela/strasheela/trunk/strasheela/contributions/anders/HarmonisedScore/testing/Score-test.oz::HS score degreeToPC used to express monzos]]
+
+
+
+** Chord pair constraint: Define Carl Lumma's "modulation strength" (Tenney distance between two chords) :MAYBE:
+
+   [wait until I have interval DB with Tenney distances]
+
+   {ModulationStrength Chord1 Chord2 ?X}
+
+   See explanation in GTD folder "Lumma: chord distances"
+
+   Use Tenney distance of intervals 
+
+
+** Chord pair constraint: Define voice leading distance			 :MAYBE:
+
+   ?? {VoiceLeadingDistance Chord1 Chord2 ?X}
+
+   ?? {VoiceLeadingDistance Chord1 Chord2 ?X PitchPairs} 
+   PitchPairs is grouping all pairs of pitch classes in Chord1 and Chord2 whose distance is minimal (including liegenbleibender Toene?, and what if number of notes in both chords differs?). 
+   Problem: how can I express PitchPairs as variable if I don't know how many pairs their are? 
+
+
+   See explanation in GTD folder "Lumma: chord distances"
+
+   
+
+** Score transformation
+
+   see [[file:~/oz/music/Strasheela/private/WorkInProgress/ScoreTransformation/ScoreTransformation.oz]]
+   and [[file:~/oz/music/Strasheela/private/WorkInProgress/ScoreTransformation/testing/ScoreTransformation-test.oz]]
+
+*** Reread/Revise already existing code 
+
+*** Check todo section in source and test file for further step(s)
+
+   see [[file:~/oz/music/Strasheela/private/WorkInProgress/ScoreTransformation/ScoreTransformation.oz]]
+   and [[file:~/oz/musi
+
+
+** Idea: user-guided search process: preserve already satisfying sections in output :WAIT:
+
+   [wait until prototype-based motif model is realised]
+
+   When composing, I have to listen to much solutions. Some parts of a solution might satisfy already, so I might want to keep that part and then get further results. How can I formalise this for easy use? 
+   
+*** Approach sketched
+
+    CSP defined by extended script. One optional script arg expects function which creates a score. This score is 'unified' with solution. (if no arg was given, this unification is skipped) 
+
+    Whenever we have a solution where we like some parts, we save (archive) the init record. In this textual representation we mark the bits we like (manual editing: add specific info tags to single elements or containers). For a more flexible approach, different marks might be introduced (use the mini language of the prototype-based motif model). For example, we might apply constraints directly to single score objects (e.g., this note should be highest pitch) 
+
+    Some function (to define) expects this annotated score and creates reduced score spec whose score topology is exactly as the solution, constraints according to mini language are applied (typically, only marked parameters are determined, every other parameter is unconstrained).
+   For convenience, this function might expect the path of the archive score file (*.ssco file) whose def in the included with an \include statement. 
+
+   Parts which are marked in the input are again marked in the solution (so they have not to be marked again). 
+
+   Later, this approach might be complemented by a GUI score interface (e.g., using PWConstraints score editor) for marking score parts to keep.
+
+**** Mini language for marking score objects 
+
+     See mini language for prototype-based motif model. It should be the same mini language.
+
+**** Explanation why extra arg for extended script: 
+     
+     I need script definition where I can specify a partically determined solution. I already have that somehow. Script always returns solution and it usually contains some texual spec. However, I cannot use solution arg as input (its an object containing vars, I cannot have vars defined outside script), and within script the music representation is often created in stages. So, I need an additional arg which expects a function which returns partially determined score object. This score and the solution are then 'unified' (using my score unification via the textual representation. NOTE: things where these scores might differ including the info tag might be left out).  
+   
+
+
+define CSP which expects its solution score in textual form. 
+
+archive init record. 
+
+   
+
+*** Create simple example which uses this approach 
+
+*** Create abstractions needed for this approach 
+
+**** Mini-language implementation	
+
+     Expects an annotated score object (textual representation) and returns score object constrained according to the mini language
+
+     -> Use implementation of mini language for prototype-based motif model
+     
+
+**** Define function expecting a path with a *.ssco file and returning a nullary function which returns score where only the marked bits are determined / constrained
+
+     
+
+
+** Refactor Lilypond output of ET31 and ET22
+
+   These functors share code doublications: reduce those and change (generalise/add) definitions to source/Output.oz if required. 
+   
+*** Generalise Out.simToLilyChord 
+
+    ET22 and ET31 don't use Out.simToLilyChord because this function is not general enough (instead they define it from scratch).
+
+*** Refactor ET31/ET22 MakeChordComment and MakeChordRatio and move into Output.oz
+
+    Then use this def in ET22, ET31, and ~/.ozrc
+
+*** Refactor ET31 / ET22 ChordEt22ToLily and move into Output.oz
+
+    Then use this def in ET22, ET31
+
+
+** Small Refactoring: Chord/Scale/Note args like getChord / getScale
+
+   the init args getChords, getScales etc for classes in HS.score are highly generic. However, this genericity is not always needed and if not needed then these args are cumbersome
+
+*** Implement alternative init arg which expects chord / scale directly
+
+    Idea: in case I already know which chord/scale some object is related to I can hand this chord / scale directly over as init arg (using both init args chord and getChords must be permitted)
+
+    First rethink whether I simply add such alternative args or wether there are better alternative ideas.. 
+
+
+** Efficiency
+
+*** Define extendable left-to-right distro strategy		  :NEXT:
+
+    left to right variable ordering
+    breaking ties: types in order (e.g., temporal params, pitch classes + octaves, pitches..)
+    again breaking ties: first fail, e.g., dom or dom/deg
+    
+    Should one of these become default??
+
+*** Check out performance with adaptive recomputation			  :NEXT:
+
+  Adaptive recomputation is highly recommended by Schulte, so I should possibly do this before investigating other approaches to improve efficiency (memory and run time)    
+
+  *Note: in a few first tests with Explorer and IOzsef I could not see any effect of recomputation on the memory consumption. What am I missing?* 
+  
+**** Check out: where is adaptive recomputation implemented ready for use: only in IOzSeF? 
+
+***** Check Oz documentation, index Virtual Manual (wiki), mailing list archive :@NET:
+
+***** Ask Oz mailing list: where is adaptive recomputation implemented ready for use: only in IOzSeF? :@NET:
+      
+      CC to Guido? 
+
+
+**** Create benchmark suite of musical CSPs which require special score distribution strategies 
+
+     see [[file:~/texte/0-Publications/Publications-TODO.org::*Create%20benchmark%20suite%20of%20musical%20CSPs%20which%20require%20special%20score%20distribution%20strategies][file:~/texte/0-Publications/Publications-TODO.org::*Create benchmark suite of musical CSPs which require special score distribution strategies]]
+
+
+# <<ScoreOutsideScript>> 
+
+*** Does score outside script/space save memory. If so, define abstractions/templates for having the score outside the script :MAYBE:
+
+    First carefully evaluated what I can gain from recomputation and adaptive recomputation. Only if I feel it is necessary, I will then further improve memory (also a bit runtime) efficiency by having (most data of) the music representation stored in the top-level space only
+
+See ../../testing/zy_Efficiency/KeepMusicRepresentationOutsideComputationalSpace.oz 
+
+**** Measure how the different approaches differ in the amout of memory (and time) comsumed by copying.
+
+ Approaches:
+
+  - !! Measure total amount of memory and time required by search (e.g. put each script in an application of its own, call plain solver and measure time and memory with UNIX tools such as time and ...)
+    -> which UNIX tool measures memory consumption of a call?
+
+  - !!?? Measure with Oz profiler:
+    problem: the memory/time comsumption of copying seems not to show if I just compile CSP with profiling information.
+    Alternative option: temporarily, compile whole Mozart with profiling and check memory consumption of space copying proc (results will be very hard to read in this case!) 
+
+
+**** _if_ I found out that memory reduction can be significantly reduced by defining the music representation outside the script/space, then I have to develop abstractions/templates for the following cases (it will be more complex than having the score inside the script, but it shouldn't be too hard..).
+
+
+  - distribution strategies
+  - implicit constraints
+  - expressive rule applications 
+
+
+**** split Strasheela in two parts: the part to define CSPs and the part to solve them. The solver part uses a very [speichersparende] representation based on records instead of classes and objects (i.e. I need to define/port the data abstraction interface required for distribution strategies). 
+
+     -> I did some profiling to better understand this issue (see Strasheela/texting/profiling.oz)
+     
+       - Memory requirement of Strasheela mainly caused by elaborated data structure: there is so much explicitly represented. A more efficient data representation for the search would dump all information not required by the CSP: this is a very difficult task!!
+
+	 -> BTW: the memory difference between a record-based and an OOP based data structure appears to be neclegtable
+
+
+***** The Solver 'the server'
+     
+      - The solver expects a CSP spec which specifies the music representation (with a unique ID for each variable) and a list of constraints which specify which variables are constrained by which constraint (aux variables also supported by the constraint spec).
+      Also distribution strategy defined by spec.
+
+      - This solver then creates the search script from the CSP spec 
+     
+      - This solver is much more efficient than current Strasheela: much less copying because much smaller data structure
+
+      - The solver would be even more efficient if it could apply batch recomputation: wait for Geoz..
+  
+***** The second part of Strasheela (the 'client') defines the CSP specs: the present Strasheela could be modified to do this. It is even possible, that the present Strasheela could be modified such that it either does the search directly itself or alternatively creates this CSP spec (this option could be useful for prototyping and also helps to keep the present application a running program ..).
+
+     - The CSP def part of Strasheela could/would mirror _every_ propagator defined by Oz. All constraints in a Strasheela program would be replaced my its Strasheela substitute. With a global switch (init variable/cell?) the user could decide whether the Strasheela constraint substitutes either just apply the orig Oz constraint or otherwise 'record' this constraint call for the CSP spec by denoting the name of the constraint and the unique IDs of all its argument vars 
+
+       !! -> How to access the ID when the constraint gets the variable directly?? I would need to rewrite all Strasheela programs such that every Strasheela constraint substitute always expects parameter objects instead of variables!
+
+***** Instead with this Strasheela 'client', other CAC applications could also create CSP specs and call the Strasheela 'server' (e.g. PWGL)
+
+
+
+*** "Promise" value heuristic						 :MAYBE:
+    
+    Example: "promise" heuristic [ref Ginsberg or ref Geelen]
+    value which is most likely to succeed: value which causes domains of other variables reduced least, more specifically the value for which the product of the remaining domain sizes is maximised
+    
+    no principle problem to do that in Oz: for each domain value of given var create a new space which copies current space. Within that space copy determine variable to space-specific domain value. Wait until space is stable. Then traverse all variables in CSP, collect their domain sizes and compute product. Return this product to value ordering algo which selects minimum
+    Important: make sure that this computation is done only once per domain value. Also, best keep the space with the selected domain value, so that it must not be created again etc.
+    
+
+** [important part done] Support for alternate tunings			 :MAYBE:
+
+*** DONE Define pair of (internally stateful) procs like {Init.setTuningTable Table} and {Init.getTuningTable ?Table}
+    CLOSED: [2008-04-14 Mon 16:25]
+
+*** DONE Modify getPitchInMidi to use tuning table if one is set
+    CLOSED: [2008-04-14 Mon 16:25]
+
+*** Provide Scala scale format support 
+
+**** Write Parser for Scala scale format
+
+     Format is rather simple -- easy to write a parser
+
+     Format description 
+     http://www.xs4all.nl/~huygensf/scala/scl_format.html
+
+     First support only scales specified in cent with a period
+
+     Then add support for ratios (simply compute cent value for given ratio using MUtils function)
+
+
+**** Transform data of Scala scale file into a tuning table (pitch int to pitch float in cents measurement)
+
+     Note that 1/1 (0 cent) is implicit and not specified. I must add it to beginning of list of pitches. 
+
+     How is a periodic tuning spec repeated? I assume this is rather simple: for first period (preiod commonly octave) take the orig scale pitches, for the second period add the period (e.g., 1200 cent) to these pitches, for the third period add 2 * the period etc.
+ 
+
+     Example: pajara TOP tuning 
+     [[file:/Applications/Scala/scl/erlich_paj3.scl::Applications%20Scala%20scl%20erlich_paj3%20scl][file:/Applications/Scala/scl/erlich_paj3.scl::Applications Scala scl erlich_paj3 scl]]
+
+
+     When loading a scala file, a warning a shown if the present number of notes per octave and the number of scale notes does conflict
+
+
+*** Define some simple tuning table generation functions		 :MAYBE:
+
+**** DONE Define transformation of a tuning spec for an octave to a full tuning table by octave transpositions
+     CLOSED: [2008-04-14 Mon 16:26]
+     
+**** Define program for creating regular temperaments, expecting generator and period intervals
+
+     Generator and Period are cent values
+
+     G is generator
+     P is period
+     N \in 1..max_N
+     M \in 1..max_M
+
+     Pitch_i = (G*N) - (P*M) 
+
+     Total number of pitches N*M
+
+
+     -------
+
+     Python code (Generator and Period are cent values)
+     !! implements different formula
+
+
+     scale = []
+     for nSteps in range(stepsPerPeriod):
+     root = (nSteps*generator)%period
+     for repeat in range(periodsPerOctave):
+     scale.append(period*repeat + root)
+     scale.sort()
+     
+     It assumes the generator and period are specified in cents. 
+     It also assumes periodsPerOctave is given. If you don't 
+     have that you can still get a tuning table for one period.
+     
+     sorted([(n*generator)%period
+     for n in range(stepsPerPeriod)])
+     
+     You always have to choose the number of steps you want. You 
+     may also like the period to be include in the table
+     
+     sorted([(n*generator)%period
+     for n in range(stepsPerPeriod)])+[period]
+
+
+     
+
+     ------
+
+     See email replies "[tuning] Re: Algorithm for 'unfolding' regular temperaments" in my action folder for details
+
+***** DONE [#B] Ask tuning mailing list for regular temperament algorithm
+      CLOSED: [2008-04-07 Mon 22:14]
+
+      Guess: rank two regular temperament: 
+      By adding the GENRATOR repeatedly, namely SIZE times, that number of pitches is obtained. These pitches are then again transposed by the PERIOD (commonly 1200 cent) 
+     
+
+*** ?? Predefine some full tuning tables for easy access 
+
+    Meantone
+
+    Pajara: some variants
+
+    More when I need them (or on request..)  
+
+    Some TOP temperaments.. More in the Erlich paper
+    http://xenharmonic.wikispaces.com/Regular+Temperaments
+
+*** Info
+
+**** Overview
+
+     My harmony model supports equi-distant divisions of the octave. By keeping this as is, I can introduce the idea of alternate tunings for the playback. Nevertheless, pitches (and pitch classes etc) are still represented by FD ints, but these ints are used as indices into a tuning table for playback. 
+
+     Application examples: play music with 12 pitches per octave in meantone, play music with 22 pitches per octave using some pajara temperament (e.g., TOP tuning). 
+
+     Note: the definition of the music theory must possibly be modified (e.g., only particular keys are useful in meantone). 
+
+
+**** Tuning table definition
+
+     I have to decide for either format
+
+***** Format 1: similar to Scala scale format
+
+      Tuning table is a tuple with floats which map note pitches (integers) to pitches measured in cent (MIDI floats). 
+
+      For simplicity, only a single period is defined (typically one octave). Additional tuning table features are the 'size' (int: number of pitches) and the 'period' (a float, MIDI cent) -- which is also the last pitch in the tuning table
+
+      The mapping for arbitrary pitches are accessed by the following formula
+
+      Octave = Pitch div TuningTable.size
+      PC = Pitch mod TuningTable.size 
+      TuningTable.PC + Octave * TuningTable.period
+
+
+***** Format 2: Full tuning table
+
+      Tuning table: Tuning specification format: a tuple with floats which map note pitches (integers) to pitches measured in cent (MIDI floats). There is an entry for all possible pitches. 
+
+      Such a tuning table is either created by hand, or by some program. Examples: 
+      - Transformation of a tuning spec for an octave to a full tuning table by octave transpositions
+      - Program for regular temperaments, expecting generator and period intervals
+      - Program parsing and processing Scala files (see below)
+
+
+**** Tuning table use
+
+***** Possibly: Use directly, e.g., in a custom-made Csound output proc
+
+***** More effective: modify getPitchInMidi to use tuning table
+
+****** Defining static tuning table
+
+       A static tuning table is settable/accessible by pair of (internally stateful) procs like {Init.setTuningTable Table} and {Init.getTuningTable ?Table}. Defaults to nil, in which case getPitchInMidi calculates pitch as before. Otherwise, user-defined tuning-table is used.
+
+
+****** ?? Changing tuning table on-the-fly
+
+       getPitchInMidi expects optional arg tuning table, so tuning can be changed on-the-fly
+
+       Note: for changing tunings on-the-fly I should somehow put tuning tables in score and these tuning tables should be used by output 
+
+
+**** Scale scale support						 :MAYBE:
+
+     Idea: method getPitchInMidi gets couterpart getPitchInMidi_Tempered where the pitch spec depends on a *.scl file, whose path is either given to some proc in Init, or (for changing the tuning on the fly) to the method getPitchInMidi_Tempered directly.  
+
+     getPitchInMidi_Tempered uses some record which contains the pitches for all pitches (some upper limit?). I may also always compute pitches on the fly -- if the computation does not depend on computing other pitches first...
+     This record is created by evaluating the scala file (first parsing it, then ...).
+     
+     If HS pitches per octave and spec in Scala file disagree, then ... 
+
+***** Program more simple temperament support (at first) 
+
+      - Tuning values are entered by hand (no parsing of Scala file)
+      - Tuning values are all cents
+      - However, octave may be \= 1200 cent, and temperament shifts tuning by corresponding (reduced/streched) octave for computing any pitch
+
+
+
+** Reconsider automatic releases					 :MAYBE:
+
+   I would like to speed up my release process (so I would release Strasheela more often)
+
+   The only tools for automating this I found so far are freshmeat-submit and shipper
+   http://catb.org/~esr/software.html
+   
+   Plus: I may release info on more sites than now (ibiblio)
+   Downside: somewhat targeted towards Linux apps and RPM packages, no support for sourceforge upload
+   
+   Note: Installation seems to work out of the box on a Mac.
+
+*** Search whether other tools are available for this 
+
+    
+*** ?? Contact Eric Raymond: ask whether his software shipper meanwhile supports SourceForge as a destination
+
+    His doc at 
+    http://www.catb.org/~esr/shipper/shipper.html
+    says "In the future, we hope to support (for example) Debian packages as deliverables and SourceForge as a destination." 
+
+    Don't contact him -- there is no hint anywere that shipper meanwhile supports SourceForge in the (brief) list of changes. 
+
+    Eric S. Raymond <esr@thyrsus.com>
+
+
+** Develop new expressive patterns					 :MAYBE:
+
+   UseMotifs pattern generalises cycle pattern by introducing multiple alternatives. Can I generalise or variate other pattern constraints similarily. Goal is to create "interestingly" shaped sequences of FD ints and FD int combinations (e.g. pairs) 
+
+*** Higher order functions like Map selecting from multiple function alternatives
+
+    Rough idea: generalise functions like Map/ForAll or MapNeighbours/ForNeighbours to expect a list of functions/procedures from which it selects freely one for each function/procedure application. 
+
+
+*** Soft cycle patterns 
+    
+**** define cycle pattern where the cycle period is FD int and constrainable
+
+**** Define reified cycle pattern CycleRs 
+
+     {CycleRs Xs Bs Period}
+
+     Xs is list of FD ints which is constrained to follow cycle, Period is period length of the cycle (an FD int), and Bs is list of 0/1 ints of same length as Xs. For each Xs element which does indeed follow the cycle its corresponding Bs element is 1 and 0 otherwise
+     Application example: constrain Bs with Pattern.percentTrue_Range so that, e.g., 60-90% of the Bs follow the cycle pattern and the rest does not
+
+**** Cycle variant where non-cycle elements are possibly inserted
+
+     {DiscontinuousCycleRs Xs Ys Bs}
+
+     Xs is list of FD ints. Ys is list of FD ints which is quasi a sublist of Xs, but neighbours in Ys are not necessarily neighbours in Ys. Bs is a list of 0/1 ints of length Xs, specifying whether the corresponding Xs element is an element of Ys and thus part of the cycle or not. If the Xs elements for which Bs element is 0 are ignored, then the remaining Xs elements form a strict cycle pattern (i.e. occur in the order they are in Y, plus wrapping at the end of Ys).
+
+
+
+
+*** Soft contour constraint
+
+    Idea: most intervals follow given contour, but not all. Combines
+    Contour and Pattern.percentTrue_Range (percentage specified as range)
+
+    Applications: 
+
+    - Contour of melody follows simple shape in general (e.g. first ascending then
+      decending), but there are exceptions
+
+      -> I got this idea while listening to some non-Western music..
+
+      Option: additionally, the overall direction of the melody is
+      constrained by constraining specific intervals (e.g. between
+      first and last pitch)
+
+**** Define constraint InpreciseContour (name?)
+**** Define example (see above)
+
+
+*** Length-independend pattern constraints like contour
+
+    Some constraint which expects two lists of FD ints (i.e. length of lists is determined) and constraints that all elements of the shorter list (first arg?) are contained *in their order* in the longer list (second arg?), but that the longer list might contain intermediate elements (i.e. neighbouring elements of the shorter list are not necessarily neighbours in the longer list, their might be one or more elements in between).
+    The constraint allows for multiple solutions for the longer list (e.g. where the additional elements are inserted), but should not necessarily insert any additional choice point. Can I define such a constraint with or? 
+    Optional additional arg constraint (proc) expects list {$ [OrigVar1 NewVar1 .. OrigVar2]} where OrigVar are also elements in the shorter list and allows to apply additional constraints to the inserted elements.  
+    
+    This constraint can be used, e.g., to constrain two pitch sequences to the same contour, even if they are of different length. The optional constraint arg allows to specify, e.g., that inserted elements "follow the same contour".
+    E.g., if the orig contour is the following (example determined and uses symbols for simplicity)
+
+    [+ + - = - +] 
+    
+    The one might constrain that inserted elements are the same as their predecessing org element. So, the following may be a longer list, a contour with inserted elements 
+
+    [+ + + - - = - - +]
+
+
+
+
+*** Constraint on list of 0/1 variables how evenly these are distributed
+
+    e.g., I may want to specify that no two 1 (or two 0) follow each other, or that the sum of N neighbouring elements tends to be the same throughout the list 
+
+
+** Instrumentation constraints						 :MAYBE:
+
+*** Constrainable instrumentation representation 
+
+    For first idea see GTD folder "instrumentation constraints"
+
+
+** Enharmonic spelling [simple mapping]					 :MAYBE:
+
+   Simple approach for creating enharmonic spelling for simple 12 ET cases: just use a database (record) which maps each pitch class to an enharmonic pitch. This spec should be user-settable, e.g., via in Init proc (similar to tuning setting..). 
+
+
+** Refactor Lilypond output further					 :MAYBE:
+
+   extend info tag lily in order to make it more general
+
+   additional features (currently, lily info tag is a tuple and not a record)
+   before: VS: lily code to put before score object 
+   after: VS: lily code to put after score object
+   implicitStaffs: Bool: specify for this container, whether possibly an implicit staff is created 
+
+   Lilypond output must be adapted accordingly
+
+
+** Refactoring: change functor name Motif into VariationMotif
+
+
+** Constraining the hierarchic nesting with record constraints		 :MAYBE:
+
+   Idea: define container class (and later subclasses like seq and sim) which use record constraints for hierarchic nesting. Container objects are wrapped in a tuple/record (instead of an [extendable] list) and score objects can be added [at the tail (?)] of the container during the search problem. 
+
+   Adding a score object to a container is a search step much like determining a FD int, and it also can lead to a fail (how?) 
+
+   Problem: suitable variable orderings -- how can I control when/where adding a score object to a container happens 
+
+   
+   ---
+
+   Nice additional effect: accessing contained score objects in a tuple/record requires only constant time access, more efficient than for a list. However, does that also work for "un-closed records"?
+
+
+
+** Lily output of ET31 and ET22
+
+ [ - Generalise these definitions as far as possible so that changes are only applied to one def (no code doubling) ]
+   - Notate chord objects as chords (without grace notes): mark root by some different layout (e.g., all other chord notes are smaller)
+   - Allow for changing display of notation by args (either chord/scale ratios or description, show scale/chord pitch classes or not, mark non-harmonic tones or not)
+
+
+** Adaptive tuning JI 
+
+   see GTD folder "Adaptive tuning"
+
 
 
 ** [90%] Harmonic constraint ProgressionStrength 			 :MAYBE:
@@ -231,7 +1958,7 @@ Abstract applied constraint, so the effect is controllable
        	Connection to MaMuTh:
        	Property (3) means, in Mazzola's terminology, that the chord set {IV, V} is cadencial.
 
-*** TODO Implement Schoenbergs orig defs				 :MAYBE:
+*** Implement Schoenbergs orig defs				 :MAYBE:
 
     Based on root PC intervals 
 
@@ -278,14 +2005,14 @@ Abstract applied constraint, so the effect is controllable
    [[file:~/oz/music/Strasheela/tmp.oz::fun%20ChordsToScore_Script%20ChordSpecs%20Args][file:~/oz/music/Strasheela/tmp.oz::fun ChordsToScore_Script ChordSpecs Args]]
 
 
-*** TODO Decide how additional constraints are represented/stored 
+*** Decide how additional constraints are represented/stored 
 
     Approaches 
     - as present: constraints are already part of def and controlled by arguments
     - have instead arg 'constraints' for constraining top-level score object: all present and further constraints are handed over by this arg. Predefined constraints are stored, e.g., in HS.rules
     - have a combination of constraints given to 'constraints' args and 'buildin' constraints controlled by additional args
 
-*** TODO According to this decision, implement the additional constraints    
+*** According to this decision, implement the additional constraints    
 
 
 
@@ -439,15 +2166,130 @@ see Strasheela/private/WorkInProgress/NonmensuralENP->mensuralENP
 
 * Strasheela installation						 :MAYBE:
 
-** [#A] Create test program (executable) which tests a few core Strasheela functionalities and reports results at stdout to the user :MAYBE:
+** simplify editing _ozrc file					  :NEXT:
+
+   Move all variables (for directories and applications) at the top of the script: just introduce new vars like TmpDir (or even TMPDIR) etc.
+
+** Include installation of Mozart extensions in install-all.sh		 :MAYBE:
+
+   I could install selection constraints and [Iozsef] via install-all.sh and then also consequently deinstall these with uninstall-all.sh 
+
+
+*** Test what happens if there is no network connection
+
+    the script should not block altogether or report confusing error messages
+
+*** Decide whether I should make script interactive
+
+   Problem: what happens if some people already have (some of) these Mozart extensions installed -- they certainly don't want me to deinstall them 
+   -> I could interactively ask whether these extensions shall be installed / deinstalled 
+
+
+   Problem: making it interactive could cause problems for package providers -- for them I should then introduce script arguments which allow to set this decision before the script runs 
+
+
+   BTW: I definitely should not make update-all interactive nor include anything Mozart extension related
+
+
+*** Write the script 
+
+** Test release on Linux Ubuntu (home PC)				 :MAYBE:
+
+** Test Suse rpms on Suse (in new Parallels VM)				 :MAYBE:
+
+
+** Create test program (executable) which tests a few core Strasheela functionalities and reports results at stdout to the user :MAYBE:
 
 useful for package creators and new users to test whether installation was successful
 
 
-** [#C] ?? Define Oz GUI application for creating an OZRC file: pathes for applications and directories are then specified in a GUI :MAYBE:
+** ?? Define Oz GUI application for creating an OZRC file: pathes for applications and directories are then specified in a GUI :MAYBE:
 
 
 * General Oz todo						      :MAYBE:OZ:
+
+** OzUnit								  :SOON:
+
+   file://Users/t/oz/Collozeum/collozeum/OzUnit/
+
+*** Test all error cases -- most are done already
+
+*** DONE Understand higher-level functionality: how to process a whole test suite etc. 
+    CLOSED: [2008-02-20 Wed 19:30]
+
+*** Create documentation, using my tests
+
+    use ozh, as usual..
+
+    Mention critic: timeout cases wait for specified time..
+
+
+    --------
+
+    Copy form email: 
+
+    On Apr 6, 2007, at 8:26 AM, Juergen Stuber wrote:
+    
+    Hi Torsten, hi Gal,
+ 
+    <snip>
+    
+    Actually I think (from experience with Java unit tests in
+    industry) that there should be something better than wait in real
+    time for a timeout when testing concurrent programs.  The timeouts
+    slow down the tests a lot, and the outcome is nondeterministic
+    (e.g. tests run fine for the developer, but fail in a complete
+    system build).
+    
+    I'd like a meta-interpreter which can provoke all the nasty races
+    deterministically and test that they are handled correctly, and
+    run as quickly as possibly by simulating the passage of time.  But
+    that would be a very big project.
+    
+    Jürgen
+    
+    -- 
+    Jürgen Stuber <juergen@jstuber.net>
+    
+
+*** Create abstraction which simplifies use
+
+    only specifies list of test suites and gets results, statistics etc are created implicitly 
+
+    two cases: if test suites are either specified directly (as I did in test file) or as a functor
+    
+*** ?? possibly an application called on the shell wrote with this abstraction
+
+*** ?? Create working test suite for OzUnit  itself
+
+*** Upload to Collozeum 
+
+**** Contact Juergen Stueber and ask for permission
+
+     juergen@jstuber.net
+
+**** Upload via SVN 
+**** Inform Oz mailing list
+
+     Also, ask whether this is a suitable means for writing tests for the standard lib
+
+
+** Collozeum
+
+*** Collozeum: make projects available at Mogul
+
+*** ozcurl/ozjs TODO: add ozmake makefile				 :MAYBE:
+
+
+** OPI:  
+
+*** Emacs TAGS for Oz and Strasheela					 :MAYBE:
+
+    Better wait for Code navigation tool from Wolfgang Meyer
+
+    this does already work in principle, but I need 'to prefix' the functor variable before each TAGS entry
+    
+    [[file:~/oz/music/Strasheela/strasheela/trunk/strasheela/scripts/generate-TAGS.sh::fun%20Foo%20Foo56%201566][file:~/oz/music/Strasheela/strasheela/trunk/strasheela/scripts/generate-TAGS.sh::fun Foo Foo56 1566]]
 
 
 ** ozh								    :MAYBE:
@@ -459,7 +2301,7 @@ the orig documentation source files for creating, e.g., the HTML doc are still m
 I meanwhile checked -- it appears this file is not available any more online
 
 
-*** ?? ozh: add TODO list to wiki
+*** ?? ozh: add list to wiki
 
   - better file names for resulting HTML files, and better anchor names (make them persistent): see below
   - better/more flexible layout of doc strings (see below) 
@@ -475,6 +2317,11 @@ The current implementation does not even preserve whitespace after a new line in
 Even better would be, if some wiki layout is supported (optionally). Does there exist some easy wiki-layout -> HTML application (expecting wikified text snippets and returning corresponding HTML code snippets).   
 
 
+
+
+* Collecting new ideas							 :MAYBE:
+
+** Lesen XMG literature							 :@READ:
 
 
 
