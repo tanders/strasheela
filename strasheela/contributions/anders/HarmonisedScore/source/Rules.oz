@@ -130,7 +130,7 @@ export
    Cadence
    DiatonicChord NoteInPCCollection
 
-   ExpressAllChordPCs ExpressEssentialChordPCs ExpressEssentialPCs_AtChordStart
+   ExpressAllChordPCs ExpressAllChordPCs_AtChordStart ExpressEssentialChordPCs ExpressEssentialPCs_AtChordStart
    ClearHarmonyAtChordBoundaries
 
    %% melodic rules
@@ -341,8 +341,22 @@ define
    /** %% The union of the pitch classes of all notes notes simultaneous to MyChord fully expresses the pitch class set of this chord (more pitch classes are possibly, but all chord pitch classes must be played). 
    %% */
    proc {ExpressAllChordPCs MyChord}
-      thread	% waits until sim notes are accessible -- then often fails! 
+      thread	% waits until sim notes are accessible
 	 PCs = {Map {MyChord getSimultaneousItems($ test:isNote)}
+		fun {$ N} {N getPitchClass($)} end}
+	 PCsFS = {GUtils.intsToFS PCs}
+      in
+	 {FS.subset {MyChord getPitchClasses($)} PCsFS}
+      end
+   end
+   /** %% More strict variant of ExpressAllChordPCs: all pitch classes must sound when chord starts.
+   %% */
+   proc {ExpressAllChordPCs_AtChordStart MyChord}
+      thread	% waits until sim notes are accessible
+	 PCs = {Map {MyChord getSimultaneousItems($ test:fun {$ X}
+							    {X isNote($)} andthen
+							    ({X getStartTime($)} =<: {MyChord getStartTime($)}) == 1
+							 end)}
 		fun {$ N} {N getPitchClass($)} end}
 	 PCsFS = {GUtils.intsToFS PCs}
       in
@@ -352,9 +366,11 @@ define
 
    /** %% The union of the pitch classes of all notes notes simultaneous to MyChord fully express at least all essential pitch classes of this chord.
    %% NB: the the essential pitch classes must be defined with the feature essentialPitchClasses in the chord DB.
+   %%
+   %% BUG: this constraint failed where ExpressAllChordPCs worked -- so there is likely a serious bug.
    %% */
    proc {ExpressEssentialChordPCs MyChord}
-      thread	% waits until sim notes are accessible -- then often fails! 
+      thread	% waits until sim notes are accessible
 	 PCs = {Map {MyChord getSimultaneousItems($ test:isNote)}
 		fun {$ N} {N getPitchClass($)} end}
 	 PCsFS = {GUtils.intsToFS PCs}
@@ -364,6 +380,8 @@ define
    end
    /** %% More strict variant of ExpressEssentialChordPCs: all essential pitch classes must sound when chord starts.
    %% Because constraint application is not delayed so long, this more strict version can actuallyt be more efficient. 
+   %%
+   %% BUG: this constraint failed where ExpressAllChordPCs worked -- so there is likely a serious bug.
    %% */
    proc {ExpressEssentialPCs_AtChordStart MyChord}
       thread	% 
