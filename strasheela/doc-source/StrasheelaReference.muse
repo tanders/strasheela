@@ -9,7 +9,7 @@ These functors define the main user functionality of Strasheela.
 
   [[../doc/api/node6.html][Score]] -- music representation 
 
-  [[../doc/api/node8.html][SDistro]] -- score distribution strategies 
+  [[../doc/api/node8.html][SDistro]] -- score search engines and distribution strategies 
 
   [[../doc/api/node9.html][Out]] -- means for output into various formats
 
