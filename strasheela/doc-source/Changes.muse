@@ -29,6 +29,7 @@
 
   - Fixes and minor changes
 
+    - Strasheela has been adapted for the new Mozart version 1.4.0
     - Convenient benchmark facilities for runtime and memory measurements of musical CSPs are added under testing/zy_Efficiency/benchmark
     - Pattern.localMaxR added
     - [[../doc/api/node8.html][SDistro]].makeSearchScript (and all Strasheela search engines): Added generic variable ordering 'dom+deg'
