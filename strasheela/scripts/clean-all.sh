@@ -10,11 +10,17 @@
 # --clean in a directory with a file makefile.oz. For details see
 # http://www.mozart-oz.org/documentation/mozart-ozmake/index.html
 
+#
+# TODO: ozmake --clean does not work recursively (e.g., nested source/ dirs are omitted). But it works doing ozmake --clean explicitly in nested dirs. So, I should add that..
+#
+
 # change to scripts directory 
 cd `dirname $0`
 echo "cd \$StrasheelaDir; ozmake --clean" "$@"
 cd ..
 ozmake --clean "$@"
+# cd source
+# ozmake --clean "$@"
 
 
 # find all makefiles in ../contributions, move into their dir and issue ozmake
