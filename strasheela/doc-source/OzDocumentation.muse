@@ -27,7 +27,7 @@ Strasheela uses the multi-paradigm programming language Oz as its user-interface
 
 * Publications 
 
-  [[http://books.google.com/books?id=BYXNltNPDGAC&pg=PR1&ots=XEZwT73n-z&dq=Programming+Constraint+Services&sig=vfakyMOLFnvtSWHV3_aUGo94iX8][Programming Constraint Services]] -- this textbook explains the space-based constraint model, the operational foundation of Strasheela (the original [[http://web.it.kth.se/~schulte/paper.html?id=Schulte:PhD:2000][PhD thesis]] is still available as well).
+  [[http://books.google.com/books?id=BYXNltNPDGAC&pg=PR1&ots=XEZwT73n-z&dq=Programming+Constraint+Services&sig=vfakyMOLFnvtSWHV3_aUGo94iX8][Programming Constraint Services]] -- this book explains the space-based constraint model, the operational foundation of Strasheela (the original [[http://web.it.kth.se/~schulte/paper.html?id=Schulte:PhD:2000][PhD thesis]] is still available as well).
 
   [[http://www.mozart-oz.org/papers/][Selected Research Papers on Oz]] -- lists many further related publications.
 
