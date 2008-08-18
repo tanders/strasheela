@@ -449,6 +449,17 @@ InspectorObject = {Inspector.new unit}
 
 
 
+** scripts/clean-all.sh: does not work for files nested in dirs (e.g. source/ dirs)
+
+   Presently, scripts/clean-all.sh skips most files to clean because of the restricted way ozmake works
+
+   ozmake --clean does not work recursively (e.g., nested source/ dirs are omitted). But it works doing ozmake --clean explicitly in nested dirs. So, I should add such explicit calls to scripts/clean-all.sh. 
+
+   see ozmake doc
+   http://www.mozart-oz.org/documentation/mozart-ozmake/index.html
+
+   Should I add a feature 'subdirs' to the makefiles and then add a makefile at each subdir? 
+
 * Strasheela documentation				      :MAYBE:STRASHEELA:
 
 ** Strasheela tutorial
