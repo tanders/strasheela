@@ -23,7 +23,7 @@ svn -v log >> trunk/strasheela/CHANGELOG.txt
 #
 # create tag file in SVN repository
 #
-export VERSION=0.9.5
+export VERSION=0.9.6
 
 svn copy https://strasheela.svn.sourceforge.net/svnroot/strasheela/trunk \
          https://strasheela.svn.sourceforge.net/svnroot/strasheela/tags/release-$VERSION \
@@ -47,21 +47,6 @@ tar -cvzf - `find strasheela -type f \! \( -name "*.wav" -o -name "*.aiff" -o -n
 # create tar of all the files in the repository (take VERSION as argument)
 tar -cvzf - `find strasheela -type f -print | sed /.svn/d` > strasheela-withSounds-$VERSION.tar.gz
 
-
-# #
-# # uploading files to sourceforge.net
-# #
-# cd /Users/t/oz/music/Strasheela/releases/strasheela-$VERSION
-# ls
-
-# ftp upload.sourceforge.net
-
-# user: anonymous
-# password: torsten.anders@plymouth.ac.uk
-
-# cd /incoming
-# put strasheela-withSounds-$VERSION.tar.gz
-# put strasheela-$VERSION.tar.gz
 
 
 
