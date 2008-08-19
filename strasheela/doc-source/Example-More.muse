@@ -2,5 +2,5 @@
 
 [[StrasheelaExamples][back]]
 
-Further examples are provided as source code in the [[../examples/][examples]] folder. In particular, check out the examples below in the folder (most upper examples whose name start with a number were discussed in these HTML pages already).
+Many further examples are provided as source code in the [[../examples/][examples]] folder. In particular, check out the examples below in the folder, most of them contained in subfolders (most upper examples whose name start with a number were discussed in these HTML pages already).
 

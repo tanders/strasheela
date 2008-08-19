@@ -1,5 +1,11 @@
 #title Old Strasheela News
 
+  Strasheela 0.9.4 released ([[Changes]])  (10 April 2008)
+
+  Strasheela 0.9.3 released ([[Changes]])  (30 March 2008)
+
+  Strasheela 0.9.2 released ([[Changes]])  (20 March 2008)
+
   The slides of four lectures related to Strasheela are made available [[Publications#presentations][online]] (22 January 2008)
 
   Strasheela 0.9.1 released ([[Changes]])  (21 January 2008)

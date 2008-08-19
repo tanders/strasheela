@@ -47,10 +47,11 @@ These extensions simplify the definition of specific musical CSP classes (e.g. s
 
   [[../contributions/anders/ET12/doc/node1.html][ET12]] -- simplified pitch notation for the common 12-tone equal temperament 
 
-
   [[../contributions/anders/ConstrainTimingTree/doc/node1.html][CTT (ConstrainTimingTree)]] -- constrain the shape of a tree of temporal items
 
-  [[../contributions/anders/Motif/doc/node1.html][Motif]] -- constrainable motif model
+  [[../contributions/anders/PrototypeMotif/doc/node1.html][PrototypeMotif]] -- constraining the musical form based on motif prototypes 
+
+  [[../contributions/anders/Motif/doc/node1.html][Motif]] -- constrainable motif model supporting motif variations
 
   [[../contributions/anders/Measure/doc/node1.html][Measure]] -- constrainable meter model
 
