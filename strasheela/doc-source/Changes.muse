@@ -2,7 +2,7 @@
 #title Changes 
 ; #author Torsten Anders
 
-* Changes in Version 0.9.6 (18 August 2008)
+* Changes in Version 0.9.6 (19 August 2008)
 
   - Main additions and changes 
 
