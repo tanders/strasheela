@@ -120,23 +120,23 @@ clearInterval(drawit)
 
 <div style="margin-left:160px"><p align="right" class="margin"><div align="right">inheritance tree</div></p>
 <pre>
- <a class="pre" href="node6.html#entity243">NonType</a> <a class="pre" href="node6.html#entity244">Reflection</a>
+ <a class="pre" href="node6.html#entity246">NonType</a> <a class="pre" href="node6.html#entity247">Reflection</a>
     |        |
     `-----+--'
           |
-     <a class="pre" href="node6.html#entity245">ScoreObject</a>
+     <a class="pre" href="node6.html#entity248">ScoreObject</a>
           |
           |
           |
-      <a class="pre" href="node6.html#entity247">Parameter</a>
+      <a class="pre" href="node6.html#entity250">Parameter</a>
           |
           |
           |
-    <a class="pre" href="node6.html#entity250">TimeParameter</a>
+    <a class="pre" href="node6.html#entity253">TimeParameter</a>
           |
           |
           |
-      <a class="pre" href="node6.html#entity251">TimePoint</a>
+      <a class="pre" href="node6.html#entity254">TimePoint</a>
 </pre>
 <hr><p class="margin"><div align="right">class definition</div></p>
 <code>
@@ -303,14 +303,7 @@ clearInterval(drawit)
 
 
 </tr></table>
-<span class="string"> Alias for getMethNames.<BR>
- */<BR>
-       meth getMethods($) {self getMethNames($)} end<BR>
-/* %% [TODO] Get the default arguments of the initialisation method... <BR>
- */<BR>
-      meth getInitArgs($) <BR>
-      end<BR>
-/* %% Returns a record where the features are all supported arguments of the init method of self with their default as value (_ indicates that no default exist).<BR>
+<span class="string"> Returns a record where the features are all supported arguments of the init method of self with their default as value (_ indicates that no default exist).<BR>
  NB: this method relies on the correct implementation of the method getInitArgs for its class and all its superclasses. <BR>
 <BR>
 </span>

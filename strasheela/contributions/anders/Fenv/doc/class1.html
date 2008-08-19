@@ -171,7 +171,18 @@ clearInterval(drawit)
 
 
 </tr></table>
-<span class="string"> Samples the fenv from 0.0 to 1.0 (including) and collects samples in a list. N is the number of samples (an integer). If N=1, only the last env value is returned. <BR>
+<span class="string"> Samples the fenv from 0.0 to 1.0 (including) and collects samples in a list. N is the number of samples (an integer). If N=1, only the last env value is returned. Returns a list of floats.<BR>
+<BR>
+</span>
+</li><li><span class="functionname">toList_Int</span>($ N add:Add mul:Mul)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> Same as toList, but rounds the results to integers. The output can be scaled (before the rounding) with the summand Add and factor Mul (both floats). <BR>
 <BR>
 </span>
 </li><li><span class="functionname">toPairs</span>($ N)<br>

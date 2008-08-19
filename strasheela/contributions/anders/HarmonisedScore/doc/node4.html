@@ -165,46 +165,57 @@ clearInterval(drawit)
 <h3>Import</h3>
 <code><ul><li>FD</li><li>FS</li><li>Browser(browse:Browse)</li><li>Select at "<span class="string">x-ozlib://duchier/cp/Select.ozf"
 </span></li><li>GUtils at "<span class="string">x-ozlib://anders/strasheela/source/GeneralUtils.ozf"
+</span></li><li>LUtils at "<span class="string">x-ozlib://anders/strasheela/source/ListUtils.ozf"
+</span></li><li>MUtils at "<span class="string">x-ozlib://anders/strasheela/source/MusicUtils.ozf"
 </span></li><li>SMapping at "<span class="string">x-ozlib://anders/strasheela/source/ScoreMapping.ozf"
 </span></li><li>Pattern at "<span class="string">x-ozlib://anders/strasheela/Pattern/Pattern.ozf"
 </span></li><li><a href="node7.html">Schoenberg</a> at "<span class="string">Schoenberg.ozf"
+</span></li><li><a href="node2.html">DB</a> at "<span class="string">Database.ozf"
 </span></li></ul></code>
 <h3>Export</h3>
-<code><ul><li>&lt;P/3:<a href="#entity219"><span class="functionname">GetFeature</span></a>&gt;
-</li><li>&lt;P/3:<a href="#entity220"><span class="functionname">UnequalParameter</span></a>&gt;
-</li><li>&lt;P/4:<a href="#entity221"><span class="functionname">UnequalParameterR</span></a>&gt;
-</li><li>&lt;P/2:<a href="#entity222"><span class="functionname">NeighboursWithUnequalParameter</span></a>&gt;
-</li><li>&lt;P/2:<a href="#entity223"><span class="functionname">Distinct</span></a>&gt;
-</li><li>&lt;P/3:<a href="#entity224"><span class="functionname">DistinctR</span></a>&gt;
-</li><li>&lt;P/1:<a href="#entity225"><span class="functionname">DistinctNeighbours</span></a>&gt;
-</li><li>&lt;P/1:<a href="#entity226"><span class="functionname">PairwiseDistinct</span></a>&gt;
-</li><li>&lt;P/2:<a href="#entity227"><span class="functionname">ButNDistinct</span></a>&gt;
-</li><li>&lt;P/2:<a href="#entity228"><span class="functionname">DistinctForN</span></a>&gt;
-</li><li>&lt;P/2:<a href="#entity229"><span class="functionname">CommonPCs</span></a>&gt;
-</li><li>&lt;P/3:<a href="#entity230"><span class="functionname">CommonPCs_Card</span></a>&gt;
-</li><li>&lt;P/3:<a href="#entity231"><span class="functionname">CommonPCsR</span></a>&gt;
-</li><li>&lt;P/1:<a href="#entity232"><span class="functionname">NeighboursWithCommonPCs</span></a>&gt;
-</li><li>&lt;P/4:<a href="#entity233"><span class="functionname">ParameterDistance</span></a>&gt;
-</li><li>&lt;P/5:<a href="#entity234"><span class="functionname">ParameterDistanceR</span></a>&gt;
-</li><li>&lt;P/3:<a href="#entity235"><span class="functionname">LimitParameterDistanceOfNeighbours</span></a>&gt;
-</li><li>&lt;P/2:<a href="#entity236"><span class="functionname">Cadence</span></a>&gt;
-</li><li>&lt;P/2:<a href="#entity237"><span class="functionname">DiatonicChord</span></a>&gt;
-</li><li>&lt;P/2:<a href="#entity238"><span class="functionname">NoteInPCCollection</span></a>&gt;
-</li><li>&lt;P/3:<a href="#entity239"><span class="functionname">IsStep</span></a>&gt;
-</li><li>&lt;P/4:<a href="#entity240"><span class="functionname">IsStepR</span></a>&gt;
-</li><li>&lt;P/3:<a href="#entity241"><span class="functionname">ResolveStepwiseR</span></a>&gt;
-</li><li>&lt;P/2:<a href="#entity243"><span class="functionname">PassingNotePitches</span></a>&gt;
-</li><li>&lt;P/3:<a href="#entity244"><span class="functionname">PassingNotePitchesR</span></a>&gt;
-</li><li>&lt;P/3:<a href="#entity245"><span class="functionname">IsPassingNoteR</span></a>&gt;
-</li><li>&lt;P/3:<a href="#entity242"><span class="functionname">IsBetweenChordNotesR</span></a>&gt;
-</li><li>&lt;P/3:<a href="#entity246"><span class="functionname">IsAuxiliaryR</span></a>&gt;
-</li><li>&lt;P/3:<a href="#entity247"><span class="functionname">IsBetweenStepsR</span></a>&gt;
-</li><li><span class="variablename">Schoenberg</span>
+<code><ul><li><span class="variablename">Schoenberg</span>
+</li><li>&lt;P/3:<a href="#entity233"><span class="functionname">GetFeature</span></a>&gt;
+</li><li>&lt;P/3:<a href="#entity234"><span class="functionname">UnequalParameter</span></a>&gt;
+</li><li>&lt;P/4:<a href="#entity235"><span class="functionname">UnequalParameterR</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity236"><span class="functionname">NeighboursWithUnequalParameter</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity237"><span class="functionname">Distinct</span></a>&gt;
+</li><li>&lt;P/3:<a href="#entity238"><span class="functionname">DistinctR</span></a>&gt;
+</li><li>&lt;P/1:<a href="#entity239"><span class="functionname">DistinctNeighbours</span></a>&gt;
+</li><li>&lt;P/1:<a href="#entity240"><span class="functionname">PairwiseDistinct</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity241"><span class="functionname">ButNDistinct</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity242"><span class="functionname">DistinctForN</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity243"><span class="functionname">CommonPCs</span></a>&gt;
+</li><li>&lt;P/3:<a href="#entity244"><span class="functionname">CommonPCs_Card</span></a>&gt;
+</li><li>&lt;P/3:<a href="#entity245"><span class="functionname">CommonPCsR</span></a>&gt;
+</li><li>&lt;P/1:<a href="#entity246"><span class="functionname">NeighboursWithCommonPCs</span></a>&gt;
+</li><li>&lt;P/4:<a href="#entity247"><span class="functionname">ParameterDistance</span></a>&gt;
+</li><li>&lt;P/5:<a href="#entity248"><span class="functionname">ParameterDistanceR</span></a>&gt;
+</li><li>&lt;P/3:<a href="#entity249"><span class="functionname">LimitParameterDistanceOfNeighbours</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity250"><span class="functionname">Cadence</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity251"><span class="functionname">DiatonicChord</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity252"><span class="functionname">NoteInPCCollection</span></a>&gt;
+</li><li>&lt;P/1:<a href="#entity253"><span class="functionname">ExpressAllChordPCs</span></a>&gt;
+</li><li>&lt;P/1:<a href="#entity254"><span class="functionname">ExpressAllChordPCs_AtChordStart</span></a>&gt;
+</li><li>&lt;P/1:<a href="#entity255"><span class="functionname">ExpressEssentialChordPCs</span></a>&gt;
+</li><li>&lt;P/1:<a href="#entity256"><span class="functionname">ExpressEssentialPCs_AtChordStart</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity257"><span class="functionname">ClearHarmonyAtChordBoundaries</span></a>&gt;
+</li><li>&lt;P/3:<a href="#entity258"><span class="functionname">IsStep</span></a>&gt;
+</li><li>&lt;P/4:<a href="#entity259"><span class="functionname">IsStepR</span></a>&gt;
+</li><li>&lt;P/3:<a href="#entity260"><span class="functionname">ResolveStepwiseR</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity262"><span class="functionname">PassingNotePitches</span></a>&gt;
+</li><li>&lt;P/3:<a href="#entity263"><span class="functionname">PassingNotePitchesR</span></a>&gt;
+</li><li>&lt;P/3:<a href="#entity264"><span class="functionname">IsPassingNoteR</span></a>&gt;
+</li><li>&lt;P/3:<a href="#entity261"><span class="functionname">IsBetweenChordNotesR</span></a>&gt;
+</li><li>&lt;P/3:<a href="#entity265"><span class="functionname">IsAuxiliaryR</span></a>&gt;
+</li><li>&lt;P/3:<a href="#entity266"><span class="functionname">IsBetweenStepsR</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity267"><span class="functionname">ResolveNonharmonicNotesStepwise</span></a>&gt;
+</li><li>&lt;P/3:<a href="#entity268"><span class="functionname">GetInterval</span></a>&gt;
+</li><li>&lt;P/4:<a href="#entity269"><span class="functionname">ConstrainMaxIntervalR</span></a>&gt;
 </li></ul></code>
 <h3>Define</h3>
 
 <code>
-<a name="entity219">
+<a name="entity233">
 <span class="keyword">proc</span>{<span class="functionname">GetFeature</span> X Feat I}<br>
 <span class="string"> Constraints the chord/scale X: the arbitrary (user defined) chord/scale database feature value at Feat is accessed/constrained to I (a FD int or FS var, depending on the feature). For instance, if X is a chord and the chord database defines a numeric 'dissonanceDegree' for each chord in the database, <code> {GetFeature X 'dissonanceDegree' 2} </code> constraints the index of X to point to a chord spec in the database which has a dissonanceDegree of 2.<BR>
  NB. GetFeature employs a selection constrain: multiple applications of GetFeature with the same Feat will accessed/constrain the same value I with multiple selection constraint propagators, which should be avoided..<BR>
@@ -215,7 +226,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity220">
+<a name="entity234">
 <span class="keyword">proc</span>{<span class="functionname">UnequalParameter</span> X Y Fn}<br>
 <span class="string"> The chords/scales X and Y differ in the parameter/attribute accessed by Fn (a unary function or method). For instance, <code> {UnequalParameter X Y getIndex} </code> constrains the indices of X and Y to differ.<BR>
 <BR>
@@ -223,7 +234,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity221">
+<a name="entity235">
 <span class="keyword">proc</span>{<span class="functionname">UnequalParameterR</span> X Y Fn B}<br>
 <span class="string"> Reified version of DistinctParameter: B=1 <-> chords/scales X and Y differ in the parameter/attribute accessed by Fn.<BR>
 <BR>
@@ -231,7 +242,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity222">
+<a name="entity236">
 <span class="keyword">proc</span>{<span class="functionname">NeighboursWithUnequalParameter</span> Xs Fn}<br>
 <span class="string"> All successive chord/scale pairs in list Xs differ in the parameter/attribute accessed by Fn.<BR>
 <BR>
@@ -239,7 +250,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity223">
+<a name="entity237">
 <span class="keyword">proc</span>{<span class="functionname">Distinct</span> X Y}<br>
 <span class="string"> The chords/scales X and Y have either different indices or different transpositions or both. <BR>
 <BR>
@@ -247,7 +258,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity224">
+<a name="entity238">
 <span class="keyword">proc</span>{<span class="functionname">DistinctR</span> X Y B}<br>
 <span class="string">  B=1 <-> The chords/scales X and Y have either different indices or different transpositions or both.<BR>
 <BR>
@@ -255,7 +266,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity225">
+<a name="entity239">
 <span class="keyword">proc</span>{<span class="functionname">DistinctNeighbours</span> Xs}<br>
 <span class="string"> All successive chord/scale pairs in list Xs have either different indices or different transpositions or both.<BR>
 <BR>
@@ -263,7 +274,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity226">
+<a name="entity240">
 <span class="keyword">proc</span>{<span class="functionname">PairwiseDistinct</span> Xs}<br>
 <span class="string"> All chords/scales in list Xs are pairwise distinct, i.e. they have either different indices or different transpositions or both.<BR>
 <BR>
@@ -271,7 +282,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity227">
+<a name="entity241">
 <span class="keyword">proc</span>{<span class="functionname">ButNDistinct</span> Xs N}<br>
 <span class="string"> All but N (a FD int) chords/scales in list Xs are pairwise distinct, i.e. they have either different indices or different transpositions or both. That is, N=4 <-> four chords/scales are not unique in Xs (either all four are the same or two different chords/scales repeated).<BR>
 <BR>
@@ -279,7 +290,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity228">
+<a name="entity242">
 <span class="keyword">proc</span>{<span class="functionname">DistinctForN</span> Xs N}<br>
 <span class="string"> Xs (a list of chords/scales) is split into sublists of length N: in each sublist, all chords/scales are pairwise distinct.<BR>
 <BR>
@@ -287,7 +298,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity229">
+<a name="entity243">
 <span class="keyword">proc</span>{<span class="functionname">CommonPCs</span> X Y}<br>
 <span class="string"> Constraints the chords/scales X and Y to have at least 1 common pitch class.<BR>
 <BR>
@@ -295,7 +306,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity230">
+<a name="entity244">
 <span class="keyword">proc</span>{<span class="functionname">CommonPCs_Card</span> X Y N}<br>
 <span class="string"> N (an FD int) is the cardiality of the set of common pitch classes between the chords/scales X and Y.<BR>
 <BR>
@@ -303,7 +314,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity231">
+<a name="entity245">
 <span class="keyword">proc</span>{<span class="functionname">CommonPCsR</span> X Y B}<br>
 <span class="string"> Reified version of CommonPCs: B=1 <-> chords/scales X and Y have at least 1 common pitch class. <BR>
 <BR>
@@ -311,7 +322,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity232">
+<a name="entity246">
 <span class="keyword">proc</span>{<span class="functionname">NeighboursWithCommonPCs</span> Xs}<br>
 <span class="string"> Each successive chord/scale pair in list Xs has at least 1 common pitch class.<BR>
  NB: The constraint introduces auxilary variables which possibly remain undetermined in the solution. <BR>
@@ -320,7 +331,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity233">
+<a name="entity247">
 <span class="keyword">proc</span>{<span class="functionname">ParameterDistance</span> X Y Fn I}<br>
 <span class="string"> Constraints the distance between the parameter/feature accessible with Fn of the chords/scales X and Y to I (a FD integer). For instance, if X and Y are chords and the chord database defines the numeric feature dissonanceDegree, the dissonanceDegree distance between X and Y is set to 1 by<BR>
  <code> {ParameterDistance X Y fun {$ X} {GetFeature X dissonanceDegree} end 1} </code><BR>
@@ -329,7 +340,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity234">
+<a name="entity248">
 <span class="keyword">proc</span>{<span class="functionname">ParameterDistanceR</span> X Y Fn I B}<br>
 <span class="string"> Reified version of ParameterDistance.<BR>
 <BR>
@@ -337,7 +348,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity235">
+<a name="entity249">
 <span class="keyword">proc</span>{<span class="functionname">LimitParameterDistanceOfNeighbours</span> Xs Fn Max}<br>
 <span class="string"> Limits the the distance between the parameter/feature accessible with Fn of the neigbouring chords/scales in Xs not to exceed Max (a FD integer, but in most cases an integer will do).<BR>
 <BR>
@@ -347,7 +358,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity236">
+<a name="entity250">
 <span class="keyword">proc</span>{<span class="functionname">Cadence</span> MyScale Chords}<br>
 <span class="string"> Constraints the union of the pitch classes of Chords (a list of chord objects) to be the same set as the set of pitch classes of MyScale (a scale object). In other words, all chords only use scale tones (diatonic chords) and all scale tones are played.  Also, the root of the last chord is constrained to the root of the scale.<BR>
  In common usage, Chords has length three and is applied to the last three chords of a progression.<BR>
@@ -359,7 +370,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity237">
+<a name="entity251">
 <span class="keyword">proc</span>{<span class="functionname">DiatonicChord</span> MyChord MyScale}<br>
 <span class="string"> All pitch classes of MyChord are in MyScale (scale must of course not diatonic, procedure name uses the phrase "diatonic to" as a synonym for "belonging to"). <BR>
 <BR>
@@ -367,7 +378,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity238">
+<a name="entity252">
 <span class="keyword">proc</span>{<span class="functionname">NoteInPCCollection</span> MyNote MyPCCollection}<br>
 <span class="string"> The pitch class of MyNote is in MyPCCollection (a chord or a scale).<BR>
 <BR>
@@ -375,7 +386,58 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity239">
+<a name="entity253">
+<span class="keyword">proc</span>{<span class="functionname">ExpressAllChordPCs</span> MyChord}<br>
+<span class="string"> The union of the pitch classes of all notes notes simultaneous to MyChord fully expresses the pitch class set of this chord (more pitch classes are possibly, but all chord pitch classes must be played). <BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity254">
+<span class="keyword">proc</span>{<span class="functionname">ExpressAllChordPCs_AtChordStart</span> MyChord}<br>
+<span class="string"> More strict variant of ExpressAllChordPCs: all pitch classes must sound when chord starts.<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity255">
+<span class="keyword">proc</span>{<span class="functionname">ExpressEssentialChordPCs</span> MyChord}<br>
+<span class="string"> The union of the pitch classes of all notes notes simultaneous to MyChord fully express at least all essential pitch classes of this chord.<BR>
+ NB: the the essential pitch classes must be defined with the feature essentialPitchClasses in the chord DB.<BR>
+<BR>
+ BUG: this constraint failed where ExpressAllChordPCs worked -- so there is likely a serious bug.<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity256">
+<span class="keyword">proc</span>{<span class="functionname">ExpressEssentialPCs_AtChordStart</span> MyChord}<br>
+<span class="string"> More strict variant of ExpressEssentialChordPCs: all essential pitch classes must sound when chord starts.<BR>
+ Because constraint application is not delayed so long, this more strict version can actuallyt be more efficient. <BR>
+<BR>
+ BUG: this constraint failed where ExpressAllChordPCs worked -- so there is likely a serious bug.<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity257">
+<span class="keyword">proc</span>{<span class="functionname">ClearHarmonyAtChordBoundaries</span> Chords VoiceNotes}<br>
+<span class="string"> Defines melodic/harmonic constraint which implements proper suspension and other things. Chords is a list of chord objects and VoiceNotes a list of note objects which all belong to a single voice. At the border between two chords, the last voice note simultaneous to the preceeding chord and the first note simultaneous to the succeeding chord, these two notes should not be both non-chord tones (note: these two notes can be the same or different score objects, and have the same or different pitches).<BR>
+ If the first note of a chord is a non-chord tone, then it should have the same pitch as the last of the previous chord. In other words: if a chord starts with a non-chord tone, then it must be a suspension (suspension are of course less clear in a solo line...). <BR>
+ NB: this constraint assumes that neighbouring chords differ (e.g., have a different root), otherwise it is too strict.<BR>
+ NB: this constraint does not define that non-chord tones are resolved stepwise, but it can be combined, e.g.., with ResolveNonharmonicNotes.<BR>
+<BR>
+ Internally, each chord accesses its first/last simultaneous note within VoiceNotes. <BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity258">
 <span class="keyword">proc</span>{<span class="functionname">IsStep</span> Pitch1 Pitch2 MaxStep}<br>
 <span class="string"> The interval between Pitch1 and Pitch2 is in [1, MaxStep].<BR>
 <BR>
@@ -383,7 +445,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity240">
+<a name="entity259">
 <span class="keyword">proc</span>{<span class="functionname">IsStepR</span> Pitch1 Pitch2 MaxStep B}<br>
 <span class="string"> In case B=1, the interval between Pitch1 and Pitch2 is in [1, MaxStep]. B is implicitly declared an 0/1 integer. <BR>
 <BR>
@@ -391,7 +453,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity241">
+<a name="entity260">
 <span class="keyword">proc</span>{<span class="functionname">ResolveStepwiseR</span> Note Args B}<br>
 <span class="string"> Constraints the interval between the pitches of Note and its successor to be in [0, MaxStep]. MaxStep defaults to 2 and can be set as optional feature of Args. Per default, the successor note is the successor of Note in the sequence of items contained in the temporal aspect of Note (i.e. the sequence/list returned by {GetTemporalAspectItems Note}). This setting can be changed with the optional Args feature getXs (e.g. to a function which does return the list of items recursively contained in the temporal aspect of the temporal aspect Note. Such setting would apply ResolveStepwiseR even across container boundaries when Note is the last element in its temporal aspect).<BR>
  In case Note has no successor, B=0.<BR>
@@ -404,7 +466,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity243">
+<a name="entity262">
 <span class="keyword">proc</span>{<span class="functionname">PassingNotePitches</span> [Pitch1 Pitch2 Pitch3] MaxStep}<br>
 <span class="string"> Constraints [Pitch1 Pitch2 Pitch3] such that Pitch2 forms a passing note pitch. The intervals between neighbouring pitches are in [1, MaxStep] (usually, MaxStep = PitchesPerOctave div 6) and the pitch sequence is either monotonically increasing or decreasing. All pitches are FD ints, MaxStep is int.<BR>
  NB: for this rule, it is irrelevant whether any pitch is consonant, or dissonant and whether it is a chord pitch or not.<BR>
@@ -413,7 +475,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity244">
+<a name="entity263">
 <span class="keyword">proc</span>{<span class="functionname">PassingNotePitchesR</span> [Pitch1 Pitch2 Pitch3] MaxStep B}<br>
 <span class="string"> Reified version of PassingNotes (see above).<BR>
  NB: Introduces a FD int which may not be determined (in case B=0).<BR>
@@ -422,7 +484,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity245">
+<a name="entity264">
 <span class="keyword">proc</span>{<span class="functionname">IsPassingNoteR</span> Note Args B}<br>
 <span class="string"> In case B=1, Note is a passing note between its predecessor and successor. Args is a record of optional arguments: maxStep (defaults to 2) and getXs, a unary function applied to Note returning the list of items in the melody including Note, defaults to the items in the temporal aspect of Note.<BR>
  See also PassingNotePitches and PassingNotePitchesR above.<BR>
@@ -434,7 +496,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity242">
+<a name="entity261">
 <span class="keyword">proc</span>{<span class="functionname">IsBetweenChordNotesR</span> Note Args B}<br>
 <span class="string"> In case B=1, both the predecessor and successor of Note return 1 (i.e. true) for the method isInChord (which means that both notes are harmonic notes: their pitch class is included in the pitch classes of their repsective chord).  Args is a record with the optional argument getXs, a unary function applied to Note returning the list of items in the melody including Note, defaults to the items in the temporal aspect of Note.   <BR>
  In case Note has no predecessor or successor, B=0. <BR>
@@ -443,7 +505,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity246">
+<a name="entity265">
 <span class="keyword">proc</span>{<span class="functionname">IsAuxiliaryR</span> Note Args B}<br>
 <span class="string"> In case B=1, both the predecessor and successor of Note have the same pitch and the pitch of Note is only a step away.<BR>
  Args is a record with the optional argument maxStep (defaults to 2) and getXs (a unary function applied to Note returning the list of items in the melody including Note, defaults to the items in the temporal aspect of Note). See also ResolveStepwiseR for an explaination of Args.<BR>
@@ -454,7 +516,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity247">
+<a name="entity266">
 <span class="keyword">proc</span>{<span class="functionname">IsBetweenStepsR</span> Note Args B}<br>
 <span class="string"> In case B=1, both the pitches of the predecessor and successor are only a step away from Note's pitch.<BR>
  Args is a record with the optional argument maxStep (defaults to 2) and getXs (a unary function applied to Note returning the list of items in the melody including Note, defaults to the items in the temporal aspect of Note). See also ResolveStepwiseR for an explaination of Args.<BR>
@@ -462,6 +524,95 @@ clearInterval(drawit)
 <BR>
  BTW: This rule generalises passing note and auxiliary. Nevertheless, a further case is also permitted: pitch contour between three successive notes as for an auxiliary, but predecessor and successor have different pitches. For instance, in case maxStep=2, predecessor and successor differ by a semitone.<BR>
  NB: Predecessor and successor of Note must be notes as well!<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity267">
+<span class="keyword">proc</span>{<span class="functionname">ResolveNonharmonicNotesStepwise</span> Notes Args}<br>
+<span class="string"> Melodic constraint for list of Notes: non-chord tones are only permitted if they are reached and left by a step. The first and last element of Notes is constrained to a chord tone.<BR>
+<BR>
+ Args:<BR>
+ 'maxInterval': an ratio spec for the maximum step-size permitted. Default is a septimal second (8#7). <BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity268">
+<span class="keyword">proc</span>{<span class="functionname">GetInterval</span> Note1 Note2 Interval}<br>
+<span class="string"> Variant of ResolveNonharmonicNotesStepwise which accesses the predecessor and sucessor note from a given note explicitly. Non-chord tones are only permitted for MyNote if they are reached and left by a step. If no predecessor or successor is accessible for MyNote, then it must be a chord tone. <BR>
+<BR>
+ Args:<BR>
+ 'maxInterval': an integer specifying the maximum step-size permitted. Default is the interval corresponding to a septimal second (8/7). <BR>
+ 'getPredecessor' and 'getSuccessor': unary function returning the predecessor/successor for the given note. Default are the methods getTemporalPredecessor/getTemporalSuccessor.<BR>
+ NOTE: If motifs are wrapped in containers, then the first (last) motif note has no predecessor (successor) and consequently must be a chord tone. This default behaviour can be changed using different 'getPredecessor' and 'getSuccessor' settings.<BR>
+ NOTE: the default 'getPredecessor' and 'getSuccessor' do allow for pauses between chord tones and non-harmonic tones. Classical music theory does this as well, but not completely unrestricted. Again, this can be changed by using different 'getPredecessor' and 'getSuccessor' settings.<BR>
+ */<BR>
+ proc {ResolveNonharmonicNotesStepwise2 MyNote Args}<BR>
+    Defaults = unit(getPredecessor: fun {$ N}<BR>
+ 				      X = {N getTemporalPredecessor($)}<BR>
+ 				   in <BR>
+ replace X by comment if pauses should not occur between predecessor/successor and MyNote<BR>
+ 				      X<BR>
+ 				      if X == nil orelse {X isPause($)} orelse ({N getOffsetTime} >: 0) == 1<BR>
+ 				      then nil<BR>
+ 				      else X<BR>
+ 				      end<BR>
+ 				   end<BR>
+ 		   getSuccessor: fun {$ N}<BR>
+ 				    X = {N getTemporalSuccessor($)}<BR>
+ 				 in<BR>
+ replace X by comment if pauses should not occur between predecessor/successor and MyNote<BR>
+ 				    X<BR>
+ 				    if X == nil orelse {X isPause($)} orelse ({X getOffsetTime} >: 0) == 1<BR>
+ 				    then nil<BR>
+ 				    else X<BR>
+ 				    end<BR>
+ 				 end<BR>
+<BR>
+ 		   maxInterval: SeptimalSecond<BR>
+ 		  )<BR>
+    As = {Adjoin Defaults Args}<BR>
+    /** %% B=1 <-> MyNote is entered and left by a step.<BR>
+ */<BR>
+    proc {Aux MyNote B}<BR>
+       Pre = {As.getPredecessor MyNote}<BR>
+       Succ = {As.getSuccessor MyNote}<BR>
+    in<BR>
+       B = {FD.int 0#1}		% needed?<BR>
+       if Pre \= nil andthen Succ \= nil<BR>
+       then<BR>
+ 	 B = {FD.conj {ConstrainMaxIntervalR Pre MyNote As.maxInterval}<BR>
+ 	      {ConstrainMaxIntervalR MyNote Succ As.maxInterval}}<BR>
+       else B=0			% otherwise always a consonance<BR>
+       end<BR>
+    end<BR>
+ in<BR>
+    thread			% accessors block<BR>
+       {MyNote nonChordPCConditions([Aux])}<BR>
+    end<BR>
+ end<BR>
+<BR>
+<BR>
+<BR>
+<BR>
+<BR>
+<BR>
+<BR>
+ Aux Constraints <BR>
+<BR>
+<BR>
+/** %% Returns the absolute pitch interval (a FD int) between the note objects Note1 and Note2. Interval is implicitly declared a FD int.<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity269">
+<span class="keyword">proc</span>{<span class="functionname">ConstrainMaxIntervalR</span> Note1 Note2 MaxInterval B}<br>
+<span class="string"> B=1 <-> constraints the absolute pitch interval between Note1 and Note2 (note objects) to MaxInterval (an integer) at most.<BR>
 <BR>
 </span>
 </code><br>

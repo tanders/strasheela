@@ -140,6 +140,7 @@ clearInterval(drawit)
  MyScript is a unary procedure defining the CSP plus a distribution strategy. Args is a record of the following optional arguments (feature-value pairs). The argument 'maxSearchTime' specifies the maximum search time in msecs (default: 1000). The default solution is given at the argument 'defaultSolution'. The argument 'solver' specifies the solver to use. The solver must be a procedure with the following interface {MySolver MyScript KillP MyScore}, and it must return a list with solution(s), or nil in case of no solution (only the first solution is ever used). The default solver is the following (KillP is a nullary procedure with stops the search when called, cf. the documentation of Search.one.depth).<BR>
 <BR>
    proc {$ MyScript KillP ?MyScore}<BR>
+      {GUtils.setRandomGeneratorSeed 0} % reset seed for random value ordering<BR>
       MyScore = {Search.one.depth MyScript 1 KillP}<BR>
    end<BR>
 <BR>

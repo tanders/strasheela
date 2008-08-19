@@ -124,7 +124,7 @@ clearInterval(drawit)
      |         |
      `----+----'
           |
-        <a class="pre" href="node9.html#entity562">Shell</a>
+        <a class="pre" href="node9.html#entity531">Shell</a>
 </pre>
 <hr><p class="margin"><div align="right">class definition</div></p>
 <code>
@@ -135,11 +135,14 @@ clearInterval(drawit)
 
 
 </tr></table>
-<span class="string"> Provides an interface to interactive commandline programs like a shell or an interpreter. Start interactive program with the method init (see below), close it with the method close.<BR>
+<span class="string"> Provides an interface to interactive commandline programs like a shell or an interpreter. Start interactive program with the method init (see below), close it with the method close. The Shell object features cmd and args bind the respective init arguments.<BR>
+<BR>
  More specialised classes (e.g. an interface to Common Lisp) may be obtained by subclasses..<BR>
 <BR>
 </span>
 <span class="keyword">class</span> <span class="type">Shell</span> (Inheritance-free)<br>
+&nbsp;&nbsp;&nbsp;<span class="keyword">feat</span>&nbsp;args&nbsp;cmd
+<br>
 <br>
 <ul><li><span class="functionname">cmd</span>(Cmd)<br>
 

@@ -187,6 +187,7 @@ clearInterval(drawit)
 </li><li><span class="functionname">getEnv</span>($)<br>
 </li><li><span class="functionname">y</span>($ X)<br>
 </li><li><span class="functionname">toList</span>($ N)<br>
+</li><li><span class="functionname">toList_Int</span>($ N add:Add mul:Mul)<br>
 </li><li><span class="functionname">toPairs</span>($ N)<br>
 </li><li><span class="functionname">plot</span>(n:N&nbsp;...)<br>
 </li></ul>
@@ -395,7 +396,7 @@ clearInterval(drawit)
 <span class="keyword">fun</span>{<span class="functionname">TempoCurveToTimeMap</span> MyFenv Step}<br>
 <span class="string"> Transforms a fenv expressing a normalised tempo curve into a fenv expressing a normalised time map. Step (a float) specifies the precision (and efficiency!) of the transformation, see Integrate's doc for details. A tempo curve expresses a tempo factor, i.e., f(x) = 1 results in no tempo change. A normalised time map maps score time to performance time. <BR>
  Private Terminology: normalised time shift functions, time map functions and tempo curves: fenvs where x values denote the score time (usually of a temporal container) which is mapped into [0,1]: 0 corresponds to the container's start time, and 1 corresponds to the container's end time. See ContainerFenvY.<BR>
- NB: a normalised time map fenvs cannot be combined by function combination (x values for fenvs are always in [0,1]). Instead, either combine tempo curve and time shift fenvs, or combine plain and un-normalised time map functions (i.e. no fenvs).<BR>
+ NB: normalised time map fenvs cannot be combined by function combination (x values for fenvs are always in [0,1]). Instead, either combine tempo curve and time shift fenvs, or combine plain and un-normalised time map functions (i.e. no fenvs).<BR>
 <BR>
 </span>
 </code><br>
@@ -405,7 +406,7 @@ clearInterval(drawit)
 <span class="keyword">fun</span>{<span class="functionname">TimeShiftToTimeMap</span> TS}<br>
 <span class="string"> Expects a fenv representing a normalised time shift function and returns a fenv representing a normalised time map function. A time shift function expresses how much is added to a score time to yield a performance time, i.e., f(x) = 0 causes performance time to be score time. A normalised time map maps score time to performance time.<BR>
  Private Terminology: normalised time shift functions, time map functions and tempo curves: fenvs where x values denote the score time (usually of a temporal container) which is mapped into [0,1]: 0 corresponds to the container's start time, and 1 corresponds to the container's end time. See ContainerFenvY.<BR>
- NB: a normalised time map fenvs cannot be combined by function combination (x values for fenvs are always in [0,1]). Instead, either combine tempo curve and time shift fenvs, or combine plain and un-normalised time map functions (i.e. no fenvs).  <BR>
+ NB: normalised time map fenvs cannot be combined by function combination (x values for fenvs are always in [0,1]). Instead, either combine tempo curve and time shift fenvs, or combine plain and un-normalised time map functions (i.e. no fenvs).  <BR>
 <BR>
 </span>
 </code><br>
@@ -430,7 +431,7 @@ clearInterval(drawit)
 <code>
 <a name="entity34">
 <span class="keyword">fun</span>{<span class="functionname">ItemFenvY</span> MyFenv MyItem MyTime}<br>
-<span class="string"> Accesses the y-value of MyFenv which is associated with a temporal item MyItem. The fenv x-value 0.0 corresponds to the container start time and the fenv x-value 1.0 coresponds to the container end time. MyTime (a float) is any time between MyContainer's start and end time. MyTime is a score time measured in seconds.<BR>
+<span class="string"> Accesses the y-value of MyFenv which is associated with a temporal item MyItem. The fenv x-value 0.0 corresponds to the item's start time and the fenv x-value 1.0 coresponds to the item's end time. MyTime (a float) is any time between MyItem's start and end time. MyTime is a score time measured in seconds.<BR>
 <BR>
 </span>
 </code><br>

@@ -123,18 +123,19 @@ clearInterval(drawit)
 <h3>Functor</h3>
 <ul>CustomCompiler ("<span class="string">/Users/t/oz/music/Strasheela/strasheela/trunk/strasheela/contributions/anders/OzServer/source/Compiler.oz</span>")<br></ul>
 <h3>Import</h3>
-<code><ul><li><a href="node3.html">Compiler</a></li><li>CompilerPanel</li><li>OS</li><li>Application</li><li>Browser</li><li>Combinator</li><li>Connection</li><li>DistributionPanel</li><li>DPControl</li><li>DPInit</li><li>DPStatistics</li><li>DefaultURL</li><li>Discovery</li><li>Emacs</li><li>Error</li><li>ErrorListener</li><li>ErrorRegistry</li><li>EvalDialog</li><li>Explorer</li><li>FD</li><li>FS</li><li>Fault</li><li>Finalize</li><li>Gump</li><li>GumpParser</li><li>GumpScanner</li><li>Inspector</li><li>Listener</li><li>Macro</li><li>Module</li><li>Narrator</li><li>OPI</li><li>OPIEnv</li><li>OPIServer</li><li>ObjectSupport</li><li>Open</li><li>OsTime</li><li>Ozcar</li><li>OzcarClient</li><li>Panel</li><li>Pickle</li><li>Profiler</li><li>Property</li><li>RecordC</li><li>Remote</li><li>Resolve</li><li>Schedule</li><li>Search</li><li>Service</li><li>Space</li><li>System</li><li>Tix</li><li>Tk</li><li>TkTools</li><li>Type</li><li>URL</li><li>VirtualSite</li><li>Path at "<span class="string">x-oz://system/os/Path.ozf"
+<code><ul><li><a href="node3.html">Compiler</a></li><li>CompilerPanel</li><li>OS</li><li>System</li><li>Application</li><li>Browser(browse:Browse)</li><li>Inspector(inspect:Inspect)</li><li>OPIEnv at "<span class="string">x-oz://system/OPIEnv.ozf"
+</span></li><li>Path at "<span class="string">x-oz://system/os/Path.ozf"
 </span></li><li><a href="node2.html">Socket</a> at "<span class="string">Socket.ozf"
 </span></li><li>Out at "<span class="string">x-ozlib://anders/strasheela/source/Output.ozf"
 </span></li></ul></code>
 <h3>Export</h3>
-<code><ul><li>&lt;P/1:<a href="#entity76"><span class="functionname">MakeFullCompiler</span></a>&gt;
-</li><li>&lt;P/3:<a href="#entity77"><span class="functionname">FeedAllInput</span></a>&gt;
+<code><ul><li>&lt;P/1:<a href="#entity27"><span class="functionname">MakeFullCompiler</span></a>&gt;
+</li><li>&lt;P/3:<a href="#entity28"><span class="functionname">FeedAllInput</span></a>&gt;
 </li></ul></code>
 <h3>Define</h3>
 
 <code>
-<a name="entity76">
+<a name="entity27">
 <span class="keyword">fun</span>{<span class="functionname">MakeFullCompiler</span> }<br>
 <span class="string"> Returns a new compiler with the full environment (comparable to the OPI) and fed the ozrc file according conventions (cf. oz/doc/opi/node4.html).<BR>
 <BR>
@@ -142,7 +143,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity77">
+<a name="entity28">
 <span class="keyword">proc</span>{<span class="functionname">FeedAllInput</span> MyCompiler MySocket Args}<br>
 <span class="string"> FeedAllInput reads code sends from MySocket and feeds them to MyCompiler. Socket input uses the format <code>["%!"<DIRECTIVE>\n]&lt;CODE&gt;</code>, as explained in top-level doc. Expression results are writting back into the socket (in the order their corresponding expressions were fed).<BR>
  Args is record with features size and resultFormat.<BR>

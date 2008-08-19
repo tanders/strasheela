@@ -120,23 +120,23 @@ clearInterval(drawit)
 
 <div style="margin-left:160px"><p align="right" class="margin"><div align="right">inheritance tree</div></p>
 <pre>
- <a class="pre" href="node6.html#entity243">NonType</a> <a class="pre" href="node6.html#entity244">Reflection</a>         <a class="pre" href="node7.html#entity323">FlagsMixin</a>
-    |        |                  |
-    `-----+--'                  |
-          |                     |
-     <a class="pre" href="node6.html#entity245">ScoreObject</a>    <a class="pre" href="node7.html#entity324">ScoreMapping.mappingMixin</a>
-          |                     |
-          `-----------+---------'
-                      |
-                     <a class="pre" href="node6.html#entity256">Item</a>
-                      |
-                      `+
-                       |
-                   <a class="pre" href="node6.html#entity257">Container</a>
-                       |
-                      +'
-                      |
-                    <a class="pre" href="node6.html#entity259">Aspect</a>
+ <a class="pre" href="node6.html#entity246">NonType</a> <a class="pre" href="node6.html#entity247">Reflection</a>       <a class="pre" href="node7.html#entity326">FlagsMixin</a>
+    |        |                |
+    `-----+--'                |
+          |                   |
+     <a class="pre" href="node6.html#entity248">ScoreObject</a>    <a class="pre" href="node7.html#entity327">SMapping.mappingMixin</a>
+          |                   |
+          `---------+---------'
+                    |
+                   <a class="pre" href="node6.html#entity259">Item</a>
+                    |
+                    `+
+                     |
+                 <a class="pre" href="node6.html#entity260">Container</a>
+                     |
+                    +'
+                    |
+                  <a class="pre" href="node6.html#entity262">Aspect</a>
 </pre>
 <hr><p class="margin"><div align="right">class definition</div></p>
 <code>
@@ -463,7 +463,7 @@ clearInterval(drawit)
 <span class="string"> Applies unary procedure P to each item in self which index is expressed by Decl. Decl is a list which contains single index integers or index ranges of the form Min#Max (Min and Max are integers).<BR>
  BTW: ForNumericRange corresponds roughly to rule application mechanism of Situation.<BR>
 <BR>
- See also ScoreMapping.forNumericRange <BR>
+ See also SMapping.forNumericRange <BR>
 <BR>
 </span>
 </li><li><span class="functionname">forNumericRangeTemporalAspect2</span>(Decl P ElseP)<br>
@@ -475,7 +475,7 @@ clearInterval(drawit)
 
 </tr></table>
 <span class="string"> Generalised variant of forNumericRangeTemporalAspect: to every item in self to which P is not applied, ElseP (a unary procedure) is applied instead.<BR>
- See also ScoreMapping.forNumericRange2 <BR>
+ See also SMapping.forNumericRange2 <BR>
 <BR>
 </span>
 </li><li><span class="functionname">getAttr</span>($ A)<br>
@@ -543,6 +543,17 @@ clearInterval(drawit)
 
 </tr></table>
 <span class="string"></span>
+</li><li><span class="functionname">getContainersRecursively</span>($)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> Returns all direct and indirect containers of self. <BR>
+<BR>
+</span>
 </li><li><span class="functionname">getFeat</span>($ F)<br>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
@@ -624,14 +635,7 @@ clearInterval(drawit)
 
 
 </tr></table>
-<span class="string"> Alias for getMethNames.<BR>
- */<BR>
-       meth getMethods($) {self getMethNames($)} end<BR>
-/* %% [TODO] Get the default arguments of the initialisation method... <BR>
- */<BR>
-      meth getInitArgs($) <BR>
-      end<BR>
-/* %% Returns a record where the features are all supported arguments of the init method of self with their default as value (_ indicates that no default exist).<BR>
+<span class="string"> Returns a record where the features are all supported arguments of the init method of self with their default as value (_ indicates that no default exist).<BR>
  NB: this method relies on the correct implementation of the method getInitArgs for its class and all its superclasses. <BR>
 <BR>
 </span>
@@ -780,6 +784,17 @@ clearInterval(drawit)
 
 </tr></table>
 <span class="string"> Alias for getTemporalAspect.<BR>
+<BR>
+</span>
+</li><li><span class="functionname">getTemporalPosition</span>(?Pos)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> Returns the index of self in its temporal container (temporal aspect).<BR>
 <BR>
 </span>
 </li><li><span class="functionname">getTemporalPredecessor</span>(B)<br>
@@ -1258,6 +1273,17 @@ clearInterval(drawit)
 <span class="string"> The method map maps the function Fn (which must return a list) to a number of collected score objects and returns a list with all results appended. Fn may also be an atom representing a unary method understood by all objects in self fulfilling Test. The method supports the features <code> mode</code>, <code> level</code>, <code> test</code>, and <code> excludeSelf</code>. These features have the same meaning as in the method collect.<BR>
 <BR>
 </span>
+</li><li><span class="functionname">percentageIsDet</span>($ exclude:Exclude)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> Returns a float how many percent parameters of self and its contained items are determined. The Boolean function/method Exclude can be used to exclude parameters from considering. By default, time point parameters are excluded.<BR>
+<BR>
+</span>
 </li><li><span class="functionname">pmApply</span>(Xs PatternMatchingExpr P)<br>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
@@ -1271,7 +1297,7 @@ clearInterval(drawit)
  An exeception is raised in case self is not contained in Xs or there is no 'x' in PatternMatchingExpr.<BR>
 <BR>
  BTW: pmApply allows to easily apply rules across container bounderies. For instance, <code>local MyNotes={Flatten {MyMotifSeq mapItems($ getItems)}} in {ForAll MyNotes proc {$ N} {N pmApply(MyNotes [o x] MyRule)} end} end</code> applies MyRule to all neighbouring notes nested in a sequence of motifs.<BR>
- See also ScoreMapping.patternMatchingApply.<BR>
+ See also SMapping.patternMatchingApply.<BR>
 <BR>
 </span>
 </li><li><span class="functionname">pmApply2</span>(Xs PatternMatchingExpr P ElseP)<br>
@@ -1283,7 +1309,7 @@ clearInterval(drawit)
 
 </tr></table>
 <span class="string"> Generalised variant of pmApply: in case no sublist in Xs matches PatternMatchingExpr, PatternMatchingApply2 does _not_ reduce to skip (as pmApply) but instead applies the null-ary procedure ElseP.<BR>
- See also ScoreMapping.patternMatchingApply2.<BR>
+ See also SMapping.patternMatchingApply2.<BR>
 <BR>
 </span>
 </li><li><span class="functionname">pmApplyTemporalAspect</span>(PatternMatchingExpr P)<br>
