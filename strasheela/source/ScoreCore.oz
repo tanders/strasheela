@@ -2177,7 +2177,7 @@ define
       
       meth getInitInfo($ exclude:Excluded)
 	 unit(superclass:Note2
-	      args:[amplitude#getAmplitude#{FD.decl}
+	      args:[amplitude#getAmplitude#64
 		    amplitudeUnit#getAmplitudeUnit#velocity])
       end
       
