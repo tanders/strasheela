@@ -4,12 +4,14 @@
    
 
 ** Get Strasheela working with new Mozart 1.4.0
-*** TODO Install Mozart 1.4.0 
+*** DONE Install Mozart 1.4.0 
+    CLOSED: [2008-08-18 Mon 22:11]
     Install as App on Mac, then you can switch between old and new installation by vars in ~/.profile
 
     I also need to comment out all Oz-related stuff in ~/.emacs to use the 1.4.0 App
 
-*** TODO Test Strasheela with new Mozart version
+*** DONE Test Strasheela with new Mozart version
+    CLOSED: [2008-08-18 Mon 22:11]
     
 *** TODO Test parallel search
 
