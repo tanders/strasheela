@@ -1,4 +1,2791 @@
 ------------------------------------------------------------------------
+r1407 | t-anders | 2008-08-19 17:16:00 +0100 (Tue, 19 Aug 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/doc/Changes.html
+   M /trunk/strasheela/doc/index.html
+
+corrected release date
+
+------------------------------------------------------------------------
+r1406 | t-anders | 2008-08-19 17:14:14 +0100 (Tue, 19 Aug 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/doc-source/index.muse
+
+corrected release date
+
+------------------------------------------------------------------------
+r1405 | t-anders | 2008-08-19 17:14:02 +0100 (Tue, 19 Aug 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/doc-source/Changes.muse
+
+corrected release date
+
+------------------------------------------------------------------------
+r1404 | t-anders | 2008-08-19 17:13:06 +0100 (Tue, 19 Aug 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/others/TODO/Strasheela-TODO.org
+
+updated todo list
+
+------------------------------------------------------------------------
+r1403 | t-anders | 2008-08-19 17:12:49 +0100 (Tue, 19 Aug 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/testing/Output-test.oz
+
+insignificant changes
+
+------------------------------------------------------------------------
+r1402 | t-anders | 2008-08-19 17:12:23 +0100 (Tue, 19 Aug 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/source/ScoreCore.oz
+
+Fixed Score.note method getInitInfo: now correct default amplitude 64
+
+------------------------------------------------------------------------
+r1401 | t-anders | 2008-08-19 17:11:36 +0100 (Tue, 19 Aug 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/source/Output.oz
+
+As we are now using OPIEnv, now removed all variables needed for compiler enviroment, also removed obsolete (commented) def of MakeHierarchicVSScore
+
+------------------------------------------------------------------------
+r1400 | t-anders | 2008-08-19 17:10:27 +0100 (Tue, 19 Aug 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/contributions/anders/Tutorial/source/Compiler.oz
+
+As we are now using OPIEnv, now removed all variables needed for compiler enviroment
+
+------------------------------------------------------------------------
+r1399 | t-anders | 2008-08-19 17:08:34 +0100 (Tue, 19 Aug 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/contributions/anders/OzServer/source/Compiler.oz
+
+As we are now using OPIEnv, now removed all variables needed for compiler enviroment
+
+------------------------------------------------------------------------
+r1398 | t-anders | 2008-08-19 12:51:03 +0100 (Tue, 19 Aug 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/doc/Changes.html
+   M /trunk/strasheela/doc/Example-More.html
+   M /trunk/strasheela/doc/OldNews.html
+   M /trunk/strasheela/doc/OzDocumentation.html
+   M /trunk/strasheela/doc/StrasheelaExamples.html
+   M /trunk/strasheela/doc/StrasheelaReference.html
+   M /trunk/strasheela/doc/index.html
+   M /trunk/strasheela/doc-source/Changes.muse
+   M /trunk/strasheela/doc-source/Example-More.muse
+   M /trunk/strasheela/doc-source/OldNews.muse
+   M /trunk/strasheela/doc-source/StrasheelaExamples.muse
+   M /trunk/strasheela/doc-source/StrasheelaReference.muse
+   M /trunk/strasheela/doc-source/index.muse
+
+Webpages updated before release
+
+------------------------------------------------------------------------
+r1397 | t-anders | 2008-08-19 12:49:43 +0100 (Tue, 19 Aug 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/others/TODO/Strasheela-TODO.org
+
+Updated todo list
+
+------------------------------------------------------------------------
+r1396 | t-anders | 2008-08-19 12:49:18 +0100 (Tue, 19 Aug 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/examples/ControllingOutput-Examples/PWGL-Output/StrasheelaToPWGL.oz
+
+Comment edited
+
+------------------------------------------------------------------------
+r1395 | t-anders | 2008-08-19 12:49:02 +0100 (Tue, 19 Aug 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/examples/Form-Examples/MotifPattern-Examples.oz
+
+Comment edited
+
+------------------------------------------------------------------------
+r1394 | t-anders | 2008-08-19 12:48:42 +0100 (Tue, 19 Aug 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/examples/Form-Examples/PrototypeMotif-Examples.oz
+
+Comment edited
+
+------------------------------------------------------------------------
+r1393 | t-anders | 2008-08-19 12:47:18 +0100 (Tue, 19 Aug 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/contributions/anders/ET22/doc/node2.html
+   M /trunk/strasheela/contributions/anders/ET22/doc/node3.html
+   M /trunk/strasheela/contributions/anders/ET22/doc/node4.html
+   M /trunk/strasheela/contributions/anders/ET22/doc/node5.html
+   M /trunk/strasheela/contributions/anders/ET22/doc/node6.html
+   M /trunk/strasheela/contributions/anders/Fenv/doc/class1.html
+   M /trunk/strasheela/contributions/anders/Fenv/doc/node1.html
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/doc/class1.html
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/doc/class10.html
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/doc/class11.html
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/doc/class12.html
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/doc/class13.html
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/doc/class14.html
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/doc/class15.html
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/doc/class16.html
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/doc/class17.html
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/doc/class18.html
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/doc/class19.html
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/doc/class2.html
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/doc/class20.html
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/doc/class21.html
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/doc/class22.html
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/doc/class23.html
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/doc/class24.html
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/doc/class25.html
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/doc/class3.html
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/doc/class4.html
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/doc/class5.html
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/doc/class6.html
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/doc/class7.html
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/doc/class8.html
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/doc/class9.html
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/doc/node10.html
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/doc/node11.html
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/doc/node12.html
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/doc/node13.html
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/doc/node14.html
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/doc/node15.html
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/doc/node3.html
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/doc/node4.html
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/doc/node6.html
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/doc/node7.html
+   M /trunk/strasheela/contributions/anders/Measure/doc/class2.html
+   M /trunk/strasheela/contributions/anders/Motif/doc/class1.html
+   M /trunk/strasheela/contributions/anders/Motif/doc/class2.html
+   M /trunk/strasheela/contributions/anders/Motif/doc/class3.html
+   M /trunk/strasheela/contributions/anders/Motif/doc/class4.html
+   M /trunk/strasheela/contributions/anders/Motif/doc/node1.html
+   M /trunk/strasheela/contributions/anders/OSC/doc/class1.html
+   M /trunk/strasheela/contributions/anders/OSC/doc/class2.html
+   M /trunk/strasheela/contributions/anders/OSC/doc/class3.html
+   M /trunk/strasheela/contributions/anders/OSC/doc/node1.html
+   M /trunk/strasheela/contributions/anders/OzServer/doc/node3.html
+   M /trunk/strasheela/contributions/anders/Pattern/doc/node1.html
+   M /trunk/strasheela/contributions/anders/PrototypeMotif/doc/node1.html
+   M /trunk/strasheela/contributions/anders/Realtime/doc/node1.html
+   M /trunk/strasheela/contributions/anders/Tutorial/doc/node3.html
+   M /trunk/strasheela/doc/api/class1.html
+   M /trunk/strasheela/doc/api/class10.html
+   M /trunk/strasheela/doc/api/class11.html
+   M /trunk/strasheela/doc/api/class12.html
+   M /trunk/strasheela/doc/api/class13.html
+   M /trunk/strasheela/doc/api/class14.html
+   M /trunk/strasheela/doc/api/class15.html
+   M /trunk/strasheela/doc/api/class16.html
+   M /trunk/strasheela/doc/api/class17.html
+   M /trunk/strasheela/doc/api/class18.html
+   M /trunk/strasheela/doc/api/class19.html
+   M /trunk/strasheela/doc/api/class2.html
+   M /trunk/strasheela/doc/api/class20.html
+   M /trunk/strasheela/doc/api/class21.html
+   M /trunk/strasheela/doc/api/class22.html
+   M /trunk/strasheela/doc/api/class23.html
+   M /trunk/strasheela/doc/api/class24.html
+   M /trunk/strasheela/doc/api/class25.html
+   M /trunk/strasheela/doc/api/class26.html
+   M /trunk/strasheela/doc/api/class27.html
+   M /trunk/strasheela/doc/api/class28.html
+   M /trunk/strasheela/doc/api/class29.html
+   M /trunk/strasheela/doc/api/class3.html
+   M /trunk/strasheela/doc/api/class30.html
+   M /trunk/strasheela/doc/api/class31.html
+   M /trunk/strasheela/doc/api/class4.html
+   M /trunk/strasheela/doc/api/class5.html
+   M /trunk/strasheela/doc/api/class6.html
+   M /trunk/strasheela/doc/api/class7.html
+   M /trunk/strasheela/doc/api/class8.html
+   M /trunk/strasheela/doc/api/class9.html
+   M /trunk/strasheela/doc/api/index.html
+   M /trunk/strasheela/doc/api/node11.html
+   M /trunk/strasheela/doc/api/node3.html
+   M /trunk/strasheela/doc/api/node4.html
+   M /trunk/strasheela/doc/api/node5.html
+   M /trunk/strasheela/doc/api/node6.html
+   M /trunk/strasheela/doc/api/node7.html
+   M /trunk/strasheela/doc/api/node8.html
+   M /trunk/strasheela/doc/api/node9.html
+
+updated reference doc
+
+------------------------------------------------------------------------
+r1392 | t-anders | 2008-08-19 12:41:40 +0100 (Tue, 19 Aug 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/examples/Form-Examples/VariationMotif-Examples.oz
+
+commend edited
+
+------------------------------------------------------------------------
+r1391 | t-anders | 2008-08-19 12:40:45 +0100 (Tue, 19 Aug 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/examples/Parallel-Search.oz
+
+minor change
+
+------------------------------------------------------------------------
+r1390 | t-anders | 2008-08-18 17:32:13 +0100 (Mon, 18 Aug 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/others/TODO/Strasheela-Maybe-TODO.org
+   M /trunk/strasheela/others/TODO/Strasheela-TODO.org
+
+Updated todo list
+
+------------------------------------------------------------------------
+r1389 | t-anders | 2008-08-18 17:31:43 +0100 (Mon, 18 Aug 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/doc-source/Changes.muse
+
+Updated list of changes
+
+------------------------------------------------------------------------
+r1388 | t-anders | 2008-08-18 17:31:02 +0100 (Mon, 18 Aug 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/scripts/clean-all.sh
+
+Comments edited
+
+------------------------------------------------------------------------
+r1387 | t-anders | 2008-08-18 17:30:22 +0100 (Mon, 18 Aug 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/doc-source/StrasheelaReference.muse
+
+minor edit
+
+------------------------------------------------------------------------
+r1386 | t-anders | 2008-08-18 17:28:35 +0100 (Mon, 18 Aug 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/doc-source/OzDocumentation.muse
+
+minor edit
+
+------------------------------------------------------------------------
+r1385 | t-anders | 2008-08-18 17:14:04 +0100 (Mon, 18 Aug 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/source/Output.oz
+
+OPIEnv instead of importing many functors explicitly (also fix to get Strasheela working with Mozart 1.4.0)
+
+------------------------------------------------------------------------
+r1384 | t-anders | 2008-08-18 17:13:34 +0100 (Mon, 18 Aug 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/contributions/anders/Tutorial/source/Compiler.oz
+
+OPIEnv instead of importing many functors explicitly (also fix to get Strasheela working with Mozart 1.4.0)
+
+------------------------------------------------------------------------
+r1383 | t-anders | 2008-08-18 17:09:58 +0100 (Mon, 18 Aug 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/contributions/anders/OzServer/source/Compiler.oz
+
+OPIEnv instead of importing many functors explicitly (also fix to get Strasheela working with Mozart 1.4.0)
+
+------------------------------------------------------------------------
+r1382 | t-anders | 2008-08-08 20:14:08 +0100 (Fri, 08 Aug 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/doc-source/Changes.muse
+
+Updates list of changes
+
+------------------------------------------------------------------------
+r1381 | t-anders | 2008-08-08 20:13:39 +0100 (Fri, 08 Aug 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/source/Rules.oz
+
+Added ExpressAllChordPCs_AtChordStart
+
+------------------------------------------------------------------------
+r1380 | t-anders | 2008-08-08 12:20:31 +0100 (Fri, 08 Aug 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/others/TODO/Strasheela-Maybe-TODO.org
+   M /trunk/strasheela/others/TODO/Strasheela-Maybe-TODO.org_archive
+   M /trunk/strasheela/others/TODO/Strasheela-TODO.org
+   M /trunk/strasheela/others/TODO/Strasheela-TODO.org_archive
+
+Updated todo list
+
+------------------------------------------------------------------------
+r1379 | t-anders | 2008-08-05 17:01:25 +0100 (Tue, 05 Aug 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/doc-source/Changes.muse
+
+Updated list of changes
+
+------------------------------------------------------------------------
+r1378 | t-anders | 2008-08-05 17:01:03 +0100 (Tue, 05 Aug 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/source/ScoreMapping.oz
+
+Doc edit (TODO list)
+
+------------------------------------------------------------------------
+r1377 | t-anders | 2008-08-05 17:00:08 +0100 (Tue, 05 Aug 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/source/ScoreCore.oz
+
+Added Item method percentageIsDet
+
+------------------------------------------------------------------------
+r1376 | t-anders | 2008-08-05 16:58:49 +0100 (Tue, 05 Aug 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/source/Rules.oz
+
+Added ExpressEssentialPCs_AtChordStart
+
+------------------------------------------------------------------------
+r1375 | t-anders | 2008-08-05 16:57:49 +0100 (Tue, 05 Aug 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/source/Distribution.oz
+
+Typewise_Distro: select: chord clause -- check explicitly for specific chord params. Typewise_LeftToRightTieBreaking_Distro: order: tie breaking for inner LeftToRight is dom, and no further type check. Set all default value orderings to 'random'.
+
+------------------------------------------------------------------------
+r1374 | t-anders | 2008-08-05 16:50:03 +0100 (Tue, 05 Aug 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/contributions/anders/ET31/source/DB.oz
+
+Added feat essentialPitchClasses to all chords
+
+------------------------------------------------------------------------
+r1373 | t-anders | 2008-08-04 19:54:02 +0100 (Mon, 04 Aug 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/doc-source/Changes.muse
+
+Updates list of changes
+
+------------------------------------------------------------------------
+r1372 | t-anders | 2008-08-04 19:53:36 +0100 (Mon, 04 Aug 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/testing/ListUtils-test.oz
+
+Test LUtils.removeDupliates
+
+------------------------------------------------------------------------
+r1371 | t-anders | 2008-08-04 19:53:00 +0100 (Mon, 04 Aug 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/source/ScoreMapping.oz
+
+Added FilterSimultaneous and FindSimultaneous
+
+------------------------------------------------------------------------
+r1370 | t-anders | 2008-08-04 19:52:13 +0100 (Mon, 04 Aug 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/source/ListUtils.oz
+
+Added RemoveDuplicates
+
+------------------------------------------------------------------------
+r1369 | t-anders | 2008-08-04 19:51:10 +0100 (Mon, 04 Aug 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/contributions/anders/Pattern/Pattern.oz
+
+Added PercentEqual_Range
+
+------------------------------------------------------------------------
+r1368 | t-anders | 2008-08-04 19:49:56 +0100 (Mon, 04 Aug 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/source/Rules.oz
+
+Refactored ClearHarmonyAtChordBoundaries: now uses SMapping.filterSimultaneous
+
+------------------------------------------------------------------------
+r1367 | t-anders | 2008-08-04 13:49:45 +0100 (Mon, 04 Aug 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/others/TODO/Strasheela-TODO.org
+
+Updated todo list
+
+------------------------------------------------------------------------
+r1366 | t-anders | 2008-08-04 13:49:23 +0100 (Mon, 04 Aug 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/source/ScoreMapping.oz
+
+MapSimultaneousPairs/ForSimultaneousPairs: now different args cTest and test
+
+------------------------------------------------------------------------
+r1365 | t-anders | 2008-08-04 13:48:20 +0100 (Mon, 04 Aug 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/source/ScoreCore.oz
+
+Doc editing
+
+------------------------------------------------------------------------
+r1364 | t-anders | 2008-08-04 13:47:56 +0100 (Mon, 04 Aug 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/source/GeneralUtils.oz
+
+TimeVString: now includes seconds as well
+
+------------------------------------------------------------------------
+r1363 | t-anders | 2008-08-04 13:47:22 +0100 (Mon, 04 Aug 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/examples/ControllingOutput-Examples/ContinuousControllersInScore-MidiOutput.oz
+
+Variated example 5b
+
+------------------------------------------------------------------------
+r1362 | t-anders | 2008-08-04 13:46:30 +0100 (Mon, 04 Aug 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/source/Score.oz
+
+HarmoniseMotifs: added arg motifsRule
+
+------------------------------------------------------------------------
+r1361 | t-anders | 2008-08-04 13:45:37 +0100 (Mon, 04 Aug 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/contributions/anders/Fenv/Fenv.oz
+
+Integrate now uses quadratic interpolation (Simpson's rule)
+
+------------------------------------------------------------------------
+r1360 | t-anders | 2008-07-30 16:56:26 +0100 (Wed, 30 Jul 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/doc-source/Changes.muse
+
+Updated list of changes
+
+------------------------------------------------------------------------
+r1359 | t-anders | 2008-07-30 16:55:56 +0100 (Wed, 30 Jul 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/source/ScoreCore.oz
+
+getSimultaneousItems and findSimultaneousItem: added arg cTest and extended doc.
+
+------------------------------------------------------------------------
+r1358 | t-anders | 2008-07-30 16:54:27 +0100 (Wed, 30 Jul 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/testing/ScoreMapping-test.oz
+
+Added MapSimultaneousPairs ForSimultaneousPairs
+
+------------------------------------------------------------------------
+r1357 | t-anders | 2008-07-30 16:54:01 +0100 (Wed, 30 Jul 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/source/ScoreMapping.oz
+
+Added MapSimultaneousPairs ForSimultaneousPairs
+
+------------------------------------------------------------------------
+r1356 | t-anders | 2008-07-30 16:53:27 +0100 (Wed, 30 Jul 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/testing/ListUtils-test.oz
+
+fixed bug in CFind/CFilter: added tests
+
+------------------------------------------------------------------------
+r1355 | t-anders | 2008-07-30 16:52:58 +0100 (Wed, 30 Jul 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/source/ListUtils.oz
+
+fixed bug in CFind/CFilter: blocked if result should be nil
+
+------------------------------------------------------------------------
+r1354 | t-anders | 2008-07-28 15:59:37 +0100 (Mon, 28 Jul 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/doc-source/Changes.muse
+
+Updated list of changes
+
+------------------------------------------------------------------------
+r1353 | t-anders | 2008-07-28 15:59:08 +0100 (Mon, 28 Jul 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/source/Rules.oz
+
+Added ResolveNonharmonicNotesStepwise, GetInterval, ConstrainMaxIntervalR
+
+------------------------------------------------------------------------
+r1352 | t-anders | 2008-07-28 13:04:23 +0100 (Mon, 28 Jul 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/source/Score.oz
+
+HarmoniseMotifs: Added args myChords, myScales, myMeasure. Debugged (constraint application could block)
+
+------------------------------------------------------------------------
+r1351 | t-anders | 2008-07-28 13:02:57 +0100 (Mon, 28 Jul 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/source/Rules.oz
+
+Debugged: HS.rules.getFeature -> GetFeature, and added LUtils
+
+------------------------------------------------------------------------
+r1350 | t-anders | 2008-07-28 10:38:06 +0100 (Mon, 28 Jul 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/doc/Changes.html
+   M /trunk/strasheela/doc/Installation.html
+
+Updated doc
+
+------------------------------------------------------------------------
+r1349 | t-anders | 2008-07-28 10:37:49 +0100 (Mon, 28 Jul 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/doc-source/Changes.muse
+
+Updated list of changes
+
+------------------------------------------------------------------------
+r1348 | t-anders | 2008-07-28 10:33:46 +0100 (Mon, 28 Jul 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/contributions/anders/Realtime/Realtime.oz
+
+Default realtime solver now call reset the random seed
+
+------------------------------------------------------------------------
+r1347 | t-anders | 2008-07-28 10:31:35 +0100 (Mon, 28 Jul 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/doc-source/Installation.muse
+
+Added instructions for realtime
+
+------------------------------------------------------------------------
+r1346 | t-anders | 2008-07-28 10:08:36 +0100 (Mon, 28 Jul 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/doc-source/Changes.muse
+
+Updated list of changes
+
+------------------------------------------------------------------------
+r1345 | t-anders | 2008-07-28 10:08:20 +0100 (Mon, 28 Jul 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/source/Score.oz
+
+HarmoniseMotifs: added args includeScales, includeMeasure
+
+------------------------------------------------------------------------
+r1344 | t-anders | 2008-07-28 10:06:48 +0100 (Mon, 28 Jul 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/source/Rules.oz
+
+Added ExpressAllChordPCs ExpressEssentialChordPCs ClearHarmonyAtChordBoundaries
+
+------------------------------------------------------------------------
+r1343 | t-anders | 2008-07-24 16:09:52 +0100 (Thu, 24 Jul 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/source/Score.oz
+
+Added HarmoniseMotifs
+
+------------------------------------------------------------------------
+r1342 | t-anders | 2008-07-23 15:45:33 +0100 (Wed, 23 Jul 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/doc-source/Changes.muse
+
+Update list of changes
+
+------------------------------------------------------------------------
+r1341 | t-anders | 2008-07-23 15:45:18 +0100 (Wed, 23 Jul 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/others/TODO/Strasheela-TODO.org
+
+Update todo list
+
+------------------------------------------------------------------------
+r1340 | t-anders | 2008-07-23 15:44:47 +0100 (Wed, 23 Jul 2008) | 2 lines
+Changed paths:
+   A /trunk/strasheela/goodies/Lisp
+   A /trunk/strasheela/goodies/Lisp/Lisp2Oz.lisp
+
+Added Lisp code for translating Lisp values into Oz values
+
+------------------------------------------------------------------------
+r1339 | t-anders | 2008-07-23 15:43:17 +0100 (Wed, 23 Jul 2008) | 2 lines
+Changed paths:
+   A /trunk/strasheela/examples/Harmony-Examples/SimpleHarmony.oz
+
+Added example
+
+------------------------------------------------------------------------
+r1338 | t-anders | 2008-07-23 15:41:07 +0100 (Wed, 23 Jul 2008) | 2 lines
+Changed paths:
+   A /trunk/strasheela/contributions/anders/OSC/others/dumpOSC/CNMAT-patched
+   A /trunk/strasheela/contributions/anders/OSC/others/dumpOSC/CNMAT-patched/Makefile
+   A /trunk/strasheela/contributions/anders/OSC/others/dumpOSC/CNMAT-patched/OSC-Kit
+   A /trunk/strasheela/contributions/anders/OSC/others/dumpOSC/CNMAT-patched/OSC-Kit/Makefile
+   A /trunk/strasheela/contributions/anders/OSC/others/dumpOSC/CNMAT-patched/OSC-Kit/NetworkReturnAddress.c
+   A /trunk/strasheela/contributions/anders/OSC/others/dumpOSC/CNMAT-patched/OSC-Kit/NetworkReturnAddress.h
+   A /trunk/strasheela/contributions/anders/OSC/others/dumpOSC/CNMAT-patched/OSC-Kit/NetworkUDP.h
+   A /trunk/strasheela/contributions/anders/OSC/others/dumpOSC/CNMAT-patched/OSC-Kit/OSC-address-space.c
+   A /trunk/strasheela/contributions/anders/OSC/others/dumpOSC/CNMAT-patched/OSC-Kit/OSC-address-space.h
+   A /trunk/strasheela/contributions/anders/OSC/others/dumpOSC/CNMAT-patched/OSC-Kit/OSC-callbacklist.c
+   A /trunk/strasheela/contributions/anders/OSC/others/dumpOSC/CNMAT-patched/OSC-Kit/OSC-callbacklist.h
+   A /trunk/strasheela/contributions/anders/OSC/others/dumpOSC/CNMAT-patched/OSC-Kit/OSC-common.h
+   A /trunk/strasheela/contributions/anders/OSC/others/dumpOSC/CNMAT-patched/OSC-Kit/OSC-dispatch.h
+   A /trunk/strasheela/contributions/anders/OSC/others/dumpOSC/CNMAT-patched/OSC-Kit/OSC-drop.c
+   A /trunk/strasheela/contributions/anders/OSC/others/dumpOSC/CNMAT-patched/OSC-Kit/OSC-drop.h
+   A /trunk/strasheela/contributions/anders/OSC/others/dumpOSC/CNMAT-patched/OSC-Kit/OSC-internal-messages.h
+   A /trunk/strasheela/contributions/anders/OSC/others/dumpOSC/CNMAT-patched/OSC-Kit/OSC-pattern-match.c
+   A /trunk/strasheela/contributions/anders/OSC/others/dumpOSC/CNMAT-patched/OSC-Kit/OSC-pattern-match.h
+   A /trunk/strasheela/contributions/anders/OSC/others/dumpOSC/CNMAT-patched/OSC-Kit/OSC-priority-queue.c
+   A /trunk/strasheela/contributions/anders/OSC/others/dumpOSC/CNMAT-patched/OSC-Kit/OSC-priority-queue.h
+   A /trunk/strasheela/contributions/anders/OSC/others/dumpOSC/CNMAT-patched/OSC-Kit/OSC-receive.c
+   A /trunk/strasheela/contributions/anders/OSC/others/dumpOSC/CNMAT-patched/OSC-Kit/OSC-receive.h
+   A /trunk/strasheela/contributions/anders/OSC/others/dumpOSC/CNMAT-patched/OSC-Kit/OSC-string-help.c
+   A /trunk/strasheela/contributions/anders/OSC/others/dumpOSC/CNMAT-patched/OSC-Kit/OSC-string-help.h
+   A /trunk/strasheela/contributions/anders/OSC/others/dumpOSC/CNMAT-patched/OSC-Kit/OSC-system-dependent.c
+   A /trunk/strasheela/contributions/anders/OSC/others/dumpOSC/CNMAT-patched/OSC-Kit/simplesynth-osc.c
+   A /trunk/strasheela/contributions/anders/OSC/others/dumpOSC/CNMAT-patched/OSC-Kit/test-priority-queue.c
+   A /trunk/strasheela/contributions/anders/OSC/others/dumpOSC/CNMAT-patched/OSC-Kit/testOSC.c
+   A /trunk/strasheela/contributions/anders/OSC/others/dumpOSC/CNMAT-patched/dumpOSC
+   A /trunk/strasheela/contributions/anders/OSC/others/dumpOSC/CNMAT-patched/dumpOSC/Makefile
+   A /trunk/strasheela/contributions/anders/OSC/others/dumpOSC/CNMAT-patched/dumpOSC/dumpOSC-wrapper
+   A /trunk/strasheela/contributions/anders/OSC/others/dumpOSC/CNMAT-patched/dumpOSC/dumpOSC-wrapper.c
+   A /trunk/strasheela/contributions/anders/OSC/others/dumpOSC/CNMAT-patched/dumpOSC/dumpOSC.c
+   A /trunk/strasheela/contributions/anders/OSC/others/dumpOSC/CNMAT-patched/dumpOSC/dumpUDP.c
+   A /trunk/strasheela/contributions/anders/OSC/others/dumpOSC/CNMAT-patched/dumpOSC/dumpUDP.c.polldev
+   A /trunk/strasheela/contributions/anders/OSC/others/dumpOSC/CNMAT-patched/libOSC
+   A /trunk/strasheela/contributions/anders/OSC/others/dumpOSC/CNMAT-patched/libOSC/Makefile
+   A /trunk/strasheela/contributions/anders/OSC/others/dumpOSC/CNMAT-patched/libOSC/OSC-client.c
+   A /trunk/strasheela/contributions/anders/OSC/others/dumpOSC/CNMAT-patched/libOSC/OSC-client.h
+   A /trunk/strasheela/contributions/anders/OSC/others/dumpOSC/CNMAT-patched/libOSC/OSC-timetag.c
+   A /trunk/strasheela/contributions/anders/OSC/others/dumpOSC/CNMAT-patched/libOSC/OSC-timetag.h
+   A /trunk/strasheela/contributions/anders/OSC/others/dumpOSC/CNMAT-patched/libOSC/test_OSC.c
+   A /trunk/strasheela/contributions/anders/OSC/others/dumpOSC/CNMAT-patched/libOSC/test_OSC_timeTag.c
+   A /trunk/strasheela/contributions/anders/OSC/others/dumpOSC/CNMAT-patched/sendOSC
+   A /trunk/strasheela/contributions/anders/OSC/others/dumpOSC/CNMAT-patched/sendOSC/Makefile
+   A /trunk/strasheela/contributions/anders/OSC/others/dumpOSC/CNMAT-patched/sendOSC/htmsocket.c
+   A /trunk/strasheela/contributions/anders/OSC/others/dumpOSC/CNMAT-patched/sendOSC/htmsocket.h
+   A /trunk/strasheela/contributions/anders/OSC/others/dumpOSC/CNMAT-patched/sendOSC/sendOSC.c
+
+Added patched CNMAT code
+
+------------------------------------------------------------------------
+r1337 | t-anders | 2008-07-23 15:38:44 +0100 (Wed, 23 Jul 2008) | 2 lines
+Changed paths:
+   A /trunk/strasheela/contributions/anders/ET31/doc-DB
+   A /trunk/strasheela/contributions/anders/ET31/doc-DB/ET31-all-chords-explicitNotes.mp3
+   A /trunk/strasheela/contributions/anders/ET31/doc-DB/ET31-all-chords-explicitNotes.pdf
+   A /trunk/strasheela/contributions/anders/ET31/doc-DB/ET31-all-chords.pdf
+   A /trunk/strasheela/contributions/anders/ET31/doc-DB/ET31-all-scales-explicitNotes.mp3
+   A /trunk/strasheela/contributions/anders/ET31/doc-DB/ET31-all-scales-explicitNotes.pdf
+   A /trunk/strasheela/contributions/anders/ET31/doc-DB/ET31-all-scales.pdf
+   A /trunk/strasheela/contributions/anders/ET31/doc-DB/ET31-allIntervals.mp3
+   A /trunk/strasheela/contributions/anders/ET31/doc-DB/ET31-allIntervals.pdf
+   A /trunk/strasheela/contributions/anders/ET31/doc-DB/Major-ChordsAtScaleDegrees-withNotes.ly
+   A /trunk/strasheela/contributions/anders/ET31/doc-DB/Major-ChordsAtScaleDegrees-withNotes.mp3
+   A /trunk/strasheela/contributions/anders/ET31/doc-DB/Major-ChordsAtScaleDegrees-withNotes.pdf
+   A /trunk/strasheela/contributions/anders/ET31/doc-DB/Major-ChordsAtScaleDegrees-withNotes.ps
+   A /trunk/strasheela/contributions/anders/ET31/doc-DB/Major-ChordsAtScaleDegrees.ly
+   A /trunk/strasheela/contributions/anders/ET31/doc-DB/Major-ChordsAtScaleDegrees.pdf
+   A /trunk/strasheela/contributions/anders/ET31/doc-DB/Major-ChordsAtScaleDegrees.ps
+
+Added 31-ET database doc
+
+------------------------------------------------------------------------
+r1336 | t-anders | 2008-07-23 15:36:31 +0100 (Wed, 23 Jul 2008) | 2 lines
+Changed paths:
+   A /trunk/strasheela/contributions/anders/ET22/doc-DB
+   A /trunk/strasheela/contributions/anders/ET22/doc-DB/0-Readme.txt
+   A /trunk/strasheela/contributions/anders/ET22/doc-DB/ChordsInDecatonicScales
+   A /trunk/strasheela/contributions/anders/ET22/doc-DB/ChordsInDecatonicScales/AlternatePentachordalMajor-ChordsAtScaleDegrees-withNotes.ly
+   A /trunk/strasheela/contributions/anders/ET22/doc-DB/ChordsInDecatonicScales/AlternatePentachordalMajor-ChordsAtScaleDegrees-withNotes.mp3
+   A /trunk/strasheela/contributions/anders/ET22/doc-DB/ChordsInDecatonicScales/AlternatePentachordalMajor-ChordsAtScaleDegrees-withNotes.pdf
+   A /trunk/strasheela/contributions/anders/ET22/doc-DB/ChordsInDecatonicScales/AlternatePentachordalMajor-ChordsAtScaleDegrees.ly
+   A /trunk/strasheela/contributions/anders/ET22/doc-DB/ChordsInDecatonicScales/AlternatePentachordalMajor-ChordsAtScaleDegrees.pdf
+   A /trunk/strasheela/contributions/anders/ET22/doc-DB/ChordsInDecatonicScales/AlternatePentachordalMinor-ChordsAtScaleDegrees-withNotes.ly
+   A /trunk/strasheela/contributions/anders/ET22/doc-DB/ChordsInDecatonicScales/AlternatePentachordalMinor-ChordsAtScaleDegrees-withNotes.mp3
+   A /trunk/strasheela/contributions/anders/ET22/doc-DB/ChordsInDecatonicScales/AlternatePentachordalMinor-ChordsAtScaleDegrees-withNotes.pdf
+   A /trunk/strasheela/contributions/anders/ET22/doc-DB/ChordsInDecatonicScales/AlternatePentachordalMinor-ChordsAtScaleDegrees.ly
+   A /trunk/strasheela/contributions/anders/ET22/doc-DB/ChordsInDecatonicScales/AlternatePentachordalMinor-ChordsAtScaleDegrees.pdf
+   A /trunk/strasheela/contributions/anders/ET22/doc-DB/ChordsInDecatonicScales/DynamicPentachordalMajor-ChordsAtScaleDegrees-withNotes.ly
+   A /trunk/strasheela/contributions/anders/ET22/doc-DB/ChordsInDecatonicScales/DynamicPentachordalMajor-ChordsAtScaleDegrees-withNotes.mp3
+   A /trunk/strasheela/contributions/anders/ET22/doc-DB/ChordsInDecatonicScales/DynamicPentachordalMajor-ChordsAtScaleDegrees-withNotes.pdf
+   A /trunk/strasheela/contributions/anders/ET22/doc-DB/ChordsInDecatonicScales/DynamicPentachordalMajor-ChordsAtScaleDegrees.ly
+   A /trunk/strasheela/contributions/anders/ET22/doc-DB/ChordsInDecatonicScales/DynamicPentachordalMajor-ChordsAtScaleDegrees.pdf
+   A /trunk/strasheela/contributions/anders/ET22/doc-DB/ChordsInDecatonicScales/DynamicPentachordalMinor-ChordsAtScaleDegrees-withNotes.ly
+   A /trunk/strasheela/contributions/anders/ET22/doc-DB/ChordsInDecatonicScales/DynamicPentachordalMinor-ChordsAtScaleDegrees-withNotes.mp3
+   A /trunk/strasheela/contributions/anders/ET22/doc-DB/ChordsInDecatonicScales/DynamicPentachordalMinor-ChordsAtScaleDegrees-withNotes.pdf
+   A /trunk/strasheela/contributions/anders/ET22/doc-DB/ChordsInDecatonicScales/DynamicPentachordalMinor-ChordsAtScaleDegrees.ly
+   A /trunk/strasheela/contributions/anders/ET22/doc-DB/ChordsInDecatonicScales/DynamicPentachordalMinor-ChordsAtScaleDegrees.pdf
+   A /trunk/strasheela/contributions/anders/ET22/doc-DB/ChordsInDecatonicScales/StandardPentachordalMajor-ChordsAtScaleDegrees-withNotes.ly
+   A /trunk/strasheela/contributions/anders/ET22/doc-DB/ChordsInDecatonicScales/StandardPentachordalMajor-ChordsAtScaleDegrees-withNotes.mp3
+   A /trunk/strasheela/contributions/anders/ET22/doc-DB/ChordsInDecatonicScales/StandardPentachordalMajor-ChordsAtScaleDegrees-withNotes.pdf
+   A /trunk/strasheela/contributions/anders/ET22/doc-DB/ChordsInDecatonicScales/StandardPentachordalMajor-ChordsAtScaleDegrees.ly
+   A /trunk/strasheela/contributions/anders/ET22/doc-DB/ChordsInDecatonicScales/StandardPentachordalMajor-ChordsAtScaleDegrees.pdf
+   A /trunk/strasheela/contributions/anders/ET22/doc-DB/ChordsInDecatonicScales/StandardPentachordalMinor-ChordsAtScaleDegrees-withNotes.ly
+   A /trunk/strasheela/contributions/anders/ET22/doc-DB/ChordsInDecatonicScales/StandardPentachordalMinor-ChordsAtScaleDegrees-withNotes.mp3
+   A /trunk/strasheela/contributions/anders/ET22/doc-DB/ChordsInDecatonicScales/StandardPentachordalMinor-ChordsAtScaleDegrees-withNotes.pdf
+   A /trunk/strasheela/contributions/anders/ET22/doc-DB/ChordsInDecatonicScales/StandardPentachordalMinor-ChordsAtScaleDegrees.ly
+   A /trunk/strasheela/contributions/anders/ET22/doc-DB/ChordsInDecatonicScales/StandardPentachordalMinor-ChordsAtScaleDegrees.pdf
+   A /trunk/strasheela/contributions/anders/ET22/doc-DB/ChordsInDecatonicScales/StaticPentachordalMajor-ChordsAtScaleDegrees-withNotes.ly
+   A /trunk/strasheela/contributions/anders/ET22/doc-DB/ChordsInDecatonicScales/StaticPentachordalMajor-ChordsAtScaleDegrees-withNotes.mp3
+   A /trunk/strasheela/contributions/anders/ET22/doc-DB/ChordsInDecatonicScales/StaticPentachordalMajor-ChordsAtScaleDegrees-withNotes.pdf
+   A /trunk/strasheela/contributions/anders/ET22/doc-DB/ChordsInDecatonicScales/StaticPentachordalMajor-ChordsAtScaleDegrees.ly
+   A /trunk/strasheela/contributions/anders/ET22/doc-DB/ChordsInDecatonicScales/StaticPentachordalMajor-ChordsAtScaleDegrees.pdf
+   A /trunk/strasheela/contributions/anders/ET22/doc-DB/ChordsInDecatonicScales/StaticPentachordalMinor-ChordsAtScaleDegrees-withNotes.ly
+   A /trunk/strasheela/contributions/anders/ET22/doc-DB/ChordsInDecatonicScales/StaticPentachordalMinor-ChordsAtScaleDegrees-withNotes.mp3
+   A /trunk/strasheela/contributions/anders/ET22/doc-DB/ChordsInDecatonicScales/StaticPentachordalMinor-ChordsAtScaleDegrees-withNotes.pdf
+   A /trunk/strasheela/contributions/anders/ET22/doc-DB/ChordsInDecatonicScales/StaticPentachordalMinor-ChordsAtScaleDegrees.ly
+   A /trunk/strasheela/contributions/anders/ET22/doc-DB/ChordsInDecatonicScales/StaticPentachordalMinor-ChordsAtScaleDegrees.pdf
+   A /trunk/strasheela/contributions/anders/ET22/doc-DB/ET22-all-chords-explicitNotes.ly
+   A /trunk/strasheela/contributions/anders/ET22/doc-DB/ET22-all-chords-explicitNotes.mp3
+   A /trunk/strasheela/contributions/anders/ET22/doc-DB/ET22-all-chords-explicitNotes.pdf
+   A /trunk/strasheela/contributions/anders/ET22/doc-DB/ET22-all-scales-explicitNotes.ly
+   A /trunk/strasheela/contributions/anders/ET22/doc-DB/ET22-all-scales-explicitNotes.mp3
+   A /trunk/strasheela/contributions/anders/ET22/doc-DB/ET22-all-scales-explicitNotes.pdf
+   A /trunk/strasheela/contributions/anders/ET22/doc-DB/ET22-allIntervals.ly
+   A /trunk/strasheela/contributions/anders/ET22/doc-DB/ET22-allIntervals.mp3
+   A /trunk/strasheela/contributions/anders/ET22/doc-DB/ET22-allIntervals.pdf
+   A /trunk/strasheela/contributions/anders/ET22/doc-DB/ET22-notation.ly
+   A /trunk/strasheela/contributions/anders/ET22/doc-DB/ET22-notation.pdf
+   A /trunk/strasheela/contributions/anders/ET22/doc-DB/script.sh
+
+Added 22-ET database doc
+
+------------------------------------------------------------------------
+r1335 | t-anders | 2008-07-23 15:30:42 +0100 (Wed, 23 Jul 2008) | 2 lines
+Changed paths:
+   A /trunk/strasheela/examples/ControllingOutput-Examples/PWGL-Output
+   A /trunk/strasheela/examples/ControllingOutput-Examples/PWGL-Output/StrasheelaToPWGL.oz
+   A /trunk/strasheela/examples/ControllingOutput-Examples/PWGL-Output/non-mensural-test.enp
+   A /trunk/strasheela/examples/ControllingOutput-Examples/PWGL-Output/read-score-from-file.pwgl
+
+Added example for PWGL (ENP) output
+
+------------------------------------------------------------------------
+r1334 | t-anders | 2008-07-23 12:11:55 +0100 (Wed, 23 Jul 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/doc-source/Changes.muse
+
+Updated list of changes
+
+------------------------------------------------------------------------
+r1333 | t-anders | 2008-07-23 12:11:35 +0100 (Wed, 23 Jul 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/others/TODO/Strasheela-TODO.org
+
+Updated TODO list
+
+------------------------------------------------------------------------
+r1332 | t-anders | 2008-07-23 12:11:10 +0100 (Wed, 23 Jul 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/examples/03-FloridCounterpoint-Canon.oz
+
+added solver call
+
+------------------------------------------------------------------------
+r1331 | t-anders | 2008-07-23 12:10:32 +0100 (Wed, 23 Jul 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/examples/Harmony-Examples/HomophonicChordProgression.oz
+
+minor change
+
+------------------------------------------------------------------------
+r1330 | t-anders | 2008-07-23 12:09:56 +0100 (Wed, 23 Jul 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/examples/ControllingOutput-Examples/Lilypond-Examples.oz
+
+Fixed Lily examples not to warn about partically determined scores
+
+------------------------------------------------------------------------
+r1329 | t-anders | 2008-07-23 12:09:18 +0100 (Wed, 23 Jul 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/source/ScoreCore.oz
+
+Change default of note argument amplitude to determined value (velocity 64)
+
+------------------------------------------------------------------------
+r1328 | t-anders | 2008-07-23 11:58:25 +0100 (Wed, 23 Jul 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/source/Output.oz
+
+Edited doc
+
+------------------------------------------------------------------------
+r1327 | t-anders | 2008-07-23 11:57:43 +0100 (Wed, 23 Jul 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/contributions/anders/Fenv/testing/Fenv-test.oz
+
+Tested Fenv method toList_Int
+
+------------------------------------------------------------------------
+r1326 | t-anders | 2008-07-23 11:57:21 +0100 (Wed, 23 Jul 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/contributions/anders/Fenv/Fenv.oz
+
+Add Fenv method toList_Int
+
+------------------------------------------------------------------------
+r1325 | t-anders | 2008-07-14 14:12:12 +0100 (Mon, 14 Jul 2008) | 2 lines
+Changed paths:
+   A /trunk/strasheela/examples/Realtime-Examples/Max_OSC_test.oz
+
+Added Example for Max/MSP <-> Strasheela communication via OSC
+
+------------------------------------------------------------------------
+r1324 | t-anders | 2008-07-14 14:12:04 +0100 (Mon, 14 Jul 2008) | 2 lines
+Changed paths:
+   A /trunk/strasheela/examples/Realtime-Examples/Max_OSC_test.pat
+
+Added Example for Max/MSP <-> Strasheela communication via OSC
+
+------------------------------------------------------------------------
+r1323 | t-anders | 2008-07-14 13:07:12 +0100 (Mon, 14 Jul 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/doc-source/Changes.muse
+
+Updated list of changes
+
+------------------------------------------------------------------------
+r1322 | t-anders | 2008-07-14 13:07:00 +0100 (Mon, 14 Jul 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/doc/Changes.html
+   M /trunk/strasheela/doc/Installation.html
+
+Updated HMLT files
+
+------------------------------------------------------------------------
+r1321 | t-anders | 2008-07-14 13:06:35 +0100 (Mon, 14 Jul 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/doc/Installation.html
+   M /trunk/strasheela/doc/contact.html
+
+Updated HMLT files
+
+------------------------------------------------------------------------
+r1320 | t-anders | 2008-07-14 13:05:47 +0100 (Mon, 14 Jul 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/source/Output.oz
+
+ToNonmensuralENP now also supports PWGL library KSQuant format (which the KSQuant object simple2score transformed into the mensural ENP format). Also, class Shell method cmd now always reports its shell cmd when echoing to stdout
+
+------------------------------------------------------------------------
+r1319 | t-anders | 2008-07-14 13:01:32 +0100 (Mon, 14 Jul 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/examples/Harmony-Examples/HomophonicChordProgression.oz
+
+Minor example edit
+
+------------------------------------------------------------------------
+r1318 | t-anders | 2008-07-14 13:01:18 +0100 (Mon, 14 Jul 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/examples/Harmony-Examples/HarmonicProgressions-31ET.oz
+
+Minor example edit
+
+------------------------------------------------------------------------
+r1317 | t-anders | 2008-07-14 13:00:51 +0100 (Mon, 14 Jul 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/examples/Form-Examples/VariationMotif-Examples.oz
+
+edited examples set
+
+------------------------------------------------------------------------
+r1316 | t-anders | 2008-07-14 13:00:23 +0100 (Mon, 14 Jul 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/examples/Form-Examples/PrototypeMotif-Examples.oz
+
+Extended/edited examples set
+
+------------------------------------------------------------------------
+r1315 | t-anders | 2008-07-14 12:59:24 +0100 (Mon, 14 Jul 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/examples/Form-Examples/MotifPattern-Examples.oz
+
+Minor example editing
+
+------------------------------------------------------------------------
+r1314 | t-anders | 2008-07-14 12:58:13 +0100 (Mon, 14 Jul 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/doc-source/Installation.muse
+
+Edited doc
+
+------------------------------------------------------------------------
+r1313 | t-anders | 2008-07-14 12:57:43 +0100 (Mon, 14 Jul 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/contributions/anders/PrototypeMotif/PrototypeMotif.oz
+
+Fixed IsMotif: now first tests that arg is item
+
+------------------------------------------------------------------------
+r1312 | t-anders | 2008-07-14 12:56:47 +0100 (Mon, 14 Jul 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/contributions/anders/OSC/OSC.oz
+
+Added doc concerning MacOS 10.5 nc problem. Improved exceptions for "Unrecognised OSC package"
+
+------------------------------------------------------------------------
+r1311 | t-anders | 2008-07-14 12:55:33 +0100 (Mon, 14 Jul 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/testing/Score-test.oz
+
+Fixed cadential sets example for pentachordal major: now using all 22 pitch classes
+
+------------------------------------------------------------------------
+r1310 | t-anders | 2008-07-02 11:36:49 +0100 (Wed, 02 Jul 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/doc-source/Changes.muse
+
+Updated list of changes
+
+------------------------------------------------------------------------
+r1309 | t-anders | 2008-07-02 11:36:23 +0100 (Wed, 02 Jul 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/examples/Form-Examples/PrototypeMotif-Examples.oz
+
+Added several examples and fixed example bug
+
+------------------------------------------------------------------------
+r1308 | t-anders | 2008-07-02 11:34:59 +0100 (Wed, 02 Jul 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/examples/Form-Examples/MotifPattern-Examples.oz
+
+Smaller changes to examples (e.g., different motif defs)
+
+------------------------------------------------------------------------
+r1307 | t-anders | 2008-07-02 11:32:49 +0100 (Wed, 02 Jul 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/examples/ShowHarmonicDatabases.oz
+
+Now example also outputs ET31 database
+
+------------------------------------------------------------------------
+r1306 | t-anders | 2008-07-02 11:31:54 +0100 (Wed, 02 Jul 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/contributions/anders/PrototypeMotif/testing/PrototypeMotif-test.oz
+
+Fixed NestedScript example (now score is initialised)
+
+------------------------------------------------------------------------
+r1305 | t-anders | 2008-07-02 11:30:55 +0100 (Wed, 02 Jul 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/contributions/anders/PrototypeMotif/PrototypeMotif.oz
+
+NestedScript: fixed bug: nestedArgs default was unit instead of nil
+
+------------------------------------------------------------------------
+r1304 | t-anders | 2008-07-02 11:29:22 +0100 (Wed, 02 Jul 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/contributions/anders/Pattern/Pattern.oz
+
+UseMotifs: fixed bug for undetermined ints (it blocked)
+
+------------------------------------------------------------------------
+r1303 | t-anders | 2008-07-02 11:28:43 +0100 (Wed, 02 Jul 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/source/Rules.oz
+
+Only whitespace changes
+
+------------------------------------------------------------------------
+r1302 | t-anders | 2008-07-02 11:28:22 +0100 (Wed, 02 Jul 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/contributions/anders/ET31/source/DB.oz
+
+now only a single root defined for all chords and scales
+
+------------------------------------------------------------------------
+r1301 | t-anders | 2008-07-01 11:56:20 +0100 (Tue, 01 Jul 2008) | 2 lines
+Changed paths:
+   A /trunk/strasheela/examples/Form-Examples/VariationMotif-Examples.oz
+
+Add variation motif examples
+
+------------------------------------------------------------------------
+r1300 | t-anders | 2008-06-30 15:39:49 +0100 (Mon, 30 Jun 2008) | 2 lines
+Changed paths:
+   D /trunk/strasheela/contributions/anders/Realtime/examples
+
+Moved realtime examples into main examples dir
+
+------------------------------------------------------------------------
+r1299 | t-anders | 2008-06-30 15:39:15 +0100 (Mon, 30 Jun 2008) | 2 lines
+Changed paths:
+   D /trunk/strasheela/contributions/anders/Realtime/examples/Simple-Counterpoint.oz
+   D /trunk/strasheela/contributions/anders/Realtime/examples/Simple-Counterpoint.sc
+   D /trunk/strasheela/contributions/anders/Realtime/examples/Simple-RealTimeOut.oz
+   D /trunk/strasheela/contributions/anders/Realtime/examples/Simple-RealTimeOut.sc
+
+Moved realtime examples into main examples dir
+
+------------------------------------------------------------------------
+r1298 | t-anders | 2008-06-30 15:36:56 +0100 (Mon, 30 Jun 2008) | 2 lines
+Changed paths:
+   A /trunk/strasheela/examples/Realtime-Examples (from /trunk/strasheela/contributions/anders/Realtime/examples:1288)
+
+Moved realtime examples into main examples dir
+
+------------------------------------------------------------------------
+r1297 | t-anders | 2008-06-30 15:35:16 +0100 (Mon, 30 Jun 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/doc-source/Changes.muse
+
+Updated list of changes
+
+------------------------------------------------------------------------
+r1296 | t-anders | 2008-06-30 15:34:56 +0100 (Mon, 30 Jun 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/testing/Score-test.oz
+
+Changed MinimalCadentialSet into MinimalCadentialSets (likewise with MinimalCadentialSet2): now returns all solutions
+
+------------------------------------------------------------------------
+r1295 | t-anders | 2008-06-30 15:34:34 +0100 (Mon, 30 Jun 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/source/Score.oz
+
+Changed MinimalCadentialSet into MinimalCadentialSets (likewise with MinimalCadentialSet2): now returns all solutions
+
+------------------------------------------------------------------------
+r1294 | t-anders | 2008-06-30 14:01:24 +0100 (Mon, 30 Jun 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/doc-source/Changes.muse
+
+Updated list of changes
+
+------------------------------------------------------------------------
+r1293 | t-anders | 2008-06-30 14:01:01 +0100 (Mon, 30 Jun 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/testing/Score-test.oz
+
+HS.score.minimalCadentialSet2 example now does not rely on any harmony database
+
+------------------------------------------------------------------------
+r1292 | t-anders | 2008-06-30 13:59:51 +0100 (Mon, 30 Jun 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/source/Score.oz
+
+Fixed MinimalCadentialSet (now calls MinimalCadentialSet2)
+
+------------------------------------------------------------------------
+r1291 | t-anders | 2008-06-30 13:08:36 +0100 (Mon, 30 Jun 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/testing/Score-test.oz
+
+Added MinimalCadentialSet2 test
+
+------------------------------------------------------------------------
+r1290 | t-anders | 2008-06-30 13:08:26 +0100 (Mon, 30 Jun 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/source/Score.oz
+
+Added MinimalCadentialSet2
+
+------------------------------------------------------------------------
+r1289 | t-anders | 2008-06-30 12:45:59 +0100 (Mon, 30 Jun 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/doc-source/contact.muse
+
+Updated postal address
+
+------------------------------------------------------------------------
+r1288 | t-anders | 2008-06-30 12:36:00 +0100 (Mon, 30 Jun 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/doc-source/Changes.muse
+
+Edited list of changes
+
+------------------------------------------------------------------------
+r1287 | t-anders | 2008-06-30 12:35:31 +0100 (Mon, 30 Jun 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/source/ScoreDistribution.oz
+
+doc editing
+
+------------------------------------------------------------------------
+r1286 | t-anders | 2008-06-30 12:34:29 +0100 (Mon, 30 Jun 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/examples/Form-Examples/MotifPattern-Examples.oz
+
+Use variable TimeUnit
+
+------------------------------------------------------------------------
+r1285 | t-anders | 2008-06-30 12:34:09 +0100 (Mon, 30 Jun 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/testing/Score-test.oz
+
+Insignificant changes
+
+------------------------------------------------------------------------
+r1284 | t-anders | 2008-06-27 17:21:09 +0100 (Fri, 27 Jun 2008) | 2 lines
+Changed paths:
+   A /trunk/strasheela/examples/Counterpoint-Examples
+   A /trunk/strasheela/examples/Counterpoint-Examples/FloridCounterpoint-Canon-orig.oz (from /trunk/strasheela/examples/FloridCounterpoint-Canon-orig.oz:1282)
+   A /trunk/strasheela/examples/Counterpoint-Examples/Fuxian-Counterpoint-with-Scale.oz (from /trunk/strasheela/examples/Fuxian-Counterpoint-with-Scale.oz:1282)
+   D /trunk/strasheela/examples/FloridCounterpoint-Canon-orig.oz
+   D /trunk/strasheela/examples/Fuxian-Counterpoint-with-Scale.oz
+
+Moved examples
+
+------------------------------------------------------------------------
+r1283 | t-anders | 2008-06-27 17:18:45 +0100 (Fri, 27 Jun 2008) | 2 lines
+Changed paths:
+   D /trunk/strasheela/examples/Harmony
+
+Renamed folders (Harmony -> Harmony-Examples)
+
+------------------------------------------------------------------------
+r1282 | t-anders | 2008-06-27 17:16:49 +0100 (Fri, 27 Jun 2008) | 2 lines
+Changed paths:
+   D /trunk/strasheela/examples/Harmony/HarmonicProgressions-22ET.oz
+   D /trunk/strasheela/examples/Harmony/HarmonicProgressions-31ET.oz
+   D /trunk/strasheela/examples/Harmony/HomophonicChordProgression.oz
+
+Renamed folders (Harmony -> Harmony-Examples)
+
+------------------------------------------------------------------------
+r1281 | t-anders | 2008-06-27 17:16:26 +0100 (Fri, 27 Jun 2008) | 2 lines
+Changed paths:
+   A /trunk/strasheela/examples/Harmony-Examples (from /trunk/strasheela/examples/Harmony:1276)
+
+Renamed folders (Harmony -> Harmony-Examples)
+
+------------------------------------------------------------------------
+r1280 | t-anders | 2008-06-27 17:15:35 +0100 (Fri, 27 Jun 2008) | 2 lines
+Changed paths:
+   A /trunk/strasheela/examples/Form-Examples (from /trunk/strasheela/examples/Form:1277)
+
+Renamed folders (Form -> Form-Examples)
+
+------------------------------------------------------------------------
+r1279 | t-anders | 2008-06-27 17:14:15 +0100 (Fri, 27 Jun 2008) | 3 lines
+Changed paths:
+   D /trunk/strasheela/examples/Form
+
+Renamed folders (Form -> Form-Examples)
+
+
+------------------------------------------------------------------------
+r1278 | t-anders | 2008-06-27 17:08:40 +0100 (Fri, 27 Jun 2008) | 2 lines
+Changed paths:
+   D /trunk/strasheela/examples/Form/MotifPattern-Examples.oz
+   D /trunk/strasheela/examples/Form/PrototypeMotif-Examples.oz
+
+Renamed folders (Form -> Form-Examples)
+
+------------------------------------------------------------------------
+r1277 | t-anders | 2008-06-27 17:00:18 +0100 (Fri, 27 Jun 2008) | 2 lines
+Changed paths:
+   A /trunk/strasheela/examples/Form
+   A /trunk/strasheela/examples/Form/MotifPattern-Examples.oz
+   A /trunk/strasheela/examples/Form/PrototypeMotif-Examples.oz
+
+Added folder of form examples
+
+------------------------------------------------------------------------
+r1276 | t-anders | 2008-06-27 16:59:43 +0100 (Fri, 27 Jun 2008) | 2 lines
+Changed paths:
+   D /trunk/strasheela/examples/HarmonicProgressions-22ET.oz
+   D /trunk/strasheela/examples/HarmonicProgressions-31ET.oz
+   A /trunk/strasheela/examples/Harmony
+   A /trunk/strasheela/examples/Harmony/HarmonicProgressions-22ET.oz (from /trunk/strasheela/examples/HarmonicProgressions-22ET.oz:1274)
+   A /trunk/strasheela/examples/Harmony/HarmonicProgressions-31ET.oz (from /trunk/strasheela/examples/HarmonicProgressions-31ET.oz:1274)
+   A /trunk/strasheela/examples/Harmony/HomophonicChordProgression.oz (from /trunk/strasheela/examples/HomophonicChordProgression.oz:1274)
+   D /trunk/strasheela/examples/HomophonicChordProgression.oz
+
+Move examples into new folder Harmony
+
+------------------------------------------------------------------------
+r1275 | t-anders | 2008-06-27 16:58:29 +0100 (Fri, 27 Jun 2008) | 2 lines
+Changed paths:
+   D /trunk/strasheela/examples/ContinuousControllersInScore-MidiOutput.oz
+   A /trunk/strasheela/examples/ControllingOutput-Examples
+   A /trunk/strasheela/examples/ControllingOutput-Examples/ContinuousControllersInScore-MidiOutput.oz (from /trunk/strasheela/examples/ContinuousControllersInScore-MidiOutput.oz:1274)
+   A /trunk/strasheela/examples/ControllingOutput-Examples/Lilypond-Examples.oz (from /trunk/strasheela/examples/Lilypond-Examples.oz:1274)
+   A /trunk/strasheela/examples/ControllingOutput-Examples/LilypondOutputWithEnharmonicNotationKeysignaturesEtc.oz (from /trunk/strasheela/examples/LilypondOutputWithEnharmonicNotationKeysignaturesEtc.oz:1274)
+   A /trunk/strasheela/examples/ControllingOutput-Examples/Microtonal-MIDI-examples.oz (from /trunk/strasheela/examples/Microtonal-MIDI-examples.oz:1274)
+   D /trunk/strasheela/examples/Lilypond-Examples.oz
+   D /trunk/strasheela/examples/LilypondOutputWithEnharmonicNotationKeysignaturesEtc.oz
+   D /trunk/strasheela/examples/Microtonal-MIDI-examples.oz
+
+Move examples into new folder ControllingOutput-Examples
+
+------------------------------------------------------------------------
+r1274 | t-anders | 2008-06-26 16:58:27 +0100 (Thu, 26 Jun 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/doc-source/Changes.muse
+
+Updated todo list
+
+------------------------------------------------------------------------
+r1273 | t-anders | 2008-06-26 16:58:12 +0100 (Thu, 26 Jun 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/testing/Score-test.oz
+
+Added tests for MinimalCadentialSet MakeAllContextScales
+
+------------------------------------------------------------------------
+r1272 | t-anders | 2008-06-26 16:56:56 +0100 (Thu, 26 Jun 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/source/Score.oz
+
+Added MinimalCadentialSet MakeAllContextScales
+
+------------------------------------------------------------------------
+r1271 | t-anders | 2008-06-25 21:23:17 +0100 (Wed, 25 Jun 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/doc-source/Changes.muse
+
+Update list of changes
+
+------------------------------------------------------------------------
+r1270 | t-anders | 2008-06-25 21:22:37 +0100 (Wed, 25 Jun 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/source/ScoreCore.oz
+
+Added Item method getContainersRecursively
+
+------------------------------------------------------------------------
+r1269 | t-anders | 2008-06-25 21:21:59 +0100 (Wed, 25 Jun 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/contributions/anders/PrototypeMotif/PrototypeMotif.oz
+
+Added IsMotif and IsInMotif
+
+------------------------------------------------------------------------
+r1268 | t-anders | 2008-06-25 21:21:10 +0100 (Wed, 25 Jun 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/contributions/anders/Pattern/Pattern.oz
+
+UseMotifs now supports nested '_'
+
+------------------------------------------------------------------------
+r1267 | t-anders | 2008-06-25 21:20:37 +0100 (Wed, 25 Jun 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/contributions/anders/Motif/Motif.oz
+
+IsInMotif now also works for deeper nested score objects
+
+------------------------------------------------------------------------
+r1266 | t-anders | 2008-06-25 15:51:06 +0100 (Wed, 25 Jun 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/doc-source/Changes.muse
+
+Updated list of changes
+
+------------------------------------------------------------------------
+r1265 | t-anders | 2008-06-25 15:50:52 +0100 (Wed, 25 Jun 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/source/ScoreDistribution.oz
+
+MakeVisitMarkedParamsFirst: changed comment
+
+------------------------------------------------------------------------
+r1264 | t-anders | 2008-06-25 15:47:40 +0100 (Wed, 25 Jun 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/contributions/anders/Pattern/testing/Pattern-test.oz
+
+Fixed Pattern.useMotifs examples, changed var Root -> Solution
+
+------------------------------------------------------------------------
+r1263 | t-anders | 2008-06-25 15:45:58 +0100 (Wed, 25 Jun 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/contributions/anders/Pattern/Pattern.oz
+
+UseMotifs: added support for special symbol '_', edited doc.
+
+------------------------------------------------------------------------
+r1262 | t-anders | 2008-06-25 15:44:31 +0100 (Wed, 25 Jun 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/contributions/anders/Measure/Measure.oz
+
+Fixed bug in UniformMeasures method overlapsBarlineR (old def had logical error)
+
+------------------------------------------------------------------------
+r1261 | t-anders | 2008-06-23 17:33:49 +0100 (Mon, 23 Jun 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/doc-source/Changes.muse
+
+Update list of changes
+
+------------------------------------------------------------------------
+r1260 | t-anders | 2008-06-23 17:33:15 +0100 (Mon, 23 Jun 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/source/ScoreDistribution.oz
+
+Added MakeMarkNextParam and MakeVisitMarkedParamsFirst
+
+------------------------------------------------------------------------
+r1259 | t-anders | 2008-06-23 17:32:17 +0100 (Mon, 23 Jun 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/source/ScoreMapping.oz
+
+Doc edit
+
+------------------------------------------------------------------------
+r1258 | t-anders | 2008-06-23 17:31:45 +0100 (Mon, 23 Jun 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/source/ScoreCore.oz
+
+Renamed ScoreMapping -> SMapping
+
+------------------------------------------------------------------------
+r1257 | t-anders | 2008-06-23 17:30:43 +0100 (Mon, 23 Jun 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/source/GeneralUtils.oz
+
+Comment edit
+
+------------------------------------------------------------------------
+r1256 | t-anders | 2008-06-23 17:30:08 +0100 (Mon, 23 Jun 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/source/Distribution.oz
+
+Revised distro typewise (uses new abstractions), added typewise_LeftToRightTieBreaking
+
+------------------------------------------------------------------------
+r1255 | t-anders | 2008-06-23 12:50:53 +0100 (Mon, 23 Jun 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/others/TODO/Strasheela-TODO.org
+
+Update todo list
+
+------------------------------------------------------------------------
+r1254 | t-anders | 2008-06-23 12:50:13 +0100 (Mon, 23 Jun 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/others/TODO/Strasheela-TODO.org
+
+Update todo list
+
+------------------------------------------------------------------------
+r1253 | t-anders | 2008-06-23 12:49:54 +0100 (Mon, 23 Jun 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/testing/zy_Efficiency/benchmark/using/RunBenchmark-Florid.oz
+
+Added tests and preliminary results
+
+------------------------------------------------------------------------
+r1252 | t-anders | 2008-06-23 12:49:09 +0100 (Mon, 23 Jun 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/source/ScoreDistribution.oz
+
+Minor change: use Naive for predef ordering
+
+------------------------------------------------------------------------
+r1251 | t-anders | 2008-06-23 12:48:35 +0100 (Mon, 23 Jun 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/examples/HarmonicProgressions-22ET.oz
+
+Added example with only ascending progressions
+
+------------------------------------------------------------------------
+r1250 | t-anders | 2008-06-23 12:47:48 +0100 (Mon, 23 Jun 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/examples/03-FloridCounterpoint-Canon.oz
+
+Additional solver calls
+
+------------------------------------------------------------------------
+r1249 | t-anders | 2008-06-23 12:47:19 +0100 (Mon, 23 Jun 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/doc-source/Installation.muse
+
+Minor change (singles quotes in first Browse example)
+
+------------------------------------------------------------------------
+r1248 | t-anders | 2008-06-23 12:46:47 +0100 (Mon, 23 Jun 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/source/Schoenberg.oz
+
+Minor change (avoid compiler warning of unused var)
+
+------------------------------------------------------------------------
+r1247 | t-anders | 2008-06-23 12:46:03 +0100 (Mon, 23 Jun 2008) | 2 lines
+Changed paths:
+   D /trunk/strasheela/contributions/anders/HarmonisedScore/examples/HS/Fuxian-Counterpoint-with-Scale.oz
+   A /trunk/strasheela/examples/Fuxian-Counterpoint-with-Scale.oz (from /trunk/strasheela/contributions/anders/HarmonisedScore/examples/HS/Fuxian-Counterpoint-with-Scale.oz:1236)
+
+Moved example into main example folder
+
+------------------------------------------------------------------------
+r1246 | t-anders | 2008-06-19 18:03:03 +0100 (Thu, 19 Jun 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/doc-source/Changes.muse
+
+Updated list of changes
+
+------------------------------------------------------------------------
+r1245 | t-anders | 2008-06-19 18:02:49 +0100 (Thu, 19 Jun 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/examples/03-FloridCounterpoint-Canon.oz
+
+Further example refactoring: changed constraint defs (more concise now), var names, also edited constraint meanings (new: MaxPitchOnlyOnce, StartInTonic; changed EndInPerfectConsonance), tmp: added distros
+
+------------------------------------------------------------------------
+r1244 | t-anders | 2008-06-19 17:58:05 +0100 (Thu, 19 Jun 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/testing/zy_Efficiency/benchmark/using/RunBenchmark-Florid.oz
+
+Minor changes
+
+------------------------------------------------------------------------
+r1243 | t-anders | 2008-06-19 17:57:40 +0100 (Thu, 19 Jun 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/testing/zy_Efficiency/benchmark/Benchmark.oz
+
+Refactored TestRuntimes: print results for every distro strategy test immediately
+
+------------------------------------------------------------------------
+r1242 | t-anders | 2008-06-19 17:56:24 +0100 (Thu, 19 Jun 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/examples/HomophonicChordProgression.oz
+
+Restrict number of superstrong progressions
+
+------------------------------------------------------------------------
+r1241 | t-anders | 2008-06-19 17:55:51 +0100 (Thu, 19 Jun 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/source/Schoenberg.oz
+
+Fixed ResolveDescendingProgressions: decending progression "resolved" only in ascending  progression (not superstrong), also fixed arg allowInterchangeProgression (added constraint)
+
+------------------------------------------------------------------------
+r1240 | t-anders | 2008-06-19 17:52:30 +0100 (Thu, 19 Jun 2008) | 2 lines
+Changed paths:
+   A /trunk/strasheela/examples/FloridCounterpoint-Canon-orig.oz
+
+Added orig FloridCounterpoint-Canon, just in case
+
+------------------------------------------------------------------------
+r1239 | t-anders | 2008-06-17 19:58:19 +0100 (Tue, 17 Jun 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/examples/HomophonicChordProgression.oz
+
+Minor doc editing
+
+------------------------------------------------------------------------
+r1238 | t-anders | 2008-06-17 19:57:41 +0100 (Tue, 17 Jun 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/examples/03-FloridCounterpoint-Canon.oz
+
+IsConsonanceR: exclude octave again
+
+------------------------------------------------------------------------
+r1237 | t-anders | 2008-06-17 19:56:39 +0100 (Tue, 17 Jun 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/source/Schoenberg.oz
+
+ResolveDescendingProgressions: decending progression is 'resolved' in an ascending (but no superstrong) progression
+
+------------------------------------------------------------------------
+r1236 | t-anders | 2008-06-16 17:26:35 +0100 (Mon, 16 Jun 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/doc-source/Changes.muse
+
+Updated list of changes
+
+------------------------------------------------------------------------
+r1235 | t-anders | 2008-06-16 17:26:23 +0100 (Mon, 16 Jun 2008) | 2 lines
+Changed paths:
+   A /trunk/strasheela/testing/zy_Efficiency/benchmark/using/RunBenchmark-Florid.oz
+   A /trunk/strasheela/testing/zy_Efficiency/benchmark/using/RunBenchmark-FuxianCP.oz (from /trunk/strasheela/testing/zy_Efficiency/benchmark/using/RunBenchmark.oz:1229)
+   A /trunk/strasheela/testing/zy_Efficiency/benchmark/using/RunBenchmark-HomophonicProgression.oz
+   D /trunk/strasheela/testing/zy_Efficiency/benchmark/using/RunBenchmark.oz
+
+Added code for calling benchmark measurements for first three CSPs (Fuxian CP, florid CP and homophonic progression)
+
+------------------------------------------------------------------------
+r1234 | t-anders | 2008-06-16 17:24:16 +0100 (Mon, 16 Jun 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/testing/zy_Efficiency/benchmark/Benchmark.oz
+
+Added SearchOne, added to solvers SearchOne and MakeFixedRecomputationSolver random seed initialisation
+
+------------------------------------------------------------------------
+r1233 | t-anders | 2008-06-16 17:23:16 +0100 (Mon, 16 Jun 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/examples/HomophonicChordProgression.oz
+
+Change script name into HomophonicChordProgression
+
+------------------------------------------------------------------------
+r1232 | t-anders | 2008-06-16 17:22:00 +0100 (Mon, 16 Jun 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/examples/03-FloridCounterpoint-Canon.oz
+
+Added args to canon script
+
+------------------------------------------------------------------------
+r1231 | t-anders | 2008-06-16 13:09:07 +0100 (Mon, 16 Jun 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/doc-source/Changes.muse
+
+Updated list of changes
+
+------------------------------------------------------------------------
+r1230 | t-anders | 2008-06-16 13:08:46 +0100 (Mon, 16 Jun 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/examples/03-FloridCounterpoint-Canon.oz
+
+Revised florid counterpoint example. For example, it now features a simple cadence rule, and solutions differ more. Also, some constraints can be modified more easily (e.g., by arguments or setting specific variables).
+
+------------------------------------------------------------------------
+r1229 | t-anders | 2008-06-16 12:11:54 +0100 (Mon, 16 Jun 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/doc-source/Changes.muse
+
+Updated list of changes
+
+------------------------------------------------------------------------
+r1228 | t-anders | 2008-06-16 12:11:41 +0100 (Mon, 16 Jun 2008) | 2 lines
+Changed paths:
+   A /trunk/strasheela/others/TODO/Strasheela-Maybe-TODO.org_archive
+
+Added file
+
+------------------------------------------------------------------------
+r1227 | t-anders | 2008-06-16 12:09:57 +0100 (Mon, 16 Jun 2008) | 2 lines
+Changed paths:
+   A /trunk/strasheela/examples/ShowHarmonicDatabases.oz
+
+Added example: show harmonic database
+
+------------------------------------------------------------------------
+r1226 | t-anders | 2008-06-16 12:09:06 +0100 (Mon, 16 Jun 2008) | 2 lines
+Changed paths:
+   A /trunk/strasheela/contributions/anders/HarmonisedScore/doc/node16.html
+
+Updated reference doc
+
+------------------------------------------------------------------------
+r1225 | t-anders | 2008-06-16 12:07:56 +0100 (Mon, 16 Jun 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/contributions/anders/ET22/doc/node2.html
+   M /trunk/strasheela/contributions/anders/ET22/doc/node3.html
+   M /trunk/strasheela/contributions/anders/ET22/doc/node4.html
+   M /trunk/strasheela/contributions/anders/ET22/doc/node5.html
+   M /trunk/strasheela/contributions/anders/ET22/doc/node6.html
+   M /trunk/strasheela/contributions/anders/Fenv/doc/class1.html
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/doc/class1.html
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/doc/class10.html
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/doc/class11.html
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/doc/class12.html
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/doc/class13.html
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/doc/class14.html
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/doc/class15.html
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/doc/class16.html
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/doc/class17.html
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/doc/class18.html
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/doc/class19.html
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/doc/class2.html
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/doc/class20.html
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/doc/class21.html
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/doc/class22.html
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/doc/class23.html
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/doc/class24.html
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/doc/class25.html
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/doc/class3.html
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/doc/class4.html
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/doc/class5.html
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/doc/class6.html
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/doc/class7.html
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/doc/class8.html
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/doc/class9.html
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/doc/index.html
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/doc/node1.html
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/doc/node10.html
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/doc/node11.html
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/doc/node12.html
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/doc/node13.html
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/doc/node14.html
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/doc/node15.html
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/doc/node2.html
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/doc/node3.html
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/doc/node4.html
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/doc/node5.html
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/doc/node6.html
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/doc/node7.html
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/doc/node8.html
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/doc/node9.html
+   M /trunk/strasheela/contributions/anders/Measure/doc/class1.html
+   M /trunk/strasheela/contributions/anders/Measure/doc/class2.html
+   M /trunk/strasheela/contributions/anders/Measure/doc/node1.html
+   M /trunk/strasheela/contributions/anders/Pattern/doc/node1.html
+   M /trunk/strasheela/contributions/anders/PrototypeMotif/doc/node1.html
+   M /trunk/strasheela/contributions/gperciva/intonation-funcs/doc/node1.html
+   M /trunk/strasheela/contributions/gperciva/pitchfingers/doc/node1.html
+   M /trunk/strasheela/contributions/gperciva/rhythm-funcs/doc/node1.html
+   M /trunk/strasheela/doc/api/class1.html
+   M /trunk/strasheela/doc/api/class10.html
+   M /trunk/strasheela/doc/api/class11.html
+   M /trunk/strasheela/doc/api/class12.html
+   M /trunk/strasheela/doc/api/class13.html
+   M /trunk/strasheela/doc/api/class14.html
+   M /trunk/strasheela/doc/api/class15.html
+   M /trunk/strasheela/doc/api/class16.html
+   M /trunk/strasheela/doc/api/class17.html
+   M /trunk/strasheela/doc/api/class18.html
+   M /trunk/strasheela/doc/api/class19.html
+   M /trunk/strasheela/doc/api/class2.html
+   M /trunk/strasheela/doc/api/class20.html
+   M /trunk/strasheela/doc/api/class21.html
+   M /trunk/strasheela/doc/api/class22.html
+   M /trunk/strasheela/doc/api/class23.html
+   M /trunk/strasheela/doc/api/class24.html
+   M /trunk/strasheela/doc/api/class25.html
+   M /trunk/strasheela/doc/api/class26.html
+   M /trunk/strasheela/doc/api/class27.html
+   M /trunk/strasheela/doc/api/class28.html
+   M /trunk/strasheela/doc/api/class29.html
+   M /trunk/strasheela/doc/api/class3.html
+   M /trunk/strasheela/doc/api/class30.html
+   M /trunk/strasheela/doc/api/class31.html
+   M /trunk/strasheela/doc/api/class4.html
+   M /trunk/strasheela/doc/api/class5.html
+   M /trunk/strasheela/doc/api/class6.html
+   M /trunk/strasheela/doc/api/class7.html
+   M /trunk/strasheela/doc/api/class8.html
+   M /trunk/strasheela/doc/api/class9.html
+   M /trunk/strasheela/doc/api/node11.html
+   M /trunk/strasheela/doc/api/node2.html
+   M /trunk/strasheela/doc/api/node3.html
+   M /trunk/strasheela/doc/api/node4.html
+   M /trunk/strasheela/doc/api/node5.html
+   M /trunk/strasheela/doc/api/node6.html
+   M /trunk/strasheela/doc/api/node7.html
+   M /trunk/strasheela/doc/api/node8.html
+   M /trunk/strasheela/doc/api/node9.html
+
+Updated reference doc
+
+------------------------------------------------------------------------
+r1224 | t-anders | 2008-06-16 12:06:28 +0100 (Mon, 16 Jun 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/source/Output.oz
+
+Insignificant change
+
+------------------------------------------------------------------------
+r1223 | t-anders | 2008-06-16 12:06:02 +0100 (Mon, 16 Jun 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/others/TODO/Strasheela-TODO.org
+
+Updated todo list
+
+------------------------------------------------------------------------
+r1222 | t-anders | 2008-06-16 12:05:36 +0100 (Mon, 16 Jun 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/doc-source/Changes.muse
+
+Updated list of changes
+
+------------------------------------------------------------------------
+r1221 | t-anders | 2008-06-16 12:04:47 +0100 (Mon, 16 Jun 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/contributions/anders/ET22/source/DB.oz
+
+Edit documentation
+
+------------------------------------------------------------------------
+r1220 | t-anders | 2008-06-16 12:03:09 +0100 (Mon, 16 Jun 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/contributions/anders/ET22/source/Output.oz
+
+Edit comment
+
+------------------------------------------------------------------------
+r1219 | t-anders | 2008-06-14 18:12:47 +0100 (Sat, 14 Jun 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/source/Output.oz
+
+Fixed lily bug: pause objects did not support lily info tag
+
+------------------------------------------------------------------------
+r1218 | t-anders | 2008-06-14 18:11:58 +0100 (Sat, 14 Jun 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/testing/Database-test.oz
+
+Added GetComment GetName
+
+------------------------------------------------------------------------
+r1217 | t-anders | 2008-06-14 18:11:41 +0100 (Sat, 14 Jun 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/source/Database.oz
+
+Added GetComment GetName
+
+------------------------------------------------------------------------
+r1216 | t-anders | 2008-06-14 18:10:26 +0100 (Sat, 14 Jun 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/contributions/anders/ET31/source/Output.oz
+
+doc edit
+
+------------------------------------------------------------------------
+r1215 | t-anders | 2008-06-14 14:37:50 +0100 (Sat, 14 Jun 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/contributions/anders/ET22/source/DB.oz
+
+Fixed bug in chord database: 'subdiminished 7th (1)' chord was completely wrong. Also the chord 'French augmented 6th' was wrongly called 'subminor 7th'. Added ratios to intervals in comments
+
+------------------------------------------------------------------------
+r1214 | t-anders | 2008-06-14 14:29:46 +0100 (Sat, 14 Jun 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/contributions/anders/ET22/source/Lilyheader.ly.data
+
+Lilypond notation of music in 22 ET greatly improved by special accidentals
+
+------------------------------------------------------------------------
+r1213 | t-anders | 2008-06-14 14:27:44 +0100 (Sat, 14 Jun 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/source/Score.oz
+
+Fixed bug in class Interval: specifying index parameter in init method led to fail
+
+------------------------------------------------------------------------
+r1212 | t-anders | 2008-06-13 15:10:39 +0100 (Fri, 13 Jun 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/contributions/anders/ET22/source/DB.oz
+
+Removed chord 'major subdiminished', in 22 ET this chord equals 'subminor 7th'
+
+------------------------------------------------------------------------
+r1211 | t-anders | 2008-06-13 15:09:24 +0100 (Fri, 13 Jun 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/source/Score.oz
+
+fixed PitchClassCollection implicit constraints: before determining the index constrained/determined the pitch class set, but not the other way round.
+
+------------------------------------------------------------------------
+r1210 | t-anders | 2008-06-13 11:59:01 +0100 (Fri, 13 Jun 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/source/ScoreCore.oz
+
+Fixed method isDet: now also works recursivly for containers
+
+------------------------------------------------------------------------
+r1209 | t-anders | 2008-06-13 11:34:32 +0100 (Fri, 13 Jun 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/contributions/anders/ET31/source/Output.oz
+
+Lily chord export: pitch classes now output as grace note chord
+
+------------------------------------------------------------------------
+r1208 | t-anders | 2008-06-13 11:34:12 +0100 (Fri, 13 Jun 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/contributions/anders/ET22/source/Output.oz
+
+Lily chord export: pitch classes now output as grace note chord
+
+------------------------------------------------------------------------
+r1207 | t-anders | 2008-06-13 11:32:50 +0100 (Fri, 13 Jun 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/examples/HarmonicProgressions-22ET.oz
+
+Minor changes
+
+------------------------------------------------------------------------
+r1206 | t-anders | 2008-06-13 11:32:00 +0100 (Fri, 13 Jun 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/source/Score.oz
+
+Changed getInitInfo for PitchClassCollection: index always included if undetermined (even if both pitchClasses and transposition are determined)
+
+------------------------------------------------------------------------
+r1205 | t-anders | 2008-06-13 11:30:38 +0100 (Fri, 13 Jun 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/source/ScoreCore.oz
+
+Edited doc
+
+------------------------------------------------------------------------
+r1204 | t-anders | 2008-06-11 22:23:29 +0100 (Wed, 11 Jun 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/examples/HomophonicChordProgression.oz
+
+Added comment
+
+------------------------------------------------------------------------
+r1203 | t-anders | 2008-06-11 22:21:52 +0100 (Wed, 11 Jun 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/source/Output.oz
+
+Fixed bug: outputting a FS decl with lower bound nil was printed []
+
+------------------------------------------------------------------------
+r1202 | t-anders | 2008-06-11 21:41:03 +0100 (Wed, 11 Jun 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/doc-source/Changes.muse
+
+Updated list of changes
+
+------------------------------------------------------------------------
+r1201 | t-anders | 2008-06-11 21:40:46 +0100 (Wed, 11 Jun 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/examples/HomophonicChordProgression.oz
+
+Improved distribution strategy: now uses HS.distro.leftToRight_TypewiseTieBreaking (and HS.distro.typewise for comparison). Removed old explicit distro def
+
+------------------------------------------------------------------------
+r1200 | t-anders | 2008-06-11 21:38:07 +0100 (Wed, 11 Jun 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/source/ScoreDistribution.oz
+
+Added MakeRightToLeft
+
+------------------------------------------------------------------------
+r1199 | t-anders | 2008-06-11 21:37:16 +0100 (Wed, 11 Jun 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/source/Output.oz
+
+Added SetMaxLilyRhythm
+
+------------------------------------------------------------------------
+r1198 | t-anders | 2008-06-11 21:36:52 +0100 (Wed, 11 Jun 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/source/Init.oz
+
+Added SetMaxLilyRhythm
+
+------------------------------------------------------------------------
+r1197 | t-anders | 2008-06-11 21:35:15 +0100 (Wed, 11 Jun 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/source/Distribution.oz
+
+Added/exported leftToRight_TypewiseTieBreaking, renamed typewiseHSDistro -> typewise
+
+------------------------------------------------------------------------
+r1196 | t-anders | 2008-06-11 21:30:27 +0100 (Wed, 11 Jun 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/contributions/anders/ET22/source/Output.oz
+
+RenderAndShowLilypond: wrapper header (arg wrapper) placed before (not after) predefined wrapper
+
+------------------------------------------------------------------------
+r1195 | t-anders | 2008-06-11 21:27:35 +0100 (Wed, 11 Jun 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/contributions/anders/Fenv/Fenv.oz
+
+Make Fenv init arg Env optional. Fixes bug: only optional args required by Score.ScoreObject method getInitClassesVS (called for archiving init record)
+
+------------------------------------------------------------------------
+r1194 | t-anders | 2008-06-11 21:25:01 +0100 (Wed, 11 Jun 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/contributions/anders/ET22/source/Lilyheader.ly.data
+
+Do not define empty \paper not \layout (otherwise problems if these are defined twice)
+
+------------------------------------------------------------------------
+r1193 | t-anders | 2008-06-10 21:35:40 +0100 (Tue, 10 Jun 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/doc-source/Changes.muse
+
+Updated list of changes
+
+------------------------------------------------------------------------
+r1192 | t-anders | 2008-06-10 21:35:26 +0100 (Tue, 10 Jun 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/others/TODO/Strasheela-TODO.org
+   M /trunk/strasheela/others/TODO/Strasheela-TODO.org_archive
+
+Updated todo list
+
+------------------------------------------------------------------------
+r1191 | t-anders | 2008-06-10 21:33:24 +0100 (Tue, 10 Jun 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/source/ScoreDistribution.oz
+
+Considerable refactoring: added (and exported) funs Naive Dom Width Deg DomDivDeg MakeDom MakeDeg MakeLeftToRight TimeParams MakeTimeParams ReflectMin ReflectMax, which use, extend and improve (less operations) existing predefined distro args. Use these for distro predef distro args. Improve def of MakeSetPreferredOrder. Update/extend doc.
+
+------------------------------------------------------------------------
+r1190 | t-anders | 2008-06-10 21:28:16 +0100 (Tue, 10 Jun 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/source/ScoreCore.oz
+
+Revised TimeMixin method getSimultaneousItems: now uses LUtils.cFilter, added findSimultaneousItem
+
+------------------------------------------------------------------------
+r1189 | t-anders | 2008-06-10 21:25:27 +0100 (Tue, 10 Jun 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/source/Score.oz
+
+Minor change
+
+------------------------------------------------------------------------
+r1188 | t-anders | 2008-06-10 21:24:46 +0100 (Tue, 10 Jun 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/HarmonisedScore.oz
+   A /trunk/strasheela/contributions/anders/HarmonisedScore/source/Distribution.oz
+
+Added file Distribution.oz for harmonic CSP distributions
+
+------------------------------------------------------------------------
+r1187 | t-anders | 2008-06-09 18:10:31 +0100 (Mon, 09 Jun 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/doc-source/Changes.muse
+
+Updated list of changes
+
+------------------------------------------------------------------------
+r1186 | t-anders | 2008-06-09 18:10:11 +0100 (Mon, 09 Jun 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/others/TODO/Strasheela-TODO.org
+
+Updated todo list
+
+------------------------------------------------------------------------
+r1185 | t-anders | 2008-06-09 18:09:23 +0100 (Mon, 09 Jun 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/contributions/anders/ET22/source/DB.oz
+
+Added feature 'essentialPitchClasses' to chord entries
+
+------------------------------------------------------------------------
+r1184 | t-anders | 2008-06-09 12:37:03 +0100 (Mon, 09 Jun 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/doc-source/Changes.muse
+
+Updated list of changes
+
+------------------------------------------------------------------------
+r1183 | t-anders | 2008-06-09 12:36:35 +0100 (Mon, 09 Jun 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/testing/GeneralUtils-test.oz
+
+Tested IntsToFS
+
+------------------------------------------------------------------------
+r1182 | t-anders | 2008-06-09 12:36:17 +0100 (Mon, 09 Jun 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/source/GeneralUtils.oz
+
+Added MakeSingletonSet, IntsToFS
+
+------------------------------------------------------------------------
+r1181 | t-anders | 2008-06-09 12:35:20 +0100 (Mon, 09 Jun 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/contributions/anders/ET22/source/Output.oz
+
+Added SetEnharmonicNotationTable: enharmonic notation can be customised
+
+------------------------------------------------------------------------
+r1180 | t-anders | 2008-06-06 18:00:55 +0100 (Fri, 06 Jun 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/doc-source/Changes.muse
+
+Updated list of changes
+
+------------------------------------------------------------------------
+r1179 | t-anders | 2008-06-06 17:58:44 +0100 (Fri, 06 Jun 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/doc-source/Changes.muse
+
+Updated list of changes
+
+------------------------------------------------------------------------
+r1178 | t-anders | 2008-06-06 17:58:18 +0100 (Fri, 06 Jun 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/others/TODO/Strasheela-TODO.org
+
+Updated todo list
+
+------------------------------------------------------------------------
+r1177 | t-anders | 2008-06-06 17:58:02 +0100 (Fri, 06 Jun 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/contributions/anders/ET31/source/Output.oz
+
+Lily out: added scale output, alll chord and scale pitch classes now notated as grace notes
+
+------------------------------------------------------------------------
+r1176 | t-anders | 2008-06-06 17:57:38 +0100 (Fri, 06 Jun 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/contributions/anders/ET22/source/Output.oz
+
+Lily out: added scale output, alll chord and scale pitch classes now notated as grace notes
+
+------------------------------------------------------------------------
+r1175 | t-anders | 2008-06-05 19:03:52 +0100 (Thu, 05 Jun 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/others/TODO/Strasheela-Maybe-TODO.org
+   M /trunk/strasheela/others/TODO/Strasheela-TODO.org
+
+Updated todo list
+
+------------------------------------------------------------------------
+r1174 | t-anders | 2008-06-05 19:03:25 +0100 (Thu, 05 Jun 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/examples/HomophonicChordProgression.oz
+
+Minor refactoring of explorer output
+
+------------------------------------------------------------------------
+r1173 | t-anders | 2008-06-05 19:02:50 +0100 (Thu, 05 Jun 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/contributions/anders/PrototypeMotif/PrototypeMotif.oz
+
+Doc edits
+
+------------------------------------------------------------------------
+r1172 | t-anders | 2008-06-05 18:58:22 +0100 (Thu, 05 Jun 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/source/databases/Default.oz
+
+Renamed scale (comment feat) 'minorPure' -> 'natural minor'
+
+------------------------------------------------------------------------
+r1171 | t-anders | 2008-06-05 18:54:57 +0100 (Thu, 05 Jun 2008) | 2 lines
+Changed paths:
+   A /trunk/strasheela/testing/zy_Efficiency/benchmark/testing
+   A /trunk/strasheela/testing/zy_Efficiency/benchmark/testing/Benchmark-test.oz
+
+Added benchmark tests
+
+------------------------------------------------------------------------
+r1170 | t-anders | 2008-06-05 18:54:30 +0100 (Thu, 05 Jun 2008) | 2 lines
+Changed paths:
+   D /trunk/strasheela/testing/zy_Efficiency/benchmark/RunBenchmark.oz
+   A /trunk/strasheela/testing/zy_Efficiency/benchmark/using
+   A /trunk/strasheela/testing/zy_Efficiency/benchmark/using/RunBenchmark.oz (from /trunk/strasheela/testing/zy_Efficiency/benchmark/RunBenchmark.oz:1169)
+
+Moved file
+
+------------------------------------------------------------------------
+r1169 | t-anders | 2008-06-05 18:53:48 +0100 (Thu, 05 Jun 2008) | 2 lines
+Changed paths:
+   A /trunk/strasheela/testing/zy_Efficiency/benchmark/Benchmark.oz
+   M /trunk/strasheela/testing/zy_Efficiency/benchmark/RunBenchmark.oz
+   A /trunk/strasheela/testing/zy_Efficiency/benchmark/makefile.oz
+
+Defined benchmark functor
+
+------------------------------------------------------------------------
+r1168 | t-anders | 2008-06-05 18:52:58 +0100 (Thu, 05 Jun 2008) | 2 lines
+Changed paths:
+   D /trunk/strasheela/testing/zy_Efficiency/benchmark/HowtoBenchmark.org
+   A /trunk/strasheela/testing/zy_Efficiency/benchmark/doc
+   A /trunk/strasheela/testing/zy_Efficiency/benchmark/doc/HowtoBenchmark.org (from /trunk/strasheela/testing/zy_Efficiency/benchmark/HowtoBenchmark.org:1158)
+
+Moved file
+
+------------------------------------------------------------------------
+r1167 | t-anders | 2008-06-02 15:27:24 +0100 (Mon, 02 Jun 2008) | 2 lines
+Changed paths:
+   A /trunk/strasheela/examples/HomophonicChordProgression.oz
+
+Adding Schoenberg chord progression example
+
+------------------------------------------------------------------------
+r1166 | t-anders | 2008-06-02 15:26:20 +0100 (Mon, 02 Jun 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/doc/Installation.html
+   M /trunk/strasheela/doc-source/Installation.muse
+
+Insignificant changes
+
+------------------------------------------------------------------------
+r1165 | t-anders | 2008-06-02 15:25:50 +0100 (Mon, 02 Jun 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/doc/index.html
+   M /trunk/strasheela/doc-source/index.muse
+
+Announced new publications
+
+------------------------------------------------------------------------
+r1164 | t-anders | 2008-06-02 15:25:17 +0100 (Mon, 02 Jun 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/doc/Publications.html
+   M /trunk/strasheela/doc-source/Publications.muse
+
+Added Grahams article, rearranged list
+
+------------------------------------------------------------------------
+r1163 | t-anders | 2008-06-02 15:24:18 +0100 (Mon, 02 Jun 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/testing/zy_Efficiency/benchmark/RunBenchmark.oz
+
+Added memory measurement, cleaned up file
+
+------------------------------------------------------------------------
+r1162 | gperciva | 2008-06-01 08:44:13 +0100 (Sun, 01 Jun 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/contributions/gperciva/intonation-funcs/intonation-funcs.oz
+   M /trunk/strasheela/contributions/gperciva/pitchfingers/pitchfingers.oz
+
+Simply some IntFuncs due to new Fingering organization.
+
+------------------------------------------------------------------------
+r1161 | gperciva | 2008-06-01 01:15:54 +0100 (Sun, 01 Jun 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/contributions/gperciva/intonation-funcs/intonation-funcs.oz
+   M /trunk/strasheela/contributions/gperciva/pitchfingers/pitchfingers.oz
+
+Make Fingers more intuitive.
+
+------------------------------------------------------------------------
+r1160 | gperciva | 2008-05-31 10:17:05 +0100 (Sat, 31 May 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/contributions/gperciva/intonation-funcs/intonation-funcs.oz
+   M /trunk/strasheela/contributions/gperciva/pitchfingers/pitchfingers.oz
+
+Fix pitch calculation for shifting, and add more int functions.
+
+------------------------------------------------------------------------
+r1159 | gperciva | 2008-05-30 08:49:16 +0100 (Fri, 30 May 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/contributions/gperciva/intonation-funcs/intonation-funcs.oz
+
+Fix for noFingeredFifths.
+
+------------------------------------------------------------------------
+r1158 | t-anders | 2008-05-29 19:20:33 +0100 (Thu, 29 May 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/doc/Changes.html
+   M /trunk/strasheela/doc/Installation.html
+
+Rendered muse -> HTML
+
+------------------------------------------------------------------------
+r1157 | t-anders | 2008-05-29 19:20:10 +0100 (Thu, 29 May 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/doc/Publications.html
+   M /trunk/strasheela/doc-source/Publications.muse
+
+Extended publications list
+
+------------------------------------------------------------------------
+r1156 | t-anders | 2008-05-29 19:19:51 +0100 (Thu, 29 May 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/source/Output.oz
+
+Fixed bug: Show: only translate into VS if necessary (otherwise printout is VS representation itself)
+
+------------------------------------------------------------------------
+r1155 | t-anders | 2008-05-29 19:18:24 +0100 (Thu, 29 May 2008) | 2 lines
+Changed paths:
+   A /trunk/strasheela/testing/zy_Efficiency/benchmark/RunBenchmark.oz
+   A /trunk/strasheela/testing/zy_Efficiency/benchmark/scripts
+
+Added benchmark abstractions
+
+------------------------------------------------------------------------
+r1154 | t-anders | 2008-05-29 12:40:06 +0100 (Thu, 29 May 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/doc-source/Changes.muse
+
+Updated list of changes
+
+------------------------------------------------------------------------
+r1153 | t-anders | 2008-05-29 12:39:51 +0100 (Thu, 29 May 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/others/TODO/Strasheela-Maybe-TODO.org
+   M /trunk/strasheela/others/TODO/Strasheela-TODO.org
+   M /trunk/strasheela/others/TODO/Strasheela-TODO.org_archive
+
+Updated todo list
+
+------------------------------------------------------------------------
+r1152 | t-anders | 2008-05-29 12:39:28 +0100 (Thu, 29 May 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/examples/HarmonicProgressions-22ET.oz
+
+Edited comment
+
+------------------------------------------------------------------------
+r1151 | t-anders | 2008-05-29 12:38:51 +0100 (Thu, 29 May 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/contributions/anders/PrototypeMotif/PrototypeMotif.oz
+
+Refactored MakeScript, arg prototypeDependencies: number of objects in prototype and motif instance can differ (but only objects can be missing at end of method collect result). ChoiceScript: fixed bug: choice arg removed from score init args. Edited doc.
+
+------------------------------------------------------------------------
+r1150 | t-anders | 2008-05-27 12:55:23 +0100 (Tue, 27 May 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/others/TODO/Strasheela-TODO.org
+
+Updated todo list
+
+------------------------------------------------------------------------
+r1149 | t-anders | 2008-05-27 12:55:00 +0100 (Tue, 27 May 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/contributions/anders/Pattern/testing/Pattern-test.oz
+
+Minor test editing
+
+------------------------------------------------------------------------
+r1148 | t-anders | 2008-05-27 12:54:20 +0100 (Tue, 27 May 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/source/Output.oz
+
+Added proc Out.show
+
+------------------------------------------------------------------------
+r1147 | t-anders | 2008-05-27 12:53:53 +0100 (Tue, 27 May 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/testing/zz_OtherStuff/VariablesWithArbitraryDomains.oz
+
+Rename into UniversalDomain (was ArbitraryDomain)
+
+------------------------------------------------------------------------
+r1146 | t-anders | 2008-05-27 12:53:09 +0100 (Tue, 27 May 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/examples/HarmonicProgressions-31ET.oz
+
+Commend editing
+
+------------------------------------------------------------------------
+r1145 | t-anders | 2008-05-27 12:52:35 +0100 (Tue, 27 May 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/contributions/anders/PrototypeMotif/PrototypeMotif.oz
+
+Refactored ChoiceScript (now selection arg name can be set), additional minor changes
+
+------------------------------------------------------------------------
+r1144 | t-anders | 2008-05-22 10:37:29 +0100 (Thu, 22 May 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/others/TODO/Strasheela-Maybe-TODO.org
+   M /trunk/strasheela/others/TODO/Strasheela-TODO.org
+
+Updated todo list
+
+------------------------------------------------------------------------
+r1143 | t-anders | 2008-05-22 10:36:40 +0100 (Thu, 22 May 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/contributions/anders/Pattern/Pattern.oz
+   M /trunk/strasheela/contributions/anders/Pattern/testing/Pattern-test.oz
+
+Added RotateList, RotateSublists
+
+------------------------------------------------------------------------
+r1142 | t-anders | 2008-05-20 21:45:18 +0100 (Tue, 20 May 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/others/TODO/Strasheela-Maybe-TODO.org
+   M /trunk/strasheela/others/TODO/Strasheela-TODO.org
+
+Updated todo list
+
+------------------------------------------------------------------------
+r1141 | t-anders | 2008-05-20 21:44:56 +0100 (Tue, 20 May 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/doc-source/Changes.muse
+
+Updated list of changes
+
+------------------------------------------------------------------------
+r1140 | t-anders | 2008-05-20 21:44:38 +0100 (Tue, 20 May 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/contributions/anders/ET31/source/Output.oz
+
+Lilypond out: Non-chord note pitches marked with x
+
+------------------------------------------------------------------------
+r1139 | t-anders | 2008-05-20 21:44:26 +0100 (Tue, 20 May 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/contributions/anders/ET22/source/Output.oz
+
+Lilypond out: Non-chord note pitches marked with x
+
+------------------------------------------------------------------------
+r1138 | t-anders | 2008-05-20 21:43:56 +0100 (Tue, 20 May 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/contributions/anders/ET31/source/DB.oz
+
+Added scale full dynamic symmetrical major
+
+------------------------------------------------------------------------
+r1137 | t-anders | 2008-05-20 21:43:31 +0100 (Tue, 20 May 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/contributions/anders/PrototypeMotif/PrototypeMotif.oz
+
+Copying prototypes: toInitRecord now excludes nil (default would exclude getChords etc).
+
+------------------------------------------------------------------------
+r1136 | t-anders | 2008-05-20 21:42:10 +0100 (Tue, 20 May 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/source/ScoreCore.oz
+
+Var DefaultInitRecordExcluded: added getChords, isRelatedChord, getScales, isRelatedScale. Fixed ScoreObject,init method warning (value converted to VS). CopyScore: toInitRecord with exclude nil.
+
+------------------------------------------------------------------------
+r1135 | t-anders | 2008-05-20 21:37:51 +0100 (Tue, 20 May 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/source/Score.oz
+
+Note, toInitRecord potientially includes init args getChords, isRelatedChord, getScales, isRelatedScale (which are procedures), but by default these are skipped
+
+------------------------------------------------------------------------
+r1134 | t-anders | 2008-05-20 21:35:45 +0100 (Tue, 20 May 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/contributions/anders/Pattern/Pattern.oz
+
+Doc editing
+
+------------------------------------------------------------------------
+r1133 | t-anders | 2008-05-17 14:05:11 +0100 (Sat, 17 May 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/contributions/anders/Pattern/testing/Pattern-test.oz
+
+Added tests for LSystemConstsToParams and MakeLSystem_B
+
+------------------------------------------------------------------------
+r1132 | t-anders | 2008-05-17 14:04:32 +0100 (Sat, 17 May 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/contributions/anders/Pattern/Pattern.oz
+
+Added LSystemConstsToParams, refactored MakeLSystem_B (now different args)
+
+------------------------------------------------------------------------
+r1131 | t-anders | 2008-05-17 08:34:08 +0100 (Sat, 17 May 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/doc-source/Changes.muse
+
+Updated list of changes
+
+------------------------------------------------------------------------
+r1130 | t-anders | 2008-05-17 08:33:45 +0100 (Sat, 17 May 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/others/TODO/01-BUGS.oz
+
+Extended bugs list
+
+------------------------------------------------------------------------
+r1129 | t-anders | 2008-05-17 08:33:23 +0100 (Sat, 17 May 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/others/TODO/Strasheela-Maybe-TODO.org
+   M /trunk/strasheela/others/TODO/Strasheela-TODO.org
+
+Updated todo list
+
+------------------------------------------------------------------------
+r1128 | t-anders | 2008-05-17 08:33:03 +0100 (Sat, 17 May 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/contributions/anders/PrototypeMotif/testing/PrototypeMotif-test.oz
+
+Changed var name: PM -> PMotif
+
+------------------------------------------------------------------------
+r1127 | t-anders | 2008-05-17 08:31:26 +0100 (Sat, 17 May 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/contributions/anders/Pattern/Pattern.oz
+
+MakeLSystem: fixed bug for N =< 0 (caused infinite loop), Added MakeLSystem_B,
+
+------------------------------------------------------------------------
+r1126 | t-anders | 2008-05-08 09:44:40 +0100 (Thu, 08 May 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/others/TODO/Strasheela-TODO.org
+
+Updated todo list
+
+------------------------------------------------------------------------
+r1125 | t-anders | 2008-05-08 09:43:12 +0100 (Thu, 08 May 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/doc-source/Changes.muse
+
+Updated list of changes
+
+------------------------------------------------------------------------
+r1124 | t-anders | 2008-05-08 09:42:45 +0100 (Thu, 08 May 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/contributions/anders/Pattern/Pattern.oz
+
+LocalMaxR added
+
+------------------------------------------------------------------------
+r1123 | t-anders | 2008-05-06 19:03:54 +0100 (Tue, 06 May 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/others/TODO/Strasheela-TODO.org
+
+updated todo list
+
+------------------------------------------------------------------------
+r1122 | gperciva | 2008-05-06 09:01:34 +0100 (Tue, 06 May 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/contributions/gperciva/pitchfingers/pitchfingers.oz
+
+thinko: fix wrong fingers for finger-numbers.
+
+------------------------------------------------------------------------
+r1121 | gperciva | 2008-05-06 08:57:41 +0100 (Tue, 06 May 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/contributions/gperciva/intonation-funcs/intonation-funcs.oz
+   M /trunk/strasheela/contributions/gperciva/pitchfingers/pitchfingers.oz
+
+Add fingerings for notes, and eliminate adjacent octaves.
+
+------------------------------------------------------------------------
+r1120 | t-anders | 2008-05-05 18:20:03 +0100 (Mon, 05 May 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/contributions/anders/PrototypeMotif/PrototypeMotif.oz
+
+Minor doc editing
+
+------------------------------------------------------------------------
+r1119 | t-anders | 2008-05-05 16:37:17 +0100 (Mon, 05 May 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/contributions/ExtensionTemplate/source/ClassDefinitionDemo.oz
+   M /trunk/strasheela/contributions/anders/Fenv/Fenv.oz
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/source/Score.oz
+   M /trunk/strasheela/contributions/anders/Measure/Measure.oz
+   M /trunk/strasheela/contributions/anders/Motif/Motif.oz
+   M /trunk/strasheela/contributions/anders/PrototypeMotif/PrototypeMotif.oz
+   M /trunk/strasheela/contributions/sprotte/Harp/Harp.oz
+   M /trunk/strasheela/contributions/sprotte/Harp/HarpClasses.oz
+   M /trunk/strasheela/scripts/replace-all.sh
+   M /trunk/strasheela/source/ListUtils.oz
+   M /trunk/strasheela/source/MidiOutput.oz
+   M /trunk/strasheela/source/ScoreCore.oz
+   M /trunk/strasheela/testing/zy_Efficiency/KeepMusicRepresentationOutsideComputationalSpace.oz
+
+Object.is blocks on undetermined FS vars -- always check for FS vars first..
+
+------------------------------------------------------------------------
+r1118 | t-anders | 2008-05-05 16:17:20 +0100 (Mon, 05 May 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/doc-source/Changes.muse
+
+Updated list of changes
+
+------------------------------------------------------------------------
+r1117 | t-anders | 2008-05-05 16:16:34 +0100 (Mon, 05 May 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/others/TODO/Strasheela-Maybe-TODO.org
+   M /trunk/strasheela/others/TODO/Strasheela-TODO.org
+   M /trunk/strasheela/others/TODO/Strasheela-TODO.org_archive
+
+Updated todo list
+
+------------------------------------------------------------------------
+r1116 | t-anders | 2008-05-05 16:15:30 +0100 (Mon, 05 May 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/contributions/anders/PrototypeMotif/PrototypeMotif.oz
+
+Comment editing (todo list)
+
+------------------------------------------------------------------------
+r1115 | t-anders | 2008-05-05 16:14:45 +0100 (Mon, 05 May 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/source/GeneralUtils.oz
+
+Minor doc editing
+
+------------------------------------------------------------------------
+r1114 | t-anders | 2008-05-05 16:13:48 +0100 (Mon, 05 May 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/contributions/anders/Pattern/testing/Pattern-test.oz
+
+Tested UseMotifs
+
+------------------------------------------------------------------------
+r1113 | t-anders | 2008-05-05 16:10:22 +0100 (Mon, 05 May 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/contributions/anders/Pattern/Pattern.oz
+
+Added UseMotifs
+
+------------------------------------------------------------------------
+r1112 | t-anders | 2008-05-05 16:08:39 +0100 (Mon, 05 May 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/contributions/anders/Measure/testing/Measure-test.oz
+
+Minor edits
+
+------------------------------------------------------------------------
+r1111 | t-anders | 2008-05-05 16:08:22 +0100 (Mon, 05 May 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/contributions/anders/Measure/Measure.oz
+
+Minor doc edits
+
+------------------------------------------------------------------------
+r1110 | t-anders | 2008-05-05 16:07:18 +0100 (Mon, 05 May 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/doc-source/Installation.muse
+
+Moved section Install Oz Extensions up
+
+------------------------------------------------------------------------
+r1109 | gperciva | 2008-05-02 22:18:49 +0100 (Fri, 02 May 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/contributions/gperciva/eventdurs/eventdurs.oz
+   M /trunk/strasheela/contributions/gperciva/intonation-funcs/intonation-funcs.oz
+   M /trunk/strasheela/contributions/gperciva/pitchfingers/pitchfingers.oz
+   M /trunk/strasheela/contributions/gperciva/rhythm-funcs/rhythm-funcs.oz
+
+Assorted minor improvements.
+
+------------------------------------------------------------------------
+r1108 | t-anders | 2008-04-30 21:14:32 +0100 (Wed, 30 Apr 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/doc-source/Changes.muse
+
+updated todo
+
+------------------------------------------------------------------------
+r1107 | t-anders | 2008-04-29 21:08:58 +0100 (Tue, 29 Apr 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/others/TODO/Strasheela-TODO.org
+
+Updated todo list
+
+------------------------------------------------------------------------
+r1106 | t-anders | 2008-04-29 21:08:33 +0100 (Tue, 29 Apr 2008) | 2 lines
+Changed paths:
+   A /trunk/strasheela/contributions/anders/PrototypeMotif
+   A /trunk/strasheela/contributions/anders/PrototypeMotif/Ideas.org
+   A /trunk/strasheela/contributions/anders/PrototypeMotif/PrototypeMotif.oz
+   A /trunk/strasheela/contributions/anders/PrototypeMotif/doc
+   A /trunk/strasheela/contributions/anders/PrototypeMotif/doc/index.html
+   A /trunk/strasheela/contributions/anders/PrototypeMotif/doc/menu.gif
+   A /trunk/strasheela/contributions/anders/PrototypeMotif/doc/node1.html
+   A /trunk/strasheela/contributions/anders/PrototypeMotif/doc/ozdoc.css
+   A /trunk/strasheela/contributions/anders/PrototypeMotif/doc/page.gif
+   A /trunk/strasheela/contributions/anders/PrototypeMotif/makefile.oz
+   A /trunk/strasheela/contributions/anders/PrototypeMotif/source
+   A /trunk/strasheela/contributions/anders/PrototypeMotif/testing
+   A /trunk/strasheela/contributions/anders/PrototypeMotif/testing/PrototypeMotif-test.oz
+
+Added prototype motif contribution
+
+------------------------------------------------------------------------
+r1105 | t-anders | 2008-04-29 21:07:50 +0100 (Tue, 29 Apr 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/source/ScoreCore.oz
+
+IsScoreObject blocked for undetermined FS variables
+
+------------------------------------------------------------------------
+r1104 | t-anders | 2008-04-28 21:16:44 +0100 (Mon, 28 Apr 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/doc/node4.html
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/doc/node6.html
+   M /trunk/strasheela/contributions/anders/Motif/doc/node1.html
+   M /trunk/strasheela/contributions/anders/Realtime/doc/class1.html
+   M /trunk/strasheela/doc/api/class10.html
+   M /trunk/strasheela/doc/api/class11.html
+   M /trunk/strasheela/doc/api/class12.html
+   M /trunk/strasheela/doc/api/class13.html
+   M /trunk/strasheela/doc/api/class14.html
+   M /trunk/strasheela/doc/api/class15.html
+   M /trunk/strasheela/doc/api/class16.html
+   M /trunk/strasheela/doc/api/class17.html
+   M /trunk/strasheela/doc/api/class18.html
+   M /trunk/strasheela/doc/api/class19.html
+   M /trunk/strasheela/doc/api/class2.html
+   M /trunk/strasheela/doc/api/class20.html
+   M /trunk/strasheela/doc/api/class21.html
+   M /trunk/strasheela/doc/api/class22.html
+   M /trunk/strasheela/doc/api/class23.html
+   M /trunk/strasheela/doc/api/class24.html
+   M /trunk/strasheela/doc/api/class25.html
+   M /trunk/strasheela/doc/api/class26.html
+   M /trunk/strasheela/doc/api/class27.html
+   M /trunk/strasheela/doc/api/class28.html
+   M /trunk/strasheela/doc/api/class29.html
+   M /trunk/strasheela/doc/api/class3.html
+   M /trunk/strasheela/doc/api/class30.html
+   M /trunk/strasheela/doc/api/class31.html
+   M /trunk/strasheela/doc/api/class4.html
+   M /trunk/strasheela/doc/api/class5.html
+   M /trunk/strasheela/doc/api/class6.html
+   M /trunk/strasheela/doc/api/class7.html
+   M /trunk/strasheela/doc/api/class8.html
+   M /trunk/strasheela/doc/api/class9.html
+   M /trunk/strasheela/doc/api/node11.html
+   M /trunk/strasheela/doc/api/node3.html
+   M /trunk/strasheela/doc/api/node6.html
+   M /trunk/strasheela/doc/api/node7.html
+   M /trunk/strasheela/doc/api/node8.html
+   M /trunk/strasheela/doc/api/node9.html
+
+Updated reference doc
+
+------------------------------------------------------------------------
+r1103 | t-anders | 2008-04-28 21:12:48 +0100 (Mon, 28 Apr 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/doc/Changes.html
+   M /trunk/strasheela/doc-source/Changes.muse
+
+Updated list of changes
+
+------------------------------------------------------------------------
+r1102 | t-anders | 2008-04-28 21:12:06 +0100 (Mon, 28 Apr 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/others/TODO/Strasheela-TODO.org
+
+Updated todo list
+
+------------------------------------------------------------------------
+r1101 | t-anders | 2008-04-28 21:11:08 +0100 (Mon, 28 Apr 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/testing/ScoreMapping-test.oz
+
+tested MapScore
+
+------------------------------------------------------------------------
+r1100 | t-anders | 2008-04-28 21:10:27 +0100 (Mon, 28 Apr 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/source/ScoreMapping.oz
+
+Added MapScore
+
+------------------------------------------------------------------------
+r1099 | t-anders | 2008-04-28 21:09:33 +0100 (Mon, 28 Apr 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/source/ScoreCore.oz
+
+ScoreObject method init: replaced GUI warning again by stdout warning as GUI warning causes exception from within space
+
+------------------------------------------------------------------------
+r1098 | t-anders | 2008-04-28 21:06:38 +0100 (Mon, 28 Apr 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/examples/HarmonicProgressions-31ET.oz
+
+Added examples: chord progression with 7-limit triads in septimal minor, chord progression in extended tonality with 7-limit tetrads, and chord progression with 7-limit tetrads forming a sequence (repetition of the sub-chord progressions at different pitches)
+
+------------------------------------------------------------------------
+r1097 | t-anders | 2008-04-28 21:00:24 +0100 (Mon, 28 Apr 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/contributions/anders/Motif/Motif.oz
+
+Added comment/doc
+
+------------------------------------------------------------------------
+r1096 | t-anders | 2008-04-28 20:58:29 +0100 (Mon, 28 Apr 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/source/Score.oz
+
+Fixed bug: ChordsToScore_Script arg minIntervalToBass (did instead constrain interval between soprano an next lower voice)
+
+------------------------------------------------------------------------
+r1095 | t-anders | 2008-04-28 20:56:09 +0100 (Mon, 28 Apr 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/source/Schoenberg.oz
+
+Edited doc
+
+------------------------------------------------------------------------
+r1094 | t-anders | 2008-04-28 20:55:08 +0100 (Mon, 28 Apr 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/source/Rules.oz
+
+Added comment
+
+------------------------------------------------------------------------
+r1093 | t-anders | 2008-04-28 20:49:43 +0100 (Mon, 28 Apr 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/contributions/anders/ET31/source/DB.oz
+
+Added some JI chords, most suggested by Doty
+
+------------------------------------------------------------------------
+r1092 | t-anders | 2008-04-22 11:18:31 +0100 (Tue, 22 Apr 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/testing/GeneralUtils-test.oz
+
+Minor change
+
+------------------------------------------------------------------------
+r1091 | t-anders | 2008-04-22 11:18:05 +0100 (Tue, 22 Apr 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/contributions/anders/Realtime/examples/Simple-Counterpoint.oz
+   M /trunk/strasheela/contributions/anders/Realtime/examples/Simple-RealTimeOut.oz
+   M /trunk/strasheela/contributions/anders/Realtime/testing/Realtime-test.oz
+   M /trunk/strasheela/doc/Example-Realtime-SimpleCounterpoint.html
+   M /trunk/strasheela/doc-source/Example-Realtime-SimpleCounterpoint.muse
+
+RT.scoreSearcherWithTimeout: Argument order of extended scripts is swapped
+
+------------------------------------------------------------------------
+r1090 | t-anders | 2008-04-22 11:14:47 +0100 (Tue, 22 Apr 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/examples/HS/Fuxian-Counterpoint-with-Scale.oz
+
+GUtils.extendedScriptToScript: Argument order of extended scripts is swapped
+
+------------------------------------------------------------------------
+r1089 | t-anders | 2008-04-22 11:14:08 +0100 (Tue, 22 Apr 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/contributions/anders/Realtime/Realtime.oz
+
+ScoreSearcherWithTimeout: Argument order of extended scripts is swapped
+
+------------------------------------------------------------------------
+r1088 | t-anders | 2008-04-22 11:10:22 +0100 (Tue, 22 Apr 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/source/GeneralUtils.oz
+
+ExtendedScriptToScript: Argument order of extended scripts is swapped
+
+------------------------------------------------------------------------
+r1087 | t-anders | 2008-04-22 10:43:22 +0100 (Tue, 22 Apr 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/source/ScoreCore.oz
+
+Replaced warnings using Browser with WarnGui warnings
+
+------------------------------------------------------------------------
+r1086 | t-anders | 2008-04-21 23:01:00 +0100 (Mon, 21 Apr 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/CHANGELOG.txt
+   M /trunk/strasheela/scripts/release-strasheela.sh
+
+Minor changes
+
+------------------------------------------------------------------------
+r1085 | t-anders | 2008-04-21 23:00:42 +0100 (Mon, 21 Apr 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/others/TODO/Strasheela-TODO.org
+   M /trunk/strasheela/others/TODO/Strasheela-TODO.org_archive
+
+Updated todo list
+
+------------------------------------------------------------------------
+r1084 | t-anders | 2008-04-21 23:00:19 +0100 (Mon, 21 Apr 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/doc-source/Changes.muse
+
+Updated list of changes (started v 0.9.6)
+
+------------------------------------------------------------------------
+r1083 | t-anders | 2008-04-21 22:59:16 +0100 (Mon, 21 Apr 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/doc/StrasheelaExamples.html
+
+Added More Examples
+
+------------------------------------------------------------------------
+r1082 | t-anders | 2008-04-21 22:22:19 +0100 (Mon, 21 Apr 2008) | 2 lines
+Changed paths:
+   A /trunk/strasheela/doc/Example-More.html
+   A /trunk/strasheela/doc-source/Example-More.muse
+
+Added More Examples
+
+------------------------------------------------------------------------
+r1081 | t-anders | 2008-04-21 22:21:24 +0100 (Mon, 21 Apr 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/doc-source/StrasheelaExamples.muse
+
+Added More Examples
+
+------------------------------------------------------------------------
+r1080 | t-anders | 2008-04-21 22:20:54 +0100 (Mon, 21 Apr 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/examples/Microtonal-MIDI-examples.oz
+
+Renamed Note2Midi -> NoteToMidi
+
+------------------------------------------------------------------------
+r1079 | t-anders | 2008-04-21 22:20:34 +0100 (Mon, 21 Apr 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/examples/ContinuousControllersInScore-MidiOutput.oz
+
+Renamed Note2Midi -> NoteToMidi
+
+------------------------------------------------------------------------
+r1078 | t-anders | 2008-04-21 22:20:17 +0100 (Mon, 21 Apr 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/source/MidiOutput.oz
+
+Renamed Note2Midi -> NoteToMidi
+
+------------------------------------------------------------------------
+r1077 | t-anders | 2008-04-21 22:19:46 +0100 (Mon, 21 Apr 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/examples/04-AutomaticMelodyHarmonsation.oz
+
+Edited example doc (describes bug in example)
+
+------------------------------------------------------------------------
+r1076 | t-anders | 2008-04-17 15:23:44 +0100 (Thu, 17 Apr 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/source/ScoreDistribution.oz
+
+Added variable ordering 'dom+deg'
+
+------------------------------------------------------------------------
 r1074 | t-anders | 2008-04-16 23:19:06 +0100 (Wed, 16 Apr 2008) | 2 lines
 Changed paths:
    M /trunk/strasheela/doc/api/class12.html
