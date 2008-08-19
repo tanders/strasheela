@@ -74,14 +74,11 @@ MyScore = {Score.makeScore seq(items:[note(duration:1
 
 declare
 MyScore = {Score.makeScore seq(items:[note(duration:1
-					   pitch:60
-					   amplitude:64)
-				      note(duration:1
-					   pitch:60
-					   amplitude:64)
-				      note(duration:1
-					   pitch:60
-					   amplitude:64)]
+					   pitch:60)
+				      note(duration:2
+					   pitch:64)
+				      note(duration:3
+					   pitch:67)]
 			       startTime:0
 			       timeUnit:(beats))
 	   unit}
@@ -89,11 +86,10 @@ MyScore = {Score.makeScore seq(items:[note(duration:1
 {Out.saveScore MyScore unit}
 
 
-%% !! Blocks
 declare
 MyLoadedScore = {Out.loadScore unit}
 
-{MyLoadedScore toInitRecord($)}
+{Browse {MyLoadedScore toInitRecord($)}}
 
 
 
