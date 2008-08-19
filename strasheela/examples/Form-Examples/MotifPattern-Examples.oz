@@ -1,7 +1,7 @@
 
 
 %%
-%% This file lists a number of small-scale examples involving motifs, all based on Pattern.useMotifs. Note that for simplicity the motif constraint is often the only constraint applied (so the result could have been created in a purely deterministic way without constraint programming). However, additional constraints can be add to these examples. 
+%% This file lists a number of small-scale examples involving motifs, all based on Pattern.useMotifs. Note that for simplicity the motif constraint is often the only constraint applied (so the result could have been created in a purely deterministic way without constraint programming). However, additional constraints can be added to these examples. 
 %%
 %% Usage: first feed buffer to feed aux defs etc at the end, then feed commented examples one by one.
 %%
