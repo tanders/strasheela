@@ -28,6 +28,11 @@
 
 *** TODO Release next version 
 
+* Backup SVN repository on Office Mac
+
+  see 
+  [[file:~/oz/music/Strasheela/sourceforge-howto/backup-howto.muse::Backup%20of%20the%20SVN%20repository][file:~/oz/music/Strasheela/sourceforge-howto/backup-howto.muse::Backup of the SVN repository]]
+
 * Strasheela Bugs
 
 
