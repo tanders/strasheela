@@ -1,6 +1,6 @@
 
 %%
-%% Output into PWGL score formats: non-mensural ENP and Kilian's simple score format.
+%% Output into PWGL score formats: non-mensural ENP and Kilian Sprotte's simple score format.
 %% It appears that the simple score format is actually the same as the non-mensural ENP format. The difference is that the simple format requires that a last time point marks the end of the score. 
 %%
 
