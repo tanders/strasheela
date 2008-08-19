@@ -13,7 +13,18 @@
 *** DONE Test Strasheela with new Mozart version
     CLOSED: [2008-08-18 Mon 22:11]
     
-*** TODO Test parallel search
+*** DONE Verify changes to compiler interfaces
+    CLOSED: [2008-08-19 Tue 17:02]
+    
+**** DONE check Out: does Out.loadScore still work?     
+     CLOSED: [2008-08-19 Tue 17:00]
+**** DONE check Tutorial
+     CLOSED: [2008-08-19 Tue 16:55]
+**** DONE ?? check OzServer -- is there an easy to do example?
+     CLOSED: [2008-08-19 Tue 17:02]
+
+*** DONE Test parallel search
+    CLOSED: [2008-08-19 Tue 17:06]
 
 *** TODO Release next version 
 
