@@ -169,6 +169,10 @@ TimeSpend = {GUtils.timeSpend  	% measure runtime
 {Browse timeSpend#TimeSpend}	
 {Browse solution#Sol}
 
+{SearchEngine close}
+
+{SearchEngine stop}
+
 
 {SearchEngine trace(true)}
 
