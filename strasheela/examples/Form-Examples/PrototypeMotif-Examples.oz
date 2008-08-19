@@ -1,6 +1,6 @@
 
 %%
-%% This file lists some small-scale examples which use the prototype motif model. Note that for simplicity many examples only apply motif-related constraints (so the result could have been created in a purely deterministic way without constraint programming). However, additional constraints can be add to these examples. 
+%% This file lists some small-scale examples which use the prototype motif model. Note that for simplicity many examples only apply motif-related constraints (so the result could have been created in a purely deterministic way without constraint programming). However, additional constraints can be added to these examples. 
 %%
 %% Usage: first feed buffer to feed aux defs etc at the end, then feed commented examples one by one.
 %%
