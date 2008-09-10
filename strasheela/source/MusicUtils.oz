@@ -17,11 +17,19 @@
 functor
 import 
    GUtils at 'GeneralUtils.ozf'
+   LUtils at 'ListUtils.ozf'
+   %% NOTE: dependency to contribution
+   Pattern at 'x-ozlib://anders/strasheela/Pattern/Pattern.ozf'
+   
 export
    KeynumToFreq FreqToKeynum RatioToKeynumInterval KeynumToPC
    LevelToDB DBToLevel
    Freq0
    FullTuningTable
+
+   MakeNoteLengthsTable MakeNoteLengthsRecord MakeDurationsRecord
+   SetNoteLengthsRecord ToDur SetDurationsRecord ToNoteLengths
+   
 define
    /** %% freq at keynum 0, keynum 69 = 440 Hz
    %% */
@@ -84,6 +92,138 @@ define
        unit(size:Size
 	    period:FullTable.(Size+1))}
    end
+
+   /** %% MakeNoteLengthsTable creates a list which maps symbolic note lengths to duration values. Expects the duration of a beat (i.e. the timeUnit is beats(Beat)) and a list of tuplet fractions to take into consideration (e.g., [3 5] denotes triplets and quintuplets). The function returns a list of pairs NotationI#DurI. NotationI is denotes a symbolic note length as a virtual string, and DurI is the corresponding duration (an int). 
+   %% Notation of symbolic note lengths:
+   %% plain durations: 'd' followed by reciprocal values. Example: d#4 is quarter note
+   %% dotted note lengths: plain duration followed by _ (underscore). Example: d#4#'_' is quarter note + eighth note. Multiple dots are not supported (simply add multiple durations instead).
+   %% tuplets (notated as individual note lengths): t followed by a number indicating the fraction, followed by the duration. Example: t#3#d#4 is a triplet quarter note and t#3#d#4#'_' is a dotted triplet note. Nested tuplets are not supported.
+   %% ties: simply add the resulting durations of the individual notes.
+   %%
+   %% */
+   fun {MakeNoteLengthsTable Beat TupletFractions}
+      Beat4 = Beat*4
+      /* %% Translates notation 1/D into corresponding duration. E.g., if D=4 then the result is Beat.
+      %% Only works for durations which "fit into" Beat.
+      %% */
+      fun {Symdur2Dur D}
+	 Beat * 4 div D
+      end
+      /** %% Returns list of pairs DurName#Dur for "plain durations". Create pairs for "plain durations" (1, 1/2, 1/4 etc.), in increasing order of durations (i.e. decreasing order of duration names)
+      %% */
+      fun {MakePlainDurPairs D}
+	 fun {Aux D Accum}
+	    if {GUtils.isDivisible Beat4 D}
+	    then {Aux D*2
+		  (d#D) # {Symdur2Dur D} | Accum}
+	    else Accum
+	    end
+	 end
+      in
+	 {Aux D nil}
+      end
+      /** %% Returns list of pairs DurName#Dur for tuplets
+      %% */
+      %% code doublications with MakePlainDurPairs..
+      fun {MakeTupletDurPairs D_outer}
+	 fun {Aux D Accum}
+	    if {GUtils.isDivisible Beat4 D}
+	    then {Aux D*2
+		  (t#D_outer#d#(D*2 div D_outer))#{Symdur2Dur D} | Accum}
+	    else Accum
+	    end
+	 end
+      in
+	 {Aux D_outer nil}
+      end
+      /** %% Expects a list of dur pairs of one kind (e.g., plain or triplet) and returns the corresponding dotted dur pairs -- appended to DurPairs.
+      %% */
+      fun {MakeDottedPairs DurPairs}
+	 if DurPairs == nil then nil
+	 else 
+	    {Append DurPairs
+	     {Pattern.map2Neighbours DurPairs
+	      fun {$ _#Dur1 Name2#Dur2}
+		 Feat = {Width Name2}+1
+	      in
+		 {Adjoin Name2 '#'(Feat:'_')}#Dur1+Dur2
+	      end}}
+	 end
+      end
+      %%
+      PlainDurPairs = {MakeDottedPairs {MakePlainDurPairs 1}}
+      AllTupletDurPairs = {LUtils.mappend TupletFractions
+			   fun {$ I} {MakeDottedPairs {MakeTupletDurPairs I}} end}
+   in
+      {Append PlainDurPairs AllTupletDurPairs}
+   end
+   /** %% Returns a record which maps symbolic note lengths (atoms which are record features) to duration values (integers, feature values in the record). See the documentation of MakeNoteLengthsTable for the arguments Beat and TupletFractions, and also the symbolic note length notation. However, whereas in MakeNoteLengthsTable this notation uses VSs (so it can be easily decomposed) here it uses atoms for convenience.
+   %%
+   %% Example: create a record R and then use this record for notating symbolic durations.  
+   %% R = {MakeNoteLengthsRecord 15 [3 5]}
+   %% R.d4    % quarter note
+   %% R.d4t3  % quarter note triplet
+   %% */
+   fun {MakeNoteLengthsRecord Beat TupletFractions}
+      {List.toRecord unit
+       {Map {MakeNoteLengthsTable Beat TupletFractions}
+	fun {$ Symbol#Dur} {VirtualString.toAtom Symbol}#Dur end}}
+   end
+   /** %% Returns a record which maps durations (integers, feature values in the record) to lists of symbolic note lengths (atoms which are record features). See the documentation of MakeNoteLengthsTable for the arguments Beat and TupletFractions, and also the symbolic note length notation.
+   %% */
+   fun {MakeDurationsRecord Beat TupletFractions}
+      %% group DurI#NotationI pairs with same duration such that the notations are collected in a single list 
+      fun {Accumulate Xs}
+	 case Xs of [D#N] then [D#N]
+	 [] D1#N1 | D2#N2 | R then
+	    if D1 == D2 then
+	       {Accumulate D1#{Append N1 N2} | R}
+	    else D1#N1 | {Accumulate D2#N2 | R}
+	    end
+	 end
+      end
+   in
+      {List.toRecord unit
+       {Map 			% put most simple notation at front 
+	{Accumulate
+	 %% sort by duration
+	 {Sort  {Map {MakeNoteLengthsTable Beat TupletFractions}
+		 fun {$ Symbol#Dur} Dur#[Symbol] end}
+	  fun {$ X Y} X.1 < Y.1 end}}
+	fun {$ Dur#Notations}
+	   Dur # {Sort Notations fun {$ X Y} {Width X} < {Width Y} end}
+	end}}
+   end
+
+   local
+      R = {NewCell {MakeNoteLengthsRecord 4 nil}}
+   in
+      /** %% Initialises transformation for ToDur. See the documentation of MakeNoteLengthsTable for the arguments Beat and TupletFractions.
+      %% */
+      proc {SetNoteLengthsRecord Beat TupletFractions}
+	 R := {MakeNoteLengthsRecord Beat TupletFractions}
+      end
+      /** %% Expects a symbolic note length (atom) and returns the corresponding duration. Use SetNoteLengthsRecord for initialisation (default is {SetNoteLengthsRecord 4 nil}).
+      %% */
+      fun {ToDur NoteLength}
+	 @R.NoteLength
+      end
+   end
+   local
+      R = {NewCell {MakeDurationsRecord 4 nil}}
+   in
+      /** %% Initialises transformation for ToNoteLengths. See the documentation of MakeNoteLengthsTable for the arguments Beat and TupletFractions.
+      %% */
+      proc {SetDurationsRecord Beat TupletFractions}
+	 R := {MakeDurationsRecord Beat TupletFractions}
+      end
+      /** %% Expects a duration (int) and returns a list of the corresponding symbolic note lengths. Use SetDurationsRecord for initialisation (default is {MakeDurationsRecord 4 nil}).
+      %% */
+      fun {ToNoteLengths Dur}
+	 @R.Dur
+      end
+   end
+   
    
 end
 
