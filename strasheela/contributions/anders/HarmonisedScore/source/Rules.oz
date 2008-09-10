@@ -111,8 +111,9 @@ import
    SMapping at 'x-ozlib://anders/strasheela/source/ScoreMapping.ozf'
 %    Score at 'x-ozlib://anders/strasheela/ScoreCore.ozf'
    Pattern at 'x-ozlib://anders/strasheela/Pattern/Pattern.ozf'
-   Schoenberg at 'Schoenberg.ozf'
+   HS_Score at 'Score.ozf'
    DB at 'Database.ozf'
+   Schoenberg at 'Schoenberg.ozf'
    
 export
 
@@ -144,7 +145,10 @@ export
 
    ResolveNonharmonicNotesStepwise
 
-   MaxInterval
+   ClearDissonanceResolution IntervalBetweenNonharmonicTonesIsConsonant
+   MaxInterval MaxNonharmonicNoteSequence MaxNonharmonicNotePercent MaxRepetitions MinPercentSteps
+
+   
 
    %% aux constraints 
    GetInterval
@@ -688,6 +692,48 @@ define
 % end
 
 
+   
+   
+   /** %% [contrapuntual constraint] If in one voice there occurs a non-chord tone followed by a chord tone (a dissonance resolution), then no other voice should obscure this resolution by a non-chord tone starting together with the tone resolving the dissonance. However, simultaneous dissonances can start more early or later.
+   %% */
+   proc {ClearDissonanceResolution VoiceNotes}
+      {Pattern.for2Neighbours VoiceNotes
+       proc {$ N1 N2}
+	  thread 			% accessing sim notes may block
+	     SimNotes = {N2 getSimultaneousItems($ test:fun {$ X}
+							   {X isNote($)} andthen
+							   ({X getStartTime($)} =: {N2 getStartTime($)}) == 1
+							end)}
+	  in
+	     {FD.impl {FD.conj
+		       ({N1 getInChordB($)} =: 0)
+		       ({N2 getInChordB($)} =: 1)}
+	      {Pattern.conjAll
+	       {Map SimNotes fun {$ N} {N getInChordB($)} end}}
+	      1}
+	  end
+       end}
+   end
+
+   
+   /** %% [contrapuntual constraint] Constraints that all pairs of simultaneous non-harmonic tones (i.e. the inChordB parameter = 0) form consonant intervals among each other. Notes is the list of all notes which potentially are non-harmonic tones (e.g., all notes in the score). ConsonantIntervals is a FD int domain specification (e.g., a list of integers) which specifies the allowed intervals.
+   %% */
+   proc {IntervalBetweenNonharmonicTonesIsConsonant Notes ConsonantIntervals}
+      fun {IsNonharmonicNote N} {N getInChordB($)} == 0 end
+      %% N1 and N2 form a consonant interval
+      proc {ConsonantInterval N1 N2}
+	 Interval = {FD.int ConsonantIntervals}
+      in
+	 {FD.distance {N1 getPitch($)} {N2 getPitch($)} '=:' Interval} 
+      end
+   in
+      %% TODO: revise ForSimultaneousPairs interface
+      {SMapping.forSimultaneousPairs {LUtils.cFilter Notes IsNonharmonicNote}
+       ConsonantInterval
+       unit(test:isNote
+	    cTest:IsNonharmonicNote)}
+   end
+
 
    
    /** %% Constraints that no pitch interval between consecutive Notes (list of note objects) exceeds MaxInterval (FD int).
@@ -698,6 +744,44 @@ define
       {ForAll Intervals proc {$ I} I =<: MaxInterval end}
    end
    
+   /** %% Restrict the number of consecutive non-harmonic Notes (list of note objects) to N at maximum. Non-harmonic notes are notes for which the method getInChordB returns 0 (i.e. false).
+   %% */
+   %% BUG: ?? causes problems in 22 ET but not 31 ET?
+   proc {MaxNonharmonicNoteSequence Notes N}
+      {Pattern.forNeighbours Notes N+1
+       proc {$ Ns}
+	  {FD.sum {Map Ns fun {$ N} {N getInChordB($)} end} '=<:' N}
+       end}
+   end
+
+   /** %% Restrict the maximum percentage of non-harmonic Notes (list of note objects) to MaxPercent.
+   %% */
+   proc {MaxNonharmonicNotePercent Notes MaxPercent}
+      {Pattern.percentTrue_Range {Map Notes fun {$ N} {FD.nega {N getInChordB($)}} end}
+       0 MaxPercent}
+   end
+
+   /** %% N specifies how many pitch repetitions occur at maximum between consecutive Notes (list of note objects), i.e. how many pitch intervals are 0. If N=0 then no repetitions are permitted.
+   %% */
+   proc {MaxRepetitions Notes N}
+      Bs = {Pattern.map2Neighbours Notes
+	    proc {$ N1 N2 B} B = ({GetInterval N1 N2} =: 0) end}
+   in
+      {Pattern.percentTrue_Range Bs 0 N}
+   end
+
+   /** %% Constrains the interval between Notes (list of note objects): there are at least MinPercent steps. The optional argument 'step' sets the step size as a frequency ratio (default 8#7).
+   %% */
+   proc {MinPercentSteps Notes MinPercent Args}
+      Default = unit(step:8#7)
+      As = {Adjoin Args Default}
+      Bs = {Pattern.map2Neighbours Notes
+	    proc {$ N1 N2 B} B = ({GetInterval N1 N2} =<: {HS_Score.ratioToInterval As.step}) end}
+   in
+      {Pattern.percentTrue_Range Bs MinPercent 100}
+   end
+
+   
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%
 %%% Aux Constraints 
@@ -705,7 +789,7 @@ define
 
    /** %% Returns the absolute pitch interval (a FD int) between the note objects Note1 and Note2. Interval is implicitly declared a FD int.
    %% */
-   %% NOTE: consider memoization if this function is called multiple times with same notes.
+   %% NOTE: consider memoization, as this function is possibly called multiple times with same notes (e.g., multiple other constraints use it).
    proc {GetInterval Note1 Note2 ?Interval}
       Interval = {FD.decl}
       {FD.distance {Note1 getPitch($)} {Note2 getPitch($)} '=:' Interval}
