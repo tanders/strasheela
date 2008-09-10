@@ -876,22 +876,23 @@ define
 
 
 
-   /* %% Expects a note object and returns a list with corresponding MIDI note-on and note-off events. NoteToMidi creates only a pair of note-on/note-off events. For additional output (e.g. pitch bend) append the result of other functions (e.g. NoteToPitchbend) to the result of NoteToMidi. 
-   %% Note that NoteToMidi always rounds down the pitch.
-   %% The Args defaults are
-   unit(noteOffVelocity:0)
+   /* %% Expects a note object and returns a list with corresponding MIDI note-on and note-off events. NoteToMidi creates only a pair of note-on/note-off events. For additional output (e.g. pitch bend) append the result of other functions (e.g. NoteToPitchbend) to the result of NoteToMidi.
+   %% Args:
+   %% 'noteOffVelocity': int for the note-off velocity, default 0
+   %% 'round': function used for rounding the MIDI pitch float, default Floor
+   %% 
    %% See NoteToUserEvent for further arguments and their meaning.
    %% */
    fun {NoteToMidi MyNote Args}
-      Defaults = unit(noteOffVelocity:0)
+      Defaults = unit(noteOffVelocity:0
+		      round:Floor)
       As = {Adjoin Defaults Args}
    in
       {NoteToUserEvent MyNote
        fun {$ Track Start Channel}
 	  EndTime = {BeatsToTicks
 		     {MyNote getEndTimeInSeconds($)}}
-	  %% NOTE: always use floor of pitch
-	  Pitch = {FloatToInt {Floor {MyNote getPitchInMidi($)}}}
+	  Pitch = {FloatToInt {As.round {MyNote getPitchInMidi($)}}}
 	  Velocity = {FloatToInt {MyNote getAmplitudeInVelocity($)}}
        in
 	  %% output a list of MIDI events 
