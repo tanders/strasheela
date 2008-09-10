@@ -708,6 +708,7 @@ define
    fun {$ Track Time Channel Value}
       {Out.midi.makeCC Track Time Channel 7 Value}
    end
+   %% NOTE: no implicit support for any tempo curves etc. Instead, adapt StartTime and EndTime (and possibly transform MyFenv) outside FenvToMidiCC.
    %% */
    fun {FenvToMidiCC MyFenv N Track StartTime EndTime Channel Controller}
       Times = {Map {LUtils.arithmeticSeries {IntToFloat StartTime}
@@ -730,6 +731,7 @@ define
    end
 
    /** %% Like FenvToMidiCC, but here the Fenv is associated with a temporal item MyItem, whose start and end times are taken. 
+   %% NOTE: no support for any tempo curves etc. 
    %% */ 
    fun {ItemFenvToMidiCC MyFenv N Track MyItem Channel Controller}
       StartTime = {Out.midi.beatsToTicks {MyItem getStartTimeInSeconds($)}}
