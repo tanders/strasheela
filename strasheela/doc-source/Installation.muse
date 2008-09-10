@@ -22,7 +22,7 @@ After successfully installing Mozart, you may want to test the installation. At 
 
    ={Browse 'hello'}= 
 
-Select this text line with the mouse, then go to the Oz menu and select 'Feed Region'. This feeds the selected code to the system (i.e. executes it): it opens a window called Oz Browser which shows 'hello'. 
+Select this text line with the mouse, then go to the Oz menu and select 'Feed Region'. This feeds the selected code to the system (i.e. executes it): it opens a window called Oz Browser which shows 'hello'. Note that the newly created window may be behind the exiting window.
 
 
 *  Install Oz Extensions 
