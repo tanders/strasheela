@@ -27,7 +27,7 @@ export
    Identity
    Random RandIntoRange
    MakeRandomGenerator SetRandomGeneratorSeed
-   Log Mod_Float
+   Log Mod_Float IsDivisible
    % MakeConcurrentFn
    ToProc ToFun Procs2Proc
    ExtendedScriptToScript
@@ -174,6 +174,13 @@ define
       then Result + X2
       else Result
       end
+   end
+
+   /** %% Returns a Boolean value whether X is divisible by Y. X and Y are ints.
+   %% */
+   %% Implementation is approximated using floats for simplicity
+   fun {IsDivisible X Y}
+      {Abs {IntToFloat X}/{IntToFloat Y} - {IntToFloat X div Y}} < 0.5 / {IntToFloat Y}
    end
 
 
