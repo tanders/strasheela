@@ -11,17 +11,23 @@
 
   - Documentation
 
+    - Added relatively complex example which constrain the rhythmical, melodic, harmonic, and formal structure at the same time: examples/Form-Examples/FriendlyMusicExample.oz
+
 
   - Minor additions
 
-    - Added OZRC file configured for MacOS
-    - Out.midi.noteToMidi: added arg 'round'
+    - HS.rules: added several harmonic/melodic/contrapuntual rules: ClearDissonanceResolution, IntervalBetweenNonharmonicTonesIsConsonant, MaxInterval, MaxNonharmonicNoteSequence, MaxNonharmonicNotePercent, MaxRepetitions, MinPercentSteps
     - GUtils: added IsDivisible
     - HS.score: added RatioToInterval
-    - HS.rules: added MaxInterval
+    - Added OZRC file configured for MacOS
+    - Out.midi.noteToMidi: added arg 'round'
+
 
   - Bug fixes and refactorings
 
+
+
+  - For further fixes see the [[../CHANGELOG.txt]].
 
 
 
