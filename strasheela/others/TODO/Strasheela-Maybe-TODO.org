@@ -460,6 +460,7 @@ InspectorObject = {Inspector.new unit}
 
    Should I add a feature 'subdirs' to the makefiles and then add a makefile at each subdir? 
 
+
 * Strasheela documentation				      :MAYBE:STRASHEELA:
 
 ** Strasheela tutorial
@@ -472,6 +473,16 @@ InspectorObject = {Inspector.new unit}
 
 
 * Strasheela design					      :MAYBE:STRASHEELA:
+
+** Constrain form with graph constraints 
+
+*** Ask Gustavo Gutierrez (gustavo.ggutierrez@gmail.com) about current stage of GeOz
+*** Install Mozart with Gecode interface and graph constraints 
+
+*** Learn graph constraints 
+
+*** Create Strasheela branch and explore how I can replace current hard-wired item nesting with graph constraints
+
 
 ** Form constraint: how to constrain repetition				 :MAYBE:
 
@@ -556,6 +567,54 @@ InspectorObject = {Inspector.new unit}
 	 Less precise, but more simple (and more efficient -- no optimisation..)
 
 
+** Partial solution solvers (with parallel search): quick approximated solution (e.g., for realtime) 
+
+   Idea for an alternative to soft constraints (e.g., based on weighted constraints)
+
+   Define solver which keeps track of best solution so far (e.g., the partial solution with most determined variables. If multiple solution have same number of most determined variables, then further criterial may apply -- some variables may be more important than others. But the order in which solutions are found also depends on the distribution strategy. Alternative quality: minimise number of violated constraints -- can I do that in Oz??).  
+
+   When search fails or is stopped (e.g., by a timeout), then the solver returns the best solution found so far (shall I then determine the undetermined variables to random domain values, and possibly even mark these parameters as "ad hoc determined"?) 
+   Alternatively, solver does not determine undetermined variables. 
+   ?? Should solver additional return quality measurement value (e.g. percentage of determined variables)
+   Problem: propagators on variables cannot be removed. So, simply determining variables will lead to fail. Instead, I have to replace them or something (would work for Strasheela parameter values, but is not general) 
+   Problem: quality measurement (primarily) based on number of correctly determined variables is not the best (remaining variables can be very wrong), but its at least something...  
+   
+   Randomisation of value ordering useful, and I should use parallel search with different random value orderings. Returned is then best solution among all parallel searchers. Even restarting might be a good idea... 
+   
+   
+   Variable ordering should possibly adapted to fit this partial solution approach. For example, with left-to-right var ordering, all "wrong values" are happening at the end. Perhaps I instead want the wrong values distributed over the whole score
+   Alternative idea: use your standard variable orderings, but variables particularlily hard to determined skip after some trying. For example, for each parameter measure how often a fail occured just after determining this parameter value. If it exceeds some threshhold, then just skip this var altogether -- it will never be determined then. 
+   If other vars depend on a skipped var (e.g., a chord index was skipped), then they can likely be determined without problem (e.g., pitch class set of chord without determined index is just larger...)
+ 
+
+   This idea has similarities with anytime algorithms (see below). 
+
+   Instead, I could use branch and bound algorithm to improve solution quality. However, that sounds more useful in case there is more time for search (i.e. not for realtime applications)
+
+   
+
+   !! Hm, weighted constraints with best solution search (BAB) might actually find a first solution quickly, as many constraints can be left out. After that it is an anytime algorithm which nicely improves the solution quality, has clean semantics etc.  
+
+
+*** Lit on anytime algorithms
+
+    see GTD folder "anytime algo"
+
+    From: C.G.Johnson@kent.ac.uk
+    Subject: Papers on Anytime Algorithms
+    Date: September 1, 2008 1:01:10 PM BDT
+
+    Here is a good general overview:
+    http://anytime.cs.umass.edu/shlomo/papers/aimag96.pdf
+    
+    ... and another...
+    http://www.acm.org/crossroads/xrds3-1/racra.html
+
+   ...and here is a paper specifically applying them to constraint problems
+   http://portal.acm.org/citation.cfm?coll=GUIDE&dl=GUIDE&id=242589
+
+   
+   
 ** Markov chain constraints which include probablilty			  :WAIT:
 
    Wait for soft constraints support for Strasheela
