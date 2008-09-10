@@ -144,6 +144,8 @@ export
 
    ResolveNonharmonicNotesStepwise
 
+   MaxInterval
+
    %% aux constraints 
    GetInterval
    ConstrainMaxIntervalR
@@ -398,7 +400,7 @@ define
 
 
 
-   /** %% Defines melodic/harmonic constraint which implements proper suspension and other things. Chords is a list of chord objects and VoiceNotes a list of note objects which all belong to a single voice. At the border between two chords, the last voice note simultaneous to the preceeding chord and the first note simultaneous to the succeeding chord, these two notes should not be both non-chord tones (note: these two notes can be the same or different score objects, and have the same or different pitches).
+   /** %% Defines contrapuntal constraint which implements proper suspension and other things. Chords is a list of chord objects and VoiceNotes a list of note objects which all belong to a single voice. At the border between two chords, the last voice note simultaneous to the preceeding chord and the first note simultaneous to the succeeding chord, these two notes should not be both non-chord tones (note: these two notes can be the same or different score objects, and have the same or different pitches).
    %% If the first note of a chord is a non-chord tone, then it should have the same pitch as the last of the previous chord. In other words: if a chord starts with a non-chord tone, then it must be a suspension (suspension are of course less clear in a solo line...). 
    %% NB: this constraint assumes that neighbouring chords differ (e.g., have a different root), otherwise it is too strict.
    %% NB: this constraint does not define that non-chord tones are resolved stepwise, but it can be combined, e.g.., with ResolveNonharmonicNotes.
@@ -688,6 +690,13 @@ define
 
 
    
+   /** %% Constraints that no pitch interval between consecutive Notes (list of note objects) exceeds MaxInterval (FD int).
+   %% */
+   proc {MaxInterval Notes MaxInterval}
+      Intervals = {Pattern.map2Neighbours Notes GetInterval}
+   in
+      {ForAll Intervals proc {$ I} I =<: MaxInterval end}
+   end
    
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%
@@ -696,6 +705,7 @@ define
 
    /** %% Returns the absolute pitch interval (a FD int) between the note objects Note1 and Note2. Interval is implicitly declared a FD int.
    %% */
+   %% NOTE: consider memoization if this function is called multiple times with same notes.
    proc {GetInterval Note1 Note2 ?Interval}
       Interval = {FD.decl}
       {FD.distance {Note1 getPitch($)} {Note2 getPitch($)} '=:' Interval}
