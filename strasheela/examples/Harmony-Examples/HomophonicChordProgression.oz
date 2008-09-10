@@ -367,7 +367,7 @@ end
 %% left-to-right strategy with breaking ties by type
 {GUtils.setRandomGeneratorSeed 0}
 {SDistro.exploreOne {GUtils.extendedScriptToScript HomophonicChordProgression
-		     unit(key:'A'#'major'
+		     unit(key:'D'#'major'
 			  n:9)}
  {Adjoin HS.distro.leftToRight_TypewiseTieBreaking
   unit(value:random)}}
