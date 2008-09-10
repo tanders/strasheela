@@ -145,6 +145,7 @@ export
 
    PitchClassToPitch PitchClassToPitch2 % PitchClassToPitchD
 %   IntervalPCToInterval
+   RatioToInterval
    TransposePC
    DegreeToPC CMajorDegreeToPC
    TransposeDegree
@@ -251,6 +252,13 @@ define
 %       {FD.timesD Octave {DB.getPitchesPerOctave} OctAux} 
 %       {FD.plusD PitchClass OctAux Pitch}
 %    end
+
+   /** %% Transforms Ratio (either a float or a fraction specification in the form <Int>#<Int>) into the corresponding keynumber interval (an int) of the presently set pitches per octave.
+   %% */
+   fun {RatioToInterval Ratio}
+      {FloatToInt {MUtils.ratioToKeynumInterval Ratio
+		   {IntToFloat {DB.getPitchesPerOctave}}}}
+   end
 
    
    /** %% Transposes the pitch class UnTranspPC by the interval TranspositionPC such that the resulting pitch TranspPC is still a pitch class, that is a pitch without an octave component. A pitch class is a FD int with the domain 0#(PitchesPerOctave-1). 
