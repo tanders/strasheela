@@ -11,7 +11,7 @@
 
   - Documentation
 
-    - Added relatively complex example which constrain the rhythmical, melodic, harmonic, and formal structure at the same time: examples/Form-Examples/FriendlyMusicExample.oz
+    - Added relatively complex examples which constrain the rhythmical, melodic, harmonic, and formal structure at the same time: examples/Form-Examples/FriendlyMusicExample.oz
 
 
   - Minor additions
