@@ -6,6 +6,8 @@
 
   - Main additions and changes 
 
+    - MUtils: Added support for symbolic duration notation: MakeNoteLengthsTable, MakeNoteLengthsRecord, MakeDurationsRecord, SetNoteLengthsRecord, ToDur, SetDurationsRecord, ToNoteLengths
+
 
   - Documentation
 
@@ -14,6 +16,9 @@
 
     - Added OZRC file configured for MacOS
     - Out.midi.noteToMidi: added arg 'round'
+    - GUtils: added IsDivisible
+    - HS.score: added RatioToInterval
+    - HS.rules: added MaxInterval
 
   - Bug fixes and refactorings
 
