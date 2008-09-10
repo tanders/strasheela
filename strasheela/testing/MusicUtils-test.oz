@@ -37,3 +37,27 @@
 {MUtils.dBToLevel ~60.0 1.0}
 
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+{Browse {MUtils.makeNoteLengthsTable 3 [3 5 7 11 13]}}
+
+declare
+R = {MUtils.makeNoteLengthsRecord 3*5 [3 5 7 11 13]}
+{Browse R}
+
+%% .. same durations..
+{Browse R.d2}
+{Browse R.t3d2_}
+
+%% Note that there are doublications. E.g., d4 and d4t3_ have same dur (namely 3) 
+{Browse {MUtils.makeDurationsRecord 3 [3 5 7 11 13]}}
+
+%%%
+
+{Browse {MUtils.setNoteLengthsRecord 3 [3 5 7 11 13]}}
+
+{Browse {MUtils.toDur d2}}
+
+
+
