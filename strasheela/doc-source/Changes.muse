@@ -2,6 +2,24 @@
 #title Changes 
 ; #author Torsten Anders
 
+* Changes in Version 0.9.7 (no date yet)
+
+  - Main additions and changes 
+
+
+  - Documentation
+
+
+  - Minor additions
+
+    - Added OZRC file configured for MacOS
+    - Out.midi.noteToMidi: added arg 'round'
+
+  - Bug fixes and refactorings
+
+
+
+
 * Changes in Version 0.9.6 (19 August 2008)
 
   - Main additions and changes 
