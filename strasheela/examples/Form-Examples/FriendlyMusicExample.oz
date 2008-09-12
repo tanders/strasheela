@@ -116,13 +116,14 @@ proc {NoteSeq Args ?MyScore}
    Defaults = unit(n:1		 % number of contained notes
 		   %% note constructor, can output textual representation. If an object is returned, the default note class (HS.score.note) is overwritten
 		   makeNote: MakeDefaultNoteArgs
+		   constructors: add(note:HS.score.note)
 		   notesRule: proc {$ Notes} skip end
 		  )
    As = {Adjoin Defaults Args}
 in
    MyScore = {Score.makeScore2 {Adjoin {Record.subtractList As [n makeNote notesRule]}
 				seq(items:{LUtils.collectN As.n As.makeNote})}
-	      add(note:HS.score.note)}
+	      As.constructors}
    %% user-defined constraints 
    thread			% apply constraints only after score is initialised
       {As.notesRule {MyScore getItems($)}}
@@ -256,10 +257,11 @@ end
 %%
 %%
 
-/* %% Different rhythmic motifs
+/* 
 
 declare
-%%% wrapped script in explicit proc so I can use local variables like MyChords
+%% Script definition, using HS.score.harmoniseMotifs
+%% wrapped script in explicit proc so I can use local variables like MyChords
 proc {MyScript MyScore}
    %% NOTE: Changing ChordNo requires refactoring (e.g., some chord constraints applied to specific chord number, and number devided by 2 for bass note no of section)
    ChordNo = 8			
@@ -436,8 +438,7 @@ in
 	    lilyTimeSignature: "\\time  3/4"
 	   )}}
 end
-
-
+%% Actual solver call
 {GUtils.setRandomGeneratorSeed 0}
 {SDistro.exploreOne MyScript
  TypewiseWithPatternMotifs_LeftToRightTieBreaking_Distro}
@@ -446,8 +447,6 @@ end
 
 %% test for seeing errors
 {MyScript}
-
-
 
 
 
