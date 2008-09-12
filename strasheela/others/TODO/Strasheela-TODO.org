@@ -1,37 +1,18 @@
 #+CATEGORY: Strasheela
 
 * Strasheela release
-   
-
-** Get Strasheela working with new Mozart 1.4.0
-*** DONE Install Mozart 1.4.0 
-    CLOSED: [2008-08-18 Mon 22:11]
-    Install as App on Mac, then you can switch between old and new installation by vars in ~/.profile
-
-    I also need to comment out all Oz-related stuff in ~/.emacs to use the 1.4.0 App
-
-*** DONE Test Strasheela with new Mozart version
-    CLOSED: [2008-08-18 Mon 22:11]
-    
-*** DONE Verify changes to compiler interfaces
-    CLOSED: [2008-08-19 Tue 17:02]
-    
-**** DONE check Out: does Out.loadScore still work?     
-     CLOSED: [2008-08-19 Tue 17:00]
-**** DONE check Tutorial
-     CLOSED: [2008-08-19 Tue 16:55]
-**** DONE ?? check OzServer -- is there an easy to do example?
-     CLOSED: [2008-08-19 Tue 17:02]
-
-*** DONE Test parallel search
-    CLOSED: [2008-08-19 Tue 17:06]
-
-*** TODO Release next version 
 
 * Backup SVN repository on Office Mac
 
   see 
   [[file:~/oz/music/Strasheela/sourceforge-howto/backup-howto.muse::Backup%20of%20the%20SVN%20repository][file:~/oz/music/Strasheela/sourceforge-howto/backup-howto.muse::Backup of the SVN repository]]
+
+
+* Strasheela examples
+
+** TODO Realtime example with non-harmonic tones etc. for Eduardo
+   DEADLINE: <2008-09-26 Fri>
+
 
 * Strasheela Bugs
 
@@ -56,6 +37,7 @@ MyScore = {Score.makeScore note(info:"test")
 
    On the other hand, pickling not supported for undetermined values. Can I have an approach which works for both cases (translates undetermined vars into text/code which would be compiled into Oz values during loading.)
 
+   Alternative idea for storing Fenvs to textual format: store approximated Fenv (sample Fenv and create envelope from sampling data)
 
 ** Define how fenvs of prototype motifs can be variated with motif instance arguments 
 
@@ -77,10 +59,55 @@ MyScore = {Score.makeScore note(info:"test")
 
 * Other 
 
+** GeOz 
+   
+*** TODO Install GeOz 
+    SCHEDULED: <2008-11-03 Mon>
+    
+    First ask  gustavo.ggutierrez@gmail.com whether meanwhile graph constraints are working again
+
+1) Download gecode sources (we don't have support for binary distributions yet) and build them. In the install directory there will be a lib/pkgconfig subdir. Export the shell variable PKG_CONFIG_PATH to /Users/u/install/lib/pkgconfig. For this you need pkg-config installed, if not, download it form http://www.rudix.org/packages.html .
+
+2) With the previous variable exported, the mozart configure will properly detect gecode. Then, just configure mozart (with debug support if you want) and install it.
+
+3) Now, you should have a working installation of the development branch and you can take a look at mozart-gecode/share/examples/gfd for the examples. That will give you and impression of the changes from the user level.
+
+If problems occur ask gustavo.ggutierrez@gmail.com
+
+
+*** Check out documentation
+
+    The reference doc is updated to reflect the new constraint system
+    Wait/ask gustavo.ggutierrez@gmail.com to render the HTML files
+
+*** Check out examples
+
+    How did coding style change? What else did change
+
+    file:/Users/t/oz/mozart/branches/mozart-gecode/mozart/share/examples/gfd/
+
+    possibly create new small-scale examples for testing and to better understand
+
+**** FD constraints (including selection constraints)
+**** FS constraints
+**** !! Graph constraints
+     
+     currently broken in Gecode 2.*
+     gustavo.ggutierrez@gmail.com said this should be fixed in about 1-2 months time (i.e. mid Oct-Nov)
+
+**** Space combinators 
+
+
+*** Check out how performance of examples 
+
+    Noticable difference of old version?
+
 
 ** TODO Read Strasheela doc					     :SOON:EASY:
 
    know your system, e.g., know all my Patterns 
+
+
 
 
 
