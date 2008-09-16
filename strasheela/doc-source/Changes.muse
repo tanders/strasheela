@@ -25,6 +25,8 @@
 
   - Bug fixes and refactorings
 
+    - Out.outputScoreConstructor: added arguments 'postfix' and 'exclude'
+
 
 
   - For further fixes see the [[../CHANGELOG.txt]].
