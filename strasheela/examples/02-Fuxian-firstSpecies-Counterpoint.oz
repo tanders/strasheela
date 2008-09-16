@@ -372,6 +372,7 @@ end
 %% recomputation (recomputation is explained, e.g., in the book
 %% 'Programming Constraint Services', details and a link to the book
 %% are given in the Strasheela documentation).
+{GUtils.setRandomGeneratorSeed 0}
 {SDistro.exploreOne Fux_FirstSpecies
  unit(order:size
       value:random)}
