@@ -367,131 +367,44 @@ declare
 %% add simple harmony constraint
 %%
 
-%% BUG: the following example is impossible (in the present implementation of PMotif)
-%% Within PMotif.makeScript an auxiliary copy of a motif prototype is created (and fully initialised). This copy has no access to the score whichin which the prototype was created, and so the fun getChords accessing a sim chord must cause an error for this aux copy creation!  
-%%
-%% First idea for an approach to address this problem: use dummy getChords def in prototype (with chord explicitly given), and change it (unset and reset later)
-%% Unsuitable: getChords would be changed too late (i.e. the required value would not be used in InitConstraint)
-
-%% Second idea: create a deep copy of an object without the [Umweg] via the textual representation of a score.
-%% Also unsuitable: I want to retain the implicitly applied constraints for 'unset' variables. So, creating a deep copy is no option then...
-
-%% Third idea: Specify that certain args are overwritten for certain score objects?? No 'unsetting' -- instead specify arg replacement
-
-
-
-%%
-%% Re-define Motif_A_P and Motif_B_P with different note classes for harmonic CSP. Only the note constructor changed, everything else is as before.
-%%
-declare
-/** %% Expects chord (textual or chord object) and returns fun for argument 'getChords'.
-%% */
-fun {GetMyChord MyChord}
-   fun {$ MyNote}
-      [if {IsRecord MyChord} then
-	  {Score.makeScore MyChord unit(chord:HS.score.chord)}
-       else MyChord
-       end]
-   end
-end
 %% Returns a note object whose pitch class is implicitly constrained to express a pitch class of a simultaneous chord object
 fun {MakeChordNote Args}
    {Score.makeScore2
-    {Adjoin note(inChordB:1	% only chord-tones permitted
+    {Adjoin note(
+	       inChordB:1	% only chord-tones permitted
 % 		 inChordB:{FD.int 0#1}
 		 getChords:
-		    {GetMyChord chord(duration:16 % dur irrelevant
-				      index:{HS.db.getChordIndex 'major'}
-				      transposition:0)}
-% 		    fun {$ MyNote}
-% 		       %% note is related to simultaneous chord
-% 		       [{MyNote findSimultaneousItem($ test:HS.score.isChord)}]
-% 		    end
+		    fun {$ MyNote}
+		       %% note is related to simultaneous chord
+		       [{MyNote findSimultaneousItem($ test:HS.score.isChord)}]
+		    end
 		)
      Args}
     unit(note:HS.score.note)}
 end
-Motif_A_P_HS = {Score.makeScore seq(handle:Motif_A_P_HS
-				    items:[note(duration:6
-						pitch:60)
-					   note(duration:2
-						pitch:62
-						inChordB:0)
-					   %% add lilypond articulations to note
-					   note(info:lily("\\downbow")
-						duration:8
-						pitch:64)]
-				    startTime:0
-				    timeUnit:beats(4))
-		add(note:MakeChordNote)}
-Motif_B_P_HS = {Score.makeScore
-		seq(handle:Motif_B_P_HS
-		    items:[sim(items:[note(duration:4
-					   pitch:67
-					   getChords:{GetMyChord chord(duration:16 % dur irrelevant
-								       index:{HS.db.getChordIndex
-									      'major'}
-								       transposition:7)})
-				      note(duration:4
-					   pitch:59
-					   getChords:{GetMyChord chord(duration:16 % dur irrelevant
-								       index:{HS.db.getChordIndex
-									      'major'}
-								       transposition:7)})])
-			   sim(items:[note(duration:8
-					   pitch:67
-					   getChords:{GetMyChord chord(duration:16 % dur irrelevant
-								       index:{HS.db.getChordIndex
-									      'major'}
-								       transposition:0)})
-				      note(duration:8
-					   pitch:60
-					   getChords:{GetMyChord chord(duration:16 % dur irrelevant
-								       index:{HS.db.getChordIndex
-									      'major'}
-								       transposition:0)})])]
-		    startTime:0
-		    timeUnit:beats(4))
-		add(note:MakeChordNote)}
+
 
 /*
 
 %% same example as before, but now the resulting harmony is controlled.
 %% Underlying chord progression is determined (G-7 C). Notes must be chord tones, but no further constraints for simplicity (e.g., no special constraints for bass notes or that chord is fully expressed) 
 
-%% TODO:
-%%
-%% ?? show chords in lily output
 
 declare
 % {HS.db.setDB HS.dbs.default.db}
 [Motif_A Motif_B]
-= {Map [Motif_A_P_HS Motif_B_P_HS]
+= {Map [Motif_A_P Motif_B_P]
    fun {$ Proto}
       {PMotif.makeScript Proto
-       unit(%% NOTE: besides the pitches, also the parameters pitchClass and octave are unset 
-	    unset: [isNote#[pitch pitchClass octave]]
+       unit(%% In motif instance, MakeChordNote is used as a constructor for note objects. So, the original class is overwritten and some arguments (i.e. inChordB and getChords) are specified.  
+	    constructors:unit(note:MakeChordNote)
+	    unset: [isNote#[pitch]]
 	    scriptArgs:
 	       unit(pitchDomain:
 		       proc {$ MyMotif Dom}
 			  {ForAll {MyMotif collect($ test:isNote)}
 			   proc {$ N} {N getPitch($)} = {FD.int Dom.1} end}
-		       end # dom(60#72)
-		    %% NOTE: stateful overwriting of attribute
-		    %% BUG: new getChords binding too late -- not used by init constraint..
-		    getChords:
-		       proc {$ MyMotif P}
-			  {MyMotif forAll(test:isNote
-					  proc {$ N}
-					     {N setAttribute(getChords P)}
-					     thread
-						{MyMotif setAttribute(chords {P N})}
-					     end
-					  end)}
-		       end # fun {$ MyNote}
-				%% note is related to simultaneous chord
-				[{MyNote findSimultaneousItem($ test:HS.score.isChord)}]
-			     end)
+		       end # dom(60#72))
 	    prototypeDependencies:
 	       [isContainer#{PMotif.unifyDependency
 			     fun {$ X}
@@ -499,8 +412,6 @@ declare
 			     end}
 	       ])}
    end}
-
-
 {GUtils.setRandomGeneratorSeed 0}
 {SDistro.exploreOne
  fun {$}
@@ -530,6 +441,49 @@ declare
 	 chord:HS.score.chord)}
  end 
  unit(value:random)}
+
+
+
+% %% TMP: testing
+% declare
+% MyScore = {SDistro.searchOne
+% 	   fun {$}
+% 	      {Score.makeScore
+% 	       sim(items:[%% voice 1
+% 			  seq(items:[motif_A(pitchDomain:dom(60#72))
+% 				     motif_A(pitchDomain:dom(60#72))]
+% 			     )
+% 			  %% voice 2
+% 			  seq(items:[motif_B(offsetTime:4
+% 					     pitchDomain:dom(48#60))
+% 				     motif_B(offsetTime:4
+% 					     pitchDomain:dom(48#60))])
+% 			  %% chord objects
+% 			  %% (note: showing chords in Lilypond output requires special customisation, left out here fore simplicity)
+% 			  seq(items:[chord(duration:4*4
+% 					   index:{HS.db.getChordIndex 'dominant seventh'}
+% 					   root:7)
+% 				     chord(duration:4*4
+% 					   index:{HS.db.getChordIndex 'major'}
+% 					   root:0)])]
+% 		   startTime:0
+% 		   timeUnit:beats(4)
+% 		  )
+% 	       add(motif_A:Motif_A
+% 		   motif_B:Motif_B
+% 		   chord:HS.score.chord)}
+% 	   end 
+% 	   unit(value:random)}.1
+
+
+% {Out.renderAndShowLilypond MyScore
+%  unit}
+
+% {Browse {Map {MyScore collect($ test:isNote)} fun {$ N} {N getChords($)} end}}
+
+
+% {Browse {Map {MyScore collect($ test:isNote)} fun {$ N} {N getInChordB($)} end}}
+
 
 */
 
@@ -761,7 +715,19 @@ proc {RenderLilypondAndCsound I X}
 			    X == {List.last {MyMotif collect($ test:isNote)}}
 			 end}
 		     end # {Out.makeNoteToLily
-			     fun {$ Note} '\\stopGroup' end}
+			    fun {$ Note} '\\stopGroup' end}
+		     %% mark non-harmonic notes
+		     isNote#fun {$ MyNote}
+			       {{Out.makeNoteToLily
+				 fun {$ N}
+				    if {HS.score.isInChordMixinForNote N}
+				       andthen {N isInChord($)} == 0
+				    then "^x"
+				    else ""
+				    end
+				 end}
+				MyNote}
+			    end
 		    ]
 	    %% See http://lilypond.org/doc/v2.11/Documentation/user/lilypond/Automatic-note-splitting#Automatic-note-splitting
 	    %% Note: automatic note splitting ignores explicit ties
