@@ -21,11 +21,13 @@
     - HS.score: added RatioToInterval
     - Added OZRC file configured for MacOS
     - Out.midi.noteToMidi: added arg 'round'
+    - PMotif.makeScript: added argument 'constructors' 
 
 
   - Bug fixes and refactorings
 
     - Out.outputScoreConstructor: added arguments 'postfix' and 'exclude'
+    - Fixed bug in the harmony-related example in [[../examples/Form-Examples/PrototypeMotif-Examples.oz][PrototypeMotif-Examples.oz]] (with the new arg PMotif.makeScript arg 'constructors')
 
 
 
