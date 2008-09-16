@@ -138,6 +138,10 @@ define
 				     proc {$ N} {N getPitch($)} = {FD.int Dom.1} end}
 				 end # dom(60#72))
 
+   %% 'constructors': this argument (a record of classes or unary functions) makes it possible to overwrite constructors used when the motif instance is created with the function Score.makeScore2. By default, the classes of the prototype are specified as constructors, but this default can be overwritten for specific score objects with this argument. Example: lets assume the prototype contains notes which are instances of the class Score.note. The motif instance can overwrite this class with the note class HS.score.note by specifying the following. In that case, only the (no unset) note parameters defined by the note objects in the prototype are copied, but additional constraints can be applied explicitly to the parameters of the new class (e.g., via a special constructor function instead of the class, by using the 'scriptArgs', etc.)
+
+   constructors: unit(note:HS.score.note)  
+
    %% NB: Be careful with variables as default script arguments, they would be shared by all motif instances. If you need independent variables as script arguments, then wrap them in a function argument (e.g., fun {$} {FD.decl} end) which would be called inside the procedure ConstraintI.
    %%
    %% 'motifTest': this is an optional output argment. It binds its value to a Boolean function which returns true for motif instances created with MyScript.
@@ -150,16 +154,17 @@ define
 		      constraints:nil
 		      scriptArgs:unit
 		      prototypeDependencies:nil
-		      motifTest:_)
+		      motifTest:_
+		      constructors:unit)
       As = {Adjoin Defaults Args}      
-      fun {CopyScore2 Orig Args}
+      fun {CopyScore2 Orig Args Constructors}
 	 OrigR = {Orig toInitRecord($ exclude:nil)}
       in
 	 {Score.makeScore2
 	  %% Add Args for top-level given directly to script 
 	  %% possibly overwrite features of orig, but keep Orig's label
 	  {Adjoin {Adjoin OrigR Args} {Label OrigR}}
-	  {MyProto getInitClasses($)}}
+	  {Adjoin {MyProto getInitClasses($)} Constructors}}
       end
       MotifName = {NewName}
    in
@@ -194,7 +199,7 @@ define
 	    end
 	 end
 	 %% Create copy of MyProto, so changing the copy does not effect MyProto. 
-	 AuxScore = {CopyScore2 MyProto unit}
+	 AuxScore = {CopyScore2 MyProto unit unit}
 	 {Score.initScore AuxScore}
       in
 	 %% Unbind AuxScore param values
@@ -214,7 +219,7 @@ define
 			      test:Test)}
 	  end}
 	 %% Create a copy of AuxScore, so all implicit constraints are applied by Score.makeScore
-	 MyScore = {CopyScore2 AuxScore TopLevelScoreObjArgs}
+	 MyScore = {CopyScore2 AuxScore TopLevelScoreObjArgs As.constructors}
 	 %% add info tag for type checking
 	 {MyScore addFlag(GlobalMotifName)}
 	 {MyScore addFlag(MotifName)}
