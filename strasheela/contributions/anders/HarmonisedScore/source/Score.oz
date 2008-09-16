@@ -1106,7 +1106,7 @@ define
 		       % untransposedRoot#getUntransposedRoot#noMatch
 			 pitchClasses#getPitchClasses#noMatch
 		       % untransposedPitchClasses#getUntransposedPitchClasses#noMatch
-			 dbFeatures#fun {$ X } {Arity {X getDBFeatures($)}} end#nil
+			 dbFeatures#fun {$ X} {Arity {X getDBFeatures($)}} end#nil
 			]})
 	 end
 
@@ -1130,6 +1130,20 @@ define
       meth getDB(?X)
 	 X={DB.getInternalChordDB}
       end
+
+      %% Try: output code string for creating index instead of index itself. However, as every call to method toInitRecord then shows this code instead of the index, this can be misleading. Besides, exporting would export it as string..
+%       meth getInitInfo($ exclude:Excluded)	    
+% 	 unit(superclass:Score.temporalElement % skip PitchClassCollection
+% 	      args: [index#fun {$ X} "{HS.db.getChordIndex '"#{self getDB($)}.comment.{self getIndex($)}.comment#"'}" end#noMatch
+% 		     transposition#getTransposition#noMatch
+% 		     root#getRoot#noMatch
+% 		     %% untransposedRoot and untransposedPitchClasses are implicit in index and transposition
+% 		       % untransposedRoot#getUntransposedRoot#noMatch
+% % 			pitchClasses#getPitchClasses#noMatch
+% 		       % untransposedPitchClasses#getUntransposedPitchClasses#noMatch
+% 		     dbFeatures#fun {$ X} {Arity {X getDBFeatures($)}} end#nil
+% 		    ])
+%       end
    end
    fun {IsChord X}
       {Score.isScoreObject X} andthen {HasFeature X ChordType}
@@ -2903,7 +2917,7 @@ define
       unit(voices:4
 	   pitchDomain:48#72
 	   amp:30
-	   value:mid
+	   value:random
 	   ignoreSopranoChordDegree:false
 	   minIntervalToBass:0)
       %% 
@@ -2920,7 +2934,7 @@ define
 	 Defaults = unit(%voices:4
 			 %pitchDomain:48#72
 			 %amp:30
-			 value:mid
+			 value:random
 			 order:{SDistro.makeSetPreferredOrder
 				%% order: time params, chord params, pitch classes, octaves, pitches
 				[fun {$ X} {X isTimeParameter($)} end
