@@ -367,51 +367,89 @@ declare
 %% add simple harmony constraint
 %%
 
+%% BUG: the following example is impossible (in the present implementation of PMotif)
+%% Within PMotif.makeScript an auxiliary copy of a motif prototype is created (and fully initialised). This copy has no access to the score whichin which the prototype was created, and so the fun getChords accessing a sim chord must cause an error for this aux copy creation!  
+%%
+%% First idea for an approach to address this problem: use dummy getChords def in prototype (with chord explicitly given), and change it (unset and reset later)
+%% Unsuitable: getChords would be changed too late (i.e. the required value would not be used in InitConstraint)
+
+%% Second idea: create a deep copy of an object without the [Umweg] via the textual representation of a score.
+%% Also unsuitable: I want to retain the implicitly applied constraints for 'unset' variables. So, creating a deep copy is no option then...
+
+%% Third idea: Specify that certain args are overwritten for certain score objects?? No 'unsetting' -- instead specify arg replacement
+
+
 
 %%
 %% Re-define Motif_A_P and Motif_B_P with different note classes for harmonic CSP. Only the note constructor changed, everything else is as before.
 %%
-
+declare
+/** %% Expects chord (textual or chord object) and returns fun for argument 'getChords'.
+%% */
+fun {GetMyChord MyChord}
+   fun {$ MyNote}
+      [if {IsRecord MyChord} then
+	  {Score.makeScore MyChord unit(chord:HS.score.chord)}
+       else MyChord
+       end]
+   end
+end
 %% Returns a note object whose pitch class is implicitly constrained to express a pitch class of a simultaneous chord object
 fun {MakeChordNote Args}
    {Score.makeScore2
     {Adjoin note(inChordB:1	% only chord-tones permitted
 % 		 inChordB:{FD.int 0#1}
 		 getChords:
-		    fun {$ MyNote}
-		       %% note is related to simultaneous chord
-		       [{MyNote findSimultaneousItem($ test:HS.score.isChord)}]
-		    end)
+		    {GetMyChord chord(duration:16 % dur irrelevant
+				      index:{HS.db.getChordIndex 'major'}
+				      transposition:0)}
+% 		    fun {$ MyNote}
+% 		       %% note is related to simultaneous chord
+% 		       [{MyNote findSimultaneousItem($ test:HS.score.isChord)}]
+% 		    end
+		)
      Args}
     unit(note:HS.score.note)}
 end
-Motif_A_P_HS = {Score.makeScore seq(items:[note(duration:6
-						pitch:60
-						amplitude:64)
+Motif_A_P_HS = {Score.makeScore seq(handle:Motif_A_P_HS
+				    items:[note(duration:6
+						pitch:60)
 					   note(duration:2
 						pitch:62
-						amplitude:64)
+						inChordB:0)
 					   %% add lilypond articulations to note
 					   note(info:lily("\\downbow")
 						duration:8
-						pitch:64
-						amplitude:64)]
+						pitch:64)]
 				    startTime:0
 				    timeUnit:beats(4))
 		add(note:MakeChordNote)}
 Motif_B_P_HS = {Score.makeScore
-		seq(items:[sim(items:[note(duration:4
+		seq(handle:Motif_B_P_HS
+		    items:[sim(items:[note(duration:4
 					   pitch:67
-					   amplitude:64)
+					   getChords:{GetMyChord chord(duration:16 % dur irrelevant
+								       index:{HS.db.getChordIndex
+									      'major'}
+								       transposition:7)})
 				      note(duration:4
 					   pitch:59
-					   amplitude:64)])
+					   getChords:{GetMyChord chord(duration:16 % dur irrelevant
+								       index:{HS.db.getChordIndex
+									      'major'}
+								       transposition:7)})])
 			   sim(items:[note(duration:8
 					   pitch:67
-					   amplitude:64)
+					   getChords:{GetMyChord chord(duration:16 % dur irrelevant
+								       index:{HS.db.getChordIndex
+									      'major'}
+								       transposition:0)})
 				      note(duration:8
 					   pitch:60
-					   amplitude:64)])]
+					   getChords:{GetMyChord chord(duration:16 % dur irrelevant
+								       index:{HS.db.getChordIndex
+									      'major'}
+								       transposition:0)})])]
 		    startTime:0
 		    timeUnit:beats(4))
 		add(note:MakeChordNote)}
@@ -438,7 +476,22 @@ declare
 		       proc {$ MyMotif Dom}
 			  {ForAll {MyMotif collect($ test:isNote)}
 			   proc {$ N} {N getPitch($)} = {FD.int Dom.1} end}
-		       end # dom(60#72))
+		       end # dom(60#72)
+		    %% NOTE: stateful overwriting of attribute
+		    %% BUG: new getChords binding too late -- not used by init constraint..
+		    getChords:
+		       proc {$ MyMotif P}
+			  {MyMotif forAll(test:isNote
+					  proc {$ N}
+					     {N setAttribute(getChords P)}
+					     thread
+						{MyMotif setAttribute(chords {P N})}
+					     end
+					  end)}
+		       end # fun {$ MyNote}
+				%% note is related to simultaneous chord
+				[{MyNote findSimultaneousItem($ test:HS.score.isChord)}]
+			     end)
 	    prototypeDependencies:
 	       [isContainer#{PMotif.unifyDependency
 			     fun {$ X}
@@ -446,6 +499,8 @@ declare
 			     end}
 	       ])}
    end}
+
+
 {GUtils.setRandomGeneratorSeed 0}
 {SDistro.exploreOne
  fun {$}
