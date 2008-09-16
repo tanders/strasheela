@@ -38,7 +38,7 @@ define
 		      pitchDomain:{ET31.pitch 'C'#3}#{ET31.pitch 'C'#5}
 		      amp:30
 		      %% as orig default
-		      % value:mid
+		      % value:random
 		      % ignoreSopranoChordDegree:false
 		      % minIntervalToBass:0
 		     ) 
