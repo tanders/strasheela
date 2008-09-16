@@ -31,7 +31,7 @@ declare
  unit(outname:"ChordsToScore"
       voices:4
       pitchDomain:{ET31.pitch 'C'#3}#{ET31.pitch 'C'#5}
-      value:mid
+      value:random
 %      value:min
       ignoreSopranoChordDegree:true
 %      minIntervalToBass:{ET31.pc 'F'}
