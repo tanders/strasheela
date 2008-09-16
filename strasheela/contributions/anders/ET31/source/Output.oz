@@ -3,6 +3,7 @@
 functor
 import
    OS FS Explorer
+   GUtils at 'x-ozlib://anders/strasheela/source/GeneralUtils.ozf'
    Out at 'x-ozlib://anders/strasheela/source/Output.ozf'
    Score at 'x-ozlib://anders/strasheela/source/ScoreCore.ozf'
    HS at 'x-ozlib://anders/strasheela/HarmonisedScore/HarmonisedScore.ozf'
@@ -38,9 +39,13 @@ define
    %%
    %% OLD: Dir is output directory.
    proc {AddExplorerOut_ChordsToScore Args}
-      Defaults = unit(outname:out)
+      Defaults = unit(outname:out
+		      value:random
+		      ignoreSopranoChordDegree:true)
       As = {Adjoin Defaults Args}
    in
+      %% reset random seed, so chord seq rendering solutions can differ when created multipe times 
+      {GUtils.setRandomGeneratorSeed 0}
       {Explorer.object
        add(information proc {$ I X}
 			  FileName = As.outname#"-"#I#"-"#{OS.rand}
