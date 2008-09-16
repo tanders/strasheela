@@ -389,10 +389,11 @@ define
 %%%
 
    
-   /** %% Creates an Oz program (as a VS) which re-constructs MyScore.
+   /** %% Creates an Oz program (as a VS) which re-constructs MyScore. 
    %% */
    fun {ToScoreConstructor MyScore Spec}
-      Defaults = unit(prefix:"declare \n MyScore \n = {Score.makeScore\n")
+      Defaults = unit(prefix:"declare \n MyScore \n = "
+		      postfix:"")
       Args = {Adjoin Defaults Spec}
       StartTime = {MyScore getStartTime($)}
       TimeUnit = {MyScore getTimeUnit($)}   
@@ -404,15 +405,37 @@ define
       then {GUtils.warnGUI "warn: undetermined timeUnit"}
       end
       %% NB: RecordToVS can handle undetermined variables
-      Args.prefix
-      #{RecordToVS
-	{Adjoin unit(startTime:StartTime
-		     timeUnit:TimeUnit)
-	 {MyScore toInitRecord($)}}}
-      #"\n"#{MyScore getInitClassesVS($)}#"}"
+      local
+	 InitRecord
+      in
+	 {MyScore {Adjoin if {Value.hasFeature Args exclude} then
+			     unit(exclude:Args.exclude)
+			  else unit
+			  end
+		   toInitRecord(InitRecord)}}
+	 Args.prefix#	 
+	 "{Score.makeScore\n"#{RecordToVS
+			       {Adjoin unit(startTime:StartTime
+					    timeUnit:TimeUnit)
+				InitRecord}}
+	 #"\n"#{MyScore getInitClassesVS($)}#"}"#Args.postfix
+      end
    end
    
-   /** %% Stores an Oz program in a file which re-constructs MyScore. For example, this file can also be used for editing purposes. 
+   /** %% Stores an Oz program in a file which re-constructs MyScore. For example, this file can also be used for editing purposes.
+   %% Args
+   %%
+   %% 'prefix' and 'postfix': VSs added before and after code for creating score object
+   %% 'exclude': 'exclude' argument of method toInitRecord
+   %%
+   %% Defaults:
+   %%
+   unit(file:"test"
+	extension:".ssco"
+	dir:{Init.getStrasheelaEnv defaultSScoDir}
+	prefix:"declare \n MyScore \n = "
+	postfix:""
+       )
    %% */
    %% !! renamed, was: OutputInitRecord
    proc {OutputScoreConstructor MyScore Spec}
