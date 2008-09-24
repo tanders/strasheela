@@ -22,11 +22,12 @@
     - Added OZRC file configured for MacOS
     - Out.midi.noteToMidi: added arg 'round'
     - PMotif.makeScript: added argument 'constructors' 
+    - Refactored score object method toInitRecord: now with arg 'clauses' (i.e., default output format -- defined by method 'getInitInfo' -- can be overwritten in 'toInitRecord' call)     - Out.outputScoreConstructor (and related score archiving procs): added arguments 'postfix', 'exclude', and 'clauses' 
+ 
 
 
-  - Bug fixes and refactorings
+  - Bug fixes 
 
-    - Out.outputScoreConstructor: added arguments 'postfix' and 'exclude'
     - Fixed bug in the harmony-related example in [[../examples/Form-Examples/PrototypeMotif-Examples.oz][PrototypeMotif-Examples.oz]] (with the new arg PMotif.makeScript arg 'constructors')
 
 
