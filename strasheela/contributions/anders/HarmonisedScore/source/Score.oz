@@ -710,7 +710,7 @@ define
 	 %% NOTE: an interval object is usually not explicitly
 	 %% contained in a score object, and thus will not be output
 	 %% when a score is stored in some format.
-	 meth getInitInfo($ exclude:Excluded)	 
+	 meth getInitInfo($ ...)	 
 	    unit(superclass:Score.abstractElement
 		 args:[index#getIndex#noMatch
 		       distance#getDistance#noMatch
@@ -1092,7 +1092,7 @@ define
 	 /** %% The parameter 'index' is included if it is undetermined, but it is omitted in case the set of pitch classes, the transposition, and the index are determined. If the index is determined, then the set of pitch classes plus the transposition should be sufficient and the index can be derived from them. Omitting the index makes archived score solutions more stable. Even if the chord/scale database was edited  later (e.g., chords were added) so that the indices changed, the archived score will still work as long as the set of pitch classes for the original chords did not change.
 	 %% In principle, it is possible that there are two chords with the same pitchclasses and transposition but different additional db features. However, that should be considered a bug in the database. In case alternative db feature values for a single chord/scale are needed, then these should be defined as variable domain values for a single db entry, not as additional entries.  
 	 %% */
-	 meth getInitInfo($ exclude:Excluded)	    
+	 meth getInitInfo($ ...)	    
 	    unit(superclass:Score.temporalElement
 		 args: {Append if {IsDet {self getPitchClasses($)}} andthen
 				  {IsDet {self getTransposition($)}} andthen
@@ -1331,7 +1331,7 @@ define
 % 	      InScaleMixinForChord, toInScaleMixinForChordInitRecord($ exclude:Excluded)}
 %       end
       
-      meth getInitInfo($ exclude:Excluded)	 
+      meth getInitInfo($ ...)	 
 	 unit(superclass:Chord
 	      args:[inScaleB#getInScaleB#{FD.int 0#1}
 		    chordPCsInScale#getChordPCsInScale#noMatch
@@ -1450,7 +1450,7 @@ define
 				    initScaleDegreeMixinForChord}
       end
       
-      meth getInitInfo($ exclude:Excluded)	 
+      meth getInitInfo($ ...)	 
 	 unit(superclass:DiatonicChord
 	      args:[rootDegree#getRootDegree#{FD.decl}
 		    rootAccidental#getRootAccidental#{DB.makeAccidentalFDInt}])
@@ -1582,7 +1582,7 @@ define
 				     initInversionMixinForChord}
 	 end
     
-	 meth getInitInfo($ exclude:Excluded)	 
+	 meth getInitInfo($ ...)	 
 	    unit(superclass:SuperClass
 		 args:[bassChordDegree#getBassChordDegree#{DB.makeChordDegreeFDInt}
 		       bassChordAccidental#getBassChordAccidental#{AbsoluteToOffsetAccidental 0}
@@ -2342,7 +2342,7 @@ define
 % 				      ])}
 % 	       Excluded}}
 %       end
-      meth getInitInfo($ exclude:Excluded)	 
+      meth getInitInfo($ ...)	 
 	 unit(superclass:Score.note
 	      args:[pitchClass#getPitchClass#{DB.makePitchClassFDInt}
 		    octave#getOctave#{DB.makeOctaveFDInt}
@@ -2408,7 +2408,7 @@ define
 % 	       Excluded}}
 %       end
       
-      meth getInitInfo($ exclude:Excluded)	 
+      meth getInitInfo($ ...)	 
 	 unit(superclass:Note2
 	      args:[inChordB#getInChordB#{FD.int 0#1}
 		    inScaleB#getInScaleB#{FD.int 0#1}
@@ -2451,7 +2451,7 @@ define
 				   initChordDegreeMixinForNote}
       end
       
-      meth getInitInfo($ exclude:Excluded)	 
+      meth getInitInfo($ ...)	 
 	 unit(superclass:Note
 	      args:[cMajorDegree#getCMajorDegree#{FD.int [1#7]}
 		    cMajorAccidental#getCMajorAccidental#{DB.makeAccidentalFDInt}
@@ -2478,7 +2478,7 @@ define
 					  initEnharmonicSpellingMixinForNote}
       end
       
-      meth getInitInfo($ exclude:Excluded)	 
+      meth getInitInfo($ ...)	 
 	 unit(superclass:Note
 	      args:[cMajorDegree#getCMajorDegree#{FD.int [1#7]}
 		    cMajorAccidental#getCMajorAccidental#{DB.makeAccidentalFDInt}])
@@ -2501,7 +2501,7 @@ define
 				   initScaleDegreeMixinForNote}
       end
       
-      meth getInitInfo($ exclude:Excluded)	 
+      meth getInitInfo($ ...)	 
 	 unit(superclass:Note
 	      args:[scaleDegree#getScaleDegree#{DB.makeScaleDegreeFDInt}
 		    scaleAccidental#getScaleAccidental#{DB.makeAccidentalFDInt}])
@@ -2524,7 +2524,7 @@ define
 				   initChordDegreeMixinForNote}
       end
       
-      meth getInitInfo($ exclude:Excluded)	 
+      meth getInitInfo($ ...)	 
 	 unit(superclass:Note
 	      args:[chordDegree#getChordDegree#{DB.makeChordDegreeFDInt}
 		    chordAccidental#getChordAccidental#{DB.makeAccidentalFDInt}])
@@ -2553,7 +2553,7 @@ define
 				   initScaleDegreeMixinForNote}
       end
    
-      meth getInitInfo($ exclude:Excluded)	 
+      meth getInitInfo($ ...)	 
 	 unit(superclass:Score.note
 	      args:[pitchClass#getPitchClass#{DB.makePitchClassFDInt}
 		    octave#getOctave#{DB.makeOctaveFDInt}
@@ -2584,7 +2584,7 @@ define
 				   initChordDegreeMixinForNote}
       end
    
-      meth getInitInfo($ exclude:Excluded)	 
+      meth getInitInfo($ ...)	 
 	 unit(superclass:Score.note
 	      args:[pitchClass#getPitchClass#{DB.makePitchClassFDInt}
 		    octave#getOctave#{DB.makeOctaveFDInt}

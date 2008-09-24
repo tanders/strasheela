@@ -184,7 +184,7 @@ define
 % 				       database#getDatabase#noMatch])}
 % 	       Excluded}}
 %       end
-      meth getInitInfo($ exclude:Excluded)
+      meth getInitInfo($ ...)
 	 unit(superclass:Score.sequential
 	      args:[motifIdentity#getMotifIdentity#noMatch
 		    motifVariation#getMotifVariation#noMatch
@@ -216,7 +216,7 @@ define
 % 				       database#getDatabase#noMatch])}
 % 	       Excluded}}
 %       end
-      meth getInitInfo($ exclude:Excluded)
+      meth getInitInfo($ ...)
 	 unit(superclass:Score.simultaneous
 	      args:[motifIdentity#getMotifIdentity#noMatch
 		    motifVariation#getMotifVariation#noMatch

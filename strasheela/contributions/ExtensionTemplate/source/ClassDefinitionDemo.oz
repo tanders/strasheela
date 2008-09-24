@@ -61,7 +61,7 @@ define
 
       /** %% For creating the textual representation from self: add reflective information about the init method.
       %% */
-      meth getInitInfo($ exclude:Excluded)
+      meth getInitInfo($ ...)
 	 unit(%% Specifies superclass of TestClass
 	      superclass:Score.temporalElement
 	      %% Specifies additional init args defined by TestClass (here only foo), its accessor method (can be a method or a function), and its default value (can be noMatch for init args which are mandatory and have no default).   

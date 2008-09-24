@@ -201,7 +201,7 @@ define
 % 	      {Append [endTime duration startTime]
 % 	       Excluded}}
 %       end      
-      meth getInitInfo($ exclude:Excluded)
+      meth getInitInfo($ ...)
 	 %% !!?? should timing only be measured in beatNumber + beatDuration, i.e. the other temporal params of Score.temporalElement are excluded? Should I at least keep startTime?
 	 unit(superclass:Score.temporalElement
 	      args:[beatNumber#getBeatNumber#noMatch
@@ -570,7 +570,7 @@ define
 % 	     }
 %       end
            
-      meth getInitInfo($ exclude:Excluded)
+      meth getInitInfo($ ...)
 	 %% !!?? should timing only be measured in beatNumber + beatDuration, i.e. the other temporal params of Score.temporalElement are excluded? Should I at least keep startTime?
 	 unit(superclass:Score.temporalElement
 	      args:[n#getN#noMatch

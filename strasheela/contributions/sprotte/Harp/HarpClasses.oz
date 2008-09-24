@@ -36,7 +36,7 @@ define
       end
       meth getFoo($) {@foo getValue($)} end
       meth getFooParameter($) @foo end
-      meth getInitInfo($ exclude:Excluded)
+      meth getInitInfo($ ...)
 	 unit(
 	    superclass:Score.temporalElement
 	    args:[foo#getFoo#{FD.decl}])
