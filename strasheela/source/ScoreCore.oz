@@ -390,7 +390,7 @@ define
       /** %% [aux method for toInitRecord]: returns a record intended to facilitate the init method creation of an object for archive purposes. Attrs has the form [Key1#Accessor1#Default1 ...], keys are the record features of the init record, accessors the respective accessor for some object attributes (unary function or method), defaults are the respective attribute default values (the special default value noMatch matches nothing). 
       */
       %% !!?? should this method (and everything related) move into Item?
-      %% !!?? should this method be turned into a local proc: it should only be called by toInitRecord...
+      %% !!?? should this method be turned into a local proc: it should only be called by toInitRecord... No, some subclasses make use of it in their toInitRecord def
       meth makeInitRecord(?X Attrs)
 	 /** %% Returns true if Val equals default (or default is NOT noMatch) and false otherwise. If true, the output is skipped. Default must not be _.
 	 %% */ 
@@ -525,26 +525,33 @@ define
 
       /** %% Outputs the full init record for self which allows to re-create the score.
       %% Excluded is a list of arguments (atoms) which must be excluded concurrently.
+      %% Clauses is a list of pairs TestI#FunI which can be used to overwrite the default init record creation (defined by the class' method getInitInfo) of specific score objects. TestI is a Boolean function or method, and FunI is a unary function expecting a score object and returning a VS. For each object for which some TestI returns true, the corresponding FunI will be used for creating init records for this object.
       %%
       %% NB: toInitRecord depends on correct definitions of the method getInitInfo for all subclasses with specific inialisiation arguments.
       %%
       %% NB: toInitRecord presently only works properly for tree-form score topologys (e.g. score graphs are not supported yet).
       %% **/
       %% !!?? should this method (and everything related) move into Item?
-      meth toInitRecord($ exclude:Excluded<=DefaultInitRecordExcluded)
+      meth toInitRecord($ exclude:Excluded<=DefaultInitRecordExcluded
+			clauses:Clauses<=nil)
 	 fun {Aux unit(superclass:Super args:Args)}
 	    if Super == nil
 	    then {Record.subtractList {self makeInitRecord($ Args)}
 		  Excluded}
 	    else
 	       {Adjoin
-		{Aux (Super, getInitInfo($ exclude:Excluded))}
+		{Aux (Super, getInitInfo($ exclude:Excluded clauses:Clauses))}
 		{Record.subtractList {self makeInitRecord($ Args)}
 		 Excluded}}
 	    end
 	 end
+	 Clause = {LUtils.find Clauses fun {$ Test#_} {Test self} end}
       in
-	 {Aux {self getInitInfo($ exclude:Excluded)}}
+	 %% 
+	 if Clause == nil then
+	    {Aux {self getInitInfo($ exclude:Excluded clauses:Clauses)}}
+	 else _#Fun = Clause in {Fun self}
+	 end
       end
 
 %      meth toInitRecord(?X exclude:Excluded<=DefaultInitRecordExcluded)
@@ -576,14 +583,14 @@ define
       %% Super is a single superclass of self which defines/inherits a method getInitInfo extending the present method definition (can be nil in case of no superclass). Argument is an init method argument (an atom), Accessor is a unary accessor function or method returning the value of the object corresponding with Argument, and Default is the default value or 'noMatch' if no default value was given. Excluded is the same arg as for toInitRecord: this argument is only required if getInitInfo recuresively calls toInitRecord. A typical getInitInfo definition follows
       %%
 
-      meth getInitInfo($ exclude:Excluded)
+      meth getInitInfo($ ...)
 	 unit(superclass:MySuperClass
 	      args:[myParameter#getMyParameter#noMatch])
       end
       
       %% */
       %% !!?? should this method (and everything related) move into Item?
-      meth getInitInfo($ exclude:Excluded)
+      meth getInitInfo($ ...)
 	 unit(superclass:nil
 	      args:[info#fun {$ X}
 			    %% @info binds a list so it can contain multiple information. Nevertheless, a single info is given to the init method without surrounding list..
@@ -1756,11 +1763,11 @@ define
 % 	      Item, toInitRecord($ exclude: items#getItems#nil | Excluded)}
 %       end
 
-      meth getInitInfo($ exclude:Excluded)
+      meth getInitInfo($ exclude:Excluded clauses:Clauses)
 	 unit(superclass:Item
 	      args:[items#fun {$ X}
 			     {X mapItems($ fun {$ X}
-					      {X toInitRecord($ exclude:Excluded)}
+					      {X toInitRecord($ exclude:Excluded clauses:Clauses)}
 					   end)}
 			  end#noMatch])
       end
@@ -1843,7 +1850,7 @@ define
 % 	       Excluded}}
 %       end
 
-      meth getInitInfo($ exclude:Excluded)
+      meth getInitInfo($ ...)
 	 unit(superclass:Aspect
 	      %% general guideline: better specify too much information, than removing information
 	      args:{FoldL
@@ -2040,7 +2047,7 @@ define
 % 	       Excluded}}
 %       end
 
-      meth getInitInfo($ exclude:Excluded)
+      meth getInitInfo($ ...)
 	 unit(superclass:Element
 	      args:{Append if {self getTemporalAspect($)} == nil
 			      %% timeUnit and startTime only for top level
@@ -2129,7 +2136,7 @@ define
 % 	       Excluded}}
 %       end
       
-      meth getInitInfo($ exclude:Excluded)
+      meth getInitInfo($ ...)
 	 unit(superclass:Event
 	      args:[pitch#getPitch#{FD.decl}
 		    pitchUnit#getPitchUnit#keynumber])
@@ -2175,7 +2182,7 @@ define
 % 	       Excluded}}
 %       end
       
-      meth getInitInfo($ exclude:Excluded)
+      meth getInitInfo($ ...)
 	 unit(superclass:Note2
 	      args:[amplitude#getAmplitude#64
 		    amplitudeUnit#getAmplitudeUnit#velocity])
@@ -2633,7 +2640,7 @@ define
 % 		  Excluded}}
 % 	 end
 	 
-	 meth getInitInfo($ exclude:Excluded)
+	 meth getInitInfo($ ...)
 	    unit(superclass:Super
 		 args:{Map InitFeats
 		       fun {$ Feat}
