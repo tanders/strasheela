@@ -408,11 +408,9 @@ define
       local
 	 InitRecord
       in
-	 {MyScore {Adjoin if {Value.hasFeature Args exclude} then
-			     unit(exclude:Args.exclude)
-			  else unit
-			  end
+	 {MyScore {Adjoin {Record.subtractList Args [prefix postfix file extension dir]}
 		   toInitRecord(InitRecord)}}
+	 %%
 	 Args.prefix#	 
 	 "{Score.makeScore\n"#{RecordToVS
 			       {Adjoin unit(startTime:StartTime
@@ -426,7 +424,7 @@ define
    %% Args
    %%
    %% 'prefix' and 'postfix': VSs added before and after code for creating score object
-   %% 'exclude': 'exclude' argument of method toInitRecord
+   %% 'exclude' and 'clauses': arguments of method toInitRecord
    %%
    %% Defaults:
    %%
