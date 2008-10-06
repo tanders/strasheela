@@ -16,8 +16,8 @@
 
   - Minor additions
 
-    - HS.rules: added several harmonic/melodic/contrapuntual rules: ClearDissonanceResolution, IntervalBetweenNonharmonicTonesIsConsonant, MaxInterval, MaxNonharmonicNoteSequence, MaxNonharmonicNotePercent, MaxRepetitions, MinPercentSteps
-    - GUtils: added IsDivisible
+    - HS.rules: added several harmonic/melodic/contrapuntual rules: VoiceLeadingDistance, VoiceLeadingDistance_Percent, SmallIntervalProgressions, SmallIntervalProgressions_Percent, ClearDissonanceResolution, IntervalBetweenNonharmonicTonesIsConsonant, MaxInterval, MaxNonharmonicNoteSequence, MaxNonharmonicNotePercent, MaxRepetitions, MinPercentSteps
+    - GUtils: added IsDivisible, Percent
     - HS.score: added RatioToInterval
     - Added OZRC file configured for MacOS
     - Out.midi.noteToMidi: added arg 'round'
