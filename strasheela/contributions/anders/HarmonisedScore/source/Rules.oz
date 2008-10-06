@@ -134,6 +134,9 @@ export
    ExpressAllChordPCs ExpressAllChordPCs_AtChordStart ExpressEssentialChordPCs ExpressEssentialPCs_AtChordStart
    ClearHarmonyAtChordBoundaries
 
+   VoiceLeadingDistance VoiceLeadingDistance_Percent
+   SmallIntervalProgressions SmallIntervalProgressions_Percent
+
    %% melodic rules
    IsStep IsStepR
    ResolveStepwiseR
@@ -428,7 +431,135 @@ define
        end}
    end
 
+   /** %% Harmonic constraint on directionless voice-leading distance N (FD int, measured in steps of the present equal temperament) between two chords Chord1 and Chord2. The distance N is the minimal sum of intervals between Chord1 and Chord2. The voice-leading distance is directionless in the sense that regardless whether a voice moves up or down, always the smaller interval is taken into account.  
+   %% 
+   %% Example (in 12 ET): {VoiceLeadingDistance C_Major Ab_Major} = 2
+   %% C->C=0 + E->Eb=1 + G->Ab=1, so the sum is 2
+   %%
+   %% Note: relatively expensive constraint. Also, only effective after of both Chord1 and Chord2 are (mostly) determined.
+   %%
+   %% BUG: definition computes minimal intervals independently, and does not make sure that every note of the new chord is reached by some interval, even if both chords have the same cardiality. 
+   %% */
+   proc {VoiceLeadingDistance Chord1 Chord2 N}
+      thread	    % blocks until cardiality of chords are determined
+	 PC_Dom = 0#{DB.getPitchesPerOctave}-1
+	 Card1 = {FS.card {Chord1 getPitchClasses($)}}
+	 Card2 = {FS.card {Chord2 getPitchClasses($)}}
+	 MaxCard = {Max Card1 Card2}
+	 Chord1_PCs = {FD.list Card1 PC_Dom}
+	 Chord2_PCs = {FD.list Card2 PC_Dom}
+      in
+	 %% theoretical max: all intervals are halve octave
+	 N = {FD.int 0#MaxCard*{DB.getPitchesPerOctave} div 2}	 
+	 %% blocks until chord PCs are know?
+	 {FS.int.match {Chord1 getPitchClasses($)} Chord1_PCs}
+	 {FS.int.match {Chord2 getPitchClasses($)} Chord2_PCs}
+	 %%
+	 N = {FD.sum
+	      {Map Chord1_PCs
+	       %% Return min interval of PC1 to any of Chord2_PCs
+	       fun {$ PC1}
+		  {Pattern.min
+		   {Map Chord2_PCs
+		    %% return min of PC1->PC2 interval and its complement
+		    fun {$ PC2}
+		       PC_Interval = {DB.makePitchClassFDInt}
+		       PC_Interval_Compl = {FD.int 1#{DB.getPitchesPerOctave}}
+		    in
+		       {HS_Score.transposePC PC1 PC_Interval PC2}
+		       PC_Interval_Compl =: {DB.getPitchesPerOctave} - PC_Interval
+		       {FD.min PC_Interval PC_Interval_Compl}
+		    end}}
+	       end}
+	      '=:'}
+      end
+   end
 
+   /** %% Like VoiceLeadingDistance, but returns a percentage value depending on the cardiality of both Chord1 and Chord2. 100 percent is the theoretical maximum that all intervals are halve octaves.
+   %% */ 
+   fun {VoiceLeadingDistance_Percent Chord1 Chord2}
+      thread
+	 Card1 = {FS.card {Chord1 getPitchClasses($)}}
+	 Card2 = {FS.card {Chord2 getPitchClasses($)}}
+	 MaxCard = {Max Card1 Card2}
+	 N = {VoiceLeadingDistance Chord1 Chord2}
+      in
+	 {GUtils.percent N MaxCard*{DB.getPitchesPerOctave} div 2}
+      end
+   end
+   
+   /** %% Harmonic constraint for creating chord progressions where many pitch classes change by small intervals. N (FD int, implicitly declared) is the number of pitch class intervals between Chord1 and Chord2 which are =< some maximal interval, typically a semitone. 
+   %% Args:
+   %% 'maxInterval': the maximum size of the interval which counts into the percentage. Default is the septimal diatonic semitone (15#14).
+   %% 'ignoreUnisons': if true (the default), unisons do not count into the percentage.
+   %% 
+   %% Examples:
+   %%
+   %% {SmallIntervalProgression C_Major Ab_Major unit} = 2
+   %% Small intervals counting: E->Eb, G->Ab 
+   %%
+   %% {SmallIntervalProgression C_Major Ab_Major unit(ignoreUnisons:false)} = 3
+   %% Small intervals counting: C->C, E->Eb, G->Ab 
+   %%
+   %% Note: relatively expensive constraint. Also, only effective after of both Chord1 and Chord2 are (mostly) determined. 
+   %% */
+   proc {SmallIntervalProgressions Chord1 Chord2 Args ?N}
+      Defaults = unit(maxInterval: 15#14
+		      ignoreUnisons:true)
+      As = {Adjoin Defaults Args}
+      MaxInterval = {FloatToInt {MUtils.ratioToKeynumInterval As.maxInterval
+				 {IntToFloat {DB.getPitchesPerOctave}}}}
+   in
+      N = {FD.decl}
+      thread	    % blocks until cardiality of chords are determined
+	 PC_Dom = 0#{DB.getPitchesPerOctave}-1
+	 Card1 = {FS.card {Chord1 getPitchClasses($)}}
+	 Card2 = {FS.card {Chord2 getPitchClasses($)}}
+	 MaxCard = {Max Card1 Card2}
+	 Chord1_PCs = {FD.list Card1 PC_Dom}
+	 Chord2_PCs = {FD.list Card2 PC_Dom}
+      in
+	 N = {FD.int 0#MaxCard}
+	 %% blocks until chord PCs are know?
+	 {FS.int.match {Chord1 getPitchClasses($)} Chord1_PCs}
+	 {FS.int.match {Chord2 getPitchClasses($)} Chord2_PCs}
+	 %%
+	 N = {FD.sum
+	      {Pattern.mapCartesianProduct Chord1_PCs Chord2_PCs
+	       proc {$ PC1 PC2 B}
+		  PC_Interval = {DB.makePitchClassFDInt}
+		  PC_Interval_Compl = {FD.int 1#{DB.getPitchesPerOctave}}
+		  PC_Interval_Aux = {DB.makePitchClassFDInt} % redundant..
+	       in
+		  {HS_Score.transposePC PC1 PC_Interval PC2}
+		  PC_Interval_Compl =: {DB.getPitchesPerOctave} - PC_Interval
+		  PC_Interval_Aux = {FD.min PC_Interval PC_Interval_Compl}
+		  if As.ignoreUnisons then
+		     B = {FD.conj
+			  (PC_Interval_Aux =<: MaxInterval)
+			  (PC1 \=: PC2)}
+		  else
+		     B = (PC_Interval_Aux =<: MaxInterval)
+		  end
+	       end}
+	      '=:'}
+      end
+   end
+   
+   
+   /** %% Like SmallIntervalProgressions, but returns a percentage value depending on the cardiality of both Chord1 and Chord2. 100 percent is the cardiality of the chord with more notes.
+   %% */ 
+   fun {SmallIntervalProgressions_Percent Chord1 Chord2 Args}
+      thread
+	 Card1 = {FS.card {Chord1 getPitchClasses($)}}
+	 Card2 = {FS.card {Chord2 getPitchClasses($)}}
+	 MaxCard = {Max Card1 Card2}
+	 N = {SmallIntervalProgressions Chord1 Chord2 Args}
+      in
+	 {GUtils.percent N MaxCard}
+      end
+   end
+   
    
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%
