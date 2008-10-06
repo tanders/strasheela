@@ -284,8 +284,81 @@ end
 	 end}}
 
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%% HS.rules.voiceLeadingDistance
+%%
+
+%% Assumes default harmony DB
+declare
+C_Major = {Score.make chord(index: {HS.db.getChordIndex 'major'}
+			    transposition: {ET12.pc 'C'})
+	   unit(chord:HS.score.chord)}
+Ab_Major = {Score.make chord(index: {HS.db.getChordIndex 'major'}
+			    transposition: {ET12.pc 'Ab'})
+	    unit(chord:HS.score.chord)}
+G_Major = {Score.make chord(index: {HS.db.getChordIndex 'major'}
+			    transposition: {ET12.pc 'G'})
+	    unit(chord:HS.score.chord)}
+FSharp_Major = {Score.make chord(index: {HS.db.getChordIndex 'major'}
+			    transposition: {ET12.pc 'F#'})
+	    unit(chord:HS.score.chord)}
+
+%% 0, because nothing changed
+{Browse {HS.rules.voiceLeadingDistance C_Major C_Major}}
+
+%% 2 tones changed by a semitone (sum is 2)
+{Browse {HS.rules.voiceLeadingDistance C_Major Ab_Major}}
+
+%% 1 tone changed by a semitone, and one by a whole tone (sum is 3)
+{Browse {HS.rules.voiceLeadingDistance C_Major G_Major}}
+
+%% PROBLEM: large steps are possibly ignored -- def does 
+{Browse {HS.rules.voiceLeadingDistance C_Major FSharp_Major}}
+
+
+%%%%
+
+%% 0, because nothing changed
+{Browse {HS.rules.voiceLeadingDistance_Percent C_Major C_Major}}
+
+{Browse {HS.rules.voiceLeadingDistance_Percent C_Major Ab_Major}}
+
+{Browse {HS.rules.voiceLeadingDistance_Percent C_Major G_Major}}
 
 
 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%% HS.rules.smallIntervalProgression
+%%
+
+%% Assumes default harmony DB
+declare
+C_Major = {Score.make chord(index: {HS.db.getChordIndex 'major'}
+			    transposition: {ET12.pc 'C'})
+	   unit(chord:HS.score.chord)}
+Ab_Major = {Score.make chord(index: {HS.db.getChordIndex 'major'}
+			    transposition: {ET12.pc 'Ab'})
+	   unit(chord:HS.score.chord)}
+
+%% 2 of chord tones change by a semitone
+{Browse {HS.rules.smallIntervalProgressions C_Major Ab_Major unit}}
+
+%% 1 tone stays and 2 of chord tones change by a semitone
+{Browse {HS.rules.smallIntervalProgressions C_Major Ab_Major
+	 unit(ignoreUnisons:false)}}
+
+
+%%
+
+
+%% 2 of 3 chord tones change by a semitone: 66 percent
+{Browse {HS.rules.smallIntervalProgressions_Percent C_Major Ab_Major unit}}
+
+%% 100 percent
+{Browse {HS.rules.smallIntervalProgressions_Percent C_Major Ab_Major
+	 unit(ignoreUnisons:false)}}
 
 
