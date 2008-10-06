@@ -10,9 +10,10 @@
 
 * Strasheela examples
 
-** TODO Realtime example with non-harmonic tones etc. for Eduardo
-   DEADLINE: <2008-09-26 Fri>
+** Realtime example with non-harmonic tones etc. for Eduardo
+   DEADLINE: <2008-10-18 Sat>
 
+*** TODO Do expresssive performance (timing and velocity)
 
 * Strasheela Bugs
 

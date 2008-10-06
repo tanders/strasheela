@@ -472,6 +472,117 @@ InspectorObject = {Inspector.new unit}
 
 
 
+** Collect a list of Strasheela features for website
+
+   Starting point: 
+
+   Strasheela is a framework for constraint-based music theory models (much like GTK is a framework for GUIs). Strasheela defines a very rich music representation (you can access lots of information from score objects), this music representation can be output into various formats in a highly customisable way, Strasheela provides interfaces to various other systems, can run as a server in the background to be used by other systems, has realtime support etc. The system provides highly flexible models for various musical concepts. For example, a considerable subset of Schoenberg's theory of harmony is available, and generalised for microtonal music. Implementing that was easy (and concise) once a flexible harmony model was there. Examples also show how to do harmonic counterpoint etc.
+
+   for full email "Re: Anton and Strasheela", see below
+
+   :COMMENT:
+   
+   	From: 	  torsten.anders@plymouth.ac.uk
+	Subject: 	Re: Anton and Strasheela
+	Date: 	September 3, 2008 7:52:03 PM BDT
+	To: 	  mjb@cs.bath.ac.uk
+	Cc: 	  jpff@cs.bath.ac.uk, gboenn@glam.ac.uk
+
+Dear Martin,
+
+Thanks for your kind reply and for the papers.
+
+On Sep 3, 2008, at 1:58 AM, Martin wrote:
+On Sat, 2008-08-30 at 22:52 +0100, Torsten Anders wrote:
+Anyway, it is always nice seeing how many people are interested in
+computationally modelling classical music theories. You are probably
+aware that Fuxian counterpoint has been implemented several times
+already. For example, Bill Schottstaedt implemented all five species
+for up to six voices. He modified the original Fuxian rule set (more
+then 40 rules are quoted in article) to get closer to Fuxâ€™ actual
+examples.
+
+   Schottstaedt, W. (1989). Automatic Counterpoint. In M. V. Mathews
+and J. R. Pierce
+(Eds.), Current Directions in Computer Music Research. The MIT Press.
+
+Thank you for the link.
+
+In case you are interested in more, I survey the field in the third chapter of my thesis (which you cited already, so you may know that anyway :)
+
+
+My own take is rather different: instead of implementing a single
+music theory model, I provide a relatively flexible framework in
+which users can implement their own theories. This has also been done
+before (e.g., by PWConstraints and Situation), but my system
+Strasheela is considerably more generic than existing systems. These
+existing systems support a specific range of constraint problems very
+well (e.g., Situation for Messian-like chord progressions, and the
+PWConstraint subsystem Score-PMC for contrapuntal problems), but
+don't allow others (e.g., Situation can only represent a sequence of
+score objects, and the rhythmical structure is fixed in Score-PMC).
+The Strasheela user, on the other hand, can define theory models
+which constrain the harmonic structure, contrapuntal structure,
+rhythmical structure and the musical form -- all in the same
+constraint problem.
+Please forgive me, then, if I have misrepresented your work in our
+paper.  As I have said, my background is not musical and thus I do tend
+to sometimes misunderstand things.
+
+By keeping Anton as simple as possible and making it clear how we have
+modelled the system in the underlying constraint language, it is
+possible to extend it in a number of ways.  One of my current targets is
+to modularise the existing rule base to a point that different styles
+can be choosen depending on the options given to the program building
+tool.
+
+From your paper I understood that ASP presents a program as a set of rules, and in general the language looks similar to Prolog to me (as a non-Prolog expert :).
+
+Questions: How does your solver work? Do you use backtracking? What is your variable and value ordering? What are the advantages of ASP over Prolog?
+
+Also, I did not understand your music representation yet. Is it correct that you are using a kind-of event list (i.e. a sequence of events, like a Csound score), with the construct chooseNote as the main "building block" for creating scores?
+
+-------
+
+In your paper you discuss the the length of code and compare it with other systems. I feel that you very much misunderstand the code-base of Strasheela. Such a comparison would only be fair for systems with the same feature set (and of course you should exclude the many examples and test files :).
+
+So far, it seems you are doing only first-species counterpoint. I am doing something similar in the following example in Strasheela, which also uses less than 400 lines of code (and _very_ much of that are actually comments). This example does use a few constructs defined in the Strasheela core, though, but most is actually defined in the example itself.
+
+http://strasheela.sourceforge.net/strasheela/examples/02-Fuxian-firstSpecies-Counterpoint.oz
+
+Strasheela is more code, because my goal is different than yours. Strasheela is a framework for constraint-based music theory models (much like GTK is a framework for GUIs). Strasheela defines a very rich music representation (you can access lots of information from score objects), this music representation can be output into various formats in a highly customisable way, Strasheela provides interfaces to various other systems, can run as a server in the background to be used by other systems, has realtime support etc. The system provides highly flexible models for various musical concepts. For example, a considerable subset of Schoenberg's theory of harmony is available, and generalised for microtonal music. Implementing that was easy (and concise) once a flexible harmony model was there. Examples also show how to do harmonic counterpoint etc. Now, after you implemented something similar, you may do your comparison again :)
+
+Anyway, conciseness is indeed an important property of a programming language, and I don't claim that Strasheela is more concise than your approach and I am indeed interested in better understanding your notation etc.
+
+-----
+
+Concerning performance time: creating an 11 note first-species counterpoint in Strasheela (like one of your "Twenty Short Pieces") takes about 50 msec (instead of many seconds, as Anton does). Now, our rule set may differ, so this comparison may not be accurate. However, what is important to note is that florid counterpoint -- which is a by far more complex search problem -- also takes only a couple of seconds (even with additional complications, like it should be a canon, the highest note should occur only once etc.). The trick here is to use an appropriate variable ordering (besides other things like constraint propagation). See Sec. 8.2 of my thesis for details.
+
+I am presenting these performance figures only to point out that you may run into performance difficulties with your approach for more complex problems. This is why I asked in the beginning what variable ordering you are using -- that is a crucial point for an efficient search for more complex problems (say, if you constrain the rhythmic, harmonic, contrapunctual, and formal structure at the same time -- as I do in examples).
+
+
+I hope you find the papers of interest and that I have not
+misrepresented your work too badly.  Perhaps there is scope for a
+workshop on constraint techniques for composition at some point in the
+future :-)
+
+Sure, meeting and discussing these things is of course always interesting for me :)
+
+Best
+Torsten
+
+--
+Torsten Anders
+Interdisciplinary Centre for Computer Music Research
+University of Plymouth
+Office: +44-1752-586219
+Private: +44-1752-558917
+http://strasheela.sourceforge.net
+http://www.torsten-anders.de
+   
+   :END:
+
+
 * Strasheela design					      :MAYBE:STRASHEELA:
 
 ** Constrain form with graph constraints 
@@ -513,7 +624,7 @@ InspectorObject = {Inspector.new unit}
 
 *** Read literature on soft constraints					 :@READ:
 
-**** TOD±O [#A] [50%] Read soft constraints article in "Handbook of Constraint Programming"
+**** TODÂ±O [#A] [50%] Read soft constraints article in "Handbook of Constraint Programming"
 **** DONE Read Bartak soft constraints survey
      CLOSED: [2008-03-17 Mon 18:33]
 
@@ -1444,7 +1555,7 @@ From this viewpoint, there is an interesting polarity between major and harmonic
 *** Find out where I can get octave-dependend "consonance/dissonance degree""consonance/dissonance degree" (harmonicity distance, whatever) from Scala or else
 
 *** Define constraint which extends selection constraint of a interval database entry field to use interval + octave
-§
+Â§
 
 
 ** Define constraint for pitch class prime factor exponents (monzos)	 :MAYBE:
@@ -2023,7 +2134,7 @@ See ../../testing/zy_Efficiency/KeepMusicRepresentationOutsideComputationalSpace
      1) it has no tones in common
      2) it has a tritone between root of IV and third of V
      3) it is sufficient to define a key without the tonic chord appearing.
-       	Schönberg calling it superstrong may be due to 3 above.
+       	SchÃ¶nberg calling it superstrong may be due to 3 above.
        	
        	Connection to MaMuTh:
        	Property (3) means, in Mazzola's terminology, that the chord set {IV, V} is cadencial.
@@ -2316,10 +2427,10 @@ useful for package creators and new users to test whether installation was succe
     run as quickly as possibly by simulating the passage of time.  But
     that would be a very big project.
     
-    Jürgen
+    JÃ¼rgen
     
     -- 
-    Jürgen Stuber <juergen@jstuber.net>
+    JÃ¼rgen Stuber <juergen@jstuber.net>
     
 
 *** Create abstraction which simplifies use
