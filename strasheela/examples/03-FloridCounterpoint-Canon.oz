@@ -87,6 +87,8 @@
 %% undetermined in the problem definition, the context of simultaneous
 %% notes can not be accessed directly and is therefore constrained by
 %% logical connectives.
+%%
+%% Note that this dissonance treatment works fine for many cases, but it is too simplistic (e.g., for cases where passing tones occur in both voices at the same time).
 %% 
 %% Open parallel fifth and octaves are not allowed. Still, hidden
 %% parallels are unaffected here -- in contrast to the previous
