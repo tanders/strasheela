@@ -17,13 +17,15 @@
 functor
 import
    Module OS Combinator Property QTk at 'x-oz://system/wp/QTk.ozf' % Tk
-   FS
+   FD FS
    LUtils at 'ListUtils.ozf'
    Browser(browse:Browse) % temp for debugging
 export
    Pi
    XOr Cases
    IsFS MakeSingletonSet IntsToFS
+   Percent
+   
    Identity
    Random RandIntoRange
    MakeRandomGenerator SetRandomGeneratorSeed
@@ -106,6 +108,32 @@ define
        MyFS}
    end
 
+   %% FS.int.match is better than this..
+%    /** %% Expects MyFS (a FS) and returns Ds, a list of FD ints which are all contained in MyFS.
+%    %% This definition is similar to FS.int.match, but Ds must not be in increasing order. This definiiton is also similar to IntsToFS, but Ds are created by FsToInts. The length of Ds is the cardiality of MyFS, and all elements in Ds are constrained to be pairwise distinct.
+%    %%
+%    %% Note: blocks until cardiality of MyFS is determined
+%    %% */
+%    proc {FsToInts MyFS ?Ds}
+%       Ds = {FD.list {FS.card MyFS} 0#FD.sup}
+%    in
+%       {FS.unionN {Map Ds fun {$ D} {MakeSingletonSet D} end}
+%        MyFS}
+%       {FD.distinct Ds}
+%    end
+
+   
+   /** %% Constrains percentage of N (FD int) if NoAll (FD int) indicates 100 percent. Result is implicitly declared a FD int.
+   %% Example:  {Percent 4 6} = 66  
+   %% note the rounding to 66 percent.
+   %% */
+   proc {Percent N NoAll Result}
+      Aux = {FD.decl}
+   in
+      Result = {FD.int 0#100}
+      Aux =: N * 100
+      Result = {FD.divI Aux NoAll}
+   end
 
    /** %% The Identity function returns its argument.
    %% */
