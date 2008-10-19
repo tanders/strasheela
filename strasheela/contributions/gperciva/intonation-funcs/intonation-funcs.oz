@@ -20,6 +20,7 @@ export
    noFingeredFifths: NoFingeredFifths
    atLeast: AtLeast
    atLeastTwin: AtLeastTwin
+   atMostTwin: AtMostTwin
    atMost: AtMost
    minChanges: MinChanges
    thirdPositionNoStretchBack: ThirdPositionNoStretchBack
@@ -125,7 +126,7 @@ define
 	   {FD.disj
 	    (FB =: 0)
 	    (FA =: 0)}
-	   {FD.disj
+	   {FD.conj
 	    (SA =: SB)
             (FA =: FB)}
 	   }
@@ -170,6 +171,18 @@ define
 		   (T =: IsTwo)
 		  }
 	       end} '>=:' Number}
+   end
+
+   proc {AtMostTwin ListOne IsOne ListTwo IsTwo Number}
+      {FD.sum {List.zip
+	       {LUtils.butLast ListOne}
+	       {LUtils.butLast ListTwo}
+	       fun {$ O T}
+		  {FD.conj
+		   (O =: IsOne)
+		   (T =: IsTwo)
+		  }
+	       end} '=<:' Number}
    end
 
    proc {AtMost List Is Number}
