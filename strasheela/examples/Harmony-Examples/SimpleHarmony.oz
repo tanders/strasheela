@@ -29,7 +29,7 @@ in
 					pitch:{FD.int 48#72}
 					amplitude:64)
 				end
-		      %% default: the first ten chords consist only of consonances
+		      %% default: the first 'chordNo' chords consist only of consonances
 		      chordIntervals: [(1#As.chordNo)#[3 4 5 7 8 9 12 15 16]])
    end
    thread As = {Adjoin Defaults Args} end 
@@ -73,7 +73,7 @@ proc {NoVoiceCrossing C}
    {Pattern.decreasing {C mapItems($ getPitch test:isNote)}}
 end
 
-%% Highest chord notes form arg: first increasing and then decreasing, turning point is at HighestNoteIndex (an integer). NOTE: constraint has only any effect if HighestNoteIndex < {Length Chords}.  
+%% Highest chord notes form arg: first increasing and then decreasing, turning point is at HighestNoteIndex (an integer). NOTE: constraint has only any effect if HighestNoteIndex < {Length Chords}  
 proc {SopranoFormsArc Chords HighestNoteIndex}
    if HighestNoteIndex < {Length Chords} 
    then 
@@ -87,7 +87,7 @@ end
 %% Only the given Intervals (an FD int spec, e.g., a list of integers) are allowed between chord pitches. Note that all pairwise note combinations are constrained, not just notes of neighbouring voices 
 proc {RestrictHarmonicIntervals C Intervals}
    {Pattern.forPairwise {C map($ getPitch test:isNote)}
-    proc {$ P1 P2} P1 - P2 =: {FD.int Intervals} end}
+    proc {$ P1 P2} {FD.distance P1 P2 '=:' {FD.int Intervals}} end}
 end
 
 
@@ -121,6 +121,26 @@ end
 			 )}
  unit(order:leftToRight
       value:random)}
+
+
+%% use different intervals in different chords
+%% example used in constraint application paper..
+{GUtils.setRandomGeneratorSeed 0}
+{SDistro.exploreOne {GUtils.extendedScriptToScript SimpleHarmony
+		     unit(chordNo: 12
+			  noteNoPerChord: 4
+			  %% start consonant, then get increasingly dissonant etc
+			  chordIntervals: [
+					   (1#3)#[3 4 5 7 8 9 12 15 16]
+					   (4#6)#[2 3 4 6 8 9 10 14 15 16]
+					   (7#9)#[1 2 3 6 8 10 11 13 14 15]
+					   (10#11)#[2 3 4 6 8 9 10 14 15 16]
+					   (12#12)#[4 5 7 8 9 12 15 16]
+					  ]
+			 )}
+ unit(order:leftToRight
+      value:random)}
+
 
 %% use different intervals in different chords
 {GUtils.setRandomGeneratorSeed 0}
