@@ -11,7 +11,7 @@ import
 
    Compiler ErrorListener OS
       
-%    QTk at 'x-oz://system/wp/QTk.ozf'
+   QTk at 'x-oz://system/wp/QTk.ozf'
    Debug at 'x-oz://boot/Debug'
    
    %% Strasheela core
@@ -47,7 +47,8 @@ define
    \\switch +threadedqueries" 
    
    CompilerEnvironment = {Adjoin OPIEnv.full
-			  env('Debug': Debug 
+			  env('QTk': QTk
+			     'Debug': Debug 
 			      'Path': Path % use my Path fixes
 			      'Inspect':ScoreInspector.inspect
 			      'Inspector': ScoreInspector
