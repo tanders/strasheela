@@ -581,7 +581,7 @@ define
 		      header:nil
 		      event2CsoundFn:{MakeEvent2CsoundFn 1
 				      [getStartTimeParameter#getValueInSeconds
-				       getDurationParameter#getValueInSeconds
+				       fun {$ X} X end#getDurationInSeconds
 				       getAmplitudeParameter#getValueInNormalized
 				       getPitchParameter#getValueInMidi]}
 		      test:fun {$ X}
