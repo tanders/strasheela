@@ -472,6 +472,10 @@ InspectorObject = {Inspector.new unit}
 
 
 
+*** ?? Sec on how to set up the system 
+
+    how to write ~/.ozrc file
+
 ** Collect a list of Strasheela features for website
 
    Starting point: 
@@ -2218,6 +2222,8 @@ see Strasheela/private/WorkInProgress/NonmensuralENP->mensuralENP
 ** Graphical interface 
 
 *** Score Interface for interactive music constraint programming
+
+    [see GTD folder "Interactive Score Search"]
     
     See future work section of my applications etc for details
 

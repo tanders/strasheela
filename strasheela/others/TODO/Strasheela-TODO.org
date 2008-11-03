@@ -29,6 +29,7 @@ rsync error: error in socket IO (code 10) at /SourceCache/rsync/rsync-24.1/rsync
 
 *** TODO Do expresssive performance (timing and velocity)
 
+
 * Strasheela Bugs
 
 ** TODO Bug: Archiving score (e.g., with Out.saveScore) with strings: double quotes of strings are lost
@@ -41,9 +42,14 @@ MyScore = {Score.makeScore note(info:"test")
 
 % then check output test file..
 
+** TODO BUG: getOffsetTimeInSeconds  no dependency to tempo curve or time shift function defined yet, depends on type of temporal container
 
 * Strasheela design						    :STRASHEELA:
 
+** TODO Archive Fenvs by approximation (sampling the Fenv)
+
+   I may use linear Fenvs or something similar. May result in long code files (if approximation/sampling has high rate), but this is at least some easy and working solution
+   
 ** TODO Create variant for Out.saveScore using pickles
 
    Some score objects (e.g., Fenvs which contain procs) cannot be translated into text (code), i.e. cannot be "archived". However, they could be picked! 
@@ -51,6 +57,7 @@ MyScore = {Score.makeScore note(info:"test")
    On the other hand, pickling not supported for undetermined values. Can I have an approach which works for both cases (translates undetermined vars into text/code which would be compiled into Oz values during loading.)
 
    Alternative idea for storing Fenvs to textual format: store approximated Fenv (sample Fenv and create envelope from sampling data)
+
 
 ** Define how fenvs of prototype motifs can be variated with motif instance arguments 
 
