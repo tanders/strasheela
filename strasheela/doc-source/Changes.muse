@@ -6,6 +6,8 @@
 
   - Main additions and changes 
 
+    - Added support for tempo curves and time shift functions to the core music representation: methods like getStartTimeInSeconds etc. take them into account, and they are supported by all standard synthesis output formats. Tempo curves and time shift functions are defined for temporal containers, and they can even be nested (e.g., local tempo curves for motifs and a global tempo curve for the whole score).
+
     - MUtils: Added support for symbolic duration notation: MakeNoteLengthsTable, MakeNoteLengthsRecord, MakeDurationsRecord, SetNoteLengthsRecord, ToDur, SetDurationsRecord, ToNoteLengths
 
 
@@ -14,7 +16,7 @@
     - Added relatively complex examples which constrain the rhythmical, melodic, harmonic, and formal structure at the same time: examples/Form-Examples/FriendlyMusicExample.oz
 
 
-  - Minor additions
+  - Minor additions and changes
 
     - HS.rules: added several harmonic/melodic/contrapuntual rules: VoiceLeadingDistance, VoiceLeadingDistance_Percent, SmallIntervalProgressions, SmallIntervalProgressions_Percent, ClearDissonanceResolution, IntervalBetweenNonharmonicTonesIsConsonant, MaxInterval, MaxNonharmonicNoteSequence, MaxNonharmonicNotePercent, MaxRepetitions, MinPercentSteps
     - GUtils: added IsDivisible, Percent
@@ -23,11 +25,12 @@
     - Out.midi.noteToMidi: added arg 'round'
     - PMotif.makeScript: added argument 'constructors' 
     - Refactored score object method toInitRecord: now with arg 'clauses' (i.e., default output format -- defined by method 'getInitInfo' -- can be overwritten in 'toInitRecord' call)     - Out.outputScoreConstructor (and related score archiving procs): added arguments 'postfix', 'exclude', and 'clauses' 
+    - Fenv.itemFenvY: interface changed slightly -- time argument now expected in present time unit, not in seconds
  
-
 
   - Bug fixes 
 
+    - Tempo curve processing bug fixed (numeric integration approximation now OK)
     - Fixed bug in the harmony-related example in [[../examples/Form-Examples/PrototypeMotif-Examples.oz][PrototypeMotif-Examples.oz]] (with the new arg PMotif.makeScript arg 'constructors')
 
 
