@@ -436,9 +436,12 @@ define
    %% Example (in 12 ET): {VoiceLeadingDistance C_Major Ab_Major} = 2
    %% C->C=0 + E->Eb=1 + G->Ab=1, so the sum is 2
    %%
-   %% Note: relatively expensive constraint. Also, only effective after of both Chord1 and Chord2 are (mostly) determined.
+   %% Note: Only the minimal intervals from all Chord2 pitch classes to Chord1 pitch classes are taking into account. Swapping the arguments can lead to different results: there may be pitch classes in Chord1 which are ignored as all pitch classes of Chord2 may be closer to some other pitch classes of Chord1.
    %%
-   %% BUG: definition computes minimal intervals independently, and does not make sure that every note of the new chord is reached by some interval, even if both chords have the same cardiality. 
+   %% Example: C-maj -> F#-maj = 4
+   %% C->C#=1, C->A#=2, G->F#=1 -- the E of C-maj is ignored in the computation  
+   %%
+   %% Note: relatively expensive constraint. Also, only effective after of both Chord1 and Chord2 are (mostly) determined.
    %% */
    proc {VoiceLeadingDistance Chord1 Chord2 N}
       thread	    % blocks until cardiality of chords are determined
@@ -456,17 +459,17 @@ define
 	 {FS.int.match {Chord2 getPitchClasses($)} Chord2_PCs}
 	 %%
 	 N = {FD.sum
-	      {Map Chord1_PCs
-	       %% Return min interval of PC1 to any of Chord2_PCs
-	       fun {$ PC1}
+	      {Map Chord2_PCs
+	       %% Return min interval of PC2 to any of Chord1_PCs
+	       fun {$ PC2}
 		  {Pattern.min
-		   {Map Chord2_PCs
-		    %% return min of PC1->PC2 interval and its complement
-		    fun {$ PC2}
+		   {Map Chord1_PCs
+		    %% return min of PC2->PC1 interval and its complement
+		    fun {$ PC1}
 		       PC_Interval = {DB.makePitchClassFDInt}
 		       PC_Interval_Compl = {FD.int 1#{DB.getPitchesPerOctave}}
 		    in
-		       {HS_Score.transposePC PC1 PC_Interval PC2}
+		       {HS_Score.transposePC PC2 PC_Interval PC1}
 		       PC_Interval_Compl =: {DB.getPitchesPerOctave} - PC_Interval
 		       {FD.min PC_Interval PC_Interval_Compl}
 		    end}}
