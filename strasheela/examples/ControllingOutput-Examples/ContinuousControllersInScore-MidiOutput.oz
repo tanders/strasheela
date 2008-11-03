@@ -352,8 +352,8 @@ Test4 = {Score.makeScore
 			 Channel = {MyNote getChannel($)}
 			 Pitch = {FloatToInt {MyNote getPitchInMidi($)}}
 			 Velocity = {FloatToInt {MyNote getAmplitudeInVelocity($)}}
-			 StartOffset = {Fenv.itemFenvY TimeShiftF MySeq NoteStart}
-			 EndOffset = {Fenv.itemFenvY TimeShiftF MySeq NoteEnd}
+			 StartOffset = {Fenv.itemFenvY TimeShiftF MySeq {MyNote getStartTime($)}}
+			 EndOffset = {Fenv.itemFenvY TimeShiftF MySeq {MyNote getEndTime($)}}
 			 %% compute note start and end times 
 			 StartTime = {Out.midi.beatsToTicks NoteStart + StartOffset}
 			 EndTime = {Out.midi.beatsToTicks NoteEnd + EndOffset}
