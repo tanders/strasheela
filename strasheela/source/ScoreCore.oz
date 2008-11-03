@@ -45,7 +45,7 @@
 
 functor 
 import
-   System
+   System 
    FD FS RecordC % Space
    Boot_Object at 'x-oz://boot/Object'
    Boot_Name at 'x-oz://boot/Name'
@@ -59,6 +59,8 @@ import
    % Applicator at 'RuleApplicator.ozf'
    Browser(browse:Browse) % temp for debugging
    %Ozcar % temp for debugging
+   %% NOTE: dependency on contribution
+   Fenv at 'x-ozlib://anders/strasheela/Fenv/Fenv.ozf'
 export
    % classes: 
    ScoreObject Parameter TimeParameter TimePoint TimeInterval Amplitude Pitch
@@ -829,8 +831,13 @@ define
       meth getOffsetTime(?X) X={@offsetTime getValue($)} end
       meth getStartTimeInSeconds(?X) X={@startTime getValueInSeconds($)} end
       meth getEndTimeInSeconds(?X) X={@endTime getValueInSeconds($)} end
-      meth getDurationInSeconds(?X) X={@duration getValueInSeconds($)} end
-      meth getOffsetTimeInSeconds(?X) X={@offsetTime getValueInSeconds($)} end
+      meth getDurationInSeconds($) {self getEndTimeInSeconds($)} - {self getStartTimeInSeconds($)} end
+%       meth getDurationInSeconds(?X) X={@duration getValueInSeconds($)} end
+      meth getOffsetTimeInSeconds(?X)
+	 %% BUG: no dependency to tempo curve or time shift function defined yet, depends on type of container, cf def for getDurationInSeconds
+	 {Browse warning(getOffsetTimeInSeconds self possibly incorrect)}
+	 X={@offsetTime getValueInSeconds($)}
+      end
       meth getStartTimeInBeats(?X) X={@startTime getValueInBeats($)} end
       meth getEndTimeInBeats(?X) X={@endTime getValueInBeats($)} end
       meth getDurationInBeats(?X) X={@duration getValueInBeats($)} end
@@ -1009,13 +1016,66 @@ define
       {IsScoreObject X} andthen {HasFeature X LeaveUninitialisedParameterMixinType}
    end
 
+
+   /** %% Collect all temporal containers in which MyItem is contained, and which have a time shift function or a tempo curve.
+   %% */
+   %% TODO: collect also containers with tempo curves..
+   fun {GetTimeshiftContainers MyItem}
+      fun {Aux X}
+	 C = {X getTemporalContainer($)}
+      in
+	 if C == nil then nil
+	 else if {C hasThisInfo($ timeshift)} % TMP orelse {C hasThisInfo($ tempo)}
+	      then C | {Aux C}
+	      else {Aux C}
+	      end
+	 end
+      end
+   in
+      %% first check whether MyItem itself is timeshift container, then call recursive Aux 
+      if {IsTemporalContainer MyItem} andthen {MyItem hasThisInfo($ timeshift)} % TMP orelse {C hasThisInfo($ tempo)}
+      then MyItem | {Aux MyItem}
+      else {Aux MyItem}
+      end
+   end
+   %%
+   /** %% Computes a transformation of MyTime which takes hierarchically nested time shift functions into account. MyItem is the score object to which MyTime belongs (e.g., MyItem is a note and MyTime is its start or end time). GetShiftedTime searches through all temporal containers of MyItem and applies all time shift functions found.
+   %% MyTime is a float specified in seconds, and a time in second is return (a float). Nevertheless, the timeshift fenvs y-values are specified in the present timeUnit, and GetShiftedTime converts them to seconds.  
+   %% */
+   fun {GetShiftedTime MyTime MyItem MyParam}
+      Cs = {GetTimeshiftContainers MyItem}
+   in
+      {System.show shiftedTime_1(cs:Cs
+				 param:MyParam
+				 item:MyItem)}
+      if Cs == nil then MyTime
+      else
+	 %%
+	 %% TODO: add support for tempo curves and combine them (as time maps)
+	 %%
+	 %% Sum all time shift values and add them to MyTime
+	 MyTime 
+	 + {LUtils.accum
+	     {Map Cs
+	      %% NOTE: dependency on contribution
+	      fun {$ C} {Fenv.itemFenvY {C getInfoRecord($ timeshift)}.1 C MyTime} end}
+	     Number.'+'}
+      end
+   end
+   
+
    class TimeParameter from Parameter
       feat label: timeParameter
       meth isTimeParameter(?B) B=true end
+      
       /** %% Returns the parameter value translated to a float representing seconds. The translation uses the parameter unit which must be bound (otherwise the method suspends). Supported units are (represented by these atoms): seconds/secs, milliseconds/msecs, and beats (a relative duration, e.g., a quarter note). The unit specification beats(N) means the parameter value of N is a single beat. beats(N) may be used to express tuplets, e.g., for beat(3) the value 1 means a third beat i.e. a triplet. N must be an integer and defaults to 1. The translation between seconds and beats uses Init.getBeatDuration.
+      %%
+      %% Additionally, hierachic tempo curves and time shift functions are taken into account.
       %% */
       meth getValueInSeconds(?X)
+	 {System.show getValueInSeconds(param:self item:{self getItem($)})}
 	 Unit = {self getUnit($)}
+	 Value_Shifted
       in
 	 %% NOTE: IsDet does not wait for binding -- quasi side effect. But most
 	 %% often this is called for output and timeUnit is sometimes
@@ -1023,31 +1083,67 @@ define
 	 if {Not {IsDet Unit}}
 	 then {GUtils.warnGUI "unit of temporal parameter(s) unbound -- computation blocks!"}
 	 end
-	 %% parameter value is float
-	 %% NOTE: inefficient to always check there two cases first,
-	 %% as they are particualy rare
+	 Value_Shifted = if {IsInt {self getValue($)}}
+			 then {GetShiftedTime {IntToFloat {self getValue($)}}
+			       {self getItem($)}
+			       self}
+			    %% otherwise float
+			 else {GetShiftedTime {self getValue($)} {self getItem($)} self}
+			 end
 	 X = case Unit
-	     of secsF then {self getValue($)} 
-	     [] msecsF then {self getValue($)} / 1000.0
+	     of beats then Value_Shifted * {Init.getBeatDuration}
+	     [] beats(N) then Value_Shifted * {Init.getBeatDuration} / {IntToFloat N}
+	     [] seconds then Value_Shifted
+	     [] secs then Value_Shifted
+	     [] milliseconds then Value_Shifted / 1000.0
+	     [] msecs then Value_Shifted / 1000.0
+	     [] secsF then Value_Shifted
+	     [] msecsF then Value_Shifted / 1000.0
 	     else
-		%% parameter value is integer
-		Value = {IntToFloat {self getValue($)}}
-	     in
-		case Unit
-		of seconds then Value
-		[] secs then Value
-		[] milliseconds then Value / 1000.0
-		[] msecs then Value / 1000.0
-		[] beats then Value * {Init.getBeatDuration}
-		[] beats(N) then Value * {Init.getBeatDuration} / {IntToFloat N}
-		else
-		   {Exception.raiseError
-		    strasheela(illParameterUnit Unit self
-			       "Supported units are seconds (or secs), millisecond (or msecs), beats, and beats(N) (where N is an integer).")}
-		   unit		% never returned
-		end
+		{Exception.raiseError
+		 strasheela(illParameterUnit Unit self
+			    "Supported units are seconds (or secs), millisecond (or msecs), beats, and beats(N) (where N is an integer).")}
+		unit		% never returned
 	     end
       end
+
+%       /** %% Returns the parameter value translated to a float representing seconds. The translation uses the parameter unit which must be bound (otherwise the method suspends). Supported units are (represented by these atoms): seconds/secs, milliseconds/msecs, and beats (a relative duration, e.g., a quarter note). The unit specification beats(N) means the parameter value of N is a single beat. beats(N) may be used to express tuplets, e.g., for beat(3) the value 1 means a third beat i.e. a triplet. N must be an integer and defaults to 1. The translation between seconds and beats uses Init.getBeatDuration.
+%       %% */
+%       meth getValueInSeconds(?X)
+% 	 Unit = {self getUnit($)}
+%       in
+% 	 %% NOTE: IsDet does not wait for binding -- quasi side effect. But most
+% 	 %% often this is called for output and timeUnit is sometimes
+% 	 %% forgotten by user...
+% 	 if {Not {IsDet Unit}}
+% 	 then {GUtils.warnGUI "unit of temporal parameter(s) unbound -- computation blocks!"}
+% 	 end
+% 	 %% parameter value is float
+% 	 %% NOTE: inefficient to always check there two cases first,
+% 	 %% as they are particualy rare
+% 	 X = case Unit
+% 	     of secsF then {self getValue($)} 
+% 	     [] msecsF then {self getValue($)} / 1000.0
+% 	     else
+% 		%% parameter value is integer
+% 		Value = {IntToFloat {self getValue($)}}
+% 	     in
+% 		case Unit
+% 		of seconds then Value
+% 		[] secs then Value
+% 		[] milliseconds then Value / 1000.0
+% 		[] msecs then Value / 1000.0
+% 		[] beats then Value * {Init.getBeatDuration}
+% 		[] beats(N) then Value * {Init.getBeatDuration} / {IntToFloat N}
+% 		else
+% 		   {Exception.raiseError
+% 		    strasheela(illParameterUnit Unit self
+% 			       "Supported units are seconds (or secs), millisecond (or msecs), beats, and beats(N) (where N is an integer).")}
+% 		   unit		% never returned
+% 		end
+% 	     end
+%       end
+      
       /** %% Returns the parameter value translated to a float representing beats. The translation uses the parameter unit which must be bound (otherwise the method suspends). Supported units are (represented by these atoms): seconds/secs, milliseconds/msecs, and beats. The unit specification beats(N) means the parameter value of N is a single beat. N must be an integer and defaults to 1. The translation between seconds and beats uses Init.getBeatDuration.
       %% */
       meth getValueInBeats(?X)
