@@ -309,6 +309,31 @@ declare
   0.01} plot}
 
 
+%% NOTE: interpolation problem of integration
+{{Fenv.integrate {New Fenv.fenv init(env:fun {$ X} {Cos X} end
+				    min:0.0
+				    max:2.0*GUtils.pi)}
+  0.1} plot}
+
+{{Fenv.integrate {New Fenv.fenv init(env:fun {$ X} 1.0 end)}
+  0.1} plot}
+
+{{Fenv.integrate {New Fenv.fenv init(env:fun {$ X} X end)}
+  0.1} plot}
+
+{{Fenv.integrate {New Fenv.fenv init(env:fun {$ X} X*X end
+				    min:~1.0
+				    max:1.0)}
+  0.1} plot}
+
+
+
+{{Fenv.integrate {New Fenv.fenv init(env:fun {$ X} {Cos X} end
+				    min:0.0
+				    max:2.0*GUtils.pi)}
+  0.2} plot}
+
+
 
 %% integrate a given and take rubato tempo curve, cf. Henkjan's paper
 {{Fenv.integrate {Fenv.linearFenv [[0.0 0.5] [0.5 2.0] [1.0 0.5]]}
@@ -320,19 +345,24 @@ declare
   0.01} plot}
 
 
+{{Fenv.tempoCurveToTimeMap {Fenv.linearFenv [[0.0 0.3] [0.5 3.0] [1.0 0.3]]}
+  0.01}
+ plot}
+
 
 %% Fenv.integrate is thread-save
 %% However, the gnuplot interface uses always the same file names per default...
 thread
-{{Fenv.tempoCurve2TimeMap {Fenv.linearFenv [[0.0 0.3] [0.5 3.0] [1.0 0.3]]}
+{{Fenv.tempoCurveToTimeMap {Fenv.linearFenv [[0.0 0.3] [0.5 3.0] [1.0 0.3]]}
   0.01}
  plot(commandFile: "/tmp/gnuplot_command"#{GUtils.getCounterAndIncr}
       dataFile:"/tmp/gnuplot_daten"#{GUtils.getCounterAndIncr})}
 end
-{{Fenv.tempoCurve2TimeMap {Fenv.linearFenv [[0.0 3.0] [0.5 3.0] [0.5 0.5] [1.0 0.5]]}
+{{Fenv.tempoCurveToTimeMap {Fenv.linearFenv [[0.0 3.0] [0.5 3.0] [0.5 0.5] [1.0 0.5]]}
   0.01}
  plot(commandFile: "/tmp/gnuplot_command"#{GUtils.getCounterAndIncr}
       dataFile:"/tmp/gnuplot_daten"#{GUtils.getCounterAndIncr})}
+
 
 
 /*
@@ -373,5 +403,143 @@ MyTempoCurve = {Fenv.concatenateTempoCurves
 
 {{Fenv.tempoCurveToTimeMap MyTempoCurve 0.01}
  plot}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%% Compare tempo curve, time shift function, and time map
+%%
+%%
+
+%%
+%% Question
+%%
+%% Is Fenv.timeMapToTimeShift OK? timeshift fenv y-values depend on time unit...
+%%
+%% NOTE: time map and time shift fenvs are in principle _independent_ of any time unit. If their value should depend on the present time uning, then the time map / time shift processing of temporal values must occur before these values are translated into, say, seconds.
+%%
+%%
+
+%%
+%% BUG: tempo curve translation with approx numeric integration presently not suitable: it is highly likely that actual temporal values are "off" and the approximation is pretty bad... 
+%%
+%%
+%%
+
+%%
+%% Note: tempo curve transformation introduces inaccurate between "steps" of integration approximation. Therefore, the step has been set here as high as the plotting "step". 
+%%
+
+%%
+%% score timing 
+%%
+
+{{Fenv.tempoCurveToTimeShift 
+  {Fenv.linearFenv [[0.0 1.0] [1.0 1.0]]}
+  0.01}
+ plot}
+
+{{Fenv.tempoCurveToTimeMap
+  {Fenv.linearFenv [[0.0 1.0] [1.0 1.0]]}
+  0.01}
+ plot}
+
+{{Fenv.timeShiftToTimeMap
+  {Fenv.linearFenv [[0.0 0.0] [1.0 0.0]]}}
+ plot}
+
+{{Fenv.timeMapToTimeShift
+  {Fenv.linearFenv [[0.0 0.0] [1.0 1.0]]}}
+ plot}
+
+%% note: very small approx errors
+{{Fenv.tempoCurveToTimeShift 
+  {Fenv.linearFenv [[0.0 1.0] [1.0 1.0]]}
+  0.2}
+ plot}
+
+{{Fenv.tempoCurveToTimeMap
+  {Fenv.linearFenv [[0.0 1.0] [1.0 1.0]]}
+  0.1}
+ plot}
+
+{{Fenv.tempoCurveToTimeMap {Fenv.linearFenv [[0.0 0.3] [0.5 3.0] [1.0 0.3]]}
+  0.1}
+ plot}
+
+
+%%
+%% Constant tempo
+%%
+
+%% tempo 2.0
+
+{{Fenv.tempoCurveToTimeShift 
+  {Fenv.linearFenv [[0.0 2.0] [1.0 2.0]]}
+  0.01}
+ plot}
+
+{{Fenv.tempoCurveToTimeMap
+  {Fenv.linearFenv [[0.0 2.0] [1.0 2.0]]}
+  0.01}
+ plot}
+
+%% tempo 0.5
+
+{{Fenv.tempoCurveToTimeShift 
+  {Fenv.linearFenv [[0.0 0.5] [1.0 0.5]]}
+  0.01}
+ plot}
+
+{{Fenv.tempoCurveToTimeMap
+  {Fenv.linearFenv [[0.0 0.5] [1.0 0.5]]}
+  0.01}
+ plot}
+
+
+%%
+%% Sudden tempo change
+%%
+
+%% OK
+{{Fenv.tempoCurveToTimeShift 
+  {Fenv.linearFenv [[0.0 2.0] [0.5 2.0] [0.501 0.5] [1.0 0.5]]}
+  0.01}
+ plot}
+
+%% OK
+{{Fenv.tempoCurveToTimeMap
+  {Fenv.linearFenv [[0.0 2.0] [0.5 2.0] [0.501 0.5] [1.0 0.5]]}
+  0.01}
+ plot}
+
+
+%%
+%% linear tempo change (give and take)
+%%
+
+{{Fenv.tempoCurveToTimeShift 
+  {Fenv.linearFenv [[0.0 0.5] [0.5 2.0] [1.0 0.5]]}
+  0.01}
+ plot}
+
+{{Fenv.tempoCurveToTimeMap
+  {Fenv.linearFenv [[0.0 0.5] [0.5 2.0] [1.0 0.5]]}
+  0.01}
+ plot}
+
+%%
+
+{{Fenv.tempoCurveToTimeShift 
+  {Fenv.linearFenv [[0.0 0.5] [0.5 1.5] [1.0 0.5]]}
+  0.01}
+ plot}
+
+{{Fenv.tempoCurveToTimeMap
+  {Fenv.linearFenv [[0.0 0.5] [0.5 1.5] [1.0 0.5]]}
+  0.01}
+ plot}
+
+
 
 
