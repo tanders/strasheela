@@ -313,7 +313,8 @@ FSharp_Major = {Score.make chord(index: {HS.db.getChordIndex 'major'}
 %% 1 tone changed by a semitone, and one by a whole tone (sum is 3)
 {Browse {HS.rules.voiceLeadingDistance C_Major G_Major}}
 
-%% PROBLEM: large steps are possibly ignored -- def does 
+%% C-maj -> F#-maj = 4
+%% C->C#=1, C->A#=2, G->F#=1 -- the E of C-maj is ignored in the computation  
 {Browse {HS.rules.voiceLeadingDistance C_Major FSharp_Major}}
 
 
