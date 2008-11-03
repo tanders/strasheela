@@ -819,7 +819,6 @@ define
       {FloatToInt TicksFloat / {IntToFloat {GetDivision}}}   
    end
 
-   
    /** %% Expects a cent value denoting a de-tuning amount (a float) and a pitch bend resolution measured in ET semitones (an int, usually in {1, ..., 12}) and returns the corresponding pitchbend value (for cent values in {~100.0, ..., 100.0} an int in {0, .., 16383}). The resolution is specified for both up and down transpositions. For example, if it is set to 2 it corresponds to the default standard pitch bend range of -2..2 semitones (4096 steps/100 cents).
    %% */
    fun {CentToPitchbend Cent Resolution}
