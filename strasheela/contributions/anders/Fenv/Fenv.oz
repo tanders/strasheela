@@ -43,8 +43,8 @@ export
    FenvSection
 
    Integrate
-   TempoCurveToTimeMap
-   TimeShiftToTimeMap
+   TempoCurveToTimeMap TempoCurveToTimeShift
+   TimeShiftToTimeMap TimeMapToTimeShift
    ConcatenateTempoCurves
    
    TemporalFenvY ItemFenvY
@@ -564,7 +564,7 @@ define
    %% Performs numerical integration internally whenever a value of the returned fenv is accessed, which can be computationally expensive.
    %% Step (a float in [0.0 0.5]) specifies the resolution of the numeric integration: the smaller Step, the more accurate the integration and the more expensive the computation. Step=0.01 results in 100 "function slices".
    %%
-   %% Note: implementation currently always uses Trapezoidal rule for the approximation (i.e. approximation by linear functions under given function), this can be made user-controllable if necessary (see implementation).
+   %% Note: implementation currently always uses Simpson's rule rule for the approximation (based on a polynomial of order 2, pretty good :), it case this is too computationally expensive, could be made user-controllable if necessary (see implementation).
    %% */
    %% Note: I tried to improve the efficiency by memoization, but without success. Memoizing the integration of a single "function slice" is less efficient than recomputing it, and memoizing the integration of an inceasing function interval does not work, because my memoization does not work for recursive functions (I can not overwrite the definition of a function, and recursively calling the memoized function had no effect -- I really tried this for hours!).
    %% NOTE: instead of 'simply' memoizing the function CompositeIntegral, I may do the internal caching manually. I would redefine CompositeIntegral to expect to integers, and change various details accrodingly: e.g., in the call to CompositeIntegral, X would be transformed into an integer {FloatToInt X/Step}. For the call to MyDefIntegral I then need floats again..
@@ -582,7 +582,7 @@ define
 	 B2 = B-Step 
       in
 	 if B2 =< 0.0
-	 then A   			% TODO: tmp solution (seems OK so far..)
+	 then {MyDefIntegral F A B}
 	 else 
 	    {MyDefIntegral F B2 B} + {CompositeIntegral A B2}
 	 end
@@ -624,12 +624,12 @@ define
 % 	    init(env:fun {$ X} {CompositeIntegral 0.0 X} end)}
 % end
    /** %% [Aux] Returns the definite integral of function F in [A, B] (two floats). Implemented with Trapezium rule, http://en.wikipedia.org/wiki/Trapezoidal_rule.
-   %% Alternative options, e.g., Quadratic interpolation Simpson's rule, http://en.wikipedia.org/wiki/Simpson%27s_rule. Wikipedia 'numeric integration' points to even more.  
+   %% Alternative options, e.g., Quadratic interpolation Simpson's rule, http://en.wikipedia.org/wiki/Simpson%27s_rule. Wikipedia 'http://en.wikipedia.org/wiki/Numerical_integration' points to even more.  
    %% */
-   fun {DefiniteIntegral_Trapezoidal F A B}
-      (B-A) * ({F A} + {F B}) / 2.0
-   end
-   %% ?? NOTE: it appears that using Simpson's rule makes hardly any differences at times. I would have expected that now all segments are curved -- what am I missing?
+%    fun {DefiniteIntegral_Trapezoidal F A B}
+%       (B-A) * ({F A} + {F B}) / 2.0
+%    end
+   %% [Aux] Returns the definite integral of function F in [A, B] (two floats), implements Simpson's rule, based on a polynomial of order 2 
    fun {DefiniteIntegral_Simpson F A B}
       (B-A) / 6.0 * ({F A} + (4.0 * {F (A + B)/2.0}) + {F B})
    end
@@ -644,6 +644,11 @@ define
       {Integrate {Reciprocal MyFenv}
        Step}
    end
+   /** %% ... this is probably not a good idea, but works for certain cases.
+   %% */
+   fun {TempoCurveToTimeShift MyFenv Step}
+      {TimeMapToTimeShift {TempoCurveToTimeMap MyFenv Step}}
+   end
 
    /** %% Expects a fenv representing a normalised time shift function and returns a fenv representing a normalised time map function. A time shift function expresses how much is added to a score time to yield a performance time, i.e., f(x) = 0 causes performance time to be score time. A normalised time map maps score time to performance time.
    %% Private Terminology: normalised time shift functions, time map functions and tempo curves: fenvs where x values denote the score time (usually of a temporal container) which is mapped into [0,1]: 0 corresponds to the container's start time, and 1 corresponds to the container's end time. See ContainerFenvY.
@@ -651,6 +656,11 @@ define
    %% */
    fun {TimeShiftToTimeMap TS}
       {ScaleFenv TS unit(add:{New Fenv init(env:fun {$ X} X end)})}
+   end
+   /** %% ... this is perhaps not a good idea, but works for certain cases.
+   %% */
+   fun {TimeMapToTimeShift MyFenv}
+      {ScaleFenv MyFenv unit(add:{New Fenv init(env:fun {$ X} ~X end)})}
    end
 
    
@@ -678,7 +688,7 @@ define
    end
    
    
-   /** %% Accesses the y-value of MyFenv which starts at time point Start (a float) for time interval Duration (a float). The fenv x-value 0.0 corresponds to the start time and the fenv x-value 1.0 coresponds to the resulting end time. MyTime (a float) is any time between the start and end time. All times are score times measured in seconds.
+   /** %% Accesses the y-value of MyFenv which starts at time point Start (a float) for time interval Duration (a float). The fenv x-value 0.0 corresponds to the start time and the fenv x-value 1.0 coresponds to the resulting end time. MyTime (a float) is any time between the start and end time. All times are score times measured in the same time unit.
    %% */
    fun {TemporalFenvY MyFenv Start Duration MyTime}
       FenvX = (MyTime-Start) / Duration
@@ -686,12 +696,12 @@ define
       {MyFenv y($ FenvX)}
    end
    
-   /** %% Accesses the y-value of MyFenv which is associated with a temporal item MyItem. The fenv x-value 0.0 corresponds to the item's start time and the fenv x-value 1.0 coresponds to the item's end time. MyTime (a float) is any time between MyItem's start and end time. MyTime is a score time measured in seconds.
+   /** %% Accesses the y-value of MyFenv which is associated with a temporal item MyItem. The fenv x-value 0.0 corresponds to the item's start time and the fenv x-value 1.0 coresponds to the item's end time. MyTime (a float) is any time between MyItem's start and end time. MyTime is a score time measured in the time unit of MyItem.
    %% */
    fun {ItemFenvY MyFenv MyItem MyTime}
       {TemporalFenvY MyFenv
-       {MyItem getStartTimeInSeconds($)}
-       {MyItem getDurationInSeconds($)}
+       {IntToFloat {MyItem getStartTime($)}}
+       {IntToFloat {MyItem getDuration($)}}
        MyTime}
    end
    
