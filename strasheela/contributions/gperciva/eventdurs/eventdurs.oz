@@ -13,6 +13,7 @@ export
    toScore: ToScore
    toScoreDouble: ToScoreDouble
    writeLilyFile: WriteLilyFile
+   writeOnsetFile: WriteOnsetFile
 
 define
    /** %% link Events with Durations.  Setting a value (or narrowing the domain) in either list will update the other list.
@@ -132,28 +133,37 @@ in
 end
 
 
-/** %% outputs a Score to a file.  This supports triplets.
+/** %% outputs a Score to a file.  This supports triplets. */
 
-NB: it does not yet support other tuplets, although since this
-	       functionality exists in Strasheela it would be easier to modify
-	       this proc accordingly.*/
-		       C={NewCell 1}
-		       proc {WriteLilyFile BaseFilename BeatDivisions MyScore}
-			  Filename=BaseFilename#@C
-			  OutClauses
-		       in
-			  if ({Int.'mod' BeatDivisions 3} == 0) then
-			     OutClauses = {Out.makeLilyTupletClauses [2#3]}
-			  else
-			     OutClauses = nil
-			  end
-			  {Out.outputLilypond
-			   MyScore
-			   unit(file:Filename clauses:OutClauses
-				implicitStaffs:false
-				wrapper:"\\score{"#(" \\layout{}\n \\midi{}\n}\n"#"")
-				unit)}
-			  C:=@C+1
-		       end
+C={NewCell 1}
+proc {WriteLilyFile BaseFilename BeatDivisions MyScore}
+   Filename=BaseFilename#@C
+   OutClauses
+in
+   if ({Int.'mod' BeatDivisions 3} == 0) then
+      OutClauses = {Out.makeLilyTupletClauses [2#3]}
+   else
+      OutClauses = nil
+   end
+   {Out.outputLilypond
+    MyScore
+    unit(file:Filename clauses:OutClauses
+	 implicitStaffs:false
+	 wrapper:"\\score{"#(" \\layout{}\n \\midi{}\n}\n"#"")
+	 unit)}
+   C:=@C+1
+end
 
-		    end
+D={NewCell 1}
+proc {WriteOnsetFile BaseFilename EventDurs}
+   % for some reason, Out.writeToFile doesn't prepend
+   % the temp dir, whereas Out.outputLilypond does.
+   Filename = '/tmp/'#BaseFilename#@D#'.txt'
+   Events = {LUtils.butLast EventDurs.1}
+   Ascii = {Map Events fun {$ X} (X + 48) end}
+in
+  {Out.writeToFile Ascii Filename}
+   D:=@D+1
+end
+
+end
