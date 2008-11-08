@@ -100,6 +100,8 @@ export
 
    SetDivision
 
+   GetChannel
+
 prepare   
    MidiNoteMixinType = {Name.new}
    
@@ -363,38 +365,31 @@ define
       %% event in sublist.
       EventListsT =    
         {List.toTuple unit
-	 {Sort {Map 
-		%% Transform objects in MyScore (fulfilling test)
-		%% according to Specs. Returns list of lists of midi
-		%% event records
-		local
-		   %% process MyScore as well, if it fits test
-		   ScoreObjects = {Append if {As.test MyScore} then [MyScore] else nil end
-				   {MyScore collect($ test:As.test)}}
-		in
-		   {LUtils.mappend ScoreObjects
-		    fun {$ X}
-		       Matching = {LUtils.find Specs
-				   fun {$ Test#_}
-				      {{GUtils.toFun Test} X}
-				   end}
-		    in if Matching == nil then nil
-		       else _#Transform = Matching
-		       in [{{GUtils.toFun Transform} X}]
-		       end
-		    end}
-		end
-% 		   {MyScore map($ fun {$ X}
-% 				  Matching = {LUtils.find Specs
-% 					      fun {$ Test#_}
-% 						 {{GUtils.toFun Test} X}
-% 					      end}
-% 			       in if Matching == nil then nil
-% 				  else _#Transform = Matching
-% 				  in {{GUtils.toFun Transform} X}
-% 				  end
-% 			       end
-% 			     test:As.test)}
+	 {Sort {Map
+		{Filter
+		 %% Transform objects in MyScore (fulfilling test)
+		 %% according to Specs. Returns list of lists of midi
+		 %% event records
+		 local
+		    %% process MyScore as well, if it fits test
+		    ScoreObjects = {Append if {As.test MyScore} then [MyScore] else nil end
+				    {MyScore collect($ test:As.test)}}
+		 in
+		    {LUtils.mappend ScoreObjects
+		     fun {$ X}
+			%% find matching clause TestI#TransformationI
+			Matching = {LUtils.find Specs
+				    fun {$ Test#_}
+				       {{GUtils.toFun Test} X}
+				    end}
+		     in if Matching == nil then nil
+			else _#Transform = Matching
+			in [{{GUtils.toFun Transform} X}]
+			end
+		     end}
+		 end
+		 %% skip empty event sublists 
+		 fun {$ Events} Events \= nil end}
 		fun {$ Events} {Sort Events TimeLessThan} end}
 	  fun {$ Events1 Events2} {TimeLessThan Events1.1 Events2.1} end}}
       %% The stateless EventListsT will be used for traversing, and the
@@ -452,8 +447,9 @@ define
 
 
    /** %% Creates a MIDI file from MyScore as defined in Spec (see below). OutputMidiFile creates a CSV file which is like an event list (i.e. only a single track is supported) and this file is then transformed into a MIDI file by csvmidi.
-   %% The user can control the transformation process by specifing transformation clauses. The format of such clauses is explain in the documentation of Out.scoreToEvents. In OutputMidiFile, the transformation function of each clause must return a list of MIDI events, which are created with functions like MakeNoteOn or MakeCC. This list can contain any MIDI events which correspond to the score object matching the clause (e.g., for a note, the returned MIDI events may include note-on and note-off events, pitchbend, aftertouch, and CC events etc.). However, if the argument removeQuestionableNoteoffs is true (which is recommended) then there must be at maximum a single noteOn event is present in this list and that it is coupled with a corresponding noteOff event. See the documentation of ScoreToEvents_Midi for information on the meaning of removeQuestionableNoteoffs.
-   %% The argument 'clauses' defaults to a transformation where only notes (either instances of Score.note or any subclasses such as MidiNote) are output.
+   %% The user can control the transformation process by specifing transformation clauses. The format of such clauses is explain in the documentation of Out.scoreToEvents. In OutputMidiFile, the transformation function of each clause must return a list of MIDI events, which are created with functions like MakeNoteOn or MakeCC. This list can contain any MIDI events which correspond to the score object matching the clause (e.g., for a note, the returned MIDI events may include note-on and note-off events, pitchbend, aftertouch, and CC events etc.). However, if the argument removeQuestionableNoteoffs is true (which is recommended) then there must be at maximum a single noteOn event is present in this list and it is coupled with a corresponding noteOff event. See the documentation of ScoreToEvents_Midi for information on the meaning of removeQuestionableNoteoffs.
+   %%
+   %% The default clauses are a transformation where only notes (either instances of Score.note or any subclasses such as MidiNote) are output. Clauses given with the 'clauses' argument are appended before the default clauses (so if you add a clause for MIDI notes, then the default clause still works for other notes).
    %% 
    %% The argument 'scoreToEventsArgs' expects a record of arguments for the procedure Out.scoreToEvents/ScoreToEvents_Midi called internally. This argument controls which score objects are considered at all for output (see the Out.scoreToEvents documentation for details).
    %%
@@ -468,13 +464,15 @@ define
 			 {MakeTempo Track 0
 			  {BeatsPerMinuteToTempoNumber {FloatToInt {Init.getTempo}}}}
 		      end]
-	clauses:[isNote#fun {$ MyNote} {NoteToMidi MyNote unit} end]
+	clauses:nil
 	removeQuestionableNoteoffs: true
 	scoreToEventsArgs: unit)
+   
+   DefaultClauses = [isNote#fun {$ MyNote} {NoteToMidi MyNote unit} end]
 
    %% In this default setting, the variables BeatsToTicks, IsMidiNoteMixin, MakeNoteOn and MakeNoteOff are defined and exported by the present functor.
    %% */
-   %% !! The present implementation interprests score as an event list (thus only a single track). An alternative definition could interpret the hierarchic structure to deduce tracks. But how should that be done? Shall the score have some fixed hierarchic structure for this purpose (e.g. an obligatory sim container as toplevel)? This can probably be done by a special clauses def which processes the containers instead of the midi notes.. 
+   %% !! The present implementation interprets score as an event list (thus only a single track). An alternative definition could interpret the hierarchic structure to deduce tracks. But how should that be done? Shall the score have some fixed hierarchic structure for this purpose (e.g. an obligatory sim container as toplevel)? This can probably be done by a special clauses def which processes the containers instead of the midi notes.. 
    %%
    %% ?? shall I give default channel (for non-midi notes) or track as args? (how to access that arg in funs in arg clauses?)
    proc {OutputMidiFile MyScore Spec}
@@ -491,21 +489,24 @@ define
 			      {MakeTempo Track 0
 			       {BeatsPerMinuteToTempoNumber {FloatToInt {Init.getTempo}}}}
 			   end]
-	     %% 
-	     clauses:[isNote#fun {$ MyNote} {NoteToMidi MyNote unit} end]
+	     %% clauses are appended before DefaultClauses
+	     clauses:nil
 	     removeQuestionableNoteoffs: true
 	     scoreToEventsArgs: unit)
       MySpec = {Adjoin DefaultSpec Spec}
       CVSEvents
+      DefaultClauses = [isNote#fun {$ MyNote} {NoteToMidi MyNote unit} end]
+      Clauses
    in
       if {Not {MyScore isDet($)}} then
 	 {GUtils.warnGUI "MIDI output may block or cause an error -- score not fully determined!"}
 %	 {System.showInfo "Warning: MIDI output may block -- score not fully determined!"}
       end
+      Clauses = {Append MySpec.clauses DefaultClauses}
       CVSEvents = {Append MySpec.headerEvents
 		   if MySpec.removeQuestionableNoteoffs
-		   then {ScoreToEvents_Midi MyScore MySpec.clauses MySpec.scoreToEventsArgs}
-		   else {Out.scoreToEvents MyScore MySpec.clauses MySpec.scoreToEventsArgs}
+		   then {ScoreToEvents_Midi MyScore Clauses MySpec.scoreToEventsArgs}
+		   else {Out.scoreToEvents MyScore Clauses MySpec.scoreToEventsArgs}
 		   end}
       {OutputCSVScore CVSEvents MySpec}
       {RenderMidiFile MySpec}
@@ -1002,6 +1003,20 @@ define
 %    in
 %       {MakePitchBend As.track Start Channel PitchBend}
 %    end
+
+   
+   /** %% Returns the MIDI channel for the temporal item X. The channel must be defined as an info tag of the form channel(Chan) either in X or in some temporal container of X. 
+   %% */
+   %% Possible efficiency issue: the same search for containers with channel def is done over and over. I may consider memoizing the found channel for an item 
+   fun {GetChannel X}
+      if {X hasThisInfo($ channel)} then {X getInfoRecord($ channel)}.1
+      elseif {X isTopLevel($)}
+      then {Exception.raiseError
+	    strasheela(failedRequirement X "No channel info-tag defined.")}
+	 unit			% never returned
+      else {GetChannel {X getTemporalContainer($)}}
+      end
+   end
    
 
 end
