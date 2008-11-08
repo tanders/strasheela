@@ -470,11 +470,24 @@ InspectorObject = {Inspector.new unit}
 
 
 
+*** ?? Music representation edit: explain explorer out early?
 
+subject: Re: [Strasheela-users] MIDI output
+On Nov 3, 2008, at 9:25 PM, Emre Sevinc wrote:
+
+Oh, by the way, as I was hecticly jumping from example to example I
+have realized that whatever you've done to the Explorer window, the
+final effect of clickin' on a green solution icon and being able to
+listen its MIDI rendering was... way cool! :)
+
+You should've shown this at the beginning of music representation
+section of the tutorial not deep down in the examples section.
 
 *** ?? Sec on how to set up the system 
 
     how to write ~/.ozrc file
+
+
 
 ** Collect a list of Strasheela features for website
 
@@ -1095,35 +1108,39 @@ From this viewpoint, there is an interesting polarity between major and harmonic
 **** Formalisieren der Ideen 
 
 
-** Time curves etc [[file:~/oz/music/Strasheela/private/examples/forOlleRomo/TempoCurves-etc.oz][TempoCurves-etc.oz]]					  :SOON:
+** Add support for nested tempo curves 
 
-   [[file:~/oz/music/Strasheela/strasheela/trunk/strasheela/examples/ContinuousControllersInScore-MidiOutput.oz]]
-   [[file:~/oz/music/Strasheela/private/examples/forOlleRomo/TempoCurves-etc.oz]]
-   [[file:~/oz/music/Strasheela/strasheela/trunk/strasheela/contributions/anders/Fenv/Fenv.oz]]
-   
-   Old Goal (unrealistic): user can freely define tempo curve and time shift curve for any temporal container in score 
-   
-   New reduced goal: user can freely define a single global tempo curve (possibly defining segments locally) and nested time shift functions for any temporal container in score 
-   I feel the building blocks are now there, but there are examples to do
+   see [[file:~/oz/music/Strasheela/strasheela/trunk/strasheela/source/ScoreCore.oz::multiply%20all%20tempo%20curves%20and%20integrate%20them%20to%20get%20performance%20time][file:~/oz/music/Strasheela/strasheela/trunk/strasheela/source/ScoreCore.oz::multiply all tempo curves and integrate them to get performance time]]
 
-*** DONE ?? concatenate tempo curve fenvs with associated start and end times in seconds
-    CLOSED: [2008-02-20 Wed 10:30]
+*** OLD: Time curves etc [[file:~/oz/music/Strasheela/private/examples/forOlleRomo/TempoCurves-etc.oz][TempoCurves-etc.oz]] 				  :SOON:
 
-*** Create example with single global tempo curve fenv
-
-    Example partly done at [[file:~/oz/music/Strasheela/strasheela/trunk/strasheela/examples/ContinuousControllersInScore-MidiOutput.oz::][ContinuousControllersInScore-MidiOutput.oz]], Example 5, 
-    but it still has bugs.
+    [[file:~/oz/music/Strasheela/strasheela/trunk/strasheela/examples/ContinuousControllersInScore-MidiOutput.oz]]
+    [[file:~/oz/music/Strasheela/private/examples/forOlleRomo/TempoCurves-etc.oz]]
+    [[file:~/oz/music/Strasheela/strasheela/trunk/strasheela/contributions/anders/Fenv/Fenv.oz]]
     
-*** Create example with nested local time shift fenvs
-    First create abstraction to access and combine local time shift fenvs
+    Old Goal (unrealistic): user can freely define tempo curve and time shift curve for any temporal container in score 
+    
+    New reduced goal: user can freely define a single global tempo curve (possibly defining segments locally) and nested time shift functions for any temporal container in score 
+    I feel the building blocks are now there, but there are examples to do
 
-*** Create example with a global tempo curve derived from consecutive local tempo curves
+**** DONE ?? concatenate tempo curve fenvs with associated start and end times in seconds
+     CLOSED: [2008-02-20 Wed 10:30]
 
-*** ?? Create tempo canon example
+**** Create example with single global tempo curve fenv
 
-*** Means to archive score with fenvs 
+     Example partly done at [[file:~/oz/music/Strasheela/strasheela/trunk/strasheela/examples/ContinuousControllersInScore-MidiOutput.oz::][ContinuousControllersInScore-MidiOutput.oz]], Example 5, 
+     but it still has bugs.
+     
+**** Create example with nested local time shift fenvs
+     First create abstraction to access and combine local time shift fenvs
 
-    Transform with toInitRecord and then pickle with Score.saveScore
+**** Create example with a global tempo curve derived from consecutive local tempo curves
+
+**** ?? Create tempo canon example
+
+**** Means to archive score with fenvs 
+
+     Transform with toInitRecord and then pickle with Score.saveScore
 
 
 

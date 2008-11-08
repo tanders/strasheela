@@ -44,6 +44,46 @@ MyScore = {Score.makeScore note(info:"test")
 
 ** TODO BUG: getOffsetTimeInSeconds  no dependency to tempo curve or time shift function defined yet, depends on type of temporal container
 
+** TODO BUG: tempo setting affects Csound and MIDI output differently
+
+%% BUG: MIDI tempo not OK
+
+declare
+%% set playback tempo
+{Init.setTempo 70.0}
+%% Create test score
+MyTestScore = {Score.makeScore
+	       seq(items:[note(duration:2
+			       pitch:60
+			       amplitude:80)
+			  note(duration:2
+			       pitch:64
+			       amplitude:60)
+			  note(duration:2
+			       pitch:67
+			       amplitude:50)
+			  note(duration:6
+			       pitch:72
+			       amplitude:100)
+			 ]
+		   startTime:0
+		   timeUnit:beats(4))
+	       unit}
+
+
+%% Just in case: wait until 
+{MyTestScore wait}
+
+
+%% Csound output 
+{Out.renderAndPlayCsound MyTestScore
+ unit(file:myTestScore)}
+
+%% MIDI output
+{Out.midi.renderAndPlayMidiFile MyTestScore
+ unit(file:myTestScore)}
+
+
 * Strasheela design						    :STRASHEELA:
 
 ** TODO Archive Fenvs by approximation (sampling the Fenv)
