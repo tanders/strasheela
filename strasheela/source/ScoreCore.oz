@@ -1019,23 +1019,13 @@ define
 
    /** %% Collect all temporal containers in which MyItem is contained, and which have a time shift function or a tempo curve.
    %% */
-   %% TODO: collect also containers with tempo curves..
-   fun {GetTimeshiftContainers MyItem}
-      fun {Aux X}
-	 C = {X getTemporalContainer($)}
-      in
-	 if C == nil then nil
-	 else if {C hasThisInfo($ timeshift)} % TMP orelse {C hasThisInfo($ tempo)}
-	      then C | {Aux C}
-	      else {Aux C}
-	      end
-	 end
-      end
-   in
-      %% first check whether MyItem itself is timeshift container, then call recursive Aux 
-      if {IsTemporalContainer MyItem} andthen {MyItem hasThisInfo($ timeshift)} % TMP orelse {C hasThisInfo($ tempo)}
-      then MyItem | {Aux MyItem}
-      else {Aux MyItem}
+   fun {GetTimingFenvContainers MyItem}
+      if MyItem == nil then nil
+      elseif {IsTemporalContainer MyItem} andthen
+% 	 (
+	  {MyItem hasThisInfo($ timeshift)} % orelse {MyItem hasThisInfo($ tempo)})
+      then MyItem | {GetTimingFenvContainers {MyItem getTemporalContainer($)}}
+      else {GetTimingFenvContainers {MyItem getTemporalContainer($)}}
       end
    end
    %%
@@ -1043,7 +1033,8 @@ define
    %% MyTime is a float specified in seconds, and a time in second is return (a float). Nevertheless, the timeshift fenvs y-values are specified in the present timeUnit, and GetShiftedTime converts them to seconds.  
    %% */
    fun {GetShiftedTime MyTime MyItem MyParam}
-      Cs = {GetTimeshiftContainers MyItem}
+%       IntegrationStep = 0.1  % approximation accuracy
+      Cs = {GetTimingFenvContainers MyItem}
    in
       {System.show shiftedTime_1(cs:Cs
 				 param:MyParam
@@ -1051,13 +1042,37 @@ define
       if Cs == nil then MyTime
       else
 	 %%
-	 %% TODO: add support for tempo curves and combine them (as time maps)
+	 %% Possible TODO -- add tempo curves (then uncomment code in GetTimingFenvContainers and below)
+	 %%
+% 	 %% multiply all tempo curves and integrate them to get performance time
+% 	 %%
+% 	 %% BUG - I cannot multiply the tempo curves directly -- they stem from different containers, and thus range over different time spans
+% 	 %% 
+% 	 %% So, find "top-level" container with tempo curve, and process the remaining tempo curves accordingly: I may specify that tempo curves are 1 for any time outside their range..x
+% 	 %% Possible special case: if tempo curve belongs to a container situationed in a sequential container, then all tempo curves of the preceeding containers in the sequential container are also taken into account.
+% 	 %% Otherwise a container with (only) a tempo curve (and no higher-level tempo curves) starts at score time (!)
+% 	 TempoProcessedTime
+% 	 = {Fenv.itemFenvY
+% 	    {Fenv.integrate
+% 	     %% TODO - access the actual fenvs
+% 	     {Fenv.combineFenvs fun {$ Xs} {LUtils.accum Xs Number.'*'} end
+% 	      {Filter Cs fun {$ C} {C hasThisInfo($ tempo)} end}}
+% 	     IntegrationStep}
+% 	    C MyTime}
+% 	 %% sum all time shift values 
+% 	 TimeShiftSum = {LUtils.accum
+% 			 {Map {Filter Cs fun {$ C} {C hasThisInfo($ timeshift)} end}
+% 			  fun {$ C}
+% 			     {Fenv.itemFenvY {C getInfoRecord($ timeshift)}.1 C MyTime}
+% 			  end}
+% 			 Number.'+'}
+%       in
+% 	 TempoProcessedTime + TimeShiftSum
 	 %%
 	 %% Sum all time shift values and add them to MyTime
 	 MyTime 
 	 + {LUtils.accum
 	     {Map Cs
-	      %% NOTE: dependency on contribution
 	      fun {$ C} {Fenv.itemFenvY {C getInfoRecord($ timeshift)}.1 C MyTime} end}
 	     Number.'+'}
       end
