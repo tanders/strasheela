@@ -1017,8 +1017,9 @@ define
    end
 
 
-   /** %% Collect all temporal containers in which MyItem is contained, and which have a time shift function or a tempo curve.
+   /** %% Collect all temporal containers in which MyItem is contained, and which have a time shift function.
    %% */
+   %% Possible efficiency issue:  the same search for time shift fenvs is done over and over. I may consider memoizing the found time shift functions for an item 
    fun {GetTimingFenvContainers MyItem}
       if MyItem == nil then nil
       elseif {IsTemporalContainer MyItem} andthen
@@ -1032,6 +1033,7 @@ define
    /** %% Computes a transformation of MyTime which takes hierarchically nested time shift functions into account. MyItem is the score object to which MyTime belongs (e.g., MyItem is a note and MyTime is its start or end time). GetShiftedTime searches through all temporal containers of MyItem and applies all time shift functions found.
    %% MyTime is a float specified in seconds, and a time in second is return (a float). Nevertheless, the timeshift fenvs y-values are specified in the present timeUnit, and GetShiftedTime converts them to seconds.  
    %% */
+   %%
    fun {GetShiftedTime MyTime MyItem MyParam}
 %       IntegrationStep = 0.1  % approximation accuracy
       Cs = {GetTimingFenvContainers MyItem}
