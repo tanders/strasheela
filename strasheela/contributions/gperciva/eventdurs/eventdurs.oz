@@ -137,9 +137,18 @@ end
 
 C={NewCell 1}
 proc {WriteLilyFile BaseFilename BeatDivisions MyScore}
-   Filename=BaseFilename#@C
+   Filename
    OutClauses
+   Pad
 in
+   if (@C<10) then
+     Pad = '000'#@C
+   elseif (@C<100) then
+     Pad = '00'#@C
+   elseif (@C<1000) then
+     Pad = '0'#@C
+   end
+   Filename = BaseFilename#Pad
    if ({Int.'mod' BeatDivisions 3} == 0) then
       OutClauses = {Out.makeLilyTupletClauses [2#3]}
    else
@@ -158,11 +167,20 @@ D={NewCell 1}
 proc {WriteOnsetFile BaseFilename EventDurs}
    % for some reason, Out.writeToFile doesn't prepend
    % the temp dir, whereas Out.outputLilypond does.
-   Filename = '/tmp/'#BaseFilename#@D#'.txt'
+   Filename
+   Pad
    Events = {LUtils.butLast EventDurs.1}
    Ascii = {Map Events fun {$ X} (X + 48) end}
 in
-  {Out.writeToFile Ascii Filename}
+   if (@D<10) then
+     Pad = '000'#@D
+   elseif (@D<100) then
+     Pad = '00'#@D
+   elseif (@D<1000) then
+     Pad = '0'#@D
+   end
+   Filename = '/tmp/'#BaseFilename#Pad#'.txt'
+   {Out.writeToFile Ascii#' ' Filename}
    D:=@D+1
 end
 
