@@ -50,6 +50,7 @@ export
    TemporalFenvY ItemFenvY
    
    FenvToMidiCC ItemFenvToMidiCC
+   ItemFenvsToMidiCC ItemTempoCurveToMidi
    
 prepare
    FenvType = {Name.new}
@@ -749,6 +750,73 @@ define
    in
       {FenvToMidiCC MyFenv N Track StartTime EndTime Channel Controller}
    end
+
+   
+   /** %% Expects a temporal item which defines fenvs in a info-tag 'fenvs', and returns a list of continuous MIDI controller events for all its fenvs. Each fenvs is defined by a pair Controller#Fenv, where Controller can take all values defined for FenvToMidiCC. Fenvs directly specify the controller values (e.g., if Controller is pitchBend, then the Fenv range is 0.0 to 16383.0, and the value 8192.0 means no pitchbend). Note that for any controller only a single Fenv should be defined at any time (otherwise they conflict with each other).
+   %% Example: fenvs((cc#1)#{Fenv.linearFenv [[0.0 0.0] [1.0 127.0]]}) 
+   %%
+   %% Args:
+   %% ccsPerSecond: how many CC events are created per second.
+   %% track: MIDI track to output, default 2 (suitable for more cases)
+   %% channel: midi channel to output, default nil (if nil, MIDI note object CCs are output to its channel and all other to channel 0) 
+   %%
+   %% Timeshift fenvs affect the start and end of the continuous MIDI controller events, but not their "spacing".
+   %% */
+   fun {ItemFenvsToMidiCC MyItem Args}
+      Defaults = unit(track:2
+		      channel:nil
+		      ccsPerSecond: 10)
+      As = {Adjoin Defaults Args}
+      DefaultMidiChan = 0
+      Channel = if  As.channel \= nil
+		then As.channel
+		elseif {Out.midi.isMidiNoteMixin MyItem}
+		then {MyItem getChannel($)}
+		else DefaultMidiChan
+		end
+      Fenvs = {MyItem getInfoRecord($ fenvs)}
+      N = {FloatToInt {MyItem getDurationInSeconds($)} * {IntToFloat As.ccsPerSecond}}
+   in
+      {LUtils.mappend {Record.toList Fenvs}
+       fun {$ Controller#MyFenv}
+	  StartTime = {Out.midi.beatsToTicks {MyItem getStartTimeInSeconds($)}}
+	  EndTime = {Out.midi.beatsToTicks {MyItem getEndTimeInSeconds($)}}
+       in
+	  {FenvToMidiCC MyFenv N As.track StartTime EndTime Channel Controller}
+       end}
+   end
+      
+   /** %% Expects a temporal item which defines a tempo curve Fenv in a info-tag 'globaltempo', and returns a list of MIDI tempo events. Returns nil in case MyItem defines no tempo curve. The tempo fenv values are in beats per minute. Due to restrictions of the MIDI protocoll, only a single global tempo is supported (note that sequencers may restrict the import of such data in a MIDI files). If multiple tempi are defined "in parallel" or nested, then "conflicting" MIDI tempo events are output.
+   %% Example: globaltempo({Fenv.linearFenv [[0.0 30.0] [1.0 240.0]]})
+   %%
+   %% Args:
+   %% ccsPerSecond: how many tempo events are created per second.
+   %% track: MIDI track to output, default 2 (suitable for more cases)
+   %%
+   %% Time shift fenvs affect the start and end of the tempo events, but not their "spacing".
+   %% */
+   fun {ItemTempoCurveToMidi MyItem Args}
+      Defaults = unit(track:2
+		      ccsPerSecond: 10)
+      As = {Adjoin Defaults Args}
+      TempoInfo = {MyItem getInfoRecord($ globaltempo)} 
+   in
+      if TempoInfo \= nil then
+	 Tempo = TempoInfo.1
+	 N = {FloatToInt {MyItem getDurationInSeconds($)} * {IntToFloat As.ccsPerSecond}}
+	 StartTime = {Out.midi.beatsToTicks {MyItem getStartTimeInSeconds($)}}
+	 EndTime = {Out.midi.beatsToTicks {MyItem getEndTimeInSeconds($)}}
+      in
+	 {FenvToMidiCC Tempo N As.track StartTime EndTime _/*Channel*/
+	  fun {$ Track Time _/*Channel*/ Value}
+	     %% implicitly, transform beats per minute to MIDI tempo value
+	     {Out.midi.makeTempo Track Time
+	      {Out.midi.beatsPerMinuteToTempoNumber Value}}
+	  end}
+      else nil
+      end
+   end
+
    
 end
 
