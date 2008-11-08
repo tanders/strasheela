@@ -6,7 +6,7 @@
 
   - Main additions and changes 
 
-    - Added support for tempo curves and time shift functions to the core music representation: methods like getStartTimeInSeconds etc. take them into account, and they are supported by all standard synthesis output formats. Tempo curves and time shift functions are defined for temporal containers, and they can even be nested (e.g., local tempo curves for motifs and a global tempo curve for the whole score).
+    - Added support for time shift functions to the core music representation: methods like getStartTimeInSeconds etc. take them into account, and they are supported by all standard synthesis output formats. Time shift functions are defined for temporal containers, and they can even be nested (e.g., locally for motifs and a globally for the whole score).
 
     - MUtils: Added support for symbolic duration notation: MakeNoteLengthsTable, MakeNoteLengthsRecord, MakeDurationsRecord, SetNoteLengthsRecord, ToDur, SetDurationsRecord, ToNoteLengths
 
