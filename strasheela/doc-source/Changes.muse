@@ -16,23 +16,28 @@
     - Added relatively complex examples which constrain the rhythmical, melodic, harmonic, and formal structure at the same time: examples/Form-Examples/FriendlyMusicExample.oz
 
 
-  - Minor additions and changes
+  - Minor additions 
 
     - HS.rules: added several harmonic/melodic/contrapuntual rules: VoiceLeadingDistance, VoiceLeadingDistance_Percent, SmallIntervalProgressions, SmallIntervalProgressions_Percent, ClearDissonanceResolution, IntervalBetweenNonharmonicTonesIsConsonant, MaxInterval, MaxNonharmonicNoteSequence, MaxNonharmonicNotePercent, MaxRepetitions, MinPercentSteps
+    - Out.outputScoreConstructor (and related score archiving procs): added arguments 'postfix', 'exclude', and 'clauses' 
     - GUtils: added IsDivisible, Percent
     - HS.score: added RatioToInterval
     - Added OZRC file configured for MacOS
     - Out.midi.noteToMidi: added arg 'round'
     - PMotif.makeScript: added argument 'constructors' 
-    - Refactored score object method toInitRecord: now with arg 'clauses' (i.e., default output format -- defined by method 'getInitInfo' -- can be overwritten in 'toInitRecord' call)     - Out.outputScoreConstructor (and related score archiving procs): added arguments 'postfix', 'exclude', and 'clauses' 
-    - Fenv.itemFenvY: interface changed slightly -- time argument now expected in present time unit, not in seconds
+    - Out.midi.getChannel added
+    - Fenv: added ItemFenvsToMidiCC and ItemTempoCurveToMidi
  
 
-  - Bug fixes 
+  - Bug fixes and changes
 
+    - Refactored score object method toInitRecord: now with arg 'clauses' (i.e., default output format -- defined by method 'getInitInfo' -- can be overwritten in 'toInitRecord' call)     
+    - Fenv.itemFenvY: interface changed slightly -- time argument now expected in present time unit, not in seconds
     - Tempo curve processing bug fixed (numeric integration approximation now OK)
     - Fixed bug in the harmony-related example in [[../examples/Form-Examples/PrototypeMotif-Examples.oz][PrototypeMotif-Examples.oz]] (with the new arg PMotif.makeScript arg 'constructors')
-
+    - Refactored MIDI output (Out.midi.renderAndPlayMidiFile and friends affected)
+      - Clauses given as arg are appended before default clauses, default clauses are not overwritten  
+      - Bug fixed for clauses resulting in nil 
 
 
   - For further fixes see the [[../CHANGELOG.txt]].
