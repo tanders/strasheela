@@ -18,10 +18,12 @@
 
 functor
    
-import   
-   Browser(browse:Browse) % temp for debugging
+import
+%    System
+%    Browser(browse:Browse) % temp for debugging
    GUtils at 'x-ozlib://anders/strasheela/source/GeneralUtils.ozf'
    LUtils at 'x-ozlib://anders/strasheela/source/ListUtils.ozf'
+   Score at 'x-ozlib://anders/strasheela/source/ScoreCore.ozf'
    Out at 'x-ozlib://anders/strasheela/source/Output.ozf'
    GPlot(plot:Plot) at 'x-ozlib://anders/strasheela/Gnuplot/Gnuplot.ozf'
    
@@ -51,6 +53,7 @@ export
    
    FenvToMidiCC ItemFenvToMidiCC
    ItemFenvsToMidiCC ItemTempoCurveToMidi
+   RenderAndPlayMidiFile
    
 prepare
    FenvType = {Name.new}
@@ -815,6 +818,93 @@ define
 	  end}
       else nil
       end
+   end
+
+
+   
+   /** %% This procedure is like Out.midi.renderAndPlayMidiFile, but it additional supports continuous controllers and a global tempo curve, expressed in the score by fenvs. 
+   %%
+   %% Supported score format:
+   %% 
+   %% The info-tag 'channel', given to a temporal item, sets the MIDI channel for this item and all contained items. Example: channel(0). If a channel is defined multiple times, then a setting in a lower hierarchical level overwrites higher-level settings.
+   %%
+   %% The info-tag 'program', given to a temporal item, results in a program change message with the specified program number at the beginning of the item. Example. program(64). Many instruments number patches from 1 to 128 rather than the 0 to 127 used within MIDI files. When interpreting ProgramNum values, note that they may be one less than the patch numbers given in an instrument's documentation.
+   %%
+   %% The info-tag 'fenvs', given to a note or temporal container, specifies a tuple of continuous controllers for the duration this item. Each Fenv spec is a pair Controller#Fenv, where Controller is defined as for Fenv.fenvToMidiCC. Example: (cc#1)#MyFenv. Fenvs directly specify the controller values (e.g., if Controller is pitchBend, then the Fenv range is 0.0 to 16383.0, and the value 8192.0 means no pitchbend). Note that for any controller only a single Fenv should be defined at any time (otherwise they conflict with each other).
+   %%
+   %% The info-tag 'timeshift', given to a temporal container, specifies a time shift function (a fenv). Example: timeshift(MyTimeshiftFenv). Time shift values are specified as time value offsets in the present timeUnit. For example, if a note has the start time 42 and its container specifies a time shift fenv with the y-value -1.0 corresponding to the start time of this note, then the MIDI note on happens at time 41. Hierarchical nesting of time shift functions is supported: if in the example above this note is recursively contained in other containers which also specify a time shift fenv, then their y-values for the note are added to the note's start time as well. Time shift fenvs also affect the timing of CC fenvs.
+   %%
+   %% The info-tag 'globaltempo', given to a temporal container, specifies a tempo curve (a fenv) and is output as MIDI tempo events. Example: globaltempo(MyTempoFenv). Tempo values are specified in BPM. Due to restrictions of the MIDI protocoll, only a single global tempo is supported (note that sequencers may restrict the import of such data in a MIDI files). If multiple tempi are defined "in parallel" or nested, then "conflicting" MIDI tempo events are output.
+   %%
+   %% All arguments of Out.midi.renderAndPlayMidiFile are supported. RenderAndPlayMidiFile is defined by calling Out.midi.renderAndPlayMidiFile with special clauses (namely for the tests isNote, and Score.isTemporalContainer). Clauses given to RenderAndPlayMidiFile are again appended at the beginning of the list of clauses (and so potentially overwrite the clauses defined by this procedure).
+   %%
+   %% Additional arguments.
+   %% ccsPerSecond: how many continuous controller events are created per second for every Fenv (the spacing of CC events may be affected).
+   %%
+   %% NOTE: timing/spacing of continuous controller events and tempo curves etc. are _not_ affected by timeshift fenvs (but their start and end are). 
+   %% */
+   %% Probably, it is a good thing that CC etc are not affected by timeshift functions, as it is more efficient.
+   proc {RenderAndPlayMidiFile MyScore Args}
+      Defaults = unit(%% Process containers for output as well
+		      scoreToEventsArgs:unit(test:fun {$ X}
+						     {X isItem($)} andthen {X isDet($)}
+						     andthen {X getDuration($)} > 0
+						  end)
+		      clauses:nil
+		      track:2
+		      %% new arg
+		      ccsPerSecond:10)
+      As = {Adjoin Defaults Args}
+   in
+      {Out.midi.renderAndPlayMidiFile MyScore
+       {Adjoin
+	%% remove args not supported by Out.midi.renderAndPlayMidiFile
+	{Record.subtractList As [ccsPerSecond]}
+	unit(clauses:
+		{Append As.clauses 
+		 [%% Note output: output Micro-CC message, note on/off, and all its fenvs (if defined)
+		  isNote
+		  #fun {$ N}
+		      ChanAux = {Out.midi.getChannel N}
+		      Chan = if ChanAux==nil then 0 else ChanAux end  
+		      Progam = {N getInfoRecord($ program)}
+		   in
+		      {LUtils.accum
+		       [if Progam==nil then nil
+			else 
+			   [{Out.midi.makeProgramChange As.track
+			     {Out.midi.beatsToTicks {N getStartTimeInSeconds($)}}
+			     Chan Progam.1}]
+			end
+			{Out.midi.noteToMidi N unit(channel:Chan
+						    round:Round)}
+			{ItemFenvsToMidiCC N unit(channel:Chan
+						  ccsPerSecond:As.ccsPerSecond)}]
+		       Append}
+		   end
+		  %% Container with fenv(s) output: output all its fenvs, and tempo curve (if defined)
+		  Score.isTemporalContainer
+		  #fun {$ C}
+		      ChanAux = {Out.midi.getChannel C}
+		      Chan = if ChanAux==nil then 0 else ChanAux end
+		      Progam = {C getInfoRecord($ program)}
+		   in
+		      {LUtils.accum
+		       [if Progam==nil then nil
+			else 
+			   [{Out.midi.makeProgramChange As.track
+			     {Out.midi.beatsToTicks {C getStartTimeInSeconds($)}}
+			     Chan Progam.1}]
+			end
+		       {ItemFenvsToMidiCC C
+			unit(channel:Chan
+			     ccsPerSecond:As.ccsPerSecond)}
+		       {ItemTempoCurveToMidi C
+			unit(ccsPerSecond:As.ccsPerSecond)}]
+		       Append}
+		   end
+		 ]}
+	    )}}
    end
 
    
