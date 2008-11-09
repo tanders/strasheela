@@ -485,25 +485,26 @@ define
 	     flags:{Init.getStrasheelaEnv defaultCSVFlags}
 	     track:0
 	     %%
-	     headerEvents:[local Track=2 in % fixed track
-			      {MakeTempo Track 0
-			       {BeatsPerMinuteToTempoNumber {FloatToInt {Init.getTempo}}}}
-			   end]
+	     headerEvents:nil
 	     %% clauses are appended before DefaultClauses
 	     clauses:nil
 	     removeQuestionableNoteoffs: true
 	     scoreToEventsArgs: unit)
       MySpec = {Adjoin DefaultSpec Spec}
-      CVSEvents
+      DefaultHeaderEvents = [local Track=2 in % fixed track
+				{MakeTempo Track 0
+				 {BeatsPerMinuteToTempoNumber {FloatToInt {Init.getTempo}}}}
+			     end]
+      Header = {Append DefaultHeaderEvents MySpec.headerEvents}
       DefaultClauses = [isNote#fun {$ MyNote} {NoteToMidi MyNote unit} end]
-      Clauses
+      Clauses = {Append MySpec.clauses DefaultClauses}
+      CVSEvents
    in
       if {Not {MyScore isDet($)}} then
 	 {GUtils.warnGUI "MIDI output may block or cause an error -- score not fully determined!"}
 %	 {System.showInfo "Warning: MIDI output may block -- score not fully determined!"}
       end
-      Clauses = {Append MySpec.clauses DefaultClauses}
-      CVSEvents = {Append MySpec.headerEvents
+      CVSEvents = {Append Header
 		   if MySpec.removeQuestionableNoteoffs
 		   then {ScoreToEvents_Midi MyScore Clauses MySpec.scoreToEventsArgs}
 		   else {Out.scoreToEvents MyScore Clauses MySpec.scoreToEventsArgs}
@@ -531,6 +532,8 @@ define
    end
 
    /** %% Outputs MyScore into a MIDI file and starts the MIDI file player with this file. See OutputMidiFile and PlayMidiFile for documentation of the arguments expected by Spec.
+   %%
+   %% Note that Fenv.renderAndPlayMidiFile extends this definition by support for continuous controllers defined in the score etc.
    %% */ 
    proc {RenderAndPlayMidiFile MyScore Spec}
       {OutputMidiFile MyScore Spec}
@@ -1005,15 +1008,16 @@ define
 %    end
 
    
-   /** %% Returns the MIDI channel for the temporal item X. The channel must be defined as an info tag of the form channel(Chan) either in X or in some temporal container of X. 
+   /** %% Returns the MIDI channel for the temporal item X (an integer). The channel is defined as an info tag of the form channel(Chan) either in X or in some temporal container of X. If no channel definition is found, nil is returned.
    %% */
    %% Possible efficiency issue: the same search for containers with channel def is done over and over. I may consider memoizing the found channel for an item 
    fun {GetChannel X}
       if {X hasThisInfo($ channel)} then {X getInfoRecord($ channel)}.1
       elseif {X isTopLevel($)}
-      then {Exception.raiseError
-	    strasheela(failedRequirement X "No channel info-tag defined.")}
-	 unit			% never returned
+      then nil
+% 	 {Exception.raiseError
+% 	    strasheela(failedRequirement X "No channel info-tag defined.")}
+% 	 unit			% never returned
       else {GetChannel {X getTemporalContainer($)}}
       end
    end
