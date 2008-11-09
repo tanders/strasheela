@@ -125,7 +125,8 @@ clearInterval(drawit)
 <h3>Import</h3>
 <code><ul><li>Path at "<span class="string">x-ozlib://anders/tmp/Path/Path.ozf"
 </span></li><li>OPIEnv at "<span class="string">x-oz://system/OPIEnv.ozf"
-</span></li><li><a href="node3.html">Compiler</a></li><li>ErrorListener</li><li>OS</li><li>Debug at "<span class="string">x-oz://boot/Debug"
+</span></li><li><a href="node3.html">Compiler</a></li><li>ErrorListener</li><li>OS</li><li>QTk at "<span class="string">x-oz://system/wp/QTk.ozf"
+</span></li><li>Debug at "<span class="string">x-oz://boot/Debug"
 </span></li><li>Strasheela at "<span class="string">x-ozlib://anders/strasheela/Strasheela.ozf"
 </span></li><li>CTT at "<span class="string">x-ozlib://anders/strasheela/ConstrainTimingTree/ConstrainTimingTree.ozf"
 </span></li><li>Pattern at "<span class="string">x-ozlib://anders/strasheela/Pattern/Pattern.ozf"
@@ -135,15 +136,15 @@ clearInterval(drawit)
 </span></li><li>ScoreInspector at "<span class="string">x-ozlib://anders/strasheela/ScoreInspector/ScoreInspector.ozf"
 </span></li></ul></code>
 <h3>Export</h3>
-<code><ul><li>&lt;P/1:<a href="#entity32"><span class="functionname">MakeCompiler</span></a>&gt;
-</li><li>&lt;P/2:<a href="#entity34"><span class="functionname">FeedStatement</span></a>&gt;
-</li><li>&lt;P/3:<a href="#entity35"><span class="functionname">FeedExpression</span></a>&gt;
-</li><li>&lt;P/1:<a href="#entity33"><span class="functionname">FeedInitFile</span></a>&gt;
+<code><ul><li>&lt;P/1:<a href="#entity33"><span class="functionname">MakeCompiler</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity35"><span class="functionname">FeedStatement</span></a>&gt;
+</li><li>&lt;P/3:<a href="#entity36"><span class="functionname">FeedExpression</span></a>&gt;
+</li><li>&lt;P/1:<a href="#entity34"><span class="functionname">FeedInitFile</span></a>&gt;
 </li></ul></code>
 <h3>Define</h3>
 
 <code>
-<a name="entity32">
+<a name="entity33">
 <span class="keyword">proc</span>{<span class="functionname">MakeCompiler</span> MyCompiler}<br>
 <span class="string"> Returns a new compiler with the full environment (comparable to the OPI + Strasheela). <BR>
 <BR>
@@ -151,7 +152,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity34">
+<a name="entity35">
 <span class="keyword">proc</span>{<span class="functionname">FeedStatement</span> MyCode MyCompiler}<br>
 <span class="string"> Feeds statement MyCode (VS) to MyCompiler. <BR>
 <BR>
@@ -159,7 +160,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity35">
+<a name="entity36">
 <span class="keyword">proc</span>{<span class="functionname">FeedExpression</span> MyCode MyCompiler Result}<br>
 <span class="string"> Feeds expression MyCode (VS) to MyCompiler and returns Result.<BR>
 <BR>
@@ -167,7 +168,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity33">
+<a name="entity34">
 <span class="keyword">proc</span>{<span class="functionname">FeedInitFile</span> MyCompiler}<br>
 <span class="string"> Feeds OZRC file to MyCompiler. The OZRC is search for at the usual places according conventions (cf. oz/doc/opi/node4.html).<BR>
 <BR>

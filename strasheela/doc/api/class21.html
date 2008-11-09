@@ -120,23 +120,23 @@ clearInterval(drawit)
 
 <div style="margin-left:160px"><p align="right" class="margin"><div align="right">inheritance tree</div></p>
 <pre>
- <a class="pre" href="node6.html#entity246">NonType</a> <a class="pre" href="node6.html#entity247">Reflection</a>       <a class="pre" href="node7.html#entity326">FlagsMixin</a>
+ <a class="pre" href="node6.html#entity268">NonType</a> <a class="pre" href="node6.html#entity269">Reflection</a>       <a class="pre" href="node7.html#entity348">FlagsMixin</a>
     |        |                |
     `-----+--'                |
           |                   |
-     <a class="pre" href="node6.html#entity248">ScoreObject</a>    <a class="pre" href="node7.html#entity327">SMapping.mappingMixin</a>
+     <a class="pre" href="node6.html#entity270">ScoreObject</a>    <a class="pre" href="node7.html#entity349">SMapping.mappingMixin</a>
           |                   |
           `---------+---------'
                     |
-                   <a class="pre" href="node6.html#entity259">Item</a>
+                   <a class="pre" href="node6.html#entity281">Item</a>
                     |
                     `+
                      |
-                  <a class="pre" href="node6.html#entity266">Element</a>
+                  <a class="pre" href="node6.html#entity288">Element</a>
                      |
                      |
                      |
-              <a class="pre" href="node6.html#entity267">AbstractElement</a>
+              <a class="pre" href="node6.html#entity289">AbstractElement</a>
 </pre>
 <hr><p class="margin"><div align="right">class definition</div></p>
 <code>
@@ -579,7 +579,7 @@ clearInterval(drawit)
  NB: getInitClassesVS examines every class in these functors (and their subfunctors) and requires that whenever a class defines an init method, all init method arguments must be optional.<BR>
 <BR>
 </span>
-</li><li><span class="functionname">getInitInfo</span>($ exclude:Excluded)<br>
+</li><li><span class="functionname">getInitInfo</span>($&nbsp;...)<br>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
 
@@ -599,7 +599,7 @@ clearInterval(drawit)
  Super is a single superclass of self which defines/inherits a method getInitInfo extending the present method definition (can be nil in case of no superclass). Argument is an init method argument (an atom), Accessor is a unary accessor function or method returning the value of the object corresponding with Argument, and Default is the default value or 'noMatch' if no default value was given. Excluded is the same arg as for toInitRecord: this argument is only required if getInitInfo recuresively calls toInitRecord. A typical getInitInfo definition follows<BR>
 <BR>
 <BR>
-      meth getInitInfo($ exclude:Excluded)<BR>
+      meth getInitInfo($ ...)<BR>
 	 unit(superclass:MySuperClass<BR>
 	      args:[myParameter#getMyParameter#noMatch])<BR>
       end<BR>
@@ -1300,7 +1300,7 @@ clearInterval(drawit)
  !! Temp: The attributes 'item' and 'containers' are always excluded to avoid endless loops. Therefore, score graphs with items having more then a single container can not be shown.<BR>
 <BR>
 </span>
-</li><li><span class="functionname">toInitRecord</span>($ exclude:Excluded)<br>
+</li><li><span class="functionname">toInitRecord</span>($ clauses:Clauses exclude:Excluded)<br>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
 
@@ -1310,6 +1310,7 @@ clearInterval(drawit)
 </tr></table>
 <span class="string"> Outputs the full init record for self which allows to re-create the score.<BR>
  Excluded is a list of arguments (atoms) which must be excluded concurrently.<BR>
+ Clauses is a list of pairs TestI#FunI which can be used to overwrite the default init record creation (defined by the class' method getInitInfo) of specific score objects. TestI is a Boolean function or method, and FunI is a unary function expecting a score object and returning a VS. For each object for which some TestI returns true, the corresponding FunI will be used for creating init records for this object.<BR>
 <BR>
  NB: toInitRecord depends on correct definitions of the method getInitInfo for all subclasses with specific inialisiation arguments.<BR>
 <BR>

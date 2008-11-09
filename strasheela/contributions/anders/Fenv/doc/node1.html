@@ -127,8 +127,9 @@ clearInterval(drawit)
 <h3>Functor</h3>
 <ul>Fenv ("<span class="string">Fenv.oz</span>")<br></ul>
 <h3>Import</h3>
-<code><ul><li>Browser(browse:Browse)</li><li>GUtils at "<span class="string">x-ozlib://anders/strasheela/source/GeneralUtils.ozf"
+<code><ul><li>GUtils at "<span class="string">x-ozlib://anders/strasheela/source/GeneralUtils.ozf"
 </span></li><li>LUtils at "<span class="string">x-ozlib://anders/strasheela/source/ListUtils.ozf"
+</span></li><li>Score at "<span class="string">x-ozlib://anders/strasheela/source/ScoreCore.ozf"
 </span></li><li>Out at "<span class="string">x-ozlib://anders/strasheela/source/Output.ozf"
 </span></li><li>GPlot(plot:Plot) at "<span class="string">x-ozlib://anders/strasheela/Gnuplot/Gnuplot.ozf"
 </span></li></ul></code>
@@ -158,12 +159,17 @@ clearInterval(drawit)
 </li><li>&lt;P/3:<a href="#entity28"><span class="functionname">FenvSection</span></a>&gt;
 </li><li>&lt;P/3:<a href="#entity29"><span class="functionname">Integrate</span></a>&gt;
 </li><li>&lt;P/3:<a href="#entity30"><span class="functionname">TempoCurveToTimeMap</span></a>&gt;
-</li><li>&lt;P/2:<a href="#entity31"><span class="functionname">TimeShiftToTimeMap</span></a>&gt;
-</li><li>&lt;P/2:<a href="#entity32"><span class="functionname">ConcatenateTempoCurves</span></a>&gt;
-</li><li>&lt;P/5:<a href="#entity33"><span class="functionname">TemporalFenvY</span></a>&gt;
-</li><li>&lt;P/4:<a href="#entity34"><span class="functionname">ItemFenvY</span></a>&gt;
-</li><li>&lt;P/8:<a href="#entity35"><span class="functionname">FenvToMidiCC</span></a>&gt;
-</li><li>&lt;P/7:<a href="#entity36"><span class="functionname">ItemFenvToMidiCC</span></a>&gt;
+</li><li>&lt;P/3:<a href="#entity31"><span class="functionname">TempoCurveToTimeShift</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity32"><span class="functionname">TimeShiftToTimeMap</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity33"><span class="functionname">TimeMapToTimeShift</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity34"><span class="functionname">ConcatenateTempoCurves</span></a>&gt;
+</li><li>&lt;P/5:<a href="#entity35"><span class="functionname">TemporalFenvY</span></a>&gt;
+</li><li>&lt;P/4:<a href="#entity36"><span class="functionname">ItemFenvY</span></a>&gt;
+</li><li>&lt;P/8:<a href="#entity37"><span class="functionname">FenvToMidiCC</span></a>&gt;
+</li><li>&lt;P/7:<a href="#entity38"><span class="functionname">ItemFenvToMidiCC</span></a>&gt;
+</li><li>&lt;P/3:<a href="#entity39"><span class="functionname">ItemFenvsToMidiCC</span></a>&gt;
+</li><li>&lt;P/3:<a href="#entity40"><span class="functionname">ItemTempoCurveToMidi</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity41"><span class="functionname">RenderAndPlayMidiFile</span></a>&gt;
 </li></ul></code>
 <h3>Define</h3>
 
@@ -386,7 +392,7 @@ clearInterval(drawit)
  Performs numerical integration internally whenever a value of the returned fenv is accessed, which can be computationally expensive.<BR>
  Step (a float in [0.0 0.5]) specifies the resolution of the numeric integration: the smaller Step, the more accurate the integration and the more expensive the computation. Step=0.01 results in 100 "function slices".<BR>
 <BR>
- Note: implementation currently always uses Trapezoidal rule for the approximation (i.e. approximation by linear functions under given function), this can be made user-controllable if necessary (see implementation).<BR>
+ Note: implementation currently always uses Simpson's rule rule for the approximation (based on a polynomial of order 2, pretty good :), it case this is too computationally expensive, could be made user-controllable if necessary (see implementation).<BR>
 <BR>
 </span>
 </code><br>
@@ -403,6 +409,14 @@ clearInterval(drawit)
 
 <code>
 <a name="entity31">
+<span class="keyword">fun</span>{<span class="functionname">TempoCurveToTimeShift</span> MyFenv Step}<br>
+<span class="string"> ... this is probably not a good idea, but works for certain cases.<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity32">
 <span class="keyword">fun</span>{<span class="functionname">TimeShiftToTimeMap</span> TS}<br>
 <span class="string"> Expects a fenv representing a normalised time shift function and returns a fenv representing a normalised time map function. A time shift function expresses how much is added to a score time to yield a performance time, i.e., f(x) = 0 causes performance time to be score time. A normalised time map maps score time to performance time.<BR>
  Private Terminology: normalised time shift functions, time map functions and tempo curves: fenvs where x values denote the score time (usually of a temporal container) which is mapped into [0,1]: 0 corresponds to the container's start time, and 1 corresponds to the container's end time. See ContainerFenvY.<BR>
@@ -412,7 +426,15 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity32">
+<a name="entity33">
+<span class="keyword">fun</span>{<span class="functionname">TimeMapToTimeShift</span> MyFenv}<br>
+<span class="string"> ... this is perhaps not a good idea, but works for certain cases.<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity34">
 <span class="keyword">fun</span>{<span class="functionname">ConcatenateTempoCurves</span> Specs}<br>
 <span class="string"> Concatenates a sequence of successive tempo curve fenvs. Specs is a list of pairs and has the form [Fenv1#Dur1 Fenv2#Dur2 ... FenvN#DurN], where FenvI is a tempo curve fenv and DurI (a float) is the score time duration of this tempo curve. Returned is a single tempo curve fenv.<BR>
  NB: in most use-cases the sequence of successive tempo curve fenvs should start at score time 0 and span over the entire score so that the global tempo curve fenv is the result. If you concatenate a tempo curve sequence which does not start at score time 0, you should decide whether the resulting tempo curve fenv starts at the performance or score start time of its first sub-tempo curve (i.e., whether a smooth continuation of previous tempo changes is intended or not). <BR>
@@ -421,23 +443,23 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity33">
-<span class="keyword">fun</span>{<span class="functionname">TemporalFenvY</span> MyFenv Start Duration MyTime}<br>
-<span class="string"> Accesses the y-value of MyFenv which starts at time point Start (a float) for time interval Duration (a float). The fenv x-value 0.0 corresponds to the start time and the fenv x-value 1.0 coresponds to the resulting end time. MyTime (a float) is any time between the start and end time. All times are score times measured in seconds.<BR>
-<BR>
-</span>
-</code><br>
-
-<code>
-<a name="entity34">
-<span class="keyword">fun</span>{<span class="functionname">ItemFenvY</span> MyFenv MyItem MyTime}<br>
-<span class="string"> Accesses the y-value of MyFenv which is associated with a temporal item MyItem. The fenv x-value 0.0 corresponds to the item's start time and the fenv x-value 1.0 coresponds to the item's end time. MyTime (a float) is any time between MyItem's start and end time. MyTime is a score time measured in seconds.<BR>
-<BR>
-</span>
-</code><br>
-
-<code>
 <a name="entity35">
+<span class="keyword">fun</span>{<span class="functionname">TemporalFenvY</span> MyFenv Start Duration MyTime}<br>
+<span class="string"> Accesses the y-value of MyFenv which starts at time point Start (a float) for time interval Duration (a float). The fenv x-value 0.0 corresponds to the start time and the fenv x-value 1.0 coresponds to the resulting end time. MyTime (a float) is any time between the start and end time. All times are score times measured in the same time unit.<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity36">
+<span class="keyword">fun</span>{<span class="functionname">ItemFenvY</span> MyFenv MyItem MyTime}<br>
+<span class="string"> Accesses the y-value of MyFenv which is associated with a temporal item MyItem. The fenv x-value 0.0 corresponds to the item's start time and the fenv x-value 1.0 coresponds to the item's end time. MyTime (a float) is any time between MyItem's start and end time. MyTime is a score time measured in the time unit of MyItem.<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity37">
 <span class="keyword">fun</span>{<span class="functionname">FenvToMidiCC</span> MyFenv N Track StartTime EndTime Channel Controller}<br>
 <span class="string"> Transforms a Fenv into a list of continuous MIDI controller events. N events are output between StartTime and EndTime (two ints, given in MIDI ticks) at Channel (an int). <BR>
  Controller denotes which controller is output. Possible values are one of the atoms pitchbend, and channelAftertouch, or one of the pairs cc#Number (Number is the controller number) and polyAftertouch#Note (Note denotes the note pitch). <BR>
@@ -445,14 +467,74 @@ clearInterval(drawit)
    fun {$ Track Time Channel Value}<BR>
       {Out.midi.makeCC Track Time Channel 7 Value}<BR>
    end<BR>
+ NOTE: no implicit support for any tempo curves etc. Instead, adapt StartTime and EndTime (and possibly transform MyFenv) outside FenvToMidiCC.<BR>
 <BR>
 </span>
 </code><br>
 
 <code>
-<a name="entity36">
+<a name="entity38">
 <span class="keyword">fun</span>{<span class="functionname">ItemFenvToMidiCC</span> MyFenv N Track MyItem Channel Controller}<br>
 <span class="string"> Like FenvToMidiCC, but here the Fenv is associated with a temporal item MyItem, whose start and end times are taken. <BR>
+ NOTE: no support for any tempo curves etc. <BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity39">
+<span class="keyword">fun</span>{<span class="functionname">ItemFenvsToMidiCC</span> MyItem Args}<br>
+<span class="string"> Expects a temporal item which defines fenvs in a info-tag 'fenvs', and returns a list of continuous MIDI controller events for all its fenvs. Each fenvs is defined by a pair Controller#Fenv, where Controller can take all values defined for FenvToMidiCC. Fenvs directly specify the controller values (e.g., if Controller is pitchBend, then the Fenv range is 0.0 to 16383.0, and the value 8192.0 means no pitchbend). Note that for any controller only a single Fenv should be defined at any time (otherwise they conflict with each other).<BR>
+ Example: fenvs((cc#1)#{Fenv.linearFenv [[0.0 0.0] [1.0 127.0]]}) <BR>
+<BR>
+ Args:<BR>
+ ccsPerSecond: how many CC events are created per second.<BR>
+ track: MIDI track to output, default 2 (suitable for more cases)<BR>
+ channel: midi channel to output, default nil (if nil, MIDI note object CCs are output to its channel and all other to channel 0) <BR>
+<BR>
+ Timeshift fenvs affect the start and end of the continuous MIDI controller events, but not their "spacing".<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity40">
+<span class="keyword">fun</span>{<span class="functionname">ItemTempoCurveToMidi</span> MyItem Args}<br>
+<span class="string"> Expects a temporal item which defines a tempo curve Fenv in a info-tag 'globaltempo', and returns a list of MIDI tempo events. Returns nil in case MyItem defines no tempo curve. The tempo fenv values are in beats per minute. Due to restrictions of the MIDI protocoll, only a single global tempo is supported (note that sequencers may restrict the import of such data in a MIDI files). If multiple tempi are defined "in parallel" or nested, then "conflicting" MIDI tempo events are output.<BR>
+ Example: globaltempo({Fenv.linearFenv [[0.0 30.0] [1.0 240.0]]})<BR>
+<BR>
+ Args:<BR>
+ ccsPerSecond: how many tempo events are created per second.<BR>
+ track: MIDI track to output, default 2 (suitable for more cases)<BR>
+<BR>
+ Time shift fenvs affect the start and end of the tempo events, but not their "spacing".<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity41">
+<span class="keyword">proc</span>{<span class="functionname">RenderAndPlayMidiFile</span> MyScore Args}<br>
+<span class="string"> This procedure is like Out.midi.renderAndPlayMidiFile, but it additional supports continuous controllers and a global tempo curve, expressed in the score by fenvs. <BR>
+<BR>
+ Supported score format:<BR>
+ <BR>
+ The info-tag 'channel', given to a temporal item, sets the MIDI channel for this item and all contained items. Example: channel(0). If a channel is defined multiple times, then a setting in a lower hierarchical level overwrites higher-level settings.<BR>
+<BR>
+ The info-tag 'program', given to a temporal item, results in a program change message with the specified program number at the beginning of the item. Example. program(64). Many instruments number patches from 1 to 128 rather than the 0 to 127 used within MIDI files. When interpreting ProgramNum values, note that they may be one less than the patch numbers given in an instrument's documentation.<BR>
+<BR>
+ The info-tag 'fenvs', given to a note or temporal container, specifies a tuple of continuous controllers for the duration this item. Each Fenv spec is a pair Controller#Fenv, where Controller is defined as for Fenv.fenvToMidiCC. Example: (cc#1)#MyFenv. Fenvs directly specify the controller values (e.g., if Controller is pitchBend, then the Fenv range is 0.0 to 16383.0, and the value 8192.0 means no pitchbend). Note that for any controller only a single Fenv should be defined at any time (otherwise they conflict with each other).<BR>
+<BR>
+ The info-tag 'timeshift', given to a temporal container, specifies a time shift function (a fenv). Example: timeshift(MyTimeshiftFenv). Time shift values are specified as time value offsets in the present timeUnit. For example, if a note has the start time 42 and its container specifies a time shift fenv with the y-value -1.0 corresponding to the start time of this note, then the MIDI note on happens at time 41. Hierarchical nesting of time shift functions is supported: if in the example above this note is recursively contained in other containers which also specify a time shift fenv, then their y-values for the note are added to the note's start time as well. Time shift fenvs also affect the timing of CC fenvs.<BR>
+<BR>
+ The info-tag 'globaltempo', given to a temporal container, specifies a tempo curve (a fenv) and is output as MIDI tempo events. Example: globaltempo(MyTempoFenv). Tempo values are specified in BPM. Due to restrictions of the MIDI protocoll, only a single global tempo is supported (note that sequencers may restrict the import of such data in a MIDI files). If multiple tempi are defined "in parallel" or nested, then "conflicting" MIDI tempo events are output.<BR>
+<BR>
+ All arguments of Out.midi.renderAndPlayMidiFile are supported. RenderAndPlayMidiFile is defined by calling Out.midi.renderAndPlayMidiFile with special clauses (namely for the tests isNote, and Score.isTemporalContainer). Clauses given to RenderAndPlayMidiFile are again appended at the beginning of the list of clauses (and so potentially overwrite the clauses defined by this procedure).<BR>
+<BR>
+ Additional arguments.<BR>
+ ccsPerSecond: how many continuous controller events are created per second for every Fenv (the spacing of CC events may be affected).<BR>
+<BR>
+ NOTE: timing/spacing of continuous controller events and tempo curves etc. are _not_ affected by timeshift fenvs (but their start and end are). <BR>
 <BR>
 </span>
 </code><br>

@@ -120,23 +120,23 @@ clearInterval(drawit)
 
 <div style="margin-left:160px"><p align="right" class="margin"><div align="right">inheritance tree</div></p>
 <pre>
- <a class="pre" href="node6.html#entity246">NonType</a> <a class="pre" href="node6.html#entity247">Reflection</a>
+ <a class="pre" href="node6.html#entity268">NonType</a> <a class="pre" href="node6.html#entity269">Reflection</a>
     |        |
     `-----+--'
           |
-     <a class="pre" href="node6.html#entity248">ScoreObject</a>
+     <a class="pre" href="node6.html#entity270">ScoreObject</a>
           |
           |
           |
-      <a class="pre" href="node6.html#entity250">Parameter</a>
+      <a class="pre" href="node6.html#entity272">Parameter</a>
           |
           |
           |
-    <a class="pre" href="node6.html#entity253">TimeParameter</a>
+    <a class="pre" href="node6.html#entity275">TimeParameter</a>
           |
          +'
          |
-    <a class="pre" href="node6.html#entity255">TimeInterval</a>
+    <a class="pre" href="node6.html#entity277">TimeInterval</a>
 </pre>
 <hr><p class="margin"><div align="right">class definition</div></p>
 <code>
@@ -339,7 +339,7 @@ clearInterval(drawit)
  NB: getInitClassesVS examines every class in these functors (and their subfunctors) and requires that whenever a class defines an init method, all init method arguments must be optional.<BR>
 <BR>
 </span>
-</li><li><span class="functionname">getInitInfo</span>($ exclude:Excluded)<br>
+</li><li><span class="functionname">getInitInfo</span>($&nbsp;...)<br>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
 
@@ -359,7 +359,7 @@ clearInterval(drawit)
  Super is a single superclass of self which defines/inherits a method getInitInfo extending the present method definition (can be nil in case of no superclass). Argument is an init method argument (an atom), Accessor is a unary accessor function or method returning the value of the object corresponding with Argument, and Default is the default value or 'noMatch' if no default value was given. Excluded is the same arg as for toInitRecord: this argument is only required if getInitInfo recuresively calls toInitRecord. A typical getInitInfo definition follows<BR>
 <BR>
 <BR>
-      meth getInitInfo($ exclude:Excluded)<BR>
+      meth getInitInfo($ ...)<BR>
 	 unit(superclass:MySuperClass<BR>
 	      args:[myParameter#getMyParameter#noMatch])<BR>
       end<BR>
@@ -423,7 +423,44 @@ clearInterval(drawit)
 
 
 </tr></table>
-<span class="string"> Returns the parameter value translated to a float representing beats. The translation uses the parameter unit which must be bound (otherwise the method suspends). Supported units are (represented by these atoms): seconds/secs, milliseconds/msecs, and beats. The unit specification beats(N) means the parameter value of N is a single beat. N must be an integer and defaults to 1. The translation between seconds and beats uses Init.getBeatDuration.<BR>
+<span class="string"> Returns the parameter value translated to a float representing seconds. The translation uses the parameter unit which must be bound (otherwise the method suspends). Supported units are (represented by these atoms): seconds/secs, milliseconds/msecs, and beats (a relative duration, e.g., a quarter note). The unit specification beats(N) means the parameter value of N is a single beat. beats(N) may be used to express tuplets, e.g., for beat(3) the value 1 means a third beat i.e. a triplet. N must be an integer and defaults to 1. The translation between seconds and beats uses Init.getBeatDuration.<BR>
+ */<BR>
+       meth getValueInSeconds(?X)<BR>
+ 	 Unit = {self getUnit($)}<BR>
+       in<BR>
+ NOTE: IsDet does not wait for binding -- quasi side effect. But most<BR>
+ often this is called for output and timeUnit is sometimes<BR>
+ forgotten by user...<BR>
+ 	 if {Not {IsDet Unit}}<BR>
+ 	 then {GUtils.warnGUI "unit of temporal parameter(s) unbound -- computation blocks!"}<BR>
+ 	 end<BR>
+ parameter value is float<BR>
+ NOTE: inefficient to always check there two cases first,<BR>
+ as they are particualy rare<BR>
+ 	 X = case Unit<BR>
+ 	     of secsF then {self getValue($)} <BR>
+ 	     [] msecsF then {self getValue($)} / 1000.0<BR>
+ 	     else<BR>
+ parameter value is integer<BR>
+ 		Value = {IntToFloat {self getValue($)}}<BR>
+ 	     in<BR>
+ 		case Unit<BR>
+ 		of seconds then Value<BR>
+ 		[] secs then Value<BR>
+ 		[] milliseconds then Value / 1000.0<BR>
+ 		[] msecs then Value / 1000.0<BR>
+ 		[] beats then Value * {Init.getBeatDuration}<BR>
+ 		[] beats(N) then Value * {Init.getBeatDuration} / {IntToFloat N}<BR>
+ 		else<BR>
+ 		   {Exception.raiseError<BR>
+ 		    strasheela(illParameterUnit Unit self<BR>
+ 			       "Supported units are seconds (or secs), millisecond (or msecs), beats, and beats(N) (where N is an integer).")}<BR>
+ 		   unit		% never returned<BR>
+ 		end<BR>
+ 	     end<BR>
+       end<BR>
+<BR>
+/** %% Returns the parameter value translated to a float representing beats. The translation uses the parameter unit which must be bound (otherwise the method suspends). Supported units are (represented by these atoms): seconds/secs, milliseconds/msecs, and beats. The unit specification beats(N) means the parameter value of N is a single beat. N must be an integer and defaults to 1. The translation between seconds and beats uses Init.getBeatDuration.<BR>
 <BR>
 </span>
 </li><li><span class="functionname">getValueInSeconds</span>(X)<br>
@@ -435,6 +472,8 @@ clearInterval(drawit)
 
 </tr></table>
 <span class="string"> Returns the parameter value translated to a float representing seconds. The translation uses the parameter unit which must be bound (otherwise the method suspends). Supported units are (represented by these atoms): seconds/secs, milliseconds/msecs, and beats (a relative duration, e.g., a quarter note). The unit specification beats(N) means the parameter value of N is a single beat. beats(N) may be used to express tuplets, e.g., for beat(3) the value 1 means a third beat i.e. a triplet. N must be an integer and defaults to 1. The translation between seconds and beats uses Init.getBeatDuration.<BR>
+<BR>
+ Additionally, hierachic tempo curves and time shift functions are taken into account.<BR>
 <BR>
 </span>
 </li><li><span class="functionname">hasThisInfo</span>(B Info)<br>
@@ -712,7 +751,7 @@ clearInterval(drawit)
  !! Temp: The attributes 'item' and 'containers' are always excluded to avoid endless loops. Therefore, score graphs with items having more then a single container can not be shown.<BR>
 <BR>
 </span>
-</li><li><span class="functionname">toInitRecord</span>($ exclude:Excluded)<br>
+</li><li><span class="functionname">toInitRecord</span>($ clauses:Clauses exclude:Excluded)<br>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
 
@@ -722,6 +761,7 @@ clearInterval(drawit)
 </tr></table>
 <span class="string"> Outputs the full init record for self which allows to re-create the score.<BR>
  Excluded is a list of arguments (atoms) which must be excluded concurrently.<BR>
+ Clauses is a list of pairs TestI#FunI which can be used to overwrite the default init record creation (defined by the class' method getInitInfo) of specific score objects. TestI is a Boolean function or method, and FunI is a unary function expecting a score object and returning a VS. For each object for which some TestI returns true, the corresponding FunI will be used for creating init records for this object.<BR>
 <BR>
  NB: toInitRecord depends on correct definitions of the method getInitInfo for all subclasses with specific inialisiation arguments.<BR>
 <BR>

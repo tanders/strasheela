@@ -140,15 +140,15 @@ clearInterval(drawit)
 </li><li><span class="variablename">Out</span>
 </li><li><span class="variablename">C</span>
 </li><li><span class="variablename">Score</span>
-</li><li>&lt;P/2:<a href="#entity69"><span class="functionname">Acc</span></a>&gt;
-</li><li>pc:&lt;P/2:<a href="#entity70"><span class="functionname">PC</span></a>&gt;
-</li><li>pcName:&lt;P/2:<a href="#entity71"><span class="functionname">PCName</span></a>&gt;
-</li><li>&lt;P/2:<a href="#entity72"><span class="functionname">Pitch</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity70"><span class="functionname">Acc</span></a>&gt;
+</li><li>pc:&lt;P/2:<a href="#entity71"><span class="functionname">PC</span></a>&gt;
+</li><li>pcName:&lt;P/2:<a href="#entity72"><span class="functionname">PCName</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity73"><span class="functionname">Pitch</span></a>&gt;
 </li></ul></code>
 <h3>Define</h3>
 
 <code>
-<a name="entity69">
+<a name="entity70">
 <span class="keyword">fun</span>{<span class="functionname">Acc</span> SymAcc}<br>
 <span class="string"> Transforms symbolic accidental (atom) into the corresponding accidental integer. The following symbolic accidentals are supported: '' is natural (!), '|' is 'half sharp',  '#' is sharp, '#|' is 1 1/2 sharp, 'x' is double sharp, ';' is half flat, 'b' is flat, 'b;' is 1 1/2 flat, 'bb' is double flat. <BR>
  Note: Returned value depends on {HS.db.getAccidentalOffset}, using the database defined by ET31.db.fullDB is recommended. <BR>
@@ -158,7 +158,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity70">
+<a name="entity71">
 <span class="keyword">fun</span>{<span class="functionname">PC</span> SymPC}<br>
 <span class="string"> Tranforms a conventional symbolic note names to the corresponding 31 ET pitch class. Notation of the symbolic note names: 'C' is c natural, 'C|' is c 'half sharp',  'C#' is c sharp, 'C#|' is c 1 1/2 sharp, 'Cx' is c double sharp, 'C;' is c half flat, 'Cb' is c flat, 'Cb;' is c 1 1/2 flat, 'Cbb' is c double flat.<BR>
  NB: the following pitch class names are undefined (otherwise, the meaning of octave would become inconsistent): any flattened C and any B raised higher than B#.  <BR>
@@ -167,7 +167,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity71">
+<a name="entity72">
 <span class="keyword">fun</span>{<span class="functionname">PCName</span> MyPC}<br>
 <span class="string"> Expects a PC (an int) and returns a list of the corresponding symbolic note names (a list of atom). Complements function PC.<BR>
 <BR>
@@ -175,7 +175,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity72">
+<a name="entity73">
 <span class="keyword">fun</span>{<span class="functionname">Pitch</span> SymPC#Octave}<br>
 <span class="string"> Transforms a symbolic pair SymPC#Octave into the corresponding pitch (an int). SymPC is a pitch class symbol (an atom) as expected by the function PC, octave is an integer. The returned value depends on PitchesPerOctave.<BR>
 <BR>
