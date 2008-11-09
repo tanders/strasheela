@@ -24,6 +24,70 @@
     <!-- Page published by Emacs Muse begins here -->
 
 
+<h2>Changes in Version 0.9.7 (no date yet)</h2>
+
+<ul>
+<li>Main additions and changes
+
+<ul>
+<li>Added support for time shift functions to the core music representation: methods like getStartTimeInSeconds etc. take them into account, and they are supported by all standard synthesis output formats. Time shift functions are defined for temporal containers, and they can even be nested (e.g., locally for motifs and a globally for the whole score).</li>
+
+<li>MUtils: Added support for symbolic duration notation: MakeNoteLengthsTable, MakeNoteLengthsRecord, MakeDurationsRecord, SetNoteLengthsRecord, ToDur, SetDurationsRecord, ToNoteLengths</li>
+</ul></li>
+</ul>
+
+
+<ul>
+<li>Documentation
+
+<ul>
+<li>Added relatively complex examples which constrain the rhythmical, melodic, harmonic, and formal structure at the same time: examples/Form-Examples/FriendlyMusicExample.oz</li>
+</ul></li>
+</ul>
+
+
+<ul>
+<li>Minor additions
+
+<ul>
+<li>HS.rules: added several harmonic/melodic/contrapuntual rules: VoiceLeadingDistance, VoiceLeadingDistance_Percent, SmallIntervalProgressions, SmallIntervalProgressions_Percent, ClearDissonanceResolution, IntervalBetweenNonharmonicTonesIsConsonant, MaxInterval, MaxNonharmonicNoteSequence, MaxNonharmonicNotePercent, MaxRepetitions, MinPercentSteps</li>
+<li>Out.outputScoreConstructor (and related score archiving procs): added arguments 'postfix', 'exclude', and 'clauses'</li>
+<li>GUtils: added IsDivisible, Percent</li>
+<li>HS.score: added RatioToInterval</li>
+<li>Added OZRC file configured for MacOS</li>
+<li>Out.midi.noteToMidi: added arg 'round'</li>
+<li>PMotif.makeScript: added argument 'constructors'</li>
+<li>Out.midi.getChannel added</li>
+<li>Fenv: added ItemFenvsToMidiCC and ItemTempoCurveToMidi</li>
+</ul></li>
+</ul>
+
+
+<ul>
+<li>Bug fixes and changes
+
+<ul>
+<li>Refactored score object method toInitRecord: now with arg 'clauses' (i.e., default output format &mdash; defined by method 'getInitInfo' &mdash; can be overwritten in 'toInitRecord' call)</li>
+<li>Fenv.itemFenvY: interface changed slightly &mdash; time argument now expected in present time unit, not in seconds</li>
+<li>Tempo curve processing bug fixed (numeric integration approximation now OK)</li>
+<li>Fixed bug in the harmony-related example in <a href="../examples/Form-Examples/PrototypeMotif-Examples.oz">PrototypeMotif-Examples.oz</a> (with the new arg PMotif.makeScript arg 'constructors')</li>
+<li>Refactored MIDI output (Out.midi.renderAndPlayMidiFile and friends affected)
+
+<ul>
+<li>Clauses given as arg are appended before default clauses, default clauses are not overwritten</li>
+<li>Bug fixed for clauses resulting in nil</li>
+</ul></li>
+</ul></li>
+</ul>
+
+
+<ul>
+<li>For further fixes see the <a href="../CHANGELOG.txt">../CHANGELOG.txt</a>.</li>
+</ul>
+
+
+
+
 <h2>Changes in Version 0.9.6 (19 August 2008)</h2>
 
 <ul>
@@ -560,7 +624,7 @@ See the documentation for <a href="../contributions/anders/HarmonisedScore/doc/n
 <div id="footer">
 <div id="author">&copy; 
 Torsten Anders</div>
-<div id="date">Last time edited: 2008.08.19</div>
+<div id="date">Last time edited: 2008.11.08</div>
 </div>
   </body>
 </html>
