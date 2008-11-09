@@ -1038,9 +1038,6 @@ define
 %       IntegrationStep = 0.1  % approximation accuracy
       Cs = {GetTimingFenvContainers MyItem}
    in
-      {System.show shiftedTime_1(cs:Cs
-				 param:MyParam
-				 item:MyItem)}
       if Cs == nil then MyTime
       else
 	 %%
@@ -1090,7 +1087,6 @@ define
       %% Additionally, hierachic tempo curves and time shift functions are taken into account.
       %% */
       meth getValueInSeconds(?X)
-	 {System.show getValueInSeconds(param:self item:{self getItem($)})}
 	 Unit = {self getUnit($)}
 	 Value_Shifted
       in
