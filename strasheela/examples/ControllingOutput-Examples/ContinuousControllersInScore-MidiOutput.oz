@@ -9,17 +9,19 @@
 %% directly, and how MIDI output can use these fenvs in the score in
 %% various ways.
 %%
-%% These examples define special MIDI output procedures, which
-%% overwrite the default MIDI output behaviour. The music
-%% representation and its output definition are separated. That way,
-%% users can customise the meaning of their music representation and
-%% specify how their particular representation is output. For example,
-%% users may once define a suitable output for their purposes, and
-%% then create multiple scores which use this output either manually,
-%% by constraint programming, by manually editing the solution of
-%% their constraint problem etc.
+%% Users can widely customise Strasheela file export. These examples
+%% define special MIDI output procedures, which overwrite the default
+%% MIDI output behaviour. The music representation and its output
+%% definition are separated. That way, users can customise the meaning
+%% of their music representation and specify how their particular
+%% representation is output. For example, users may once define a
+%% suitable output for their purposes, and then create multiple scores
+%% which use this output either manually, by constraint programming,
+%% by manually editing the solution of their constraint problem
+%% etc. In addition, the (relatively short) definition of
+%% Fenv.renderAndPlayMidiFile itself can be studied as an example (in
+%% strasheela/contributions/anders/Fenv/Fenv.oz).
 %%
-
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -30,7 +32,6 @@
 %% feed these definitions first, then feed the examples paragraph-wise. 
 %%
 
-
 declare
 [Fenv] = {ModuleLink ['x-ozlib://anders/strasheela/Fenv/Fenv.ozf']}
 %% fixed track for MIDI output
@@ -39,6 +40,7 @@ ProcessEventsAndContainers = unit(test:fun {$ X}
 					  {X isItem($)} andthen {X isDet($)}
 					  andthen {X getDuration($)} > 0
 				       end)
+
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
