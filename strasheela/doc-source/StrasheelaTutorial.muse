@@ -52,7 +52,7 @@ This interactive tutorial supports the direct execution and editing of Oz and St
 ** [[MusicalCSPs][Musical Constraint Satisfaction Problems in Strasheela]]
 
 
-**Important:** This tutorial is still work-in-progress. Nevertheless, the tutorial is complemented by many examples with extensive explanations in the [[../examples/][examples folder]]. These examples define various musical constraint problems, ranging from relatively simple to highly complex music theories. Also, the rich export facilties to formats like MIDI or Lilypond is demonstrated ([[../examples/ControllingOutput-Examples][ControllingOutput-Examples]]), and special features like realtime constraint programming ([[../examples/Realtime-Examples][Realtime-Examples]]) or the use of [[../examples/Parallel-Search.oz][parallel search]] with multiple CPUs or computers shown.
+**Important:** This tutorial is still work-in-progress. Nevertheless, the tutorial is complemented by many examples with extensive explanations in the [[../examples/][examples folder]]. These examples define various musical constraint problems, ranging from relatively simple to quite complex music theories. Also, the rich export facilties to formats like MIDI or Lilypond is demonstrated ([[../examples/ControllingOutput-Examples][ControllingOutput-Examples]]), and special features like realtime constraint programming ([[../examples/Realtime-Examples][Realtime-Examples]]) or the use of [[../examples/Parallel-Search.oz][parallel search]] with multiple CPUs or computers shown.
 
 
 * First Steps with the Oz Programming Interface
