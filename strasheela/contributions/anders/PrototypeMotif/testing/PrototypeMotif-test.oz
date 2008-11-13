@@ -270,7 +270,6 @@ NestedMotif_AA
       constructors:add(motif_A:Motif_A)
       )}
 
-
 /*
 
 {GUtils.setRandomGeneratorSeed 0}
@@ -289,6 +288,25 @@ NestedMotif_AA
 
 */
 
+
+/*
+
+%% test arg passing to submotifs
+{GUtils.setRandomGeneratorSeed 0}
+{SDistro.exploreOne  {GUtils.extendedScriptToScript NestedMotif_AA
+		      unit(% startTime:0
+			   timeUnit:beats(4)
+			   contour:[1 3 1]
+			   nestedArgs: [[id(x) id(z)] # unit(pitchDomain:dom(60#63))
+					id(y) # unit(pitchDomain:dom(60#64))
+					%% test principle
+					topLevel # unit(startTime:0)]
+			   %% required if motif is top-level score object
+			   initScore:true
+			  )}
+ unit(value:random)}
+
+*/
 
 
 
