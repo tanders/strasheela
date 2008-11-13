@@ -72,6 +72,7 @@ export
    MakeScore MakeScore2 InitScore
    make: MakeScore
    CopyScore CopyScore2
+   TransformScore TransformScore2
    MakeContainer MakeSim MakeSeq 
    % ResolveRepeats
    MakeClass
@@ -527,7 +528,7 @@ define
 
       /** %% Outputs the full init record for self which allows to re-create the score.
       %% Excluded is a list of arguments (atoms) which must be excluded concurrently.
-      %% Clauses is a list of pairs TestI#FunI which can be used to overwrite the default init record creation (defined by the class' method getInitInfo) of specific score objects. TestI is a Boolean function or method, and FunI is a unary function expecting a score object and returning a VS. For each object for which some TestI returns true, the corresponding FunI will be used for creating init records for this object.
+      %% Clauses is a list of pairs TestI#FunI which can be used to overwrite the default init record creation (defined by the class' method getInitInfo) of specific score objects. TestI is a Boolean function or method, and FunI is a unary function expecting a score object and returning a record. For each object for which some TestI returns true, the corresponding FunI will be used for creating the init records for this object.
       %%
       %% NB: toInitRecord depends on correct definitions of the method getInitInfo for all subclasses with specific inialisiation arguments.
       %%
@@ -547,7 +548,7 @@ define
 		 Excluded}}
 	    end
 	 end
-	 Clause = {LUtils.find Clauses fun {$ Test#_} {Test self} end}
+	 Clause = {LUtils.find Clauses fun {$ Test#_} {{GUtils.toFun Test} self} end}
       in
 	 %% 
 	 if Clause == nil then
@@ -2602,7 +2603,33 @@ define
 	 {InitScore MyCopy}
       end
    end
+
+   /** %% Like TransformScore, but the resulting score is not fully initialised (cf. MakeScore2 vs. MakeScore).
+   %% */
+   fun {TransformScore2 MyScore Args}
+      Defaults = unit(clauses:nil
+		      constructors:{MyScore getInitClasses($)})
+      As = {Adjoin Defaults Args}
+   in
+      {MakeScore2 {MyScore toInitRecord($ clauses:As.clauses)}
+       As.constructors}
+   end
+   /** %% TransformScore returns a transformed copy of MyScore. 
+   %%
+   %% The following optional arguments are supports via Args.
+   %% 'clauses': a list of pairs TestI#FunI. TestI is a Boolean function or method, and FunI is a unary function expecting a score object and returning either a textual score object specification (a record), or a score object (which must not be fully initialised). For each object for which some TestI returns true, the corresponding FunI will be used for creating a score object which will replace the original object. 
+   %% 'constructors': the contructors used for creating the transformed score from a textual score (cf. MakeScore). Default are the classes of MyScore: {MyScore getInitClasses($)}.
+   %%
+   %% Note that TransformScore does not support recursive transformations. For example, if you change the content of a container during a transformation, this new content will not be recursively processed (but you could explicitly call TransformScore again with the resulting score). 
+   %%
+   %% NB: CopyScore internally uses toInitRecord. Therefore, all present restrictions of toInitRecord apply: getInitInfo must be defined correctly for all classes and only tree-form score topologies are supported.
+   %% */
+   proc {TransformScore MyScore Args ?TransformedScore}
+      {TransformScore2 MyScore Args TransformedScore}
+      {InitScore TransformedScore}
+   end
    
+      
    /** %% Returns a container of ContainerClass containing Items. Args is a record of optional container init arguments.
    %% A MakeContainer call may specify more container init-arguments than specified as default arguments.
    %% The Items must still combinable with other score items, i.e. they must not be fully initialised (e.g. created by MakeScore2). Also the container returned by MakeContainer is  still combinable with other score items, i.e. in the end the score must be initialised by InitScore.
