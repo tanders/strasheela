@@ -702,6 +702,42 @@ MyScore = {Score.makeScore sim(items:[seq(items:[note
 
 
 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%5
+%%
+%% Score.transformScore
+%%
+
+declare
+MyScore = {Score.makeScore seq(items:[note(duration:1
+					   pitch:60)
+				      note(duration:1
+					   pitch:62)
+				      note(duration:1
+					   pitch:63)]
+			       startTime:0
+			       timeUnit:(beats))
+	   unit}
+
+%% Transpose score by 2 semitones
+{{Score.transformScore MyScore
+  unit(clauses:[isNote#fun {$ N}
+			  {Adjoin {N toInitRecord($)}
+			   note(pitch:{N getPitch($)}+2)}
+		       end])}
+ toInitRecord($)}
+
+
+%% Reverse notes in container
+{{Score.transformScore MyScore
+  unit(clauses:[isSequential#fun {$ C}
+				{Adjoin {C toInitRecord($)}
+				 %% NOTE: explicitly create textual versions of the contained score objects
+				 seq(items:{Reverse {C mapItems($ toInitRecord)}})}
+			     end])}
+ toInitRecord($)}
+
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%5
 %%
 %% toFullRecord
