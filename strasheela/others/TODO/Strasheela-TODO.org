@@ -2,6 +2,16 @@
 
 * Strasheela release
 
+** TODO Finish Example: Midi-output.oz 
+
+   [[file:~/oz/music/Strasheela/strasheela/trunk/strasheela/examples/ControllingOutput-Examples/MIDI-output.oz]]
+
+   see TODOs marked in file
+
+** Clean up list of changes
+
+** Release
+
 * TODO Backup Strasheela SVN repository on Office Mac
 
   see 
