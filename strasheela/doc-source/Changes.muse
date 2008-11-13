@@ -9,6 +9,7 @@
     - Added support for time shift functions to the core music representation: methods like getStartTimeInSeconds etc. take them into account, and they are supported by all standard synthesis output formats. Time shift functions are defined for temporal containers, and they can even be nested (e.g., locally for motifs and a globally for the whole score).
 
     - MUtils: Added support for symbolic duration notation: MakeNoteLengthsTable, MakeNoteLengthsRecord, MakeDurationsRecord, SetNoteLengthsRecord, ToDur, SetDurationsRecord, ToNoteLengths
+      TODO: demonstrate in example
 
     - Fenv.renderAndPlayMidiFile: MIDI file output which additional supports continuous controllers (e.g., pitch bend, aftertouch, CC) and a global tempo curve, all expressed in the score by fenvs.
 
@@ -22,6 +23,7 @@
 
   - Minor additions 
 
+    - Score: added TransformScore and TransformScore2
     - HS.rules: added several harmonic/melodic/contrapuntual rules: VoiceLeadingDistance, VoiceLeadingDistance_Percent, SmallIntervalProgressions, SmallIntervalProgressions_Percent, ClearDissonanceResolution, IntervalBetweenNonharmonicTonesIsConsonant, MaxInterval, MaxNonharmonicNoteSequence, MaxNonharmonicNotePercent, MaxRepetitions, MinPercentSteps
     - Out.outputScoreConstructor (and related score archiving procs): added arguments 'postfix', 'exclude', and 'clauses' 
     - GUtils: added IsDivisible, Percent
