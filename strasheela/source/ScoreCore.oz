@@ -57,7 +57,7 @@ import
    Out at 'Output.ozf'
    % Pattern at 'Pattern.ozf'
    % Applicator at 'RuleApplicator.ozf'
-   Browser(browse:Browse) % temp for debugging
+%    Browser(browse:Browse) % temp for debugging
    %Ozcar % temp for debugging
    %% NOTE: dependency on contribution
    Fenv at 'x-ozlib://anders/strasheela/Fenv/Fenv.ozf'
