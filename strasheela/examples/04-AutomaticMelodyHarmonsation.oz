@@ -402,7 +402,7 @@ proc {RenderLilypondForHS I X}
 			  if {Not {IsVirtualString ChordDescr}}
 			  then raise noVS(chordDesc:ChordDescr) end
 			  end
-			  RootMicroPitch#'_\\markup{\\column < '#ChordDescr#' > }'
+			  RootMicroPitch#'_\\markup{\\column { '#ChordDescr#' } }'
 		       end}
 		     %% marking non-chord pitch notes
 		     isNote#{Out.makeNoteToLily DefaultAddedSigns}
