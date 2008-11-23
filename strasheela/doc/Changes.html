@@ -1,3 +1,4 @@
+
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html>
   <head>
@@ -32,7 +33,10 @@
 <ul>
 <li>Added support for time shift functions to the core music representation: methods like getStartTimeInSeconds etc. take them into account, and they are supported by all standard synthesis output formats. Time shift functions are defined for temporal containers, and they can even be nested (e.g., locally for motifs and a globally for the whole score).</li>
 
-<li>MUtils: Added support for symbolic duration notation: MakeNoteLengthsTable, MakeNoteLengthsRecord, MakeDurationsRecord, SetNoteLengthsRecord, ToDur, SetDurationsRecord, ToNoteLengths</li>
+<li>MUtils: Added support for symbolic duration notation: MakeNoteLengthsTable, MakeNoteLengthsRecord, MakeDurationsRecord, SetNoteLengthsRecord, ToDur, SetDurationsRecord, ToNoteLengths
+TODO: demonstrate in example</li>
+
+<li>Fenv.renderAndPlayMidiFile: MIDI file output which additional supports continuous controllers (e.g., pitch bend, aftertouch, CC) and a global tempo curve, all expressed in the score by fenvs.</li>
 </ul></li>
 </ul>
 
@@ -41,7 +45,9 @@
 <li>Documentation
 
 <ul>
+<li>Demonstrate various MIDI file export facilities in the new examples/ControllingOutput-Examples/MIDI-output.oz</li>
 <li>Added relatively complex examples which constrain the rhythmical, melodic, harmonic, and formal structure at the same time: examples/Form-Examples/FriendlyMusicExample.oz</li>
+<li>Added realtime counterpoint example with Max interface: examples/Realtime-Examples/Simple-Counterpoint-Max.pat</li>
 </ul></li>
 </ul>
 
@@ -50,6 +56,7 @@
 <li>Minor additions
 
 <ul>
+<li>Score: added TransformScore and TransformScore2</li>
 <li>HS.rules: added several harmonic/melodic/contrapuntual rules: VoiceLeadingDistance, VoiceLeadingDistance_Percent, SmallIntervalProgressions, SmallIntervalProgressions_Percent, ClearDissonanceResolution, IntervalBetweenNonharmonicTonesIsConsonant, MaxInterval, MaxNonharmonicNoteSequence, MaxNonharmonicNotePercent, MaxRepetitions, MinPercentSteps</li>
 <li>Out.outputScoreConstructor (and related score archiving procs): added arguments 'postfix', 'exclude', and 'clauses'</li>
 <li>GUtils: added IsDivisible, Percent</li>
@@ -76,6 +83,8 @@
 <ul>
 <li>Clauses given as arg are appended before default clauses, default clauses are not overwritten</li>
 <li>Bug fixed for clauses resulting in nil</li>
+<li>Updated precompiled files for examples to Mozart version 1.4.0 (now some examples do not work with 1.3.* anymore, unfortunately the binary format is incompatible)</li>
+<li>examples/04-AutomaticMelodyHarmonsation.oz: customised Lilypond output works again with recent Lilypond versions</li>
 </ul></li>
 </ul></li>
 </ul>
@@ -624,7 +633,7 @@ See the documentation for <a href="../contributions/anders/HarmonisedScore/doc/n
 <div id="footer">
 <div id="author">&copy; 
 Torsten Anders</div>
-<div id="date">Last time edited: 2008.11.08</div>
+<div id="date">Last time edited: 2008.11.23</div>
 </div>
   </body>
 </html>
