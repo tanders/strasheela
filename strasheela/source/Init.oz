@@ -1,4 +1,4 @@
-
+   
 %%% *************************************************************
 %%% Copyright (C) 2003-2005 Torsten Anders (t.anders@qub.ac.uk) 
 %%% This program is free software; you can redistribute it and/or
@@ -16,7 +16,7 @@
 
 functor
 import
-   Browser(browse:Browse)
+%    Browser(browse:Browse)
    %% Inspector(inspect:Inspect)
    Pickle Explorer Error Resolve
    IOzSeF at 'x-ozlib://tack/iozsef/iozsef.ozf'
@@ -604,6 +604,6 @@ define
 		items: [line(oz(E))])
        end 
     end}
-   
-   
+    
 end
+
