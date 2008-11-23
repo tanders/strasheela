@@ -65,7 +65,7 @@ This opens an editor window with two frames. You can enter Oz source code in the
 
   ={Browse hello}=
 
-Select this line with the mouse. Then, go to the Oz menu and select =Feed Region= (there are other menu entries for feeding the source line in where the cursor is, a paragraph etc.). This feeds the selected code to the Oz compiler which executes it. It opens the Browser window, and the Browser displays =hello=. 
+Select this line with the mouse. Then, go to the Oz menu and select =Feed Region= (there are other menu entries for feeding the source line in which the cursor is, a paragraph etc.). This feeds the selected code to the Oz compiler which executes it. It opens the Browser window, and the Browser displays =hello=. 
 
   [[OPI-atFullResolution][./graphics/OPI-reduced.png]]
 
