@@ -2412,6 +2412,54 @@ useful for package creators and new users to test whether installation was succe
 
 * General Oz todo						      :MAYBE:OZ:
 
+** Smart/Auto Completion or intellisense for Oz
+
+   Different options
+
+
+   http://www.emacswiki.org/emacs/CategoryCompletion#toc3
+
+
+*** !! Use Oz compiler 
+
+    see [[file:~/oz/music/Strasheela/private/WorkInProgress/AutoCompletition/AutoCompletition.oz]]
+
+    For auto completition, all variable names (environment) and functor features are known by the Oz compiler. I can relatively easily write an Oz application which expects a string and returns all possible extensions. 
+
+    Then I need some emacs interface for auto completition (there are lots... e.g., http://www.emacswiki.org/emacs/CompletionUI, http://www.emacswiki.org/emacs/AutoComplete), which expects function to access completition information..
+
+    Also see oz-find
+
+
+*** DynamicAbbreviations
+
+    Buildin M-/
+    http://www.emacswiki.org/emacs/DynamicAbbreviations
+     
+
+*** EmacsTags
+
+    http://www.emacswiki.org/emacs/EmacsTags
+
+*** Write Oz parser for Emacs tool Semantic
+
+    http://cedet.sourceforge.net/semantic.shtml
+    http://www.emacswiki.org/emacs/HowSemanticFulfillsThoseNeeds
+
+
+*** Parser with Semantic Bovinator
+
+    http://www.emacswiki.org/emacs/SemanticBovinator
+    http://www.emacswiki.org/emacs/HowToSetUpSemanticBovinatorForANewLanguage
+
+*** AutoComplete
+    
+    http://www.emacswiki.org/emacs/AutoComplete
+    http://www.emacswiki.org/emacs/auto-complete.el
+
+*** http://www.emacswiki.org/emacs/CompletionUI
+
+
 ** OzUnit								  :SOON:
 
    file://Users/t/oz/Collozeum/collozeum/OzUnit/
