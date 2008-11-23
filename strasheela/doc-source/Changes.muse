@@ -44,6 +44,8 @@
     - Refactored MIDI output (Out.midi.renderAndPlayMidiFile and friends affected)
       - Clauses given as arg are appended before default clauses, default clauses are not overwritten  
       - Bug fixed for clauses resulting in nil 
+      - Updated precompiled files for examples to Mozart version 1.4.0 (now some examples do not work with 1.3.* anymore, unfortunately the binary format is incompatible)
+      - examples/04-AutomaticMelodyHarmonsation.oz: customised Lilypond output works again with recent Lilypond versions 
 
 
   - For further fixes see the [[../CHANGELOG.txt]].
