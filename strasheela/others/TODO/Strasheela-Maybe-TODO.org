@@ -465,6 +465,69 @@ InspectorObject = {Inspector.new unit}
 
 ** Strasheela tutorial
 
+*** Add MIDI out example to music representation chap
+
+    [I already this added MIDI out example]
+
+The output to Csound and MIDI is indeed very similar in Strasheela. Consider the following example. First feed the following code snippet, that creates a short example score, which is fully determined. 
+
+declare
+%% set playback tempo
+{Init.setTempo 70.0}
+%% Create test score
+MyTestScore = {Score.makeScore
+	       seq(items:[note(duration:2
+			       pitch:60
+			       amplitude:80)
+			  note(duration:2
+			       pitch:64
+			       amplitude:60)
+			  note(duration:2
+			       pitch:67
+			       amplitude:50)
+			  note(duration:6
+			       pitch:72
+			       amplitude:100)
+			 ]
+		   startTime:0
+		   timeUnit:beats(4))
+	       unit}
+
+Then output this score to either a Csound or MIDI file. I fist show the approach I am usually using myself. Note that in these cases, only the base name of the resulting files are given. The default extensions are used (they should be OK in most cases), and the default directory is either what you specified (e.g., in your init file, and you can specified different directories for different file types) or the system default /tmp/. 
+
+%% Csound output
+{Out.renderAndPlayCsound MyTestScore
+unit(file:myTestScore)}
+
+%% MIDI output
+{Out.midi.renderAndPlayMidiFile MyTestScore
+unit(file:myTestScore)}
+
+
+Here is an example which explicitly specifies all directories involved, just to make the point. Please note that you can control independently where the auxiliary *.csv files and the actual *.mid files are stored. Remember that you can set these directories in your init file. 
+
+{Out.midi.renderAndPlayMidiFile MyTestScore
+unit(file:myTest
+      midiDir:'/tmp/'
+      csvDir:'/tmp/')}
+
+
+In the example you quoted from the tutorial, the destination (directory and file) is instead given with a file dialog. Internally, the directories are simply appended in front of the file name. Because the file dialog returns the full file name, we need to set the directories involved to nil. You notice that several directories are set to nil here, namely all directories involved. 
+
+%% Csound
+{Out.renderAndPlayCsound MyTestScore
+unit(file:{Tk.return tk_getSaveFile}
+      scoDir:nil soundDir:nil)}
+
+
+Now, we can do the same with the MIDI output. However, we also need to set all the directories involved to nil. Note that these directories are named differently than the dirs of the Csound output... 
+
+{Out.midi.renderAndPlayMidiFile MyTestScore
+unit(file:{Tk.return tk_getSaveFile}
+      midiDir:nil
+      csvDir:nil)}
+
+
 *** Strasheela tutorial: do music constraint programming 'chapter'
 
 
