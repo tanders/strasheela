@@ -48,7 +48,7 @@ define
    
    CompilerEnvironment = {Adjoin OPIEnv.full
 			  env('QTk': QTk
-			     'Debug': Debug 
+			      'Debug': Debug 
 			      'Path': Path % use my Path fixes
 			      'Inspect':ScoreInspector.inspect
 			      'Inspector': ScoreInspector
