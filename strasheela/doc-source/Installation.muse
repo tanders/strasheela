@@ -7,16 +7,28 @@ This page provides installation instructions for Strasheela, a constraint-based 
 
 * Install Emacs 
 
-On Linux it is is probably already there. 
+** Linux
+
+On Linux Emacs is probably already there. 
+
+** MacOS
 
 The Emacs pre-installed by MacOS X is less suitable, due to its missing graphical interface. A highly recommended alternative is [[http://aquamacs.org/][Aquamacs]]. Alternatively, there are also the [[http://www.apple.com/downloads/macosx/unix_open_source/carbonemacspackage.html][Carbon Emacs Package]] and [[http://www.apple.com/downloads/macosx/unix_open_source/emacsonaqua.html][Emacs on Aqua]]. Note: Emacs on Aqua is only suitable for pre-10.4 Macs (based on Emacs version 20.7 instead of 21.* or 22.*). 
+
+** Windows
 
 For Windows, follow the instructions in the Mozart Installation Manual on [[http://www.mozart-oz.org/documentation/install/node1.html#label2][Obtaining and Installing GNU Emacs]]. The Emacs installer provided at the Mozart site is already dated, check out the [[http://www.gnu.org/software/emacs/windows/ntemacs.html][GNU Emacs FAQ For Windows]] for a more recent version: [[http://www.gnu.org/software/emacs/windows/faq2.html#getting-emacs][Where can I get precompiled versions?]].
 
 
 * Install Mozart 
 
-Simply get a package ready to install from the [[http://www.mozart-oz.org/download][Download Mozart]] page. In case of troubles or for compiling from source consult the Mozart [[http://www.mozart-oz.org/documentation/install/index.html][Installation Manual]]. Additional help can be found [[http://gforge.info.ucl.ac.be/plugins/wiki/index.php?FAQ&id=17&type=g][here]] (in particular for installing Mozart on Intel Macs). A usual Windows problem is that Mozart does not find Emacs if it has to be invoked with a different name (e.g., =runemacs.exe= as the Win-Emacs-Version recommended above). In that case, set the environment variable =OZEMACS= to the path of your Emacs application (e.g., =C:\Program Files\emacs-22.1\bin\runemacs.exe=) as described [[http://support.microsoft.com/default.aspx?scid=kb;en-us;310519][here]].  
+Simply get a package ready to install from the [[http://www.mozart-oz.org/download][Download Mozart]] page. In case of troubles or for compiling from source consult the Mozart [[http://www.mozart-oz.org/documentation/install/index.html][Installation Manual]]. 
+
+** Addressing Windows Problems
+
+A usual Windows problem is that Mozart does not find Emacs if it has to be invoked with a different name (e.g., =runemacs.exe= as the Win-Emacs-Version recommended above). In that case, set the environment variable =OZEMACS= to the path of your Emacs application (e.g., =C:\Program Files\emacs-22.1\bin\runemacs.exe=) as described [[http://support.microsoft.com/default.aspx?scid=kb;en-us;310519][here]].  
+
+** Test Installation 
 
 After successfully installing Mozart, you may want to test the installation. At a commandline (a terminal or a DOS box) type =oz=. This starts the Oz Programming Interface (OPI), which runs inside Emacs. The initial window is split in two text buffers (=Oz= and =*Oz Compiler*=). In the upper buffer type the following.
 
@@ -82,7 +94,7 @@ Open a shell (or a DOS promt) and move into the directory =Strasheela/contributi
 
     <example>ozmake --install</example> 
 
-On Windows, you may need to enter =ozmake.exe=. Alternatively, you may use drag and drop. For example, you may drag the ozmake application (which can be found in the =bin= directory of your Mozart installation) and drop it into the DOS promt in order to enter its full path. You can also enter the path of the directory with drag and drop. Then, move into the *top-level* Strasheela directory and call =ozmake= again. Continue likewise with all Strasheela constributions you want to install in =Strasheela/contributions/= (e.g., =Strasheela/contributions/anders/Pattern=).
+On Windows, you may need to enter =ozmake.exe=. Alternatively, you may use drag and drop. For example, you may drag the ozmake application (which can be found in the =bin= directory of your Mozart installation) and drop it into the DOS promt in order to enter its full path. You can also enter the path of the directory with drag and drop. Then, move into the *top-level* Strasheela directory and call =ozmake= again. Continue likewise with all Strasheela constributions in =Strasheela/contributions/= (e.g., =Strasheela/contributions/anders/Pattern=).
 
 The steps above result only in a bare-bones Strasheela installation which is of limited practical use. The following installation steps bring Strasheela to life (e.g. they are essential for hearing Strasheela output). The examples provided with Strasheela assume that all the following installation steps have been conducted. 
 
