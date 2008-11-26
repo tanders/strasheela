@@ -43,7 +43,7 @@ Strasheela is a highly expressive constraint-based music composition system.[2] 
 
 * Getting Started
 
-  [[http://sourceforge.net/project/showfiles.php?group_id=167225][Download release from Sourceforge]]
+  [[http://sourceforge.net/project/showfiles.php?group_id=167225][Download release]]
 
   [[http://strasheela.svn.sourceforge.net/viewvc/strasheela/trunk/strasheela.tar.gz?view=tar][Download current development snapshot]]
 
