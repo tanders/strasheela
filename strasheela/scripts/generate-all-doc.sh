@@ -24,7 +24,7 @@ cd `dirname $0`
 echo "rm ../doc/api/*.html; rm ../doc/api/*.gif; ozh ../Strasheela.oz -o ../doc/api/"
 rm ../doc/api/*.html
 rm ../doc/api/*.gif
-ozh ../Strasheela.oz -o ../doc/api/
+ozh ../Strasheela.oz -o ../doc/api/  #  --stylesheet=ozdoc-edit.css
 
 # find all contribution makefiles, move into their dir and generate the documentation for each *.oz file in the directory (this should be only a single one!)
 cd ../contributions
