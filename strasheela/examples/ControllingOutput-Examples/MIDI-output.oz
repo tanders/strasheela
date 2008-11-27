@@ -63,7 +63,7 @@ MyTestScore = {Score.makeScore
 %% For feedback where the files are stored check standard out (Oz
 %% menu: Show/Hide: Emulator)
 {Out.midi.renderAndPlayMidiFile MyTestScore
-unit(file:myTestScore)}
+ unit(file:myTestScore)}
 
 
 %% Explicitly specify all directories involved, just to make the
@@ -72,7 +72,7 @@ unit(file:myTestScore)}
 %% stored. Remember that you can set these directories in your init
 %% file.
 {Out.midi.renderAndPlayMidiFile MyTestScore
-unit(file:myTest
+ unit(file:myTest
       midiDir:'/tmp/'
       csvDir:'/tmp/')}
 
@@ -83,7 +83,7 @@ unit(file:myTest
 %% several directories are set to nil here, namely all directories
 %% involved.
 {Out.midi.renderAndPlayMidiFile MyTestScore
-unit(file:{Tk.return tk_getSaveFile}
+ unit(file:{Tk.return tk_getSaveFile}
       midiDir:nil
       csvDir:nil)}
 
@@ -179,7 +179,7 @@ MyScore = {Score.makeScore
 %% modification from above
 {Init.setTempo 70.0}
 {Out.midi.renderAndPlayMidiFile MyTestScore
-unit(file:myTestScore)}
+ unit(file:myTestScore)}
 
 
 %% The expressive performance is specified with a time shift fenv. A
@@ -316,8 +316,8 @@ MyScore = {Score.makeScore
  plot}
 
 {{Fenv.combineFenvs fun {$ Xs} {LUtils.accum Xs Number.'*'} end
- [{Fenv.linearFenv [[0.0 0.0] [0.3 1.0] [1.0 0.0]]}
-  {Fenv.triangle 7 unit}]}
+  [{Fenv.linearFenv [[0.0 0.0] [0.3 1.0] [1.0 0.0]]}
+   {Fenv.triangle 7 unit}]}
  plot}
 
 
