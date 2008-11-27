@@ -10,7 +10,10 @@ declare
 [ET31] = {ModuleLink ['x-ozlib://anders/strasheela/ET31/ET31.ozf']}
 {HS.db.setDB ET31.db.fullDB}
 
-%% symbolic duration names (no tuplets for simplicity)
+%% Symbolic duration names (no tuplets for simplicity): Note durations
+%% are then written as follows: R.d16 (16th note), R.d8 (eighth note)
+%% and so forth, R.d8_ (dotted eighth note). See doc of
+%% MUtils.makeNoteLengthsTable for more details.
 Beat = 4
 R = {MUtils.makeNoteLengthsRecord Beat nil}
 
