@@ -70,9 +70,21 @@ ozmake --install --package=mogul:/tack/iozsef
 
 * Install Strasheela 
 
-** Which File to Download?
+**  How to obtain Strasheela?
 
-Strasheela offers two archive files for download: =strasheela-$VERSION.tar.gz= and =strasheela-withSounds-$VERSION.tar.gz= (e.g., strasheela-0.9.tar.gz). Both files are identical, except that all sound files of the documentation are only contained in the bigger archive strasheela-withSounds-$VERSION.tar.gz. So, for running Strasheela the files don't make any difference. If you have a network connection where you can always access the Strasheela documentation online, then the archive file without the sounds is sufficient. 
+You can either obtain a Strasheela [[http://sourceforge.net/project/showfiles.php?group_id=167225][release]] or a [[http://strasheela.svn.sourceforge.net/viewvc/strasheela/trunk/strasheela.tar.gz?view=tar][development snapshot]] (releases are done at irregular intervals whenenver some development stage was finished). Both are =tar.gz=  archive files, which must be unpacked.[5] 
+
+Alternatively, you can check out the Subversion repository with the following command (this option allows for easy updates later, but requires installing [[http://en.wikipedia.org/wiki/Subversion_(software)][Subversion]]).
+
+<example>
+svn co https://strasheela.svn.sourceforge.net/svnroot/strasheela/trunk/strasheela/ strasheela 
+</example>
+
+You can then later update your Subversion repository by moving into the =strasheela= top-level directory and typing this.
+
+<example>
+svn update
+</example>
 
 
 ** Installation
@@ -217,3 +229,5 @@ Have fun with Strasheela!
 [3] You can load Strasheela manually as well by manually feeding the (edited) content of =_ozrc= to Oz.
 
 [4] See http://www.ps.uni-sb.de/pipermail/mozart-users/2006/015298.html. Nevertheless, the selection constraints have been installed successfully on Windows with earlier Mozart versions (cf. the installation of the [[http://sourcesup.cru.fr/xmg/][XMG - eXtensible MetaGrammar]]). 
+
+[5] In order to reduce the file size of the release archive, the release does not contain the sound files which are part of the documentation of the examples. For running Strasheela these missing sounds don't make any difference, and these files are always available as part of the online documentation of Strasheela. Nevertheless, if you do not have a permanent network connection, you may consider using a [[http://strasheela.svn.sourceforge.net/viewvc/strasheela/trunk/strasheela.tar.gz?view=tar][development snapshot]] or the Subversion repository, because these contain also the sound files of the documentation examples. 
