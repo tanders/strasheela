@@ -2,23 +2,22 @@
 #title Changes 
 ; #author Torsten Anders
 
-* Changes in Version 0.9.7 (no date yet)
+* Changes in Version 0.9.7 (27 November 2008)
 
   - Main additions and changes 
 
     - Added support for time shift functions to the core music representation: methods like getStartTimeInSeconds etc. take them into account, and they are supported by all standard synthesis output formats. Time shift functions are defined for temporal containers, and they can even be nested (e.g., locally for motifs and a globally for the whole score).
 
-    - MUtils: Added support for symbolic duration notation: MakeNoteLengthsTable, MakeNoteLengthsRecord, MakeDurationsRecord, SetNoteLengthsRecord, ToDur, SetDurationsRecord, ToNoteLengths
-      TODO: demonstrate in example
+    - Fenv.renderAndPlayMidiFile: MIDI file output which additional supports continuous controllers (e.g., pitch bend, aftertouch, CC) and a global tempo curve, all expressed in the score by fenvs (demonstrated in [[../examples/ControllingOutput-Examples/MIDI-output.oz][these examples]]).
 
-    - Fenv.renderAndPlayMidiFile: MIDI file output which additional supports continuous controllers (e.g., pitch bend, aftertouch, CC) and a global tempo curve, all expressed in the score by fenvs.
+    - MUtils: Added support for symbolic duration notation: MakeNoteLengthsTable, MakeNoteLengthsRecord, MakeDurationsRecord, SetNoteLengthsRecord, ToDur, SetDurationsRecord, ToNoteLengths (see usage in [[../examples/Form-Examples/FriendlyMusicExample.oz][this example]])
 
 
   - Documentation
 
-    - Demonstrate various MIDI file export facilities in the new examples/ControllingOutput-Examples/MIDI-output.oz
-    - Added relatively complex examples which constrain the rhythmical, melodic, harmonic, and formal structure at the same time: examples/Form-Examples/FriendlyMusicExample.oz
-    - Added realtime counterpoint example with Max interface: examples/Realtime-Examples/Simple-Counterpoint-Max.pat
+    - Demonstrate various MIDI file export facilities in the new file [[../examples/ControllingOutput-Examples/MIDI-output.oz]]
+    - Added relatively complex examples which constrain the rhythmical, melodic, harmonic, and formal structure at the same time [[../examples/Form-Examples/FriendlyMusicExample.oz]]
+    - Added realtime counterpoint example with Max interface: [[../examples/Realtime-Examples/]]
 
 
   - Minor additions 
