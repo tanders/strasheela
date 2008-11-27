@@ -87,7 +87,7 @@
 <dd>
 <dl>
 <dt>
-<a href="#sec12">Which File to Download?</a>
+<a href="#sec12">How to obtain Strasheela?</a>
 </dt>
 <dt>
 <a href="#sec13">Installation</a>
@@ -210,9 +210,21 @@ ozmake --install --package=mogul:/tack/iozsef
 Install Strasheela</h2>
 
 <h3><a name="sec12" id="sec12"></a>
-Which File to Download?</h3>
+How to obtain Strasheela?</h3>
 
-<p class="first">Strasheela offers two archive files for download: <code>strasheela-$VERSION.tar.gz</code> and <code>strasheela-withSounds-$VERSION.tar.gz</code> (e.g., strasheela-0.9.tar.gz). Both files are identical, except that all sound files of the documentation are only contained in the bigger archive strasheela-withSounds-$VERSION.tar.gz. So, for running Strasheela the files don't make any difference. If you have a network connection where you can always access the Strasheela documentation online, then the archive file without the sounds is sufficient.</p>
+<p class="first">You can either obtain a Strasheela <a href="http://sourceforge.net/project/showfiles.php?group_id=167225">release</a> or a <a href="http://strasheela.svn.sourceforge.net/viewvc/strasheela/trunk/strasheela.tar.gz?view=tar">development snapshot</a> (releases are done at irregular intervals whenenver some development stage was finished). Both are <code>tar.gz</code>  archive files, which must be unpacked.<sup><a class="footref" name="fnr.5" href="#fn.5">5</a></sup></p>
+
+<p>Alternatively, you can check out the Subversion repository with the following command (this option allows for easy updates later, but requires installing <a href="http://en.wikipedia.org/wiki/Subversion_(software)">Subversion</a>).</p>
+
+<pre class="example">
+svn co https://strasheela.svn.sourceforge.net/svnroot/strasheela/trunk/strasheela/ strasheela
+</pre>
+
+<p>You can then later update your Subversion repository by moving into the <code>strasheela</code> top-level directory and typing this.</p>
+
+<pre class="example">
+svn update
+</pre>
 
 
 
@@ -418,6 +430,8 @@ scripts/install-all.sh <span style="color: #bc8f8f;">\</span>
 <p class="footnote"><a class="footnum" name="fn.3" href="#fnr.3">3.</a> You can load Strasheela manually as well by manually feeding the (edited) content of <code>_ozrc</code> to Oz.</p>
 
 <p class="footnote"><a class="footnum" name="fn.4" href="#fnr.4">4.</a> See <a href="http://www.ps.uni-sb.de/pipermail/mozart-users/2006/015298.html">http://www.ps.uni-sb.de/pipermail/mozart-users/2006/015298.html</a>. Nevertheless, the selection constraints have been installed successfully on Windows with earlier Mozart versions (cf. the installation of the <a href="http://sourcesup.cru.fr/xmg/">XMG - eXtensible MetaGrammar</a>).</p>
+
+<p class="footnote"><a class="footnum" name="fn.5" href="#fnr.5">5.</a> In order to reduce the file size of the release archive, the release does not contain the sound files which are part of the documentation of the examples (the sound files blow up the size to an archive 10 times as big!). For running Strasheela these missing sounds don't make any difference, and these files are always available as part of the online documentation of Strasheela. Nevertheless, if you do not have a permanent network connection, you may consider using a <a href="http://strasheela.svn.sourceforge.net/viewvc/strasheela/trunk/strasheela.tar.gz?view=tar">development snapshot</a> or the Subversion repository, because these contain also the sound files of the documentation examples.</p>
 
 
 
