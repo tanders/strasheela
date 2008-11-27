@@ -149,7 +149,7 @@ MyScore = {Score.makeScore
 
 %% The first three notes are played slightly faster (performance time
 %% shorter than score time), but the length of the whole score remains
-%% exactly the same
+%% exactly the same.
 {Init.setTempo 70.0} 
 declare
 MyScore = {Score.makeScore
@@ -335,19 +335,13 @@ MyScore = {Score.makeScore
 %%
 %% Note: All remaining examples use Fenv.renderAndPlayMidiFile 
 %%
-
-
-%% TODO: set channel with info tag (either in single notes, or in a container)
-
+%% For convenience, Fenv.renderAndPlayMidiFile pre-defines further control of the MIDI output. These additional MIDI output features are all defined as clauses given to Out.midi.renderAndPlayMidiFile. If you plan further MIDI output customisation, consider the definition of Fenv.renderAndPlayMidiFile in strasheela/contributions/anders/Fenv/Fenv.oz as an example.   
+%%
 
 %% Setting the program (info-tag to either to a note or a temporal
 %% container). No MIDI channel defined (default is 0).
 declare
-MyScore = {Score.makeScore seq(info:[
-				     test
-				     program(64)
-% 				     channel(0)
-				    ]
+MyScore = {Score.makeScore seq(info:program(64)
 			       items:[note(duration:2
 					   pitch:60
 					   amplitude:51)
@@ -368,6 +362,62 @@ MyScore = {Score.makeScore seq(info:[
  unit}
 
 
+%% Such settings can be scattered in the score hierarchy (the hierarchically lowest setting overwrites higher settings)
+declare
+MyScore = {Score.makeScore seq(info:program(1)
+			       items:[seq(items:[note(duration:2
+						      pitch:60
+						      amplitude:51)
+						 note(duration:2
+						      pitch:64
+						      amplitude:58)
+						 note(info:program(60)
+						      duration:2
+						      pitch:67
+						      amplitude:65)
+						 note(info:program(1)
+						      duration:6
+						      pitch:72
+						      amplitude:80)])
+				      seq(info:[program(64)]
+					  items:[note(duration:6
+						      pitch:48
+						      amplitude:51)])]
+			       startTime:0
+			       timeUnit:beats(4))
+	   unit}
+{MyScore wait}
+{Fenv.renderAndPlayMidiFile MyScore
+ unit}
+
+
+%% The MIDI channel is set with an info tag (either in single notes, or in a container). In this example, two simultaneous voices are set to different midi channels and different programs (note that setting the voices only to different programs but the same channel would not work: program change events change all the following notes of a channel).  
+declare
+MyScore = {Score.makeScore sim(items:[seq(info:[channel(0)
+						program(1)]
+					  items:[note(duration:2
+						      pitch:60
+						      amplitude:51)
+						 note(duration:2
+						      pitch:64
+						      amplitude:58)
+						 note(duration:2
+						      pitch:67
+						      amplitude:65)
+						 note(duration:6
+						      pitch:72
+						      amplitude:80)])
+				      seq(info:[channel(1)
+						program(64)]
+					  items:[note(duration:12
+						      pitch:48
+						      amplitude:51)])]
+			       startTime:0
+			       timeUnit:beats(4))
+	   unit}
+{MyScore wait}
+{Fenv.renderAndPlayMidiFile MyScore
+ unit}
 
 
 
@@ -376,10 +426,11 @@ MyScore = {Score.makeScore seq(info:[
 %% used as continuous controllers. Fenvs (function envelope) provide a
 %% highly flexible means for expressing envelopes with numeric
 %% functions (see the fenv documentation for details and its test file
-%% for examples). The examples below show how score values are
-%% generated from fenvs, how fenvs can be stored in the score
-%% directly, and how MIDI output can use these fenvs in the score in
-%% various ways.
+%% for examples). Fenvs can express continuous controllers such as
+%% pitch bend, aftertouch, or CC. The examples below show how score
+%% values are generated from fenvs, how fenvs can be stored in the
+%% score directly, and how MIDI output can use these fenvs in the
+%% score in various ways.
 %%
 %% Strasheela predefines ready-to-use MIDI file export where
 %% fenvs can be used for CC events, timeshift functions and tempo
@@ -387,11 +438,59 @@ MyScore = {Score.makeScore seq(info:[
 %% facilities of Fenv.renderAndPlayMidiFile.
 %%
 
+%% Example which outputs CC 7, commonly controlling the volume and pitch bend. 
+declare
+MyScore
+= {Score.makeScore
+   seq(info:[channel(0)
+	     program(64)
+	     fenvs((cc#7)#{Fenv.linearFenv [[0.0 30.0] [0.6 127.0] [0.9 80.0] [1.0 0.0]]}
+		   pitchbend#{Fenv.linearFenv [[0.0 8000.0] [0.7 8000.0] [1.0 ~8000.0]]})]
+       items:[note(duration:2
+		   pitch:60
+		   amplitude:51)
+	      note(duration:2
+		   pitch:64
+		   amplitude:58)
+	      note(duration:2
+		   pitch:67
+		   amplitude:65)
+	      note(duration:6
+		   pitch:72
+		   amplitude:80)]
+       startTime:0
+       timeUnit:beats(4))
+   unit}
+{MyScore wait}
+{Fenv.renderAndPlayMidiFile MyScore
+ unit}
 
-%% TODO: Define and output continuous controllers (pitch bend, aftertouch, CC) for single notes or containers  
 
+%% Example with tempo curve, where the tempo is specified in BPM. The fenv is output as tempo MIDI events. 
+declare
+MyScore
+= {Score.makeScore
+   seq(info:[channel(0)
+	     globaltempo({Fenv.linearFenv [[0.0 30.0] [0.5 60.0] [1.0 60.0]]})]
+       items:[note(duration:2
+		   pitch:60
+		   amplitude:51)
+	      note(duration:2
+		   pitch:64
+		   amplitude:58)
+	      note(duration:2
+		   pitch:67
+		   amplitude:65)
+	      note(duration:6
+		   pitch:72
+		   amplitude:80)]
+       startTime:0
+       timeUnit:beats(4))
+   unit}
+{MyScore wait}
+{Fenv.renderAndPlayMidiFile MyScore
+ unit}
 
-%% TODO: Define a global tempo curve 
 
 
 
