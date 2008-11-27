@@ -463,6 +463,89 @@ InspectorObject = {Inspector.new unit}
 
 * Strasheela documentation				      :MAYBE:STRASHEELA:
 
+** Use a Wiki for doc editing
+
+*** Advantage of a wiki
+
+    - Quick editing 
+    - New content is immediately online
+    - Others can contribute (submitters must be registered, but I would allow for easy registration)
+    - Facilities like searching
+
+*** Sourceforge Mediawiki login
+
+    How is login managed for Sourceforge Mediawiki hosted app?
+
+    It appears wiki editors must be registered at Sourceforge and addditionally somehow for the wiki. How?
+    I would like to make registration for wiki contributors as easy as possible. How?? Do I need to set up my own wiki then?
+
+
+*** Sourceforge Mediawiki hosted app problems
+    
+**** Not possible to load up sound files
+
+     Mediawiki does allow for this in principle, but not Sourceforge mediawiki hosted app
+
+**** Sourceforge mediawiki hosted app does not allow customisation
+     
+     https://sourceforge.net/tracker/index.php?func=detail&aid=2147518&group_id=1&atid=200001
+
+     So, consider using a self-administered wiki instead
+     Could even be installed at sourceforge (like the webset). Example
+     http://pipmak.sourceforge.net/wiki/index.php/Main_Page
+     
+
+     Only customisation interface
+     https://apps.sourceforge.net/mediawiki/strasheela/index.php?title=Special:SpecialPages
+
+
+*** Present Sourceforge Mediawiki hosted app status 
+
+    I added 1 page for testing
+    https://apps.sourceforge.net/mediawiki/strasheela/index.php?title=All-interval_series
+
+    I can disable Mediawiki 
+    https://sourceforge.net/project/admin/hostedapp.php?group_id=167225
+
+    
+*** Mediawiki problem
+
+**** Likely very hard to have syntax colouring for Oz code
+
+     Perhaps I can live without syntax colouring?
+     For example, Lily doc does not even have syntax colouring in the actual doc..
+
+     - Extension:Syntax Highlighting GeSHi does not support Oz
+
+     - I cannot paste in pure HTML created y Emacs buffer HTMLize (and even if that would work, it would be tedious)
+
+
+*** !!?? Ask Sourceforge to support soundfile upload (which formats: mp3, ogg, midi?)
+
+*** Running Own MediaWiki Installation on Sourceforge.net
+
+    Description how
+    http://winhp.sourceforge.net/wiki/index.php/Running_MediaWiki_on_Sourceforge.net
+
+    But there are problems
+    https://sourceforge.net/tracker/index.php?func=detail&aid=2261709&group_id=1&atid=200001
+    Sourceforge replied (how to create a symlink), but never confirmation that/how it now works from orig poster 
+
+*** ?? Using another wiki platform? 
+
+    http://en.wikipedia.org/wiki/Wiki_software
+    It is hard to determine which wiki engines are the most popular, although a list of lead candidates include TWiki, MoinMoin, PmWiki, DokuWiki and MediaWiki (Google trend history comparison). TWiki, Traction TeamPage and Atlassian Confluence are popular on intranets. TikiWiki CMS/Groupware is a popular Wiki-CMS hybrid. A list of some of those available is included below, and another can be found at Wiki:WikiEngines.
+
+
+    http://en.wikipedia.org/wiki/Comparison_of_wiki_software
+
+    http://c2.com/cgi/wiki?ChoosingaWiki
+    
+    http://www.wikimatrix.org/
+
+    
+    
+
 ** Strasheela tutorial
 
 *** Add MIDI out example to music representation chap
@@ -662,6 +745,39 @@ http://www.torsten-anders.de
    
    :END:
 
+
+** Web site analysis
+
+   For piwik analysis of web traffic, I need to add some javascript code to all project HTML papges
+
+   - ozh pages not coverd
+     ozh has only css arg, I could add arg for HTML header.. If this is worth the effort
+
+   - OK for Emacs Muse pages
+      
+
+
+<!-- Piwik -->
+<script type="text/javascript">
+var pkBaseURL = (("https:" == document.location.protocol) ? "https://apps.sourceforge.net/piwik/strasheela/" : "http://apps.sourceforge.net/piwik/strasheela/");
+document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/javascript'%3E%3C/script%3E"));
+</script><script type="text/javascript">
+piwik_action_name = '';
+piwik_idsite = 1;
+piwik_url = pkBaseURL + "piwik.php";
+piwik_log(piwik_action_name, piwik_idsite, piwik_url);
+</script>
+<object><noscript><p><img src="http://apps.sourceforge.net/piwik/strasheela/piwik.php?idsite=1" alt="piwik"/></p></noscript></object>
+<!-- End Piwik Tag -->
+
+
+   https://apps.sourceforge.net/piwik/strasheela/index.php?module=CoreHome&action=index&idSite=1&period=day&date=today
+
+
+
+   https://apps.sourceforge.net/piwik/strasheela/index.php?module=SitesManager&action=displayJavascriptCode&idsite=1
+
+   
 
 * Strasheela design					      :MAYBE:STRASHEELA:
 
