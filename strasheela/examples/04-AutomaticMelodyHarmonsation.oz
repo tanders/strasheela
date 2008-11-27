@@ -446,6 +446,9 @@ end
  Aux.myDistribution}
 
 
+%% TODO: distro strategy inefficient 
+%%
+{GUtils.setRandomGeneratorSeed 0}
 %% 'Horch was kommt von draussen rein' (full melody)
 {SDistro.exploreOne
  {AutomaticHarmonisation
@@ -478,7 +481,9 @@ end
    4#72				% ho   
   ]
   4}
- Aux.myDistribution}
+%  HS.distro.typewise_LeftToRightTieBreaking
+ Aux.myDistribution
+}
 
 
 */
