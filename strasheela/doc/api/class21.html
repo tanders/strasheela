@@ -120,23 +120,23 @@ clearInterval(drawit)
 
 <div style="margin-left:160px"><p align="right" class="margin"><div align="right">inheritance tree</div></p>
 <pre>
- <a class="pre" href="node6.html#entity268">NonType</a> <a class="pre" href="node6.html#entity269">Reflection</a>       <a class="pre" href="node7.html#entity348">FlagsMixin</a>
+ <a class="pre" href="node6.html#entity266">NonType</a> <a class="pre" href="node6.html#entity267">Reflection</a>       <a class="pre" href="node7.html#entity350">FlagsMixin</a>
     |        |                |
     `-----+--'                |
           |                   |
-     <a class="pre" href="node6.html#entity270">ScoreObject</a>    <a class="pre" href="node7.html#entity349">SMapping.mappingMixin</a>
+     <a class="pre" href="node6.html#entity268">ScoreObject</a>    <a class="pre" href="node7.html#entity351">SMapping.mappingMixin</a>
           |                   |
           `---------+---------'
                     |
-                   <a class="pre" href="node6.html#entity281">Item</a>
+                   <a class="pre" href="node6.html#entity279">Item</a>
                     |
                     `+
                      |
-                  <a class="pre" href="node6.html#entity288">Element</a>
+                  <a class="pre" href="node6.html#entity286">Element</a>
                      |
                      |
                      |
-              <a class="pre" href="node6.html#entity289">AbstractElement</a>
+              <a class="pre" href="node6.html#entity287">AbstractElement</a>
 </pre>
 <hr><p class="margin"><div align="right">class definition</div></p>
 <code>
@@ -1310,7 +1310,7 @@ clearInterval(drawit)
 </tr></table>
 <span class="string"> Outputs the full init record for self which allows to re-create the score.<BR>
  Excluded is a list of arguments (atoms) which must be excluded concurrently.<BR>
- Clauses is a list of pairs TestI#FunI which can be used to overwrite the default init record creation (defined by the class' method getInitInfo) of specific score objects. TestI is a Boolean function or method, and FunI is a unary function expecting a score object and returning a VS. For each object for which some TestI returns true, the corresponding FunI will be used for creating init records for this object.<BR>
+ Clauses is a list of pairs TestI#FunI which can be used to overwrite the default init record creation (defined by the class' method getInitInfo) of specific score objects. TestI is a Boolean function or method, and FunI is a unary function expecting a score object and returning a record. For each object for which some TestI returns true, the corresponding FunI will be used for creating the init records for this object.<BR>
 <BR>
  NB: toInitRecord depends on correct definitions of the method getInitInfo for all subclasses with specific inialisiation arguments.<BR>
 <BR>
