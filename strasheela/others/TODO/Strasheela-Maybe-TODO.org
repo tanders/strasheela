@@ -472,16 +472,22 @@ InspectorObject = {Inspector.new unit}
     - Others can contribute (submitters must be registered, but I would allow for easy registration)
     - Facilities like searching
 
-*** Sourceforge Mediawiki login
+*** !!?? How can I backup the wiki content?
 
-    How is login managed for Sourceforge Mediawiki hosted app?
-
-    It appears wiki editors must be registered at Sourceforge and addditionally somehow for the wiki. How?
-    I would like to make registration for wiki contributors as easy as possible. How?? Do I need to set up my own wiki then?
-
+    shell access highly recommended! 
 
 *** Sourceforge Mediawiki hosted app problems
-    
+
+**** Sourceforge Mediawiki login restricted
+
+     How is login managed for Sourceforge Mediawiki hosted app?
+     It appears wiki editors must be registered at Sourceforge and addditionally granted permissions for the wiki.
+
+     I would like to make registration for wiki contributors as easy as possible. How?? Do I need to set up my own wiki then? Yes, that is the only way (and no changes planned by sourceforge, until projects can configure their own hosted wiki)
+     https://sourceforge.net/tracker/index.php?func=detail&aid=2183367&group_id=1&atid=350001
+
+
+
 **** Not possible to load up sound files
 
      Mediawiki does allow for this in principle, but not Sourceforge mediawiki hosted app
@@ -543,8 +549,33 @@ InspectorObject = {Inspector.new unit}
     
     http://www.wikimatrix.org/
 
-    
-    
+
+
+**** !! PmWiki: easy to install and customize, focuses on ease-of-use
+
+     http://en.wikipedia.org/wiki/PmWiki
+     http://www.pmwiki.org/
+     Support for sounds (default includes mp3, but no ogg not midi, default file size limit 50 KB)
+     Code? preformatted text OK, no syntax colouring of specific langs?
+
+
+     uses plain text files, no database needed
+
+**** DokuWiki: aimed at small companies’ documentation needs
+
+     http://en.wikipedia.org/wiki/Dokuwiki
+     http://www.dokuwiki.org/dokuwiki
+     
+
+     uses plain text files, no database needed
+
+     Source: syntax highlighting with GeSHi Generic Syntax Highlighter (as mediawiki)
+
+**** NO: TWiki: structured wiki -- more than I need (content management system)
+
+
+     
+     
 
 ** Strasheela tutorial
 
