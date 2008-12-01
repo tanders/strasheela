@@ -11,7 +11,7 @@ This file was automatically generated from the interactive Strasheela tutorial. 
 
 ** Introduction
 
-The following sections introduce various aspects of Strasheela's music representation. The representation is then later used for defining musical constraint satisfaction problems. 
+The following sections introduce various aspects of Strasheela's music representation.  The representation is then later used for defining musical constraint satisfaction problems. 
 
 *Please note that this part of the tutorial is still unfinished!*
 
@@ -21,7 +21,7 @@ The following sections introduce various aspects of Strasheela's music represent
 
 ** Introduction
 
-This section creates a Strasheela score consisting of a single note. The score is specified textually, and this specification is then transformed into a score object instance.
+This section creates a Strasheela score consisting of a single note.  The score is specified textually, and this specification is then transformed into a score object instance.
 
   - the textual representation is easier for human interaction -- we can read and write music in textual form relatively easily.  For example,
   note(pitch:60 duration:4)
@@ -35,11 +35,35 @@ This subsection shows how to create a simple score and examine it in the Inspect
 
   <O: Note>
 
-where the O says that this is an object, and Note is the name of its class. To look "inside" a score object, activate the context menu (typically right-click, but on a mac you must middle-click).  Select 'Filter' -> 'Show Textual Score'.  This shows the score in the textual form as entered in this example.
+where the O says that this is an object, and Note is the name of its class.  To look "inside" a score object, activate the context menu (typically right-click, but on a mac you must middle-click).  Select 'Filter' -> 'Show Textual Score'.  This shows the score in the textual form as entered in this example.
 
-Note also that the background color behind the score changed to indicate that we are now 'looking into' something. You can 'go back' to the original view by the context menu entry 'unmap' (you have to right-click on the top-level label note). 
+If you cannot activate the context menu (for example, having a mac laptop with only one mouse button), you can still see some info in the Inspector by adding `{... toInitRecord($)}'.
 
-The Inspector also provides different views on the score via the other 'Filter' context menu entries. These provide more information on the internal structure of a score object. For example, 'Show Score Hierarchy Recursively' reveals that even a plain note is internally represented hiearchically: the note parameters (e.g. duration, pitch) are represented by their own objects.
+WARNING: the Inspector may appear behind this window.
+
+<src lang="oz">
+local
+   TextualScore = note(startTime:0
+                       duration:1000
+		       timeUnit:milliseconds
+		       pitch:60
+		       amplitude:64)
+   %% second argument to Score.makeScore explained later
+   ScoreInstance = {Score.makeScore TextualScore unit}
+in
+   {Inspect ScoreInstance}
+   %% if difficulties arise with the Context Menu
+   {Inspect {ScoreInstance toInitRecord($)}}
+end
+</src>
+
+** More Inspector features
+
+There are a few other useful features of the Inspector.
+
+When you select a Filter, the background color behind the score changed to indicate that we are now 'looking into' something.  You can 'go back' to the original view by the context menu entry 'unmap' (you have to right-click on the top-level label note). 
+
+The Inspector also provides different views on the score via the other 'Filter' context menu entries.  These provide more information on the internal structure of a score object.  For example, 'Show Score Hierarchy Recursively' reveals that even a plain note is internally represented hiearchically: the note parameters (e.g. duration, pitch) are represented by their own objects.
 
 WARNING: the Inspector may appear behind this window.
 
@@ -57,29 +81,23 @@ in
 end
 </src>
 
-* Sound Output
+* Output Formats
 
-** intro
+** Introduction 
 
-This section creates a Strasheela score consisting of three notes. The first section saves a Csound score file (with the procedure Out.outputCsoundScore). The second and third sections additionally call Csound in the background and open the resulting sound file with an editor (with the procedure Out.renderAndPlayCsound). Note that these sections requires that you specified where Csound is installed on your system and what sound file editor you want to use (see 'Settings...' in the Tutorial menu).
+This section creates a Strasheela score consisting of three notes and demonstrates various methods of outputting the music.
 
-This section introduces Strasheela containers: three notes are contained in a simultaneous container (sim). This container expresses how the notes are temporally arranged. The startTime of notes in a simultaneous container is their offsetTime plus the startTime of the encapsulating simultaneous container (which is 0 here). Thus, in this section the first note starts at 0, the second at 500, and the third at 1500.
-
-The temporal structure of the score is specified in milliseconds, as the timeUnit argument of this container indicates. Please note that the timeUnit must be specified only once in a score. This setting is shared by all temporal score objects (i.e. the container and the notes). 
-
-The sections demonstrate different ways to specify the output file(s). In the first two sections, the path is specified textually in two components: directory and file name (the extension .sco is added automatically). For section, the first section outputs the file "/tmp/test.sco". You may change these settings by editing the arguments scoDir (the directory for the sco file), soundDir (the directory for the resulting sound file), and file (the file name without extension). Windows users will have to input a directory path like, for section, "C:\\Dokumente und Einstellungen\\" (German settings..). In the third section, the output file is specified with a file dialog for convenience. BTW: most directory arguments of output procedures (e.g., scoDir soundDir of Out.renderAndPlayCsound) can be omitted; their default value are directories set in the Strasheela environment (cf. the _ozrc file in the Strasheela directory for an section how to set these default directories).
-
-Please note that the shell (or Dos) where you started this tutorial provides feedback. It confirms the writing of the Csound score file, shows the call to Csound resulting from your settings etc. When you are using Strasheela from within the OPI, the Emacs buffer 'Oz Emulator' shows this information. 
-
-Please have a look at the content of the resulting Csound score file (on UNIX, you may just uncomment the last line of the first section). You will notice that the Csound p-fields p2 and p3 (i.e. the second and third columns) correspond to the notes' offset time and duration, now measured in Csound beats (note the Csound tempo specification above, which can be changed with the procedure Init.setTempo, but defaults to 60.0). Moreover, p4 is the amplitude (measure as midi velocity value in the section and now normalised in 0-1) and p5 is the pitch (measured as midi keynumber). In strasheela/goodies/csound you will find a demo Csound orc file which works with these settings. This file is used in the second and third section. 
-
-The section requires to wait with the Csound output until all score information not explicitly specified (e.g. the start time of the notes) is propagated in the background. Remember that Oz is a concurrent programming languages: propagation of such score information happens concurrently 'behind the scene'. The wait method blocks until all parameter values in the score are determined (we will not need it later in actual CSPs).
+Please note that the shell (or Dos) where you started this tutorial provides feedback.  It confirms the writing of the LilyPond or Csound score file, shows the call to the helper applications, etc.  When you are using Strasheela from within the OPI, the Emacs buffer 'Oz Emulator' shows this information.
 
 
+** Output LilyPond
 
-** Output Csound score file
+The first section outputs the music to a PDF file using LilyPond.
 
-No information available.
+The {MyScore wait} requires Strasheela to wait until all score information not explicitly specified (e.g. the start time of the notes) is propagated in the background.  Remember that Oz is a concurrent programming languages: propagation of such score information happens concurrently 'behind the scene'.  The wait method blocks until all parameter values in the score are determined.  We will not need it later in actual CSPs.
+
+WARNING: you must specify (via the `Settings...' menu entry) where Strasheela can find lilypond, convert-ly (part of LilyPond), and a PDF viewer.
+
 
 <src lang="oz">
 local
@@ -96,11 +114,111 @@ local
 				  pitch:64
 				  amplitude:64)]
 		      startTime:0 timeUnit:milliseconds)
-   ScoreInstance = {Score.makeScore TextualScore unit}
+   MyScore = {Score.makeScore TextualScore unit}
 in
-   % wait until all score parameters are determined 
-   {ScoreInstance wait}   
-   {Out.outputCsoundScore ScoreInstance 
+   {MyScore wait}   
+   {Out.renderAndShowLilypond MyScore
+    unit(file:{Tk.return tk_getSaveFile}
+	 dir:nil)}
+end
+</src>
+
+** Output MusicXML, via Fomus
+
+This second section outputs to a MusicXML file (using Fomus), which can be opened, for section, by software like Finale and Sibelius. Fomus supports outputting into further formats and supports tweaking the MusicXML output specifically for Finale or Sibelius usage: just set the appropriate Fomus flag in the section below (see the Fomus documentation for the supported flags). Please note that for running these sections you must specify (via 'Settings...' menu entry) where Strasheela can find the applications lilypond, convert-ly (an application part of Lilypond), a PDF file viewer, and Fomus. 
+
+WARNING: you must specify (via the `Settings...' menu entry) where Strasheela can find Fomus.
+
+
+<src lang="oz">
+local
+   TextualScore = sim(items:[note(offsetTime:0
+                                  duration:1000
+				  pitch:60
+				  amplitude:64)
+			     note(offsetTime:500
+				  duration:1000
+				  pitch:62
+				  amplitude:64)
+			     note(offsetTime:1500
+				  duration:1000
+				  pitch:64
+				  amplitude:64)]
+		      startTime:0 timeUnit:milliseconds)
+   MyScore = {Score.makeScore TextualScore unit}
+in
+   {MyScore wait}  
+   {Out.renderFomus MyScore
+    unit(file:{Tk.return tk_getSaveFile}
+	 dir:nil
+	 flags:['-x'])}
+end
+</src>
+
+** Output MIDI file
+
+This section saves a MIDI file with the procedure `Out.renderMidiFile'.
+
+The filename is given directly as "/tmp/test.midi" (the .midi is added automatically).  You may change this by editing the argument csvDir and midiDir (the directory) and file (the file name without extension).
+
+WARNING: Windows users will have to input a directory path like "C:\\Dokumente und Einstellungen\\" (German settings).
+
+WARNING: you must specify (via the `Settings...' menu entry) where Strasheela can find a MIDI player.
+
+<src lang="oz">
+local
+   TextualScore = sim(items:[note(offsetTime:0
+                                  duration:1000
+				  pitch:60
+				  amplitude:64)
+			     note(offsetTime:500
+				  duration:1000
+				  pitch:62
+				  amplitude:64)
+			     note(offsetTime:1500
+				  duration:1000
+				  pitch:64
+				  amplitude:64)]
+		      startTime:0 timeUnit:milliseconds)
+   MyScore = {Score.makeScore TextualScore unit}
+in
+   {MyScore wait}   
+   {Out.midi.renderAndPlayMidiFile MyScore
+   unit(file:'test'
+         midiDir:'/tmp/'
+         csvDir:'/tmp/')}
+end
+</src>
+
+** Output Csound file (no sound)
+
+This section saves a Csound score file with the procedure `Out.outputCsoundScore'.
+
+The filename is given directly as "/tmp/test.sco" (the .sco is added automatically).  You may change this by editing the argument scoDir (the directory) and file (the file name without extension).  Windows users will have to input a directory path like "C:\\Dokumente und Einstellungen\\" (German settings..).
+
+Please have a look at the content of the resulting Csound score file (on UNIX, you may just uncomment the last line of the first section).  You will notice that the Csound p-fields p2 and p3 (i.e. the second and third columns) correspond to the notes' offset time and duration, now measured in Csound beats (note the Csound tempo specification above, which can be changed with the procedure Init.setTempo, but defaults to 60.0).  Moreover, p4 is the amplitude (measure as midi velocity value in the section and now normalised in 0-1) and p5 is the pitch (measured as midi keynumber).  In strasheela/goodies/csound you will find a demo Csound orc file which works with these settings.  This file is used in the second and third section.
+
+WARNING: you must specify (via the `Settings...' menu entry) where Strasheela can find CSound.
+
+<src lang="oz">
+local
+   TextualScore = sim(items:[note(offsetTime:0
+                                  duration:1000
+				  pitch:60
+				  amplitude:64)
+			     note(offsetTime:500
+				  duration:1000
+				  pitch:62
+				  amplitude:64)
+			     note(offsetTime:1500
+				  duration:1000
+				  pitch:64
+				  amplitude:64)]
+		      startTime:0 timeUnit:milliseconds)
+   MyScore = {Score.makeScore TextualScore unit}
+in
+   {MyScore wait}   
+   {Out.outputCsoundScore MyScore
     unit(scoDir:"/tmp/" 
          file:"test")}
    % UNIX: show content of resulting test.sco at terminal (uncomment next line)
@@ -108,12 +226,16 @@ in
 end
 </src>
 
-** Output sound file
+** Output Csound file (with sound)
 
-No information available.
+This section additionally calls Csound in the background and open the resulting sound file with an editor with the procedure `Out.renderAndPlayCsound'.
+
+There is one new file variable: soundDir (the directory for the resulting sound file).
+
+WARNING: you must specify (via the `Settings...' menu entry) where Strasheela can find CSound.
+
 
 <src lang="oz">
-%% NB: set Csound and sound file editor in 'Settings...' in the Tutorial menu
 local
    TextualScore = sim(items:[note(offsetTime:0
                                   duration:1000
@@ -127,26 +249,28 @@ local
 				  duration:1000
 				  pitch:64
 				  amplitude:64)]
-		      startTime:0
-		      timeUnit:milliseconds)
-   ScoreInstance = {Score.makeScore TextualScore unit}
+		      startTime:0 timeUnit:milliseconds)
+   MyScore = {Score.makeScore TextualScore unit}
 in
    {Init.setTempo 80.0}
-   {ScoreInstance wait}   
-   {Out.renderAndPlayCsound ScoreInstance
+   {MyScore wait}   
+   {Out.renderAndPlayCsound MyScore
     unit(file:"test"
 	 scoDir:"/tmp/"
          soundDir:"/tmp/")}
 end
 </src>
 
-** Output sound file (file dialog)
+** Output CSound file (file dialog)
 
-No information available.
+In this example, the output file is specified with a file dialog for convenience.
+
+Most directory arguments of output procedures (e.g., scoDir and soundDir in Out.renderAndPlayCsound) can be omitted; their default value are directories set in the Strasheela environment (cf. the _ozrc file in the Strasheela directory for an section how to set these default directories).
+
+WARNING: you must specify (via the `Settings...' menu entry) where Strasheela can find CSound.
+
 
 <src lang="oz">
-%% Specify file with file dialog (full path without extension)
-%% NB: set Csound and sound file editor (or just a player) in 'Settings...' in the Tutorial menu
 local
    TextualScore = sim(items:[note(offsetTime:0
                                   duration:1000
@@ -160,33 +284,31 @@ local
 				  duration:1000
 				  pitch:64
 				  amplitude:64)]
-		      startTime:0
-		      timeUnit:milliseconds)
-   ScoreInstance = {Score.makeScore TextualScore unit}
+		      startTime:0 timeUnit:milliseconds)
+   MyScore = {Score.makeScore TextualScore unit}
 in
    {Init.setTempo 40.0}
-   {ScoreInstance wait}   
-   {Out.renderAndPlayCsound ScoreInstance
+   {MyScore wait}   
+   %% Specify file with file dialog (full path without extension)
+   {Out.renderAndPlayCsound MyScore
     unit(file:{Tk.return tk_getSaveFile}
 	 scoDir:nil soundDir:nil)}
 end
 </src>
 
-* Sheet Music Output
+* Music Containers
 
-** intro
+** Introduction
 
-This section creates a hierarchically nested score and outputs it to sheet music. The previous section presented the simultaneous container (sim), which arranges its contained score objects simultaneously in time. The present section introduces the sequential container (seq), which arranges its contained score objects sequentially in time. The section demonstrates that simultaneous and sequential containers can be arbitrarily nested. 
-
-In the previous section, the timeUnit was set to milliseconds. Here, it is set to beats(4), which means that the duration 4 indicates a quarter-note (a beat) and consequently duration 1 is a sixteenth-note. In general, all musical parameters support some unit of measurement which indicates how the numeric parameter value is interpreted (in particular for output into export formats). For section, the pitchUnit defaults to (MIDI) 'keynumber', but can also be set to midicent, frequency, or et72 (i.e. equal temperament with 72 steps per octave). These various parameter units of measurements are supported, because Strasheela parameter values are (at least presently) always integers. Whereas the timeUnit must be set only once in the score, other units can be set individually for every score object. The timeUnit is handled differently, because Strasheela implicitly applies some constraints to all temporal parameters (e.g., the temporal structure in sequential and simultaneous containers is enforced by constraints), and these constraints require a consistent timeUnit for all parameters.
-
-The first section outputs the music to a PDF file (using Lilypond). The second section outputs to a MusicXML file (using Fomus), which can be opened, for section, by software like Finale and Sibelius. Fomus supports outputting into further formats and supports tweaking the MusicXML output specifically for Finale or Sibelius usage: just set the appropriate Fomus flag in the section below (see the Fomus documentation for the supported flags). Please note that for running these sections you must specify (via 'Settings...' menu entry) where Strasheela can find the applications lilypond, convert-ly (an application part of Lilypond), a PDF file viewer, and Fomus. 
+The following section introduces the overall construction and organization of Strasheela's music representation.
 
 
 
-** Output Lilypond
+** Containers
 
-No information available.
+This example introduces Strasheela containers: notes are organized into sequential containers (seq) and simultaneous containers (sim).
+
+In the previous section, the timeUnit was set to milliseconds.  Here, it is set to beats(4), which means that the duration 4 indicates a quarter-note (a beat) and consequently duration 1 is a sixteenth-note.  In general, all musical parameters support some unit of measurement which indicates how the numeric parameter value is interpreted (in particular for output into export formats).  For example, the pitchUnit defaults to (MIDI) 'keynumber', but can also be set to midicent, frequency, or et72 (i. e. equal temperament with 72 steps per octave).  These various parameter units of measurements are supported, because Strasheela parameter values are (at least presently) always integers.  Whereas the timeUnit must be set only once in the score, other units can be set individually for every score object.  The timeUnit is handled differently, because Strasheela implicitly applies some constraints to all temporal parameters (e.g., the temporal structure in sequential and simultaneous containers is enforced by constraints), and these constraints require a consistent timeUnit for all parameters.
 
 <src lang="oz">
 local
@@ -220,52 +342,12 @@ local
 	      unit}
 in
    {MyScore wait}   
-   {Out.renderAndShowLilypond MyScore
-    unit(file:{Tk.return tk_getSaveFile}
-	 dir:nil)}
-end
-</src>
-
-** Output MusicXML, via Fomus
-
-No information available.
-
-<src lang="oz">
-local
-   MyScore = {Score.makeScore 
-	      sim(items:[seq(items:[note(duration:2
-					 pitch:64
-					 amplitude:64)
-				    note(duration:2
-					 pitch:65
-					 amplitude:64)
-				    note(duration:4
-					 pitch:67
-					 amplitude:64)
-				    note(duration:4
-					 pitch:62
-					 amplitude:64)])
-			 seq(items:[sim(items:[note(duration:8
-						    pitch:48
-						    amplitude:64)
-					       note(duration:8
-						    pitch:55
-						    amplitude:64)])
-				    sim(items:[note(duration:4
-						    pitch:50
-						    amplitude:64)
-					       note(duration:4
-						    pitch:54
-						    amplitude:64)])])]
-		  startTime:0
-		  timeUnit:beats(4))
-	      unit}
-in
-   {MyScore wait}  
-   {Out.renderFomus MyScore
-    unit(file:{Tk.return tk_getSaveFile}
-	 dir:nil
-	 flags:['-x'])}
+   {Out.midi.renderAndPlayMidiFile MyScore
+    unit(file:'test')}
+%Uncomment if desired:
+%   {Out.renderAndShowLilypond MyScore
+%    unit(file:{Tk.return tk_getSaveFile}
+%	 dir:nil)}
 end
 </src>
 
@@ -273,7 +355,7 @@ end
 
 ** intro
 
-Various information about score objects can be stored and retrieved from Strasheela's music representation. This information is used for formulating music theory models. For section, a musical CSP may specify a score where all note pitch variables are initialised to certain domains, and neighbouring melodic notes are then accessed and constrained.
+Various information about score objects can be stored and retrieved from Strasheela's music representation. This information is used for formulating music theory models. For example, a musical CSP may specify a score where all note pitch variables are initialised to certain domains, and neighbouring melodic notes are then accessed and constrained.
 
 The textual music representation allows for the convenient definition of complex scores, as already shown by the previous sections. The interface defined for Strasheela score objects, on the other hand, simplifies the access to score information. As shown before, the textual representation is transformed into a score object with the function Score.makeScore. Vice versa, a score object can be transformed into its textual representation (see below for an section). Using the textual representation and Score.makeScore is strongly recommended for creating Strasheela score objects, because it hides low-level details of the score object creation process. 
 
@@ -313,7 +395,7 @@ No information available.
 for score object to create (e.g., sets the pitch of a note, or the
 duration of a sequential container). Most of these initialisation
 arguments are optional, and Strasheela defines a default value for
-these initialisation arguments. For section, parameter values such as
+these initialisation arguments. For example, parameter values such as
 durations and pitches default to a constrained variable.
 
 This section creates a single note and specifies no initialisation
@@ -323,7 +405,7 @@ Inspector, use the note's context menu: 'Filter' -> 'Show Score
 Hierarchy Recursively'. 
 
 An undetermined parameter value is accessed the same way as a
-determined parameter. For section, a note's undetermined pitch is
+determined parameter. For example, a note's undetermined pitch is
 accessed with the method getPitch. Accessing undetermined parameter
 values is important for constraining these values. */
 
@@ -529,7 +611,7 @@ No information available.
 
 <src lang="oz">
 /* Sometimes it is useful to access positionally related
-information. For section, you may want to access the successor of a
+information. For example, you may want to access the successor of a
 note in a voice in order to constrain the melodic interval between
 these two notes.
 
@@ -542,7 +624,7 @@ access to positionally related information must take into account that
 a score object may be contained in multiple containers. 
 
 Therefore, positional accessor methods expect a specification which
-container they must refers to. For section, the container may be given
+container they must refers to. For example, the container may be given
 as an argument or a method tailored for a specific container type such
 as getTemporalSuccessor is used (an item can only be contained in a
 single temporal container at maximum). */
@@ -808,7 +890,7 @@ Score.makeScore uses the classes defined by the Strasheela core -- as
 did all sections so far.
 
 Strasheela extensions, however, often define their own classes which
-extend the classes of the Strasheela core. For section, Strasheela's
+extend the classes of the Strasheela core. For example, Strasheela's
 harmony model -- an extension provided in the strasheela/contribtion
 folder -- provides the class HS.score.note (the harmony extention --
 i.e. its functor -- is usually bound to the variable HS). The class
@@ -826,7 +908,7 @@ Every Strasheela score class defines a method init, which is called
 internally when an instance of this class is created (cf. Strasheela's
 reference documentation for a init method definition of various
 classes). The feature/value-pairs of an object's textual
-representation correspond to these init method arguments. For section,
+representation correspond to these init method arguments. For example,
 the init method of the class HS.score.note expects the arguments of
 the standard note class Score.note (e.g., duration and pitch) with
 additional arguments (e.g., pitchClass). The textual representation
@@ -1103,7 +1185,7 @@ end
 
 ** intro
 
-The previous section discussed methods for accessing (information on) directly contained score objects. This sections shows methods which traverse the whole score hierarchy for accessing information. For section, the method collect returns a list of directly and indirectly contained score objects.
+The previous section discussed methods for accessing (information on) directly contained score objects. This sections shows methods which traverse the whole score hierarchy for accessing information. For example, the method collect returns a list of directly and indirectly contained score objects.
 
 These methods support a few additional arguments. You saw the argument test already in the section before. The argument 'level' expects an integer which limits the depth the method decends during its traversal (its default is all, i.e., full recursive traversal). The argument 'mode' specifies whether only the subtree below the given object is traversed (mode: tree) or whether the full score graph is traversed (mode: graph). 
 
@@ -1316,7 +1398,7 @@ No information available.
 <src lang="oz">
 /* The previous sections demonstrated various generic means for
 accessing information. In addition, Strasheela provides predefined
-accessors for more specific information. For section, the method
+accessors for more specific information. For example, the method
 getSimultaneousItems returns all score in the whole score items which
 are simultaneous to a given item (i.e. overlap in time). Like many
 methods shown before, getSimultaneousItems also supports an argument
