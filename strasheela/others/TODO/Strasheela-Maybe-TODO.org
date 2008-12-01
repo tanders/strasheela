@@ -492,6 +492,9 @@ InspectorObject = {Inspector.new unit}
 
      Mediawiki does allow for this in principle, but not Sourceforge mediawiki hosted app
 
+     Note: 
+
+
 **** Sourceforge mediawiki hosted app does not allow customisation
      
      https://sourceforge.net/tracker/index.php?func=detail&aid=2147518&group_id=1&atid=200001
@@ -528,6 +531,7 @@ InspectorObject = {Inspector.new unit}
 
 *** !!?? Ask Sourceforge to support soundfile upload (which formats: mp3, ogg, midi?)
 
+
 *** Running Own MediaWiki Installation on Sourceforge.net
 
     Description how
@@ -536,6 +540,23 @@ InspectorObject = {Inspector.new unit}
     But there are problems
     https://sourceforge.net/tracker/index.php?func=detail&aid=2261709&group_id=1&atid=200001
     Sourceforge replied (how to create a symlink), but never confirmation that/how it now works from orig poster 
+
+
+    * Sourceforge supports MySQL database servers for projects    
+    * PHP script support
+    * SSI (Server-Side Includes) support
+    * CGI (Perl, Python, Tcl, Ruby) script support
+
+
+**** Disk Quota
+
+     *Disk Quota*: Each project is provided 100MB of disk space for their usage. Each user is provided 5 MB of disk space. Any excess usage without prior permission may result in data purge without notice. In the event that your project requires additional disk space, please submit a Support Request. User disk space quotas will not be increased; project data should be placed in the provided project space rather than your home directory.
+     http://alexandria.wiki.sourceforge.net/Project+Web%2C+Shell%2C+VHOST+and+Database+Services
+
+     *!! NOTE: full Strasheela already goes beyond that quota (125MB)*
+
+     !! strasheela/contributions/anders/ET22/doc-DB/ChordsInDecatonicScales/ contains almost 70MB
+
 
 *** ?? Using another wiki platform? 
 

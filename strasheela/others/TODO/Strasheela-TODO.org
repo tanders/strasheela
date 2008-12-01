@@ -2,10 +2,58 @@
 
 * Strasheela release
 
-** DONE Clean up list of changes
-   CLOSED: [2008-11-27 Thu 18:26]
+** ?? Possibly set up wiki
+
+   Problem: I would need memory!! 
+
+   Could I instead install a wiki on ICCMR server? There is > 15 GB available... 
+
+   Advantage: I can easily backup, have access to hardware 
+
+*** Required features
+
+    - Sound files upload
+    - Backup possible
+
+*** other important features 
+
+    - Easy registration for editors
+
+*** Installation
+
+**** Mediawiki
+     
+     http://www.mediawiki.org/wiki/Installation
+     http://www.mediawiki.org/wiki/Manual:Installation_guide
+
+     Check out turn-key solutions
+     http://www.mediawiki.org/wiki/TurnKey_MediaWiki
+     http://www.rpath.org/rbuilder/project/mediawiki
+
+***** Mediawiki Extensions
+
+      http://www.mediawiki.org/wiki/Extension:Matrix
+
+***** Add syntax colouring for Oz
+
+      http://www.mediawiki.org/wiki/Extension:ASHighlight
+      http://www.andre-simon.de/dokuwiki/doku.php?id=en:langdef
+      http://www.andre-simon.de/dokuwiki/doku.php?id=en:regex
+
+
+***** Lilypond support: http://www.mediawiki.org/wiki/Extension:LilyPond
+
+
+***** MP3 
+      http://www.mediawiki.org/wiki/Extension:FlashMP3
+
+** Document more examples 
+
+   Move existing example doc to wiki
+   Add more example docs..
 
 ** Release
+
 
 * TODO Backup Strasheela SVN repository on Office Mac
 
