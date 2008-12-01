@@ -1,4 +1,3 @@
-
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html>
   <head>
@@ -8,18 +7,6 @@
           content="text/html; charset=iso-8859-1">
     
     <link rel="stylesheet" href="style.css" type="text/css" />
-  <!-- Piwik -->
-    <script type="text/javascript">
-    var pkBaseURL = (("https:" == document.location.protocol) ? "https://apps.sourceforge.net  /piwik/strasheela/" : "http://apps.sourceforge.net/piwik/strasheela/");
-    document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/javascript'%3E%3C/script%3E"));
-    </script><script type="text/javascript">
-    piwik_action_name = '';
-    piwik_idsite = 1;
-    piwik_url = pkBaseURL + "piwik.php";
-    piwik_log(piwik_action_name, piwik_idsite, piwik_url);
-    </script>
-    <object><noscript><p><img src="http://apps.sourceforge.net/piwik/strasheela/piwik.php?idsite=1" alt="piwik"/></p></noscript></object>
-  <!-- End Piwik Tag -->
   </head>
   <body>
 <div id="header">
@@ -292,21 +279,25 @@ Distribution Strategy</h3>
 
 
 <pre class="src">
-<span style="color: #a020f0;">proc</span><span style="color: #b8860b;"> </span>{<span style="color: #0000ff;">Money</span> Root}
-   S E N D M O R Y
+<span style="color: #a020f0;">local</span>
+   <span style="color: #a020f0;">proc</span><span style="color: #b8860b;"> </span>{<span style="color: #0000ff;">Money</span> Root}
+     S E N D M O R Y
+   <span style="color: #a020f0;">in</span>
+     Root = sol(s:S e:E n:N d:D m:M o:O r:R y:Y)
+     Root <span style="color: #a020f0;">:::</span> 0<span style="color: #a020f0;">#</span>9                            <span style="color: #b22222;">% </span><span style="color: #b22222;">set domain for all digits
+</span>     {FD<span style="color: #a020f0;">.</span>distinct Root}
+     S <span style="color: #a020f0;">\=:</span> 0                                 <span style="color: #b22222;">% </span><span style="color: #b22222;">first digits must not be 0
+</span>     M <span style="color: #a020f0;">\=:</span> 0
+     1000<span style="color: #a020f0;">*</span>S <span style="color: #a020f0;">+</span> 100<span style="color: #a020f0;">*</span>E <span style="color: #a020f0;">+</span> 10<span style="color: #a020f0;">*</span>N <span style="color: #a020f0;">+</span> D               <span style="color: #b22222;">% </span><span style="color: #b22222;">define equation
+</span>     <span style="color: #a020f0;">+</span>            1000<span style="color: #a020f0;">*</span>M <span style="color: #a020f0;">+</span> 100<span style="color: #a020f0;">*</span>O <span style="color: #a020f0;">+</span> 10<span style="color: #a020f0;">*</span>R <span style="color: #a020f0;">+</span> E
+     <span style="color: #a020f0;">=:</span> 10000<span style="color: #a020f0;">*</span>M <span style="color: #a020f0;">+</span> 1000<span style="color: #a020f0;">*</span>O <span style="color: #a020f0;">+</span> 100<span style="color: #a020f0;">*</span>N <span style="color: #a020f0;">+</span> 10<span style="color: #a020f0;">*</span>E <span style="color: #a020f0;">+</span> Y
+
+     {FD<span style="color: #a020f0;">.</span>distribute naive Root}              <span style="color: #b22222;">% </span><span style="color: #b22222;">define distribution
+</span><span style="color: #b22222;">%     </span><span style="color: #b22222;">{FD.distribute ff Root}
+</span>   <span style="color: #a020f0;">end</span>
 <span style="color: #a020f0;">in</span>
-   Root = sol(s:S e:E n:N d:D m:M o:O r:R y:Y)
-   Root <span style="color: #a020f0;">:::</span> 0<span style="color: #a020f0;">#</span>9                            <span style="color: #b22222;">% </span><span style="color: #b22222;">set domain for all digits
-</span>   {FD<span style="color: #a020f0;">.</span>distinct Root}
-   S <span style="color: #a020f0;">\=:</span> 0                                 <span style="color: #b22222;">% </span><span style="color: #b22222;">first digits must not be 0
-</span>   M <span style="color: #a020f0;">\=:</span> 0
-   1000<span style="color: #a020f0;">*</span>S <span style="color: #a020f0;">+</span> 100<span style="color: #a020f0;">*</span>E <span style="color: #a020f0;">+</span> 10<span style="color: #a020f0;">*</span>N <span style="color: #a020f0;">+</span> D               <span style="color: #b22222;">% </span><span style="color: #b22222;">define equation
-</span>   <span style="color: #a020f0;">+</span>            1000<span style="color: #a020f0;">*</span>M <span style="color: #a020f0;">+</span> 100<span style="color: #a020f0;">*</span>O <span style="color: #a020f0;">+</span> 10<span style="color: #a020f0;">*</span>R <span style="color: #a020f0;">+</span> E
-   <span style="color: #a020f0;">=:</span> 10000<span style="color: #a020f0;">*</span>M <span style="color: #a020f0;">+</span> 1000<span style="color: #a020f0;">*</span>O <span style="color: #a020f0;">+</span> 100<span style="color: #a020f0;">*</span>N <span style="color: #a020f0;">+</span> 10<span style="color: #a020f0;">*</span>E <span style="color: #a020f0;">+</span> Y
-   {FD<span style="color: #a020f0;">.</span>distribute naive Root}              <span style="color: #b22222;">% </span><span style="color: #b22222;">define distribution
-</span><span style="color: #b22222;">%   </span><span style="color: #b22222;">{FD.distribute ff Root}
-</span><span style="color: #a020f0;">end</span>
-{ExploreAll Money}
+   {ExploreAll Money}
+<span style="color: #a020f0;">end</span>
 </pre>
 
 
@@ -332,7 +323,7 @@ BACKGROUND</h3>
 <div id="footer">
 <div id="author">&copy; 
 Torsten Anders and Graham Percival</div>
-<div id="date">Last time edited: 2008.11.27</div>
+<div id="date">Last time edited: ; INVALID LISP CODE</div>
 </div>
   </body>
 </html>

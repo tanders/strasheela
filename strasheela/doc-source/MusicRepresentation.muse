@@ -9,7 +9,7 @@ This file was automatically generated from the interactive Strasheela tutorial. 
 
 * -- Strasheela's Music Representation
 
-** intro
+** Introduction
 
 The following sections introduce various aspects of Strasheela's music representation. The representation is then later used for defining musical constraint satisfaction problems. 
 
@@ -17,41 +17,33 @@ The following sections introduce various aspects of Strasheela's music represent
 
 
 
-** Implicit pattern matching in Strasheela
-
-The following function GetPitch expects a record as argument which must match the record note(pitch:Pitch ...).  The variable Pitch is implicitly declared and bound to the value at the feature 'pitch' of the record given as argument to the function.
-
-Please note that the record in the header of the function GetPitch is not even complete but contains three dots (...) to indicate that further record features are possible.
-
-
-<src lang="oz">
-local
-   fun {GetPitch note(pitch:Pitch ...)}
-      Pitch
-   end
-in
-   {Inspect {GetPitch note(duration:4 pitch:60)}}
-end
-</src>
-
 * Score Creation
 
-** intro
+** Introduction
 
-This section creates a Strasheela score, consisting of a single note. The score is specified textually, and this specification is then transformed into a score object instance. A textual representation, on the one hand, is conveniently entered and edited. A score object instance, on the other hand, has the advantage that many operations are already defined for it. For section, there are various operations available for accessing score information and for outputting a score into other formats (e.g. Csound or Lilypond). The textual score format and the interface of a score object (i.e. the operations it understands) are explained later. 
+This section creates a Strasheela score consisting of a single note. The score is specified textually, and this specification is then transformed into a score object instance.
 
-The created score object is shown by the Inspector. The Inspector shows <O: Note>, where the O says that this is an object, and Note is the name of its class. However, the Inspector also allows you to look 'inside' a score object via the object's context menu (typically right-mouseclick, but happens to be the middle-mouse key on my Mac...). Select 'Filter' -> 'Show Textual Score'. This shows the score in the textual form as entered in the section. Note also that the background color behind the score changed to indicate that we are now 'looking into' something. You can 'go back' to the original view by the context menu entry 'unmap' (you have to right-click on the top-level label note). 
+  - the textual representation is easier for human interaction -- we can read and write music in textual form relatively easily.  For example,
+  note(pitch:60 duration:4)
 
-The Inspector also provides different views on the score via the other 'Filter' context menu entries. These provide more information on the internal structure of a score object. For section, 'Show Score Hierarchy Recursively' reveals that even a plain note is internally represented hiearchically: the note parameters (e.g. duration, pitch) are represented by their own objects.  
-
+  - the score object is easier for computer interaction.  For example, there are various operations available for outputting a score into other formats (e.g. Csound, LilyPond, MIDI).
 
 
 ** Inspect score object
 
-No information available.
+This subsection shows how to create a simple score and examine it in the Inspector  The Inspector shows
+
+  <O: Note>
+
+where the O says that this is an object, and Note is the name of its class. To look "inside" a score object, activate the context menu (typically right-click, but on a mac you must middle-click).  Select 'Filter' -> 'Show Textual Score'.  This shows the score in the textual form as entered in this example.
+
+Note also that the background color behind the score changed to indicate that we are now 'looking into' something. You can 'go back' to the original view by the context menu entry 'unmap' (you have to right-click on the top-level label note). 
+
+The Inspector also provides different views on the score via the other 'Filter' context menu entries. These provide more information on the internal structure of a score object. For example, 'Show Score Hierarchy Recursively' reveals that even a plain note is internally represented hiearchically: the note parameters (e.g. duration, pitch) are represented by their own objects.
+
+WARNING: the Inspector may appear behind this window.
 
 <src lang="oz">
-%% Inspector may be behind the tutorial...
 local
    TextualScore = note(startTime:0
                        duration:1000
@@ -1710,4 +1702,23 @@ in
 	 clauses:[IsEt31Note#NoteEt31ToLily])}
 end
 
+</src>
+
+* to be sorted
+
+** Implicit pattern matching in Strasheela
+
+The following function GetPitch expects a record as argument which must match the record note(pitch:Pitch ...).  The variable Pitch is implicitly declared and bound to the value at the feature 'pitch' of the record given as argument to the function.
+
+Please note that the record in the header of the function GetPitch is not even complete but contains three dots (...) to indicate that further record features are possible.
+
+
+<src lang="oz">
+local
+   fun {GetPitch note(pitch:Pitch ...)}
+      Pitch
+   end
+in
+   {Inspect {GetPitch note(duration:4 pitch:60)}}
+end
 </src>

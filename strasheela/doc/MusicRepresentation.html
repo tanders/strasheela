@@ -1,4 +1,3 @@
-
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html>
   <head>
@@ -8,18 +7,6 @@
           content="text/html; charset=iso-8859-1">
     
     <link rel="stylesheet" href="style.css" type="text/css" />
-  <!-- Piwik -->
-    <script type="text/javascript">
-    var pkBaseURL = (("https:" == document.location.protocol) ? "https://apps.sourceforge.net  /piwik/strasheela/" : "http://apps.sourceforge.net/piwik/strasheela/");
-    document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/javascript'%3E%3C/script%3E"));
-    </script><script type="text/javascript">
-    piwik_action_name = '';
-    piwik_idsite = 1;
-    piwik_url = pkBaseURL + "piwik.php";
-    piwik_log(piwik_action_name, piwik_idsite, piwik_url);
-    </script>
-    <object><noscript><p><img src="http://apps.sourceforge.net/piwik/strasheela/piwik.php?idsite=1" alt="piwik"/></p></noscript></object>
-  <!-- End Piwik Tag -->
   </head>
   <body>
 <div id="header">
@@ -46,206 +33,213 @@
 <dd>
 <dl>
 <dt>
-<a href="#sec3">intro</a>
-</dt>
-<dt>
-<a href="#sec4">Implicit pattern matching in Strasheela</a>
+<a href="#sec3">Introduction</a>
 </dt>
 </dl>
 </dd>
 <dt>
-<a href="#sec5">Score Creation</a>
+<a href="#sec4">Score Creation</a>
 </dt>
 <dd>
 <dl>
 <dt>
-<a href="#sec6">intro</a>
+<a href="#sec5">Introduction</a>
 </dt>
 <dt>
-<a href="#sec7">Inspect score object</a>
+<a href="#sec6">Inspect score object</a>
 </dt>
 </dl>
 </dd>
 <dt>
-<a href="#sec8">Sound Output</a>
+<a href="#sec7">Sound Output</a>
 </dt>
 <dd>
 <dl>
 <dt>
-<a href="#sec9">intro</a>
+<a href="#sec8">intro</a>
 </dt>
 <dt>
-<a href="#sec10">Output Csound score file</a>
+<a href="#sec9">Output Csound score file</a>
 </dt>
 <dt>
-<a href="#sec11">Output sound file</a>
+<a href="#sec10">Output sound file</a>
 </dt>
 <dt>
-<a href="#sec12">Output sound file (file dialog)</a>
+<a href="#sec11">Output sound file (file dialog)</a>
 </dt>
 </dl>
 </dd>
 <dt>
-<a href="#sec13">Sheet Music Output</a>
+<a href="#sec12">Sheet Music Output</a>
 </dt>
 <dd>
 <dl>
 <dt>
-<a href="#sec14">intro</a>
+<a href="#sec13">intro</a>
 </dt>
 <dt>
-<a href="#sec15">Output Lilypond</a>
+<a href="#sec14">Output Lilypond</a>
 </dt>
 <dt>
-<a href="#sec16">Output MusicXML, via Fomus</a>
+<a href="#sec15">Output MusicXML, via Fomus</a>
 </dt>
 </dl>
 </dd>
 <dt>
-<a href="#sec17">Specifying and Accessing Basic Score Object Information</a>
+<a href="#sec16">Specifying and Accessing Basic Score Object Information</a>
 </dt>
 <dd>
 <dl>
 <dt>
-<a href="#sec18">intro</a>
+<a href="#sec17">intro</a>
 </dt>
 <dt>
-<a href="#sec19">Setting/accessing a parameter value</a>
+<a href="#sec18">Setting/accessing a parameter value</a>
 </dt>
 <dt>
-<a href="#sec20">Default parameter values</a>
+<a href="#sec19">Default parameter values</a>
 </dt>
 <dt>
-<a href="#sec21">Type checking (1)</a>
+<a href="#sec20">Type checking (1)</a>
 </dt>
 <dt>
-<a href="#sec22">Type checking (2)</a>
+<a href="#sec21">Type checking (2)</a>
 </dt>
 <dt>
-<a href="#sec23">Identity test</a>
+<a href="#sec22">Identity test</a>
 </dt>
 <dt>
-<a href="#sec24">Info tags (1)</a>
+<a href="#sec23">Info tags (1)</a>
 </dt>
 <dt>
-<a href="#sec25">Info tags (2)</a>
+<a href="#sec24">Info tags (2)</a>
 </dt>
 <dt>
-<a href="#sec26">The handle argument</a>
+<a href="#sec25">The handle argument</a>
 </dt>
 <dt>
-<a href="#sec27">Contained objects</a>
+<a href="#sec26">Contained objects</a>
 </dt>
 <dt>
-<a href="#sec28">Positional information (1)</a>
+<a href="#sec27">Positional information (1)</a>
 </dt>
 <dt>
-<a href="#sec29">Positional information (2)</a>
+<a href="#sec28">Positional information (2)</a>
 </dt>
 <dt>
-<a href="#sec30">The temporal parameters</a>
+<a href="#sec29">The temporal parameters</a>
 </dt>
 <dt>
-<a href="#sec31">The offsetTime parameter (1)</a>
+<a href="#sec30">The offsetTime parameter (1)</a>
 </dt>
 <dt>
-<a href="#sec32">The offsetTime parameter (2)</a>
+<a href="#sec31">The offsetTime parameter (2)</a>
 </dt>
 <dt>
-<a href="#sec33">Incrementally creating scores (1)</a>
+<a href="#sec32">Incrementally creating scores (1)</a>
 </dt>
 <dt>
-<a href="#sec34">Incrementally creating scores (2)</a>
+<a href="#sec33">Incrementally creating scores (2)</a>
 </dt>
 <dt>
-<a href="#sec35">Using extension classes</a>
+<a href="#sec34">Using extension classes</a>
 </dt>
 <dt>
-<a href="#sec36">Using creator functions</a>
+<a href="#sec35">Using creator functions</a>
 </dt>
 <dt>
-<a href="#sec37">Saving a score object as textual score</a>
+<a href="#sec36">Saving a score object as textual score</a>
 </dt>
 <dt>
-<a href="#sec38">Finding init Documentation</a>
+<a href="#sec37">Finding init Documentation</a>
 </dt>
 </dl>
 </dd>
 <dt>
-<a href="#sec39">Higher-Order Accessors</a>
+<a href="#sec38">Higher-Order Accessors</a>
 </dt>
 <dd>
 <dl>
 <dt>
-<a href="#sec40">intro</a>
+<a href="#sec39">intro</a>
 </dt>
 <dt>
-<a href="#sec41">filterItems</a>
+<a href="#sec40">filterItems</a>
 </dt>
 <dt>
-<a href="#sec42">findItem</a>
+<a href="#sec41">findItem</a>
 </dt>
 <dt>
-<a href="#sec43">mapItems</a>
+<a href="#sec42">mapItems</a>
 </dt>
 <dt>
-<a href="#sec44">forAllItems</a>
+<a href="#sec43">forAllItems</a>
 </dt>
 <dt>
-<a href="#sec45">countItems</a>
+<a href="#sec44">countItems</a>
 </dt>
 </dl>
 </dd>
 <dt>
-<a href="#sec46">Higher-Order Accessors for Indirectly Contained Objects</a>
+<a href="#sec45">Higher-Order Accessors for Indirectly Contained Objects</a>
 </dt>
 <dd>
 <dl>
 <dt>
-<a href="#sec47">intro</a>
+<a href="#sec46">intro</a>
 </dt>
 <dt>
-<a href="#sec48">collect (1)</a>
+<a href="#sec47">collect (1)</a>
 </dt>
 <dt>
-<a href="#sec49">collect (2)</a>
+<a href="#sec48">collect (2)</a>
 </dt>
 <dt>
-<a href="#sec50">collect (3)</a>
+<a href="#sec49">collect (3)</a>
 </dt>
 <dt>
-<a href="#sec51">collect (4)</a>
+<a href="#sec50">collect (4)</a>
 </dt>
 <dt>
-<a href="#sec52">collect (5)</a>
+<a href="#sec51">collect (5)</a>
 </dt>
 <dt>
-<a href="#sec53">map</a>
+<a href="#sec52">map</a>
 </dt>
 <dt>
-<a href="#sec54">find</a>
+<a href="#sec53">find</a>
 </dt>
 <dt>
-<a href="#sec55">Simultaneous items</a>
+<a href="#sec54">Simultaneous items</a>
 </dt>
 <dt>
-<a href="#sec56">User-defined accessors</a>
+<a href="#sec55">User-defined accessors</a>
 </dt>
 </dl>
 </dd>
 <dt>
-<a href="#sec57">Customising Output to Export Formats</a>
+<a href="#sec56">Customising Output to Export Formats</a>
 </dt>
 <dd>
 <dl>
 <dt>
-<a href="#sec58">intro</a>
+<a href="#sec57">intro</a>
 </dt>
 <dt>
-<a href="#sec59">Output Csound Score</a>
+<a href="#sec58">Output Csound Score</a>
 </dt>
 <dt>
-<a href="#sec60">Output Lilypond</a>
+<a href="#sec59">Output Lilypond</a>
+</dt>
+</dl>
+</dd>
+<dt>
+<a href="#sec60">to be sorted</a>
+</dt>
+<dd>
+<dl>
+<dt>
+<a href="#sec61">Implicit pattern matching in Strasheela</a>
 </dt>
 </dl>
 </dd>
@@ -263,7 +257,7 @@ About this document</h2>
 &mdash; Strasheela's Music Representation</h2>
 
 <h3><a name="sec3" id="sec3"></a>
-intro</h3>
+Introduction</h3>
 
 <p class="first">The following sections introduce various aspects of Strasheela's music representation. The representation is then later used for defining musical constraint satisfaction problems.</p>
 
@@ -272,49 +266,43 @@ intro</h3>
 
 
 
-<h3><a name="sec4" id="sec4"></a>
-Implicit pattern matching in Strasheela</h3>
 
-<p class="first">The following function GetPitch expects a record as argument which must match the record note(pitch:Pitch ...).  The variable Pitch is implicitly declared and bound to the value at the feature 'pitch' of the record given as argument to the function.</p>
+<h2><a name="sec4" id="sec4"></a>
+Score Creation</h2>
 
-<p>Please note that the record in the header of the function GetPitch is not even complete but contains three dots (...) to indicate that further record features are possible.</p>
+<h3><a name="sec5" id="sec5"></a>
+Introduction</h3>
 
+<p class="first">This section creates a Strasheela score consisting of a single note. The score is specified textually, and this specification is then transformed into a score object instance.</p>
+
+<ul>
+<li>the textual representation is easier for human interaction &mdash; we can read and write music in textual form relatively easily.  For example,
+note(pitch:60 duration:4)</li>
+
+<li>the score object is easier for computer interaction.  For example, there are various operations available for outputting a score into other formats (e.g. Csound, LilyPond, MIDI).</li>
+</ul>
+
+
+
+<h3><a name="sec6" id="sec6"></a>
+Inspect score object</h3>
+
+<p class="first">This subsection shows how to create a simple score and examine it in the Inspector  The Inspector shows</p>
+
+<blockquote>
+<p class="quoted">&lt;O: Note&gt;</p>
+</blockquote>
+
+<p>where the O says that this is an object, and Note is the name of its class. To look &quot;inside&quot; a score object, activate the context menu (typically right-click, but on a mac you must middle-click).  Select 'Filter' -&gt; 'Show Textual Score'.  This shows the score in the textual form as entered in this example.</p>
+
+<p>Note also that the background color behind the score changed to indicate that we are now 'looking into' something. You can 'go back' to the original view by the context menu entry 'unmap' (you have to right-click on the top-level label note).</p>
+
+<p>The Inspector also provides different views on the score via the other 'Filter' context menu entries. These provide more information on the internal structure of a score object. For example, 'Show Score Hierarchy Recursively' reveals that even a plain note is internally represented hiearchically: the note parameters (e.g. duration, pitch) are represented by their own objects.</p>
+
+<p>WARNING: the Inspector may appear behind this window.</p>
 
 <pre class="src">
 <span style="color: #a020f0;">local</span>
-   <span style="color: #a020f0;">fun</span><span style="color: #b8860b;"> </span>{<span style="color: #0000ff;">GetPitch</span> note(pitch:Pitch <span style="color: #a020f0;">...</span>)}
-      Pitch
-   <span style="color: #a020f0;">end</span>
-<span style="color: #a020f0;">in</span>
-   {Inspect {GetPitch note(duration:4 pitch:60)}}
-<span style="color: #a020f0;">end</span>
-</pre>
-
-
-
-<h2><a name="sec5" id="sec5"></a>
-Score Creation</h2>
-
-<h3><a name="sec6" id="sec6"></a>
-intro</h3>
-
-<p class="first">This section creates a Strasheela score, consisting of a single note. The score is specified textually, and this specification is then transformed into a score object instance. A textual representation, on the one hand, is conveniently entered and edited. A score object instance, on the other hand, has the advantage that many operations are already defined for it. For section, there are various operations available for accessing score information and for outputting a score into other formats (e.g. Csound or Lilypond). The textual score format and the interface of a score object (i.e. the operations it understands) are explained later.</p>
-
-<p>The created score object is shown by the Inspector. The Inspector shows &lt;O: Note&gt;, where the O says that this is an object, and Note is the name of its class. However, the Inspector also allows you to look 'inside' a score object via the object's context menu (typically right-mouseclick, but happens to be the middle-mouse key on my Mac...). Select 'Filter' -&gt; 'Show Textual Score'. This shows the score in the textual form as entered in the section. Note also that the background color behind the score changed to indicate that we are now 'looking into' something. You can 'go back' to the original view by the context menu entry 'unmap' (you have to right-click on the top-level label note).</p>
-
-<p>The Inspector also provides different views on the score via the other 'Filter' context menu entries. These provide more information on the internal structure of a score object. For section, 'Show Score Hierarchy Recursively' reveals that even a plain note is internally represented hiearchically: the note parameters (e.g. duration, pitch) are represented by their own objects.</p>
-
-
-
-
-<h3><a name="sec7" id="sec7"></a>
-Inspect score object</h3>
-
-<p class="first">No information available.</p>
-
-<pre class="src">
-<span style="color: #b22222;">%% </span><span style="color: #b22222;">Inspector may be behind the tutorial...
-</span><span style="color: #a020f0;">local</span>
    TextualScore = note(startTime:0
                        duration:1000
                        timeUnit:milliseconds
@@ -329,10 +317,10 @@ Inspect score object</h3>
 
 
 
-<h2><a name="sec8" id="sec8"></a>
+<h2><a name="sec7" id="sec7"></a>
 Sound Output</h2>
 
-<h3><a name="sec9" id="sec9"></a>
+<h3><a name="sec8" id="sec8"></a>
 intro</h3>
 
 <p class="first">This section creates a Strasheela score consisting of three notes. The first section saves a Csound score file (with the procedure Out.outputCsoundScore). The second and third sections additionally call Csound in the background and open the resulting sound file with an editor (with the procedure Out.renderAndPlayCsound). Note that these sections requires that you specified where Csound is installed on your system and what sound file editor you want to use (see 'Settings...' in the Tutorial menu).</p>
@@ -352,7 +340,7 @@ intro</h3>
 
 
 
-<h3><a name="sec10" id="sec10"></a>
+<h3><a name="sec9" id="sec9"></a>
 Output Csound score file</h3>
 
 <p class="first">No information available.</p>
@@ -385,7 +373,7 @@ Output Csound score file</h3>
 </pre>
 
 
-<h3><a name="sec11" id="sec11"></a>
+<h3><a name="sec10" id="sec10"></a>
 Output sound file</h3>
 
 <p class="first">No information available.</p>
@@ -419,7 +407,7 @@ Output sound file</h3>
 </pre>
 
 
-<h3><a name="sec12" id="sec12"></a>
+<h3><a name="sec11" id="sec11"></a>
 Output sound file (file dialog)</h3>
 
 <p class="first">No information available.</p>
@@ -454,10 +442,10 @@ Output sound file (file dialog)</h3>
 
 
 
-<h2><a name="sec13" id="sec13"></a>
+<h2><a name="sec12" id="sec12"></a>
 Sheet Music Output</h2>
 
-<h3><a name="sec14" id="sec14"></a>
+<h3><a name="sec13" id="sec13"></a>
 intro</h3>
 
 <p class="first">This section creates a hierarchically nested score and outputs it to sheet music. The previous section presented the simultaneous container (sim), which arranges its contained score objects simultaneously in time. The present section introduces the sequential container (seq), which arranges its contained score objects sequentially in time. The section demonstrates that simultaneous and sequential containers can be arbitrarily nested.</p>
@@ -469,7 +457,7 @@ intro</h3>
 
 
 
-<h3><a name="sec15" id="sec15"></a>
+<h3><a name="sec14" id="sec14"></a>
 Output Lilypond</h3>
 
 <p class="first">No information available.</p>
@@ -513,7 +501,7 @@ Output Lilypond</h3>
 </pre>
 
 
-<h3><a name="sec16" id="sec16"></a>
+<h3><a name="sec15" id="sec15"></a>
 Output MusicXML, via Fomus</h3>
 
 <p class="first">No information available.</p>
@@ -559,10 +547,10 @@ Output MusicXML, via Fomus</h3>
 
 
 
-<h2><a name="sec17" id="sec17"></a>
+<h2><a name="sec16" id="sec16"></a>
 Specifying and Accessing Basic Score Object Information</h2>
 
-<h3><a name="sec18" id="sec18"></a>
+<h3><a name="sec17" id="sec17"></a>
 intro</h3>
 
 <p class="first">Various information about score objects can be stored and retrieved from Strasheela's music representation. This information is used for formulating music theory models. For section, a musical CSP may specify a score where all note pitch variables are initialised to certain domains, and neighbouring melodic notes are then accessed and constrained.</p>
@@ -578,7 +566,7 @@ intro</h3>
 
 
 
-<h3><a name="sec19" id="sec19"></a>
+<h3><a name="sec18" id="sec18"></a>
 Setting/accessing a parameter value</h3>
 
 <p class="first">No information available.</p>
@@ -599,7 +587,7 @@ simultaneous container. */</span>
 </pre>
 
 
-<h3><a name="sec20" id="sec20"></a>
+<h3><a name="sec19" id="sec19"></a>
 Default parameter values</h3>
 
 <p class="first">No information available.</p>
@@ -632,7 +620,7 @@ values is important for constraining these values. */</span>
 </pre>
 
 
-<h3><a name="sec21" id="sec21"></a>
+<h3><a name="sec20" id="sec20"></a>
 Type checking (1)</h3>
 
 <p class="first">No information available.</p>
@@ -653,7 +641,7 @@ applied and which objects are skipped. */</span>
 </pre>
 
 
-<h3><a name="sec22" id="sec22"></a>
+<h3><a name="sec21" id="sec21"></a>
 Type checking (2)</h3>
 
 <p class="first">No information available.</p>
@@ -693,7 +681,7 @@ records. */</span>
 </pre>
 
 
-<h3><a name="sec23" id="sec23"></a>
+<h3><a name="sec22" id="sec22"></a>
 Identity test</h3>
 
 <p class="first">No information available.</p>
@@ -716,7 +704,7 @@ equality. */</span>
 </pre>
 
 
-<h3><a name="sec24" id="sec24"></a>
+<h3><a name="sec23" id="sec23"></a>
 Info tags (1)</h3>
 
 <p class="first">No information available.</p>
@@ -741,7 +729,7 @@ in the case the score object was tagged with it. */</span>
 </pre>
 
 
-<h3><a name="sec25" id="sec25"></a>
+<h3><a name="sec24" id="sec24"></a>
 Info tags (2)</h3>
 
 <p class="first">No information available.</p>
@@ -762,7 +750,7 @@ of a given object. */</span>
 </pre>
 
 
-<h3><a name="sec26" id="sec26"></a>
+<h3><a name="sec25" id="sec25"></a>
 The handle argument</h3>
 
 <p class="first">No information available.</p>
@@ -801,7 +789,7 @@ representation supports the handle argument. */</span>
 </pre>
 
 
-<h3><a name="sec27" id="sec27"></a>
+<h3><a name="sec26" id="sec26"></a>
 Contained objects</h3>
 
 <p class="first">No information available.</p>
@@ -834,7 +822,7 @@ argument (see above). */</span>
 </pre>
 
 
-<h3><a name="sec28" id="sec28"></a>
+<h3><a name="sec27" id="sec27"></a>
 Positional information (1)</h3>
 
 <p class="first">No information available.</p>
@@ -883,7 +871,7 @@ single temporal container at maximum). */</span>
 </pre>
 
 
-<h3><a name="sec29" id="sec29"></a>
+<h3><a name="sec28" id="sec28"></a>
 Positional information (2)</h3>
 
 <p class="first">No information available.</p>
@@ -917,7 +905,7 @@ TemporalContainer (not necessarily the temporal successor!). */</span>
 </pre>
 
 
-<h3><a name="sec30" id="sec30"></a>
+<h3><a name="sec29" id="sec29"></a>
 The temporal parameters</h3>
 
 <p class="first">No information available.</p>
@@ -951,7 +939,7 @@ Recursively). */</span>
 </pre>
 
 
-<h3><a name="sec31" id="sec31"></a>
+<h3><a name="sec30" id="sec30"></a>
 The offsetTime parameter (1)</h3>
 
 <p class="first">No information available.</p>
@@ -991,7 +979,7 @@ shown previously is reproduced here. */</span>
 </pre>
 
 
-<h3><a name="sec32" id="sec32"></a>
+<h3><a name="sec31" id="sec31"></a>
 The offsetTime parameter (2)</h3>
 
 <p class="first">No information available.</p>
@@ -1032,7 +1020,7 @@ sequential container). */</span>
 </pre>
 
 
-<h3><a name="sec33" id="sec33"></a>
+<h3><a name="sec32" id="sec32"></a>
 Incrementally creating scores (1)</h3>
 
 <p class="first">No information available.</p>
@@ -1071,7 +1059,7 @@ create independent textual scores and combine them later. */</span>
 </pre>
 
 
-<h3><a name="sec34" id="sec34"></a>
+<h3><a name="sec33" id="sec33"></a>
 Incrementally creating scores (2)</h3>
 
 <p class="first">No information available.</p>
@@ -1122,7 +1110,7 @@ argument. */</span>
 </pre>
 
 
-<h3><a name="sec35" id="sec35"></a>
+<h3><a name="sec34" id="sec34"></a>
 Using extension classes</h3>
 
 <p class="first">No information available.</p>
@@ -1171,7 +1159,7 @@ here. */</span>
 </pre>
 
 
-<h3><a name="sec36" id="sec36"></a>
+<h3><a name="sec35" id="sec35"></a>
 Using creator functions</h3>
 
 <p class="first">No information available.</p>
@@ -1209,7 +1197,7 @@ Score.makeScore2 as described above). */</span>
 </pre>
 
 
-<h3><a name="sec37" id="sec37"></a>
+<h3><a name="sec36" id="sec36"></a>
 Saving a score object as textual score</h3>
 
 <p class="first">No information available.</p>
@@ -1251,7 +1239,7 @@ a file and returns a score object. */</span>
 </pre>
 
 
-<h3><a name="sec38" id="sec38"></a>
+<h3><a name="sec37" id="sec37"></a>
 Finding init Documentation</h3>
 
 <p class="first">No information available.</p>
@@ -1277,10 +1265,10 @@ values (_ indicates no default value). */</span>
 
 
 
-<h2><a name="sec39" id="sec39"></a>
+<h2><a name="sec38" id="sec38"></a>
 Higher-Order Accessors</h2>
 
-<h3><a name="sec40" id="sec40"></a>
+<h3><a name="sec39" id="sec39"></a>
 intro</h3>
 
 <p class="first">Strasheela provides various means for accessing information about multiple score objects contained in a container. Many of these means are higher-order methods, that is, the user specifies the desired information with a method or function as argument (see the introduction to higher order programming previously in this tutorial).</p>
@@ -1290,7 +1278,7 @@ intro</h3>
 
 
 
-<h3><a name="sec41" id="sec41"></a>
+<h3><a name="sec40" id="sec40"></a>
 filterItems</h3>
 
 <p class="first">No information available.</p>
@@ -1321,7 +1309,7 @@ using a Boolean method (e.g., isNote). */</span>
 </pre>
 
 
-<h3><a name="sec42" id="sec42"></a>
+<h3><a name="sec41" id="sec41"></a>
 findItem</h3>
 
 <p class="first">No information available.</p>
@@ -1351,7 +1339,7 @@ or function) returns true. */</span>
 </pre>
 
 
-<h3><a name="sec43" id="sec43"></a>
+<h3><a name="sec42" id="sec42"></a>
 mapItems</h3>
 
 <p class="first">No information available.</p>
@@ -1387,7 +1375,7 @@ altogether. */</span>
 </pre>
 
 
-<h3><a name="sec44" id="sec44"></a>
+<h3><a name="sec43" id="sec43"></a>
 forAllItems</h3>
 
 <p class="first">No information available.</p>
@@ -1417,7 +1405,7 @@ test -- in contrast to mapItems this procedure/method returns no value
 </pre>
 
 
-<h3><a name="sec45" id="sec45"></a>
+<h3><a name="sec44" id="sec44"></a>
 countItems</h3>
 
 <p class="first">No information available.</p>
@@ -1447,10 +1435,10 @@ a method or a function (try isNote, isPause or isItem instead). */</span>
 
 
 
-<h2><a name="sec46" id="sec46"></a>
+<h2><a name="sec45" id="sec45"></a>
 Higher-Order Accessors for Indirectly Contained Objects</h2>
 
-<h3><a name="sec47" id="sec47"></a>
+<h3><a name="sec46" id="sec46"></a>
 intro</h3>
 
 <p class="first">The previous section discussed methods for accessing (information on) directly contained score objects. This sections shows methods which traverse the whole score hierarchy for accessing information. For section, the method collect returns a list of directly and indirectly contained score objects.</p>
@@ -1460,7 +1448,7 @@ intro</h3>
 
 
 
-<h3><a name="sec48" id="sec48"></a>
+<h3><a name="sec47" id="sec47"></a>
 collect (1)</h3>
 
 <p class="first">No information available.</p>
@@ -1485,7 +1473,7 @@ itself in the output. */</span>
 </pre>
 
 
-<h3><a name="sec49" id="sec49"></a>
+<h3><a name="sec48" id="sec48"></a>
 collect (2)</h3>
 
 <p class="first">No information available.</p>
@@ -1512,7 +1500,7 @@ method. This section returns all notes whose duration is &gt; 1.*/</span>
 </pre>
 
 
-<h3><a name="sec50" id="sec50"></a>
+<h3><a name="sec49" id="sec49"></a>
 collect (3)</h3>
 
 <p class="first">No information available.</p>
@@ -1535,7 +1523,7 @@ collect. Here, all sequential objects in MyScore are contained. */</span>
 </pre>
 
 
-<h3><a name="sec51" id="sec51"></a>
+<h3><a name="sec50" id="sec50"></a>
 collect (4)</h3>
 
 <p class="first">No information available.</p>
@@ -1563,7 +1551,7 @@ levels specified are included. */</span>
 </pre>
 
 
-<h3><a name="sec52" id="sec52"></a>
+<h3><a name="sec51" id="sec51"></a>
 collect (5)</h3>
 
 <p class="first">No information available.</p>
@@ -1596,7 +1584,7 @@ the handle argument, see above. */</span>
 </pre>
 
 
-<h3><a name="sec53" id="sec53"></a>
+<h3><a name="sec52" id="sec52"></a>
 map</h3>
 
 <p class="first">No information available.</p>
@@ -1621,7 +1609,7 @@ to forAllItems but works with score hierarchies. */</span>
 </pre>
 
 
-<h3><a name="sec54" id="sec54"></a>
+<h3><a name="sec53" id="sec53"></a>
 find</h3>
 
 <p class="first">No information available.</p>
@@ -1674,7 +1662,7 @@ filterItems. */</span>
 </pre>
 
 
-<h3><a name="sec55" id="sec55"></a>
+<h3><a name="sec54" id="sec54"></a>
 Simultaneous items</h3>
 
 <p class="first">No information available.</p>
@@ -1720,7 +1708,7 @@ getSimultaneousItems.  */</span>
 </pre>
 
 
-<h3><a name="sec56" id="sec56"></a>
+<h3><a name="sec55" id="sec55"></a>
 User-defined accessors</h3>
 
 <p class="first">No information available.</p>
@@ -1793,10 +1781,10 @@ virtually idential to the previous section. */</span>
 
 
 
-<h2><a name="sec57" id="sec57"></a>
+<h2><a name="sec56" id="sec56"></a>
 Customising Output to Export Formats</h2>
 
-<h3><a name="sec58" id="sec58"></a>
+<h3><a name="sec57" id="sec57"></a>
 intro</h3>
 
 <p class="first">Strasheela's music representation has been designed to make the definition of new output formats and the extension of existing formats relatively simple without necessarily touching the original Strasheela code. This section demonstrates the definition of Csound and Liliput output for a different temperament. The temperament is expressed in the score by a new pitch unit et31, denoting 31-tone equal-temperament. For more information on this interesting temperament visit <a href="http://www.tonalsoft.com/enc/number/31edo.aspx">http://www.tonalsoft.com/enc/number/31edo.aspx</a> or <a href="http://en.wikipedia.org/wiki/31_equal_temperament">http://en.wikipedia.org/wiki/31_equal_temperament</a>.</p>
@@ -1807,7 +1795,7 @@ intro</h3>
 
 
 
-<h3><a name="sec59" id="sec59"></a>
+<h3><a name="sec58" id="sec58"></a>
 Output Csound Score</h3>
 
 <p class="first">No information available.</p>
@@ -1940,7 +1928,7 @@ these procedures). A test demonstrates this definition. */</span>
 </pre>
 
 
-<h3><a name="sec60" id="sec60"></a>
+<h3><a name="sec59" id="sec59"></a>
 Output Lilypond</h3>
 
 <p class="first">No information available.</p>
@@ -2082,13 +2070,36 @@ used in the test for simplicity). */</span>
 
 
 
+<h2><a name="sec60" id="sec60"></a>
+to be sorted</h2>
+
+<h3><a name="sec61" id="sec61"></a>
+Implicit pattern matching in Strasheela</h3>
+
+<p class="first">The following function GetPitch expects a record as argument which must match the record note(pitch:Pitch ...).  The variable Pitch is implicitly declared and bound to the value at the feature 'pitch' of the record given as argument to the function.</p>
+
+<p>Please note that the record in the header of the function GetPitch is not even complete but contains three dots (...) to indicate that further record features are possible.</p>
+
+
+<pre class="src">
+<span style="color: #a020f0;">local</span>
+   <span style="color: #a020f0;">fun</span><span style="color: #b8860b;"> </span>{<span style="color: #0000ff;">GetPitch</span> note(pitch:Pitch <span style="color: #a020f0;">...</span>)}
+      Pitch
+   <span style="color: #a020f0;">end</span>
+<span style="color: #a020f0;">in</span>
+   {Inspect {GetPitch note(duration:4 pitch:60)}}
+<span style="color: #a020f0;">end</span>
+</pre>
+
+
+
 
 <!-- Page published by Emacs Muse ends here -->
 <!-- Footer -->
 <div id="footer">
 <div id="author">&copy; 
 Torsten Anders and Graham Percival</div>
-<div id="date">Last time edited: 2008.11.27</div>
+<div id="date">Last time edited: ; INVALID LISP CODE</div>
 </div>
   </body>
 </html>

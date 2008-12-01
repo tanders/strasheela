@@ -337,9 +337,9 @@ This `if' returns a value, which is browsed.
 
 Procedures and functions are the standard means for expressing a collection of computations in a single entity.  Examples range from numeric computations to commands involving the operating system.  For example, we have already seen a number of numeric operations expressed by the common infix notation.
 
-WARNING: curly braces {...} surround every function or a procedure call.  This syntax for procedure/function application is rather unusual when compared with other programming languages, but it is also unambiguous. 
+WARNING: curly braces {...} must surround a function or a procedure call.  This syntax for procedure/function application is rather unusual when compared with other programming languages, but it is also unambiguous. 
 
-In Oz, procedures are the fundamental concept.  Functions are just a syntactic variant of procedures, added for convenience.  The main difference between functions and procedures is that functions always returns exactly one value.  Procedures do not necessarily return anything.
+In Oz, procedures are the fundamental concept.  Functions are just a syntactic variant of procedures, added for convenience.  The main difference between functions and procedures is that functions are procedures which always returns exactly one value.  Procedures do not necessarily return anything.
 
 More specifically, a function is a procedure whose last argument -- the return value -- is expressed implicitly.  Every function may be called like a procedure by adding this return value explicitly.  In addition, any procedure can also be called as a function which returns its omitted last argument.
 
@@ -524,7 +524,6 @@ Obviously, `true' and `false' are the common Boolean values.  Oz provides the va
 %% The Inspector shows atoms and names in different colors
 {Inspect 'I am an atom'}
 </src>
-
 
 * Compound Types
 
