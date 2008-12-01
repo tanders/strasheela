@@ -262,6 +262,58 @@ end</oz>
 </section>
 
 
+<section title="Music Containers">
+<subsection title="Introduction">
+<info>The following section introduces the overall construction and organization of Strasheela's music representation.
+</info>
+<oz>
+</oz></subsection>
+
+<subsection title="Containers">
+<info>This example introduces Strasheela containers: notes are organized into sequential containers (seq) and simultaneous containers (sim).
+
+In the previous section, the timeUnit was set to milliseconds.  Here, it is set to beats(4), which means that the duration 4 indicates a quarter-note (a beat) and consequently duration 1 is a sixteenth-note.  In general, all musical parameters support some unit of measurement which indicates how the numeric parameter value is interpreted (in particular for output into export formats).  For example, the pitchUnit defaults to (MIDI) 'keynumber', but can also be set to midicent, frequency, or et72 (i. e. equal temperament with 72 steps per octave).  These various parameter units of measurements are supported, because Strasheela parameter values are (at least presently) always integers.  Whereas the timeUnit must be set only once in the score, other units can be set individually for every score object.  The timeUnit is handled differently, because Strasheela implicitly applies some constraints to all temporal parameters (e.g., the temporal structure in sequential and simultaneous containers is enforced by constraints), and these constraints require a consistent timeUnit for all parameters.</info>
+<oz>local
+   MyScore = {Score.makeScore 
+	      sim(items:[seq(items:[note(duration:2
+					 pitch:64
+					 amplitude:64)
+				    note(duration:2
+					 pitch:65
+					 amplitude:64)
+				    note(duration:4
+					 pitch:67
+					 amplitude:64)
+				    note(duration:4
+					 pitch:62
+					 amplitude:64)])
+			 seq(items:[sim(items:[note(duration:8
+						    pitch:48
+						    amplitude:64)
+					       note(duration:8
+						    pitch:55
+						    amplitude:64)])
+				    sim(items:[note(duration:4
+						    pitch:50
+						    amplitude:64)
+					       note(duration:4
+						    pitch:54
+						    amplitude:64)])])]
+		  startTime:0
+		  timeUnit:beats(4))
+	      unit}
+in
+   {MyScore wait}   
+   {Out.midi.renderAndPlayMidiFile MyScore
+    unit(file:'test')}
+%Uncomment if desired:
+%   {Out.renderAndShowLilypond MyScore
+%    unit(file:{Tk.return tk_getSaveFile}
+%	 dir:nil)}
+end</oz>
+</subsection>
+</section>
+
 
 <section title="Specifying and Accessing Basic Score Object Information">
 <subsection title="intro">
@@ -1496,99 +1548,6 @@ in
 end</oz>
 </subsection>
 
-<subsection title="more sorting">
-<info>zzz
-
-This section introduces Strasheela containers: three notes are contained in a simultaneous container (sim). This container expresses how the notes are temporally arranged. The startTime of notes in a simultaneous container is their offsetTime plus the startTime of the encapsulating simultaneous container (which is 0 here). Thus, in this section the first note starts at 0, the second at 500, and the third at 1500.
-
-The temporal structure of the score is specified in milliseconds, as the timeUnit argument of this container indicates. Please note that the timeUnit must be specified only once in a score. This setting is shared by all temporal score objects (i.e. the container and the notes). 
-
-This section creates a hierarchically nested score and outputs it to sheet music. The previous section presented the simultaneous container (sim), which arranges its contained score objects simultaneously in time. The present section introduces the sequential container (seq), which arranges its contained score objects sequentially in time. The section demonstrates that simultaneous and sequential containers can be arbitrarily nested. 
-
-In the previous section, the timeUnit was set to milliseconds. Here, it is set to beats(4), which means that the duration 4 indicates a quarter-note (a beat) and consequently duration 1 is a sixteenth-note. In general, all musical parameters support some unit of measurement which indicates how the numeric parameter value is interpreted (in particular for output into export formats). For example, the pitchUnit defaults to (MIDI) 'keynumber', but can also be set to midicent, frequency, or et72 (i.e. equal temperament with 72 steps per octave). These various parameter units of measurements are supported, because Strasheela parameter values are (at least presently) always integers. Whereas the timeUnit must be set only once in the score, other units can be set individually for every score object. The timeUnit is handled differently, because Strasheela implicitly applies some constraints to all temporal parameters (e.g., the temporal structure in sequential and simultaneous containers is enforced by constraints), and these constraints require a consistent timeUnit for all parameters.
-
-
-</info>
-<oz>
-
-
-
-%%% lilypond
-local
-   MyScore = {Score.makeScore 
-	      sim(items:[seq(items:[note(duration:2
-					 pitch:64
-					 amplitude:64)
-				    note(duration:2
-					 pitch:65
-					 amplitude:64)
-				    note(duration:4
-					 pitch:67
-					 amplitude:64)
-				    note(duration:4
-					 pitch:62
-					 amplitude:64)])
-			 seq(items:[sim(items:[note(duration:8
-						    pitch:48
-						    amplitude:64)
-					       note(duration:8
-						    pitch:55
-						    amplitude:64)])
-				    sim(items:[note(duration:4
-						    pitch:50
-						    amplitude:64)
-					       note(duration:4
-						    pitch:54
-						    amplitude:64)])])]
-		  startTime:0
-		  timeUnit:beats(4))
-	      unit}
-in
-   {MyScore wait}   
-   {Out.renderAndShowLilypond MyScore
-    unit(file:{Tk.return tk_getSaveFile}
-	 dir:nil)}
-end
-
-
-%%% Fomus
-   MyScore = {Score.makeScore 
-	      sim(items:[seq(items:[note(duration:2
-					 pitch:64
-					 amplitude:64)
-				    note(duration:2
-					 pitch:65
-					 amplitude:64)
-				    note(duration:4
-					 pitch:67
-					 amplitude:64)
-				    note(duration:4
-					 pitch:62
-					 amplitude:64)])
-			 seq(items:[sim(items:[note(duration:8
-						    pitch:48
-						    amplitude:64)
-					       note(duration:8
-						    pitch:55
-						    amplitude:64)])
-				    sim(items:[note(duration:4
-						    pitch:50
-						    amplitude:64)
-					       note(duration:4
-						    pitch:54
-						    amplitude:64)])])]
-		  startTime:0
-		  timeUnit:beats(4))
-	      unit}
-in
-   {MyScore wait}  
-   {Out.renderFomus MyScore
-    unit(file:{Tk.return tk_getSaveFile}
-	 dir:nil
-	 flags:['-x'])}
-end
-</oz>
-</subsection>
 </section>
 
 
