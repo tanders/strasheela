@@ -134,7 +134,38 @@ in
 	 flags:['-x'])}
 end</oz></subsection>
 
-<subsection title="Output Csound score file">
+<subsection title="Output MIDI file">
+<info>This section saves a MIDI file with the procedure `Out.renderMidiFile'.
+
+The filename is given directly as "/tmp/test.midi" (the .midi is added automatically).  You may change this by editing the argument csvDir and midiDir (the directory) and file (the file name without extension).
+
+WARNING: Windows users will have to input a directory path like "C:\\Dokumente und Einstellungen\\" (German settings).
+
+WARNING: you must specify (via the `Settings...' menu entry) where Strasheela can find a MIDI player.</info>
+<oz>local
+   TextualScore = sim(items:[note(offsetTime:0
+                                  duration:1000
+				  pitch:60
+				  amplitude:64)
+			     note(offsetTime:500
+				  duration:1000
+				  pitch:62
+				  amplitude:64)
+			     note(offsetTime:1500
+				  duration:1000
+				  pitch:64
+				  amplitude:64)]
+		      startTime:0 timeUnit:milliseconds)
+   MyScore = {Score.makeScore TextualScore unit}
+in
+   {MyScore wait}   
+   {Out.midi.renderAndPlayMidiFile MyScore
+   unit(file:'test'
+         midiDir:'/tmp/'
+         csvDir:'/tmp/')}
+end</oz></subsection>
+
+<subsection title="Output Csound file (no sound)">
 <info>This section saves a Csound score file with the procedure `Out.outputCsoundScore'.
 
 The filename is given directly as "/tmp/test.sco" (the .sco is added automatically).  You may change this by editing the argument scoDir (the directory) and file (the file name without extension).  Windows users will have to input a directory path like "C:\\Dokumente und Einstellungen\\" (German settings..).
@@ -166,7 +197,7 @@ in
    % {Out.exec 'cat' ["/tmp/test.sco"]}
 end</oz></subsection>
 
-<subsection title="Output sound file">
+<subsection title="Output Csound file (with sound)">
 <info>This section additionally calls Csound in the background and open the resulting sound file with an editor with the procedure `Out.renderAndPlayCsound'.
 
 There is one new file variable: soundDir (the directory for the resulting sound file).
@@ -197,7 +228,7 @@ in
          soundDir:"/tmp/")}
 end</oz></subsection>
 
-<subsection title="Output sound file (file dialog)">
+<subsection title="Output CSound file (file dialog)">
 <info>In this example, the output file is specified with a file dialog for convenience.
 
 Most directory arguments of output procedures (e.g., scoDir and soundDir in Out.renderAndPlayCsound) can be omitted; their default value are directories set in the Strasheela environment (cf. the _ozrc file in the Strasheela directory for an section how to set these default directories).
