@@ -16,7 +16,7 @@
 
 functor
 import
-%    Browser(browse:Browse)
+   Browser(browse:Browse)
    %% Inspector(inspect:Inspect)
    Pickle Explorer Error Resolve
    IOzSeF at 'x-ozlib://tack/iozsef/iozsef.ozf'
