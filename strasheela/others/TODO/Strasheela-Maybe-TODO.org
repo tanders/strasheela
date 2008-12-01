@@ -2645,50 +2645,99 @@ useful for package creators and new users to test whether installation was succe
 
 ** Smart/Auto Completion or intellisense for Oz
 
-   Different options
+   see [[file:~/oz/music/Strasheela/private/WorkInProgress/AutoCompletition/]]
 
+*** Oz interface
 
-   http://www.emacswiki.org/emacs/CategoryCompletion#toc3
-
-
-*** !! Use Oz compiler 
-
-    see [[file:~/oz/music/Strasheela/private/WorkInProgress/AutoCompletition/AutoCompletition.oz]]
-
-    For auto completition, all variable names (environment) and functor features are known by the Oz compiler. I can relatively easily write an Oz application which expects a string and returns all possible extensions. 
-
-    Then I need some emacs interface for auto completition (there are lots... e.g., http://www.emacswiki.org/emacs/CompletionUI, http://www.emacswiki.org/emacs/AutoComplete), which expects function to access completition information..
-
-    Also see oz-find
-
-
-*** DynamicAbbreviations
-
-    Buildin M-/
-    http://www.emacswiki.org/emacs/DynamicAbbreviations
+**** TODO Add keyword support (fun, proc, class, end, ...)
+**** TODO check for capitalised first letter
+**** TODO Turn OzCompletition.oz into Oz executable
+**** TODO Try: access OPI compiler in OzCompletition.oz
      
-
-*** EmacsTags
-
-    http://www.emacswiki.org/emacs/EmacsTags
-
-*** Write Oz parser for Emacs tool Semantic
-
-    http://cedet.sourceforge.net/semantic.shtml
-    http://www.emacswiki.org/emacs/HowSemanticFulfillsThoseNeeds
-
-
-*** Parser with Semantic Bovinator
-
-    http://www.emacswiki.org/emacs/SemanticBovinator
-    http://www.emacswiki.org/emacs/HowToSetUpSemanticBovinatorForANewLanguage
-
-*** AutoComplete
+     Use distributed programming facilities of Oz:
     
-    http://www.emacswiki.org/emacs/AutoComplete
-    http://www.emacswiki.org/emacs/auto-complete.el
+     In OZRC, create a ticket for Oz compiler engine (OPI.compiler), but only when running OPI (i.e., {Property.get 'oz.standalone'} returns false). Save ticket in a local file
 
-*** http://www.emacswiki.org/emacs/CompletionUI
+     In OzCompletition.oz, use this ticket to access OPI_Compiler (do error checking whether ticket exist etc)
+
+     Then "ask" this compiler engine for environment to create completions
+
+***** Advantages:
+
+      - Efficiency: I do not have to start a new compiler each time app OzCompletition.oz is run 
+      - Expressivity: all variables currently in environment of OPI compiler are "seen", I don't need any special processing of present Emacs buffer etc
+	-> suggest that oz-find or oz-flymake uses this principle, if it works..
+
+**** DONE Complete string for Vars in env and features in functors
+     CLOSED: [2008-11-29 Sat 13:13]
+
+
+*** Documentation 
+
+    Do readme file
+
+    - Installation
+
+    - Use
+      - use beginning of 
+	[[file:~/emacs/oz-completion-ui.el]]
+
+*** Add to Collozeum
+
+*** DONE Emacs interface
+    CLOSED: [2008-11-29 Sat 13:10]
+
+    - get completion-ui running with simple example
+    - understand format returned by completion-ui completion-function
+    - how to call shell program in Emacs lisp: shell-command-to-string
+
+
+*** Old
+
+    Different options
+
+
+    http://www.emacswiki.org/emacs/CategoryCompletion#toc3
+
+
+**** !! Use Oz compiler 
+
+     see [[file:~/oz/music/Strasheela/private/WorkInProgress/AutoCompletition/AutoCompletition.oz]]
+
+     For auto completition, all variable names (environment) and functor features are known by the Oz compiler. I can relatively easily write an Oz application which expects a string and returns all possible extensions. 
+
+     Then I need some emacs interface for auto completition (there are lots... e.g., http://www.emacswiki.org/emacs/CompletionUI, http://www.emacswiki.org/emacs/AutoComplete), which expects function to access completition information..
+
+     Also see oz-find
+
+
+**** DynamicAbbreviations
+
+     Buildin M-/
+     http://www.emacswiki.org/emacs/DynamicAbbreviations
+      
+
+**** EmacsTags
+
+     http://www.emacswiki.org/emacs/EmacsTags
+
+**** Write Oz parser for Emacs tool Semantic
+
+     http://cedet.sourceforge.net/semantic.shtml
+     http://www.emacswiki.org/emacs/HowSemanticFulfillsThoseNeeds
+
+
+**** Parser with Semantic Bovinator
+
+     http://www.emacswiki.org/emacs/SemanticBovinator
+     http://www.emacswiki.org/emacs/HowToSetUpSemanticBovinatorForANewLanguage
+
+**** AutoComplete
+     
+     http://www.emacswiki.org/emacs/AutoComplete
+     http://www.emacswiki.org/emacs/auto-complete.el
+
+**** http://www.emacswiki.org/emacs/CompletionUI
 
 
 ** OzUnit								  :SOON:
