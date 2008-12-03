@@ -110,21 +110,21 @@ define
    %% */
    fun {Dom X Y}
       {FD.reflect.size {X getValue($)}}
-      =<
+      <
       {FD.reflect.size {Y getValue($)}}
    end
    /** %% [variable ordering] 'width' score variable ordering: first visits score parameters with smallest domain width (the smallest difference between the domain bounds). In case of a tie, X is preferred.
    %% */
    fun {Width X Y}
       {FD.reflect.width {X getValue($)}}
-      =<
+      <
       {FD.reflect.width {Y getValue($)}}
    end
    /** %% [variable ordering] 'deg' score variable ordering: first visits score parameters with most constraints applied (i.e. most threads suspending on its variable). In case of a tie, X is preferred.
    %% */
    fun {Deg X Y}
       {FD.reflect.nbSusps {X getValue($)}}
-      =<
+      <
       {FD.reflect.nbSusps {Y getValue($)}}
    end
 
@@ -132,14 +132,14 @@ define
    %% */
    fun {ReflectMin X Y}
       {FD.reflect.min {X getValue($)}}
-      =<
+      <
       {FD.reflect.min {Y getValue($)}}
    end
    /** %% [variable ordering] first visits score parameters with maximal upper domain boundary. In case of a tie, X is preferred.
    %% */
    fun {ReflectMax X Y}
       {FD.reflect.max {X getValue($)}}
-      =<
+      >
       {FD.reflect.max {Y getValue($)}}
    end
 
@@ -149,7 +149,7 @@ define
       fun {DomDivDeg X Y}
 	 %% factor added in order to avoid that integer quotient is often 0
 	 {FD.reflect.size {X getValue($)}} * Factor div {FD.reflect.nbSusps {X getValue($)}}
-	 =<
+	 <
 	 {FD.reflect.size {Y getValue($)}} * Factor div {FD.reflect.nbSusps {Y getValue($)}}
       end
    end
@@ -280,7 +280,7 @@ define
 	    XI = {GetTestIndex X AllTests}
 	    YI = {GetTestIndex Y AllTests}
 	 in
-	    XI =< YI
+	    XI < YI
 	 end
       end
       /** %% [variable ordering constructor] More general variant of MakeSetPreferredOrder2. Returns a variable ordering which visits parameters in an order specified by test functions. Tests is a list of unary boolean funcs which expect a parameter. Implicitly, a last Boolean function is added which always returns true (so parameters not matching any test are always rated lower). The variable ordering first visits the parameter for which a test with smaller index in Tests returns true. MakeSetPreferredOrder breaks ties with the score variable ordering P.
