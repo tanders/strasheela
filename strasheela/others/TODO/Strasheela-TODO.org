@@ -12,8 +12,8 @@
 
 *** Required features
 
-    - Sound files upload
-    - Backup possible
+    OK in sourceforge - Sound files upload
+    OK in sourceforge - Backup possible
 
 *** other important features 
 

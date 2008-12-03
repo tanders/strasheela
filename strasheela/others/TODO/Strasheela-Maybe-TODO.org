@@ -508,6 +508,11 @@ InspectorObject = {Inspector.new unit}
      https://apps.sourceforge.net/mediawiki/strasheela/index.php?title=Special:SpecialPages
 
 
+*** Mediawiki backup
+
+    https://apps.sourceforge.net/backup/strasheela/
+    http://www.mediawiki.org/wiki/Manual:Moving_a_wiki
+
 *** Present Sourceforge Mediawiki hosted app status 
 
     I added 1 page for testing
