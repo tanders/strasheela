@@ -2,6 +2,21 @@
 #title Changes 
 ; #author Torsten Anders
 
+* Changes in Version 0.9.8 (4 December 2008)
+
+  - Serious bug fixed (compilation error): Score and Init: Browser was not imported 
+
+  - Tutorial: revisions of section on Strasheela Music Representation (thanks Graham)
+
+  - SDistro: first-fail variables orderings (e.g., distribution order values like dom, width, and their various relations) are more efficient (replaced many =< by <)
+
+  - Code cleaned up (virtually no compiler warnings anymore)
+
+
+
+  - For further fixes see the [[../CHANGELOG.txt]].
+
+
 * Changes in Version 0.9.7 (27 November 2008)
 
   - Main additions and changes 

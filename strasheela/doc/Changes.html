@@ -37,6 +37,26 @@
     <!-- Page published by Emacs Muse begins here -->
 
 
+<h2>Changes in Version 0.9.8 (4 December 2008)</h2>
+
+<ul>
+<li>Serious bug fixed (compilation error): Score and Init: Browser was not imported</li>
+
+<li>Tutorial: revisions of section on Strasheela Music Representation (thanks Graham)</li>
+
+<li>SDistro: first-fail variables orderings (e.g., distribution order values like dom, width, and their various relations) are more efficient (replaced many =&lt; by &lt;)</li>
+
+<li>Code cleaned up (virtually no compiler warnings anymore)</li>
+</ul>
+
+
+
+<ul>
+<li>For further fixes see the <a href="../CHANGELOG.txt">../CHANGELOG.txt</a>.</li>
+</ul>
+
+
+
 <h2>Changes in Version 0.9.7 (27 November 2008)</h2>
 
 <ul>
@@ -123,7 +143,7 @@
 
 <li><a href="../doc/api/node8.html">SDistro</a>: Refactored the definition of distribution strategies and their documentation. More complex variable orderings are now conveniently defined with special constructor functions. The following procedures are added to <a href="../doc/api/node8.html">SDistro</a>: Naive, Dom, Width, Deg, DomDivDeg, MakeDom, MakeDeg, MakeLeftToRight, MakeRightToLeft, TimeParams, MakeTimeParams, Min, Max, MakeMarkNextParam, and MakeVisitMarkedParamsFirst. The definitions of distribution strategies for harmonic CSPs in <a href="../contributions/anders/HarmonisedScore/source/Distribution.oz">HS.distro</a> demonstrate how complex distribution strategies are defined concisely with these new procedures</li>
 
-<li><a href="../doc/api/node6.html">Score</a>: The performance of the temporal item method <code>getSimultaneousItems</code> is much improved, and a method <code>findSimultaneousItem</code> added. Before, <code>getSimultaneousItems</code> blocked until the whole rhythmical structure was determined. Now the score only needs sufficient information whether some object is simultaneous or not to the given object, but their temporal parameters don't need to be determined. This speeds up the search process of CSPs which rely on this method (e.g., contrapuntual problems accessing sets of simultaneous notes and which also constrain the rhythmical structure)</li>
+<li><a href="../doc/api/node6.html">Score</a>: The performance of the temporal item method =getSimultaneousItems= is much improved, and a method <code>findSimultaneousItem</code> added. Before, <code>getSimultaneousItems</code> blocked until the whole rhythmical structure was determined. Now the score only needs sufficient information whether some object is simultaneous or not to the given object, but their temporal parameters don't need to be determined. This speeds up the search process of CSPs which rely on this method (e.g., contrapuntual problems accessing sets of simultaneous notes and which also constrain the rhythmical structure)</li>
 </ul></li>
 </ul>
 
@@ -644,7 +664,7 @@ See the documentation for <a href="../contributions/anders/HarmonisedScore/doc/n
 <div id="footer">
 <div id="author">&copy; 
 Torsten Anders</div>
-<div id="date">Last time edited: 2008.11.27</div>
+<div id="date">Last time edited: 2008.12.04</div>
 </div>
   </body>
 </html>
