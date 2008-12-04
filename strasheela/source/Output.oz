@@ -43,7 +43,7 @@ import
    Open OS Tk System Compiler% Time
    FD FS
    Browser(browse:Browse)
-   Inspector(inspect:Inspect)
+%    Inspector(inspect:Inspect)
 
    OPIEnv at 'x-oz://system/OPIEnv.ozf'
    

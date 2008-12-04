@@ -32,7 +32,7 @@ import
    GUtils at 'GeneralUtils.ozf'
    %% !! functor of Strasheela core depending on extension
    Pattern at 'x-ozlib://anders/strasheela/Pattern/Pattern.ozf'
-   Browser(browse:Browse) % temp for debugging
+%    Browser(browse:Browse) % temp for debugging
 export
    
    FlagsMixin MappingMixin

@@ -19,7 +19,7 @@ import
    Module OS Combinator Property QTk at 'x-oz://system/wp/QTk.ozf' % Tk
    FD FS
    LUtils at 'ListUtils.ozf'
-   Browser(browse:Browse) % temp for debugging
+%    Browser(browse:Browse) % temp for debugging
 export
    Pi
    XOr Cases

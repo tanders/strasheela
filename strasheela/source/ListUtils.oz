@@ -17,7 +17,7 @@
 functor 
 import
    System
-   Browser(browse:Browse)
+%    Browser(browse:Browse)
    GUtils at 'GeneralUtils.ozf'
    
 export
