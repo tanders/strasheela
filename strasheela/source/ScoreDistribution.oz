@@ -103,7 +103,7 @@ define
    /** %% [variable ordering (a score distribution strategy 'order' procedure)] naive variable ordering: visit first parameter first.
    %% */
    fun {Naive _ _} 
-      true
+      false
    end
    
    /** %% [variable ordering] 'dom' score variable ordering: first visits score parameters with smallest domain size. In case of a tie (i.e. both domain sizes are equal), X is preferred.
