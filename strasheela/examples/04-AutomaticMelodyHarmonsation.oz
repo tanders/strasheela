@@ -430,7 +430,8 @@ end
 {SDistro.exploreOne
  {AutomaticHarmonisation [3#60 1#62   2#64 1#62 1#60   3#59 1#62   4#60] 4}
  {Adjoin Aux.myDistribution
- unit(value:mid)}}
+  unit(order:size
+       value:mid)}}
 
 
 %% 'Horch was kommt von draussen rein' (first four measures): there
