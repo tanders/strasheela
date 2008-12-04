@@ -7,7 +7,7 @@ import
    Score at 'x-ozlib://anders/strasheela/source/ScoreCore.ozf'
    Out at 'x-ozlib://anders/strasheela/source/Output.ozf'
 
-   Browser(browse:Browse) % temp for debugging
+%    Browser(browse:Browse) % temp for debugging
 export
    setup: Setup
    toScore: ToScore
