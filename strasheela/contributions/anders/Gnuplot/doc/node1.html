@@ -124,17 +124,17 @@ clearInterval(drawit)
 <h3>Functor</h3>
 <ul>Gnuplot ("<span class="string">Gnuplot.oz</span>")<br></ul>
 <h3>Import</h3>
-<code><ul><li>Browser(browse:Browse)</li><li>GUtils at "<span class="string">x-ozlib://anders/strasheela/source/GeneralUtils.ozf"
+<code><ul><li>GUtils at "<span class="string">x-ozlib://anders/strasheela/source/GeneralUtils.ozf"
 </span></li><li>LUtils at "<span class="string">x-ozlib://anders/strasheela/source/ListUtils.ozf"
 </span></li><li>Out at "<span class="string">x-ozlib://anders/strasheela/source/Output.ozf"
 </span></li></ul></code>
 <h3>Export</h3>
-<code><ul><li>&lt;P/2:<a href="#entity5"><span class="functionname">Plot</span></a>&gt;
+<code><ul><li>&lt;P/2:<a href="#entity4"><span class="functionname">Plot</span></a>&gt;
 </li></ul></code>
 <h3>Define</h3>
 
 <code>
-<a name="entity5">
+<a name="entity4">
 <span class="keyword">proc</span>{<span class="functionname">Plot</span> Y Args}<br>
 <span class="string"> Generates script and data file for gnuplot and calls gnuplot with these files. Coordinates (i.e. x, y, and z) may be either a list of numbers (for a single plot) or a list of lists (for multiple plots) -- the nesting of all lists must be the same. Specifying z results in a 3D plot.<BR>
  The argument 'style' (sets the lines style) expects either a single VSs for all or a list of styles with a new value for every plot. The argument 'title' (sets the title for each) plot expects also either a single VSs for all or a list of styles with a new value for every plot. The argument 'set' expects a list of VSs describing arbitrary additional settings to gnuplot (without the leading 'set'). The argument dataFile gives the beginning of the data file names (every plot is written to an own data file). commandFile is the name of the command file. The arg additionalPsOut expects a string to which a postscript file of the plot is saved.<BR>

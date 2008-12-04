@@ -126,15 +126,15 @@ clearInterval(drawit)
 <h3>Import</h3>
 <code><ul><li>Search</li><li>System</li><li>GUtils at "<span class="string">x-ozlib://anders/strasheela/source/GeneralUtils.ozf"
 </span></li><li>SDistro at "<span class="string">x-ozlib://anders/strasheela/source/ScoreDistribution.ozf"
-</span></li><li>Browser(browse:Browse)</li></ul></code>
+</span></li></ul></code>
 <h3>Export</h3>
-<code><ul><li>&lt;P/3:<a href="#entity6"><span class="functionname">SearchWithTimeout</span></a>&gt;
-</li><li>&lt;C:<a href="#entity7"><span class="type">ScoreSearcherWithTimeout</span></a>&gt;
+<code><ul><li>&lt;P/3:<a href="#entity5"><span class="functionname">SearchWithTimeout</span></a>&gt;
+</li><li>&lt;C:<a href="#entity6"><span class="type">ScoreSearcherWithTimeout</span></a>&gt;
 </li></ul></code>
 <h3>Define</h3>
 
 <code>
-<a name="entity6">
+<a name="entity5">
 <span class="keyword">proc</span>{<span class="functionname">SearchWithTimeout</span> MyScript Args Result}<br>
 <span class="string"> SearchWithTimeout is a 'meta search engine' with a timeout: in case a user-specified maximum search time is elapsed, a user-specified default solution is returned (defaults to nil).<BR>
  MyScript is a unary procedure defining the CSP plus a distribution strategy. Args is a record of the following optional arguments (feature-value pairs). The argument 'maxSearchTime' specifies the maximum search time in msecs (default: 1000). The default solution is given at the argument 'defaultSolution'. The argument 'solver' specifies the solver to use. The solver must be a procedure with the following interface {MySolver MyScript KillP MyScore}, and it must return a list with solution(s), or nil in case of no solution (only the first solution is ever used). The default solver is the following (KillP is a nullary procedure with stops the search when called, cf. the documentation of Search.one.depth).<BR>
@@ -151,7 +151,7 @@ clearInterval(drawit)
 </span>
 </code><br>
 
-<a name="entity7">
+<a name="entity6">
 <p class="margin"><div align="right"><a href="class1.html">[class info]</a></div></p>
 <code>
 

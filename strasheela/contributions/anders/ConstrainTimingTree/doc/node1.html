@@ -130,21 +130,21 @@ clearInterval(drawit)
 <h3>Functor</h3>
 <ul>ConstrainTimingTree ("<span class="string">ConstrainTimingTree.oz</span>")<br></ul>
 <h3>Import</h3>
-<code><ul><li>FD</li><li>Combinator</li><li>Browser(browse:Browse)</li><li>GUtils at "<span class="string">x-ozlib://anders/strasheela/source/GeneralUtils.ozf"
+<code><ul><li>FD</li><li>Combinator</li><li>GUtils at "<span class="string">x-ozlib://anders/strasheela/source/GeneralUtils.ozf"
 </span></li><li>Pattern at "<span class="string">x-ozlib://anders/strasheela/Pattern/Pattern.ozf"
 </span></li></ul></code>
 <h3>Export</h3>
-<code><ul><li>&lt;P/1:<a href="#entity6"><span class="functionname">AvoidSymmetries</span></a>&gt;
-</li><li>&lt;P/2:<a href="#entity7"><span class="functionname">IsExisting</span></a>&gt;
-</li><li>&lt;P/2:<a href="#entity8"><span class="functionname">RelevantLength</span></a>&gt;
-</li><li>&lt;P/2:<a href="#entity9"><span class="functionname">IsLastExistingItem</span></a>&gt;
-</li><li>&lt;P/3:<a href="#entity10"><span class="functionname">AccessLastItem</span></a>&gt;
-</li><li>&lt;P/2:<a href="#entity11"><span class="functionname">GetExistingItems</span></a>&gt;
+<code><ul><li>&lt;P/1:<a href="#entity5"><span class="functionname">AvoidSymmetries</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity6"><span class="functionname">IsExisting</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity7"><span class="functionname">RelevantLength</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity8"><span class="functionname">IsLastExistingItem</span></a>&gt;
+</li><li>&lt;P/3:<a href="#entity9"><span class="functionname">AccessLastItem</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity10"><span class="functionname">GetExistingItems</span></a>&gt;
 </li></ul></code>
 <h3>Define</h3>
 
 <code>
-<a name="entity6">
+<a name="entity5">
 <span class="keyword">proc</span>{<span class="functionname">AvoidSymmetries</span> MyScore}<br>
 <span class="string"> AvoidSymmetries applies constrains on all temporal items in MyScore to avoid symmeries in case the duration of some temporal items is 0.<BR>
  Two rules are applied to the score: (i) for all temporal items, all parameter values are determined to their minimal domain value (execept the values of the parameters start time, duration and end time). (ii) for all temporal items in temporal aspects, 'non-existing' items are only 'collected' at the end of a temporal aspect.<BR>
@@ -158,7 +158,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity7">
+<a name="entity6">
 <span class="keyword">proc</span>{<span class="functionname">IsExisting</span> TemporalItem B}<br>
 <span class="string"> B=1 <-> TemporalItem is existing (i.e. its duration \= 0).<BR>
 <BR>
@@ -168,7 +168,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity8">
+<a name="entity7">
 <span class="keyword">proc</span>{<span class="functionname">RelevantLength</span> TemporalAspect N}<br>
 <span class="string"> Returns the number of temporal items in TemporalAspect which are relevant (i.e. whose duration is NOT 0).<BR>
  NB (efficiency notice): This constraint implicitly constrains that all non-existing' items in TemporalAspect are only 'collected' at the end of the aspect. That is, this constrain makes AvoidSymmetries _partly_ redundant.<BR>
@@ -177,7 +177,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity9">
+<a name="entity8">
 <span class="keyword">proc</span>{<span class="functionname">IsLastExistingItem</span> TemporalItem B}<br>
 <span class="string">  B=1 <-> TemporalItem is an existing item which is either the last in its temporal container or is followed by a non-existing item.<BR>
 <BR>
@@ -185,7 +185,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity10">
+<a name="entity9">
 <span class="keyword">proc</span>{<span class="functionname">AccessLastItem</span> TemporalAspect Fn Result}<br>
 <span class="string"> Accesses a value from the last "existing" item in TemporalAspect. Fn is a unary function or method: the result of Fn -- applied to the last existing item -- is returned in X.<BR>
  NB: AccessLastItem does not block, but Result remains undetermined until the last existing item in TemporalAspect is known (i.e. the durations of the items are sufficiently known). <BR>
@@ -194,7 +194,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity11">
+<a name="entity10">
 <span class="keyword">proc</span>{<span class="functionname">GetExistingItems</span> TemporalAspect Items}<br>
 <span class="string"> Returns the list of existing items in TemporalAspect.<BR>
  NB: blocks until for all items in TemporalAspect it is known whether they exist (i.e. the durations of the items are sufficiently known).<BR>

@@ -152,27 +152,27 @@ clearInterval(drawit)
 <h3>Functor</h3>
 <ul>OSC ("<span class="string">OSC.oz</span>")<br></ul>
 <h3>Import</h3>
-<code><ul><li>System</li><li>OS</li><li>Open</li><li>Browser(browse:Browse)</li><li>LUtils at "<span class="string">x-ozlib://anders/strasheela/source/ListUtils.ozf"
+<code><ul><li>System</li><li>OS</li><li>Open</li><li>LUtils at "<span class="string">x-ozlib://anders/strasheela/source/ListUtils.ozf"
 </span></li><li>Init at "<span class="string">x-ozlib://anders/strasheela/source/Init.ozf"
 </span></li><li>Out at "<span class="string">x-ozlib://anders/strasheela/source/Output.ozf"
 </span></li><li><a href="node2.html">OSC_Scanner</a> at "<span class="string">source/OSC_Scanner.ozf"
 </span></li><li><a href="node3.html">OSC_Parser</a> at "<span class="string">source/OSC_Parser.ozf"
 </span></li></ul></code>
 <h3>Export</h3>
-<code><ul><li>&lt;C:<a href="#entity11"><span class="type">SendOSC</span></a>&gt;
-</li><li>&lt;C:<a href="#entity12"><span class="type">DumpOSC</span></a>&gt;
-</li><li>&lt;P/1:<a href="#entity13"><span class="functionname">TimeNow</span></a>&gt;
-</li><li>&lt;C:<a href="#entity20"><span class="type">Buffer</span></a>&gt;
-</li><li>&lt;P/2:<a href="#entity19"><span class="functionname">HexToDecimal1000</span></a>&gt;
-</li><li>&lt;P/2:<a href="#entity18"><span class="functionname">FormatHex</span></a>&gt;
-</li><li>ntpToUnixTime1000:&lt;P/2:<a href="#entity15"><span class="functionname">NTPToUnixTime1000</span></a>&gt;
-</li><li>&lt;P/2:<a href="#entity16"><span class="functionname">DecimalToHex_Int</span></a>&gt;
-</li><li>&lt;P/2:<a href="#entity17"><span class="functionname">DecimalToHex_Frac</span></a>&gt;
-</li><li>&lt;P/2:<a href="#entity14"><span class="functionname">FormatTimeTag</span></a>&gt;
+<code><ul><li>&lt;C:<a href="#entity10"><span class="type">SendOSC</span></a>&gt;
+</li><li>&lt;C:<a href="#entity11"><span class="type">DumpOSC</span></a>&gt;
+</li><li>&lt;P/1:<a href="#entity12"><span class="functionname">TimeNow</span></a>&gt;
+</li><li>&lt;C:<a href="#entity19"><span class="type">Buffer</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity18"><span class="functionname">HexToDecimal1000</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity17"><span class="functionname">FormatHex</span></a>&gt;
+</li><li>ntpToUnixTime1000:&lt;P/2:<a href="#entity14"><span class="functionname">NTPToUnixTime1000</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity15"><span class="functionname">DecimalToHex_Int</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity16"><span class="functionname">DecimalToHex_Frac</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity13"><span class="functionname">FormatTimeTag</span></a>&gt;
 </li></ul></code>
 <h3>Define</h3>
 
-<a name="entity11">
+<a name="entity10">
 <p class="margin"><div align="right"><a href="class1.html">[class info]</a></div></p>
 <code>
 
@@ -193,7 +193,7 @@ clearInterval(drawit)
 <span class="keyword">end</span>
 </code><br>
 
-<a name="entity12">
+<a name="entity11">
 <p class="margin"><div align="right"><a href="class2.html">[class info]</a></div></p>
 <code>
 
@@ -230,7 +230,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity13">
+<a name="entity12">
 <span class="keyword">fun</span>{<span class="functionname">TimeNow</span> }<br>
 <span class="string"> Returns the milliseconds since midnight UTC of January 1, 1970, in other words UNIX time (see http://en.wikipedia.org/wiki/Unix_time) multiplied by 1000.<BR>
  FIXME: presently, only plain seconds are output. Therefore, the returned value can be rather late already. For a more finegrained solution later, use e.g. gettimeofday (see http://www.penguin-soft.com/penguin/man/2/gettimeofday.html?manpath=/man/man2/gettimeofday.2.inc and http://developer.apple.com/documentation/Darwin/Reference/ManPages/man2/gettimeofday.2.html).<BR>
@@ -238,7 +238,7 @@ clearInterval(drawit)
 </span>
 </code><br>
 
-<a name="entity20">
+<a name="entity19">
 <p class="margin"><div align="right"><a href="class3.html">[class info]</a></div></p>
 <code>
 
@@ -261,7 +261,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity19">
+<a name="entity18">
 <span class="keyword">fun</span>{<span class="functionname">HexToDecimal1000</span> HexChars}<br>
 <span class="string"> [aux] Expects an hex number (string of exactly 16 ints/chars a-f, where the first 8 digits are greater 1 and the last 8 digits are less then 1, i.e. the last 8 digits are behind the dot) and returns the corresponding decimal integer times 1000.<BR>
 <BR>
@@ -269,7 +269,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity18">
+<a name="entity17">
 <span class="keyword">fun</span>{<span class="functionname">FormatHex</span> Xs}<br>
 <span class="string"> [aux] Transforms a list of integers representing a hexadecimal number (as returned by DecimalToHex) into a VS in the usual format.<BR>
  The dumpOSC output format is created: lowercase letters are used with (however, sendOSC also understands uppercase letters and leading 0x).<BR>
@@ -278,7 +278,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity15">
+<a name="entity14">
 <span class="keyword">fun</span>{<span class="functionname">NTPToUnixTime1000</span> NTPTime1000}<br>
 <span class="string"> [aux] NTPTime1000 (an int: NTP time in msecs) transformed into UNIX time in msecs (an int).<BR>
 <BR>
@@ -286,7 +286,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity16">
+<a name="entity15">
 <span class="keyword">fun</span>{<span class="functionname">DecimalToHex_Int</span> X}<br>
 <span class="string"> [aux] Outputs list of 'digits' for hexadecimal number of the decimal number X (an int).<BR>
  NB: integers are used as figures: i.e. the decimal number 31 is represented as [1 15] instead of the usual 1F.<BR>
@@ -295,7 +295,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity17">
+<a name="entity16">
 <span class="keyword">fun</span>{<span class="functionname">DecimalToHex_Frac</span> X}<br>
 <span class="string"> [aux] Convert the fractional part. X is in [999, 0] msecs, corresponding to [0.999, 0.0] secs. <BR>
 <BR>
@@ -303,7 +303,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity14">
+<a name="entity13">
 <span class="keyword">fun</span>{<span class="functionname">FormatTimeTag</span> UnixTime1000}<br>
 <span class="string"> [aux] Outputs an OSC time tag for the given UnixTime1000 as a hexadecimal number (a VS). UnixTime1000 (an integer) are the milliseconds since midnight UTC of January 1, 1970, in other words UNIX time multiplied by 1000.<BR>
 <BR>

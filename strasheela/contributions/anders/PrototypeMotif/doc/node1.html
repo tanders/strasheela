@@ -133,26 +133,26 @@ clearInterval(drawit)
 <h3>Functor</h3>
 <ul>PrototypeMotif ("<span class="string">PrototypeMotif.oz</span>")<br></ul>
 <h3>Import</h3>
-<code><ul><li>FD</li><li>Browser(browse:Browse)</li><li>GUtils at "<span class="string">x-ozlib://anders/strasheela/source/GeneralUtils.ozf"
+<code><ul><li>FD</li><li>GUtils at "<span class="string">x-ozlib://anders/strasheela/source/GeneralUtils.ozf"
 </span></li><li>LUtils at "<span class="string">x-ozlib://anders/strasheela/source/ListUtils.ozf"
 </span></li><li>Score at "<span class="string">x-ozlib://anders/strasheela/source/ScoreCore.ozf"
 </span></li><li>SMapping at "<span class="string">x-ozlib://anders/strasheela/source/ScoreMapping.ozf"
 </span></li><li>Pattern at "<span class="string">x-ozlib://anders/strasheela/Pattern/Pattern.ozf"
 </span></li></ul></code>
 <h3>Export</h3>
-<code><ul><li>&lt;P/3:<a href="#entity8"><span class="functionname">MakeScript</span></a>&gt;
-</li><li>&lt;P/2:<a href="#entity9"><span class="functionname">IsMotif</span></a>&gt;
-</li><li>&lt;P/3:<a href="#entity10"><span class="functionname">IsInMotif</span></a>&gt;
-</li><li>&lt;P/3:<a href="#entity11"><span class="functionname">NestedScript</span></a>&gt;
-</li><li>&lt;P/3:<a href="#entity12"><span class="functionname">ChoiceScript</span></a>&gt;
-</li><li>&lt;P/2:<a href="#entity13"><span class="functionname">UnifyDependency</span></a>&gt;
-</li><li>&lt;P/2:<a href="#entity14"><span class="functionname">GetFirstNote</span></a>&gt;
-</li><li>&lt;P/2:<a href="#entity15"><span class="functionname">GetHighestPitch</span></a>&gt;
+<code><ul><li>&lt;P/3:<a href="#entity7"><span class="functionname">MakeScript</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity8"><span class="functionname">IsMotif</span></a>&gt;
+</li><li>&lt;P/3:<a href="#entity9"><span class="functionname">IsInMotif</span></a>&gt;
+</li><li>&lt;P/3:<a href="#entity10"><span class="functionname">NestedScript</span></a>&gt;
+</li><li>&lt;P/3:<a href="#entity11"><span class="functionname">ChoiceScript</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity12"><span class="functionname">UnifyDependency</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity13"><span class="functionname">GetFirstNote</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity14"><span class="functionname">GetHighestPitch</span></a>&gt;
 </li></ul></code>
 <h3>Define</h3>
 
 <code>
-<a name="entity8">
+<a name="entity7">
 <span class="keyword">proc</span>{<span class="functionname">MakeScript</span> MyProto Args MyScript}<br>
 <span class="string"> MakeScript returns a (sub)-CSP for creating motif instances similar to a given prototype. MakeScript expects a prototype motif MyProto (a score object, usually a container with other score objects) and some optional arguments. MakeScript returns an extended script, that is a binary procedure with the interface {MyScript Args MyScore} (for details see GUtils.extendedScriptToScript). <BR>
  The returned script expects the following optional arguments. 'initScore' (defaults to false) specifies whether the resulting score is fully initialised implicitly. Ignore this argument if the returned motif instance is nested into other containers and that way only a part of a score, but set it to true if the returned motif instance is the full score (e.g., for testing). For further details on score initialisation see Score.initScore.<BR>
@@ -201,7 +201,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity9">
+<a name="entity8">
 <span class="keyword">fun</span>{<span class="functionname">IsMotif</span> X}<br>
 <span class="string"> Returns true for any motif instance created by a script which was created by MakeScript. <BR>
 <BR>
@@ -209,7 +209,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity10">
+<a name="entity9">
 <span class="keyword">fun</span>{<span class="functionname">IsInMotif</span> X Test}<br>
 <span class="string"> Is X contained in a motif (directly or indirectly) and is Test true? Test is a boolean binary function with the interface {$ X MyMotif}.<BR>
 <BR>
@@ -217,7 +217,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity11">
+<a name="entity10">
 <span class="keyword">proc</span>{<span class="functionname">NestedScript</span> MyTextScore Args MyScript}<br>
 <span class="string"> NestedScript returns a (sub)-CSP for creating nested motif instances which consist in multiple sub-motifs. For an example see PrototypeMotif/testing/PrototypeMotif-test.oz.<BR>
  NestedScript expects a score MyTextScore and some optional arguments. MyTextScore is a textual score (a record) which specifies the motif score topology. MyTextScore typically contains motif instance declations created with MakeScript or other NestedScript calls. Note that NestedScript expects a score in textual format, in contrast to MakeScript which expects a score object. MakeScript returns an extended script, that is a binary procedure with the interface {MyScript Args MyScore} (for details see GUtils.extendedScriptToScript).<BR>
@@ -248,7 +248,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity12">
+<a name="entity11">
 <span class="keyword">proc</span>{<span class="functionname">ChoiceScript</span> Scripts ChoiceArgs MyScript}<br>
 <span class="string"> Expects Scripts, a record of extended scripts, and returns a new extended script by which one of the scripts in Scripts can be selected. The new script expects all arguments of the scripts in Scripts and an additional optional argument. The name of this additional argument is set by the ChoiceArgs feature choiceArg. ChoiceArgs default is<BR>
    unit(choiceArg:choose)<BR>
@@ -259,7 +259,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity13">
+<a name="entity12">
 <span class="keyword">fun</span>{<span class="functionname">UnifyDependency</span> Fn}<br>
 <span class="string"> [convenience definition] Function for defining a dependency between a motif instance and a prototype. The unary function Fn is applied to the prototype and the motif instance and the results are unified. The following example is a pair given to the MakeScript argument prototypeDependencies which constrains that the prototype and the motif instance feature the same pitch contour. <BR>
 <BR>
@@ -271,7 +271,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity14">
+<a name="entity13">
 <span class="keyword">fun</span>{<span class="functionname">GetFirstNote</span> MyMotif}<br>
 <span class="string"> [convenience definition] Expects a motif instance and returns the first note contained, regardless of nesting depth (returns the first note returned by the collect method).  <BR>
 <BR>
@@ -279,7 +279,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity15">
+<a name="entity14">
 <span class="keyword">proc</span>{<span class="functionname">GetHighestPitch</span> MyMotif MaxPitch}<br>
 <span class="string"> [convenience definition] Expects a motif instance and returns the pitch of the highest motif note (regardless of nesting depth).<BR>
 <BR>

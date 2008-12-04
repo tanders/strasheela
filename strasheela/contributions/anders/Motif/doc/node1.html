@@ -147,24 +147,24 @@ motif(durations:[2 2 2 8] pitchContour:[1 1 0] comment:beethovensFifth)<BR>
 <h3>Functor</h3>
 <ul>Motif ("<span class="string">Motif.oz</span>")<br></ul>
 <h3>Import</h3>
-<code><ul><li>FD</li><li>Combinator</li><li>Browser(browse:Browse)</li><li>GUtils at "<span class="string">x-ozlib://anders/strasheela/source/GeneralUtils.ozf"
+<code><ul><li>FD</li><li>Combinator</li><li>GUtils at "<span class="string">x-ozlib://anders/strasheela/source/GeneralUtils.ozf"
 </span></li><li>LUtils at "<span class="string">x-ozlib://anders/strasheela/source/ListUtils.ozf"
 </span></li><li>Score at "<span class="string">x-ozlib://anders/strasheela/source/ScoreCore.ozf"
 </span></li><li>Pattern at "<span class="string">x-ozlib://anders/strasheela/Pattern/Pattern.ozf"
 </span></li></ul></code>
 <h3>Export</h3>
-<code><ul><li>&lt;C:<a href="#entity8"><span class="type">Database</span></a>&gt;
-</li><li>&lt;P/2:<a href="#entity9"><span class="functionname">IsDatabase</span></a>&gt;
-</li><li>&lt;C:<a href="#entity10"><span class="type">MotifMixin</span></a>&gt;
-</li><li>&lt;C:<a href="#entity14"><span class="type">Sequential</span></a>&gt;
-</li><li>&lt;C:<a href="#entity16"><span class="type">Simultaneous</span></a>&gt;
-</li><li>&lt;P/2:<a href="#entity11"><span class="functionname">IsMotif</span></a>&gt;
-</li><li>&lt;P/3:<a href="#entity12"><span class="functionname">IsInMotif</span></a>&gt;
-</li><li>&lt;P/2:<a href="#entity17"><span class="functionname">MakeVariation</span></a>&gt;
+<code><ul><li>&lt;C:<a href="#entity7"><span class="type">Database</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity8"><span class="functionname">IsDatabase</span></a>&gt;
+</li><li>&lt;C:<a href="#entity9"><span class="type">MotifMixin</span></a>&gt;
+</li><li>&lt;C:<a href="#entity13"><span class="type">Sequential</span></a>&gt;
+</li><li>&lt;C:<a href="#entity15"><span class="type">Simultaneous</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity10"><span class="functionname">IsMotif</span></a>&gt;
+</li><li>&lt;P/3:<a href="#entity11"><span class="functionname">IsInMotif</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity16"><span class="functionname">MakeVariation</span></a>&gt;
 </li></ul></code>
 <h3>Define</h3>
 
-<a name="entity8">
+<a name="entity7">
 <p class="margin"><div align="right"><a href="class1.html">[class info]</a></div></p>
 <code>
 
@@ -194,11 +194,11 @@ motif(durations:[2 2 2 8] pitchContour:[1 1 0] comment:beethovensFifth)<BR>
 </code><br>
 
 <code>
-<a name="entity9">
+<a name="entity8">
 <span class="keyword">fun</span>{<span class="functionname">IsDatabase</span> X}
 </code><br>
 
-<a name="entity10">
+<a name="entity9">
 <p class="margin"><div align="right"><a href="class2.html">[class info]</a></div></p>
 <code>
 
@@ -224,7 +224,7 @@ motif(durations:[2 2 2 8] pitchContour:[1 1 0] comment:beethovensFifth)<BR>
 <span class="keyword">end</span>
 </code><br>
 
-<a name="entity14">
+<a name="entity13">
 <p class="margin"><div align="right"><a href="class3.html">[class info]</a></div></p>
 <code>
 
@@ -235,7 +235,7 @@ motif(durations:[2 2 2 8] pitchContour:[1 1 0] comment:beethovensFifth)<BR>
 
 </tr></table>
 <span class="string"></span>
-<span class="keyword">class</span> <span class="type">Sequential</span>&nbsp;<span class="keyword">from</span>&nbsp;<span class="reference">Score.sequential</span>&nbsp;<a href="#entity10">MotifMixin</a>
+<span class="keyword">class</span> <span class="type">Sequential</span>&nbsp;<span class="keyword">from</span>&nbsp;<span class="reference">Score.sequential</span>&nbsp;<a href="#entity9">MotifMixin</a>
 <br>&nbsp;&nbsp;&nbsp;<span class="keyword">feat</span>&nbsp;label
 
 <ul><li><span class="functionname">init</span>(...)<br>
@@ -244,7 +244,7 @@ motif(durations:[2 2 2 8] pitchContour:[1 1 0] comment:beethovensFifth)<BR>
 <span class="keyword">end</span>
 </code><br>
 
-<a name="entity16">
+<a name="entity15">
 <p class="margin"><div align="right"><a href="class4.html">[class info]</a></div></p>
 <code>
 
@@ -255,7 +255,7 @@ motif(durations:[2 2 2 8] pitchContour:[1 1 0] comment:beethovensFifth)<BR>
 
 </tr></table>
 <span class="string"></span>
-<span class="keyword">class</span> <span class="type">Simultaneous</span>&nbsp;<span class="keyword">from</span>&nbsp;<span class="reference">Score.simultaneous</span>&nbsp;<a href="#entity10">MotifMixin</a>
+<span class="keyword">class</span> <span class="type">Simultaneous</span>&nbsp;<span class="keyword">from</span>&nbsp;<span class="reference">Score.simultaneous</span>&nbsp;<a href="#entity9">MotifMixin</a>
 <br>&nbsp;&nbsp;&nbsp;<span class="keyword">feat</span>&nbsp;simMotif
 
 <ul><li><span class="functionname">init</span>(...)<br>
@@ -265,12 +265,12 @@ motif(durations:[2 2 2 8] pitchContour:[1 1 0] comment:beethovensFifth)<BR>
 </code><br>
 
 <code>
-<a name="entity11">
+<a name="entity10">
 <span class="keyword">fun</span>{<span class="functionname">IsMotif</span> X}
 </code><br>
 
 <code>
-<a name="entity12">
+<a name="entity11">
 <span class="keyword">fun</span>{<span class="functionname">IsInMotif</span> X Test}<br>
 <span class="string"> Is X contained in a motif (directly or indirectly) and Test is true? Test is a boolean binary function fun {$ X MyMotif} <body> end.<BR>
 <BR>
@@ -278,7 +278,7 @@ motif(durations:[2 2 2 8] pitchContour:[1 1 0] comment:beethovensFifth)<BR>
 </code><br>
 
 <code>
-<a name="entity17">
+<a name="entity16">
 <span class="keyword">fun</span>{<span class="functionname">MakeVariation</span> Decl}<br>
 <span class="string"> MakeVariation simplifies the definition of a motif variation procedure, while at the same time also somewhat restricting the description format given to the MotifDescriptionDB. MakeVariation expects a declarations and returns a variation procedure (expecting a motif instance and a 0/1-variable). Decl is a record, where each record feature is also a feature in the MotifDescriptionDB. Each record field value is an accessor function or method expecting a motif instance and returning a list of FD integers which corresponds with this feature (this returned list is unified with the database list at the corresponding feature). <BR>
  The required motif description format (given to the MotifDescriptionDB) is as follows. Each motif description is a record with descriptive record features (e.g. durations, pitches, pitchContour). The values at these features are lists of FD integers. Entries in the MotifDescriptionDB must be uniform: they have the same features, and lists at the same MotifDescriptionDB feature have the same length.<BR>
