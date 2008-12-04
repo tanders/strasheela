@@ -19,7 +19,7 @@
 functor
 import
    FD FS Combinator
-   LUtils at 'x-ozlib://anders/strasheela/source/ListUtils.ozf'
+%    LUtils at 'x-ozlib://anders/strasheela/source/ListUtils.ozf'
    Pattern at 'x-ozlib://anders/strasheela/Pattern/Pattern.ozf'
    HS at 'x-ozlib://anders/strasheela/HarmonisedScore/HarmonisedScore.ozf'
    

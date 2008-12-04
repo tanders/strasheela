@@ -6,7 +6,7 @@ functor
 import
    OS Explorer
    Resolve
-  Browser(browse:Browse)
+%   Browser(browse:Browse)
    
    %% !! tmp functor until next release with debugged Path of stdlib
    Path at 'x-ozlib://anders/tmp/Path/Path.ozf'

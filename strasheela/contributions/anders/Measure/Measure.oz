@@ -37,7 +37,7 @@
 functor
 import
    FD FS
-   Browser(browse:Browse) % temp for debugging
+%    Browser(browse:Browse) % temp for debugging
    Score at 'x-ozlib://anders/strasheela/source/ScoreCore.ozf'
    Pattern at 'x-ozlib://anders/strasheela/Pattern/Pattern.ozf'
 export

@@ -58,7 +58,7 @@
 functor 
 import
    System OS Open
-   Browser(browse:Browse)
+%    Browser(browse:Browse)
    LUtils at 'x-ozlib://anders/strasheela/source/ListUtils.ozf'
    Init at 'x-ozlib://anders/strasheela/source/Init.ozf'
    Out at 'x-ozlib://anders/strasheela/source/Output.ozf'

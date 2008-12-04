@@ -42,7 +42,7 @@ motif(durations:[2 2 2 8] pitchContour:[1 1 0] comment:beethovensFifth)
 functor
 import
    FD Combinator
-   Browser(browse:Browse) % temp for debugging
+%    Browser(browse:Browse) % temp for debugging
    GUtils at 'x-ozlib://anders/strasheela/source/GeneralUtils.ozf'
    LUtils at 'x-ozlib://anders/strasheela/source/ListUtils.ozf'
    Score at 'x-ozlib://anders/strasheela/source/ScoreCore.ozf'

@@ -13,7 +13,7 @@ functor
 import
    FD % FS
    Combinator
-   Browser(browse:Browse) % temp for debugging
+%    Browser(browse:Browse) % temp for debugging
    GUtils at 'x-ozlib://anders/strasheela/source/GeneralUtils.ozf'
    Pattern at 'x-ozlib://anders/strasheela/Pattern/Pattern.ozf'
 export

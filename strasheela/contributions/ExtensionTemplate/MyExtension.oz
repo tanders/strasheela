@@ -28,8 +28,8 @@ import
    
    %% Other functors (e.g. Strasheela functors) require to specify
    %% their platform-independent URI. LUtils is not used in this
-   %% functor and a warning will be shown at compilation time.
-   LUtils at 'x-ozlib://anders/strasheela/source/ListUtils.ozf'   
+   %% functor (a warning would be shown at compilation time).
+%    LUtils at 'x-ozlib://anders/strasheela/source/ListUtils.ozf'   
 
    
 export

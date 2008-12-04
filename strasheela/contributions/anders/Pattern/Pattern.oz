@@ -48,7 +48,7 @@ import
    Select(fd) at 'x-ozlib://duchier/cp/Select.ozf'
    GUtils at 'x-ozlib://anders/strasheela/source/GeneralUtils.ozf'
    LUtils at 'x-ozlib://anders/strasheela/source/ListUtils.ozf'
-   Browser(browse:Browse) % temp for debugging
+%    Browser(browse:Browse) % temp for debugging
 export
    PlainPattern PlainPattern2
    Continuous AllEqual Increasing Decreasing

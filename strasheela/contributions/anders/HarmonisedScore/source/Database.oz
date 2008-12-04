@@ -32,7 +32,7 @@ functor
 import
    
    FD FS RecordC
-   Browser(browse:Browse) 
+%    Browser(browse:Browse) 
 %   GUtils at 'x-ozlib://anders/strasheela/source/GeneralUtils.ozf'
    LUtils at 'x-ozlib://anders/strasheela/source/ListUtils.ozf'
    MUtils at 'x-ozlib://anders/strasheela/source/MusicUtils.ozf'

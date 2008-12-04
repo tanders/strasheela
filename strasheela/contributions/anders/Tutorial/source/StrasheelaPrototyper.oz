@@ -93,7 +93,7 @@ import
    QTk at 'x-oz://system/wp/QTk.ozf'
    Application
 % not used
-   Browser(browse:Browse)
+%    Browser(browse:Browse)
    % System
    % Error
    

@@ -116,7 +116,7 @@
 functor
 import
    FD FS Combinator System Search
-   Browser(browse:Browse) % temp for debugging
+%    Browser(browse:Browse) % temp for debugging
 %   Inspector(inspect:Inspect) % temp for debugging
    Select at 'x-ozlib://duchier/cp/Select.ozf'
    GUtils at 'x-ozlib://anders/strasheela/source/GeneralUtils.ozf'
