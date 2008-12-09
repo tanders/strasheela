@@ -135,7 +135,7 @@ export
    ClearHarmonyAtChordBoundaries
 
    VoiceLeadingDistance VoiceLeadingDistance_Percent
-   SmallIntervalProgressions SmallIntervalProgressions_Percent
+   SmallIntervalsInProgression SmallIntervalsInProgression_Percent
 
    %% melodic rules
    IsStep IsStepR
@@ -431,7 +431,7 @@ define
        end}
    end
 
-   /** %% Harmonic constraint on directionless voice-leading distance N (FD int, measured in steps of the present equal temperament) between two chords Chord1 and Chord2. The distance N is the minimal sum of intervals between Chord1 and Chord2. The voice-leading distance is directionless in the sense that regardless whether a voice moves up or down, always the smaller interval is taken into account.  
+   /** %% Harmonic constraint on directionless voice-leading distance N (FD int, measured in steps of the present equal temperament) between two chords Chord1 and Chord2. The distance N is the minimal sum of intervals between Chord1 and Chord2. The voice-leading distance is directionless in the sense that regardless whether a voice moves up or down, always the smaller interval is taken into account. The lower N, the more "smooth" is the harmonic progression (repetition is quasi most smooth). 
    %% 
    %% Example (in 12 ET): {VoiceLeadingDistance C_Major Ab_Major} = 2
    %% C->C=0 + E->Eb=1 + G->Ab=1, so the sum is 2
@@ -491,9 +491,10 @@ define
       end
    end
    
-   /** %% Harmonic constraint for creating chord progressions where many pitch classes change by small intervals. N (FD int, implicitly declared) is the number of pitch class intervals between Chord1 and Chord2 which are =< some maximal interval, typically a semitone. 
+   /** %% Harmonic constraint for creating chord progressions where many pitch classes change by small intervals. N (FD int, implicitly declared) is the number of pitch class intervals between Chord1 and Chord2 which are =< some maximal interval, typically a semitone. The higher N, the more smooth is the transition (for VoiceLeadingDistance it is the other way round!).
+   %%
    %% Args:
-   %% 'maxInterval': the maximum size of the interval which counts into the percentage. Default is the septimal diatonic semitone (15#14).
+   %% 'maxInterval': the maximum size of the interval which counts into the percentage. Default is the septimal diatonic semitone (15#14, i.e. given as a pair of integers denoting a ratio).
    %% 'ignoreUnisons': if true (the default), unisons do not count into the percentage.
    %% 
    %% Examples:
@@ -506,7 +507,7 @@ define
    %%
    %% Note: relatively expensive constraint. Also, only effective after of both Chord1 and Chord2 are (mostly) determined. 
    %% */
-   proc {SmallIntervalProgressions Chord1 Chord2 Args ?N}
+   proc {SmallIntervalsInProgression Chord1 Chord2 Args ?N}
       Defaults = unit(maxInterval: 15#14
 		      ignoreUnisons:true)
       As = {Adjoin Defaults Args}
@@ -550,14 +551,14 @@ define
    end
    
    
-   /** %% Like SmallIntervalProgressions, but returns a percentage value depending on the cardiality of both Chord1 and Chord2. 100 percent is the cardiality of the chord with more notes.
+   /** %% Like SmallIntervalsInProgression, but returns a percentage value depending on the cardiality of both Chord1 and Chord2. 100 percent is the cardiality of the chord with more notes.
    %% */ 
-   fun {SmallIntervalProgressions_Percent Chord1 Chord2 Args}
+   fun {SmallIntervalsInProgression_Percent Chord1 Chord2 Args}
       thread
 	 Card1 = {FS.card {Chord1 getPitchClasses($)}}
 	 Card2 = {FS.card {Chord2 getPitchClasses($)}}
 	 MaxCard = {Max Card1 Card2}
-	 N = {SmallIntervalProgressions Chord1 Chord2 Args}
+	 N = {SmallIntervalsInProgression Chord1 Chord2 Args}
       in
 	 {GUtils.percent N MaxCard}
       end
