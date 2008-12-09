@@ -603,6 +603,11 @@ InspectorObject = {Inspector.new unit}
      
      
 
+** Installation instruction
+
+   Add explanation how to edit OZRC file 
+   (e.g., wiki article and create link there in installation instruction)
+
 ** Strasheela tutorial
 
 *** Add MIDI out example to music representation chap
