@@ -31,6 +31,7 @@ export
    ProgressionStrength
 
    ResolveDescendingProgressions
+   ProgressionSelector
 
 define
    
@@ -99,7 +100,7 @@ define
            + PitchesPerOct * 2 * SuperB
    end
 
-   /** %% Expects a list of chord/scale objects and constrains them according to Schoenberg's recommendation. For any three successive chords/scales, if the first two chords form a descending progression, then the progression from the first to the third chord forms a strong progression (so the middle chord is quasi a 'passing chord'). Also, the last chord/scale pair forms always a strong progression.
+   /** %% Expects a list of chord/scale objects Xs and constrains them according to Schoenberg's recommendation. For any three successive chords/scales, if the first two chords form a descending progression, then the progression from the first to the third chord forms a strong progression (so the middle chord is quasi a 'passing chord'). Also, the last chord/scale pair forms always a strong progression.
    %% Optional Args: allowInterchangeProgression (default is false). If true, then mere interchange progressions (e.g., I V I), are permitted as well. In any case, no two descending progression must follow each other. allowRepetition: if true, two neighbouring chords can have the same root. Defaults to false.
    %% */ 
    proc {ResolveDescendingProgressions Xs Args}
@@ -138,4 +139,26 @@ define
 %       1}
    end
 
+   
+   /** %% [Convenience constraint] Constraints the chord root progression for a list of chord objects Cs, where the actual rule is selected by an argument. Different argument values represent different variants of Schoenbergs rule set. Supported values are (in order of their strictness):
+   %% - ascending: only ascending chord progressions are permitted
+   %% - resolveDescendingProgressions(...): descending progressions are resolved (arguments to ResolveDescendingProgressions can be given as Selector features)
+   %% - harmonicBand: consecutive chords must share common pitch classes
+   %% - commonPCs: consecutive chords must share common pitch classes
+   %% */
+   proc {ProgressionSelector Cs Selector}
+      case Selector of ascending then
+	 {Pattern.for2Neighbours Cs 
+	  proc {$ C1 C2} {AscendingProgressionR C1 C2 1} end}
+      [] resolveDescendingProgressions(...) then
+	 {ResolveDescendingProgressions Cs Selector}
+      [] harmonicBand then
+	 {Pattern.for2Neighbours Cs 
+	  proc {$ C1 C2} {HS.rules.commonPCs C1 C2} end}
+      [] commonPCs then		% same as previous clause, only different selector
+	 {Pattern.for2Neighbours Cs 
+	  proc {$ C1 C2} {HS.rules.commonPCs C1 C2} end}
+      end
+   end
+   
 end
