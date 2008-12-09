@@ -125,7 +125,7 @@ define
    
    /** %% Constrains percentage of N (FD int) if NoAll (FD int) indicates 100 percent. Result is implicitly declared a FD int.
    %% Example:  {Percent 4 6} = 66  
-   %% note the rounding to 66 percent.
+   %% Note the rounding to 66 percent (better do not rely on exact value of Result but constraint it, e.g., by a comparison such as Result >: 50).
    %% */
    proc {Percent N NoAll Result}
       Aux = {FD.decl}
@@ -206,9 +206,10 @@ define
 
    /** %% Returns a Boolean value whether X is divisible by Y. X and Y are ints.
    %% */
-   %% Implementation is approximated using floats for simplicity
    fun {IsDivisible X Y}
-      {Abs {IntToFloat X}/{IntToFloat Y} - {IntToFloat X div Y}} < 0.5 / {IntToFloat Y}
+      %% Implementation is approximated using floats for simplicity
+%       {Abs {IntToFloat X}/{IntToFloat Y} - {IntToFloat X div Y}} < 0.5 / {IntToFloat Y}
+      X div Y * Y == X
    end
 
 
