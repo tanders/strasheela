@@ -327,6 +327,7 @@ FSharp_Major = {Score.make chord(index: {HS.db.getChordIndex 'major'}
 
 {Browse {HS.rules.voiceLeadingDistance_Percent C_Major G_Major}}
 
+{Browse {HS.rules.voiceLeadingDistance_Percent C_Major FSharp_Major}}
 
 
 
@@ -345,10 +346,10 @@ Ab_Major = {Score.make chord(index: {HS.db.getChordIndex 'major'}
 	   unit(chord:HS.score.chord)}
 
 %% 2 of chord tones change by a semitone
-{Browse {HS.rules.smallIntervalProgressions C_Major Ab_Major unit}}
+{Browse {HS.rules.smallIntervalsInProgression C_Major Ab_Major unit}}
 
 %% 1 tone stays and 2 of chord tones change by a semitone
-{Browse {HS.rules.smallIntervalProgressions C_Major Ab_Major
+{Browse {HS.rules.smallIntervalsInProgression C_Major Ab_Major
 	 unit(ignoreUnisons:false)}}
 
 
@@ -356,10 +357,10 @@ Ab_Major = {Score.make chord(index: {HS.db.getChordIndex 'major'}
 
 
 %% 2 of 3 chord tones change by a semitone: 66 percent
-{Browse {HS.rules.smallIntervalProgressions_Percent C_Major Ab_Major unit}}
+{Browse {HS.rules.smallIntervalsInProgression_Percent C_Major Ab_Major unit}}
 
 %% 100 percent
-{Browse {HS.rules.smallIntervalProgressions_Percent C_Major Ab_Major
+{Browse {HS.rules.smallIntervalsInProgression_Percent C_Major Ab_Major
 	 unit(ignoreUnisons:false)}}
 
 
