@@ -5,7 +5,7 @@
 #
 
 
-# test current version: does compilation run smoothly
+# test current version: does compilation run smoothly?
 cd ~/oz/music/Strasheela/strasheela/trunk/
 ./strasheela/scripts/uninstall-all.sh
 tar -cvzf - `find strasheela -type f \! \( -name "*.wav" -o -name "*.aiff" -o -name "*.mp3" -o -name "*.ozf" \) -print | sed /.svn/d` > ~/tmp/strasheela-test.tar.gz
