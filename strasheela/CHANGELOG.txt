@@ -1,4 +1,416 @@
 ------------------------------------------------------------------------
+r1553 | t-anders | 2008-12-04 00:35:12 +0000 (Thu, 04 Dec 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/scripts/release-strasheela.sh
+
+Added code for compilation check
+
+------------------------------------------------------------------------
+r1552 | t-anders | 2008-12-04 00:34:31 +0000 (Thu, 04 Dec 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/examples/04-AutomaticMelodyHarmonsation.oz
+
+change var ordering for sub example
+
+------------------------------------------------------------------------
+r1551 | t-anders | 2008-12-04 00:33:25 +0000 (Thu, 04 Dec 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/contributions/ExtensionTemplate/doc/class1.html
+   M /trunk/strasheela/contributions/ExtensionTemplate/doc/node1.html
+   M /trunk/strasheela/contributions/ExtensionTemplate/doc/node2.html
+   M /trunk/strasheela/contributions/ExtensionTemplate/doc/node3.html
+   M /trunk/strasheela/contributions/anders/ConstrainTimingTree/doc/node1.html
+   M /trunk/strasheela/contributions/anders/ET22/doc/node3.html
+   M /trunk/strasheela/contributions/anders/ET22/doc/node4.html
+   M /trunk/strasheela/contributions/anders/ET22/doc/node5.html
+   M /trunk/strasheela/contributions/anders/ET22/doc/node6.html
+   M /trunk/strasheela/contributions/anders/Gnuplot/doc/node1.html
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/doc/class1.html
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/doc/class10.html
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/doc/class11.html
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/doc/class12.html
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/doc/class13.html
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/doc/class14.html
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/doc/class15.html
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/doc/class16.html
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/doc/class17.html
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/doc/class18.html
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/doc/class19.html
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/doc/class2.html
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/doc/class20.html
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/doc/class21.html
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/doc/class22.html
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/doc/class23.html
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/doc/class24.html
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/doc/class25.html
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/doc/class3.html
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/doc/class4.html
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/doc/class5.html
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/doc/class6.html
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/doc/class7.html
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/doc/class8.html
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/doc/class9.html
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/doc/node10.html
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/doc/node11.html
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/doc/node12.html
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/doc/node13.html
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/doc/node14.html
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/doc/node15.html
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/doc/node2.html
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/doc/node3.html
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/doc/node4.html
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/doc/node6.html
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/doc/node7.html
+   M /trunk/strasheela/contributions/anders/Measure/doc/class1.html
+   M /trunk/strasheela/contributions/anders/Measure/doc/class2.html
+   M /trunk/strasheela/contributions/anders/Measure/doc/node1.html
+   M /trunk/strasheela/contributions/anders/Motif/doc/class1.html
+   M /trunk/strasheela/contributions/anders/Motif/doc/class2.html
+   M /trunk/strasheela/contributions/anders/Motif/doc/class3.html
+   M /trunk/strasheela/contributions/anders/Motif/doc/class4.html
+   M /trunk/strasheela/contributions/anders/Motif/doc/node1.html
+   M /trunk/strasheela/contributions/anders/OSC/doc/class1.html
+   M /trunk/strasheela/contributions/anders/OSC/doc/class2.html
+   M /trunk/strasheela/contributions/anders/OSC/doc/class3.html
+   M /trunk/strasheela/contributions/anders/OSC/doc/node1.html
+   M /trunk/strasheela/contributions/anders/Pattern/doc/node1.html
+   M /trunk/strasheela/contributions/anders/PrototypeMotif/doc/node1.html
+   M /trunk/strasheela/contributions/anders/Realtime/doc/class1.html
+   M /trunk/strasheela/contributions/anders/Realtime/doc/node1.html
+   M /trunk/strasheela/contributions/anders/Tutorial/doc/node2.html
+   M /trunk/strasheela/contributions/anders/Tutorial/doc/node3.html
+   M /trunk/strasheela/contributions/gperciva/eventdurs/doc/node1.html
+   M /trunk/strasheela/doc/api/class1.html
+   M /trunk/strasheela/doc/api/class12.html
+   M /trunk/strasheela/doc/api/class13.html
+   M /trunk/strasheela/doc/api/class14.html
+   M /trunk/strasheela/doc/api/class15.html
+   M /trunk/strasheela/doc/api/class16.html
+   M /trunk/strasheela/doc/api/class18.html
+   M /trunk/strasheela/doc/api/class19.html
+   M /trunk/strasheela/doc/api/class20.html
+   M /trunk/strasheela/doc/api/class21.html
+   M /trunk/strasheela/doc/api/class22.html
+   M /trunk/strasheela/doc/api/class23.html
+   M /trunk/strasheela/doc/api/class24.html
+   M /trunk/strasheela/doc/api/class25.html
+   M /trunk/strasheela/doc/api/class26.html
+   M /trunk/strasheela/doc/api/class27.html
+   M /trunk/strasheela/doc/api/class28.html
+   M /trunk/strasheela/doc/api/class29.html
+   M /trunk/strasheela/doc/api/class30.html
+   M /trunk/strasheela/doc/api/class31.html
+   M /trunk/strasheela/doc/api/node11.html
+   M /trunk/strasheela/doc/api/node2.html
+   M /trunk/strasheela/doc/api/node3.html
+   M /trunk/strasheela/doc/api/node4.html
+   M /trunk/strasheela/doc/api/node5.html
+   M /trunk/strasheela/doc/api/node6.html
+   M /trunk/strasheela/doc/api/node7.html
+   M /trunk/strasheela/doc/api/node8.html
+   M /trunk/strasheela/doc/api/node9.html
+
+Render reference doc
+
+------------------------------------------------------------------------
+r1550 | t-anders | 2008-12-04 00:30:31 +0000 (Thu, 04 Dec 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/doc/Basics-1.html
+   M /trunk/strasheela/doc/Basics-2.html
+   M /trunk/strasheela/doc/Changes.html
+   M /trunk/strasheela/doc/ConstraintProgramming.html
+   M /trunk/strasheela/doc/MusicRepresentation.html
+   M /trunk/strasheela/doc/MusicalCSPs.html
+   M /trunk/strasheela/doc/index.html
+   M /trunk/strasheela/doc-source/Changes.muse
+   M /trunk/strasheela/doc-source/index.muse
+
+Render doc
+
+------------------------------------------------------------------------
+r1549 | t-anders | 2008-12-04 00:28:24 +0000 (Thu, 04 Dec 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/source/ScoreDistribution.oz
+
+Optimised naive variable ordering (return false instead of true)
+
+------------------------------------------------------------------------
+r1548 | t-anders | 2008-12-04 00:27:53 +0000 (Thu, 04 Dec 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/source/GeneralUtils.oz
+   M /trunk/strasheela/source/ListUtils.oz
+   M /trunk/strasheela/source/Output.oz
+   M /trunk/strasheela/source/ScoreMapping.oz
+
+Cleaned up code: removed compiler warnings like 'Browse not used'
+
+------------------------------------------------------------------------
+r1547 | t-anders | 2008-12-04 00:27:03 +0000 (Thu, 04 Dec 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/contributions/gperciva/app-framework/makefile.oz
+   M /trunk/strasheela/contributions/gperciva/app-music-framework/makefile.oz
+
+Cleaned up code: fixed two makefile.oz (equal uri/mogul path, equal bin name..)
+
+------------------------------------------------------------------------
+r1546 | t-anders | 2008-12-04 00:25:08 +0000 (Thu, 04 Dec 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/contributions/gperciva/eventdurs/eventdurs.oz
+
+Cleaned up code: removed compiler warnings like 'Browse not used'
+
+------------------------------------------------------------------------
+r1545 | t-anders | 2008-12-04 00:24:34 +0000 (Thu, 04 Dec 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/contributions/gperciva/app-music-framework/MyMusic.oz
+
+Fixed indentation
+
+------------------------------------------------------------------------
+r1544 | t-anders | 2008-12-04 00:22:49 +0000 (Thu, 04 Dec 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/contributions/ExtensionTemplate/MyExtension.oz
+   M /trunk/strasheela/contributions/anders/ConstrainTimingTree/ConstrainTimingTree.oz
+   M /trunk/strasheela/contributions/anders/ET22/source/Output.oz
+   M /trunk/strasheela/contributions/anders/Gnuplot/Gnuplot.oz
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/source/Database.oz
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/source/Rules.oz
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/source/Schoenberg.oz
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/source/Score.oz
+   M /trunk/strasheela/contributions/anders/Measure/Measure.oz
+   M /trunk/strasheela/contributions/anders/Motif/Motif.oz
+   M /trunk/strasheela/contributions/anders/OSC/OSC.oz
+   M /trunk/strasheela/contributions/anders/Pattern/Pattern.oz
+   M /trunk/strasheela/contributions/anders/PrototypeMotif/PrototypeMotif.oz
+   M /trunk/strasheela/contributions/anders/Realtime/Realtime.oz
+   M /trunk/strasheela/contributions/anders/Tutorial/source/StrasheelaPrototyper.oz
+
+Cleaned up code: removed many compiler warnings like 'Browse not used'
+
+------------------------------------------------------------------------
+r1543 | t-anders | 2008-12-03 22:46:57 +0000 (Wed, 03 Dec 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/source/ScoreDistribution.oz
+
+Revised variables orderings for efficiency: replaced many =< by < etc.
+
+------------------------------------------------------------------------
+r1542 | t-anders | 2008-12-03 22:37:19 +0000 (Wed, 03 Dec 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/others/TODO/Strasheela-Maybe-TODO.org
+   M /trunk/strasheela/others/TODO/Strasheela-TODO.org
+
+updated todo list
+
+------------------------------------------------------------------------
+r1541 | t-anders | 2008-12-01 17:15:10 +0000 (Mon, 01 Dec 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/others/TODO/Strasheela-Maybe-TODO.org
+
+Update todo list
+
+------------------------------------------------------------------------
+r1540 | t-anders | 2008-12-01 14:48:42 +0000 (Mon, 01 Dec 2008) | 2 lines
+Changed paths:
+   D /trunk/strasheela/contributions/anders/ET31/doc-DB
+
+Removed excessive sound files
+
+------------------------------------------------------------------------
+r1539 | t-anders | 2008-12-01 14:48:07 +0000 (Mon, 01 Dec 2008) | 2 lines
+Changed paths:
+   D /trunk/strasheela/contributions/anders/ET31/doc-DB/ET31-all-chords-explicitNotes.mp3
+   D /trunk/strasheela/contributions/anders/ET31/doc-DB/ET31-all-chords-explicitNotes.pdf
+   D /trunk/strasheela/contributions/anders/ET31/doc-DB/ET31-all-chords.pdf
+   D /trunk/strasheela/contributions/anders/ET31/doc-DB/ET31-all-scales-explicitNotes.mp3
+   D /trunk/strasheela/contributions/anders/ET31/doc-DB/ET31-all-scales-explicitNotes.pdf
+   D /trunk/strasheela/contributions/anders/ET31/doc-DB/ET31-all-scales.pdf
+   D /trunk/strasheela/contributions/anders/ET31/doc-DB/ET31-allIntervals.mp3
+   D /trunk/strasheela/contributions/anders/ET31/doc-DB/ET31-allIntervals.pdf
+   D /trunk/strasheela/contributions/anders/ET31/doc-DB/Major-ChordsAtScaleDegrees-withNotes.ly
+   D /trunk/strasheela/contributions/anders/ET31/doc-DB/Major-ChordsAtScaleDegrees-withNotes.mp3
+   D /trunk/strasheela/contributions/anders/ET31/doc-DB/Major-ChordsAtScaleDegrees-withNotes.pdf
+   D /trunk/strasheela/contributions/anders/ET31/doc-DB/Major-ChordsAtScaleDegrees-withNotes.ps
+   D /trunk/strasheela/contributions/anders/ET31/doc-DB/Major-ChordsAtScaleDegrees.ly
+   D /trunk/strasheela/contributions/anders/ET31/doc-DB/Major-ChordsAtScaleDegrees.pdf
+   D /trunk/strasheela/contributions/anders/ET31/doc-DB/Major-ChordsAtScaleDegrees.ps
+
+Removed excessive sound files
+
+------------------------------------------------------------------------
+r1538 | t-anders | 2008-12-01 14:47:21 +0000 (Mon, 01 Dec 2008) | 2 lines
+Changed paths:
+   D /trunk/strasheela/contributions/anders/ET22/doc-DB
+
+Removed excessive sound files
+
+------------------------------------------------------------------------
+r1537 | t-anders | 2008-12-01 14:46:29 +0000 (Mon, 01 Dec 2008) | 2 lines
+Changed paths:
+   D /trunk/strasheela/contributions/anders/ET22/doc-DB/ChordsInDecatonicScales
+
+Removed excessive sound files
+
+------------------------------------------------------------------------
+r1536 | t-anders | 2008-12-01 14:44:51 +0000 (Mon, 01 Dec 2008) | 2 lines
+Changed paths:
+   D /trunk/strasheela/contributions/anders/ET22/doc-DB/0-Readme.txt
+   D /trunk/strasheela/contributions/anders/ET22/doc-DB/ET22-all-chords-explicitNotes.ly
+   D /trunk/strasheela/contributions/anders/ET22/doc-DB/ET22-all-chords-explicitNotes.mp3
+   D /trunk/strasheela/contributions/anders/ET22/doc-DB/ET22-all-chords-explicitNotes.pdf
+   D /trunk/strasheela/contributions/anders/ET22/doc-DB/ET22-all-scales-explicitNotes.ly
+   D /trunk/strasheela/contributions/anders/ET22/doc-DB/ET22-all-scales-explicitNotes.mp3
+   D /trunk/strasheela/contributions/anders/ET22/doc-DB/ET22-all-scales-explicitNotes.pdf
+   D /trunk/strasheela/contributions/anders/ET22/doc-DB/ET22-allIntervals.ly
+   D /trunk/strasheela/contributions/anders/ET22/doc-DB/ET22-allIntervals.mp3
+   D /trunk/strasheela/contributions/anders/ET22/doc-DB/ET22-allIntervals.pdf
+   D /trunk/strasheela/contributions/anders/ET22/doc-DB/ET22-notation.ly
+   D /trunk/strasheela/contributions/anders/ET22/doc-DB/ET22-notation.pdf
+   D /trunk/strasheela/contributions/anders/ET22/doc-DB/script.sh
+
+Removed excessive sound files
+
+------------------------------------------------------------------------
+r1535 | t-anders | 2008-12-01 14:43:56 +0000 (Mon, 01 Dec 2008) | 2 lines
+Changed paths:
+   D /trunk/strasheela/contributions/anders/ET22/doc-DB/ChordsInDecatonicScales/AlternatePentachordalMajor-ChordsAtScaleDegrees-withNotes.ly
+   D /trunk/strasheela/contributions/anders/ET22/doc-DB/ChordsInDecatonicScales/AlternatePentachordalMajor-ChordsAtScaleDegrees-withNotes.mp3
+   D /trunk/strasheela/contributions/anders/ET22/doc-DB/ChordsInDecatonicScales/AlternatePentachordalMajor-ChordsAtScaleDegrees-withNotes.pdf
+   D /trunk/strasheela/contributions/anders/ET22/doc-DB/ChordsInDecatonicScales/AlternatePentachordalMajor-ChordsAtScaleDegrees.ly
+   D /trunk/strasheela/contributions/anders/ET22/doc-DB/ChordsInDecatonicScales/AlternatePentachordalMajor-ChordsAtScaleDegrees.pdf
+   D /trunk/strasheela/contributions/anders/ET22/doc-DB/ChordsInDecatonicScales/AlternatePentachordalMinor-ChordsAtScaleDegrees-withNotes.ly
+   D /trunk/strasheela/contributions/anders/ET22/doc-DB/ChordsInDecatonicScales/AlternatePentachordalMinor-ChordsAtScaleDegrees-withNotes.mp3
+   D /trunk/strasheela/contributions/anders/ET22/doc-DB/ChordsInDecatonicScales/AlternatePentachordalMinor-ChordsAtScaleDegrees-withNotes.pdf
+   D /trunk/strasheela/contributions/anders/ET22/doc-DB/ChordsInDecatonicScales/AlternatePentachordalMinor-ChordsAtScaleDegrees.ly
+   D /trunk/strasheela/contributions/anders/ET22/doc-DB/ChordsInDecatonicScales/AlternatePentachordalMinor-ChordsAtScaleDegrees.pdf
+   D /trunk/strasheela/contributions/anders/ET22/doc-DB/ChordsInDecatonicScales/DynamicPentachordalMajor-ChordsAtScaleDegrees-withNotes.ly
+   D /trunk/strasheela/contributions/anders/ET22/doc-DB/ChordsInDecatonicScales/DynamicPentachordalMajor-ChordsAtScaleDegrees-withNotes.mp3
+   D /trunk/strasheela/contributions/anders/ET22/doc-DB/ChordsInDecatonicScales/DynamicPentachordalMajor-ChordsAtScaleDegrees-withNotes.pdf
+   D /trunk/strasheela/contributions/anders/ET22/doc-DB/ChordsInDecatonicScales/DynamicPentachordalMajor-ChordsAtScaleDegrees.ly
+   D /trunk/strasheela/contributions/anders/ET22/doc-DB/ChordsInDecatonicScales/DynamicPentachordalMajor-ChordsAtScaleDegrees.pdf
+   D /trunk/strasheela/contributions/anders/ET22/doc-DB/ChordsInDecatonicScales/DynamicPentachordalMinor-ChordsAtScaleDegrees-withNotes.ly
+   D /trunk/strasheela/contributions/anders/ET22/doc-DB/ChordsInDecatonicScales/DynamicPentachordalMinor-ChordsAtScaleDegrees-withNotes.mp3
+   D /trunk/strasheela/contributions/anders/ET22/doc-DB/ChordsInDecatonicScales/DynamicPentachordalMinor-ChordsAtScaleDegrees-withNotes.pdf
+   D /trunk/strasheela/contributions/anders/ET22/doc-DB/ChordsInDecatonicScales/DynamicPentachordalMinor-ChordsAtScaleDegrees.ly
+   D /trunk/strasheela/contributions/anders/ET22/doc-DB/ChordsInDecatonicScales/DynamicPentachordalMinor-ChordsAtScaleDegrees.pdf
+   D /trunk/strasheela/contributions/anders/ET22/doc-DB/ChordsInDecatonicScales/StandardPentachordalMajor-ChordsAtScaleDegrees-withNotes.ly
+   D /trunk/strasheela/contributions/anders/ET22/doc-DB/ChordsInDecatonicScales/StandardPentachordalMajor-ChordsAtScaleDegrees-withNotes.mp3
+   D /trunk/strasheela/contributions/anders/ET22/doc-DB/ChordsInDecatonicScales/StandardPentachordalMajor-ChordsAtScaleDegrees-withNotes.pdf
+   D /trunk/strasheela/contributions/anders/ET22/doc-DB/ChordsInDecatonicScales/StandardPentachordalMajor-ChordsAtScaleDegrees.ly
+   D /trunk/strasheela/contributions/anders/ET22/doc-DB/ChordsInDecatonicScales/StandardPentachordalMajor-ChordsAtScaleDegrees.pdf
+   D /trunk/strasheela/contributions/anders/ET22/doc-DB/ChordsInDecatonicScales/StandardPentachordalMinor-ChordsAtScaleDegrees-withNotes.ly
+   D /trunk/strasheela/contributions/anders/ET22/doc-DB/ChordsInDecatonicScales/StandardPentachordalMinor-ChordsAtScaleDegrees-withNotes.mp3
+   D /trunk/strasheela/contributions/anders/ET22/doc-DB/ChordsInDecatonicScales/StandardPentachordalMinor-ChordsAtScaleDegrees-withNotes.pdf
+   D /trunk/strasheela/contributions/anders/ET22/doc-DB/ChordsInDecatonicScales/StandardPentachordalMinor-ChordsAtScaleDegrees.ly
+   D /trunk/strasheela/contributions/anders/ET22/doc-DB/ChordsInDecatonicScales/StandardPentachordalMinor-ChordsAtScaleDegrees.pdf
+   D /trunk/strasheela/contributions/anders/ET22/doc-DB/ChordsInDecatonicScales/StaticPentachordalMajor-ChordsAtScaleDegrees-withNotes.ly
+   D /trunk/strasheela/contributions/anders/ET22/doc-DB/ChordsInDecatonicScales/StaticPentachordalMajor-ChordsAtScaleDegrees-withNotes.mp3
+   D /trunk/strasheela/contributions/anders/ET22/doc-DB/ChordsInDecatonicScales/StaticPentachordalMajor-ChordsAtScaleDegrees-withNotes.pdf
+   D /trunk/strasheela/contributions/anders/ET22/doc-DB/ChordsInDecatonicScales/StaticPentachordalMajor-ChordsAtScaleDegrees.ly
+   D /trunk/strasheela/contributions/anders/ET22/doc-DB/ChordsInDecatonicScales/StaticPentachordalMajor-ChordsAtScaleDegrees.pdf
+   D /trunk/strasheela/contributions/anders/ET22/doc-DB/ChordsInDecatonicScales/StaticPentachordalMinor-ChordsAtScaleDegrees-withNotes.ly
+   D /trunk/strasheela/contributions/anders/ET22/doc-DB/ChordsInDecatonicScales/StaticPentachordalMinor-ChordsAtScaleDegrees-withNotes.mp3
+   D /trunk/strasheela/contributions/anders/ET22/doc-DB/ChordsInDecatonicScales/StaticPentachordalMinor-ChordsAtScaleDegrees-withNotes.pdf
+   D /trunk/strasheela/contributions/anders/ET22/doc-DB/ChordsInDecatonicScales/StaticPentachordalMinor-ChordsAtScaleDegrees.ly
+   D /trunk/strasheela/contributions/anders/ET22/doc-DB/ChordsInDecatonicScales/StaticPentachordalMinor-ChordsAtScaleDegrees.pdf
+
+Removed excessive sound files
+
+------------------------------------------------------------------------
+r1534 | t-anders | 2008-12-01 11:32:57 +0000 (Mon, 01 Dec 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/source/ScoreCore.oz
+
+Bugfix: import browser
+
+------------------------------------------------------------------------
+r1533 | t-anders | 2008-12-01 11:32:44 +0000 (Mon, 01 Dec 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/source/Init.oz
+
+Bugfix: import browser
+
+------------------------------------------------------------------------
+r1532 | t-anders | 2008-12-01 11:30:18 +0000 (Mon, 01 Dec 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/doc/MusicRepresentation.html
+   M /trunk/strasheela/doc-source/MusicRepresentation.muse
+
+Updated tutorial
+
+------------------------------------------------------------------------
+r1531 | t-anders | 2008-12-01 11:15:43 +0000 (Mon, 01 Dec 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/others/TODO/Strasheela-Maybe-TODO.org
+   M /trunk/strasheela/others/TODO/Strasheela-TODO.org
+   M /trunk/strasheela/others/TODO/Strasheela-TODO.org_archive
+
+Updated todo list
+
+------------------------------------------------------------------------
+r1530 | t-anders | 2008-12-01 11:15:28 +0000 (Mon, 01 Dec 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/doc/Basics-1.html
+   M /trunk/strasheela/doc/Basics-2.html
+   M /trunk/strasheela/doc/ConstraintProgramming.html
+   M /trunk/strasheela/doc/MusicRepresentation.html
+   M /trunk/strasheela/doc/MusicalCSPs.html
+   M /trunk/strasheela/doc-source/Basics-1.muse
+   M /trunk/strasheela/doc-source/ConstraintProgramming.muse
+   M /trunk/strasheela/doc-source/MusicRepresentation.muse
+
+Updated tutorial
+
+------------------------------------------------------------------------
+r1529 | gperciva | 2008-12-01 05:21:13 +0000 (Mon, 01 Dec 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/contributions/anders/Tutorial/TheExamples/02-Strasheela/MusicRepresentation.tut
+
+More organization.
+
+------------------------------------------------------------------------
+r1528 | gperciva | 2008-12-01 04:51:01 +0000 (Mon, 01 Dec 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/contributions/anders/Tutorial/TheExamples/02-Strasheela/MusicRepresentation.tut
+
+Add MIDI output info.
+
+------------------------------------------------------------------------
+r1527 | t-anders | 2008-11-27 19:34:00 +0000 (Thu, 27 Nov 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/scripts/release-strasheela.sh
+
+Commented creating "with-sound" tar ball
+
+------------------------------------------------------------------------
+r1526 | t-anders | 2008-11-27 19:33:17 +0000 (Thu, 27 Nov 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/CHANGELOG.txt
+
+Updated change log
+
+------------------------------------------------------------------------
+r1525 | t-anders | 2008-11-27 19:32:31 +0000 (Thu, 27 Nov 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/doc/Installation.html
+
+Added sec: how to obtain Strasheela
+
+------------------------------------------------------------------------
+r1524 | t-anders | 2008-11-27 19:31:44 +0000 (Thu, 27 Nov 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/doc-source/Installation.muse
+
+Extended sec: how to obtain Strasheela
+
+------------------------------------------------------------------------
+r1523 | t-anders | 2008-11-27 19:26:37 +0000 (Thu, 27 Nov 2008) | 2 lines
+Changed paths:
+   M /trunk/strasheela/doc-source/Installation.muse
+
+Updated sec: how to obtain Strasheela
+
+------------------------------------------------------------------------
 r1521 | t-anders | 2008-11-27 18:33:13 +0000 (Thu, 27 Nov 2008) | 2 lines
 Changed paths:
    M /trunk/strasheela/doc/Changes.html
