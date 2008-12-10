@@ -2,6 +2,28 @@
 #title Changes 
 ; #author Torsten Anders
 
+* Changes in Version 0.9.8 (no date yet)
+
+  - Main additions and changes 
+    - Score.makeScore: more convenient notation variant supported for nested scores. The following two examples are now equivalent.
+      - ={Score.makeScore seq(items:[note note]) unit}=  
+      - ={Score.make seq([note note]) unit}=  
+
+  - Documentation
+
+  - Minor additions 
+    - HS.rules.schoenberg: added ProgressionSelector
+
+  - Bug fixes and changes
+    - HS.rules: constraint name changes: 
+      - SmallIntervalProgressions -> SmallIntervalsInProgression
+      - SmallIntervalProgressions_Percent -> SmallIntervalsInProgression_Percent
+    - GUtils: simplified IsDivisible implementation 
+
+
+  - For further fixes see the [[../CHANGELOG.txt]].
+
+
 * Changes in Version 0.9.8 (4 December 2008)
 
   - Serious bug fixed (compilation error): Score and Init: Browser was not imported 
@@ -11,8 +33,6 @@
   - SDistro: first-fail variables orderings (e.g., distribution order values like dom, width, and their various relations) are more efficient (replaced many =< by <)
 
   - Code cleaned up (virtually no compiler warnings anymore)
-
-
 
   - For further fixes see the [[../CHANGELOG.txt]].
 

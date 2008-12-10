@@ -37,6 +37,48 @@
     <!-- Page published by Emacs Muse begins here -->
 
 
+<h2>Changes in Version 0.9.8 (no date yet)</h2>
+
+<ul>
+<li>Main additions and changes
+
+<ul>
+<li>Score.makeScore: more convenient notation variant supported for nested scores. The following two examples are now equivalent.
+
+<ul>
+<li><code>{Score.makeScore seq(items:[note note]) unit}</code></li>
+<li><code>{Score.make seq([note note]) unit}</code></li>
+</ul></li>
+</ul></li>
+
+<li>Documentation</li>
+
+<li>Minor additions
+
+<ul>
+<li>HS.rules.schoenberg: added ProgressionSelector</li>
+</ul></li>
+
+<li>Bug fixes and changes
+
+<ul>
+<li>HS.rules: constraint name changes:
+
+<ul>
+<li>SmallIntervalProgressions -&gt; SmallIntervalsInProgression</li>
+<li>SmallIntervalProgressions_Percent -&gt; SmallIntervalsInProgression_Percent</li>
+</ul></li>
+<li>GUtils: simplified IsDivisible implementation</li>
+</ul></li>
+</ul>
+
+
+<ul>
+<li>For further fixes see the <a href="../CHANGELOG.txt">../CHANGELOG.txt</a>.</li>
+</ul>
+
+
+
 <h2>Changes in Version 0.9.8 (4 December 2008)</h2>
 
 <ul>
@@ -47,11 +89,7 @@
 <li>SDistro: first-fail variables orderings (e.g., distribution order values like dom, width, and their various relations) are more efficient (replaced many =&lt; by &lt;)</li>
 
 <li>Code cleaned up (virtually no compiler warnings anymore)</li>
-</ul>
 
-
-
-<ul>
 <li>For further fixes see the <a href="../CHANGELOG.txt">../CHANGELOG.txt</a>.</li>
 </ul>
 
@@ -664,7 +702,7 @@ See the documentation for <a href="../contributions/anders/HarmonisedScore/doc/n
 <div id="footer">
 <div id="author">&copy; 
 Torsten Anders</div>
-<div id="date">Last time edited: 2008.12.04</div>
+<div id="date">Last time edited: 2008.12.10</div>
 </div>
   </body>
 </html>
