@@ -1741,13 +1741,24 @@ define
 	 %% items binds the (extendable) list of items contained in
 	 %% the container
 	 items
-	 /** % The optional parameter items expects a list of items which are contained in the container instance. (Additionally, items can be given by calling the method bilinkItems.)
+	 /** % The optional argument 'items' expects a list of items which are contained in the container instance. (Additionally, items can be given by calling the method bilinkItems.) A convenient shorthand notation for 'items' is the init method argument at record position 1.
+	 %% Example: init(MyItems ...)
 	 % */
-      meth init(items:Items<=nil ...) = M
-	 Item, {Record.subtract M items}
+      meth init(1:Items1<=nil items:Items2<=nil ...) = M
+	 Items = if Items2 \= nil then Items2
+		 elseif Items1 \= nil then Items1
+		 else nil
+		 end
+      in	 
+	 Item, {Record.subtractList M [1 items]}
 	 @items = {New LUtils.extendableList init}
 	 {self bilinkItems(Items)}
       end 
+%       meth init(items:Items<=nil ...) = M
+% 	 Item, {Record.subtract M items}
+% 	 @items = {New LUtils.extendableList init}
+% 	 {self bilinkItems(Items)}
+%       end 
       /** % [aux method]
       % */
       meth closeExtendableLists
@@ -2353,10 +2364,10 @@ define
 	    in
 	       if {IsClass Constructor}
 	       then X={New Constructor {Adjoin {Record.subtractList ScoreSpec
-						[items containers]}
+						[items containers 1]}
 					init}}
 	       else X={Constructor {Record.subtractList ScoreSpec
-				    [items containers]}}
+				    [items containers 1]}}
 	       end
 	       if HasID
 	       then {Dictionary.put MyItemIDs ScoreSpec.id X}
@@ -2368,9 +2379,17 @@ define
 	 X = {MakeExplicitObject ScoreSpec Constructors MyItemIDs}
       in
 	 %% create contained items
-	 if {HasFeature ScoreSpec items}
+	 if {HasFeature ScoreSpec items} 
 	 then
 	    Items = {LUtils.mappend ScoreSpec.items
+		     fun {$ S} {MakeExplicitScoreAux S Constructors MyItemIDs} end}
+	 in
+	    {X bilinkItems(Items)} 
+	 end
+	 %% shorthand notation: feature 1 for items
+	 if {HasFeature ScoreSpec 1} 
+	 then
+	    Items = {LUtils.mappend ScoreSpec.1
 		     fun {$ S} {MakeExplicitScoreAux S Constructors MyItemIDs} end}
 	 in
 	    {X bilinkItems(Items)} 
@@ -2418,7 +2437,7 @@ define
 	       GetFeat = fun {$ X Feat} X.Feat end
 	    end
 	    %% X equals ScoreSpec except features containers and items
-	    {Record.forAllInd {Record.subtractList ScoreSpec [containers items]}
+	    {Record.forAllInd {Record.subtractList ScoreSpec [containers items 1]}
 	     proc {$ Feat _} {GetFeat X Feat} = ScoreSpec.Feat end}
 	    if {HasFeature ScoreSpec containers}
 	    then {GetFeat X containers} = {Map ScoreSpec.containers
@@ -2427,6 +2446,10 @@ define
 	    if {HasFeature ScoreSpec items}
 	    then {GetFeat X items} = {Map ScoreSpec.items 
 				      fun {$ X} {UnifyIDsAux X MyUnifyIDs} end}
+	    end
+	    if {HasFeature ScoreSpec 1}
+	    then {GetFeat X 1} = {Map ScoreSpec.1 
+				  fun {$ X} {UnifyIDsAux X MyUnifyIDs} end}
 	    end
 	 end
       end
@@ -2534,7 +2557,9 @@ define
       %%
       %% A nested score hierarchy is expressed by specifying further init record lists at the feature items or containers, e.g.,
       %%<code>{Score.makeScore seq(items:[note note] startTime:0) unit}}</code>
-      %%
+      %% As a shorthand notation, the feature 1 can be used instead of items, e.g., 
+      %%<code>{Score.makeScore seq([note note] startTime:0) unit}}</code>
+      %% 
       %% Score objects can be marked with an id. Score graphs can be formulated by referring to the same score object with the same id multiple times 
       <code>{Score.makeScore sim(items:[note(containers:[aspect(id:1 info:test)]
 					     duration:1)
