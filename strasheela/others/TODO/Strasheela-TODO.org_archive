@@ -976,6 +976,34 @@ rpmbuild will typically create binary RPMs in the usual system-specific location
   :END:
 
 
+* DONE Backup Strasheela SVN repository on Office Mac
+  CLOSED: [2008-12-09 Tue 17:35]
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2008-12-09 Tue 17:35
+  :ARCHIVE_FILE: ~/oz/music/Strasheela/strasheela/trunk/strasheela/others/TODO/Strasheela-TODO.org
+  :ARCHIVE_CATEGORY: Strasheela
+  :ARCHIVE_TODO: DONE
+  :END:
+
+  Does not work behind Uni firewall, but from homw
+
+  see 
+  [[file:~/oz/music/Strasheela/sourceforge-howto/backup-howto.muse::Backup%20of%20the%20SVN%20repository][file:~/oz/music/Strasheela/sourceforge-howto/backup-howto.muse::Backup of the SVN repository]]
+
+  This seems never to work. 
+  Could uni firewall be problem? 
+  - http://samba.anu.edu.au/rsync/FAQ.html#6
+  - http://samba.anu.edu.au/rsync/firewall.html
+
+
+  cd /Volumes/Data/Backup/Strasheela-SVN-repository 
+  rsync -av strasheela.svn.sourceforge.net::svn/strasheela/* .
+
+rsync: failed to connect to strasheela.svn.sourceforge.net: Operation timed out (60)
+rsync error: error in socket IO (code 10) at /SourceCache/rsync/rsync-24.1/rsync/clientserver.c(94)
+
+
+
 
 
 

@@ -55,25 +55,6 @@
 ** Release
 
 
-* TODO Backup Strasheela SVN repository on Office Mac
-
-  see 
-  [[file:~/oz/music/Strasheela/sourceforge-howto/backup-howto.muse::Backup%20of%20the%20SVN%20repository][file:~/oz/music/Strasheela/sourceforge-howto/backup-howto.muse::Backup of the SVN repository]]
-
-  This seems never to work. 
-  Could uni firewall be problem? 
-  - http://samba.anu.edu.au/rsync/FAQ.html#6
-  - http://samba.anu.edu.au/rsync/firewall.html
-
-
-  cd /Volumes/Data/Backup/Strasheela-SVN-repository 
-  rsync -av strasheela.svn.sourceforge.net::svn/strasheela/* .
-
-rsync: failed to connect to strasheela.svn.sourceforge.net: Operation timed out (60)
-rsync error: error in socket IO (code 10) at /SourceCache/rsync/rsync-24.1/rsync/clientserver.c(94)
-
-
-
 
 * Strasheela examples
 
@@ -138,6 +119,16 @@ MyTestScore = {Score.makeScore
 
 * Strasheela design						    :STRASHEELA:
 
+
+** TODO Fenv.renderAndPlayMidi: add Fenv controlling articulation (note length)
+   
+   ?? Fenv value is note duration factor 
+   E.g., 0.8 results in some non-legato, 1.1 is legato, 0.3 is staccato
+   
+   Or is addition better than multiplication
+   I feel multiplication is more flexible, but sometimes I may want to add instead
+   ?? can I somehow generise and allow for both options?
+
 ** TODO Archive Fenvs by approximation (sampling the Fenv)
 
    I may use linear Fenvs or something similar. May result in long code files (if approximation/sampling has high rate), but this is at least some easy and working solution
@@ -174,7 +165,7 @@ MyTestScore = {Score.makeScore
 ** GeOz 
    
 *** TODO Install GeOz 
-    SCHEDULED: <2008-12-08 Mon>
+    SCHEDULED: <2009-04-06 Mon>
     
     First ask  gustavo.ggutierrez@gmail.com whether meanwhile graph constraints are working again
 

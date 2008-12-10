@@ -2836,13 +2836,6 @@ useful for package creators and new users to test whether installation was succe
 
 ** ozh								    :MAYBE:
 
-*** ozh: add SGML doc
-
-the orig documentation source files for creating, e.g., the HTML doc are still missing in our branch
-
-I meanwhile checked -- it appears this file is not available any more online
-
-
 *** ?? ozh: add list to wiki
 
   - better file names for resulting HTML files, and better anchor names (make them persistent): see below
@@ -2857,6 +2850,13 @@ File names and anchor names should be generated from source entries (e.g., file 
 The current implementation does not even preserve whitespace after a new line in doc strings. Consequently, the layout of code examples is destroyed.
 
 Even better would be, if some wiki layout is supported (optionally). Does there exist some easy wiki-layout -> HTML application (expecting wikified text snippets and returning corresponding HTML code snippets).   
+
+*** ozh: add SGML doc						       :ARCHIVE:
+    CLOSED: [2008-12-10 Wed 10:14]
+
+the orig documentation source files for creating, e.g., the HTML doc are still missing in our branch
+
+I meanwhile checked -- it appears this file is not available any more online
 
 
 
