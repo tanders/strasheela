@@ -71,8 +71,12 @@ export
    IsScoreObject IsTemporalItem IsTemporalContainer
    MakeScore MakeScore2 InitScore
    make: MakeScore
+   make2: MakeScore2
    CopyScore CopyScore2
+   init: InitScore
    TransformScore TransformScore2
+   transform: TransformScore
+   transform2: TransformScore2
    MakeContainer MakeSim MakeSeq 
    % ResolveRepeats
    MakeClass
