@@ -1,0 +1,15 @@
+#title MEWER
+
+[[StrasheelaExamples][back]]
+
+<contents depth="2">
+
+[[http://percival-music.ca/software/mewer/index.html][MEWER (MEWsician's Exercises for Rhythms)]] is an online game to practice clapping or tapping rhythms. This game is for practicing rhythms, it doesn't attempt to teach people how to read the rhythms. Here direct links to the
+; If you have absolutely no musical training, it won't make much sense.
+
+ - [[http://percival-music.ca/software/mewer/mewer-flash.html][MEWER Flash Version]]: Requires Flash 9 or higher, and Javascript enabled. Supports microphone and keyboard input. 
+ - [[http://percival-music.ca/software/mewer/mewer-js.html][MEWER Javascript Version]]: Does not support microphone. This version **does not work in Internet Explorer**. Using the Flash version is recommended.
+
+Source code for the exercise generation (ie the Strasheela part!) is available at: http://code.google.com/p/mewes/. 
+
+
