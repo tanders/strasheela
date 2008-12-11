@@ -10,9 +10,11 @@
       - ={Score.make seq([note note]) unit}=  
 
   - Documentation
+    - Page for [[Example-MEWER][MEWER]] added to examples
 
   - Minor additions 
     - HS.rules.schoenberg: added ProgressionSelector
+    - Pattern.firstToLastDistance added
 
   - Bug fixes and changes
     - HS.rules: constraint name changes: 
