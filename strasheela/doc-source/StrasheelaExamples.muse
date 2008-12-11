@@ -10,6 +10,8 @@ Musical constraint satisfaction problems (CSP) usually have multiple solutions. 
 
 ; **NB**: The explanation for these examples is partly unfinished. Also, some examples depend on changes in the subversion repository not released yet. Nevertheless, I do now upload these examples anyway and will continuously update them later. Please keep re-checking ;-) 
 
+* [[Example-MEWER][New: MEWER (MEWsician's Exercises for Rhythms)]]
+
 * [[Example-AllIntervalSeries][All-Interval Series]]
 
 * [[Example-FuxianFirstSpeciesCounterpoint][Fuxian First Species Counterpoint]]
