@@ -54,7 +54,7 @@ export
    Continuous AllEqual Increasing Decreasing
    InInterval
    Cycle Cycle2 Rotation Heap Random Palindrome Line Accumulation
-   ArithmeticSeries GeometricSeries Max Min ArithmeticMean Range
+   ArithmeticSeries GeometricSeries Max Min ArithmeticMean Range FirstToLastDistance
 
    UseMotifs
    
@@ -359,7 +359,11 @@ define
       {FD.distance {Max Xs} {Min Xs} A Y}
    end
 
-
+   /** %% Y (a FD int) is the distance between the first and the last value in Xs (a list of FD ints). A is a relation such as '=:' etc.
+   %% */
+   proc {FirstToLastDistance Xs A Y}
+      {FD.distance Xs.1 {List.last Xs} A Y}
+   end
 
    
    /** %% UseMotifs constrains the list Xs to consist only of "motif instances" declared in the list Motifs, a list of motif specs. More specifically, UseMotifs constrains that Xs is quasi the result of elements in Motifs appended in any order and possibly with repetitions. However, UseMotifs is a constraint -- the order of Motif elements in Xs is not fixed by UseMotifs.
