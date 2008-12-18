@@ -208,6 +208,7 @@ define
       end
       /** %% Returns a list of all methods (atoms) defined for self. 
       %% */
+      %% TODO: I cannot get method arguments
       meth getMethNames($)
 	 {Dictionary.keys {self getClass($)}.{Boot_Name.newUnique 'ooMeth'}}
       end
@@ -474,7 +475,7 @@ define
 % 				then nil
 % 				else {Transform Val}
 % 				end
- 	       in
+	       in
 %		  if Transformed==nil
 		  if {ValueIsSkipped Val Default}
 		  then nil
@@ -915,7 +916,7 @@ define
       %%*/
       %% @1=?Xs	
       meth getSimultaneousItems(?Xs test:Test<=fun {$ X} true end
-			       cTest: CTest<=fun {$ X} true end)
+				cTest: CTest<=fun {$ X} true end)
 	 thread 		% ?? NOTE: thread needed?
 	    TopLevel = {self getTopLevels($ test:fun {$ X} {X isTimeMixin($)} end)}.1
 	    ScoreObjects = {TopLevel collect($ test:Test)}
@@ -935,18 +936,18 @@ define
       %% NB: Test must be a deterministic function/method which does not block (e.g., checks on score object types or their position in the score topology are OK) and which is used for pre-filtering score objects. The argument cTest has the same format (optional Boolean function or method), but it is applied within the concurrent filtering of LUtils.cFilter, together with isSimultaneousItemR. Computationally very expensive tests and in particular tests which can block are better handed to cTest. 
       %% */
       meth findSimultaneousItem(?X test:Test<=fun {$ X} true end
-			       cTest: CTest<=fun {$ X} true end)
+				cTest: CTest<=fun {$ X} true end)
 	 thread 		% ?? NOTE: thread needed?
 	    TopLevel = {self getTopLevels($ test:fun {$ X} {X isTimeMixin($)} end)}.1
 	    ScoreObjects = {TopLevel collect($ test:Test)}
 	 in
 	    X = {LUtils.cFind ScoreObjects
-		  fun {$ X}
-		     X \= self andthen
-		     {X isItem($)} andthen
-		     ({self isSimultaneousItemR($ X)} == 1) andthen
-		     {{GUtils.toFun CTest} X}
-		  end}
+		 fun {$ X}
+		    X \= self andthen
+		    {X isItem($)} andthen
+		    ({self isSimultaneousItemR($ X)} == 1) andthen
+		    {{GUtils.toFun CTest} X}
+		 end}
 	 end
       end
 
@@ -1029,7 +1030,7 @@ define
       if MyItem == nil then nil
       elseif {IsTemporalContainer MyItem} andthen
 % 	 (
-	  {MyItem hasThisInfo($ timeshift)} % orelse {MyItem hasThisInfo($ tempo)})
+	 {MyItem hasThisInfo($ timeshift)} % orelse {MyItem hasThisInfo($ tempo)})
       then MyItem | {GetTimingFenvContainers {MyItem getTemporalContainer($)}}
       else {GetTimingFenvContainers {MyItem getTemporalContainer($)}}
       end
@@ -1076,9 +1077,9 @@ define
 	 %% Sum all time shift values and add them to MyTime
 	 MyTime 
 	 + {LUtils.accum
-	     {Map Cs
-	      fun {$ C} {Fenv.itemFenvY {C getInfoRecord($ timeshift)}.1 C MyTime} end}
-	     Number.'+'}
+	    {Map Cs
+	     fun {$ C} {Fenv.itemFenvY {C getInfoRecord($ timeshift)}.1 C MyTime} end}
+	    Number.'+'}
       end
    end
    
@@ -1514,14 +1515,14 @@ define
       %% */
       meth pmApplyTemporalAspect(PatternMatchingExpr P)
 	 {SMapping.patternMatchingApply self {{self getTemporalAspect($)}
-						  getItems($)}
+					      getItems($)}
 	  PatternMatchingExpr P}
       end
       /** %% Generalised variant of pmApplyTemporalAspect2: in case no sublist in Xs matches PatternMatchingExpr, PatternMatchingApply2 does _not_ reduce to skip (as pmApplyTemporalAspect2) but instead applies the null-ary procedure ElseP.
       %% */ 
       meth pmApplyTemporalAspect2(PatternMatchingExpr P ElseP)
 	 {SMapping.patternMatchingApply2 self {{self getTemporalAspect($)}
-						   getItems($)}
+					       getItems($)}
 	  PatternMatchingExpr P ElseP}
       end
 
@@ -1654,9 +1655,9 @@ define
       /** %% Returns a float how many percent parameters of self and its contained items are determined. The Boolean function/method Exclude can be used to exclude parameters from considering. By default, time point parameters are excluded.
       %% */
       meth percentageIsDet($ exclude:Exclude<=isTimePoint)
-	Params = {self collect($ test:fun {$ X} {X isParameter($)} andthen {Not {{GUtils.toFun Exclude} X}} end)}
-	L = {Length Params}
-	DetParamsNo = {Length {Filter Params fun {$ P} {IsDet {P getValue($)}} end}}
+	 Params = {self collect($ test:fun {$ X} {X isParameter($)} andthen {Not {{GUtils.toFun Exclude} X}} end)}
+	 L = {Length Params}
+	 DetParamsNo = {Length {Filter Params fun {$ P} {IsDet {P getValue($)}} end}}
       in
 	 {IntToFloat DetParamsNo} / {IntToFloat L} * 100.0
       end
@@ -2381,32 +2382,23 @@ define
       end
       fun {MakeExplicitScoreAux ScoreSpec Constructors MyItemIDs}
 	 X = {MakeExplicitObject ScoreSpec Constructors MyItemIDs}
+	 proc {ProcessNested Feat}
+	    if {HasFeature ScoreSpec Feat} then
+	       Ys = if {IsList ScoreSpec.Feat} then 
+		       {LUtils.mappend ScoreSpec.Feat
+			fun {$ S} {MakeExplicitScoreAux S Constructors MyItemIDs} end}
+		    else
+		       %% take first: no list for mappend required.. 
+		       {MakeExplicitScoreAux ScoreSpec.Feat Constructors MyItemIDs}.1 
+		    end
+	    in
+	       {X bilinkItems(Ys)}
+	    end
+	 end
       in
-	 %% create contained items
-	 if {HasFeature ScoreSpec items} 
-	 then
-	    Items = {LUtils.mappend ScoreSpec.items
-		     fun {$ S} {MakeExplicitScoreAux S Constructors MyItemIDs} end}
-	 in
-	    {X bilinkItems(Items)} 
-	 end
-	 %% shorthand notation: feature 1 for items
-	 if {HasFeature ScoreSpec 1} 
-	 then
-	    Items = {LUtils.mappend ScoreSpec.1
-		     fun {$ S} {MakeExplicitScoreAux S Constructors MyItemIDs} end}
-	 in
-	    {X bilinkItems(Items)} 
-	 end
-	 %% created surrounding containers
-	 if {HasFeature ScoreSpec containers}
-	 then
-	    Containers = {LUtils.mappend ScoreSpec.containers
-			  fun {$ S} {MakeExplicitScoreAux S Constructors MyItemIDs} end}
-	 in
-	    {X bilinkContainers(Containers)} 
-	 end
-	 [X]
+	 %% create contained items and surrounding containers
+	 {ForAll [containers items 1] ProcessNested}
+	 [X] % list for mappend
       end
       fun {MakeExplicitScore ScoreSpec Constructors MyItemIDs} 
 	 ConstructorsUsed 
@@ -2419,7 +2411,7 @@ define
 	 end
 	 {MakeExplicitScoreAux ScoreSpec ConstructorsUsed MyItemIDs}.1
       end
-      proc {UnifyIDsAux ScoreSpec MyUnifyIDs ?X}      
+      proc {UnifyIDsAux ScoreSpec MyUnifyIDs ?X}
 	 if {IsScoreObject ScoreSpec} % !! new: needs testing
 	 then X=ScoreSpec
 	 else 
@@ -2443,17 +2435,18 @@ define
 	    %% X equals ScoreSpec except features containers and items
 	    {Record.forAllInd {Record.subtractList ScoreSpec [containers items 1]}
 	     proc {$ Feat _} {GetFeat X Feat} = ScoreSpec.Feat end}
-	    if {HasFeature ScoreSpec containers}
-	    then {GetFeat X containers} = {Map ScoreSpec.containers
-					   fun {$ X} {UnifyIDsAux X MyUnifyIDs} end}
-	    end
-	    if {HasFeature ScoreSpec items}
-	    then {GetFeat X items} = {Map ScoreSpec.items 
-				      fun {$ X} {UnifyIDsAux X MyUnifyIDs} end}
-	    end
-	    if {HasFeature ScoreSpec 1}
-	    then {GetFeat X 1} = {Map ScoreSpec.1 
-				  fun {$ X} {UnifyIDsAux X MyUnifyIDs} end}
+	    %% NOTE: unification of IDs only for textual score, if list of containers/items is created by constructor, these are skipped..
+	    local 
+	       proc {ProcessNested Feat}
+		  if {HasFeature ScoreSpec Feat} then
+		     if {IsList ScoreSpec.Feat} then 
+			{GetFeat X Feat} = {Map ScoreSpec.Feat
+					    fun {$ X} {UnifyIDsAux X MyUnifyIDs} end}
+		     else {GetFeat X Feat} = {UnifyIDsAux ScoreSpec.Feat MyUnifyIDs} 
+		     end
+		  end
+	       end
+	    in {ForAll [containers items 1] ProcessNested}
 	    end
 	 end
       end
