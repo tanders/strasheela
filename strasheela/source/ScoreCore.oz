@@ -77,7 +77,8 @@ export
    TransformScore TransformScore2
    transform: TransformScore
    transform2: TransformScore2
-   MakeContainer MakeSim MakeSeq 
+   MakeItems MakeItems_iargs MakeContainer MakeSim MakeSeq
+   DefSubscript
    % ResolveRepeats
    MakeClass
 prepare
@@ -2350,7 +2351,8 @@ define
 				 note: Note
 				 note2: Note2
 				 event: Event
-				 pause: Pause)
+				 pause: Pause
+				 items: MakeItems)
       %%
       proc {MakeExplicitObject ScoreSpec Constructors MyItemIDs ?X}
 	 %% Creates single object. Prevents recreation if ID already
@@ -2650,45 +2652,203 @@ define
       {TransformScore2 MyScore Args TransformedScore}
       {InitScore TransformedScore}
    end
-   
-      
-   /** %% Returns a container of ContainerClass containing Items. Args is a record of optional container init arguments.
-   %% A MakeContainer call may specify more container init-arguments than specified as default arguments.
-   %% The Items must still combinable with other score items, i.e. they must not be fully initialised (e.g. created by MakeScore2). Also the container returned by MakeContainer is  still combinable with other score items, i.e. in the end the score must be initialised by InitScore.
-   %% */
-   proc {MakeContainer ContainerClass Items Args ?MyScore}
-      Defaults = unit(%info:bla	% platzhalter
-		      %offsetTime:0
-		      %startTime:{FD.decl}
-		      %duration:{FD.decl}
-		      %endTime:{FD.decl}
-		      %% !! was bug, but now it probably breaks some
-		      %% example outs
-		      %timeUnit:_ %beats(8)
-		      %chordStartMarker:0 % no marker
-		      %numChannels:2
-		      %effect:nil
-		      %effectArgs:nil
-		      %% list of unary procs
-		      rules:[proc {$ X} skip end]
-		      containerClass:Sequential)
-      ActualArgs = {Adjoin Defaults Args}
+
+
+   local
+      /** %% Creates a list of score object parameter values from a specification. Format of Spec is either each#Xs, fenv#MyFenv, or MyVal, see MakeItems doc for details.  
+      %% */
+      fun {MakeParameterValues Spec N}
+	 case Spec of
+	    each#Xs then 
+	    if {Length Xs} \= N then
+	       {Exception.raiseError
+		strasheela(failedRequirement Xs "List must be of length n: "#N)}
+	    end
+	    Xs
+	 [] fenv#MyFenv then 
+	    {Map {MyFenv toList($ N)} FloatToInt}
+	 else {LUtils.collectN N fun {$} Spec end}
+	 end    
+      end
+      /** %% Expects a record wholes feature values are lists and returns a list of records with single element features. 
+      %% */
+      fun {RecordMatTrans R}
+	 {List.mapInd {MakeList {Length R.({Arity R}.1)}}
+	  fun {$ I X}
+	     %% !! implementation using Nth not efficient, list is multiple
+	     %% times traversed
+	     X = {Record.map R fun {$ Xs} {Nth Xs I} end}
+	  end}
+      end
    in
-      MyScore = {New ContainerClass
-		 {Adjoin {Record.subtractList ActualArgs
-			  [rules containerClass]}
-		  init}}
-      {MyScore bilinkItems(Items)}
-      thread			% unclosed hierarchy...
-	 {{GUtils.procs2Proc ActualArgs.rules} MyScore}
+      /** %% Extended script which returns a list of 'n' score items (e.g., notes), where many parameters can be still undetermined, and the objects are not fully initialised. 
+      %%
+      %% Args: 
+      %% 'n': number of items
+      %% 'constructors': creator class or function for items
+      %% 'handle': argument to access the resulting list of items (convenient when MakeItems is used in a nested data structure, cf. ScoreObject init method arg handle) 
+      %%
+      %% In addition, all items arguments expected by 'constructors' are supported. If not specially marked, these arguments are shared by all parameters. For specifying individual arguments for the elements, the following special cases are supported. These cases are notated as a pair Label # ArgValue. The following labels are supported. 
+      %% 'each': the ArgValue is a list of length 'n' and specifies argument values for the individual elements. Example Args for specifying individual note pitches.
+      unit(pitch: each#[60 62 64]) 
+      %% 'fenv': the ArgValue is a Fenv. Argument values for the individual elements are obtained by sampling the Fenv (method toList), and converting the results to integers.
+
+      %%
+      %% Default Args:
+      unit(n: 1
+	   constructor: Score.note)
+      %%
+      %%*/
+      %% - !!?? should arg constructor be generalised to additionally support case each#Constructors, where Constructors is list of length n with individual constructor for each returned item? Users should likely better use Score.make for that purpose..
+      proc {MakeItems Args ?Elements}
+	 Defaults = unit(n: 1
+			 constructor: Note
+			 handle:_
+			 %% 'rule': constraint (unary proc) applied to list of all items
+% 			 rule: proc {$ Xs} skip end
+			)
+	 As = {Adjoin Defaults Args}
+	 L = element			% element label
+	 RawSpec = {Record.subtractList As {Arity Defaults}}
+	 Specs = if {IsLiteral RawSpec} then
+		    {LUtils.collectN As.n fun {$} L end}
+		 else 
+		    SpecWithLists = {Record.map RawSpec
+				     fun {$ Param} {MakeParameterValues Param As.n} end}
+		 in
+		    {RecordMatTrans SpecWithLists}
+		 end
+      in 
+	 Elements = {Map Specs
+		     fun {$ Spec}
+			{MakeScore2 {Adjoin Spec L} % overwrite label
+			 unit(L:As.constructor)}
+		     end}
+	 As.handle = Elements
+% 	 thread			% rule may block until Elements are determined
+% 	    %% apply rules
+% %    {ForAll Elements As.rule}	
+% 	    {As.rule Elements}
+% 	 end
       end
    end
-   %%  For Args see Defaults in MkContainer.
-   %% The Items must still combinable with other score items, i.e. they must not be fully initialised (e.g. created by MakeScore2). Also the container returned by MakeContainer is  still combinable with other score items, i.e. in the end the score must be initialised by InitScore.
-   fun {MakeSim Items Args} {MakeContainer Simultaneous Items Args} end
-   %%  For Args see Defaults in MkContainer.
-   %% The Items must still combinable with other score items, i.e. they must not be fully initialised (e.g. created by MakeScore2). Also the container returned by MakeContainer is  still combinable with other score items, i.e. in the end the score must be initialised by InitScore.
-   fun {MakeSeq Items Args} {MakeContainer Sequential Items Args} end
+   
+   /** %% Same as Score.makeItems, but all Score.makeItems arguments are wrapped in arg iargs for compatibility with DefSubscript.
+   %% */
+   fun {MakeItems_iargs Args}
+      Default = unit(iargs:unit)
+      As = {Adjoin Default Args}
+   in
+      {MakeItems As.iargs}
+   end
+
+   /** %% Extended script which returns a container with items, not fully initialised and where many parameters can be still undetermined. The contained elements are created with Score.makeItems.
+   %%
+   %% Args:
+   %% 'constructor': the container constructor (class or function)
+   %% 'iargs': arguments for the creation of container items, a record of args in the format expected by Score.makeItems  
+   %% Any other container argument is supported as well.
+   %%
+   %% Default Args:
+   unit(iargs:unit
+	constructor: Sequential)
+   %% */
+   proc {MakeContainer Args ?MyMotif}
+      Default = unit(iargs:unit
+		     %% arg ignored, but filtered out of container args
+		     rargs:unit
+		     constructor: Sequential
+		    )
+      As = {Adjoin Default Args}
+      %% just caution in case I later change Default.iargs
+      ItemAs = {Adjoin Default.iargs Args.iargs} 
+      MyNotes = {MakeItems ItemAs}
+   in 
+      MyMotif = {MakeScore2 {Adjoin {Record.subtractList As {Arity Default}}
+			      {Adjoin seq(items:MyNotes) container}}
+		 unit(container:As.constructor)}
+   end
+   /** %% Extended script which returns a simultaneous container with items, not fully initialised and where many parameters can be still undetermined. Specialisation of MakeContainer where the constructor is Simultaneous. See MakeContainer for further information.
+   %% */
+   fun {MakeSim Args}
+      {MakeContainer {Adjoin Args unit(constructor:Simultaneous)}}
+   end
+   /** %% Extended script which returns a sequential container with items, not fully initialised and where many parameters can be still undetermined. Specialisation of MakeContainer where the constructor is Sequential. See MakeContainer for further information.
+   %% */
+   fun {MakeSeq Args}
+      {MakeContainer {Adjoin Args unit(constructor:Sequential)}}
+   end
+
+   /** %% Extended script creator: returns an extended script (a procedure with the interface {Script Args ?MyMotif}) which specialises a "super" extended script. Possible super-scripts are, e.g., Score.makeItems_iargs, MakeContainer or any user-defined extended script, possibly created with DefSubscript. DefArgs is a record of optional arguments for declaring the super-script and the default arguments of the resulting script.
+   %%
+   %% DefArgs:
+   %% 'super': the super-script: a procedure with the interface {Script Args ?MyMotif} where Args must support the argument 'iargs', and can support any other argument as well. 'iargs' is a record of args in the format expected by Score.makeItems.
+   %% 'defaults': record of default top-level argument values for resulting script. 
+   %% 'idefaults': record of default argument values for args feature 'iargs' of resulting script. 
+   %% 'rdefaults': record of default argument values for args feature 'rargs' of resulting script. 
+   %%
+   %% Default DefArgs:
+   unit(super:MakeContainer 
+	defaults: unit
+	idefaults: unit
+	rdefaults: unit)
+   %%
+   %% Body is a procedure with the interface {Body MyMotif Args}, where MyMotif is the motif created by the super-script, and Args is the record of all arguments specified for the resulting script. Args always has the features 'iargs' and 'rargs'.
+   %% 'iargs': a record of arguments given to contained items in the format expected by Score.makeItems
+   %% 'rargs': record of arguments for constraints
+   %% In addition, Args can contain any init argument expected by the motif's top-level ("super" CSP creates a container).
+   %%
+   %% Args contains the arguments provided when calling the resulting script plus the default values of omitted arguments specified with 'defaults', 'idefaults' and 'rdefaults'. (If you need the defaults of the super-script in Body, declare them again for the resulting script)
+   %%
+   %% Example:
+   %% %% Motif definition: creates CSP with sequential container of notes (MakeContainer is super CSP), default are 3 notes (default itemsArgs.n is 3). Note pitches are constrained with Pattern.continuous, the direction of this pattern is controlled with the argument rargs.direction, default is '<:'. 
+   MakeRun
+   = {DefSubscript unit(super:MakeContainer
+			rdefaults: unit(direction: '<:')
+			idefaults: unit(n:3))
+      proc {$ MyMotif Args} % body
+	 MyNotes = {MyMotif getItems($)} in
+	 {ParamPattern2 MyNotes getPitch Pattern.continuous
+	  [Args.rargs.direction]}
+      end}
+   %% %% Motif application (MyScore is not fully initialised, see MakeContainer)
+   MyScore
+   = {MakeRun
+      unit(iargs:unit(%% number of notes (overwrites default 3)
+		      n: 2
+		      %% %% all notes of same duration 2 (see Score.makeItems for other format options)
+		      duration:2)
+	   %% %% decreasing pitches (overwrites default '<:')
+	   rargs:unit(direction:'>:')
+	   %% %% argument to top-level container 
+	   startTime:0)}		
+   %%
+   %% */
+   fun {DefSubscript DefArgs Body}
+      Default = unit(super:MakeContainer 
+		     defaults: unit
+		     idefaults: unit
+		     rdefaults: unit)
+      DefAs = {Adjoin Default DefArgs}
+   in
+      proc {$ Args ?MyMotif}
+	 ItemAs = if {HasFeature Args iargs} then
+		     {Adjoin DefAs.idefaults Args.iargs}
+		  else DefAs.idefaults
+		  end
+	 RuleAs = if {HasFeature Args rargs} then
+		     {Adjoin DefAs.rdefaults Args.rargs}
+		  else DefAs.rdefaults
+		  end
+	 As = {Adjoin  {Adjoin DefAs.defaults Args}
+	       unit(iargs: ItemAs
+		    rargs: RuleAs)}
+      in
+	 MyMotif = {DefAs.super As}
+	 thread {Body MyMotif As} end
+      end
+   end
+
    
 
 %    local
