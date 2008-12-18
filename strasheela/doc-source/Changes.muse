@@ -5,16 +5,23 @@
 * Changes in Version 0.9.8 (no date yet)
 
   - Main additions and changes 
+
+  - Documentation
+    - Page for [[Example-MEWER][MEWER]] application added to list of examples
+
+  - Extensions and simplifications for score creation
+    - Added Score.makeItems, Score.defSubscript
     - Score.makeScore: more convenient notation variant supported for nested scores. The following two examples are now equivalent.
       - ={Score.makeScore seq(items:[note note]) unit}=  
       - ={Score.make seq([note note]) unit}=  
+    - Score.makeScore: textual score format extended: list of items can now also be created by constructor, e.g., MakeItems (before this was only supported for single items). 
 
-  - Documentation
-    - Page for [[Example-MEWER][MEWER]] added to examples
+    - Score: MakeContainer, MakeSeq and MakeSim are replaced by completely different implementations
 
   - Minor additions 
     - HS.rules.schoenberg: added ProgressionSelector
     - Pattern.firstToLastDistance added
+    - 
 
   - Bug fixes and changes
     - HS.rules: constraint name changes: 
