@@ -299,8 +299,9 @@ MyScores = {Score.makeScore [aspect(id:1 info:bla)
  fun {$ X} {X toPPrintRecord($)} end}
 
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%
 %% using id within Score.makeScore within a search script
 %% 
@@ -399,6 +400,174 @@ end
 
 
 {ExploreOne SearchScript}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%% MakeItems 
+%% 
+
+%%
+%% MakeItems used directly with arg shorthand 
+%%
+
+declare
+MyNotes = {Score.makeItems unit(n:3
+% 				constructor:Score.note % default
+				amplitude:fenv#{Fenv.linearFenv [[0.0 64.0]
+								 [1.0 127.0]]}
+				pitch:each#[60 62 64]
+				duration:2)}
+{ForAll MyNotes Score.initScore}
+
+{Browse {Map MyNotes fun {$ X} {X toInitRecord($)} end}}
+
+
+%%
+%% MakeItems used within Score.make
+%%
+
+declare
+MyScore 
+= {Score.make sim({Score.makeItems unit(n:3
+					pitch:each#[60 62 64]
+					offsetTime:each#[0 500 1500]
+					duration:100)}
+		  startTime:0
+		  timeUnit:milliseconds)
+   unit}
+{Score.initScore MyScore}
+
+{Browse {MyScore toInitRecord($)}}
+
+%%
+%% using Fenvs
+%%
+
+declare
+MyScore = {Score.make
+	   seq({Score.makeItems unit(n:3
+				     info:[test value]
+				     amplitude:fenv#{Fenv.linearFenv [[0.0 60.0]
+								      [1.0 127.0]]}
+				     pitch:each#[60 62 64]
+				     duration:2)}
+	       startTime:0
+	       timeUnit:beats)
+	   unit}
+{Score.initScore MyScore}
+
+{Browse {MyScore toInitRecord($)}}
+
+
+%%
+%% MakeItems as constructor in Score.make (for label items) 
+%%
+
+declare
+MyScore = {Score.make seq(items(n:3
+				duration:2))
+	   unit}
+
+%% equivalent to
+declare
+MyScore = {Score.make seq([note(duration:2)
+			   note(duration:2)
+			   note(duration:2)])
+	   unit}
+
+{Browse {MyScore toInitRecord($)}}
+
+
+
+%%
+%% items are containers already 
+%%
+
+declare
+MakeRun			
+= {Score.defSubscript unit(rdefaults: unit(direction: '<:')
+			   idefaults: unit(n:5))
+   proc {$ MyMotif Args} % body
+      {Pattern.continuous {MyMotif mapItems($ getPitch)}
+       Args.rargs.direction}
+   end}
+MyScore = {Score.make seq(items:{Score.makeItems items(n:3
+						 constructor:MakeRun
+% 						 iargs:unit(n:2
+% 							    constructor:Score.note
+% 							    duration:3)
+						)}
+			  startTime:0
+			  timeUnit:beats)
+	   unit}
+
+{Browse {MyScore toInitRecord($)}}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%% MakeContainer
+%%
+
+declare
+MyScore = {Score.makeSeq unit(iargs:unit(n:3
+					duration:2)
+			      startTime:0
+			      timeUnit:beats)}
+{Score.init MyScore}
+
+{MyScore toInitRecord($)}
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%% Score.defSubscript 
+%%
+
+
+declare
+%% def scripts
+%%
+%% seq of 'n' notes, pitches constrained by Pattern.continuous with 'direction' 
+MakeRun			
+= {Score.defSubscript unit(rdefaults: unit(direction: '<:')
+			   idefaults: unit(n:5))
+   proc {$ MyMotif Args} % body
+      {Pattern.continuous {MyMotif mapItems($ getPitch)}
+       Args.rargs.direction}
+   end}
+%% extends MakeRun: all note pitch domains constrained to 'pitchDom'
+MakeRun_PitchDom
+= {Score.defSubscript unit(super: MakeRun
+			   rdefaults: unit(pitchDom: 60#72))
+   proc {$ MyMotif Args}
+      %% TODO: define pattern constraint Pattern.domains (or similar name)
+      {ForAll {MyMotif mapItems($ getPitch)}
+       proc {$ P} P = {FD.int Args.rargs.pitchDom} end}
+   end}
+%%
+%% use scripts for creating scores, overwriting a few args 
+MyRun = {MakeRun
+	 unit(iargs:unit(n: 2
+			 duration:2)
+	      rargs:unit(direction:'>:')
+	      startTime:0)}
+{Score.init MyRun}
+%%
+MyRun2 = {MakeRun_PitchDom
+	  unit(iargs:unit
+% 		rargs:unit(direction:'<:')
+	       startTime:0)}
+{Score.init MyRun2}
+
+
+{MyRun toInitRecord($)}
+
+{MyRun2 toInitRecord($)}
 
 
 
