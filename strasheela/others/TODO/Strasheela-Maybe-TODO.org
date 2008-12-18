@@ -575,7 +575,15 @@ InspectorObject = {Inspector.new unit}
     
     http://www.wikimatrix.org/
 
+*** ?? Drupal
 
+    Content Management System, big sites are run with it
+
+    editing can be wiki-like 
+    http://drupal.org/node/87225
+
+    http://en.wikipedia.org/wiki/Drupal
+    Drupal lacks an intuitive, easy administration user interface
 
 **** !! PmWiki: easy to install and customize, focuses on ease-of-use
 
@@ -607,6 +615,7 @@ InspectorObject = {Inspector.new unit}
 
    Add explanation how to edit OZRC file 
    (e.g., wiki article and create link there in installation instruction)
+
 
 ** Strasheela tutorial
 
