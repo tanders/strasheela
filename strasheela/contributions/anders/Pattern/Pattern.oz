@@ -95,6 +95,8 @@ export
    ConjAll DisjAll
 
    ZerosOnlyAtEnd RelevantLength
+
+   ForAllItems MapItems
 define
    
    /** % PlainPattern constraints Xs to a plain pattern (ie. no nesting or combination of patterns). The pattern is specified by the procedere Proc given to PlainPattern. Proc constraints a single pattern item and is called recursively. Proc expects two arguments: the current item and its predecessor in the list (i.e. Proc is called for all items except the first, which has no predecessor).
@@ -1346,7 +1348,45 @@ define
       {SelectMultiple Xs Is Ys} 
       {P Ys}
    end
-   
+
+   %%
+   %%
+   %%
+
+   /** %% Performs List.forAll on a list of items, but Meth can be a method or procedure. 
+   %% */
+   proc {ForAllItems Items Meth}
+      {ForAll Items {GUtils.toFun Meth}}
+   end
+
+   /** %% Performs List.map on a list of items, but Meth can be a method or function. 
+   %% */
+   fun {MapItems Items Meth}
+      {Map Items {GUtils.toFun Meth}}
+   end
+
+   %% nice idea in principle, but doing {MyPattern {MapItems Items Accessor} Args} is more simple..
+   %% 
+%    /** %% Pattern constraint applicator for parameter of a list of Items (a list of Items). Accessor is a unary method or function, and MyPattern is a procedure expecting a list of FD ints. 
+%    %%
+%    %% Example:
+%    {ForParams MyNotes getPitch Increasing}
+%    %% */
+%    proc {ForParams Items Accessor MyPattern} 
+%       {ForParams2 Items Accessor MyPattern nil}
+%    end
+%    /** %% Like ParamPattern, but MyPattern can expect more arguments. More specifically, MyPattern is a procedure expecting a list of FD ints as first arguments and zero or more furher arguments. OtherPatternArgs is a list of additional arguments to MyPattern. 
+%    %%
+%    %% Example:
+%    {ForParams2 MyNotes getPitch Continuous ['<:']}
+%    %% */
+%    proc {ConstrainParams2 Items Accessor MyPattern OtherPatternArgs} 
+%       {Procedure.apply MyPattern
+%        {MapItems Items Accessor} | OtherPatternArgs}
+%    end
+
+
+
    
    
    %%
