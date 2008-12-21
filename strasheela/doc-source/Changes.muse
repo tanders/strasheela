@@ -20,8 +20,8 @@
 
   - Minor additions 
     - HS.rules.schoenberg: added ProgressionSelector
-    - Pattern.firstToLastDistance added
-    - 
+    - Pattern: addeed ForAllItems MapItems FirstToLastDistance 
+    - ET31: added many scales to database (origin is Scala list of 31 ET modi)
 
   - Bug fixes and changes
     - HS.rules: constraint name changes: 
