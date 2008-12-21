@@ -378,9 +378,7 @@ MyScore_ScaleNotes = {ExpressScales {MyScore_ScalesOnly
 %%
 
 
-%% NOTE: TMP: vorlauefige teilweise def: single scale and single scale degree
-%%
-%% Extended script
+%% Extended script: for a given scale and degree find "matching" chord object. 
 proc {ChordAtScaleDegree Args MyChord}
    Defaults = unit(scale:unit	% required arg
 		   degree:1
@@ -414,9 +412,8 @@ MyScale = {Score.makeScore
 {SDistro.exploreOne
  {GUtils.extendedScriptToScript ChordAtScaleDegree
   unit(scale:MyScale
-       degree:1
-       value:min)}
- unit}
+       degree:1)}
+ unit(value:min)}
 
 */
 
@@ -432,8 +429,7 @@ proc {FindChordsAtAllScaleDegrees MyScale ?MyScore}
    Degrees = {List.number 1 {FS.card {MyScale getPitchClasses($)}} 1}
    ChordSeqs = {Map Degrees
 		fun {$ Degree}
-		   seq(info:lily("\\bar \"||\" \\break")
-		      items: {Map
+		   Chords = {Map
 			       %% Always search for single chords
 			       {SDistro.searchAll
 				{GUtils.extendedScriptToScript ChordAtScaleDegree
@@ -446,10 +442,22 @@ proc {FindChordsAtAllScaleDegrees MyScale ?MyScore}
 					     {X hasThisInfo($ index)} orelse
 					     {X hasThisInfo($ transposition)}
 					  end)}
-			       ObjectToText})
+			       ObjectToText}
+		in
+		   if Chords == nil then
+		      {Browse emptyChord}
+		      seq(info:lily("\\bar \"||\" \\break")
+			  items: [note(info:lily("_\\markup{\\column{no chord}}")
+				       pitch:Degree
+				       duration:2)])
+		   else 
+		      seq(info:lily("\\bar \"||\" \\break")
+			  items: Chords)
+		   end
 		end}
 in
    {Out.show "Search for all chords finished"}
+%    {Browse chords#{Map ChordSeqs fun {$ Seq} Seq.items end}}
    MyScore = {Score.makeScore
 	      seq(items: {ObjectToText MyScale} | ChordSeqs
 		  startTime:0
@@ -460,6 +468,63 @@ end
 
 
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%% 
+%%
+
+% %% TODO: define extended script where chord, scale and scale degree are both input and output, and where I can specify params (e.g. restrict index domain)  
+% %%
+% %% Extended script: for a given scale and degree find "matching" chord object. 
+% proc {ChordAtScaleDegree Args MyChord}
+%    Defaults = unit(scale:unit	% required arg
+% 		   degree:1
+% 		   %% Note: for single solution the startTime and duration must be
+% 		   %% determined to avoid symmetries
+% 		   startTime:0
+% 		   duration:1
+% 		   timeUnit:beats)
+%    As = {Adjoin Defaults Args}
+%    ScaleDegreePC = {FD.decl}
+% in
+%    ScaleDegreePC = {HS.score.degreeToPC
+% 		    {HS.score.pcSetToSequence {As.scale getPitchClasses($)}
+% 		     {As.scale getRoot($)}}
+% 		    As.degree#{HS.score.absoluteToOffsetAccidental 0}}
+%    MyChord = {Score.makeScore {Adjoin {Record.subtractList As [scale degree]}
+% 			       chord(root:ScaleDegreePC)}
+% 	      unit(chord:HS.score.chord)}
+%    {HS.rules.diatonicChord MyChord As.scale}
+% end
+
+
+/* % test
+
+declare
+MyScale = {Score.makeScore
+	   scale(index:{HS.db.getScaleIndex 'standard pentachordal major'}
+		 transposition:{ET22.pc 'C'})
+	   unit(scale:HS.score.scale)}
+
+{SDistro.exploreOne
+ {GUtils.extendedScriptToScript ChordAtScaleDegree
+  unit(scale:MyScale
+       degree:1)}
+ unit(value:min)}
+
+*/
+
+
+
+
+% /** %% For given chord MyChord, collect all scales and the corresponding scale degrees into which this chord "fits" (i.e., chord root is scale degree pitch class and all chord pitch classes fall into scale). 
+% %% */
+% proc {FindAllScalesAndDegreesForChord MyChord ?MyScore}
+   
+% end
+
+
+%%%%%%%%%%
 
 /*
 
@@ -668,12 +733,14 @@ proc {ProcessScale ScaleIndex OutFilenameStart Dir}
 	      unit(scale:HS.score.scale)}
    MyScore_ChordsAtDegrees = {FindChordsAtAllScaleDegrees MyScale}
    {MyScore_ChordsAtDegrees wait}
+   {Browse MyScore_ChordsAtDegrees}
    MyScore_ChordNotes = {ExpressChords {MyScore_ChordsAtDegrees
 					collect($ test:HS.score.isChord)}
 			 unit(pitchOffset:{ET31.pitch 'C'#3}
 			      noteDuration:4)}
 in
    {MyScore_ChordNotes wait}
+%    {Browse chordsAtDegrees#{MyScore_ChordsAtDegrees toInitRecord($)}}
    %% render lily output (scale and chord objects)
    {RenderLily_ET31 MyScore_ChordsAtDegrees
     unit(file:OutFilenameStart#"-ChordsAtScaleDegrees"
@@ -691,9 +758,89 @@ end
 
 {ProcessScale {HS.db.getScaleIndex 'major'}
  "Major"
- "/Users/t/oz/music/Strasheela/strasheela/trunk/strasheela/contributions/anders/ET31/doc-DB/"}
+ "/Users/t/sound/tmp/"
+%  "/Users/t/oz/music/Strasheela/strasheela/trunk/strasheela/contributions/anders/ET31/doc-DB/"
+}
+
+% %% BUG: why is ChordSeq undetermined for 'Secor sentinel', but determined for 'major'? -- this causes blocking of ProcessScale
+% %% startTime and duration params of chord seqs are undetermined in for some scale degree there is no chord! 
+% declare
+% MyIndex = {HS.db.getScaleIndex 'Secor sentinel'}
+% % MyIndex = {HS.db.getScaleIndex 'major'}
+% ChordSeq = {FindChordsAtAllScaleDegrees {Score.makeScore
+% 					 scale(index:MyIndex
+% 					       transposition:{ET31.pc 'C'}
+% 					       %% duration should be determined
+% 					       duration:4
+% 					       startTime:0
+% 					       timeUnit:beats)
+% 					 unit(scale:HS.score.scale)}}
+% {ChordSeq wait}
+% {Browse hi}
+%
+% {ChordSeq toInitRecord($)}
+
+
+{ProcessScale {HS.db.getScaleIndex 'Secor sentinel'}
+ 'SecorSentinel'
+ "/Users/t/sound/tmp/"
+%  "/Users/t/oz/music/Strasheela/strasheela/trunk/strasheela/contributions/anders/ET31/doc-DB/"
+}
+
+
+
+{ProcessScale {HS.db.getScaleIndex '"septimal" natural minor'}
+ "SeptimalNaturalMinor"
+ "/Users/t/sound/tmp/"
+%  "/Users/t/oz/music/Strasheela/strasheela/trunk/strasheela/contributions/anders/ET31/doc-DB/"
+}
+
+
+
 
 %% TODO: same for other scales ... 
+
+
+%% Question the other way round: for a given chord -- in which scale and at which scale degree does chord fit?
+
+
+%%
+%% For each chord, all scales and scale degrees
+%%
+
+% %% NOTE: unfinished
+% declare
+% proc {ProcessChord ChordIndex OutFilenameStart Dir}
+%    MyChord = {Score.makeScore
+% 	      chord(index:ChordIndex
+% 		    transposition:{ET31.pc 'C'}
+% 		    %% duration should be determined
+% 		    duration:4
+% 		    startTime:0
+% 		    timeUnit:beats)
+% 	      unit(chord:HS.score.chord)}
+%    MyScore_ChordsAtDegrees = {FindChordsAtAllScaleDegrees MyScale}
+%    {MyScore_ChordsAtDegrees wait}
+%    MyScore_ChordNotes = {ExpressChords {MyScore_ChordsAtDegrees
+% 					collect($ test:HS.score.isChord)}
+% 			 unit(pitchOffset:{ET31.pitch 'C'#3}
+% 			      noteDuration:4)}
+% in
+%    {MyScore_ChordNotes wait}
+%    %% render lily output (scale and chord objects)
+%    {RenderLily_ET31 MyScore_ChordsAtDegrees
+%     unit(file:OutFilenameStart#"-ChordsAtScaleDegrees"
+% 	 dir:Dir)}
+%    {Init.setTempo 70.0}
+%    {Out.renderAndPlayCsound MyScore_ChordNotes
+%     unit(file:OutFilenameStart#"-ChordsAtScaleDegrees-withNotes"
+% 	 soundDir:Dir)}
+%    %% render lily output (chord objects and notes)
+%    {RenderLily_ET31 MyScore_ChordNotes
+%     unit(file:OutFilenameStart#"-ChordsAtScaleDegrees-withNotes"
+% 	 dir:Dir)}
+% end
+
 
 
 */
