@@ -124,9 +124,6 @@ Xs = [_ _ _ _ _ _ _ _]
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-declare 
-[Pattern] = {Module.link ['x-ozlib://anders/music/sdl/Pattern.ozf']}
-
 declare
 Xs = {FD.list 8 1#20}
 CycleElements = {FD.list 3 3#5}
@@ -201,9 +198,6 @@ Ys = [3 4 5]
 
 %% testing Pattern.max 
 
-declare 
-[Pattern] = {Module.link ['x-ozlib://anders/music/sdl/Pattern.ozf']}
-
 declare
 Xs = {FD.list 7 1#20}
 Y
@@ -219,10 +213,18 @@ Y = 5
 
 Zs = [3 4 5]
 
+
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-declare 
-[Pattern] = {Module.link ['x-ozlib://anders/music/sdl/Pattern.ozf']}
+{Pattern.xsToDxs [1 3 2 4]}
+
+{Pattern.dxsToXs {Pattern.xsToDxs [1 3 2 4]} 1}
+
+{Pattern.dxsToXs [2 2 1] 0}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %% conjunction: the integers in Xs are increasing and all fall in the interval [X, Y].
 
@@ -264,8 +266,6 @@ Zs = {FD.list 5 0#20}
 
 
 
-declare 
-[Pattern] = {Module.link ['x-ozlib://anders/music/sdl/Pattern.ozf']}
 
 declare
 Xs = {FD.list 3 1#3}
@@ -287,9 +287,6 @@ Ys.1=0
 Zs.1=1
 
 
-
-declare 
-[Pattern] = {Module.link ['x-ozlib://anders/music/sdl/Pattern.ozf']}
 
 %% Xs are pitches, Ys are intervals between pitches with offset of 100
 %% to aviod negative numbers
@@ -335,9 +332,6 @@ Zs.1=1
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %% Pattern.transformDisj: decision for FnI leads to decision for transformation function 
-
-%declare 
-%[Pattern] = {Module.link ['x-ozlib://anders/music/sdl/Pattern.ozf']}
 
 declare
 Xs = {FD.list 3 1#10}

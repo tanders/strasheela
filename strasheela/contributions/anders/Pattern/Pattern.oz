@@ -54,7 +54,9 @@ export
    Continuous AllEqual Increasing Decreasing
    InInterval
    Cycle Cycle2 Rotation Heap Random Palindrome Line Accumulation
-   ArithmeticSeries GeometricSeries Max Min ArithmeticMean Range FirstToLastDistance
+   ArithmeticSeries GeometricSeries Max Min
+   DxsToXs XsToDxs
+   ArithmeticMean Range FirstToLastDistance
 
    UseMotifs
    
@@ -342,6 +344,33 @@ define
        fun {$ X1 X2} {FD.min X1 X2} end
        Y}
    end
+
+   
+   /** %% Expects a list of integers considered as distances and returns a list of integers beginning with Start where the given distances apply.
+   %%
+   %% NB: no constraint, integers can be negative.
+   %% */
+   %% TODO: create constraint variant
+   fun {DxsToXs Dxs Start}
+      fun {Aux Dxs Acc}
+	 case Dxs of nil then nil
+	 else
+% 	    X = {FD.decl} in
+	    X = Acc + Dxs.1 in
+	    X | {Aux Dxs.2 X}
+	 end
+      end
+   in
+      Start | {Aux Dxs Start}
+   end
+   /** %% Expects a list of integers and returns the distances between them, also a list of integers.
+   %% NB: no constraint, integers can be negative.
+   %% */
+   %% TODO: create constraint variant
+   fun {XsToDxs Xs}
+      {Map2Neighbours Xs fun {$ X Y} Y - X end}
+   end
+
 
    /** %% Constrains EncodedMean/Quotient (two FD int) to be the arithmetic means of ArithmeticMean (a list of FD ints). Encoding the means by the expression EncodedMean/Quotient allows to represent means which are ratios by FD ints. In the following example, the means is constrained to 1.5
    <code>{ArithmeticMean Xs 15 10}</code>
