@@ -20,6 +20,7 @@
 functor 
    
 import
+   Pattern at 'x-ozlib://anders/strasheela/Pattern/Pattern.ozf'
    HS at 'x-ozlib://anders/strasheela/HarmonisedScore/HarmonisedScore.ozf'
    ET31 at '../ET31.ozf'
    
@@ -302,10 +303,16 @@ define
 
    %% 
    Scales = scales(
+
+	       %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	       %%
 	       %% all 31 ET scales listed in Scala (modes of size 31)
 	       %%
 
+	       %%
+	       %% the common scales 
+	       %%
+	       
 	       %% other chromatic scale variants possible which are not listed here?
 	       scale(pitchClasses:['C' 'C#' 'D' 'Eb' 'E' 'F' 'F#' 'G' 'G#' 'A' 'Bb' 'B']
 % 			 roots:['C' 'C#' 'D' 'Eb' 'E' 'F' 'F#' 'G' 'G#' 'A' 'Bb' 'B'] % 
@@ -332,6 +339,16 @@ define
 	       scale(pitchClasses:['C' 'D' 'E' 'F' 'G' 'Ab' 'Bb']
 		     roots:['C'] 
 		     comment:'major-minor')
+	       %% Scale consists of 2 sets of 3-limit intervals which are related by a 7/4. Together, they approximate minor.
+	       scale(pitchClasses:['C' 'D' 'D#' 'F' 'G' 'G#' 'A#']
+		     roots:['C'] 
+		     comment:'"septimal" natural minor')
+
+	       %%
+	       %% Euler-Fokker genera
+	       %% Boxy shapes from the [3,5,7] lattice
+	       %%
+	       
 	       scale(pitchClasses:['C' 'D' 'F' 'G']
 		     roots:['C'] 
 		     comment:'genus primum')
@@ -383,162 +400,172 @@ define
 	       scale(pitchClasses:['C' 'D' 'D#' 'Eb' 'E' 'F#' 'G' 'G#' 'Ab' 'A#' 'Bb' 'B']
 		     roots:['C'] 
 		     comment:'genus bichromaticum')
+	       %% Note: last interval implicit (left out interval back to 'C')
+	       scale(pitchClasses:{Pattern.dxsToXs [3 1 2 4 2 4 2 4 2 1 3] 0}
+		     roots:['C'] 
+		     comment:'genus [3577]')  % Joel Mandelbaum Andante cantabile
 
-	       %% TODO: add these scales from Scala
-% 	       scale(pitchClasses:['C']
-% 			 roots:['C'] 
-% 			 comment:'neutral diatonic mixolydian')
-% 	       scale(pitchClasses:['C']
-% 			 roots:['C'] 
-% 			 comment:'neutral diatonic lydian')
-% 	       scale(pitchClasses:['C']
-% 			 roots:['C'] 
-% 			 comment:'neutral diatonic phrygian')
-% 	       scale(pitchClasses:['C']
-% 			 roots:['C'] 
-% 			 comment:'neutral diatonic dorian')
-% 	       scale(pitchClasses:['C']
-% 			 roots:['C'] 
-% 			 comment:'neutral diatonic hypolydian')
-% 	       scale(pitchClasses:['C']
-% 			 roots:['C'] 
-% 			 comment:'neutral diatonic hypophrygian')
-% 	       scale(pitchClasses:['C']
-% 			 roots:['C'] 
-% 			 comment:'neutral diatonic hypodorian')
-% 	       scale(pitchClasses:['C']
-% 			 roots:['C'] 
-% 			 comment:'neutral mixolydian')
-% 	       scale(pitchClasses:['C']
-% 			 roots:['C'] 
-% 			 comment:'neutral lydian')
-% 	       scale(pitchClasses:['C']
-% 			 roots:['C'] 
-% 			 comment:'neutral phrygian')
-% 	       scale(pitchClasses:['C']
-% 			 roots:['C'] 
-% 			 comment:'neutral dorian')
-% 	       scale(pitchClasses:['C']
-% 			 roots:['C'] 
-% 			 comment:'neutral hypolydian')
-% 	       scale(pitchClasses:['C']
-% 			 roots:['C'] 
-% 			 comment:'neutral hypophrygian')
-% 	       scale(pitchClasses:['C']
-% 			 roots:['C'] 
-% 			 comment:'neutral hypodorian')
-% 	       scale(pitchClasses:['C']
-% 			 roots:['C'] 
-% 			 comment:'hemiolic chromatic mixolydian')
-% 	       scale(pitchClasses:['C']
-% 			 roots:['C'] 
-% 			 comment:'hemiolic chromatic lydian')
-% 	       scale(pitchClasses:['C']
-% 			 roots:['C'] 
-% 			 comment:'hemiolic chromatic phrygian')
-% 	       scale(pitchClasses:['C']
-% 			 roots:['C'] 
-% 			 comment:'hemiolic chromatic dorian')
-% 	       scale(pitchClasses:['C']
-% 			 roots:['C'] 
-% 			 comment:'hemiolic chromatic hypolydian')
-% 	       scale(pitchClasses:['C']
-% 			 roots:['C'] 
-% 			 comment:'hemiolic chromatic hypophrygian')
-% 	       scale(pitchClasses:['C']
-% 			 roots:['C'] 
-% 			 comment:'hemiolic chromatic hypodorian')
-% 	       scale(pitchClasses:['C']
-% 			 roots:['C'] 
-% 			 comment:'ratio 2:3 chromatic mixolydian')
-% 	       scale(pitchClasses:['C']
-% 			 roots:['C'] 
-% 			 comment:'ratio 2:3 chromatic lydian')
-% 	       scale(pitchClasses:['C']
-% 			 roots:['C'] 
-% 			 comment:'ratio 2:3 chromatic phrygian')
-% 	       scale(pitchClasses:['C']
-% 			 roots:['C'] 
-% 			 comment:'ratio 2:3 chromatic dorian')
-% 	       scale(pitchClasses:['C']
-% 			 roots:['C'] 
-% 			 comment:'ratio 2:3 chromatic hypolydian')
-% 	       scale(pitchClasses:['C']
-% 			 roots:['C'] 
-% 			 comment:'ratio 2:3 chromatic hypophrygian')
-% 	       scale(pitchClasses:['C']
-% 			 roots:['C'] 
-% 			 comment:'ratio 2:3 chromatic hypodorian')
-% 	       scale(pitchClasses:['C']
-% 			 roots:['C'] 
-% 			 comment:'intense diatonic mixolydian')
-% 	       scale(pitchClasses:['C']
-% 			 roots:['C'] 
-% 			 comment:'intense diatonic lydian')
-% 	       scale(pitchClasses:['C']
-% 			 roots:['C'] 
-% 			 comment:'intense diatonic phrygian')
-% 	       scale(pitchClasses:['C']
-% 			 roots:['C'] 
-% 			 comment:'intense diatonic dorian')
-% 	       scale(pitchClasses:['C']
-% 			 roots:['C'] 
-% 			 comment:'intense diatonic hypolydian')
-% 	       scale(pitchClasses:['C']
-% 			 roots:['C'] 
-% 			 comment:'intense diatonic hypophrygian')
-% 	       scale(pitchClasses:['C']
-% 			 roots:['C'] 
-% 			 comment:'intense diatonic hypodorian')
-% 	       scale(pitchClasses:['C']
-% 			 roots:['C'] 
-% 			 comment:'intense diatonic mixolydian')
-% 	       scale(pitchClasses:['C']
-% 			 roots:['C'] 
-% 			 comment:'soft diatonic lydian')
-% 	       scale(pitchClasses:['C']
-% 			 roots:['C'] 
-% 			 comment:'soft diatonic phrygian')
-% 	       scale(pitchClasses:['C']
-% 			 roots:['C'] 
-% 			 comment:'soft diatonic dorian')
-% 	       scale(pitchClasses:['C']
-% 			 roots:['C'] 
-% 			 comment:'soft diatonic hypolydian')
-% 	       scale(pitchClasses:['C']
-% 			 roots:['C'] 
-% 			 comment:'soft diatonic hypophrygian')
-% 	       scale(pitchClasses:['C']
-% 			 roots:['C'] 
-% 			 comment:'soft diatonic hypodorian')
-% 	       scale(pitchClasses:['C']
-% 			 roots:['C'] 
-% 			 comment:'soft diatonic mixolydian')
-% 	       scale(pitchClasses:['C']
-% 			 roots:['C'] 
-% 			 comment:'enharmonic lydian')
-% 	       scale(pitchClasses:['C']
-% 			 roots:['C'] 
-% 			 comment:'enharmonic phrygian')
-% 	       scale(pitchClasses:['C']
-% 			 roots:['C'] 
-% 			 comment:'enharmonic dorian')
-% 	       scale(pitchClasses:['C']
-% 			 roots:['C'] 
-% 			 comment:'enharmonic hypolydian')
-% 	       scale(pitchClasses:['C']
-% 			 roots:['C'] 
-% 			 comment:'enharmonic hypophrygian')
-% 	       scale(pitchClasses:['C']
-% 			 roots:['C'] 
-% 			 comment:'enharmonic hypodorian')
-% 	       scale(pitchClasses:['C']
-% 		     roots:['C'] 
-% 		     comment:'enharmonic mixolydian')
+	       %%
+	       %% Greek/tetrachord modes
+	       %%
+	       
+	       scale(pitchClasses:['C' 'D;' 'Eb' 'F' 'G;' 'Ab' 'Bb']
+			 roots:['C'] 
+			 comment:'neutral diatonic mixolydian')
+	       scale(pitchClasses:['C' 'D;' 'E;' 'F' 'G;' 'A;' 'B;']
+			 roots:['C'] 
+			 comment:'neutral diatonic lydian')
+	       scale(pitchClasses:['C' 'D' 'E;' 'F' 'G' 'A' 'B;']
+			 roots:['C'] 
+			 comment:'neutral diatonic phrygian')
+	       scale(pitchClasses:['C' 'D;' 'Eb' 'F' 'G' 'A;' 'Bb']
+			 roots:['C'] 
+			 comment:'neutral diatonic dorian')
+	       scale(pitchClasses:['C' 'D;' 'E;' 'F|' 'G' 'A;' 'B;']
+			 roots:['C'] 
+			 comment:'neutral diatonic hypolydian')
+	       scale(pitchClasses:['C' 'D' 'E' 'F|' 'G' 'A' 'B;']
+			 roots:['C'] 
+			 comment:'neutral diatonic hypophrygian')
+	       scale(pitchClasses:['C' 'D' 'E;' 'F' 'G' 'A;' 'Bb']
+			 roots:['C'] 
+			 comment:'neutral diatonic hypodorian')
+	       scale(pitchClasses:['C' 'D;' 'E;' 'F' 'G;' 'A;' 'Bb']
+			 roots:['C'] 
+			 comment:'neutral mixolydian')
+	       scale(pitchClasses:['C' 'D' 'E;' 'F' 'G' 'A;' 'B;']
+			 roots:['C'] 
+			 comment:'neutral lydian')
+	       scale(pitchClasses:['C' 'D;' 'Eb' 'F' 'G;' 'A;' 'Bb']
+			 roots:['C'] 
+			 comment:'neutral phrygian')
+	       scale(pitchClasses:['C' 'D;' 'E;' 'F' 'G' 'A;' 'B;']
+			 roots:['C'] 
+			 comment:'neutral dorian')
+	       scale(pitchClasses:['C' 'D' 'E;' 'F|' 'G' 'A' 'B;']
+			 roots:['C'] 
+			 comment:'neutral hypolydian')
+	       scale(pitchClasses:['C' 'D;' 'E;' 'F' 'G' 'A;' 'Bb']
+			 roots:['C'] 
+			 comment:'neutral hypophrygian')
+	       scale(pitchClasses:['C' 'D' 'E;' 'F|' 'G' 'A;' 'B;']
+			 roots:['C'] 
+			 comment:'neutral hypodorian')
+	       scale(pitchClasses:['C' 'C#' 'D;' 'F' 'F#' 'G;' 'Bb']
+			 roots:['C'] 
+			 comment:'hemiolic chromatic mixolydian')
+	       scale(pitchClasses:['C' 'C#' 'Fb' 'F' 'F#' 'A|' 'B|']
+			 roots:['C'] 
+			 comment:'hemiolic chromatic lydian')
+	       scale(pitchClasses:['C' 'E;' 'Fb' 'F' 'A;' 'B;' 'B|']
+			 roots:['C'] 
+			 comment:'hemiolic chromatic phrygian')
+	       scale(pitchClasses:['C' 'C#' 'D;' 'F' 'G' 'G#' 'A;'] 
+			 roots:['C'] 
+			 comment:'hemiolic chromatic dorian')
+	       scale(pitchClasses:['C' 'C#' 'Fb' 'Gb' 'G' 'G#' 'B|']
+			 roots:['C'] 
+			 comment:'hemiolic chromatic hypolydian')
+	       scale(pitchClasses:['C' 'E;' 'F|' 'Gb' 'G' 'B;' 'B|']
+			 roots:['C'] 
+			 comment:'hemiolic chromatic hypophrygian')
+	       scale(pitchClasses:['C' 'D' 'D#' 'E;' 'G' 'G#' 'A;']
+			 roots:['C'] 
+			 comment:'hemiolic chromatic hypodorian')
+	       scale(pitchClasses:['C' 'C#' 'D' 'F' 'F#' 'G' 'Bb']
+			 roots:['C'] 
+			 comment:'ratio 2:3 chromatic mixolydian')
+	       scale(pitchClasses:['C' 'Db' 'Fb' 'F' 'Gb' 'A|' 'B|']
+			 roots:['C'] 
+			 comment:'ratio 2:3 chromatic lydian')
+	       scale(pitchClasses:['C' 'Eb' 'E' 'F' 'Ab' 'Bb' 'B']
+			 roots:['C'] 
+			 comment:'ratio 2:3 chromatic phrygian')
+	       scale(pitchClasses:['C' 'C#' 'D' 'F' 'G' 'G#' 'A']
+			 roots:['C'] 
+			 comment:'ratio 2:3 chromatic dorian')
+	       scale(pitchClasses:['C' 'Db' 'Fb' 'Gb' 'G' 'Ab' 'B|']
+			 roots:['C'] 
+			 comment:'ratio 2:3 chromatic hypolydian')
+	       scale(pitchClasses:['C' 'Eb' 'F' 'F#' 'G' 'Bb' 'B']
+			 roots:['C'] 
+			 comment:'ratio 2:3 chromatic hypophrygian')
+	       scale(pitchClasses:['C' 'D' 'D#' 'E' 'G' 'G#' 'A']
+			 roots:['C'] 
+			 comment:'ratio 2:3 chromatic hypodorian')
+	       scale(pitchClasses:['C' 'Db' 'Eb' 'F' 'Gb' 'Ab' 'Bb']
+			 roots:['C'] 
+			 comment:'intense diatonic mixolydian')
+	       scale(pitchClasses:['C' 'D' 'Eb' 'F' 'G' 'A' 'Bb']
+			 roots:['C'] 
+			 comment:'intense diatonic phrygian')
+	       scale(pitchClasses:['C' 'Db' 'Eb' 'F' 'G' 'Ab' 'Bb']
+			 roots:['C'] 
+			 comment:'intense diatonic dorian')
+	       scale(pitchClasses:['C' 'D' 'E' 'F#' 'G' 'A' 'B']
+			 roots:['C'] 
+			 comment:'intense diatonic hypolydian')
+	       scale(pitchClasses:['C' 'D' 'E' 'F' 'G' 'A' 'Bb']
+			 roots:['C'] 
+			 comment:'intense diatonic hypophrygian')
+	       scale(pitchClasses:['C' 'C#' 'D#' 'F' 'F#' 'G#' 'Bb']
+			 roots:['C'] 
+			 comment:'soft diatonic mixolydian')
+	       scale(pitchClasses:['C' 'D' 'Fb' 'F' 'G' 'A|' 'B|'] 
+			 roots:['C'] 
+			 comment:'soft diatonic lydian')
+	       scale(pitchClasses:['C' 'D|' 'Eb' 'F' 'G|' 'A|' 'Bb']
+			 roots:['C'] 
+			 comment:'soft diatonic phrygian')
+	       scale(pitchClasses:['C' 'C#' 'D#' 'F' 'G' 'G#' 'A#']
+			 roots:['C'] 
+			 comment:'soft diatonic dorian')
+	       scale(pitchClasses:['C' 'D' 'Fb' 'Gb' 'G' 'A' 'B|']
+			 roots:['C'] 
+			 comment:'soft diatonic hypolydian')
+	       scale(pitchClasses:['C' 'D|' 'Fb' 'F' 'G' 'A|' 'Bb']
+			 roots:['C'] 
+			 comment:'soft diatonic hypophrygian')
+	       scale(pitchClasses:['C' 'D' 'D#' 'E#' 'G' 'G#' 'A#']
+			 roots:['C'] 
+			 comment:'soft diatonic hypodorian')
+	       scale(pitchClasses:['C' 'C|' 'Db' 'F' 'F|' 'Gb' 'Bb']
+			 roots:['C'] 
+			 comment:'enharmonic mixolydian')
+	       scale(pitchClasses:['C' 'C#' 'E#' 'F' 'F#' 'A#' 'B#']
+			 roots:['C'] 
+			 comment:'enharmonic lydian')
+	       scale(pitchClasses:['C' 'E' 'Fb' 'F' 'A' 'B' 'B|']
+			 roots:['C'] 
+			 comment:'enharmonic phrygian')
+	       scale(pitchClasses:['C' 'C|' 'Db' 'F' 'G' 'G|' 'Ab']
+			 roots:['C'] 
+			 comment:'enharmonic dorian')
+	       scale(pitchClasses:['C' 'C#' 'E#' 'G;' 'G' 'G#' 'B#']
+			 roots:['C'] 
+			 comment:'enharmonic hypolydian')
+	       scale(pitchClasses:['C' 'E' 'F#' 'Gb' 'G' 'B' 'B|']
+			 roots:['C'] 
+			 comment:'enharmonic hypophrygian')
+	       scale(pitchClasses:['C' 'D' 'D|' 'Eb' 'G' 'G|' 'Ab']
+			 roots:['C'] 
+		     comment:'enharmonic hypodorian')
+
+	       %%
+	       %% Interscalar
+	       %%
 	       
 	       scale(pitchClasses:['C' 'D|' 'E#' 'G|' 'A#']
 		     roots:['C'] 
 		     comment:'quasi-equal pentatonic')
+	       scale(pitchClasses:{Pattern.dxsToXs [3 3 2 3 3 3 3 3 2 3] 0}
+		     roots:['C'] 
+		     comment:'near 11 edo')	       
+
+	       %%
+	       %% Miscellaneous
+	       %%
+	       
 	       scale(pitchClasses:['C' 'Db' 'D' 'D#' 'E' 'F' 'F#' 'G' 'Ab' 'A' 'A#' 'B']
 		     roots:['C'] 
 		     comment:'Fokker 12-tone')
@@ -556,33 +583,53 @@ define
 	       scale(pitchClasses:['C' 'Db' 'D#' 'E' 'F' 'G' 'Ab' 'A#' 'B']
 		     roots:['C'] 
 		     comment:'Hahn pentachordal')
-	       scale(pitchClasses:['C' 'D' 'D|' 'Fb' 'E#' 'G;' 'G' 'A' 'A|' 'B|' 'B#']
+	       scale(pitchClasses:{Pattern.dxsToXs [4 4 2 5 3 3 4 3] 0}
 		     roots:['C'] 
-		     comment:'de Vries 11-tone')
-	       scale(pitchClasses:['C' 'D;' 'D' 'E;' 'F' 'G;' 'G' 'A;' 'Bb' 'B;']
-		     roots:['C'] 
-		     comment:'Breed 10-tone')
-	       scale(pitchClasses:['C' 'D;' 'D|' 'E' 'E#' 'Gb' 'G' 'A;' 'A#' 'B']
-		     roots:['C'] 
-		     comment:'Lumma decatonic')
+		     comment:'Hahn nonatonic')
 	       scale(pitchClasses:['C' 'D' 'Eb' 'Fb' 'F|' 'G;' 'A;' 'A#' 'B']
 		     roots:['C'] 
 		     comment:'Rothenberg generalised diatonic')
-	       %% Similar scales in Scale, e.g., "soft diatonic dorian"
-	       %%
-	       %% Scale consists of 2 sets of 3-limit intervals which are related by a 7/4. Together, they approximate minor.
-	       scale(pitchClasses:['C' 'D' 'D#' 'F' 'G' 'G#' 'A#']
+	       scale(pitchClasses:{Pattern.dxsToXs [2 3 3 6 4 4 2 2] 0}
 		     roots:['C'] 
-		     comment:'"septimal" natural minor')
+		     comment:'Michael Sheiman 9-note')
+
+	       
+	       %%
+	       %% MOS and Cradle MOS
+	       %%
+	       
+	       scale(pitchClasses:{Pattern.dxsToXs [4 5 4 5 4 5] 0}
+		     roots:['C'] 
+		     comment:'Neutral scale 7-note')
+	       scale(pitchClasses:{Pattern.dxsToXs [4 1 4 4 1 4 4 4 1] 0}
+		     roots:['C'] 
+		     comment:'Neutral scale 10-note')
+	       scale(pitchClasses:['C' 'D;' 'D' 'E;' 'F' 'G;' 'G' 'A;' 'Bb' 'B;']
+		     roots:['C'] 
+		     comment:'Breed 10-tone')
 	       scale(pitchClasses:['C' 'D;' 'D#' 'Fb' 'F|' 'G' 'Ab' 'A#' 'B']
 		     roots:['C'] 
 		     comment:'Orwell')
+	       scale(pitchClasses:['C' 'D' 'D|' 'Fb' 'E#' 'G;' 'G' 'A' 'A|' 'B|' 'B#']
+		     roots:['C'] 
+		     comment:'de Vries 11-tone')
+	       scale(pitchClasses:{Pattern.dxsToXs [3 1 3 1 3 1 3 1 3 1 3 1 3 1] 0}
+		     roots:['C'] 
+		     comment:'pseudo-Porcupine 15-note')	
+	       scale(pitchClasses:{Pattern.dxsToXs [1 7 1 2 1 7 1 2 1 7] 0}
+		     roots:['C'] 
+		     comment:'nested bees')
+	       scale(pitchClasses:['C' 'D;' 'D|' 'E' 'E#' 'Gb' 'G' 'A;' 'A#' 'B']
+		     roots:['C'] 
+		     comment:'Lumma decatonic')
 	       scale(pitchClasses:['C' 'C#' 'D#' 'E;' 'Fb' 'Gb' 'G' 'G#' 'A;' 'B;' 'B|']
 		     roots:['C'] 
-		     comment:'Secor sentinel')
+		     comment:'Secor/Barton no-fives')
 
+
+	       %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	       %%
-	       %% other scales
+	       %% other scales (not from Scala list of 31 ET scales)
 	       %%
 
 	       %% high tuning errors of 11#8 (9.4 cent) and 13#8 (11 cent!)
