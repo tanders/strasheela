@@ -79,7 +79,9 @@ LilyHeader =
       \\override SpacingSpanner
                 #'base-shortest-duration = #(ly:make-moment 1 32)
     }
-  }"
+  }
+
+\\score{"
 
 proc {RenderLily_ET22 X Args}
    {ET22.out.renderAndShowLilypond X
@@ -733,7 +735,7 @@ proc {ProcessScale ScaleIndex OutFilenameStart Dir}
 	      unit(scale:HS.score.scale)}
    MyScore_ChordsAtDegrees = {FindChordsAtAllScaleDegrees MyScale}
    {MyScore_ChordsAtDegrees wait}
-   {Browse MyScore_ChordsAtDegrees}
+%    {Browse MyScore_ChordsAtDegrees}
    MyScore_ChordNotes = {ExpressChords {MyScore_ChordsAtDegrees
 					collect($ test:HS.score.isChord)}
 			 unit(pitchOffset:{ET31.pitch 'C'#3}
@@ -754,6 +756,24 @@ in
     unit(file:OutFilenameStart#"-ChordsAtScaleDegrees-withNotes"
 	 dir:Dir)}
 end
+%% sub set of processing of ProcessScale
+proc {ShowScaleChords ScaleIndex OutFilenameStart Dir}
+   MyScale = {Score.makeScore
+	      scale(index:ScaleIndex
+		    transposition:{ET31.pc 'C'}
+		    %% duration should be determined
+		    duration:4
+		    startTime:0
+		    timeUnit:beats)
+	      unit(scale:HS.score.scale)}
+   MyScore_ChordsAtDegrees = {FindChordsAtAllScaleDegrees MyScale}
+   {MyScore_ChordsAtDegrees wait}
+in
+   {RenderLily_ET31 MyScore_ChordsAtDegrees
+    unit(file:OutFilenameStart#"-ChordsAtScaleDegrees"
+	 dir:Dir)}
+end
+
 
 
 {ProcessScale {HS.db.getScaleIndex 'major'}
@@ -762,39 +782,144 @@ end
 %  "/Users/t/oz/music/Strasheela/strasheela/trunk/strasheela/contributions/anders/ET31/doc-DB/"
 }
 
-% %% BUG: why is ChordSeq undetermined for 'Secor sentinel', but determined for 'major'? -- this causes blocking of ProcessScale
-% %% startTime and duration params of chord seqs are undetermined in for some scale degree there is no chord! 
-% declare
-% MyIndex = {HS.db.getScaleIndex 'Secor sentinel'}
-% % MyIndex = {HS.db.getScaleIndex 'major'}
-% ChordSeq = {FindChordsAtAllScaleDegrees {Score.makeScore
-% 					 scale(index:MyIndex
-% 					       transposition:{ET31.pc 'C'}
-% 					       %% duration should be determined
-% 					       duration:4
-% 					       startTime:0
-% 					       timeUnit:beats)
-% 					 unit(scale:HS.score.scale)}}
-% {ChordSeq wait}
-% {Browse hi}
-%
-% {ChordSeq toInitRecord($)}
+{ShowScaleChords {HS.db.getScaleIndex 'major'}
+ 'Major'
+ "/Users/t/sound/tmp/"
+}
 
-
-{ProcessScale {HS.db.getScaleIndex 'Secor sentinel'}
+{ShowScaleChords {HS.db.getScaleIndex 'Secor/Barton no-fives'}
  'SecorSentinel'
  "/Users/t/sound/tmp/"
-%  "/Users/t/oz/music/Strasheela/strasheela/trunk/strasheela/contributions/anders/ET31/doc-DB/"
 }
 
 
 
-{ProcessScale {HS.db.getScaleIndex '"septimal" natural minor'}
+{ShowScaleChords {HS.db.getScaleIndex '"septimal" natural minor'}
  "SeptimalNaturalMinor"
  "/Users/t/sound/tmp/"
-%  "/Users/t/oz/music/Strasheela/strasheela/trunk/strasheela/contributions/anders/ET31/doc-DB/"
 }
 
+
+%% !! No chord fits into this scale
+{ShowScaleChords {HS.db.getScaleIndex 'Rothenberg generalised diatonic'}
+ "RothenbergGeneralisedDiatonic"
+ "/Users/t/sound/tmp/"
+}
+
+
+{ShowScaleChords {HS.db.getScaleIndex 'modus conjunctus'}
+ "ModusConjunctus"
+ "/Users/t/sound/tmp/"
+}
+
+
+{ShowScaleChords {HS.db.getScaleIndex 'octatonic'}
+ "Octatonic"
+ "/Users/t/sound/tmp/"
+}
+
+{ShowScaleChords {HS.db.getScaleIndex 'Hahn symmetric pentachordal'}
+ "HahnSymmetricPentachordal"
+ "/Users/t/sound/tmp/"
+}
+
+{ShowScaleChords {HS.db.getScaleIndex 'Hahn pentachordal'}
+ "HahnPentachordal"
+ "/Users/t/sound/tmp/"
+}
+
+{ShowScaleChords {HS.db.getScaleIndex 'Lumma decatonic'}
+ "LummaDecatonic"
+ "/Users/t/sound/tmp/"
+}
+
+
+%% many scale degrees without fitting chord
+{ShowScaleChords {HS.db.getScaleIndex 'Orwell'}
+ "Orwell"
+ "/Users/t/sound/tmp/"
+}
+
+
+%% many scale degrees without fitting chord
+{ShowScaleChords {HS.db.getScaleIndex 'genus sextum'}
+ "GenusSextum"
+ "/Users/t/sound/tmp/"
+}
+
+
+%% many scale degrees without fitting chord
+{ShowScaleChords {HS.db.getScaleIndex 'genus septimum'}
+ "GenusSeptimum"
+ "/Users/t/sound/tmp/"
+}
+
+{ShowScaleChords {HS.db.getScaleIndex 'genus enharmonicum instrumentale'}
+ "GenusEnharmonicumInstrumentale"
+ "/Users/t/sound/tmp/"
+}
+
+
+{ShowScaleChords {HS.db.getScaleIndex 'neutral diatonic dorian'}
+ "NeutralDiatonicDorian"
+ "/Users/t/sound/tmp/"
+}
+
+{ShowScaleChords {HS.db.getScaleIndex 'neutral dorian'}
+ "NeutralDorian"
+ "/Users/t/sound/tmp/"
+}
+
+%% many scale degrees without fitting chord
+{ShowScaleChords {HS.db.getScaleIndex 'Lumma decatonic'}
+ "LummadDecatonic"
+ "/Users/t/sound/tmp/"
+}
+
+
+{ShowScaleChords {HS.db.getScaleIndex 'Breed 10-tone'}
+ "Breed10tone"
+ "/Users/t/sound/tmp/"
+}
+
+%% very many harmonic possibilities, but has perhaps conventional touch
+%% but certainly reduces 31 tone set to perhaps useful subset
+{ShowScaleChords {HS.db.getScaleIndex 'genus bichromaticum'}
+ "GenusBichormaticum"
+ "/Users/t/sound/tmp/"
+}
+
+
+{ShowScaleChords {HS.db.getScaleIndex 'modus conjunctus'}
+ "ModusConjunctus"
+ "/Users/t/sound/tmp/"
+}
+
+
+%% Test
+
+declare
+MyChordSeq = {FindChordsAtAllScaleDegrees {Score.makeScore
+					   scale(index:{HS.db.getScaleIndex 'Rothenberg generalised diatonic'}
+						 transposition:{ET31.pc 'C'}
+						 %% duration should be determined
+						 duration:4
+						 startTime:0
+						 timeUnit:beats)
+					   unit(scale:HS.score.scale)}}
+{MyChordSeq wait}
+{Browse ok}
+
+declare
+MyScore_ChordNotes = {ExpressChords {MyChordSeq
+				     collect($ test:HS.score.isChord)}
+		      unit(pitchOffset:{ET31.pitch 'C'#3}
+			   noteDuration:4)}
+{MyScore_ChordNotes wait}
+{Browse ok}
+
+
+{MyScore_ChordNotes toInitRecord($)}
 
 
 
