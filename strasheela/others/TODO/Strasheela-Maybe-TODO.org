@@ -1501,6 +1501,25 @@ From this viewpoint, there is an interesting polarity between major and harmonic
 
 *** Chord database
 
+**** Add chords using Scala
+
+     equaltemp 22 2/1
+     set notation E22
+     chords /match * 3
+     chords /match * 4
+     chords /match * 5
+     ...
+
+     cf. [[file:~/oz/music/Strasheela/strasheela/trunk/strasheela/contributions/anders/ET31/source/chords-TODO.org]]
+
+
+**** Add scales using Scala
+
+     equaltemp 22 2/1
+     set notation E22
+     
+     then select [Play] in menu, and in that window select [Mode...]
+
 **** Manually add harmonicity measurements				  :EASY:
 
      %% Howto get harmonicity measurements from Scala
@@ -1565,7 +1584,6 @@ From this viewpoint, there is an interesting polarity between major and harmonic
 
 
 *** Scale database							 :MAYBE:
-
 
 **** ?? Extend scale database						 :MAYBE:
 
@@ -1749,14 +1767,11 @@ From this viewpoint, there is an interesting polarity between major and harmonic
 
 *** Add additional chords 
 
+    see chords listed in [[file:~/oz/music/Strasheela/strasheela/trunk/strasheela/contributions/anders/ET31/source/chords-TODO.org]]
+
 **** Play around with Scala clavier to find additional chords 
 
 ***** Find further septimal chords
-
-
-**** Check Scala chord database: which chords fit into 31 ET
-
-     I feel I did this already..
 
 
 **** Re-check written info on chords in articles in [meinen Unterlagen] 
@@ -1764,7 +1779,8 @@ From this viewpoint, there is an interesting polarity between major and harmonic
      I feel this is mostly done already
 
 
-*** Add scales suitable for chords which go beyond 5-limit (not simply diatonic scales)
+*** DONE Add scales suitable for chords which go beyond 5-limit (not simply diatonic scales)
+    CLOSED: [2008-12-23 Tue 22:02]
     
     If I want to use melodic steps, then I likely must use non-harmonic notes. However, then I must introduce scales (so the non-harmonic notes are not arbitrary). These scales must match the chords. 
 
