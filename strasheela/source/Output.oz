@@ -64,7 +64,7 @@ import
 export
    Show
    WriteToFile ReadFromFile
-   RecordToVS ListToVS ListToLines % ListToVS2 ListToVS3 
+   RecordToVS RecordToVS_simple ListToVS ListToLines % ListToVS2 ListToVS3 
    MakeEventlist OutputEventlist
    ScoreToEvents
    MakeHierarchicVSScore
@@ -162,15 +162,27 @@ define
 	      end
 	 end
       end
+      /** %% Double any escape char (\)
+      %% */
+      fun {PreserveEscapes S}
+	 {LUtils.mappend S
+	  fun {$ Char} case Char of &\\ then [&\\ &\\] else [Char] end end}
+      end
    in
-      /** %% Transforms a (possibly nested) record into a single virtual string with Oz record syntax. RecordToVS also transforms the special Oz records with the labels '|' (i.e. lists) and '#' into their shorthand syntax. However, the virtual string output is not indented, every record feature (or list element) starts a new line. As the output is basically a text value (i.e. no 'normal' Oz value anymore), FD and FS variables are transformed into a constructor call (FD.int and FS.var.bounds) which would create these variables when evaluated. 
-      %% NB: Value.toVirtualString does something very similar: it transforms nested data into their print representation. Instead, RecordToVS does not expect any max width/depth arguments and attempts to format the output. 
+      /** %% Transforms a (possibly nested) record into a single virtual string with Oz record syntax. RecordToVS also transforms the special Oz records with the labels '|' (i.e. lists) and '#' into their shorthand syntax. The virtual string output is not indented, but every record feature (or list element) starts a new line. As the output is basically a text value (i.e. no 'normal' Oz value anymore), FD and FS variables are transformed into a constructor call (FD.int and FS.var.bounds) which would create these variables when evaluated. 
+      %% NB: Value.toVirtualString does something very similar: it transforms nested data into their print representation. However, RecordToVS tries to create code which when executed results in same value, whereas Value.toVirtualString creates print representation. Also, RecordToVS does not expect any max width/depth arguments and attempts to format the output. 
       %% NB: if X (or some value in X) is not of any of the types record (or list or #-pair) or virtual string, Value.toVirtualString is called on this value.
       %%
       %% */
       fun {RecordToVS X}
 	 if {IsDet X} then
-	    if {IsVirtualString X} then X
+	    %% Strings should always be surrounded by double quotes, and all escape sequences should be preseved when printed
+	    %% same for atoms and virtual strings..
+	    if {IsString X} then "\""#{PreserveEscapes X}#"\""
+	    elseif {IsAtom X} then "'"#{PreserveEscapes {AtomToString X}}#"'"
+	    elseif {IsNumber X} then X
+	       %% Note: bytestrings would result in error..
+	    elseif {IsVirtualString X} then {Record.map X RecordToVS}
 	    elseif {IsRecord X} andthen {Arity X} \= nil
 	    then L = {Label X}
 	    in
@@ -209,7 +221,34 @@ define
 	 end
       end
    end
-   
+   /** %% A simpler form of RecordToVS which does not handle variables, and virtual strings are preseved as is.
+   %% */
+   fun {RecordToVS_simple X}
+      if {IsDet X} then
+	 if {IsVirtualString X} then X
+	 elseif {IsRecord X} andthen {Arity X} \= nil
+	 then L = {Label X}
+	 in
+	    case L
+	    of '|' then '['#{ListToLines {Map X RecordToVS_simple}}#"]"
+	    [] '#' then {ListToVS {Map {Record.toList X} RecordToVS_simple} "#"} 
+	    else {RecordToVS_simple L}#"("
+	       #{ListToLines 
+		 {Map {Arity X}
+		  fun {$ Feat}
+		     if {IsNumber Feat}
+		     then {RecordToVS_simple X.Feat}
+		     else Feat#":"#{RecordToVS_simple X.Feat}
+		     end
+		  end}}
+	       #")"
+	    end
+	    %% undetermined other values
+	 else {Value.toVirtualString X 10 1000}
+	 end
+      end
+   end
+      
    /** % Transforms Xs, a list of virtual strings, into a single virtual string. Delimiter is the virtual string between all list elements.
    %% */
    fun {ListToVS Xs Delimiter}
@@ -491,7 +530,7 @@ define
    %% A pickle is not used, because undetermined variables can not be pickled.
    proc {SaveScore MyScore Args}
       {OutputScoreConstructor MyScore
-       {Adjoin Args unit(prefix:"{Score.makeScore\n")}}
+       {Adjoin Args unit}}
    end
 
    local
