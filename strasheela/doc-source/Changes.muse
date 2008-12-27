@@ -28,7 +28,8 @@
       - SmallIntervalProgressions -> SmallIntervalsInProgression
       - SmallIntervalProgressions_Percent -> SmallIntervalsInProgression_Percent
     - GUtils: simplified IsDivisible implementation 
-
+    - Out: Revised RecordToVS: now outputs strings as strings, preserves escape sequences etc. Added RecordToVS_simple
+    - Out.saveScore: fixed (added wrote prefix)
 
   - For further fixes see the [[../CHANGELOG.txt]].
 
