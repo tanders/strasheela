@@ -603,11 +603,11 @@ define
 	 unit(superclass:nil
 	      args:[info#fun {$ X}
 			    %% @info binds a list so it can contain multiple information. Nevertheless, a single info is given to the init method without surrounding list..
-			    Aux = {X getInfo($)}
+			    MyInfo = {X getInfo($)}
 			 in
-			    if {IsList Aux} andthen {Length Aux} == 1
-			    then Aux.1
-			    else Aux
+			    if {IsList MyInfo} andthen {Length MyInfo} == 1
+			    then MyInfo.1
+			    else MyInfo
 			    end
 			 end#nil
 		    id#getID#noMatch])
@@ -671,7 +671,7 @@ define
 	 Classes = {self getInitClasses($)}
 	 Specs = {GetClassSpecsFromFunctors {Init.getStrasheelaEnv strasheelaFunctors}}
       in
-	 {Out.recordToVS
+	 {Out.recordToVS_simple
 	  {Record.map Classes
 	   fun {$ MyClass}
 	      %% take 'path spec' from matching class
@@ -2686,7 +2686,8 @@ define
       %% Args: 
       %% 'n': number of items
       %% 'constructors': creator class or function for items
-      %% 'handle': argument to access the resulting list of items (convenient when MakeItems is used in a nested data structure, cf. ScoreObject init method arg handle) 
+      %% 'handle': argument to access the resulting list of items (convenient when MakeItems is used in a nested data structure, cf. ScoreObject init method arg handle)
+      %% 'rule': constraint (unary proc) applied to list of all items
       %%
       %% In addition, all items arguments expected by 'constructors' are supported. If not specially marked, these arguments are shared by all parameters. For specifying individual arguments for the elements, the following special cases are supported. These cases are notated as a pair Label # ArgValue. The following labels are supported. 
       %% 'each': the ArgValue is a list of length 'n' and specifies argument values for the individual elements. Example Args for specifying individual note pitches.
@@ -2704,8 +2705,7 @@ define
 	 Defaults = unit(n: 1
 			 constructor: Note
 			 handle:_
-			 %% 'rule': constraint (unary proc) applied to list of all items
-% 			 rule: proc {$ Xs} skip end
+			 rule: proc {$ Xs} skip end
 			)
 	 As = {Adjoin Defaults Args}
 	 L = element			% element label
@@ -2725,11 +2725,9 @@ define
 			 unit(L:As.constructor)}
 		     end}
 	 As.handle = Elements
-% 	 thread			% rule may block until Elements are determined
-% 	    %% apply rules
-% %    {ForAll Elements As.rule}	
-% 	    {As.rule Elements}
-% 	 end
+	 thread			% rule may block until Elements are determined
+	    {As.rule Elements}
+	 end
       end
    end
    
