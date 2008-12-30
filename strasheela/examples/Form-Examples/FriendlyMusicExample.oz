@@ -1,10 +1,13 @@
 %%
 %% This file contains more complex examples which constrain the rhythmical, melodic, harmonic, and formal structure. 
 %%
-%% Usage: first feed buffer for aux defs, then feed examples (solver calls at the end) one by one.
+%% Usage: first feed buffer for aux defs, then feed example (solver calls at the end)
 %%
 %%
 
+%%
+%% TODO: fix example again: example seems broken (search takes much longer than before -- does it find solution at all?)
+%%
 
 declare
 [ET31] = {ModuleLink ['x-ozlib://anders/strasheela/ET31/ET31.ozf']}
@@ -124,7 +127,7 @@ proc {NoteSeq Args ?MyScore}
 		  )
    As = {Adjoin Defaults Args}
 in
-   MyScore = {Score.makeScore2 {Adjoin {Record.subtractList As [n makeNote notesRule]}
+   MyScore = {Score.makeScore2 {Adjoin {Record.subtractList As [n makeNote notesRule constructors]}
 				seq(items:{LUtils.collectN As.n As.makeNote})}
 	      As.constructors}
    %% user-defined constraints 
@@ -313,7 +316,8 @@ proc {MyScript MyScore}
 		       %% NOTE: Music ends in longer note
 		       {{List.last Notes} getDuration($)} >=: R.d2
 		       {HS.rules.maxInterval Notes Octave}
-		       {HS.rules.maxNonharmonicNoteSequence Notes 3}
+		       %% TMP comment (I change def of this constraint)
+% 		       {HS.rules.maxNonharmonicNoteSequence Notes 3}
 % 				    {HS.rules.maxNonharmonicNotePercent Notes 10}
 		       {HS.rules.minPercentSteps Notes 50 unit}
 		       {HS.rules.maxRepetitions Notes 0}
