@@ -20,15 +20,19 @@
 
   - Minor additions 
     - HS.rules.schoenberg: added ProgressionSelector
-    - Pattern: added ForAllItems MapItems FirstToLastDistance DxsToXs XsToDxs
+    - Pattern: added ForAllItems MapItems FirstToLastDistance DxsToXs XsToDxs EqualizeParam
     - ET31: added many scales to database (origin is Scala list of 31 ET modi)
 
   - Bug fixes and changes
     - HS.rules: constraint name changes: 
       - SmallIntervalProgressions -> SmallIntervalsInProgression
       - SmallIntervalProgressions_Percent -> SmallIntervalsInProgression_Percent
+    - HS.rules: 
+      - Fixed MaxNonharmonicNoteSequence (before limited number of harmonic instead of non-harmonic tones) 
+      - Added ExpressAllChordPCs_AtChordEnd
     - GUtils: simplified IsDivisible implementation 
-    - Out: Revised RecordToVS: now outputs strings as strings, preserves escape sequences etc. Added RecordToVS_simple
+    - Score method toInitRecord: now outputs strings (e.g., for lilypond) as proper strings 
+      - Out: Revised RecordToVS: now outputs strings as strings, preserves escape sequences etc. Added RecordToVS_simple
     - Out.saveScore: fixed (added wrote prefix)
 
   - For further fixes see the [[../CHANGELOG.txt]].
