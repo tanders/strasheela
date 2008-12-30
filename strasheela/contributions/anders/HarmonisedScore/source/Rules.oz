@@ -131,7 +131,8 @@ export
    Cadence
    DiatonicChord NoteInPCCollection
 
-   ExpressAllChordPCs ExpressAllChordPCs_AtChordStart ExpressEssentialChordPCs ExpressEssentialPCs_AtChordStart
+   ExpressAllChordPCs ExpressAllChordPCs_AtChordStart ExpressAllChordPCs_AtChordEnd
+   ExpressEssentialChordPCs ExpressEssentialPCs_AtChordStart
    ClearHarmonyAtChordBoundaries
 
    VoiceLeadingDistance VoiceLeadingDistance_Percent
@@ -365,6 +366,21 @@ define
 	 PCs = {Map {MyChord getSimultaneousItems($ test:fun {$ X}
 							    {X isNote($)} andthen
 							    ({X getStartTime($)} =<: {MyChord getStartTime($)}) == 1
+							 end)}
+		fun {$ N} {N getPitchClass($)} end}
+	 PCsFS = {GUtils.intsToFS PCs}
+      in
+% 	 {Browse unit(notePCs:PCsFS chordPCs:{MyChord getPitchClasses($)})}
+	 {FS.subset {MyChord getPitchClasses($)} PCsFS}
+      end
+   end
+   /** %% More strict variant of ExpressAllChordPCs: all pitch classes must sound when chord end.
+   %% */
+   proc {ExpressAllChordPCs_AtChordEnd MyChord}
+      thread	% waits until sim notes are accessible
+	 PCs = {Map {MyChord getSimultaneousItems($ test:fun {$ X}
+							    {X isNote($)} andthen
+							    ({X getEndTime($)} >=: {MyChord getEndTime($)}) == 1
 							 end)}
 		fun {$ N} {N getPitchClass($)} end}
 	 PCsFS = {GUtils.intsToFS PCs}
@@ -871,21 +887,21 @@ define
 
 
    
-   /** %% Constraints that no pitch interval between consecutive Notes (list of note objects) exceeds MaxInterval (FD int).
+   /** %% Constraints that no pitch interval between consecutive Notes (list of note objects) exceeds MaxInt (FD int).
    %% */
-   proc {MaxInterval Notes MaxInterval}
+   proc {MaxInterval Notes MaxInt}
       Intervals = {Pattern.map2Neighbours Notes GetInterval}
    in
-      {ForAll Intervals proc {$ I} I =<: MaxInterval end}
+      {ForAll Intervals proc {$ I} I =<: MaxInt end}
    end
    
-   /** %% Restrict the number of consecutive non-harmonic Notes (list of note objects) to N at maximum. Non-harmonic notes are notes for which the method getInChordB returns 0 (i.e. false).
+   /** %% Restrict the number of consecutive non-harmonic Notes (list of note objects) to N a maximum. Non-harmonic notes are notes for which the method getInChordB returns 0 (i.e. false).
    %% */
    %% BUG: ?? causes problems in 22 ET but not 31 ET?
    proc {MaxNonharmonicNoteSequence Notes N}
       {Pattern.forNeighbours Notes N+1
        proc {$ Ns}
-	  {FD.sum {Map Ns fun {$ N} {N getInChordB($)} end} '=<:' N}
+	  {FD.sum {Map Ns fun {$ N} {FD.nega {N getInChordB($)}} end} '=<:' N}
        end}
    end
 
@@ -898,6 +914,7 @@ define
 
    /** %% N specifies how many pitch repetitions occur at maximum between consecutive Notes (list of note objects), i.e. how many pitch intervals are 0. If N=0 then no repetitions are permitted.
    %% */
+   %% BUG: is MaxPercentRepetitions
    proc {MaxRepetitions Notes N}
       Bs = {Pattern.map2Neighbours Notes
 	    proc {$ N1 N2 B} B = ({GetInterval N1 N2} =: 0) end}
