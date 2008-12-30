@@ -2748,130 +2748,119 @@ define
 
    
 
-   local
-      /** %% Expects list of chords and list of those items which are to start with a chord. Each of these items is constrained to start at the same time as the chord at the corresponding position. The number of Chords and the number of Items must be equal.
-      %% */
-      proc {ConstrainChordStartTime ItemsStartingWithChord Chords}
-	 for
-	    MyItem in ItemsStartingWithChord
-	    MyChord in Chords 
-	 do
-	    {MyItem getStartTime($)} =: {MyChord getStartTime($)}
-	 end
-      end
+   /** %% HarmoniseScore simplifies the definition of harmonic CSPs, typically their top-level definition. HarmoniseScore constrains the pitches of the notes contained in a given score (ActualScore) to follow a harmonic progression. HarmoniseScore's arguments are arranged in the following score topology 
+   
+   <code>MyScore = {MakeScore2 sim(items:[ActualScore seq(handle:ChordSeq items:[Chord1 ... ChordN])])}</code>
+   
+   %% HarmoniseScore requires that it is known in the CSP definition which Strasheela items do start with a new chord. A list with these items is given by the argument ItemsStartingWithChord. The items in ItemsStartingWithChord can be freely scattered in the ActualScore but they must be ordered in ascending temporal order in ItemsStartingWithChord. The temporal distance between two neighbouring items in ItemsStartingWithChord determines the duration of the chord matching the first of the two items.
+   %%
+   %% Creators is a record of optional creator functions/classes similar to the corresponding argument of Score.makeScore. Creators defaults to
+   <code>unit(chord:Chord
+	      sim:Score.simultaneous
+	      seq:Score.sequential)</code>
+   %%
+   %% NB: ActualScore must not be fully initialised (i.e. created with Strasheela.score.makeScore2). However, HarmoniseScore itself does fully initialise ActualScore, ChordSeq, and HarmonisedScore.
+   %%
+   %% Moreover, HarmoniseScore does neither set the startTime nor timeUnit, that is, these settings are usually done for ActualScore.
+   %%
+   %% The ItemsStartingWithChord are best accessed via the handle feature from a textual Strasheela score, because the score must not be fully initialised when using HarmoniseScore, and thus traversing the actual score object is restricted. 
+   %% */
+   proc {HarmoniseScore ActualScore ItemsStartingWithChord Creators ?ChordSeq ?HarmonisedScore}
+      {HarmoniseScore2 ActualScore ItemsStartingWithChord Creators ChordSeq HarmonisedScore}
+      {Score.initScore HarmonisedScore}
+   end
+   /** %% HarmoniseScore2 is idential to HarmoniseScore, except that HarmoniseScore2 does <em>not</em> initialise ActualScore, ChordSeq, nor HarmonisedScore. Instead, the HarmonisedScore must be explicitly initialised after calling HarmoniseScore (cf. the difference between Score.makeScore and Score.makeScore2).
+   %% */ 
+   proc {HarmoniseScore2 ActualScore ItemsStartingWithChord Creators ?ChordSeq ?HarmonisedScore}
+      DefaultCreators = unit(chord:Chord
+			     sim:Score.simultaneous
+			     seq:Score.sequential)
+      MyCreators = {Adjoin DefaultCreators Creators}
+      ChordNumber = {Length ItemsStartingWithChord}
    in
-      /** %% HarmoniseScore simplifies the definition of harmonic CSPs, typically their top-level definition. HarmoniseScore constrains the pitches of the notes contained in a given score (ActualScore) to follow a harmonic progression. HarmoniseScore's arguments are arranged in the following score topology 
-      
-      <code>MyScore = {MakeScore2 sim(items:[ActualScore seq(handle:ChordSeq items:[Chord1 ... ChordN])])}</code>
-      
-      %% HarmoniseScore requires that it is known in the CSP definition which Strasheela items do start with a new chord. A list with these items is given by the argument ItemsStartingWithChord. The items in ItemsStartingWithChord can be freely scattered in the ActualScore but they must be ordered in ascending temporal order in ItemsStartingWithChord. The temporal distance between two neighbouring items in ItemsStartingWithChord determines the duration of the chord matching the first of the two items.
-      %%
-      %% Creators is a record of optional creator functions/classes similar to the corresponding argument of Score.makeScore. Creators defaults to
-      <code>unit(chord:Chord
-		 sim:Score.simultaneous
-		 seq:Score.sequential)</code>
-      %%
-      %% NB: ActualScore must not be fully initialised (i.e. created with Strasheela.score.makeScore2). However, HarmoniseScore itself does fully initialise ActualScore, ChordSeq, and HarmonisedScore.
-      %%
-      %% Moreover, HarmoniseScore does neither set the startTime nor timeUnit, that is, these settings are usually done for ActualScore.
-      %%
-      %% The ItemsStartingWithChord are best accessed via the handle feature from a textual Strasheela score, because the score must not be fully initialised when using HarmoniseScore, and thus traversing the actual score object is restricted. 
-      %% */
-      proc {HarmoniseScore ActualScore ItemsStartingWithChord Creators ?ChordSeq ?HarmonisedScore}
-	 {HarmoniseScore2 ActualScore ItemsStartingWithChord Creators ChordSeq HarmonisedScore}
-	 {Score.initScore HarmonisedScore}
+      ChordSeq = {Score.makeScore2
+		  seq(info:chordSeq
+		      items:{LUtils.collectN ChordNumber fun {$} chord end}
+		      %% temporal parameters of ActualScore are unified
+		      %% with temporal parameters of ChordSeq
+		      offsetTime:{ActualScore getOffsetTime($)}
+		      startTime:{ActualScore getStartTime($)}
+		      endTime:{ActualScore getEndTime($)})
+		  MyCreators}
+      HarmonisedScore = {Score.makeScore2 sim(items:[ActualScore
+						     ChordSeq])
+			 MyCreators}
+      thread
+	 %% application delayed until the score is fully initialised
+	 {Pattern.equalizeParam ItemsStartingWithChord {ChordSeq getItems($)}
+	  getStartTime}
       end
-      /** %% HarmoniseScore2 is idential to HarmoniseScore, except that HarmoniseScore2 does <em>not</em> initialise ActualScore, ChordSeq, nor HarmonisedScore. Instead, the HarmonisedScore must be explicitly initialised after calling HarmoniseScore (cf. the difference between Score.makeScore and Score.makeScore2).
-      %% */ 
-      proc {HarmoniseScore2 ActualScore ItemsStartingWithChord Creators ?ChordSeq ?HarmonisedScore}
-	 DefaultCreators = unit(chord:Chord
-				sim:Score.simultaneous
-				seq:Score.sequential)
-	 MyCreators = {Adjoin DefaultCreators Creators}
-	 ChordNumber = {Length ItemsStartingWithChord}
-      in
-	 ChordSeq = {Score.makeScore2
-		     seq(info:chordSeq
-			 items:{LUtils.collectN ChordNumber fun {$} chord end}
-			 %% temporal parameters of ActualScore are unified
-			 %% with temporal parameters of ChordSeq
-			 offsetTime:{ActualScore getOffsetTime($)}
-			 startTime:{ActualScore getStartTime($)}
-			 endTime:{ActualScore getEndTime($)})
-		     MyCreators}
-	 HarmonisedScore = {Score.makeScore2 sim(items:[ActualScore
-							ChordSeq])
-			    MyCreators}
-	 thread
-	    %% application delayed until the score is fully initialised
-	    {ConstrainChordStartTime ItemsStartingWithChord {ChordSeq getItems($)}}
-	 end
-      end
+   end
 
       
-      /** %% Returns the script defined internally by ChordsToScore. See there for details. 
-      %% */
-      fun {ChordsToScore_Script ChordSpecs Args}
-	 Defaults = unit(voices:4
-			 pitchDomain:48#72
-			 amp:30
+   /** %% Returns the script defined internally by ChordsToScore. See there for details. 
+   %% */
+   fun {ChordsToScore_Script ChordSpecs Args}
+      Defaults = unit(voices:4
+		      pitchDomain:48#72
+		      amp:30
 			 % value:mid
-			 ignoreSopranoChordDegree:false
-			 minIntervalToBass:0
+		      ignoreSopranoChordDegree:false
+		      minIntervalToBass:0
 		     % engeLage:false
-			) 
-	 As = {Adjoin Defaults Args}
-	 /** %% Expects C (a chord declaration) and returns a chord object.
-	 %% NB: the returned chord object is not fully initialised! 
-	 %% */
-	 fun {MakeChord C}
+		     ) 
+      As = {Adjoin Defaults Args}
+      /** %% Expects C (a chord declaration) and returns a chord object.
+      %% NB: the returned chord object is not fully initialised! 
+      %% */
+      fun {MakeChord C}
 %	 {Score.makeScore2 {Adjoin C chord} unit(chord:FullChord)}
-	    {Score.makeScore2 {Adjoin C chord} unit(chord:InversionChord)}
-	 end
-	 /** %% Expects D (a FD int) and returns a singleton FS which contains only D.
-	 %% */
-	 proc {MakeSingletonSet D ?MyFS}
-	    MyFS = {FS.var.decl}
-	    {FS.include D MyFS}
-	    {FS.card MyFS 1}
-	 end
-      in
-	 proc {$ /* MyScript */ MyScore}
-	    Chords = {Map ChordSpecs MakeChord}
-	    %% list of list of simultaneous note and chord objects 
-	    ChordNotess = {Map Chords
-			   proc {$ C ?Notes}
-			      Dur = {C getDuration($)}
-			      %% Pairs of note objects and
-			      %% singletons sets with the note's
-			      %% PC
-			      NotesAndPCs = {LUtils.collectN As.voices
-					     fun {$}
-						N PC_FS
-						PC = {DB.makePitchClassFDInt}
-					     in
-						N = {Score.makeScore2
-						     note(duration:Dur
-							  pitchClass:PC
-							  pitch:{FD.int As.pitchDomain}
-							  amplitude:As.amp)
-						     unit(note:Note2)}
-						%% N is chord note
-						{FS.include PC {C getPitchClasses($)}}
-						%% for constraining that all chord PC are expressed
-						{MakeSingletonSet PC PC_FS}
-						%% return result
-						N#PC_FS
-					     end}
-			      PC_FSs = {Map NotesAndPCs fun {$ _#PC_FS} PC_FS end}
-			   in
-			      Notes = {Map NotesAndPCs fun {$ N#_} N end}
+	 {Score.makeScore2 {Adjoin C chord} unit(chord:InversionChord)}
+      end
+      /** %% Expects D (a FD int) and returns a singleton FS which contains only D.
+      %% */
+      proc {MakeSingletonSet D ?MyFS}
+	 MyFS = {FS.var.decl}
+	 {FS.include D MyFS}
+	 {FS.card MyFS 1}
+      end
+   in
+      proc {$ /* MyScript */ MyScore}
+	 Chords = {Map ChordSpecs MakeChord}
+	 %% list of list of simultaneous note and chord objects 
+	 ChordNotess = {Map Chords
+			proc {$ C ?Notes}
+			   Dur = {C getDuration($)}
+			   %% Pairs of note objects and
+			   %% singletons sets with the note's
+			   %% PC
+			   NotesAndPCs = {LUtils.collectN As.voices
+					  fun {$}
+					     N PC_FS
+					     PC = {DB.makePitchClassFDInt}
+					  in
+					     N = {Score.makeScore2
+						  note(duration:Dur
+						       pitchClass:PC
+						       pitch:{FD.int As.pitchDomain}
+						       amplitude:As.amp)
+						  unit(note:Note2)}
+					     %% N is chord note
+					     {FS.include PC {C getPitchClasses($)}}
+					     %% for constraining that all chord PC are expressed
+					     {MakeSingletonSet PC PC_FS}
+					     %% return result
+					     N#PC_FS
+					  end}
+			   PC_FSs = {Map NotesAndPCs fun {$ _#PC_FS} PC_FS end}
+			in
+			   Notes = {Map NotesAndPCs fun {$ N#_} N end}
 %			     Result = {Append Notes [C]}
-			      %% no voice crossing (but unison doublings are OK)
-			      {Pattern.continuous
-			       {Map Notes fun {$ N} {N getPitch($)} end}
-			       '=<:'}
-			      %% QUATSCH (diese def fuer enge lage)
+			   %% no voice crossing (but unison doublings are OK)
+			   {Pattern.continuous
+			    {Map Notes fun {$ N} {N getPitch($)} end}
+			    '=<:'}
+			   %% QUATSCH (diese def fuer enge lage)
 % 			  %% sim intervals between neighbouring voices
 % 			  %% all > than an octave
 % 			  if As.engeLage then
@@ -2881,94 +2870,90 @@ define
 % 				 P1 - P2 <: {HS.db.getPitchesPerOctave}
 % 			      end}
 % 			  end
-			      %% first and last Note PCs are bass and soprano of C
-			      if {Not As.ignoreSopranoChordDegree} then 
-				 {Notes.1 getPitchClass($)} = {C getSopranoPitchClass($)}
-			      end
-			      {{List.last Notes} getPitchClass($)} = {C getBassPitchClass($)}
-			      %%
-			      if As.minIntervalToBass > 0 then 
-				 {Notes.1 getPitchClass($)} - {{Nth Notes 2} getPitchClass($)} >=: As.minIntervalToBass
-			      end
-			      %% The note PCs together express all PCs of C (and no others)
-			      {FS.unionN PC_FSs {C getPitchClasses($)}}
-			   end}
-	 in
-	    MyScore
-	    = {Score.makeScore
-	       sim(items:[seq(items:{Map ChordNotess
-				     fun {$ ChordNotes}
-					sim(items:ChordNotes)
-				     end})
-			  seq(info:lily('\\set Staff.instrumentName = "Analysis"')
-			      items:Chords)]
-		   startTime:0
-		   %% implicit
+			   %% first and last Note PCs are bass and soprano of C
+			   if {Not As.ignoreSopranoChordDegree} then 
+			      {Notes.1 getPitchClass($)} = {C getSopranoPitchClass($)}
+			   end
+			   {{List.last Notes} getPitchClass($)} = {C getBassPitchClass($)}
+			   %%
+			   if As.minIntervalToBass > 0 then 
+			      {Notes.1 getPitchClass($)} - {{Nth Notes 2} getPitchClass($)} >=: As.minIntervalToBass
+			   end
+			   %% The note PCs together express all PCs of C (and no others)
+			   {FS.unionN PC_FSs {C getPitchClasses($)}}
+			end}
+      in
+	 MyScore
+	 = {Score.makeScore
+	    sim(items:[seq(items:{Map ChordNotess
+				  fun {$ ChordNotes}
+				     sim(items:ChordNotes)
+				  end})
+		       seq(info:lily('\\set Staff.instrumentName = "Analysis"')
+			   items:Chords)]
+		startTime:0
+		%% implicit
 %		timeUnit:{Chords.1 getTimeUnit($)}
-		  )
-	       unit}
-	 end	 
-      end
+	       )
+	    unit}
+      end	 
+   end
       
-      /** %% Expects a list of chord objects in textual form (init records for InversionChord), and returns a homophonic score object with notes expressing these chords. The notes (Note2 objects) are constrained to express all chord pitch classes, but chords can contain more notes than chord pitch classes. The CSP defined by ChordsToScore is intentionally relatively simple, as it is intended for listening to isolated chord progressions only (e.g., Bruckner's role of the "shortest path" between notes in a voice is not implemented).
-      %% ChordSpecs must be fully determined, but chord attributes can be missing (e.g., the chord root is either determined or missing). 
-      %% The created score topology has the following form: sim([seq([note note ...]) seq( note...) ... seq(chord chord ...)])
-      %% The function defines the following optional Args. voices: the number of homophonic voices, pitchDomain: the pitch domain for all notes (depends on PitchesPerOctave). amp: the amplitude of all notes. order: the score distribition variable ordering strategy. value: the score distribution value selection strategy. ignoreSopranoChordDegree: if false, the sopranoChordDegrees of the input chords affect the output notes. minIntervalToBass: smallest interval allowed between bass and next lowest pitch. These are the default values
-      unit(voices:4
-	   pitchDomain:48#72
-	   amp:30
-	   value:random
-	   ignoreSopranoChordDegree:false
-	   minIntervalToBass:0)
-      %% 
-      %% IMPORTANT: there are a few things to watch out for.
-      %%
-      %% - The timeUnit must be set in at least one chord spec.
-      %% - Chord attributes cannot be undetermined variables -- ChordsToScore blocks in this case (it leads to a script with undetermined variables in the top-level space). 
-      %% - ChordsToScore conducts a search and it is possible that no solution can be found. For example, the following cases can lead to no solution: the number of voices is insufficient for expressing all chord tones, the pitchDomain is too small, the number of voices equals the number of chord tones, but the soprano and bass chord degrees are equal so that these voices express the same chord tone and hence one tone is missing etc. 
-      %% */
-      %%
-      %% OLD doc snippets:
-      %% engeLage: a boolean specifying whether the interval between simultaneous notes of neighbouring voices must be less than an octave.   
-      fun {ChordsToScore ChordSpecs Args}
-	 Defaults = unit(%voices:4
+   /** %% Expects a list of chord objects in textual form (init records for InversionChord), and returns a homophonic score object with notes expressing these chords. The notes (Note2 objects) are constrained to express all chord pitch classes, but chords can contain more notes than chord pitch classes. The CSP defined by ChordsToScore is intentionally relatively simple, as it is intended for listening to isolated chord progressions only (e.g., Bruckner's role of the "shortest path" between notes in a voice is not implemented).
+   %% ChordSpecs must be fully determined, but chord attributes can be missing (e.g., the chord root is either determined or missing). 
+   %% The created score topology has the following form: sim([seq([note note ...]) seq( note...) ... seq(chord chord ...)])
+   %% The function defines the following optional Args. voices: the number of homophonic voices, pitchDomain: the pitch domain for all notes (depends on PitchesPerOctave). amp: the amplitude of all notes. order: the score distribition variable ordering strategy. value: the score distribution value selection strategy. ignoreSopranoChordDegree: if false, the sopranoChordDegrees of the input chords affect the output notes. minIntervalToBass: smallest interval allowed between bass and next lowest pitch. These are the default values
+   unit(voices:4
+	pitchDomain:48#72
+	amp:30
+	value:random
+	ignoreSopranoChordDegree:false
+	minIntervalToBass:0)
+   %% 
+   %% IMPORTANT: there are a few things to watch out for.
+   %%
+   %% - The timeUnit must be set in at least one chord spec.
+   %% - Chord attributes cannot be undetermined variables -- ChordsToScore blocks in this case (it leads to a script with undetermined variables in the top-level space). 
+   %% - ChordsToScore conducts a search and it is possible that no solution can be found. For example, the following cases can lead to no solution: the number of voices is insufficient for expressing all chord tones, the pitchDomain is too small, the number of voices equals the number of chord tones, but the soprano and bass chord degrees are equal so that these voices express the same chord tone and hence one tone is missing etc. 
+   %% */
+   %%
+   %% OLD doc snippets:
+   %% engeLage: a boolean specifying whether the interval between simultaneous notes of neighbouring voices must be less than an octave.   
+   fun {ChordsToScore ChordSpecs Args}
+      Defaults = unit(%voices:4
 			 %pitchDomain:48#72
 			 %amp:30
-			 value:random
-			 order:{SDistro.makeSetPreferredOrder
-				%% order: time params, chord params, pitch classes, octaves, pitches
-				[fun {$ X} {X isTimeParameter($)} end
-				 fun {$ X} {IsChord {X getItem($)}} end
-				 %% NOTE: searching for PCs before octaves can lead to massive increase of search size
+		      value:random
+		      order:{SDistro.makeSetPreferredOrder
+			     %% order: time params, chord params, pitch classes, octaves, pitches
+			     [fun {$ X} {X isTimeParameter($)} end
+			      fun {$ X} {IsChord {X getItem($)}} end
+			      %% NOTE: searching for PCs before octaves can lead to massive increase of search size
 			    % fun {$ X} {IsPitchClass X} end
 			    % fun {$ X} {X hasThisInfo($ octave)} end
-				]
-				fun {$ X Y}
-				   fun {GetDomSize X} {FD.reflect.size {X getValue($)}} end
-				in {GetDomSize X} < {GetDomSize Y}
-				end}
+			     ]
+			     fun {$ X Y}
+				fun {GetDomSize X} {FD.reflect.size {X getValue($)}} end
+			     in {GetDomSize X} < {GetDomSize Y}
+			     end}
 			 %ignoreSopranoChordDegree:false
 			 %minIntervalToBass:0
 		         % engeLage:false
-			) 
-	 As = {Adjoin Defaults Args}
-	 {System.showInfo "ChordsToScore: start searching..."}
-	 %% !! TODO: check distro strategy
-	 Sol = {SDistro.searchOne {ChordsToScore_Script ChordSpecs Args}
-		unit(order:As.order
+		     ) 
+      As = {Adjoin Defaults Args}
+      {System.showInfo "ChordsToScore: start searching..."}
+      %% !! TODO: check distro strategy
+      Sol = {SDistro.searchOne {ChordsToScore_Script ChordSpecs Args}
+	     unit(order:As.order
 		 % value:random
-		     value:As.value
-		    )}
-      in
-	 if Sol == nil then raise noSolution(inProc:ChordsToScore) end
-	 else Sol.1
-	 end 
-      end
-
-      
+		  value:As.value
+		 )}
+   in
+      if Sol == nil then raise noSolution(inProc:ChordsToScore) end
+      else Sol.1
+      end 
    end
-   
-   
+    
 
   
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -2977,8 +2962,8 @@ define
 %%%
   
 
-   %% !! use SDistro.makeSearchScript (and SDistro.exploreOne etc.) instead of this
-   %%
+%% !! use SDistro.makeSearchScript (and SDistro.exploreOne etc.) instead of this
+%%
 %    %% !! outdated doc
 %    /** %% Creates a constraint script for a score which is constrained by a (silent) harmonic progression. MkScoreWithoutChords and MkChordProgression are null-ary funcs which return both a part of the full score, namely the actual sounding score and the silent chord progression. Each subpart of the score must still be extendable (e.g. use Score.makeScore2 for generation). The start and end times of both ScoreWithoutChords and ChordProgression are unified (!). In the resulting score -- a simultaneous is the top-level -- ScoreWithoutChords is placed before ChordProgression.
 %    %% Args is a record of additional arguments. All features optional, for defaults see source:
