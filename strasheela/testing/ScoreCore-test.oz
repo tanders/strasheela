@@ -907,6 +907,8 @@ MyScore = {Score.makeScore seq(items:[note(duration:1
  toInitRecord($)}
 
 
+
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%5
 %%
 %% toFullRecord
