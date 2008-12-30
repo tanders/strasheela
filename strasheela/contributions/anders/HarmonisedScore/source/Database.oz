@@ -236,6 +236,10 @@ define
       
       %% All features of the DB and also of some sub-DBs (e.g. of the chordDB and scaleDB) are optional (as marked by square brackets). Missing features are set to the features of the default database (HS.dbs.default). However, in case PitchesPerOctave \= 12, then the following features are mandatory: chordDB, scaleDB and intervalDB.
       %% Note the above doc is unfinished: for further details read the doc of the aux accessors (available in the source file contributions/anders/HarmonisedScore/source/Database.oz).
+      %%
+      %% 'comment' feature of database entries: is either a single value (usually an atom) or a record.
+      %% Naming database entries: either by an atom given to the 'comment' feature of a database, or an atom given to the 'name' feature of the record at the 'comment' feature, or -- for multiple alternative names -- a list of atoms given to the 'name' feature of the record at the 'comment' feature.
+      %%
       %% TODO: write a better doc..
       %% */
       proc {SetDB NewDB}
@@ -484,7 +488,7 @@ define
    in
       /** %% Processes an entry for a HS database (e.g. for a chord database). HS depends on pitches as keynumbers and pitch classes (all represented by integers or FD ints), both depending on KeysPerOctave. RatiosInDBEntryToPCs, on the other hand, permits also ratios (floats or fractions specs) which are transformed and rounded to the nearest pitch class (a ratio representing an interval exceeding an octave is transformed into an interval within an octave). 
       %% MyDBEntry is a record with arbitrary features. Each feature value is either an interger, a list of integers, a ratio spec (either a float or a fraction spec in the form &lt;Int&gt;#&lt;Int&gt;), or a list of ratio specs. The output contains each integer/lists of integers unchanged but substitutes each ratio/list of ratios by the nearest pitch class interval (an integer), depending on KeysPerOctave (an integer).
-      %% Additionally, a comment feature in MyDBEntry with arbitrary value is permitted. The returned record has always a comment feature with a record as value. The explaination of the comment in the return value is a bit complicated and depends on MyDBEntry. For features in MyDBEntry with a ratio, collect in comment the ratio, its pitch class plus the error, for other features in Test keep the orig value. In case MyDBEntry contains a feature comment as well, this value is preserved: in case MyDBEntry.comment is a record as well, its features are added to the comment record of the result. However, in case MyDBEntry.comment contains a feature 'comment' with the same feature as a feature in MyDBEntry itself, then the feature of MyDBEntry.comment is preferred. See the test file for examples.
+      %% Additionally, a comment feature in MyDBEntry with arbitrary value is permitted. The returned record has always a comment feature with a record as value. The explanation of the comment in the return value is a bit complicated and depends on MyDBEntry. For features in MyDBEntry with a ratio, collect in comment the ratio, its pitch class plus the error, for other features in Test keep the orig value. In case MyDBEntry contains a feature comment as well, this value is preserved: in case MyDBEntry.comment is a record as well, its features are added to the comment record of the result. However, in case MyDBEntry.comment contains a feature 'comment' with the same feature as a feature in MyDBEntry itself, then the feature of MyDBEntry.comment is preferred. See the test file for examples.
       %% Because the comment feature of the returned DB entry is changed, the function WasRatiosDBEntry recognises a DB entry processed by RatiosInDBEntryToPCs.
       %%
       %% NB: in HS.db, an OctaveDomain is also specified as &lt;Int&gt;#&lt;Int&gt;, but must not be mixed up with a fraction spec.
@@ -558,15 +562,19 @@ define
    end
 
    local
+      %% NOTE: I tried adding support for multiple names (feat 'comment' or 'name' may get list). Does not work out of the box, though -- transformation of DB from edit format into internal format somehow scrables comments containing a list
+      fun {IsMatching Entry Feat MyName}
+	 {HasFeature Entry Feat} andthen
+	 (Entry.Feat == MyName orelse
+	  ({IsList Entry.Feat} andthen {Member MyName Entry.Feat}))
+      end
       fun {Index MyName DB}
 	 X = {LUtils.find {Record.toListInd DB}
 	      fun {$ _/*I*/#X}
 		 DBEntry = if {WasRatiosDBEntry X} then X.comment else X end
 	      in
-		 {HasFeature DBEntry comment}
-		 andthen (DBEntry.comment == MyName orelse
-			  ({HasFeature DBEntry.comment name}
-			   andthen DBEntry.comment.name == MyName))
+		 {IsMatching DBEntry comment MyName} orelse
+		 {IsMatching DBEntry name MyName}
 	      end}
       in
 	 case X of  I#_/*DBEntry*/ then I
