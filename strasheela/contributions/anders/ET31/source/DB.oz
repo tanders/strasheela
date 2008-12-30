@@ -77,7 +77,10 @@ define
 			 roots:[1#1]   % ??
 			 essentialPitchClasses:[1#1 5#4 25#16]
 %				dissonanceDegree:2
-			 comment:'augmented')
+% 			 comment:'augmented'
+% 			 comment:unit(name:'augmented')
+			 comment:unit(name:['augmented' 'augmented triad'])
+			)
 
 		   %% three different diminished triads
 		   
