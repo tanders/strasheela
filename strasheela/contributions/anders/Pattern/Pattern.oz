@@ -98,7 +98,7 @@ export
 
    ZerosOnlyAtEnd RelevantLength
 
-   ForAllItems MapItems
+   ForAllItems MapItems EqualizeParam
 define
    
    /** % PlainPattern constraints Xs to a plain pattern (ie. no nesting or combination of patterns). The pattern is specified by the procedere Proc given to PlainPattern. Proc constraints a single pattern item and is called recursively. Proc expects two arguments: the current item and its predecessor in the list (i.e. Proc is called for all items except the first, which has no predecessor).
@@ -1392,6 +1392,19 @@ define
    %% */
    fun {MapItems Items Meth}
       {Map Items {GUtils.toFun Meth}}
+   end
+
+   /** %% Expects two lists of items (both of the same length) and an Accessor (unary function or method). The variables returned by the Accessor are constrained to be equal for Items at corresponding positions in the two lists. Example: items at corresponding positions in the two lists are constrained to start at the same time.  
+   %%
+   {EqualizeParam Items1 Items2 getStartTime}
+   %% */
+   proc {EqualizeParam Items1 Items2 Accessor}
+      for
+	 Item1 in Items1
+	 Item2 in Items2
+      do
+	 {{GUtils.toFun Accessor} Item1} =: {{GUtils.toFun Accessor} Item2}
+      end
    end
 
    %% nice idea in principle, but doing {MyPattern {MapItems Items Accessor} Args} is more simple..
