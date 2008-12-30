@@ -163,7 +163,7 @@ MyScore = {AllIntervals unit(pitchOffset: {ET22.pitch 'C'#4})}
 %%
 
 
-/** %% This example lists all chords. 
+/** %% This example lists all chords in present DB. 
 %% */
 fun {AllChords Args}
    Defaults = unit(%% duration for each chord
@@ -206,7 +206,7 @@ in
     sim(items:[seq(items:{Map Chords
 			  fun {$ MyChord}
 			     PCs = {FsToInts {MyChord getPitchClasses($)}}
-			     ChordName = {HS.db.getName MyChord}
+% 			     ChordName = {HS.db.getName MyChord}
 			  in
 			     sim(items:{MakeNote {MyChord getRoot($)}}
 				 | {Map {Map PCs fun {$ PC} PC+Octave end}
@@ -235,6 +235,44 @@ in
 	chord:HS.score.chord)}
 end
 
+/** %% Expresses pitches declared as essential pitch classes in DB for chords by notes. Chords is a list of textual chord objects. 
+%% */
+%% code doublication with ExpressChords
+fun {ExpressEssentialChordPCs Chords Args}
+   Defaults = unit(pitchOffset:0
+		   %% duration for each note/chord
+		   noteDuration: 1)
+   As = {Adjoin Defaults Args}
+   Octave = {HS.db.getPitchesPerOctave}
+   fun {MakeNote Pitch}
+      note(duration:As.noteDuration
+	   pitch:Pitch+As.pitchOffset
+	   amplitude:64)
+   end
+in
+   {Score.makeScore
+    sim(items:[seq(items:{Map Chords
+			  fun {$ MyChord}
+			     PCs = {FsToInts {HS.rules.getFeature MyChord essentialPitchClasses}}
+% 			     ChordName = {HS.db.getName MyChord}
+			  in
+			     sim(% {MakeNote {MyChord getRoot($)}} |
+				 {Map {Map PCs fun {$ PC} PC+Octave end}
+				      MakeNote})
+			  end})
+	       seq(items:{Map Chords
+			  fun {$ MyChord}
+			     ChordText = {Adjoin  {Record.subtractList {MyChord toInitRecord($)}
+						   [startTime]}
+					  chord(duration:As.noteDuration)}
+			  in
+			     ChordText
+			  end})]
+	startTime:0
+	timeUnit:beats)
+    add(note:HS.score.note2
+	chord:HS.score.chord)}
+end
 
 
 /*
@@ -689,6 +727,18 @@ MyScore_ChordNotes = {ExpressChords {MyScore_ChordsOnly
  unit(file: "ET31-all-chords-explicitNotes")}
 {RenderLily_ET31 MyScore_ChordNotes
  unit(file:"ET31-all-chords-explicitNotes")}
+
+
+declare
+MyScore_ChordsOnly = {AllChords unit(chordDuration:2)}
+{MyScore_ChordsOnly wait}
+MyScore_EssentialChordNotes = {ExpressEssentialChordPCs {MyScore_ChordsOnly
+							 collect($ test:HS.score.isChord)}
+			       unit(pitchOffset:{ET31.pitch 'C'#3}
+				    noteDuration:4)}
+{MyScore_EssentialChordNotes wait}
+{RenderLily_ET31 MyScore_EssentialChordNotes
+ unit(file:"ET31-all-chords-essentialNotes")}
 
 {Browse {MyScore_ChordsOnly toInitRecord($)}}
 
