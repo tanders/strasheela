@@ -1,0 +1,633 @@
+#+TITLE: 31 ET 
+
+Chords created in Scala with the following commands 
+
+equaltemp 31 2/1
+set notation E31
+
+show chords with at least size 3
+
+chords /match * -3
+
+chords /match * 3
+chords /match * 4
+chords /match * 5
+...
+
+This searches for chords listed in file chordnam.par which fit into the current scale, 31 ET. The last parameter is the chord size (number of pitches).
+
+for doc see file://localhost/Applications/Scala/Scala.app/Contents/Resources/sw/bin/document.html
+
+NOTE: it appears chords are given by absolute intervals, not as pitch classes without octave component. So, inversions are given explicitly, and some chords are repeated if only the pitch classes are taken into account.
+
+* Todo
+
+** TODO [50%] Obtain ratios for these chords, if available
+** TODO [30%] Einarbeiten in ./DB.oz
+
+   see sections marked todo below
+
+** DONE filter out pitch class doublications (e.g., inversions)
+   CLOSED: [2008-12-30 Tue 19:12]
+** DONE filter out all chords which contain octaves and filter out inversions
+   CLOSED: [2008-12-30 Tue 19:12]
+
+
+* Dreiklaenge
+
+** TODO Actual chords
+
+ 0-10-18: Major Triad  diff.  0.783,-5.181
+  C E G
+  4:5:6
+ 0-8-15: Diminished Triad  diff. -5.964,-1.867
+  C Eb F#
+  5:6:7
+ 0-7-18: Subminor Triad, NM Septimal Split Fifth 5|m3-M3  diff.  4.097,-5.181
+  C D# G
+  6:7:9
+ 0-11-20: Isoharmonic Augmented Triad  diff. -9.278,-8.298
+  C Fb G# (fundamental D|)
+  7:9:11
+ 0-14-25: NM Subfocal Tritonic Seventh  diff. -9.382,-1.084
+  C F| A#
+  8:11:14
+ 0-8-18: Minor Triad  diff. -5.964,-5.181
+  C Eb G
+  10:12:15
+ 0-11-18: Supermajor Triad, NM Septimal Split Fifth 5|M3-m3  diff. -9.278,-5.181
+  C Fb G
+  14:18:21
+ 0-10-20: Augmented  diff.  0.783, 1.566
+  C E G#
+  16:20:25
+ 0-9-18: Neutral Triad  diff.  0.979,-5.181
+  C E; G
+  18:22:27
+ 0-15-25: Subharmonic Tritonic Seventh  diff. -1.867,-1.084
+  C F# A#
+  20:28:35
+ 0-7-15: Subharmonic Diminished Triad  diff.  4.097,-1.867
+  C D# F#
+  30:35:42
+ 0-6-12: Double Septimal Whole-Tone  diff.  1.084, 2.168
+  C D| E#
+  49:56:64
+ 0-5-8: Minor Trichord  diff. -6.452, 9.677
+  C D Eb
+  
+ 0-4-9: Sikah (Segah)  diff.  4.839,-1.613
+  C D; E;
+  7:8:9
+ 
+??
+  0-11-34: BP Wide Triad 2nd inversion  diff. -9.278,-3.314
+   C Fb Db
+   7:9:15
+
+Total of 76 (with removed below)
+
+
+** Removed 
+
+   I am modelling harmony based on pitch classes, so chords with equal pitch classes are equal chords and removed..
+
+*** Inversions, doubles etc. 
+
+  0-18-31: 8/5 Chord, NM Trine "8|5-4"  diff. -5.181, 0.000
+   C G C
+  0-13-23: Major Triad 2nd inversion  diff.  5.181, 5.964
+   C F A
+  0-13-31: NM Converse Trine "8|4-5"  diff.  5.181, 0.000
+   C F C
+  0-8-21: Neapolitan Sixth, Major Triad 1st inversion  diff. -5.964,-0.783
+   C Eb Ab
+
+ 0-13-20: Subminor Triad 2nd inversion  diff.  5.181, 9.278
+  C F G#
+ 0-11-24: Subminor Triad 1st inversion  diff. -9.278,-4.097
+  C Fb A|
+ 0-10-23: Minor Triad 1st inversion  diff.  0.783, 5.964
+  C E A
+ 0-13-21: Minor Triad 2nd inversion  diff.  5.181,-0.783
+  C F Ab
+ 0-18-31: 46-Tone NM Trine  diff. -7.574, 0.000
+  C G C
+
+ 0-12-31: 13-Tone NM Converse Trine  diff.  2.978, 0.000
+  C E# C
+ 0-19-31: 13-Tone NM Trine  diff. -2.978, 0.000
+  C G| C
+
+ 0-23-38: BP Wide Triad  diff.  5.964, 4.097
+  C A D#
+  umkehrung v C Eb F#
+
+ 0-11-18: NM Trevicesimal Split Fifth 5|Maj3-min3  diff.  1.442,-5.181
+  C Fb G
+  as Supermajor triad 
+0-11-18: NM Undecimal Split Fifth 5|Maj3-min3  diff.  8.298,-5.181
+  C Fb G
+  as Supermajor triad 
+
+ 0-10-16: Septimal Hard-diminished  diff.  0.783, 1.867
+  C E Gb
+  same as Subharmonic Tritonic Seventh
+
+ 0-8-24: Supermajor 6/3 Triad  diff. -5.964,-4.097
+  C Eb A|
+  same as Subharmonic Diminished Triad
+
+ 0-7-18: NM Trevicesimal Split Fifth 5|m3-M3  diff. -6.623,-5.181
+  C D# G
+  subminor
+ 0-9-18: NM Trevicesimal Middle Split Fifth 5|Supmin3-submaj3  diff.  7.836,-5.181
+  C E; G
+  neutral triad
+ 0-10-18: NM Schismic Split Fifth 5|S3-s3  diff.  2.737,-5.181
+  C E G
+  major
+ 0-8-18: NM Schismic Split Fifth 5|s3-S3  diff. -7.918,-5.181
+  C Eb G
+  minor
+ 0-8-18: Minor Triad "m"  diff.  9.677,-3.226
+  C Eb G
+
+ 0-9-18: 17-tone Neutral Triad, NM Neutral Split Fifth  diff. -4.554,-9.108
+  C E; G
+ 0-11-18: 17-Tone NM Split Fifth 5|M3-m3  diff.  2.277,-9.108
+  C Fb G
+ 0-13-18: 17-Tone Suspended Fourth  diff.  9.108,-9.108
+  C F G
+ 0-13-31: 17-Tone NM Converse Trine  diff.  9.108, 0.000
+  C F C
+ 0-18-31: 17-Tone NM Trine  diff. -9.108, 0.000
+  C G C
+
+ 0-9-18: 24-Tone Neutral Triad, NM Neutral Split Fifth  diff. -1.613,-3.226
+  C E; G
+ 0-13-31: 29-Tone NM Converse Trine  diff.  6.674, 0.000
+  C F C
+ 0-18-31: 29-Tone NM Trine  diff. -6.674, 0.000
+  C G C
+ 0-7-18: 31-Tone Subminor Triad
+  C D# G
+ 0-8-18: 31-Tone Minor Triad
+  C Eb G
+ 0-9-18: 31-Tone Neutral Triad
+  C E; G
+ 0-10-18: 31-Tone Major Triad
+  C E G
+ 0-11-18: 31-Tone Supermajor Triad
+  C Fb G
+ 0-7-18: 36-Tone Subminor Triad, NM Quasi-Septimal Split Fifth 5|m3-M3  diff.  4.301,-3.226
+  C D# G
+ 0-11-18: 36-Tone Supermajor Triad, NM Quasi-Septimal Split Fifth 5|M3-m3  diff. -7.527,-3.226
+  C Fb G
+ 0-13-26: 36-Tone Quartal Triad  diff.  3.226, 6.452
+  C F Bb
+ 0-13-31: 36-Tone NM Converse Trine  diff.  3.226, 0.000
+  C F C
+ 0-18-31: 36-Tone NM Trine  diff. -3.226, 0.000
+  C G C
+ 0-8-18: 46-Tone NM Schismalike Split Fifth 5|s3-S3  diff. -3.366,-7.574
+  C Eb G
+ 0-9-18: 46-Tone NM Middle Split Fifth 5|Supmin3-submaj3  diff.  9.257,-7.574
+  C E; G
+ 0-10-18: 46-Tone NM Schismalike Split Fifth 5|S3-s3  diff. -4.208,-7.574
+  C E G
+ 0-11-18: 46-Tone NM Quasi-Undecimal Split Fifth 5|Maj3-min3  diff.  8.415,-7.574
+  C Fb G
+ 0-13-31: 46-Tone NM Converse Trine  diff.  7.574, 0.000
+  C F C
+
+ 0-14-25: 46-Tone NM Tritonic Subfocal Seventh  diff. -5.891, 2.525
+  C F| A#
+
+ 0-5-18: Suspended Second "sus2", Second-Fifth Chord "5/2"  diff. -6.452,-3.226
+  C D G
+  like C F G
+
+ 0-13-18: Suspended Fourth "sus4"  diff.  3.226,-3.226
+  C F G
+ 0-13-26: Quartal Triad  diff.  3.226, 6.452
+  C F Bb
+
+ 0-18-36: Quintal Triad  diff. -3.226,-6.452
+  C G D
+
+
+*** Subchords of other well-known chords  
+    
+    *no consistent exclusion: e.g., I leave diminished triads in as extra triads...*
+
+    0-10-28: Major Quintal Triad  diff.  0.783,-4.398
+  C E B
+
+ 0-18-28: Major Quintal Triad  diff. -5.181,-4.398
+  C G B
+
+ 0-10-25: Harmonic 7/3 Triad  diff.  0.783,-1.084
+  C E A#
+ 0-18-25: Harmonic 7/5 Triad  diff. -5.181,-1.084
+  C G A#
+
+ 0-7-13: Subminor Quartal Triad  diff.  4.097, 5.181
+  C D# F
+  subset of harmonic seventh on F
+
+ 0-7-25: Subminor 7/m3 Triad  diff.  4.097,-1.084
+  C D# A#
+  
+ 0-18-24: Supermajor 6/5 Triad  diff. -5.181,-4.097
+  C G A|
+  essential subset of C E| G A|
+
+ 0-8-13: Minor Quartal Triad  diff.  9.677, 3.226
+  C Eb F
+  part of D7 on F
+
+ 0-5-13: Second-Fourth Chord "4/2"  diff. -6.452, 3.226
+  C D F
+  like sixth [ajutee] without third or minor seventh without fifth
+ 0-8-26: Minor Quintal Triad  diff.  9.677, 6.452
+  C Eb Bb
+  minor seventh without fifth
+
+ 0-18-26: Minor Quintal Triad  diff. -3.226, 6.452
+  C G Bb
+
+
+*** Tetrachord subsets
+
+    
+  
+*** Others 
+
+    *not consistent removals: these chords are just odd or somehow problematic*
+
+ 0-13-18: Suspended Fourth, Quartal Triad 1st inversion, NM 5|4-Maj2  diff.  5.181,-5.181
+  C F G
+  ?? shall I count this as extra chord? it is too common in classical music as a cliche suspension
+
+
+* Tetrads 
+
+  *Note: several pitch sets here are tetrachords.* 
+  Put these extra. (they can then be added explicitly to the database)
+
+** DONE Actual chords (added to DB)
+   CLOSED: [2008-12-31 Wed 11:45]
+
+ 0-38-72-87: 15-Limit ASS 1  diff.  4.097, 0.783,-1.084
+  C D# E A#
+  3:7:15:21
+ 0-49-58-107: 11-Limit ASS  diff. -5.181,-4.202,-9.382
+  C G B; F|
+  3:9:11:33
+ 0-10-18-25: Harmonic Dominant Seventh  diff.  0.783,-5.181,-1.084
+  C E G A#
+  4:5:6:7
+ 0-15-49-87: 15-Limit ASS 2  diff. -1.867,-5.181,-1.084
+  C F# G A#
+  5:7:15:35
+ 0-7-18-23: Subminor Sixth  diff.  4.097,-5.181, 5.964
+  C D# G A
+  harmonic 9th without root (F) 
+  6:7:9:10
+ 0-7-18-27: Undecimal Subminor Seventh  diff.  4.097,-5.181,-4.202
+  C D# G B;
+  harmonic 11 without root (F)
+  6:7:9:11
+ 0-10-25-38: Hendrix Chord (Erlich)  diff.  0.783,-1.084, 4.097
+  C E A# D#
+  6:15:21:28, 12:15:21:28
+     4:10:14:19  Hendrix Chord (Monzo)
+ 0-10-18-28: Major Seventh  diff.  0.783,-5.181,-4.398
+  C E G B
+  8:10:12:15 
+ 0-15-25-38: Vogel's Tristan Chord  diff. -1.867,-1.084, 4.097
+  C F# A# D#
+  1:(3:4:5:7)
+    5:7:9:12  Tristan Chord, Harmonic Half-diminished Seventh
+ 0-7-15-25: Subharmonic Half-diminished Seventh  diff.  4.097,-1.867,-1.084
+  C D# F# A#
+  same as C Eb G A|
+  1:(4:5:6:7)
+ 0-7-18-25: Subminor Seventh, NM Septimal Minor Seventh Quad  diff.  4.097,-5.181,-1.084
+  C D# G A#
+  12:14:18:21
+ 0-11-18-24: Supermajor Added Sixth, NM Septimal Major Sixth Quad  diff. -9.278,-5.181,-4.097
+  C E| G A|
+  14:18:21:24
+ 0-10-20-25: Augmented Dominant Seventh  diff.  0.783, 1.566,-1.084
+  C E G# A#
+  16:20:25:28
+ 0-10-20-28: Augmented Major Seventh  diff.  0.783, 1.566,-4.398
+  C E G# B
+  16:20:25:30
+ 0-12-18-25: Pepper's Square  diff. -6.265,-5.181,-1.084
+  C E# G A#
+  16:21:24:28
+ 0-9-18-27: Neutral Seventh  diff.  0.979,-5.181,-4.202
+  C E; G B;
+  18:22:27:33
+ 0-10-15-25: French Sixth  diff.  0.783,-1.867,-1.084
+  C E F# A#
+  20:25:28:35
+ 0-8-15-23: Diminished Seventh  diff. -5.964,-1.867,-7.831
+  C Eb F# A
+  25:30:35:42
+ 0-11-18-25: NM Rebounding Seventh, Focal Seventh  diff.  8.298,-5.181,-1.084
+  C Fb G A#
+  44:56:66:77
+ 0-5-13-18: Second-Fourth-Fifth Chord "5/4/2"  diff. -6.452, 3.226,-3.226
+  C D F G
+ 0-8-18-26: Minor Seventh "m7"  diff.  9.677,-3.226, 6.452
+  C Eb G Bb
+ 0-10-18-23: Added Sixth, Minor Seventh 1st inversion  diff.  0.783,-5.181, 5.964
+  C E G A
+  12:15:18:20
+ 0-8-18-36: Minor Added Ninth "madd9"  diff.  9.677,-3.226,-6.452
+  C Eb G D
+ 0-13-18-36: Fourth-Ninth Chord "9/4" "sus4add9"  diff.  3.226,-3.226,-6.452
+  C F G D
+ 0-13-26-39: Quartal Tetrad  diff.  3.226, 6.452, 9.677
+  C F Bb Eb
+ 0-7-19-26: 13-Tone NM Minor Seventh Quad  diff. -5.955,-2.978,-8.933
+  C D# G| Bb
+ 0-12-19-24: 13-Tone NM Major Sixth Quad  diff.  2.978,-2.978, 5.955
+  C E# G| A| (root A|?)
+ 0-10-18-26: 31-Tone Dominant Seventh
+  C E G Bb
+ 0-11-18-26: 36-Tone NM Larger Rebounding Seventh  diff. -7.527,-3.226, 6.452
+  C Fb G Bb
+  C E| G Bb
+
+?? to add:
+C E| G A|
+essential subset C G A|
+ same as C D# G A#
+
+
+** temporarily left out
+
+?? replace by C D G A#
+ 0-5-18-26: Dominant Seventh Suspended Second "7sus2"  diff. -6.452,-3.226, 6.452
+  C D G Bb
+
+
+Total of 89 (including Tetrachords and removed, see below)
+
+
+** TODO Tetrachords 
+
+    0-3-8-11: Hzzam  diff.  2.921,-7.304,-4.382
+  C Db Eb Fb
+ 0-3-8-13: Iraq, Segh  diff.  2.921,-7.304, 5.113
+  C Db Eb F
+ 0-3-10-13: Sedaraban, Hicaz  diff.  2.921, 2.191, 5.113
+  C Db E F
+ 0-3-6-13: Al-Farabi's Intense Chromatic (307)  diff.  4.398, 1.084, 5.181
+  C Db D| F
+ 0-6-12-13: Al-Farabi's Diatonic (394)  diff.  1.084, 2.168, 5.181
+  C D| E# F
+ 0-1-3-13: Ptolemy's Enharmonic (104)  diff.  0.659, 4.398, 5.181
+  C C| Db F
+ 0-2-6-13: Ptolemy's Intense Chromatic (308)  diff. -3.118, 1.084, 5.181
+  C C# D| F
+ 0-2-7-13: Ptolemy's Diatonon Malakon, Soft Diatonic (392)  diff. -7.048, 4.097, 5.181
+  C C# D# F
+ 0-3-8-13: Ptolemy's Diatonon Syntonon, Intense Diatonic (455)  diff.  4.398,-5.964, 5.181
+  C Db Eb F
+ 0-4-8-13: Ptolemy's Diatonon Homalon, Equable Diatonic (474)  diff.  4.202,-5.964, 5.181
+  C D; Eb F
+ 0-2-3-13: Pachymeres/Tartini Enharmonic (110)  diff. -7.048, 4.398, 5.181
+  C C# Db F
+ 0-3-10-13: Palmer Tetrachord (482)  diff.  2.444, 2.737, 5.181
+  C Db E F
+ 0-2-5-13: Perrett (235)  diff. -7.048,-2.650, 5.181
+  C C# D F
+ 0-4-11-13: Qutb al-Din al-Shirazi  diff.  4.202, 8.298, 5.181
+  C D; Fb F
+ 0-2-3-13: Salinas Enharmonic (109)  diff.  6.747, 4.398, 5.181
+  C C# Db F
+ 0-1-2-13: Schlesinger (44)  diff.  2.261, 3.739, 5.181
+  C C| C# F
+ 0-3-7-13: Vogel (397)  diff.  4.398, 4.097, 5.181
+  C Db D# F
+ 0-2-4-13: Wilson Chromatic (190)  diff.  0.463,-2.655, 5.181
+  C C# D; F
+ 0-2-4-13: Winnington-Ingram (176)  diff.  3.739, 4.202, 5.181
+  C C# D; F
+ 0-2-4-13: Hemiolic Chromatic (610)  diff.  2.419, 4.839, 3.226
+  C C# D; F
+ 0-4-9-14: Sikah (Segah)  diff.  4.839,-1.613,-8.065
+  C D; E; F|
+ 0-5-9-13: Rast, Nagdi, Neutral Diatonic, Islamic Diatonic  diff. -6.452,-1.613, 3.226
+  C D E; F
+ 0-8-9-13: Sazkar  diff.  9.677,-1.613, 3.226
+  C Eb E; F
+ 0-4-9-13: Dudon Mohajira Tetrachord  diff.  4.202,-6.160, 5.181
+  C D; E; F
+ 0-5-8-13: Minor Tetrachord, Phrygian Tetrachord  diff. -6.452, 9.677, 3.226
+  C D Eb F
+ 0-3-10-13: Tartini neochromatic  diff.  4.398, 0.783, 5.181
+  C Db E F
+
+
+** Removed
+
+*** Inversions, doubles etc
+
+ 0-13-18-31: Pythagorean Quadrichord  diff.  5.181,-5.181, 0.000
+  C F G C
+ 0-49-72-121: Genus [35]  diff. -5.181, 0.783,-4.398
+  C G E B
+  same as Major Seventh
+
+ 0-23-49-72: 9-Limit ASS 1 (Anomalous Saturated Suspension)  diff.  5.964,-5.181, 0.783
+  C A G E
+  same as Added Sixth
+ 0-18-36-62: Quintal Tetrad  diff. -3.226,-6.452, 0.000
+  C G D C
+
+ 0-8-15-21: Harmonic Dominant Seventh 1st inversion  diff. -5.964,-1.867,-0.783
+  C Eb F# Ab
+ 0-7-13-23: Harmonic Dominant Seventh 2nd inversion  diff.  4.097, 5.181, 5.964
+  C D# F A
+ 0-6-16-24: Harmonic Dominant Seventh 3rd inversion  diff.  1.084, 1.867,-4.097
+  C D| Gb A|
+ 0-8-18-21: Major Seventh 1st inversion  diff. -5.964,-5.181,-0.783
+  C Eb G Ab
+
+ 0-38-49-87: 9-Limit ASS 2  diff.  4.097,-5.181,-1.084
+  C D# G A#
+  as Subminor Seventh
+
+ 0-41-56-69: Hendrix Chord (Erlich)  diff.  0.783,-1.084, 4.097
+  C E A# D#
+  same chord in less octaves already there..
+
+ 0-10-13-23: Major Seventh 2nd inversion  diff.  0.783, 5.181, 5.964
+  C E F A
+ 0-3-13-21: Major Seventh 3rd inversion  diff.  4.398, 5.181,-0.783
+  C Db F Ab
+ 0-8-13-21: Third-Fourth Chord, Minor Seventh 2nd inversion  diff. -5.964, 5.181,-0.783
+  C Eb F Ab
+ 0-8-13-23: Dominant Seventh 2nd inversion  diff. -5.964, 5.181, 5.964
+  C Eb F A
+ 0-8-16-23: Diminished Seventh 3rd inversion  diff.  7.831, 1.867, 5.964
+  C Eb Gb A
+ 0-8-15-23: Contracting Diminished Seventh  diff. -5.964,-1.867, 5.964
+  C Eb F# A
+  same as Diminished Seventh
+ 0-7-15-23: Diminished Seventh 1st inversion  diff.  4.097,-1.867, 5.964
+  C D# F# A
+ 0-8-16-24: Diminished Seventh 2nd inversion  diff. -5.964, 1.867,-4.097
+  C Eb Gb A|
+
+ 0-11-18-24: NM Trevicesimal Major Sixth Quad  diff.  1.442,-5.181, 6.623
+  C Fb G A|
+  same as C D# G A#
+
+ 0-4-9-13: Mojahira, Iraq  diff.  4.839,-1.613, 3.226
+  C D; E; F
+  same as Dudon Mohajira Tetrachord
+ 0-4-9-13: Dudon Tetrachord A  diff.  1.532, 0.979, 5.181
+  C D; E; F
+
+ 0-5-8-13: Busalik, Nahawand  diff. -6.452, 9.677, 3.226
+  C D Eb F
+  same as Minor Tetrachord
+
+ 0-9-18-27: 24-Tone Neutral Seventh  diff. -1.613,-3.226,-4.839
+  C E; G B;
+ 0-10-18-25: 31-Tone Harmonic Dominant Seventh
+  C E G A#
+ 0-7-18-25: 36-Tone Subminor Seventh, NM Quasi-Septimal Minor Seventh Quad  diff.  4.301,-3.226, 1.075
+  C D# G A#
+ 0-11-18-24: 36-Tone Supermajor Added Sixth, NM Quasi-Septimal Major Sixth Quad  diff. -7.527,-3.226,-4.301
+  C Fb G A|
+  same as C D# G A#
+
+ 0-11-18-25: 46-Tone NM Rebounding Seventh  diff.  8.415,-7.574, 2.525
+  C Fb G A#
+  as 
+
+ 0-1-3-13: Avicenna's (Ibn Sina) Enharmonic (108)  diff. -5.121, 4.398, 5.181
+  C C| Db F
+  as Ptolemy's Enharmonic
+
+ 0-3-10-13: Helmholtz Chromatic (306)  diff.  4.398, 0.783, 5.181
+  C Db E F
+  as Tartini neochromatic
+
+ 0-0-3-13: Hofmann (115)  diff. -6.776, 4.398, 5.181
+  C C Db F
+ 
+ 0-7-15-25: 7-Limit Minor Prime Chord  diff.  4.097,-1.867,-1.084
+  C D# F# A#
+  same as C Eb G A|
+  60:70:84:105
+
+*** Subchords of other well-known chords
+
+?? 0-13-18-23: Sixth Suspended Fourth  diff.  5.181,-5.181, 5.964
+  C F G A
+  6:8:9:10
+  this is major with ninth
+
+*** Other
+
+ 0-13-18-26: Dominant Seventh Suspended Fourth "7sus4"  diff.  3.226,-3.226, 6.452
+  C F G Bb
+
+
+* Fuenfklaenge
+
+** TODO Actual chords
+
+C E F# A# D#  
+  Tristan Chord + Hendrix chord
+
+0-10-14-18-25: 11-Limit Major Prime Chord  diff.  0.783,-9.382,-5.181,-1.084
+  C E F| G A#
+  .. Harmonic EleventhHarmonic Eleventh without 9th
+
+ 0-7-11-15-25: 11-Limit Minor Prime Chord  diff.  4.097, 8.298,-1.867,-1.084
+  C D# Fb F# A#
+ 0-5-8-13-18: Minor Pentachord  diff. -6.452, 9.677, 3.226,-3.226
+  C D Eb F G
+  ?? chord or scale
+ 0-8-18-26-36: Minor Ninth "m9"  diff.  9.677,-3.226, 6.452,-6.452
+  C Eb G Bb D
+ 0-13-18-26-36: Dominant Ninth Suspended Fourth "9sus4"  diff.  3.226,-3.226, 6.452,-6.452
+  C F G Bb D
+  ??
+ 0-10-18-25-36: 31-Tone Harmonic Dominant Ninth
+  C E G A# D
+ 0-2-4-8-13: Hemiolic Chromatic and Diatonic Mixed  diff.  2.419, 4.839, 9.677, 3.226
+  C C# D; Eb F
+  ?? chord or scale
+ 0-3-8-11-18: Hzzam pentachord  diff.  2.921,-7.304,-4.382,-5.113
+  C Db Eb Fb G
+  minor 9th + dim. fourth..
+ 0-3-8-13-18: Segh pentachord  diff.  2.921,-7.304, 5.113,-5.113
+  C Db Eb F G
+  minor 9th + fourth..
+
+Total of 9
+
+TODO: there should be more useful [Fuenfklaenge]
+
+
+C F# G A# D#
+5#1 7#1 15#1 35#1 + ..
+
+** Removed
+
+
+* Akkorde aus 6 Toenen
+
+** TODO Actual chords
+
+0-23-38-72-87-110: Hexany 1 3 5 7  diff.  5.964, 4.097, 0.783,-1.084, 4.880
+  C A D# E A# G;
+  ?? chord or scale
+ 0-8-18-26-36-44: Minor Eleventh "m11"  diff.  9.677,-3.226, 6.452,-6.452, 3.226
+  C Eb G Bb D F
+ 0-10-18-25-36-45: 31-Tone Harmonic Eleventh
+  C E G A# D F|
+ 0-3-8-13-16-21: Iraq hexachord  diff.  2.921,-7.304, 5.113, 8.034,-2.191
+  C Db Eb F Gb Ab
+  could add Bb..
+  ?? chord or scale
+
+  Total of 6 (including removed, see below)
+
+
+** Removed 
+
+   0-8-18-31-49-80: Undertone  diff.  9.677,-3.226, 0.000,-3.226,-3.226
+   C Eb G C G G
+
+   0-7-10-17-23-25: Reduced Hexany 1 3 5 7  diff.  4.097, 0.783, 4.880, 5.964,-1.084
+   C D# E G; A A#
+  same as Hexany
+
+
+* Akkorde aus 8 Toenen
+
+** Removed
+
+   these are tetrads
+
+0-31-49-62-72-80-87-93: Harmonics 1-8  diff.  0.000,-5.181, 0.000, 0.783,-5.181,-1.084, 0.000
+  C C G C E G A# C
+ 0-6-13-21-31-44-62-93: Subharmonics 1-8  diff.  1.084, 5.181,-0.783, 0.000, 5.181, 0.000, 0.000
+  C D| F Ab C F C C
+Total of 2
+
+
+
