@@ -48,6 +48,7 @@ import
    Select(fd) at 'x-ozlib://duchier/cp/Select.ozf'
    GUtils at 'x-ozlib://anders/strasheela/source/GeneralUtils.ozf'
    LUtils at 'x-ozlib://anders/strasheela/source/ListUtils.ozf'
+   Score at 'x-ozlib://anders/strasheela/source/ScoreCore.ozf'
 %    Browser(browse:Browse) % temp for debugging
 export
    PlainPattern PlainPattern2
@@ -58,7 +59,7 @@ export
    DxsToXs XsToDxs
    ArithmeticMean Range FirstToLastDistance
 
-   UseMotifs
+   UseMotifs MakeIndexConstructor GetMotifIndex
    
    MarkovChain MarkovChain_1
    MakeLSystem MakeLSystem_B MakeLSystem2 LSystemConstsToParams
@@ -483,6 +484,32 @@ define
       end
    end
 
+   /** %% [aux for UseMotifs] Returns a score item constructor (i.e. returns a function which returns score itmes) with added parameters for pattern motif indices. Constructor is the score item constructor to specialise (a unary function or class, e.g. HS.note). IndexParamNames is a list of atoms used to mark the added parameters (in an info tag motifIndex(IndexParamName) of these parameters).
+   %% The added parameters are created implicitly and not supported by the textual representation (i.e. the method toInitRecord leaves them out as well), but accessible with the function GetMotifIndex (see below) or the method getParameters (which returns a list of all parameter objects).
+   %%
+   %% Important: for efficiency, the distribution strategy should visit early parameters with info tab 'motifIndex'. Constructors created by MakeIndexConstructor add this info tab to all index parameters.
+   %% */
+   fun {MakeIndexConstructor Constructor IndexParamNames}
+      {Score.makeConstructor Constructor
+       unit(addParameters: fn # fun {$}
+				   {Map IndexParamNames
+				    fun {$ ParamName}
+				       {New Score.parameter
+					init(info:motifIndex(ParamName)
+					     value:{FD.decl})}
+				    end}
+				end)}
+   end
+   /** %% [aux for UseMotifs] Expects X, a score item with added index variable(s) and returns the index variable value associated with the name IndexParamName (an atom).
+   %% */
+   fun {GetMotifIndex X IndexParamName}
+      {{LUtils.find {X getParameters($)}
+	fun {$ Param} 
+	   {Param hasThisInfo($ motifIndex)} andthen
+	   {Param getInfoRecord($ motifIndex)}.1 == IndexParamName
+	end}
+       getValue($)}
+   end
 
    
    local
