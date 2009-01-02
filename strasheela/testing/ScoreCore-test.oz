@@ -402,6 +402,21 @@ end
 {ExploreOne SearchScript}
 
 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%% MakeConstructor
+%%
+
+declare
+MakeNote = {Score.makeConstructor Score.note
+	    unit(offsetTime:{FD.int 0#10})} % buildin default is 0
+N = {MakeNote unit(pitch:60)}
+{Score.init N}
+
+{N toInitRecord($)}
+
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%
 %% MakeItems 
@@ -503,6 +518,7 @@ MyScore = {Score.make seq(items:{Score.makeItems items(n:3
 	   unit}
 
 {Browse {MyScore toInitRecord($)}}
+
 
 
 
