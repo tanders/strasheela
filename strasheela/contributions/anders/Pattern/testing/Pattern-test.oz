@@ -1558,6 +1558,32 @@ Xs.2.1 = 5
  end}
 
 
+%%
+%% conveniently creating score objects with motif index parameters.
+%%
+%%
+
+declare
+%% constructor definition
+MakeNote_MotifIndex
+= {Pattern.makeIndexConstructor Score.note
+   [duration]}
+
+declare
+%% constructor use 
+N = {MakeNote_MotifIndex unit(duration:2)}
+{Score.init N}
+
+{Pattern.getMotifIndex N duration}
+
+{N getParameters($)}
+
+%% 
+{N toInitRecord($)}
+
+
+
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%
