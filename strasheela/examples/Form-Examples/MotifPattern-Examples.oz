@@ -46,6 +46,7 @@
       value:random)}
 
 
+
 %% More efficient variant of example above which introduces additional note parameter for motif index (see def of MakeMotifIndexNote and GetMotifIndex below). Search space is greatly reduced by searching for the motif index instead of the actual durations. Besides, this variant is more secure (motifs which are like the beginning of other motifs otherwise cause problems, see Pattern.useMotifs doc).
 {GUtils.setRandomGeneratorSeed 0}
 {SDistro.exploreOne
@@ -480,7 +481,7 @@ in
     note(pitch:{ET12.pitch 'C'#4}
 	 addParameters:[MyParam])}
 end
-/** %% Returns a note with an two added parameters for the motif index for durations and pitches. 
+/** %% Returns a note with two added parameters for the motif index for durations and pitches. 
 %% */
 fun {MakeMotifIndexNote_DurAndPitch}
    MyParam1 = {New Score.parameter
