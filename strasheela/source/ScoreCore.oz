@@ -77,6 +77,7 @@ export
    TransformScore TransformScore2
    transform: TransformScore
    transform2: TransformScore2
+   MakeConstructor
    MakeItems MakeItems_iargs MakeContainer MakeSim MakeSeq
    DefSubscript
    % ResolveRepeats
@@ -2654,6 +2655,32 @@ define
    end
 
 
+   
+   /** %% Returns a score item constructor function with interface {F Args} which creates essentially the same item as Constructor (unary function or class), but uses the default arguments Defaults (record of init arguments). The item returned by the constructor is not fully initialised.
+   %% In addition, the resulting constructor function supports convenience notations for certain values. The following notations are supported (both as default arguments and as actual arguments). 
+   %% fn # MyFun: the actual value is returned by the function MyFun (remember that handing undetermined variables to constructors is only possible if the constructor call is wrapped in the script or some other procedure; otherwise the search blocks).   
+   %% fd # DomSpec: DomSpec is the specification expected by FD.int.
+   %%
+   %% Example
+   {Score.makeConstructor Score.note
+    unit(pitch: fd#(60#72)
+	 duration: fn#fun {$} {FD.int 1#10} end)}
+   %% */
+   %% TODO: add support for fs # DomSpec : what format should DomSpec be in that case?
+   fun {MakeConstructor Constructor Defaults}
+      fun {$ Args}
+	 {MakeScore2 {Record.map {Adjoin Defaults
+				  {Adjoin Args unit}}
+		      fun {$ X}
+			 case X of fd # DomSpec then {FD.int DomSpec}
+			 [] fn # F then {F}
+			 else X
+			 end
+		      end}
+	  unit(unit:Constructor)}
+      end
+   end
+
    local
       /** %% Creates a list of score object parameter values from a specification. Format of Spec is either each#Xs, fenv#MyFenv, or MyVal, see MakeItems doc for details.  
       %% */
@@ -2739,6 +2766,7 @@ define
    in
       {MakeItems As.iargs}
    end
+   
 
    /** %% Extended script which returns a container with items, not fully initialised and where many parameters can be still undetermined. The contained elements are created with Score.makeItems.
    %%
