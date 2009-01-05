@@ -2,7 +2,7 @@
 #title Changes 
 ; #author Torsten Anders
 
-* Changes in Version 0.9.8 (no date yet)
+* Changes in Version 0.9.9 (no date yet)
 
   - Main additions and changes 
 
