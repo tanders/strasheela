@@ -165,8 +165,10 @@ MyTestScore = {Score.makeScore
 ** GeOz 
    
 *** TODO Install GeOz 
-    SCHEDULED: <2009-04-06 Mon>
+    SCHEDULED: <2009-02-02 Mon>
     
+    NOTE: development of Gecode/J is discontinued. So, I better stick with Mozart/Oz. But then it would be a good idea to support gustavo getting Gecode running for Oz. E.g., moral support by installing it and asking questions, also finding bugs perhaps..
+
     First ask  gustavo.ggutierrez@gmail.com whether meanwhile graph constraints are working again
 
 1) Download gecode sources (we don't have support for binary distributions yet) and build them. In the install directory there will be a lib/pkgconfig subdir. Export the shell variable PKG_CONFIG_PATH to /Users/u/install/lib/pkgconfig. For this you need pkg-config installed, if not, download it form http://www.rudix.org/packages.html .

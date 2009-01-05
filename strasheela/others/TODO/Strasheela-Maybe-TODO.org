@@ -476,6 +476,7 @@ InspectorObject = {Inspector.new unit}
 
     shell access highly recommended! 
 
+
 *** Sourceforge Mediawiki hosted app problems
 
 **** Sourceforge Mediawiki login restricted
@@ -488,12 +489,12 @@ InspectorObject = {Inspector.new unit}
 
 
 
-**** Not possible to load up sound files
+**** DONE Not possible to load up sound files
+     CLOSED: [2008-12-01 Mon 13:25]
 
      Mediawiki does allow for this in principle, but not Sourceforge mediawiki hosted app
 
-     Note: 
-
+     Solution: simply create a link to sound files
 
 **** Sourceforge mediawiki hosted app does not allow customisation
      
@@ -532,9 +533,6 @@ InspectorObject = {Inspector.new unit}
      - Extension:Syntax Highlighting GeSHi does not support Oz
 
      - I cannot paste in pure HTML created y Emacs buffer HTMLize (and even if that would work, it would be tedious)
-
-
-*** !!?? Ask Sourceforge to support soundfile upload (which formats: mp3, ogg, midi?)
 
 
 *** Running Own MediaWiki Installation on Sourceforge.net
