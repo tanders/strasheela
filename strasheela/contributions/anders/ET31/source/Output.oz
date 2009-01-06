@@ -223,22 +223,16 @@ define
       end
 
 
-%       /** %% Returns the chord comment.
-%       %% */
-%       proc {MakeChordComment MyChord ?Result}
-% 	 ChordComment = {HS.db.getInternalChordDB}.comment.{MyChord getIndex($)}
-%       in
-% 	 Result = '#'('\\column { '
-% 		      if {IsRecord ChordComment} andthen {HasFeature ChordComment comment}
-% 		      then ChordComment.comment
-% 		      else ChordComment
-% 		      end
-% 		      ' } ')
-% 	 %% 
-% 	 if {Not {IsVirtualString Result}}
-% 	 then raise noVS(Result) end
-% 	 end
-%       end
+      /** %% Returns the chord comment.
+      %% */
+      proc {MakeChordComment MyChord ?Result}
+	 Result = '#'('\\column { '
+		      {Out.listToVS {HS.db.getName MyChord} '; '}
+		      ' } ')
+	 if {Not {IsVirtualString Result}}
+	 then raise noVS(Result) end
+	 end
+      end
       /* %% Returns the chord as ratio spec: Transposition x untransposed PCs (a VS).
       %% */
       proc {MakeChordRatios MyChord ?Result}
@@ -276,8 +270,8 @@ define
       %%
       fun {ChordEt31ToLily MyChord}
 	 Rhythms = {Out.lilyMakeRhythms {MyChord getDurationParameter($)}}
-%	 ChordDescr = {MakeChordComment MyChord}
-	 ChordDescr = {MakeChordRatios MyChord} 
+	 ChordDescr = {MakeChordComment MyChord}
+% 	 ChordDescr = {MakeChordRatios MyChord} 
 	 AddedSigns = '_\\markup{'#ChordDescr#'}'
       in
 	 %% if MyChord is shorter than 64th then skip it (Out.lilyMakeRhythms
@@ -348,7 +342,8 @@ define
 	 AddedArgs = unit(clauses:if {HasFeature Args clauses}
 				  then {Append Args.clauses AddedClauses}
 				  else AddedClauses
-				  end)
+				  end
+			 )
 	 As = {Adjoin Args AddedArgs}
       in
 	 {Out.renderAndShowLilypond MyScore As}
