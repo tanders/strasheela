@@ -49,6 +49,9 @@ import
    GUtils at 'x-ozlib://anders/strasheela/source/GeneralUtils.ozf'
    LUtils at 'x-ozlib://anders/strasheela/source/ListUtils.ozf'
    Score at 'x-ozlib://anders/strasheela/source/ScoreCore.ozf'
+   
+%    Fenv at 'x-ozlib://anders/strasheela/Fenv/Fenv.ozf'
+   
 %    Browser(browse:Browse) % temp for debugging
 export
    PlainPattern PlainPattern2
@@ -100,6 +103,8 @@ export
    ZerosOnlyAtEnd RelevantLength
 
    ForAllItems MapItems EqualizeParam
+
+   FenvBoundaries
 define
    
    /** % PlainPattern constraints Xs to a plain pattern (ie. no nesting or combination of patterns). The pattern is specified by the procedere Proc given to PlainPattern. Proc constraints a single pattern item and is called recursively. Proc expects two arguments: the current item and its predecessor in the list (i.e. Proc is called for all items except the first, which has no predecessor).
@@ -1409,6 +1414,14 @@ define
    %%
    %%
 
+
+   
+   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+   %%
+   %% patterns on items
+   %% 
+
+   
    /** %% Performs List.forAll on a list of items, but Meth can be a method or procedure. 
    %% */
    proc {ForAllItems Items Meth}
@@ -1455,9 +1468,26 @@ define
 %    end
 
 
+   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+   %%
+   %% Using Fenvs
+   %%
+   
+
+   /** %% Restricts the upper and lower domain boundary of a list of FD ints (Xs) by two Fenvs. Each fenv is "sampled" where the number of samples is the lengt of Xs, and these samples are then used as domain boundaries. 
+   %% Remember that fenv values are always floats, these are internally rounded to integers.  
+   %% */
+   proc {FenvBoundaries Xs FenvUpperDom FenvLowerDom}
+      N = {Length Xs}
+      UpperDoms = {Map {FenvUpperDom toList($ N)} FloatToInt}
+      LowerDoms = {Map {FenvLowerDom toList($ N)} FloatToInt}
+   in
+      {ForAll {LUtils.matTrans [Xs UpperDoms LowerDoms]}
+       proc {$ [X Upper Lower]} X :: Lower#Upper end}
+   end
 
    
-   
+   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
    %%
    %% Unfinished
    %% 
