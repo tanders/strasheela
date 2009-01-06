@@ -622,22 +622,23 @@ define
 	 unit			% never returned
       end
    end
-   /** %% Returns the name of a chord, scale or interval specified in its database entry (a VS, usually an atom). Returns nil if no name was found.
+   /** %% Returns the name of a chord, scale or interval specified in its database entry (a VS, usually an atom). The name is a list of atoms (its a list because there are sometimes multiple name alternatives). Returns nil if no name was found.
    %% Blocks until the index parameter is determined.
    %%
-   %% The name is often specified as an atom at the 'comment' feature of a database entry. Alternatively, the entry defines a record at the 'comment' feature, and then the name is the value at the feature 'comment' in this subrecord.
+   %% The name is often specified as an atom at the 'comment' feature of a database entry. Alternatively, the entry defines a record at the 'comment' feature, and then the name is and atom at the feature 'name' in this subrecord, or a list of atoms at the feature 'name' (for specifying multiple alternative names).  
    %% */
-   %% NOTE: not fully fail-proof if name is specified at other feature (e.g. some new feature 'name' within the comment record. But OK as long as database entries stick to the format above.
    fun {GetName X}
       Comment = {GetComment X}
+      NameAux = if {IsRecord Comment} then
+		   if {HasFeature Comment comment} andthen {IsVirtualString Comment.comment}
+		   then Comment.comment
+		   elseif {HasFeature Comment name}
+		   then Comment.name
+		   else nil
+		   end
+		end
    in
-      %% note: name must be virtual string
-      if {IsRecord Comment} andthen {HasFeature Comment comment} andthen {IsVirtualString Comment.comment}
-      then Comment.comment 
-      elseif {IsVirtualString Comment} 
-      then Comment
-      else nil
-      end
+      if {IsList NameAux} then NameAux else [NameAux] end 
    end
 
    
