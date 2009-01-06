@@ -248,15 +248,9 @@ define
       /** %% Returns the chord comment (also works for scale). 
       %% */
       proc {MakeChordComment MyChord ?Result}
-	 ChordComment = {HS.db.getInternalChordDB}.comment.{MyChord getIndex($)}
-      in
 	 Result = '#'('\\column {'
-		      if {IsRecord ChordComment} andthen {HasFeature ChordComment comment}
-		      then ChordComment.comment
-		      else ChordComment
-		      end
+		      {Out.listToVS {HS.db.getName MyChord} '; '}
 		      ' } ')
-	 %% 
 	 if {Not {IsVirtualString Result}}
 	 then raise noVS(Result) end
 	 end
