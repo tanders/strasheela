@@ -206,7 +206,7 @@ in
     sim(items:[seq(items:{Map Chords
 			  fun {$ MyChord}
 			     PCs = {FsToInts {MyChord getPitchClasses($)}}
-% 			     ChordName = {HS.db.getName MyChord}
+% 			     ChordName = {HS.db.getName MyChord}.1
 			  in
 			     sim(items:{MakeNote {MyChord getRoot($)}}
 				 | {Map {Map PCs fun {$ PC} PC+Octave end}
@@ -254,7 +254,7 @@ in
     sim(items:[seq(items:{Map Chords
 			  fun {$ MyChord}
 			     PCs = {FsToInts {HS.rules.getFeature MyChord essentialPitchClasses}}
-% 			     ChordName = {HS.db.getName MyChord}
+% 			     ChordName = {HS.db.getName MyChord}.1
 			  in
 			     sim(% {MakeNote {MyChord getRoot($)}} |
 				 {Map {Map PCs fun {$ PC} PC+Octave end}
@@ -362,7 +362,7 @@ in
     seq(items:{Map Scales
 	       fun {$ MyScale}
 		  PCs = {FsToInts {MyScale getPitchClasses($)}}
-		  ScaleName = {HS.db.getName MyScale}
+		  ScaleName = {HS.db.getName MyScale}.1 % can be multiple alternative names
 	       in
 		  seq(items:{Append
 			     %% do first note "by hand" and add scale name
@@ -506,6 +506,55 @@ in
 		  chord:HS.score.chord)}
 end
 
+/* % test
+
+declare
+MyScale = {Score.makeScore
+	   scale(index:{HS.db.getScaleIndex 'standard pentachordal major'}
+		 transposition:{ET22.pc 'C'}
+		 %% duration should be determined
+		 duration:4
+		 startTime:0
+		 timeUnit:beats)
+	   unit(scale:HS.score.scale)}
+MyScore = {FindChordsAtAllScaleDegrees MyScale}
+
+{MyScore isDet($)}
+
+{MyScore toInitRecord($)}
+
+*/
+
+
+/* % test for ET31
+
+declare
+[ET31] = {ModuleLink ['x-ozlib://anders/strasheela/ET31/ET31.ozf']}
+{HS.db.setDB ET31.db.fullDB}
+
+declare
+MyScale = {Score.makeScore
+	   scale(index:{HS.db.getScaleIndex 'genus enharmonicum instrumentale'}
+		 transposition:{ET31.pc 'C'}
+		 %% duration should be determined
+		 duration:4
+		 startTime:0
+		 timeUnit:beats)
+	   unit(scale:HS.score.scale)}
+MyScore_ChordsAtDegrees = {FindChordsAtAllScaleDegrees MyScale}
+
+{MyScore_ChordsAtDegrees isDet($)}
+
+{MyScore_ChordsAtDegrees toInitRecord($)}
+
+
+{SDistro.exploreOne
+ {GUtils.extendedScriptToScript ChordAtScaleDegree
+  unit(scale:MyScale
+       degree:1)}
+ unit(value:min)}
+
+*/
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -536,25 +585,6 @@ end
 % 	      unit(chord:HS.score.chord)}
 %    {HS.rules.diatonicChord MyChord As.scale}
 % end
-
-
-/* % test
-
-declare
-MyScale = {Score.makeScore
-	   scale(index:{HS.db.getScaleIndex 'standard pentachordal major'}
-		 transposition:{ET22.pc 'C'})
-	   unit(scale:HS.score.scale)}
-
-{SDistro.exploreOne
- {GUtils.extendedScriptToScript ChordAtScaleDegree
-  unit(scale:MyScale
-       degree:1)}
- unit(value:min)}
-
-*/
-
-
 
 
 % /** %% For given chord MyChord, collect all scales and the corresponding scale degrees into which this chord "fits" (i.e., chord root is scale degree pitch class and all chord pitch classes fall into scale). 
@@ -709,11 +739,30 @@ MyScore = {AllIntervals unit(pitchOffset: {ET31.pitch 'C'#4})}
 
 
 %%
+%% test single chord
+%%
+
+declare
+MyChord
+MyScore = {Score.make
+	   seq([chord(handle:MyChord
+		      index:1 transposition:0 duration:2)]
+	       startTime:0
+	       timeUnit:beats)
+	   add(chord:HS.score.chord)}
+
+{RenderLily_ET31 MyScore
+ unit}
+
+{HS.db.getName MyChord}
+ 
+
+%%
 %% all chords
 %%
 
 declare
-MyScore_ChordsOnly = {AllChords unit(chordDuration:2)}
+MyScore_ChordsOnly = {AllChords unit(chordDuration:8)}
 {MyScore_ChordsOnly wait}
 {RenderLily_ET31 MyScore_ChordsOnly
  unit(file:"ET31-all-chords")}
@@ -721,7 +770,7 @@ MyScore_ChordNotes = {ExpressChords {MyScore_ChordsOnly
 				     collect($ test:HS.score.isChord)}
 		      unit(pitchOffset:{ET31.pitch 'C'#3}
 			   noteDuration:4)}
-{MyScore_ChordNotes wait}
+{MyScore_ChordNotes wait}	
 {Init.setTempo 60.0}
 {Out.renderAndPlayCsound MyScore_ChordNotes
  unit(file: "ET31-all-chords-explicitNotes")}
@@ -826,6 +875,7 @@ end
 
 
 
+
 {ProcessScale {HS.db.getScaleIndex 'major'}
  "Major"
  "/Users/t/sound/tmp/"
@@ -838,7 +888,7 @@ end
 }
 
 {ShowScaleChords {HS.db.getScaleIndex 'Secor/Barton no-fives'}
- 'SecorSentinel'
+ 'SecorBarton'
  "/Users/t/sound/tmp/"
 }
 
@@ -920,12 +970,6 @@ end
  "/Users/t/sound/tmp/"
 }
 
-%% many scale degrees without fitting chord
-{ShowScaleChords {HS.db.getScaleIndex 'Lumma decatonic'}
- "LummadDecatonic"
- "/Users/t/sound/tmp/"
-}
-
 
 {ShowScaleChords {HS.db.getScaleIndex 'Breed 10-tone'}
  "Breed10tone"
@@ -939,11 +983,6 @@ end
  "/Users/t/sound/tmp/"
 }
 
-
-{ShowScaleChords {HS.db.getScaleIndex 'modus conjunctus'}
- "ModusConjunctus"
- "/Users/t/sound/tmp/"
-}
 
 
 %% Test
@@ -1021,5 +1060,241 @@ MyScore_ChordNotes = {ExpressChords {MyChordSeq
 */
 
 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%% CSP
+%%
+
+%% Find scale of 7-11 tones in 31 ET
+%%
+%% - on each scale degree can be build a tetrad consisting only of scale tones
+%% - the scale uses only 3 different step sizes at maximum
+%% - no stepsize is the 31 ET interval 1
+%% - the scale contains the fifth
+%%
+%% Likely, there does not exist any solution for the CSP. In that case, try to reduce the constraints 
+
+%%
+%% Perhaps there does not even exist a scale where on each scale degree there is a [leitereigener] chord
+%%
+
+/*
+
+declare
+[ET31] = {ModuleLink ['x-ozlib://anders/strasheela/ET31/ET31.ozf']}
+{HS.db.setDB ET31.db.fullDB}
+% {Explorer.object
+%  add(information proc {$ I unit(scale:Scale chords:Chords)}
+% 		    {Browse unit(scale:Scale
+% 				 chords:{Map Chords fun {$ MyChord} {MyChord toInitRecord($)} end})}
+% 		 end
+%      label: 'show sol (scale search CSP)')}
+%%
+declare
+proc {MyScript Root}
+   N = 10			% change to vals between 7 and 11
+   MyScale = {FD.list N 0#30}	% elements are ET31 pitch classes
+   MyScale_FS = {FS.var.decl}
+   Chords = {Score.makeItems unit(n:N
+				  constructor: HS.score.chord)}
+%    ScaleIntervals 
+in
+   Root = unit(scale:MyScale
+% 	       chords:Chords
+	       chords:{Map Chords fun {$ MyChord} {MyChord getPitchClasses($)} end}
+	      )
+   {Pattern.increasing MyScale}
+   %% On each scale degree there exists a [leitereigen] tetrad / chord
+   {FS.int.match MyScale_FS MyScale} % GUtils.intsToFS
+   {ForAll {LUtils.matTrans [MyScale Chords]}
+    proc {$ [ScaleTone MyChord]}
+       ScaleTone = {MyChord getRoot($)}
+       {FS.subset {MyChord getPitchClasses($)} MyScale_FS}
+       {FS.card {MyChord  getPitchClasses($)}} >=: 4
+    end}
+%    %% no stepsize is the 31 ET interval 1
+%    {Pattern.for2Neighbours MyScale
+%     proc {$ X Y}
+%        Z = {FD.decl} in
+%        Y - X =: Z
+%        Z >: 1
+%     end}
+   %% Distro
+   %% TODO: improve distro?
+   {FD.distribute ff
+    {LUtils.accum [MyScale
+		   {Pattern.mapItems Chords getIndex}
+		   {Pattern.mapItems Chords getTransposition}]
+     Append}}
+end
+%%
+{ExploreOne MyScript}
+
+*/
+
+
+
+
+% declare
+% [ET31] = {ModuleLink ['x-ozlib://anders/strasheela/ET31/ET31.ozf']}
+% {HS.db.setDB ET31.db.fullDB}
+% {Explorer.object
+%  add(information proc {$ I X}
+% 		    if {Score.isScoreObject X}
+% 		    then 
+% 		       FileName = out#{GUtils.getCounterAndIncr}
+% 		    in
+% 		       {ET31.out.renderAndShowLilypond X
+% 			unit(file: FileName#'-'#I)}
+% 		    end
+% 		 end
+%      label: 'to Lilypond (31 ET)')}
+
+
+% %% dummy 1
+% {SDistro.exploreOne
+%  proc {$ MyScale}
+%     MyScale = {Score.make seq([scale(duration:2)]
+% 			      startTime:0
+% 			      timeUnit:beats)
+% 	       add(scale:HS.score.scale)}
+%  end
+%  unit}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%% DB check: find doublettes: 2 chords (scales) with same pitch class set but different index
+%%
+
+/*
+
+%% check ET31 chord database 
+declare
+[ET31] = {ModuleLink ['x-ozlib://anders/strasheela/ET31/ET31.ozf']}
+{HS.db.setDB ET31.db.fullDB}
+{Explorer.object
+ add(information proc {$ I MyScore}
+		    Chord1 = {MyScore getItems($)}.1
+		    Chord2 = {MyScore getItems($)}.2.1
+		 in
+		    {Browse I#{MyScore toInitRecord($)}}
+		    {Browse indices(chord1:{HS.db.getName Chord1}
+				    chord2:{HS.db.getName Chord2})}
+		 end
+     label: 'browse initRecord and chord names')}
+
+{SDistro.exploreOne
+ proc {$ MyScore}
+    Chord1 Chord2
+ in
+    MyScore = {Score.make seq([chord(handle:Chord1
+				     duration:2)
+			       chord(handle:Chord2
+				     duration:2)]
+			      startTime:0
+			     timeUnit:beats)
+	       add(chord:HS.score.chord)}
+    {Chord1 getPitchClasses($)} = {Chord2 getPitchClasses($)}
+    {Chord1 getRoot($)} =: {Chord2 getRoot($)}
+    {Chord1 getIndex($)} \=: {Chord2 getIndex($)}
+ end
+ unit}
+
+*/
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%% DB check: find chord pairs with the same pitch class set, which only differ in their root and index, so I am aware of these
+%%
+
+/*
+
+%% check ET31 chord database 
+declare
+[ET31] = {ModuleLink ['x-ozlib://anders/strasheela/ET31/ET31.ozf']}
+{HS.db.setDB ET31.db.fullDB}
+{Explorer.object
+ add(information proc {$ I MyScore}
+		    Chord1 = {MyScore getItems($)}.1
+		    Chord2 = {MyScore getItems($)}.2.1
+		 in
+		    {Browse I#{MyScore toInitRecord($)}}
+		    {Browse indices(chord1:{HS.db.getName Chord1}
+				    chord2:{HS.db.getName Chord2})}
+		 end
+     label: 'browse initRecord and chord names')}
+
+{SDistro.exploreAll
+ proc {$ MyScore}
+    Chord1 Chord2
+ in
+    MyScore = {Score.make seq([chord(handle:Chord1
+				     duration:2)
+			       chord(handle:Chord2
+				     duration:2)]
+			      startTime:0
+			     timeUnit:beats)
+	       add(chord:HS.score.chord)}
+    {Chord1 getPitchClasses($)} = {Chord2 getPitchClasses($)}
+    {Chord1 getRoot($)} \=: {Chord2 getRoot($)}
+%     {Chord1 getIndex($)} \=: {Chord2 getIndex($)}
+    %% remove symmetries
+    {Chord1 getTransposition($)} = 0
+    {Chord1 getIndex($)} <: {Chord2 getIndex($)}
+ end
+ unit}
+
+*/
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%% TODO: DB check: find chord pairs where the pitch class sets are subsets of each other,  so I am aware of these
+%%
+
+/*
+
+%% check ET31 chord database 
+declare
+[ET31] = {ModuleLink ['x-ozlib://anders/strasheela/ET31/ET31.ozf']}
+{HS.db.setDB ET31.db.fullDB}
+{Explorer.object
+ add(information proc {$ I MyScore}
+		    Chord1 = {MyScore getItems($)}.1
+		    Chord2 = {MyScore getItems($)}.2.1
+		 in
+		    {Browse I#{MyScore toInitRecord($)}}
+		    {Browse indices(chord1:{HS.db.getName Chord1}
+				    chord2:{HS.db.getName Chord2})}
+		 end
+     label: 'browse initRecord and chord names')}
+
+%% 82 solutions!
+{SDistro.exploreAll
+ proc {$ MyScore}
+    Chord1 Chord2
+ in
+    MyScore = {Score.make seq([chord(handle:Chord1
+				     duration:2)
+			       chord(handle:Chord2
+				     duration:2)]
+			      startTime:0
+			     timeUnit:beats)
+	       add(chord:HS.score.chord)}
+    {FS.subset {Chord1 getPitchClasses($)} {Chord2 getPitchClasses($)}}
+    {Chord1 getRoot($)} \=: {Chord2 getRoot($)}
+    {Chord1 getIndex($)} \=: {Chord2 getIndex($)}
+    %% remove symmetries
+    {Chord1 getTransposition($)} = 0
+ end
+ unit}
+
+*/
 
 
