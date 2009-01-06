@@ -33,6 +33,12 @@ NOTE: it appears chords are given by absolute intervals, not as pitch classes wi
    CLOSED: [2008-12-30 Tue 19:12]
 
 
+** TODO Check other sources 
+
+   more chords (not all of these are really suitable) 
+   http://en.wikipedia.org/wiki/Septimal_meantone_temperament#Chords_of_septimal_meantone
+
+
 * Dreiklaenge
 
 ** TODO Actual chords
@@ -546,7 +552,8 @@ Total of 89 (including Tetrachords and removed, see below)
 
 * Fuenfklaenge
 
-** TODO Actual chords
+** DONE Actual chords
+   CLOSED: [2009-01-04 Sun 13:46]
 
 C E F# A# D#  
   Tristan Chord + Hendrix chord
@@ -554,12 +561,11 @@ C E F# A# D#
 0-10-14-18-25: 11-Limit Major Prime Chord  diff.  0.783,-9.382,-5.181,-1.084
   C E F| G A#
   .. Harmonic EleventhHarmonic Eleventh without 9th
+  8:10:11:12:14
 
  0-7-11-15-25: 11-Limit Minor Prime Chord  diff.  4.097, 8.298,-1.867,-1.084
   C D# Fb F# A#
- 0-5-8-13-18: Minor Pentachord  diff. -6.452, 9.677, 3.226,-3.226
-  C D Eb F G
-  ?? chord or scale
+  660:770:840:924:1155
  0-8-18-26-36: Minor Ninth "m9"  diff.  9.677,-3.226, 6.452,-6.452
   C Eb G Bb D
  0-13-18-26-36: Dominant Ninth Suspended Fourth "9sus4"  diff.  3.226,-3.226, 6.452,-6.452
@@ -567,16 +573,7 @@ C E F# A# D#
   ??
  0-10-18-25-36: 31-Tone Harmonic Dominant Ninth
   C E G A# D
- 0-2-4-8-13: Hemiolic Chromatic and Diatonic Mixed  diff.  2.419, 4.839, 9.677, 3.226
-  C C# D; Eb F
-  ?? chord or scale
- 0-3-8-11-18: Hzzam pentachord  diff.  2.921,-7.304,-4.382,-5.113
-  C Db Eb Fb G
-  minor 9th + dim. fourth..
- 0-3-8-13-18: Segh pentachord  diff.  2.921,-7.304, 5.113,-5.113
-  C Db Eb F G
-  minor 9th + fourth..
-
+ 
 Total of 9
 
 TODO: there should be more useful [Fuenfklaenge]
@@ -584,6 +581,24 @@ TODO: there should be more useful [Fuenfklaenge]
 
 C F# G A# D#
 5#1 7#1 15#1 35#1 + ..
+
+** TODO Pentachords (add to scales, see tetrachods above)
+
+    0-5-8-13-18: Minor Pentachord  diff. -6.452, 9.677, 3.226,-3.226
+    C D Eb F G
+    ?? chord or scale
+
+    0-2-4-8-13: Hemiolic Chromatic and Diatonic Mixed  diff.  2.419, 4.839, 9.677, 3.226
+    C C# D; Eb F
+    ?? chord or scale
+
+     0-3-8-11-18: Hzzam pentachord  diff.  2.921,-7.304,-4.382,-5.113
+   C Db Eb Fb G
+   minor 9th + dim. fourth..
+  0-3-8-13-18: Segh pentachord  diff.  2.921,-7.304, 5.113,-5.113
+   C Db Eb F G
+   minor 9th + fourth..
+
 
 ** Removed
 
@@ -595,17 +610,22 @@ C F# G A# D#
 0-23-38-72-87-110: Hexany 1 3 5 7  diff.  5.964, 4.097, 0.783,-1.084, 4.880
   C A D# E A# G;
   ?? chord or scale
+  3:5:7:15:21:35
  0-8-18-26-36-44: Minor Eleventh "m11"  diff.  9.677,-3.226, 6.452,-6.452, 3.226
   C Eb G Bb D F
  0-10-18-25-36-45: 31-Tone Harmonic Eleventh
   C E G A# D F|
+  4:5:6:7:9:11
+
+  Total of 6 (including removed, see below)
+
+
+** Haxachords 
+
  0-3-8-13-16-21: Iraq hexachord  diff.  2.921,-7.304, 5.113, 8.034,-2.191
   C Db Eb F Gb Ab
   could add Bb..
   ?? chord or scale
-
-  Total of 6 (including removed, see below)
-
 
 ** Removed 
 
