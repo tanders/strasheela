@@ -205,6 +205,7 @@ MyInterval = {Score.makeScore
 	      unit(interval:HS.score.interval)}
 
 
+%% returns list of alternative names
 {HS.db.getName MyScale}
 
 {HS.db.getName MyChord}
