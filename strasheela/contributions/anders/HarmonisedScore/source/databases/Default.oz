@@ -146,6 +146,9 @@ define
 % 				    scale(pitchClasses:[0 2 3 5 7 8 9 10 11]
 % 					  roots:[0] 
 % 					  comment:minor)
+		   scale(pitchClasses:[0 1 2 3 4 5 6 7 8 9 10 11]
+			 roots:[0] 
+			 comment:'chromatic')
 		  )
 
    Intervals = intervals(interval(interval:0
