@@ -1597,3 +1597,22 @@ N = {MakeNote_MotifIndex unit(duration:2)}
 {Map [[a b c d] [e f] [g h i]]
  fun {$ Xs} {Pattern.rotateList Xs 1} end}
 
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%% Pattern.fenvBoundaries
+%%
+
+
+
+declare
+Xs = {FD.list 10 0#100}
+FenvUpperDom = {Fenv.linearFenv [[0.0 50.0] [1.0 100.0]]}
+FenvLowerDom = {Fenv.linearFenv [[0.0 0.0] [0.7 70.0] [1.0 10.0]]}
+
+{Browse Xs}
+
+{Pattern.fenvBoundaries Xs FenvUpperDom FenvLowerDom}
+
