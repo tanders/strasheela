@@ -16,14 +16,16 @@
       - ={Score.make seq([note note]) unit}=  
     - Score.makeScore: textual score format extended: list of items can now also be created by constructor, e.g., MakeItems (before this was only supported for single items). 
 
-    - Score: MakeContainer, MakeSeq and MakeSim are replaced by completely different implementations
+    - Score: MakeContainer, MakeSeq and MakeSim are replaced by completely different implementations, MakeConstructor 
 
   - Minor additions 
     - HS.rules.schoenberg: added ProgressionSelector
-    - Pattern: added ForAllItems MapItems FirstToLastDistance DxsToXs XsToDxs EqualizeParam
-    - ET31: added many scales to database (origin is Scala list of 31 ET modi)
+    - Pattern: added ForAllItems MapItems FirstToLastDistance DxsToXs XsToDxs EqualizeParam MakeIndexConstructor GetMotifIndex FenvBoundaries
+    - ET31: added many chords and scales to database (origin is Scala's list of 31 ET chords and modi)
 
   - Bug fixes and changes
+    - HS.db: GetChordIndex/GetScaleIndex/GetIntervalIndex: database entries can now have multiple alternative names. When such entries are defined with SetDB, the subfeature 'name' of the feature 'comment' has a list of names (atoms).
+    - Refactored HS.db.getName: now returns list of alternative chord/scale/interval name
     - HS.rules: constraint name changes: 
       - SmallIntervalProgressions -> SmallIntervalsInProgression
       - SmallIntervalProgressions_Percent -> SmallIntervalsInProgression_Percent
