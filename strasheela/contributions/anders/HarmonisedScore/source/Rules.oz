@@ -567,16 +567,16 @@ define
    end
    
    
-   /** %% Like SmallIntervalsInProgression, but returns a percentage value depending on the cardiality of both Chord1 and Chord2. 100 percent is the cardiality of the chord with more notes.
+   /** %% Like SmallIntervalsInProgression, but constraints the percentage depending on the cardiality of both Chord1 and Chord2. 100 percent denotes the cardiality of the chord with more notes, 0 percent means no note pair changes by a small interval.
    %% */ 
-   fun {SmallIntervalsInProgression_Percent Chord1 Chord2 Args}
+   proc {SmallIntervalsInProgression_Percent Chord1 Chord2 Args ?Percent}
       thread
 	 Card1 = {FS.card {Chord1 getPitchClasses($)}}
 	 Card2 = {FS.card {Chord2 getPitchClasses($)}}
 	 MaxCard = {Max Card1 Card2}
 	 N = {SmallIntervalsInProgression Chord1 Chord2 Args}
       in
-	 {GUtils.percent N MaxCard}
+	 {GUtils.percent N MaxCard Percent}
       end
    end
    
