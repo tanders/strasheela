@@ -25,7 +25,7 @@ declare
 {ET22.out.addExplorerOut_ChordsToScore
  unit(outname:"ChordsToScore"
       voices:5
-      pitchDomain:{ET22.pitch 'C'#3}#{ET22.pitch 'C'#5}
+      pitchDomain:{ET22.pitch 'C'#4}#{ET22.pitch 'C'#6}
       value:mid
 %      value:min
       ignoreSopranoChordDegree:true
@@ -191,6 +191,8 @@ end
 %%
 %% Better understand possibilities of decatonic scale. 
 %% Show all chords possible on a given degree of the decatonic scale (var ScaleDegree)
+%% 
+%% (see examples/ShowHarmonicDatabases.oz for much more detailed examples for such purposes)
 %%
 
 
