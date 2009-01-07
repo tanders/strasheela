@@ -488,7 +488,11 @@ proc {FindChordsAtAllScaleDegrees MyScale ?MyScore}
 		      {Browse emptyChord}
 		      seq(info:lily("\\bar \"||\" \\break")
 			  items: [note(info:lily("_\\markup{\\column{no chord}}")
-				       pitch:Degree
+				       %% BUG: pitch is not Degree 
+				       pitch: Degree
+				       %% not correct either
+% 				       pitch:{MyScale degreeToPC(Degree {HS.score.absoluteToOffsetAccidental 0}
+% 								 $)}
 				       duration:2)])
 		   else 
 		      seq(info:lily("\\bar \"||\" \\break")
@@ -984,6 +988,26 @@ end
 }
 
 
+
+{ShowScaleChords {HS.db.getScaleIndex 'Hahn 12-pitch 7-limit 1'}
+ "Hahn12tone-1"
+ "/Users/t/sound/tmp/"
+}
+
+{ShowScaleChords {HS.db.getScaleIndex 'Hahn 12-pitch 7-limit 2'}
+ "Hahn12tone-2"
+ "/Users/t/sound/tmp/"
+}
+
+{ShowScaleChords {HS.db.getScaleIndex 'Fokker 12-pitch 7-limit'}
+ "Foker12tone"
+ "/Users/t/sound/tmp/"
+}
+
+{ShowScaleChords {HS.db.getScaleIndex 'stellated hexany'}
+ "StellatedHexany"
+ "/Users/t/sound/tmp/"
+}
 
 %% Test
 
