@@ -501,7 +501,7 @@ define
 	       %% Scale consists of 2 sets of 3-limit intervals which are related by a 7/4. Together, they approximate minor.
 	       scale(pitchClasses:['C' 'D' 'D#' 'F' 'G' 'G#' 'A#']
 		     roots:['C'] 
-		     comment:'"septimal" natural minor')
+		     comment:'septimal natural minor')
 
 	       %%
 	       %% Euler-Fokker genera
@@ -785,7 +785,81 @@ define
 		     roots:['C'] 
 		     comment:'Secor/Barton no-fives')
 
+	       %%
+	       %% Date: Sat, 19 Dec 1998 14:05:02 -0600 (CST)
+	       %% From: Paul Hahn <manynote@...>
+	       %% To: tuning@...
+	       %% Subject: Re: All, then best, 7-limit scales with 31 consonances
+	       %%On Mon, 30 Nov 1998, Paul Hahn wrote:
+% > There are only three [31-consonance 7-limit JI scales] whose
+% > smallest scale degree is not smaller than 25:24; they approximate 12TET
+% > reasonably well. This is the (IMHO) best one:
+% >
+% > 42:25------21:20-------21:16
+% > \'-. .-'/ \'-. .-'/ \'-.
+% > \ 6:5--/---\--3:2--/---\-15:8
+% > \ /|\ / \ /|\ / \ /|
+% > \ | / \ | / \ |
+% > / \|/ \ / \|/ \ / \|
+% > / 7:5---------7:4--------35:32
+% > /.-' '-.\ /.-' '-.\ /.-'
+% > 8:5---------1:1---------5:4
 
+% Incidentally, I just noticed that this scale differs by just one pitch
+% from a just version of Fokker's 12-pitch 7-limit scale that Dave Keenan
+% recently rediscovered. The one pitch that differs is 35:32, which needs
+% to be changed to 9:8. This reduces the number of 7-limit consonances in
+% the JI version to 30 again, but the 31TET or 1/4-comma meantone versions
+% have 38.
+
+	       %% Summary: the following three scales have no 1 step interval, and all contain very many 7-limit consonances
+	       
+	       scale(%% pcs unsorted
+		     pitchClasses:[42#25 21#20 21#16
+				   6#5 3#2 15#8
+				   7#5 7#4 35#32
+				   8#5 1#1 5#4]
+		     roots:[1#1] 
+		     comment:'Hahn 12-pitch 7-limit 1')
+	       scale(pitchClasses:[42#25 21#20 21#16
+				   6#5 3#2 15#8
+				   7#5 7#4
+				   9#8
+				   8#5 1#1 5#4]
+		     roots:[1#1] 
+		     comment:'Fokker 12-pitch 7-limit')
+
+% http://sonic-arts.org/td/1592.htm
+
+% From: Paul Hahn
+% To: Tuning Forum
+% Subject: Most 7-limit consonances with 12 pitches
+	       
+% 	           35:24-------35:16------105:64
+% 	         .-'/ \'-.   .-'/ \'-.   .-'/
+% 	      5:3--/---\--5:4--/---\-15:8  /
+% 	      /|\ /     \ /|\ /     \ /|  /
+% 	     / | /       \ | /       \ | /
+% 	    /  |/ \     / \|/ \     / \|/
+% 	   /  7:6---------7:4--------21:16
+% 	  /.-'   '-.\ /.-'   '-.\ /.-'
+% 	4:3---------1:1---------3:2
+
+	       scale(pitchClasses:[35#24 35#16 105#64
+				   5#3 5#4 15#8
+				   7#6 7#4 21#16
+				   4#3 1#1 3#2]
+		     roots:[1#1] 
+		     comment:'Hahn 12-pitch 7-limit 2')
+
+	       
+
+	       %% many 1 step intervals
+	       scale(pitchClasses:[1#1 21#20 15#14 35#32 9#8 5#4 21#16 35#24 3#2 49#32 25#16 105#64 7#4 15#8]
+		     roots:[1#1] 
+		     comment:'stellated hexany')
+	       
+	       
 	       %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	       %%
 	       %% other scales (not from Scala list of 31 ET scales)
