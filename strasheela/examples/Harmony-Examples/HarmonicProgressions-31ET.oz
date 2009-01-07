@@ -441,8 +441,9 @@ proc {MyScript ChordSeq}
  			'minor 6th'
  			'subminor 6th'
  			'harmonic 7th'
- 			'subharmonic 6th'
- 			'mix of plain and reversed harmonic dominant 7th'
+			'subharmonic 6th'
+			'Tristan chord'
+			'Hendrix chord'
  			'minor 7th'
  			'sixte ajoutee'
 			%% 
@@ -547,8 +548,9 @@ proc {MyScript ChordSeq}
  			'minor 6th'
  			'subminor 6th'
  			'harmonic 7th'
- 			'subharmonic 6th'
- 			'mix of plain and reversed harmonic dominant 7th'
+			'subharmonic 6th'
+			'Tristan chord'
+			'Hendrix chord'
  			'minor 7th'
  			'sixte ajoutee'
 			%% 
