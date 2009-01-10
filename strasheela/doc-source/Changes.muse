@@ -35,6 +35,7 @@
     - GUtils: simplified IsDivisible implementation 
     - Score method toInitRecord: now outputs strings (e.g., for lilypond) as proper strings 
       - Out: Revised RecordToVS: now outputs strings as strings, preserves escape sequences etc. Added RecordToVS_simple
+    - Score: Revised ScoreObject method unify: new args exclude, and derive 
     - Out.saveScore: fixed (added wrote prefix)
 
   - For further fixes see the [[../CHANGELOG.txt]].
