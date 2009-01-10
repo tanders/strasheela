@@ -732,12 +732,31 @@ define
 % 	 X = {self toFullRecordAux($ exclude:Exclude)}
 %       end
 
-      /** %% Effectively unifies self and ScoreObject. Stateful data (including class instances) can not be unified in Oz. So, unify transforms self and ScoreObject to records (using toFullRecord) and unifies those.
-      %% !! Temp: NB: toFullRecord (and thus unify) only works properly on score trees (see doc of toFullRecord). Besides, the score topology of both objects must be determined and equal. 
+      /** %% Effectively unifies self and ScoreObject. This method is useful for constraining various forms of repetitions. Stateful data (including class instances) can not be unified in Oz. So, unify transforms self and ScoreObject to records (using toFullRecord) and unifies those records. 
+      %%
+      %% Args:
+      %% 'exclude' (default [startTime endTime]): list of attribute names (list of atoms) to ignore, see arg 'exclude' for toFullRecord. (The internal attributes 'parameters' and 'flags' are always excluded.)
+      %% 'derive' (default nil): for unifying derived score information (e.g., exclude the pitches, but unify pitch intervals, see example below). List of unary functions expecting the full score (self or ScoreObject) and returning a data structure to unify.
+      %%
+      %% Example:
+      {Score1 unify(Score2
+		    exclude:[pitch]
+		    derive:[proc {$ MyScore Intervals}
+			       Ps = {MyScore mapItems($ getPitch)}
+			    in
+			       Intervals = {Pattern.map2Neighbours Ps
+					    proc {$ P1 P2 ?Interval}
+					       Interval = {FD.decl}
+					       P2 - P1 + 100000 =: Interval
+					    end}
+			    end])}
+      %% NB: only works properly for tree-form score topologys (because of limitation of toFullRecord). 
       %% */ 
-      meth unify(ScoreObject)
+      meth unify(ScoreObject exclude:Exclude<=[startTime endTime] derive:Derive<=nil)
 	 % the flags attribute is only for internal use and is bound to some stateful data structure..
-	 {self toFullRecord($ exclude:[flags])} = {ScoreObject toFullRecord($ exclude:[flags])} 
+	 {self toFullRecord($ exclude:flags|parameters|Exclude)}
+	 = {ScoreObject toFullRecord($ exclude:flags|parameters|Exclude)}
+	 {ForAll Derive proc {$ P} {P self} = {P ScoreObject} end}
       end
 
       %% removed method: operator == does work for objects, it returns true for identical objects. The method '==' instead tested not identity but equality based on parameter etc. values, but this definition is too unsure and hasn't been really needed so far...
