@@ -887,7 +887,6 @@ MyScore = {Score.makeScore sim(items:[seq(items:[note
 
 
 
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%5
 %%
 %% Score.transformScore
@@ -1024,6 +1023,8 @@ Note2 = {Score.makeScore note
 % -> true 
 
 
+
+
 %%%%%
 
 declare
@@ -1053,6 +1054,53 @@ Score2 = {Score.makeScore seq(items:[note note note])
 
 {Browse {Score1 '=='($ Score2)}}
 % -> true 
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%5
+%%
+%% unify
+%%
+
+
+
+declare
+Score1 Score2
+MyScore = {Score.make seq([seq(handle:Score1
+			       [note(duration:2)
+				note(duration:2)]
+			       startTime:0
+			       timeUnit:beats)
+			   seq(handle:Score2
+			       [note(pitch:60)
+				note(pitch:62)])]
+			  startTime:0
+			  timeUnit:beats)
+	   unit}
+
+{Browse {MyScore toInitRecord($)}}
+
+%% startTime and endTime implicitly excluded
+{Score1 unify(Score2)}
+
+{Browse {MyScore toInitRecord($)}}
+
+%% create a fresh score first..
+{Score1 unify(Score2
+	      exclude:[startTime endTime pitch])}
+
+%% create a fresh score first..
+{Score1 unify(Score2
+	      exclude:[startTime endTime pitch]
+	      derive:[proc {$ MyScore Intervals}
+			 Ps = {MyScore mapItems($ getPitch)}
+		      in
+			 Intervals = {Pattern.map2Neighbours Ps
+				      proc {$ P1 P2 ?Interval}
+					 Interval = {FD.decl}
+					 P2 - P1 + 100000 =: Interval
+				      end}
+		      end])}
+
 
 
 
