@@ -131,6 +131,8 @@ export
    Cadence
    DiatonicChord NoteInPCCollection
 
+   ResoveDissonances
+   
    ExpressAllChordPCs ExpressAllChordPCs_AtChordStart ExpressAllChordPCs_AtChordEnd
    ExpressEssentialChordPCs ExpressEssentialPCs_AtChordStart
    ClearHarmonyAtChordBoundaries
@@ -346,7 +348,47 @@ define
    proc {NoteInPCCollection MyNote MyPCCollection}
       {FS.include {MyNote getPitchClass($)} {MyPCCollection getPitchClasses($)}}
    end
-   
+
+
+   /** %% Constraints that every chord in Chords which is not a consonant chord is resolved by an ascending chord progression. The last chord is implicitly constrained to be a consonant chord.
+   %%
+   %% Args:
+   %% 'consonantChords' (default ['major' 'minor']): list of chord types (atoms of chord names or index integers) specifying which chords are considered consonant.
+   %%
+   %% Note: this is a simplified dissonance resolution constraint.
+   %% - Dissonance preparation not supported
+   %% - Dissonances do not necessarily "fall" in resolution (which is OK in principle), but this resolution behaviour cannot be controlled
+   %% */
+   %% TODO: support dissonance preparation as an option
+   %% TODO: ?? support dissonance resolution by either "fallen" or "liegenbleiben"
+   %% TODO: !!?? dissonance should not be resolved in octave, double check Schoenberg's Writing..
+   %%
+   %% -> all these TODO require that the dissonant pitch is dissonant chord is "marked"
+   proc {ResoveDissonances Chords Args}
+      Default = unit(consonantChords:['major' 'minor'])
+      As = {Adjoin Args Default}
+      %% consonantChords can be atoms of chord names or indices
+      ConsonantChordIndices = if {All As.consonantChords IsAtom}
+			      then {Map As.consonantChords DB.getChordIndex}
+			      elseif {All As.consonantChords IsInt}
+			      then As.consonantChords
+			      end
+      %% boolean constraint whether chord C is consonant
+      fun {IsConsonantR C}
+	 {Pattern.disjAll
+	  {Map ConsonantChordIndices
+	   fun {$ ConsIndex} {C getIndex($)} =: ConsIndex end}}
+      end
+   in
+      {Pattern.map2Neighbours Chords
+       fun {$ C1 C2}
+	  {FD.impl {FD.nega {IsConsonantR C1}}
+	   {Schoenberg.ascendingProgressionR C1 C2}
+	   1}
+       end}
+      {IsConsonantR {List.last Chords} 1}
+   end
+
 
    /** %% The union of the pitch classes of all notes notes simultaneous to MyChord fully expresses the pitch class set of this chord (more pitch classes are possibly, but all chord pitch classes must be played). 
    %% */
