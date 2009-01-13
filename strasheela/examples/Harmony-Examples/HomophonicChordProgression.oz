@@ -200,24 +200,14 @@ end
 %% Constraints 
 %%
 
-
-local
-   /** %% Expects D (a FD int) and returns a singleton FS which contains only D.
-   %% */
-   proc {MakeSingletonSet D ?MyFS}
-      MyFS = {FS.var.decl}
-      {FS.include D MyFS}
-      {FS.card MyFS 1}
-   end
-in
-   /** %% MyChord and Notes are the chord and the notes at a time frame: all notes of the chord are played and no others.
-   %% */
-   proc {PlayAllChordTones MyChord Notes}
-      {FS.unionN {Map Notes fun {$ N} {MakeSingletonSet {N getPitchClass($)}} end}
-       {MyChord getPitchClasses($)}}
-      {ForAll Notes
-       proc {$ N} {FS.include {N getPitchClass($)} {MyChord getPitchClasses($)}} end}
-   end
+/** %% MyChord and Notes are the chord and the notes at a time frame: all notes of the chord are played and no others.
+%% */
+proc {PlayAllChordTones MyChord Notes}
+   {FS.unionN {Map Notes
+	       fun {$ N} {GUtils.makeSingletonSet {N getPitchClass($)}} end}
+    {MyChord getPitchClasses($)}}
+   {ForAll Notes
+    proc {$ N} {FS.include {N getPitchClass($)} {MyChord getPitchClasses($)}} end}
 end
 
 /** %% Notes are the notes at a time frame and constrained to increasing pitch. NOTE: notes must be given in increasing order, bass first.
@@ -321,6 +311,7 @@ in
 % 	...}
 %     end}
 end
+
 
 
 
