@@ -2,7 +2,7 @@
 /** %% Defines databases for chords, scales and intervals in 22 equal temperament. 
 %% Internally, database entries are often defined by ratios (using notation X#Y for X/Y) to make them more comprehensible and portable to other temperaments. Alternatively, chords and scales are notated with conventional symbolic note names (see function PC). In any case, the databases focus on chords, scales and intervals which are close to just intonation in 22 ET.
 %%
-%% The entries of these databases are show in common music notation in PDF files in the folder <a href="../doc-DB">../doc-DB</a>. For further details,please visit the source at ../source/DB.oz or browse/inspect the value of ET22.db.fullDB to read the actual databases.
+%% The entries of these databases are show in common music notation in PDF files in the folder <a href="http://cmr.soc.plymouth.ac.uk/tanders/StrasheelaExample/ET22/">ET22</a>. For further details,please visit the source at ../source/DB.oz or browse/inspect the value of ET22.db.fullDB to read the actual databases.
 %%
 %% Note: some chords share the same pitch classes, but differ in their root. Nevertheless, these have different database entries, as they can also differ in other respects (e.g., different names, different set of 'essentialPitchClasses' or different set of 'dissonances'). The following chord pairs only differ in their root: 'minor 7th'/'minor 6th', 'subdiminished 7th (1)'/'subdiminished 7th (2)', 'subharmonic 6th'/'half subdiminished 7th', 'subminor 7th'/'supermajor 6th', 'subminor 7th suspended 4th'/'supermajor 6th suspended 2nd'
 %%
