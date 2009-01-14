@@ -1,0 +1,33 @@
+#title Modelling Schoenberg's Theory of Harmony
+
+[[StrasheelaExamples][back]]
+
+<contents depth="2">
+
+* Overview
+
+; Example strongly influenced by Schoenberg, but does not always follow exactly (e.g., sometimes add constraints, sometimes generalise)
+
+
+* Simplified Root Progression Constraint: Harmonic Band
+
+
+* Cadencing 
+
+
+* Using Different Inversions
+
+
+* Revised Root Progression Rules
+
+
+* Dissonance Treatment
+
+
+* Modulation 
+
+  *TODO*
+
+
+[[StrasheelaExamples][back]]
+
