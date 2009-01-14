@@ -22,117 +22,69 @@ declare
 
 
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%
-%% Preparation
-%%
-
-%% Explorer output 
-proc {RenderLilypondAndCsound I X}
-   if {Score.isScoreObject X}
-   then 
-      FileName = out#{GUtils.getCounterAndIncr}#'-'#I#'-'#{OS.rand}
-   in
-      {ET31.out.renderAndShowLilypond X
-       unit(file: FileName)}
-      {Out.renderAndPlayCsound X
-       unit(file: FileName)}
-   end
-end
-{Explorer.object
- add(information RenderLilypondAndCsound
-     label: 'to Lily + Csound: Homophonic Chord Progression')}
-
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%
-%% Chord database
-%%
-
-
-%% TODO: extend
-ChordIndices = {Map ['major'
-		     'minor'
-		     'harmonic diminished'
-		     'augmented'
-		    ]
-		HS.db.getChordIndex}
-
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%
 %% Top-level definition
 %%
 
-/*
 
-%% Doc: Score topology
+
+/** %% Top-level script: creates a chord progression with the following score topology
 
 sim(sim(seq(note+)   % soprano 
 	seq(note+))  % alto
     sim(seq(note+)   % tenor
 	seq(note+))  % bass
     seq(chord+)
-    %% NOTE: postpone modulation... if needed, refactor HomophonicChordProgression so that different scale  settings can be used
-    %% ?? howto express overlapping for neutralising? ?? Use sim container + an easy to use constructor used like seq creation but which allows for negative offsetTimes (no problem for determined offsetTimes..).
-    % seq/sim(scale+)
+    
    )
-
-*/
-
-%% TODO: make some of the constraints controllable by args for flexibility
+%%
+%% Args are the args given to subscript MakeSchoenbergianProgression.
+%% 
+%% */
+%% NOTE: postpone modulation... if needed, refactor HomophonicChordProgression so that different scale  settings can be used
+%% ?? howto express overlapping for neutralising? ?? Use sim container + an easy to use constructor used like seq creation but which allows for negative offsetTimes (no problem for determined offsetTimes..).
+%% seq/sim(scale+)
+%%
 proc {HomophonicChordProgression Args ?MyScore}
-   Defaults = unit(n:7		% number of chords
-		   duration:2	% duration of each note and chord
-		   timeUnit:beats
-		   %% pair TranspositionName#IndexName
-		   key:'C'#'major'
+   Defaults = unit(%% args for chord creation (see HS.score.makeChords)
+		   iargs: unit(n:7
+			       duration:2
+			       timeUnit:beats)
+		   %% args for rules on chords
+		   rargs: unit(scale:{MakeScale 'C' 'major'}
+			       types: ['major' 'minor'])
 		  )
-   As = {Adjoin Defaults Args}
-   MyScale = {Score.makeScore scale(index:{HS.db.getScaleIndex As.key.2}
-				    transposition:{ET31.pc As.key.1})
-	      unit(scale:HS.score.scale)}
-   fun {MakeVoiceNotes PitchDom}
-      {LUtils.collectN As.n
-       fun {$}
-	  {Score.makeScore2
-	   note(duration:As.duration
-		pitch:{FD.int PitchDom}
-		inChordB:1
-		getChords: fun {$ Self}
-			      {Self getSimultaneousItems($ test:HS.score.isChord)}
-			   end
-		isRelatedChord:proc {$ Self Chord B} B=1 end
-		amplitude:64
-		amplitudeUnit:velo
-	       )
-	   unit(note:HS.score.note)}
-       end}
+   As = unit(iargs:{Adjoin Defaults.iargs Args.iargs}
+	     rargs:{Adjoin Defaults.rargs Args.rargs})
+   Chords = {MakeSchoenbergianProgression As}
+   fun {MakeNNotes MinPitch MaxPitch}
+      {MakeNotes unit(iargs:unit(n:As.iargs.n
+				 duration:As.iargs.duration)
+		      rargs:unit(minPitch: MinPitch
+				 maxPitch: MaxPitch))}
    end
-   Chords = {LUtils.collectN As.n
-	     fun {$}
-		{Score.makeScore2 chord(duration:As.duration
-					index:{FD.int ChordIndices}
-					%% unused, just to remove symmetries 
-					sopranoChordDegree:1)
-		 unit(chord:HS.score.inversionChord)}
-	     end}
    %% Pitch domain from Schoenberg's Harmonielehre, p. 36
-   SopranoNotes = {MakeVoiceNotes {ET31.pitch 'C'#4}#{ET31.pitch 'A'#5}}
-   AltoNotes = {MakeVoiceNotes {ET31.pitch 'G'#3}#{ET31.pitch 'E'#5}}
-   TenorNotes = {MakeVoiceNotes {ET31.pitch 'C'#3}#{ET31.pitch 'A'#4}}
-   BassNotes = {MakeVoiceNotes {ET31.pitch 'E'#2}#{ET31.pitch 'D'#4}}
+   SopranoNotes = {MakeNNotes 'C'#4 'A'#5}
+   AltoNotes = {MakeNNotes 'G'#3 'E'#5}
+   TenorNotes = {MakeNNotes 'C'#3 'A'#4}
+   BassNotes = {MakeNNotes 'E'#2 'D'#4}
 in
    MyScore = {Score.makeScore
-	      sim(items:[seq(items:[sim(items:[seq(items:SopranoNotes)
-					       seq(items:AltoNotes)])])
-			 seq(items:[sim(items:[seq(items:TenorNotes)
-					       seq(items:BassNotes)])])
+	      sim(items:[seq(items:[sim(items:[seq(info:soprano
+						   items:SopranoNotes)
+					       seq(info:alto
+						   items:AltoNotes)])])
+			 seq(items:[sim(items:[seq(info:tenor
+						   items:TenorNotes)
+					       seq(info:bass
+						   items:BassNotes)])])
 			 seq(info:lily("\\set Staff.instrumentName = \"Analysis\"")
-			     items:Chords)]
-		  startTime:0
-		  timeUnit:As.timeUnit)
+			     items:Chords)
+			 %% TODO: add scales to music representation for modulation
+			]
+		  startTime:0)
 	      unit}
    %%
    %% 'wellformedness' constraints
@@ -147,32 +99,7 @@ in
        {C getBassPitchClass($)} = {BN getPitchClass($)}
     end}
    %%
-   %% Chord progression constraints
-   %%
-   %% Good progression: descending progression only as 'passing chords'
-   {HS.rules.schoenberg.resolveDescendingProgressions Chords unit}
-%    %% no super strong progression in such a simple progression
-%    {Pattern.for2Neighbours Chords
-%     proc {$ C1 C2} {HS.rules.schoenberg.superstrongProgressionR C1 C2 0} end}
-   %% at max 20 percent superstrong progressions
-   %% NOTE: this rule makes the problem harder
-   {Pattern.percentTrue_Range
-    {Pattern.map2Neighbours Chords
-     fun {$ C1 C2} {HS.rules.schoenberg.superstrongProgressionR C1 C2} end}
-    0 20}
-   %% First and last chords are root in root position
-   {HS.rules.distinctR Chords.1 {List.last Chords} 0}
-   {Chords.1 getRoot($)} = {MyScale getRoot($)}
-   {Chords.1 getBassChordDegree($)} = {{List.last Chords} getBassChordDegree($)} = 1
-   %% TODO: TMP: allow for more inversions, but then constrain them accordingly
-   {ForAll Chords proc {$ C} {C getBassChordDegree($)} = {FD.int 1#2} end}
-   %% only diatonic chords
-   {ForAll Chords proc {$ C} {HS.rules.diatonicChord C MyScale} end}
-   %% last three chords form cadence with only strong progressions
-   {HS.rules.cadence MyScale {LUtils.lastN Chords 3}}
-   {Pattern.for2Neighbours {LUtils.lastN Chords 3}
-    proc {$ C1 C2} {HS.rules.schoenberg.ascendingProgressionR C1 C2 1} end}
-   %% 
+   %% melodic constraints
    {ForAll [TenorNotes AltoNotes SopranoNotes]
     proc {$ Notes}
        {RestrictMelodicIntervals_UpperVoices Notes
@@ -195,10 +122,109 @@ end
 
 
 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%% Music representation and sub-scripts
+%%
+
+/** %% Returns a scale object, expects the key and type as atoms, e.g., {MakeScale 'C' 'major'}
+%% */
+proc {MakeScale Key ScaleType Result}
+   Result = {Score.make2 scale(index:{HS.db.getScaleIndex ScaleType}
+			       transposition:{ET31.pc Key})
+	     unit(scale:HS.score.scale)}
+end
+
+
+
+/** %% Returns list of notes to which common counterpoint rules are applied: non-harmonic tones are restricted and the first and last tone is constrained to a chord tone.
+%%
+%% Args.rargs:
+%% 'minPitch' and 'maxPitch': domain specification in ET31 pitch notation
+%% In addition, all arguments of Score.makeItems_iargs are supported.
+%% */
+MakeNotes
+= {Score.defSubscript
+   unit(super:Score.makeItems_iargs
+	idefaults: unit(constructor: HS.score.note
+			getChords: fun {$ Self}
+				      [{Self findSimultaneousItem($ test:HS.score.isChord)}]
+				   end
+			inChordB:1)
+	rdefaults: unit(minPitch:'C'#3
+			maxPitch:'C'#6
+		       ))
+   proc {$ Notes Args} 
+      {RestrictPitchDomain Notes Args.rargs.minPitch Args.rargs.maxPitch}
+   end}
+
+
+/** %% Extended script which returns a list of chords following (different versions of) Schoenberg's rule proposals for root progressions. This is a sub-script of HS.score.makeChords, all arguments of HS.score.makeChords are supported as well.
+%%
+%% Args.rargs:
+%% 'progressionSelector': arg (atom or record) given to HS.rules.schoenberg.progressionSelector, see doc there.
+%% 'maxPercentSuperstrong' (default false): maximum percentage of the superstrong progressions permitted (false means this constraint is switched off).
+%% 'cadenceN' (default 3): how many chords at end form cadence (sound all chord PCs)
+%% 'onlyAscendingInCadence' (default true): Boolean whether the cadence consists only of ascending progressions
+%%
+%% Args.iargs:
+%% all HS.score.inversionChord init argument, including dom specifications in the form fd#Dom
+%%
+%% */
+MakeSchoenbergianProgression
+= {Score.defSubscript
+   unit(super:HS.score.makeChords
+	idefaults: unit(%% add support for fd # Dom arg specs 
+			constructor: {Score.makeConstructor HS.score.inversionChord
+				      unit}
+			bassChordDegree: 1)
+	rdefaults: unit(progressionSelector:resolveDescendingProgressions
+			scale:{MakeScale 'C' 'major'}
+			maxPercentSuperstrong: false
+			cadenceN: 3
+			onlyAscendingInCadence: true
+		       ))
+   proc {$ Chords Args}
+      MyScale = Args.rargs.scale
+   in 
+      {HS.rules.schoenberg.progressionSelector Chords Args.rargs.progressionSelector}
+      if Args.rargs.maxPercentSuperstrong \= false then  
+	 %% NOTE: this rule makes the problem harder
+	 {Pattern.percentTrue_Range
+	  {Pattern.map2Neighbours Chords
+	   fun {$ C1 C2} {HS.rules.schoenberg.superstrongProgressionR C1 C2} end}
+	  0 Args.rargs.maxPercentSuperstrong}
+      end
+      %% First and last chords are root in root position
+      {HS.rules.distinctR Chords.1 {List.last Chords} 0}
+      {Chords.1 getRoot($)} = {MyScale getRoot($)}
+      {Chords.1 getBassChordDegree($)} = {{List.last Chords} getBassChordDegree($)} = 1
+      %% only diatonic chords
+      {ForAll Chords proc {$ C} {HS.rules.diatonicChord C MyScale} end}
+      %% last three chords form cadence with only strong progressions
+      {HS.rules.cadence MyScale {LUtils.lastN Chords Args.rargs.cadenceN}}
+      if Args.rargs.onlyAscendingInCadence then 
+	 {Pattern.for2Neighbours {LUtils.lastN Chords Args.rargs.cadenceN}
+	  proc {$ C1 C2} {HS.rules.schoenberg.ascendingProgressionR C1 C2 1} end}
+      end
+   end}
+
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%
 %% Constraints 
 %%
+
+
+/** %% Expects a list of notes and two ET31 pitches specified like 'C'#4. These set the upper and lower pitch domain of all notes.
+%% */
+proc {RestrictPitchDomain Notes MaxDom MinDom}   
+   Dom = {ET31.pitch MaxDom}#{ET31.pitch MinDom}
+in
+   {Pattern.mapItems Notes getPitch} ::: Dom
+end
+
 
 /** %% MyChord and Notes are the chord and the notes at a time frame: all notes of the chord are played and no others.
 %% */
@@ -346,30 +372,81 @@ in
    end
 end
 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%% Output
+%%
+
+%% Explorer output 
+proc {RenderLilypondAndCsound I X}
+   if {Score.isScoreObject X}
+   then 
+      FileName = out#{GUtils.getCounterAndIncr}#'-'#I#'-'#{OS.rand}
+   in
+      {ET31.out.renderAndShowLilypond X
+       unit(file: FileName)}
+      {Out.renderAndPlayCsound X
+       unit(file: FileName)}
+   end
+end
+{Explorer.object
+ add(information RenderLilypondAndCsound
+     label: 'to Lily + Csound: Homophonic Chord Progression')}
+
+
+
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%
 %% Solver calls
 %%
 
+
 /*
 
 
-
-%% left-to-right strategy with breaking ties by type
 {GUtils.setRandomGeneratorSeed 0}
-{SDistro.exploreOne {GUtils.extendedScriptToScript HomophonicChordProgression
-		     unit(key:'D'#'major'
-			  n:9)}
- {Adjoin HS.distro.leftToRight_TypewiseTieBreaking
-  unit(value:random)}}
+{SDistro.exploreOne
+ {GUtils.extendedScriptToScript HomophonicChordProgression
+  unit(iargs:unit(n:9)
+       rargs:unit(scale:{MakeScale 'D' 'major'}))}
+ %% left-to-right strategy with breaking ties by type
+ HS.distro.leftToRight_TypewiseTieBreaking}
 
+
+
+
+%% allowing for different inversions: root inversion and sixth chords.
+{GUtils.setRandomGeneratorSeed 0}
+{SDistro.exploreOne
+ {GUtils.extendedScriptToScript HomophonicChordProgression
+  unit(iargs:unit(n:9
+		  bassChordDegree: fd#(1#2))
+       rargs:unit(scale:{MakeScale 'D' 'major'}))}
+ HS.distro.leftToRight_TypewiseTieBreaking}
+
+
+%% TODO: add further solver calls using args of MakeSchoenbergianProgression and cases in Example-Schoenberg-TheoryOfHarmony.muse
+
+
+%% more chord types 
+
+['major'
+ 'minor'
+ 'harmonic diminished'
+ 'augmented'
+]
 
 */
 
 
 
 
+
 /* %% compare performance of different distribution startegies
+
+%% TODO: update to new HomophonicChordProgression interface
 
 %% left-to-right strategy with breaking ties by type
 {SDistro.exploreOne {GUtils.extendedScriptToScript HomophonicChordProgression
