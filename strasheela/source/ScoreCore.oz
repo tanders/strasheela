@@ -2876,7 +2876,7 @@ define
 		     rdefaults: unit)
       DefAs = {Adjoin Default DefArgs}
    in
-      proc {$ Args ?MyMotif}
+      proc {$ Args ?MyScore}
 	 ItemAs = if {HasFeature Args iargs} then
 		     {Adjoin DefAs.idefaults Args.iargs}
 		  else DefAs.idefaults
@@ -2889,8 +2889,8 @@ define
 	       unit(iargs: ItemAs
 		    rargs: RuleAs)}
       in
-	 MyMotif = {DefAs.super As}
-	 thread {Body MyMotif As} end
+	 MyScore = {DefAs.super As}
+	 thread {Body MyScore As} end
       end
    end
 
