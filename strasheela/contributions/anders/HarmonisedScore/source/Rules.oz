@@ -132,6 +132,8 @@ export
    DiatonicChord NoteInPCCollection
 
    ResoveDissonances
+
+   IndexCardinality SetEachChordType SetEachScaleType RequireChordTypes
    
    ExpressAllChordPCs ExpressAllChordPCs_AtChordStart ExpressAllChordPCs_AtChordEnd
    ExpressEssentialChordPCs ExpressEssentialPCs_AtChordStart
@@ -397,6 +399,43 @@ define
       {IsConsonantR {List.last Chords} 1}
    end
 
+
+   /** %% Sets the total number of different chord indices in all Chords (a list of chords or scale objects) to N (FD int). 
+   %% */
+   proc {IndexCardinality Chords N}
+      {Pattern.howManyDistinct {Pattern.mapItems Chords getIndex} N}
+   end
+
+   /** %% Expects a list of chords and a list of atoms specifying chord types (indices) by name (e.g. 'major') and sets the index of each chord to the union of these types.
+   %% */
+   %% TODO: allow for index integers as well (some chords/scales have no name)
+   proc {SetEachChordType Chords Types}   
+      ChordIndices = {Map Types DB.getChordIndex}
+   in
+      {Pattern.mapItems Chords getIndex} ::: ChordIndices
+   end
+   /** %% Expects a list of scales and a list of atoms specifying scale types (indices) by name (e.g. 'major') and sets the index of each scale to the union of these types.
+   %% */
+   %% TODO: allow for index integers as well (some chords/scales have no name)
+   proc {SetEachScaleType Scales Types}   
+      ScaleIndices = {Map Types DB.getScaleIndex}
+   in
+      {Pattern.mapItems Scales getIndex} ::: ScaleIndices
+   end
+
+   /** %% In union of all Chords (list of chords) all Types (chord names given as atom, e.g., 'major') are present.
+   %% */
+   %% TODO: allow for index integers as well (some chords/scales have no name)
+   proc {RequireChordTypes Chords Types}
+      AuxFS = {FS.unionN {Map Chords
+			  fun {$ C} {GUtils.makeSingletonSet {C getIndex($)}} end}}
+   in
+      {ForAll {Map Types DB.getScaleIndex}
+       proc {$ I} {FS.include I AuxFS} end}
+   end
+
+
+   
 
    /** %% The union of the pitch classes of all notes notes simultaneous to MyChord fully expresses the pitch class set of this chord (more pitch classes are possibly, but all chord pitch classes must be played). 
    %% */
