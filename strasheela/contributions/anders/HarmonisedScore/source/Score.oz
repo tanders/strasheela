@@ -356,6 +356,7 @@ define
    %%
    %% In case an octave component is important, then introduce variables for the absolute TranspositionInterval and its TranspositionOctave and constrain their relation by {IntervalPCToInterval TranspositionPC#TranspositionOctave Transposition}. 
    %% */
+   %% TODO: ?? replace CollectionPCs by CollectionFS? Only cardiality of set is needed..
    proc {TransposeDegree CollectionPCs
 	 UntransposedDegree#UntransposedPC
 	 TranspositionDegree#TranspositionPC
@@ -1476,7 +1477,8 @@ define
 	 end
       end
    in
-      /** %% [abstract class] This mixin class extends a chord (sub-)class by information about the bass note (i.e., the chord inversion) and the soprano note (German: die Akkordlage). It defines the following additional parameters: bassChordDegree and sopranoChordDegree (together with bassChordAccidental and sopranoChordAccidental). These parameters represent the chord degree of the bass and the soprano. The chord degree is the position of the bass/soprano pitch class in the ordered list of chord pitch classes starting from the chord root. For example, the PC set of the A-major chord is {1, 4, 9}, and the root pitch class is 9 (PitchesPerOctave=12). The corresponding sorted pitch class sequence is thus [9 1 4]. If the bassChordDegree is set to 2, this means that the chord is a sixth-chord, and the bass pitch class is 1 (the second element of the ordered pitch class sequence). Note that the sorted pitch class sequence always would start with the root. If the root is not contained in the chord pitch classes, then the sequence starts with the first pitch class which would follow the root.
+      /** %% [abstract class] This mixin class extends a chord (sub-)class by information about the bass note (i.e., the chord inversion) and the soprano note (German: die Akkordlage). It defines the following additional parameters: bassChordDegree and sopranoChordDegree (together with bassChordAccidental and sopranoChordAccidental). These parameters represent the chord degree of the bass and the soprano. The chord degree is the position of the bass/soprano pitch class in the ordered list of chord pitch classes starting from the chord root. For example, the PC set of the A-major chord is {1, 4, 9}, and the root pitch class is 9 (PitchesPerOctave=12). The corresponding sorted pitch class sequence is thus [9 1 4]. If the bassChordDegree is set to 2, this means that the chord is a sixth-chord (if the chord is a triad), and the bass pitch class is 1 (the second element of the ordered pitch class sequence). Note that the sorted pitch class sequence always would start with the root. If the root is not contained in the chord pitch classes, then the sequence starts with the first pitch class which would follow the root.
+      %% Often, only the bass is interesting, and the sopranoChordDegree is not used. Therefore, the sopranoChordDegree defaults to 1.
       %% The parameters bassChordAccidental and sopranoChordAccidental allow to specify chord note alterations in the soprano or bass. Note that these parameters default to the neutral accidental (i.e., {HS.score.absoluteToOffsetAccidental 0}).
       %% The parameters bassPitchClass and sopranoPitchClass represent the pitch classes which correspond to the bassChordDegree and sopranoChordDegree (together with bassChordAccidental and sopranoChordAccidental).
       %%
@@ -1492,7 +1494,7 @@ define
 	 meth initInversionMixinForChord(bassChordDegree:BDegree<=_
 					 bassChordAccidental:BAccidental<={AbsoluteToOffsetAccidental 0}
 					 bassPitchClass:BassPC<=_
-					 sopranoChordDegree:SDegree<=_
+					 sopranoChordDegree:SDegree<=1
 					 sopranoChordAccidental:SAccidental<={AbsoluteToOffsetAccidental 0}
 					 sopranoPitchClass:SopranoPC<=_) = M
 	    @bassChordDegree = {New Score.parameter
