@@ -129,7 +129,6 @@ import
    Measure at 'x-ozlib://anders/strasheela/Measure/Measure.ozf'
    DB at 'Database.ozf'
    Rules at 'Rules.ozf'
-   HS_Score at 'Score.ozf'
 
    
    % SDistro at 'x-ozlib://anders/strasheela/ScoreDistribution.ozf'
@@ -149,6 +148,7 @@ export
    TransposePC
    DegreeToPC CMajorDegreeToPC
    TransposeDegree
+   GetDegree
    AbsoluteToOffsetAccidental OffsetToAbsoluteAccidental
    PcSetToSequence
 
@@ -184,6 +184,8 @@ export
    
    PitchClass IsPitchClass
 
+   MakeChords MakeScales
+   
    HarmoniseScore HarmoniseScore2
    HarmoniseMotifs
    
@@ -404,7 +406,21 @@ define
 %       %% - 1 because TranspositionDegree is specified zero-based (i.e. distance from I to V is 'fifth', although V-I = 'fourth')
 %       Aux = UntransposedDegree + TranspositionDegree - 1 
 %       TransposedDegree =: {FD.modI Aux {Length CollectionPCs}}
-%    end  
+%    end
+
+   /** %% Returns the chord/scale degree (FD int) for (FD int). MyScale is the chord/scale object to which the degree corresponds.
+   %%
+   %% Args"
+   %% 'accidentalRange' (int) specifies how many pitch class steps PitchClasses can be "off" (if AccidentalRange==0, then all PitClasses must be in the chord/scale).
+   %% */
+   fun {GetDegree PitchClass MyScale Args}
+      Default = unit(accidentalRange: 2) % suitable default for 31 ET?
+      As = {Adjoin Default Args}
+      AccDom = {AbsoluteToOffsetAccidental ~(As.accidentalRange)}#{AbsoluteToOffsetAccidental As.accidentalRange}
+   in
+      {MyScale degreeToPC($ {FD.int AccDom} PitchClass)}
+   end
+
 
    /** %% Converts a determined and possibly negative 'absolute accidental' (int) into a non-negative 'offset accidental' (int) used in CSPs. The absolute accidental 0 always denotes no pitch inflection of a scale degree (or noteName), negative values denote a 'decreasing' and positive an 'increasing' chromatic accidental. 
    %% For common praxis, where DB.getAccidentalOffset returns 2, 'absolute accidentals' are encoded like bb=~2, b=~1, neutral=0, #=1, x=2 and 'offset accidentals' as bb=0, b=1, neutral=2, #=3, x=4.
@@ -462,7 +478,7 @@ define
        fun {$ Index Transposition}
 	  {Score.makeScore scale(index:Index
 				 transposition:Transposition)
-	   unit(scale:HS_Score.scale)}
+	   unit(scale:Scale)}
        end}
    end
    local
@@ -2597,6 +2613,51 @@ define
    end
 
 
+   
+   /** %% Extended script which returns a list of chords (not fully initialised, undetermined temporal params and timeUnit). Arguments are specified as two sub-records Args.iargs (item arguments, given to the chords) and Args.rargs (rule/constraint arguments), so arguments to constraints do not interfere with the arguments given to the chord initialisations. 
+   %%
+   %% Args.iargs:
+   %% 'n': number of chords
+   %% 'constructor' (default HS.score.chord): class or function
+   %% 'handle': access the resulting list of chords
+   %% all other chord init arguments are supported, and arg specs supported by Score.makeItems are supported (e.g., 'each' and 'fenv' args such as myParam: each#Params)
+   %%
+   %% Args.rargs
+   %% 'types' (default false): list of 'chord types' (list of atoms supported by HS.db.getChordIndex) which are permitted. This constraint is skipped if 'types' is false.
+   %% */
+   MakeChords
+   = {Score.defSubscript unit(super:Score.makeItems_iargs
+			      rdefaults: unit(types: false) % ['harmonic 7th']
+			      idefaults: unit(%n:1
+					      constructor: Chord))
+      proc {$ MyChords Args}
+	 if Args.rargs.types \= false then 
+	    {Rules.setEachChordType MyChords Args.rargs.types}
+	 end
+      end}
+   
+   /** %% Extended script which returns a list of scales (not fully initialised, undetermined temporal params and timeUnit). Arguments are specified as two sub-records Args.iargs (item arguments, given to the chords) and Args.rargs (rule/constraint arguments), so arguments to constraints do not interfere with the arguments given to the chord initialisations. 
+   %%
+   %% Args.iargs:
+   %% 'n': number of scales
+   %% 'constructor' (default HS.score.scale): class or function
+   %% 'handle': access the resulting list of scales
+   %% all other scale init arguments are supported, and arg specs supported by Score.makeItems are supported (e.g., 'each' and 'fenv' args such as myParam: each#Params)
+   %%
+   %% Args.rargs
+   %% 'types' (default false): list of 'scale types' (list of atoms supported by HS.db.getScaleIndex) which are permitted. This constraint is skipped if 'types' is false.
+   %% */
+   MakeScales
+   = {Score.defSubscript unit(super:Score.makeItems_iargs
+			      rdefaults: unit(types: false) % ['major']
+			      idefaults: unit(constructor: Scale))
+      proc {$ MyChords Args}
+	 if Args.rargs.types \= false then 
+	    {Rules.setEachScaleType MyChords Args.rargs.types}
+	 end
+      end}
+   
+
    /** %% Like HarmoniseScore, HarmoniseMotifs simplifies the definition of harmonic CSPs (these two definitions are both designed for convenience, not generality, and they cover different cases). HarmoniseMotifs is an extended script and defines a harmonic CSP for a given list of motifs (arbitrary textual score object specifications, possibly nested). Most of the actual CSP is defined by arguments, but the top-level score topology defined by HarmoniseMotifs is as follows
 
    sim(items:[seq(items:Motifs)
@@ -2666,7 +2727,7 @@ define
 		      makeChord:fun {$}
 				   chord(duration:{FD.int 1#FD.sup}  
 					 getScales: fun {$ Self}
-						       {Self getSimultaneousItems($ test:HS_Score.isScale)}
+						       {Self getSimultaneousItems($ test:IsScale)}
 						    end
 					 inScaleB:1 
 					 %% just to remove symmetries (if inversion chord is used)
@@ -2696,8 +2757,8 @@ define
 				       items:{LUtils.collectN As.chordNo
 					      As.makeChord})
 		  add(chord:if As.includeScales
-			    then HS_Score.diatonicChord
-			    else HS_Score.chord
+			    then DiatonicChord
+			    else Chord
 			    end
 		    % chord:HS.score.inversionChord
 		     )}
@@ -2708,7 +2769,7 @@ define
 		  then [{Score.makeScore2 seq(info:lily("\\set Staff.instrumentName = \"Scale\"")
 					      items:{LUtils.collectN As.scaleNo
 						     As.makeScale})
-			 add(scale:HS_Score.scale)}]
+			 add(scale:Scale)}]
 		  else nil
 		  end
       MyMeasureL = if As.includeMeasure
