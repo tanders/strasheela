@@ -20,6 +20,8 @@ Musical constraint satisfaction problems (CSP) usually have multiple solutions. 
 
 * [[Example-AutomaticMelodyHarmonisation][Automatic Melody Harmonisation]]
 
+* [[Example-Schoenberg-TheoryOfHarmony][Schoenberg's Theory of Harmony]] 
+
 * [[HarmonyExamples][A Collection of of Harmonic Constraint Satisfaction Problems]] 
 
 * [[Example-MicrotonalChordProgression][Microtonal Chord Progression]] 
