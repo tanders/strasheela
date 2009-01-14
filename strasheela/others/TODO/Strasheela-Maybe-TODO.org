@@ -79,7 +79,6 @@
       Simplified approach: if chord is condissonant, then resolve by strong root progression (e.g. fourth upwards fundament)
       Constraint interface: {ResolveDissonance Chord1 Chord2}
 
-
 ***** Implement rule 	 
 
 

@@ -62,18 +62,17 @@
 
 *** TODO Do expresssive performance (timing and velocity)
 
+** TODO Revised Realtime example for Eduardo				:URGENT:
+
+*** Create default solutions (in case of fail etc)
+*** See other TODOs in text
+*** Remove commented code
+*** Maxpatch: use or copy comments from other Max patch..
+
+*** ?? add Motifs (distinguish cases by triplets vs [duolen])
+
 
 * Strasheela Bugs
-
-** TODO Bug: Archiving score (e.g., with Out.saveScore) with strings: double quotes of strings are lost
-
-declare
-MyScore = {Score.makeScore note(info:"test")
-	   unit}
-
-{Out.saveScore MyScore unit}
-
-% then check output test file..
 
 ** TODO BUG: getOffsetTimeInSeconds  no dependency to tempo curve or time shift function defined yet, depends on type of temporal container
 
@@ -118,7 +117,6 @@ MyTestScore = {Score.makeScore
 
 
 * Strasheela design						    :STRASHEELA:
-
 
 ** TODO Fenv.renderAndPlayMidi: add Fenv controlling articulation (note length)
    
@@ -208,7 +206,7 @@ If problems occur ask gustavo.ggutierrez@gmail.com
     Noticable difference of old version?
 
 
-** TODO Read Strasheela doc					     :SOON:EASY:
+** TODO Read Strasheela doc					   :URGENT:EASY:
 
    know your system, e.g., know all my Patterns 
 
