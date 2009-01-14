@@ -351,19 +351,27 @@ define
 
 
    /** %% Constraints that every chord in Chords which is not a consonant chord is resolved by an ascending chord progression. The last chord is implicitly constrained to be a consonant chord.
+   %% This rule is inspired by Schoenberg, note however that it is never given by Schoenberg (When introducing 7th-chords, Schoenberg requires they are resolved by root progression a fourth up. Besides that, Schoenberg primarily discusses treatment dissonant tone in chord: it descends by one step or is held over.). 
    %%
    %% Args:
    %% 'consonantChords' (default ['major' 'minor']): list of chord types (atoms of chord names or index integers) specifying which chords are considered consonant.
    %%
-   %% Note: this is a simplified dissonance resolution constraint.
-   %% - Dissonance preparation not supported
+   %% Note: this is an over-simplified dissonance resolution constraint.
+   %% - Dissonance preparation not supported (preparation only required in early section of Schoenberg's harmony, later he even skips into dissoance, though stepwise introduction of dissonance is preferred)
    %% - Dissonances do not necessarily "fall" in resolution (which is OK in principle), but this resolution behaviour cannot be controlled
+   %%
    %% */
+   %%
+   %% Misleading approach here: I do not consider the dissont tone(s) in the chord, so I cannot treat it accordingly
+   %%
    %% TODO: support dissonance preparation as an option
    %% TODO: ?? support dissonance resolution by either "fallen" or "liegenbleiben"
    %% TODO: !!?? dissonance should not be resolved in octave, double check Schoenberg's Writing..
    %%
    %% -> all these TODO require that the dissonant pitch is dissonant chord is "marked"
+   %%
+   %% Schoenberg, p. 161 ff (meine deutsche Auflage v 1986): Dissonanz kann fallen, steigen, liegen bleiben, und sogar wegspringen (in bekannter harmonischer Situation). Steigende Dissonanz ist eher kontrapunktisches als harmonisches Ereignis, kommt in Praxis aber vor. Auch Aufloesung der Sept in Oktav kommt vor.
+   %% Schoenberg suggests a more strict rule for training purposes (student will later be more free): dissonance tone either falls or held over, 'evil seven' (resolution of seven in octave) is not permitted 
    proc {ResoveDissonances Chords Args}
       Default = unit(consonantChords:['major' 'minor'])
       As = {Adjoin Args Default}
