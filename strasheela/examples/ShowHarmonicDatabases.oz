@@ -89,6 +89,14 @@ proc {RenderLily_ET22 X Args}
      Args}}
 end
 
+
+proc {RenderLily_ET31 X Args}
+   {ET31.out.renderAndShowLilypond X
+    {Adjoin unit(wrapper:[LilyHeader "\n}"])
+     Args}}
+end
+
+
 %% Explorer output 
 proc {Render_ET22 I X}
    if {Score.isScoreObject X}
@@ -561,6 +569,110 @@ MyScore_ChordsAtDegrees = {FindChordsAtAllScaleDegrees MyScale}
 */
 
 
+proc {ProcessScale_ET22 ScaleIndex OutFilenameStart Dir}
+   MyScale = {Score.makeScore
+	      scale(index:ScaleIndex
+		    transposition:{ET22.pc 'C'}
+		    %% duration should be determined
+		    duration:4
+		    startTime:0
+		    timeUnit:beats)
+	      unit(scale:HS.score.scale)}
+   MyScore_ChordsAtDegrees = {FindChordsAtAllScaleDegrees MyScale}
+   {MyScore_ChordsAtDegrees wait}
+%    {Browse MyScore_ChordsAtDegrees}
+   MyScore_ChordNotes = {ExpressChords {MyScore_ChordsAtDegrees
+					collect($ test:HS.score.isChord)}
+			 unit(pitchOffset:{ET22.pitch 'C'#3}
+			      noteDuration:4)}
+in
+   {MyScore_ChordNotes wait}
+%    {Browse chordsAtDegrees#{MyScore_ChordsAtDegrees toInitRecord($)}}
+   %% render lily output (scale and chord objects)
+   {RenderLily_ET22 MyScore_ChordsAtDegrees
+    unit(file:OutFilenameStart#"-ChordsAtScaleDegrees"
+	 dir:Dir)}
+   {Init.setTempo 70.0}
+   {Out.renderAndPlayCsound MyScore_ChordNotes
+    unit(file:OutFilenameStart#"-ChordsAtScaleDegrees-withNotes"
+	 soundDir:Dir)}
+   %% render lily output (chord objects and notes)
+   {RenderLily_ET22 MyScore_ChordNotes
+    unit(file:OutFilenameStart#"-ChordsAtScaleDegrees-withNotes"
+	 dir:Dir)}
+end
+%% sub set of processing of ProcessScale_ET22
+proc {ShowScaleChords_ET22 ScaleIndex OutFilenameStart Dir}
+   MyScale = {Score.makeScore
+	      scale(index:ScaleIndex
+		    transposition:{ET22.pc 'C'}
+		    %% duration should be determined
+		    duration:4
+		    startTime:0
+		    timeUnit:beats)
+	      unit(scale:HS.score.scale)}
+   MyScore_ChordsAtDegrees = {FindChordsAtAllScaleDegrees MyScale}
+   {MyScore_ChordsAtDegrees wait}
+in
+   {RenderLily_ET22 MyScore_ChordsAtDegrees
+    unit(file:OutFilenameStart#"-ChordsAtScaleDegrees"
+	 dir:Dir)}
+end
+
+
+proc {ProcessScale_ET31 ScaleIndex OutFilenameStart Dir}
+   MyScale = {Score.makeScore
+	      scale(index:ScaleIndex
+		    transposition:{ET31.pc 'C'}
+		    %% duration should be determined
+		    duration:4
+		    startTime:0
+		    timeUnit:beats)
+	      unit(scale:HS.score.scale)}
+   MyScore_ChordsAtDegrees = {FindChordsAtAllScaleDegrees MyScale}
+   {MyScore_ChordsAtDegrees wait}
+%    {Browse MyScore_ChordsAtDegrees}
+   MyScore_ChordNotes = {ExpressChords {MyScore_ChordsAtDegrees
+					collect($ test:HS.score.isChord)}
+			 unit(pitchOffset:{ET31.pitch 'C'#3}
+			      noteDuration:4)}
+in
+   {MyScore_ChordNotes wait}
+%    {Browse chordsAtDegrees#{MyScore_ChordsAtDegrees toInitRecord($)}}
+   %% render lily output (scale and chord objects)
+   {RenderLily_ET31 MyScore_ChordsAtDegrees
+    unit(file:OutFilenameStart#"-ChordsAtScaleDegrees"
+	 dir:Dir)}
+   {Init.setTempo 70.0}
+   {Out.renderAndPlayCsound MyScore_ChordNotes
+    unit(file:OutFilenameStart#"-ChordsAtScaleDegrees-withNotes"
+	 soundDir:Dir)}
+   %% render lily output (chord objects and notes)
+   {RenderLily_ET31 MyScore_ChordNotes
+    unit(file:OutFilenameStart#"-ChordsAtScaleDegrees-withNotes"
+	 dir:Dir)}
+end
+%% sub set of processing of ProcessScale_ET31
+proc {ShowScaleChords_ET31 ScaleIndex OutFilenameStart Dir}
+   MyScale = {Score.makeScore
+	      scale(index:ScaleIndex
+		    transposition:{ET31.pc 'C'}
+		    %% duration should be determined
+		    duration:4
+		    startTime:0
+		    timeUnit:beats)
+	      unit(scale:HS.score.scale)}
+   MyScore_ChordsAtDegrees = {FindChordsAtAllScaleDegrees MyScale}
+   {MyScore_ChordsAtDegrees wait}
+in
+   {RenderLily_ET31 MyScore_ChordsAtDegrees
+    unit(file:OutFilenameStart#"-ChordsAtScaleDegrees"
+	 dir:Dir)}
+end
+
+
+
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%
 %% 
@@ -602,63 +714,70 @@ MyScore_ChordsAtDegrees = {FindChordsAtAllScaleDegrees MyScale}
 
 /*
 
-declare
-proc {ProcessScale ScaleIndex OutFilenameStart Dir}
-   MyScale = {Score.makeScore
-	      scale(index:ScaleIndex
-		    transposition:{ET22.pc 'C'}
-		    %% duration should be determined
-		    duration:4
-		    startTime:0
-		    timeUnit:beats)
-	      unit(scale:HS.score.scale)}
-   MyScore_ChordsAtDegrees = {FindChordsAtAllScaleDegrees MyScale}
-   {MyScore_ChordsAtDegrees wait}
-   MyScore_ChordNotes = {ExpressChords {MyScore_ChordsAtDegrees
-					collect($ test:HS.score.isChord)}
-			 unit(pitchOffset:{ET22.pitch 'C'#3}
-			      noteDuration:4)}
-in
-   {MyScore_ChordNotes wait}
-   %% render lily output (scale and chord objects)
-   {RenderLily_ET22 MyScore_ChordsAtDegrees
-    unit(file:OutFilenameStart#"-ChordsAtScaleDegrees"
-	 dir:Dir)}
-   {Init.setTempo 70.0}
-   {Out.renderAndPlayCsound MyScore_ChordNotes
-    unit(file:OutFilenameStart#"-ChordsAtScaleDegrees-withNotes"
-	 soundDir:Dir)}
-   %% render lily output (chord objects and notes)
-   {RenderLily_ET22 MyScore_ChordNotes
-    unit(file:OutFilenameStart#"-ChordsAtScaleDegrees-withNotes"
-	 dir:Dir)}
-end
+% declare
+% proc {ProcessScale_ET31 ScaleIndex OutFilenameStart Dir}
+%    MyScale = {Score.makeScore
+% 	      scale(index:ScaleIndex
+% 		    transposition:{ET22.pc 'C'}
+% 		    %% duration should be determined
+% 		    duration:4
+% 		    startTime:0
+% 		    timeUnit:beats)
+% 	      unit(scale:HS.score.scale)}
+%    MyScore_ChordsAtDegrees = {FindChordsAtAllScaleDegrees MyScale}
+%    {MyScore_ChordsAtDegrees wait}
+%    MyScore_ChordNotes = {ExpressChords {MyScore_ChordsAtDegrees
+% 					collect($ test:HS.score.isChord)}
+% 			 unit(pitchOffset:{ET22.pitch 'C'#3}
+% 			      noteDuration:4)}
+% in
+%    {MyScore_ChordNotes wait}
+%    %% render lily output (scale and chord objects)
+%    {RenderLily_ET22 MyScore_ChordsAtDegrees
+%     unit(file:OutFilenameStart#"-ChordsAtScaleDegrees"
+% 	 dir:Dir)}
+%    {Init.setTempo 70.0}
+%    {Out.renderAndPlayCsound MyScore_ChordNotes
+%     unit(file:OutFilenameStart#"-ChordsAtScaleDegrees-withNotes"
+% 	 soundDir:Dir)}
+%    %% render lily output (chord objects and notes)
+%    {RenderLily_ET22 MyScore_ChordNotes
+%     unit(file:OutFilenameStart#"-ChordsAtScaleDegrees-withNotes"
+% 	 dir:Dir)}
+% end
 
 
-{ProcessScale {HS.db.getScaleIndex 'standard pentachordal major'}
+{ShowScaleChords_ET22 {HS.db.getScaleIndex 'standard pentachordal major'}
  "StandardPentachordalMajor"
- "/Users/t/oz/music/Strasheela/strasheela/trunk/strasheela/contributions/anders/ET22/doc-DB/"}
-{ProcessScale {HS.db.getScaleIndex 'static symmetrical major'}
+ "/Users/t/sound/tmp/"}
+
+{ShowScaleChords_ET22 {HS.db.getScaleIndex 'static symmetrical major'}
  "StaticPentachordalMajor"
- "/Users/t/oz/music/Strasheela/strasheela/trunk/strasheela/contributions/anders/ET22/doc-DB/"}
-{ProcessScale {HS.db.getScaleIndex 'alternate pentachordal major'}
+ "/Users/t/sound/tmp/"}
+
+{ShowScaleChords_ET22 {HS.db.getScaleIndex 'alternate pentachordal major'}
  "AlternatePentachordalMajor"
- "/Users/t/oz/music/Strasheela/strasheela/trunk/strasheela/contributions/anders/ET22/doc-DB/"}
-{ProcessScale {HS.db.getScaleIndex 'dynamic symmetrical major'}
+ "/Users/t/sound/tmp/"}
+
+{ShowScaleChords_ET22 {HS.db.getScaleIndex 'dynamic symmetrical major'}
  "DynamicPentachordalMajor"
- "/Users/t/oz/music/Strasheela/strasheela/trunk/strasheela/contributions/anders/ET22/doc-DB/"}
-{ProcessScale {HS.db.getScaleIndex 'standard pentachordal minor'}
+ "/Users/t/sound/tmp/"}
+
+{ShowScaleChords_ET22 {HS.db.getScaleIndex 'standard pentachordal minor'}
  "StandardPentachordalMinor"
- "/Users/t/oz/music/Strasheela/strasheela/trunk/strasheela/contributions/anders/ET22/doc-DB/"}
-{ProcessScale {HS.db.getScaleIndex 'static symmetrical minor'}
+ "/Users/t/sound/tmp/"}
+
+{ShowScaleChords_ET22 {HS.db.getScaleIndex 'static symmetrical minor'}
  "StaticPentachordalMinor"
- "/Users/t/oz/music/Strasheela/strasheela/trunk/strasheela/contributions/anders/ET22/doc-DB/"}
-{ProcessScale {HS.db.getScaleIndex 'alternate pentachordal minor'}
+ "/Users/t/sound/tmp/"}
+
+{ShowScaleChords_ET22 {HS.db.getScaleIndex 'alternate pentachordal minor'}
  "AlternatePentachordalMinor"
- "/Users/t/oz/music/Strasheela/strasheela/trunk/strasheela/contributions/anders/ET22/doc-DB/"}
-{ProcessScale {HS.db.getScaleIndex 'dynamic symmetrical minor'}
+ "/Users/t/sound/tmp/"}
+
+{ShowScaleChords_ET22 {HS.db.getScaleIndex 'dynamic symmetrical minor'}
  "DynamicPentachordalMinor"
- "/Users/t/oz/music/Strasheela/strasheela/trunk/strasheela/contributions/anders/ET22/doc-DB/"}
+ "/Users/t/sound/tmp/"}
 
 
 %%%
@@ -714,7 +833,6 @@ end
 %% output another database 
 %%
 
-
 /*
 
 
@@ -722,11 +840,6 @@ declare
 [ET31] = {ModuleLink ['x-ozlib://anders/strasheela/ET31/ET31.ozf']}
 {HS.db.setDB ET31.db.fullDB}
 %%
-proc {RenderLily_ET31 X Args}
-   {ET31.out.renderAndShowLilypond X
-    {Adjoin unit(wrapper:[LilyHeader "\n}"])
-     Args}}
-end
 
 %%
 %% all intervals
@@ -826,185 +939,132 @@ MyScore_ScaleNotes = {ExpressScales {MyScore_ScalesOnly
 %%
 
 
-declare
-proc {ProcessScale ScaleIndex OutFilenameStart Dir}
-   MyScale = {Score.makeScore
-	      scale(index:ScaleIndex
-		    transposition:{ET31.pc 'C'}
-		    %% duration should be determined
-		    duration:4
-		    startTime:0
-		    timeUnit:beats)
-	      unit(scale:HS.score.scale)}
-   MyScore_ChordsAtDegrees = {FindChordsAtAllScaleDegrees MyScale}
-   {MyScore_ChordsAtDegrees wait}
-%    {Browse MyScore_ChordsAtDegrees}
-   MyScore_ChordNotes = {ExpressChords {MyScore_ChordsAtDegrees
-					collect($ test:HS.score.isChord)}
-			 unit(pitchOffset:{ET31.pitch 'C'#3}
-			      noteDuration:4)}
-in
-   {MyScore_ChordNotes wait}
-%    {Browse chordsAtDegrees#{MyScore_ChordsAtDegrees toInitRecord($)}}
-   %% render lily output (scale and chord objects)
-   {RenderLily_ET31 MyScore_ChordsAtDegrees
-    unit(file:OutFilenameStart#"-ChordsAtScaleDegrees"
-	 dir:Dir)}
-   {Init.setTempo 70.0}
-   {Out.renderAndPlayCsound MyScore_ChordNotes
-    unit(file:OutFilenameStart#"-ChordsAtScaleDegrees-withNotes"
-	 soundDir:Dir)}
-   %% render lily output (chord objects and notes)
-   {RenderLily_ET31 MyScore_ChordNotes
-    unit(file:OutFilenameStart#"-ChordsAtScaleDegrees-withNotes"
-	 dir:Dir)}
-end
-%% sub set of processing of ProcessScale
-proc {ShowScaleChords ScaleIndex OutFilenameStart Dir}
-   MyScale = {Score.makeScore
-	      scale(index:ScaleIndex
-		    transposition:{ET31.pc 'C'}
-		    %% duration should be determined
-		    duration:4
-		    startTime:0
-		    timeUnit:beats)
-	      unit(scale:HS.score.scale)}
-   MyScore_ChordsAtDegrees = {FindChordsAtAllScaleDegrees MyScale}
-   {MyScore_ChordsAtDegrees wait}
-in
-   {RenderLily_ET31 MyScore_ChordsAtDegrees
-    unit(file:OutFilenameStart#"-ChordsAtScaleDegrees"
-	 dir:Dir)}
-end
 
-
-
-
-{ProcessScale {HS.db.getScaleIndex 'major'}
+{ProcessScale_ET31 {HS.db.getScaleIndex 'major'}
  "Major"
  "/Users/t/sound/tmp/"
 %  "/Users/t/oz/music/Strasheela/strasheela/trunk/strasheela/contributions/anders/ET31/doc-DB/"
 }
 
-{ShowScaleChords {HS.db.getScaleIndex 'major'}
+{ShowScaleChords_ET31 {HS.db.getScaleIndex 'major'}
  'Major'
  "/Users/t/sound/tmp/"
 }
 
-{ShowScaleChords {HS.db.getScaleIndex 'Secor/Barton no-fives'}
+{ShowScaleChords_ET31 {HS.db.getScaleIndex 'Secor/Barton no-fives'}
  'SecorBarton'
  "/Users/t/sound/tmp/"
 }
 
 
 
-{ShowScaleChords {HS.db.getScaleIndex '"septimal" natural minor'}
+{ShowScaleChords_ET31 {HS.db.getScaleIndex '"septimal" natural minor'}
  "SeptimalNaturalMinor"
  "/Users/t/sound/tmp/"
 }
 
 
 %% !! No chord fits into this scale
-{ShowScaleChords {HS.db.getScaleIndex 'Rothenberg generalised diatonic'}
+{ShowScaleChords_ET31 {HS.db.getScaleIndex 'Rothenberg generalised diatonic'}
  "RothenbergGeneralisedDiatonic"
  "/Users/t/sound/tmp/"
 }
 
 
-{ShowScaleChords {HS.db.getScaleIndex 'modus conjunctus'}
+{ShowScaleChords_ET31 {HS.db.getScaleIndex 'modus conjunctus'}
  "ModusConjunctus"
  "/Users/t/sound/tmp/"
 }
 
 
-{ShowScaleChords {HS.db.getScaleIndex 'octatonic'}
+{ShowScaleChords_ET31 {HS.db.getScaleIndex 'octatonic'}
  "Octatonic"
  "/Users/t/sound/tmp/"
 }
 
-{ShowScaleChords {HS.db.getScaleIndex 'Hahn symmetric pentachordal'}
+{ShowScaleChords_ET31 {HS.db.getScaleIndex 'Hahn symmetric pentachordal'}
  "HahnSymmetricPentachordal"
  "/Users/t/sound/tmp/"
 }
 
-{ShowScaleChords {HS.db.getScaleIndex 'Hahn pentachordal'}
+{ShowScaleChords_ET31 {HS.db.getScaleIndex 'Hahn pentachordal'}
  "HahnPentachordal"
  "/Users/t/sound/tmp/"
 }
 
-{ShowScaleChords {HS.db.getScaleIndex 'Lumma decatonic'}
+{ShowScaleChords_ET31 {HS.db.getScaleIndex 'Lumma decatonic'}
  "LummaDecatonic"
  "/Users/t/sound/tmp/"
 }
 
 
 %% many scale degrees without fitting chord
-{ShowScaleChords {HS.db.getScaleIndex 'Orwell'}
+{ShowScaleChords_ET31 {HS.db.getScaleIndex 'Orwell'}
  "Orwell"
  "/Users/t/sound/tmp/"
 }
 
 
 %% many scale degrees without fitting chord
-{ShowScaleChords {HS.db.getScaleIndex 'genus sextum'}
+{ShowScaleChords_ET31 {HS.db.getScaleIndex 'genus sextum'}
  "GenusSextum"
  "/Users/t/sound/tmp/"
 }
 
 
 %% many scale degrees without fitting chord
-{ShowScaleChords {HS.db.getScaleIndex 'genus septimum'}
+{ShowScaleChords_ET31 {HS.db.getScaleIndex 'genus septimum'}
  "GenusSeptimum"
  "/Users/t/sound/tmp/"
 }
 
-{ShowScaleChords {HS.db.getScaleIndex 'genus enharmonicum instrumentale'}
+{ShowScaleChords_ET31 {HS.db.getScaleIndex 'genus enharmonicum instrumentale'}
  "GenusEnharmonicumInstrumentale"
  "/Users/t/sound/tmp/"
 }
 
 
-{ShowScaleChords {HS.db.getScaleIndex 'neutral diatonic dorian'}
+{ShowScaleChords_ET31 {HS.db.getScaleIndex 'neutral diatonic dorian'}
  "NeutralDiatonicDorian"
  "/Users/t/sound/tmp/"
 }
 
-{ShowScaleChords {HS.db.getScaleIndex 'neutral dorian'}
+{ShowScaleChords_ET31 {HS.db.getScaleIndex 'neutral dorian'}
  "NeutralDorian"
  "/Users/t/sound/tmp/"
 }
 
 
-{ShowScaleChords {HS.db.getScaleIndex 'Breed 10-tone'}
+{ShowScaleChords_ET31 {HS.db.getScaleIndex 'Breed 10-tone'}
  "Breed10tone"
  "/Users/t/sound/tmp/"
 }
 
 %% very many harmonic possibilities, but has perhaps conventional touch
 %% but certainly reduces 31 tone set to perhaps useful subset
-{ShowScaleChords {HS.db.getScaleIndex 'genus bichromaticum'}
+{ShowScaleChords_ET31 {HS.db.getScaleIndex 'genus bichromaticum'}
  "GenusBichormaticum"
  "/Users/t/sound/tmp/"
 }
 
 
 
-{ShowScaleChords {HS.db.getScaleIndex 'Hahn 12-pitch 7-limit 1'}
+{ShowScaleChords_ET31 {HS.db.getScaleIndex 'Hahn 12-pitch 7-limit 1'}
  "Hahn12tone-1"
  "/Users/t/sound/tmp/"
 }
 
-{ShowScaleChords {HS.db.getScaleIndex 'Hahn 12-pitch 7-limit 2'}
+{ShowScaleChords_ET31 {HS.db.getScaleIndex 'Hahn 12-pitch 7-limit 2'}
  "Hahn12tone-2"
  "/Users/t/sound/tmp/"
 }
 
-{ShowScaleChords {HS.db.getScaleIndex 'Fokker 12-pitch 7-limit'}
+{ShowScaleChords_ET31 {HS.db.getScaleIndex 'Fokker 12-pitch 7-limit'}
  "Foker12tone"
  "/Users/t/sound/tmp/"
 }
 
-{ShowScaleChords {HS.db.getScaleIndex 'stellated hexany'}
+{ShowScaleChords_ET31 {HS.db.getScaleIndex 'stellated hexany'}
  "StellatedHexany"
  "/Users/t/sound/tmp/"
 }
