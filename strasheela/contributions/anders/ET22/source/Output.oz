@@ -1,7 +1,10 @@
 /** %% This functor defines Lilypond output (using semitone and quartertone accidentals) and Explorer output actions for 22 ET.
 %%
-%% BUG: Lilypond notation problem: using grace notes (for showing chord and scale notes) seems to disable the Staff.instrumentName display. It is possible that this has to do with the missing \score at the beginning of lilypond 22 ET score data. Yet, setting this causes an error related to the \override of Score.Accidental and Score.KeySignature #'glyph-name-alist for 22 ET. For now, I leave it like this -- either I show Staff.instrumentName or scale/chord pitch classes with grace notes. If I want to publish a score with analytical information using grace notes, I will again look into this matter. 
+%% BUG: Lilypond notation problem: using grace notes (for showing chord and scale notes) seems to disable the Staff.instrumentName display. It is possible that this has to do with the missing \score at the beginning of lilypond 22 ET score data. Yet, setting this causes an error related to the \override of Score.Accidental and Score.KeySignature #'glyph-name-alist for 22 ET. For now, I leave it like this -- either I show Staff.instrumentName or scale/chord pitch classes with grace notes. If I want to publish a score with analytical information using grace notes, I will again look into this matter.
+%%
 %% */ 
+%% TODO: ET31.out and the present functor ET22.out share many similarities (code doublication). Recent updates on making Lily output more flexible was only done to ET31.out
+%% Actual todo: generalise and factor out the common code, i.e., reduce/avoid code doublication
 functor
 import
    OS Explorer
