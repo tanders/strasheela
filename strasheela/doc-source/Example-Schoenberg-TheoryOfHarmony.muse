@@ -12,21 +12,109 @@
 * Simplified Root Progression Constraint: Harmonic Band
 
 
+[[../examples/Output/Schoenberg-harmBand1.mp3][../examples/Output/Schoenberg-harmBand1.png]]
+
+[[../examples/Output/Schoenberg-harmBand2.mp3][../examples/Output/Schoenberg-harmBand2.png]]
+
+
 * Cadencing 
 
+The following examples end in a cadence. The constraint used here is not Schoenberg's rule, but this concise constraint stems from Rothenberg. 
+Added constraint: union of the pitch classes of the last three chords equals the pitch class set of the scale (C major).
+
+[[../examples/Output/Schoenberg-cadence1.mp3][../examples/Output/Schoenberg-cadence1.png]]
+
+Demonstrate effect of this constraint: now the last 4 chords form a cadence in the sence that the pitch classes of these chords together form the Bb major scale. 
+
+[[../examples/Output/Schoenberg-cadence2.mp3][../examples/Output/Schoenberg-cadence2.png]]
 
 * Using Different Inversions
+
+Sixth chords can be used freely
+
+[[../examples/Output/Schoenberg-sixthChords.mp3][../examples/Output/Schoenberg-sixthChords.png]]
 
 
 * Revised Root Progression Rules
 
+[[../examples/Output/Schoenberg-revisedProgression1.mp3][../examples/Output/Schoenberg-revisedProgression1.png]]
+
+Purely asdencing progression
+
+[[../examples/Output/Schoenberg-onlyAscending.mp3][../examples/Output/Schoenberg-onlyAscending.png]]
 
 * Dissonance Treatment
 
 
+Liberal dissonance treatment (a Non-Schoenberg rule): if dissonance, then do ascending progression
+
+[[../examples/Output/Schoenberg-liberalDissTreatment1.mp3][../examples/Output/Schoenberg-liberalDissTreatment1.png]]
+; [[../examples/Output/Schoenberg-liberalDissTreatment1.mp3][../examples/Output/Schoenberg-liberalDissTreatment1.png]]
+
+; note: tritone step in bass
+[[../examples/Output/Schoenberg-liberalDissTreatment2.mp3][../examples/Output/Schoenberg-liberalDissTreatment2.png]]
+
+[[../examples/Output/Schoenberg-liberalDissTreatment3.mp3][../examples/Output/Schoenberg-liberalDissTreatment3.png]]
+
+
+* Minor 
+
+Turning points 
+
+Disabled cadence constraint
+
+[[../examples/Output/Schoenberg-minor1.mp3][../examples/Output/Schoenberg-minor1.png]]
+
+
+[[../examples/Output/Schoenberg-minor2.mp3][../examples/Output/Schoenberg-minor2.png]]
+
+** Allow for seventh chords
+
+[[../examples/Output/Schoenberg-minor3.mp3][../examples/Output/Schoenberg-minor3.png]]
+
+[[../examples/Output/Schoenberg-minor4.mp3][../examples/Output/Schoenberg-minor4.png]]
+
 * Modulation 
 
   *TODO*
+
+
+* Using Non-Conventional Chords and Scales
+
+** Septimal Minor 
+
+This example uses the septimal minor scale. 
+
+ *TODO: pict of septimal minor*
+ 
+Example uses only scale notes. Only root inversion. More simple rule for connecting chords again: harmonic band. 4 chords form a cadence.
+The analysis shows the ratios approximated by the tuning.
+
+[[../examples/Output/Schoenberg-septimalMinor1.mp3][../examples/Output/Schoenberg-septimalMinor1.png]]
+
+[[../examples/Output/Schoenberg-septimalMinor2.mp3][../examples/Output/Schoenberg-septimalMinor2.png]]
+
+
+** Hahn pentachordal
+
+
+This example uses a pentachordal scale proposed by Paul Hahn.
+
+ *TODO: pict of Hahn's pentachordal*
+
+Example uses only scale notes. Only root inversion.
+Only ascending progression. 4 chords form a cadence.
+
+[[../examples/Output/Schoenberg-pentachordal1.mp3][../examples/Output/Schoenberg-pentachordal1.png]]
+
+Using 1st inversion as well.
+
+[[../examples/Output/Schoenberg-pentachordal2.mp3][../examples/Output/Schoenberg-pentachordal2.png]]
+
+
+* Implementation Comments
+
+Example is implemented in such a way that the creation of the abstract harmony (e.g., the analytical harmonic information, in contrast to the actual notes) is defined in a modular way. In other words, the harmonic CSP without the four-voice voiceleading rules can be reused in other constraint problems, for example harmonic counterpoint problems where the polyphonic structure depends on some underlying harmony.
 
 
 [[StrasheelaExamples][back]]
