@@ -131,7 +131,7 @@ export
    Cadence
    DiatonicChord NoteInPCCollection
 
-   ResoveDissonances
+   ResolveDissonances
 
    IndexCardinality SetEachChordType SetEachScaleType RequireChordTypes
    
@@ -374,7 +374,7 @@ define
    %%
    %% Schoenberg, p. 161 ff (meine deutsche Auflage v 1986): Dissonanz kann fallen, steigen, liegen bleiben, und sogar wegspringen (in bekannter harmonischer Situation). Steigende Dissonanz ist eher kontrapunktisches als harmonisches Ereignis, kommt in Praxis aber vor. Auch Aufloesung der Sept in Oktav kommt vor.
    %% Schoenberg suggests a more strict rule for training purposes (student will later be more free): dissonance tone either falls or held over, 'evil seven' (resolution of seven in octave) is not permitted 
-   proc {ResoveDissonances Chords Args}
+   proc {ResolveDissonances Chords Args}
       Default = unit(consonantChords:['major' 'minor'])
       As = {Adjoin Args Default}
       %% consonantChords can be atoms of chord names or indices
@@ -390,8 +390,8 @@ define
 	   fun {$ ConsIndex} {C getIndex($)} =: ConsIndex end}}
       end
    in
-      {Pattern.map2Neighbours Chords
-       fun {$ C1 C2}
+      {Pattern.for2Neighbours Chords
+       proc {$ C1 C2}
 	  {FD.impl {FD.nega {IsConsonantR C1}}
 	   {Schoenberg.ascendingProgressionR C1 C2}
 	   1}
