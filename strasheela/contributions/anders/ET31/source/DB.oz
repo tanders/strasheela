@@ -328,6 +328,11 @@ define
 			 essentialPitchClasses:[25#1 30#1 35#1 42#1]
 %				dissonanceDegree:2
 			 comment:'diminished 7th')
+		   chord(pitchClasses:['C' 'Eb' 'Gb' 'Bb'] 
+			 roots:['C'] %% 
+			 essentialPitchClasses:['C' 'Eb' 'Gb' 'Bb']
+%				dissonanceDegree:2
+			 comment:'halve-diminished 7th')
 		   chord(pitchClasses:[44#1 56#1 66#1 77#1] % C Fb G A#
 			 roots:[44#1] %% 
 			 essentialPitchClasses:[44#1 56#1 66#1 77#1]
@@ -501,7 +506,7 @@ define
 	       %% Scale consists of 2 sets of 3-limit intervals which are related by a 7/4. Together, they approximate minor.
 	       scale(pitchClasses:['C' 'D' 'D#' 'F' 'G' 'G#' 'A#']
 		     roots:['C'] 
-		     comment:'septimal natural minor')
+		     comment:unit(name:['septimal natural minor' 'septimal minor']))
 
 	       %%
 	       %% Euler-Fokker genera
