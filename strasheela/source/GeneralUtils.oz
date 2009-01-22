@@ -39,6 +39,7 @@ export
    GetCounterAndIncr ResetCounter
    UnarySkip BinarySkip
    TakeFeatures
+   RecursiveAdjoin
 
    ModuleLink ModuleApply
    TimeSpend
@@ -409,6 +410,31 @@ define
 	  {Member Feat MyFeats}
        end}
    end
+
+   /** %% Like Adjoin, but nested records are processed recursively.
+   %% R1 and R2 must have the same nesting for recursive processing, otherwise R2 features are taken (like Adjoin).
+   %% */
+   proc {RecursiveAdjoin R1 R2 ?Result}
+      Feats = {LUtils.removeDuplicates {Append {Arity R1} {Arity R2}}}
+   in
+      Result = {MakeRecord {Label R2} Feats}
+      {Record.forAllInd Result
+       proc {$ Feat X}
+	  if {HasFeature R2 Feat} then
+	     if {IsRecord R2.Feat}
+		andthen {HasFeature R1 Feat}
+		andthen {Width R2.Feat} >= 1
+		andthen {Width R1.Feat} >= 1
+		%% nested case
+	     then X = {RecursiveAdjoin R1.Feat R2.Feat}
+	     else X = R2.Feat
+	     end
+	  else %% only R1 has feature Feat
+	     X = R1.Feat
+	  end
+       end}
+   end
+
    
    local
       ModMan = {New Module.manager init}
