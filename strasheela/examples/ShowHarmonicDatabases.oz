@@ -958,8 +958,8 @@ MyScore_ScaleNotes = {ExpressScales {MyScore_ScalesOnly
 
 
 
-{ShowScaleChords_ET31 {HS.db.getScaleIndex '"septimal" natural minor'}
- "SeptimalNaturalMinor"
+{ShowScaleChords_ET31 {HS.db.getScaleIndex 'septimal natural minor'}
+ "SeptimalMinor"
  "/Users/t/sound/tmp/"
 }
 
@@ -1066,6 +1066,12 @@ MyScore_ScaleNotes = {ExpressScales {MyScore_ScalesOnly
 
 {ShowScaleChords_ET31 {HS.db.getScaleIndex 'stellated hexany'}
  "StellatedHexany"
+ "/Users/t/sound/tmp/"
+}
+
+
+{ShowScaleChords_ET31 {HS.db.getScaleIndex 'major'}
+ "Major"
  "/Users/t/sound/tmp/"
 }
 
