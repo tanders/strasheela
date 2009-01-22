@@ -58,18 +58,24 @@
 
 * Strasheela examples
 
-** TODO Realtime example with non-harmonic tones etc. for Eduardo
+** Realtime example with non-harmonic tones etc. for Eduardo
 
-*** TODO Do expresssive performance (timing and velocity)
+*** Do expresssive performance (timing and velocity)
 
-** TODO Revised Realtime example for Eduardo				:URGENT:
+** Revised Realtime example for Eduardo					:URGENT:
 
 *** Create default solutions (in case of fail etc)
-*** See other TODOs in text
-*** Remove commented code
-*** Maxpatch: use or copy comments from other Max patch..
+*** DONE See other TODOs in text
+    CLOSED: [2009-01-19 Mon 18:54]
+*** DONE Remove commented code
+    CLOSED: [2009-01-19 Mon 18:54]
+*** DONE Maxpatch: use or copy comments from other Max patch..
+    CLOSED: [2009-01-19 Mon 18:54]
 
-*** ?? add Motifs (distinguish cases by triplets vs [duolen])
+*** DONE ?? add Motifs (?? distinguish cases by triplets vs [duolen])
+    CLOSED: [2009-01-19 Mon 18:54]
+    
+*** ?? Do expresssive performance (timing and velocity)
 
 
 * Strasheela Bugs
