@@ -359,11 +359,12 @@ define
    %% In case an octave component is important, then introduce variables for the absolute TranspositionInterval and its TranspositionOctave and constrain their relation by {IntervalPCToInterval TranspositionPC#TranspositionOctave Transposition}. 
    %% */
    %% TODO: ?? replace CollectionPCs by CollectionFS? Only cardiality of set is needed..
-   proc {TransposeDegree CollectionPCs
+   proc {TransposeDegree CollectionPCsFS
 	 UntransposedDegree#UntransposedPC
 	 TranspositionDegree#TranspositionPC
 	 TransposedDegree#TransposedPC}
-      L = {Length CollectionPCs}
+      L = {FS.card CollectionPCsFS}
+%       L = {Length CollectionPCs}
       Aux = {FD.decl}
       proc {ModVar X Y}
 	 %% modulus variation for degrees returns number in [1,L]: {FD.modI (X-1) L} + 1
@@ -412,6 +413,8 @@ define
    %%
    %% Args"
    %% 'accidentalRange' (int) specifies how many pitch class steps PitchClasses can be "off" (if AccidentalRange==0, then all PitClasses must be in the chord/scale).
+   %%
+   %% NOTE: depends on unfinished method degreeToPC 
    %% */
    fun {GetDegree PitchClass MyScale Args}
       Default = unit(accidentalRange: 2) % suitable default for 31 ET?
@@ -1041,7 +1044,8 @@ define
 	 end
 	 %% ?? name
 	 %%
-	 %% !! unfinished def.
+	 /** %% !! unfinished def. but seems to work...
+	 %% */
 	 %% Inconsistency to interface of proc with this name..
 	 meth degreeToPC(Degree Accidental PC)
 	    thread 		% !! thread tmp: because FD.list blocks..
