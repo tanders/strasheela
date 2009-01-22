@@ -74,9 +74,9 @@ define
    %% !! NB: this is a quick hack and not portable yet
    proc {EncodeMP3 SoundFile}
       %% linux with notlame 
-      {Out.exec notlame ["-h" SoundFile#".wav" SoundFile#".mp3"]}
+%       {Out.exec notlame ["-h" SoundFile#".wav" SoundFile#".mp3"]}
       %% MacOS installation uses lame
-%      {Out.exec "/Applications/lame" ["-V2" SoundFile#".wav" SoundFile#".mp3"]}
+     {Out.exec "/Applications/lame" ["-V2" SoundFile#".wav" SoundFile#".mp3"]}
    end
 
 
