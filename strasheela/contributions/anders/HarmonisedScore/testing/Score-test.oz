@@ -169,6 +169,10 @@ Accidental = 1 % i.e. b
 %%
 
 declare
+C_Major = {Score.make scale(index:{HS.db.getScaleIndex major}
+			    transposition:0)
+	   unit(scale:HS.score.scale)}
+CollectionPCsFS = {C_Major getPitchClasses($)}
 CollectionPCs = [0 2 4 5 7 9 11] %% C-major
 UntransposedDegree#UntransposedAccidental#UntransposedPC = {FD.decl}#{HS.db.makeAccidentalFDInt}#{FD.decl}
 TranspositionDegree#TranspositionAccidental#TranspositionPC = {FD.decl}#{HS.db.makeAccidentalFDInt}#{FD.decl}
