@@ -206,3 +206,26 @@ Y = 2
 {Browse {GUtils.timeSpend proc {$} _ = {List.number 1 10000000 1} end}}
 
 
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%% GUtils.recursiveAdjoin
+%%
+
+{GUtils.recursiveAdjoin
+ unit(iargs:unit(a:1 c:2)
+      x:test)
+ unit(iargs:unit(b:1 c:42)
+      x:hi)}
+
+
+{GUtils.recursiveAdjoin
+ unit(iargs: unit(n:7
+		  duration:2
+		  timeUnit:beats)
+      rargs: unit(scale: cMajor
+		  types: ['major' 'minor'])
+      lilyKey: "my test")
+ unit(iargs: unit(n:9)
+      rargs: unit(scale: aMinor))}
