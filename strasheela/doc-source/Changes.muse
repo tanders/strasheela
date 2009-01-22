@@ -7,6 +7,7 @@
   - Main additions and changes 
 
   - Documentation
+    - Extensively revised example Schoenberg-TheoryOfHarmony.oz (before called HomophonicChordProgression.oz): now features solver calls for many variations on the theory of harmony
     - Page for [[Example-MEWER][MEWER]] application added to list of examples
 
   - Extensions and simplifications for score creation
@@ -19,9 +20,11 @@
     - Score: MakeContainer, MakeSeq and MakeSim are replaced by completely different implementations, MakeConstructor 
 
   - Minor additions 
-    - HS.rules.schoenberg: added ProgressionSelector
+    - HS.rules.schoenberg: added ProgressionSelector, ResolveDissonances, IndexCardinality SetEachChordType SetEachScaleType RequireChordTypes
+    - HS.score: added MakeChords MakeScales GetDegree
     - Pattern: added ForAllItems MapItems FirstToLastDistance DxsToXs XsToDxs EqualizeParam MakeIndexConstructor GetMotifIndex FenvBoundaries
     - ET31: added many chords and scales to database (origin is Scala's list of 31 ET chords and modi)
+    - GUtils: added RecursiveAdjoin
 
   - Bug fixes and changes
     - HS.db: GetChordIndex/GetScaleIndex/GetIntervalIndex: database entries can now have multiple alternative names. When such entries are defined with SetDB, the subfeature 'name' of the feature 'comment' has a list of names (atoms).
@@ -32,11 +35,13 @@
     - HS.rules: 
       - Fixed MaxNonharmonicNoteSequence (before limited number of harmonic instead of non-harmonic tones) 
       - Added ExpressAllChordPCs_AtChordEnd
+    - HS.score: Refactored TransposeDegree: expected scale/chord PCs as list, now FS
     - GUtils: simplified IsDivisible implementation 
     - Score method toInitRecord: now outputs strings (e.g., for lilypond) as proper strings 
       - Out: Revised RecordToVS: now outputs strings as strings, preserves escape sequences etc. Added RecordToVS_simple
     - Score: Revised ScoreObject method unify: new args exclude, and derive 
     - Out.saveScore: fixed (added wrote prefix)
+    - ET31.out: Substatianlly refactored Lilypond output of analytical information (chords, scales), now more flexible
 
   - For further fixes see the [[../CHANGELOG.txt]].
 

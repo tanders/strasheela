@@ -37,47 +37,69 @@
     <!-- Page published by Emacs Muse begins here -->
 
 
-<h2>Changes in Version 0.9.8 (no date yet)</h2>
+<h2>Changes in Version 0.9.9 (no date yet)</h2>
 
 <ul>
-<li>Main additions and changes
+<li>Main additions and changes</li>
+
+<li>Documentation
 
 <ul>
+<li>Extensively revised example Schoenberg-TheoryOfHarmony.oz (before called HomophonicChordProgression.oz): now features solver calls for many variations on the theory of harmony</li>
+<li>Page for <a href="Example-MEWER.html">MEWER</a> application added to list of examples</li>
+</ul></li>
+
+<li>Extensions and simplifications for score creation
+
+<ul>
+<li>Added Score.makeItems, Score.defSubscript</li>
 <li>Score.makeScore: more convenient notation variant supported for nested scores. The following two examples are now equivalent.
 
 <ul>
 <li><code>{Score.makeScore seq(items:[note note]) unit}</code></li>
 <li><code>{Score.make seq([note note]) unit}</code></li>
 </ul></li>
-</ul></li>
+<li>Score.makeScore: textual score format extended: list of items can now also be created by constructor, e.g., MakeItems (before this was only supported for single items).</li>
 
-<li>Documentation
-
-<ul>
-<li>Page for <a href="Example-MEWER.html">MEWER</a> added to examples</li>
+<li>Score: MakeContainer, MakeSeq and MakeSim are replaced by completely different implementations, MakeConstructor</li>
 </ul></li>
 
 <li>Minor additions
 
 <ul>
-<li>HS.rules.schoenberg: added ProgressionSelector</li>
+<li>HS.rules.schoenberg: added ProgressionSelector, ResolveDissonances, IndexCardinality SetEachChordType SetEachScaleType RequireChordTypes</li>
+<li>HS.score: added MakeChords MakeScales GetDegree</li>
+<li>Pattern: added ForAllItems MapItems FirstToLastDistance DxsToXs XsToDxs EqualizeParam MakeIndexConstructor GetMotifIndex FenvBoundaries</li>
+<li>ET31: added many chords and scales to database (origin is Scala's list of 31 ET chords and modi)</li>
 </ul></li>
 
 <li>Bug fixes and changes
 
 <ul>
+<li>HS.db: GetChordIndex/GetScaleIndex/GetIntervalIndex: database entries can now have multiple alternative names. When such entries are defined with SetDB, the subfeature 'name' of the feature 'comment' has a list of names (atoms).</li>
+<li>Refactored HS.db.getName: now returns list of alternative chord/scale/interval name</li>
 <li>HS.rules: constraint name changes:
 
 <ul>
 <li>SmallIntervalProgressions -&gt; SmallIntervalsInProgression</li>
 <li>SmallIntervalProgressions_Percent -&gt; SmallIntervalsInProgression_Percent</li>
 </ul></li>
-<li>GUtils: simplified IsDivisible implementation</li>
-</ul></li>
-</ul>
-
+<li>HS.rules:
 
 <ul>
+<li>Fixed MaxNonharmonicNoteSequence (before limited number of harmonic instead of non-harmonic tones)</li>
+<li>Added ExpressAllChordPCs_AtChordEnd</li>
+</ul></li>
+<li>GUtils: simplified IsDivisible implementation</li>
+<li>Score method toInitRecord: now outputs strings (e.g., for lilypond) as proper strings
+
+<ul>
+<li>Out: Revised RecordToVS: now outputs strings as strings, preserves escape sequences etc. Added RecordToVS_simple</li>
+</ul></li>
+<li>Score: Revised ScoreObject method unify: new args exclude, and derive</li>
+<li>Out.saveScore: fixed (added wrote prefix)</li>
+</ul></li>
+
 <li>For further fixes see the <a href="../CHANGELOG.txt">../CHANGELOG.txt</a>.</li>
 </ul>
 
@@ -706,7 +728,7 @@ See the documentation for <a href="../contributions/anders/HarmonisedScore/doc/n
 <div id="footer">
 <div id="author">&copy; 
 Torsten Anders</div>
-<div id="date">Last time edited: 2008.12.11</div>
+<div id="date">Last time edited: 2009.01.17</div>
 </div>
   </body>
 </html>
