@@ -62,6 +62,8 @@ export
    DxsToXs XsToDxs
    ArithmeticMean Range FirstToLastDistance
 
+   WindowedPattern WindowedPatternRecursions
+   
    UseMotifs MakeIndexConstructor GetMotifIndex
    
    MarkovChain MarkovChain_1
@@ -107,7 +109,7 @@ export
    FenvBoundaries
 define
    
-   /** % PlainPattern constraints Xs to a plain pattern (ie. no nesting or combination of patterns). The pattern is specified by the procedere Proc given to PlainPattern. Proc constraints a single pattern item and is called recursively. Proc expects two arguments: the current item and its predecessor in the list (i.e. Proc is called for all items except the first, which has no predecessor).
+   /** % PlainPattern constraints Xs to a plain pattern (ie. no nesting or combination of patterns). The pattern is specified by the procedere Proc given to PlainPattern. Proc constraints a single pattern item and is called recursively. Proc expects two arguments: the current item and its predecessor in the list. 
 %*/
    %% !! this is in effect the same as For2Neighbours..
    proc {PlainPattern Xs Proc}
@@ -120,7 +122,7 @@ define
        end}
    end
     
-   /** % PlainPattern2 constraints Xs to a plain pattern (ie. no nesting or combination of patterns) and is a variant of PlainPattern which adds additional control. The pattern is specified by the procedere Proc given to PlainPattern2. Proc constraints a single pattern item and is called recursively. Proc expects three arguments: the current item, a list with all previous pattern items in reverse order -- last is first), the number of generations processed so far (i.e. Proc is called for all items in Xs.
+   /** % PlainPattern2 constraints Xs to a plain pattern (ie. no nesting or combination of patterns) and is a variant of PlainPattern which adds additional control. The pattern is specified by the procedere Proc given to PlainPattern2. Proc constraints a single pattern item and is called recursively. Proc expects three arguments: the current item, a list with all previous pattern items in reverse order (last is first), the number of generations processed so far. 
 %*/
    proc {PlainPattern2 Xs Proc}      
       proc {Aux ToProcess Processed N}
@@ -242,7 +244,7 @@ define
        end}
    end
 
-   /** Constrains all elements in the list Xs (FD variables) to form a cycle pattern of the (shorter) list Ys (FD variables). I.e. Xs enumerates the elements of Ys in sequential order and sticks on the last element once it has been reached.
+   /** Constrains all elements in the list Xs (FD variables) to form a line pattern of the (shorter) list Ys (FD variables). I.e. Xs enumerates the elements of Ys in sequential order and sticks on the last element once it has been reached.
    */
    proc {Line Xs Ys}
       L = {Length Ys}
@@ -378,7 +380,7 @@ define
    end
 
 
-   /** %% Constrains EncodedMean/Quotient (two FD int) to be the arithmetic means of ArithmeticMean (a list of FD ints). Encoding the means by the expression EncodedMean/Quotient allows to represent means which are ratios by FD ints. In the following example, the means is constrained to 1.5
+   /** %% Constrains EncodedMean/Quotient (two FD int) to be the arithmetic means of Xs (a list of FD ints). Encoding the means by the expression EncodedMean/Quotient allows to represent means which are ratios by FD ints. In the following example, the mean is constrained to 1.5
    <code>{ArithmeticMean Xs 15 10}</code>
    %% */
    proc {ArithmeticMean Xs EncodedMean Quotient}
@@ -401,6 +403,115 @@ define
    proc {FirstToLastDistance Xs A Y}
       {FD.distance Xs.1 {List.last Xs} A Y}
    end
+
+   /** %% 'Higher-level' pattern constraint: applies the pattern constraint MyPattern to sublists of Xs (a list of FD ints). MyPattern is a binary procedure which expects a list of FD ints as first arg, and one or more single FD ints as remaining args (but see args patternArgs and includeIndex below). Yss is a list of list of FD ints, which are the accumulated "remaining args" of MyPattern. The strength of MetaPattern lies in the fact that Yss can be further constrained!  
+   %% 
+   %% Args:
+   %% 'windowlength' (default 3): length of Xs sublists to which is MyPattern is applied. At the end, sublists can be shorter if minwindowlength < windowlength.
+   %% 'minwindowlength' (default same as windowlength): minimum length of Xs sublists permitted. This setting is used as an abort condition. If the last sublist is shorter than minwindowlength, the pattern constraint application is skipped.
+   %% 'windowoffset' (default same as windowlength): "offset" of Xs element positions between the first elements of consecutive sublists. windowoffset must be =< than windowlength, but > 0.
+   %%
+   %% These arguments are integers (for a static setting), but windowlength and windowoffset can also be lists of integers. In the latter case, each integer is used for a single application of MyPattern. If the given list is too short to provide a value for each individual pattern constraint application, then the last value is simply used for the remaining calls as well. In any case, the given list must at least be of length 2 (otherwise it is a static setting, and no list is required).
+   %%
+   %% 'patternArgs' (default false): If this argument is *not* false, then MyPattern is a ternary procedure which expects a single value or a record of further args as third argument. Like for windowlength and windowoffset patternArgs, patternArgs supports a static setting (a single value, must not be a list) or a dynamic setting (a list of values). Note that static arguments can also be provided directly to the definition of MyPattern.
+   %% 'includeIndex' (default false): if true, then MyPattern is a ternary procedure which expects the accumulated number of recursive calls so far of as third argument. Only one of the arguments patternArgs and includeIndex must be non-false. 
+   %% 
+   %% Example:
+   %%
+   {MetaPattern proc {$ Xs Y} {Pattern.max Xs Y} end
+    Xs [Ys]
+    unit(windowlength:2
+	 windowoffset:2)}
+   %%
+   %% Results in the following constraint applications
+   {Pattern.max {List.take Xs 2} {Nth Ys 1}}
+   {Pattern.max {List.take {List.drop Xs 2} 2} {Nth Ys 2}}
+   %% ...
+   %%
+   %% See the test file for a few full examples.
+   %% */
+   %%
+   proc {WindowedPattern MyPattern Xs Yss Args}
+      Defaults As
+      proc {Aux Xs Yss_matTransed Args I}
+	 %% creates all args for this and recursive calls
+	 ProcessedArgs = {Record.map Args
+			  fun {$ X}
+			     case X
+			     of [A B] then A#B
+			     [] _ | _ then X
+			     else X#X
+			     end 
+			  end}
+      in
+	 if {Length Xs} >= ProcessedArgs.minwindowlength.1 then
+	    if ProcessedArgs.includeIndex.1 then
+	       {Procedure.apply MyPattern
+		{Append
+		 {List.take Xs ProcessedArgs.windowlength.1} | Yss_matTransed.1
+		 [I]}}
+	    elseif ProcessedArgs.patternArgs.1 \= false then
+	       {Procedure.apply MyPattern
+		{Append
+		 {List.take Xs ProcessedArgs.windowlength.1} | Yss_matTransed.1
+		 [ProcessedArgs.patternArgs.1]}}
+	    else
+	       {Procedure.apply MyPattern
+		{List.take Xs ProcessedArgs.windowlength.1} | Yss_matTransed.1}
+	    end
+	    {Aux {List.drop Xs ProcessedArgs.windowoffset.1}
+	     Yss_matTransed.2
+	     {Record.map ProcessedArgs fun {$ X} X.2 end}
+	     I+1}
+	 end
+      end
+   in
+      thread 
+	 Defaults = unit(windowlength:3
+			 windowoffset: As.windowlength
+			 %% should be integer (actually, it can be list as well, but as it is only efective as an abort condition, making this dynamic can become confusing...)
+			 minwindowlength: As.windowlength
+			 patternArgs: false
+			 includeIndex:false)
+      end
+      As = {Adjoin Defaults Args}
+      {Aux Xs {LUtils.matTrans Yss} As 1}
+   end
+   /** %% [Aux for WindowedPattern] Returns the number of recursive constraint applications caused by WindowedPattern. WindowedPatternNo is useful, for example, to obtain the length of lists of FD ints given in Yss to WindowedPattern.
+   %%
+   %% N is length of Xs given to WindowedPattern, Args is args given to WindowedPattern.
+   %% */
+   fun {WindowedPatternRecursions N Args}
+      Defaults As
+      fun {Aux N Args}
+	 %% creates all args for this and recursive calls
+	 ProcessedArgs = {Record.map Args
+			  fun {$ X}
+			     case X
+			     of [A B] then A#B
+			     [] _ | _ then X
+			     else X#X
+			     end 
+			  end}
+      in
+	 if N >= ProcessedArgs.minwindowlength.1 then 
+	    1 + {Aux N - ProcessedArgs.windowoffset.1
+		 {Record.map ProcessedArgs fun {$ X} X.2 end}}
+	 else 0
+	 end
+      end
+   in
+      thread 
+	 Defaults = unit(windowlength:3
+			 windowoffset: As.windowlength
+			 minwindowlength: As.windowlength)
+      end
+      As = {Adjoin Defaults Args}
+      {Aux N {Record.subtractList As
+	      %% irrelevant args
+	      [includeIndex patternArgs windowlength]}}
+   end
+
 
    
    /** %% UseMotifs constrains the list Xs to consist only of "motif instances" declared in the list Motifs, a list of motif specs. More specifically, UseMotifs constrains that Xs is quasi the result of elements in Motifs appended in any order and possibly with repetitions. However, UseMotifs is a constraint -- the order of Motif elements in Xs is not fixed by UseMotifs.
