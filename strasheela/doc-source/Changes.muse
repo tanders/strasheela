@@ -22,7 +22,7 @@
   - Minor additions 
     - HS.rules.schoenberg: added ProgressionSelector, ResolveDissonances, IndexCardinality SetEachChordType SetEachScaleType RequireChordTypes
     - HS.score: added MakeChords MakeScales GetDegree
-    - Pattern: added ForAllItems MapItems FirstToLastDistance DxsToXs XsToDxs EqualizeParam MakeIndexConstructor GetMotifIndex FenvBoundaries
+    - Pattern: added WindowedPattern WindowedPatternRecursions ForAllItems MapItems FirstToLastDistance DxsToXs XsToDxs EqualizeParam MakeIndexConstructor GetMotifIndex FenvBoundaries
     - ET31: added many chords and scales to database (origin is Scala's list of 31 ET chords and modi)
     - GUtils: added RecursiveAdjoin
 
