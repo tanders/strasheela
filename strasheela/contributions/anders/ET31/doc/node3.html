@@ -136,22 +136,29 @@ clearInterval(drawit)
 </span></li><li><a href="node2.html">DB</a> at "<span class="string">DB.ozf"
 </span></li></ul></code>
 <h3>Export</h3>
-<code><ul><li>&lt;P/2:<a href="#entity36"><span class="functionname">RenderAndShowLilypond</span></a>&gt;
-</li><li>&lt;P/1:<a href="#entity35"><span class="functionname">AddExplorerOut_ChordsToScore</span></a>&gt;
+<code><ul><li>&lt;P/2:<a href="#entity40"><span class="functionname">RenderAndShowLilypond</span></a>&gt;
+</li><li>&lt;P/1:<a href="#entity36"><span class="functionname">AddExplorerOut_ChordsToScore</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity37"><span class="functionname">MakeChordComment</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity38"><span class="functionname">MakeChordRatios</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity39"><span class="functionname">MakeScaleComment</span></a>&gt;
 </li></ul></code>
 <h3>Define</h3>
 
 <code>
-<a name="entity36">
+<a name="entity40">
 <span class="keyword">proc</span>{<span class="functionname">RenderAndShowLilypond</span> MyScore Args}<br>
 <span class="string"> Proc is like Out.renderAndShowLilypond, but provides buildin support for notes and chords with pitch units in et31.<BR>
  Please note that this support is defined by the argument Clauses (see Out.renderAndShowLilypond) -- additional clauses are still possible, but adding new note/chord clauses will overwrite the support for 31 ET.<BR>
+<BR>
+ Additional Args:<BR>
+ 'chordDescription' (default MakeChordComment): unary function expecting a chord and returning a VS used as annotation for chords. <BR>
+ 'scaleDescription': (default MakeScaleComment): unary function expecting a scale and returning a VS used as annotation for scale. <BR>
 <BR>
 </span>
 </code><br>
 
 <code>
-<a name="entity35">
+<a name="entity36">
 <span class="keyword">proc</span>{<span class="functionname">AddExplorerOut_ChordsToScore</span> Args}<br>
 <span class="string"> Creates an Explorer output. The script solution must be a sequential container with chord objects (i.e. without the actual notes).<BR>
  The Explorer output action creates a CSP with expects a chord sequence and returns a homophonic chord progression. AddExplorerOut_ChordsToScore internally uses ET31.score.chordsToScore for this purpose.  <BR>
@@ -159,6 +166,27 @@ clearInterval(drawit)
  Args are outname and the arguments of ET31.score.chordsToScore. the outname arg sets the output file name (which gets added the space number in the Explorer and then a random number). outname also sets the name under which this action appears in the Explorer menu.<BR>
 <BR>
  IMPORTANT: ET31.score.chordsToScore conducts a search which potentially can fail (e.g., if insufficient arguments are provided)!<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity37">
+<span class="keyword">proc</span>{<span class="functionname">MakeChordComment</span> MyChord Result}<br>
+<span class="string"> Expects a chord and returns the chord comment (a VS).<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity38">
+<span class="keyword">proc</span>{<span class="functionname">MakeChordRatios</span> MyChord Result}
+</code><br>
+
+<code>
+<a name="entity39">
+<span class="keyword">proc</span>{<span class="functionname">MakeScaleComment</span> MyScale Result}<br>
+<span class="string"> Expects a scale and returns the scale comment (a VS). <BR>
 <BR>
 </span>
 </code><br>

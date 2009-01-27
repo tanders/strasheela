@@ -165,13 +165,14 @@ clearInterval(drawit)
 </li><li>&lt;P/1:<a href="#entity105"><span class="functionname">UnarySkip</span></a>&gt;
 </li><li>&lt;P/2:<a href="#entity106"><span class="functionname">BinarySkip</span></a>&gt;
 </li><li>&lt;P/3:<a href="#entity112"><span class="functionname">TakeFeatures</span></a>&gt;
-</li><li>&lt;P/2:<a href="#entity113"><span class="functionname">ModuleLink</span></a>&gt;
-</li><li>&lt;P/2:<a href="#entity114"><span class="functionname">ModuleApply</span></a>&gt;
-</li><li>&lt;P/2:<a href="#entity115"><span class="functionname">TimeSpend</span></a>&gt;
-</li><li>&lt;P/2:<a href="#entity116"><span class="functionname">Assert</span></a>&gt;
-</li><li>&lt;P/1:<a href="#entity117"><span class="functionname">WarnGUI</span></a>&gt;
-</li><li>&lt;P/1:<a href="#entity118"><span class="functionname">InfoGUI</span></a>&gt;
-</li><li>&lt;P/1:<a href="#entity119"><span class="functionname">ErrorGUI</span></a>&gt;
+</li><li>&lt;P/3:<a href="#entity113"><span class="functionname">RecursiveAdjoin</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity114"><span class="functionname">ModuleLink</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity115"><span class="functionname">ModuleApply</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity116"><span class="functionname">TimeSpend</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity117"><span class="functionname">Assert</span></a>&gt;
+</li><li>&lt;P/1:<a href="#entity118"><span class="functionname">WarnGUI</span></a>&gt;
+</li><li>&lt;P/1:<a href="#entity119"><span class="functionname">InfoGUI</span></a>&gt;
+</li><li>&lt;P/1:<a href="#entity120"><span class="functionname">ErrorGUI</span></a>&gt;
 </li></ul></code>
 <h3>Define</h3>
 
@@ -234,7 +235,7 @@ clearInterval(drawit)
 <BR>
 /** %% Constrains percentage of N (FD int) if NoAll (FD int) indicates 100 percent. Result is implicitly declared a FD int.<BR>
  Example:  {Percent 4 6} = 66  <BR>
- note the rounding to 66 percent.<BR>
+ Note the rounding to 66 percent (better do not rely on exact value of Result but constraint it, e.g., by a comparison such as Result >: 50).<BR>
 <BR>
 </span>
 </code><br>
@@ -417,6 +418,15 @@ clearInterval(drawit)
 
 <code>
 <a name="entity113">
+<span class="keyword">proc</span>{<span class="functionname">RecursiveAdjoin</span> R1 R2 Result}<br>
+<span class="string"> Like Adjoin, but nested records are processed recursively.<BR>
+ R1 and R2 must have the same nesting for recursive processing, otherwise R2 features are taken (like Adjoin).<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity114">
 <span class="keyword">fun</span>{<span class="functionname">ModuleLink</span> UrlVs}<br>
 <span class="string"> ModuleLink is like Module.link except that multiple calls of ModuleLink share the same module manager (and don't create new managers as Module.link does). For instance, when ModuleLink links multiple functors which refer to a stateful datum in some functor, then all refer to the same datum instance. By constrast, linking with Module.link results into multiple stateful datum instances.<BR>
  !! On second though, ModuleLink seems to solve a non-existing problem. ModuleLink is an attempt to avoids problems in case some functor is linked more then once in the OPI. Actually, this should happen only in two cases: either you want to create two module instances (with independent stateful data) or you want to reload a functor (e.g. after compilation) without restarting the whole program. In both cases, Module.link does the right thing. So, why did I ever need ModuleLink???<BR>
@@ -426,7 +436,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity114">
+<a name="entity115">
 <span class="keyword">fun</span>{<span class="functionname">ModuleApply</span> UFs}<br>
 <span class="string"> ModuleApply is like Moduel.apply expect that it always uses the same module manager (cf. ModuleLink). <BR>
 <BR>
@@ -434,7 +444,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity115">
+<a name="entity116">
 <span class="keyword">fun</span>{<span class="functionname">TimeSpend</span> P}<br>
 <span class="string"> Returns the time (in msecs) the application of P (a null-ary procedure) took.<BR>
 <BR>
@@ -442,7 +452,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity116">
+<a name="entity117">
 <span class="keyword">proc</span>{<span class="functionname">Assert</span> B MyException}<br>
 <span class="string"> If B is false, then MyException is raised.<BR>
 <BR>
@@ -450,7 +460,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity117">
+<a name="entity118">
 <span class="keyword">proc</span>{<span class="functionname">WarnGUI</span> VS}<br>
 <span class="string"> Opens a warning dialog which displays VS.<BR>
 <BR>
@@ -458,7 +468,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity118">
+<a name="entity119">
 <span class="keyword">proc</span>{<span class="functionname">InfoGUI</span> VS}<br>
 <span class="string"> Opens a warning dialog which displays VS. <BR>
 <BR>
@@ -466,7 +476,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity119">
+<a name="entity120">
 <span class="keyword">proc</span>{<span class="functionname">ErrorGUI</span> VS}<br>
 <span class="string"> Opens an error dialog which displays VS. <BR>
 <BR>

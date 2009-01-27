@@ -196,6 +196,10 @@ clearInterval(drawit)
       <BR>
  All features of the DB and also of some sub-DBs (e.g. of the chordDB and scaleDB) are optional (as marked by square brackets). Missing features are set to the features of the default database (HS.dbs.default). However, in case PitchesPerOctave \= 12, then the following features are mandatory: chordDB, scaleDB and intervalDB.<BR>
  Note the above doc is unfinished: for further details read the doc of the aux accessors (available in the source file contributions/anders/HarmonisedScore/source/Database.oz).<BR>
+<BR>
+ 'comment' feature of database entries: is either a single value (usually an atom) or a record.<BR>
+ Naming database entries: either by an atom given to the 'comment' feature of a database, or an atom given to the 'name' feature of the record at the 'comment' feature, or -- for multiple alternative names -- a list of atoms given to the 'name' feature of the record at the 'comment' feature.<BR>
+<BR>
  TODO: write a better doc..<BR>
 <BR>
 </span>
@@ -296,7 +300,7 @@ clearInterval(drawit)
 <span class="keyword">proc</span>{<span class="functionname">RatiosInDBEntryToPCs</span> MyDBEntry KeysPerOctave Out}<br>
 <span class="string"> Processes an entry for a HS database (e.g. for a chord database). HS depends on pitches as keynumbers and pitch classes (all represented by integers or FD ints), both depending on KeysPerOctave. RatiosInDBEntryToPCs, on the other hand, permits also ratios (floats or fractions specs) which are transformed and rounded to the nearest pitch class (a ratio representing an interval exceeding an octave is transformed into an interval within an octave). <BR>
  MyDBEntry is a record with arbitrary features. Each feature value is either an interger, a list of integers, a ratio spec (either a float or a fraction spec in the form &lt;Int&gt;#&lt;Int&gt;), or a list of ratio specs. The output contains each integer/lists of integers unchanged but substitutes each ratio/list of ratios by the nearest pitch class interval (an integer), depending on KeysPerOctave (an integer).<BR>
- Additionally, a comment feature in MyDBEntry with arbitrary value is permitted. The returned record has always a comment feature with a record as value. The explaination of the comment in the return value is a bit complicated and depends on MyDBEntry. For features in MyDBEntry with a ratio, collect in comment the ratio, its pitch class plus the error, for other features in Test keep the orig value. In case MyDBEntry contains a feature comment as well, this value is preserved: in case MyDBEntry.comment is a record as well, its features are added to the comment record of the result. However, in case MyDBEntry.comment contains a feature 'comment' with the same feature as a feature in MyDBEntry itself, then the feature of MyDBEntry.comment is preferred. See the test file for examples.<BR>
+ Additionally, a comment feature in MyDBEntry with arbitrary value is permitted. The returned record has always a comment feature with a record as value. The explanation of the comment in the return value is a bit complicated and depends on MyDBEntry. For features in MyDBEntry with a ratio, collect in comment the ratio, its pitch class plus the error, for other features in Test keep the orig value. In case MyDBEntry contains a feature comment as well, this value is preserved: in case MyDBEntry.comment is a record as well, its features are added to the comment record of the result. However, in case MyDBEntry.comment contains a feature 'comment' with the same feature as a feature in MyDBEntry itself, then the feature of MyDBEntry.comment is preferred. See the test file for examples.<BR>
  Because the comment feature of the returned DB entry is changed, the function WasRatiosDBEntry recognises a DB entry processed by RatiosInDBEntryToPCs.<BR>
 <BR>
  NB: in HS.db, an OctaveDomain is also specified as &lt;Int&gt;#&lt;Int&gt;, but must not be mixed up with a fraction spec.<BR>
@@ -361,10 +365,10 @@ clearInterval(drawit)
 <code>
 <a name="entity47">
 <span class="keyword">fun</span>{<span class="functionname">GetName</span> X}<br>
-<span class="string"> Returns the name of a chord, scale or interval specified in its database entry (a VS, usually an atom). Returns nil if no name was found.<BR>
+<span class="string"> Returns the name of a chord, scale or interval specified in its database entry (a VS, usually an atom). The name is a list of atoms (its a list because there are sometimes multiple name alternatives). Returns nil if no name was found.<BR>
  Blocks until the index parameter is determined.<BR>
 <BR>
- The name is often specified as an atom at the 'comment' feature of a database entry. Alternatively, the entry defines a record at the 'comment' feature, and then the name is the value at the feature 'comment' in this subrecord.<BR>
+ The name is often specified as an atom at the 'comment' feature of a database entry. Alternatively, the entry defines a record at the 'comment' feature, and then the name is and atom at the feature 'name' in this subrecord, or a list of atoms at the feature 'name' (for specifying multiple alternative names).  <BR>
 <BR>
 </span>
 </code><br>

@@ -124,6 +124,12 @@ clearInterval(drawit)
 <span class="string"> This functor defines databases for chords, scales and intervals in 31 equal temperament. It is the core of the functor ET31. See the documentation of HS.db.setDB for the meaning of the exported database features. <BR>
  Internally, database entries are partly defined by ratios (using notation X#Y for X/Y) to make them more comprehensible and portable to other temperaments. Alternatively, chords and scales are notated with conventional symbolic note names (see function ET31.pc). In any case, the databases focus on chords, scales and intervals which are close to just intonation in 31 ET.<BR>
 <BR>
+ (Most of) The database entries can be read in common music notation at<BR>
+ http://cmr.soc.plymouth.ac.uk/tanders/StrasheelaExample/ET31/ET31-allIntervals.pdf<BR>
+ http://cmr.soc.plymouth.ac.uk/tanders/StrasheelaExample/ET31/ET31-all-chords.pdf<BR>
+ http://cmr.soc.plymouth.ac.uk/tanders/StrasheelaExample/ET31/ET31-all-scales.pdf<BR>
+ Please visit the source at ../source/DB.oz or browse/inspect the value of ET31.db.fullDB to read the actual databases. <BR>
+<BR>
  The naming of of chords can be debatable. Some of the chords I found myself and so their might be no standard name for it. Some terminology I used for naming the chords is introduced below. Note that this terminology is not always used consistently (e.g., the augmented chord [1#1 6#5 36#25] is simply chord 'augmented', not 'augmented triad' or 'geometric augmented').<BR>
 <BR>
  'otonal' and 'utonal': as established by Partch. However, ratios can be left out, i.e.,  [4/4 4/5 4/7] is utonal even if 4/6 is missing.<BR>
@@ -135,7 +141,24 @@ clearInterval(drawit)
  'reversed': an chord which exactly reverses some chord (e.g., the utonal equivalent of some otonal chord). A better term might be 'inversed', but that is already used differently..<BR>
 <BR>
  <BR>
- Please visit the source at ../source/DB.oz or browse/inspect the value of ET31.db.fullDB to read the actual databases. <BR>
+<BR>
+<BR>
+<BR>
+ Chord name abbrevations adopted from Scale (see Scala file chordnam.par, which has been used for creating this database)  <BR>
+<BR>
+ ASS stands for Anomalous Saturated Suspension.<BR>
+ BP stands for Bohlen-Pierce.<BR>
+ NM stands for Neo-Medieval; they were provided by Margo Schulter. This<BR>
+ chord notation was inspired by the "partitions" of Jacobus of Liège, <BR>
+ specifying first the outer interval of the sonority, and then the adjacent<BR>
+ intervals in ascending order, cf.<BR>
+ outer|lower-upper or outer|lower-middle-upper<BR>
+<BR>
+<BR>
+ Note: in the chord DB, the following entries only differ in their root:<BR>
+ - 'sixte ajoutee' and 'minor 7th'<BR>
+ - 'minor 9th' and 'major 7th added 6th'<BR>
+ - 'subminor 7th' and 'supermajor added 6th'<BR>
 <BR>
 <BR>
 </span>
@@ -143,7 +166,8 @@ clearInterval(drawit)
 <h3>Functor</h3>
 <ul>DB ("<span class="string">/Users/t/oz/music/Strasheela/strasheela/trunk/strasheela/contributions/anders/ET31/source/DB.oz</span>")<br></ul>
 <h3>Import</h3>
-<code><ul><li>HS at "<span class="string">x-ozlib://anders/strasheela/HarmonisedScore/HarmonisedScore.ozf"
+<code><ul><li>Pattern at "<span class="string">x-ozlib://anders/strasheela/Pattern/Pattern.ozf"
+</span></li><li>HS at "<span class="string">x-ozlib://anders/strasheela/HarmonisedScore/HarmonisedScore.ozf"
 </span></li><li><a href="node6.html">ET31</a> at "<span class="string">../ET31.ozf"
 </span></li></ul></code>
 <h3>Export</h3>

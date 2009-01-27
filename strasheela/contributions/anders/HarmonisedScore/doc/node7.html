@@ -149,17 +149,18 @@ clearInterval(drawit)
 </span></li><li>HS at "<span class="string">x-ozlib://anders/strasheela/HarmonisedScore/HarmonisedScore.ozf"
 </span></li></ul></code>
 <h3>Export</h3>
-<code><ul><li>&lt;P/3:<a href="#entity373"><span class="functionname">AscendingProgressionR</span></a>&gt;
-</li><li>&lt;P/3:<a href="#entity374"><span class="functionname">DescendingProgressionR</span></a>&gt;
-</li><li>&lt;P/3:<a href="#entity375"><span class="functionname">SuperstrongProgressionR</span></a>&gt;
-</li><li>&lt;P/3:<a href="#entity376"><span class="functionname">ConstantProgressionR</span></a>&gt;
-</li><li>&lt;P/3:<a href="#entity377"><span class="functionname">ProgressionStrength</span></a>&gt;
-</li><li>&lt;P/2:<a href="#entity378"><span class="functionname">ResolveDescendingProgressions</span></a>&gt;
+<code><ul><li>&lt;P/3:<a href="#entity390"><span class="functionname">AscendingProgressionR</span></a>&gt;
+</li><li>&lt;P/3:<a href="#entity391"><span class="functionname">DescendingProgressionR</span></a>&gt;
+</li><li>&lt;P/3:<a href="#entity392"><span class="functionname">SuperstrongProgressionR</span></a>&gt;
+</li><li>&lt;P/3:<a href="#entity393"><span class="functionname">ConstantProgressionR</span></a>&gt;
+</li><li>&lt;P/3:<a href="#entity394"><span class="functionname">ProgressionStrength</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity395"><span class="functionname">ResolveDescendingProgressions</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity396"><span class="functionname">ProgressionSelector</span></a>&gt;
 </li></ul></code>
 <h3>Define</h3>
 
 <code>
-<a name="entity373">
+<a name="entity390">
 <span class="keyword">proc</span>{<span class="functionname">AscendingProgressionR</span> X Y B}<br>
 <span class="string"> B=1 <-> the progression from chord/scale X to chord/scale Y is ascending (or strong): X and Y have common pitch classes, but the root of Y does not occur in the set of X's pitchclasses.<BR>
 <BR>
@@ -167,7 +168,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity374">
+<a name="entity391">
 <span class="keyword">proc</span>{<span class="functionname">DescendingProgressionR</span> X Y B}<br>
 <span class="string"> B=1 <-> the progression from chord/scale X to chord/scale Y is descending (or weak): a non-root pitchclass of X is root in Y.<BR>
 <BR>
@@ -175,7 +176,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity375">
+<a name="entity392">
 <span class="keyword">proc</span>{<span class="functionname">SuperstrongProgressionR</span> X Y B}<br>
 <span class="string"> B=1 <-> the progression from chord/scale X to chord/scale Y is superstrong in a Schoenbergian sense (cf. Harmonielehre): X and Y have no common pitch classes.<BR>
 <BR>
@@ -183,12 +184,12 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity376">
+<a name="entity393">
 <span class="keyword">proc</span>{<span class="functionname">ConstantProgressionR</span> X Y B}
 </code><br>
 
 <code>
-<a name="entity377">
+<a name="entity394">
 <span class="keyword">proc</span>{<span class="functionname">ProgressionStrength</span> X Y N}<br>
 <span class="string"> Expects two chord/scale objects X and Y, and returns N (an FD int) expressing the 'strength' of the harmonic progression encoded by a single integer.<BR>
  More specifically, N can be used to distinguish between the following cases.<BR>
@@ -201,10 +202,22 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity378">
+<a name="entity395">
 <span class="keyword">proc</span>{<span class="functionname">ResolveDescendingProgressions</span> Xs Args}<br>
-<span class="string"> Expects a list of chord/scale objects and constrains them according to Schoenberg's recommendation. For any three successive chords/scales, if the first two chords form a descending progression, then the progression from the first to the third chord forms a strong progression (so the middle chord is quasi a 'passing chord'). Also, the last chord/scale pair forms always a strong progression.<BR>
+<span class="string"> Expects a list of chord/scale objects Xs and constrains them according to Schoenberg's recommendation. For any three successive chords/scales, if the first two chords form a descending progression, then the progression from the first to the third chord forms a strong progression (so the middle chord is quasi a 'passing chord'). Also, the last chord/scale pair forms always a strong progression.<BR>
  Optional Args: allowInterchangeProgression (default is false). If true, then mere interchange progressions (e.g., I V I), are permitted as well. In any case, no two descending progression must follow each other. allowRepetition: if true, two neighbouring chords can have the same root. Defaults to false.<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity396">
+<span class="keyword">proc</span>{<span class="functionname">ProgressionSelector</span> Cs Selector}<br>
+<span class="string"> [Convenience constraint] Constraints the chord root progression for a list of chord objects Cs, where the actual rule is selected by an argument. Different argument values represent different variants of Schoenbergs rule set. Supported values are (in order of their strictness):<BR>
+ - ascending: only ascending chord progressions are permitted<BR>
+ - resolveDescendingProgressions(...): descending progressions are resolved (arguments to ResolveDescendingProgressions can be given as Selector features)<BR>
+ - harmonicBand: consecutive chords must share common pitch classes<BR>
+ - commonPCs: consecutive chords must share common pitch classes<BR>
 <BR>
 </span>
 </code><br>
