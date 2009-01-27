@@ -1454,6 +1454,124 @@ end
 
 
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%% WindowedPattern
+%%
+
+
+%% static settings 
+%%
+%% Example constraints that Xs consists of sublists of length 3, and the maximum elements in these sublists are increasing. Example solution:
+%% X = [0 0 1 0 0 2 0 0 3 0 0 4 0 0 6 0 0 6 0 0]
+%% Y = [1 2 3 4 5 6]
+%%
+%% (minwindowlength defaults to windowlength, and last 2-element sublist is not constrained therefore, so X ends with 0 0 in solution above)
+{ExploreOne
+ proc {$ Root}
+    N = 20
+    Args = unit(windowlength:3)
+    Xs = {FD.list N 0#10}
+    Ys = {FD.list {Pattern.windowedPatternRecursions N Args} 1#10}
+ in
+    Root = Xs # Ys
+    {Pattern.windowedPattern proc {$ Xs Y} {Pattern.max Xs Y} end
+     Xs [Ys]
+     Args}
+    {Pattern.increasing Ys}
+    %%
+    {FD.distribute ff Xs}
+ end}
+
+%% dynamic settings for windowlength (windowoffset defaults to the same value)
+%% length of sublists is increasing over 2, 3, 4 and then stays at 4
+{ExploreOne
+ proc {$ Root}
+    N = 20
+    Args = unit(windowlength:[2 3 4])
+    Xs = {FD.list N 0#10}
+    Ys = {FD.list {Pattern.windowedPatternRecursions N Args} 1#10}
+ in
+    Root = Xs # Ys
+    {Pattern.windowedPattern proc {$ Xs Y} {Pattern.max Xs Y} end
+     Xs [Ys]
+     Args}
+    {Pattern.increasing Ys}
+    %%
+    {FD.distribute ff Xs}
+ end}
+
+%% additional arguments 
+{ExploreOne
+ proc {$ Root}
+    N = 16
+    Args = unit(windowlength:4
+		%% set of motifs allowed changes
+		patternArgs:[unit(motifs:[[1 2 3 4]
+					  [4 3 2 1]])
+			     unit(motifs:[[5 7 6 8]
+					  [9 7 8 6]])
+			     unit(motifs:[[1 2 3 4]
+					  [4 3 2 1]])
+			     unit(motifs:[[5 7 6 8]
+					  [9 7 8 6]])])
+    Xs = {FD.list N 0#10}
+    %% ignore Ys, just a place-holder
+    Ys = {MakeList {Pattern.windowedPatternRecursions N Args}}
+ in
+    Root = Xs # Ys
+    {Pattern.windowedPattern proc {$ Xs _ /* Y */ unit(motifs:Motifs)}
+				{Pattern.useMotifs Xs Motifs unit}
+			     end
+     Xs [Ys]
+     Args}
+    %%
+    {FD.distribute ff Xs}
+ end}
+
+
+%% use index args (indices are simply browsed here)
+{ExploreOne
+ proc {$ Root}
+    N = 20
+    Args = unit(windowlength:3
+		includeIndex:true)
+    Xs = {FD.list N 0#10}
+    Ys = {FD.list {Pattern.windowedPatternRecursions N Args} 1#10}
+ in
+    Root = Xs # Ys
+    {Pattern.windowedPattern proc {$ Xs Y I}
+				{Browse I}
+				{Pattern.max Xs Y}
+			     end
+     Xs [Ys]
+     Args}
+    {Pattern.increasing Ys}
+    %%
+    {FD.distribute ff Xs}
+ end}
+
+
+
+%%
+%% WindowedPatternRecursions
+%%
+
+%% browse results
+
+%% When WindowedPattern is called with this setting, it results in 2 sublists of length 10, adding up to the full list length 20 (windowoffset defaults to windowlength)
+{Pattern.windowedPatternRecursions 20 unit(windowlength:10)}
+
+%% this setting results in 20 sublists from the full list of length 20. Note that the last sublists are shorter than windowlength, going down to 1 for the very last sublist.
+{Pattern.windowedPatternRecursions 20 unit(windowlength:10
+					   windowoffset:1
+					   minwindowlength:1)}
+
+%% default windowlength is 3
+{Pattern.windowedPatternRecursions 20 unit}
+
+
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%
