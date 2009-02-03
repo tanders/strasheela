@@ -56,6 +56,7 @@ import
 export
    PlainPattern PlainPattern2
    Continuous AllEqual Increasing Decreasing
+   Arc
    InInterval
    Cycle Cycle2 Rotation Heap Random Palindrome Line Accumulation
    ArithmeticSeries GeometricSeries Max Min
@@ -171,6 +172,30 @@ define
       {Continuous Xs '=:'}
    end
 
+   
+   /** %% Constraints Xs to form an "arc", i.e. there is only a single change of direction. 
+   %%
+   %% Args:
+   %% 'firstRel' (default '<:'): a relation atom ('<:', '=<:', '>:', '>=:')
+   %% 'tuningPointPos' (default mid): specifies at which position within Xs the arc changes direction, positive int or atom mid
+   %% */
+   proc {Arc Xs Args}
+      Default = unit(firstRel: '<:'
+		     tuningPointPos: mid)
+      As = {Adjoin Default Args}
+      Pos = if As.tuningPointPos == mid then
+	       {Length Xs} div 2
+	    else As.tuningPointPos
+	    end
+      Ys Zs
+   in
+      {List.takeDrop Xs Pos Ys Zs}
+      {Continuous Ys As.firstRel}
+      {Continuous {List.last Ys}|Zs
+       {GUtils.relationComplement As.firstRel}}
+   end
+   
+   
    /** % Constraints all elements in Xs to fall in interval [Min, Max], including.
    */
    proc {InInterval Xs Min Max}
@@ -984,6 +1009,8 @@ define
    proc {Contour Xs Dirs}
       Dirs = {Map2Neighbours Xs Direction}
    end
+
+   
 
    /** %% Xs and Ys are both contours of equal length (i.e. both lists of FD ints with domain 0#2). Ys is the inversion of Xs (and vice versa). 
    %% */
