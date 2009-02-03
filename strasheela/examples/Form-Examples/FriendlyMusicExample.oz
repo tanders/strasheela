@@ -7,6 +7,7 @@
 
 %%
 %% TODO: fix example again: example seems broken (search takes much longer than before -- does it find solution at all?)
+%% .. some problems in distro strategy found meanwhile (some orelse instead of andthen), but still performance worse than it has been once?
 %%
 
 declare
@@ -174,9 +175,10 @@ end
 %%
 
 fun {ParameterFilterTest X}
-   %% Filter out container parameters, measure parameters, time points and note pitches. 
-   {Not {{X getItem($)} isContainer($)}} orelse
-   {Not {Measure.isUniformMeasures {X getItem($)}}} orelse 
+   %% Filter out container parameters, measure parameters, time points and note pitches.
+   %% NOTE: boolean connective was wrong (was orelse)
+   {Not {{X getItem($)} isContainer($)}} andthen
+   {Not {Measure.isUniformMeasures {X getItem($)}}} andthen 
    {HS.distro.isNoTimepointNorPitch X}
 end
 
