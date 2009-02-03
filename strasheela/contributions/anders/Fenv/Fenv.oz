@@ -197,8 +197,8 @@ define
       /** %% Combines an arbitrary number of fenvs to a single fenv. Expects its args as a list in the form [fenv num fenv num ... fenv]. The numbers between the fenvs specify the start resp. end point of a certain fenv. All numbers should be between 0--1 (exclusive).
       %% */
       fun {FenvSeq FenvsAndPoints}
-	 Points = {Append 0.0|{LUtils.everyNth FenvsAndPoints.2 2} [1.0]} % 0, <vals>, 1
-	 Fenvs = {LUtils.everyNth FenvsAndPoints 2}
+	 Points = {Append 0.0|{LUtils.everyNth FenvsAndPoints.2 2 0} [1.0]} % 0, <vals>, 1
+	 Fenvs = {LUtils.everyNth FenvsAndPoints 2 0}
       in
 	 {Aux Fenvs Points}
       end
