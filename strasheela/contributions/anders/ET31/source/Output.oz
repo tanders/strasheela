@@ -371,7 +371,10 @@ define
 	 then FirstPcColl
 	    %% tied scale
 	 else FirstPcColl#{Out.listToVS {Map Rhythms.2
-					 fun {$ R} " ~ "#MyRoot#R end}
+					 %% TMP: tie did not work out of the box with \\afterGrace, simply removed for now
+					 fun {$ R} MyRoot#R end
+% 					 fun {$ R} " ~ "#MyRoot#R end
+					}
 			   " "}
 	 end
       end
