@@ -23,7 +23,7 @@ export
 
 define
    proc {EventEvery List NumEvents}
-      {ForAll {LUtils.everyNth List NumEvents}
+      {ForAll {LUtils.everyNth List NumEvents 0}
        proc {$ X}
 	  X \=: 0
        end}
@@ -62,7 +62,7 @@ define
 
    proc {NoThreeIdenticalAdjacentBeats Durs BeatDivisions}
       {Pattern.forNeighbours
-       {LUtils.everyNth Durs BeatDivisions}
+       {LUtils.everyNth Durs BeatDivisions 0}
        3
        proc {$ X}
 	  {FD.impl
@@ -74,7 +74,7 @@ define
 
    proc {NoTwoIdenticalAdjacentBeats Durs BeatDivisions}
       {Pattern.forNeighbours
-       {LUtils.everyNth Durs BeatDivisions}
+       {LUtils.everyNth Durs BeatDivisions 0}
        2
        proc {$ X}
 	  ( {Nth X 1} \=: {Nth X 2} )
@@ -83,7 +83,7 @@ define
 
    proc {MinDursOnBeats Durs BeatDivisions DurValue NumDurs}
       {FD.sum {Map
-	       {LUtils.everyNth Durs BeatDivisions}
+	       {LUtils.everyNth Durs BeatDivisions 0}
 	       fun {$ X} (X=:DurValue) end}
        '>=:' NumDurs}
    end
