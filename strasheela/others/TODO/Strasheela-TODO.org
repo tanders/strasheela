@@ -212,7 +212,7 @@ If problems occur ask gustavo.ggutierrez@gmail.com
     Noticable difference of old version?
 
 
-** TODO Read Strasheela doc					   :URGENT:EASY:
+** TODO Read Strasheela doc						  :EASY:
 
    know your system, e.g., know all my Patterns 
 
