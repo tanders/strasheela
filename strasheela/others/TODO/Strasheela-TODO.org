@@ -62,7 +62,7 @@
 
 *** Do expresssive performance (timing and velocity)
 
-** Revised Realtime example for Eduardo					:URGENT:
+** Revised Realtime example for Eduardo
 
 *** Create default solutions (in case of fail etc)
 *** DONE See other TODOs in text
