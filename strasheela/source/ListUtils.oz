@@ -34,7 +34,7 @@ export
    Accum
    SubtractList Split Sublist Sublists
    MatTrans NthWrapped
-   EveryNth % OddPositions EvenPositions
+   EveryNth OddPositions EvenPositions
    Replace
    ButLast LastN
    ArithmeticSeries ReciprocalArithmeticSeries
@@ -407,38 +407,39 @@ define
       {Nth Xs {Int.'mod' N-1 {Length Xs}}+1}
    end
 
-   /** %% Returns a list with every N-th element of Xs (by preserving the order).
+
+   /** %% Returns a list with every N-th element of Xs (by preserving the order). Offset specifies an offset for the element to start (if Offset=0 the first element of Xs is the first element of the result). 
    %% NB: causes infinite loop if N=0.
    %% */ 
-   fun {EveryNth Xs N}
+   fun {EveryNth Xs N Offset}
       %% transform into tuple to allow for constant time access (is this really more efficient?)
       XR = {List.toTuple unit Xs}
    in
-      for I in 1..{Width XR};N
+      for I in 1..({Width XR}-Offset);N
 	 collect:C
-      do {C XR.I}
+      do {C XR.(I+Offset)}
       end 
-   end   
-   
-   /*
-   %% generalised version of EveryNth, but buggy -- arithm series outputs 0-based positions (not 1-based as required for Oz) and influence Offset is ignored for length of arithm series
-   
-   %% Returns a list which contains every Nth element in Xs starting at offset.
-   %% 
-   fun {EveryNth Xs N Offset}
-      %% transform into tuple to allow for constant time access (is this really more efficient?)
-      {Map {ArithmeticSeries {IntToFloat Offset} {IntToFloat N}
-	    {FloatToInt {Ceil {IntToFloat {Length Xs}} / {IntToFloat N}}}}
-       fun {$ I} {Nth Xs {FloatToInt I}} end}
    end
+%    /** %% Returns a list with every N-th element of Xs (by preserving the order).
+%    %% NB: causes infinite loop if N=0.
+%    %% */ 
+%    fun {EveryNth Xs N}
+%       %% transform into tuple to allow for constant time access (is this really more efficient?)
+%       XR = {List.toTuple unit Xs}
+%    in
+%       for I in 1..{Width XR};N
+% 	 collect:C
+%       do {C XR.I}
+%       end 
+%    end   
 
-    %% Returns every element in Xs at an odd position.
-   %% 
+   /** %% Returns every element in Xs at an odd position.
+   %% */
    fun {OddPositions Xs} {EveryNth Xs 2 1} end
-    %% Returns every element in Xs at an even position.
-   %%
+   /** %% Returns every element in Xs at an even position.
+   %% */
    fun {EvenPositions Xs} {EveryNth Xs 2 0} end
-   */
+   
    
    /** %% Replaces all elements in Xs (a list of atoms) by the value in the record R at the feature equal to the list element. If R has no such feature the list element remains.
    %% */
