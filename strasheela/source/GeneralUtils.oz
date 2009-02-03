@@ -24,6 +24,9 @@ export
    Pi
    XOr Cases
    IsFS MakeSingletonSet IntsToFS
+
+   RelationComplement
+   
    Percent
    
    Identity
@@ -108,6 +111,21 @@ define
       {FS.unionN {Map Ds fun {$ D} {MakeSingletonSet D} end}
        MyFS}
    end
+
+   
+   /** %% Expects a FD relation atom ('<:', '=<:', '>:', '>=:', '=:', or '\\=:') and returns the complement. For example, the complement of '<:' is '>:', of '>=:' is '=<:' and of '=:' is '\\=:'.
+   %% */ 
+   fun {RelationComplement Dir}
+      case Dir
+      of '>:' then '<:'
+      [] '>=:' then '=<:'
+      [] '<:' then '>:'
+      [] '=<:' then '>=:'
+      [] '=:' then '\\=:'
+      [] '\\=:'then '=:'
+      end
+   end
+
 
    %% FS.int.match is better than this..
 %    /** %% Expects MyFS (a FS) and returns Ds, a list of FD ints which are all contained in MyFS.
