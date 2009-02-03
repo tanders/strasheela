@@ -586,6 +586,58 @@ MyRun2 = {MakeRun_PitchDom
 {MyRun2 toInitRecord($)}
 
 
+{SDistro.exploreOne
+ proc {$ MyScore}
+    MyScore = {MakeRun unit}
+    {Score.init MyScore}
+ end
+ unit}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%% ItemslistToContainerSubscript
+%%
+
+declare
+MakeRun_Notes			
+= {Score.defSubscript unit(super:Score.makeItems_iargs
+			   rdefaults: unit(direction: '<:')
+			   idefaults: unit(n:5))
+   proc {$ Notes Args} % body
+      {Pattern.continuous {Pattern.mapItems Notes getPitch}
+       Args.rargs.direction}
+   end}
+MakeRun_Seq = {Score.itemslistToContainerSubscript MakeRun_Notes seq}
+%%
+MyRun = {MakeRun_Seq
+	 unit(iargs:unit
+	      startTime:0)}
+{Score.init MyRun}
+
+{MyRun toInitRecord($)}
+
+
+%%
+{SDistro.exploreOne
+ proc {$ MyScore}
+    MyScore = {MakeRun_Seq unit(startTime:0
+				iargs:unit(n: 3
+					   duration:2))}
+    {Score.init MyScore}
+ end
+ unit}
+
+
+%%
+{SDistro.exploreOne
+ proc {$ MyScore}
+    MyScore = {Score.make seq({MakeRun_Notes unit(iargs:unit(n: 3
+							     duration:2))}
+			      startTime:0)
+	       unit}
+ end
+ unit}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
