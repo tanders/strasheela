@@ -82,9 +82,10 @@ define
    %% NB: using this test for filtering is suitable for many harmonic CSPs. When time intervals (duration and offset time parameters) are determined, then time points will be determined by propagation. Similarily, pitch parameters will be determined by propagation if the pitch class and octave are determined. Nevertheless, depending on your CSP this filtering might not be appropriate. For example, if your CSP uses chord and scale degrees for notes, then it may be appropriate to filter these parameters out as well or alternatively filter out the note pitch class parameters.
    %% */
    fun {IsNoTimepointNorPitch X}
-      %% {Not {{X getItem($)} isContainer($)}} orelse
-      {Not {X isTimePoint($)}} orelse
-      {Not {X isPitch($)} andthen
+      %% {Not {{X getItem($)} isContainer($)}} andthen
+      {Not {X isTimePoint($)}} andthen
+      {Not
+       {X isPitch($)} andthen
        ({X hasThisInfo($ root)} orelse
 	{X hasThisInfo($ untransposedRoot)} orelse
 	{X hasThisInfo($ notePitch)})}
