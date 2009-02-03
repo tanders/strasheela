@@ -79,7 +79,7 @@ export
    transform2: TransformScore2
    MakeConstructor
    MakeItems MakeItems_iargs MakeContainer MakeSim MakeSeq
-   DefSubscript
+   DefSubscript ItemslistToContainerSubscript
    % ResolveRepeats
    MakeClass
 prepare
@@ -2895,6 +2895,24 @@ define
    end
 
    
+   /** %% Expects a subscript which returns a list of items, and returns a variant of this subscript which wraps a container around this items list. The subscript arguments iargs and rargs are handed to the Subscript (usually created with Score.defSubscript), all other subscript arguments are given to the container. ContainerLabel is a label such as seq or sim.
+   %% Purpose of this function: simplifies creation (& avoids code doubling) of two variants of a subscript, e.g., one returning plain list of notes (defined with DefSubscript), and one wrapping these notes in a container (defined with ItemslistToContainerSubscript from existing script).  
+   %% */
+   fun {ItemslistToContainerSubscript Subscript ContainerLabel}
+      fun {$ Args}
+	 %% make sure some value for iargs and rargs is there..
+	 FullArgs = {Adjoin unit(iargs:unit
+				 rargs:unit)
+		     Args}
+      in
+	 {MakeScore2
+	  {Adjoin {Record.subtractList Args [iargs rargs]}
+	   ContainerLabel({Subscript unit(iargs:FullArgs.iargs
+					  rargs:FullArgs.rargs)})}
+	  unit}
+      end
+   end
+
 
 %    local
 %       proc {ResolveRepeatsAux ScoreSpec ?X}
