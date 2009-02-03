@@ -114,15 +114,12 @@ EList = {New LUtils.extendableList init}
 %%
 
 
-{LUtils.everyNth [1 2 3 4 5 6 7 8 9] 2}
+{LUtils.everyNth [1 2 3 4 5 6 7 8 9] 2 0}
 
-/*
+{LUtils.everyNth [1 2 3 4 5 6 7 8 9] 2 1}
+
 {LUtils.evenPositions [1 2 3 4 5 6 7 8 9]}
 
-
-{LUtils.arithmeticSeries {IntToFloat 3} {IntToFloat 2}
- {FloatToInt {Ceil {IntToFloat 9} / {IntToFloat 2}}}}
-*/
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%
