@@ -9,9 +9,10 @@
   - Documentation
     - Extensively revised example Schoenberg-TheoryOfHarmony.oz (before called HomophonicChordProgression.oz): now features solver calls for many variations on the theory of harmony
     - Page for [[Example-MEWER][MEWER]] application added to list of examples
+    - examples/Form-Examples/FriendlyMusicExample.oz: Fixed bug in distro (was orelse instead of andthen)
 
   - Extensions and simplifications for score creation
-    - Added Score.makeItems, Score.defSubscript
+    - Added Score.makeItems, Score.defSubscript, ItemslistToContainerSubscript
     - Score.makeScore: more convenient notation variant supported for nested scores. The following two examples are now equivalent.
       - ={Score.makeScore seq(items:[note note]) unit}=  
       - ={Score.make seq([note note]) unit}=  
@@ -22,7 +23,7 @@
   - Minor additions 
     - HS.rules.schoenberg: added ProgressionSelector, ResolveDissonances, IndexCardinality SetEachChordType SetEachScaleType RequireChordTypes
     - HS.score: added MakeChords MakeScales GetDegree
-    - Pattern: added WindowedPattern WindowedPatternRecursions ForAllItems MapItems FirstToLastDistance DxsToXs XsToDxs EqualizeParam MakeIndexConstructor GetMotifIndex FenvBoundaries
+    - Pattern: added WindowedPattern WindowedPatternRecursions ForAllItems MapItems FirstToLastDistance DxsToXs XsToDxs EqualizeParam MakeIndexConstructor GetMotifIndex FenvBoundaries Arc
     - ET31: added many chords and scales to database (origin is Scala's list of 31 ET chords and modi)
     - GUtils: added RecursiveAdjoin
 
@@ -36,12 +37,14 @@
       - Fixed MaxNonharmonicNoteSequence (before limited number of harmonic instead of non-harmonic tones) 
       - Added ExpressAllChordPCs_AtChordEnd
     - HS.score: Refactored TransposeDegree: expected scale/chord PCs as list, now FS
-    - GUtils: simplified IsDivisible implementation 
+    - HS.distro: Fixed bug in IsNoTimepointNorPitch (was orelse instead of andthen)
+    - GUtils: simplified IsDivisible implementation, added RelationComplement 
     - Score method toInitRecord: now outputs strings (e.g., for lilypond) as proper strings 
       - Out: Revised RecordToVS: now outputs strings as strings, preserves escape sequences etc. Added RecordToVS_simple
     - Score: Revised ScoreObject method unify: new args exclude, and derive 
     - Out.saveScore: fixed (added wrote prefix)
     - ET31.out: Substatianlly refactored Lilypond output of analytical information (chords, scales), now more flexible
+    - LUtils: Refactored EveryNth (new arg Offset), added OddPositions EvenPositions
 
   - For further fixes see the [[../CHANGELOG.txt]].
 
