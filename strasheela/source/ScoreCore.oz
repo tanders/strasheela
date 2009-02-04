@@ -2652,7 +2652,7 @@ define
    %% */
    fun {TransformScore2 MyScore Args}
       Defaults = unit(clauses:nil
-		      constructors:{MyScore getInitClasses($)})
+		      constructors:{Adjoin {MyScore getInitClasses($)} add})
       As = {Adjoin Defaults Args}
    in
       {MakeScore2 {MyScore toInitRecord($ clauses:As.clauses)}
@@ -2662,7 +2662,7 @@ define
    %%
    %% The following optional arguments are supports via Args.
    %% 'clauses': a list of pairs TestI#FunI. TestI is a Boolean function or method, and FunI is a unary function expecting a score object and returning either a textual score object specification (a record), or a score object (which must not be fully initialised). For each object for which some TestI returns true, the corresponding FunI will be used for creating a score object which will replace the original object. 
-   %% 'constructors': the contructors used for creating the transformed score from a textual score (cf. MakeScore). Default are the classes of MyScore: {MyScore getInitClasses($)}.
+   %% 'constructors': the contructors used for creating the transformed score from a textual score (cf. MakeScore). Default are the classes of MyScore: {MyScore getInitClasses($)}, plus the default constructors.
    %%
    %% Note that TransformScore does not support recursive transformations. For example, if you change the content of a container during a transformation, this new content will not be recursively processed (but you could explicitly call TransformScore again with the resulting score). 
    %%
