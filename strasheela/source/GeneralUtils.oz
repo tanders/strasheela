@@ -43,6 +43,7 @@ export
    UnarySkip BinarySkip
    TakeFeatures
    RecursiveAdjoin
+   KeepList
 
    ModuleLink ModuleApply
    TimeSpend
@@ -453,7 +454,16 @@ define
        end}
    end
 
-   
+   /** %% Opposite of Record.subtractList: returns a record like R, but only keeps the features Fs. Fs can contain features not present in R, but these will then be skipped. 
+   %% */
+   fun {KeepList R Fs}
+      Feats = {Filter {Arity R}
+	       fun {$ Feat} {Member Feat Fs} end}
+   in
+      {Record.mapInd {MakeRecord {Label R} Feats}
+       fun {$ Feat _} R.Feat end}
+   end
+
    local
       ModMan = {New Module.manager init}
    in
