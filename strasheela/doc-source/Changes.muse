@@ -25,7 +25,7 @@
     - HS.score: added MakeChords MakeScales GetDegree
     - Pattern: added WindowedPattern WindowedPatternRecursions ForAllItems MapItems FirstToLastDistance DxsToXs XsToDxs EqualizeParam MakeIndexConstructor GetMotifIndex FenvBoundaries Arc
     - ET31: added many chords and scales to database (origin is Scala's list of 31 ET chords and modi)
-    - GUtils: added RecursiveAdjoin
+    - GUtils: added RecursiveAdjoin, KeepList
 
   - Bug fixes and changes
     - HS.db: GetChordIndex/GetScaleIndex/GetIntervalIndex: database entries can now have multiple alternative names. When such entries are defined with SetDB, the subfeature 'name' of the feature 'comment' has a list of names (atoms).
