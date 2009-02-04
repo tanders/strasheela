@@ -274,7 +274,7 @@ MyScore = {Score.makeScore
 	   unit}
 {MyScore wait}
 {Out.midi.renderAndPlayMidiFile MyScore
- unit(file:timeshifted)}
+ unit(file:timeshifted2)}
 
 
 %% Plotting top-level time shift fenv
