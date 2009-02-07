@@ -169,7 +169,7 @@ MyTestScore = {Score.makeScore
 ** GeOz 
    
 *** TODO Install GeOz 
-    SCHEDULED: <2009-02-02 Mon>
+    SCHEDULED: <2009-03-02 Mon>
     
     NOTE: development of Gecode/J is discontinued. So, I better stick with Mozart/Oz. But then it would be a good idea to support gustavo getting Gecode running for Oz. E.g., moral support by installing it and asking questions, also finding bugs perhaps..
 
