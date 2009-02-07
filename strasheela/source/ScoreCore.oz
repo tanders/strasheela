@@ -2675,7 +2675,7 @@ define
 
 
    
-   /** %% Returns a score item constructor function with interface {F Args} which creates essentially the same item as Constructor (unary function or class), but uses the default arguments Defaults (record of init arguments). The item returned by the constructor is not fully initialised.
+   /** %% Returns a score item constructor function with interface {F Args} which creates essentially the same item as Constructor (unary function or class), but uses the default arguments Defaults (record of init arguments). Defaults and Args can be nested records, in which case nested default specs are not overwritten if Args specifies same higher-level arg (i.e. Default and Arg are combined with GUtils.recursiveAdjoin instead of just Adjoin). The item returned by the constructor is not fully initialised. 
    %% In addition, the resulting constructor function supports convenience notations for certain values. The following notations are supported (both as default arguments and as actual arguments). 
    %% fn # MyFun: the actual value is returned by the function MyFun (remember that handing undetermined variables to constructors is only possible if the constructor call is wrapped in the script or some other procedure; otherwise the search blocks).   
    %% fd # DomSpec: DomSpec is the specification expected by FD.int.
@@ -2688,7 +2688,7 @@ define
    %% TODO: add support for fs # DomSpec : what format should DomSpec be in that case?
    fun {MakeConstructor Constructor Defaults}
       fun {$ Args}
-	 {MakeScore2 {Record.map {Adjoin Defaults
+	 {MakeScore2 {Record.map {GUtils.recursiveAdjoin Defaults
 				  {Adjoin Args unit}}
 		      fun {$ X}
 			 case X of fd # DomSpec then {FD.int DomSpec}
@@ -2716,12 +2716,12 @@ define
 	 else {LUtils.collectN N fun {$} Spec end}
 	 end    
       end
-      /** %% Expects a record wholes feature values are lists and returns a list of records with single element features. 
+      /** %% Expects a record who's feature values are lists and returns a list of records with single element features. 
       %% */
       fun {RecordMatTrans R}
 	 {List.mapInd {MakeList {Length R.({Arity R}.1)}}
 	  fun {$ I X}
-	     %% !! implementation using Nth not efficient, list is multiple
+	     %% !! NOTE: implementation using Nth not efficient, list is multiple
 	     %% times traversed
 	     X = {Record.map R fun {$ Xs} {Nth Xs I} end}
 	  end}
@@ -2731,7 +2731,7 @@ define
       %%
       %% Args: 
       %% 'n': number of items
-      %% 'constructors': creator class or function for items
+      %% 'constructor': creator class or function for items
       %% 'handle': argument to access the resulting list of items (convenient when MakeItems is used in a nested data structure, cf. ScoreObject init method arg handle)
       %% 'rule': constraint (unary proc) applied to list of all items
       %%
@@ -2745,8 +2745,11 @@ define
       unit(n: 1
 	   constructor: Score.note)
       %%
+      %% NB: constructor must not expect any of the args expected by MakeItems (n, constructor, handle, rule), as these are affected by MakeItems. This fact limits the recursive use of MakeItems (where the constructor is created by MakeItems).
+      %%
       %%*/
-      %% - !!?? should arg constructor be generalised to additionally support case each#Constructors, where Constructors is list of length n with individual constructor for each returned item? Users should likely better use Score.make for that purpose..
+      %% - !!?? TODO: should arg constructor be generalised to additionally support case each#Constructors, where Constructors is list of length n with individual constructor for each returned item? Users should likely better use Score.make for that purpose..
+      %% TODO: alternative arg format based on indices, so that for specific indices (and index ranges) I can specify specific args
       proc {MakeItems Args ?Elements}
 	 Defaults = unit(n: 1
 			 constructor: Note
@@ -2770,7 +2773,7 @@ define
 			{MakeScore2 {Adjoin Spec L} % overwrite label
 			 unit(L:As.constructor)}
 		     end}
-	 As.handle = Elements
+	 As.handle = Elements 
 	 thread			% rule may block until Elements are determined
 	    {As.rule Elements}
 	 end
