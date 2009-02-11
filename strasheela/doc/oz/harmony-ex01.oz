@@ -116,6 +116,11 @@ end
 
 */
 
+/* % solver call for using explorer 
+
+{SDistro.exploreOne MyScript Aux.myDistribution}
+
+*/
 
 /*
 
