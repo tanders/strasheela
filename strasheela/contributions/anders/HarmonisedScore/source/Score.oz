@@ -279,7 +279,9 @@ define
       TranspPC :: PCDomain
       %% main constraints
       Aux =: UnTranspPC + TranspositionPC
-      TranspPC =: {FD.modI Aux PitchesPerOctave}
+      %% NOTE: try domain propagation (it improved at least search for the case I tested immediately after changing this, namely ET31 CSP where chords must be in Hahn pentachordal scale, so chord index is rather large and search took more time with FD.modI)
+      TranspPC =: {FD.modD Aux PitchesPerOctave}
+%       TranspPC =: {FD.modI Aux PitchesPerOctave}
    end
 
 
@@ -881,6 +883,9 @@ define
 	    {FS.include UntranspRoot {Select.fs MyDB.roots Index}}
 	    {TransposePC UntranspRoot Transposition TranspRoot}
 
+	    %% root is always in set of pitch classes (this is even true for chords like diminished triad or seventh chord: root is not fundamental)
+	    {FS.include UntranspRoot UntranspPCs_FS}
+	    {FS.include TranspRoot TranspPCs_FS}
 	    
 	    %% alternative try of transposition constraints with GUtils.intsToFS instead of FS.forAllIn and possibly re-use of the FD variables for other user constraints
 	    %% This approach seems to work as well, but the FD variables are not necessarily determined, so the hoped for additional use is not really there. 
@@ -1254,7 +1259,13 @@ define
 	    %% !!?? couldn't I use syntax of meth directly for defining arg defaults??
 	    Defaults = unit(inScaleB:_
 			    %% !!?? suitable default? 
-			    getScales:proc {$ Self Scales} Scales=nil end
+			    getScales:fun {$ Self}
+					 MyScale = {Self findSimultaneousItem($ test:IsScale)}
+				      in
+					 if MyScale == nil then nil
+					 else [MyScale]
+					 end
+				      end 
 			    %% !!?? B=1 OK? (more often needed then just skip). But very wrong when getScales returns more than one candidate! 
 			    isRelatedScale:proc {$ Self Scale B} B=1 end
 			    chordPCsInScale:_)
@@ -1893,7 +1904,8 @@ define
       end
    in
       /** %% [abstract class] Mixin class for a note class with pitchClass parameter. Allows to conveniently define relations between self (i.e. a note) and a chord. The parameter inChordB (value is a 0/1 int) states whether the pitch class (a FD int) of self is included in the pitch classes (a FS) of the chord to which self is related.
-      %% Which chord actually self is related to, this is defined by the required init arguments getChords and isRelatedChord. Both arguments expect a procedure. getChords expects a unary function which expects self and returns a list of chord candidates to which self may be related (e.g. all chords in the piece). However, self is related to exactly one chord. Therefore, if the function at getChords returns a list with exactly one chord, then the related chord is determined. For example, in case the rhythmic structure of the music is determined in the CSP, the function at getChords may return the chord simultaneous with self: <code> proc {$ Self} {Self getSimultaneousItems($ test:IsChord)}.1 end </code>. In any case, the user should aim to keep the number of related chord candidates low to minimise propagators.
+      %% By default, the related chord is the simultaneous chord object (if there are multiple simultaneous chord objects, then the first found is taken). 
+      %% This default behaviour can be overwritten with the arguments getChords and isRelatedChord. Both arguments expect a procedure. getChords expects a unary function which expects self and returns a list of chord candidates to which self may be related (e.g. all chords in the piece). However, self is related to exactly one chord. Therefore, if the function at getChords returns a list with exactly one chord, then the related chord is determined. For example, in case the rhythmic structure of the music is determined in the CSP, the function at getChords may return the chord simultaneous with self: <code> proc {$ Self} [{Self findSimultaneousItem($ test:HS.score.isChord)}] end </code>. In any case, the user should aim to keep the number of related chord candidates low to minimise propagators.
       %% In case of multiple related chord candidates (i.e. the related chord is not determined in the CSP definition, e.g., because the rhythmic structure of the music is undetermined in the problem definition), the procedure at isRelatedChord defines which of the candidates the actual related chord is. This ternary procedure expects self, a chord, and an 0/1-int (the 0/1-int is declared within the proc). For the related chord, the 0/1-int is 1 (and 0 otherwise). For example, to relate self to its simultaneous chord this proc may be defined <code> proc {$ Self Chord B} {Self isSimultaneousItemR(B Chord)} end </code>.  However, as mentioned before only exactly one chord may be related to self (this is an implicit constraint in the class def -- intendent to enhance propagation -- which causes the search to fail otherwise).
       %% In case a single note shall optionally be related to multiple chords (e.g. to express a suspension) consider to represent this single note with multiple note objects. The representation of the note may even explicitly represent tied notes: an additional 0/1-int parameter could state whether a note is tied, e.g., to its predecessor with the implied constraint that their pitches equal.
       %% Additional constraints may be enforced on self dependent on the value of the parameter inChordB, see the method nonChordNoteConditions for details.
@@ -1914,7 +1926,13 @@ define
 	    isRelatedChord	% init proc
 	 meth initInChordMixinForNote(...) = M
 	    Defaults = unit(inChordB:_
-			    getChords:proc {$ Self Chords} Chords=nil end
+			    getChords:fun {$ Self}
+					 MyChord = {Self findSimultaneousItem($ test:IsChord)}
+				      in
+					 if MyChord == nil then nil
+					 else [MyChord]
+					 end
+				      end 
 			    %% ?? B=1 OK? (more often needed then just skip)
 			    isRelatedChord:proc {$ Self Chord B} B=1 end)
 	    Args = {Adjoin Defaults M}
@@ -2033,7 +2051,13 @@ define
 	    isRelatedScale % init proc
 	 meth initInScaleMixinForNote(...) = M
 	    Defaults = unit(inScaleB:_
-			    getScales:proc {$ Self Scales} Scales=nil end
+			    getScales: fun {$ Self}
+					 MyScale = {Self findSimultaneousItem($ test:IsScale)}
+				      in
+					 if MyScale == nil then nil
+					 else [MyScale]
+					 end
+				      end 
 			    %% ?? B=1 OK? (more often needed then just skip)
 			    isRelatedScale:proc {$ Self Scale B} B=1 end)
 	    Args = {Adjoin Defaults M}
@@ -2700,7 +2724,7 @@ define
 	makeChord:fun {$}
 		     chord(duration:{FD.int 1#FD.sup}  % no non-existing chords of dur 0
 			   getScales: fun {$ Self}
-					 {Self getSimultaneousItems($ test:HS.score.isScale)}
+					 [{Self findSimultaneousItem($ test:HS.score.isScale)}]
 				      end
 			   inScaleB:1 % only scale pitches
 			  )
@@ -2731,8 +2755,8 @@ define
 		      makeChord:fun {$}
 				   chord(duration:{FD.int 1#FD.sup}  
 					 getScales: fun {$ Self}
-						       {Self getSimultaneousItems($ test:IsScale)}
-						    end
+						       [{Self findSimultaneousItem($ test:IsScale)}]
+						    end 
 					 inScaleB:1 
 					 %% just to remove symmetries (if inversion chord is used)
 					 %% sopranoChordDegree:1
