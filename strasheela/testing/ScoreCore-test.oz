@@ -439,6 +439,49 @@ MyNotes = {Score.makeItems unit(n:3
 
 
 %%
+%% MakeItems_iargs
+%%
+
+declare
+Ns = {Score.makeItems_iargs unit(iargs: unit(n: 3
+					     info: test
+% 				constructor:Score.note % default
+					     amplitude:fenv#{Fenv.linearFenv [[0.0 64.0]
+									      [1.0 127.0]]}
+					     pitch:each#[60 62 64])
+				 %% 
+				 rargs: unit)}
+{ForAll Ns Score.init}		
+
+{Pattern.mapItems Ns toInitRecord}
+
+%%
+%% MakeItems_iargs used directly with arg shorthand
+%% each-args supported for rargs
+%%
+%% ... feature removed again 
+%%
+% %% NOTE: problem: Args.iargs.n is used for specifying number of runs, but I now cannot set number of notes in the run anymore, not can I overwrite the constructor of note items 
+% declare
+% MakeRun			
+% = {Score.defSubscript unit(rdefaults: unit(direction: '<:')
+% 			   idefaults: unit(n:5))
+%    proc {$ MyMotif Args} % body
+%       {Pattern.continuous {MyMotif mapItems($ getPitch)}
+%        Args.rargs.direction}
+%    end}
+% MyNotes = {Score.makeItems_iargs
+% 	   unit(iargs: unit(n: 2
+% 			    constructor:MakeRun
+% 			    duration:2)
+% 		rargs: unit(direction: each # ['>:' '<:']))}
+% {ForAll MyNotes Score.initScore}
+
+% {Browse {Map MyNotes fun {$ X} {X toInitRecord($)} end}}
+
+
+
+%%
 %% MakeItems used within Score.make
 %%
 
