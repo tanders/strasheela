@@ -37,14 +37,19 @@
       - Fixed MaxNonharmonicNoteSequence (before limited number of harmonic instead of non-harmonic tones) 
       - Added ExpressAllChordPCs_AtChordEnd
     - HS.score: Refactored TransposeDegree: expected scale/chord PCs as list, now FS
+    - HS.score: efficiency improvements: TransposePC: use FD.modD instead of FD.modI. PitchClassCollection initialisation: constrain that root (untransposed root) is in PCs (untransposed PCs) for better propagation. 
+    - HS.score: new default for all args getChords/getScales: list with single simultaneous chord/scale (with findSimultaneousItem), nil (old default) if none is found 
     - HS.distro: Fixed bug in IsNoTimepointNorPitch (was orelse instead of andthen)
     - GUtils: simplified IsDivisible implementation, added RelationComplement 
     - Score method toInitRecord: now outputs strings (e.g., for lilypond) as proper strings 
-      - Out: Revised RecordToVS: now outputs strings as strings, preserves escape sequences etc. Added RecordToVS_simple
+    - Out: Revised RecordToVS: now outputs strings as strings, preserves escape sequences etc. Added RecordToVS_simple
+    - Out: Last note of automatically split and tied notes was longer than what has been set by Out.setMaxLilyRhythm, now fixed
     - Score: Revised ScoreObject method unify: new args exclude, and derive 
     - Out.saveScore: fixed (added wrote prefix)
     - ET31.out: Substatianlly refactored Lilypond output of analytical information (chords, scales), now more flexible
     - LUtils: Refactored EveryNth (new arg Offset), added OddPositions EvenPositions
+    - Score: Refactored ScoreObject method info: not-explicitly cared-for arguments are ignored now (a warning is printed)
+    - Midi output: Note off timing revised: when a note on event and the preceeding note off event occur at exactly the same time, some MIDI devices have problems. So far, Strasheela be default simply removed (OutputMidiFile arg removeQuestionableNoteoffs defaulted to true). Now, by default such note offs are very slightly moved forward (NoteToMidi new arg noteOffOffset defaults to ~0.003, measured in secs -- NoteToMidi is used by default for outputting MIDI notes (matching OutputMidiFile clause with test isNote).
 
   - For further fixes see the [[../CHANGELOG.txt]].
 
