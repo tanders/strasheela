@@ -853,9 +853,9 @@ define
       %%
       %% Examples:
       %% Application of a harmonic constraint to all pairs of simultaneous notes. This approach works for any number of voices and arbitrarily complex rhythmic structures. 
-      {ForSimultaneousPairs {MyScore collect($ test:isNote)} IsConsonant isNote}
+      {ForSimultaneousPairs {MyScore collect($ test:isNote)} IsConsonant unit(test:isNote)}
       %% Application of a harmonic constraint to all note pairs consisting of a bass note and a note from a higher voice. MyBass is a container which contains all the bass notes. 
-      {ForSimultaneousPairs {MyBass collect($ test:isNote)} IsConsonant isNote}
+      {ForSimultaneousPairs {MyBass collect($ test:isNote)} IsConsonant unit(test:isNote)}
       %% */
       proc {ForSimultaneousPairs Xs P Args}
 	 Defaults = unit(test: fun {$ X} true end
