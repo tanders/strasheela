@@ -313,8 +313,10 @@ define
 	  proc {$ Attr X}
 	     %% Note: GUI causes space hierarchy from within local space
 	     % {GUtils.warnGUI "Setting "#{Value.toVirtualString self 100 100}#"'s attribute '"#Attr#"' directly to "#{Value.toVirtualString X 100 100}#". Possibly, this attribute does not exist in this object!"}
-	     {System.showInfo "Warning: setting "#{Value.toVirtualString self 100 100}#"'s attribute "#Attr#" directly to "#{Value.toVirtualString X 100 100}#". Possibly, this attribute does not exist in this object!"}
-	     @Attr = X
+% 	     {System.showInfo "Warning: setting "#{Value.toVirtualString self 100 100}#"'s attribute "#Attr#" directly to "#{Value.toVirtualString X 100 100}#". Possibly, this attribute does not exist in this object!"}
+	     {System.showInfo "Warning: method init for creating an object with label "#self.label#": ignored arg "#Attr#" with value "#{Value.toVirtualString X 100 100}}
+	     %% Note: removed direct setting of attributes
+% 	     @Attr = X
 	  end}
 	 
       end
@@ -2778,16 +2780,63 @@ define
 	    {As.rule Elements}
 	 end
       end
+
+      /** %% Same as Score.makeItems, but all Score.makeItems arguments are wrapped in arg iargs for compatibility with DefSubscript.
+      %% Note: arg processing (each-args etc) only supported for iargs, but not rarg, and also not for iargs.n. The reason is that only a single value of these args is needed for items creation (e.g., only one iargs.n is needed). 
+      %% */
+      fun {MakeItems_iargs Args}	 
+	 Default = unit(iargs:unit)
+	 As = {Adjoin Default Args}
+      in
+	 {MakeItems As.iargs}
+      end
+
+      %% Some attempt to add arg processing (each-args etc) for rargs, but this approach was not a good idea. Kept here just in case...
+%       /** %% Same as Score.makeItems, but all Score.makeItems arguments are wrapped in arg iargs for compatibility with DefSubscript.
+%       %% Arg processing (each-args etc) is supported for iargs and rargs.
+%       %% */
+%       %% NOTE: some code doublication from MakeItems
+%       proc {MakeItems_iargs Args ?Items}	 
+% 	 Defaults = unit(iargs: unit(n: 1
+% 				     constructor: Note
+% 				     handle:_
+% 				     rule: proc {$ Xs} skip end)
+% 			 rargs:unit)
+% 	 As = {GUtils.recursiveAdjoin Defaults Args}
+% 	 MyLabel = {NewName}
+% 	 %%
+% 	 fun {MakeSpecs N Args IgnoredFeats}
+% 	    RawSpec = {Record.subtractList Args IgnoredFeats}
+% 	 in
+% 	    if {IsLiteral RawSpec} then
+% 	       {LUtils.collectN N fun {$} MyLabel end}
+% 	    else 
+% 	       SpecWithLists = {Record.map RawSpec
+% 				fun {$ Param} {MakeParameterValues Param N} end}
+% 	    in
+% 	       {RecordMatTrans SpecWithLists}
+% 	    end
+% 	 end
+% 	 Rargs_Specs = {MakeSpecs As.iargs.n As.rargs nil}
+% 	 Iargs_Specs = {MakeSpecs As.iargs.n As.iargs {Arity Defaults.iargs}}
+%       in 
+% 	 Items = {Map {LUtils.matTrans [Rargs_Specs Iargs_Specs]}
+% 		  fun {$ [Rargs_Spec Iargs_Spec]}
+% 		     FullSpec = unit(iargs: Iargs_Spec
+% 				     rargs: Rargs_Spec)
+% 		  in
+% 		     {MakeScore2 {Adjoin FullSpec MyLabel} % overwrite label
+% 		      unit(MyLabel:As.iargs.constructor)}
+% 		  end}
+% 	 As.iargs.handle = Items 
+% 	 thread			% rule may block until Elements are determined
+% 	    {As.iargs.rule Items}
+% 	 end	 
+%       end
+
    end
    
-   /** %% Same as Score.makeItems, but all Score.makeItems arguments are wrapped in arg iargs for compatibility with DefSubscript.
-   %% */
-   fun {MakeItems_iargs Args}
-      Default = unit(iargs:unit)
-      As = {Adjoin Default Args}
-   in
-      {MakeItems As.iargs}
-   end
+
    
 
    /** %% Extended script which returns a container with items, not fully initialised and where many parameters can be still undetermined. The contained elements are created with Score.makeItems.
