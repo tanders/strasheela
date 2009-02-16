@@ -270,7 +270,7 @@ define
    end
 
 
-   /** %% When outputting a Lilypond file, Strasheela automatically splits very long notes (or other score objects notated by notes such as chords or scales) into multiple notes connected by ties. The maximum duration notated by a single note can be set with this porcedure. Dur is a float measured in quarternotes. For example, 2.0 indicates a halve note and 0.5 an eighth note. The maximum duration supported by Lilypond is a longa (16.0). The default is 4.0 (a whole note).
+   /** %% When outputting a Lilypond file, Strasheela automatically splits very long notes (or other score objects notated by notes such as chords or scales) into multiple notes connected by ties. The maximum duration notated by a single note can be set with this procedure. Dur is a float measured in quarternotes. For example, 2.0 indicates a halve note and 0.5 an eighth note. The maximum duration supported by Lilypond is a longa (16.0). The default is 4.0 (a whole note).
    %% It is recommended to set Dur to the length of your bars (e.g., 4.0 for 4/4).
    %%
    %% Note: this definition is an alias for Out.setMaxLilyRhythm.
