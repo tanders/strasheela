@@ -18,7 +18,7 @@ Musical constraint satisfaction problems (CSP) usually have multiple solutions. 
 
 * [[Example-FloridCounterpoint][Florid Counterpoint]]
 
-* [[Example-AutomaticMelodyHarmonisation][Automatic Melody Harmonisation]]
+* [[Example-AutomaticMelodyHarmonisation][Automatic Melody Harmonisation (Analysis)]]
 
 * [[Example-Schoenberg-TheoryOfHarmony][Schoenberg's Theory of Harmony]] 
 
