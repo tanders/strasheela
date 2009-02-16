@@ -6,7 +6,7 @@
 
 * The Constraint Satisfaction Problem
 
-This example creates a harmonisation for a given melody (e.g. a folk tune). Voicing is irrelevant in this CSP: only the chord symbols are searched for. For simplicity, this CSP defines relatively rigid basic conditions. 
+This example creates a harmonisation for a given melody. More specifically, it performs an automatic harmony analysis for a folk tune.  Voicing is irrelevant in this CSP: only the chord symbols are searched for. For simplicity, this CSP defines relatively rigid basic conditions. 
  
   - Only the major, the minor, and the dominant seventh chord are permitted.
 
