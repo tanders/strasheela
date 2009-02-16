@@ -331,7 +331,8 @@ define
 
    
    /** %% Variant of Out.scoreToEvents which deletes questionable note off events. Transformation clauses in Specs must return a list of MIDI events.
-   %% In principle, multiple notes of the same channel and pitch can overlap in a Midi file. However, there is only a single note ressource and the second note will take over this ressource. What is more problematic, however, is the fact that the first note off event will turn off the note regardless whether the first of the second note was actually longer. ScoreToEvents_Midi avoids this problem by filtering out any note off event which would switch off a note too early. Nevertheless, this function can not change the fact that Midi provides only a single ressource per channel and pitch -- the 'taking over' of this ressource (e.g. restarting of the envelope) by overlapping notes can not be avoided.  
+   %% In principle, multiple notes of the same channel and pitch can overlap in a Midi file. However, there is only a single note ressource and the second note will take over this ressource. What is more problematic, however, is the fact that the first note off event will turn off the note regardless whether the first of the second note was actually longer. ScoreToEvents_Midi avoids this problem by filtering out any note off event which would switch off a note too early. Nevertheless, this function can not change the fact that Midi provides only a single ressource per channel and pitch -- the 'taking over' of this ressource (e.g. restarting of the envelope) by overlapping notes can not be avoided.
+   %% Note that removing note off events can lead to problems when displaying the resulting files in a sequencer. A better approach might be to very slightly move note off events forward using the NoteToMidi argument noteOffOffset.
    %% */
    fun {ScoreToEvents_Midi MyScore Specs Args}
       Defaults = unit(test:fun {$ X}
@@ -447,7 +448,7 @@ define
 
 
    /** %% Creates a MIDI file from MyScore as defined in Spec (see below). OutputMidiFile creates a CSV file which is like an event list (i.e. only a single track is supported) and this file is then transformed into a MIDI file by csvmidi.
-   %% The user can control the transformation process by specifing transformation clauses. The format of such clauses is explain in the documentation of Out.scoreToEvents. In OutputMidiFile, the transformation function of each clause must return a list of MIDI events, which are created with functions like MakeNoteOn or MakeCC. This list can contain any MIDI events which correspond to the score object matching the clause (e.g., for a note, the returned MIDI events may include note-on and note-off events, pitchbend, aftertouch, and CC events etc.). However, if the argument removeQuestionableNoteoffs is true (which is recommended) then there must be at maximum a single noteOn event is present in this list and it is coupled with a corresponding noteOff event. See the documentation of ScoreToEvents_Midi for information on the meaning of removeQuestionableNoteoffs.
+   %% The user can control the transformation process by specifing transformation clauses. The format of such clauses is explain in the documentation of Out.scoreToEvents. In OutputMidiFile, the transformation function of each clause must return a list of MIDI events, which are created with functions like MakeNoteOn or MakeCC. This list can contain any MIDI events which correspond to the score object matching the clause (e.g., for a note, the returned MIDI events may include note-on and note-off events, pitchbend, aftertouch, and CC events etc.). However, if the argument removeQuestionableNoteoffs is true, then there must be at maximum a single noteOn event is present in this list and it is coupled with a corresponding noteOff event. See the documentation of ScoreToEvents_Midi for information on the meaning of removeQuestionableNoteoffs. 
    %%
    %% The default clauses are a transformation where only notes (either instances of Score.note or any subclasses such as MidiNote) are output. Clauses given with the 'clauses' argument are appended before the default clauses (so if you add a clause for MIDI notes, then the default clause still works for other notes).
    %% 
@@ -488,7 +489,7 @@ define
 	     headerEvents:nil
 	     %% clauses are appended before DefaultClauses
 	     clauses:nil
-	     removeQuestionableNoteoffs: true
+	     removeQuestionableNoteoffs: false % true
 	     scoreToEventsArgs: unit)
       MySpec = {Adjoin DefaultSpec Spec}
       DefaultHeaderEvents = [local Track=2 in % fixed track
@@ -883,18 +884,20 @@ define
    %% Args:
    %% 'noteOffVelocity': int for the note-off velocity, default 0
    %% 'round': function used for rounding the MIDI pitch float, default Floor
+   %% 'noteOffOffset' (default 0): amount by which the notes endTime is moved (e.g., a negative value to avoid overlapping noteoffs and noteons resulting in hanging notes), measured in seconds.
    %% 
    %% See NoteToUserEvent for further arguments and their meaning.
    %% */
    fun {NoteToMidi MyNote Args}
       Defaults = unit(noteOffVelocity:0
-		      round:Floor)
+		      round:Floor
+		      noteOffOffset:~0.003)
       As = {Adjoin Defaults Args}
    in
       {NoteToUserEvent MyNote
        fun {$ Track Start Channel}
 	  EndTime = {BeatsToTicks
-		     {MyNote getEndTimeInSeconds($)}}
+		     {MyNote getEndTimeInSeconds($)} + As.noteOffOffset}
 	  Pitch = {FloatToInt {As.round {MyNote getPitchInMidi($)}}}
 	  Velocity = {FloatToInt {MyNote getAmplitudeInVelocity($)}}
        in
