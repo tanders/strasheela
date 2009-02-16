@@ -9,10 +9,12 @@ import
    HS at 'x-ozlib://anders/strasheela/HarmonisedScore/HarmonisedScore.ozf'
    ET31 at '../ET31.ozf'
    DB at 'DB.ozf'
-   
+
+%    Browser(browse:Browse)
 export
    RenderAndShowLilypond
    AddExplorerOut_ChordsToScore
+   AddExplorerOuts_ArchiveInitRecord
 
    MakeChordComment MakeChordRatios MakeScaleComment
 define
@@ -343,6 +345,7 @@ define
       PcCollDescr = {MakeDescr MyPcColl}
       AddedSigns = '_\\markup{'#PcCollDescr#'}'
    in
+%       {Browse rhythms#Rhythms}
       %% if MyChord is shorter than 64th then skip it (Out.lilyMakeRhythms
       %% then returns nil)
       if Rhythms == nil
@@ -415,6 +418,25 @@ define
       As2 = {Adjoin As1 AddedArgs}
    in
       {Out.renderAndShowLilypond MyScore As2}
+   end
+
+   proc {ArchiveInitRecord I X}
+      if {Score.isScoreObject X}
+      then 
+	 FileName = out#{GUtils.getCounterAndIncr}
+      in
+	 {Out.outputScoreConstructor X
+	  unit(file: FileName
+	       prefix:"declare \n [ET31] = {ModuleLink ['x-ozlib://anders/strasheela/ET31/ET31.ozf']} \n {HS.db.setDB ET31.db.fullDB} \n MyScore \n = ")}
+      end
+   end
+
+   /** %% Adds ET31 declaration on top of *.ssco file and calls {HS.db.setDB ET31.db.fullDB}
+   %% */
+   proc {AddExplorerOuts_ArchiveInitRecord}   
+      {Explorer.object
+       add(information ArchiveInitRecord
+	   label: 'Archive initRecord (ET31)')}
    end
    
 end
