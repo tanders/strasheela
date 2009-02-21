@@ -759,7 +759,7 @@ define
    %% Example: fenvs((cc#1)#{Fenv.linearFenv [[0.0 0.0] [1.0 127.0]]}) 
    %%
    %% Args:
-   %% ccsPerSecond: how many CC events are created per second.
+   %% ccsPerSecond: how many CC events are created per second (a float).
    %% track: MIDI track to output, default 2 (suitable for more cases)
    %% channel: midi channel to output, default nil (if nil, MIDI note object CCs are output to its channel and all other to channel 0) 
    %%
@@ -768,7 +768,7 @@ define
    fun {ItemFenvsToMidiCC MyItem Args}
       Defaults = unit(track:2
 		      channel:nil
-		      ccsPerSecond: 10)
+		      ccsPerSecond: 10.0)
       As = {Adjoin Defaults Args}
       DefaultMidiChan = 0
       Channel = if  As.channel \= nil
@@ -778,7 +778,7 @@ define
 		else DefaultMidiChan
 		end
       Fenvs = {MyItem getInfoRecord($ fenvs)}
-      N = {FloatToInt {MyItem getDurationInSeconds($)} * {IntToFloat As.ccsPerSecond}}
+      N = {FloatToInt {MyItem getDurationInSeconds($)} * As.ccsPerSecond}
    in
       {LUtils.mappend {Record.toList Fenvs}
        fun {$ Controller#MyFenv}
@@ -793,20 +793,20 @@ define
    %% Example: globaltempo({Fenv.linearFenv [[0.0 30.0] [1.0 240.0]]})
    %%
    %% Args:
-   %% ccsPerSecond: how many tempo events are created per second.
+   %% ccsPerSecond: how many tempo events are created per second (a float).
    %% track: MIDI track to output, default 2 (suitable for more cases)
    %%
    %% Time shift fenvs affect the start and end of the tempo events, but not their "spacing".
    %% */
    fun {ItemTempoCurveToMidi MyItem Args}
       Defaults = unit(track:2
-		      ccsPerSecond: 10)
+		      ccsPerSecond: 10.0)
       As = {Adjoin Defaults Args}
       TempoInfo = {MyItem getInfoRecord($ globaltempo)} 
    in
       if TempoInfo \= nil then
 	 Tempo = TempoInfo.1
-	 N = {FloatToInt {MyItem getDurationInSeconds($)} * {IntToFloat As.ccsPerSecond}}
+	 N = {FloatToInt {MyItem getDurationInSeconds($)} * As.ccsPerSecond}
 	 StartTime = {Out.midi.beatsToTicks {MyItem getStartTimeInSeconds($)}}
 	 EndTime = {Out.midi.beatsToTicks {MyItem getEndTimeInSeconds($)}}
       in
@@ -853,7 +853,7 @@ define
 		      clauses:nil
 		      track:2
 		      %% new arg
-		      ccsPerSecond:10)
+		      ccsPerSecond:10.0)
       As = {Adjoin Defaults Args}
    in
       {Out.midi.renderAndPlayMidiFile MyScore
