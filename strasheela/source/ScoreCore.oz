@@ -338,6 +338,11 @@ define
       %% */
       meth addInfo(X)
 	 info <- X | @info
+      end
+      /** %% [destructive method] Adds every element in list Xs to list in attribute info. 
+      %% */
+      meth addInfos(Xs)
+	 {ForAll Xs proc {$ X} {self addInfo(X)} end}
       end  
       /** %% Returns boolean whether the list at the attr info of self contains Info. In case some info value is a record, then it is checked whether its label is Info.
       %% */
