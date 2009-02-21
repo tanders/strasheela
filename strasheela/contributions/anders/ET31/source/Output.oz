@@ -231,7 +231,8 @@ define
    %% */
    proc {MakeChordComment MyChord ?Result}
       Result = '#'('\\column { '
-		   {Out.listToVS {HS.db.getName MyChord} '; '}
+		   {HS.db.getName MyChord}.1
+% 		   {Out.listToVS {HS.db.getName MyChord} '; '}
 		   ' } ')
       if {Not {IsVirtualString Result}}
       then raise noVS(Result) end
@@ -260,10 +261,11 @@ define
       ScaleComment = {HS.db.getInternalScaleDB}.comment.{MyScale getIndex($)}
    in
       Result = '#'('\\column {'
-		   if {IsRecord ScaleComment} andthen {HasFeature ScaleComment comment}
-		   then ScaleComment.comment
-		   else ScaleComment
-		   end
+		   {HS.db.getName MyScale}.1
+% 		   if {IsRecord ScaleComment} andthen {HasFeature ScaleComment comment}
+% 		   then ScaleComment.comment
+% 		   else ScaleComment
+% 		   end
 		   ' } ')
       %% 
       if {Not {IsVirtualString Result}}
