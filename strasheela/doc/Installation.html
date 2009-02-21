@@ -93,13 +93,13 @@
 <a href="#sec13">Installation</a>
 </dt>
 <dt>
-<a href="#sec14">Update</a>
+<a href="#sec14">Edit Oz Initialisation File to Load Strasheela</a>
+</dt>
+<dt>
+<a href="#sec15">Update</a>
 </dt>
 </dl>
 </dd>
-<dt>
-<a href="#sec15">Edit Oz Initialisation File</a>
-</dt>
 <dt>
 <a href="#sec16">Install the Software for which Strasheela Supports an Output Format</a>
 </dt>
@@ -272,27 +272,7 @@ ozmake --install
 
 
 <h3><a name="sec14" id="sec14"></a>
-Update</h3>
-
-<p class="first">This section discusses how to update from an old to a new Strasheela version. In case your old Strasheela source folder contains no personal files, you can simply replace your old folder with the new one. If your old folder contains personal files (e.g., personal contributions), then you better first copy them to the new Strasheela version :)</p>
-
-<p>If  you are on UNIX, you then upgrade simply by running the script <code>Strasheela/scripts/upgrade-all.sh</code>. On Windows, you have to call <code>ozmake</code> manually, like during your first Strasheela installation. In a DOS window, move into the Strasheela top-level dictionary and enter the following.</p>
-
-<blockquote>
-<p class="quoted"></p>
-</blockquote> 
-
-<pre class="example">
-ozmake --upgrade
-</pre>
-
-<p>Then repeat this command in every Strasheela contribution directory.</p>
-
-
-
-
-<h2><a name="sec15" id="sec15"></a>
-Edit Oz Initialisation File</h2>
+Edit Oz Initialisation File to Load Strasheela</h3>
 
 <p class="first">You will usually want to load Strasheela automatically whenever you start Oz. For this purpose, please edit the Oz initialisation file. Strasheela provides the initialisation file template <code>Strasheela/_ozrc</code>, edit this template file according to your system.<sup><a class="footref" name="fnr.3" href="#fn.3">3</a></sup> A special template <code>Strasheela/_WindowsOZRC</code> is provided for Windows which demonstrates how Windows pathes are entered (this template still requires editing according to your system).
 Several settings in the initialisation file templates depend on the software for which Strasheela supports an output format (see below).
@@ -311,7 +291,7 @@ Also, you may want to add the Oz applications (e.g., the Strasheela tutorial) to
 export PATH=~/.oz/1.3.2/bin/:$PATH
 </pre>
 
-<p>You can test your setting by executing the following at the commmand line (first logout/login again or at least open a new terminal).</p>
+<p>You can test your <code>PATH</code> setting by executing the following at the commmand line (first logout/login again or at least open a new terminal).</p>
 
 <blockquote>
 <p class="quoted"></p>
@@ -320,6 +300,27 @@ export PATH=~/.oz/1.3.2/bin/:$PATH
 <pre class="example">
 StrasheelaTutorial
 </pre>
+
+
+
+<h3><a name="sec15" id="sec15"></a>
+Update</h3>
+
+<p class="first">This section discusses how to update from an old to a new Strasheela version. In case your old Strasheela source folder contains no personal files, you can simply replace your old folder with the new one. If your old folder contains personal files (e.g., personal contributions), then you better first copy them to the new Strasheela version :)</p>
+
+<p>If  you are on UNIX, you then upgrade simply by running the script <code>Strasheela/scripts/upgrade-all.sh</code>. On Windows, you have to call <code>ozmake</code> manually, like during your first Strasheela installation. In a DOS window, move into the Strasheela top-level dictionary and enter the following.</p>
+
+<blockquote>
+<p class="quoted"></p>
+</blockquote> 
+
+<pre class="example">
+ozmake --upgrade
+</pre>
+
+<p>Then repeat this command in every Strasheela contribution directory.</p>
+
+
 
 
 <h2><a name="sec16" id="sec16"></a>
@@ -440,7 +441,7 @@ scripts/install-all.sh <span style="color: #bc8f8f;">\</span>
 <div id="footer">
 <div id="author">&copy; 
 Torsten Anders</div>
-<div id="date">Last time edited: 2008.11.27</div>
+<div id="date">Last time edited: 2009.02.18</div>
 </div>
   </body>
 </html>

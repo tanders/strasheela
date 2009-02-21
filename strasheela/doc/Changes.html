@@ -47,12 +47,13 @@
 <ul>
 <li>Extensively revised example Schoenberg-TheoryOfHarmony.oz (before called HomophonicChordProgression.oz): now features solver calls for many variations on the theory of harmony</li>
 <li>Page for <a href="Example-MEWER.html">MEWER</a> application added to list of examples</li>
+<li>examples/Form-Examples/FriendlyMusicExample.oz: Fixed bug in distro (was orelse instead of andthen)</li>
 </ul></li>
 
 <li>Extensions and simplifications for score creation
 
 <ul>
-<li>Added Score.makeItems, Score.defSubscript</li>
+<li>Added Score.makeItems, Score.defSubscript, ItemslistToContainerSubscript</li>
 <li>Score.makeScore: more convenient notation variant supported for nested scores. The following two examples are now equivalent.
 
 <ul>
@@ -69,8 +70,9 @@
 <ul>
 <li>HS.rules.schoenberg: added ProgressionSelector, ResolveDissonances, IndexCardinality SetEachChordType SetEachScaleType RequireChordTypes</li>
 <li>HS.score: added MakeChords MakeScales GetDegree</li>
-<li>Pattern: added ForAllItems MapItems FirstToLastDistance DxsToXs XsToDxs EqualizeParam MakeIndexConstructor GetMotifIndex FenvBoundaries</li>
+<li>Pattern: added WindowedPattern WindowedPatternRecursions ForAllItems MapItems FirstToLastDistance DxsToXs XsToDxs EqualizeParam MakeIndexConstructor GetMotifIndex FenvBoundaries Arc</li>
 <li>ET31: added many chords and scales to database (origin is Scala's list of 31 ET chords and modi)</li>
+<li>GUtils: added RecursiveAdjoin, KeepList</li>
 </ul></li>
 
 <li>Bug fixes and changes
@@ -90,14 +92,22 @@
 <li>Fixed MaxNonharmonicNoteSequence (before limited number of harmonic instead of non-harmonic tones)</li>
 <li>Added ExpressAllChordPCs_AtChordEnd</li>
 </ul></li>
-<li>GUtils: simplified IsDivisible implementation</li>
-<li>Score method toInitRecord: now outputs strings (e.g., for lilypond) as proper strings
-
-<ul>
+<li>HS.score: Refactored TransposeDegree: expected scale/chord PCs as list, now FS</li>
+<li>HS.score: efficiency improvements: TransposePC: use FD.modD instead of FD.modI. PitchClassCollection initialisation: constrain that root (untransposed root) is in PCs (untransposed PCs) for better propagation.</li>
+<li>HS.score: new default for all args getChords/getScales: list with single simultaneous chord/scale (with findSimultaneousItem), nil (old default) if none is found</li>
+<li>HS.distro: Fixed bug in IsNoTimepointNorPitch (was orelse instead of andthen)</li>
+<li>GUtils: simplified IsDivisible implementation, added RelationComplement, ConstrainRelation</li>
+<li>Score method toInitRecord: now outputs strings (e.g., for lilypond) as proper strings</li>
 <li>Out: Revised RecordToVS: now outputs strings as strings, preserves escape sequences etc. Added RecordToVS_simple</li>
-</ul></li>
+<li>Out: Last note of automatically split and tied notes was longer than what has been set by Out.setMaxLilyRhythm, now fixed</li>
 <li>Score: Revised ScoreObject method unify: new args exclude, and derive</li>
 <li>Out.saveScore: fixed (added wrote prefix)</li>
+<li>ET31.out: Substatianlly refactored Lilypond output of analytical information (chords, scales), now more flexible</li>
+<li>LUtils: Refactored EveryNth (new arg Offset), added OddPositions EvenPositions</li>
+<li>Score: Refactored ScoreObject method init: not-explicitly cared-for arguments are ignored now (a warning is printed)</li>
+<li>Score: added ScoreObject method addInfos (complements addInfo)</li>
+<li>Midi output: Note off timing revised: when a note on event and the preceeding note off event occur at exactly the same time, some MIDI devices have problems. So far, Strasheela be default simply removed (OutputMidiFile arg removeQuestionableNoteoffs defaulted to true). Now, by default such note offs are very slightly moved forward (NoteToMidi new arg noteOffOffset defaults to ~0.003, measured in secs &mdash; NoteToMidi is used by default for outputting MIDI notes (matching OutputMidiFile clause with test isNote).</li>
+<li>Fenv: Changed ItemFenvsToMidiCC and ItemTempoCurveToMidi arg ccsPerSecond from int to float</li>
 </ul></li>
 
 <li>For further fixes see the <a href="../CHANGELOG.txt">../CHANGELOG.txt</a>.</li>
@@ -728,7 +738,7 @@ See the documentation for <a href="../contributions/anders/HarmonisedScore/doc/n
 <div id="footer">
 <div id="author">&copy; 
 Torsten Anders</div>
-<div id="date">Last time edited: 2009.01.17</div>
+<div id="date">Last time edited: 2009.02.21</div>
 </div>
   </body>
 </html>
