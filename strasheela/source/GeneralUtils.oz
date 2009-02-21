@@ -25,7 +25,7 @@ export
    XOr Cases
    IsFS MakeSingletonSet IntsToFS
 
-   RelationComplement
+   RelationComplement ConstrainRelation
    
    Percent
    
@@ -124,6 +124,19 @@ define
       [] '=<:' then '>=:'
       [] '=:' then '\\=:'
       [] '\\=:'then '=:'
+      end
+   end
+
+   /** %% Constraints the relation between the FD ints X and Y according to A, a FD relation atom ('<:', '=<:', '>:', '>=:', '=:', or '\\=:'). 
+   %% */
+   proc {ConstrainRelation X Y A}
+      case A
+      of '>:' then X >: Y
+      [] '>=:' then X >=: Y 
+      [] '<:' then X <: Y  
+      [] '=<:' then X =<: Y  
+      [] '=:' then X =: Y 
+      [] '\\=:' then X \=: Y 
       end
    end
 
