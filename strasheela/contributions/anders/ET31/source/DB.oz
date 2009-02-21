@@ -276,7 +276,7 @@ define
 			 roots:[1#7] 
 			 essentialPitchClasses:[1#3 1#4 1#5 1#7]
 %				dissonanceDegree:2
-			 comment:unit(name:['Tristan chord' 'subharmonic half-diminished 7th' 'subharmonic 6th' 'minor septimal 6th']))
+			 comment:unit(name:['subharmonic 6th' 'Tristan chord' 'subharmonic half-diminished 7th' 'minor septimal 6th']))
 		   %% !!!
 % 		   chord(pitchClasses:['C' 'D#' 'F#' 'A#'] % same as C Eb G A|
 % 			 roots:['D#'] % 'C'
@@ -337,7 +337,7 @@ define
 			 roots:[44#1] %% 
 			 essentialPitchClasses:[44#1 56#1 66#1 77#1]
 %				dissonanceDegree:2
-			 comment:unit(name:['NM rebounding 7th' 'focal 7th']))
+			 comment:unit(name:['focal 7th' 'NM rebounding 7th']))
 		   
 		   %% same as sixte ajoutee, but different root
 		   %% non-reversable chord
@@ -369,7 +369,7 @@ define
 			 roots:['C'] %% 
 			 essentialPitchClasses:['C' 'F' 'G' 'D']
 %				dissonanceDegree:2
-			 comment:unit(name:['fourth-ninth chord' '9/4' 'sus4add9' '2nd-4th-5th' 'quartal tetrad']))
+			 comment:unit(name:['quartal tetrad' 'fourth-ninth chord' '9/4' 'sus4add9' '2nd-4th-5th']))
 % 		   chord(pitchClasses:['C' 'F' 'Bb' 'Eb'] % 
 % 			 roots:['C'] %% 
 % 			 essentialPitchClasses:['C' 'F' 'Bb' 'Eb']
@@ -506,7 +506,7 @@ define
 	       %% Scale consists of 2 sets of 3-limit intervals which are related by a 7/4. Together, they approximate minor.
 	       scale(pitchClasses:['C' 'D' 'D#' 'F' 'G' 'G#' 'A#']
 		     roots:['C'] 
-		     comment:unit(name:['septimal natural minor' 'septimal minor']))
+		     comment:unit(name:['septimal minor' 'septimal natural minor']))
 
 	       %%
 	       %% Euler-Fokker genera
