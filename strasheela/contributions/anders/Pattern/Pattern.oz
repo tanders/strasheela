@@ -145,15 +145,8 @@ define
    %% reified PlainPattern def.)
    proc {Continuous Xs A}
       {PlainPattern Xs
-       proc {$ X Predecessor}	
-	  case A
-	  of '>:' then Predecessor >: X
-	  [] '>=:' then Predecessor >=: X 
-	  [] '<:' then Predecessor <: X  
-	  [] '=<:' then Predecessor =<: X  
-	  [] '=:' then Predecessor =: X 
-	  [] '\\=:' then Predecessor \=: X 
-	  end
+       proc {$ X Predecessor}
+	  {GUtils.constrainRelation Predecessor X A}
        end}
    end
    /** %% Constrain all elements in Xs to be greater then their predecessor in Xs.
@@ -177,15 +170,17 @@ define
    %%
    %% Args:
    %% 'firstRel' (default '<:'): a relation atom ('<:', '=<:', '>:', '>=:')
-   %% 'tuningPointPos' (default mid): specifies at which position within Xs the arc changes direction, positive int or atom mid
+   %% 'turningPointPos' (default mid): specifies at which position within Xs the arc changes direction, positive int or atom mid
    %% */
    proc {Arc Xs Args}
       Default = unit(firstRel: '<:'
-		     tuningPointPos: mid)
+		     turningPointPos: mid)
       As = {Adjoin Default Args}
-      Pos = if As.tuningPointPos == mid then
-	       {Length Xs} div 2
-	    else As.tuningPointPos
+      Pos = if As.turningPointPos == mid then
+	       L = {Length Xs}
+	    in
+	       L div 2 + if {IsOdd L} then 1 else 0 end
+	    else As.turningPointPos
 	    end
       Ys Zs
    in
