@@ -41,7 +41,8 @@
     - HS.score: new default for all args getChords/getScales: list with single simultaneous chord/scale (with findSimultaneousItem), nil (old default) if none is found 
     - HS.distro: Fixed bug in IsNoTimepointNorPitch (was orelse instead of andthen)
     - GUtils: simplified IsDivisible implementation, added RelationComplement, ConstrainRelation
-    - Score method toInitRecord: now outputs strings (e.g., for lilypond) as proper strings 
+    - Score: ScoreObject method toInitRecord: now outputs strings (e.g., for lilypond) as proper strings 
+    - Score: ScoreObject method unify: added arg overwrite. Method toFullRecord: added arg unbind.
     - Out: Revised RecordToVS: now outputs strings as strings, preserves escape sequences etc. Added RecordToVS_simple
     - Out: Last note of automatically split and tied notes was longer than what has been set by Out.setMaxLilyRhythm, now fixed
     - Score: Revised ScoreObject method unify: new args exclude, and derive 
