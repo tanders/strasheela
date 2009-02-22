@@ -72,6 +72,10 @@ Strasheela is a highly expressive constraint-based music composition system.[2] 
 
 ------------
 
+  *Strasheela is developed at the [[http://cmr.soc.plymouth.ac.uk/index.html][Interdisciplinary Centre of Computer Music Research]] at the [[http://www.plymouth.ac.uk/][University of Plymouth]], and funded by the [[http://www.lestrum.org/Site/Welcome.html][Le StruM project]].* 
+
+------------
+
 [1] Illustration by Leonid Vladimirsky from: Alexandr M. Volkov (1939, revised in 1959). *The Wizard of the Emerald City*, Soviet Russia Publishers.  
 
 [2] Strasheela is also the name of an amicable and stubby scarecrow in the children's novel [[http://emeraldcity.ru/eng/books.htm#volshebnik][The Wizard of the Emerald City]] by Alexandr M. Volkov, in which the Russian author retells *The Wonderful Wizard of Oz* by L. Frank Baum. The latter inspired the name for the programming language Oz, which forms the foundation for the Strasheela composition system. 
