@@ -697,18 +697,22 @@ define
       
       
       /** %% Outputs the whole score object tree as a record with the the object label as record label and with all the object attributes and object features as record features. All attributes/features containing score objects themself are called recursively, dictionaries and extendable lists (see LUtils) are transformed to records resp. lists.
-      %% The argument exclude allows to recursively exclude object attributes in the output.
+      %%
+      %% Args: 
+      %% 'exclude' (default nil): list of attribute names (list of atoms) recursively excluded in the output.
+      %% 'unbind' (default nil): list of attribute names (list of atoms) which are output, but whose value is set to a free variable.
+      %%
       %% !! Temp: The attributes 'item' and 'containers' are always excluded to avoid endless loops. Therefore, score graphs with items having more then a single container can not be shown.
       %% */
-      meth toFullRecord(?X exclude:Exclude<=nil)
+      meth toFullRecord(?X exclude:Exclude<=nil unbind:Unbind<=nil)
 	 fun {GetProperVal Val}
 	    if {Not {IsDet Val}}
 	    then Val
 	    elseif {IsScoreObject Val}
-	    then {Val toFullRecord($ exclude:Exclude)}
+	    then {Val toFullRecord($ exclude:Exclude unbind:Unbind)}
 	    elseif {LUtils.isExtendableList Val}
 	    then {Map Val.list fun {$ X}
-				  {X toFullRecord($ exclude:Exclude)}
+				  {X toFullRecord($ exclude:Exclude unbind:Unbind)}
 			       end}
 	    elseif {IsDictionary Val}
 	    then {Dictionary.toRecord dict Val}
@@ -729,9 +733,19 @@ define
       in
 	 X = {Adjoin
 	      {Record.mapInd Attrs
-	       fun {$ I A} {GetProperVal @I} end}
+	       fun {$ I A} 
+		  if {Not {Member I Unbind}} then
+		     {GetProperVal @I}
+		  else _
+		  end
+	       end}
 	      {Record.mapInd Feats
-	       fun {$ I A} {GetProperVal self.I} end}}
+	       fun {$ I A} 
+		  if {Not {Member I Unbind}} then
+		     {GetProperVal self.I}
+		  else _
+		  end
+	       end}}
       end
 %       %% Outputs the object as a record with the the object lable as record label  and with all its attributes as record features. 
 %       
@@ -743,6 +757,7 @@ define
       %%
       %% Args:
       %% 'exclude' (default [startTime endTime]): list of attribute names (list of atoms) to ignore, see arg 'exclude' for toFullRecord. (The internal attributes 'parameters' and 'flags' are always excluded.)
+      %% 'overwrite' (default nil): list of attribute names (list of atoms) to keep as declared in self (i.e. the setting in ScoreObject is quasi overwritten).
       %% 'derive' (default nil): for unifying derived score information (e.g., exclude the pitches, but unify pitch intervals, see example below). List of unary functions expecting the full score (self or ScoreObject) and returning a data structure to unify.
       %%
       %% Example:
@@ -759,10 +774,14 @@ define
 			    end])}
       %% NB: only works properly for tree-form score topologys (because of limitation of toFullRecord). 
       %% */ 
-      meth unify(ScoreObject exclude:Exclude<=[startTime endTime] derive:Derive<=nil)
+      meth unify(ScoreObject
+		 overwrite:Overwrite<=nil
+		 exclude:Exclude<=[startTime endTime]
+		 derive:Derive<=nil)
 	 % the flags attribute is only for internal use and is bound to some stateful data structure..
 	 {self toFullRecord($ exclude:flags|parameters|Exclude)}
-	 = {ScoreObject toFullRecord($ exclude:flags|parameters|Exclude)}
+	 = {ScoreObject toFullRecord($ exclude:flags|parameters|Exclude
+				     unbind: Overwrite)}
 	 {ForAll Derive proc {$ P} {P self} = {P ScoreObject} end}
       end
 
