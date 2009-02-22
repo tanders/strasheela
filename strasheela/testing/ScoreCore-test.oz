@@ -1151,6 +1151,24 @@ Score2 = {Score.makeScore seq(items:[note note note])
 % -> true 
 
 
+%%%%%
+
+%%
+%% using arg overwrite
+%%
+
+declare
+N1 = {Score.make note(duration: 1 amplitude: 100) unit}
+N2 = {Score.make note(duration: 2 pitch: 60) unit}
+
+%% keep duration of N1 but get pitch of N2.
+%% note: amplitude and offset default to determined values, so if different they must be excluded or overwritten as well 
+{N1 unify(N2 overwrite: [duration amplitude])}
+
+{N1 toInitRecord($)}
+
+
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%5
 %%
 %% unify
