@@ -52,13 +52,15 @@ define
       %% need lily out def supporting chords -- which is defined below
       {RenderLilypondHS MyScore unit(file:File
 				     dir:OutDir
-				     flags:["--preview"])}   
+% 				     flags:["--preview"]
+				    )}   
    end
    proc {ToSheetMusic_ShowRatios MyScore OutDir File}
       %% need lily out def supporting chords -- which is defined below
       {RenderLilypondHS_ShowRatios MyScore unit(file:File
 						dir:OutDir
-						flags:["--preview"])}   
+% 						flags:["--preview"]
+					       )}   
    end
    
    proc {ToSound MyScore OutDir File}
@@ -231,7 +233,7 @@ define
 					   if {Not {IsVirtualString ChordDescr}}
 					   then raise noVS(chordDesc:ChordDescr) end
 					   end
-					   RootMicroPitch#'_\\markup{\\column < '#ChordDescr#' > }'
+					   RootMicroPitch#'_\\markup{\\column { '#ChordDescr#' } }'
 					end}
 		      %% marking non-chord pitch notes
 		      isNote#{Out.makeNoteToLily DefaultAddedSigns}
@@ -244,14 +246,14 @@ define
       fun {MakeChordDescr MyChord}
 	 %% Transform chord PCs into ratios according to Partch
 	 %% interval DB (Transposition x untransposed PC)
-	 '\\column < '#	 
+	 '\\column { '#	 
 	 {PC2RatioVS {MyChord getTransposition($)}}#
 	 ' x ('#
 	 {Out.listToVS {Map {FS.reflect.lowerBoundList
 			     {MyChord getUntransposedPitchClasses($)}}
 			PC2RatioVS}
 	  ' '}#
-	 ') >' 
+	 ') }' 
       end
    in
       {Out.renderLilypond MyScore
