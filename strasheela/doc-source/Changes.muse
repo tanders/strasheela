@@ -28,6 +28,7 @@
     - ET31: added many chords and scales to database (origin is Scala's list of 31 ET chords and modi)
     - GUtils: added RecursiveAdjoin, KeepList, IsRatio, RatioToFloat
     - MUtils: added TransposeRatioIntoStandardOctave, RatioToStandardOctaveFloat, SortRatios, SortRatios2
+    - Out.toLilypond: added args hasImplicitStaff, hasBreak. Added IsOutmostSim.
 
   - Bug fixes and changes
     - HS.db: GetChordIndex/GetScaleIndex/GetIntervalIndex: database entries can now have multiple alternative names. When such entries are defined with SetDB, the subfeature 'name' of the feature 'comment' has a list of names (atoms).
