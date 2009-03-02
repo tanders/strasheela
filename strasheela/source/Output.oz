@@ -81,7 +81,7 @@ export
    LilyMakePitch LilyMakeFromMidiPitch LilyMakeMicroPitch LilyMakeEt72MarkFromMidiPitch
    PauseToLily LilyRest
    LilyMakeRhythms LilyMakeRhythms2 
-   IsOutmostSeq IsSingleStaffPolyphony SingleStaffPolyphonyToLily IsLilyChord SimToLilyChord GetUserLily
+   IsOutmostSeq IsOutmostSim IsSingleStaffPolyphony SingleStaffPolyphonyToLily IsLilyChord SimToLilyChord GetUserLily
    SetMaxLilyRhythm
    
    %% 
@@ -415,7 +415,7 @@ define
 	 fun {$ X} true end
 	 #fun {$ X} 
 	     %%raise unsupportedClass(Score MakeHierarchicVSScore) end
-	     {GUtils.warnGUI "Score contains object for which no clause was defined!"}
+	     {GUtils.warnGUI "Score contains object ("#{Value.toVirtualString X 1 1}#") for which no clause was defined!"}
 %	     {Browse warn#unsupportedClass(Score MakeHierarchicVSScore)}
 	     ''
 	  end]}}
@@ -1027,7 +1027,7 @@ define
    end
 
    
-   /** %% [for clause definitions] Tests whether X is an Outmost sequential container, i.e. a container which has no direct or indirect temporal container which is also a sequential container. X is either the top-level container, or (the most common case) contained in a top-level simultaneous container.
+   /** %% [for clause definitions and arg hasImplicitStaff] Tests whether X is an Outmost sequential container, i.e. a container which has no direct or indirect temporal container which is also a sequential container. X is either the top-level container, or (the most common case) contained in a top-level simultaneous container.
    %% An outmost sequential implicitly creates a staff by default. 			%% */
    fun {IsOutmostSeq X}
       %% Returns true if Y has a sequential as either direct or indirect container
@@ -1043,50 +1043,43 @@ define
       {Not {X hasTemporalContainer($)} andthen
        {{X getTemporalContainer($)} hasTemporalContainer($)}}
    end
-	  
-   local
-      %% average pitch decides clef
-      %% LilyClefs = clef(bass_8 bass violin "violin^8")
-      fun {DecideClef X}
-	 %% simple check avarage pitch got confused with pitch classes
-	 %% (note pitch class and chord root are also pitches)
-	 Pitches = {X map($ getValueInMidi test:fun {$ X}
-						   {X isPitch($)} andthen
-						   {Not {X hasThisInfo($ pitchClass)}}
+
+   /** %% [for clause definitions and arg hasImplicitStaff] Tests whether X is a simultaneous container and there is no simultaneous container in which X is nested.
+   %% */
+   fun {IsOutmostSim X}
+      {Score.isScoreObject X} andthen
+      {X isSimultaneous($)} andthen
+      {All {X getContainersRecursively($)}
+       fun {$ C} {Not {C isSimultaneous($)}} end}
+   end
+
+   
+   %% average pitch decides clef
+   %% LilyClefs = clef(bass_8 bass violin "violin^8")
+   fun {DecideClef X}
+      %% simple check avarage pitch got confused with pitch classes
+      %% (note pitch class and chord root are also pitches)
+      Pitches = {X map($ getValueInMidi test:fun {$ X}
+						{X isPitch($)} andthen
+						{Not {X hasThisInfo($ pitchClass)}}
 						% {{X getItem($)} isNote($)}
-						end)}
-	 AveragePitch = {FoldL Pitches Number.'+' 0.0} / {IntToFloat
-							  {Length Pitches}}
-      in
-	 if AveragePitch < 12.0 then "\"bass_29\""
-	 elseif AveragePitch < 24.0 then "\"bass_22\""
-	 elseif AveragePitch < 36.0 then "\"bass_15\""
-	 elseif AveragePitch < 48.0 then "\"bass_8\""
-	 elseif AveragePitch < 60.0 then bass
-	 elseif AveragePitch < 72.0 then violin
-	 elseif AveragePitch < 84.0 then "\"violin^8\""
-	 elseif AveragePitch < 96.0 then "\"violin^15\""
-	 elseif AveragePitch < 108.0 then  "\"violin^22\""
-	 else "\"violin^29\""
-	 end
-      end
+					     end)}
+      AveragePitch = {FoldL Pitches Number.'+' 0.0} / {IntToFloat
+						       {Length Pitches}}
    in
-      /** %% Create a staff and clef for Seq, then output Seq
-      %% */
-      %% Not exported
-      fun {OutmostSeqToLily Seq Args}
-	 Staff = if Args.implicitStaffs
-		 then "\\new Staff "#"{ \\clef "#{DecideClef Seq}
-		 else ""
-		 end
-	 Closing = if Args.implicitStaffs
-		 then " }"
-		 else ""
-		 end
-      in
-	 "\n "#Staff#" "#{SeqToLily Seq Args}#Closing
+      if AveragePitch < 12.0 then "\"bass_29\""
+      elseif AveragePitch < 24.0 then "\"bass_22\""
+      elseif AveragePitch < 36.0 then "\"bass_15\""
+      elseif AveragePitch < 48.0 then "\"bass_8\""
+      elseif AveragePitch < 60.0 then bass
+      elseif AveragePitch < 72.0 then violin
+      elseif AveragePitch < 84.0 then "\"violin^8\""
+      elseif AveragePitch < 96.0 then "\"violin^15\""
+      elseif AveragePitch < 108.0 then  "\"violin^22\""
+      else "\"violin^29\""
       end
    end
+	  
 
    /** %% [for clause definitions] Accesses tuple with label 'lily' in info feature of X, and returns VS (concatenating all lily tuple elements). The lily tuple must only contain VSs.
    %% */
@@ -1217,7 +1210,6 @@ define
 	 TupletContinuationClause | TupletStartClauses
       end
    end
-   
 
 
    /** %% [for clause definitions] like ToLilypond, except only the bare Lilypond score is created. That is, no Lilypond version number is inserted in the output, nor is the wrapper Lilypond code inserted (see wrapper argument of ToLilypond).
@@ -1233,14 +1225,41 @@ define
 	 %% NOTE: these are the default Lily output clauses
 	 %%
 	 [
-	  IsOutmostSeq#fun {$ X} {OutmostSeqToLily X As} end
-	 
+	  fun {$ X}
+	     {X isContainer($)} andthen {As.hasImplicitStaff X} 
+	  end#fun {$ C}  %% Create a staff and clef for C, then output C
+	      Staff = if Args.implicitStaffs
+		      then "\\new Staff "#"{ \\clef "#{DecideClef C}
+		      else ""
+		      end
+	      Closing = if Args.implicitStaffs
+			then " }"
+			else ""
+			end
+	   in
+	      "\n "#Staff#" "#if {C isSequential($)}
+			      then {SeqToLily C As}
+			      elseif {C isSimultaneous($)}
+			      then {SimToLily C As}
+			      end#Closing
+	   end
+	  
 	  isSequential#fun {$ X} {SeqToLily X As} end
 
 	  IsSingleStaffPolyphony#fun {$ X} {SingleStaffPolyphonyToLily X As} end
 	 
 	  IsLilyChord#SimToLilyChord
 
+	  fun {$ X}
+	     {X isContainer($)} andthen {As.hasBreak X}  
+	  end#fun {$ C}
+		 if {C isSequential($)}
+		 then {SeqToLily C As}
+		 elseif {C isSimultaneous($)}
+		 then {SimToLily C As}
+		 end#" \\break"
+	      end
+	  
 	  isSimultaneous#fun {$ X} {SimToLily X As} end
 	 
 	 %% enharmonic note output
@@ -1278,7 +1297,7 @@ define
 	   % Otherwise clause
 	  fun {$ X} true end
 	  #fun {$ X}
-	      {GUtils.warnGUI "Score contains object for which no clause for Lilypond output was defined!"}
+	      {GUtils.warnGUI "Score contains object ("#{Value.toVirtualString X 1 1}#") for which no clause for Lilypond output was defined!"}
 %	      {Browse warn#unsupportedClass(X ToLilypond2)}
 	      ''
 	   end]}
@@ -1293,15 +1312,24 @@ define
    %% Note and pause objects (rests) are notated as expected, including ties for complex durations. However, their duration must exceed the minimum duration value supported (a 64th), shorted durations (or shorter tired fractions) are ignored. Also, offset times of score objects are notated as rests in front of the objects (again, except its duration is less than the minimum duration value supported (offset time notation is not supported by default for a top-level simultaneous container). 
    %% Enharmonic notation is supported for enharmonic note objects (subclasses of HS.score.enharmonicSpellingMixinForNote such as HS.score.enharmonicNote). Tuplet output is supported via clauses conveniently created with the function MakeLilyTupletClauses (see there).
    %% 
-   %% ToLilypond expects the following further arguments. The optional argument 'clauses' provides much control on how the Lilypond output is conducted. Internally, almost all functionality of ToLilypond is also defined by such clauses: further special cases (as described above) can be defined, or the default ones overwritten. 'clauses' expects a list of the form [Test1#ProcessingFun1 ...]. TestN and ProcessingFunN are both unary functions expecting a score object (an item instance such as notes or containers). If the Boolean function TestN is the first clause test which returns true for a score object in MyScore, then ProcessingFunN will create the Lilypond VS for this object. For example, the user may define a subclass of Score.note with an additional articulation attribute (e.g. values may be staccato, tenuto etc.) and the user then defines a clause which causes Lilypond to show the articulation by its common sign in the printed score.
-   %% The argument 'wrapper' expects a list of two VSs with legal Lilypond code. These VSs are inserted at the beginning and the end respecitively of the Lilypond score. Note that the Lilypond version statement is hardwired -- you should not add a version statement to your header (there is a 'version' argument expecting the version number as a VS, use at own risk). 
+   %% Args: 
+   %% 'clauses' (list of function or method pairs): The optional argument 'clauses' provides much control on how the Lilypond output is conducted. Internally, almost all functionality of ToLilypond is also defined by such clauses: further special cases (as described above) can be defined, or the default ones overwritten. 'clauses' expects a list of the form [Test1#ProcessingFun1 ...]. TestN and ProcessingFunN are both unary functions expecting a score object (an item instance such as notes or containers). If the Boolean function TestN is the first clause test which returns true for a score object in MyScore, then ProcessingFunN will create the Lilypond VS for this object. For example, the user may define a subclass of Score.note with an additional articulation attribute (e.g. values may be staccato, tenuto etc.) and the user then defines a clause which causes Lilypond to show the articulation by its common sign in the printed score.
+   %% 'wrapper' (list of two strings): The argument 'wrapper' expects a list of two VSs with legal Lilypond code. These VSs are inserted at the beginning and the end respecitively of the Lilypond score. Note that the Lilypond version statement is hardwired -- you should not add a version statement to your header (there is a 'version' argument expecting the version number as a VS, use at own risk).
+   %% 'implicitStaffs' (Boolean): whether staff declarations are created automatically.
+   %% 'hasImplicitStaff' (unary Boolan function): test for which containers staff declarations are created automatically (only supported for containers).
+   %% 'hasBreak' (Boolean): test after which container \break is inserted.
+   %%
    %% Arbitrary Lilypond code can be added to container and note objects via a tuple with the label 'lily' given to the info attribute of the score object. This tuple must only contain VSs which are legal Lilypond code. For containers, this lilypond code is always inserted in the Lilypond output before the container, for notes it is inserted after the note.
+   %%
    %% The argument defaults are shown below. 
    
    unit(clauses:nil
 	wrapper:["\\paper {}\n\n\\score{" %% empty paper def
 		 "\n}"]
-	implicitStaffs:true)
+	implicitStaffs:true
+	hasImplicitStaff: IsOutmostSeq
+	hasBreak: fun {$ X} false end
+	version:"2.10.0")
 
    %% */
    fun {ToLilypond MyScore Args}
@@ -1309,7 +1337,10 @@ define
 		      wrapper:["\\paper {}\n\n\\score{" %% empty paper def
 			       "\n}"]
 		      implicitStaffs:true
-		      version:"2.10.0")
+		      hasImplicitStaff: IsOutmostSeq
+		      hasBreak: fun {$ X} false end
+		      version:"2.10.0"
+		     )
       As = {Adjoin Default Args}
    in
       if {Not {MyScore isDet($)}} then
