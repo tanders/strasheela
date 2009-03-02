@@ -7,7 +7,10 @@
    In particular, collect example files in contribution examples subfolders centrally in srasheela/examples (possibly in subfolders there)
 
 
-** 'Interesting arpeggio' example [[file:~/oz/music/Strasheela/private/examples/forOlleRomo/Arpeggio.oz][Arpeggio.oz]]
+** TODO 'Interesting arpeggio' example [[file:~/oz/music/Strasheela/private/examples/forOlleRomo/Arpeggio.oz][Arpeggio.oz]]
+
+   *Implementation strait-forward with Pattern.fenvContour*
+
 
    [?? Wait until I have prototype-based motif model -- he wants to
    shape duration and velo parameters with functions, I can do that
@@ -22,6 +25,8 @@
   
 *** Describe task in English, mentioning Strasheela techniques to use
 *** Implement description
+
+    
 
 
 ** Schoenberg Harmony							  :WAIT:
@@ -849,6 +854,28 @@ piwik_log(piwik_action_name, piwik_idsite, piwik_url);
 
 * Strasheela design					      :MAYBE:STRASHEELA:
 
+** saving textual scores with procs, fenvs, classes etc 
+
+   procs, fenvs, classes can be pickled
+
+   Idea: output each of these data in (their own ?) pickle file and in the *.ssco Load these pickles in order to restore the score
+   For example, I may create some folder <myfile>-pickles just next to the *.ssco file
+   I then have to set the current dir in *.ssco file to dir where this file is contained
+   
+   This solution would be much better than storing a fenv by interpolation data..
+ 
+
+** Subscript mixins
+
+   Goal: "factor out" specific constraints (and corresponding args) of subscripts to make these defs more flexible
+   Example: having rhythm defined in "mixing" and added only when need to subscripts applying counterpoint constraints and/or constraining pitch countour
+
+   First idea: extend Score.defSubscript by new arg mixins (complements arg super)
+   Mixin only applies constraints and hands args to constraints
+   Each mixin defined by some abstraction similar to Score.defSubscript: default args are declared and constraint application by proc
+   Score.defSubscript internally then applies procs of all mixins (and cares for the default etc args!)
+
+
 ** Constrain form with graph constraints 
 
 *** Ask Gustavo Gutierrez (gustavo.ggutierrez@gmail.com) about current stage of GeOz
@@ -1481,6 +1508,15 @@ From this viewpoint, there is an interesting polarity between major and harmonic
 
     [[file:~/oz/music/Strasheela/private/0-privateContributions/ET22/source/DB.oz::functor]]
 
+*** Make limits constrainable (e.g., for chord root intervals)
+
+    cf. how I did this in [[file:~/oz/music/Strasheela/strasheela/trunk/strasheela/examples/05-MicrotonalChordProgression.oz::proc%20RestrictRootPrimeLimit%20Chords%20MaxLimit][file:~/oz/music/Strasheela/strasheela/trunk/strasheela/examples/05-MicrotonalChordProgression.oz::proc RestrictRootPrimeLimit Chords MaxLimit]]
+
+    Add limit to interval databases (e.g., ET22 or ET31: problem if they temper out commas, there can be multiple limit interpretations)
+
+    Add ready-made constraint for constraining the limit given a (PC) interval
+
+
 *** Better understand decatonic scales					  :NEXT:
 
 **** Analyse their intervals (incl JI interpretations)
@@ -1664,6 +1700,16 @@ From this viewpoint, there is an interesting polarity between major and harmonic
 
    See [[file:~/oz/music/Strasheela/private/0-privateContributions/ET31/source/DB.oz::Internally%20database%20entries%20are%20often%20defined%20by%20ratios%20using%20notation%20X%20Y%20for%20X%20Y%20to%20make%20them%20more%20comprehensible%20and%20portable%20to%20other%20temperaments%20Alternatively%20chords%20and%20scales%20are%20notated%20with%20conventional%20symbolic%20note%20names%20see%20function%20PC%20In%20any%20case%20the%20databases%20focus%20on%20chords%20scales%20and%20intervals%20which%20are%20close%20to%20just%20intonation%20in%2031%20ET][file:~/oz/music/Strasheela/private/0-privateContributions/ET31/source/DB.oz]]
    and [[file:ET31/music-sketches/ChordTest.oz][file:~/oz/music/Strasheela/private/CompositionPlans/ET31/music-sketches/ChordTest.oz]]
+
+*** Make limits constrainable (e.g., for chord root intervals)
+
+    cf. how I did this in [[file:~/oz/music/Strasheela/strasheela/trunk/strasheela/examples/05-MicrotonalChordProgression.oz::proc%20RestrictRootPrimeLimit%20Chords%20MaxLimit][file:~/oz/music/Strasheela/strasheela/trunk/strasheela/examples/05-MicrotonalChordProgression.oz::proc RestrictRootPrimeLimit Chords MaxLimit]]
+
+    Add limit to interval databases (e.g., ET22 or ET31: problem if they temper out commas, there can be multiple limit interpretations)
+
+    Add ready-made constraint for constraining the limit given a (PC) interval
+
+
 
 *** Add harmonic complexity / dissonance degree info
 

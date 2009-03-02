@@ -2,6 +2,7 @@
 
 * Strasheela release
 
+
 ** ?? Possibly set up wiki
 
    Problem: I would need memory!! 
@@ -47,14 +48,26 @@
 ***** MP3 
       http://www.mediawiki.org/wiki/Extension:FlashMP3
 
+
 ** Document more examples 
 
    Move existing example doc to wiki
    Add more example docs..
 
-** Release
+
+** Repair adaptive JI
+
+   see [[file:~/oz/music/Strasheela/strasheela/trunk/strasheela/contributions/anders/HarmonisedScore/testing/Score-test.oz::GetAdaptiveJIPitch]]
 
 
+** Lilypond: output seq (of seq ...) of sims with multiple staffs 
+
+
+** TODO Release								:URGENT:
+
+*** Briefly document Schoenberg harmony example 
+*** Clean up Changes.muse
+*** Release + testing
 
 * Strasheela examples
 
