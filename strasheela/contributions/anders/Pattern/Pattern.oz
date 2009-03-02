@@ -49,7 +49,8 @@ import
    GUtils at 'x-ozlib://anders/strasheela/source/GeneralUtils.ozf'
    LUtils at 'x-ozlib://anders/strasheela/source/ListUtils.ozf'
    Score at 'x-ozlib://anders/strasheela/source/ScoreCore.ozf'
-   
+
+   %% not needed for supporting Fenv object methods..
 %    Fenv at 'x-ozlib://anders/strasheela/Fenv/Fenv.ozf'
    
 %    Browser(browse:Browse) % temp for debugging
@@ -108,6 +109,7 @@ export
    ForAllItems MapItems EqualizeParam
 
    FenvBoundaries
+   FenvContour
 define
    
    /** % PlainPattern constraints Xs to a plain pattern (ie. no nesting or combination of patterns). The pattern is specified by the procedere Proc given to PlainPattern. Proc constraints a single pattern item and is called recursively. Proc expects two arguments: the current item and its predecessor in the list. 
@@ -960,13 +962,13 @@ define
    proc {Direction X1 X2 Dir}
       IsUp = {FD.decl}
       IsEq = {FD.decl}
-      % IsDown = {FD.decl}	% for propagation only
+      IsDown = {FD.decl}	% for propagation only
    in
-      Dir = {FD.int 0#2}	% i.e. IsUp and IsUp exclude each other
+      Dir = {FD.int 0#2} 
       IsUp =: (X1 <: X2)
       IsEq =: (X1 =: X2)
-      % IsDown =: (X1 >: X2)	% for propagation only
-      % 1 =: IsUp + IsEq + IsDown % for propagation only
+      IsDown =: (X1 >: X2)	% for propagation only
+      1 =: IsUp + IsEq + IsDown % for propagation only
       %% IsUp \=: IsEq		% ?? not implicit, but is it helpful -- causes failure?
       %% Represented like binary number:
       %% nothing true: down: 00 = 0
@@ -1618,7 +1620,23 @@ define
       {ForAll {LUtils.matTrans [Xs UpperDoms LowerDoms]}
        proc {$ [X Upper Lower]} X :: Lower#Upper end}
    end
+   
+   /** %% Constraints the contour of the elements in Xs (FD ints) to follow the contour of MyFenv (a fenv). Internally, Pattern.contour is used.
+   %% */
+   proc {FenvContour Xs MyFenv}
+      L = {Length Xs}
+      Dirs = {Map2Neighbours {MyFenv toList($ L)}
+	      fun {$ Y1 Y2}
+		 if Y1 < Y2 then {SymbolToDirection '+'}
+		 elseif Y1 == Y2 then {SymbolToDirection '='}
+		 else {SymbolToDirection '-'}
+		 end
+	      end}
+   in
+      {Contour Xs Dirs}
+   end
 
+   
    
    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
    %%
