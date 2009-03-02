@@ -1738,6 +1738,38 @@ FenvLowerDom = {Fenv.linearFenv [[0.0 0.0] [0.7 70.0] [1.0 10.0]]}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%
+%% Pattern.fenvContour
+%%
+
+
+declare
+Xs = {FD.list 10 1#10}
+MyFenv = {Fenv.sinFenv [[0.0 0.0] [0.5 1.0] [1.0 0.0]]}
+{MyFenv plot}
+
+{Browse Xs}
+
+{Pattern.fenvContour Xs MyFenv}
+
+{Nth Xs 5} = 6
+
+{Nth Xs 1} = 5
+
+%%
+
+declare
+Xs = {FD.list 10 1#10}
+MyFenv = {Fenv.sinFenv [[0.0 0.0] [0.4 1.0] [0.75 ~1.0] [1.0 0.0]]}
+{MyFenv plot}
+
+{Browse Xs}
+
+{Pattern.fenvContour Xs MyFenv}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
 %% Pattern.arc
 %%
 
