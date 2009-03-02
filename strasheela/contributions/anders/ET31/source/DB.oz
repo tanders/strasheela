@@ -44,6 +44,8 @@
 functor 
    
 import
+   GUtils at 'x-ozlib://anders/strasheela/source/GeneralUtils.ozf'
+   MUtils at 'x-ozlib://anders/strasheela/source/MusicUtils.ozf'
    Pattern at 'x-ozlib://anders/strasheela/Pattern/Pattern.ozf'
    HS at 'x-ozlib://anders/strasheela/HarmonisedScore/HarmonisedScore.ozf'
    ET31 at '../ET31.ozf'
@@ -459,7 +461,7 @@ define
 			 comment:unit(name:'minor 11th' 'm11'))
 		   chord(pitchClasses:[4#1 5#1 6#1 7#1 9#1 11#1] % C E G A# D F|
 			 roots:[4#1] %% 
-			 essentialPitchClasses:[4#1 5#1 7#1 9#1 11#1]
+			 essentialPitchClasses:[4#1 9#1 5#1 11#1 7#1]
 %				dissonanceDegree:2
 			 comment:unit(name:'harmonic 11th'))
 		   
@@ -873,7 +875,7 @@ define
 	       %% high tuning errors of 11#8 (9.4 cent) and 13#8 (11 cent!)
 	       %% is this good enough anyway? 11#8 tuning error in 12ET is ~50 cent!
 	       scale(pitchClasses:[8#8 9#8 10#8 11#8 12#8 13#8 14#8 15#8]
-		     roots:['C']  
+		     roots:[8#8]  
 %				dissonanceDegree:2
 		     comment:'harmonic series') % name nicht eindeutig
 
@@ -1046,7 +1048,16 @@ define
 	 {Record.mapInd Decl
 	  fun {$ Feat X}
 	     case Feat
-	     of pitchClasses then {Map X Transform}
+	     of pitchClasses then 
+		PCs = {Map X Transform}
+	     in
+		if {All PCs GUtils.isRatio} 
+		then 
+		   %% sorted in ascending order and (first) root is always first.
+		   %% important for correct adaptive JI (so HS.score.getDegree returns currect ratio position)
+		   {MUtils.sortRatios2 PCs Decl.roots.1}
+		else PCs	% ?? leave unsorted -- no harm for JI..
+		end
 	     [] essentialPitchClasses then {Map X Transform}
 	     [] roots then {Map X Transform}
 	     else X

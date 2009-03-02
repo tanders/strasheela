@@ -55,6 +55,8 @@
 functor 
    
 import
+   GUtils at 'x-ozlib://anders/strasheela/source/GeneralUtils.ozf'
+   MUtils at 'x-ozlib://anders/strasheela/source/MusicUtils.ozf'
    HS at 'x-ozlib://anders/strasheela/HarmonisedScore/HarmonisedScore.ozf'
    ET22 at '../ET22.ozf'
    
@@ -403,7 +405,16 @@ define
 	 {Record.mapInd Decl
 	  fun {$ Feat X}
 	     case Feat
-	     of pitchClasses then {Map X Transform}
+	     of pitchClasses then
+		PCs = {Map X Transform}
+	     in
+		if {All PCs GUtils.isRatio} 
+		then 
+		   %% sorted in ascending order and (first) root is always first.
+		   %% important for correct adaptive JI (so HS.score.getDegree returns currect ratio position)
+		   {MUtils.sortRatios2 PCs Decl.roots.1}
+		else PCs	% ?? leave unsorted -- no harm for JI..
+		end
 	     [] essentialPitchClasses then {Map X Transform}
 	     [] roots then {Map X Transform}
 	     else X
