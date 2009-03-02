@@ -33,10 +33,15 @@ export
    Random RandIntoRange
    MakeRandomGenerator SetRandomGeneratorSeed
    Log Mod_Float IsDivisible
-   % MakeConcurrentFn
+   RatioToFloat
+   IsRatio
+
+   %% MakeConcurrentFn
    ToProc ToFun Procs2Proc
    ExtendedScriptToScript
-   ApplySelected EncodeRatio
+   ApplySelected
+   
+   EncodeRatio
    SelectArg
    TimeVString
    GetCounterAndIncr ResetCounter
@@ -246,6 +251,19 @@ define
    end
 
 
+   /** %% Expects a ratio spec Nom#Denom and returns the corresponding float.
+   %% */
+   fun {RatioToFloat Nom#Denom}
+      {IntToFloat Nom} / {IntToFloat Denom}
+   end
+ 
+   /** %% Returns true if X is a pair of ints Nom#Denom.
+   %% */
+   fun {IsRatio X}
+      {IsRecord X} andthen {Label X} == '#'
+      andthen {Width X}==2 andthen {All {Record.toList X} IsInt}
+   end
+   
    %%
    %% Constraint programming utils
    %%
@@ -255,6 +273,7 @@ define
    proc {EncodeRatio X Y Factor Q}	
       X * Factor =: Y * Q
    end
+
 
 %    proc {EncodeInteger X Y Summand Z}
 %    end
