@@ -171,7 +171,7 @@ define
    in
       /** %% Transforms a (possibly nested) record into a single virtual string with Oz record syntax. RecordToVS also transforms the special Oz records with the labels '|' (i.e. lists) and '#' into their shorthand syntax. The virtual string output is not indented, but every record feature (or list element) starts a new line. As the output is basically a text value (i.e. no 'normal' Oz value anymore), FD and FS variables are transformed into a constructor call (FD.int and FS.var.bounds) which would create these variables when evaluated. 
       %% NB: Value.toVirtualString does something very similar: it transforms nested data into their print representation. However, RecordToVS tries to create code which when executed results in same value, whereas Value.toVirtualString creates print representation. Also, RecordToVS does not expect any max width/depth arguments and attempts to format the output. 
-      %% NB: if X (or some value in X) is not of any of the types record (or list or #-pair) or virtual string, Value.toVirtualString is called on this value.
+      %% NB: if X (or some value in X) is not of any of the types record (or list or #-pair) or virtual string, Value.toVirtualString is called on this value and the result is output as atom (i.e. surrounded by 'quotes').
       %%
       %% */
       fun {RecordToVS X}
@@ -206,7 +206,7 @@ define
 		  #{Domain2VS {FS.reflect.lowerBound X}}#' '
 		  #{Domain2VS {FS.reflect.upperBound X}}#'}'}
 	       %% determined other values
-	    else {Value.toVirtualString X 10 1000}
+	    else "'"#{Value.toVirtualString X 10 1000}#"'"
 	    end
 	 elseif {IsFree X} then "_"
 	 elseif {FD.is X} then {VirtualString.toString
@@ -217,7 +217,7 @@ define
 	       #{Domain2VS {FS.reflect.lowerBound X}}#' '
 	       #{Domain2VS {FS.reflect.upperBound X}}#'}'}
 	    %% undetermined other values
-	 else {Value.toVirtualString X 10 1000}
+	 else "'"#{Value.toVirtualString X 10 1000}#"'"
 	 end
       end
    end
@@ -244,7 +244,7 @@ define
 	       #")"
 	    end
 	    %% undetermined other values
-	 else {Value.toVirtualString X 10 1000}
+	 else "'"#{Value.toVirtualString X 10 1000}#"'"
 	 end
       end
    end
