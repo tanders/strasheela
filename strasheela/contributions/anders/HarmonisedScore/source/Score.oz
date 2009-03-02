@@ -152,6 +152,8 @@ export
    AbsoluteToOffsetAccidental OffsetToAbsoluteAccidental
    PcSetToSequence
 
+   GetAdaptiveJIPitch
+   
    MinimalCadentialSets MinimalCadentialSets2 MakeAllContextScales 
 
    Interval
@@ -415,8 +417,6 @@ define
    %%
    %% Args"
    %% 'accidentalRange' (int) specifies how many pitch class steps PitchClasses can be "off" (if AccidentalRange==0, then all PitClasses must be in the chord/scale).
-   %%
-   %% NOTE: depends on unfinished method degreeToPC 
    %% */
    fun {GetDegree PitchClass MyScale Args}
       Default = unit(accidentalRange: 2) % suitable default for 31 ET?
@@ -471,6 +471,83 @@ define
 %      end
    end
 
+
+
+   
+   local      
+      /** %% MyPCColl is either chord or scale object. Ratios are ratios of MyPCColl.
+      %% */
+      fun {GetAdaptivePitch_aux MyNote MyPCColl Ratios RootRatio}
+	 Degree = {GetDegree {MyNote getPitchClass($)} MyPCColl
+		   %% note: only exact pitches
+		   unit(accidentalRange:0)}
+	 Ratio_Float = {MUtils.transposeRatioIntoStandardOctave
+			{GUtils.ratioToFloat {Nth Ratios Degree}} * RootRatio}
+	 %% NB: transposition is tempered (depends on {HS.db.getPitchesPerOctave})
+	 Transposition_Freq = {MUtils.keynumToFreq
+			       {IntToFloat {MyPCColl getTransposition($)}}
+			       {IntToFloat {DB.getPitchesPerOctave}}}
+	 OctaveOffset = if {MyNote getPitchClass($)} < {MyPCColl getTransposition($)}
+			then 0
+			else 1 end
+	 Octave_Float = {Pow 2.0 {IntToFloat {MyNote getOctave($)}+OctaveOffset}}
+	 Note_Freq = Transposition_Freq * Ratio_Float * Octave_Float
+      in
+% 	 {Browse unit(ratios:Ratios
+% 		      rootRatio: RootRatio
+% 		      notePC: {MyNote getPitchClass($)}
+% 		      chordPCs: {MyPCColl getPitchClasses($)}
+% 		      degree:Degree
+% 		      ratio_Float:Ratio_Float
+% 		      transposition_Freq: Transposition_Freq
+% 		      note_Freq: Note_Freq
+% 		      note_pitch: {MUtils.freqToKeynum Note_Freq 12.0})}
+	 %% translate to midi cent
+	 {MUtils.freqToKeynum Note_Freq 12.0}
+      end
+   in
+      /** %% Returns an adaptive just intonation pitch (midi float) of MyNote (HS.score.note instance).
+      %% If MyNote is a chord tone (i.e. getInChordB returns 1) and then related chord of MyNote is specified by ratios in the chord database, then the corresponding chord ratio is used for tuning. Similarily, if MyNote is not a chord but a scale tone and the related scale is specified by ratios, then the corresponding scale ratio is used.
+      %% In any other case, the "normally" tuned pitch of MyNote is returned (usually an equal temperament depending on {HS.db.getPitchesPerOctave}, or some user-defined tuning depending on {Init.getTuningTable}), again a midi float.
+      %%
+      %% Note: if MyNote is the root of MyChord, then the tempered root is played. However, the corresponding scale tone may not be tempered. So, the same note is played differently if it is not a chord tone. (Naturally, it is usually played differently if it is a chord tone but not the root).
+      %%
+      %% NB: Args is currently unused, intended for later extensions..
+      %% */
+      %% 
+      %% TODO:
+      %% - !! tune chord roots to corresponding scale degree (if there is a scale). Then other scale notes are in corresponding relation, and I can get JI results if scale is defined by JI intervals.
+      %%
+      %% - def arg approximation: value between 1.0 (justly tuned adaptive pitches) and 0.0 (tempered)
+      %% - handle multiple chords/scales related to MyNote (see bug below)
+      %% 
+      fun {GetAdaptiveJIPitch MyNote _ /* Args */}
+% 	 Default = unit(approximation: 1.0
+% 		       )
+	 if {MyNote getChords($)} \= nil andthen {MyNote getInChordB($)} == 1 then
+	    MyChord = {MyNote getChords($)}.1 % BUG: simplification: could also be "later" chord
+	    ChordRatios = {DB.getUntransposedRatios MyChord}
+	    ChordRootRatio = {DB.getUntransposedRootRatio_Float MyChord}
+	 in
+	    if ChordRatios \= nil 
+	    then {GetAdaptivePitch_aux MyNote MyChord ChordRatios ChordRootRatio}
+	    else {MyNote getPitchInMidi($)}
+	    end
+	 elseif {MyNote getScales($)} \= nil andthen {MyNote getInScaleB($)} == 1 then
+	    MyScale = {MyNote getScales($)}.1 % BUG: simplification: could also be "later" chord
+	    ScaleRatios = {DB.getUntransposedRatios MyScale}
+	    ScaleRootRatio = {DB.getUntransposedRootRatio_Float MyScale}
+	 in
+	    if ScaleRatios \= nil
+	    then {GetAdaptivePitch_aux MyNote MyScale ScaleRatios ScaleRootRatio}
+	    else {MyNote getPitchInMidi($)}
+	    end
+	 else {MyNote getPitchInMidi($)}
+	 end
+      end
+   end
+
+   
 
    %%
    %% minimal cadential sets
