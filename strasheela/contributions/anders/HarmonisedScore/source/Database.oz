@@ -33,7 +33,7 @@ import
    
    FD FS RecordC
 %    Browser(browse:Browse) 
-%   GUtils at 'x-ozlib://anders/strasheela/source/GeneralUtils.ozf'
+   GUtils at 'x-ozlib://anders/strasheela/source/GeneralUtils.ozf'
    LUtils at 'x-ozlib://anders/strasheela/source/ListUtils.ozf'
    MUtils at 'x-ozlib://anders/strasheela/source/MusicUtils.ozf'
    Out at 'x-ozlib://anders/strasheela/source/Output.ozf'
@@ -60,6 +60,10 @@ export
 
    GetChordIndex GetScaleIndex GetIntervalIndex
    GetComment GetName
+
+   GetUntransposedRatios
+   GetUntransposedRootRatio
+   GetUntransposedRootRatio_Float
    
 define
 
@@ -641,6 +645,108 @@ define
       if {IsList NameAux} then NameAux else [NameAux] end 
    end
 
+   local
+      fun {GetRatios_aux PC_Specs}
+	 {LUtils.mappend PC_Specs
+	  fun {$ PC_Spec}
+	     if {IsRecord PC_Spec} andthen {HasFeature PC_Spec ratio}
+	     then [PC_Spec.ratio]
+	     else nil
+	     end
+	  end}
+      end
+      %% NOTE: some functions below share code -- copy and paste was just more simple for now...
+      %%
+      /** %% Returns the ratios specs by which the chord MyChord is declared in the chord database. If the chord was declared by pitch classes instead and thus no ratios are available then nil is returned.
+      %% */
+      fun {GetUntransposedChordRatios MyChord}
+	 DB_Entry = {GetEditChordDB}.{MyChord getIndex($)}
+      in
+	 case DB_Entry of chord(comment:chord(pitchClasses:PC_Specs
+					      ...)
+				...)
+	 then {GetRatios_aux PC_Specs}
+	 else nil
+	 end
+      end
+      /** %% Returns the ratio specs by which the chord's MyChord roots are declared in the chord database. If the root was declared by a pitch class instead and thus no ratio is available then nil is returned.
+      %% */
+      fun {GetUntransposedChordRootRatio MyChord}
+	 DB_Entry = {GetEditChordDB}.{MyChord getIndex($)}
+      in
+	 case DB_Entry of chord(comment:chord(roots:PC_Specs
+					      ...)
+				...)
+	 then {GetRatios_aux PC_Specs}
+	 else nil
+	 end
+      end
+      /** %% Returns the ratios specs by which the scale MyScale is declared in the scale database. If the scale was declared by pitch classes instead and thus no ratios are available then nil is returned.
+      %% */
+      fun {GetUntransposedScaleRatios MyScale}
+	 DB_Entry = {GetEditScaleDB}.{MyScale getIndex($)}
+      in
+	 case DB_Entry of scale(comment:scale(pitchClasses:PC_Specs
+					      ...)
+				...)
+	 then {GetRatios_aux PC_Specs}
+	 else nil
+	 end
+      end
+      /** %% Returns the ratio specs by which the scales's MyScale roots are declared in the scale database. If the root was declared by a pitch class instead and thus no ratio is available then nil is returned.
+      %% */
+      fun {GetUntransposedScaleRootRatio MyScale}
+	 DB_Entry = {GetEditScaleDB}.{MyScale getIndex($)}
+      in
+	 case DB_Entry of scale(comment:scale(roots:PC_Specs
+					      ...)
+				...)
+	 then {GetRatios_aux PC_Specs}
+	 else nil
+	 end
+      end
+   in
+      /** %% Returns the ratios specs by which X (chord or scale object) is declared in the database. If X was declared by pitch classes instead and thus no ratios are available then nil is returned.
+      %% */
+      fun {GetUntransposedRatios X}
+	 if {HS_Score.isChord X} then {GetUntransposedChordRatios X}
+	 elseif {HS_Score.isScale X} then {GetUntransposedScaleRatios X}
+	 end
+      end
+      /** %% Returns the ratio specs by which the roots of X (chord or scale object) are declared in the database. If the root was declared by a pitch class instead and thus no ratio is available then nil is returned.
+      %% */
+      fun {GetUntransposedRootRatio X} 
+	 if {HS_Score.isChord X} then {GetUntransposedChordRootRatio X}
+	 elseif {HS_Score.isScale X} then {GetUntransposedScaleRootRatio X}
+	 end
+      end
+      /** %%  Returns the frequency ratio of the [first] root of X (chord or scale object) as a float. For example, if the ratio 1#1 or the pitch class 0 is declared as root, then 1.0 is returned; it it is 3#2 then 1.5 is returned.
+      %%
+      %% NB: blocks until root and transposition of X are determined. 
+      %% */
+      fun {GetUntransposedRootRatio_Float X}
+	 if {X getRoot($)} == {X getTransposition($)} then 1.0
+	 else 
+	    UntransposedRootRatio = {GetUntransposedRootRatio X}
+	 in
+	    if UntransposedRootRatio \= nil then
+	       %% root defined by ratio
+	       %%
+	       {MUtils.transposeRatioIntoStandardOctave
+		%% NOTE: simplicitation: just take first root (when is there more than one actually in any database?)
+		{GUtils.ratioToFloat UntransposedRootRatio.1}}
+	    else
+	      PitchesPerOctave = {GetPitchesPerOctave}
+	    in
+	       %% root defined as PC
+	       %%
+	       {MUtils.keynumToFreq
+		{IntToFloat {X getUntransposedRoot($)}} {IntToFloat PitchesPerOctave}}
+	       / {MUtils.keynumToFreq 0.0 {IntToFloat PitchesPerOctave}}
+	    end
+	 end   
+      end
+   end
    
    
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
