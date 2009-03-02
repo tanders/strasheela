@@ -15,7 +15,8 @@
 %% */
 	    
 functor
-import 
+import
+%    Browser(browse:Browse)
    GUtils at 'GeneralUtils.ozf'
    LUtils at 'ListUtils.ozf'
    %% NOTE: dependency to contribution
@@ -23,6 +24,8 @@ import
    
 export
    KeynumToFreq FreqToKeynum RatioToKeynumInterval KeynumToPC
+   TransposeRatioIntoStandardOctave RatioToStandardOctaveFloat
+   SortRatios SortRatios2
    LevelToDB DBToLevel
    Freq0
    FullTuningTable
@@ -64,6 +67,41 @@ define
       {GUtils.mod_Float Keynum PitchesPerOctave}
    end
 
+   /** %% Expects a frequency ratio (a float) and octave transposes it into interval [1.0, 2.0]
+   %% */
+   fun {TransposeRatioIntoStandardOctave Freq}
+      if Freq >= 2.0 then {TransposeRatioIntoStandardOctave Freq / 2.0}
+      elseif Freq < 1.0 then {TransposeRatioIntoStandardOctave Freq * 2.0}
+      else Freq
+      end
+   end
+   /** %% Expects a ratio (pair of ints Nom#Denom) and returns the corresponding float, octave transposed into interval [1.0, 2.0].
+   %% */
+   fun {RatioToStandardOctaveFloat Ratio}
+      {TransposeRatioIntoStandardOctave
+       {GUtils.ratioToFloat Ratio}}
+   end
+
+   /** %% Expects a list of ratios and sorts them in ascending order (assuming all are situated in the same octave). For example, {SortRatios [4#1 5#1 6#1 7#1 9#1 11#1]} returns [4#1 9#1 5#1 11#1 6#1 7#1].
+   %% */
+   fun {SortRatios Ratios}
+      {Sort Ratios
+       fun {$ R1 R2}
+	  {RatioToStandardOctaveFloat R1} < {RatioToStandardOctaveFloat R2}
+       end}
+   end
+   /** %% Expects a list of ratios and sorts them in ascending order (assuming all are situated in the same octave). However, the first ratio in the result is StartRatio (which must occur in Ratios), and all smaller ratios are appended at the end. For example, {SortRatios2 [1#3 1#4 1#5 1#7] 1#7} returns [1#7 1#3 1#5 1#4].
+   %% */
+   fun {SortRatios2 Ratios StartRatio}
+      SortedRs = {SortRatios Ratios}
+      Pos = {LUtils.position StartRatio SortedRs}
+      Xs Ys
+   in
+      {List.takeDrop SortedRs Pos-1 Xs Ys}
+      {Append Ys Xs}
+   end
+
+   
    /** %% Converts a linear amplitude level L into an logarithmic amplitude (decibels).  LRel is the relativ full level.
    %% */
    fun {LevelToDB L LRel}
