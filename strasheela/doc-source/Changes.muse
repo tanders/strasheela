@@ -23,9 +23,11 @@
   - Minor additions 
     - HS.rules.schoenberg: added ProgressionSelector, ResolveDissonances, IndexCardinality SetEachChordType SetEachScaleType RequireChordTypes
     - HS.score: added MakeChords MakeScales GetDegree
-    - Pattern: added WindowedPattern WindowedPatternRecursions ForAllItems MapItems FirstToLastDistance DxsToXs XsToDxs EqualizeParam MakeIndexConstructor GetMotifIndex FenvBoundaries Arc
+    - HS.db: added GetUntransposedRatios, GetUntransposedRootRatio, GetUntransposedRootRatio_Float
+    - Pattern: added WindowedPattern WindowedPatternRecursions ForAllItems MapItems FirstToLastDistance DxsToXs XsToDxs EqualizeParam MakeIndexConstructor GetMotifIndex FenvBoundaries Arc, FenvContour
     - ET31: added many chords and scales to database (origin is Scala's list of 31 ET chords and modi)
-    - GUtils: added RecursiveAdjoin, KeepList
+    - GUtils: added RecursiveAdjoin, KeepList, IsRatio, RatioToFloat
+    - MUtils: added TransposeRatioIntoStandardOctave, RatioToStandardOctaveFloat, SortRatios, SortRatios2
 
   - Bug fixes and changes
     - HS.db: GetChordIndex/GetScaleIndex/GetIntervalIndex: database entries can now have multiple alternative names. When such entries are defined with SetDB, the subfeature 'name' of the feature 'comment' has a list of names (atoms).
@@ -53,6 +55,9 @@
     - Score: added ScoreObject method addInfos (complements addInfo)
     - Midi output: Note off timing revised: when a note on event and the preceeding note off event occur at exactly the same time, some MIDI devices have problems. So far, Strasheela be default simply removed (OutputMidiFile arg removeQuestionableNoteoffs defaulted to true). Now, by default such note offs are very slightly moved forward (NoteToMidi new arg noteOffOffset defaults to ~0.003, measured in secs -- NoteToMidi is used by default for outputting MIDI notes (matching OutputMidiFile clause with test isNote).
     - Fenv: Changed ItemFenvsToMidiCC and ItemTempoCurveToMidi arg ccsPerSecond from int to float
+    - Pattern: improved propagation of Direction
+    - Out.recordToVS: for values which cannot be transformed into Oz code, an descriptive atom created with Value.toVirtualString is output. Affects, e.g., archiving scores  
+    - LUtils: Fixed function Position to support nested elements
 
   - For further fixes see the [[../CHANGELOG.txt]].
 
