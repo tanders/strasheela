@@ -108,7 +108,10 @@ The following two examples combine the treatment of "turning points" in minor wi
 
 * Modulation 
 
-  *TODO*
+  *TODO* 
+
+Sketch: Not only a single underlying scale is used, but chords are related two their simultaneous scale. Just before a new scale starts (or where scales overlap in time?), "neutral" chords are used which only use pitch classes which occur in both consecutive scales (the size of this "window" is controlled by some variable N). The first chord after the "old" scale ends uses pitch classes which do not occur in the previous scale (modulation chord). Optionally, a cadence in the new scale follows immediately.
+
 
 
 * Using Non-Conventional Chords and Scales
@@ -118,12 +121,13 @@ Finally, some exercises are shown which apply Schoenberg's rule set to unconvent
 
 ** Septimal Minor 
 
-This example uses the septimal minor scale. 
+This exercise uses the septimal minor scale. The meantone note names of this scale are as follows. Remember that in this tuning enharmonic notes are actually different pitches. For example, the interval C-Eb is the minor third (6/5) whereas C-D# is similarily consonant subminor third (7/6).
 
- *TODO: pict of septimal minor*
- 
-Example uses only scale notes. Only root inversion. More simple rule for connecting chords again: harmonic band. 4 chords form a cadence.
-The analysis shows the ratios approximated by the tuning.
+  C D D# F G G# A# (C)
+
+  *TODO: pict of septimal minor*
+
+The exercise uses only scale notes and only chords in root inversion. The rules of connecting chords is again the more simple harmonic band constraint, and four chords form a cadence. The analysis now shows the ratios approximated by the tuning. The notation first shows the ratios of the chord in a column surrounded by parentheses, and a transposition factor for all these chord ratios. Two solutions are shown.
 
 [[../examples/Output/Schoenberg-septimalMinor1.mp3][../examples/Output/Schoenberg-septimalMinor1.png]]
 
@@ -132,24 +136,29 @@ The analysis shows the ratios approximated by the tuning.
 
 ** Hahn pentachordal
 
+Whereas the septimal minor scale still shows much similarity with the common diatonic scales, the next example uses an even less familiar scale, namely the following pentachordal scale proposed by Paul Hahn.
 
-This example uses a pentachordal scale proposed by Paul Hahn.
+  C Db D# E F G Ab A# B (C)
+ 
+  *TODO: pict of Hahn's pentachordal*
 
- *TODO: pict of Hahn's pentachordal*
-
-Example uses only scale notes. Only root inversion.
-Only ascending progression. 4 chords form a cadence.
+Again, only scale notes and only chords in root inversion are used in this exercise. All chord progressions are ascending progressions (following the generalised definition given above, Schoenbergs definition does not apply anymore for this scale). Again, four chords form a cadence.
 
 [[../examples/Output/Schoenberg-pentachordal1.mp3][../examples/Output/Schoenberg-pentachordal1.png]]
 
-Using 1st inversion as well.
+The next solution uses chords in both root inversion and 1st inversion.
 
 [[../examples/Output/Schoenberg-pentachordal2.mp3][../examples/Output/Schoenberg-pentachordal2.png]]
 
 
 * Implementation Comments
 
-All the exercises above are defined by the same CSP. This Strasheela example is implemented in such a way that the creation of the abstract harmony (e.g., the analytical harmonic information, in contrast to the actual notes) is defined in a modular way. In other words, the harmonic CSP without the four-voice voiceleading rules can be reused in other constraint problems, for example harmonic counterpoint problems where the polyphonic structure depends on some underlying harmony.
+All the exercises above are defined by the same CSP. The different exercises above are realised by giving different arguments to this CSP in the solver call. 
+ 
+Moreover, this example is implemented in such a way that the creation of the abstract harmony (e.g., the analytical harmonic information, in contrast to the actual notes) is defined in a modular way. In other words, the harmonic CSP without the four-voice voiceleading rules can be reused in other constraint problems, for example harmonic counterpoint problems where the polyphonic structure depends on some underlying harmony.
+
+  [[../examples//Harmony-Examples/Schoenberg-TheoryOfHarmony.oz][full source]] 
+
 
 [[StrasheelaExamples][back]]
 
