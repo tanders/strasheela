@@ -1,4 +1,3 @@
-
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html>
   <head>
@@ -8,18 +7,6 @@
           content="text/html; charset=iso-8859-1">
     
     <link rel="stylesheet" href="style.css" type="text/css" />
-  <!-- Piwik -->
-    <script type="text/javascript">
-    var pkBaseURL = (("https:" == document.location.protocol) ? "https://apps.sourceforge.net  /piwik/strasheela/" : "http://apps.sourceforge.net/piwik/strasheela/");
-    document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/javascript'%3E%3C/script%3E"));
-    </script><script type="text/javascript">
-    piwik_action_name = '';
-    piwik_idsite = 1;
-    piwik_url = pkBaseURL + "piwik.php";
-    piwik_log(piwik_action_name, piwik_idsite, piwik_url);
-    </script>
-    <object><noscript><p><img src="http://apps.sourceforge.net/piwik/strasheela/piwik.php?idsite=1" alt="piwik"/></p></noscript></object>
-  <!-- End Piwik Tag -->
   </head>
   <body>
 <div id="header">
@@ -93,16 +80,31 @@
 <h2><a name="sec1" id="sec1"></a>
 Overview</h2>
 
+<p class="first">This example implements a rich theory of harmony. More specifically, it implements a whole collection of harmony CSPs.</p>
 
+<p>The example implements a considerable amount of Schoenberg's tonal <a href="http://www.amazon.com/Theory-Harmony-California-Library-Reprint/dp/0520049446/ref=pd_bbs_sr_1?ie=UTF8&amp;s=books&amp;qid=1236274946&amp;sr=8-1">Theory of Harmony</a>. The different harmony CSPs implement increasingly complex exercises which stem from Schoenberg's textbook. For example, it implements Schoenberg's recommendations on convincing chord root progressions (there are multiple variants of increasing complexity), and Schoenberg's suggestions for treating minor.</p>
+
+<p>Nevertheless, the example does not follow Schoenberg faithfully. For example, the example is implemented in <a href="http://en.wikipedia.org/wiki/31_equal_temperament">31-tone equal temperament</a> (31-ET), instead of the 12-tone equal temperament which Schoenberg stunningly exhausted in his compositions. 31-ET has been chosen, because it allows for convenient pitch class calculations (much like 12-ET, but with 31 pitch classes) and at the same time supports enharmonic notation (e.g., C# and Db are different pitch classes). You can play all examples by simply clicking on the score images and you will hear that this tuning also sounds lovely (it is a variant of <a href="http://en.wikipedia.org/wiki/Meantone">Meantone temperament</a>, the prevailing tuning of Renaissance music and early Baroque).</p>
+
+<p>The example also diverts from Schoenberg in the actual rule sets implemented. Sometimes, constraints are added which stem from a different source, and sometimes rules suggested by Schoenberg have been generalised.</p>
+
+<p>The <a href="../examples//Harmony-Examples/Schoenberg-TheoryOfHarmony.oz">full source</a> for creating the solutions presented below is available.</p>
 
 
 
 <h2><a name="sec2" id="sec2"></a>
 Simplified Root Progression Constraint: Harmonic Band</h2>
 
+<p class="first">We skip much introductory material of Schoenberg's textbook and start with one of the first musically more interesting exercises: compose a harmonic progression of diatonic chords where consecutive chords are connected by what Schoenberg calls a &quot;harmonic band&quot;, that is, common pitch classes between chords. In case there are common pitch classes, then these are placed in the same voice. The other voices move in small intervals (Bruckner's &quot;law of the shortest path&quot;).</p>
+
+<p>The first two staffs show the usual four-voice setting of the harmonic progression. The third staff presents analytical information: the chord root is notated with the duration of the actual chord, and other chord pitch classes as grace notes. Giving this information is a bit overkill in this simple exercise, but I find it useful for more complex cases, and the program creates it therefore automatically. Finally, also the Roman numerals of the chord roots are shown.</p>
+
 
 <p><a class="image-link" href="../examples/Output/Schoenberg-harmBand1.mp3">
 <img src="../examples/Output/Schoenberg-harmBand1.png"></a></p>
+
+<p>A second solution to this first exercise is given, as for many other exercises below as well.</p>
+
 
 <p><a class="image-link" href="../examples/Output/Schoenberg-harmBand2.mp3">
 <img src="../examples/Output/Schoenberg-harmBand2.png"></a></p>
@@ -112,13 +114,14 @@ Simplified Root Progression Constraint: Harmonic Band</h2>
 <h2><a name="sec3" id="sec3"></a>
 Cadencing</h2>
 
-<p class="first">The following examples end in a cadence. The constraint used here is not Schoenberg's rule, but this concise constraint stems from Rothenberg.
-Added constraint: union of the pitch classes of the last three chords equals the pitch class set of the scale (C major).</p>
+<p class="first">The first exercise does not necessarily end with an <a href="http://en.wikipedia.org/wiki/Authentic_cadence">authentic cadence</a> (see above). This second exercise constraints that chord progressions end in a cadence. The constraint used here stems from David Rothenberg, not Schoenberg.</p>
+
+<p>This constraint requires that the union of the pitch classes of the last N chords equals the pitch class set of the underlying scale. In the following solution, the scale here is C-major, and N=3. Together with Schoenberg's harmonic-band constraint this results in an authentic cadence.</p>
 
 <p><a class="image-link" href="../examples/Output/Schoenberg-cadence1.mp3">
 <img src="../examples/Output/Schoenberg-cadence1.png"></a></p>
 
-<p>Demonstrate effect of this constraint: now the last 4 chords form a cadence in the sence that the pitch classes of these chords together form the Bb major scale.</p>
+<p>In order to better understand the effect of this cadencing constraint, N is set to 4 for the following solution (the scale is changed to Bb-major). Note that this &quot;cadence&quot; of 4 chords does not necessarily result in an authentic cadence.</p>
 
 <p><a class="image-link" href="../examples/Output/Schoenberg-cadence2.mp3">
 <img src="../examples/Output/Schoenberg-cadence2.png"></a></p>
@@ -127,7 +130,7 @@ Added constraint: union of the pitch classes of the last three chords equals the
 <h2><a name="sec4" id="sec4"></a>
 Using Different Inversions</h2>
 
-<p class="first">Sixth chords can be used freely</p>
+<p class="first">In the previous exercises, all chords where is root position. Schoenberg suggests that 6th chords can also be used freely, which is done in the following solution.</p>
 
 <p><a class="image-link" href="../examples/Output/Schoenberg-sixthChords.mp3">
 <img src="../examples/Output/Schoenberg-sixthChords.png"></a></p>
@@ -137,10 +140,18 @@ Using Different Inversions</h2>
 <h2><a name="sec5" id="sec5"></a>
 Revised Root Progression Rules</h2>
 
+<p class="first">Later in his textbook, Schoenberg revises his prior recommendation on chord progressions (harmonic band). This case indicates Schoenbergs teaching approach in general. At first he introduces rather strict rules which (as he says) exclude many useful solutions but at least allow mostly convincing results. Later, he repeatedly relaxes and refines his rule set.</p>
+
+<p>Schoenberg's recommendations are briefly summarised in the following, please consult his textbook for the full details. He introduces the notion of so-called ascending progressions (e.g., V-I or III-I), descending progressions (e.g., I-V or III-V), and super-strong progressions (e.g., V-VI). In my generalisation of Schoenberg's concept, ascending progressions have a harmonic band, but the root of the second chord does not occur in the first (Schoenberg says something like &quot;the king of the first chord is overruled by a new king&quot;). Descending progressions also have a harmonic band, but the root of the second chord was already a non-root tone in the preceeding chord. Finally, super-strong progressions have no harmonic band. (There is a fourth case not mentioned by Schoenberg were two consecutive chords have the same root.)</p>
+
+<p>Ascending progressions can be used freely, super-strong progressions should be used sparely for special emphjasis, but descending progressions should commonly be treated with particular care. Schoenberg recommends that in a sequence of three chords C_1, C_2, C_3 the sequence C_1, C_2 can only then be descending if C_1, C_3 is ascending (e.g., III-V-I).</p>
+
+<p>The following example contains a super-strong progression between the 2nd and 3rd chord (V-IV), followed by a decending progression (IV-VI), all other progressions are ascending.</p>
+
 <p><a class="image-link" href="../examples/Output/Schoenberg-revisedProgression1.mp3">
 <img src="../examples/Output/Schoenberg-revisedProgression1.png"></a></p>
 
-<p>Purely asdencing progression</p>
+<p>The next solution consists solely of asdencing progressions.</p>
 
 <p><a class="image-link" href="../examples/Output/Schoenberg-onlyAscending.mp3">
 <img src="../examples/Output/Schoenberg-onlyAscending.png"></a></p>
@@ -149,8 +160,9 @@ Revised Root Progression Rules</h2>
 <h2><a name="sec6" id="sec6"></a>
 Dissonance Treatment</h2>
 
+<p class="first">All solutions presented so far consisted of consonant triads only. When introducing seventh chords discussing dissonance treatment for the first time, Schoenberg recommends that these dissonances should be resolved by the strongest chord root progression available &mdash; &quot;a fourths upwards the fundament&quot; &mdash; and that the seventh (the dissonant tone) should be resolved by a step downwards.</p>
 
-<p>Liberal dissonance treatment (a Non-Schoenberg rule): if dissonance, then do ascending progression</p>
+<p>The following exercise implements a rule which is already more liberal (and which was not proposed by Schoenberg). Dissonant chords are always resolved by an ascending progression. The following example contains a few seventh chords. For example the 4th to 5th chord (I^7 - IV) is an instance of a &quot;fourths upwards the fundament&quot;.</p>
 
 <p><a class="image-link" href="../examples/Output/Schoenberg-liberalDissTreatment1.mp3">
 <img src="../examples/Output/Schoenberg-liberalDissTreatment1.png"></a></p>
@@ -261,7 +273,7 @@ Implementation Comments</h2>
 <div id="footer">
 <div id="author">&copy; 
 Torsten Anders</div>
-<div id="date">Last time edited: 2009.01.19</div>
+<div id="date">Last time edited: ; INVALID LISP CODE</div>
 </div>
   </body>
 </html>

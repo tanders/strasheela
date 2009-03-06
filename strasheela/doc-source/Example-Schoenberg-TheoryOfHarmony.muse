@@ -6,52 +6,80 @@
 
 * Overview
 
-; Example strongly influenced by Schoenberg, but does not always follow exactly (e.g., sometimes add constraints, sometimes generalise)
+This example implements a rich theory of harmony. More specifically, it implements a whole collection of harmony CSPs.
 
+The example implements a considerable amount of Schoenberg's tonal [[http://www.amazon.com/Theory-Harmony-California-Library-Reprint/dp/0520049446/ref=pd_bbs_sr_1?ie=UTF8&s=books&qid=1236274946&sr=8-1][Theory of Harmony]]. The different harmony CSPs implement increasingly complex exercises which stem from Schoenberg's textbook. For example, it implements Schoenberg's recommendations on convincing chord root progressions (there are multiple variants of increasing complexity), and Schoenberg's suggestions for treating minor.  
+
+Nevertheless, the example does not follow Schoenberg faithfully. For example, the example is implemented in [[http://en.wikipedia.org/wiki/31_equal_temperament][31-tone equal temperament]] (31-ET), instead of the 12-tone equal temperament which Schoenberg stunningly exhausted in his compositions. 31-ET has been chosen, because it allows for convenient pitch class calculations (much like 12-ET, but with 31 pitch classes) and at the same time supports enharmonic notation (e.g., C# and Db are different pitch classes). You can play all examples by simply clicking on the score images and you will hear that this tuning also sounds lovely (it is a variant of [[http://en.wikipedia.org/wiki/Meantone][Meantone temperament]], the prevailing tuning of Renaissance music and early Baroque).
+
+The example also diverts from Schoenberg in the actual rule sets implemented. Sometimes, constraints are added which stem from a different source, and sometimes rules suggested by Schoenberg have been generalised. 
+
+The [[../examples//Harmony-Examples/Schoenberg-TheoryOfHarmony.oz][full source]] for creating the solutions presented below is available.
+  
 
 * Simplified Root Progression Constraint: Harmonic Band
 
+We skip much introductory material of Schoenberg's textbook and start with one of the first musically more interesting exercises: compose a harmonic progression of diatonic chords where consecutive chords are connected by what Schoenberg calls a "harmonic band", that is, common pitch classes between chords. In case there are common pitch classes, then these are placed in the same voice. The other voices move in small intervals (Bruckner's "law of the shortest path"). 
+
+The first two staffs show the usual four-voice setting of the harmonic progression. The third staff presents analytical information: the chord root is notated with the duration of the actual chord, and other chord pitch classes as grace notes. Giving this information is a bit overkill in this simple exercise, but I find it useful for more complex cases, and the program creates it therefore automatically. Finally, also the Roman numerals of the chord roots are shown.  
+
 
 [[../examples/Output/Schoenberg-harmBand1.mp3][../examples/Output/Schoenberg-harmBand1.png]]
+
+A second solution to this first exercise is given, as for many other exercises below as well.
+
 
 [[../examples/Output/Schoenberg-harmBand2.mp3][../examples/Output/Schoenberg-harmBand2.png]]
 
 
 * Cadencing 
 
-The following examples end in a cadence. The constraint used here is not Schoenberg's rule, but this concise constraint stems from Rothenberg. 
-Added constraint: union of the pitch classes of the last three chords equals the pitch class set of the scale (C major).
+The first exercise does not necessarily end with an [[http://en.wikipedia.org/wiki/Authentic_cadence][authentic cadence]] (see above). This second exercise constraints that chord progressions end in a cadence. The constraint used here stems from David Rothenberg, not Schoenberg.
+
+This constraint requires that the union of the pitch classes of the last N chords equals the pitch class set of the underlying scale. In the following solution, the scale here is C-major, and N=3. Together with Schoenberg's harmonic-band constraint this results in an authentic cadence.  
 
 [[../examples/Output/Schoenberg-cadence1.mp3][../examples/Output/Schoenberg-cadence1.png]]
 
-Demonstrate effect of this constraint: now the last 4 chords form a cadence in the sence that the pitch classes of these chords together form the Bb major scale. 
+In order to better understand the effect of this cadencing constraint, N is set to 4 for the following solution (the scale is changed to Bb-major). Note that this "cadence" of 4 chords does not necessarily result in an authentic cadence.
 
 [[../examples/Output/Schoenberg-cadence2.mp3][../examples/Output/Schoenberg-cadence2.png]]
 
 * Using Different Inversions
 
-Sixth chords can be used freely
+In the previous exercises, all chords where is root position. Schoenberg suggests that 6th chords can also be used freely, which is done in the following solution.
 
 [[../examples/Output/Schoenberg-sixthChords.mp3][../examples/Output/Schoenberg-sixthChords.png]]
 
 
 * Revised Root Progression Rules
 
+Later in his textbook, Schoenberg revises his prior recommendation on chord progressions (harmonic band). This case indicates Schoenbergs teaching approach in general. At first he introduces rather strict rules which (as he says) exclude many useful solutions but at least allow mostly convincing results. Later, he repeatedly relaxes and refines his rule set.
+
+Schoenberg's recommendations are briefly summarised in the following, please consult his textbook for the full details. He introduces the notion of so-called ascending progressions (e.g., V-I or III-I), descending progressions (e.g., I-V or III-V), and super-strong progressions (e.g., V-VI). In my generalisation of Schoenberg's concept, ascending progressions have a harmonic band, but the root of the second chord does not occur in the first (Schoenberg says something like "the king of the first chord is overruled by a new king"). Descending progressions also have a harmonic band, but the root of the second chord was already a non-root tone in the preceeding chord. Finally, super-strong progressions have no harmonic band. (There is a fourth case not mentioned by Schoenberg were two consecutive chords have the same root.)
+
+Ascending progressions can be used freely, super-strong progressions should be used sparely for special emphjasis, but descending progressions should commonly be treated with particular care. Schoenberg recommends that in a sequence of three chords C_1, C_2, C_3 the sequence C_1, C_2 can only then be descending if C_1, C_3 is ascending (e.g., III-V-I).
+
+The following example contains a super-strong progression between the 2nd and 3rd chord (V-IV), followed by a decending progression (IV-VI), all other progressions are ascending. These solutions are already a bit longer, because we meanwhile have a more rich harmonic vocabulary. 
+
 [[../examples/Output/Schoenberg-revisedProgression1.mp3][../examples/Output/Schoenberg-revisedProgression1.png]]
 
-Purely asdencing progression
+The next solution consists solely of asdencing progressions.
 
 [[../examples/Output/Schoenberg-onlyAscending.mp3][../examples/Output/Schoenberg-onlyAscending.png]]
 
 * Dissonance Treatment
 
+All solutions presented so far consisted of consonant triads only. When introducing seventh chords discussing dissonance treatment for the first time, Schoenberg recommends that these dissonances should be resolved by the strongest chord root progression available -- "a fourths upwards the fundament" -- and that the seventh (the dissonant tone) should be resolved by a step downwards. 
 
-Liberal dissonance treatment (a Non-Schoenberg rule): if dissonance, then do ascending progression
+The following exercise implements a rule which is already more liberal (and which was not proposed by Schoenberg). Dissonant chords are always resolved by an ascending progression. The following example contains a few seventh chords. For example the 4th to 5th chord (I^7 - IV) is an instance of a "fourths upwards the fundament".
 
 [[../examples/Output/Schoenberg-liberalDissTreatment1.mp3][../examples/Output/Schoenberg-liberalDissTreatment1.png]]
 ; [[../examples/Output/Schoenberg-liberalDissTreatment1.mp3][../examples/Output/Schoenberg-liberalDissTreatment1.png]]
 
 ; note: tritone step in bass
+
+Again, multiple solutions are presented. 
+
 [[../examples/Output/Schoenberg-liberalDissTreatment2.mp3][../examples/Output/Schoenberg-liberalDissTreatment2.png]]
 
 [[../examples/Output/Schoenberg-liberalDissTreatment3.mp3][../examples/Output/Schoenberg-liberalDissTreatment3.png]]
@@ -59,16 +87,20 @@ Liberal dissonance treatment (a Non-Schoenberg rule): if dissonance, then do asc
 
 * Minor 
 
-Turning points 
+This exercise introduces the use of the minor key. The minor key is particular in that the set of seven diatonic scale degrees is extended by two raised pitches.  This is the first step in Schoenberg's textbook towards opening up tonal harmony, a development which finally culminates into the free use of 12 pitch classes.
 
-Disabled cadence constraint
+For Schoenberg, it is important to make clear the characteristics of minor. He therefore at first imposes relatively strict rules on the "special degrees" VI and VII which can occur either in their natural or their raised form. Schoenberg suggests that these "turning points" are always resolved stepwise in the direction of the accidental (e.g. natural accidental downwards toward natural accidental, and sharp upwards to next sharp if available).  
+
+In the solutions given below, this resolution may however happen in a different voice. For example, the F# in the 3rd chord moves upwards to G# in the 4th chord, but this G# happens in a different voice. Again, two solutions are given, both in A-minor.
 
 [[../examples/Output/Schoenberg-minor1.mp3][../examples/Output/Schoenberg-minor1.png]]
 
 
 [[../examples/Output/Schoenberg-minor2.mp3][../examples/Output/Schoenberg-minor2.png]]
 
-** Allow for seventh chords
+** Allow for seventh chords in minor
+
+The following two examples combine the treatment of "turning points" in minor with the dissonance treatment introduced before.
 
 [[../examples/Output/Schoenberg-minor3.mp3][../examples/Output/Schoenberg-minor3.png]]
 
@@ -80,6 +112,9 @@ Disabled cadence constraint
 
 
 * Using Non-Conventional Chords and Scales
+
+Finally, some exercises are shown which apply Schoenberg's rule set to unconventional scales and chords made possible by the selected tuning (31-ET).
+
 
 ** Septimal Minor 
 
@@ -114,8 +149,13 @@ Using 1st inversion as well.
 
 * Implementation Comments
 
-Example is implemented in such a way that the creation of the abstract harmony (e.g., the analytical harmonic information, in contrast to the actual notes) is defined in a modular way. In other words, the harmonic CSP without the four-voice voiceleading rules can be reused in other constraint problems, for example harmonic counterpoint problems where the polyphonic structure depends on some underlying harmony.
-
+All the exercises above are defined by the same CSP. This Strasheela example is implemented in such a way that the creation of the abstract harmony (e.g., the analytical harmonic information, in contrast to the actual notes) is defined in a modular way. In other words, the harmonic CSP without the four-voice voiceleading rules can be reused in other constraint problems, for example harmonic counterpoint problems where the polyphonic structure depends on some underlying harmony.
 
 [[StrasheelaExamples][back]]
+
+
+* TODO
+
+Check whether math notation like C_1 and I^7 workds
+
 
