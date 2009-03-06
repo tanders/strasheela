@@ -821,10 +821,10 @@ end
 {GUtils.setRandomGeneratorSeed 0}
 {SDistro.exploreOne
  {GUtils.extendedScriptToScript HomophonicChordProgression
-  unit(iargs:unit(n:5
+  unit(iargs:unit(n:6
 		  bassChordDegree: 1)
        rargs:unit(progressionSelector:harmonicBand
-% 		  cadenceN:3
+		  cadenceN:3
 		  onlyAscendingInCadence:false
 		 ))}
  HS.distro.leftToRight_TypewiseTieBreaking}
