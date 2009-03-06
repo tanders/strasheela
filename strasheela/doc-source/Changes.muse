@@ -5,62 +5,68 @@
 * Changes in Version 0.9.9 (no date yet)
 
   - Main additions and changes 
+    - [[../contributions/anders/Pattern/doc/node1.html][Pattern]]: added many pattern constraints and related definitions: FenvContour, FenvBoundaries, Arc, WindowedPattern, WindowedPatternRecursions, ForAllItems, MapItems, FirstToLastDistance, DxsToXs, XsToDxs, EqualizeParam, MakeIndexConstructor, GetMotifIndex  
+    - Support for [[http://tonalsoft.com/enc/a/adaptive-ji.aspx][adaptive just intonation]] has been added: [[../contributions/anders/HarmonisedScore/doc/node1.html][HS]].score.getAdaptiveJIPitch 
+    - Extensions and simplifications for score creation, defined in [[../doc/api/node6.html][Score]]
+      - Added MakeItems, DefSubscript, ItemslistToContainerSubscript, MakeConstructor
+      - MakeContainer, MakeSeq and MakeSim are replaced by completely different implementations  
+      - Score.makeScore: textual score format extended 
+        - More convenient notation variant supported for nested scores. The following two examples are now equivalent.
+          - ={Score.makeScore seq(items:[note note]) unit}=  
+          - ={Score.make seq([note note]) unit}=  
+        - List of items can now also be created by constructor such as MakeItems (before this was only supported for single items) 
+
 
   - Documentation
     - Extensively revised example Schoenberg-TheoryOfHarmony.oz (before called HomophonicChordProgression.oz): now features solver calls for many variations on the theory of harmony
     - Page for [[Example-MEWER][MEWER]] application added to list of examples
     - examples/Form-Examples/FriendlyMusicExample.oz: Fixed bug in distro (was orelse instead of andthen)
 
-  - Extensions and simplifications for score creation
-    - Added Score.makeItems, Score.defSubscript, ItemslistToContainerSubscript
-    - Score.makeScore: more convenient notation variant supported for nested scores. The following two examples are now equivalent.
-      - ={Score.makeScore seq(items:[note note]) unit}=  
-      - ={Score.make seq([note note]) unit}=  
-    - Score.makeScore: textual score format extended: list of items can now also be created by constructor, e.g., MakeItems (before this was only supported for single items). 
-
-    - Score: MakeContainer, MakeSeq and MakeSim are replaced by completely different implementations, MakeConstructor 
 
   - Minor additions 
+    - [[../doc/api/node9.html][Out]]: added args hasImplicitStaff and hasBreak to Out.toLilypond. Added IsOutmostSim.
+    - [[../doc/api/node3.html][GUtils]]: added RecursiveAdjoin, KeepList, IsRatio, RatioToFloat
+    - [[../doc/api/node5.html][MUtils]]: added TransposeRatioIntoStandardOctave, RatioToStandardOctaveFloat, SortRatios, SortRatios2
+    - [[../contributions/anders/HarmonisedScore/doc/node1.html][HS]].db: added GetUntransposedRatios, GetUntransposedRootRatio, GetUntransposedRootRatio_Float
+    - HS.score: added MakeChords, MakeScales, and GetDegree
     - HS.rules.schoenberg: added ProgressionSelector, ResolveDissonances, IndexCardinality SetEachChordType SetEachScaleType RequireChordTypes
-    - HS.score: added MakeChords MakeScales GetDegree
-    - HS.db: added GetUntransposedRatios, GetUntransposedRootRatio, GetUntransposedRootRatio_Float
-    - Pattern: added WindowedPattern WindowedPatternRecursions ForAllItems MapItems FirstToLastDistance DxsToXs XsToDxs EqualizeParam MakeIndexConstructor GetMotifIndex FenvBoundaries Arc, FenvContour
-    - ET31: added many chords and scales to database (origin is Scala's list of 31 ET chords and modi)
-    - GUtils: added RecursiveAdjoin, KeepList, IsRatio, RatioToFloat
-    - MUtils: added TransposeRatioIntoStandardOctave, RatioToStandardOctaveFloat, SortRatios, SortRatios2
-    - Out.toLilypond: added args hasImplicitStaff, hasBreak. Added IsOutmostSim.
+    - [[../contributions/anders/ET31/doc/node1.html][ET31]]: added many chords and scales to database (origin is Scala's list of 31 ET chords and modi)
+
 
   - Bug fixes and changes
+    - [[../doc/api/node6.html][Score]]: ScoreObject method toInitRecord: now outputs strings (e.g., for lilypond) as proper strings (e.g., important for archiving scores)
+    - Score: Refactored ScoreObject method init: not-explicitly supported arguments are ignored now (a warning is printed)
+    - Score: Revised ScoreObject method unify: new args exclude, derive, overwrite
+    - Score: Method toFullRecord: added arg unbind.
+    - Score: added ScoreObject method addInfos (complements addInfo)
+    - [[../doc/api/node9.html][Out]]: Last note of automatically split and tied notes was longer than what has been set by Out.setMaxLilyRhythm, now fixed
+    - Out.saveScore: fixed (added wrote prefix)
+    - Out.recordToVS revised: For values which cannot be transformed into Oz code, an descriptive atom created with Value.toVirtualString is output. Also, now outputs strings as strings, preserves escape sequences etc. (both affects, e.g., archiving scores). Added RecordToVS_simple
+    - [[../doc/api/node11.html][Midi]] output: Note off timing revised: when a note on event and the preceeding note off event occur at exactly the same time, some MIDI devices have problems. So far, Strasheela be default simply removed (OutputMidiFile arg removeQuestionableNoteoffs defaulted to true). Now, by default such note offs are very slightly moved forward (NoteToMidi new arg noteOffOffset defaults to ~0.003, measured in secs -- NoteToMidi is used by default for outputting MIDI notes (matching OutputMidiFile clause with test isNote).
+    - [[../doc/api/node3.html][GUtils]]: simplified IsDivisible implementation, added RelationComplement, ConstrainRelation
+    - [[../doc/api/node4.html][LUtils]]: Refactored EveryNth (new arg Offset), added OddPositions EvenPositions
+    - LUtils: Fixed function Position to support nested elements
     - HS.db: GetChordIndex/GetScaleIndex/GetIntervalIndex: database entries can now have multiple alternative names. When such entries are defined with SetDB, the subfeature 'name' of the feature 'comment' has a list of names (atoms).
     - Refactored HS.db.getName: now returns list of alternative chord/scale/interval name
-    - HS.rules: constraint name changes: 
-      - SmallIntervalProgressions -> SmallIntervalsInProgression
-      - SmallIntervalProgressions_Percent -> SmallIntervalsInProgression_Percent
+    - HS.score: 
+      - Refactored TransposeDegree: expected scale/chord PCs as list, now FS
+      - Efficiency improvements: TransposePC: uses now FD.modD instead of FD.modI. 
+      - PitchClassCollection initialisation: constrains that root (untransposed root) is in PCs (untransposed PCs) for better propagation. 
+      - New default for all args getChords/getScales: list with single simultaneous chord/scale (with findSimultaneousItem), nil (old default) if none is found 
     - HS.rules: 
       - Fixed MaxNonharmonicNoteSequence (before limited number of harmonic instead of non-harmonic tones) 
       - Added ExpressAllChordPCs_AtChordEnd
-    - HS.score: Refactored TransposeDegree: expected scale/chord PCs as list, now FS
-    - HS.score: efficiency improvements: TransposePC: use FD.modD instead of FD.modI. PitchClassCollection initialisation: constrain that root (untransposed root) is in PCs (untransposed PCs) for better propagation. 
-    - HS.score: new default for all args getChords/getScales: list with single simultaneous chord/scale (with findSimultaneousItem), nil (old default) if none is found 
+      - constraint name changed: 
+        - SmallIntervalProgressions -> SmallIntervalsInProgression
+        - SmallIntervalProgressions_Percent -> SmallIntervalsInProgression_Percent
     - HS.distro: Fixed bug in IsNoTimepointNorPitch (was orelse instead of andthen)
-    - GUtils: simplified IsDivisible implementation, added RelationComplement, ConstrainRelation
-    - Score: ScoreObject method toInitRecord: now outputs strings (e.g., for lilypond) as proper strings 
-    - Score: ScoreObject method unify: added arg overwrite. Method toFullRecord: added arg unbind.
-    - Out: Revised RecordToVS: now outputs strings as strings, preserves escape sequences etc. Added RecordToVS_simple
-    - Out: Last note of automatically split and tied notes was longer than what has been set by Out.setMaxLilyRhythm, now fixed
-    - Score: Revised ScoreObject method unify: new args exclude, and derive 
-    - Out.saveScore: fixed (added wrote prefix)
-    - ET31.out: Substatianlly refactored Lilypond output of analytical information (chords, scales), now more flexible
-    - LUtils: Refactored EveryNth (new arg Offset), added OddPositions EvenPositions
-    - Score: Refactored ScoreObject method init: not-explicitly cared-for arguments are ignored now (a warning is printed)
-    - Score: added ScoreObject method addInfos (complements addInfo)
-    - Midi output: Note off timing revised: when a note on event and the preceeding note off event occur at exactly the same time, some MIDI devices have problems. So far, Strasheela be default simply removed (OutputMidiFile arg removeQuestionableNoteoffs defaulted to true). Now, by default such note offs are very slightly moved forward (NoteToMidi new arg noteOffOffset defaults to ~0.003, measured in secs -- NoteToMidi is used by default for outputting MIDI notes (matching OutputMidiFile clause with test isNote).
-    - Fenv: Changed ItemFenvsToMidiCC and ItemTempoCurveToMidi arg ccsPerSecond from int to float
-    - Pattern: improved propagation of Direction
-    - Out.recordToVS: for values which cannot be transformed into Oz code, an descriptive atom created with Value.toVirtualString is output. Affects, e.g., archiving scores  
-    - LUtils: Fixed function Position to support nested elements
 
-  - For further fixes see the [[../CHANGELOG.txt]].
+    - ET31.out: Substatianlly refactored Lilypond output of analytical information (chords, scales), now more flexible
+    - [[../contributions/anders/Fenv/doc/node1.html][Fenv]]: Changed ItemFenvsToMidiCC and ItemTempoCurveToMidi arg ccsPerSecond from int to float
+    - Pattern: improved propagation of Direction
+
+
+  - For further fixes see the [[http://apps.sourceforge.net/trac/strasheela/timeline][Trac Timeline]] or the [[../CHANGELOG.txt]].
 
 
 * Changes in Version 0.9.8 (4 December 2008)
