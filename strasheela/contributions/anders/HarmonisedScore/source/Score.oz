@@ -413,17 +413,19 @@ define
 %       TransposedDegree =: {FD.modI Aux {Length CollectionPCs}}
 %    end
 
-   /** %% Returns the chord/scale degree (FD int) for (FD int). MyScale is the chord/scale object to which the degree corresponds.
+   /** %% Returns the chord/scale degree (FD int) for (FD int). MyPCColl is the chord/scale object to which the degree corresponds.
    %%
    %% Args"
    %% 'accidentalRange' (int) specifies how many pitch class steps PitchClasses can be "off" (if AccidentalRange==0, then all PitClasses must be in the chord/scale).
+   %%
+   %% Note: very weak propagation -- MyPCColl must first be determined.
    %% */
-   fun {GetDegree PitchClass MyScale Args}
+   fun {GetDegree PitchClass MyPCColl Args}
       Default = unit(accidentalRange: 2) % suitable default for 31 ET?
       As = {Adjoin Default Args}
       AccDom = {AbsoluteToOffsetAccidental ~(As.accidentalRange)}#{AbsoluteToOffsetAccidental As.accidentalRange}
    in
-      {MyScale degreeToPC($ {FD.int AccDom} PitchClass)}
+      {MyPCColl degreeToPC($ {FD.int AccDom} PitchClass)}
    end
 
 
@@ -475,51 +477,95 @@ define
 
    
    local      
-      /** %% MyPCColl is either chord or scale object. Ratios are ratios of MyPCColl.
+      /** %% MyPCColl is either chord or scale object. Ratios are the (untransposed) ratios (pairs of ints) of MyPCColl. RootRatio is (untransposed) root float of MyPCColl.
       %% */
-      fun {GetAdaptivePitch_aux MyNote MyPCColl Ratios RootRatio}
+      fun {GetAdaptiveJIPitch_aux MyNote MyPCColl Ratios}
+	 %% MyNote's degree in MyPCColl's ratios
 	 Degree = {GetDegree {MyNote getPitchClass($)} MyPCColl
 		   %% note: only exact pitches
 		   unit(accidentalRange:0)}
+	 %% MyNote's ratio as float with root ratio correction (i.e. untransposed root is effectively 1#1) 
 	 Ratio_Float = {MUtils.transposeRatioIntoStandardOctave
-			{GUtils.ratioToFloat {Nth Ratios Degree}} * RootRatio}
-	 %% NB: transposition is tempered (depends on {HS.db.getPitchesPerOctave})
+			{GUtils.ratioToFloat {Nth Ratios Degree}}} 
+	 %% MyPCColl's transposition as frequency
+	 %%
+	 %% TODO: transposition is tempered (depends on {HS.db.getPitchesPerOctave}) -- should this potentially depend on scale ratios if MyPCColl is a chord?
 	 Transposition_Freq = {MUtils.keynumToFreq
 			       {IntToFloat {MyPCColl getTransposition($)}}
 			       {IntToFloat {DB.getPitchesPerOctave}}}
 	 OctaveOffset = if {MyNote getPitchClass($)} < {MyPCColl getTransposition($)}
 			then 0
 			else 1 end
+	 %% MyNote's octave as frequency ratio float
 	 Octave_Float = {Pow 2.0 {IntToFloat {MyNote getOctave($)}+OctaveOffset}}
 	 Note_Freq = Transposition_Freq * Ratio_Float * Octave_Float
+	 %% TMP copy from DB
+% 	 fun {PCError PC KeysPerOctave}
+% 	    fun {ToCent X}
+% 	       (X / KeysPerOctave) * 1200.0
+% 	    end
+% 	 in
+% 	    ~{ToCent (PC - {Round PC})}
+% 	 end
       in
-% 	 {Browse unit(ratios:Ratios
-% 		      rootRatio: RootRatio
+% 	 {Browse unit(chordUntransposedRatios:Ratios
+% 		      chordUntransposedRatios_Float: {Map Ratios GUtils.ratioToFloat}
+% % 		      chordUntransposedRatiosWithRootCorrection_Float:
+% % 			 {Map Ratios fun {$ Ratio} {GUtils.ratioToFloat Ratio} / RootRatio end}
+% 		      %% ratios translated into list of PCs (so I can check degrees) -- PCs must be the same as chordPCs
+% 		      chordUntransposedRatios_PC:
+% 			 {Map Ratios
+% 			  fun {$ Ratio}
+% 			     KeysPerOctave = {IntToFloat {DB.getPitchesPerOctave}}
+% 			     PC = {MUtils.keynumToPC {MUtils.ratioToKeynumInterval Ratio
+% 						      KeysPerOctave}
+% 				   KeysPerOctave}
+% 			  in
+% 			     unit(ratio:Ratio pc:{FloatToInt PC} error:{PCError PC KeysPerOctave}#cent)
+% 			  end}
+% 		      chordUntranposedRootRatio: RootRatio
+% 		      note_untransposedRatio: {Nth Ratios Degree}
+% 		      noteDegree: Degree
 % 		      notePC: {MyNote getPitchClass($)}
 % 		      chordPCs: {MyPCColl getPitchClasses($)}
-% 		      degree:Degree
-% 		      ratio_Float:Ratio_Float
-% 		      transposition_Freq: Transposition_Freq
-% 		      note_Freq: Note_Freq
-% 		      note_pitch: {MUtils.freqToKeynum Note_Freq 12.0})}
-	 %% translate to midi cent
+% 		      chordPCs_List_Root: {PcSetToSequence {MyPCColl getPitchClasses($)}
+% 					   {MyPCColl getRoot($)}}
+% 		      chordPCs_List_Transposition: {PcSetToSequence {MyPCColl getPitchClasses($)}
+% 						    {MyPCColl getTransposition($)}}
+% 		      chordUntransposedPCs: {MyPCColl getUntransposedPitchClasses($)}
+% 		      note_untransposedRatio_Float:Ratio_Float
+% % 		      note_untransposedRatioWithRootCorrection_Float:Ratio_Float
+% 		      chord: {DB.getName MyPCColl}
+% 		      chordTransposition_PC: {MyPCColl getTransposition($)}
+% % 		      chordTransposition_Freq: Transposition_Freq
+% % 		      note_JI_Freq: Note_Freq
+% 		      note_JI_midiFloat: {MUtils.freqToKeynum Note_Freq 12.0}
+% 		      note_ET_midiFloat: {MyNote getPitchInMidi($)})}
+	 %% translate to midi float
 	 {MUtils.freqToKeynum Note_Freq 12.0}
       end
    in
       /** %% Returns an adaptive just intonation pitch (midi float) of MyNote (HS.score.note instance).
-      %% If MyNote is a chord tone (i.e. getInChordB returns 1) and then related chord of MyNote is specified by ratios in the chord database, then the corresponding chord ratio is used for tuning. Similarily, if MyNote is not a chord but a scale tone and the related scale is specified by ratios, then the corresponding scale ratio is used.
+      %% If MyNote is a chord tone (i.e. getInChordB returns 1) and the related chord of MyNote is specified by ratios in the chord database, then the corresponding chord ratio is used for tuning. Similarily, if MyNote is not a chord but a scale tone and the related scale is specified by ratios, then the corresponding scale ratio is used.
       %% In any other case, the "normally" tuned pitch of MyNote is returned (usually an equal temperament depending on {HS.db.getPitchesPerOctave}, or some user-defined tuning depending on {Init.getTuningTable}), again a midi float.
       %%
-      %% Note: if MyNote is the root of MyChord, then the tempered root is played. However, the corresponding scale tone may not be tempered. So, the same note is played differently if it is not a chord tone. (Naturally, it is usually played differently if it is a chord tone but not the root).
+      %% Note that you need to define chord/scale databases using ratios (integer pairs) for adaptive JI. Presently, only the predefined chord and scale databases in ET31 and ET22 are defined by ratios.  In the default chord database, chords and scales are (currently) defined by pitch class integers and thus GetAdaptiveJIPitch returns the same pitch as the note method getPitchInMidi.
       %%
       %% NB: Args is currently unused, intended for later extensions..
-      %% */
-      %% 
-      %% TODO:
-      %% - !! tune chord roots to corresponding scale degree (if there is a scale). Then other scale notes are in corresponding relation, and I can get JI results if scale is defined by JI intervals.
       %%
-      %% - def arg approximation: value between 1.0 (justly tuned adaptive pitches) and 0.0 (tempered)
+      %%
+      %% TODO:
+      %%
+      %% - !! tune chord roots to corresponding scale degree (if there is a scale). Then other scale notes are in corresponding relation, and I can get JI results if scale is defined by JI intervals.
+      %% Currently, if MyNote is the root of MyChord, then the tempered root is played. However, the corresponding scale tone may not be tempered. So, the same note is played differently if it is not a chord tone. (Naturally, it is usually played differently if it is a chord tone but not the root).
+      %%
+      %% - def arg approximation, e.g., value between 1.0 (justly tuned adaptive pitches), 0.0 (as getPitchInMidi, usually ET), or even ~1.0 (worse than ET)
+      %%
       %% - handle multiple chords/scales related to MyNote (see bug below)
+      %% 
+      %%
+      %% */
+      %%
       %% 
       fun {GetAdaptiveJIPitch MyNote _ /* Args */}
 % 	 Default = unit(approximation: 1.0
@@ -527,19 +573,19 @@ define
 	 if {MyNote getChords($)} \= nil andthen {MyNote getInChordB($)} == 1 then
 	    MyChord = {MyNote getChords($)}.1 % BUG: simplification: could also be "later" chord
 	    ChordRatios = {DB.getUntransposedRatios MyChord}
-	    ChordRootRatio = {DB.getUntransposedRootRatio_Float MyChord}
+% 	    ChordRootRatio = {DB.getUntransposedRootRatio_Float MyChord}
 	 in
 	    if ChordRatios \= nil 
-	    then {GetAdaptivePitch_aux MyNote MyChord ChordRatios ChordRootRatio}
+	    then {GetAdaptiveJIPitch_aux MyNote MyChord ChordRatios}
 	    else {MyNote getPitchInMidi($)}
 	    end
 	 elseif {MyNote getScales($)} \= nil andthen {MyNote getInScaleB($)} == 1 then
 	    MyScale = {MyNote getScales($)}.1 % BUG: simplification: could also be "later" chord
 	    ScaleRatios = {DB.getUntransposedRatios MyScale}
-	    ScaleRootRatio = {DB.getUntransposedRootRatio_Float MyScale}
+% 	    ScaleRootRatio = {DB.getUntransposedRootRatio_Float MyScale}
 	 in
 	    if ScaleRatios \= nil
-	    then {GetAdaptivePitch_aux MyNote MyScale ScaleRatios ScaleRootRatio}
+	    then {GetAdaptiveJIPitch_aux MyNote MyScale ScaleRatios}
 	    else {MyNote getPitchInMidi($)}
 	    end
 	 else {MyNote getPitchInMidi($)}
@@ -1124,13 +1170,16 @@ define
 	 meth getDBFeature(?X Feat)
 	    X = @dbFeatures.Feat
 	 end
-	 %% ?? name
+	 
+	 /** %% Constraints PC (FD int) to Degree with Accidental (FD ints) in self.
 	 %%
-	 /** %% !! unfinished def. but seems to work...
+	 %% NOTE: very weak propagation -- self must first be determined
 	 %% */
 	 %% Inconsistency to interface of proc with this name..
+	 %%
+	 %% -> GetDegree does not work correctly if untransposed root is not 0
 	 meth degreeToPC(Degree Accidental PC)
-	    thread 		% !! thread tmp: because FD.list blocks..
+	    thread 		% thread because FD.list blocks until N in known..
 	       %% !! inefficient definition: I need the transposed pitch classes in the order of the untransposed pitch classes as vector. I can not extract these from @pitchClasses and therefore FS.match @untransposedPitchClasses and transpose them again (!).
 	       %% An alternative differnt implementation of @pitchClasses themselves as vector of FD ints instead of Fs would not be a good idea either: selection/propagation of the cardiality would not work and block until @index is determined.
 	       %%
@@ -1138,20 +1187,29 @@ define
 	       %%
 	       PCDomain = 0#{DB.getPitchesPerOctave}-1
 	       Transposition = {self getTransposition($)}
+	       Root = {self getRoot($)}
 	       UntranspPCsFS = {self getUntransposedPitchClasses($)}
 	       N = {FS.card UntranspPCsFS}
 	       %% !! blocks until N is determined (i.e. @index is determined or all chords/scales in database or index domain are of equal length)
 	       UntranspPCsList = {FD.list N PCDomain} 
 	       TranspPCsList = {FD.list N PCDomain}
+	       RootPos TranspPCsList_Sorted
 	    in
 	       %% !!?? is matching a good idea: shall PCs always be in
 	       %% increasing order in UntranspPCsList
 	       {FS.int.match UntranspPCsFS UntranspPCsList}
+	       %% NB: blocks
+% 	       thread {GUtils.intsToFS UntranspPCsList UntranspPCsFS} end
 	       {ForAll {LUtils.matTrans [UntranspPCsList TranspPCsList]}
 		proc {$ [UntranspPC TranspPC]}
 		   {TransposePC UntranspPC Transposition TranspPC}
+% 		   {TransposePC UntranspPC Root TranspPC}
 		end}
-	       {DegreeToPC TranspPCsList Degree#Accidental PC}
+	       %% NOTE: sorting greatly impairs propagation, but should at least work correctly for determined chord/scale
+	       RootPos = {LUtils.position Root TranspPCsList}
+	       TranspPCsList_Sorted = {Append {List.drop TranspPCsList RootPos-1}
+				       {List.take TranspPCsList RootPos-1}}
+	       {DegreeToPC TranspPCsList_Sorted Degree#Accidental PC}
 	    end
 	 end
 	 /** %% dummy method for documentation -- redefined in subclasses.
