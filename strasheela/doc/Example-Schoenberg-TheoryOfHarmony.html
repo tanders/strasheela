@@ -1,3 +1,4 @@
+
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html>
   <head>
@@ -7,6 +8,18 @@
           content="text/html; charset=iso-8859-1">
     
     <link rel="stylesheet" href="style.css" type="text/css" />
+  <!-- Piwik -->
+    <script type="text/javascript">
+    var pkBaseURL = (("https:" == document.location.protocol) ? "https://apps.sourceforge.net  /piwik/strasheela/" : "http://apps.sourceforge.net/piwik/strasheela/");
+    document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/javascript'%3E%3C/script%3E"));
+    </script><script type="text/javascript">
+    piwik_action_name = '';
+    piwik_idsite = 1;
+    piwik_url = pkBaseURL + "piwik.php";
+    piwik_log(piwik_action_name, piwik_idsite, piwik_url);
+    </script>
+    <object><noscript><p><img src="http://apps.sourceforge.net/piwik/strasheela/piwik.php?idsite=1" alt="piwik"/></p></noscript></object>
+  <!-- End Piwik Tag -->
   </head>
   <body>
 <div id="header">
@@ -18,6 +31,9 @@
   </ul>
   <div id="logo">
     <a href="http://sourceforge.net"><img src="http://sflogo.sourceforge.net/sflogo.php?group_id=167225&amp;type=1" width="88" height="31" border="0" alt="SourceForge.net Logo" /></a>
+  </div>
+  <div id="logo">
+  <a href="http://cmr.soc.plymouth.ac.uk/"><img src="http://cmr.soc.plymouth.ac.uk/iccmr_logo_2.jpg" width="125"  width="88" height="31" border="0" alt="ICCMR Logo" /></a>
   </div>
 </div>
     <h1>Modelling Schoenberg's Theory of Harmony</h1>
@@ -50,7 +66,7 @@
 <dd>
 <dl>
 <dt>
-<a href="#sec8">Allow for seventh chords</a>
+<a href="#sec8">Allow for seventh chords in minor</a>
 </dt>
 </dl>
 </dd>
@@ -144,9 +160,9 @@ Revised Root Progression Rules</h2>
 
 <p>Schoenberg's recommendations are briefly summarised in the following, please consult his textbook for the full details. He introduces the notion of so-called ascending progressions (e.g., V-I or III-I), descending progressions (e.g., I-V or III-V), and super-strong progressions (e.g., V-VI). In my generalisation of Schoenberg's concept, ascending progressions have a harmonic band, but the root of the second chord does not occur in the first (Schoenberg says something like &quot;the king of the first chord is overruled by a new king&quot;). Descending progressions also have a harmonic band, but the root of the second chord was already a non-root tone in the preceeding chord. Finally, super-strong progressions have no harmonic band. (There is a fourth case not mentioned by Schoenberg were two consecutive chords have the same root.)</p>
 
-<p>Ascending progressions can be used freely, super-strong progressions should be used sparely for special emphjasis, but descending progressions should commonly be treated with particular care. Schoenberg recommends that in a sequence of three chords C_1, C_2, C_3 the sequence C_1, C_2 can only then be descending if C_1, C_3 is ascending (e.g., III-V-I).</p>
+<p>Ascending progressions can be used freely, super-strong progressions should be used sparely for special emphjasis, but descending progressions should commonly be treated with particular care. Schoenberg recommends that in a sequence of three chords C1, C2, C3 the sequence C1, C2 can only then be descending if C1, C3 is ascending (e.g., III-V-I).</p>
 
-<p>The following example contains a super-strong progression between the 2nd and 3rd chord (V-IV), followed by a decending progression (IV-VI), all other progressions are ascending.</p>
+<p>The following example contains a super-strong progression between the 2nd and 3rd chord (V-IV), followed by a decending progression (IV-VI), all other progressions are ascending. These solutions are already a bit longer, because we meanwhile have a more rich harmonic vocabulary.</p>
 
 <p><a class="image-link" href="../examples/Output/Schoenberg-revisedProgression1.mp3">
 <img src="../examples/Output/Schoenberg-revisedProgression1.png"></a></p>
@@ -162,12 +178,15 @@ Dissonance Treatment</h2>
 
 <p class="first">All solutions presented so far consisted of consonant triads only. When introducing seventh chords discussing dissonance treatment for the first time, Schoenberg recommends that these dissonances should be resolved by the strongest chord root progression available &mdash; &quot;a fourths upwards the fundament&quot; &mdash; and that the seventh (the dissonant tone) should be resolved by a step downwards.</p>
 
-<p>The following exercise implements a rule which is already more liberal (and which was not proposed by Schoenberg). Dissonant chords are always resolved by an ascending progression. The following example contains a few seventh chords. For example the 4th to 5th chord (I^7 - IV) is an instance of a &quot;fourths upwards the fundament&quot;.</p>
+<p>The following exercise implements a rule which is already more liberal (and which was not proposed by Schoenberg). Dissonant chords are always resolved by an ascending progression. The following example contains a few seventh chords. For example the 4th to 5th chord (I7 - IV) is an instance of a &quot;fourths upwards the fundament&quot;.</p>
 
 <p><a class="image-link" href="../examples/Output/Schoenberg-liberalDissTreatment1.mp3">
 <img src="../examples/Output/Schoenberg-liberalDissTreatment1.png"></a></p>
 
 
+
+
+<p>Again, multiple solutions are presented.</p>
 
 <p><a class="image-link" href="../examples/Output/Schoenberg-liberalDissTreatment2.mp3">
 <img src="../examples/Output/Schoenberg-liberalDissTreatment2.png"></a></p>
@@ -180,9 +199,11 @@ Dissonance Treatment</h2>
 <h2><a name="sec7" id="sec7"></a>
 Minor</h2>
 
-<p class="first">Turning points</p>
+<p class="first">This exercise introduces the use of the minor key. The minor key is particular in that the set of seven diatonic scale degrees is extended by two raised pitches.  This is the first step in Schoenberg's textbook towards opening up tonal harmony, a development which finally culminates into the free use of 12 pitch classes.</p>
 
-<p>Disabled cadence constraint</p>
+<p>For Schoenberg, it is important to make clear the characteristics of minor. He therefore at first imposes relatively strict rules on the &quot;special degrees&quot; VI and VII which can occur either in their natural or their raised form. Schoenberg suggests that these &quot;turning points&quot; are always resolved stepwise in the direction of the accidental (e.g. natural accidental downwards toward natural accidental, and sharp upwards to next sharp if available).</p>
+
+<p>In the solutions given below, this resolution may however happen in a different voice. For example, the F# in the 3rd chord moves upwards to G# in the 4th chord, but this G# happens in a different voice. Again, two solutions are given, both in A-minor.</p>
 
 <p><a class="image-link" href="../examples/Output/Schoenberg-minor1.mp3">
 <img src="../examples/Output/Schoenberg-minor1.png"></a></p>
@@ -192,7 +213,9 @@ Minor</h2>
 <img src="../examples/Output/Schoenberg-minor2.png"></a></p>
 
 <h3><a name="sec8" id="sec8"></a>
-Allow for seventh chords</h3>
+Allow for seventh chords in minor</h3>
+
+<p class="first">The following two examples combine the treatment of &quot;turning points&quot; in minor with the dissonance treatment introduced before.</p>
 
 <p><a class="image-link" href="../examples/Output/Schoenberg-minor3.mp3">
 <img src="../examples/Output/Schoenberg-minor3.png"></a></p>
@@ -209,22 +232,31 @@ Modulation</h2>
 <p class="quoted"><em>TODO</em></p>
 </blockquote>
 
+<p>Sketch: Not only a single underlying scale is used, but chords are related two their simultaneous scale. Just before a new scale starts (or where scales overlap in time?), &quot;neutral&quot; chords are used which only use pitch classes which occur in both consecutive scales (the size of this &quot;window&quot; is controlled by some variable N). The first chord after the &quot;old&quot; scale ends uses pitch classes which do not occur in the previous scale (modulation chord). Optionally, a cadence in the new scale follows immediately.</p>
+
+
 
 
 <h2><a name="sec10" id="sec10"></a>
 Using Non-Conventional Chords and Scales</h2>
 
+<p class="first">Finally, some exercises are shown which apply Schoenberg's rule set to unconventional scales and chords made possible by the selected tuning (31-ET).</p>
+
+
 <h3><a name="sec11" id="sec11"></a>
 Septimal Minor</h3>
 
-<p class="first">This example uses the septimal minor scale.</p>
+<p class="first">This exercise uses the septimal minor scale. The meantone note names of this scale are as follows. Remember that in this tuning enharmonic notes are actually different pitches. For example, the interval C-Eb is the minor third (6/5) whereas C-D# is similarily consonant subminor third (7/6).</p>
+
+<blockquote>
+<p class="quoted">C D D# F G G# A# (C)</p>
+</blockquote>
 
 <blockquote>
 <p class="quoted"><em>TODO: pict of septimal minor</em></p>
 </blockquote>
 
-<p>Example uses only scale notes. Only root inversion. More simple rule for connecting chords again: harmonic band. 4 chords form a cadence.
-The analysis shows the ratios approximated by the tuning.</p>
+<p>The exercise uses only scale notes and only chords in root inversion. The rules of connecting chords is again the more simple harmonic band constraint, and four chords form a cadence. The analysis now shows the ratios approximated by the tuning. The notation first shows the ratios of the chord in a column surrounded by parentheses, and a transposition factor for all these chord ratios. Two solutions are shown.</p>
 
 <p><a class="image-link" href="../examples/Output/Schoenberg-septimalMinor1.mp3">
 <img src="../examples/Output/Schoenberg-septimalMinor1.png"></a></p>
@@ -237,20 +269,22 @@ The analysis shows the ratios approximated by the tuning.</p>
 <h3><a name="sec12" id="sec12"></a>
 Hahn pentachordal</h3>
 
+<p class="first">Whereas the septimal minor scale still shows much similarity with the common diatonic scales, the next example uses an even less familiar scale, namely the following pentachordal scale proposed by Paul Hahn.</p>
 
-<p>This example uses a pentachordal scale proposed by Paul Hahn.</p>
+<blockquote>
+<p class="quoted">C Db D# E F G Ab A# B (C)</p>
+</blockquote>
 
 <blockquote>
 <p class="quoted"><em>TODO: pict of Hahn's pentachordal</em></p>
 </blockquote>
 
-<p>Example uses only scale notes. Only root inversion.
-Only ascending progression. 4 chords form a cadence.</p>
+<p>Again, only scale notes and only chords in root inversion are used in this exercise. All chord progressions are ascending progressions (following the generalised definition given above, Schoenbergs definition does not apply anymore for this scale). Again, four chords form a cadence.</p>
 
 <p><a class="image-link" href="../examples/Output/Schoenberg-pentachordal1.mp3">
 <img src="../examples/Output/Schoenberg-pentachordal1.png"></a></p>
 
-<p>Using 1st inversion as well.</p>
+<p>The next solution uses chords in both root inversion and 1st inversion.</p>
 
 <p><a class="image-link" href="../examples/Output/Schoenberg-pentachordal2.mp3">
 <img src="../examples/Output/Schoenberg-pentachordal2.png"></a></p>
@@ -261,7 +295,13 @@ Only ascending progression. 4 chords form a cadence.</p>
 <h2><a name="sec13" id="sec13"></a>
 Implementation Comments</h2>
 
-<p class="first">Example is implemented in such a way that the creation of the abstract harmony (e.g., the analytical harmonic information, in contrast to the actual notes) is defined in a modular way. In other words, the harmonic CSP without the four-voice voiceleading rules can be reused in other constraint problems, for example harmonic counterpoint problems where the polyphonic structure depends on some underlying harmony.</p>
+<p class="first">All the exercises above are defined by the same CSP. The different exercises above are realised by giving different arguments to this CSP in the solver call.</p>
+
+<p>Moreover, this example is implemented in such a way that the creation of the abstract harmony (e.g., the analytical harmonic information, in contrast to the actual notes) is defined in a modular way. In other words, the harmonic CSP without the four-voice voiceleading rules can be reused in other constraint problems, for example harmonic counterpoint problems where the polyphonic structure depends on some underlying harmony.</p>
+
+<blockquote>
+<p class="quoted"><a href="../examples//Harmony-Examples/Schoenberg-TheoryOfHarmony.oz">full source</a></p>
+</blockquote>
 
 
 <p><a href="StrasheelaExamples.html">back</a></p>
@@ -273,7 +313,7 @@ Implementation Comments</h2>
 <div id="footer">
 <div id="author">&copy; 
 Torsten Anders</div>
-<div id="date">Last time edited: ; INVALID LISP CODE</div>
+<div id="date">Last time edited: 2009.03.08</div>
 </div>
   </body>
 </html>

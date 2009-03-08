@@ -1,3 +1,4 @@
+
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html>
   <head>
@@ -7,6 +8,18 @@
           content="text/html; charset=iso-8859-1">
     
     <link rel="stylesheet" href="style.css" type="text/css" />
+  <!-- Piwik -->
+    <script type="text/javascript">
+    var pkBaseURL = (("https:" == document.location.protocol) ? "https://apps.sourceforge.net  /piwik/strasheela/" : "http://apps.sourceforge.net/piwik/strasheela/");
+    document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/javascript'%3E%3C/script%3E"));
+    </script><script type="text/javascript">
+    piwik_action_name = '';
+    piwik_idsite = 1;
+    piwik_url = pkBaseURL + "piwik.php";
+    piwik_log(piwik_action_name, piwik_idsite, piwik_url);
+    </script>
+    <object><noscript><p><img src="http://apps.sourceforge.net/piwik/strasheela/piwik.php?idsite=1" alt="piwik"/></p></noscript></object>
+  <!-- End Piwik Tag -->
   </head>
   <body>
 <div id="header">
@@ -19,6 +32,9 @@
   <div id="logo">
     <a href="http://sourceforge.net"><img src="http://sflogo.sourceforge.net/sflogo.php?group_id=167225&amp;type=1" width="88" height="31" border="0" alt="SourceForge.net Logo" /></a>
   </div>
+  <div id="logo">
+  <a href="http://cmr.soc.plymouth.ac.uk/"><img src="http://cmr.soc.plymouth.ac.uk/iccmr_logo_2.jpg" width="125"  width="88" height="31" border="0" alt="ICCMR Logo" /></a>
+  </div>
 </div>
     <h1>Changes</h1>
     <!-- Page published by Emacs Muse begins here -->
@@ -27,8 +43,33 @@
 <h2>Changes in Version 0.9.9 (no date yet)</h2>
 
 <ul>
-<li>Main additions and changes</li>
+<li>Main additions and changes
 
+<ul>
+<li><a href="../contributions/anders/Pattern/doc/node1.html">Pattern</a>: added many pattern constraints and related definitions: FenvContour, FenvBoundaries, Arc, WindowedPattern, WindowedPatternRecursions, ForAllItems, MapItems, FirstToLastDistance, DxsToXs, XsToDxs, EqualizeParam, MakeIndexConstructor, GetMotifIndex</li>
+<li>Support for <a href="http://tonalsoft.com/enc/a/adaptive-ji.aspx">adaptive just intonation</a> has been added: <a href="../contributions/anders/HarmonisedScore/doc/node1.html">HS</a>.score.getAdaptiveJIPitch</li>
+<li>Extensions and simplifications for score creation, defined in <a href="../doc/api/node6.html">Score</a>
+
+<ul>
+<li>Added MakeItems, DefSubscript, ItemslistToContainerSubscript, MakeConstructor</li>
+<li>MakeContainer, MakeSeq and MakeSim are replaced by completely different implementations</li>
+<li>Score.makeScore: textual score format extended
+
+<ul>
+<li>More convenient notation variant supported for nested scores. The following two examples are now equivalent.
+
+<ul>
+<li><code>{Score.makeScore seq(items:[note note]) unit}</code></li>
+<li><code>{Score.make seq([note note]) unit}</code></li>
+</ul></li>
+<li>List of items can now also be created by constructor such as MakeItems (before this was only supported for single items)</li>
+</ul></li>
+</ul></li>
+</ul></li>
+</ul>
+
+
+<ul>
 <li>Documentation
 
 <ul>
@@ -36,75 +77,73 @@
 <li>Page for <a href="Example-MEWER.html">MEWER</a> application added to list of examples</li>
 <li>examples/Form-Examples/FriendlyMusicExample.oz: Fixed bug in distro (was orelse instead of andthen)</li>
 </ul></li>
+</ul>
 
-<li>Extensions and simplifications for score creation
-
-<ul>
-<li>Added Score.makeItems, Score.defSubscript, ItemslistToContainerSubscript</li>
-<li>Score.makeScore: more convenient notation variant supported for nested scores. The following two examples are now equivalent.
 
 <ul>
-<li><code>{Score.makeScore seq(items:[note note]) unit}</code></li>
-<li><code>{Score.make seq([note note]) unit}</code></li>
-</ul></li>
-<li>Score.makeScore: textual score format extended: list of items can now also be created by constructor, e.g., MakeItems (before this was only supported for single items).</li>
-
-<li>Score: MakeContainer, MakeSeq and MakeSim are replaced by completely different implementations, MakeConstructor</li>
-</ul></li>
-
 <li>Minor additions
 
 <ul>
+<li><a href="../doc/api/node9.html">Out</a>: added args hasImplicitStaff and hasBreak to Out.toLilypond. Added IsOutmostSim.</li>
+<li><a href="../doc/api/node3.html">GUtils</a>: added RecursiveAdjoin, KeepList, IsRatio, RatioToFloat</li>
+<li><a href="../doc/api/node5.html">MUtils</a>: added TransposeRatioIntoStandardOctave, RatioToStandardOctaveFloat, SortRatios, SortRatios2</li>
+<li><a href="../contributions/anders/HarmonisedScore/doc/node1.html">HS</a>.db: added GetUntransposedRatios, GetUntransposedRootRatio, GetUntransposedRootRatio_Float</li>
+<li>HS.score: added MakeChords, MakeScales, and GetDegree</li>
 <li>HS.rules.schoenberg: added ProgressionSelector, ResolveDissonances, IndexCardinality SetEachChordType SetEachScaleType RequireChordTypes</li>
-<li>HS.score: added MakeChords MakeScales GetDegree</li>
-<li>HS.db: added GetUntransposedRatios, GetUntransposedRootRatio, GetUntransposedRootRatio_Float</li>
-<li>Pattern: added WindowedPattern WindowedPatternRecursions ForAllItems MapItems FirstToLastDistance DxsToXs XsToDxs EqualizeParam MakeIndexConstructor GetMotifIndex FenvBoundaries Arc, FenvContour</li>
-<li>ET31: added many chords and scales to database (origin is Scala's list of 31 ET chords and modi)</li>
-<li>GUtils: added RecursiveAdjoin, KeepList, IsRatio, RatioToFloat</li>
-<li>MUtils: added TransposeRatioIntoStandardOctave, RatioToStandardOctaveFloat, SortRatios, SortRatios2</li>
-<li>Out.toLilypond: added args hasImplicitStaff, hasBreak. Added IsOutmostSim.</li>
+<li><a href="../contributions/anders/ET31/doc/node1.html">ET31</a>: added many chords and scales to database (origin is Scala's list of 31 ET chords and modi)</li>
 </ul></li>
+</ul>
 
+
+<ul>
 <li>Bug fixes and changes
 
 <ul>
+<li><a href="../doc/api/node6.html">Score</a>: ScoreObject method toInitRecord: now outputs strings (e.g., for lilypond) as proper strings (e.g., important for archiving scores)</li>
+<li>Score: Refactored ScoreObject method init: not-explicitly supported arguments are ignored now (a warning is printed)</li>
+<li>Score: Revised ScoreObject method unify: new args exclude, derive, overwrite</li>
+<li>Score: Method toFullRecord: added arg unbind.</li>
+<li>Score: added ScoreObject method addInfos (complements addInfo)</li>
+<li><a href="../doc/api/node9.html">Out</a>: Last note of automatically split and tied notes was longer than what has been set by Out.setMaxLilyRhythm, now fixed</li>
+<li>Out.saveScore: fixed (added wrote prefix)</li>
+<li>Out.recordToVS revised: For values which cannot be transformed into Oz code, an descriptive atom created with Value.toVirtualString is output. Also, now outputs strings as strings, preserves escape sequences etc. (both affects, e.g., archiving scores). Added RecordToVS_simple</li>
+<li><a href="../doc/api/node11.html">Midi</a> output: Note off timing revised: when a note on event and the preceeding note off event occur at exactly the same time, some MIDI devices have problems. So far, Strasheela be default simply removed (OutputMidiFile arg removeQuestionableNoteoffs defaulted to true). Now, by default such note offs are very slightly moved forward (NoteToMidi new arg noteOffOffset defaults to ~0.003, measured in secs &mdash; NoteToMidi is used by default for outputting MIDI notes (matching OutputMidiFile clause with test isNote).</li>
+<li><a href="../doc/api/node3.html">GUtils</a>: simplified IsDivisible implementation, added RelationComplement, ConstrainRelation</li>
+<li><a href="../doc/api/node4.html">LUtils</a>: Refactored EveryNth (new arg Offset), added OddPositions EvenPositions</li>
+<li>LUtils: Fixed function Position to support nested elements</li>
 <li>HS.db: GetChordIndex/GetScaleIndex/GetIntervalIndex: database entries can now have multiple alternative names. When such entries are defined with SetDB, the subfeature 'name' of the feature 'comment' has a list of names (atoms).</li>
 <li>Refactored HS.db.getName: now returns list of alternative chord/scale/interval name</li>
-<li>HS.rules: constraint name changes:
+<li>HS.score:
 
 <ul>
-<li>SmallIntervalProgressions -&gt; SmallIntervalsInProgression</li>
-<li>SmallIntervalProgressions_Percent -&gt; SmallIntervalsInProgression_Percent</li>
+<li>Refactored TransposeDegree: expected scale/chord PCs as list, now FS</li>
+<li>Efficiency improvements: TransposePC: uses now FD.modD instead of FD.modI.</li>
+<li>PitchClassCollection initialisation: constrains that root (untransposed root) is in PCs (untransposed PCs) for better propagation.</li>
+<li>New default for all args getChords/getScales: list with single simultaneous chord/scale (with findSimultaneousItem), nil (old default) if none is found</li>
 </ul></li>
 <li>HS.rules:
 
 <ul>
 <li>Fixed MaxNonharmonicNoteSequence (before limited number of harmonic instead of non-harmonic tones)</li>
 <li>Added ExpressAllChordPCs_AtChordEnd</li>
-</ul></li>
-<li>HS.score: Refactored TransposeDegree: expected scale/chord PCs as list, now FS</li>
-<li>HS.score: efficiency improvements: TransposePC: use FD.modD instead of FD.modI. PitchClassCollection initialisation: constrain that root (untransposed root) is in PCs (untransposed PCs) for better propagation.</li>
-<li>HS.score: new default for all args getChords/getScales: list with single simultaneous chord/scale (with findSimultaneousItem), nil (old default) if none is found</li>
-<li>HS.distro: Fixed bug in IsNoTimepointNorPitch (was orelse instead of andthen)</li>
-<li>GUtils: simplified IsDivisible implementation, added RelationComplement, ConstrainRelation</li>
-<li>Score: ScoreObject method toInitRecord: now outputs strings (e.g., for lilypond) as proper strings</li>
-<li>Score: ScoreObject method unify: added arg overwrite. Method toFullRecord: added arg unbind.</li>
-<li>Out: Revised RecordToVS: now outputs strings as strings, preserves escape sequences etc. Added RecordToVS_simple</li>
-<li>Out: Last note of automatically split and tied notes was longer than what has been set by Out.setMaxLilyRhythm, now fixed</li>
-<li>Score: Revised ScoreObject method unify: new args exclude, and derive</li>
-<li>Out.saveScore: fixed (added wrote prefix)</li>
-<li>ET31.out: Substatianlly refactored Lilypond output of analytical information (chords, scales), now more flexible</li>
-<li>LUtils: Refactored EveryNth (new arg Offset), added OddPositions EvenPositions</li>
-<li>Score: Refactored ScoreObject method init: not-explicitly cared-for arguments are ignored now (a warning is printed)</li>
-<li>Score: added ScoreObject method addInfos (complements addInfo)</li>
-<li>Midi output: Note off timing revised: when a note on event and the preceeding note off event occur at exactly the same time, some MIDI devices have problems. So far, Strasheela be default simply removed (OutputMidiFile arg removeQuestionableNoteoffs defaulted to true). Now, by default such note offs are very slightly moved forward (NoteToMidi new arg noteOffOffset defaults to ~0.003, measured in secs &mdash; NoteToMidi is used by default for outputting MIDI notes (matching OutputMidiFile clause with test isNote).</li>
-<li>Fenv: Changed ItemFenvsToMidiCC and ItemTempoCurveToMidi arg ccsPerSecond from int to float</li>
-<li>Pattern: improved propagation of Direction</li>
-<li>Out.recordToVS: for values which cannot be transformed into Oz code, an descriptive atom created with Value.toVirtualString is output. Affects, e.g., archiving scores</li>
-<li>LUtils: Fixed function Position to support nested elements</li>
-</ul></li>
+<li>constraint name changed:
 
-<li>For further fixes see the <a href="../CHANGELOG.txt">../CHANGELOG.txt</a>.</li>
+<ul>
+<li>SmallIntervalProgressions -&gt; SmallIntervalsInProgression</li>
+<li>SmallIntervalProgressions_Percent -&gt; SmallIntervalsInProgression_Percent</li>
+</ul></li>
+</ul></li>
+<li>HS.distro: Fixed bug in IsNoTimepointNorPitch (was orelse instead of andthen)</li>
+
+<li>ET31.out: Substatianlly refactored Lilypond output of analytical information (chords, scales), now more flexible</li>
+<li><a href="../contributions/anders/Fenv/doc/node1.html">Fenv</a>: Changed ItemFenvsToMidiCC and ItemTempoCurveToMidi arg ccsPerSecond from int to float</li>
+<li>Pattern: improved propagation of Direction</li>
+</ul></li>
+</ul>
+
+
+<ul>
+<li>For further fixes see the <a href="http://apps.sourceforge.net/trac/strasheela/timeline">Trac Timeline</a> or the <a href="../CHANGELOG.txt">../CHANGELOG.txt</a>.</li>
 </ul>
 
 
@@ -732,7 +771,7 @@ See the documentation for <a href="../contributions/anders/HarmonisedScore/doc/n
 <div id="footer">
 <div id="author">&copy; 
 Torsten Anders</div>
-<div id="date">Last time edited: ; INVALID LISP CODE</div>
+<div id="date">Last time edited: 2009.03.08</div>
 </div>
   </body>
 </html>
