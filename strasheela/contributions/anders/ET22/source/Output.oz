@@ -23,7 +23,9 @@ import
 export
    RenderAndShowLilypond SetEnharmonicNotationTable
    AddExplorerOut_ChordsToScore
-   
+
+   IsEt22Note IsEt22Chord IsEt22Scale
+   NoteEt22ToLily NoteEt22ToLily_AdaptiveJI
 define
 
    %%
@@ -186,191 +188,222 @@ define
 	    20:'B\\' 
 	    21:'B'  )}
    end
+
+
+   /** %% Returns true if X is a note object with pitch unit et22.
+   %% */
+   fun {IsEt22Note X}
+      {X isNote($)} andthen 
+      {X getPitchUnit($)} == et22
+   end
+   /** %% Returns true if X is a chord object with root pitch unit et22.
+   %% */
+   fun {IsEt22Chord X}
+      {HS.score.isChord X} andthen 
+      {{X getRootParameter($)} getUnit($)} == et22
+   end
+   /** %% Returns true if X is a scale object with root pitch unit et22.
+   %% */
+   fun {IsEt22Scale X}
+      {HS.score.isScale X} andthen 
+      {{X getRootParameter($)} getUnit($)} == et22
+   end
+
+
+   LilyOctaves = octs(",,,," ",,," ",," "," "" "'" "''" "'''" "''''")
+   %% Transform a Pitch (an int) into the corresponding Lily code (a VS)
+   fun {ET22PitchToLily MyPitch}
+      MyPC = {Int.'mod' MyPitch 22}
+      Oct = {Int.'div' MyPitch 22} + 1
+   in
+      {Et22PcToLily MyPC} # LilyOctaves.Oct
+   end
       
-   local
-   
-      fun {IsEt22Note X}
-	 {X isNote($)} andthen 
-	 {X getPitchUnit($)} == et22
-      end
-      fun {IsEt22Chord X}
-	 {HS.score.isChord X} andthen 
-	 {{X getRootParameter($)} getUnit($)} == et22
-      end
-      fun {IsEt22Scale X}
-	 {HS.score.isScale X} andthen 
-	 {{X getRootParameter($)} getUnit($)} == et22
-      end
+   /** %% Expects a Strasheela note object and returns the corresponding
+   %% Lilypond code (a VS). For simplicity, this transformation does not
+   %% support any additional expessions (e.g. fingering marks, or articulation
+   %% marks).
+   %% */
+   fun {NoteEt22ToLily MyNote}
+      {{Out.makeNoteToLily2
+	fun {$ N} {ET22PitchToLily {N getPitch($)}} end
+	fun {$ N}
+	   NonChordMarker = if {HS.score.isInChordMixinForNote N}
+			       andthen {N isInChord($)} == 0
+			    then "^x"
+			    else ""
+			    end
+	in
+	   NonChordMarker
+	end}
+       MyNote}
+   end
+
+   /** %% Like NoteEt22ToLily, but additionally notates the adaptive JI pitch offset of this note with respect to 22 ET.
+   %% */
+   fun {NoteEt22ToLily_AdaptiveJI MyNote}
+      {{Out.makeNoteToLily2
+	fun {$ N} {ET22PitchToLily {N getPitch($)}} end
+	fun {$ N}
+	   NonChordMarker = if {HS.score.isInChordMixinForNote N}
+			       andthen {N isInChord($)} == 0
+			    then "^x"
+			    else ""
+			    end
+	   JIPitch = {HS.score.getAdaptiveJIPitch N unit}
+	   ETPitch = {N getPitchInMidi($)}
+	   TuningOffset = if {Abs JIPitch-ETPitch} > 0.01
+			  then "_\\markup{"#(JIPitch-ETPitch)*100.0#" c}"
+			  else "_\\markup{0 c}"
+			  end
+	in
+	   NonChordMarker#TuningOffset
+	end}
+       MyNote}
+   end
 
 
-      LilyOctaves = octs(",,,," ",,," ",," "," "" "'" "''" "'''" "''''")
-      %% Transform a Pitch (an int) into the corresponding Lily code (a VS)
-      fun {ET22PitchToLily MyPitch}
-	 MyPC = {Int.'mod' MyPitch 22}
-	 Oct = {Int.'div' MyPitch 22} + 1
-      in
-	 {Et22PcToLily MyPC} # LilyOctaves.Oct
+   fun {SimTo22LilyChord Sim}
+      Items = {Sim getItems($)}
+      Pitches = {Out.listToVS
+		 {Map Items
+		  fun {$ N} {ET22PitchToLily {N getPitch($)}} end}
+		 " "}
+      Rhythms = {Out.lilyMakeRhythms
+		 {Items.1 getDurationParameter($)}}
+      FirstChord = {Out.getUserLily Sim}#"\n <"#Pitches#">"#Rhythms.1
+   in
+      if {Length Rhythms} == 1
+      then FirstChord
+      else FirstChord#{Out.listToVS
+		       {Map Rhythms.2
+			fun {$ R} " ~ <"#Pitches#">"#R end}
+		       " "}
       end
+   end
       
-      %% Expects a Strasheela note object and returns the corresponding
-      %% Lilypond code (a VS). For simplicity, this transformation does not
-      %% support any expessions (e.g. fingering marks, or articulation
-      %% marks). You could add these nevertheless as lily info tag.
-      fun {NoteEt22ToLily MyNote}
-	 {{Out.makeNoteToLily2
-	   fun {$ N} {ET22PitchToLily {N getPitch($)}} end
-	   fun {$ N}
-	      if {HS.score.isInChordMixinForNote N}
-		 andthen {N isInChord($)} == 0
-	      then "^x"
-	      else ""
-	      end
-	   end}
-	  MyNote}
+   /** %% Returns the chord comment (also works for scale). 
+   %% */
+   proc {MakeChordComment MyChord ?Result}
+      Result = '#'('\\column {'
+		   {Out.listToVS {HS.db.getName MyChord} '; '}
+		   ' } ')
+      if {Not {IsVirtualString Result}}
+      then raise noVS(Result) end
       end
+   end
+   /** %% Returns the scale comment. 
+   %% */
+   proc {MakeScaleComment MyScale ?Result}
+      ScaleComment = {HS.db.getInternalScaleDB}.comment.{MyScale getIndex($)}
+   in
+      Result = '#'('\\column {'
+		   if {IsRecord ScaleComment} andthen {HasFeature ScaleComment comment}
+		   then ScaleComment.comment
+		   else ScaleComment
+		   end
+		   ' } ')
+      %% 
+      if {Not {IsVirtualString Result}}
+      then raise noVS(Result) end
+      end
+   end
 
-      fun {SimTo22LilyChord Sim}
-	 Items = {Sim getItems($)}
-	 Pitches = {Out.listToVS
-		    {Map Items
-		     fun {$ N} {ET22PitchToLily {N getPitch($)}} end}
-		    " "}
-	 Rhythms = {Out.lilyMakeRhythms
-		    {Items.1 getDurationParameter($)}}
-	 FirstChord = {Out.getUserLily Sim}#"\n <"#Pitches#">"#Rhythms.1
+   %% NB: much code repetition to NoteEt22ToLily and similar definitions
+   %%
+   fun {ChordEt22ToLily MyChord}
+      Rhythms = {Out.lilyMakeRhythms {MyChord getDurationParameter($)}}
+      ChordDescr = {MakeChordComment MyChord}
+%	 ChordDescr = {MakeChordRatios MyChord} 
+      AddedSigns = '_\\markup{'#ChordDescr#'}'
+   in
+      %% if MyChord is shorter than 64th then skip it (Out.lilyMakeRhythms
+      %% then returns nil)
+      if Rhythms == nil
+      then ''
+      else  
+	 MyRoot = {ET22PitchToLily {MyChord getRoot($)}}
+	 MyPitches = "\\grace <"#{Out.listToVS {Map {HS.score.pcSetToSequence
+						     {MyChord getPitchClasses($)}
+						     {MyChord getRoot($)}}
+						ET22PitchToLily}
+				  %% set Lily grace note duration to quarter notes (4)
+				  " "}#">4 "
+	 FirstChord = MyPitches#MyRoot#Rhythms.1#AddedSigns
       in
-	 if {Length Rhythms} == 1
+	 if {Length Rhythms} == 1 % is tied chord?
 	 then FirstChord
-	 else FirstChord#{Out.listToVS
-			  {Map Rhythms.2
-			   fun {$ R} " ~ <"#Pitches#">"#R end}
+	    %% tied roots
+	 else FirstChord#{Out.listToVS {Map Rhythms.2
+					fun {$ R} " ~ "#MyRoot#R end}
 			  " "}
 	 end
       end
-      
-      /** %% Returns the chord comment (also works for scale). 
-      %% */
-      proc {MakeChordComment MyChord ?Result}
-	 Result = '#'('\\column {'
-		      {Out.listToVS {HS.db.getName MyChord} '; '}
-		      ' } ')
-	 if {Not {IsVirtualString Result}}
-	 then raise noVS(Result) end
-	 end
-      end
-      /** %% Returns the scale comment. 
-      %% */
-      proc {MakeScaleComment MyScale ?Result}
-	 ScaleComment = {HS.db.getInternalScaleDB}.comment.{MyScale getIndex($)}
-      in
-	 Result = '#'('\\column {'
-		      if {IsRecord ScaleComment} andthen {HasFeature ScaleComment comment}
-		      then ScaleComment.comment
-		      else ScaleComment
-		      end
-		      ' } ')
-	 %% 
-	 if {Not {IsVirtualString Result}}
-	 then raise noVS(Result) end
-	 end
-      end
-
-      %% NB: much code repetition to NoteEt22ToLily and similar definitions
-      %%
-      fun {ChordEt22ToLily MyChord}
-	 Rhythms = {Out.lilyMakeRhythms {MyChord getDurationParameter($)}}
-	 ChordDescr = {MakeChordComment MyChord}
-%	 ChordDescr = {MakeChordRatios MyChord} 
-	 AddedSigns = '_\\markup{'#ChordDescr#'}'
-      in
-	 %% if MyChord is shorter than 64th then skip it (Out.lilyMakeRhythms
-	 %% then returns nil)
-	 if Rhythms == nil
-	 then ''
-	 else  
-	    MyRoot = {ET22PitchToLily {MyChord getRoot($)}}
-	    MyPitches = "\\grace <"#{Out.listToVS {Map {HS.score.pcSetToSequence
-							{MyChord getPitchClasses($)}
-							{MyChord getRoot($)}}
-						   ET22PitchToLily}
-				     %% set Lily grace note duration to quarter notes (4)
-				     " "}#">4 "
-	    FirstChord = MyPitches#MyRoot#Rhythms.1#AddedSigns
-	 in
-	    if {Length Rhythms} == 1 % is tied chord?
-	    then FirstChord
-	       %% tied roots
-	    else FirstChord#{Out.listToVS {Map Rhythms.2
-					   fun {$ R} " ~ "#MyRoot#R end}
-			     " "}
-	    end
-	 end
-      end
+   end
 
       
-      %% Notate all scale pitches as grace notes first, then indicate duration of scale by scale root only 
-      fun {ScaleEt22ToLily MyScale}
-	 Rhythms = {Out.lilyMakeRhythms {MyScale getDurationParameter($)}}
-	 ScaleDescr = {MakeScaleComment MyScale}
-	 AddedSigns = '_\\markup{'#ScaleDescr#'}'
-      in
-	 %% if MyChord is shorter than 64th then skip it (Out.lilyMakeRhythms
-	 %% then returns nil)
-	 if Rhythms == nil
-	 then ''
-	 else
-	    MyRoot = {ET22PitchToLily {MyScale getRoot($)}}
-	    MyPitches = "\\grace {"#{Out.listToVS {Map {HS.score.pcSetToSequence
-							{MyScale getPitchClasses($)}
-							{MyScale getRoot($)}}
-						   ET22PitchToLily}
-				     %% set Lily grace note duration to 4
-				     "4 "}#"} "
-	    FirstScale = MyPitches#MyRoot#Rhythms.1#AddedSigns
-	 in
-	    if {Length Rhythms} == 1 % is tied scale?
-	    then FirstScale
-	       %% tied scale
-	    else FirstScale#{Out.listToVS {Map Rhythms.2
-					   fun {$ R} " ~ "#MyRoot#R end}
-			     " "}
-	    end
-	 end
-      end
-
-
-      %% code to insert at beginning and end of Lilypond score, defines ET notation 
-      LilyHeader = {Out.readFromFile
-		    {{Path.make
-		      {Resolve.localize
-		       'x-ozlib://anders/strasheela/ET22/source/Lilyheader.ly.data'}.1}
-		     toString($)}}
-      LilyFooter = "\n}"
-      
+   %% Notate all scale pitches as grace notes first, then indicate duration of scale by scale root only 
+   fun {ScaleEt22ToLily MyScale}
+      Rhythms = {Out.lilyMakeRhythms {MyScale getDurationParameter($)}}
+      ScaleDescr = {MakeScaleComment MyScale}
+      AddedSigns = '_\\markup{'#ScaleDescr#'}'
    in
-      /** %% Proc is like Out.renderAndShowLilypond, but provides buildin support for notes and chords with pitch units in et22.
-      %% Please note that this support is defined by the argument clauses and wrapper (see Out.toLilypond) -- additional clauses are still possible, but adding new note/chord clauses will overwrite the support for 22 ET (the wrapper can be defined like for Out.renderAndShowLilypond).
-      %% Also, note that convert-ly (which updates) sometimes breaks the 22 ET notation (e.g., when inserting new explicit staffs).
-      %% */
-      proc {RenderAndShowLilypond MyScore Args}
-	 AddedClauses = [Out.isLilyChord#SimTo22LilyChord
-			 IsEt22Note#NoteEt22ToLily
-			 IsEt22Chord#ChordEt22ToLily
-			 IsEt22Scale#ScaleEt22ToLily]
-	 ET22Wrapper = [LilyHeader LilyFooter]
-	 AddedArgs = unit(wrapper:if {HasFeature Args wrapper}
-				  then [H T] = Args.wrapper in 
-				     [H#ET22Wrapper.1 T]
-				  else ET22Wrapper
-				  end
-			  clauses:if {HasFeature Args clauses}
-				  then {Append Args.clauses AddedClauses}
-				  else AddedClauses
-				  end)
-	 As = {Adjoin Args AddedArgs}
+      %% if MyChord is shorter than 64th then skip it (Out.lilyMakeRhythms
+      %% then returns nil)
+      if Rhythms == nil
+      then ''
+      else
+	 MyRoot = {ET22PitchToLily {MyScale getRoot($)}}
+	 MyPitches = "\\grace {"#{Out.listToVS {Map {HS.score.pcSetToSequence
+						     {MyScale getPitchClasses($)}
+						     {MyScale getRoot($)}}
+						ET22PitchToLily}
+				  %% set Lily grace note duration to 4
+				  "4 "}#"} "
+	 FirstScale = MyPitches#MyRoot#Rhythms.1#AddedSigns
       in
-	 {Out.renderAndShowLilypond MyScore As}
+	 if {Length Rhythms} == 1 % is tied scale?
+	 then FirstScale
+	    %% tied scale
+	 else FirstScale#{Out.listToVS {Map Rhythms.2
+					fun {$ R} " ~ "#MyRoot#R end}
+			  " "}
+	 end
       end
+   end
+
+
+   %% code to insert at beginning and end of Lilypond score, defines ET notation 
+   LilyHeader = {Out.readFromFile
+		 {{Path.make
+		   {Resolve.localize
+		    'x-ozlib://anders/strasheela/ET22/source/Lilyheader.ly.data'}.1}
+		  toString($)}}
+   LilyFooter = "\n}"
+      
+   
+   /** %% Proc is like Out.renderAndShowLilypond, but provides buildin support for notes and chords with pitch units in et22.
+   %% Please note that this support is defined by the argument clauses and wrapper (see Out.toLilypond) -- additional clauses are still possible, but adding new note/chord clauses will overwrite the support for 22 ET (the wrapper can be defined like for Out.renderAndShowLilypond).
+   %% Also, note that convert-ly (which updates) sometimes breaks the 22 ET notation (e.g., when inserting new explicit staffs).
+   %% */
+   proc {RenderAndShowLilypond MyScore Args}
+      AddedClauses = [Out.isLilyChord#SimTo22LilyChord
+		      IsEt22Note#NoteEt22ToLily
+		      IsEt22Chord#ChordEt22ToLily
+		      IsEt22Scale#ScaleEt22ToLily]
+      ET22Wrapper = [LilyHeader LilyFooter]
+      AddedArgs = unit(wrapper:if {HasFeature Args wrapper}
+			       then [H T] = Args.wrapper in 
+				  [H#ET22Wrapper.1 T]
+			       else ET22Wrapper
+			       end
+		       clauses:if {HasFeature Args clauses}
+			       then {Append Args.clauses AddedClauses}
+			       else AddedClauses
+			       end)
+      As = {Adjoin Args AddedArgs}
+   in
+      {Out.renderAndShowLilypond MyScore As}
    end
    
 end
