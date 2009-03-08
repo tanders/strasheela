@@ -55,8 +55,8 @@
 functor 
    
 import
-   GUtils at 'x-ozlib://anders/strasheela/source/GeneralUtils.ozf'
-   MUtils at 'x-ozlib://anders/strasheela/source/MusicUtils.ozf'
+%    GUtils at 'x-ozlib://anders/strasheela/source/GeneralUtils.ozf'
+%    MUtils at 'x-ozlib://anders/strasheela/source/MusicUtils.ozf'
    HS at 'x-ozlib://anders/strasheela/HarmonisedScore/HarmonisedScore.ozf'
    ET22 at '../ET22.ozf'
    
@@ -197,7 +197,7 @@ define
 		     essentialPitchClasses:[6#1 7#1 9#1 10#1]
 		     comment:'subminor major 6th')  
 	       chord(pitchClasses:[5#1 6#1 7#1 9#1]
-		     roots:[1#9]    
+		     roots:[9#1]    
 %				dissonanceDegree:2
 		     essentialPitchClasses:[5#1 6#1 7#1 9#1]
 		     comment:'supermajor minor 7th')
@@ -405,16 +405,7 @@ define
 	 {Record.mapInd Decl
 	  fun {$ Feat X}
 	     case Feat
-	     of pitchClasses then
-		PCs = {Map X Transform}
-	     in
-		if {All PCs GUtils.isRatio} 
-		then 
-		   %% sorted in ascending order and (first) root is always first.
-		   %% important for correct adaptive JI (so HS.score.getDegree returns currect ratio position)
-		   {MUtils.sortRatios2 PCs Decl.roots.1}
-		else PCs	% ?? leave unsorted -- no harm for JI..
-		end
+	     of pitchClasses then {Map X Transform}
 	     [] essentialPitchClasses then {Map X Transform}
 	     [] roots then {Map X Transform}
 	     else X
@@ -427,21 +418,22 @@ define
 
    /** %% Full database declaration defined in this functor. 
    %% */
-   DB = unit(chordDB:{Record.map Chords
-		      fun {$ X}
-			 {HS.db.ratiosInDBEntryToPCs {ToStandardDeclaration X}
+   DB = unit(
+	   chordDB:{Record.map Chords
+		    fun {$ X}
+		       {HS.db.ratiosInDBEntryToPCs {ToStandardDeclaration X}
+			PitchesPerOctave}
+		    end}
+	   scaleDB:{Record.map Scales
+		    fun {$ X}
+		       {HS.db.ratiosInDBEntryToPCs {ToStandardDeclaration X}
 			  PitchesPerOctave}
-		      end}
-	     scaleDB:{Record.map Scales
-		      fun {$ X}
-			 {HS.db.ratiosInDBEntryToPCs {ToStandardDeclaration X}
-			  PitchesPerOctave}
-		      end}
-	     intervalDB:{Record.map Intervals
-			 fun {$ X} {HS.db.ratiosInDBEntryToPCs X PitchesPerOctave} end}
-	     pitchesPerOctave: PitchesPerOctave
-	     accidentalOffset: AccidentalOffset
-	     octaveDomain: OctaveDomain)
+		    end}
+	   intervalDB:{Record.map Intervals
+		       fun {$ X} {HS.db.ratiosInDBEntryToPCs X PitchesPerOctave} end}
+	   pitchesPerOctave: PitchesPerOctave
+	   accidentalOffset: AccidentalOffset
+	   octaveDomain: OctaveDomain)
    
 end
 
