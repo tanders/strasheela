@@ -1429,31 +1429,31 @@ MyScore = {HS.score.chordsToScore [chord(duration:1
 %%
 
 
-%% TMP
-declare
-fun {TestJI MyNote}
-   JIPitch = {HS.score.getAdaptiveJIPitch MyNote unit}
-   ETPitch = {MyNote getPitchInMidi($)}
-in
-   %% JI may at max be 10 cent off, otherwise take ETPitch
-   %% 13#8 is 11 cent error
-   if {Abs JIPitch-ETPitch} > 0.11 then
-      {Browse
-       off_JI(ji:{HS.score.getAdaptiveJIPitch MyNote unit}
-	      midi: {MyNote getPitchInMidi($)}
-	      note:{MyNote toInitRecord($)}
-	      chordIndex: {{MyNote getChords($)}.1 getIndex($)}
-	      chordTransposition: {{MyNote getChords($)}.1 getTransposition($)}
-	      chordPCs: {{MyNote getChords($)}.1 getPitchClasses($)}
-	      chordRatios: {HS.db.getUntransposedRatios {MyNote getChords($)}.1}
-	      noteDegreeInChord: {HS.score.getDegree {MyNote getPitchClass($)} {MyNote getChords($)}.1 unit(accidentalRange: 0)}
-	     )}
-      ETPitch
-   else
-      {Browse ok_JI}
-      JIPitch
-   end
-end
+% %% TMP
+% declare
+% fun {TestJI MyNote}
+%    JIPitch = {HS.score.getAdaptiveJIPitch MyNote unit}
+%    ETPitch = {MyNote getPitchInMidi($)}
+% in
+%    %% JI may at max be 10 cent off, otherwise take ETPitch
+%    %% 13#8 is 11 cent error
+%    if {Abs JIPitch-ETPitch} > 0.11 then
+%       {Browse
+%        off_JI(ji:{HS.score.getAdaptiveJIPitch MyNote unit}
+% 	      midi: {MyNote getPitchInMidi($)}
+% 	      note:{MyNote toInitRecord($)}
+% 	      chordIndex: {{MyNote getChords($)}.1 getIndex($)}
+% 	      chordTransposition: {{MyNote getChords($)}.1 getTransposition($)}
+% 	      chordPCs: {{MyNote getChords($)}.1 getPitchClasses($)}
+% 	      chordRatios: {HS.db.getUntransposedRatios {MyNote getChords($)}.1}
+% 	      noteDegreeInChord: {HS.score.getDegree {MyNote getPitchClass($)} {MyNote getChords($)}.1 unit(accidentalRange: 0)}
+% 	     )}
+%       ETPitch
+%    else
+%       {Browse ok_JI}
+%       JIPitch
+%    end
+% end
 
 %%
 %% 31 ET
@@ -1463,6 +1463,112 @@ declare
 [ET31] = {ModuleLink ['x-ozlib://anders/strasheela/ET31/ET31.ozf']}
 {HS.db.setDB ET31.db.fullDB}
 
+%% test 1: untransposed chord root is 1#1, chord untransposed: OK
+declare
+MyNote
+MyChord
+MyScore = {Score.make sim([note(handle: MyNote
+				duration:4
+				pitchClass: {ET31.pc 'G'}
+				octave: 4)
+			   chord(handle:MyChord
+				 duration:4
+ 				 index: {HS.db.getChordIndex 'major'}
+				 transposition: {ET31.pc 'C'}
+				)
+			  ]
+			  startTime: 0
+			  timeUnit: beats(4))
+	   add(note:HS.score.note
+	       chord:HS.score.chord
+	       scale:HS.score.scale)}
+{Browse ji#{HS.score.getAdaptiveJIPitch MyNote unit}}
+%% compare
+{Browse et#{MyNote getPitchInMidi($)}}
+
+
+%% test 2: untransposed chord root is 1#1, chord transposed: OK
+declare
+MyNote
+MyChord
+MyScore = {Score.make sim([note(handle: MyNote
+				duration:4
+				pitchClass: {ET31.pc 'A'}
+				octave: 4)
+			   chord(handle:MyChord
+				 duration:4
+ 				 index: {HS.db.getChordIndex 'major'}
+				 transposition: {ET31.pc 'D'}
+				)
+			  ]
+			  startTime: 0
+			  timeUnit: beats(4))
+	   add(note:HS.score.note
+	       chord:HS.score.chord
+	       scale:HS.score.scale)}
+{Browse ji#{HS.score.getAdaptiveJIPitch MyNote unit}}
+%% compare
+{Browse et#{MyNote getPitchInMidi($)}}
+
+
+%% test 3: transposed chord root is 5#4, chord is untransposed
+%%
+%%
+%% OK wrong degree:
+%% - PC 4 is ratio 35#1 at chord degree 4 (instead of wrong degree 1)
+%% - PC 10 is ratio 5#1 at degree 1 (instead of wrong degree 2)
+%%
+%% OK :there should be no "root correction" 
+%% 
+declare
+MyNote
+MyChord
+MyScore = {Score.make sim([note(handle: MyNote
+				duration:4
+				pitchClass: 4 % 4 10 25 28
+				octave: 4)
+			   chord(handle:MyChord
+				 duration:4
+				 index: 17 % '15-limit ASS 2'
+				 transposition: 0
+				)
+			  ]
+			  startTime: 0
+			  timeUnit: beats(4))
+	   add(note:HS.score.note
+	       chord:HS.score.chord
+	       scale:HS.score.scale)}
+{Browse ji#{HS.score.getAdaptiveJIPitch MyNote unit}}
+%% compare
+{Browse et#{MyNote getPitchInMidi($)}}
+
+
+
+%% test 4: transposed chord root 5#4, chord transposed 
+declare
+MyNote
+MyChord
+MyScore = {Score.make sim([note(handle: MyNote
+				duration:4
+				pitchClass: 7 
+				octave: 4)
+			   chord(handle:MyChord
+				 duration:4
+				 index: 17 % '15-limit ASS 2'
+				 transposition: 13
+				)
+			  ]
+			  startTime: 0
+			  timeUnit: beats(4))
+	   add(note:HS.score.note
+	       chord:HS.score.chord
+	       scale:HS.score.scale)}
+{Browse ji#{HS.score.getAdaptiveJIPitch MyNote unit}}
+%% compare
+{Browse et#{MyNote getPitchInMidi($)}}
+
+
+
 %% try changing the pitch class of MyNote and the roots of the chord and scale and see how the adaptive pitch changes
 declare
 MyNote
@@ -1471,35 +1577,36 @@ MyChord
 MyScale
 MyScore = {Score.make sim([note(handle: MyNote
 				duration:4
+				pitchClass: {ET31.pc 'F#'}
 % 				pitchClass: {ET31.pc 'A'}
 % 				pitchClass: 11
 % 				pitchClass: 28 % B
-				pitchClass: 7 % '15-limit ASS 2'
+% 				pitchClass: 7 % '15-limit ASS 2'
 % 				pitchClass: 23  % TODO: 
 				octave: 4)
-			   note(handle: N2
-				duration:4
-				pitchClass: 10
-				octave: 4)
-			   note(handle: N3
-				duration:4
-				pitchClass: 17
-				octave: 4)
-			   note(handle: N4
-				duration:4
-				pitchClass: 23
-				octave: 4)
+% 			   note(handle: N2
+% 				duration:4
+% 				pitchClass: 10
+% 				octave: 4)
+% 			   note(handle: N3
+% 				duration:4
+% 				pitchClass: 17
+% 				octave: 4)
+% 			   note(handle: N4
+% 				duration:4
+% 				pitchClass: 23
+% 				octave: 4)
 			   chord(handle:MyChord
 				 duration:4
-%  				 index: {HS.db.getChordIndex 'major'}
+ 				 index: {HS.db.getChordIndex 'major'}
 % 				 index: 23
 % 				 index: 51
-				 index: 17
+% 				 index: 17
 % 				 index: 22 % TODO:
-% 				 transposition: {ET31.pc 'C'}
+				 transposition: {ET31.pc 'D'}
 % 				 transposition: 6
 % 				 transposition: 18 % G
-				 transposition: 13
+% 				 transposition: 13
 % 				 transposition: 23 % TODO:
 				)
 			   scale(handle:MyScale
@@ -1518,70 +1625,108 @@ MyScore = {Score.make sim([note(handle: MyNote
 {Browse et#{MyNote getPitchInMidi($)}}
 
 
-%% BUG: JI pitches are not even ascending, as they should be
-{Map [MyNote N2 N3 N4]
- fun {$ N} ji#{HS.score.getAdaptiveJIPitch N unit} end}
-
-{Map [MyNote N2 N3 N4]
- fun {$ N} et#{N getPitchInMidi($)} end}
-
-% {Pattern.map2Neighbours [MyNote N2 N3 N4]
-%  fun {$ N1 N2} {HS.score.getAdaptiveJIPitch N2 unit} - {HS.score.getAdaptiveJIPitch N1 unit} end}
-
-{Map [MyNote N2 N3 N4]
- fun {$ N} et#{N getPitchInMidi($)} end}
 
 
-{TestJI MyNote}
+% %% BUG: JI pitches are not even ascending, as they should be
+% {Map [MyNote N2 N3 N4]
+%  fun {$ N} ji#{HS.score.getAdaptiveJIPitch N unit} end}
 
-%% BUG: 
+% {Map [MyNote N2 N3 N4]
+%  fun {$ N} et#{N getPitchInMidi($)} end}
+
+% % {Pattern.map2Neighbours [MyNote N2 N3 N4]
+% %  fun {$ N1 N2} {HS.score.getAdaptiveJIPitch N2 unit} - {HS.score.getAdaptiveJIPitch N1 unit} end}
+
+% {Map [MyNote N2 N3 N4]
+%  fun {$ N} et#{N getPitchInMidi($)} end}
+
+
+% {TestJI MyNote}
+
+% %% BUG: 
+
+% %%
+% %% Problem is not just taking the wrong chord index -- JI pitches and ET pitches are not just swapped in their order...
+% %%
+
+% %% which of these two forms is used in HS.score.getDegree -- this might be the reason for errors
+
+% {HS.score.pcSetToSequence {MyChord getPitchClasses($)} {MyChord getRoot($)}}
+
+% %% this one is obviously used in HS.score.getDegree (see tests below) 
+% {HS.score.pcSetToSequence {MyChord getPitchClasses($)} {MyChord getTransposition($)}}
+
+
+% %% TODO:
+% %% - lasse dir degree von note anzeigen..
+% %% ?? - check whether wrong JI pitch is actually also a chord pitch (so only the chord degree is wrong) 
+
+
+% {HS.score.getDegree 10 MyChord unit(accidentalRange: 0)}
+% % -> 4
+
+% {HS.score.getDegree 17 MyChord unit(accidentalRange: 0)}
+% % -> 1
+
+
+
+% {ET31.pcName 18}
+
+% {HS.db.getName MyChord}
+
+% {MyChord getPitchClasses($)}
+
+% {HS.db.getUntransposedRatios MyChord}
+
+% {MyChord getTransposition($)}
+
+% {HS.db.getUntransposedRootRatio MyChord}
+
+% {HS.db.getUntransposedRootRatio_Float MyChord}
+
+% {MUtils.sortRatios [5#1 7#1 15#1 35#1]}
+
+
+% {HS.score.getDegree 10 MyChord unit(accidentalRange: 0)}
+
+
+% {MyChord getPitchClasses($)}
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%
 
 %%
-%% Problem is not just taking the wrong chord index -- JI pitches and ET pitches are not just swapped in their order...
+%% 22 ET
 %%
 
-%% which of these two forms is used in HS.score.getDegree -- this might be the reason for errors
+declare
+[ET22] = {ModuleLink ['x-ozlib://anders/strasheela/ET22/ET22.ozf']}
+{HS.db.setDB ET22.db.fullDB}
 
-{HS.score.pcSetToSequence {MyChord getPitchClasses($)} {MyChord getRoot($)}}
-
-%% this one is obviously used in HS.score.getDegree (see tests below) 
-{HS.score.pcSetToSequence {MyChord getPitchClasses($)} {MyChord getTransposition($)}}
-
-
-%% TODO:
-%% - lasse dir degree von note anzeigen..
-%% ?? - check whether wrong JI pitch is actually also a chord pitch (so only the chord degree is wrong) 
-
-
-{HS.score.getDegree 10 MyChord unit(accidentalRange: 0)}
-% -> 4
-
-{HS.score.getDegree 17 MyChord unit(accidentalRange: 0)}
-% -> 1
-
-
-
-{ET31.pcName 18}
-
-{HS.db.getName MyChord}
-
-{MyChord getPitchClasses($)}
-
-{HS.db.getUntransposedRatios MyChord}
-
-{MyChord getTransposition($)}
-
-{HS.db.getUntransposedRootRatio MyChord}
-
-{HS.db.getUntransposedRootRatio_Float MyChord}
-
-{MUtils.sortRatios [5#1 7#1 15#1 35#1]}
-
-
-{HS.score.getDegree 10 MyChord unit(accidentalRange: 0)}
-
-
-{MyChord getPitchClasses($)}
+%% test 1: untransposed chord root is 1#1, chord untransposed: OK
+declare
+MyNote
+MyChord
+MyScore = {Score.make sim([note(handle: MyNote
+				duration:4
+				pitchClass: {ET22.pc 'G'}
+				octave: 4)
+			   chord(handle:MyChord
+				 duration:4
+ 				 index: {HS.db.getChordIndex 'harmonic 7th'}
+				 transposition: {ET22.pc 'C'}
+				)
+			  ]
+			  startTime: 0
+			  timeUnit: beats(4))
+	   add(note:HS.score.note
+	       chord:HS.score.chord
+	       scale:HS.score.scale)}
+{Browse ji#{HS.score.getAdaptiveJIPitch MyNote unit}}
+%% compare
+{Browse et#{MyNote getPitchInMidi($)}}
 
 
 
