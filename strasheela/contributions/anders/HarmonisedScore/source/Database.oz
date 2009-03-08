@@ -446,13 +446,12 @@ define
    local
       /** %% Returns the rounding error of rounding a pitch class float into a pitch class int. The meaning of PC (a float) depends on KeysPerOctave (a float). The error is returned in cent (a float).
       %% */
-      %% BUG: reported error signs not correct
       fun {PCError PC KeysPerOctave}
 	 fun {ToCent X}
 	    (X / KeysPerOctave) * 1200.0
 	 end
       in
-	 {ToCent (PC - {Round PC})}
+	 ~{ToCent (PC - {Round PC})}
       end
       /** %% Transform Ratio (either a float or a fraction specification in the form &lt;Int&gt;#&lt;Int&gt;) into a pitch class interval (a float) depending on KeysPerOctave (a float).
       %% */
@@ -504,31 +503,52 @@ define
 	 %% Internally, KeysPerOctave arg is always a float
 	 KeysPerOctave_F = {IntToFloat KeysPerOctave} 
 	 % Comment = {Record.clone MyDBEntry}
-	 Comment = {RecordC.tell {Label MyDBEntry}} 
+	 Comment = {RecordC.tell {Label MyDBEntry}}
+	 %% sort PC ratios to start with root -- important for GetDegree (e.g. for adaptive JI) 
+	 MyDBEntry_Sorted
+	 = {Adjoin MyDBEntry
+	    {Adjoin
+	     if {HasFeature MyDBEntry pitchClasses}
+	     then
+		PCs = MyDBEntry.pitchClasses
+		Root = MyDBEntry.roots.1
+	     in
+		unit(pitchClasses:
+			if {All PCs GUtils.isRatio}
+			then
+			   %% sorted in ascending order and (first) root is always first.
+			   %% important for correct adaptive JI (so HS.score.getDegree returns currect ratio position)
+			   {MUtils.sortRatios2 PCs Root}
+			else RootPos = {LUtils.position Root PCs} in
+			   {Append {List.drop PCs RootPos-1} {List.take PCs RootPos-1}} 
+			end)
+	     else unit
+	     end
+	     {Label MyDBEntry}}}
       in
-	 if {HasFeature MyDBEntry comment}
+	 if {HasFeature MyDBEntry_Sorted comment}
 	 then
-	    if {IsRecord MyDBEntry.comment} andthen {Width MyDBEntry.comment} > 0
-	    then {Record.forAllInd MyDBEntry.comment
+	    if {IsRecord MyDBEntry_Sorted.comment} andthen {Width MyDBEntry_Sorted.comment} > 0
+	    then {Record.forAllInd MyDBEntry_Sorted.comment
 		  proc {$ Feat X}
 		     Comment ^ Feat = X
 		  end}
 	    else
-	       Comment ^ comment = MyDBEntry.comment
+	       Comment ^ comment = MyDBEntry_Sorted.comment
 	    end
 	 end
 	 Out = {Record.clone {Adjoin
 			      unit(comment:_) %% compulsary feat 'comment'
-			      MyDBEntry}}
+			      MyDBEntry_Sorted}}
 	 %%
-	 {Record.forAllInd {Record.subtract MyDBEntry comment}
+	 {Record.forAllInd {Record.subtract MyDBEntry_Sorted comment}
 	  proc {$ Feat X}
 	     proc {BindComment Val}
 		CommentFeat = Comment ^ Feat
 	     in
-		%% for features which are contained in both MyDBEntry
-		%% and MyDBEntry.comment, the (already
-		%% determined) value of MyDBEntry.comment is kept
+		%% for features which are contained in both MyDBEntry_Sorted
+		%% and MyDBEntry_Sorted.comment, the (already
+		%% determined) value of MyDBEntry_Sorted.comment is kept
 		if {IsFree CommentFeat}
 		then CommentFeat = Val
 		end
@@ -546,7 +566,7 @@ define
 	     then Aux = {RatiosToPCs X KeysPerOctave_F} in
 		{BindComment Aux}
 		Out.Feat = {Map Aux fun {$ X} X.pc end}
-	     else raise unsupportedValue(RatiosInDBEntryToPCs MyDBEntry value:X) end
+	     else raise unsupportedValue(RatiosInDBEntryToPCs MyDBEntry_Sorted value:X) end
 	     end
 	  end}
 	 Out.comment = Comment
