@@ -19,6 +19,7 @@ import
 %    Browser(browse:Browse)
    GUtils at 'GeneralUtils.ozf'
    LUtils at 'ListUtils.ozf'
+   Out at 'Output.ozf'
    %% NOTE: dependency to contribution
    Pattern at 'x-ozlib://anders/strasheela/Pattern/Pattern.ozf'
    
@@ -97,8 +98,14 @@ define
       Pos = {LUtils.position StartRatio SortedRs}
       Xs Ys
    in
-      {List.takeDrop SortedRs Pos-1 Xs Ys}
-      {Append Ys Xs}
+      if Pos == nil then
+	 {Exception.raiseError
+	  strasheela(failedRequirement StartRatio "ratio not contained in ["#{Out.listToVS Ratios " "}#"]")}
+	 unit			% never returned
+      else
+	 {List.takeDrop SortedRs Pos-1 Xs Ys}
+	 {Append Ys Xs}
+      end
    end
 
    
