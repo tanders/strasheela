@@ -142,9 +142,9 @@ clearInterval(drawit)
 </span></li><li>SDistro at "<span class="string">x-ozlib://anders/strasheela/source/ScoreDistribution.ozf"
 </span></li></ul></code>
 <h3>Export</h3>
-<code><ul><li>&lt;P/2:<a href="#entity376"><span class="functionname">MakeOrder_TimeScaleChordPitchclass</span></a>&gt;
-</li><li>&lt;P/2:<a href="#entity377"><span class="functionname">MakeOrder_TimeScaleChordPitchclassOctave</span></a>&gt;
-</li><li>&lt;P/2:<a href="#entity378"><span class="functionname">IsNoTimepointNorPitch</span></a>&gt;
+<code><ul><li>&lt;P/2:<a href="#entity385"><span class="functionname">MakeOrder_TimeScaleChordPitchclass</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity386"><span class="functionname">MakeOrder_TimeScaleChordPitchclassOctave</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity387"><span class="functionname">IsNoTimepointNorPitch</span></a>&gt;
 </li><li>typewise:<span class="variablename">Typewise_Distro</span>
 </li><li>leftToRight_TypewiseTieBreaking:<span class="variablename">LeftToRight_TypewiseTieBreaking_Distro</span>
 </li><li>typewise_LeftToRightTieBreaking:<span class="variablename">Typewise_LeftToRightTieBreaking_Distro</span>
@@ -152,7 +152,7 @@ clearInterval(drawit)
 <h3>Define</h3>
 
 <code>
-<a name="entity376">
+<a name="entity385">
 <span class="keyword">fun</span>{<span class="functionname">MakeOrder_TimeScaleChordPitchclass</span> P}<br>
 <span class="string"> [variable ordering constructor] Returns a score variable ordering. A variable ordering is a binary function expecting two parameter objects and returning a boolean value, which is given to the argument 'order' expected by score solvers. This variable ordering first visits time parameters, then scale, then chord, and then pitch class parameters. It breaks ties (i.e. both parameters are the same type or not one of these type) with the score variable ordering P. For example, P can be SDistro.dom.<BR>
 <BR>
@@ -160,7 +160,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity377">
+<a name="entity386">
 <span class="keyword">fun</span>{<span class="functionname">MakeOrder_TimeScaleChordPitchclassOctave</span> P}<br>
 <span class="string"> [variable ordering constructor] Returns a score variable ordering. This variable ordering first visits time parameters, then scale, then chord, then pitch class parameters, and then octaves. It breaks ties (i.e. both parameters are the same type or not one of these type) with the score variable ordering P. For example, P can be SDistro.dom.<BR>
 <BR>
@@ -170,7 +170,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity378">
+<a name="entity387">
 <span class="keyword">fun</span>{<span class="functionname">IsNoTimepointNorPitch</span> X}<br>
 <span class="string"> [Parameter filtering test] Score distribution should only be performed on the parameters necessary for efficiency. IsNoTimepointNorPitch returns false for the following parameter types: time points, and pitch parameters with one of the following info tags: root, untransposedRoot and notePitch (notePitch is added to a note's pitch parameter info tags by PitchClassMixin), and true otherwise.<BR>
  NB: using this test for filtering is suitable for many harmonic CSPs. When time intervals (duration and offset time parameters) are determined, then time points will be determined by propagation. Similarily, pitch parameters will be determined by propagation if the pitch class and octave are determined. Nevertheless, depending on your CSP this filtering might not be appropriate. For example, if your CSP uses chord and scale degrees for notes, then it may be appropriate to filter these parameters out as well or alternatively filter out the note pitch class parameters.<BR>

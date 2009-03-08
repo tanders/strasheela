@@ -138,14 +138,19 @@ clearInterval(drawit)
 </span></li><li><a href="node6.html">ET22</a> at "<span class="string">../ET22.ozf"
 </span></li></ul></code>
 <h3>Export</h3>
-<code><ul><li>&lt;P/2:<a href="#entity36"><span class="functionname">RenderAndShowLilypond</span></a>&gt;
+<code><ul><li>&lt;P/2:<a href="#entity41"><span class="functionname">RenderAndShowLilypond</span></a>&gt;
 </li><li>&lt;P/1:<a href="#entity35"><span class="functionname">SetEnharmonicNotationTable</span></a>&gt;
 </li><li>&lt;P/1:<a href="#entity34"><span class="functionname">AddExplorerOut_ChordsToScore</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity36"><span class="functionname">IsEt22Note</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity37"><span class="functionname">IsEt22Chord</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity38"><span class="functionname">IsEt22Scale</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity39"><span class="functionname">NoteEt22ToLily</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity40"><span class="functionname">NoteEt22ToLily_AdaptiveJI</span></a>&gt;
 </li></ul></code>
 <h3>Define</h3>
 
 <code>
-<a name="entity36">
+<a name="entity41">
 <span class="keyword">proc</span>{<span class="functionname">RenderAndShowLilypond</span> MyScore Args}<br>
 <span class="string"> Proc is like Out.renderAndShowLilypond, but provides buildin support for notes and chords with pitch units in et22.<BR>
  Please note that this support is defined by the argument clauses and wrapper (see Out.toLilypond) -- additional clauses are still possible, but adding new note/chord clauses will overwrite the support for 22 ET (the wrapper can be defined like for Out.renderAndShowLilypond).<BR>
@@ -173,6 +178,49 @@ clearInterval(drawit)
  Args are outname and the arguments of ET22.score.chordsToScore. the outname arg sets the output file name (which gets added the space number in the Explorer and then a random number). outname also sets the name under which this action appears in the Explorer menu.<BR>
 <BR>
  IMPORTANT: ET22.score.chordsToScore conducts a search which potentially can fail (e.g., if insufficient arguments are provided)!<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity36">
+<span class="keyword">fun</span>{<span class="functionname">IsEt22Note</span> X}<br>
+<span class="string"> Returns true if X is a note object with pitch unit et22.<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity37">
+<span class="keyword">fun</span>{<span class="functionname">IsEt22Chord</span> X}<br>
+<span class="string"> Returns true if X is a chord object with root pitch unit et22.<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity38">
+<span class="keyword">fun</span>{<span class="functionname">IsEt22Scale</span> X}<br>
+<span class="string"> Returns true if X is a scale object with root pitch unit et22.<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity39">
+<span class="keyword">fun</span>{<span class="functionname">NoteEt22ToLily</span> MyNote}<br>
+<span class="string"> Expects a Strasheela note object and returns the corresponding<BR>
+ Lilypond code (a VS). For simplicity, this transformation does not<BR>
+ support any additional expessions (e.g. fingering marks, or articulation<BR>
+ marks).<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity40">
+<span class="keyword">fun</span>{<span class="functionname">NoteEt22ToLily_AdaptiveJI</span> MyNote}<br>
+<span class="string"> Like NoteEt22ToLily, but additionally notates the adaptive JI pitch offset of this note with respect to 22 ET.<BR>
 <BR>
 </span>
 </code><br>

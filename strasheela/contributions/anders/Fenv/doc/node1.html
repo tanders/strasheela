@@ -488,7 +488,7 @@ clearInterval(drawit)
  Example: fenvs((cc#1)#{Fenv.linearFenv [[0.0 0.0] [1.0 127.0]]}) <BR>
 <BR>
  Args:<BR>
- ccsPerSecond: how many CC events are created per second.<BR>
+ ccsPerSecond: how many CC events are created per second (a float).<BR>
  track: MIDI track to output, default 2 (suitable for more cases)<BR>
  channel: midi channel to output, default nil (if nil, MIDI note object CCs are output to its channel and all other to channel 0) <BR>
 <BR>
@@ -504,7 +504,7 @@ clearInterval(drawit)
  Example: globaltempo({Fenv.linearFenv [[0.0 30.0] [1.0 240.0]]})<BR>
 <BR>
  Args:<BR>
- ccsPerSecond: how many tempo events are created per second.<BR>
+ ccsPerSecond: how many tempo events are created per second (a float).<BR>
  track: MIDI track to output, default 2 (suitable for more cases)<BR>
 <BR>
  Time shift fenvs affect the start and end of the tempo events, but not their "spacing".<BR>

@@ -120,19 +120,19 @@ clearInterval(drawit)
 
 <div style="margin-left:160px"><p align="right" class="margin"><div align="right">inheritance tree</div></p>
 <pre>
- <a class="pre" href="node6.html#entity268">NonType</a> <a class="pre" href="node6.html#entity269">Reflection</a>       <a class="pre" href="node7.html#entity363">FlagsMixin</a>
+ <a class="pre" href="node6.html#entity291">NonType</a> <a class="pre" href="node6.html#entity292">Reflection</a>       <a class="pre" href="node7.html#entity388">FlagsMixin</a>
     |        |                |
     `-----+--'                |
           |                   |
-     <a class="pre" href="node6.html#entity270">ScoreObject</a>    <a class="pre" href="node7.html#entity364">SMapping.mappingMixin</a>
+     <a class="pre" href="node6.html#entity293">ScoreObject</a>    <a class="pre" href="node7.html#entity389">SMapping.mappingMixin</a>
           |                   |
           `---------+---------'
                     |
-                   <a class="pre" href="node6.html#entity281">Item</a>
+                   <a class="pre" href="node6.html#entity304">Item</a>
                     |
                     `+
                      |
-                  <a class="pre" href="node6.html#entity288">Element</a>
+                  <a class="pre" href="node6.html#entity311">Element</a>
 </pre>
 <hr><p class="margin"><div align="right">class definition</div></p>
 <code>
@@ -184,6 +184,17 @@ clearInterval(drawit)
 
 </tr></table>
 <span class="string"> [destructive method] Adds X to list in attribute info. The tail of the list at attribute info is the info specified at the init method which defaults to nil.<BR>
+<BR>
+</span>
+</li><li><span class="functionname">addInfos</span>(Xs)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> [destructive method] Adds every element in list Xs to list in attribute info. <BR>
 <BR>
 </span>
 </li><li><span class="functionname">bilinkContainers</span>(Containers)<br>
@@ -1283,7 +1294,7 @@ clearInterval(drawit)
 <span class="string"> [destructive method] Statefully sets attribute A to value X. The method is indented for editing a score after search, the search itself is indented to be fully stateless.<BR>
 <BR>
 </span>
-</li><li><span class="functionname">toFullRecord</span>(X exclude:Exclude)<br>
+</li><li><span class="functionname">toFullRecord</span>(X exclude:Exclude unbind:Unbind)<br>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
 
@@ -1292,7 +1303,11 @@ clearInterval(drawit)
 
 </tr></table>
 <span class="string"> Outputs the whole score object tree as a record with the the object label as record label and with all the object attributes and object features as record features. All attributes/features containing score objects themself are called recursively, dictionaries and extendable lists (see LUtils) are transformed to records resp. lists.<BR>
- The argument exclude allows to recursively exclude object attributes in the output.<BR>
+<BR>
+ Args: <BR>
+ 'exclude' (default nil): list of attribute names (list of atoms) recursively excluded in the output.<BR>
+ 'unbind' (default nil): list of attribute names (list of atoms) which are output, but whose value is set to a free variable.<BR>
+<BR>
  !! Temp: The attributes 'item' and 'containers' are always excluded to avoid endless loops. Therefore, score graphs with items having more then a single container can not be shown.<BR>
 <BR>
 </span>
@@ -1324,7 +1339,7 @@ clearInterval(drawit)
 <span class="string"> Method returns a record with essential data of self. The method is intended to view self uncluttered. The method feature <code>features</code> allows to freely select a list of score object features/attributes to include. <BR>
 <BR>
 </span>
-</li><li><span class="functionname">unify</span>(ScoreObject derive:Derive exclude:Exclude)<br>
+</li><li><span class="functionname">unify</span>(ScoreObject derive:Derive exclude:Exclude overwrite:Overwrite)<br>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
 
@@ -1336,6 +1351,7 @@ clearInterval(drawit)
 <BR>
  Args:<BR>
  'exclude' (default [startTime endTime]): list of attribute names (list of atoms) to ignore, see arg 'exclude' for toFullRecord. (The internal attributes 'parameters' and 'flags' are always excluded.)<BR>
+ 'overwrite' (default nil): list of attribute names (list of atoms) to keep as declared in self (i.e. the setting in ScoreObject is quasi overwritten).<BR>
  'derive' (default nil): for unifying derived score information (e.g., exclude the pitches, but unify pitch intervals, see example below). List of unary functions expecting the full score (self or ScoreObject) and returning a data structure to unify.<BR>
 <BR>
  Example:<BR>
