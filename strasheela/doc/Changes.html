@@ -40,14 +40,14 @@
     <!-- Page published by Emacs Muse begins here -->
 
 
-<h2>Changes in Version 0.9.9 (no date yet)</h2>
+<h2>Changes in Version 0.9.9 (9 March 2009)</h2>
 
 <ul>
 <li>Main additions and changes
 
 <ul>
 <li><a href="../contributions/anders/Pattern/doc/node1.html">Pattern</a>: added many pattern constraints and related definitions: FenvContour, FenvBoundaries, Arc, WindowedPattern, WindowedPatternRecursions, ForAllItems, MapItems, FirstToLastDistance, DxsToXs, XsToDxs, EqualizeParam, MakeIndexConstructor, GetMotifIndex</li>
-<li>Support for <a href="http://tonalsoft.com/enc/a/adaptive-ji.aspx">adaptive just intonation</a> has been added: <a href="../contributions/anders/HarmonisedScore/doc/node1.html">HS</a>.score.getAdaptiveJIPitch</li>
+<li>Support for <a href="http://tonalsoft.com/enc/a/adaptive-ji.aspx">adaptive just intonation</a> has been added: <a href="../contributions/anders/HarmonisedScore/doc/node1.html">HS</a>.score.getAdaptiveJIPitch. See <a href="../examples/Harmony-Examples/Schoenberg-TheoryOfHarmony.oz">Schoenberg-TheoryOfHarmony.oz</a> for an example how to use it with a special adaptive JI explorer action.</li>
 <li>Extensions and simplifications for score creation, defined in <a href="../doc/api/node6.html">Score</a>
 
 <ul>
@@ -73,9 +73,10 @@
 <li>Documentation
 
 <ul>
-<li>Extensively revised example Schoenberg-TheoryOfHarmony.oz (before called HomophonicChordProgression.oz): now features solver calls for many variations on the theory of harmony</li>
+<li>Added example doc <a href="../doc/Example-Schoenberg-TheoryOfHarmony.html">Example-Schoenberg-TheoryOfHarmony.html</a></li>
+<li>Extensively revised example <a href="../examples/Harmony-Examples/Schoenberg-TheoryOfHarmony.oz">Schoenberg-TheoryOfHarmony.oz</a> (before called HomophonicChordProgression.oz): now features solver calls for many variations on the theory of harmony</li>
 <li>Page for <a href="Example-MEWER.html">MEWER</a> application added to list of examples</li>
-<li>examples/Form-Examples/FriendlyMusicExample.oz: Fixed bug in distro (was orelse instead of andthen)</li>
+<li><a href="../examples/Form-Examples/FriendlyMusicExample.oz">FriendlyMusicExample.oz</a>: Fixed bug in distro (was orelse instead of andthen)</li>
 </ul></li>
 </ul>
 
@@ -91,11 +92,9 @@
 <li>HS.score: added MakeChords, MakeScales, and GetDegree</li>
 <li>HS.rules.schoenberg: added ProgressionSelector, ResolveDissonances, IndexCardinality SetEachChordType SetEachScaleType RequireChordTypes</li>
 <li><a href="../contributions/anders/ET31/doc/node1.html">ET31</a>: added many chords and scales to database (origin is Scala's list of 31 ET chords and modi)</li>
+<li>ET31.out: NoteEt31ToLily_AdaptiveJI, and Et31AsEt12_TuningTable</li>
 </ul></li>
-</ul>
 
-
-<ul>
 <li>Bug fixes and changes
 
 <ul>
@@ -120,6 +119,7 @@
 <li>Efficiency improvements: TransposePC: uses now FD.modD instead of FD.modI.</li>
 <li>PitchClassCollection initialisation: constrains that root (untransposed root) is in PCs (untransposed PCs) for better propagation.</li>
 <li>New default for all args getChords/getScales: list with single simultaneous chord/scale (with findSimultaneousItem), nil (old default) if none is found</li>
+<li>Fixed PitchClassCollection method degreeToPC (now also correct if root is \= transposition).</li>
 </ul></li>
 <li>HS.rules:
 

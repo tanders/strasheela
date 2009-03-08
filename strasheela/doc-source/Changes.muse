@@ -2,7 +2,7 @@
 #title Changes 
 ; #author Torsten Anders
 
-* Changes in Version 0.9.9 (no date yet)
+* Changes in Version 0.9.9 (9 March 2009)
 
   - Main additions and changes 
     - [[../contributions/anders/Pattern/doc/node1.html][Pattern]]: added many pattern constraints and related definitions: FenvContour, FenvBoundaries, Arc, WindowedPattern, WindowedPatternRecursions, ForAllItems, MapItems, FirstToLastDistance, DxsToXs, XsToDxs, EqualizeParam, MakeIndexConstructor, GetMotifIndex  
