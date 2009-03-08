@@ -7,8 +7,9 @@ import
    Out at 'x-ozlib://anders/strasheela/source/Output.ozf'
    Score at 'x-ozlib://anders/strasheela/source/ScoreCore.ozf'
    HS at 'x-ozlib://anders/strasheela/HarmonisedScore/HarmonisedScore.ozf'
-   ET31 at '../ET31.ozf'
+%    ET31 at '../ET31.ozf'
    DB at 'DB.ozf'
+   ET31_Score at 'Score.ozf'
 
 %    Browser(browse:Browse)
 export
@@ -17,6 +18,11 @@ export
    AddExplorerOuts_ArchiveInitRecord
 
    MakeChordComment MakeChordRatios MakeScaleComment
+
+   IsEt31Note IsEt31Chord IsEt31Scale
+   NoteEt31ToLily NoteEt31ToLily_AdaptiveJI
+
+   Et31AsEt12_TuningTable
 define
 
    %%
@@ -55,7 +61,7 @@ define
 		       in
 			  if {Score.isScoreObject X}
 			  then
-			     MyScore = {ET31.score.chordsToScore
+			     MyScore = {ET31_Score.chordsToScore
 					{Map {X collect($ test:HS.score.isChord)}
 					 fun {$ C}
 					    %% timeUnit is not exported by toInitRecord,
@@ -147,15 +153,21 @@ define
       else {PrettyRatios Ratios}
       end
    end
-   
+
+   /** %% Returns true if X is a note object with pitch unit et31.
+   %% */
    fun {IsEt31Note X}
       {X isNote($)} andthen 
       {X getPitchUnit($)} == et31
    end
+   /** %% Returns true if X is a chord object with root pitch unit et31.
+   %% */
    fun {IsEt31Chord X}
       {HS.score.isChord X} andthen 
       {{X getRootParameter($)} getUnit($)} == et31
    end
+   /** %% Returns true if X is a scale object with root pitch unit et31.
+   %% */
    fun {IsEt31Scale X}
       {HS.score.isScale X} andthen 
       {{X getRootParameter($)} getUnit($)} == et31
@@ -189,22 +201,49 @@ define
       LilyEt31PCs.MyPC # LilyOctaves.Oct
    end
 
-   %% Expects a Strasheela note object and returns the corresponding
+   /** %% Expects a Strasheela note object and returns the corresponding
    %% Lilypond code (a VS). For simplicity, this transformation does not
-   %% support any expessions (e.g. fingering marks, or articulation
+   %% support any additional expessions (e.g. fingering marks, or articulation
    %% marks).
+   %% */
    fun {NoteEt31ToLily MyNote}
       {{Out.makeNoteToLily2
 	fun {$ N} {ET31PitchToLily {N getPitch($)}} end
 	fun {$ N}
-	   if {HS.score.isInChordMixinForNote N}
-	      andthen {N isInChord($)} == 0
-	   then "^x"
-	   else ""
-	   end
+	   NonChordMarker = if {HS.score.isInChordMixinForNote N}
+			       andthen {N isInChord($)} == 0
+			    then "^x"
+			    else ""
+			    end
+	in
+	   NonChordMarker
 	end}
        MyNote}
    end
+
+   /** %% Like NoteEt31ToLily, but additionally notates the adaptive JI pitch offset of this note with respect to 31 ET.
+   %% */
+   fun {NoteEt31ToLily_AdaptiveJI MyNote}
+      {{Out.makeNoteToLily2
+	fun {$ N} {ET31PitchToLily {N getPitch($)}} end
+	fun {$ N}
+	   NonChordMarker = if {HS.score.isInChordMixinForNote N}
+			       andthen {N isInChord($)} == 0
+			    then "^x"
+			    else ""
+			    end
+	   JIPitch = {HS.score.getAdaptiveJIPitch N unit}
+	   ETPitch = {N getPitchInMidi($)}
+	   TuningOffset = if {Abs JIPitch-ETPitch} > 0.01
+			  then "_\\markup{"#(JIPitch-ETPitch)*100.0#" c}"
+			  else "_\\markup{0 c}"
+			  end
+	in
+	   NonChordMarker#TuningOffset
+	end}
+       MyNote}
+   end
+
 
       
    fun {SimTo31LilyChord Sim}
@@ -440,5 +479,41 @@ define
        add(information ArchiveInitRecord
 	   label: 'Archive initRecord (ET31)')}
    end
+
+   /** %% Tuning table which assigns 12 ET tuning to the 31 ET pitch classes. Can be useful for comparison.. 
+   %% */
+   Et31AsEt12_TuningTable
+   = unit(1: 0.0			% C
+      2: 0.0			% C|
+      3: 100.0			% C#
+      4: 100.0			% Db
+      5: 200.0			% D!
+      6: 200.0			% D
+      7: 200.0
+      8: 300.0
+      9: 300.0
+      10: 400.0
+      11: 400.0
+      12: 400.0
+      13: 500.0
+      14: 500.0
+      15: 500.0
+      16: 600.0
+      17: 600.0
+      18: 700.0 
+      19: 700.0
+      20: 700.0
+      21: 800.0
+      22: 800.0
+      23: 900.0
+      24: 900.0
+      25: 900.0
+      26: 1000.0
+      27: 1000.0
+      28: 1100.0
+      29: 1100.0
+      30: 1100.0
+      31: 1200.0
+    )
    
 end
