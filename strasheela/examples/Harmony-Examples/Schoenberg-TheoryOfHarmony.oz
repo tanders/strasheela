@@ -691,6 +691,42 @@ LilyHeader
 fun {IsScaleSeq X}
    {X isSequential($)} andthen {HS.score.isScale {X getItems($)}.1}
 end
+
+EventToCsound_adaptiveJI 
+= {Out.makeEvent2CsoundFn 1
+   [getStartTimeParameter#getValueInSeconds
+    fun {$ X} X end#getDurationInSeconds
+    getAmplitudeParameter#getValueInNormalized
+    %% max 127 velo results in max 90 dB (Csound amp value 31622.764)
+%     getAmplitudeParameter#fun {$ X} {MUtils.levelToDB {X getValueInNormalized($)} 1.0} + 90.0 end
+    fun {$ X} X end#fun {$ MyNote}
+		       JIPitch = {HS.score.getAdaptiveJIPitch MyNote unit}
+		       ETPitch = {MyNote getPitchInMidi($)}
+		    in
+		       %% JI may at max be 10 cent off, otherwise take ETPitch
+		       %% 13#8 is 11 cent error
+		       if {Abs JIPitch-ETPitch} > 0.11 then
+			  {Browse
+			   off_JI(ji:{HS.score.getAdaptiveJIPitch MyNote unit}
+				  midi: {MyNote getPitchInMidi($)}
+				  note:{MyNote toInitRecord($)}
+				  chordIndex: {{MyNote getChords($)}.1 getIndex($)}
+				  chordTransposition: {{MyNote getChords($)}.1 getTransposition($)}
+				  chordPCs: {{MyNote getChords($)}.1 getPitchClasses($)}
+				  chordRatios: {HS.db.getUntransposedRatios {MyNote getChords($)}.1}
+				  noteDegreeInChord: {HS.score.getDegree {MyNote getPitchClass($)} {MyNote getChords($)}.1 unit(accidentalRange: 0)}
+				 )}
+			  ETPitch
+		       else
+% 			  {Browse ok_JI}
+% 			  {System.show
+% 			   {Out.recordToVS
+% 			    ok_JI}}
+			  JIPitch
+		       end
+		    end
+   ]}
+
 	     
 %% Explorer output 
 proc {RenderLilypondAndCsound I X}
@@ -709,10 +745,35 @@ proc {RenderLilypondAndCsound I X}
 	    clauses:[IsScaleSeq#fun {$ _} "" end]
 	   )}
       {Out.renderAndPlayCsound X
-       unit(file: FileName)}
+       unit(file: FileName)} 
       {EncodeMP3 {Init.getStrasheelaEnv defaultSoundDir}#FileName}
    end
 end
+proc {RenderLilypondAndCsound_AdaptiveJI I X}
+   if {Score.isScoreObject X}
+   then 
+      FileName = "Schoenberg-"#I#"-"#{GUtils.getCounterAndIncr}#"-adaptiveJI"
+   in
+      {ET31.out.renderAndShowLilypond X
+       unit(file: FileName
+	    chordDescription:MakeChordDegree
+% 	    flags:["--preview"]  % does not work with newer Lily versions?
+	    flags:["-dbackend=eps" "-dno-gs-load-fonts" "-dinclude-eps-fonts"]
+	    wrapper: [LilyHeader 
+		      "\n}"]
+	    %% Skip notating scales
+	    clauses:[IsScaleSeq#fun {$ _} "" end
+		     ET31.out.isEt31Note#ET31.out.noteEt31ToLily_AdaptiveJI]
+	   )}
+      {Out.renderAndPlayCsound X
+       unit(file: FileName
+	    event2CsoundFn: EventToCsound_adaptiveJI)}
+      {EncodeMP3 {Init.getStrasheelaEnv defaultSoundDir}#FileName}
+   end
+end
+{Explorer.object
+ add(information RenderLilypondAndCsound_AdaptiveJI
+     label: 'to Lily + Csound: Schoenberg (adaptive JI)')}
 {Explorer.object
  add(information RenderLilypondAndCsound
      label: 'to Lily + Csound: Schoenberg')}
@@ -747,6 +808,14 @@ end
  add(information RenderLilypondAndCsound
      label: 'to Lily + Csound: Schoenberg 2')}
 
+
+*/
+
+
+/* % you can set the 31 note tuning table to 12 ET for comparison...
+
+{Init.setTuningTable
+ ET31.eT31AsEt12_TuningTable}
 
 */
 
@@ -942,7 +1011,7 @@ end
  HS.distro.leftToRight_TypewiseTieBreaking}
 
 
-%% minor with [wendepunkte]: use note params scaleDegree and scaleAccidental
+%% minor with turning points: use note params scaleDegree and scaleAccidental
 %% allow for accidental Natural and Sharp. if VI or VII is sharp then, next note is following degree -- this is relaxed version of Schoenberg's rule
 %% TODO: make butlast chord use raised VII
 {GUtils.setRandomGeneratorSeed 0}
