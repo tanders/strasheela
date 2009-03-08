@@ -57,7 +57,7 @@ Later in his textbook, Schoenberg revises his prior recommendation on chord prog
 
 Schoenberg's recommendations are briefly summarised in the following, please consult his textbook for the full details. He introduces the notion of so-called ascending progressions (e.g., V-I or III-I), descending progressions (e.g., I-V or III-V), and super-strong progressions (e.g., V-VI). In my generalisation of Schoenberg's concept, ascending progressions have a harmonic band, but the root of the second chord does not occur in the first (Schoenberg says something like "the king of the first chord is overruled by a new king"). Descending progressions also have a harmonic band, but the root of the second chord was already a non-root tone in the preceeding chord. Finally, super-strong progressions have no harmonic band. (There is a fourth case not mentioned by Schoenberg were two consecutive chords have the same root.)
 
-Ascending progressions can be used freely, super-strong progressions should be used sparely for special emphjasis, but descending progressions should commonly be treated with particular care. Schoenberg recommends that in a sequence of three chords C_1, C_2, C_3 the sequence C_1, C_2 can only then be descending if C_1, C_3 is ascending (e.g., III-V-I).
+Ascending progressions can be used freely, super-strong progressions should be used sparely for special emphjasis, but descending progressions should commonly be treated with particular care. Schoenberg recommends that in a sequence of three chords C1, C2, C3 the sequence C1, C2 can only then be descending if C1, C3 is ascending (e.g., III-V-I).
 
 The following example contains a super-strong progression between the 2nd and 3rd chord (V-IV), followed by a decending progression (IV-VI), all other progressions are ascending. These solutions are already a bit longer, because we meanwhile have a more rich harmonic vocabulary. 
 
@@ -71,7 +71,7 @@ The next solution consists solely of asdencing progressions.
 
 All solutions presented so far consisted of consonant triads only. When introducing seventh chords discussing dissonance treatment for the first time, Schoenberg recommends that these dissonances should be resolved by the strongest chord root progression available -- "a fourths upwards the fundament" -- and that the seventh (the dissonant tone) should be resolved by a step downwards. 
 
-The following exercise implements a rule which is already more liberal (and which was not proposed by Schoenberg). Dissonant chords are always resolved by an ascending progression. The following example contains a few seventh chords. For example the 4th to 5th chord (I^7 - IV) is an instance of a "fourths upwards the fundament".
+The following exercise implements a rule which is already more liberal (and which was not proposed by Schoenberg). Dissonant chords are always resolved by an ascending progression. The following example contains a few seventh chords. For example the 4th to 5th chord (I7 - IV) is an instance of a "fourths upwards the fundament". 
 
 [[../examples/Output/Schoenberg-liberalDissTreatment1.mp3][../examples/Output/Schoenberg-liberalDissTreatment1.png]]
 ; [[../examples/Output/Schoenberg-liberalDissTreatment1.mp3][../examples/Output/Schoenberg-liberalDissTreatment1.png]]
@@ -163,8 +163,5 @@ Moreover, this example is implemented in such a way that the creation of the abs
 [[StrasheelaExamples][back]]
 
 
-* TODO
-
-Check whether math notation like C_1 and I^7 workds
 
 
