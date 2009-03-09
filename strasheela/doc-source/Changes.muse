@@ -2,6 +2,22 @@
 #title Changes 
 ; #author Torsten Anders
 
+* Changes in Version 0.9.1o (no date yet)
+
+  - Main additions and changes 
+
+  - Documentation
+
+  - Minor additions 
+    - GUtils: added RoundDigits
+
+  - Bug fixes and changes
+
+
+  - For further fixes see the [[http://apps.sourceforge.net/trac/strasheela/timeline][Trac Timeline]] or the [[../CHANGELOG.txt]].
+
+
+
 * Changes in Version 0.9.9 (9 March 2009)
 
   - Main additions and changes 
@@ -33,6 +49,7 @@
     - HS.rules.schoenberg: added ProgressionSelector, ResolveDissonances, IndexCardinality SetEachChordType SetEachScaleType RequireChordTypes
     - [[../contributions/anders/ET31/doc/node1.html][ET31]]: added many chords and scales to database (origin is Scala's list of 31 ET chords and modi)
     - ET31.out: NoteEt31ToLily_AdaptiveJI, and Et31AsEt12_TuningTable
+
 
   - Bug fixes and changes
     - [[../doc/api/node6.html][Score]]: ScoreObject method toInitRecord: now outputs strings (e.g., for lilypond) as proper strings (e.g., important for archiving scores)
