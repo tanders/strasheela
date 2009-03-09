@@ -92,6 +92,16 @@ for I in 1..10 do {Browse {GUtils.random 3}} end
 
 
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%% GUtils.round_digits
+%% 
+
+{GUtils.roundDigits 1.23456 2}
+
+{GUtils.roundDigits 1.23456 1}
+
+{GUtils.roundDigits 1.23456 0}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%
