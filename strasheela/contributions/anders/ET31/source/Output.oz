@@ -234,8 +234,8 @@ define
 			    end
 	   JIPitch = {HS.score.getAdaptiveJIPitch N unit}
 	   ETPitch = {N getPitchInMidi($)}
-	   TuningOffset = if {Abs JIPitch-ETPitch} > 0.01
-			  then "_\\markup{"#(JIPitch-ETPitch)*100.0#" c}"
+	   TuningOffset = if {Abs JIPitch-ETPitch} > 0.001
+			  then "_\\markup{"#{GUtils.roundDigits (JIPitch-ETPitch)*100.0 1}#" c}"
 			  else "_\\markup{0 c}"
 			  end
 	in

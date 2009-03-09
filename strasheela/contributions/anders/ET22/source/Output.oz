@@ -14,6 +14,7 @@ import
    %% !! tmp functor until next release with debugged Path of stdlib
    Path at 'x-ozlib://anders/tmp/Path/Path.ozf'
 
+   GUtils at 'x-ozlib://anders/strasheela/source/GeneralUtils.ozf'
    Out at 'x-ozlib://anders/strasheela/source/Output.ozf'
    Score at 'x-ozlib://anders/strasheela/source/ScoreCore.ozf'
    HS at 'x-ozlib://anders/strasheela/HarmonisedScore/HarmonisedScore.ozf'
@@ -252,8 +253,8 @@ define
 			    end
 	   JIPitch = {HS.score.getAdaptiveJIPitch N unit}
 	   ETPitch = {N getPitchInMidi($)}
-	   TuningOffset = if {Abs JIPitch-ETPitch} > 0.01
-			  then "_\\markup{"#(JIPitch-ETPitch)*100.0#" c}"
+	   TuningOffset = if {Abs JIPitch-ETPitch} > 0.001
+			  then "_\\markup{"#{GUtils.roundDigits (JIPitch-ETPitch)*100.0 1}#" c}"
 			  else "_\\markup{0 c}"
 			  end
 	in
