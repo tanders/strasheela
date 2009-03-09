@@ -640,10 +640,20 @@ in
    proc {IsPerfectConsonanceR Interval B}
       Aux = {FD.decl}
    in
-      Aux = {FD.modI Interval 12}
+      Aux = {FD.modI Interval {HS.db.getPitchesPerOctave}}
       B = {FS.reified.include Aux PerfectConsonance}
    end
 end
+
+/* % test
+
+{IsPerfectConsonanceR Octave+Fifth}
+
+{IsPerfectConsonanceR Fifth}
+
+{IsPerfectConsonanceR Fifth+1}
+
+*/
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -708,27 +718,21 @@ EventToCsound_adaptiveJI
 		       JIPitch = {HS.score.getAdaptiveJIPitch MyNote unit}
 		       ETPitch = {MyNote getPitchInMidi($)}
 		    in
-		       %% JI may at max be 10 cent off, otherwise take ETPitch
-		       %% 13#8 is 11 cent error
-		       if {Abs JIPitch-ETPitch} > 0.11 then
+		       %% if JI pitch is at least a syntonic comma off, then show it
+		       if {Abs JIPitch-ETPitch} >= 0.2151 
+		       then
 			  {Browse
-			   off_JI(ji:{HS.score.getAdaptiveJIPitch MyNote unit}
-				  midi: {MyNote getPitchInMidi($)}
-				  note:{MyNote toInitRecord($)}
-				  chordIndex: {{MyNote getChords($)}.1 getIndex($)}
-				  chordTransposition: {{MyNote getChords($)}.1 getTransposition($)}
-				  chordPCs: {{MyNote getChords($)}.1 getPitchClasses($)}
-				  chordRatios: {HS.db.getUntransposedRatios {MyNote getChords($)}.1}
-				  noteDegreeInChord: {HS.score.getDegree {MyNote getPitchClass($)} {MyNote getChords($)}.1 unit(accidentalRange: 0)}
-				 )}
-			  ETPitch
-		       else
-% 			  {Browse ok_JI}
-% 			  {System.show
-% 			   {Out.recordToVS
-% 			    ok_JI}}
-			  JIPitch
+			   large_JI_offset(ji:{HS.score.getAdaptiveJIPitch MyNote unit}
+					   midi: {MyNote getPitchInMidi($)}
+					   note:{MyNote toInitRecord($)}
+					   chordIndex: {{MyNote getChords($)}.1 getIndex($)}
+					   chordTransposition: {{MyNote getChords($)}.1 getTransposition($)}
+					   chordPCs: {{MyNote getChords($)}.1 getPitchClasses($)}
+					   chordRatios: {HS.db.getUntransposedRatios {MyNote getChords($)}.1}
+					   noteDegreeInChord: {HS.score.getDegree {MyNote getPitchClass($)} {MyNote getChords($)}.1 unit(accidentalRange: 0)}
+					  )}
 		       end
+		       JIPitch
 		    end
    ]}
 
@@ -1047,12 +1051,6 @@ end
       )}
  %% left-to-right strategy with breaking ties by type
  HS.distro.leftToRight_TypewiseTieBreaking}
-
-
-
-
-
-
 
 
 
