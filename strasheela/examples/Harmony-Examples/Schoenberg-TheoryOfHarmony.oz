@@ -8,6 +8,7 @@
 %%
 %% TODO:
 %%
+%% - !! Solutions contain parallel fifths + octaves
 %% - I may notate the chord scale degrees with Roman numerals. Seems this is not predefined in lily. So, I would have to specify that the chord seq is ignored in Lily, and then define a special output for the bass notes which accesses the sim chords, translates their scale degree into a text string and prints that with a text markup.
 %%   NOTE: some other Lily users use a \Lyrics context for roman numerals 
 %%
@@ -631,12 +632,16 @@ end
 
 
 local
-   PerfectConsonance = {FS.value.make [0 Fifth {HS.db.getPitchesPerOctave}]}
+%    PerfectConsonance = {FS.value.make [0 Fifth Octave Octave+Fifth Octave+Octave Octave+Octave+Fifth]}
+   PerfectConsonance = {FS.value.make [0 Fifth]}
 in
    /** %% B=1 <-> Interval (FD int) is perfect consonance (prime, fifths or octave).
    %% */
    proc {IsPerfectConsonanceR Interval B}
-      B = {FS.reified.include Interval PerfectConsonance}
+      Aux = {FD.decl}
+   in
+      Aux = {FD.modI Interval 12}
+      B = {FS.reified.include Aux PerfectConsonance}
    end
 end
 
@@ -767,7 +772,9 @@ proc {RenderLilypondAndCsound_AdaptiveJI I X}
 	   )}
       {Out.renderAndPlayCsound X
        unit(file: FileName
-	    event2CsoundFn: EventToCsound_adaptiveJI)}
+	    event2CsoundFn: EventToCsound_adaptiveJI
+% 	    orc: 'pluck.orc'
+	   )}
       {EncodeMP3 {Init.getStrasheelaEnv defaultSoundDir}#FileName}
    end
 end
@@ -815,7 +822,7 @@ end
 /* % you can set the 31 note tuning table to 12 ET for comparison...
 
 {Init.setTuningTable
- ET31.eT31AsEt12_TuningTable}
+ ET31.out.et31AsEt12_TuningTable}
 
 */
 
