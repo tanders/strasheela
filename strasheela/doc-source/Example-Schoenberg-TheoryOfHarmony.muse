@@ -17,6 +17,10 @@ The example also diverts from Schoenberg in the actual rule sets implemented. So
 The [[../examples//Harmony-Examples/Schoenberg-TheoryOfHarmony.oz][full source]] for creating the solutions presented below is available.
   
 
+  Oops: the examples and the code of this release produces parallel fifths/octaves (between voices more than an octave apart). This has meanwhile been fixed in the SVN repository, and I will update this site some time later... 
+
+
+
 * Simplified Root Progression Constraint: Harmonic Band
 
 We skip much introductory material of Schoenberg's textbook and start with one of the first musically more interesting exercises: compose a harmonic progression of diatonic chords where consecutive chords are connected by what Schoenberg calls a "harmonic band", that is, common pitch classes between chords. In case there are common pitch classes, then these are placed in the same voice. The other voices move in small intervals (Bruckner's "law of the shortest path"). 
@@ -158,6 +162,8 @@ All the exercises above are defined by the same CSP. The different exercises abo
 Moreover, this example is implemented in such a way that the creation of the abstract harmony (e.g., the analytical harmonic information, in contrast to the actual notes) is defined in a modular way. In other words, the harmonic CSP without the four-voice voiceleading rules can be reused in other constraint problems, for example harmonic counterpoint problems where the polyphonic structure depends on some underlying harmony.
 
   [[../examples//Harmony-Examples/Schoenberg-TheoryOfHarmony.oz][full source]] 
+
+
 
 
 [[StrasheelaExamples][back]]
