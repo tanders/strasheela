@@ -7,6 +7,7 @@
   - Main additions and changes 
 
   - Documentation
+    - [[../examples/Harmony-Examples/Schoenberg-TheoryOfHarmony.oz][Schoenberg-TheoryOfHarmony.oz]]: the examples produces parallel fifths/octaves (between voices more than an octave apart), now fixed 
 
   - Minor additions 
     - GUtils: added RoundDigits
