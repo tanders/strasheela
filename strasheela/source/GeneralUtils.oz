@@ -31,6 +31,7 @@ export
    
    Identity
    Random RandIntoRange
+   RoundDigits
    MakeRandomGenerator SetRandomGeneratorSeed
    Log Mod_Float IsDivisible
    RatioToFloat
@@ -198,6 +199,16 @@ define
       (Rand * (Max - Min + 1)) div MaxRand + Min
    end
 
+   /** %% Rounds F (a float) to Digits (an int) number of digits after the floating point.
+   %%
+   %% Note: the accuracy of this rounding is subject to float accuracy..
+   %% */
+   fun {RoundDigits F Digits}
+      Fac = {IntToFloat {Pow 10 Digits}}
+   in
+      {Round F * Fac} / Fac
+   end
+   
    local
       fun lazy {RandomStream} {OS.rand}|{RandomStream} end   
       RandomNumbers={NewCell {RandomStream}}
