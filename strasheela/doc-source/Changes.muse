@@ -1,4 +1,3 @@
-
 #title Changes 
 ; #author Torsten Anders
 
@@ -11,6 +10,10 @@
 
   - Minor additions 
     - GUtils: added RoundDigits
+    - Pattern: Added Intervals AbsIntervals RestrictMaxInterval Hook Stairs
+    - HS: added HS.acc HS.pc HS.pcName HS.pitch
+    - HS.score: added HarmonicRythmFollowsMarkers
+    - HS.rules: added RestrictPitchDomain, OnlyOrnamentalDissonance_Durations
 
   - Bug fixes and changes
 
