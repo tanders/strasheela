@@ -116,7 +116,7 @@
 functor
 import
    FD FS Combinator System Search
-%    Browser(browse:Browse) % temp for debugging
+   Browser(browse:Browse) % temp for debugging
 %   Inspector(inspect:Inspect) % temp for debugging
    Select at 'x-ozlib://duchier/cp/Select.ozf'
    GUtils at 'x-ozlib://anders/strasheela/source/GeneralUtils.ozf'
@@ -190,7 +190,9 @@ export
    
    HarmoniseScore HarmoniseScore2
    HarmoniseMotifs
-   
+
+   HarmonicRythmFollowsMarkers
+      
 %   ChordStartMixin Simultaneous Sequential
    
 %    % LinkItemsIntoContainerRecord 
@@ -3022,6 +3024,41 @@ define
 	  getStartTime}
       end
    end
+
+   
+   /** %% Constraints the start times of Chords (list of chord objects) to the start times of those items in MyScore (score object) which are marked to start a chord. In addition, the end time of the last chord is constrained to the end time of MyScore. The default chord-start-marker is an info tag 'startChord'. The number of marked score items and the number of chords must be equal.
+   %%
+   %% Args
+   %% 'hasChordStartMarker': a unary Boolean function which tests whether a score object should start with a new chord. The default is
+   fun {$ X} {X hasThisInfo($ startChord)} end
+   %%
+   %% Note: score objects with chord-start-marker must not overlap in time.
+   %% */
+   proc {HarmonicRythmFollowsMarkers MyScore Chords Args}
+      Default = unit(hasChordStartMarker: fun {$ X} {X hasThisInfo($ startChord)} end)
+      As = {Adjoin Default Args}
+   in
+      thread
+	 %% Sorting with reified constraints
+	 ChordStartingItems = {Sort {MyScore filter($ As.hasChordStartMarker
+						    excludeSelf: false)}
+			       fun {$ X Y}
+				  ({X getStartTime($)} <: {Y getStartTime($)}) == 1
+			       end}
+      in
+	 %% do warning
+	 if {Length ChordStartingItems} \= {Length Chords} then
+	    {Browse 'HarmonicRythmsFollowsMarkers: number of chords ('#{Length Chords}#') does not match number of score objects which should start with a chord ('#{Length ChordStartingItems}#').'}
+	 end
+	 %% Actual constraints
+	 {List.forAllInd {LUtils.matTrans [ChordStartingItems Chords]}
+	  proc {$ I [MyItem MyChord]}
+	     {MyItem getStartTime($)} = {MyChord getStartTime($)}
+	  end}
+	 {MyScore getEndTime($)} = {{List.last Chords} getEndTime($)}
+      end
+   end
+
 
       
    /** %% Returns the script defined internally by ChordsToScore. See there for details. 
