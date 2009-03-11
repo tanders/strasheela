@@ -111,6 +111,7 @@ import
    SMapping at 'x-ozlib://anders/strasheela/source/ScoreMapping.ozf'
 %    Score at 'x-ozlib://anders/strasheela/ScoreCore.ozf'
    Pattern at 'x-ozlib://anders/strasheela/Pattern/Pattern.ozf'
+   HS at '../HarmonisedScore.ozf'
    HS_Score at 'Score.ozf'
    DB at 'Database.ozf'
    Schoenberg at 'Schoenberg.ozf'
@@ -138,11 +139,14 @@ export
    ExpressAllChordPCs ExpressAllChordPCs_AtChordStart ExpressAllChordPCs_AtChordEnd
    ExpressEssentialChordPCs ExpressEssentialPCs_AtChordStart
    ClearHarmonyAtChordBoundaries
+   OnlyOrnamentalDissonance_Durations
 
    VoiceLeadingDistance VoiceLeadingDistance_Percent
    SmallIntervalsInProgression SmallIntervalsInProgression_Percent
 
    %% melodic rules
+   RestrictPitchDomain
+   
    IsStep IsStepR
    ResolveStepwiseR
    PassingNotePitches PassingNotePitchesR
@@ -675,6 +679,16 @@ define
 %%% melodic rules
 %%%
 
+   
+   /** %% Expects a list of notes and two pitches MaxDom and MinDom (specified in the formats supported by HS.pitch, e.g., a pitch integer or an ET31 pitch specified like 'C'#4). These set the upper and lower pitch domain of all notes.
+   %% */
+   proc {RestrictPitchDomain Notes MaxDom MinDom}
+      Dom = {HS.pitch MaxDom}#{HS.pitch MinDom}
+   in
+      {Pattern.mapItems Notes getPitch} ::: Dom
+   end
+
+
    /** %% [aux def] Returns the list of items of the temporal aspect X is contained in.
    %% */
    fun {GetTemporalAspectItems X}
@@ -931,7 +945,7 @@ define
 %    end
 % end
 
-
+  
    
    
    /** %% [contrapuntual constraint] If in one voice there occurs a non-chord tone followed by a chord tone (a dissonance resolution), then no other voice should obscure this resolution by a non-chord tone starting together with the tone resolving the dissonance. However, simultaneous dissonances can start more early or later.
@@ -954,6 +968,21 @@ define
 	  end
        end}
    end
+
+   
+   /** %% Allows only for 'ornamental' in contrast to 'emphasized' non-harmonic tones. This definition only takes note durations into account. It restricts that a non-harmonic note must be preceeded and followed by a note which is at least as long as the non-harmonic note itself.
+   %% */
+   %% TODO: ?? complement this constraint by reified constraint so it can be combined with others..
+   proc {OnlyOrnamentalDissonance_Durations Notes}
+      {Pattern.forNeighbours Notes 3
+       proc {$ [N1 N2 N3]}
+	  {FD.impl {FD.nega {N2 getInChordB($)}}
+	   {FD.conj ({N1 getDuration($)} >=: {N2 getDuration($)})
+	    ({N3 getDuration($)} >=: {N2 getDuration($)})}
+	   1}
+       end}
+   end
+
 
    
    /** %% [contrapuntual constraint] Constraints that all pairs of simultaneous non-harmonic tones (i.e. the inChordB parameter = 0) form consonant intervals among each other. Notes is the list of all notes which potentially are non-harmonic tones (e.g., all notes in the score). ConsonantIntervals is a FD int domain specification (e.g., a list of integers) which specifies the allowed intervals.
