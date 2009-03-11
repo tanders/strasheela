@@ -23,7 +23,7 @@ declare
 %% notation (with Lilypond, requires Lilypond 2.11.43 or later), sound
 %% (with Csound), and Strasheela code (archived score objects).
 {ET22.out.addExplorerOut_ChordsToScore
- unit(outname:"ChordsToScore"
+ unit(outname:"ChordsToScore (ET22)"
       voices:5
       pitchDomain:{ET22.pitch 'C'#4}#{ET22.pitch 'C'#6}
       value:mid
