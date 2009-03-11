@@ -941,6 +941,58 @@ Zs = {FD.list {Length Xs}-1 0#10}
  end}
 
 
+%%
+%% Pattern.hook
+%%
+
+declare
+Xs = {FD.list 10 0#10}
+
+{Browse Xs}
+
+{Pattern.hook Xs  unit(oppositeDir:{Pattern.symbolToDirection '+'})}
+
+
+%%
+%% Pattern.stairs
+%%
+
+declare
+Xs = {FD.list 10 0#10}
+
+{Browse Xs}
+
+{Pattern.stairs Xs  unit}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%% Pattern.interval, Pattern.absIntervals
+%%
+
+%% values > 100 indicate upwards intervals, < 100 are downwards
+{Search.base.one
+ proc {$ Ys}
+    Xs = [1 3 2 4 3]
+    Offset = 100
+ in
+    Ys = {FD.list 4 0#200}
+    {Pattern.intervals Xs Ys Offset}
+    {FD.distribute ff Ys}
+ end}
+
+
+{Search.base.one
+ proc {$ Ys}
+    Xs = [1 3 2 4 3]
+ in
+    Ys = {FD.list 4 0#10}
+    {Pattern.absIntervals Xs Ys}
+    {FD.distribute ff Ys}
+ end}
+
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%
 %% Pattern.selectList and friends
