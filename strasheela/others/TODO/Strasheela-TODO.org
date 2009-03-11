@@ -63,7 +63,8 @@
 ** Lilypond: output seq (of seq ...) of sims with multiple staffs 
 
 
-** TODO Release								:URGENT:
+** DONE Release								:URGENT:
+   CLOSED: [2009-03-10 Tue 11:21]
 
 *** Briefly document Schoenberg harmony example 
 *** Clean up Changes.muse
