@@ -17,7 +17,7 @@
 %%
 %% The harmony model provides convenient means in a highly generic way. For example, the model is suitable for theories of harmony is the conventional 12-tone equal-temperament. However, also microtonal music is supported: the representations for analytical concepts are suitable for any other equal division of the octave, and that way also for approximations of just intonation. For this purpose, the model generalises established concepts of 12-tone equal-temperament for other equal-temperaments. A number of fundamental terms which are generalised are explained below.
 %% 
-%% The present functor is the top-level functor of the harmony model. It only exports subfunctors.
+%% The present functor is the top-level functor of the harmony model. It primarily exports subfunctors.
 %%
 %%
 %% Terminology: (all terms denote integers and can be represented by FD ints)
@@ -133,6 +133,11 @@ import
    Rules at 'source/Rules.ozf'
    DBs at 'source/databases/Databases.ozf'
    Distro at 'source/Distribution.ozf'
+
+   %% for Pitch etc.
+   ET12 at 'x-ozlib://anders/strasheela/ET12/ET12.ozf'
+   ET22 at 'x-ozlib://anders/strasheela/ET22/ET22.ozf'
+   ET31 at 'x-ozlib://anders/strasheela/ET31/ET31.ozf'
    
 export
    db:DB
@@ -140,5 +145,47 @@ export
    score:HSScore
    rules:Rules
    distro:Distro
+
+   Acc pc:PC pcName:PCName Pitch
+   
+define
+
+   %% aux for PC etc
+   fun {MakeTranslation FnSymbol}
+      fun {$ X}
+	 if {IsInt X} then X
+	 else 
+	    PitchesPerOctave = {DB.getPitchesPerOctave}
+	 in
+	    case PitchesPerOctave
+	    of 12 then {ET12.FnSymbol X}
+	    [] 22 then {ET22.FnSymbol X}
+	    [] 31 then {ET31.FnSymbol X}
+	    else 
+	       {Exception.raiseError
+		strasheela(failedRequirement PitchesPerOctave "No symbolic pitch translation supported for "#PitchesPerOctave#" ET.")}
+	       unit		% never returned
+	    end
+	 end
+      end
+   end
+
+   /** %% Transforms symbolic accidental (atom) into the corresponding accidental integer, depending on {HS.db.getPitchesPerOctave}. An integer is returned unaltered.
+   %% */
+   Acc = {MakeTranslation acc}
+
+   /** %% Transforms symbolic note name (atom) into the corresponding pitch class integer, depending on {HS.db.getPitchesPerOctave}. An integer is returned unaltered.
+   %% */
+   PC = {MakeTranslation pc}
+
+   /** %% Transforms symbolic note name (atom) into the corresponding pitch class integer, depending on {HS.db.getPitchesPerOctave}. An integer is returned unaltered.
+   %% */
+   PCName = {MakeTranslation pcName}  
+      
+   /** %% Translates a symbolic pitch P in the format PC#Octave (PC is an atom, Octave is an int) into the corresponding pitch integer, depending on {HS.db.getPitchesPerOctave}. If P is an int, then it is returned unaltered.
+   %% */
+   Pitch = {MakeTranslation pitch}  
+   
+   
    
 end
