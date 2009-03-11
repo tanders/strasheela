@@ -127,7 +127,7 @@ define
 	 AccDecls.SymAcc + {HS.db.getAccidentalOffset} 
       end
       
-      /** %% Tranforms a conventional symbolic note names to the corresponding 31 ET pitch class. Notation of the symbolic note names: 'D' is d natural, 'D|' is d 'half sharp',  'D#' is d sharp, 'D#|' is d 1 1/2 sharp, 'Dx' is d double sharp, 'D;' is d half flat, 'Db' is d flat, 'Db;' is d 1 1/2 flat, 'Dbb' is d double flat.
+      /** %% Tranforms a conventional symbolic note name to the corresponding 31 ET pitch class. Notation of the symbolic note names: 'D' is d natural, 'D|' is d 'half sharp',  'D#' is d sharp, 'D#|' is d 1 1/2 sharp, 'Dx' is d double sharp, 'D;' is d half flat, 'Db' is d flat, 'Db;' is d 1 1/2 flat, 'Dbb' is d double flat.
       %% NB: the following pitch class names are undefined (otherwise, the meaning of octave would become inconsistent): any flattened C and any B raised higher than B#.  
       %% */
       fun {PC SymPC}
