@@ -109,6 +109,8 @@ define
    end
 
    
+
+   
    /** %% Converts a linear amplitude level L into an logarithmic amplitude (decibels).  LRel is the relativ full level.
    %% */
    fun {LevelToDB L LRel}
