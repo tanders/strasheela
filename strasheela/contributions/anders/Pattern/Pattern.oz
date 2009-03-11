@@ -60,6 +60,7 @@ export
    Arc
    InInterval
    Cycle Cycle2 Rotation Heap Random Palindrome Line Accumulation
+   Intervals AbsIntervals RestrictMaxInterval
    ArithmeticSeries GeometricSeries Max Min
    DxsToXs XsToDxs
    ArithmeticMean Range FirstToLastDistance
@@ -98,6 +99,7 @@ export
    WhichTrue
    SymbolToDirection DirectionToSymbol
    Direction DirectionR Contour InverseContour ContourMatrix
+   Hook Stairs
    DirectionChangeR LocalMaxR
    FdInts FdRanges
    
@@ -338,6 +340,36 @@ define
       {ForAll Xs proc {$ X}
 		    {Select.fd Ys _ X}
 		 end}
+   end
+
+
+   /** %% Ys (a list of FD ints) are the intervals between Xs (list of FD ints) plus an Offset (a FD int) in order to avoid negative intervals.
+   %% */
+   proc {Intervals Xs Ys Offset}
+      Ys = {Map2Neighbours Xs
+	    proc {$ X1 X2 ?Interval}
+	       Interval = {FD.decl}
+	        Interval =: X2 - X1 + Offset
+	    end}
+   end
+
+   /** %% Ys (a list of FD ints) are the absolute intervals between Xs (list of FD ints).
+   %% */
+   proc {AbsIntervals Xs Ys}
+      Ys = {Map2Neighbours Xs
+	    proc {$ X1 X2 ?Interval}
+	       Interval = {FD.decl}
+	       {FD.distance X1 X2 '=:' Interval}
+	    end}
+   end
+
+
+   /** %% Restricts the maximum absolute interval between Xs (list of FD ints) to MaxInterval (FD int).
+   %% */
+   proc {RestrictMaxInterval Xs MaxInterval}
+      Intervals = {AbsIntervals Xs}
+   in
+      {ForAll Intervals proc {$ I} I =<: MaxInterval end}
    end
 
 
@@ -1041,6 +1073,71 @@ define
 			       {Direction X1 X2}
 			    end}
    end
+
+
+   /** %% Contour constraint where all intervals go in the same directions except one. The interval which goes in the opposite direction always either goes up or down (no repetition).
+   %%
+   %% Args
+   %% 'oppositePos' (default last): position of the interval which goes in opposite direction (integer or 'last')
+   %% 'oppositeDir': direction of the interval which goes in opposite direction (FD int).
+   %% 'repetition' (default false): Boolean specifying whether there can be repetitions among the "other" intervals.
+   %%
+   %% Naming: value sequence forms a "hook" if oppositePos is last or 1.
+   %% */
+   proc {Hook Xs Args}
+      Default = unit(oppositePos: last
+		     oppositeDir: _
+		     repetition: false)
+      As = {Adjoin Default Args}
+      L1 = {Length Xs}-1 
+      Dirs = {FD.list L1 0#2}
+      OppositePos = if {IsInt As.oppositePos}
+		    then As.oppositePos
+		    else L1
+		    end
+      Opposite = {Nth Dirs OppositePos} = As.oppositeDir
+      MostDirs = {Append {List.take Dirs OppositePos-1}
+		  {List.drop Dirs OppositePos}}
+      RepetitionDir = {SymbolToDirection '='}
+   in
+      {Contour Xs Dirs}
+      Opposite \=: RepetitionDir
+      {ForAll MostDirs
+       proc {$ Dir} Dir \=: Opposite end}
+      if As.repetition == false then
+	 {ForAll MostDirs
+	  proc {$ Dir} Dir \=: RepetitionDir end}
+      end
+   end
+
+   /** %% Pattern where segments of Args.n elements in Xs (FD ints) follow continuous relation As.rel. For n=2, the result is similar to a common pitch sequence for Organ pedal.  
+   %%
+   %% Args
+   %% 'n' (default 2): 
+   %% 'rel' (default '<:'):
+   %%
+   %% Note: presently only works if length of Xs is multiple of Args.n.
+   %% */
+   proc {Stairs Xs Args}
+      Default = unit(n:2
+		     rel:'<:')
+      As = {Adjoin Default Args}
+      Sublists = {Map {List.number 0 As.n-1 1}
+		  fun {$ I} {LUtils.everyNth Xs As.n I} end}
+   in
+      {ForAll Sublists proc {$ Sublist} {Continuous Sublist As.rel} end}
+      {ForAll {LUtils.matTrans Sublists}
+       proc {$ Sublist2} {Continuous Sublist2 As.rel} end}
+      %% elements of first sublist always complement dir than following
+      %% elements of last sublist
+      {ForAll {LUtils.matTrans
+	       [Sublists.1.2 {LUtils.butLast {List.last Sublists}}]}
+       proc {$ Sublist2}
+	  {Continuous Sublist2 As.rel}
+       end}
+   end
+
+   
    
    /** %% Constraints the domain bounderies of the elements in Xs (FD integers). Mins specifies the mininum and and Max the maximum domain value for each element in Xs.
    %% */
@@ -1551,10 +1648,10 @@ define
 
 
    
-   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-   %%
-   %% patterns on items
-   %% 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%
+%%% patterns on items
+%%% 
 
    
    /** %% Performs List.forAll on a list of items, but Meth can be a method or procedure. 
@@ -1603,10 +1700,10 @@ define
 %    end
 
 
-   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-   %%
-   %% Using Fenvs
-   %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%
+%%% Using Fenvs
+%%%
    
 
    /** %% Restricts the upper and lower domain boundary of a list of FD ints (Xs) by two Fenvs. Each fenv is "sampled" where the number of samples is the lengt of Xs, and these samples are then used as domain boundaries. 
@@ -1638,10 +1735,10 @@ define
 
    
    
-   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-   %%
-   %% Unfinished
-   %% 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%
+%%% Unfinished
+%%% 
   
    %% !! TODO: This is not general enough, because the order of elements are predetermined. Better reimplement this with selection constraints: in principle like the def of random. But collect also all index values and constraint a period of indexes by FD.distinct.
    proc {Heap Xs Ys}
