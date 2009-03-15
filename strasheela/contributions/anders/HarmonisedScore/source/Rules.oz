@@ -121,6 +121,17 @@ export
    %% subfunctors
    Schoenberg
 
+   %% interval constraints
+   GetInterval
+   ConstrainMaxIntervalR
+   MakeIntervalConstraint
+   PerfectConsonances IsPerfectConsonanceR
+   Limit3Consonances IsLimit3ConsonanceR
+   Limit3Intervals_2 IsLimit3IntervalR_2
+   Limit5Consonances IsLimit5ConsonanceR IsLimit_3_5_ConsonanceR
+   IsLimit7ConsonanceR IsLimit_3_5_7_ConsonanceR
+   
+
    %% chord / scale rules
    GetFeature
    UnequalParameter UnequalParameterR NeighboursWithUnequalParameter
@@ -134,9 +145,12 @@ export
 
    ResolveDissonances
 
+   NoParallels NoParallel
+
    IndexCardinality SetEachChordType SetEachScaleType RequireChordTypes
    
-   ExpressAllChordPCs ExpressAllChordPCs_AtChordStart ExpressAllChordPCs_AtChordEnd
+   ExpressAllChordPCs % ExpressAllChordPCs_Warn
+   ExpressAllChordPCs_AtChordStart ExpressAllChordPCs_AtChordEnd
    ExpressEssentialChordPCs ExpressEssentialPCs_AtChordStart
    ClearHarmonyAtChordBoundaries
    OnlyOrnamentalDissonance_Durations
@@ -161,14 +175,100 @@ export
    MaxInterval MaxNonharmonicNoteSequence MaxNonharmonicNotePercent MaxRepetitions MinPercentSteps
 
    
-
-   %% aux constraints 
-   GetInterval
-   ConstrainMaxIntervalR
    
 define
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%
+%%% Interval Constraints 
+%%%
+
+   /** %% Returns the absolute pitch interval (a FD int) between the note objects Note1 and Note2. Interval is implicitly declared a FD int.
+   %% */
+   %% NOTE: consider memoization, as this function is possibly called multiple times with same notes (e.g., multiple other constraints use it).
+   proc {GetInterval Note1 Note2 ?Interval}
+      Interval = {FD.decl}
+      {FD.distance {Note1 getPitch($)} {Note2 getPitch($)} '=:' Interval}
+   end
    
+   
+   /** %% B=1 <-> constraints the absolute pitch interval between Note1 and Note2 (note objects) to MaxInterval (an integer) at most.
+   %% */
+   proc {ConstrainMaxIntervalR Note1 Note2 MaxInterval B}
+      B = {FD.int 0#1}
+      {FD.reified.distance {Note1 getPitch($)} {Note2 getPitch($)} '=<:' MaxInterval
+       B}
+   end
+
+   /** %% Expects a list of ratios (pairs of ints) and returns a binary constraint {IsInRatios Interval B} with Interval (FD int) a pitch interval and B a 0/1 int.   
+   %%  B=1 <-> Interval reduced into a single octave is element in ratios, translated to pitch classes.   
+   %% */
+   fun {MakeIntervalConstraint Ratios}
+      proc {$ Interval B}
+	 %% Intervals must be def in constraint: depents on pitches per octave
+	 Intervals = {FS.value.make
+		      {Sort {Map Ratios HS.score.ratioToInterval} Value.'<'}}
+	 Aux = {FD.decl}
+      in
+	 Aux = {FD.modI Interval {HS.db.getPitchesPerOctave}}
+	 B = {FS.reified.include Aux Intervals}
+      end
+   end
+
+   %%
+   %% TODO:
+   %%
+   %% - def more general limit constraint, expecting interval, list of limits and orders as args
+   %%
+
+   /** %% Perfect consonances (list of ratios).
+   %% */
+   PerfectConsonances = [1#1 3#2]
+   /** %% Binary constraint {$ Interval B}: B=1 <-> Interval is perfect consonance. 
+   %% */
+   IsPerfectConsonanceR
+   = {MakeIntervalConstraint PerfectConsonances}
+   
+   /** %% 3-limit consonances: fourth, fifth (list of ratios).
+   %% */
+   Limit3Consonances = [4#3 3#2]      
+   /** %% Binary constraint {$ Interval B}: B=1 <-> Interval is 3-limit consonance (fourth or fifth). 
+   %% */
+   IsLimit3ConsonanceR
+   = {MakeIntervalConstraint Limit3Consonances}
+   /** %% 2nd order 3-limit intervals: fourth/fifth, maj second/min seventh (list of ratios).
+   %% */
+   Limit3Intervals_2 = [9#8 4#3 3#2 16#9]
+   /** %% Binary constraint {$ Interval B}: B=1 <-> Interval 2nd order is 3-limit interval.
+   %% */
+   IsLimit3IntervalR_2
+   = {MakeIntervalConstraint Limit3Intervals_2}
+   /** %% 5-limit consonances (list of ratios).
+   %% */
+   Limit5Consonances = [6#5 5#4 8#5 5#3]   
+   /** %% Binary constraint {$ Interval B}: B=1 <-> Interval is 5-limit consonance (does not include 3-limit). 
+   %% */
+   IsLimit5ConsonanceR
+   = {MakeIntervalConstraint Limit5Consonances}
+   /** %% Binary constraint {$ Interval B}: B=1 <-> Interval is 3 or 5-limit consonance.
+   %% */
+   IsLimit_3_5_ConsonanceR
+   = {MakeIntervalConstraint {Append Limit3Consonances Limit5Consonances}}
+   /** %% 7-limit consonances (list of ratios).
+   %% */
+   Limit7Consonances = [8#7 7#6 7#5 10#7 12#7 7#4]
+   /** %% Binary constraint {$ Interval B}: B=1 <-> Interval is 7-limit consonance (does not include 3 nor 5 limit). 
+   %% */
+   IsLimit7ConsonanceR
+   = {MakeIntervalConstraint Limit7Consonances}
+   /** %% Binary constraint {$ Interval B}: B=1 <-> Interval is 3, 5, or 7-limit consonance.
+   %% */
+   IsLimit_3_5_7_ConsonanceR
+   = {MakeIntervalConstraint
+      {Append {Append Limit3Consonances Limit5Consonances} Limit7Consonances}}
+   
+   
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%
 %%% rules on chord(s)/scale(s)
@@ -403,6 +503,26 @@ define
       {IsConsonantR {List.last Chords} 1}
    end
 
+   
+
+   /** %% Open and hidden parallel fifths and fourth are not permitted: perfect consonances must not be reached by both voices in the same direction. NotePairs is a list of two-note-pairs. Each pair consists of consecutive notes in the same voice and NotePairs together are the simultaneous note pairs of all voices. 
+   %% */
+   proc {NoParallels NotePairs}
+      {Pattern.forPairwise NotePairs NoParallel}
+   end
+   /** %%  Open and hidden parallel fifths and fourth are not permitted: perfect consonances must not be reached by both voices in the same direction. The pairs N1A#N1B and N2A#N2B are pairs of consecutive melodic notes,  whereas N1B and N2B are simultaneous notes. 
+   %% */
+   proc {NoParallel N1A#N1B N2A#N2B}
+      Dir1 = {Pattern.direction {N1A getPitch($)} {N1B getPitch($)}}
+      Dir2 = {Pattern.direction {N2A getPitch($)} {N2B getPitch($)}}
+   in
+      {FD.impl
+       %% interval between sim successor notes
+       {IsPerfectConsonanceR {GetInterval N1B N2B}}
+       (Dir1 \=: Dir2)
+       1}
+   end
+   
 
    /** %% Sets the total number of different chord indices in all Chords (a list of chords or scale objects) to N (FD int). 
    %% */
@@ -452,6 +572,23 @@ define
 	 {FS.subset {MyChord getPitchClasses($)} PCsFS}
       end
    end
+%    /** %% Like ExpressAllChordPCs, but browses warning is number of sim notes is insufficient for expressing all chord tones.
+%    %% */
+%    %% NOTE: is it a good idea to have extra constraint for this?
+%    proc {ExpressAllChordPCs_Warn MyChord}
+%       thread	% waits until sim notes are accessible
+% 	 Ns = {MyChord getSimultaneousItems($ test:isNote)}
+% 	 C_Card = {FD.decl}
+% 	 PCs = {Map Ns fun {$ N} {N getPitchClass($)} end}
+% 	 PCsFS = {GUtils.intsToFS PCs}
+%       in
+% 	  C_Card = {FS.card {MyChord getPitchClasses($)}}
+% 	  if {Length Ns} >= C_Card then 
+% 	     {FS.subset {MyChord getPitchClasses($)} PCsFS}
+% 	  else {Browse warn('not enough notes for expressing full chord')}
+% 	  end
+%       end
+%    end
    /** %% More strict variant of ExpressAllChordPCs: all pitch classes must sound when chord starts.
    %% */
    proc {ExpressAllChordPCs_AtChordStart MyChord}
@@ -1052,29 +1189,6 @@ define
    end
 
    
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%
-%%% Aux Constraints 
-%%%
-
-   /** %% Returns the absolute pitch interval (a FD int) between the note objects Note1 and Note2. Interval is implicitly declared a FD int.
-   %% */
-   %% NOTE: consider memoization, as this function is possibly called multiple times with same notes (e.g., multiple other constraints use it).
-   proc {GetInterval Note1 Note2 ?Interval}
-      Interval = {FD.decl}
-      {FD.distance {Note1 getPitch($)} {Note2 getPitch($)} '=:' Interval}
-   end
-   
-   
-   /** %% B=1 <-> constraints the absolute pitch interval between Note1 and Note2 (note objects) to MaxInterval (an integer) at most.
-   %% */
-   proc {ConstrainMaxIntervalR Note1 Note2 MaxInterval B}
-      B = {FD.int 0#1}
-      {FD.reified.distance {Note1 getPitch($)} {Note2 getPitch($)} '=<:' MaxInterval
-       B}
-   end
-
-   
    
    /*
    %% ?? combining multiple  non-harmonic pitch conditions (e.g. for ornamental resolution)
@@ -1085,6 +1199,9 @@ define
 
    */
 
+
+
+   
    
 %    %% Constraining chord index and/or transposition pattern (or dissonance degree or whatever...) -- I put this here just to keep such ideas in mind ;-)
 % %    fun {MkCycleChords As}
