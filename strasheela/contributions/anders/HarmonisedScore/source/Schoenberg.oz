@@ -147,7 +147,8 @@ define
    %% - commonPCs: consecutive chords must share common pitch classes
    %% */
    proc {ProgressionSelector Cs Selector}
-      case Selector of ascending then
+      case Selector
+      of ascending then
 	 {Pattern.for2Neighbours Cs 
 	  proc {$ C1 C2} {AscendingProgressionR C1 C2 1} end}
       [] resolveDescendingProgressions(...) then
