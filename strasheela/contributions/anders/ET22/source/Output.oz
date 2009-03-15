@@ -7,7 +7,7 @@
 %% Actual todo: generalise and factor out the common code, i.e., reduce/avoid code doublication
 functor
 import
-   OS Explorer
+   OS FS Explorer
    Resolve
 %   Browser(browse:Browse)
    
@@ -18,12 +18,15 @@ import
    Out at 'x-ozlib://anders/strasheela/source/Output.ozf'
    Score at 'x-ozlib://anders/strasheela/source/ScoreCore.ozf'
    HS at 'x-ozlib://anders/strasheela/HarmonisedScore/HarmonisedScore.ozf'
+   DB at 'DB.ozf'
    ET22 at '../ET22.ozf'
 %   DB at 'DB.ozf'
    
 export
    RenderAndShowLilypond SetEnharmonicNotationTable
    AddExplorerOut_ChordsToScore
+
+   MakeChordComment MakeChordRatios MakeScaleComment
 
    IsEt22Note IsEt22Chord IsEt22Scale
    NoteEt22ToLily NoteEt22ToLily_AdaptiveJI
@@ -190,6 +193,25 @@ define
 	    21:'B'  )}
    end
 
+   /** %% Transforms the pitch class MyPC into a ratio VS. Alternative ratio transformations are given (written like 1/2|1/3). If no transformation existists, 'n/a' is output.
+   %% NB: transformation uses the interval specs defined for 31 ET, but because as a temperament just intonation intervals are ambiguous the returned ratio may be missleading.. 
+   %% */
+   fun {PC2RatioVS MyPC}
+      IntervalDB = DB.fullDB.intervalDB
+      fun {PrettyRatios Rs}
+	 %% alternative ratio transformations written as 1/2|1/3
+	 {Out.listToVS
+	  {Map Rs fun {$ Nom#Den} Nom#'/'#Den end}
+	  '|'}
+      end
+      Ratios = {HS.db.pc2Ratios MyPC IntervalDB}
+   in
+      if Ratios == nil
+      then 'n/a'
+      else {PrettyRatios Ratios}
+      end
+   end
+
 
    /** %% Returns true if X is a note object with pitch unit et22.
    %% */
@@ -293,6 +315,22 @@ define
       then raise noVS(Result) end
       end
    end
+   /* %% Expects a chord and returns the chord as ratio spec: Transposition x untransposed PCs (a VS).
+   %% */
+   proc {MakeChordRatios MyChord ?Result}
+      Result = '#'('\\column { '
+		   {PC2RatioVS {MyChord getTransposition($)}}
+		   ' x ('
+		   {Out.listToVS {Map {FS.reflect.lowerBoundList
+				       {MyChord getUntransposedPitchClasses($)}}
+				  PC2RatioVS}
+		    ' '}
+		   ') }')
+      %% 
+      if {Not {IsVirtualString Result}}
+      then raise noVS(Result) end
+      end
+   end
    /** %% Returns the scale comment. 
    %% */
    proc {MakeScaleComment MyScale ?Result}
@@ -388,6 +426,9 @@ define
    %% Also, note that convert-ly (which updates) sometimes breaks the 22 ET notation (e.g., when inserting new explicit staffs).
    %% */
    proc {RenderAndShowLilypond MyScore Args}
+      Default = unit(chordDescription:MakeChordComment
+		     scaleDescription:MakeScaleComment)
+      As1 = {Adjoin Default Args}
       AddedClauses = [Out.isLilyChord#SimTo22LilyChord
 		      IsEt22Note#NoteEt22ToLily
 		      IsEt22Chord#ChordEt22ToLily
@@ -402,9 +443,9 @@ define
 			       then {Append Args.clauses AddedClauses}
 			       else AddedClauses
 			       end)
-      As = {Adjoin Args AddedArgs}
+      As2 = {Adjoin As1 AddedArgs}
    in
-      {Out.renderAndShowLilypond MyScore As}
+      {Out.renderAndShowLilypond MyScore As2}
    end
    
 end
