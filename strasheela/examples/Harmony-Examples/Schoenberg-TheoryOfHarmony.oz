@@ -224,7 +224,7 @@ MakeNotes
 			maxPitch:'C'#6
 		       ))
    proc {$ Notes Args} 
-      {RestrictPitchDomain Notes Args.rargs.minPitch Args.rargs.maxPitch}
+      {HS.rules.restrictPitchDomain Notes Args.rargs.minPitch Args.rargs.maxPitch}
    end}
 
 
@@ -337,15 +337,6 @@ in
     end}
 end
 
-/** %% Expects a list of notes and two ET31 pitches specified like 'C'#4. These set the upper and lower pitch domain of all notes.
-%% */
-proc {RestrictPitchDomain Notes MaxDom MinDom}   
-   Dom = {ET31.pitch MaxDom}#{ET31.pitch MinDom}
-in
-   {Pattern.mapItems Notes getPitch} ::: Dom
-end
-
-
 /** %% MyChord and Notes are the chord and the notes at a time frame: all notes of the chord are played and no others.
 %% */
 proc {PlayAllChordTones MyChord Notes}
@@ -369,7 +360,7 @@ end
 proc {ConstrainUpperVoiceDistance Notes}
    {Pattern.for2Neighbours Notes.2
     proc {$ N1 N2}
-       {GetInterval N1 N2} =<: {HS.db.getPitchesPerOctave}
+       {HS.rules.getInterval N1 N2} =<: {HS.db.getPitchesPerOctave}
     end}
 end
 
@@ -388,7 +379,7 @@ in
     end}
 end
 /** %% Open and hidden parallel fifths and fourth are not permitted: perfect consonances must not be reached by both voices in the same direction.
-%% NotePairs is same are as in HarmonicBandStays.
+%% NotePairs is same are as in CommonPitchesHeldOver.
 %% */
 proc {NoParallels NotePairs}
    {Pattern.forPairwise NotePairs NoParallel}
@@ -402,7 +393,7 @@ proc {NoParallel N1A#N1B N2A#N2B}
 in
    {FD.impl
     %% interval between sim successor notes
-    {IsPerfectConsonanceR {GetInterval N1B N2B}}
+    {HS.rules.isPerfectConsonanceR {HS.rules.getInterval N1B N2B}}
     (Dir1 \=: Dir2)
     1}
 end
@@ -415,7 +406,7 @@ proc {RestrictMelodicIntervals_UpperVoices Notes Args}
    Defaults = unit(minPercent:70
 		   maxPercent:100)
    As = {Adjoin Defaults Args}
-   Intervals = {Pattern.map2Neighbours Notes GetInterval}
+   Intervals = {Pattern.map2Neighbours Notes HS.rules.getInterval}
 in
    {ForAll Intervals proc {$ X} X =<: Fifth end}
    {Pattern.percentTrue_Range {Map Intervals proc {$ X B} B = (X =<: MajSecond) end}
@@ -427,7 +418,7 @@ end
 proc {RestrictMelodicIntervals_Bass Notes}
 %   Defaults = unit(minSteps:0)
 %   As = {Adjoin Defaults Args}
-   Intervals = {Pattern.map2Neighbours Notes GetInterval}
+   Intervals = {Pattern.map2Neighbours Notes HS.rules.getInterval}
 in
    {ForAll Intervals
     proc {$ X}
@@ -606,15 +597,19 @@ RaisedVI_PC = {DegreeToPC TranspPCsList 6#Sharp}
 %% Aux for constraints etc 
 %%
 
+%%
+%% TODO:
+%%
+%% - add constraints Is3LimitR, Is5LimitR, Is7LimitR, constraining a PC interval
+%% - move these constaints and IsPerfectConsonanceR to HS.rules
+%% - move NoParallels to HS.rules
+%%
+
 %% diatonic interval definition -- independent of 31 ET
-Octave = {FloatToInt {MUtils.ratioToKeynumInterval 2#1
-		      {IntToFloat {HS.db.getPitchesPerOctave}}}}
-Fifth = {FloatToInt {MUtils.ratioToKeynumInterval 3#2
-		     {IntToFloat {HS.db.getPitchesPerOctave}}}}
-Fourth = {FloatToInt {MUtils.ratioToKeynumInterval 4#3
-		      {IntToFloat {HS.db.getPitchesPerOctave}}}}
-MajSecond = {FloatToInt {MUtils.ratioToKeynumInterval 9#8
-			 {IntToFloat {HS.db.getPitchesPerOctave}}}}
+Octave = {HS.score.ratioToInterval 2#1}
+Fifth = {HS.score.ratioToInterval 3#2}
+Fourth = {HS.score.ratioToInterval 4#3}
+MajSecond = {HS.score.ratioToInterval 9#8}
 
 
 Natural = {HS.score.absoluteToOffsetAccidental 0}
@@ -622,38 +617,6 @@ Sharp = {HS.score.absoluteToOffsetAccidental 2}
 Flat = {HS.score.absoluteToOffsetAccidental ~2}
 
 
-/** %% Returns FD int for absolute pitch interval between Note1 and Note2
-%% */
-%% NOTE: called multiple times: shall I muse memoization?
-proc {GetInterval Note1 Note2 Interval}
-   Interval = {FD.decl}
-   {FD.distance {Note1 getPitch($)} {Note2 getPitch($)} '=:' Interval}
-end
-
-
-local
-%    PerfectConsonance = {FS.value.make [0 Fifth Octave Octave+Fifth Octave+Octave Octave+Octave+Fifth]}
-   PerfectConsonance = {FS.value.make [0 Fifth]}
-in
-   /** %% B=1 <-> Interval (FD int) is perfect consonance (prime, fifths or octave).
-   %% */
-   proc {IsPerfectConsonanceR Interval B}
-      Aux = {FD.decl}
-   in
-      Aux = {FD.modI Interval {HS.db.getPitchesPerOctave}}
-      B = {FS.reified.include Aux PerfectConsonance}
-   end
-end
-
-/* % test
-
-{IsPerfectConsonanceR Octave+Fifth}
-
-{IsPerfectConsonanceR Fifth}
-
-{IsPerfectConsonanceR Fifth+1}
-
-*/
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
