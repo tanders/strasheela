@@ -387,3 +387,39 @@ end
 
 
 */
+
+
+/* % variant: compute both voices, no cadence in end
+
+{SDistro.exploreOne 
+ proc {$ MyScore}
+    N = 12
+    Voice1 = {MakeVoice {FD.list N 60#76} 'voice 1'}
+    Voice2 = {MakeVoice {FD.list N 60#76} 'voice 2'}
+ in
+    MyScore = {Score.makeScore sim(items: [Voice1
+					   Voice2]
+				  startTime: 0
+				  timeUnit:beats)
+	      unit}
+    {OnlyDiatonicPitches {Voice1 getItems($)}}
+    {RestrictMelodicIntervals Voice1}
+%     {OnlyConsonances Voice1}
+%     {PreferImperfectConsonances Voice1}
+%     {NoDirectMotionIntoPerfectConsonance Voice1}
+%     {StartAndEndWithPerfectConsonance Voice1}
+    %%
+    {OnlyDiatonicPitches {Voice2 getItems($)}}
+    {RestrictMelodicIntervals Voice2}
+    {OnlyConsonances Voice2}
+    {PreferImperfectConsonances Voice2}
+    {NoDirectMotionIntoPerfectConsonance Voice2}
+    {StartAndEndWithPerfectConsonance Voice2}
+ end
+ unit(order:startTime
+      value:mid)}
+
+
+*/
+
+
