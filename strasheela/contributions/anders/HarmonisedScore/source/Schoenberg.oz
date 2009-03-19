@@ -24,7 +24,7 @@ import
    HS at 'x-ozlib://anders/strasheela/HarmonisedScore/HarmonisedScore.ozf'
    
 export
-   AscendingProgressionR
+   AscendingProgressionR AscendingProgression2R
    DescendingProgressionR
    SuperstrongProgressionR
    ConstantProgressionR
@@ -38,12 +38,18 @@ define
    /** %% B=1 <-> the progression from chord/scale X to chord/scale Y is ascending (or strong): X and Y have common pitch classes, but the root of Y does not occur in the set of X's pitchclasses.
    %% */
    proc {AscendingProgressionR X Y B}
-      B = {FD.int 0#1}
+%       B = {FD.int 0#1}
       B = {FD.conj
 	   {FD.nega {FS.reified.include {Y getRoot($)} {X getPitchClasses($)}}}
 	   {HS.rules.commonPCsR X Y}}
    end
-
+   /** %% More strict variant of AscendingProgressionR: B=1 <-> the root of Y does not occur in the set of X's pitchclasses, but the root of X is also a pitch class in Y.
+   %% */
+   proc {AscendingProgression2R X Y B}
+      B = {FD.conj
+	   {FD.nega {FS.reified.include {Y getRoot($)} {X getPitchClasses($)}}}
+	   {FS.reified.include {X getRoot($)} {Y getPitchClasses($)}}}
+   end
 
    /** %% B=1 <-> the progression from chord/scale X to chord/scale Y is descending (or weak): a non-root pitchclass of X is root in Y.
    %% */
