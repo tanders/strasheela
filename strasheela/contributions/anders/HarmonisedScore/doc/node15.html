@@ -1,7 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
 <html>
  <head>
-  <title>ArithmeticalSeriesChords</title>
+  <title>Catler</title>
   <style>BODY {
  background: url(page.gif) repeat-y white;
 }
@@ -65,16 +65,16 @@ document.write('<div id="slidemenubar2" style="left:-144" onMouseover="pull()" o
 </td></tr><tr><td bgcolor="#009cff" width="144"><a href="node4.html">Rules</a>
 </td></tr><tr><td bgcolor="#009cff" width="144"><a href="node5.html">DBs</a>
 </td></tr><tr><td bgcolor="#009cff" width="144"><a href="node6.html">Distro</a>
-</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node7.html">Schoenberg</a>
-</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node8.html">Default</a>
-</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node9.html">Jazz</a>
-</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node10.html">Partch</a>
-</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node11.html">Johnston</a>
-</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node12.html">Harrison</a>
-</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node13.html">Chalmers</a>
-</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node14.html">Catler</a>
-</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node15.html">ArithmeticalSeriesChords</a>
-</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node16.html">HS</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node7.html">HS</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node8.html">Schoenberg</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node9.html">Default</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node10.html">Jazz</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node11.html">Partch</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node12.html">Johnston</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node13.html">Harrison</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node14.html">Chalmers</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node15.html">Catler</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node16.html">ArithmeticalSeriesChords</a>
 </td></tr></table></layer>
 <script language="JavaScript1.2">
 function regenerate(){
@@ -134,30 +134,19 @@ clearInterval(drawit)
 <span class="string"></span>
 </span>
 <h3>Functor</h3>
-<ul>ArithmeticalSeriesChords ("<span class="string">/Users/t/oz/music/Strasheela/strasheela/trunk/strasheela/contributions/anders/HarmonisedScore/source/databases/ArithmeticalSeriesChords.oz</span>")<br></ul>
+<ul>Catler ("<span class="string">/Users/t/oz/music/Strasheela/strasheela/trunk/strasheela/contributions/anders/HarmonisedScore/source/databases/Catler.oz</span>")<br></ul>
 <h3>Import</h3>
-<code><ul><li>GUtils at "<span class="string">x-ozlib://anders/strasheela/source/GeneralUtils.ozf"
-</span></li><li>LUtils at "<span class="string">x-ozlib://anders/strasheela/source/ListUtils.ozf"
-</span></li><li><a href="node16.html">HS</a> at "<span class="string">../../HarmonisedScore.ozf"
+<code><ul><li><a href="node7.html">HS</a> at "<span class="string">../../HarmonisedScore.ozf"
 </span></li></ul></code>
 <h3>Export</h3>
-<code><ul><li>&lt;P/2:<a href="#entity463"><span class="functionname">GetSelectedChords</span></a>&gt;
-</li><li>&lt;P/2:<a href="#entity464"><span class="functionname">GetChords</span></a>&gt;
+<code><ul><li>&lt;P/2:<a href="#entity533"><span class="functionname">GetIntervals</span></a>&gt;
 </li></ul></code>
 <h3>Define</h3>
 
 <code>
-<a name="entity463">
-<span class="keyword">fun</span>{<span class="functionname">GetSelectedChords</span> KeysPerOctave}<br>
-<span class="string"> Returns a database with chords whose pitch ratios are created by means of arithmetic series (this database presents a selection). For usage in HS, the intervals are rounded to the nearest pitch class interval depending on KeysPerOctave (an int).<BR>
-<BR>
-</span>
-</code><br>
-
-<code>
-<a name="entity464">
-<span class="keyword">fun</span>{<span class="functionname">GetChords</span> KeysPerOctave}<br>
-<span class="string"> Returns a database with chords whose pitch ratios are created by means of arithmetic series. For usage in HS, the intervals are rounded to the nearest pitch class interval depending on KeysPerOctave (an int).<BR>
+<a name="entity533">
+<span class="keyword">fun</span>{<span class="functionname">GetIntervals</span> KeysPerOctave}<br>
+<span class="string"> Returns a database with the Jon Catler 24 tone Just Intonation Scale "over and under the 13 limit" (cf. www.microtonal-synthesis.com/scales.html). For usage in HS, the intervals are rounded to the nearest pitch class interval depending on KeysPerOctave (an int).<BR>
 <BR>
 </span>
 </code><br>

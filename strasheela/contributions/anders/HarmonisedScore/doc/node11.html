@@ -1,7 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
 <html>
  <head>
-  <title>Johnston</title>
+  <title>Partch</title>
   <style>BODY {
  background: url(page.gif) repeat-y white;
 }
@@ -65,16 +65,16 @@ document.write('<div id="slidemenubar2" style="left:-144" onMouseover="pull()" o
 </td></tr><tr><td bgcolor="#009cff" width="144"><a href="node4.html">Rules</a>
 </td></tr><tr><td bgcolor="#009cff" width="144"><a href="node5.html">DBs</a>
 </td></tr><tr><td bgcolor="#009cff" width="144"><a href="node6.html">Distro</a>
-</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node7.html">Schoenberg</a>
-</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node8.html">Default</a>
-</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node9.html">Jazz</a>
-</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node10.html">Partch</a>
-</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node11.html">Johnston</a>
-</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node12.html">Harrison</a>
-</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node13.html">Chalmers</a>
-</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node14.html">Catler</a>
-</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node15.html">ArithmeticalSeriesChords</a>
-</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node16.html">HS</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node7.html">HS</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node8.html">Schoenberg</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node9.html">Default</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node10.html">Jazz</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node11.html">Partch</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node12.html">Johnston</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node13.html">Harrison</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node14.html">Chalmers</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node15.html">Catler</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node16.html">ArithmeticalSeriesChords</a>
 </td></tr></table></layer>
 <script language="JavaScript1.2">
 function regenerate(){
@@ -134,21 +134,45 @@ clearInterval(drawit)
 <span class="string"></span>
 </span>
 <h3>Functor</h3>
-<ul>Johnston ("<span class="string">/Users/t/oz/music/Strasheela/strasheela/trunk/strasheela/contributions/anders/HarmonisedScore/source/databases/Johnston.oz</span>")<br></ul>
+<ul>Partch ("<span class="string">/Users/t/oz/music/Strasheela/strasheela/trunk/strasheela/contributions/anders/HarmonisedScore/source/databases/Partch.oz</span>")<br></ul>
 <h3>Import</h3>
-<code><ul><li><a href="node16.html">HS</a> at "<span class="string">../../HarmonisedScore.ozf"
+<code><ul><li><a href="node7.html">HS</a> at "<span class="string">../../HarmonisedScore.ozf"
 </span></li></ul></code>
 <h3>Export</h3>
-<code><ul><li>&lt;P/2:<a href="#entity449"><span class="functionname">GetIntervals</span></a>&gt;
+<code><ul><li>&lt;P/2:<a href="#entity518"><span class="functionname">GetIntervals</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity515"><span class="functionname">Get11LimitDiamondChords</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity516"><span class="functionname">Get7LimitDiamondChords</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity517"><span class="functionname">Get5LimitDiamondChords</span></a>&gt;
 </li></ul></code>
 <h3>Define</h3>
 
 <code>
-<a name="entity449">
+<a name="entity518">
 <span class="keyword">fun</span>{<span class="functionname">GetIntervals</span> KeysPerOctave}<br>
-<span class="string"> Returns a database with the Ben Johnston 25 note just enharmonic scale (cf. www.microtonal-synthesis.com/scales.html). For usage in HS, the intervals are rounded to the nearest pitch class interval depending on KeysPerOctave (an int).<BR>
+<span class="string"> Returns a database with the Partch intervals. For usage in HS, the intervals are rounded to the nearest pitch class interval depending on KeysPerOctave (an int).<BR>
 <BR>
 </span>
+</code><br>
+
+<code>
+<a name="entity515">
+<span class="keyword">fun</span>{<span class="functionname">Get11LimitDiamondChords</span> KeysPerOctave}<br>
+<span class="string"> Returns a database with the two chords which constitute the 11-limit tonality diamond. All other <code>6*6-2=34</code> chords of this diamond are transpositions of these two by the proportions of the other.<BR>
+ For usage in HS, each chord's pitchclasses and root are rounded to the nearest pitch class depending on KeysPerOctave (an int).<BR>
+<BR>
+ NB: two possible roots are specified for the Utonality chords: 1/1 (the 'mirror-root') and 4/3 (following convention and Hindemiths root definition). For example, in C-minor 1/1 is g and 4/3 is c. <BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity516">
+<span class="keyword">fun</span>{<span class="functionname">Get7LimitDiamondChords</span> KeysPerOctave}
+</code><br>
+
+<code>
+<a name="entity517">
+<span class="keyword">fun</span>{<span class="functionname">Get5LimitDiamondChords</span> KeysPerOctave}
 </code><br>
 <h3>End</h3>
 </div></body>

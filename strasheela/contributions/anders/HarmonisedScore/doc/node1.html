@@ -65,16 +65,16 @@ document.write('<div id="slidemenubar2" style="left:-144" onMouseover="pull()" o
 </td></tr><tr><td bgcolor="#009cff" width="144"><a href="node4.html">Rules</a>
 </td></tr><tr><td bgcolor="#009cff" width="144"><a href="node5.html">DBs</a>
 </td></tr><tr><td bgcolor="#009cff" width="144"><a href="node6.html">Distro</a>
-</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node7.html">Schoenberg</a>
-</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node8.html">Default</a>
-</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node9.html">Jazz</a>
-</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node10.html">Partch</a>
-</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node11.html">Johnston</a>
-</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node12.html">Harrison</a>
-</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node13.html">Chalmers</a>
-</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node14.html">Catler</a>
-</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node15.html">ArithmeticalSeriesChords</a>
-</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node16.html">HS</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node7.html">HS</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node8.html">Schoenberg</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node9.html">Default</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node10.html">Jazz</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node11.html">Partch</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node12.html">Johnston</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node13.html">Harrison</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node14.html">Chalmers</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node15.html">Catler</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node16.html">ArithmeticalSeriesChords</a>
 </td></tr></table></layer>
 <script language="JavaScript1.2">
 function regenerate(){
@@ -137,7 +137,7 @@ clearInterval(drawit)
 <BR>
  The harmony model provides convenient means in a highly generic way. For example, the model is suitable for theories of harmony is the conventional 12-tone equal-temperament. However, also microtonal music is supported: the representations for analytical concepts are suitable for any other equal division of the octave, and that way also for approximations of just intonation. For this purpose, the model generalises established concepts of 12-tone equal-temperament for other equal-temperaments. A number of fundamental terms which are generalised are explained below.<BR>
  <BR>
- The present functor is the top-level functor of the harmony model. It only exports subfunctors.<BR>
+ The present functor is the top-level functor of the harmony model. It primarily exports subfunctors.<BR>
 <BR>
 <BR>
  Terminology: (all terms denote integers and can be represented by FD ints)<BR>
@@ -187,6 +187,9 @@ clearInterval(drawit)
 </span></li><li><a href="node4.html">Rules</a> at "<span class="string">source/Rules.ozf"
 </span></li><li><a href="node5.html">DBs</a> at "<span class="string">source/databases/Databases.ozf"
 </span></li><li><a href="node6.html">Distro</a> at "<span class="string">source/Distribution.ozf"
+</span></li><li>ET12 at "<span class="string">x-ozlib://anders/strasheela/ET12/ET12.ozf"
+</span></li><li>ET22 at "<span class="string">x-ozlib://anders/strasheela/ET22/ET22.ozf"
+</span></li><li>ET31 at "<span class="string">x-ozlib://anders/strasheela/ET31/ET31.ozf"
 </span></li></ul></code>
 <h3>Export</h3>
 <code><ul><li>db:<span class="variablename">DB</span>
@@ -194,6 +197,10 @@ clearInterval(drawit)
 </li><li>score:<span class="variablename">HSScore</span>
 </li><li>rules:<span class="variablename">Rules</span>
 </li><li>distro:<span class="variablename">Distro</span>
+</li><li><span class="variablename">Acc</span>
+</li><li>pc:<span class="variablename">PC</span>
+</li><li>pcName:<span class="variablename">PCName</span>
+</li><li><span class="variablename">Pitch</span>
 </li></ul></code>
 <h3>Define</h3>
 <h3>End</h3>
