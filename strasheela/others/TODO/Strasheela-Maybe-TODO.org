@@ -854,6 +854,17 @@ piwik_log(piwik_action_name, piwik_idsite, piwik_url);
 
 * Strasheela design					      :MAYBE:STRASHEELA:
 
+** Conversion of cent values to fractions with continued fractions
+
+I've had Kraig Grady post a simple Excel spreadsheet that approximates 
+intervals in cents by ratios by means of continued fractions at 
+http://anaphoria.com/journal.html. It is based on a decimal to ratio 
+converter written by Kardi Teknomo. Use Sheet 2 for your computations.
+
+http://anaphoria.com/Continued%20FractionCentJC.xls
+
+   http://people.revoledu.com/kardi/tutorial/ContinuedFraction/index.html
+
 ** saving textual scores with procs, fenvs, classes etc 
 
    procs, fenvs, classes can be pickled
