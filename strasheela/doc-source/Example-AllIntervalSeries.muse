@@ -8,7 +8,8 @@
 
 This example defines an all-interval series -- a CSP classics. The all-interval series concept stems from [[http://en.wikipedia.org/wiki/Serialism][serial music]]. A *series* (or tone row) is a sequence of twelve tone names (pitch classes) of the chromatic scale, in which each pitch class occurs exactly once. In an *all-interval series*, also all eleven intervals between the twelve pitches are pairwise distinct (i.e. each interval occurs only once). These intervals are computed in such a way that they are [[http://en.wikipedia.org/wiki/Inversion_(music)#Inversional_equivalency][inversional equivalent]]: complementary intervals such a fifth upwards and a fourth downwards count as the same interval (namely 7). Shown is one of the 3856 solutions known from the [[http://links.jstor.org/sici?sici=0022-2909(197423)18%3A2%3C364%3ATSOAS%3E2.0.CO%3B2-K][literature]]. 
 
-  [[../examples/Output/01-AllIntervalSeries.mp3][../examples/Output/01-AllIntervalSeries.preview.png]]
+  [[../examples/Output/01-AllIntervalSeries.mp3][../examples/Output/01-AllIntervalSeries.preview.png]] 
+   click the score for sound (mp3)
 
   [[../examples/01-AllIntervalSeries.oz][source]]
 ; [[../examples/Output/01-AllIntervalSeries.mp3][mp3]][[../examples/Output/01-AllIntervalSeries.mid][midi]]

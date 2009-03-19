@@ -34,6 +34,8 @@ the same mode as the cantus firmus.
 
 
   [[../examples/Output/02-Fuxian-firstSpecies-Counterpoint.mp3][../examples/Output/02-Fuxian-firstSpecies-Counterpoint.preview.png]]
+   
+  click the score for sound (mp3)
 
 ; [1] 
 ;  [[../examples/Output/02-Fuxian-firstSpecies-Counterpoint.mp3][mp3]] [[../examples/Output/02-Fuxian-firstSpecies-Counterpoint.mid][midi]]

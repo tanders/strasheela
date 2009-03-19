@@ -42,6 +42,7 @@ The [[../examples/07-Harmonised-L-system.oz][source]] demonstrates how the solve
 
 [[../examples/Output/07-Harmonised-L-system-ex5.mp3][../examples/Output/07-Harmonised-L-system-ex5.preview.png]]
 
+  click the score for sound (mp3)
 
 The motif constructure =MakeMyFreeMotif= defines the motif quasi literally. Everything is fixed, only the note pitches are set to variables of the domain {48, ..., 72} (i.e. midi pitches two octaves around middle *c*). The function =Score.makeScore= has already been used in several examples before. [[../doc/api/node6.html#entity199][Score.makeScore2]] is a cousin which does not fully initialise the score, and that way allows for the combination of its result with other parts of the final score.   
 

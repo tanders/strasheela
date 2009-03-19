@@ -19,6 +19,8 @@ The example creates a two voice counterpoint. In the score, the analysis bracket
 
   [[../examples/Output/03-FloridCounterpoint-Canon.mp3][../examples/Output/03-FloridCounterpoint-Canon.preview.png]]
 
+   click the score for sound (mp3)
+
 ; [[../examples/Output/03-FloridCounterpoint-Canon.mp3][mp3]] [[../examples/Output/03-FloridCounterpoint-Canon.mid][midi]] 
   [[../examples/03-FloridCounterpoint-Canon.oz][source]]
 

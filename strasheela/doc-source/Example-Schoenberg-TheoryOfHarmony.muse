@@ -30,6 +30,8 @@ The first two staffs show the usual four-voice setting of the harmonic progressi
 
 [[../examples/Output/Schoenberg-harmBand1.mp3][../examples/Output/Schoenberg-harmBand1.png]]
 
+    click the score for sound (mp3)
+
 A second solution to this first exercise is given, as for many other exercises below as well.
 
 

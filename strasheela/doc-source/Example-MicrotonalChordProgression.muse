@@ -55,6 +55,8 @@ The examples differ in the prime limit of the permitted chord transpositions (i.
 
 [[../examples/Output/05-MicrotonalChordProgression-ex1.mp3][../examples/Output/05-MicrotonalChordProgression-ex1.preview.png]]
 
+  click the score for sound (mp3)
+
 The prime limit of chord roots is still 3, in the next example. However, it allows for non-root inversions. In that case, the bass must progress step-wise. 
 
 [[../examples/Output/05-MicrotonalChordProgression-ex2.mp3][../examples/Output/05-MicrotonalChordProgression-ex2.preview.png]]
