@@ -2,7 +2,7 @@
 %%
 %% This files defines harmonic progression CSPs in 22 ET. 
 %% 
-%% Wxamples provide different options to select (e.g., a
+%% Examples provide different options to select (e.g., a
 %% different scale to use such as major or minor). These options are
 %% marked by a "SELECT" in comments.
 %%
@@ -11,27 +11,19 @@
 %%
 
 declare
+[Segs] = {ModuleLink ['x-ozlib://anders/strasheela/Segments/Segments.ozf']}
 [ET22] = {ModuleLink ['x-ozlib://anders/strasheela/ET22/ET22.ozf']}
 {HS.db.setDB ET22.db.fullDB}
-%%
-%% Configure a Explorer output action for 22 ET, which expects only a
-%% sequential container with chord objects as solution (i.e. without
-%% the actual notes). The Explorer output action itself then creates a
-%% CSP with expects a chord sequence and returns a homophonic chord
-%% progression. The arguments of the action affect this CSP for the
-%% homophonic chord progression. The result is transformed into music
-%% notation (with Lilypond, requires Lilypond 2.11.43 or later), sound
-%% (with Csound), and Strasheela code (archived score objects).
-{ET22.out.addExplorerOut_ChordsToScore
- unit(outname:"ChordsToScore (ET22)"
-      voices:5
-      pitchDomain:{ET22.pitch 'C'#4}#{ET22.pitch 'C'#6}
-      value:mid
-%      value:min
-      ignoreSopranoChordDegree:true
-%      minIntervalToBass:{ET22.pc 'F'}
-     )}
 
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%% CSPs resulting in plain chord seq (use explorer action "ChordsToScore (ET22)")
+%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -273,6 +265,91 @@ end
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%% CSPs resulting in homophonic choral setting
+%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+/*
+
+%% Schoenberg rules
+%%
+%% Note: no solution for purely ascending progression with only harmonic 7th, subarmonic 6th and augmented.
+%% try: no super-strong, at least not at end
+{GUtils.setRandomGeneratorSeed 0}
+{SDistro.exploreOne
+ proc {$ MyScore}
+    Chords = {HS.score.makeChords
+	      unit(iargs: unit(n:9
+% 			       constructor:HS.score.inversionChord
+			       constructor:HS.score.fullChord
+			       duration: 2
+			       bassChordDegree: 1
+			       inScaleB: 1)
+		   rargs: unit(types: ['harmonic 7th'
+				       'subharmonic 6th'
+				       %% TODO: constraint: two augmented should not follow each other. BTW: how to resolve augmented?
+				       'augmented'
+				      ]))}
+    MyScale = {Score.make2 scale(index: {HS.db.getScaleIndex 'dynamic symmetrical major'}
+			       transposition: 0)
+	     unit(scale:HS.score.scale)}
+ in
+   MyScore = {Segs.homophonicChordProgression
+	      unit(voiceNo: 5
+		   iargs: unit(inChordB: 1
+			       inScaleB: 1
+			      )
+		   %% one pitch dom spec for each voice
+		   rargs: each # [unit(minPitch: 'C'#4 
+				       maxPitch: 'A'#5)
+				  unit(minPitch: 'C'#4 
+				       maxPitch: 'A'#5)
+				  unit(minPitch: 'G'#3 
+				       maxPitch: 'E'#5)
+				  unit(minPitch: 'C'#3 
+				       maxPitch: 'A'#4)
+				  unit(minPitch: 'E'#2 
+				       maxPitch: 'D'#4)]
+		   chords: Chords
+		   scales: [MyScale]
+		   restrictMelodicIntervals: false
+% 		   commonPitchesHeldOver: false
+% 		   noParallels: false
+		   startTime: 0
+		   timeUnit: beats)}
+    {HS.rules.schoenberg.progressionSelector Chords
+     resolveDescendingProgressions
+%      ascending
+    }
+    %% last three chords (cadence) no superstrong progressions
+    {Pattern.for2Neighbours {Reverse {List.take {Reverse Chords} 3}}
+     proc {$ C1 C2} {HS.rules.schoenberg.superstrongProgressionR C1 C2 0} end}
+%     {Pattern.for2Neighbours {Reverse {List.take {Reverse Chords} 3}}
+%      proc {$ C1 C2} {HS.rules.schoenberg.ascendingProgressionR C1 C2 1} end}
+%     {Pattern.for2Neighbours Chords
+%      proc {$ C1 C2} {HS.rules.schoenberg.superstrongProgressionR C1 C2 0} end}
+    %% First and last chords are first scale degree.
+    {Chords.1 getRootDegree($)} = {{List.last Chords} getRootDegree($)} = 1 
+%     {HS.rules.distinctR Chords.1 {List.last Chords} 0}
+%     %% only diatonic chords
+%     {ForAll Chords proc {$ C} {HS.rules.diatonicChord C MyScale} end}
+    %% last three chords form cadence
+    {HS.rules.cadence MyScale {LUtils.lastN Chords 4}}
+ end
+ %% left-to-right strategy with breaking ties by type
+%  HS.distro.leftToRight_TypewiseTieBreaking
+ HS.distro.typewise_LeftToRightTieBreaking
+}
+
+*/
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%
 %% Simply list all scales in a musical examples 
 %%
@@ -281,4 +358,116 @@ end
 
 
 
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%% Aux defs
+%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%% Output
+%%
+
+%% Configure a Explorer output action for 22 ET, which expects only a
+%% sequential container with chord objects as solution (i.e. without
+%% the actual notes). The Explorer output action itself then creates a
+%% CSP with expects a chord sequence and returns a homophonic chord
+%% progression. The arguments of the action affect this CSP for the
+%% homophonic chord progression. The result is transformed into music
+%% notation (with Lilypond, requires Lilypond 2.11.43 or later), sound
+%% (with Csound), and Strasheela code (archived score objects).
+{ET22.out.addExplorerOut_ChordsToScore
+ unit(outname:"ChordsToScore (ET22)"
+      voices:5
+      pitchDomain:{ET22.pitch 'C'#4}#{ET22.pitch 'C'#6}
+      value:mid
+%      value:min
+      ignoreSopranoChordDegree:true
+%      minIntervalToBass:{ET22.pc 'F'}
+     )}
+
+EventToCsound_adaptiveJI 
+= {Out.makeEvent2CsoundFn 1
+   [getStartTimeParameter#getValueInSeconds
+    fun {$ X} X end#getDurationInSeconds
+    getAmplitudeParameter#getValueInNormalized
+    %% max 127 velo results in max 90 dB (Csound amp value 31622.764)
+%     getAmplitudeParameter#fun {$ X} {MUtils.levelToDB {X getValueInNormalized($)} 1.0} + 90.0 end
+    fun {$ X} X end#fun {$ MyNote}
+		       JIPitch = {HS.score.getAdaptiveJIPitch MyNote unit}
+		       ETPitch = {MyNote getPitchInMidi($)}
+		    in
+		       %% JI may at max be 10 cent off, otherwise take ETPitch
+		       %% 13#8 is 11 cent error
+		       if {Abs JIPitch-ETPitch} > 0.11 then
+			  {Browse
+			   off_JI(ji:{HS.score.getAdaptiveJIPitch MyNote unit}
+				  midi: {MyNote getPitchInMidi($)}
+				  note:{MyNote toInitRecord($)}
+				  chordIndex: {{MyNote getChords($)}.1 getIndex($)}
+				  chordTransposition: {{MyNote getChords($)}.1 getTransposition($)}
+				  chordPCs: {{MyNote getChords($)}.1 getPitchClasses($)}
+				  chordRatios: {HS.db.getUntransposedRatios {MyNote getChords($)}.1}
+				  noteDegreeInChord: {HS.score.getDegree {MyNote getPitchClass($)} {MyNote getChords($)}.1 unit(accidentalRange: 0)}
+				 )}
+			  ETPitch
+		       else
+% 			  {Browse ok_JI}
+% 			  {System.show
+% 			   {Out.recordToVS
+% 			    ok_JI}}
+			  JIPitch
+		       end
+		    end
+   ]}
+
+	     
+%% Explorer output 
+proc {RenderLilypondAndCsound I X}
+   if {Score.isScoreObject X}
+   then 
+      FileName = "Test-"#I#"-"#{GUtils.getCounterAndIncr}
+   in
+      {ET22.out.renderAndShowLilypond X
+       unit(file: FileName
+	   )}
+      {Out.renderAndPlayCsound X
+       unit(file: FileName)} 
+   end
+end
+proc {RenderLilypondAndCsound_AdaptiveJI I X}
+   if {Score.isScoreObject X}
+   then 
+      FileName = "test-"#I#"-"#{GUtils.getCounterAndIncr}#"-adaptiveJI"
+   in
+      {ET22.out.renderAndShowLilypond X
+       unit(file: FileName
+% 	    chordDescription:ET22.out.makeChordRatios
+	    clauses:[ET22.out.isEt22Note#ET22.out.noteEt22ToLily_AdaptiveJI]
+	   )}
+      {Out.renderAndPlayCsound X
+       unit(file: FileName
+	    event2CsoundFn: EventToCsound_adaptiveJI
+	   )}
+   end
+end
+{Explorer.object
+ add(information RenderLilypondAndCsound
+     label: 'to Lily + Csound: 22 ET')}
+{Explorer.object
+ add(information RenderLilypondAndCsound_AdaptiveJI
+     label: 'to Lily + Csound: 22 ET (adaptive JI)')}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%% Distro
+%%
 
