@@ -51,14 +51,14 @@ MyScale = {Score.makeScore
 %% */
 proc {MyScript ChordSeq}
    %% settings
-   N = 6			% number of chords
+   N = 8			% number of chords
    Dur = 2			% dur of each chord
    %% SELECT chords (for further chord names check the chord database in contributions/anders/ET22/source/DB.oz)
    %% only specified chord types are used 
    ChordIndices = {Map ['harmonic 7th'
 			'subharmonic 6th'
 			%% TODO: constraint: two augmented should not follow each other. BTW: how to resolve augmented?
-			 'augmented'
+% 			 'augmented'
 		       ]
 		   HS.db.getChordIndex}
    %% create chord objects
@@ -134,12 +134,19 @@ MyScale = {Score.makeScore
 %% */
 proc {MyScript ChordSeq}
    %% settings
-   N = 6			% number of chords
+   N = 4			% number of chords
    Dur = 2			% dur of each chord
+   %% no solution with only these chords..
+%    ChordIndices = {Map ['harmonic 7th'
+% 			'subharmonic 6th'
+% 			%% TODO: constraint: two augmented should not follow each other. BTW: how to resolve augmented?
+% 			'augmented'
+% 		       ]
+% 		   HS.db.getChordIndex}
    %% create chord objects
    Chords = {LUtils.collectN N
 	     fun {$}
-		{Score.makeScore2 chord(%index:{FD.int ChordIndices}
+		{Score.makeScore2 chord(% index:{FD.int ChordIndices}
 					duration:Dur
 					%% just to remove symmetries 
 					sopranoChordDegree:1
