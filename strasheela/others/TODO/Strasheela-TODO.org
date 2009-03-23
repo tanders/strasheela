@@ -63,13 +63,6 @@
 ** Lilypond: output seq (of seq ...) of sims with multiple staffs 
 
 
-** DONE Release								:URGENT:
-   CLOSED: [2009-03-10 Tue 11:21]
-
-*** Briefly document Schoenberg harmony example 
-*** Clean up Changes.muse
-*** Release + testing
-
 * Strasheela examples
 
 ** Realtime example with non-harmonic tones etc. for Eduardo
@@ -183,7 +176,7 @@ MyTestScore = {Score.makeScore
 ** GeOz 
    
 *** TODO Install GeOz 
-    SCHEDULED: <2009-03-15 Sun>
+    SCHEDULED: <2009-06-01 Mon>
     
     NOTE: development of Gecode/J is discontinued. So, I better stick with Mozart/Oz. But then it would be a good idea to support gustavo getting Gecode running for Oz. E.g., moral support by installing it and asking questions, also finding bugs perhaps..
 
