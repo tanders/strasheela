@@ -439,13 +439,27 @@ MyScore = {Score.makeScore sim(items:[seq(items:[note(handle:N1
 			       timeUnit:beats)
 	   unit}
 
+{MyScore toInitRecord($)}
 
-{SMapping.mapSimultaneousPairs [N1] fun {$ X Y} {X getInfo($)}#{Y getInfo($)} end isNote}
+
+{SMapping.mapSimultaneousPairs [N1]
+ fun {$ X Y} {X getInfo($)}#{Y getInfo($)} end
+ unit(test: isNote)}
+
 %% -> nil
 
-{SMapping.mapSimultaneousPairs [N2] fun {$ X Y} {X getInfo($)}#{Y getInfo($)} end isNote}
+{SMapping.mapSimultaneousPairs [N2]
+ fun {$ X Y} {X getInfo($)}#{Y getInfo($)} end
+ unit(test: isNote)}
+
 %% -> [[n2]#[n1]]
 
+
+{SMapping.forSimultaneousPairs [N2]
+ proc {$ X Y} {Browse {X getInfo($)}#{Y getInfo($)}} end
+ unit(test: isNote)}
+
+%% browses [n2]#[n1]
 
 
 
