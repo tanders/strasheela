@@ -140,6 +140,8 @@ export
    CommonPCs CommonPCs_Card CommonPCsR NeighboursWithCommonPCs 
    ParameterDistance ParameterDistanceR LimitParameterDistanceOfNeighbours
 
+   GetRootPCIntervals
+   
    Cadence
    DiatonicChord NoteInPCCollection
 
@@ -432,6 +434,17 @@ define
        end}
    end
 
+   /** %% Returns the list of PC intervals between the roots of Chords (list of chord objects). 
+   %% */
+   fun {GetRootPCIntervals Chords}
+      {Pattern.map2Neighbours {Pattern.mapItems Chords getRoot}
+       proc {$ Root1 Root2 ?Interval}
+	  Interval = {FD.decl}
+	  {HS.score.transposePC Root1 Interval Root2}
+       end}
+   end
+
+
 
    /** %% Constraints the union of the pitch classes of Chords (a list of chord objects) to be the same set as the set of pitch classes of MyScale (a scale object). In other words, all chords only use scale tones (diatonic chords) and all scale tones are played.  Also, the root of the last chord is constrained to the root of the scale.
    %% In common usage, Chords has length three and is applied to the last three chords of a progression.
@@ -505,7 +518,7 @@ define
 
    
 
-   /** %% Open and hidden parallel fifths and fourth are not permitted: perfect consonances must not be reached by both voices in the same direction. NotePairs is a list of two-note-pairs. Each pair consists of consecutive notes in the same voice and NotePairs together are the simultaneous note pairs of all voices. 
+   /** %% Open and hidden parallel fifths and fourth are not permitted: perfect consonances must not be reached by both voices in the same direction. NotePairs is a list of two-note-pairs. Each pair consists of consecutive notes in the same voice and NotePairs together are the simultaneous note pairs of all voices. In particular, the second element of each pair in NotePairs are all simultaneous notes -- if any of these form a perfect consonance, then the first notes of these pairs should not progress into these sim notes in the same direction. 
    %% */
    proc {NoParallels NotePairs}
       {Pattern.forPairwise NotePairs NoParallel}
