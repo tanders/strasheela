@@ -843,13 +843,15 @@ define
 	   end}}
       end
       /** %% ForSimultaneousPairs traverses Xs (a list of score objects) and applies the binary procedure P to pairs of simultaneous score objects. 
-      %% ForSimultaneousPairs applies {Fn X Y} to all pairs X and Y, where X is an element in Xs and Y is a score object which is simultaneous to X, but which is not necessarily contained in Xs. In order to avoid applying the same constraint twice in case both X and Y are contained in Xs, there is an additional restriction related to the hierarchic nesting of X and Y. Simplified, this restriction states that the container of Y must be at a lower position than the container of X -- which usually means that Y is in a higher voice than X. However, ForSimultaneousPairs is more general and works for arbitrary nesting.
+      %% ForSimultaneousPairs applies {Fn X Y} to all pairs X and Y, where X is an element in Xs and Y is a score object which is simultaneous to X, but which is not necessarily contained in Xs. In order to avoid applying the same constraint twice in case both X and Y are contained in Xs, there is an additional restriction related to the hierarchic nesting of X and Y. Simplified, this restriction states that the container of Y must be at a lower position than the container of X. However, ForSimultaneousPairs is more general and works for arbitrary nesting.
       %%
       %% Args: 
       %% 'test': a Boolean function or method for pre-filtering potential Y values.
       %% 'cTest': a Boolean function or method applied within the concurrent filtering done for isSimultaneousItemR. See doc of the Score.item method getSimultaneousItems for details. 
       %%
       %% Note that ForSimultaneousPairs even works if the rhythmical structure is indetermined in the CSP definition, but it will block until the rhythmic structure is determined enough to tell which score objects are simultaneous. Therefore, a distribution strategy which determines the rhythmical structure relatively early (e.g., left to right) is recommended.
+      %%
+      %% NB: if Xs is notes of a single container, then container of this voice must be higher position than container of sim notes to which constraints should be applied -- otherwise nothing happens.
       %%
       %% Examples:
       %% Application of a harmonic constraint to all pairs of simultaneous notes. This approach works for any number of voices and arbitrarily complex rhythmic structures. 
