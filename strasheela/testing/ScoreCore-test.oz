@@ -637,6 +637,55 @@ MyRun2 = {MakeRun_PitchDom
  unit}
 
 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%% DefMixinSubscript
+%%
+
+
+declare
+MakeDottedRhythm
+= {Score.defMixinSubscript unit(rdefaults: unit(shortDur: 1))
+   proc {$ MyScore Args} % mixin body
+      Durs = {MyScore mapItems($ getDuration)}
+      %% Durs length must be at least 2
+      [Dur1 Dur2] = {List.take Durs 2}
+   in
+      Dur1 =: Dur2 * 3
+      Dur2 = Args.rargs.shortDur
+      {Pattern.cycle Durs 2}
+   end}
+MakeContinuousNotes
+= {Score.defSubscript unit(super:Score.makeContainer
+			   rdefaults: unit(direction: '<:')
+			   idefaults: unit(n:3))
+   proc {$ MyScore Args} % subscript body
+      {Pattern.continuous {MyScore mapItems($ getPitch)}
+       Args.rargs.direction}
+   end}
+MakeMyMotif
+=  {Score.defSubscript unit(super: MakeContinuousNotes
+			    mixins: [MakeDottedRhythm])
+    GUtils.binarySkip}
+declare
+%% Motif application (MyScore is not fully initialised, see MakeContainer)
+MyScore
+= {MakeMyMotif
+   unit(iargs:unit(%% number of notes (overwrites default 3)
+		   n: 4)
+	%% decreasing pitches (overwrites default '<:')
+	rargs:unit(direction:'>:'
+		   shortDur: 2
+		  )
+	%% argument to top-level container 
+	startTime:0)}
+{Score.init MyScore}
+
+{Browse {MyScore toInitRecord($)}}
+
+
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%
 %% ItemslistToContainerSubscript
