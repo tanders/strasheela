@@ -20,6 +20,8 @@
     - HS.rules.schoenberg: added AscendingProgression2R
 
   - Bug fixes and changes
+    - Score: method getSimultaneousItems: now made sure arg test is only applied to items 
+    - Out: Lilypond output, arg hasBreak: no \break inserted after last container matching hasBreak 
 
 
   - For further fixes see the [[http://apps.sourceforge.net/trac/strasheela/timeline][Trac Timeline]] or the [[../CHANGELOG.txt]].
