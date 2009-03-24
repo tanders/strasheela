@@ -911,11 +911,11 @@ end
 
 
 %% same as before, but now limit number of super strong progressions
-%% TODO: also reduce number of descending progressions
+%% TODO: also reduce number of superstrong progressions
 {GUtils.setRandomGeneratorSeed 0}
 {SDistro.exploreOne
  {GUtils.extendedScriptToScript HomophonicChordProgression
-  unit(iargs:unit(n:9
+  unit(iargs:unit(n:11
 		  bassChordDegree: fd#(1#2))
        rargs:unit(maxPercentSuperstrong:20))}
  HS.distro.leftToRight_TypewiseTieBreaking}
