@@ -966,7 +966,11 @@ define
 				cTest: CTest<=fun {$ X} true end)
 	 thread 		% ?? NOTE: thread needed?
 	    TopLevel = {self getTopLevels($ test:fun {$ X} {X isTimeMixin($)} end)}.1
-	    ScoreObjects = {TopLevel collect($ test:Test)}
+	    ScoreObjects = {TopLevel collect($ test: fun {$ X}
+							%% only test items further
+							{X isItem($)} andthen
+							{{GUtils.toFun Test} X}
+						     end)}
 	 in
 	    Xs = {LUtils.cFilter ScoreObjects
 		  fun {$ X}
