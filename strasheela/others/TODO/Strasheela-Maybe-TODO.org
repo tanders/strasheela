@@ -851,7 +851,7 @@ piwik_log(piwik_action_name, piwik_idsite, piwik_url);
    https://apps.sourceforge.net/piwik/strasheela/index.php?module=SitesManager&action=displayJavascriptCode&idsite=1
 
    
-
+   
 * Strasheela design					      :MAYBE:STRASHEELA:
 
 ** Conversion of cent values to fractions with continued fractions
@@ -864,6 +864,16 @@ converter written by Kardi Teknomo. Use Sheet 2 for your computations.
 http://anaphoria.com/Continued%20FractionCentJC.xls
 
    http://people.revoledu.com/kardi/tutorial/ContinuedFraction/index.html
+
+
+On Mar 18, 2009, at 6:03 PM, John H. Chalmers wrote:
+Torsten: Alas, there is no simple function to convert cents to ratios  
+as cents are irrational numbers (1200 x log2 of ratios), so something  
+like the continued fraction algorithm is necessary to approximate  
+them. Viggo Brun's algorithm can be used or Erv Wilson's application  
+of the Stern-Brocot tree, but these are mathematically equivalent to  
+the continued fraction method.
+
 
 ** saving textual scores with procs, fenvs, classes etc 
 
