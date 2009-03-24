@@ -79,7 +79,7 @@ export
    transform2: TransformScore2
    MakeConstructor
    MakeItems MakeItems_iargs MakeContainer MakeSim MakeSeq
-   DefSubscript ItemslistToContainerSubscript
+   DefSubscript DefMixinSubscript ItemslistToContainerSubscript
    % ResolveRepeats
    MakeClass
 prepare
@@ -2904,53 +2904,66 @@ define
       {MakeContainer {Adjoin Args unit(constructor:Sequential)}}
    end
 
-   /** %% Extended script creator: returns an extended script (a procedure with the interface {Script Args ?MyMotif}) which specialises a "super" extended script. Possible super-scripts are, e.g., Score.makeItems_iargs, MakeContainer or any user-defined extended script, possibly created with DefSubscript. DefArgs is a record of optional arguments for declaring the super-script and the default arguments of the resulting script.
+   /** %% Extended script creator for reusable (and hierarchical) sub-CSP definition: returns an extended script (a procedure with the interface {Script Args ?MyScore}) which specialises a "super" extended script. The super-script returns either an item (typically a container with items) or a list of items; possible super-scripts are, e.g., Score.makeItems_iargs, MakeContainer or any user-defined extended script, possibly also created with DefSubscript. The resulting score object(s) are not fully initialised, and can thus be integrated withing a higher-level container.
+   %% 
+   %% DefArgs is a record of optional arguments for declaring the super-script and the default arguments of the resulting script.
    %%
    %% DefArgs:
-   %% 'super': the super-script: a procedure with the interface {Script Args ?MyMotif} where Args must support the argument 'iargs', and can support any other argument as well. 'iargs' is a record of args in the format expected by Score.makeItems.
+   %% 'super': the super-script: a procedure with the interface {Script Args ?MyScore} where Args must support the argument 'iargs', and can support any other argument as well. 'iargs' is a record of args in the format expected by Score.makeItems.
+   %% 'mixins': a list of mixins defined with DefMixinSubscript. 
    %% 'defaults': record of default top-level argument values for resulting script. 
    %% 'idefaults': record of default argument values for args feature 'iargs' of resulting script. 
    %% 'rdefaults': record of default argument values for args feature 'rargs' of resulting script. 
    %%
    %% Default DefArgs:
-   unit(super:MakeContainer 
+   unit(super:MakeContainer
+	mixins: nil
 	defaults: unit
 	idefaults: unit
 	rdefaults: unit)
    %%
-   %% Body is a procedure with the interface {Body MyMotif Args}, where MyMotif is the motif created by the super-script, and Args is the record of all arguments specified for the resulting script. Args always has the features 'iargs' and 'rargs'.
+   %% Body is a procedure with the interface {Body MyScore Args}, where MyScore is the item(s) created by the super-script, and Args is the record of the arguments specified for the resulting script. Body can also be nil (e.g. for combining a super script and a mixin without adding any further constraints).   
+   %% 
+   %% Args always has the features 'iargs' and 'rargs'.
    %% 'iargs': a record of arguments given to contained items in the format expected by Score.makeItems
    %% 'rargs': record of arguments for constraints
-   %% In addition, Args can contain any init argument expected by the motif's top-level ("super" CSP creates a container).
+   %% In addition, Args can contain any init argument expected by the MyScore's top-level ("super" CSP creates a container).
+   %% 
+   %% More specifically, Args contains the arguments provided when calling the resulting script plus the default values of omitted arguments specified with 'defaults', 'idefaults' and 'rdefaults' for this specific script. Default arguments specified for any super-script are absent from Args, if you need the defaults of the super-script in Body, declare them again for this script.
    %%
-   %% Args contains the arguments provided when calling the resulting script plus the default values of omitted arguments specified with 'defaults', 'idefaults' and 'rdefaults'. (If you need the defaults of the super-script in Body, declare them again for the resulting script)
    %%
    %% Example:
-   %% %% Motif definition: creates CSP with sequential container of notes (MakeContainer is super CSP), default are 3 notes (default itemsArgs.n is 3). Note pitches are constrained with Pattern.continuous, the direction of this pattern is controlled with the argument rargs.direction, default is '<:'. 
+   %% Motif definition: creates CSP with sequential container of notes (MakeContainer is super CSP), default are 3 notes (default itemsArgs.n is 3). Note pitches are constrained with Pattern.continuous, the direction of this pattern is controlled with the argument rargs.direction, default is '<:'. 
    MakeRun
    = {DefSubscript unit(super:MakeContainer
 			rdefaults: unit(direction: '<:')
 			idefaults: unit(n:3))
-      proc {$ MyMotif Args} % body
-	 MyNotes = {MyMotif getItems($)} in
-	 {ParamPattern2 MyNotes getPitch Pattern.continuous
-	  [Args.rargs.direction]}
+      proc {$ MyScore Args} % body
+	 {Pattern.continuous {MyScore mapItems($ getPitch)}
+	  Args.rargs.direction}
       end}
-   %% %% Motif application (MyScore is not fully initialised, see MakeContainer)
+   %% Motif application (MyScore is not fully initialised, see MakeContainer)
    MyScore
    = {MakeRun
       unit(iargs:unit(%% number of notes (overwrites default 3)
 		      n: 2
-		      %% %% all notes of same duration 2 (see Score.makeItems for other format options)
+		      %% all notes of same duration 2 (see Score.makeItems for other format options)
 		      duration:2)
-	   %% %% decreasing pitches (overwrites default '<:')
+	   %% decreasing pitches (overwrites default '<:')
 	   rargs:unit(direction:'>:')
-	   %% %% argument to top-level container 
-	   startTime:0)}		
+	   %% argument to top-level container 
+	   startTime:0)}
+
+   %% For testing purposes, you can call these definitions outside any top-level script and look at the result with the following lines
+   {Score.init MyScore}
+
+   %% then do
+   {Browse {MyScore toInitRecord($)}}
    %%
    %% */
    fun {DefSubscript DefArgs Body}
-      Default = unit(super:MakeContainer 
+      Default = unit(super:MakeContainer
+		     mixins: nil
 		     defaults: unit
 		     idefaults: unit
 		     rdefaults: unit)
@@ -2970,8 +2983,90 @@ define
 		    rargs: RuleAs)}
       in
 	 MyScore = {DefAs.super As}
-	 thread {Body MyScore As} end
+	 if Body \= nil then 
+	    thread {Body MyScore As} end
+	 end
+	 {ForAll DefAs.mixins
+	  %% threads created already in Mixin (if defined with DefMixinSubscript)
+	  proc {$ Mixin} {Mixin MyScore As} end}
       end
+   end
+
+
+   /** %% [Complements DefSubscript]: defines further arguments and applies further constraints to a script defined by DefSubscript. 
+   %%
+   %% Args:
+   %% 'super' (default GUtils.unarySkip): an optional super-mixin, also defined by DefMixinSubscript.  
+   %% defaults, idefaults, rdefaults: same as for DefSubscript.
+   %%
+   %% Body: same as for DefSubscript.
+   %%
+   %% Example:
+   %% Motif definition where the pitch structure is defined with DefSubscript, and the rythmic structure by a mixin subscipt.
+   MakeDottedRhythm
+   = {DefMixinSubscript unit(rdefaults: unit(shortDur: 1))
+      proc {$ MyScore Args} % mixin body
+	 Durs = {MyScore mapItems($ getDuration)}
+	 %% Durs length must be at least 2
+	 [Dur1 Dur2] = {List.take Durs 2}
+      in
+	 Dur1 =: Dur2 * 3
+	 Dur2 = Args.rargs.shortDur
+	 {Pattern.cycle Durs 2}
+      end}
+   MakeContinuousNotes
+   = {DefSubscript unit(super:MakeContainer
+			rdefaults: unit(direction: '<:')
+			idefaults: unit(n:3))
+      proc {$ MyScore Args} % subscript body
+	 {Pattern.continuous {MyScore mapItems($ getPitch)}
+	  Args.rargs.direction}
+      end}
+   MakeMyMotif
+   =  {DefSubscript unit(super: MakeContinuousNotes
+			 mixins: [MakeDottedRhythm])
+       nil}
+   %% Motif application (MyScore is not fully initialised, see MakeContainer)
+   MyScore
+   = {MakeMyMotif
+      unit(iargs:unit(%% number of notes (overwrites default 3)
+		      n: 4)
+	   %% decreasing pitches (overwrites default '<:')
+	   rargs:unit(direction:'>:'
+		      shortDur: 2)
+	   %% argument to top-level container 
+	   startTime:0)}
+
+   %% For testing purposes, you can call these definitions outside any top-level script and look at the result with the following lines
+   {Score.init MyScore}
+    
+   %% then do
+   {Browse {MyScore toInitRecord($)}}
+   %% */
+   fun {DefMixinSubscript DefArgs Body}
+      Default = unit(super: GUtils.binarySkip
+		     defaults: unit
+		     idefaults: unit
+		     rdefaults: unit)
+      DefAs = {Adjoin Default DefArgs}
+   in
+      proc {$ MyScore Args}
+	 ItemAs = if {HasFeature Args iargs} then
+		     {Adjoin DefAs.idefaults Args.iargs}
+		  else DefAs.idefaults
+		  end
+	 RuleAs = if {HasFeature Args rargs} then
+		     {Adjoin DefAs.rdefaults Args.rargs}
+		  else DefAs.rdefaults
+		  end
+	 As = {Adjoin  {Adjoin DefAs.defaults Args}
+	       unit(iargs: ItemAs
+		    rargs: RuleAs)}
+      in
+	 %% thread created already in DefAs.super (if defined with DefMixinSubscript)
+	 {DefAs.super MyScore As} 
+	 thread {Body MyScore As} end
+      end   
    end
 
    
