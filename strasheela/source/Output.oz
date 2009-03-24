@@ -1251,7 +1251,11 @@ define
 	  IsLilyChord#SimToLilyChord
 
 	  fun {$ X}
-	     {X isContainer($)} andthen {As.hasBreak X}  
+	     {X isContainer($)} andthen
+	     {As.hasBreak X}  andthen
+	     %% no break after last occurance
+	     {X hasTemporalContainer($)} andthen
+	     {Not {X isLastItem($ {X getTemporalContainer($)})}}
 	  end#fun {$ C}
 		 if {C isSequential($)}
 		 then {SeqToLily C As}
