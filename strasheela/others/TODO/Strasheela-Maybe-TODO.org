@@ -884,17 +884,6 @@ the continued fraction method.
    I then have to set the current dir in *.ssco file to dir where this file is contained
    
    This solution would be much better than storing a fenv by interpolation data..
- 
-
-** Subscript mixins
-
-   Goal: "factor out" specific constraints (and corresponding args) of subscripts to make these defs more flexible
-   Example: having rhythm defined in "mixing" and added only when need to subscripts applying counterpoint constraints and/or constraining pitch countour
-
-   First idea: extend Score.defSubscript by new arg mixins (complements arg super)
-   Mixin only applies constraints and hands args to constraints
-   Each mixin defined by some abstraction similar to Score.defSubscript: default args are declared and constraint application by proc
-   Score.defSubscript internally then applies procs of all mixins (and cares for the default etc args!)
 
 
 ** Constrain form with graph constraints 

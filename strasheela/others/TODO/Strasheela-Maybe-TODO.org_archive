@@ -199,6 +199,27 @@ Archived entries from file /Users/t/oz/music/Strasheela/strasheela/trunk/strashe
 
   I could also edit the tempo curves etc in ENP, even in algorithmic ways. 
   I would need some 'info' slot to keep arbitrary additional info on score objects (e.g., where some motif starts and ends), if I want to do that adaequately 
+ 
+
+* DONE Subscript mixins
+  CLOSED: [2009-03-24 Tue 20:10]
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2009-03-24 Tue 20:10
+  :ARCHIVE_FILE: ~/oz/music/Strasheela/strasheela/trunk/strasheela/others/TODO/Strasheela-Maybe-TODO.org
+  :ARCHIVE_OLPATH: Strasheela design
+  :ARCHIVE_CATEGORY: Strasheela
+  :ARCHIVE_TODO: DONE
+  :ARCHIVE_ITAGS: MAYBE STRASHEELA
+  :END:
+
+  Goal: "factor out" specific constraints (and corresponding args) of subscripts to make these defs more flexible
+  Example: having rhythm defined in "mixing" and added only when need to subscripts applying counterpoint constraints and/or constraining pitch countour
+
+  First idea: extend Score.defSubscript by new arg mixins (complements arg super)
+  Mixin only applies constraints and hands args to constraints
+  Each mixin defined by some abstraction similar to Score.defSubscript: default args are declared and constraint application by proc
+  Score.defSubscript internally then applies procs of all mixins (and cares for the default etc args!)
+
 
 
 
