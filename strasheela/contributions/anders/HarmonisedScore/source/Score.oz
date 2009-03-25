@@ -558,6 +558,10 @@ define
       %%
       %% TODO:
       %%
+      %% - !! Using scale ratios for non-harmonic notes is a bad idea: they can be completely wrong for the chord at hand (e.g. for just major scale, nineth of V is syntonic comma too low)
+      %%
+      %% - ?? option for non-harmonic notes: derive most likely interval ratio of this note to root (from interval DB) and then use that ratio for tuning this non-harmonic tone. 
+      %%
       %% - !! tune chord roots to corresponding scale degree (if there is a scale). Then other scale notes are in corresponding relation, and I can get JI results if scale is defined by JI intervals.
       %% Currently, if MyNote is the root of MyChord, then the tempered root is played. However, the corresponding scale tone may not be tempered. So, the same note is played differently if it is not a chord tone. (Naturally, it is usually played differently if it is a chord tone but not the root).
       %%
