@@ -55,6 +55,10 @@
    Add more example docs..
 
 
+** Test Windows installation script and complete it
+
+   [[file:~/oz/music/Strasheela/strasheela/trunk/strasheela/scripts/install.bat]]
+
 ** Repair adaptive JI
 
    see [[file:~/oz/music/Strasheela/strasheela/trunk/strasheela/contributions/anders/HarmonisedScore/testing/Score-test.oz::GetAdaptiveJIPitch]]
