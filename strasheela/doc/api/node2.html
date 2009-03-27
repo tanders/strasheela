@@ -136,8 +136,7 @@ clearInterval(drawit)
 <code><ul><li>OS</li><li>Path at "<span class="string">x-ozlib://anders/tmp/Path/Path.ozf"
 </span></li></ul></code>
 <h3>Import</h3>
-<code><ul><li>Browser(browse:Browse)</li><li>Pickle</li><li>Explorer</li><li>Error</li><li>Resolve</li><li>IOzSeF at "<span class="string">x-ozlib://tack/iozsef/iozsef.ozf"
-</span></li><li><a href="node10.html">Strasheela</a> at "<span class="string">../Strasheela.ozf"
+<code><ul><li>Browser(browse:Browse)</li><li>Pickle</li><li>Explorer</li><li>Error</li><li>Resolve</li><li><a href="node10.html">Strasheela</a> at "<span class="string">../Strasheela.ozf"
 </span></li><li><a href="node3.html">GUtils</a> at "<span class="string">GeneralUtils.ozf"
 </span></li><li><a href="node5.html">MUtils</a> at "<span class="string">MusicUtils.ozf"
 </span></li><li><a href="node6.html">Score</a> at "<span class="string">ScoreCore.ozf"
@@ -145,30 +144,29 @@ clearInterval(drawit)
 </span></li><li>ScoreInspector at "<span class="string">x-ozlib://anders/strasheela/ScoreInspector/ScoreInspector.ozf"
 </span></li></ul></code>
 <h3>Export</h3>
-<code><ul><li>&lt;P/2:<a href="#entity41"><span class="functionname">GetStrasheelaEnv</span></a>&gt;
-</li><li>&lt;P/2:<a href="#entity42"><span class="functionname">PutStrasheelaEnv</span></a>&gt;
-</li><li>&lt;P/1:<a href="#entity43"><span class="functionname">GetFullStrasheelaEnv</span></a>&gt;
-</li><li>&lt;P/1:<a href="#entity44"><span class="functionname">SetFullStrasheelaEnv</span></a>&gt;
-</li><li>&lt;P/1:<a href="#entity45"><span class="functionname">SaveStrasheelaEnv</span></a>&gt;
-</li><li>&lt;P/1:<a href="#entity46"><span class="functionname">LoadStrasheelaEnv</span></a>&gt;
-</li><li>&lt;P/1:<a href="#entity47"><span class="functionname">GetBeatDuration</span></a>&gt;
-</li><li>&lt;P/1:<a href="#entity49"><span class="functionname">SetBeatDuration</span></a>&gt;
-</li><li>&lt;P/1:<a href="#entity48"><span class="functionname">GetTempo</span></a>&gt;
-</li><li>&lt;P/1:<a href="#entity50"><span class="functionname">SetTempo</span></a>&gt;
-</li><li>&lt;P/1:<a href="#entity51"><span class="functionname">SetTuningTable</span></a>&gt;
-</li><li>&lt;P/0:<a href="#entity52"><span class="functionname">UnsetTuningTable</span></a>&gt;
-</li><li>&lt;P/1:<a href="#entity53"><span class="functionname">GetTuningTable</span></a>&gt;
-</li><li>&lt;P/1:<a href="#entity54"><span class="functionname">SetMaxLilyRhythm</span></a>&gt;
-</li><li>&lt;P/0:<a href="#entity55"><span class="functionname">AddExplorerOuts_Standard</span></a>&gt;
-</li><li>&lt;P/0:<a href="#entity56"><span class="functionname">AddExplorerOuts_Extended</span></a>&gt;
-</li><li>&lt;P/0:<a href="#entity57"><span class="functionname">AddIOzSeFOuts</span></a>&gt;
+<code><ul><li>&lt;P/2:<a href="#entity40"><span class="functionname">GetStrasheelaEnv</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity41"><span class="functionname">PutStrasheelaEnv</span></a>&gt;
+</li><li>&lt;P/1:<a href="#entity42"><span class="functionname">GetFullStrasheelaEnv</span></a>&gt;
+</li><li>&lt;P/1:<a href="#entity43"><span class="functionname">SetFullStrasheelaEnv</span></a>&gt;
+</li><li>&lt;P/1:<a href="#entity44"><span class="functionname">SaveStrasheelaEnv</span></a>&gt;
+</li><li>&lt;P/1:<a href="#entity45"><span class="functionname">LoadStrasheelaEnv</span></a>&gt;
+</li><li>&lt;P/1:<a href="#entity46"><span class="functionname">GetBeatDuration</span></a>&gt;
+</li><li>&lt;P/1:<a href="#entity48"><span class="functionname">SetBeatDuration</span></a>&gt;
+</li><li>&lt;P/1:<a href="#entity47"><span class="functionname">GetTempo</span></a>&gt;
+</li><li>&lt;P/1:<a href="#entity49"><span class="functionname">SetTempo</span></a>&gt;
+</li><li>&lt;P/1:<a href="#entity50"><span class="functionname">SetTuningTable</span></a>&gt;
+</li><li>&lt;P/0:<a href="#entity51"><span class="functionname">UnsetTuningTable</span></a>&gt;
+</li><li>&lt;P/1:<a href="#entity52"><span class="functionname">GetTuningTable</span></a>&gt;
+</li><li>&lt;P/1:<a href="#entity53"><span class="functionname">SetMaxLilyRhythm</span></a>&gt;
+</li><li>&lt;P/0:<a href="#entity54"><span class="functionname">AddExplorerOuts_Standard</span></a>&gt;
+</li><li>&lt;P/0:<a href="#entity55"><span class="functionname">AddExplorerOuts_Extended</span></a>&gt;
 </li><li><span class="variablename">StrasheelaSourceDir</span>
 </li><li><span class="variablename">StrasheelaInstallDir</span>
 </li></ul></code>
 <h3>Define</h3>
 
 <code>
-<a name="entity41">
+<a name="entity40">
 <span class="keyword">fun</span>{<span class="functionname">GetStrasheelaEnv</span> Key}<br>
 <span class="string"> Access the value of the Strasheela 'environment variable' Key. <BR>
 <BR>
@@ -176,7 +174,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity42">
+<a name="entity41">
 <span class="keyword">proc</span>{<span class="functionname">PutStrasheelaEnv</span> Key Value}<br>
 <span class="string"> Set the value of the Strasheela 'environment variable' Key to Value. These variables are used, e.g., by the various output format transformers. <BR>
 <BR>
@@ -184,7 +182,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity43">
+<a name="entity42">
 <span class="keyword">fun</span>{<span class="functionname">GetFullStrasheelaEnv</span> }<br>
 <span class="string"> Returns the full Strasheela environment as record. <BR>
 <BR>
@@ -192,7 +190,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity44">
+<a name="entity43">
 <span class="keyword">proc</span>{<span class="functionname">SetFullStrasheelaEnv</span> R}<br>
 <span class="string"> Overwrites the full Strasheela environment (R is a record).<BR>
 <BR>
@@ -200,7 +198,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity45">
+<a name="entity44">
 <span class="keyword">proc</span>{<span class="functionname">SaveStrasheelaEnv</span> Path}<br>
 <span class="string"> Save the full Strasheela environment as a pickle at Path. <BR>
 <BR>
@@ -208,7 +206,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity46">
+<a name="entity45">
 <span class="keyword">proc</span>{<span class="functionname">LoadStrasheelaEnv</span> Path}<br>
 <span class="string"> Load the full Strasheela environment from a pickle saved at Path (this was before created with SaveStrasheelaEnv). <BR>
 <BR>
@@ -216,7 +214,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity47">
+<a name="entity46">
 <span class="keyword">fun</span>{<span class="functionname">GetBeatDuration</span> }<br>
 <span class="string"> Access the current beat duration in seconds (a float, defaults to 0.8).<BR>
 <BR>
@@ -224,7 +222,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity49">
+<a name="entity48">
 <span class="keyword">proc</span>{<span class="functionname">SetBeatDuration</span> Dur}<br>
 <span class="string"> Set the beat duration in seconds to Dur which must be a float.<BR>
 <BR>
@@ -232,7 +230,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity48">
+<a name="entity47">
 <span class="keyword">fun</span>{<span class="functionname">GetTempo</span> }<br>
 <span class="string"> Access the current tempo in beats per minute (a float, defaults to 75.0).<BR>
 <BR>
@@ -240,7 +238,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity50">
+<a name="entity49">
 <span class="keyword">proc</span>{<span class="functionname">SetTempo</span> Tempo}<br>
 <span class="string"> Set the tempo in beats per minute which must be a float.<BR>
 <BR>
@@ -248,7 +246,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity51">
+<a name="entity50">
 <span class="keyword">proc</span>{<span class="functionname">SetTuningTable</span> Table}<br>
 <span class="string"> Globally sets the tuning table to Table. The tuning table is used by all output formats which use the (full) float returned by the pitch parameter method getValueInMidi (e.g. the note method getPitchInMidi, which is used by default by Csound and microtonal MIDI output). The format of the tuning table declaration is somewhat similar to the Scala scale file format (cf. http://www.xs4all.nl/~huygensf/scala/scl_format.html). Table is a tuple of pitch specs. A pitch spec is either a float (measured in cent) or a ratio notated Nom#Den. The first degree is implict (always 1/1 or 0.0). Also the size is implicit (the width of the tuple), in contrast to the Scala scale file format. The last table value is the period interval.<BR>
  It is recommended to set the pitchUnit of notes to a value matching the size of the tuning table so that constraints on pitch classes etc work as expected (e.g., for a tuning table with 31 pitches per octave/period, the pitchUnit et31 is recommended).<BR>
@@ -257,7 +255,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity52">
+<a name="entity51">
 <span class="keyword">proc</span>{<span class="functionname">UnsetTuningTable</span> }<br>
 <span class="string"> By default, no tuning table is set and methods like getPitchInMidi return pitches corresponding to an equal-tempered scale. UnsetTuningTable sets this default behaviour back. <BR>
 <BR>
@@ -265,7 +263,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity53">
+<a name="entity52">
 <span class="keyword">proc</span>{<span class="functionname">GetTuningTable</span> Table}<br>
 <span class="string"> [aux def, not intended for user] Returns a full tuning table (cf. MUtils.fullTuningTable for the format). <BR>
 <BR>
@@ -273,7 +271,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity54">
+<a name="entity53">
 <span class="keyword">proc</span>{<span class="functionname">SetMaxLilyRhythm</span> Dur}<br>
 <span class="string"> When outputting a Lilypond file, Strasheela automatically splits very long notes (or other score objects notated by notes such as chords or scales) into multiple notes connected by ties. The maximum duration notated by a single note can be set with this procedure. Dur is a float measured in quarternotes. For example, 2.0 indicates a halve note and 0.5 an eighth note. The maximum duration supported by Lilypond is a longa (16.0). The default is 4.0 (a whole note).<BR>
  It is recommended to set Dur to the length of your bars (e.g., 4.0 for 4/4).<BR>
@@ -284,7 +282,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity55">
+<a name="entity54">
 <span class="keyword">proc</span>{<span class="functionname">AddExplorerOuts_Standard</span> }<br>
 <span class="string"> Extends the Explorer menu "Notes -> Information Action" by a few entries to output scores into various formats just by clicking the solution nodes in the Explorer.<BR>
  This procedure adds standard output formats like Csound, Lilypond, and MIDI.<BR>
@@ -293,20 +291,12 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity56">
+<a name="entity55">
 <span class="keyword">proc</span>{<span class="functionname">AddExplorerOuts_Extended</span> }<br>
 <span class="string"> Extends the Explorer menu "Notes -> Information Action" by a few entries to output scores into various formats just by clicking the solution nodes in the Explorer. <BR>
  This procedure complements the formats of AddExplorerOuts_Standard by further formats like ENP and Fomus.<BR>
 <BR>
  This split into two procedures is only intended to avoid confusing new users with too many options. Anyway, the Explorer actions created by both procs are (hopefully) soon obsolete and replaced by a GUI settings dialog...<BR>
-<BR>
-</span>
-</code><br>
-
-<code>
-<a name="entity57">
-<span class="keyword">proc</span>{<span class="functionname">AddIOzSeFOuts</span> }<br>
-<span class="string"> Extends the IOzSeF menu "Options -> Information Action" by a few entries to output scores into various formats just by clicking the solution nodes in the Explorer. This procedure adds standard output formats like Csound, Lilypond, and MIDI, as well as further formats like ENP and Fomus.<BR>
 <BR>
 </span>
 </code><br>

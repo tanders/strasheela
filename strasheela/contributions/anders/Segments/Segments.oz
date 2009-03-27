@@ -12,6 +12,9 @@
 %%% *************************************************************
 
 /** %% This functor defines re-usable musical segments. These segments are defined as sub-CSPs (extended scripts). They implement relatively specific musical ideas (e.g., a contrapuntual line, a specific motif, or a homophonic chord progression), but they support a number of arguments in order to make them flexible enough that they are interesting for re-use.
+%%
+%% Unfortunately, the documentation for many of the definitions here are not automatically extracted in the the HTML reference. Please check the source at ../Segments.oz for the documentation of these definitions. 
+%%
 %% */
 
 %% TODO:

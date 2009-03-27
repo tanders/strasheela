@@ -47,7 +47,7 @@ These extensions simplify the definition of specific musical CSP classes (e.g. s
 
   [[../contributions/anders/ET12/doc/node1.html][ET12]] -- simplified pitch notation for the common 12-tone equal temperament 
 
-  [[../contributions/anders/ConstrainTimingTree/doc/node1.html][CTT (ConstrainTimingTree)]] -- constrain the shape of a tree of temporal items
+  [[../contributions/anders/Segments/doc/node1.html][Segs (Segments)]] -- ready-made constructors for musical segments such as contrapuntual lines, homophonic chord progressions, or specific motifs
 
   [[../contributions/anders/PrototypeMotif/doc/node1.html][PrototypeMotif]] -- constraining the musical form based on motif prototypes 
 
@@ -55,21 +55,22 @@ These extensions simplify the definition of specific musical CSP classes (e.g. s
 
   [[../contributions/anders/Measure/doc/node1.html][Measure]] -- constrainable meter model
 
+  [[../contributions/anders/Fenv/doc/node1.html][Fenv (function envelope)]] -- envelopes by numeric functions
+
+  [[../contributions/anders/Gnuplot/doc/node1.html][Gnuplot]] -- an interface to [[http://www.gnuplot.info/][Gnuplot]] for plotting numeric Oz data (e.g., [[../contributions/anders/Fenv/doc/node1.html][Fenv]] data).
+
   [[../contributions/anders/Realtime/doc/node1.html][RT (Realtime)]] -- solvers for real-time constraint programming
 
   [[../contributions/anders/MidiInput/doc/node1.html][MidiIn]] -- MIDI file import 
 
   [[../contributions/anders/OSC/doc/node1.html][OSC]] -- an OpenSound Control interface
 
+  [[../contributions/anders/ConstrainTimingTree/doc/node1.html][CTT (ConstrainTimingTree)]] -- constrain the shape of a tree of temporal items
 
 
 These provide further extensions.
   
   [[../contributions/anders/Memoize/doc/node1.html][Memo]] -- memoization of functions (e.g. useful for a modular CSP definition where some function always returns the same data structure with the same constrained variables when given the same input)
-
-  [[../contributions/anders/Fenv/doc/node1.html][Fenv (function envelope)]] -- envelopes by numeric functions
-
-  [[../contributions/anders/Gnuplot/doc/node1.html][Gnuplot]] -- an interface to [[http://www.gnuplot.info/][Gnuplot]] for plotting numeric Oz data (e.g., [[../contributions/anders/Fenv/doc/node1.html][Fenv]] data).
 
   [[../contributions/anders/OzServer/doc/node1.html][OzServer]] -- run Strasheela as server in the background, started and 'remote-controlled' by any other application (e.g. a Lisp compiler) 
   
@@ -79,6 +80,8 @@ These provide further extensions.
   
   [[../contributions/anders/Tutorial/doc/node1.html][Tutorial]] -- the tutorial application definition
   
+  [[../contributions/anders/IOzSeF/doc/node1.html][IOzSeF]] -- score search support for the  [[http://www.mozart-oz.org/mogul/doc/tack/iozsef/iozsef.html][IOzSeF]] constraint solvers
+
 
 ; MultiDict        
 ; MultiRecord  

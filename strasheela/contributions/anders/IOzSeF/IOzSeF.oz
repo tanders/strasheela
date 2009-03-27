@@ -1,4 +1,6 @@
 
+/** %% Provides score search support for the IOzSeF constraint solvers (http://www.mozart-oz.org/mogul/doc/tack/iozsef/iozsef.html). First install IOzSeF as described in the Strasheela installation instructions.  
+%% */
 
 functor
 import
@@ -11,9 +13,9 @@ import
    ScoreInspector at 'x-ozlib://anders/strasheela/ScoreInspector/ScoreInspector.ozf'
    
 export
-   IozsefInit IozsefInitBest
-   IozsefExploreOne IozsefExploreAll IozsefExploreBest
-   IozsefSearchOne IozsefSearchAll IozsefSearchBest
+   init: IozsefInit initBest: IozsefInitBest
+   exploreOne: IozsefExploreOne exploreAll: IozsefExploreAll exploreBest: IozsefExploreBest
+   searchOne: IozsefSearchOne searchAll: IozsefSearchAll searchBest: IozsefSearchBest
 
    AddIOzSeFOuts
    

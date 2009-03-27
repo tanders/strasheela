@@ -1790,13 +1790,21 @@ FenvLowerDom = {Fenv.linearFenv [[0.0 0.0] [0.7 70.0] [1.0 10.0]]}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%
+%% Pattern.fenvToContour
+%%
+
+{Pattern.fenvToContour {Fenv.linearFenv [[0.0 1.0] [0.5 2.0] [0.8 0.0] [1.0 1.0]]} 6}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
 %% Pattern.fenvContour
 %%
 
 
 declare
 Xs = {FD.list 10 1#10}
-MyFenv = {Fenv.sinFenv [[0.0 0.0] [0.5 1.0] [1.0 0.0]]}
+MyFenv = {Fenv.linearFenv [[0.0 0.0] [0.5 1.0] [1.0 0.0]]}
 {MyFenv plot}
 
 {Browse Xs}
@@ -1817,6 +1825,40 @@ MyFenv = {Fenv.sinFenv [[0.0 0.0] [0.4 1.0] [0.75 ~1.0] [1.0 0.0]]}
 {Browse Xs}
 
 {Pattern.fenvContour Xs MyFenv}
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%% Pattern.approximate, Pattern.approximateContour
+%%
+
+
+declare
+Dirs1 = {Pattern.fenvToContour {Fenv.linearFenv [[0.0 60.0] [0.5 72.0] [0.8 56.0] [1.0 60.0]]} 10}
+Dirs2 = {FD.list 10 0#2}
+
+{Browse Dirs1#Dirs2}
+
+{Pattern.approximate Dirs1 Dirs2 10 50} 
+
+{List.take Dirs2 5} ::: 0
+
+
+%%%%%
+
+
+declare
+Dirs1 = {Pattern.fenvToContour {Fenv.linearFenv [[0.0 1.0] [0.5 2.0] [0.8 0.5] [1.0 1.0]]} 10}
+Dirs2 = {FD.list 10 0#2}
+
+{Browse Dirs1#Dirs2}
+
+%% reduces domain (directions differ by at max 1)
+{Pattern.approximateContour Dirs1 Dirs2 10 50} 
+
+{List.take Dirs2 5} ::: 1
 
 
 

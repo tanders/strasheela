@@ -88,6 +88,7 @@ export
    SelectList SelectMultiple ApplyToN
 
    RotateList RotateSublists
+   Average
    
    HowManyDistinct
    HowManyAs
@@ -111,7 +112,11 @@ export
    ForAllItems MapItems EqualizeParam
 
    FenvBoundaries
+   FenvToContour
    FenvContour
+   ApproximateContour
+   Approximate
+   
 define
    
    /** % PlainPattern constraints Xs to a plain pattern (ie. no nesting or combination of patterns). The pattern is specified by the procedere Proc given to PlainPattern. Proc constraints a single pattern item and is called recursively. Proc expects two arguments: the current item and its predecessor in the list. 
@@ -1717,22 +1722,47 @@ define
       {ForAll {LUtils.matTrans [Xs UpperDoms LowerDoms]}
        proc {$ [X Upper Lower]} X :: Lower#Upper end}
    end
+
+   /** %% Expects a fenv, and returns its contour with N (int) directions encoded as expected by Pattern.direction.
+   %% */
+   fun {FenvToContour MyFenv N}
+      {Map2Neighbours {MyFenv toList($ N+1)}
+       fun {$ Y1 Y2}
+	  if Y1 < Y2 then {SymbolToDirection '+'}
+	  elseif Y1 == Y2 then {SymbolToDirection '='}
+	  else {SymbolToDirection '-'}
+	  end
+       end}
+   end
    
    /** %% Constraints the contour of the elements in Xs (FD ints) to follow the contour of MyFenv (a fenv). Internally, Pattern.contour is used.
    %% */
    proc {FenvContour Xs MyFenv}
-      L = {Length Xs}
-      Dirs = {Map2Neighbours {MyFenv toList($ L)}
-	      fun {$ Y1 Y2}
-		 if Y1 < Y2 then {SymbolToDirection '+'}
-		 elseif Y1 == Y2 then {SymbolToDirection '='}
-		 else {SymbolToDirection '-'}
-		 end
-	      end}
-   in
-      {Contour Xs Dirs}
+      {Contour Xs {FenvToContour MyFenv {Length Xs}-1}}
    end
 
+   /** %% Contour Dirs2 (List of FD ints) quasi paraphrases original contour Dirs1 (List of FD ints). In at maximum MaxErrorPercent (FD int) and at least MinPercentError (FD int) cases, an ascending or descending value of Dir1 can be a constant value in Dir2 while constant values can be ascending or descending. In other words the direction values are either the same or differ by one. Dirs1 and Dirs2 must be of same length. 
+   %% */
+   proc {ApproximateContour Dirs1 Dirs2 MinPercentError MaxErrorPercent}
+      {PercentTrue_Range
+       {Map {LUtils.matTrans [Dirs1 Dirs2]}
+	proc {$ [Dir1 Dir2] B}
+	   {FD.distance Dir1 Dir2 '=<:' 1}
+	   B = (Dir1 \=: Dir2)
+	end}
+       MinPercentError MaxErrorPercent}
+   end
+   
+   /** %% Ys (List of FD ints) quasi paraphrases original Xs (List of FD ints). At maximum MaxErrorPercent (FD int) and at least MinPercentError (FD int) values of Ys can arbitrarily differ from Xs. Xs and Ys must be of same length.
+   %% */
+   proc {Approximate Xs Ys MinPercentError MaxErrorPercent}
+      {PercentTrue_Range
+       {Map {LUtils.matTrans [Xs Ys]}
+	fun {$ [X Y]}
+	   X \=: Y
+	end}
+       MinPercentError MaxErrorPercent}
+   end
    
    
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -1779,6 +1809,16 @@ define
 	fun {$ Ys} {RotateList Ys I} end}}
    end
 
+
+   /** %% Y (FD int, implicitly declared) is the average of Xs (list of FD ints).
+   %% */
+   proc {Average Xs Y}
+      Sum = {FD.decl}
+   in
+      Y = {FD.decl}
+      Sum = {FD.sum Xs '=:'}
+      Y = {FD.divI Sum {Length Xs}}
+   end
    
 
    /** %% Returns a list of determined values sorted according to an L-system. Axiom is the first pattern period (a list) and N is the number of periods (an integer). N=0 results in the axiom. Rules is a unary function, whose argument is the last pattern value and which returns the next period (a list). Rules can be defined, e.g., by a case expression.  

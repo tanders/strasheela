@@ -40,28 +40,41 @@
     <!-- Page published by Emacs Muse begins here -->
 
 
-<h2>Changes in Version 0.9.1o (no date yet)</h2>
+<h2>Changes in Version 0.9.1o (28 March 2009)</h2>
 
 <ul>
-<li>Main additions and changes</li>
+<li>Main additions and changes
+
+<ul>
+<li>Added functor <a href="../contributions/anders/Segments/doc/node1.html">Segments</a>: a collection of re-usable musical segments (sub-CSPs) such as a contrapuntual line, motifs, or a homophonic chord progression</li>
+<li>Fixed serious bug: core of Strasheela dependend on <a href="http://www.mozart-oz.org/mogul/doc/tack/iozsef/iozsef.html">IOzSeF</a>, now IOzSeF support moved into an extra contribution functor <a href="../contributions/anders/IOzSeF/doc/node1.html">IOzSeF</a> (thanks to Ajay Dhar for pointing out this problem)</li>
+</ul></li>
 
 <li>Documentation
 
 <ul>
-<li><a href="../examples/Harmony-Examples/Schoenberg-TheoryOfHarmony.oz">Schoenberg-TheoryOfHarmony.oz</a>: the examples produces parallel fifths/octaves (between voices more than an octave apart), now fixed</li>
+<li><a href="../examples/Harmony-Examples/Schoenberg-TheoryOfHarmony.oz">Schoenberg-TheoryOfHarmony.oz</a>: the examples produced parallel fifths/octaves (between voices more than an octave apart), now fixed in source (not yet fixed in solutions in HTML file...)</li>
+<li><a href="../examples/Harmony-Examples/HarmonicProgressions-22ET.oz">HarmonicProgressions-22ET.oz</a>: Added adaptive JI output, added four-voice setting of examples (using new Segs.homophonicChordProgression)</li>
 </ul></li>
 
 <li>Minor additions
 
 <ul>
+<li>Score: added DefMixinSubscript</li>
 <li>GUtils: added RoundDigits</li>
-<li>Pattern: Added Intervals AbsIntervals RestrictMaxInterval Hook Stairs</li>
-<li>HS: added HS.acc HS.pc HS.pcName HS.pitch</li>
+<li>Pattern: added constraints Intervals, AbsIntervals, RestrictMaxInterval, Hook, Stairs</li>
+<li>HS: added general pitch converters HS.acc, HS.pc, HS.pcName, and HS.pitch</li>
 <li>HS.score: added HarmonicRythmFollowsMarkers</li>
-<li>HS.rules: added RestrictPitchDomain, OnlyOrnamentalDissonance_Durations, NoParallels NoParallel MakeIntervalConstraint PerfectConsonances IsPerfectConsonanceR Limit3Consonances IsLimit3ConsonanceR Limit3Intervals_2 IsLimit3IntervalR_2 Limit5Consonances IsLimit5ConsonanceR IsLimit_3_5_ConsonanceR IsLimit7ConsonanceR IsLimit_3_5_7_ConsonanceR</li>
+<li>HS.rules: added the constraints RestrictPitchDomain, OnlyOrnamentalDissonance_Durations, NoParallels, NoParallel, MakeIntervalConstraint, PerfectConsonances, IsPerfectConsonanceR, Limit3Consonances, IsLimit3ConsonanceR, Limit3Intervals_2, IsLimit3IntervalR_2, Limit5Consonances, IsLimit5ConsonanceR, IsLimit_3_5_ConsonanceR, IsLimit7ConsonanceR, IsLimit_3_5_7_ConsonanceR, and GetRootPCIntervals</li>
+<li>HS.rules.schoenberg: added AscendingProgression2R</li>
 </ul></li>
 
-<li>Bug fixes and changes</li>
+<li>Further bug fixes and changes
+
+<ul>
+<li>Score: method getSimultaneousItems: now made sure arg test is only applied to items</li>
+<li>Out: Lilypond output, arg hasBreak: no \break inserted after last container matching hasBreak</li>
+</ul></li>
 </ul>
 
 
@@ -806,7 +819,7 @@ See the documentation for <a href="../contributions/anders/HarmonisedScore/doc/n
 <div id="footer">
 <div id="author">&copy; 
 Torsten Anders</div>
-<div id="date">Last time edited: 2009.03.18</div>
+<div id="date">Last time edited: 2009.03.27</div>
 </div>
   </body>
 </html>

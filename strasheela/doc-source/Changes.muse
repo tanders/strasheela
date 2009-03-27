@@ -1,26 +1,26 @@
 #title Changes 
 ; #author Torsten Anders
 
-* Changes in Version 0.9.1o (no date yet)
+* Changes in Version 0.9.10 (28 March 2009)
 
   - Main additions and changes 
-    - Added functor Segments: a collection of re-usable musical segments (sub-CSPs) such as a contrapuntual line, motifs, or a homophonic chord progression
-    - Fixed serious bug: core of Strasheela dependend on [[http://www.mozart-oz.org/mogul/doc/tack/iozsef/iozsef.html][IOzSeF]], now IOzSeF support moved into an extra contribution functor (Thank you Ajay Dhar for pointing out this problem) 
+    - Added functor [[../contributions/anders/Segments/doc/node1.html][Segments]]: a collection of re-usable musical segments (sub-CSPs) such as a contrapuntual line, motifs, or a homophonic chord progression
+    - Fixed serious bug: core of Strasheela dependend on [[http://www.mozart-oz.org/mogul/doc/tack/iozsef/iozsef.html][IOzSeF]], now IOzSeF support moved into an extra contribution functor [[../contributions/anders/IOzSeF/doc/node1.html][IOzSeF]] (thanks to Ajay Dhar for pointing out this problem) 
 
   - Documentation
-    - [[../examples/Harmony-Examples/Schoenberg-TheoryOfHarmony.oz][Schoenberg-TheoryOfHarmony.oz]]: the examples produced parallel fifths/octaves (between voices more than an octave apart), now fixed 
-    - examples/Harmony-Examples/HarmonicProgressions-22ET.oz: Added adaptive JI output, added four-voice setting of examples (using new Segs.homophonicChordProgression)
+    - [[../examples/Harmony-Examples/Schoenberg-TheoryOfHarmony.oz][Schoenberg-TheoryOfHarmony.oz]]: the examples produced parallel fifths/octaves (between voices more than an octave apart), now fixed in source (not yet fixed in solutions in HTML file...)
+    - [[../examples/Harmony-Examples/HarmonicProgressions-22ET.oz][HarmonicProgressions-22ET.oz]]: Added adaptive JI output, added four-voice setting of examples (using new Segs.homophonicChordProgression)
 
   - Minor additions 
     - Score: added DefMixinSubscript 
     - GUtils: added RoundDigits
-    - Pattern: Added Intervals AbsIntervals RestrictMaxInterval Hook Stairs
-    - HS: added HS.acc HS.pc HS.pcName HS.pitch
+    - Pattern: added constraints Intervals, AbsIntervals, RestrictMaxInterval, Hook, Stairs
+    - HS: added general pitch converters HS.acc, HS.pc, HS.pcName, and HS.pitch
     - HS.score: added HarmonicRythmFollowsMarkers
-    - HS.rules: added RestrictPitchDomain, OnlyOrnamentalDissonance_Durations, NoParallels NoParallel MakeIntervalConstraint PerfectConsonances IsPerfectConsonanceR Limit3Consonances IsLimit3ConsonanceR Limit3Intervals_2 IsLimit3IntervalR_2 Limit5Consonances IsLimit5ConsonanceR IsLimit_3_5_ConsonanceR IsLimit7ConsonanceR IsLimit_3_5_7_ConsonanceR GetRootPCIntervals
+    - HS.rules: added the constraints RestrictPitchDomain, OnlyOrnamentalDissonance_Durations, NoParallels, NoParallel, MakeIntervalConstraint, PerfectConsonances, IsPerfectConsonanceR, Limit3Consonances, IsLimit3ConsonanceR, Limit3Intervals_2, IsLimit3IntervalR_2, Limit5Consonances, IsLimit5ConsonanceR, IsLimit_3_5_ConsonanceR, IsLimit7ConsonanceR, IsLimit_3_5_7_ConsonanceR, and GetRootPCIntervals
     - HS.rules.schoenberg: added AscendingProgression2R
 
-  - Bug fixes and changes
+  - Further bug fixes and changes
     - Score: method getSimultaneousItems: now made sure arg test is only applied to items 
     - Out: Lilypond output, arg hasBreak: no \break inserted after last container matching hasBreak 
 
