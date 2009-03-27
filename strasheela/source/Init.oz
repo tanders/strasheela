@@ -19,7 +19,6 @@ import
    Browser(browse:Browse)
    %% Inspector(inspect:Inspect)
    Pickle Explorer Error Resolve
-   IOzSeF at 'x-ozlib://tack/iozsef/iozsef.ozf'
    
    Strasheela at '../Strasheela.ozf'
    GUtils at 'GeneralUtils.ozf'
@@ -61,7 +60,6 @@ export
    SetTuningTable UnsetTuningTable GetTuningTable
    SetMaxLilyRhythm
    AddExplorerOuts_Standard AddExplorerOuts_Extended
-   AddIOzSeFOuts
 %   StrasheelaDir
    StrasheelaSourceDir StrasheelaInstallDir
    
@@ -523,29 +521,6 @@ define
 	      label: 'to Fomus')}
       end
 
-      /** %% Extends the IOzSeF menu "Options -> Information Action" by a few entries to output scores into various formats just by clicking the solution nodes in the Explorer. This procedure adds standard output formats like Csound, Lilypond, and MIDI, as well as further formats like ENP and Fomus.
-      %% */
-      %% NOTE: implementation simply reuses defs for Explorer actions. There Explorer actions always expect number of Explorer node as argument. IOzSeF does not support this -- so this node nubmer argument is always 1 here. 
-      proc {AddIOzSeFOuts}
-	 %% Standard
-	 {IOzSeF.addInformationAction 'Inspect Score (use score object context menu)' root
-	  proc {$ X} {ScoreInspector.inspect X} end}
-	 {IOzSeF.addInformationAction 'Archive initRecord' root
-	  proc {$ X}  {ArchiveInitRecord 1 X} end}
-	 {IOzSeF.addInformationAction 'to Csound' root
-	  proc {$ X}  {RenderCsound 1 X} end}
-	 {IOzSeF.addInformationAction 'to Lilypond' root
-	  proc {$ X}  {RenderLilypond 1 X} end}
-	 {IOzSeF.addInformationAction 'to Midi' root
-	  proc {$ X}  {RenderMidi 1 X} end}
-	 %% Extended
-	 {IOzSeF.addInformationAction 'Archive ENPNonMensural' root
-	  proc {$ X}  {ArchiveENPNonMensural 1 X} end}
-	 {IOzSeF.addInformationAction 'Archive Fomus' root
-	  proc {$ X}  {ArchiveFomus 1 X} end}
-	 {IOzSeF.addInformationAction 'to Fomus' root
-	  proc {$ X}  {RenderFomus 1 X} end}
-      end
       
    end
 
