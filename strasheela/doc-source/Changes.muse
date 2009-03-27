@@ -5,6 +5,7 @@
 
   - Main additions and changes 
     - Added functor Segments: a collection of re-usable musical segments (sub-CSPs) such as a contrapuntual line, motifs, or a homophonic chord progression
+    - Fixed serious bug: core of Strasheela dependend on [[http://www.mozart-oz.org/mogul/doc/tack/iozsef/iozsef.html][IOzSeF]], now IOzSeF support moved into an extra contribution functor  
 
 
   - Documentation
