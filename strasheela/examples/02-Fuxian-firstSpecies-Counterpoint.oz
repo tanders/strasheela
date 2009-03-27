@@ -380,10 +380,10 @@ end
 
 
 
-%% tmp
-{SDistro.iozsefExploreOne Fux_FirstSpecies
- unit(order:size
-      value:mid)}
+% %% tmp: iozsefExploreOne meanwhile moved into extra iozsef functor 
+% {SDistro.iozsefExploreOne Fux_FirstSpecies
+%  unit(order:size
+%       value:mid)}
 
 
 */
