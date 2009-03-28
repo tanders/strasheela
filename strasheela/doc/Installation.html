@@ -30,10 +30,10 @@
     <li class="navn"><a href="contact.html">contact</a></li>
   </ul>
   <div id="logo">
-    <a href="http://sourceforge.net"><img src="http://sflogo.sourceforge.net/sflogo.php?group_id=167225&amp;type=1" width="88" height="31" border="0" alt="SourceForge.net Logo" /></a>
+<a href="http://sourceforge.net/projects/strasheela"><img src="http://sflogo.sourceforge.net/sflogo.php?group_id=167225&type=12" width="120" height="30" border="0" alt="Get Strasheela at SourceForge.net. Fast, secure and Free Open Source software downloads" /></a>
   </div>
   <div id="logo">
-  <a href="http://cmr.soc.plymouth.ac.uk/"><img src="http://cmr.soc.plymouth.ac.uk/iccmr_logo_2.jpg" width="125"  width="88" height="31" border="0" alt="ICCMR Logo" /></a>
+  <a href="http://cmr.soc.plymouth.ac.uk/"><img src="http://cmr.soc.plymouth.ac.uk/iccmr_logo_2.jpg" width="125"  width="80" height="30" border="0" alt="ICCMR Logo" /></a>
   </div>
 </div>
     <h1>Strasheela Installation</h1>
@@ -96,7 +96,7 @@
 <a href="#sec13">Installation</a>
 </dt>
 <dt>
-<a href="#sec14">Edit Oz Initialisation File to Load Strasheela</a>
+<a href="#sec14">IMPORTANT: Edit Oz Initialisation File to Load Strasheela</a>
 </dt>
 <dt>
 <a href="#sec15">Update</a>
@@ -104,7 +104,7 @@
 </dl>
 </dd>
 <dt>
-<a href="#sec16">Install the Software for which Strasheela Supports an Output Format</a>
+<a href="#sec16">IMPORTANT: Install the Software for which Strasheela Supports an Output Format</a>
 </dt>
 <dt>
 <a href="#sec17">Using Strasheela in Realtime with OSC</a>
@@ -181,14 +181,14 @@ Selection Constraints</h3>
 
 
 
-<p>Please note that you need a C++ compiler in order to install these constraints. The GNU C++ compiler is usually already installed on Linux. On MacOS X, install Apple's developer tool Xcode (available either from your MacOS installation CDs, or from <a href="http://developer.apple.com/tools/xcode/">here</a> if this online version is newer). On Windows, you may consider installing this compiler under <a href="http://www.cygwin.com/">Cygwin</a>. You can install the selection constraints by typing</p>
+<p>Please note that you need a C++ compiler in order to install these constraints. The GNU C++ compiler is usually already installed on Linux. On MacOS X, install Apple's developer tool Xcode (available either from your MacOS installation CDs, or from <a href="http://developer.apple.com/tools/xcode/">here</a> if this online version is newer). On Windows, you may consider installing this compiler under <a href="http://www.cygwin.com/">Cygwin</a>. You can install the selection constraints by typing (of course, you do not type the leading promt yourself, here <code>$</code>).</p>
 
 <blockquote>
 <p class="quoted"></p>
 </blockquote> 
 
 <pre class="example">
-ozmake --install --package=http://www.mozart-oz.org/mogul/populate/duchier/select/duchier-select__1.3.0__source__1.8.pkg
+$ ozmake --install --package=http://www.mozart-oz.org/mogul/populate/duchier/select/duchier-select__1.3.0__source__1.8.pkg
 </pre>
 
 <p>NB: Unfortunately, it has been found that on Mozart 1.3.2 <code>ozmake</code> hangs when invoking the GNU compiler on Windows.<sup><a class="footref" name="fnr.4" href="#fn.4">4</a></sup></p>
@@ -202,8 +202,8 @@ IOzSeF</h3>
 <p>Strasheela integrates IOzSeF for convenient score search (see <a href="../doc/api/node8.html">SDistro</a>). You can install IOzSeF by typing</p>
 
 <pre class="example">
-ozmake --install --package=mogul:/tack/TkTreeWidget
-ozmake --install --package=mogul:/tack/iozsef
+$ ozmake --install --package=mogul:/tack/TkTreeWidget
+$ ozmake --install --package=mogul:/tack/iozsef
 </pre>
 
 
@@ -220,13 +220,13 @@ How to obtain Strasheela?</h3>
 <p>Alternatively, you can check out the Subversion repository with the following command (this option allows for easy updates later, but requires installing <a href="http://en.wikipedia.org/wiki/Subversion_(software)">Subversion</a>).</p>
 
 <pre class="example">
-svn co https://strasheela.svn.sourceforge.net/svnroot/strasheela/trunk/strasheela/ strasheela
+$ svn co https://strasheela.svn.sourceforge.net/svnroot/strasheela/trunk/strasheela/ strasheela
 </pre>
 
 <p>You can then later update your Subversion repository by moving into the <code>strasheela</code> top-level directory and typing this.</p>
 
 <pre class="example">
-svn update
+$ svn update
 </pre>
 
 
@@ -234,17 +234,17 @@ svn update
 <h3><a name="sec13" id="sec13"></a>
 Installation</h3>
 
-<p class="first">On a UNIX-like system (i.e. Linux or MacOS), for compiling and installing Strasheela with all its extensions open a shell, move into <code>Strasheela/scripts</code><sup><a class="footref" name="fnr.1" href="#fn.1">1</a></sup> and run</p>
+<p class="first">The steps in this section result only in a bare-bones Strasheela installation which is of limited practical use. Only the installation steps in the sections below this section bring Strasheela to life (e.g. they are essential for hearing Strasheela output). The examples provided with Strasheela assume that all the following installation steps have been conducted.</p>
 
-<blockquote>
-<p class="quoted"></p>
-</blockquote> 
+<h4>UNIX</h4>
+
+<p class="first">On a UNIX-like system (i.e. Linux or MacOS), you need a C++ compiler besides an Oz installation for compiling Strasheela with all its contributions. On Linux it is likely already installed, on MacOS you should first install Apple's developer tool Xcode, available on the MacOS installation CDs.
+Then, open a shell, move into <code>Strasheela/scripts</code><sup><a class="footref" name="fnr.1" href="#fn.1">1</a></sup>, and run the commands given below (naturally, you have to replace the path with the path on your system and you do not enter the leading promt, here <code>$</code>). On MacOS (at least), you can enter the path of the directory using drag and drop: grap the Strasheela scripts directory with the mouse and let it go over the terminal window. This script outputs some warnings which you can savely ignore.</p>
 
 <pre class="example">
-./install-all.sh
+$ cd /path/to/Strasheela/scripts
+$ ./install-all.sh
 </pre>
-
-<p>This script outputs a number of warnings, most of them of the form <code>binding analysis warning: local variable Browse used only once</code>. You can savely ignore all these warnings (I left them in as it slightly simplifies debugging for me..).</p>
 
 <p>In case you later somehow changed Strasheela<sup><a class="footref" name="fnr.2" href="#fn.2">2</a></sup> and want to update the installation then run (again in the folder <code>Strasheela/scripts</code>)</p>
 
@@ -253,11 +253,47 @@ Installation</h3>
 </blockquote> 
 
 <pre class="example">
-./update-all.sh
+$ ./update-all.sh
 </pre>
 
 
-<p>An alternative method installs the core of Strasheela (in <code>Strasheela</code>) and each of its extensions (in <code>Strasheela/contributions/*/*</code>) separately. This method also works on MS Windows. It uses <a href="http://www.mozart-oz.org/documentation/mozart-ozmake/index.html">ozmake</a>, a tool for installing Mozart packages (the above mentioned scripts internally call ozmake as well).</p>
+
+<h4>Windows</h4>
+
+<p class="first">On Windows, you compile and install Strasheela and most of its contributions by opening a DOS command prompt window and typing the following (naturally, you have to replace the path with the path on your system and you do not enter the leading promt, here <code>&gt;</code>). You can enter the path of the directory using drag and drop: grap the Strasheela scripts directory with the mouse and let it go over the terminal window.</p>
+
+<pre class="example">
+&gt; cd C:\\path\to\Strasheela\scripts
+&gt; install.bat
+</pre>
+
+<p>The batch file <code>install.bat</code> installs only those parts of Strasheela which do not require a C++ compiler installed (e.g., Midi file input is not supported in this case). If you have a C++ compiler installed, you may install all Strasheela contributions by using the batch file <code>install-all.bat</code> instead of <code>install.bat</code> (note that this is currently untested).</p>
+
+<p>In case you later somehow changed Strasheela<sup><a class="footref" name="fnr.2" href="#fn.2">2</a></sup> and want to update the installation then run (again in the folder <code>Strasheela/scripts</code>) either</p>
+
+<blockquote>
+<p class="quoted"></p>
+</blockquote> 
+
+<pre class="example">
+&gt; ./update.bat
+</pre>
+
+<p>or (with a C++ compiler )</p>
+
+<blockquote>
+<p class="quoted"></p>
+</blockquote> 
+
+<pre class="example">
+&gt; ./update-all.bat
+</pre>
+
+
+
+<h4>Installing individual components</h4>
+
+<p class="first">An alternative method installs the core of Strasheela (in <code>Strasheela</code>) and each of its extensions (in <code>Strasheela/contributions/*/*</code>) separately. It uses <a href="http://www.mozart-oz.org/documentation/mozart-ozmake/index.html">ozmake</a>, a tool for installing Mozart packages (the above mentioned scripts internally call ozmake as well).</p>
 
 <p>Open a shell (or a DOS promt) and move into the directory <code>Strasheela/contributions/tmp/Path/</code>. Then type</p>
 
@@ -266,22 +302,22 @@ Installation</h3>
 </blockquote> 
 
 <pre class="example">
-ozmake --install
+$ ozmake --install
 </pre>
 
-<p>On Windows, you may need to enter <code>ozmake.exe</code>. Alternatively, you may use drag and drop. For example, you may drag the ozmake application (which can be found in the <code>bin</code> directory of your Mozart installation) and drop it into the DOS promt in order to enter its full path. You can also enter the path of the directory with drag and drop. Then, move into the <em>top-level</em> Strasheela directory and call <code>ozmake</code> again. Continue likewise with all Strasheela constributions in <code>Strasheela/contributions/</code> (e.g., <code>Strasheela/contributions/anders/Pattern</code>).</p>
+<p>On Windows, you may need to enter <code>ozmake.exe</code>.  Then, move into the <em>top-level</em> Strasheela directory and call <code>ozmake</code> again. Continue likewise with all Strasheela constributions in <code>Strasheela/contributions/</code> (e.g., <code>Strasheela/contributions/anders/Pattern</code>).</p>
 
-<p>The steps above result only in a bare-bones Strasheela installation which is of limited practical use. The following installation steps bring Strasheela to life (e.g. they are essential for hearing Strasheela output). The examples provided with Strasheela assume that all the following installation steps have been conducted.</p>
+
 
 
 <h3><a name="sec14" id="sec14"></a>
-Edit Oz Initialisation File to Load Strasheela</h3>
+IMPORTANT: Edit Oz Initialisation File to Load Strasheela</h3>
 
 <p class="first">You will usually want to load Strasheela automatically whenever you start Oz. For this purpose, please edit the Oz initialisation file. Strasheela provides the initialisation file template <code>Strasheela/_ozrc</code>, edit this template file according to your system.<sup><a class="footref" name="fnr.3" href="#fn.3">3</a></sup> A special template <code>Strasheela/_WindowsOZRC</code> is provided for Windows which demonstrates how Windows pathes are entered (this template still requires editing according to your system).
 Several settings in the initialisation file templates depend on the software for which Strasheela supports an output format (see below).
 Please leave all paths starting with <code>x-ozlib://</code> untouched. These are platform-independent paths, which don't require any changes. Also, you better don't change any code, unless you know what you are doing :)</p>
 
-<p>On Linux and MacOS X, you can save your initialisation file as <code>~/.ozrc</code> or <code>~/.oz/ozrc</code> (for Mac users unfamiliar with UNIX conventions: <code>~</code> indicates your home directory, e.g., /Users/yourself). On Windows, it is easiest to set the environment variable <code>OZRC</code> to the path of your initialisation file. A description how to manage environment variables on MS Windows XP can be found <a href="http://support.microsoft.com/default.aspx?scid=kb;en-us;310519">here</a>.</p>
+<p>On Linux and MacOS X, you can save your initialisation file as <code>~/.ozrc</code> or <code>~/.oz/ozrc</code> (for Mac users unfamiliar with UNIX conventions: <code>~</code> indicates your home directory, e.g., /Users/yourself). On Windows, it is easiest to set the environment variable <code>OZRC</code> to the path of your initialisation file. A description how to manage environment variables on MS Windows XP can be found <a href="http://support.microsoft.com/default.aspx?scid=kb;en-us;310519">here</a>. Note that aftern changing environment variable, you should open a new DOS box / restart Emacs in order to see its effect.</p>
 
 <p><a name="settingPATH" id="settingPATH"></a>
 Also, you may want to add the Oz applications (e.g., the Strasheela tutorial) to your <code>PATH</code> environment variable, so that you can call them directly at the commandline. For example, on MacOS or Linux add the following line to your <code>~/.profile</code> file. You may need to replace <code>1.3.2</code> with the mozart version you are using (just check how your subdirectory of <code>~/.oz</code> is called).</p>
@@ -301,7 +337,7 @@ export PATH=~/.oz/1.3.2/bin/:$PATH
 </blockquote> 
 
 <pre class="example">
-StrasheelaTutorial
+$ StrasheelaTutorial
 </pre>
 
 
@@ -311,23 +347,13 @@ Update</h3>
 
 <p class="first">This section discusses how to update from an old to a new Strasheela version. In case your old Strasheela source folder contains no personal files, you can simply replace your old folder with the new one. If your old folder contains personal files (e.g., personal contributions), then you better first copy them to the new Strasheela version :)</p>
 
-<p>If  you are on UNIX, you then upgrade simply by running the script <code>Strasheela/scripts/upgrade-all.sh</code>. On Windows, you have to call <code>ozmake</code> manually, like during your first Strasheela installation. In a DOS window, move into the Strasheela top-level dictionary and enter the following.</p>
-
-<blockquote>
-<p class="quoted"></p>
-</blockquote> 
-
-<pre class="example">
-ozmake --upgrade
-</pre>
-
-<p>Then repeat this command in every Strasheela contribution directory.</p>
+<p>You then upgrade simply by running the script <code>Strasheela/scripts/upgrade-all.sh</code> (on MacOS or Linux), <code>Strasheela/scripts/upgrade.bat</code> (on Windows), or <code>Strasheela/scripts/upgrade-all.sh</code> (on Windows with a C++ compiler installed).</p>
 
 
 
 
 <h2><a name="sec16" id="sec16"></a>
-Install the Software for which Strasheela Supports an Output Format</h2>
+IMPORTANT: Install the Software for which Strasheela Supports an Output Format</h2>
 
 <p class="first">Strasheela exports its scores into various formats, for instance, to produce sheet music or sound output.</p>
 
@@ -444,7 +470,7 @@ scripts/install-all.sh <span style="color: #bc8f8f;">\</span>
 <div id="footer">
 <div id="author">&copy; 
 Torsten Anders</div>
-<div id="date">Last time edited: 2009.03.08</div>
+<div id="date">Last time edited: 2009.03.28</div>
 </div>
   </body>
 </html>
