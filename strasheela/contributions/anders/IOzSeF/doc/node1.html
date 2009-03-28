@@ -1,0 +1,217 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<html>
+ <head>
+  <title>IOzSeF</title>
+  <style>BODY {
+ background: url(page.gif) repeat-y white;
+}
+#slidemenubar, #slidemenubar2{
+ position:absolute;
+ left:-144px;
+ width:160px;
+ top:10px;
+ border:0px solid black;
+ font:bold 12px Verdana;
+ line-height:10px;
+}
+.margin {
+ position: absolute;
+ left: 10px;
+ width: 130px;
+}
+BODY, P, H1, H2, H3, A {
+ font-family: sans-serif;
+}
+PRE, CODE {
+ font-family: courier, monospace;
+}
+P {
+ text-align: justify;
+}
+H1     { color: #9B0000; }
+H2     { color: #FF9933; }
+H3, H4 { color: #881155; }
+CODE              { color: #663366; }
+.code CODE        { color: #000000; }
+SPAN.comment      { color: #B22222; }
+SPAN.keyword      { color: #A020F0; }
+SPAN.string       { color: #BC8F8F; }
+SPAN.functionname { color: #0000FF; }
+SPAN.type         { color: #228B22; }
+SPAN.variablename { color: #B8860B; }
+SPAN.reference    { color: #5F9EA0; }
+SPAN.builtin      { color: #DA70D6; }
+A:link {
+ color: #666666;
+}
+A:visited {
+ color: black;
+}
+A.pre { font-family: courier, monospace;
+ color: #228B22;
+}
+</style>
+ </head>
+<body>
+<script language="JavaScript1.2">
+if (document.all)
+document.write('<div id="slidemenubar2" style="left:-144" onMouseover="pull()" onMouseout="draw()">')
+</script>
+<layer id="slidemenubar" onMouseover="pull()" onMouseout="draw()">
+<table border="0" cellpadding="0" cellspacing="0" width="161"><tr><td bgcolor="#009cff" width="144"><a href="index.html">Index</a>
+</td><td rowspan="2" valign="top" width="16"><img src="menu.gif" width="16"></td></tr><tr><td bgcolor="#009cff" width="144"><a href="node1.html">IOzSeF</a>
+</td></tr></table></layer>
+<script language="JavaScript1.2">
+function regenerate(){
+window.location.reload()
+}
+function regenerate2(){
+if (document.layers)
+setTimeout("window.onresize=regenerate",400)
+}
+window.onload=regenerate2
+if (document.all){
+document.write('</div>')
+themenu=document.all.slidemenubar2.style
+rightboundary=0
+leftboundary=-144
+}
+else{
+themenu=document.layers.slidemenubar
+rightboundary=144
+leftboundary=0
+}
+function pull(){
+if (window.drawit)
+clearInterval(drawit)
+pullit=setInterval("pullengine()",20)
+}
+function draw(){
+clearInterval(pullit)
+drawit=setInterval("drawengine()",50)
+}
+function pullengine(){
+if (document.all&&themenu.pixelLeft<rightboundary)
+themenu.pixelLeft+=5
+else if(document.layers&&themenu.left<rightboundary)
+themenu.left+=5
+else if (window.pullit)
+clearInterval(pullit)
+}
+function drawengine(){
+if (document.all&&themenu.pixelLeft>leftboundary)
+themenu.pixelLeft-=5
+else if(document.layers&&themenu.left>leftboundary)
+themenu.left-=5
+else if (window.drawit)
+clearInterval(drawit)
+}
+</script>
+
+<div style="margin-left:160px"><span class="string">
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> Provides score search support for the IOzSeF constraint solvers (http://www.mozart-oz.org/mogul/doc/tack/iozsef/iozsef.html). First install IOzSeF as described in the Strasheela installation instructions.  <BR>
+<BR>
+</span>
+</span>
+<h3>Functor</h3>
+<ul>IOzSeF ("<span class="string">IOzSeF.oz</span>")<br></ul>
+<h3>Import</h3>
+<code><ul><li>Browser(browse:Browse)</li><li>IOzSeF at "<span class="string">x-ozlib://tack/iozsef/iozsef.ozf"
+</span></li><li>GUtils at "<span class="string">x-ozlib://anders/strasheela/source/GeneralUtils.ozf"
+</span></li><li>Score at "<span class="string">x-ozlib://anders/strasheela/source/ScoreCore.ozf"
+</span></li><li>Out at "<span class="string">x-ozlib://anders/strasheela/source/Output.ozf"
+</span></li><li>SDistro at "<span class="string">x-ozlib://anders/strasheela/source/ScoreDistribution.ozf"
+</span></li><li>ScoreInspector at "<span class="string">x-ozlib://anders/strasheela/ScoreInspector/ScoreInspector.ozf"
+</span></li></ul></code>
+<h3>Export</h3>
+<code><ul><li>init:&lt;P/2:<a href="#entity8"><span class="functionname">IozsefInit</span></a>&gt;
+</li><li>initBest:&lt;P/3:<a href="#entity9"><span class="functionname">IozsefInitBest</span></a>&gt;
+</li><li>exploreOne:&lt;P/2:<a href="#entity10"><span class="functionname">IozsefExploreOne</span></a>&gt;
+</li><li>exploreAll:&lt;P/2:<a href="#entity11"><span class="functionname">IozsefExploreAll</span></a>&gt;
+</li><li>exploreBest:&lt;P/3:<a href="#entity12"><span class="functionname">IozsefExploreBest</span></a>&gt;
+</li><li>searchOne:&lt;P/2:<a href="#entity13"><span class="functionname">IozsefSearchOne</span></a>&gt;
+</li><li>searchAll:&lt;P/2:<a href="#entity14"><span class="functionname">IozsefSearchAll</span></a>&gt;
+</li><li>searchBest:&lt;P/3:<a href="#entity15"><span class="functionname">IozsefSearchBest</span></a>&gt;
+</li><li>&lt;P/0:<a href="#entity16"><span class="functionname">AddIOzSeFOuts</span></a>&gt;
+</li></ul></code>
+<h3>Define</h3>
+
+<code>
+<a name="entity8">
+<span class="keyword">proc</span>{<span class="functionname">IozsefInit</span> ScoreScript Args}
+</code><br>
+
+<code>
+<a name="entity9">
+<span class="keyword">proc</span>{<span class="functionname">IozsefInitBest</span> ScoreScript OrderP Args}<br>
+<span class="string"> Calls IOzSeF.init/IOzSeF.initBest with a script created by SDistro.makeSearchScript. It opens the IOzSeF 'Explorer' without starting any search. Best solution is performed with respect to OrderP (a binary procedure).  This variant of the Explorer provides additional features (e.g., support for more forms of recomputation, and various search strategies). It requires an installation of IOzSeF, see http://www.mozart-oz.org/mogul/doc/tack/iozsef/iozsef.html. The meaning of the arguments are the same as for SDistro.makeSearchScript.<BR>
+<BR>
+ Please see the IOzSeF documentation for more information. Note the following procedures <BR>
+ - IOzSeF.getSolutions: Returns the solutions found so far during interactive exploration<BR>
+ - IOzSeF.cancelExploration: Cancels the current interactive exploration.<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity10">
+<span class="keyword">proc</span>{<span class="functionname">IozsefExploreOne</span> ScoreScript Args}
+</code><br>
+
+<code>
+<a name="entity11">
+<span class="keyword">proc</span>{<span class="functionname">IozsefExploreAll</span> ScoreScript Args}
+</code><br>
+
+<code>
+<a name="entity12">
+<span class="keyword">proc</span>{<span class="functionname">IozsefExploreBest</span> ScoreScript OrderP Args}<br>
+<span class="string"> Calls IOzSeF.exploreOne/IOzSeF.exploreAll/IOzSeF.exploreBest with a script created by SDistro.makeSearchScript. Best solution is performed with respect to OrderP (a binary procedure). This variant of the Explorer provides additional features (e.g., support for more forms of recomputation, and various search strategies). It requires an installation of IOzSeF, see http://www.mozart-oz.org/mogul/doc/tack/iozsef/iozsef.html. The meaning of the arguments are the same as for SDistro.makeSearchScript.<BR>
+<BR>
+ Please see the IOzSeF documentation for more information. Note the following procedures <BR>
+ - IOzSeF.getSolutions: Returns the solutions found so far during interactive exploration<BR>
+ - IOzSeF.cancelExploration: Cancels the current interactive exploration.<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity13">
+<span class="keyword">proc</span>{<span class="functionname">IozsefSearchOne</span> ScoreScript Args}
+</code><br>
+
+<code>
+<a name="entity14">
+<span class="keyword">proc</span>{<span class="functionname">IozsefSearchAll</span> ScoreScript Args}
+</code><br>
+
+<code>
+<a name="entity15">
+<span class="keyword">proc</span>{<span class="functionname">IozsefSearchBest</span> ScoreScript OrderP Args}<br>
+<span class="string"> Calls IOzSeF.searchOne/IOzSeF.searchAll/IOzSeF.searchBest with a script created by SDistro.makeSearchScript. Best solution is performed with respect to OrderP (a binary procedure). It requires an installation of IOzSeF, see http://www.mozart-oz.org/mogul/doc/tack/iozsef/iozsef.html. The meaning of the arguments are the same as for SDistro.makeSearchScript.<BR>
+<BR>
+ Please see the IOzSeF documentation for more information. Note the following procedures <BR>
+ - IOzSeF.cancelSearch: Cancels the current non-interactive search.<BR>
+ - IOzSeF.setOption(Key Value) sets options like explorationStrat (dfs,bdfs,id,lds), noOfSols (0,...), recompStrat (plain,fixed,adaptive), mrd (0,...)<BR>
+ - IOzSeF.getTime<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity16">
+<span class="keyword">proc</span>{<span class="functionname">AddIOzSeFOuts</span> }<br>
+<span class="string"> Extends the IOzSeF menu "Options -> Information Action" by a few entries to output scores into various formats just by clicking the solution nodes in the Explorer. This procedure adds standard output formats like Csound, Lilypond, and MIDI, as well as further formats like ENP and Fomus.<BR>
+<BR>
+</span>
+</code><br>
+<h3>End</h3>
+</div></body>
+</html>
