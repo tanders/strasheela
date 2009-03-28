@@ -1,23 +1,23 @@
+:: compiles and installs all of strasheela, except those bits which depend on a C compiler
 
-rem The user still has to do the following manually:
-rem 
-rem > Open a shell (or a DOS promt) and move into the directory Strasheela/ 
-rem > contributions/tmp/Path/. Then type
-rem > 
-rem > ozmake --install
-rem > 
-rem > Move to the top-level Strasheela directory, then type
-rem > 
-rem > ozmake --install
-rem 
-rem After these steps are complete, they should go to the contributions folder and execute the batch, which will 
-rem  
-rem > Move to any contribution (e.g., Strasheela/contributions/anders/ 
-rem > Pattern or Strasheela/contributions/anders/Tutorial) and call ozmake 
-rem > again.
+@echo off
 
-set currentdir=%CD%
-dir /s /b /ad > folders.tmp
-for /f "usebackq tokens=1* delims==" %%a in (folders.tmp) do (cd %%a & ozmake)
-cd %currentdir%
-del folders.tmp
+:: script must be called from script dir
+set scriptDir=%CD%
+:: set scriptDir = %~p0
+
+:: first install tmp Path contribution
+echo "cd ../contributions/tmp/Path; ozmake --install"
+cd ../contributions/tmp/Path
+ozmake --install 
+
+cd %scriptDir%
+echo "cd ..; ozmake --install"
+cd ..
+ozmake --install 
+
+cd %scriptDir%
+
+for /f "usebackq tokens=1* delims==" %%a in (makefiles-no-cc.txt) do (echo "cd %%~pa; ozmake --install" &  cd %%~pa & ozmake --install & cd %scriptDir%)
+
+
