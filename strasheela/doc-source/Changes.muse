@@ -4,6 +4,7 @@
 * Changes in Version 0.9.10 (28 March 2009)
 
   - Main additions and changes 
+    - Added Windows batch files for installation etc. (thanks to Ajay Dhar for a first version!!)
     - Added functor [[../contributions/anders/Segments/doc/node1.html][Segments]]: a collection of re-usable musical segments (sub-CSPs) such as a contrapuntual line, motifs, or a homophonic chord progression
     - Fixed serious bug: core of Strasheela dependend on [[http://www.mozart-oz.org/mogul/doc/tack/iozsef/iozsef.html][IOzSeF]], now IOzSeF support moved into an extra contribution functor [[../contributions/anders/IOzSeF/doc/node1.html][IOzSeF]] (thanks to Ajay Dhar for pointing out this problem) 
 
