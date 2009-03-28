@@ -94,26 +94,30 @@ The steps in this section result only in a bare-bones Strasheela installation wh
 *** UNIX
 
 On a UNIX-like system (i.e. Linux or MacOS), you need a C++ compiler besides an Oz installation for compiling Strasheela with all its contributions. On Linux it is likely already installed, on MacOS you should first install Apple's developer tool Xcode, available on the MacOS installation CDs.
-Then, open a shell, move into =Strasheela/scripts=[1], and run the commands given below (naturally, you have to replace the path with the path on your system and you do not enter the leading promt, here =$=). On MacOS (at least), you can enter the path of the directory using drag and drop: grap the Strasheela scripts directory with the mouse and let it go over the terminal window. This script outputs some warnings which you can savely ignore.
+Then, open a shell, and run the commands given below (naturally, you have to replace the path with the path on your system, and you do not enter the leading promt, here =$=). 
 
 <example>
 $ cd /path/to/Strasheela/scripts
 $ ./install-all.sh
 </example>
 
-In case you later somehow changed Strasheela[2] and want to update the installation then run (again in the folder =Strasheela/scripts=)
+BTW: on MacOS, you can enter the path of the directory using drag and drop: grap the Strasheela scripts directory with the mouse and let it go over the terminal window. This script outputs some warnings which you can savely ignore.
+
+In case you later somehow changed Strasheela[2] and want to update the installation then run (again in the folder =Strasheela/scripts=[1])
 
     <example>$ ./update-all.sh</example>
 
 
 *** Windows
 
-On Windows, you compile and install Strasheela and most of its contributions by opening a DOS command prompt window and typing the following (naturally, you have to replace the path with the path on your system and you do not enter the leading promt, here =>=). You can enter the path of the directory using drag and drop: grap the Strasheela scripts directory with the mouse and let it go over the terminal window. 
+On Windows, you compile and install Strasheela and most of its contributions by opening a DOS command prompt window and typing the following (naturally, you have to replace the path with the path on your system, and you do not enter the leading promt, here =>=). 
 
 <example>
-> cd C:\\path\to\Strasheela\scripts
+> cd C:\path\to\Strasheela\scripts
 > install.bat
 </example>
+
+You can enter the path of the directory using drag and drop: grap the Strasheela scripts directory with the mouse and let it go over the terminal window. 
 
 The batch file =install.bat= installs only those parts of Strasheela which do not require a C++ compiler installed (e.g., Midi file input is not supported in this case). If you have a C++ compiler installed, you may install all Strasheela contributions by using the batch file =install-all.bat= instead of =install.bat= (note that this is currently untested). 
 
@@ -139,9 +143,11 @@ On Windows, you may need to enter =ozmake.exe=.  Then, move into the *top-level*
 
 ** IMPORTANT: Edit Oz Initialisation File to Load Strasheela
 
-You will usually want to load Strasheela automatically whenever you start Oz. For this purpose, please edit the Oz initialisation file. Strasheela provides the initialisation file template =Strasheela/_ozrc=, edit this template file according to your system.[3] A special template =Strasheela/_WindowsOZRC= is provided for Windows which demonstrates how Windows pathes are entered (this template still requires editing according to your system). 
-Several settings in the initialisation file templates depend on the software for which Strasheela supports an output format (see below).
-Please leave all paths starting with =x-ozlib://= untouched. These are platform-independent paths, which don't require any changes. Also, you better don't change any code, unless you know what you are doing :) 
+You will usually want to load Strasheela automatically whenever you start Oz. For this purpose, please edit the Oz initialisation file. Strasheela provides the initialisation file template =Strasheela/_ozrc=.[3] A special template =Strasheela/_WindowsOZRC= is provided for Windows which demonstrates how Windows pathes are entered (this template still requires editing according to your system). Also, a special template  =Strasheela/_MacOSOZRC= is available with typical MacOS settings. 
+
+In any case, **you must edit these template files according to your system**. 
+More specifically, you must set the directory (or directories) into which Strasheela should saves files (e.g., MIDI files, Csound files, Lilypond scores). Also, you must the the paths to the applications which Strasheela should call (e.g., Csound, Lilypond, see below). If these paths are not set correctly, then you cannot output any results created with Strasheela. 
+Nevertheless, please leave all paths starting with =x-ozlib://= untouched. These are platform-independent paths, which don't require any changes. Also, you better don't change any code, unless you know what you are doing :) 
 
 On Linux and MacOS X, you can save your initialisation file as =~/.ozrc= or =~/.oz/ozrc= (for Mac users unfamiliar with UNIX conventions: =~= indicates your home directory, e.g., /Users/yourself). On Windows, it is easiest to set the environment variable =OZRC= to the path of your initialisation file. A description how to manage environment variables on MS Windows XP can be found [[http://support.microsoft.com/default.aspx?scid=kb;en-us;310519][here]]. Note that aftern changing environment variable, you should open a new DOS box / restart Emacs in order to see its effect.
 
