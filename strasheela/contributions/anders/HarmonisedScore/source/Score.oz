@@ -547,8 +547,8 @@ define
 	 {MUtils.freqToKeynum Note_Freq 12.0}
       end
    in
-      /** %% Returns an adaptive just intonation pitch (midi float) of MyNote (HS.score.note instance).
-      %% If MyNote is a chord tone (i.e. getInChordB returns 1) and the related chord of MyNote is specified by ratios in the chord database, then the corresponding chord ratio is used for tuning. Similarily, if MyNote is not a chord but a scale tone and the related scale is specified by ratios, then the corresponding scale ratio is used.
+      /** %% Returns an adaptive just intonation pitch (midi float) of MyNote (HS.score.note instance), where the tuning depends on the harmonic context (i.e. the chord object related to MyNote).
+      %% If MyNote is a chord tone (i.e. getInChordB returns 1) and the related chord of MyNote is specified by ratios in the chord database, then the corresponding chord ratio is used for tuning. 
       %% In any other case, the "normally" tuned pitch of MyNote is returned (usually an equal temperament depending on {HS.db.getPitchesPerOctave}, or some user-defined tuning depending on {Init.getTuningTable}), again a midi float.
       %%
       %% Note that you need to define chord/scale databases using ratios (integer pairs) for adaptive JI. Presently, only the predefined chord and scale databases in ET31 and ET22 are defined by ratios.  In the default chord database, chords and scales are (currently) defined by pitch class integers and thus GetAdaptiveJIPitch returns the same pitch as the note method getPitchInMidi.
@@ -557,8 +557,6 @@ define
       %%
       %%
       %% TODO:
-      %%
-      %% - !! Using scale ratios for non-harmonic notes is a bad idea: they can be completely wrong for the chord at hand (e.g. for just major scale, nineth of V is syntonic comma too low)
       %%
       %% - ?? option for non-harmonic notes: derive most likely interval ratio of this note to root (from interval DB) and then use that ratio for tuning this non-harmonic tone. 
       %%
@@ -572,6 +570,10 @@ define
       %%
       %% */
       %%
+      %% Note
+      %%
+      %% - I considered using scale ratios for non-harmonic notes, but this was a bad idea: they can be completely wrong for the chord at hand (e.g. for just major scale, nineth of V is syntonic comma too low)
+      %% 
       %% 
       fun {GetAdaptiveJIPitch MyNote _ /* Args */}
 % 	 Default = unit(approximation: 1.0
@@ -583,15 +585,6 @@ define
 	 in
 	    if ChordRatios \= nil 
 	    then {GetAdaptiveJIPitch_aux MyNote MyChord ChordRatios}
-	    else {MyNote getPitchInMidi($)}
-	    end
-	 elseif {MyNote getScales($)} \= nil andthen {MyNote getInScaleB($)} == 1 then
-	    MyScale = {MyNote getScales($)}.1 % BUG: simplification: could also be "later" chord
-	    ScaleRatios = {DB.getUntransposedRatios MyScale}
-% 	    ScaleRootRatio = {DB.getUntransposedRootRatio_Float MyScale}
-	 in
-	    if ScaleRatios \= nil
-	    then {GetAdaptiveJIPitch_aux MyNote MyScale ScaleRatios}
 	    else {MyNote getPitchInMidi($)}
 	    end
 	 else {MyNote getPitchInMidi($)}
