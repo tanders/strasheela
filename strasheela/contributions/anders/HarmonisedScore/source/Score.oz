@@ -479,28 +479,29 @@ define
 
    
    local      
-      /** %% MyPCColl is either chord or scale object. Ratios are the (untransposed) ratios (pairs of ints) of MyPCColl. RootRatio is (untransposed) root float of MyPCColl.
+      /** %% MyNote is chord tone in MyChord. Ratios are the (untransposed) ratios (pairs of ints) of MyChord. 
       %% */
-      fun {GetAdaptiveJIPitch_aux MyNote MyPCColl Ratios}
-	 %% MyNote's degree in MyPCColl's ratios
-	 Degree = {GetDegree {MyNote getPitchClass($)} MyPCColl
+      fun {GetAdaptiveJIPitch_ChordTone MyNote MyChord Ratios}
+	 %% MyNote's degree in MyChord's ratios
+	 Degree = {GetDegree {MyNote getPitchClass($)} MyChord
 		   %% note: only exact pitches
 		   unit(accidentalRange:0)}
-	 %% MyNote's ratio as float with root ratio correction (i.e. untransposed root is effectively 1#1) 
+	 %% MyNote's ratio as float
 	 Ratio_Float = {MUtils.transposeRatioIntoStandardOctave
 			{GUtils.ratioToFloat {Nth Ratios Degree}}} 
-	 %% MyPCColl's transposition as frequency
-	 %%
-	 %% TODO: transposition is tempered (depends on {HS.db.getPitchesPerOctave}) -- should this potentially depend on scale ratios if MyPCColl is a chord?
-	 Transposition_Freq = {MUtils.keynumToFreq
-			       {IntToFloat {MyPCColl getTransposition($)}}
-			       {IntToFloat {DB.getPitchesPerOctave}}}
-	 OctaveOffset = if {MyNote getPitchClass($)} < {MyPCColl getTransposition($)}
+	 %% MyChord's root as frequency, tempered depending on {HS.db.getPitchesPerOctave} or the current tuning table
+	 Root_Freq = {MUtils.keynumToFreq
+		      {{MyChord getRootParameter($)} getValueInMidi($)}
+		      12.0}
+	 UntransposedRoot_Float = {MUtils.transposeRatioIntoStandardOctave
+				   {GUtils.ratioToFloat
+				    {DB.getUntransposedRootRatio MyChord}.1}}
+	 OctaveOffset = if {MyNote getPitchClass($)} < {MyChord getTransposition($)}
 			then 0
 			else 1 end
 	 %% MyNote's octave as frequency ratio float
 	 Octave_Float = {Pow 2.0 {IntToFloat {MyNote getOctave($)}+OctaveOffset}}
-	 Note_Freq = Transposition_Freq * Ratio_Float * Octave_Float
+	 Note_Freq = Root_Freq * Ratio_Float * Octave_Float / UntransposedRoot_Float
 	 %% TMP copy from DB
 % 	 fun {PCError PC KeysPerOctave}
 % 	    fun {ToCent X}
@@ -529,17 +530,17 @@ define
 % 		      note_untransposedRatio: {Nth Ratios Degree}
 % 		      noteDegree: Degree
 % 		      notePC: {MyNote getPitchClass($)}
-% 		      chordPCs: {MyPCColl getPitchClasses($)}
-% 		      chordPCs_List_Root: {PcSetToSequence {MyPCColl getPitchClasses($)}
-% 					   {MyPCColl getRoot($)}}
-% 		      chordPCs_List_Transposition: {PcSetToSequence {MyPCColl getPitchClasses($)}
-% 						    {MyPCColl getTransposition($)}}
-% 		      chordUntransposedPCs: {MyPCColl getUntransposedPitchClasses($)}
+% 		      chordPCs: {MyChord getPitchClasses($)}
+% 		      chordPCs_List_Root: {PcSetToSequence {MyChord getPitchClasses($)}
+% 					   {MyChord getRoot($)}}
+% 		      chordPCs_List_Root: {PcSetToSequence {MyChord getPitchClasses($)}
+% 						    {MyChord getRoot($)}}
+% 		      chordUntransposedPCs: {MyChord getUntransposedPitchClasses($)}
 % 		      note_untransposedRatio_Float:Ratio_Float
 % % 		      note_untransposedRatioWithRootCorrection_Float:Ratio_Float
-% 		      chord: {DB.getName MyPCColl}
-% 		      chordTransposition_PC: {MyPCColl getTransposition($)}
-% % 		      chordTransposition_Freq: Transposition_Freq
+% 		      chord: {DB.getName MyChord}
+% 		      chordRoot_PC: {MyChord getRoot($)}
+% % 		      chordRoot_Freq: Root_Freq
 % % 		      note_JI_Freq: Note_Freq
 % 		      note_JI_midiFloat: {MUtils.freqToKeynum Note_Freq 12.0}
 % 		      note_ET_midiFloat: {MyNote getPitchInMidi($)})}
@@ -548,7 +549,9 @@ define
       end
    in
       /** %% Returns an adaptive just intonation pitch (midi float) of MyNote (HS.score.note instance), where the tuning depends on the harmonic context (i.e. the chord object related to MyNote).
-      %% If MyNote is a chord tone (i.e. getInChordB returns 1) and the related chord of MyNote is specified by ratios in the chord database, then the corresponding chord ratio is used for tuning. 
+      %%
+      %% If MyNote is a chord tone (i.e. getInChordB returns 1) and the related chord of MyNote is specified by ratios in the chord database, then the corresponding chord ratio is used for tuning. The chord root is tuned according to the current tuning table, or to the equal temperament defined by its pitch unit if no tuning table is specified.
+      %%
       %% In any other case, the "normally" tuned pitch of MyNote is returned (usually an equal temperament depending on {HS.db.getPitchesPerOctave}, or some user-defined tuning depending on {Init.getTuningTable}), again a midi float.
       %%
       %% Note that you need to define chord/scale databases using ratios (integer pairs) for adaptive JI. Presently, only the predefined chord and scale databases in ET31 and ET22 are defined by ratios.  In the default chord database, chords and scales are (currently) defined by pitch class integers and thus GetAdaptiveJIPitch returns the same pitch as the note method getPitchInMidi.
@@ -581,10 +584,10 @@ define
 	 if {MyNote getChords($)} \= nil andthen {MyNote getInChordB($)} == 1 then
 	    MyChord = {MyNote getChords($)}.1 % BUG: simplification: could also be "later" chord
 	    ChordRatios = {DB.getUntransposedRatios MyChord}
-% 	    ChordRootRatio = {DB.getUntransposedRootRatio_Float MyChord}
 	 in
 	    if ChordRatios \= nil 
-	    then {GetAdaptiveJIPitch_aux MyNote MyChord ChordRatios}
+	    then {GetAdaptiveJIPitch_ChordTone MyNote MyChord ChordRatios}
+	       %% chord is defined by PCs and not ratios
 	    else {MyNote getPitchInMidi($)}
 	    end
 	 else {MyNote getPitchInMidi($)}
