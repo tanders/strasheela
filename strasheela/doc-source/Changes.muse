@@ -13,8 +13,8 @@
   - Minor additions 
     - GUtils: added RecursiveRatio
     - ET22.db: interval database now defined as ratios for adaptive JI
-    - ET22.out: added NoteEt22ToLily_AdaptiveJI2, PajaraRMS_TuningTable
-    - ET31.out: added NoteEt31ToLily_AdaptiveJI2, Meantone_TuningTable
+    - ET22.out: added NoteEt22ToLily_AdaptiveJI2, PajaraRMS_TuningTable, JI_TuningTable
+    - ET31.out: added NoteEt31ToLily_AdaptiveJI2, Meantone_TuningTable, JI_TuningTable
 
 
   - Further bug fixes and changes
