@@ -34,8 +34,10 @@ export
    RoundDigits
    MakeRandomGenerator SetRandomGeneratorSeed
    Log Mod_Float IsDivisible
+   
    RatioToFloat
    IsRatio
+   RecursiveRatio
 
    %% MakeConcurrentFn
    ToProc ToFun Procs2Proc
@@ -267,13 +269,15 @@ define
    fun {RatioToFloat Nom#Denom}
       {IntToFloat Nom} / {IntToFloat Denom}
    end
- 
    /** %% Returns true if X is a pair of ints Nom#Denom.
    %% */
    fun {IsRatio X}
       {IsRecord X} andthen {Label X} == '#'
       andthen {Width X}==2 andthen {All {Record.toList X} IsInt}
    end
+   /** %% Expects a ratio X#Y and returns Y#X.
+   %% */
+   fun {RecursiveRatio X#Y} Y#X end
    
    %%
    %% Constraint programming utils
