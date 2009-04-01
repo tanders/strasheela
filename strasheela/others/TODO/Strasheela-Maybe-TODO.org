@@ -854,6 +854,12 @@ piwik_log(piwik_action_name, piwik_idsite, piwik_url);
    
 * Strasheela design					      :MAYBE:STRASHEELA:
 
+** Value ordering with access to parameter objects
+
+   Copy FD.distribute source somewhere into Strasheela and then adapt it as required
+
+** 
+
 ** Conversion of cent values to fractions with continued fractions
 
 I've had Kraig Grady post a simple Excel spreadsheet that approximates 
@@ -1722,6 +1728,15 @@ From this viewpoint, there is an interesting polarity between major and harmonic
 
 
 *** Add harmonic complexity / dissonance degree info
+
+    Simple measurement: *Tenney height*: factor of numerator and denominator, often written n*d, for a ratio n/d in lowest terms
+    Tenney height generalizes to geomean(a*b*c...) for a chord a:b:c..., which gives sqrt(n*d) for dyads.
+    http://lumma.org/music/theory/TuningFAQ.txt
+
+
+    Tenney height applies only to rational numbers, and only to simple ones at that (where the product n*d is below 100 or so). Harmonic entropy is a smooth, differentiable function of interval size, i.e. 301:200 and 3:2 should have similar entropies. Near the simple rationals, harmonic entropy is proportional to sqrt(n*d).  Triadic harmonic entropy has never been fully computed, but we do know something about how it must turn out. In 2002, Paul Erlich showed that the area of the Voronoi cells of rational triads in 2-D triadspace is strongly correlated to the generalized Tenney height of the triads: http://groups.yahoo.com/group/harmonic_entropy/files/triadic.gif
+
+
 
     Use Scala software to get information about [dissonance degree] 
     There are different measurements available (Vogler, Tenney?, Barlow?): use multiple in extra DB features? 
