@@ -20,9 +20,10 @@ export
    MakeChordComment MakeChordRatios MakeScaleComment
 
    IsEt31Note IsEt31Chord IsEt31Scale
-   NoteEt31ToLily NoteEt31ToLily_AdaptiveJI
+   NoteEt31ToLily NoteEt31ToLily_AdaptiveJI NoteEt31ToLily_AdaptiveJI2
 
    Et31AsEt12_TuningTable
+   Meantone_TuningTable
 define
 
    %%
@@ -237,6 +238,28 @@ define
 	   TuningOffset = if {Abs JIPitch-ETPitch} > 0.001
 			  then "_\\markup{"#{GUtils.roundDigits (JIPitch-ETPitch)*100.0 1}#" c}"
 			  else "_\\markup{0 c}"
+			  end
+	in
+	   NonChordMarker#TuningOffset
+	end}
+       MyNote}
+   end
+   /** %% Like NoteEt31ToLily_AdaptiveJI, but additionally also notates the absolute pitch in cent.
+   %% */
+   fun {NoteEt31ToLily_AdaptiveJI2 MyNote}
+      {{Out.makeNoteToLily2
+	fun {$ N} {ET31PitchToLily {N getPitch($)}} end
+	fun {$ N}
+	   NonChordMarker = if {HS.score.isInChordMixinForNote N}
+			       andthen {N isInChord($)} == 0
+			    then "^x"
+			    else ""
+			    end
+	   JIPitch = {HS.score.getAdaptiveJIPitch N unit}
+	   ETPitch = {N getPitchInMidi($)}
+	   TuningOffset = if {Abs JIPitch-ETPitch} > 0.001
+			  then "_\\markup{\\column {"#{GUtils.roundDigits (JIPitch-ETPitch)*100.0 1}#"c "#{MyNote getPitchInMidi($)}#"}}"
+			  else "_\\markup{\\column {"#0#"c "#{MyNote getPitchInMidi($)}#"}}"
 			  end
 	in
 	   NonChordMarker#TuningOffset
@@ -514,6 +537,42 @@ define
       29: 1100.0
       30: 1100.0
       31: 1200.0
-    )
+	 )
+
+   /** %% Tuning table for 1/4 comma meantone for 31 tones.
+   %% */
+   Meantone_TuningTable
+   = unit(1:         34.990 
+	  2:         76.049 
+	  3:        111.039 
+	  4:        152.098 
+	  5:        193.157 
+	  6:        228.147 
+	  7:        269.206 
+	  8:        310.265 
+	  9:        345.255 
+	  10:        386.314 
+	  11:        421.304 
+	  12:        462.363 
+	  13:        503.422 
+	  14:        538.412 
+	  15:        579.471 
+	  16:        614.461 
+	  17:        655.520 
+	  18:        696.578 
+	  19:        731.569 
+	  20:        772.627 
+	  21:        807.618 
+	  22:        848.676 
+	  23:        889.735 
+	  24:        924.725 
+	  25:        965.784 
+	  26:       1006.843 
+	  27:       1041.833 
+	  28:       1082.892 
+	  29:       1117.882 
+	  30:       1158.941 
+	  31:       1200.000)
+
    
 end
