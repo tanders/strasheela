@@ -16,6 +16,41 @@ declare
 {HS.db.setDB ET22.db.fullDB}
 
 
+/* % consider using an alternative tuning table
+
+%% Pajara with RMS optimal generator
+{Init.setTuningTable
+ ET22.out.ajaraRMS_TuningTable}
+
+%% Pajara TOP tuning
+{Init.setTuningTable unit(65.60000
+			  106.57000
+			  172.17000
+			  213.14000
+			  278.74000
+			  319.71000
+			  385.31000
+			  426.28000
+			  491.88000
+			  532.85000
+			  598.45000
+			  664.05000
+			  705.02000
+			  770.62000
+			  811.59000
+			  877.19000
+			  918.16000
+			  983.76000
+			  1024.73000
+			  1090.33000
+			  1131.30000
+			  1196.90000)}
+
+
+{Init.unsetTuningTable}
+
+*/
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -324,7 +359,7 @@ end
 		   chords: Chords
 		   scales: [MyScale]
 		   restrictMelodicIntervals: false
-% 		   commonPitchesHeldOver: false
+		   commonPitchesHeldOver: false
 % 		   noParallels: false
 		   startTime: 0
 		   timeUnit: beats)}
@@ -348,8 +383,8 @@ end
     {HS.rules.cadence MyScale {LUtils.lastN Chords 4}}
  end
  %% left-to-right strategy with breaking ties by type
-%  HS.distro.leftToRight_TypewiseTieBreaking
- HS.distro.typewise_LeftToRightTieBreaking
+ HS.distro.leftToRight_TypewiseTieBreaking
+%  HS.distro.typewise_LeftToRightTieBreaking
 }
 
 */
@@ -365,6 +400,103 @@ end
 
 
 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%% Simple test with non-harmonic tones (checking adaptive JI)
+%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+/*
+
+
+%%
+%% random melody over given chord(s)
+%%
+
+declare
+%% initialise seed for randomisation of search
+{GUtils.setRandomGeneratorSeed 0}
+%% a beat (quarter note) has duration 4
+Beat = 4
+%% call solver
+{SDistro.exploreOne
+ %% define script 
+ proc {$ MyScore}
+    %% total number of notes
+    NoteNoPerBar = 11
+    %% Given chords: I V V I in C major 
+    ChordSpecs = [chord('C' 'harmonic 7th')
+% 		  chord('G' 'minor')
+% 		  chord('G' 'major')
+% 		  chord('G' 'major')
+		 ]
+    %% underlying scale is C major
+    MyScale = {Score.make2 scale(index: {HS.db.getScaleIndex 'standard pentachordal major'}
+				 transposition: {HS.pc 'C'})
+	       unit(scale: HS.score.scale)}
+    %% create list of chords from specs: every chord two beats long
+    Chords = {Map ChordSpecs
+	      fun {$ chord(Root Type)}
+		 {Score.make2 chord(index: {HS.db.getChordIndex Type}
+				    root: {HS.pc Root})
+		 unit(chord: HS.score.chord)}
+	      end}
+    %% Create list of actual 
+    VoiceNotes = {Segs.makeCounterpoint
+		  unit(
+		     %% args for individual notes
+		     iargs: unit(n: NoteNoPerBar
+				 inScaleB:1 % only use scale pitches
+				 %% possible durations
+				 duration: 2
+				)
+		     rargs: unit(maxPitch: 'C'#5
+				 minPitch: 'C'#4)
+		     )}
+    Akk = {Segs.makeAkkord
+	   unit(iargs: unit(noteNo: 4)
+		rargs: unit(maxPitch: 'C'#4
+			    minPitch: 'C'#3))}
+    End                         % for unifying endtimes
+ in
+    %% Pitch of notes created by Segs.makeCounterpoint are implicitely constrained to fit to simultaneous chords and scales
+    MyScore = {Score.make sim([seq(info: channel(0) % Midi channel 1
+				   VoiceNotes
+				   endTime: End)
+			       seq([Akk]
+				   endTime: End)
+			       seq(Chords
+				   endTime: End)
+			       seq([MyScale]
+				   endTime: End)]
+			      startTime: 0
+			      timeUnit: beats(Beat))
+	       unit}
+    {VoiceNotes.1 getPitchClass($)} = {HS.pc 'C'}
+    {Pattern.increasing {Pattern.mapItems VoiceNotes getPitch}}
+ end
+ %% definition of search strategy
+ HS.distro.typewise_LeftToRightTieBreaking
+}
+
+
+*/
+
+/* % TMP
+
+
+{HS.db.getInternalIntervalDB}
+
+{HS.db.getEditIntervalDB}
+
+{HS.db.pc2Ratios 18 {HS.db.getEditIntervalDB}}
+ 
+
+*/
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -456,7 +588,7 @@ proc {RenderLilypondAndCsound_AdaptiveJI I X}
       {ET22.out.renderAndShowLilypond X
        unit(file: FileName
 % 	    chordDescription:ET22.out.makeChordRatios
-	    clauses:[ET22.out.isEt22Note#ET22.out.noteEt22ToLily_AdaptiveJI]
+	    clauses:[ET22.out.isEt22Note#ET22.out.noteEt22ToLily_AdaptiveJI2]
 	   )}
       {Out.renderAndPlayCsound X
        unit(file: FileName
