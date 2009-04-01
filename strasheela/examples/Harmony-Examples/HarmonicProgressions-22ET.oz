@@ -15,12 +15,15 @@ declare
 [ET22] = {ModuleLink ['x-ozlib://anders/strasheela/ET22/ET22.ozf']}
 {HS.db.setDB ET22.db.fullDB}
 
+/* TMP
+
+*/
+
 
 /* % consider using an alternative tuning table
 
 %% Pajara with RMS optimal generator
-{Init.setTuningTable
- ET22.out.ajaraRMS_TuningTable}
+{Init.setTuningTable ET22.out.pajaraRMS_TuningTable}
 
 %% Pajara TOP tuning
 {Init.setTuningTable unit(65.60000
@@ -45,6 +48,9 @@ declare
 			  1090.33000
 			  1131.30000
 			  1196.90000)}
+
+%% JI
+{Init.setTuningTable ET22.out.ji_TuningTable}
 
 
 {Init.unsetTuningTable}
@@ -317,6 +323,10 @@ end
 
 /*
 
+%%
+%% TODO: some dissonance resolution (if 'augmented' then fundament upwards a fourth?).
+%%
+
 %% Schoenberg rules
 %%
 %% Note: no solution for purely ascending progression with only harmonic 7th, subarmonic 6th and augmented.
@@ -381,6 +391,9 @@ end
 %     {ForAll Chords proc {$ C} {HS.rules.diatonicChord C MyScale} end}
     %% last three chords form cadence
     {HS.rules.cadence MyScale {LUtils.lastN Chords 4}}
+    %% NOTE: directly causes fail, some bug? 
+%     {HS.rules.resolveDissonances Chords unit(consonantChords:['harmonic 7th'
+% 							      'subharmonic 6th'])}
  end
  %% left-to-right strategy with breaking ties by type
  HS.distro.leftToRight_TypewiseTieBreaking
@@ -388,7 +401,6 @@ end
 }
 
 */
-
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -429,7 +441,7 @@ Beat = 4
     %% total number of notes
     NoteNoPerBar = 11
     %% Given chords: I V V I in C major 
-    ChordSpecs = [chord('C' 'harmonic 7th')
+    ChordSpecs = [chord('G' 'harmonic 7th')
 % 		  chord('G' 'minor')
 % 		  chord('G' 'major')
 % 		  chord('G' 'major')
@@ -454,13 +466,13 @@ Beat = 4
 				 %% possible durations
 				 duration: 2
 				)
-		     rargs: unit(maxPitch: 'C'#5
-				 minPitch: 'C'#4)
+		     rargs: unit(maxPitch: 'G'#5
+				 minPitch: 'G'#4)
 		     )}
     Akk = {Segs.makeAkkord
 	   unit(iargs: unit(noteNo: 4)
-		rargs: unit(maxPitch: 'C'#4
-			    minPitch: 'C'#3))}
+		rargs: unit(maxPitch: 'G'#4
+			    minPitch: 'G'#3))}
     End                         % for unifying endtimes
  in
     %% Pitch of notes created by Segs.makeCounterpoint are implicitely constrained to fit to simultaneous chords and scales
@@ -476,7 +488,7 @@ Beat = 4
 			      startTime: 0
 			      timeUnit: beats(Beat))
 	       unit}
-    {VoiceNotes.1 getPitchClass($)} = {HS.pc 'C'}
+    {VoiceNotes.1 getPitchClass($)} = {HS.pc 'G'}
     {Pattern.increasing {Pattern.mapItems VoiceNotes getPitch}}
  end
  %% definition of search strategy
@@ -540,29 +552,31 @@ EventToCsound_adaptiveJI
 %     getAmplitudeParameter#fun {$ X} {MUtils.levelToDB {X getValueInNormalized($)} 1.0} + 90.0 end
     fun {$ X} X end#fun {$ MyNote}
 		       JIPitch = {HS.score.getAdaptiveJIPitch MyNote unit}
-		       ETPitch = {MyNote getPitchInMidi($)}
+% 		       ETPitch = {MyNote getPitchInMidi($)}
 		    in
-		       %% JI may at max be 10 cent off, otherwise take ETPitch
-		       %% 13#8 is 11 cent error
-		       if {Abs JIPitch-ETPitch} > 0.11 then
-			  {Browse
-			   off_JI(ji:{HS.score.getAdaptiveJIPitch MyNote unit}
-				  midi: {MyNote getPitchInMidi($)}
-				  note:{MyNote toInitRecord($)}
-				  chordIndex: {{MyNote getChords($)}.1 getIndex($)}
-				  chordTransposition: {{MyNote getChords($)}.1 getTransposition($)}
-				  chordPCs: {{MyNote getChords($)}.1 getPitchClasses($)}
-				  chordRatios: {HS.db.getUntransposedRatios {MyNote getChords($)}.1}
-				  noteDegreeInChord: {HS.score.getDegree {MyNote getPitchClass($)} {MyNote getChords($)}.1 unit(accidentalRange: 0)}
-				 )}
-			  ETPitch
-		       else
-% 			  {Browse ok_JI}
-% 			  {System.show
-% 			   {Out.recordToVS
-% 			    ok_JI}}
-			  JIPitch
-		       end
+		       JIPitch
+% 		       %% JI may at max be 10 cent off, otherwise take ETPitch
+% 		       %% 13#8 is 11 cent error
+% 		       if {Abs JIPitch-ETPitch} > 0.11 then
+% 			  {Browse
+% 			   off_JI(ji:{HS.score.getAdaptiveJIPitch MyNote unit}
+% 				  midi: {MyNote getPitchInMidi($)}
+% 				  note:{MyNote toInitRecord($)}
+% 				  chordIndex: {{MyNote getChords($)}.1 getIndex($)}
+% 				  chordTransposition: {{MyNote getChords($)}.1 getTransposition($)}
+% 				  chordPCs: {{MyNote getChords($)}.1 getPitchClasses($)}
+% 				  chordRatios: {HS.db.getUntransposedRatios {MyNote getChords($)}.1}
+% 				  noteDegreeInChord: {HS.score.getDegree {MyNote getPitchClass($)} {MyNote getChords($)}.1 unit(accidentalRange: 0)}
+% 				 )}
+% % 			  ETPitch
+% 			  JIPitch
+% 		       else
+% % 			  {Browse ok_JI}
+% % 			  {System.show
+% % 			   {Out.recordToVS
+% % 			    ok_JI}}
+% 			  JIPitch
+% 		       end
 		    end
    ]}
 
