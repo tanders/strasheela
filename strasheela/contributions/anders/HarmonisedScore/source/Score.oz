@@ -152,7 +152,7 @@ export
    AbsoluteToOffsetAccidental OffsetToAbsoluteAccidental
    PcSetToSequence
 
-   GetAdaptiveJIPitch
+   GetAdaptiveJIPitch GetAdaptiveJIPitch2
    
    MinimalCadentialSets MinimalCadentialSets2 MakeAllContextScales 
 
@@ -477,32 +477,94 @@ define
 
 
 
-   
-   local      
-      /** %% MyNote is chord tone in MyChord. Ratios are the (untransposed) ratios (pairs of ints) of MyChord. 
-      %% */
-      fun {GetAdaptiveJIPitch_ChordTone MyNote MyChord Ratios}
-	 %% MyNote's degree in MyChord's ratios
-	 Degree = {GetDegree {MyNote getPitchClass($)} MyChord
-		   %% note: only exact pitches
-		   unit(accidentalRange:0)}
-	 %% MyNote's ratio as float
-	 Ratio_Float = {MUtils.transposeRatioIntoStandardOctave
-			{GUtils.ratioToFloat {Nth Ratios Degree}}} 
-	 %% MyChord's root as frequency, tempered depending on {HS.db.getPitchesPerOctave} or the current tuning table
-	 Root_Freq = {MUtils.keynumToFreq
-		      {{MyChord getRootParameter($)} getValueInMidi($)}
-		      12.0}
-	 UntransposedRoot_Float = {MUtils.transposeRatioIntoStandardOctave
-				   {GUtils.ratioToFloat
-				    {DB.getUntransposedRootRatio MyChord}.1}}
-	 OctaveOffset = if {MyNote getPitchClass($)} < {MyChord getTransposition($)}
-			then 0
-			else 1 end
-	 %% MyNote's octave as frequency ratio float
-	 Octave_Float = {Pow 2.0 {IntToFloat {MyNote getOctave($)}+OctaveOffset}}
-	 Note_Freq = Root_Freq * Ratio_Float * Octave_Float / UntransposedRoot_Float
-	 %% TMP copy from DB
+   /** %% Returns an adaptive just intonation pitch (midi float) of MyNote (HS.score.note instance), where the tuning depends on the harmonic context (i.e. the chord object related to MyNote).
+   %%
+   %% If MyNote is a chord tone (i.e. getInChordB returns 1) and the related chord of MyNote is specified by ratios in the chord database, then the corresponding chord ratio is used for tuning. The chord root is tuned according to the current tuning table, or to the equal temperament defined by its pitch unit if no tuning table is specified.
+   %%
+   %% Args:
+   %% 'tuneNonharmonicNotes' (default true): If true, non-harmonic tones are tuned as the ratio defined in the current interval DB for the PC interval between MyNote and the root of the related chord. Otherwise, the result is {MyNote getPitchInMidi($)} (i.e. either the pitch of the tuning table or the ET depending on the pitch unit).
+   %%
+   %% Note that you need to define chord/scale databases using ratios (integer pairs) for adaptive JI. Presently, only the predefined chord and scale databases in ET31 and ET22 are defined by ratios.  In the default chord database, chords and scales are (currently) defined by pitch class integers and thus GetAdaptiveJIPitch returns the same pitch as the note method getPitchInMidi.
+   %%
+   %% */
+   %%
+   %% TODO:
+   %%
+   %% - !!?? tune chord roots to corresponding scale degree (if there is a scale). Then other scale notes are in corresponding relation, and I can get JI results if scale is defined by JI intervals.
+   %% Currently, if MyNote is the root of MyChord, then the tempered root is played. However, the corresponding scale tone may not be tempered. So, the same note is played differently if it is not a chord tone. (Naturally, it is usually played differently if it is a chord tone but not the root).
+   %%
+   %% - def arg approximation, e.g., value between 1.0 (justly tuned adaptive pitches), 0.0 (as getPitchInMidi, usually ET), or even ~1.0 (worse than ET)
+   %%
+   %% - handle multiple chords/scales related to MyNote (see bug below)
+   %% 
+   %%
+   %%
+   %% Note
+   %%
+   %% - I considered using scale ratios for non-harmonic notes, but this was a bad idea: they can be completely wrong for the chord at hand (e.g. for just major scale, nineth of V is syntonic comma too low)
+   %% 
+   %% 
+   fun {GetAdaptiveJIPitch MyNote Args}
+      Default = unit(% approximation: 1.0
+		     tuneNonharmonicNotes: true
+		    )
+      As = {Adjoin Default Args}
+   in 
+      if {MyNote getChords($)} \= nil then
+	    % BUG: simplification: could also be "later" chord
+	 MyChord = {MyNote getChords($)}.1 
+	 ChordRatios = {DB.getUntransposedRatios MyChord}
+      in
+	 if ChordRatios == nil then
+	    %% chord is defined by PCs and not ratios
+	    {MyNote getPitchInMidi($)}
+	 elseif {MyNote getInChordB($)} == 1 then
+	    %% harmonic note
+	    MyNoteDegree = {GetDegree {MyNote getPitchClass($)} MyChord
+			    %% note: only exact pitches
+			    unit(accidentalRange:0)}
+	    MyNoteRatio = {Nth ChordRatios MyNoteDegree}
+	 in
+	    {GetAdaptiveJIPitch2 MyNote MyNoteRatio MyChord As}
+	 elseif {MyNote getInChordB($)} == 0 andthen As.tuneNonharmonicNotes then 
+	    %% non-harmonic note
+	    RootNoteInterval = {TransposePC {MyChord getRoot($)} $ {MyNote getPitchClass($)}}	     
+	    MyNoteRatio = {DB.pc2Ratios RootNoteInterval {DB.getEditIntervalDB}}
+	 in
+	    if MyNoteRatio \= nil then 
+	       {GetAdaptiveJIPitch2 MyNote MyNoteRatio.1 MyChord As}
+	       %% no interval ratio defined
+	    else {MyNote getPitchInMidi($)}
+	    end
+	    %% non-harmonic note and As.tuneNonharmonicNotes is false
+	 else {MyNote getPitchInMidi($)}
+	 end
+	 %% no related chord
+      else {MyNote getPitchInMidi($)}
+      end
+   end
+
+   /** %% Returns the adapted JI pitch of MyNote as Midi float. MyNoteRatio (pair of ints) is the ratio over the root of MyChord which corresponds to the pitch of MyNote.
+   %%
+   %% Args currently unused, intended for later extensions.
+   %% */
+   fun {GetAdaptiveJIPitch2 MyNote MyNoteRatio MyChord Args}
+      Ratio_Float = {MUtils.transposeRatioIntoStandardOctave
+		     {GUtils.ratioToFloat MyNoteRatio}} 
+      %% MyChord's root as frequency, tempered depending on {HS.db.getPitchesPerOctave} or the current tuning table
+      Root_Freq = {MUtils.keynumToFreq
+		   {{MyChord getRootParameter($)} getValueInMidi($)}
+		   12.0}
+      UntransposedRoot_Float = {MUtils.transposeRatioIntoStandardOctave
+				{GUtils.ratioToFloat
+				 {DB.getUntransposedRootRatio MyChord}.1}}
+      OctaveOffset = if {MyNote getPitchClass($)} < {MyChord getTransposition($)}
+		     then 0
+		     else 1 end
+      %% MyNote's octave as frequency ratio float
+      Octave_Float = {Pow 2.0 {IntToFloat {MyNote getOctave($)}+OctaveOffset}}
+      Note_Freq = Root_Freq * Ratio_Float * Octave_Float / UntransposedRoot_Float
+      %% TMP copy from DB
 % 	 fun {PCError PC KeysPerOctave}
 % 	    fun {ToCent X}
 % 	       (X / KeysPerOctave) * 1200.0
@@ -510,7 +572,7 @@ define
 % 	 in
 % 	    ~{ToCent (PC - {Round PC})}
 % 	 end
-      in
+   in
 % 	 {Browse unit(chordUntransposedRatios:Ratios
 % 		      chordUntransposedRatios_Float: {Map Ratios GUtils.ratioToFloat}
 % % 		      chordUntransposedRatiosWithRootCorrection_Float:
@@ -544,55 +606,8 @@ define
 % % 		      note_JI_Freq: Note_Freq
 % 		      note_JI_midiFloat: {MUtils.freqToKeynum Note_Freq 12.0}
 % 		      note_ET_midiFloat: {MyNote getPitchInMidi($)})}
-	 %% translate to midi float
-	 {MUtils.freqToKeynum Note_Freq 12.0}
-      end
-   in
-      /** %% Returns an adaptive just intonation pitch (midi float) of MyNote (HS.score.note instance), where the tuning depends on the harmonic context (i.e. the chord object related to MyNote).
-      %%
-      %% If MyNote is a chord tone (i.e. getInChordB returns 1) and the related chord of MyNote is specified by ratios in the chord database, then the corresponding chord ratio is used for tuning. The chord root is tuned according to the current tuning table, or to the equal temperament defined by its pitch unit if no tuning table is specified.
-      %%
-      %% In any other case, the "normally" tuned pitch of MyNote is returned (usually an equal temperament depending on {HS.db.getPitchesPerOctave}, or some user-defined tuning depending on {Init.getTuningTable}), again a midi float.
-      %%
-      %% Note that you need to define chord/scale databases using ratios (integer pairs) for adaptive JI. Presently, only the predefined chord and scale databases in ET31 and ET22 are defined by ratios.  In the default chord database, chords and scales are (currently) defined by pitch class integers and thus GetAdaptiveJIPitch returns the same pitch as the note method getPitchInMidi.
-      %%
-      %% NB: Args is currently unused, intended for later extensions..
-      %%
-      %%
-      %% TODO:
-      %%
-      %% - ?? option for non-harmonic notes: derive most likely interval ratio of this note to root (from interval DB) and then use that ratio for tuning this non-harmonic tone. 
-      %%
-      %% - !! tune chord roots to corresponding scale degree (if there is a scale). Then other scale notes are in corresponding relation, and I can get JI results if scale is defined by JI intervals.
-      %% Currently, if MyNote is the root of MyChord, then the tempered root is played. However, the corresponding scale tone may not be tempered. So, the same note is played differently if it is not a chord tone. (Naturally, it is usually played differently if it is a chord tone but not the root).
-      %%
-      %% - def arg approximation, e.g., value between 1.0 (justly tuned adaptive pitches), 0.0 (as getPitchInMidi, usually ET), or even ~1.0 (worse than ET)
-      %%
-      %% - handle multiple chords/scales related to MyNote (see bug below)
-      %% 
-      %%
-      %% */
-      %%
-      %% Note
-      %%
-      %% - I considered using scale ratios for non-harmonic notes, but this was a bad idea: they can be completely wrong for the chord at hand (e.g. for just major scale, nineth of V is syntonic comma too low)
-      %% 
-      %% 
-      fun {GetAdaptiveJIPitch MyNote _ /* Args */}
-% 	 Default = unit(approximation: 1.0
-% 		       )
-	 if {MyNote getChords($)} \= nil andthen {MyNote getInChordB($)} == 1 then
-	    MyChord = {MyNote getChords($)}.1 % BUG: simplification: could also be "later" chord
-	    ChordRatios = {DB.getUntransposedRatios MyChord}
-	 in
-	    if ChordRatios \= nil 
-	    then {GetAdaptiveJIPitch_ChordTone MyNote MyChord ChordRatios}
-	       %% chord is defined by PCs and not ratios
-	    else {MyNote getPitchInMidi($)}
-	    end
-	 else {MyNote getPitchInMidi($)}
-	 end
-      end
+      %% translate to midi float
+      {MUtils.freqToKeynum Note_Freq 12.0}
    end
 
    
