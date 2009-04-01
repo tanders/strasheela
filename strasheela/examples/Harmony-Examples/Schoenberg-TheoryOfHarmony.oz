@@ -23,6 +23,20 @@ declare
 
 
 
+/* % you can set the 31 note tuning table to 12 ET for comparison...
+
+{Init.setTuningTable
+ ET31.out.et31AsEt12_TuningTable}
+
+{Init.setTuningTable
+ ET31.out.meantone_TuningTable}
+
+{Init.unsetTuningTable}
+
+*/
+
+
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%
@@ -785,13 +799,6 @@ end
 
 */
 
-
-/* % you can set the 31 note tuning table to 12 ET for comparison...
-
-{Init.setTuningTable
- ET31.out.et31AsEt12_TuningTable}
-
-*/
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
