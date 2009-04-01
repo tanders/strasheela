@@ -29,7 +29,10 @@ export
    MakeChordComment MakeChordRatios MakeScaleComment
 
    IsEt22Note IsEt22Chord IsEt22Scale
-   NoteEt22ToLily NoteEt22ToLily_AdaptiveJI
+   NoteEt22ToLily NoteEt22ToLily_AdaptiveJI NoteEt22ToLily_AdaptiveJI2
+
+   PajaraRMS_TuningTable
+   
 define
 
    %%
@@ -284,6 +287,28 @@ define
 	end}
        MyNote}
    end
+   /** %% Like NoteEt22ToLily_AdaptiveJI, but additionally also notates the absolute pitch in cent.
+   %% */
+   fun {NoteEt22ToLily_AdaptiveJI2 MyNote}
+      {{Out.makeNoteToLily2
+	fun {$ N} {ET22PitchToLily {N getPitch($)}} end
+	fun {$ N}
+	   NonChordMarker = if {HS.score.isInChordMixinForNote N}
+			       andthen {N isInChord($)} == 0
+			    then "^x"
+			    else ""
+			    end
+	   JIPitch = {HS.score.getAdaptiveJIPitch N unit}
+	   ETPitch = {N getPitchInMidi($)}
+	   TuningOffset = if {Abs JIPitch-ETPitch} > 0.001
+			  then "_\\markup{\\column {"#{GUtils.roundDigits (JIPitch-ETPitch)*100.0 1}#"c "#{MyNote getPitchInMidi($)}#"}}"
+			  else "_\\markup{\\column {"#0#"c "#{MyNote getPitchInMidi($)}#"}}"
+			  end
+	in
+	   NonChordMarker#TuningOffset
+	end}
+       MyNote}
+   end
 
 
    fun {SimTo22LilyChord Sim}
@@ -447,5 +472,32 @@ define
    in
       {Out.renderAndShowLilypond MyScore As2}
    end
+
+
+   /** %% Tuning table for Pajara with RMS optimal generator.
+   %% */
+   PajaraRMS_TuningTable
+   = unit(1: 52.886
+	  2: 108.814
+	  3: 161.700
+	  4: 217.629
+	  5: 270.515
+	  6: 326.443
+	  7: 379.329
+	  8: 435.257
+	  9: 488.143
+	  10: 544.072
+	  11: 600.000
+	  12: 652.886
+	  13: 708.814
+	  14: 761.700
+	  15: 817.629
+	  16: 870.515
+	  17: 926.443
+	  18: 979.329
+	  19: 1035.257
+	  20: 1088.143
+	  21: 1144.072
+	  22: 1200.000)
    
 end
