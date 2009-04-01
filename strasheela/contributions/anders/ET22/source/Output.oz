@@ -31,7 +31,7 @@ export
    IsEt22Note IsEt22Chord IsEt22Scale
    NoteEt22ToLily NoteEt22ToLily_AdaptiveJI NoteEt22ToLily_AdaptiveJI2
 
-   PajaraRMS_TuningTable
+   PajaraRMS_TuningTable ji_TuningTable: JI_TuningTable
    
 define
 
@@ -301,7 +301,7 @@ define
 	   JIPitch = {HS.score.getAdaptiveJIPitch N unit}
 	   ETPitch = {N getPitchInMidi($)}
 	   TuningOffset = if {Abs JIPitch-ETPitch} > 0.001
-			  then "_\\markup{\\column {"#{GUtils.roundDigits (JIPitch-ETPitch)*100.0 1}#"c "#{MyNote getPitchInMidi($)}#"}}"
+			  then "_\\markup{\\column {"#{GUtils.roundDigits (JIPitch-ETPitch)*100.0 1}#"c "#JIPitch#"}}"
 			  else "_\\markup{\\column {"#0#"c "#{MyNote getPitchInMidi($)}#"}}"
 			  end
 	in
@@ -499,5 +499,38 @@ define
 	  20: 1088.143
 	  21: 1144.072
 	  22: 1200.000)
+
+   /** %% Tuning table with JI interpretation of 22 ET: intervals correspond to default values of ET22 interval DB ratios.
+   %% */
+   JI_TuningTable
+   = {List.toTuple unit
+      {Append
+       {Map {List.number 1 21 1}
+	fun {$ I}
+	   {HS.db.pc2Ratios I DB.fullDB.intervalDB}.1
+	end}
+       [2#1]}}
+%    = unit(32#31
+% 	  16#15
+% 	  10#9
+% 	  8#7
+% 	  7#6
+% 	  6#5
+% 	  5#4
+% 	  9#7
+% 	  4#3
+% 	  11#8
+% 	  7#5
+% 	  16#11
+% 	  3#2
+% 	  14#9
+% 	  8#5
+% 	  5#3
+% 	  12#7
+% 	  7#4
+% 	  9#5
+% 	  15#8
+% 	  31#16
+% 	  2#1)
    
 end
