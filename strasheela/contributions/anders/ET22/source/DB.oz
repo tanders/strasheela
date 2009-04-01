@@ -316,71 +316,71 @@ define
    %% ambiguous, no (ratio-based) harmonicity measurements were taken.
 
    %% for ratios see Erlich "Tuning, Tonality, and Twenty-Two-Tone Temperament"
-   Intervals = intervals(interval(interval:0 % 1#1
+   Intervals = intervals(interval(interval: 1#1 % 0
 				  % dissonanceDegree:0
 				 )
 			 %% quartertone
-			 interval(interval:1 % 32#31
+			 interval(interval: 32#31 % 1 %
 				  % dissonanceDegree:0
 				 )
-			 interval(interval:2 % 16#15 18#17 17#16 15#14
+			 interval(interval: 16#15  % 2 % 16#15 18#17 17#16 15#14
 				  % dissonanceDegree:0
 				 )
-			 interval(interval:3 % 10#9 12#11 11#10
+			 interval(interval: 10#9  % 3 % 12#11 11#10
 				  % dissonanceDegree:0
 				 )
-			 interval(interval:4 % 8#7 9#8 17#15 
+			 interval(interval: 8#7 % 4 % 9#8 17#15 
 				  % dissonanceDegree:0
 				 )
-			 interval(interval:5 % 7#6 20#17
+			 interval(interval: 7#6 % 5 %  20#17
 				  % dissonanceDegree:0
 				 )
-			 interval(interval:6 % 6#5 17#14 11#9
+			 interval(interval: 6#5 % 6 %  17#14 11#9
 				  % dissonanceDegree:0
 				 )
-			 interval(interval:7 % 5#4 
+			 interval(interval: 5#4 % 7 
 				  % dissonanceDegree:0
 				 )
-			 interval(interval:8 % 9#7 14#11 22#17
+			 interval(interval: 9#7 % 8 %  14#11 22#17
 				  % dissonanceDegree:0
 				 )
-			 interval(interval:9 % 4#3 
+			 interval(interval: 4#3 % 9 
 				  % dissonanceDegree:0
 				 )
-			 interval(interval:10 % 11#8 15#11 
+			 interval(interval: 11#8 % 10 %  15#11 
 				  % dissonanceDegree:0
 				 )
-			 interval(interval:11 % 7#5 10#7 24#17 17#12 
+			 interval(interval: 7#5 % 11 %  10#7 24#17 17#12 
 				  % dissonanceDegree:0
 				 )
-			 interval(interval:12 % 16#11 22#15
+			 interval(interval: 16#11 % 12 %  22#15
 				  % dissonanceDegree:0
 				 )
-			 interval(interval:13 % 3#2 
+			 interval(interval: 3#2 % 13 
 				  % dissonanceDegree:0
 				 )
-			 interval(interval:14 % 17#11 14#9 11#7
+			 interval(interval: 14#9 % 14 % 17#11  11#7
 				  % dissonanceDegree:0
 				 )
-			 interval(interval:15 % 8#5
+			 interval(interval: 8#5 % 15 
 				  % dissonanceDegree:0
 				 )
-			 interval(interval:16 % 5#3 18#11 28#17
+			 interval(interval: 5#3 % 16 %  18#11 28#17
 				  % dissonanceDegree:0
 				 )
-			 interval(interval:17 % 12#7 17#10
+			 interval(interval: 12#7 % 17 % 17#10
 				  % dissonanceDegree:0
 				 )
-			 interval(interval:18 % 7#4 30#17 16#9
+			 interval(interval: 7#4 % 18 %30#17 16#9
 				  % dissonanceDegree:0
 				 )
-			 interval(interval:19 % 9#5 20#11 11#6
+			 interval(interval: 9#5 % 19 %20#11 11#6
 				  % dissonanceDegree:0
 				 )
-			 interval(interval:20 % 15#8 28#15 32#17 17#9 
+			 interval(interval: 15#8 % 20 % 15#8 28#15 32#17 17#9 
 				  % dissonanceDegree:0
 				 )
-			 interval(interval:21 %
+			 interval(interval: 31#16 % 21
 				  % dissonanceDegree:0
 				 )
 			)
