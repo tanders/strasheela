@@ -24,6 +24,7 @@ export
 
    Et31AsEt12_TuningTable
    Meantone_TuningTable
+   JI_TuningTable
 define
 
    %%
@@ -258,7 +259,7 @@ define
 	   JIPitch = {HS.score.getAdaptiveJIPitch N unit}
 	   ETPitch = {N getPitchInMidi($)}
 	   TuningOffset = if {Abs JIPitch-ETPitch} > 0.001
-			  then "_\\markup{\\column {"#{GUtils.roundDigits (JIPitch-ETPitch)*100.0 1}#"c "#{MyNote getPitchInMidi($)}#"}}"
+			  then "_\\markup{\\column {"#{GUtils.roundDigits (JIPitch-ETPitch)*100.0 1}#"c "#JIPitch#"}}"
 			  else "_\\markup{\\column {"#0#"c "#{MyNote getPitchInMidi($)}#"}}"
 			  end
 	in
@@ -573,6 +574,17 @@ define
 	  29:       1117.882 
 	  30:       1158.941 
 	  31:       1200.000)
+
+   /** %% Tuning table with JI interpretation of 31 ET: intervals correspond to default values of ET31 interval DB ratios.
+   %% */
+   JI_TuningTable
+   = {List.toTuple unit
+      {Append
+       {Map {List.number 1 30 1}
+	fun {$ I}
+	   {HS.db.pc2Ratios I DB.fullDB.intervalDB}.1
+	end}
+       [2#1]}}
 
    
 end
