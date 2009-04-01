@@ -892,7 +892,10 @@ define
    %%
    %% TODO:
    %%
+   %% !! - revise JI intervals in interval DB (e.g., currently they are not symmetric, see {HS.db.getEditIntervalDB})
+   %%
    %% - additional interval features like their dissonance degree, harmonic distance etc. -- use figures you can get from Scala..
+   %%
    %%
 
    %% Interval specs are given as ratios which are relatively simple
