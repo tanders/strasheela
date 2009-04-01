@@ -312,8 +312,21 @@ define
    %% mapping is too much 'overloaded' in decatonic music. Some
    %% interval mappings are unambiguous, but many are not.
    %%
-   %% Note: as the ratios corresponding to these intervals are
-   %% ambiguous, no (ratio-based) harmonicity measurements were taken.
+   %% For adaptive JI, there is now a ratio for each
+   %% interval. However, as the ratios corresponding to these
+   %% intervals are ambiguous, this mapping is no eternal truth, and
+   %% might require adaptation (e.g., see intervals marked with NOTE:
+   %% but depending on context more might be problematic, namely all
+   %% with multiple associated ratios). Nevertheless, this is a good
+   %% default: symmetrical, all but one intervals (namely 2) agree
+   %% with Erlich, default interval interpretation is either
+   %% particular small-number-ratio, or particular intersting (e.g.,
+   %% preference for 8#7 over 9#8: no meantone, so use that for clear
+   %% novelty and underline non-meantone quality). Also, remember that
+   %% for adaptive JI these ratios are only used for non-harmonic
+   %% tones (Erlich likely fine-tuned his JI versions of his decatonic
+   %% certainly by harmonic considerations -- these are covered by
+   %% Strasheela's adaptive JI functionality anyway).
 
    %% for ratios see Erlich "Tuning, Tonality, and Twenty-Two-Tone Temperament"
    Intervals = intervals(interval(interval: 1#1 % 0
@@ -323,60 +336,83 @@ define
 			 interval(interval: 32#31 % 1 %
 				  % dissonanceDegree:0
 				 )
-			 interval(interval: 16#15  % 2 % 16#15 18#17 17#16 15#14
+			 %% NOTE:
+			 %% used 16#15 is more simple than Erlich's proposal, and symmetrical to interval 20
+			 %% but erlich10.scl (Pentachordal decatonic): 21#20 (24.6 c error)
+			 %% but erlich11.scl (Symmetrical decatonic): 15#14
+			 interval(interval: 16#15 % 2 %21#20 18#17 17#16 15#14
 				  % dissonanceDegree:0
 				 )
 			 interval(interval: 10#9  % 3 % 12#11 11#10
 				  % dissonanceDegree:0
 				 )
+			 %% Note: 8#7 instead of 9#8 
+			 %% as erlich10.scl (Pentachordal decatonic)
 			 interval(interval: 8#7 % 4 % 9#8 17#15 
 				  % dissonanceDegree:0
 				 )
+			 %% as erlich11.scl (Symmetrical decatonic)
 			 interval(interval: 7#6 % 5 %  20#17
 				  % dissonanceDegree:0
 				 )
+			 %% as erlich10.scl (Pentachordal decatonic)
 			 interval(interval: 6#5 % 6 %  17#14 11#9
 				  % dissonanceDegree:0
 				 )
+			 %% as erlich11.scl (Symmetrical decatonic)
 			 interval(interval: 5#4 % 7 
 				  % dissonanceDegree:0
 				 )
 			 interval(interval: 9#7 % 8 %  14#11 22#17
 				  % dissonanceDegree:0
 				 )
+			 %% as erlich10.scl (Pentachordal decatonic)
+			 %% as erlich11.scl (Symmetrical decatonic)
 			 interval(interval: 4#3 % 9 
 				  % dissonanceDegree:0
 				 )
 			 interval(interval: 11#8 % 10 %  15#11 
 				  % dissonanceDegree:0
 				 )
+			 %% NOTE: 
+			 %% as erlich10.scl (Pentachordal decatonic): 7#5
+			 %% but erlich11.scl (Symmetrical decatonic): 10#7
 			 interval(interval: 7#5 % 11 %  10#7 24#17 17#12 
 				  % dissonanceDegree:0
 				 )
 			 interval(interval: 16#11 % 12 %  22#15
 				  % dissonanceDegree:0
 				 )
+			 %% as erlich10.scl (Pentachordal decatonic)
+			 %% as erlich11.scl (Symmetrical decatonic)
 			 interval(interval: 3#2 % 13 
 				  % dissonanceDegree:0
 				 )
 			 interval(interval: 14#9 % 14 % 17#11  11#7
 				  % dissonanceDegree:0
 				 )
+			 %% as erlich10.scl (Pentachordal decatonic)
 			 interval(interval: 8#5 % 15 
 				  % dissonanceDegree:0
 				 )
+			 %% as erlich11.scl (Symmetrical decatonic)
 			 interval(interval: 5#3 % 16 %  18#11 28#17
 				  % dissonanceDegree:0
 				 )
+			 %% as erlich10.scl (Pentachordal decatonic)
 			 interval(interval: 12#7 % 17 % 17#10
 				  % dissonanceDegree:0
 				 )
+			 %% Note: 7#4 instead of Pythagorean 7th 16#9 
+			 %% as erlich11.scl (Symmetrical decatonic)
 			 interval(interval: 7#4 % 18 %30#17 16#9
 				  % dissonanceDegree:0
 				 )
+			 %% as erlich10.scl (Pentachordal decatonic)
 			 interval(interval: 9#5 % 19 %20#11 11#6
 				  % dissonanceDegree:0
 				 )
+			 %% as erlich11.scl (Symmetrical decatonic)
 			 interval(interval: 15#8 % 20 % 15#8 28#15 32#17 17#9 
 				  % dissonanceDegree:0
 				 )
