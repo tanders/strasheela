@@ -617,17 +617,24 @@ define
    end
    
    /** %% Returns a list of all ratios which match PC (an int) in IntervalDB (given in its edit form) which was defined using ratios (e.g. {HS.dbs.partch.getIntervals {HS.db.getPitchesPerOctave}}).
-   %% A ratio consists in two integers and has the form Nom#Denom. If no entry in the database matches PC, nil is returned.
+   %% A ratio consists in two integers and has the form Nom#Denom. If no entry in the database matches PC or non matching is defined as ratio, then nil is returned.
    %%
    %% Two examples:
-   {PC2Ratios 9 {HS.dbs.partch.getIntervals 12}}
-   {PC2Ratios 53 {HS.dbs.partch.getIntervals 72}}
+   {Pc2Ratios 9 {HS.dbs.partch.getIntervals 12}}
+   {Pc2Ratios 53 {HS.dbs.partch.getIntervals 72}}
    %%
    %% NB: Pc2Ratios is a deterministic function and no constraint.
    %% */
    fun {Pc2Ratios PC IntervalDB}
-      {Map {Filter {Record.toList IntervalDB} fun {$ X} X.interval == PC end}
-       fun {$ X} X.comment.interval.ratio end}
+      {LUtils.mappend {Filter {Record.toList IntervalDB} fun {$ X} X.interval == PC end}
+       fun {$ X}
+	  Aux = X.comment.interval
+       in
+	  if {IsRecord Aux} andthen {HasFeature Aux ratio} then
+	     [Aux.ratio]
+	  else nil
+	  end
+       end}
    end
 
 
