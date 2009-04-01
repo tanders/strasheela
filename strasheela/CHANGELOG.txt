@@ -1,4 +1,724 @@
 ------------------------------------------------------------------------
+r1816 | t-anders | 2009-03-28 21:53:50 +0000 (Sat, 28 Mar 2009) | 2 lines
+Changed paths:
+   M /trunk/strasheela/doc/Changes.html
+   M /trunk/strasheela/doc-source/Changes.muse
+
+Updated list of changes
+
+------------------------------------------------------------------------
+r1815 | t-anders | 2009-03-28 21:47:09 +0000 (Sat, 28 Mar 2009) | 2 lines
+Changed paths:
+   M /trunk/strasheela/doc/Changes.html
+   M /trunk/strasheela/doc-source/Changes.muse
+
+Updated list of changes
+
+------------------------------------------------------------------------
+r1814 | t-anders | 2009-03-28 21:46:40 +0000 (Sat, 28 Mar 2009) | 2 lines
+Changed paths:
+   M /trunk/strasheela/doc/Installation.html
+   M /trunk/strasheela/doc-source/Installation.muse
+
+Updated installation instructions
+
+------------------------------------------------------------------------
+r1813 | t-anders | 2009-03-28 21:32:16 +0000 (Sat, 28 Mar 2009) | 2 lines
+Changed paths:
+   M /trunk/strasheela/doc/Installation.html
+   M /trunk/strasheela/doc-source/Installation.muse
+
+Installation instruction now explain windows install scripts, some other edits as well
+
+------------------------------------------------------------------------
+r1812 | t-anders | 2009-03-28 21:28:37 +0000 (Sat, 28 Mar 2009) | 2 lines
+Changed paths:
+   A /trunk/strasheela/contributions/anders/IOzSeF/doc
+   A /trunk/strasheela/contributions/anders/IOzSeF/doc/index.html
+   A /trunk/strasheela/contributions/anders/IOzSeF/doc/menu.gif
+   A /trunk/strasheela/contributions/anders/IOzSeF/doc/node1.html
+   A /trunk/strasheela/contributions/anders/IOzSeF/doc/ozdoc.css
+   A /trunk/strasheela/contributions/anders/IOzSeF/doc/page.gif
+
+Added IOzSeF doc
+
+------------------------------------------------------------------------
+r1811 | t-anders | 2009-03-28 20:57:05 +0000 (Sat, 28 Mar 2009) | 2 lines
+Changed paths:
+   A /trunk/strasheela/scripts/install-all.bat
+   M /trunk/strasheela/scripts/install.bat
+   A /trunk/strasheela/scripts/makefiles-no-cc.txt
+   A /trunk/strasheela/scripts/uninstall-all.bat
+   A /trunk/strasheela/scripts/upgrade-all.bat
+   A /trunk/strasheela/scripts/upgrade.bat
+
+Added install etc. scripts for windows
+
+------------------------------------------------------------------------
+r1810 | t-anders | 2009-03-27 23:03:10 +0000 (Fri, 27 Mar 2009) | 2 lines
+Changed paths:
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/doc/node11.html
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/doc/node12.html
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/doc/node13.html
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/doc/node14.html
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/doc/node15.html
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/doc/node16.html
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/doc/node3.html
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/doc/node4.html
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/doc/node6.html
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/doc/node8.html
+   M /trunk/strasheela/contributions/anders/IOzSeF/IOzSeF.oz
+   M /trunk/strasheela/contributions/anders/Pattern/Pattern.oz
+   M /trunk/strasheela/contributions/anders/Pattern/doc/node1.html
+   M /trunk/strasheela/contributions/anders/Pattern/testing/Pattern-test.oz
+   M /trunk/strasheela/contributions/anders/Segments/Segments.oz
+   M /trunk/strasheela/contributions/anders/Segments/doc/node1.html
+   M /trunk/strasheela/contributions/anders/Segments/doc/node3.html
+   M /trunk/strasheela/doc/Changes.html
+   M /trunk/strasheela/doc/Example-HarmonisedLindenmayerSystem.html
+   M /trunk/strasheela/doc/Example-Schoenberg-TheoryOfHarmony.html
+   M /trunk/strasheela/doc/OldNews.html
+   M /trunk/strasheela/doc/StrasheelaReference.html
+   M /trunk/strasheela/doc/api/class1.html
+   M /trunk/strasheela/doc/api/class10.html
+   M /trunk/strasheela/doc/api/class11.html
+   M /trunk/strasheela/doc/api/class12.html
+   M /trunk/strasheela/doc/api/class13.html
+   M /trunk/strasheela/doc/api/class14.html
+   M /trunk/strasheela/doc/api/class15.html
+   M /trunk/strasheela/doc/api/class16.html
+   M /trunk/strasheela/doc/api/class17.html
+   M /trunk/strasheela/doc/api/class18.html
+   M /trunk/strasheela/doc/api/class19.html
+   M /trunk/strasheela/doc/api/class2.html
+   M /trunk/strasheela/doc/api/class20.html
+   M /trunk/strasheela/doc/api/class21.html
+   M /trunk/strasheela/doc/api/class22.html
+   M /trunk/strasheela/doc/api/class23.html
+   M /trunk/strasheela/doc/api/class24.html
+   M /trunk/strasheela/doc/api/class25.html
+   M /trunk/strasheela/doc/api/class26.html
+   M /trunk/strasheela/doc/api/class27.html
+   M /trunk/strasheela/doc/api/class28.html
+   M /trunk/strasheela/doc/api/class29.html
+   M /trunk/strasheela/doc/api/class3.html
+   M /trunk/strasheela/doc/api/class30.html
+   M /trunk/strasheela/doc/api/class31.html
+   M /trunk/strasheela/doc/api/class4.html
+   M /trunk/strasheela/doc/api/class5.html
+   M /trunk/strasheela/doc/api/class6.html
+   M /trunk/strasheela/doc/api/class7.html
+   M /trunk/strasheela/doc/api/class8.html
+   M /trunk/strasheela/doc/api/class9.html
+   M /trunk/strasheela/doc/api/node11.html
+   M /trunk/strasheela/doc/api/node2.html
+   M /trunk/strasheela/doc/api/node3.html
+   M /trunk/strasheela/doc/api/node4.html
+   M /trunk/strasheela/doc/api/node5.html
+   M /trunk/strasheela/doc/api/node6.html
+   M /trunk/strasheela/doc/api/node7.html
+   M /trunk/strasheela/doc/api/node8.html
+   M /trunk/strasheela/doc/api/node9.html
+   M /trunk/strasheela/doc/index.html
+   M /trunk/strasheela/doc-source/Changes.muse
+   M /trunk/strasheela/doc-source/OldNews.muse
+   M /trunk/strasheela/doc-source/StrasheelaReference.muse
+   M /trunk/strasheela/doc-source/index.muse
+
+Updated doc
+
+------------------------------------------------------------------------
+r1809 | t-anders | 2009-03-27 23:00:47 +0000 (Fri, 27 Mar 2009) | 2 lines
+Changed paths:
+   M /trunk/strasheela/scripts/release-strasheela.sh
+
+Minor edit
+
+------------------------------------------------------------------------
+r1808 | t-anders | 2009-03-27 23:00:27 +0000 (Fri, 27 Mar 2009) | 2 lines
+Changed paths:
+   M /trunk/strasheela/examples/02-Fuxian-firstSpecies-Counterpoint.oz
+
+Commented out iozsef solver call
+
+------------------------------------------------------------------------
+r1807 | t-anders | 2009-03-27 14:11:04 +0000 (Fri, 27 Mar 2009) | 2 lines
+Changed paths:
+   M /trunk/strasheela/doc-source/Changes.muse
+
+Updated list of changes (added thanks)
+
+------------------------------------------------------------------------
+r1806 | t-anders | 2009-03-27 13:48:39 +0000 (Fri, 27 Mar 2009) | 2 lines
+Changed paths:
+   M /trunk/strasheela/doc-source/Changes.muse
+
+Updated list of changes
+
+------------------------------------------------------------------------
+r1805 | t-anders | 2009-03-27 13:48:22 +0000 (Fri, 27 Mar 2009) | 2 lines
+Changed paths:
+   M /trunk/strasheela/others/TODO/Strasheela-TODO.org_archive
+
+Updated todo list
+
+------------------------------------------------------------------------
+r1804 | t-anders | 2009-03-27 13:47:42 +0000 (Fri, 27 Mar 2009) | 2 lines
+Changed paths:
+   M /trunk/strasheela/examples/Harmony-Examples/Schoenberg-TheoryOfHarmony.oz
+
+Minor doc edit
+
+------------------------------------------------------------------------
+r1803 | t-anders | 2009-03-27 13:46:12 +0000 (Fri, 27 Mar 2009) | 2 lines
+Changed paths:
+   M /trunk/strasheela/source/Init.oz
+   M /trunk/strasheela/source/ScoreDistribution.oz
+
+Removed dependency to IOzSeF
+
+------------------------------------------------------------------------
+r1802 | t-anders | 2009-03-27 13:45:25 +0000 (Fri, 27 Mar 2009) | 2 lines
+Changed paths:
+   A /trunk/strasheela/contributions/anders/IOzSeF
+   A /trunk/strasheela/contributions/anders/IOzSeF/IOzSeF.oz
+   A /trunk/strasheela/contributions/anders/IOzSeF/makefile.oz
+
+Added functor IOzSeF
+
+------------------------------------------------------------------------
+r1801 | t-anders | 2009-03-25 17:07:14 +0000 (Wed, 25 Mar 2009) | 2 lines
+Changed paths:
+   M /trunk/strasheela/others/TODO/Strasheela-TODO.org
+
+Update todo list
+
+------------------------------------------------------------------------
+r1800 | t-anders | 2009-03-25 17:06:04 +0000 (Wed, 25 Mar 2009) | 2 lines
+Changed paths:
+   A /trunk/strasheela/scripts/install.bat
+
+Added first version of an install script for windows -- still incomplete
+
+------------------------------------------------------------------------
+r1799 | t-anders | 2009-03-25 17:05:21 +0000 (Wed, 25 Mar 2009) | 2 lines
+Changed paths:
+   M /trunk/strasheela/examples/Parallel-Search-moreExamples.oz
+
+Get first dummy parallel search example with objects running
+
+------------------------------------------------------------------------
+r1798 | t-anders | 2009-03-25 12:52:13 +0000 (Wed, 25 Mar 2009) | 2 lines
+Changed paths:
+   M /trunk/strasheela/others/TODO/Strasheela-Maybe-TODO.org
+   M /trunk/strasheela/others/TODO/Strasheela-Maybe-TODO.org_archive
+
+Updated todo list
+
+------------------------------------------------------------------------
+r1797 | t-anders | 2009-03-25 12:51:49 +0000 (Wed, 25 Mar 2009) | 2 lines
+Changed paths:
+   M /trunk/strasheela/doc-source/Example-Schoenberg-TheoryOfHarmony.muse
+
+Doc edit
+
+------------------------------------------------------------------------
+r1796 | t-anders | 2009-03-25 12:51:31 +0000 (Wed, 25 Mar 2009) | 2 lines
+Changed paths:
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/source/Score.oz
+
+Doc edit
+
+------------------------------------------------------------------------
+r1795 | t-anders | 2009-03-24 19:34:54 +0000 (Tue, 24 Mar 2009) | 2 lines
+Changed paths:
+   M /trunk/strasheela/doc-source/Changes.muse
+
+Updated list of changes
+
+------------------------------------------------------------------------
+r1794 | t-anders | 2009-03-24 19:34:37 +0000 (Tue, 24 Mar 2009) | 2 lines
+Changed paths:
+   M /trunk/strasheela/testing/ScoreCore-test.oz
+
+Added DefMixinSubscript test
+
+------------------------------------------------------------------------
+r1793 | t-anders | 2009-03-24 19:34:18 +0000 (Tue, 24 Mar 2009) | 2 lines
+Changed paths:
+   M /trunk/strasheela/source/ScoreCore.oz
+
+Added DefMixinSubscript
+
+------------------------------------------------------------------------
+r1792 | t-anders | 2009-03-24 18:00:42 +0000 (Tue, 24 Mar 2009) | 2 lines
+Changed paths:
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/source/Rules.oz
+
+Added GetRootPCIntervals
+
+------------------------------------------------------------------------
+r1791 | t-anders | 2009-03-24 17:38:05 +0000 (Tue, 24 Mar 2009) | 2 lines
+Changed paths:
+   M /trunk/strasheela/others/TODO/Strasheela-Maybe-TODO.org
+
+Updated todo list
+
+------------------------------------------------------------------------
+r1790 | t-anders | 2009-03-24 17:37:44 +0000 (Tue, 24 Mar 2009) | 2 lines
+Changed paths:
+   M /trunk/strasheela/doc-source/Changes.muse
+
+Updated list of changes
+
+------------------------------------------------------------------------
+r1789 | t-anders | 2009-03-24 17:37:26 +0000 (Tue, 24 Mar 2009) | 2 lines
+Changed paths:
+   M /trunk/strasheela/examples/Harmony-Examples/Schoenberg-TheoryOfHarmony.oz
+
+Minor change
+
+------------------------------------------------------------------------
+r1788 | t-anders | 2009-03-24 17:37:06 +0000 (Tue, 24 Mar 2009) | 2 lines
+Changed paths:
+   M /trunk/strasheela/testing/ScoreMapping-test.oz
+
+Edited tests for SMapping.mapSimultaneousPairs, added SMapping.forSimultaneousPairs test
+
+------------------------------------------------------------------------
+r1787 | t-anders | 2009-03-24 17:36:18 +0000 (Tue, 24 Mar 2009) | 2 lines
+Changed paths:
+   M /trunk/strasheela/source/ScoreMapping.oz
+
+doc edit
+
+------------------------------------------------------------------------
+r1786 | t-anders | 2009-03-24 17:35:43 +0000 (Tue, 24 Mar 2009) | 2 lines
+Changed paths:
+   M /trunk/strasheela/source/Output.oz
+
+ToLilypond2, arg hasBreak: no \break inserted after last container matching hasBreak
+
+------------------------------------------------------------------------
+r1785 | t-anders | 2009-03-24 17:33:10 +0000 (Tue, 24 Mar 2009) | 2 lines
+Changed paths:
+   M /trunk/strasheela/source/ScoreCore.oz
+
+method getSimultaneousItems: now made sure arg test is only applied to items
+
+------------------------------------------------------------------------
+r1784 | t-anders | 2009-03-23 15:17:14 +0000 (Mon, 23 Mar 2009) | 2 lines
+Changed paths:
+   M /trunk/strasheela/examples/Harmony-Examples/HarmonicProgressions-22ET.oz
+
+Minor edits
+
+------------------------------------------------------------------------
+r1783 | t-anders | 2009-03-23 15:16:37 +0000 (Mon, 23 Mar 2009) | 2 lines
+Changed paths:
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/source/Schoenberg.oz
+
+Minor doc edit
+
+------------------------------------------------------------------------
+r1782 | t-anders | 2009-03-23 15:16:03 +0000 (Mon, 23 Mar 2009) | 2 lines
+Changed paths:
+   M /trunk/strasheela/contributions/anders/ET22/ET22.oz
+
+Added more enharmonic notations
+
+------------------------------------------------------------------------
+r1781 | t-anders | 2009-03-23 15:15:21 +0000 (Mon, 23 Mar 2009) | 2 lines
+Changed paths:
+   M /trunk/strasheela/others/TODO/Strasheela-TODO.org
+   M /trunk/strasheela/others/TODO/Strasheela-TODO.org_archive
+
+Update todo list
+
+------------------------------------------------------------------------
+r1780 | t-anders | 2009-03-19 22:42:06 +0000 (Thu, 19 Mar 2009) | 2 lines
+Changed paths:
+   A /trunk/strasheela/doc/sound/harmony-ex01.ly
+
+Added file again (could not otherwise update anymore)
+
+------------------------------------------------------------------------
+r1779 | t-anders | 2009-03-19 22:40:32 +0000 (Thu, 19 Mar 2009) | 2 lines
+Changed paths:
+   D /trunk/strasheela/doc/sound/harmony-ex01.ly
+
+Temp remove file (could not update anymore)
+
+------------------------------------------------------------------------
+r1778 | t-anders | 2009-03-19 22:33:50 +0000 (Thu, 19 Mar 2009) | 2 lines
+Changed paths:
+   M /trunk/strasheela/doc/Changes.html
+   M /trunk/strasheela/doc-source/Changes.muse
+
+Updated list of changes
+
+------------------------------------------------------------------------
+r1777 | t-anders | 2009-03-19 22:33:14 +0000 (Thu, 19 Mar 2009) | 2 lines
+Changed paths:
+   A /trunk/strasheela/scripts/count-lines-of-code.sh
+   A /trunk/strasheela/scripts/langdefs
+
+Added little script to count lines of code
+
+------------------------------------------------------------------------
+r1776 | t-anders | 2009-03-19 22:30:06 +0000 (Thu, 19 Mar 2009) | 2 lines
+Changed paths:
+   M /trunk/strasheela/contributions/anders/ET22/doc/node3.html
+   M /trunk/strasheela/contributions/anders/ET22/doc/node4.html
+   M /trunk/strasheela/contributions/anders/ET22/doc/node5.html
+   M /trunk/strasheela/contributions/anders/ET22/doc/node6.html
+   M /trunk/strasheela/contributions/anders/ET31/doc/node1.html
+   M /trunk/strasheela/contributions/anders/ET31/doc/node6.html
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/doc/class1.html
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/doc/class10.html
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/doc/class11.html
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/doc/class12.html
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/doc/class13.html
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/doc/class14.html
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/doc/class15.html
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/doc/class16.html
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/doc/class17.html
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/doc/class18.html
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/doc/class19.html
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/doc/class2.html
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/doc/class20.html
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/doc/class21.html
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/doc/class22.html
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/doc/class23.html
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/doc/class24.html
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/doc/class25.html
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/doc/class3.html
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/doc/class4.html
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/doc/class5.html
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/doc/class6.html
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/doc/class7.html
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/doc/class8.html
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/doc/class9.html
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/doc/index.html
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/doc/node1.html
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/doc/node10.html
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/doc/node11.html
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/doc/node12.html
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/doc/node13.html
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/doc/node14.html
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/doc/node15.html
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/doc/node16.html
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/doc/node2.html
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/doc/node3.html
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/doc/node4.html
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/doc/node5.html
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/doc/node6.html
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/doc/node7.html
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/doc/node8.html
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/doc/node9.html
+   M /trunk/strasheela/contributions/anders/Pattern/doc/node1.html
+   M /trunk/strasheela/doc/api/class1.html
+   M /trunk/strasheela/doc/api/class10.html
+   M /trunk/strasheela/doc/api/class11.html
+   M /trunk/strasheela/doc/api/class12.html
+   M /trunk/strasheela/doc/api/class13.html
+   M /trunk/strasheela/doc/api/class14.html
+   M /trunk/strasheela/doc/api/class15.html
+   M /trunk/strasheela/doc/api/class16.html
+   M /trunk/strasheela/doc/api/class17.html
+   M /trunk/strasheela/doc/api/class18.html
+   M /trunk/strasheela/doc/api/class19.html
+   M /trunk/strasheela/doc/api/class2.html
+   M /trunk/strasheela/doc/api/class20.html
+   M /trunk/strasheela/doc/api/class21.html
+   M /trunk/strasheela/doc/api/class22.html
+   M /trunk/strasheela/doc/api/class23.html
+   M /trunk/strasheela/doc/api/class24.html
+   M /trunk/strasheela/doc/api/class25.html
+   M /trunk/strasheela/doc/api/class26.html
+   M /trunk/strasheela/doc/api/class27.html
+   M /trunk/strasheela/doc/api/class28.html
+   M /trunk/strasheela/doc/api/class29.html
+   M /trunk/strasheela/doc/api/class3.html
+   M /trunk/strasheela/doc/api/class30.html
+   M /trunk/strasheela/doc/api/class31.html
+   M /trunk/strasheela/doc/api/class4.html
+   M /trunk/strasheela/doc/api/class5.html
+   M /trunk/strasheela/doc/api/class6.html
+   M /trunk/strasheela/doc/api/class7.html
+   M /trunk/strasheela/doc/api/class8.html
+   M /trunk/strasheela/doc/api/class9.html
+   M /trunk/strasheela/doc/api/node11.html
+   M /trunk/strasheela/doc/api/node3.html
+   M /trunk/strasheela/doc/api/node4.html
+   M /trunk/strasheela/doc/api/node5.html
+   M /trunk/strasheela/doc/api/node6.html
+   M /trunk/strasheela/doc/api/node7.html
+   M /trunk/strasheela/doc/api/node8.html
+   M /trunk/strasheela/doc/api/node9.html
+
+Updated reference doc
+
+------------------------------------------------------------------------
+r1775 | t-anders | 2009-03-19 22:22:42 +0000 (Thu, 19 Mar 2009) | 2 lines
+Changed paths:
+   A /trunk/strasheela/contributions/anders/Segments
+   A /trunk/strasheela/contributions/anders/Segments/Segments.oz
+   A /trunk/strasheela/contributions/anders/Segments/doc
+   A /trunk/strasheela/contributions/anders/Segments/doc/index.html
+   A /trunk/strasheela/contributions/anders/Segments/doc/menu.gif
+   A /trunk/strasheela/contributions/anders/Segments/doc/node1.html
+   A /trunk/strasheela/contributions/anders/Segments/doc/node2.html
+   A /trunk/strasheela/contributions/anders/Segments/doc/node3.html
+   A /trunk/strasheela/contributions/anders/Segments/doc/ozdoc.css
+   A /trunk/strasheela/contributions/anders/Segments/doc/page.gif
+   A /trunk/strasheela/contributions/anders/Segments/makefile.oz
+   A /trunk/strasheela/contributions/anders/Segments/source
+   A /trunk/strasheela/contributions/anders/Segments/source/HomophonicChordProgression.oz
+   A /trunk/strasheela/contributions/anders/Segments/testing
+   A /trunk/strasheela/contributions/anders/Segments/testing/Segments-test.oz
+
+Added functor Segments
+
+------------------------------------------------------------------------
+r1774 | t-anders | 2009-03-19 22:02:54 +0000 (Thu, 19 Mar 2009) | 2 lines
+Changed paths:
+   M /trunk/strasheela/others/TODO/Strasheela-Maybe-TODO.org
+
+Updated todo list
+
+------------------------------------------------------------------------
+r1773 | t-anders | 2009-03-19 22:02:21 +0000 (Thu, 19 Mar 2009) | 2 lines
+Changed paths:
+   M /trunk/strasheela/examples/Harmony-Examples/HarmonicProgressions-22ET.oz
+
+Added adaptive JI output, added four-voice setting of examples (using new Segs.homophonicChordProgression)
+
+------------------------------------------------------------------------
+r1772 | t-anders | 2009-03-19 21:59:23 +0000 (Thu, 19 Mar 2009) | 2 lines
+Changed paths:
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/source/Schoenberg.oz
+
+Added AscendingProgression2R
+
+------------------------------------------------------------------------
+r1771 | t-anders | 2009-03-19 21:58:25 +0000 (Thu, 19 Mar 2009) | 2 lines
+Changed paths:
+   M /trunk/strasheela/doc/Example-AllIntervalSeries.html
+   M /trunk/strasheela/doc/Example-FloridCounterpoint.html
+   M /trunk/strasheela/doc/Example-FuxianFirstSpeciesCounterpoint.html
+   M /trunk/strasheela/doc/Example-MicrotonalChordProgression.html
+   M /trunk/strasheela/doc/Example-Schoenberg-TheoryOfHarmony.html
+   M /trunk/strasheela/doc-source/Example-AllIntervalSeries.muse
+   M /trunk/strasheela/doc-source/Example-FloridCounterpoint.muse
+   M /trunk/strasheela/doc-source/Example-FuxianFirstSpeciesCounterpoint.muse
+   M /trunk/strasheela/doc-source/Example-HarmonisedLindenmayerSystem.muse
+   M /trunk/strasheela/doc-source/Example-MicrotonalChordProgression.muse
+   M /trunk/strasheela/doc-source/Example-Schoenberg-TheoryOfHarmony.muse
+
+Added remark to score figures that there are mp3s
+
+------------------------------------------------------------------------
+r1770 | t-anders | 2009-03-15 23:11:05 +0000 (Sun, 15 Mar 2009) | 2 lines
+Changed paths:
+   M /trunk/strasheela/examples/Harmony-Examples/Schoenberg-TheoryOfHarmony.oz
+
+Moved some constraint defs to HS.rules: RestrictPitchDomain, GetInterval, IsPerfectConsonanceR, use HS.score.ratioToInterval
+
+------------------------------------------------------------------------
+r1769 | t-anders | 2009-03-15 23:05:27 +0000 (Sun, 15 Mar 2009) | 2 lines
+Changed paths:
+   M /trunk/strasheela/contributions/anders/ET22/source/Output.oz
+
+Exported MakeChordComment, MakeChordRatios, MakeScaleComment. Added RenderAndShowLilypond args chordDescription and scaleDescription. Internally added MakeChordRatios (copied from ET31)
+
+------------------------------------------------------------------------
+r1768 | t-anders | 2009-03-15 23:03:41 +0000 (Sun, 15 Mar 2009) | 2 lines
+Changed paths:
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/source/Rules.oz
+
+Added NoParallels NoParallel MakeIntervalConstraint PerfectConsonances IsPerfectConsonanceR Limit3Consonances IsLimit3ConsonanceR Limit3Intervals_2 IsLimit3IntervalR_2 Limit5Consonances IsLimit5ConsonanceR IsLimit_3_5_ConsonanceR IsLimit7ConsonanceR IsLimit_3_5_7_ConsonanceR
+
+------------------------------------------------------------------------
+r1767 | t-anders | 2009-03-15 23:01:25 +0000 (Sun, 15 Mar 2009) | 2 lines
+Changed paths:
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/source/Schoenberg.oz
+
+Minor code restructoring (added newline)
+
+------------------------------------------------------------------------
+r1766 | t-anders | 2009-03-15 23:00:43 +0000 (Sun, 15 Mar 2009) | 2 lines
+Changed paths:
+   M /trunk/strasheela/examples/02-Fuxian-firstSpecies-Counterpoint.oz
+
+Added small variant (compute both voices)
+
+------------------------------------------------------------------------
+r1765 | t-anders | 2009-03-11 11:27:09 +0000 (Wed, 11 Mar 2009) | 2 lines
+Changed paths:
+   M /trunk/strasheela/doc/index.html
+
+Now SF logo inserted
+
+------------------------------------------------------------------------
+r1764 | t-anders | 2009-03-11 11:26:42 +0000 (Wed, 11 Mar 2009) | 2 lines
+Changed paths:
+   M /trunk/strasheela/doc-source/Changes.muse
+
+Updated list of changes
+
+------------------------------------------------------------------------
+r1763 | t-anders | 2009-03-11 11:26:25 +0000 (Wed, 11 Mar 2009) | 2 lines
+Changed paths:
+   M /trunk/strasheela/others/TODO/Strasheela-TODO.org
+
+Updated todo list
+
+------------------------------------------------------------------------
+r1762 | t-anders | 2009-03-11 11:25:28 +0000 (Wed, 11 Mar 2009) | 2 lines
+Changed paths:
+   M /trunk/strasheela/examples/Harmony-Examples/HarmonicProgressions-22ET.oz
+
+Minor change (name of explorer action)
+
+------------------------------------------------------------------------
+r1761 | t-anders | 2009-03-11 11:24:56 +0000 (Wed, 11 Mar 2009) | 2 lines
+Changed paths:
+   M /trunk/strasheela/contributions/anders/Pattern/testing/Pattern-test.oz
+
+Tested pattern constraints: Hook Stairs Intervals AbsIntervals
+
+------------------------------------------------------------------------
+r1760 | t-anders | 2009-03-11 11:23:49 +0000 (Wed, 11 Mar 2009) | 2 lines
+Changed paths:
+   M /trunk/strasheela/contributions/anders/Pattern/Pattern.oz
+
+Added Intervals AbsIntervals RestrictMaxInterval Hook Stairs
+
+------------------------------------------------------------------------
+r1759 | t-anders | 2009-03-11 11:22:09 +0000 (Wed, 11 Mar 2009) | 2 lines
+Changed paths:
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/source/Rules.oz
+
+HS.rules: added RestrictPitchDomain, OnlyOrnamentalDissonance_Durations
+
+------------------------------------------------------------------------
+r1758 | t-anders | 2009-03-11 11:20:28 +0000 (Wed, 11 Mar 2009) | 2 lines
+Changed paths:
+   M /trunk/strasheela/contributions/anders/ET31/ET31.oz
+
+Minor doc edit
+
+------------------------------------------------------------------------
+r1757 | t-anders | 2009-03-11 11:19:46 +0000 (Wed, 11 Mar 2009) | 2 lines
+Changed paths:
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/HarmonisedScore.oz
+
+Added HS.acc HS.pc HS.pcName HS.pitch
+
+------------------------------------------------------------------------
+r1756 | t-anders | 2009-03-11 11:18:39 +0000 (Wed, 11 Mar 2009) | 2 lines
+Changed paths:
+   M /trunk/strasheela/contributions/anders/HarmonisedScore/source/Score.oz
+
+Added HarmonicRythmFollowsMarkers
+
+------------------------------------------------------------------------
+r1755 | t-anders | 2009-03-11 11:16:55 +0000 (Wed, 11 Mar 2009) | 2 lines
+Changed paths:
+   M /trunk/strasheela/source/MusicUtils.oz
+
+Minor doc edit
+
+------------------------------------------------------------------------
+r1754 | t-anders | 2009-03-09 19:11:27 +0000 (Mon, 09 Mar 2009) | 2 lines
+Changed paths:
+   A /trunk/strasheela/examples/Parallel-Search-moreExamples.oz
+
+Added Parallel-Search-moreExamples.oz
+
+------------------------------------------------------------------------
+r1753 | t-anders | 2009-03-09 18:24:37 +0000 (Mon, 09 Mar 2009) | 2 lines
+Changed paths:
+   M /trunk/strasheela/doc/Changes.html
+   M /trunk/strasheela/doc-source/Changes.muse
+
+Updated list of changes
+
+------------------------------------------------------------------------
+r1752 | t-anders | 2009-03-09 18:24:14 +0000 (Mon, 09 Mar 2009) | 2 lines
+Changed paths:
+   M /trunk/strasheela/doc/Example-Schoenberg-TheoryOfHarmony.html
+   M /trunk/strasheela/doc-source/Example-Schoenberg-TheoryOfHarmony.muse
+
+Announced parallel fifths in examples..
+
+------------------------------------------------------------------------
+r1751 | t-anders | 2009-03-09 18:20:43 +0000 (Mon, 09 Mar 2009) | 2 lines
+Changed paths:
+   M /trunk/strasheela/examples/Harmony-Examples/Schoenberg-TheoryOfHarmony.oz
+
+No parallel fifths/octaves: now fixed
+
+------------------------------------------------------------------------
+r1750 | t-anders | 2009-03-09 17:58:59 +0000 (Mon, 09 Mar 2009) | 2 lines
+Changed paths:
+   M /trunk/strasheela/doc-source/Changes.muse
+
+Updated list of changes
+
+------------------------------------------------------------------------
+r1749 | t-anders | 2009-03-09 17:52:53 +0000 (Mon, 09 Mar 2009) | 2 lines
+Changed paths:
+   M /trunk/strasheela/examples/Harmony-Examples/Schoenberg-TheoryOfHarmony.oz
+
+Tried fixing IsPerfectConsonanceR for intervals of PCs instead of pitches (but still does parallel fifths and octaves)
+
+------------------------------------------------------------------------
+r1748 | t-anders | 2009-03-09 17:51:23 +0000 (Mon, 09 Mar 2009) | 2 lines
+Changed paths:
+   M /trunk/strasheela/contributions/anders/ET22/source/Output.oz
+   M /trunk/strasheela/contributions/anders/ET31/source/Output.oz
+
+NoteEt31ToLily_AdaptiveJI / NoteEt22ToLily_AdaptiveJI: cent accuracy only 1 figure after floating point
+
+------------------------------------------------------------------------
+r1747 | t-anders | 2009-03-09 17:50:06 +0000 (Mon, 09 Mar 2009) | 2 lines
+Changed paths:
+   M /trunk/strasheela/testing/GeneralUtils-test.oz
+
+Tested RoundDigits
+
+------------------------------------------------------------------------
+r1746 | t-anders | 2009-03-09 17:49:48 +0000 (Mon, 09 Mar 2009) | 2 lines
+Changed paths:
+   M /trunk/strasheela/source/GeneralUtils.oz
+
+Added RoundDigits
+
+------------------------------------------------------------------------
+r1745 | t-anders | 2009-03-09 11:30:08 +0000 (Mon, 09 Mar 2009) | 2 lines
+Changed paths:
+   M /trunk/strasheela/doc/StrasheelaExamples.html
+   M /trunk/strasheela/doc-source/StrasheelaExamples.muse
+
+Updated examples list
+
+------------------------------------------------------------------------
+r1743 | t-anders | 2009-03-08 23:57:50 +0000 (Sun, 08 Mar 2009) | 2 lines
+Changed paths:
+   M /trunk/strasheela/scripts/release-strasheela.sh
+
+Minor edit of release script
+
+------------------------------------------------------------------------
+r1742 | t-anders | 2009-03-08 23:57:29 +0000 (Sun, 08 Mar 2009) | 2 lines
+Changed paths:
+   M /trunk/strasheela/CHANGELOG.txt
+
+Updated changelog
+
+------------------------------------------------------------------------
 r1741 | t-anders | 2009-03-08 23:50:57 +0000 (Sun, 08 Mar 2009) | 2 lines
 Changed paths:
    M /trunk/strasheela/doc/Changes.html
