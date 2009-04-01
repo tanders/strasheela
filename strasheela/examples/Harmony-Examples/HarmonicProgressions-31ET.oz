@@ -39,6 +39,11 @@ declare
 
 % {Init.setTempo 60.0}
 
+/*
+
+{HS.db.getEditIntervalDB}
+
+*/
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%
