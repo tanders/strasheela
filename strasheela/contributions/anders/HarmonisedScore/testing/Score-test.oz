@@ -1518,7 +1518,7 @@ MyScore = {Score.make sim([note(handle: MyNote
 %% - PC 4 is ratio 35#1 at chord degree 4 (instead of wrong degree 1)
 %% - PC 10 is ratio 5#1 at degree 1 (instead of wrong degree 2)
 %%
-%% OK :there should be no "root correction" 
+%% OK: there should be no "root correction" 
 %% 
 declare
 MyNote
@@ -1696,7 +1696,6 @@ MyScore = {Score.make sim([note(handle: MyNote
 
 
 %%%%%%%%%%%%%%%%%%%%%%
-
 %%
 %% 22 ET
 %%
@@ -1727,6 +1726,42 @@ MyScore = {Score.make sim([note(handle: MyNote
 {Browse ji#{HS.score.getAdaptiveJIPitch MyNote unit}}
 %% compare
 {Browse et#{MyNote getPitchInMidi($)}}
+
+
+
+%% 
+declare
+MyNote
+MyChord
+MyScore = {Score.make sim([note(handle: MyNote
+				duration:4
+				pitchClass: {ET22.pc 'Bb'}
+				octave: 4)
+			   chord(handle:MyChord
+				 duration:4
+ 				 index: {HS.db.getChordIndex 'subharmonic 6th'}
+				 root: {ET22.pc 'Bb'}
+				)
+			  ]
+			  startTime: 0
+			  timeUnit: beats(4))
+	   add(note:HS.score.note
+	       chord:HS.score.chord
+	       scale:HS.score.scale)}
+{Browse ji#{HS.score.getAdaptiveJIPitch MyNote unit}}
+%% compare
+{Browse et#{MyNote getPitchInMidi($)}}
+
+{MyChord toInitRecord($)}
+{HS.db.getUntransposedRatios MyChord}
+{HS.db.getUntransposedRootRatio MyChord}
+
+%% adaptive JI interval 0 for transposition PC instead of for root PC
+
+{MUtils.transposeRatioIntoStandardOctave
+ {GUtils.ratioToFloat 6#1}}
+
+
 
 
 
