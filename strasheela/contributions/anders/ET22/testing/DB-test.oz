@@ -6,6 +6,12 @@ declare
 
 /*
 
+{HS.db.getEditIntervalDB}
+
+*/
+
+/*
+
 %% traverse all scales in database, create a score whose notes express it and output Lilypond + Csound
 
 declare
