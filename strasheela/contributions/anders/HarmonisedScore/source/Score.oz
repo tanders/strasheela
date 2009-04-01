@@ -558,7 +558,9 @@ define
       UntransposedRoot_Float = {MUtils.transposeRatioIntoStandardOctave
 				{GUtils.ratioToFloat
 				 {DB.getUntransposedRootRatio MyChord}.1}}
+      %% some BUG: here 
       OctaveOffset = if {MyNote getPitchClass($)} < {MyChord getTransposition($)}
+			andthen {MyChord getRoot($)} > {MyChord getTransposition($)}
 		     then 0
 		     else 1 end
       %% MyNote's octave as frequency ratio float
