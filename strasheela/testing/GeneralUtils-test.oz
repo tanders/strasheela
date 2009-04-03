@@ -239,3 +239,8 @@ Y = 2
       lilyKey: "my test")
  unit(iargs: unit(n:9)
       rargs: unit(scale: aMinor))}
+
+{GUtils.recursiveAdjoin unit(bla:test)
+ unit(duration: {FD.int 1#2})}
+
+
