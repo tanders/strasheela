@@ -19,7 +19,7 @@
 
 %% TODO:
 %%
-%% - MakeCounterpoint_PatternMotifs and friends are broken (block)
+%% OK - MakeCounterpoint_PatternMotifs and friends are broken (block)
 %%
 %% - MakeCounterpoint: add optional constraint: non-harmonic tone follows and is followed by note at least as long as the non-harmonic tone
 %%
@@ -204,8 +204,6 @@ define
    %% NOTE: Arg.iargs.constructor must stay its default value, the note constructor must not be overwritten (the default constructor implicitly adds motif index parameters to the notes).
    %% Also, this constructor defines uncommon default values for the notes' parameters offsetTime (usual default is 0, new default is undetermined variable) and inChordB (usual default is 0, new default is 0/1 variable).
    %%
-   %%
-   %% BUG: blocks
    %% */
    %% Idea of making Arg.iargs.constructor an argument again: create constructor on the fly with Pattern.makeIndexConstructor. However, this cannot be done with Score.defSubscript or Score.makeItems, as I cannot process the constructor argument before it is used. So, I would have to define MakeCounterpoint_PatternMotifs from scratch, or change def of Score.makeItems to allow for processing of constructor arg (the latter is not a good idea, I may then later need to process the processed arg etc). 
    %%
