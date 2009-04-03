@@ -240,7 +240,6 @@ F = IntToFloat
 
 /*
 
-%% BUG: blocks
 declare
 Ns = {Segs.makeCounterpoint_PatternMotifs
       unit(iargs:unit(n:8)
