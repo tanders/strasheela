@@ -598,7 +598,7 @@ define
 	 if {FD.is X} then X = Y 
 	 elseif X == '_' then skip
 	 elseif {IsList X} then {UnifyLists X Y}
-	 elseif {IsRecord X} andthen {Not {IsAtom X}} then {UnifyRecord X Y}
+	 elseif {GUtils.isRecord X} andthen {Not {GUtils.isAtom X}} then {UnifyRecord X Y}
 	 else {Exception.raiseError
 	       strasheela(failedRequirement X "must be an FD int, '_', a list or a record")}
 	 end

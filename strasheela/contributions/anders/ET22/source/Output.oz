@@ -362,7 +362,7 @@ define
       ScaleComment = {HS.db.getInternalScaleDB}.comment.{MyScale getIndex($)}
    in
       Result = '#'('\\column {'
-		   if {IsRecord ScaleComment} andthen {HasFeature ScaleComment comment}
+		   if {GUtils.isRecord ScaleComment} andthen {HasFeature ScaleComment comment}
 		   then ScaleComment.comment
 		   else ScaleComment
 		   end

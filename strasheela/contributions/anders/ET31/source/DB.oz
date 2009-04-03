@@ -44,7 +44,7 @@
 functor 
    
 import
-%    GUtils at 'x-ozlib://anders/strasheela/source/GeneralUtils.ozf'
+   GUtils at 'x-ozlib://anders/strasheela/source/GeneralUtils.ozf'
 %    MUtils at 'x-ozlib://anders/strasheela/source/MusicUtils.ozf'
    Pattern at 'x-ozlib://anders/strasheela/Pattern/Pattern.ozf'
    HS at 'x-ozlib://anders/strasheela/HarmonisedScore/HarmonisedScore.ozf'
@@ -1042,7 +1042,7 @@ define
       /** %% Only transform atoms (e.g. 'C#'), but leave integers (PCs) and records (ratios, e.g., 1#1) untouched.
       %% */
       fun {Transform MyPitch}
-	 if {IsAtom MyPitch} then {ET31.pc MyPitch} else MyPitch end
+	 if {GUtils.isAtom MyPitch} then {ET31.pc MyPitch} else MyPitch end
       end
    in
       /** %% [Aux def] Expects a chord or scale declaration, and in case it contains symbolic notes names, these are replaced by their corresponding 31 ET pitch class.  

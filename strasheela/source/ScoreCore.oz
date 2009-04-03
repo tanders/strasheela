@@ -349,7 +349,7 @@ define
       meth hasThisInfo(?B Info)
 	 B = ({List.some {self getInfo($)}
 	       fun {$ X}
-		  if {IsRecord X}
+		  if {GUtils.isRecord X}
 		  then {Label X} == Info
 		  else X == Info
 		  end
@@ -359,7 +359,7 @@ define
       %% */
       meth getInfoRecord($ L)
 	 {LUtils.find {self getInfo($)}
-	  fun {$ X} {IsRecord X} andthen {Label X} == L end}
+	  fun {$ X} {GUtils.isRecord X} andthen {Label X} == L end}
       end
 
       
@@ -466,7 +466,7 @@ define
 % % 	    then  {VirtualString.toString
 % % 		   '['#{Out.listToVS {Map Val Transform} ' '}#']'}
 % % 	       %% I skip record->VS: this (as the list transformation) is only conmetically, e.g., to avoid textual representation of strings as lists of integers (which is semantically the same) 
-% % 	    elseif {IsRecord Val}
+% % 	    elseif {GUtils.isRecord Val}
 % % 	    then {VirtualString.toString
 % % 		  {Out.recordToVS {Record.map Val Transform}}}
 % % 	       %%
@@ -661,10 +661,10 @@ define
 			  in {IsScoreObject X} andthen
 			     {X isItem($)}
 			  end)
-			 orelse {IsRecord Val}
+			 orelse {GUtils.isRecord Val}
 		      end}}
 		fun {$ Feat#Val}
-		   if {IsRecord Val}
+		   if {GUtils.isRecord Val}
 		   then {Aux Val InitPath#Feat#"."}
 		   else
 		      %% Val is item class
@@ -2655,7 +2655,7 @@ define
 % 	 then
 % 	 elseif {IsDirectionary}
 % 	 then
-	 elseif {IsRecord R}
+	 elseif {GUtils.isRecord R}
 	 then {Record.map R CopyVars}
 	 else R
 	 end

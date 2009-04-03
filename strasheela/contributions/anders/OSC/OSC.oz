@@ -59,6 +59,7 @@ functor
 import
    System OS Open
 %    Browser(browse:Browse)
+   GUtils at 'x-ozlib://anders/strasheela/source/GeneralUtils.ozf'
    LUtils at 'x-ozlib://anders/strasheela/source/ListUtils.ozf'
    Init at 'x-ozlib://anders/strasheela/source/Init.ozf'
    Out at 'x-ozlib://anders/strasheela/source/Output.ozf'
@@ -135,12 +136,12 @@ define
 		    ?VS = "[ "#"\n"#{Out.listToVS {Map Packet Aux} "\n"}#"\n]"
 		 end
 	       %% is message
-	    elseif {IsRecord Packet}
+	    elseif {GUtils.isRecord Packet}
 	    then Address = {Label Packet} in	       
 	       ?VS = {Out.listToVS Address|{Map {Record.toList Packet}
 					    %% surround strings by quotes in case of whitespaces
 					    fun {$ Arg}
-					       if {IsString Arg} orelse {IsAtom Arg}
+					       if {IsString Arg} orelse {GUtils.isAtom Arg}
 					       then "\""#Arg#"\""
 					       else Arg
 					       end
@@ -326,7 +327,7 @@ define
 	       {@bundleResponder TT | Packets}
 	       {ForAll Packets proc {$ X} {Aux X TT} end}
 	       %% is message
-	    [] Msg andthen {IsRecord Msg} then
+	    [] Msg andthen {GUtils.isRecord Msg} then
 	       Address = {Label Msg}
 	       Procs = {Dictionary.condGet self.responders Address nil}
 	    in if Procs \= nil

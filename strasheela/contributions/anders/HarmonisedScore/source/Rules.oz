@@ -495,7 +495,7 @@ define
       Default = unit(consonantChords:['major' 'minor'])
       As = {Adjoin Args Default}
       %% consonantChords can be atoms of chord names or indices
-      ConsonantChordIndices = if {All As.consonantChords IsAtom}
+      ConsonantChordIndices = if {All As.consonantChords GUtils.isAtom}
 			      then {Map As.consonantChords DB.getChordIndex}
 			      elseif {All As.consonantChords IsInt}
 			      then As.consonantChords

@@ -528,7 +528,7 @@ define
       in
 	 if {HasFeature MyDBEntry_Sorted comment}
 	 then
-	    if {IsRecord MyDBEntry_Sorted.comment} andthen {Width MyDBEntry_Sorted.comment} > 0
+	    if {GUtils.isRecord MyDBEntry_Sorted.comment} andthen {Width MyDBEntry_Sorted.comment} > 0
 	    then {Record.forAllInd MyDBEntry_Sorted.comment
 		  proc {$ Feat X}
 		     Comment ^ Feat = X
@@ -630,7 +630,7 @@ define
        fun {$ X}
 	  Aux = X.comment.interval
        in
-	  if {IsRecord Aux} andthen {HasFeature Aux ratio} then
+	  if {GUtils.isRecord Aux} andthen {HasFeature Aux ratio} then
 	     [Aux.ratio]
 	  else nil
 	  end
@@ -660,7 +660,7 @@ define
    %% */
    fun {GetName X}
       Comment = {GetComment X}
-      NameAux = if {IsRecord Comment} then
+      NameAux = if {GUtils.isRecord Comment} then
 		   if {HasFeature Comment comment} andthen {IsVirtualString Comment.comment}
 		   then Comment.comment
 		   elseif {HasFeature Comment name}
@@ -676,7 +676,7 @@ define
       fun {GetRatios_aux PC_Specs}
 	 {LUtils.mappend PC_Specs
 	  fun {$ PC_Spec}
-	     if {IsRecord PC_Spec} andthen {HasFeature PC_Spec ratio}
+	     if {GUtils.isRecord PC_Spec} andthen {HasFeature PC_Spec ratio}
 	     then [PC_Spec.ratio]
 	     else nil
 	     end

@@ -179,11 +179,11 @@ define
 	    %% Strings should always be surrounded by double quotes, and all escape sequences should be preseved when printed
 	    %% same for atoms and virtual strings..
 	    if {IsString X} then "\""#{PreserveEscapes X}#"\""
-	    elseif {IsAtom X} then "'"#{PreserveEscapes {AtomToString X}}#"'"
+	    elseif {GUtils.isAtom X} then "'"#{PreserveEscapes {AtomToString X}}#"'"
 	    elseif {IsNumber X} then X
 	       %% Note: bytestrings would result in error..
 	    elseif {IsVirtualString X} then {Record.map X RecordToVS}
-	    elseif {IsRecord X} andthen {Arity X} \= nil
+	    elseif {GUtils.isRecord X} andthen {Arity X} \= nil
 	    then L = {Label X}
 	    in
 	       case L
@@ -226,7 +226,7 @@ define
    fun {RecordToVS_simple X}
       if {IsDet X} then
 	 if {IsVirtualString X} then X
-	 elseif {IsRecord X} andthen {Arity X} \= nil
+	 elseif {GUtils.isRecord X} andthen {Arity X} \= nil
 	 then L = {Label X}
 	 in
 	    case L
@@ -1576,18 +1576,18 @@ define
    %% */
    fun {RecordToLispKeywordList X}
       %% an atom is also a record, but handled special here
-      if {IsAtom X}		
+      if {GUtils.isAtom X}		
       then X
 	 %% a list is also a record, but handled special here
       elseif {IsList X}
       then {LispList {Map X RecordToLispKeywordList}}
-      elseif {IsRecord X}
+      elseif {GUtils.isRecord X}
       then {LispList
 	    {Map {Record.toListInd X}
 	     fun {$ Feat#Val}
 % 		ValVS = if {IsList Val}
 % 			then {LispList {Map Val RecordToLispKeywordList}}
-% 			elseif {IsRecord Val}
+% 			elseif {GUtils.isRecord Val}
 % 			then {RecordToLispKeywordList Val}
 % 			else Val
 % 			end
@@ -1717,7 +1717,7 @@ define
       in	 
 	 if {IsBool X} then {Bool2LispBool X}    
 	 elseif {IsUnit X} then 'unit'
-	 elseif {IsAtom X} then {Atom2LispSymbol X}
+	 elseif {GUtils.isAtom X} then {Atom2LispSymbol X}
 	 elseif As.charTransform andthen {IsChar X} 
 	 then {Char2LispChar X}	    
 	    %% Syntax transformation for negative numbers and exponential notation already buildin in Oz.
@@ -1728,7 +1728,7 @@ define
 	 elseif {IsList X} then {List2LispList X Args}
 	    %% 
 	 elseif {IsVirtualString X} then X  
-	 elseif {IsRecord X} then {Record2Lisp X Args}
+	 elseif {GUtils.isRecord X} then {Record2Lisp X Args}
 	 else
 	    {Exception.raiseError
 	     kernel(type
