@@ -1733,6 +1733,7 @@ From this viewpoint, there is an interesting polarity between major and harmonic
     Tenney height generalizes to geomean(a*b*c...) for a chord a:b:c..., which gives sqrt(n*d) for dyads.
     http://lumma.org/music/theory/TuningFAQ.txt
 
+    NOTE: Tenney height requires that minimal ratios possible are used
 
     Tenney height applies only to rational numbers, and only to simple ones at that (where the product n*d is below 100 or so). Harmonic entropy is a smooth, differentiable function of interval size, i.e. 301:200 and 3:2 should have similar entropies. Near the simple rationals, harmonic entropy is proportional to sqrt(n*d).  Triadic harmonic entropy has never been fully computed, but we do know something about how it must turn out. In 2002, Paul Erlich showed that the area of the Voronoi cells of rational triads in 2-D triadspace is strongly correlated to the generalized Tenney height of the triads: http://groups.yahoo.com/group/harmonic_entropy/files/triadic.gif
 
