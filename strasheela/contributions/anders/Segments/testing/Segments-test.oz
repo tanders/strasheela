@@ -76,6 +76,49 @@ fun {SymbolicDurToInt Spec} D.Spec end
 F = IntToFloat
 
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%% Distro
+%%
+
+fun {ParameterFilterTest X}
+   %% Filter out container parameters, measure parameters, time points and note pitches. 
+   {Not {{X getItem($)} isContainer($)}} andthen
+%    {Not {Measure.isUniformMeasures {X getItem($)}}} andthen
+   {Not {X isTimePoint($)}} andthen
+   {Not
+    {X isPitch($)} andthen
+    (%% root can be smaller domain than transposition (restricted to pitch classes), so FF would determine that.
+     %% However, determining root results in poor propagation for index (because it determined transposed root, not root)
+     {X hasThisInfo($ root)} orelse
+%      {X hasThisInfo($ transposition)} orelse 
+     {X hasThisInfo($ untransposedRoot)} orelse
+     {X hasThisInfo($ notePitch)})}
+end
+
+TypewiseWithPatternMotifs_LeftToRightTieBreaking_Distro
+= unit(
+     value:random 
+     select: {SDistro.makeMarkNextParam
+	      [fun {$ X}
+		  {HS.score.isPitchClass X} andthen
+		  {{X getItem($)} isNote($)}
+	       end
+	       # [getOctaveParameter]
+	      ]}
+     order: {SDistro.makeVisitMarkedParamsFirst
+	     %% edited version of HS.distro.makeOrder_TimeScaleChordPitchclass
+	     {SDistro.makeSetPreferredOrder
+	      %% first visit motif index, then rhythmic structure etc
+	      [fun {$ X} {X hasThisInfo($ motifIndex)} end 
+	       fun {$ X} {X isTimeParameter($)} end
+	       fun {$ X} {HS.score.isScale {X getItem($)}} end
+	       fun {$ X} {HS.score.isChord {X getItem($)}} end
+	       fun {$ X} {HS.score.isPitchClass X} end]
+	      {SDistro.makeLeftToRight SDistro.dom}}}
+     test: ParameterFilterTest)
+
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%
@@ -240,17 +283,30 @@ F = IntToFloat
 
 /*
 
-declare
-Ns = {Segs.makeCounterpoint_PatternMotifs
-      unit(iargs:unit(n:8)
-	   rargs:unit(motifSpecs:[[[0 d4] [0 d4] [0 d2]]
-				  [[d4 d4] [0 d2]]]
-		      motifSpecTransformers: [SymbolicDurToInt SymbolicDurToInt] 
-		      motifAccessors: [fun {$ Ns} {Pattern.mapItems Ns getOffsetTime} end
-				       fun {$ Ns} {Pattern.mapItems Ns getDuration} end]))}
-{ForAll Ns Score.init}
+{SDistro.exploreOne
+ proc {$ MyScore}
+    End
+ in
+    MyScore = {Score.make
+	       sim([seq({Segs.makeCounterpoint_PatternMotifs
+			 unit(iargs:unit(n:8
+					inChordB: 1)
+			      rargs:unit(motifSpecs:[[[0 d4] [0 d4] [0 d2]]
+						     [[d4 d4] [0 d2]]]
+					 motifSpecTransformers: [SymbolicDurToInt SymbolicDurToInt] 
+					 motifAccessors: [fun {$ Ns} {Pattern.mapItems Ns getOffsetTime} end
+							  fun {$ Ns} {Pattern.mapItems Ns getDuration} end]))}
+			endTime: End)
+		    seq([chord(index: {HS.db.getChordIndex major}
+			       transposition: 0)]
+			endTime: End)]
+		   startTime:0
+		   timeUnit:beats(Beat))
+	       add(chord:HS.score.chord)}
+ end
+ TypewiseWithPatternMotifs_LeftToRightTieBreaking_Distro
+}
 
-{Pattern.mapItems Ns toInitRecord}
 
 */
 
