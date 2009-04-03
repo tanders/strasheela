@@ -23,6 +23,12 @@ import
 export
    Pi
    XOr Cases
+
+   MakeTypecheck_NotKinded
+   isRecord: IsRecord2
+   isAtom: IsAtom2
+   isInt: IsInt2
+   
    IsFS MakeSingletonSet IntsToFS
 
    RelationComplement ConstrainRelation
@@ -91,6 +97,18 @@ define
       end
    end
 
+   /** %% Mozart typechecks like IsRecord block on kinded variables. MakeTypecheck_NotKinded returns a variant of the type test MyTest (a Boolean function) which immediates returns false for kinded variables. 
+   %% */
+   fun {MakeTypecheck_NotKinded MyTest}
+      fun {$ X}
+	 {Not {IsKinded X}} andthen {MyTest X}
+      end
+   end
+   IsRecord2 = {MakeTypecheck_NotKinded IsRecord}
+   IsAtom2 = {MakeTypecheck_NotKinded IsAtom}
+   IsInt2 = {MakeTypecheck_NotKinded IsInt}
+   
+   
    /** %% IsFS returns true if X is a FS variable (determined or not) and false otherwise. This function is necessary, because the primitive Oz functions FS.var.is and FS.value.is behave differently for determined and undetermined FS variables.
    %% */ 
    fun {IsFS X}
@@ -272,7 +290,7 @@ define
    /** %% Returns true if X is a pair of ints Nom#Denom.
    %% */
    fun {IsRatio X}
-      {IsRecord X} andthen {Label X} == '#'
+      {IsRecord2 X} andthen {Label X} == '#'
       andthen {Width X}==2 andthen {All {Record.toList X} IsInt}
    end
    /** %% Expects a ratio X#Y and returns Y#X.
@@ -340,9 +358,9 @@ define
       Res = 
       if {IsProcedure X} 	% !! do I need this option ?
       then X
-      elseif {IsAtom X}
+      elseif {IsAtom2 X}
       then proc {$ O} {O X} end	% method with no arg
-      elseif {IsRecord X}
+      elseif {IsRecord2 X}
       then
 	 %% first feature of method is always result
 	 if {Arity X} == [1]
@@ -379,7 +397,7 @@ define
       Res = 
       if {IsProcedure X} 	% !! do I need this option ?
       then X
-      elseif {IsAtom X}
+      elseif {IsAtom2 X}
       then {ToProc {MakeRecord X [1]}}
 	 % raise type error: neither procedure nor atom
       else
@@ -485,10 +503,10 @@ define
       Feats = {LUtils.removeDuplicates {Append {Arity R1} {Arity R2}}}
       %% X is record but neither list nor pair
       fun {IsNormalRecord X}
-	 {IsRecord X}
+	 {IsRecord2 X}
 	 andthen {Not {IsList X}}
 	 andthen {Not {Label X}=='#'}
-	 andthen {Not {IsAtom X}}
+	 andthen {Not {IsAtom2 X}}
       end
    in
       Result = {MakeRecord {Label R2} Feats}
