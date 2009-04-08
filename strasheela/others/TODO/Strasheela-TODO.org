@@ -59,6 +59,7 @@
 
    [[file:~/oz/music/Strasheela/strasheela/trunk/strasheela/scripts/install.bat]]
 
+
 ** Repair adaptive JI
 
    see [[file:~/oz/music/Strasheela/strasheela/trunk/strasheela/contributions/anders/HarmonisedScore/testing/Score-test.oz::GetAdaptiveJIPitch]]
@@ -69,9 +70,12 @@
 
 * Strasheela examples
 
+
 ** Realtime example with non-harmonic tones etc. for Eduardo
 
 *** Do expresssive performance (timing and velocity)
+
+*** TODO Add more motifs						:URGENT:
 
 ** Revised Realtime example for Eduardo
 
