@@ -331,6 +331,7 @@ end
 %%
 %% Note: no solution for purely ascending progression with only harmonic 7th, subarmonic 6th and augmented.
 %% try: no super-strong, at least not at end
+%% it is possible to have no augmented chords..
 {GUtils.setRandomGeneratorSeed 0}
 {SDistro.exploreOne
  proc {$ MyScore}
@@ -343,11 +344,14 @@ end
 			       inScaleB: 1)
 		   rargs: unit(types: ['harmonic 7th'
 				       'subharmonic 6th'
+				       %% only root differs from 'subharmonic 6th'
+% 				       'half subdiminished 7th' 
 				       %% TODO: constraint: two augmented should not follow each other. BTW: how to resolve augmented?
-				       'augmented'
+% 				       'augmented'
+% 				       'French augmented 6th'
 				      ]))}
     MyScale = {Score.make2 scale(index: {HS.db.getScaleIndex 'dynamic symmetrical major'}
-			       transposition: 0)
+				 transposition: 0)
 	     unit(scale:HS.score.scale)}
  in
    MyScore = {Segs.homophonicChordProgression
@@ -425,10 +429,6 @@ end
 /*
 
 
-%%
-%% random melody over given chord(s)
-%%
-
 declare
 %% initialise seed for randomisation of search
 {GUtils.setRandomGeneratorSeed 0}
@@ -439,47 +439,65 @@ Beat = 4
  %% define script 
  proc {$ MyScore}
     %% total number of notes
-    NoteNoPerBar = 11
-    %% Given chords: I V V I in C major 
-    ChordSpecs = [chord('G' 'harmonic 7th')
-% 		  chord('G' 'minor')
-% 		  chord('G' 'major')
-% 		  chord('G' 'major')
+    ChordSpecs = [chord('C' 'harmonic 7th')
+ 		  chord('F' 'harmonic 7th')
+ 		  chord('G' 'harmonic 7th')
+ 		  chord('C' 'harmonic 7th')
 		 ]
+    L = {Length ChordSpecs}
+    NoteDur = 2
+    NotesPerChord = 6
+    TotalNoteNo = L * NotesPerChord
     %% underlying scale is C major
-    MyScale = {Score.make2 scale(index: {HS.db.getScaleIndex 'standard pentachordal major'}
+    MyScale = {Score.make2 scale(index: {HS.db.getScaleIndex 'dynamic symmetrical major'}
 				 transposition: {HS.pc 'C'})
 	       unit(scale: HS.score.scale)}
     %% create list of chords from specs: every chord two beats long
     Chords = {Map ChordSpecs
 	      fun {$ chord(Root Type)}
 		 {Score.make2 chord(index: {HS.db.getChordIndex Type}
-				    root: {HS.pc Root})
+				    root: {HS.pc Root}
+				    duration: NoteDur * NotesPerChord)
 		 unit(chord: HS.score.chord)}
 	      end}
     %% Create list of actual 
     VoiceNotes = {Segs.makeCounterpoint
 		  unit(
 		     %% args for individual notes
-		     iargs: unit(n: NoteNoPerBar
+		     iargs: unit(n: TotalNoteNo
 				 inScaleB:1 % only use scale pitches
 				 %% possible durations
-				 duration: 2
+				 duration: NoteDur
 				)
 		     rargs: unit(maxPitch: 'G'#5
-				 minPitch: 'G'#4)
+				 minPitch: 'G'#4
+				 maxNonharmonicNoteSequence: 1)
 		     )}
-    Akk = {Segs.makeAkkord
-	   unit(iargs: unit(noteNo: 4)
-		rargs: unit(maxPitch: 'G'#4
-			    minPitch: 'G'#3))}
+    Akks = {Segs.makeAkkords
+	    unit(akkN:L
+		 iargs: unit(n: 4 % chord tones
+			     duration: NoteDur * NotesPerChord
+			    )
+		 rargs: unit(maxPitch: 'G'#4
+			     minPitch: 'G'#3))}
+    BassNs = {Segs.makeCounterpoint
+	      unit(iargs: unit(n: L
+			       inChordB:1 
+			       duration: NoteDur * NotesPerChord
+			      )
+		   rargs: unit(maxPitch: 'B'#3
+			       minPitch: 'C'#3)
+		  )}
     End                         % for unifying endtimes
  in
     %% Pitch of notes created by Segs.makeCounterpoint are implicitely constrained to fit to simultaneous chords and scales
-    MyScore = {Score.make sim([seq(info: channel(0) % Midi channel 1
+    MyScore = {Score.make sim(info: lily("\\time 3/4")
+			      [seq(info: channel(0) % Midi channel 1
 				   VoiceNotes
 				   endTime: End)
-			       seq([Akk]
+			       seq(Akks
+				   endTime: End)
+			       seq(BassNs
 				   endTime: End)
 			       seq(Chords
 				   endTime: End)
@@ -488,8 +506,15 @@ Beat = 4
 			      startTime: 0
 			      timeUnit: beats(Beat))
 	       unit}
-    {VoiceNotes.1 getPitchClass($)} = {HS.pc 'G'}
-    {Pattern.increasing {Pattern.mapItems VoiceNotes getPitch}}
+%     {VoiceNotes.1 getPitchClass($)} = {HS.pc 'G'}
+%     {Pattern.increasing {Pattern.mapItems VoiceNotes getPitch}}
+    {Pattern.cycle
+     {Pattern.contour {Pattern.mapItems VoiceNotes getPitch}}
+     NotesPerChord}
+    {Pattern.for2Neighbours {Pattern.mapItems VoiceNotes getPitch}
+     proc {$ P1 P2} P1 \=: P2 end}
+    {ForAll BassNs
+     proc {$ BN} {{BN getChords($)}.1 getRoot($)} = {BN getPitchClass($)} end}
  end
  %% definition of search strategy
  HS.distro.typewise_LeftToRightTieBreaking
@@ -506,7 +531,8 @@ Beat = 4
 {HS.db.getEditIntervalDB}
 
 {HS.db.pc2Ratios 18 {HS.db.getEditIntervalDB}}
- 
+
+
 
 */
 
