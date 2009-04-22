@@ -41,7 +41,7 @@ export
    ForContexts MapContexts ForContextsR
    PatternMatchingApply PatternMatchingApply2
    ForNumericRange ForNumericRange2 ForNumericRangeArgs
-   
+   MapTimeslices ForTimeslices
    MapSimultaneousPairs ForSimultaneousPairs
    FilterSimultaneous FindSimultaneous
    
@@ -773,6 +773,70 @@ define
    end
 
 
+   local
+      /** %% Traverses Xs (a list of temporal items) and returns list of those items which sound within time window Start-End. Nevertheless, these items may also start before or sound longer then this time window.
+      %% */
+      fun {FilterInTimeWindow Xs Start End CTest}
+	 thread
+	    {LUtils.cFilter Xs
+	     fun {$ X}
+		{CTest X} andthen
+		({X getStartTime($)} <: End) == 1 andthen 
+		({X getEndTime($)} >: Start) == 1 
+	     end}
+	 end
+      end
+   in
+      /** %% Applies Fn (unary function expecting list of items) to sublists of Items (list of items) which are positioned within certain "time slices". A time slice is defined by a start and end time, the items within a timeslice include those that start before or sound longer then this time slice, but some part of them must occur within the time slice. A sequence of time slices with regular durations is defined by the args startTime, endTime (required arg!) and step.
+      %%
+      %% Args:
+      %% startTime (default 0): int specifying start of first time slice.
+      %% endTime (no default!): int specifying end of last time slice.
+      %% step (default 1): int specifying size of all time slices.
+      %% 'test': a Boolean function or method for pre-filtering Items.
+      %% 'cTest': a Boolean function or method applied within the concurrent filtering of Items. 
+      %%
+      %% */
+      %%
+      %% TODO:
+      %% - if consecutive time frames have same set of objects: consider skipping?
+      fun {MapTimeslices Items Fn Args}
+	 Defaults = unit(test: fun {$ X} true end
+			 cTest: fun {$ X} true end
+			 startTime: 0
+% 		      endTime: _
+			 step: 1)
+	 As = {Adjoin Defaults Args}
+	 FilteredItems = {Filter Items {GUtils.toFun As.test}}
+	 Times = {List.number As.startTime As.endTime As.step}
+      in
+	 {Pattern.map2Neighbours Times
+	  fun {$ Start End}
+	     {Fn {FilterInTimeWindow FilteredItems Start End {GUtils.toFun As.cTest}}}
+	  end}
+      end
+
+      /** %% Same as MapTimeslices, but P is unary procedure expecting list of items.
+      %% */
+      proc {ForTimeslices Items P Args}
+	 Defaults = unit(test: fun {$ X} true end
+			 cTest: fun {$ X} true end
+			 startTime: 0
+% 		      endTime: _
+			 step: 1)
+	 As = {Adjoin Defaults Args}
+	 FilteredItems = {Filter Items {GUtils.toFun As.test}}
+	 Times = {List.number As.startTime As.endTime As.step}
+      in
+	 {Pattern.for2Neighbours Times
+	  proc {$ Start End}
+	     {P {FilterInTimeWindow FilteredItems Start End {GUtils.toFun As.cTest}}}
+	  end}
+      end
+   end
+
+
+   
    local
       /** %% [aux def] Returns the list of temporal containers in with X is recursively contained, starting with the most nested container (top-level container is last).
       %% */
