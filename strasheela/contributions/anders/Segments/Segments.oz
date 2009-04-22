@@ -50,6 +50,7 @@ import
    LUtils at 'x-ozlib://anders/strasheela/source/ListUtils.ozf'
    MUtils at 'x-ozlib://anders/strasheela/source/MusicUtils.ozf'
    Score at 'x-ozlib://anders/strasheela/source/ScoreCore.ozf'
+   Init at 'x-ozlib://anders/strasheela/source/Init.ozf'
 
    Pattern at 'x-ozlib://anders/strasheela/Pattern/Pattern.ozf'
    HS at 'x-ozlib://anders/strasheela/HarmonisedScore/HarmonisedScore.ozf'
@@ -65,10 +66,9 @@ export
 
    MakeCounterpoint MakeCounterpoint_Seq
    MakeCounterpoint_PatternMotifs
-   %% TMP comment -- fix defs below
-%    MakeCounterpoint_PatternMotifs_DurationPitchcontour
-%    MakeCounterpoint_PatternMotifs_OffsetDuration
-%    MakeCounterpoint_PatternMotifs_OffsetDurationPitchcontour
+   MakeCounterpoint_PatternMotifs_DurationPitchcontour
+   MakeCounterpoint_PatternMotifs_OffsetDuration
+   MakeCounterpoint_PatternMotifs_OffsetDurationPitchcontour
    
    %% TMP comment -- fix defs below
 %    MkEvenRhythm_
@@ -134,6 +134,7 @@ define
    %% 'maxInterval' (default 3#1): ratio spec for the maximum melodic interval size permitted
    %% 'maxNonharmonicNoteSequence (default false)': Restrict the number of consecutive non-harmonic Notes to given maximum. Disabled if set to false.
    %% 'minPercentSteps' (default false): there are at least the specified percentage steps. Disabled if set to false.
+   %% 'clearDissonanceResolution' (default false): If in one voice there occurs a non-chord tone followed by a chord tone (a dissonance resolution), then no other voice should obscure this resolution by a non-chord tone starting together with the tone resolving the dissonance. Disabled if set to false.
    %% 'step' (default 8#7): ratio spec for the maximum step size permitted which counts for 'minPercentSteps' and maximum step size for dissonance resolutions
    %% 'maxRepetitions' (default false): how many pitch repetitions occur at maximum between consecutive Notes. Disabled if set to false.
    %% In addition, all arguments of Score.makeItems_iargs are supported.
@@ -150,6 +151,7 @@ define
 					      %% BUG: in maxRepetitions
 % 					   maxRepetitions:0
 					      minPercentSteps: false
+					      clearDissonanceResolution: false
 					      step:8#7)
 			      idefaults: unit(
 % 					 getChords: fun {$ Self}
@@ -182,7 +184,9 @@ define
 	 %% BUG: in HS.rules.maxRepetitions
 %       {HS.rules.maxRepetitions Notes Args.rargs.maxRepetitions}
 	 {HS.rules.resolveNonharmonicNotesStepwise Notes unit(maxInterval:Args.rargs.step)}
-	 {HS.rules.clearDissonanceResolution Notes} % ??
+	 if Args.rargs.clearDissonanceResolution \= false then 
+	    {HS.rules.clearDissonanceResolution Notes} % ??
+	 end
 %       {HS.rules.clearHarmonyAtChordBoundaries SimChords Notes}
       end}
    /** %% Same as MakeCounterpoint, but returns seq of notes and supports seq args.
@@ -241,57 +245,54 @@ define
 	       workOutEven:Args.rargs.workOutEven)}
       end}
 
-% %%
-% %% TODO: add SymbolicDurToInt, D etc in a modular/redefinable way
-% %%
 
-% /** %% Like MakeCounterpoint_PatternMotifs, but motif specs are two-element lists of symbolic note durations and pitch contours. Remember that the first contour value in a motif should always be '_'.
-% %% Overwrites Args.rargs motifSpecTransformers and motifAccessors..
-% %% Notes's offsetTime parameters have their usual default 0. 
-% %% */
-% MakeCounterpoint_PatternMotifs_DurationPitchcontour 
-% = {Score.defSubscript
-%    unit(super:MakeCounterpoint_PatternMotifs
-% 	idefaults:unit(offsetTime:0)
-% 	rdefaults:unit(%% motifSpecs are only example
-% 		       motifSpecs:[[[d4 '_'] [d4 '+'] [d2 '+']]
-% 				   [[d2 '_'] [d2 '-']]]
-% 		       motifSpecTransformers: [SymbolicDurToInt Pattern.symbolToDirection] 
-% 		       motifAccessors: [{MakeParametersAccessor getDuration}
-% 					PitchContourAccessor]))
-%    GUtils.binarySkip}
+/** %% Like MakeCounterpoint_PatternMotifs, but motif specs are two-element lists of symbolic note durations and pitch contours. Remember that the first contour value in a motif should always be '_'.
+%% Overwrites Args.rargs motifSpecTransformers and motifAccessors..
+%% Notes's offsetTime parameters have their usual default 0. 
+%% */
+MakeCounterpoint_PatternMotifs_DurationPitchcontour 
+= {Score.defSubscript
+   unit(super:MakeCounterpoint_PatternMotifs
+	idefaults:unit(offsetTime:0)
+	rdefaults:unit(%% motifSpecs are only example
+		       motifSpecs:[[[d4 '_'] [d4 '+'] [d2 '+']]
+				   [[d2 '_'] [d2 '-']]]
+		       motifSpecTransformers: [Init.symbolicDurToInt Pattern.symbolToDirection] 
+		       motifAccessors: [{MakeParametersAccessor getDuration}
+					PitchContourAccessor]))
+   GUtils.binarySkip}
 
-% /** %% Like MakeCounterpoint_PatternMotifs, but motif specs are two-element lists of symbolic note offset times and durations.
-% %% Leave Args.rargs motifSpecTransformers and motifAccessors untouched..
-% %% */
-% MakeCounterpoint_PatternMotifs_OffsetDuration 
-% = {Score.defSubscript 
-%    unit(super:MakeCounterpoint_PatternMotifs
-% 	rdefaults:unit(%% motifSpecs are only example
-% 		       motifSpecs:[[[d4 d8] [0 d8] [0 d2]]
-% 				   [[d4 d4] [0 d2]]]
-% 		       motifSpecTransformers: [SymbolicDurToInt SymbolicDurToInt] 
-% 		       motifAccessors: [{MakeParametersAccessor getOffsetTime}
-% 					{MakeParametersAccessor getDuration}]))
-%    GUtils.binarySkip}
+/** %% Like MakeCounterpoint_PatternMotifs, but motif specs are two-element lists of symbolic note offset times and durations.
+%% Leave Args.rargs motifSpecTransformers and motifAccessors untouched..
+%% */
+MakeCounterpoint_PatternMotifs_OffsetDuration 
+= {Score.defSubscript 
+   unit(super:MakeCounterpoint_PatternMotifs
+	rdefaults:unit(%% motifSpecs are only example
+		       motifSpecs:[[[d4 d8] [0 d8] [0 d2]]
+				   [[d4 d4] [0 d2]]]
+		       motifSpecTransformers: [Init.symbolicDurToInt Init.symbolicDurToInt] 
+		       motifAccessors: [{MakeParametersAccessor getOffsetTime}
+					{MakeParametersAccessor getDuration}]))
+   GUtils.binarySkip}
 
 
-% /** %% Like MakeCounterpoint_PatternMotifs, but motif specs are three-element lists of symbolic note offsets, durations and pitch contours. Remember that the first contour value in a motif should always be '_'.
-% %% Leave Args.rargs motifSpecTransformers and motifAccessors untouched..
-% %% */
-% MakeCounterpoint_PatternMotifs_OffsetDurationPitchcontour 
-% = {Score.defSubscript
-%    unit(super:MakeCounterpoint_PatternMotifs
-% 	rdefaults:unit(%% motifSpecs are only example
-% 		       motifSpecs:[[[d4 d8 '_'] [0 d8 '+'] [0 d2 '+']]
-% 				   [[d4 d4 '_'] [0 d2 '-']]]
-% 		       motifSpecTransformers: [SymbolicDurToInt
-% 					       SymbolicDurToInt
-% 					       Pattern.symbolToDirection] 
-% 		       motifAccessors: [{MakeParametersAccessor getOffsetTime}
-% 					{MakeParametersAccessor getDuration}
-% 					PitchContourAccessor]))
-%    GUtils.binarySkip}
+/** %% Like MakeCounterpoint_PatternMotifs, but motif specs are three-element lists of symbolic note offsets, durations and pitch contours. Remember that the first contour value in a motif should always be '_'.
+%% Leave Args.rargs motifSpecTransformers and motifAccessors untouched..
+%% */
+MakeCounterpoint_PatternMotifs_OffsetDurationPitchcontour 
+= {Score.defSubscript
+   unit(super:MakeCounterpoint_PatternMotifs
+	rdefaults:unit(%% motifSpecs are only example
+		       motifSpecs:[[[d4 d8 '_'] [0 d8 '+'] [0 d2 '+']]
+				   [[d4 d4 '_'] [0 d2 '-']]]
+		       motifSpecTransformers: [Init.symbolicDurToInt
+					       Init.symbolicDurToInt
+					       Pattern.symbolToDirection] 
+		       motifAccessors: [{MakeParametersAccessor getOffsetTime}
+					{MakeParametersAccessor getDuration}
+					PitchContourAccessor]))
+   GUtils.binarySkip}
 
 
 
@@ -389,7 +390,7 @@ define
 			     )
       proc {$ NoteSeq Args}
 	 {Pattern.fenvContour {NoteSeq mapItems($ getPitch)}
-	  Args.rargs.direction}
+	  Args.rargs.pitchFenv}
       end}
 
 
