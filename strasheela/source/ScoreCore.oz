@@ -2922,12 +2922,16 @@ define
 	idefaults: unit
 	rdefaults: unit)
    %%
-   %% Body is a procedure with the interface {Body MyScore Args}, where MyScore is the item(s) created by the super-script, and Args is the record of the arguments specified for the resulting script. Body can also be nil (e.g. for combining a super script and a mixin without adding any further constraints).   
+   %% Body is a procedure with the interface {Body MyScore Args}, where MyScore is the item(s) created by the super-script, and Args is the record of the arguments specified for the resulting script. Body can also be nil (e.g. for combining a super script and a mixin without adding any further constraints). The features of Args are both the arguments supported by the resulting extended script, and the Args expected by body.  
    %% 
-   %% Args always has the features 'iargs' and 'rargs'.
+   %% Args always has the features 'iargs' and 'rargs'. 
    %% 'iargs': a record of arguments given to contained items in the format expected by Score.makeItems
    %% 'rargs': record of arguments for constraints
-   %% In addition, Args can contain any init argument expected by the MyScore's top-level ("super" CSP creates a container).
+   %%
+   %% The variable Args of the body only contains the following arguments when they where specified with the extended script application.  
+   %% 'super': same as for DefArgs
+   %% 'mixins': same as for DefArgs
+   %% In addition, Args can contain any init argument expected by the MyScore's top-level ("super" CSP creates a container). 
    %% 
    %% More specifically, Args contains the arguments provided when calling the resulting script plus the default values of omitted arguments specified with 'defaults', 'idefaults' and 'rdefaults' for this specific script. Default arguments specified for any super-script are absent from Args, if you need the defaults of the super-script in Body, declare them again for this script.
    %%
