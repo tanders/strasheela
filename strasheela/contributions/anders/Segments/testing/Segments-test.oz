@@ -393,6 +393,28 @@ TypewiseWithPatternMotifs_LeftToRightTieBreaking_Distro
 
 
 %%
+%% Segs.mkFenvContour
+%%
+
+/*
+
+{SDistro.exploreOne
+ fun {$}
+    {TestMotif a(iargs: unit(n: 3
+			     duration: 4
+			     inChordB: 1))
+     Segs.mkFenvContour}
+ end
+ unit
+%  HS.distro.typewise_LeftToRightTieBreaking
+}
+
+*/
+
+
+
+
+%%
 %% MakeAkkords
 %%
 
@@ -452,6 +474,8 @@ TypewiseWithPatternMotifs_LeftToRightTieBreaking_Distro
 
 
 */
+
+
 
 
 
