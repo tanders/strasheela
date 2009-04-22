@@ -424,6 +424,47 @@ proc {$ X} {Browse elseCase#X} end}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%
+%% SMapping.mapTimeslices, SMapping.forTimeslices
+%% 
+
+
+declare
+MyScore = {Score.make sim([seq([note(duration: 1
+				     pitch: 1)
+				note(duration: 2
+				     pitch: 2)
+				note(duration: 1
+				     pitch: 3)
+				note(duration: 2
+				     pitch: 4)])
+			   seq([note(duration: 2
+				     pitch: 5)
+				note(duration: 1
+				     pitch: 6)
+				note(duration: 2
+				     pitch: 7)
+				note(duration: 1
+				     pitch: 7)])]
+			  startTime:0
+			  timeUnit: beats)
+	   unit}
+
+
+{Browse
+ {SMapping.mapTimeslices {MyScore collect($ test:isNote)}
+  fun {$ Xs} {Pattern.mapItems Xs toInitRecord} end
+  unit(endTime: 6)}}
+
+
+{SMapping.forTimeslices {MyScore collect($ test:isNote)}
+  proc {$ Xs} {Browse {Pattern.mapItems Xs toInitRecord}} end
+  unit(endTime: 6)}
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
 %% SMapping.forSimultaneousPairs / SMapping.mapSimultaneousPairs
 %% 
 
