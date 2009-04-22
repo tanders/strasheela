@@ -75,7 +75,8 @@
 
 *** Do expresssive performance (timing and velocity)
 
-*** TODO Add more motifs						:URGENT:
+*** DONE Add more motifs						:URGENT:
+    CLOSED: [2009-04-11 Sat 14:06]
 
 ** Revised Realtime example for Eduardo
 
