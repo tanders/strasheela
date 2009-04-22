@@ -106,7 +106,7 @@ define
       /** %% Samples the fenv from 0.0 to 1.0 (including) and collects samples in a list. N is the number of samples (an integer). If N=1, only the last env value is returned. Returns a list of floats.
       %% */
       meth toList($ N<=100)
-	 if N==1 then {self y($ 1)}
+	 if N==1 then [{self y($ 1.0)}]
 	    %% tmp: for i from 0 to 1 by (/ 1 (1- n))
 	 else N1 = {IntToFloat N-1} in
 	    for I in 0..N-1  collect:C do
