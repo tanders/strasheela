@@ -141,13 +141,17 @@ export
    ParameterDistance ParameterDistanceR LimitParameterDistanceOfNeighbours
 
    GetRootPCIntervals
+   GetRootDegreeIntervals
+
+   SetBoundaryRoots
+   SetBoundaryTypes
    
    Cadence
    DiatonicChord NoteInPCCollection
 
    ResolveDissonances
 
-   NoParallels NoParallel
+   NoParallels NoParallels2 NoParallel
 
    IndexCardinality SetEachChordType SetEachScaleType RequireChordTypes
    
@@ -226,7 +230,7 @@ define
    /** %% Perfect consonances (list of ratios).
    %% */
    PerfectConsonances = [1#1 3#2]
-   /** %% Binary constraint {$ Interval B}: B=1 <-> Interval is perfect consonance. 
+   /** %% Binary constraint {$ PCInterval B}: B=1 <-> Interval is perfect consonance. 
    %% */
    IsPerfectConsonanceR
    = {MakeIntervalConstraint PerfectConsonances}
@@ -234,36 +238,36 @@ define
    /** %% 3-limit consonances: fourth, fifth (list of ratios).
    %% */
    Limit3Consonances = [4#3 3#2]      
-   /** %% Binary constraint {$ Interval B}: B=1 <-> Interval is 3-limit consonance (fourth or fifth). 
+   /** %% Binary constraint {$ PCInterval B}: B=1 <-> Interval is 3-limit consonance (fourth or fifth). 
    %% */
    IsLimit3ConsonanceR
    = {MakeIntervalConstraint Limit3Consonances}
    /** %% 2nd order 3-limit intervals: fourth/fifth, maj second/min seventh (list of ratios).
    %% */
    Limit3Intervals_2 = [9#8 4#3 3#2 16#9]
-   /** %% Binary constraint {$ Interval B}: B=1 <-> Interval 2nd order is 3-limit interval.
+   /** %% Binary constraint {$ PCInterval B}: B=1 <-> Interval 2nd order is 3-limit interval.
    %% */
    IsLimit3IntervalR_2
    = {MakeIntervalConstraint Limit3Intervals_2}
    /** %% 5-limit consonances (list of ratios).
    %% */
    Limit5Consonances = [6#5 5#4 8#5 5#3]   
-   /** %% Binary constraint {$ Interval B}: B=1 <-> Interval is 5-limit consonance (does not include 3-limit). 
+   /** %% Binary constraint {$ PCInterval B}: B=1 <-> Interval is 5-limit consonance (does not include 3-limit). 
    %% */
    IsLimit5ConsonanceR
    = {MakeIntervalConstraint Limit5Consonances}
-   /** %% Binary constraint {$ Interval B}: B=1 <-> Interval is 3 or 5-limit consonance.
+   /** %% Binary constraint {$ PCInterval B}: B=1 <-> Interval is 3 or 5-limit consonance.
    %% */
    IsLimit_3_5_ConsonanceR
    = {MakeIntervalConstraint {Append Limit3Consonances Limit5Consonances}}
    /** %% 7-limit consonances (list of ratios).
    %% */
    Limit7Consonances = [8#7 7#6 7#5 10#7 12#7 7#4]
-   /** %% Binary constraint {$ Interval B}: B=1 <-> Interval is 7-limit consonance (does not include 3 nor 5 limit). 
+   /** %% Binary constraint {$ PCInterval B}: B=1 <-> Interval is 7-limit consonance (does not include 3 nor 5 limit). 
    %% */
    IsLimit7ConsonanceR
    = {MakeIntervalConstraint Limit7Consonances}
-   /** %% Binary constraint {$ Interval B}: B=1 <-> Interval is 3, 5, or 7-limit consonance.
+   /** %% Binary constraint {$ PCInterval B}: B=1 <-> Interval is 3, 5, or 7-limit consonance.
    %% */
    IsLimit_3_5_7_ConsonanceR
    = {MakeIntervalConstraint
@@ -444,7 +448,71 @@ define
        end}
    end
 
+   /** %% Expects a list of Chords and a scale, and returns the absolute distances between the scale degrees of the chord roots (list of FD ints).
+   %% */
+   fun {GetRootDegreeIntervals Chords MyScale}
+      {Pattern.map2neighbours {Pattern.mapItems Chords
+			       fun {$ C} {HS_Score.getDegree {C getRoot($)} MyScale unit} end}
+       proc {$ RootDegree1 RootDegree2 Interval}
+	  Interval = {FD.decl}
+	  {FD.distance RootDegree1 RootDegree2 '=:' Interval}
+       end}
+   end
+   
 
+   /** %% Sets the pitch classe of the first chord root in Chords (list of chords) and potentially constrains the pitch class interval between the first and last chord root. 
+   %%
+   %% Args:
+   %% 'firstRoot' (default false): root of first chord (pc atom, see HS.pc)
+   %% 'firstToLastRootInterval' (default false): pc interval between first and last chord root (pc atom, e.g., 'C' is 0, or false).
+   %% 'lastRoot' (default false): root of last chord (pc atom, or false)
+   %%
+   %% */
+   %% ?? TODO: def symbolic interval name (instead of using PC)
+   proc {SetBoundaryRoots Chords Args}   
+      Defaults = unit(firstRoot:false
+		      firstToLastRootInterval:false
+		      lastRoot:false
+		     )
+      As = {Adjoin Defaults Args}
+   in
+      if As.firstRoot \= false then
+	 %% first chord has specified root
+	 {Chords.1 getRoot($)} = {HS.pc As.firstRoot}
+      end
+      if As.firstToLastRootInterval \= false then
+	 %% interval first to last root as specified
+	 {HS.score.transposePC {Chords.1 getRoot($)} {HS.pc As.firstToLastRootInterval}
+	  {{List.last Chords} getRoot($)}}
+      end
+      if As.lastRoot \= false then
+	 {{List.last Chords} getRoot($)} = {HS.pc As.lastRoot}
+      end
+   end
+
+   
+   
+   /** %% Sets the types of the first and last chord in Chords (list of chords).
+   %%
+   %% Args:
+   %% 'firstType' / 'lastType' (default false): sets the type (index) of the first/last chord in Chords to the type specified, an atom (chord name specified in the database). Disabled if false.
+   %%
+   %% */
+   proc {SetBoundaryTypes Chords Args}   
+      Defaults = unit(firstType: false
+		      lastType: false
+		     )
+      As = {Adjoin Defaults Args}
+   in
+      if As.firstType \= false then
+	 {Chords.1 getIndex($)} = {HS.db.getChordIndex As.firstType}
+      end
+      if As.lastType \= false then
+	 {{List.last Chords} getIndex($)} = {HS.db.getChordIndex As.lastType}
+      end
+   end
+
+   
 
    /** %% Constraints the union of the pitch classes of Chords (a list of chord objects) to be the same set as the set of pitch classes of MyScale (a scale object). In other words, all chords only use scale tones (diatonic chords) and all scale tones are played.  Also, the root of the last chord is constrained to the root of the scale.
    %% In common usage, Chords has length three and is applied to the last three chords of a progression.
@@ -522,6 +590,31 @@ define
    %% */
    proc {NoParallels NotePairs}
       {Pattern.forPairwise NotePairs NoParallel}
+   end
+   /** %% Open and hidden parallel fifths and fourth are not permitted: perfect consonances must not be reached by both voices in the same direction. Notes is the list of all notes to which the constraint is applied (e.g., the list of all notes in the score).
+   %%
+   %% Args:
+   %% getPredecessor: unary function expecting a note and returning the preceding note in the same voice. Default:
+   fun {$ N} {N getPredecessor($ {N getTemporalAspect($)})} end
+   %% */
+   %% find sim notes and access predecessor of note and sim note
+   proc {NoParallels2 Notes Args}
+      Default = unit(getPredecessor: fun {$ N} {N getPredecessor($ {N getTemporalAspect($)})} end)
+      As = {Adjoin Default Args}
+   in
+      %% Separate thread statements?? Constraints may block on different score contexts..     
+      thread 
+	 {SMapping.forSimultaneousPairs Notes
+	  proc {$ N1B N2B}
+	     N1A = {As.getPredecessor N1B}
+	     N2A = {As.getPredecessor N2B} 
+	  in
+	     if N1A \= nil andthen N2A \= nil then
+		{NoParallel N1A#N1B N2A#N2B}
+	     end
+	  end
+	  unit(test:isNote)}
+      end
    end
    /** %%  Open and hidden parallel fifths and fourth are not permitted: perfect consonances must not be reached by both voices in the same direction. The pairs N1A#N1B and N2A#N2B are pairs of consecutive melodic notes,  whereas N1B and N2B are simultaneous notes. 
    %% */
