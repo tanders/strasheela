@@ -65,10 +65,15 @@ import
    FD Search Explorer
    GUtils at 'GeneralUtils.ozf'
    LUtils at 'ListUtils.ozf'
+
+   FD_edited(fdDistribute: FdDistribute)
+   
    % Score at 'ScoreCore.ozf'
    % Browser(browse:Browse) % temp for debugging
    
 export
+
+   FdDistribute
    
    %% solver defs
    SearchOne SearchAll SearchBest
@@ -89,6 +94,7 @@ export
    MakeFDDistribution % better use MakeSearchScript
    
 define
+
 
    
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -425,10 +431,8 @@ define
 	       startTime: {MakeLeftToRight TimeParams}
 	       leftToRight: {MakeLeftToRight TimeParams}
 	      )
-
-	   select: 
-	      %% !! value feature to document 
-	   fns(value: fun {$ X} {X getValue($)} end)
+	   
+	   select: fns(value: fun {$ X} {X getValue($)} end)
 	   
 	   value: 
 	      fns(min: min %FD.reflect.min
@@ -536,10 +540,12 @@ define
 
    end				
 
-   /** %% Returns a search script (a unary procedure) whose solution is a score. ScoreScript is a unary proc expressing a whole search problem involving a score as its solution, however without specifying any distribution strategy. Args is a record specifying the score distribution strategy with same features expected by FD.distribute for a distribution strategy (filter, order, select, value, and procedure) and the additional feature test. The distribution strategy features have the same meaning and usage as in FD.distribute, for example, all these arguments support procedures as values (for details, see http://www.mozart-oz.org/documentation/system/node26.html). However, the distribution defined by MakeSearchScript always distributes score parameter objects, not plain variables. For example, the predefined select-procedure 'value' is defined as follows
+   /** %% Returns a search script (a unary procedure) whose solution is a score. ScoreScript is a unary proc expressing a whole search problem involving a score as its solution, however without specifying any distribution strategy. Args is a record specifying the score distribution strategy with the same features as expected by FD.distribute for a distribution strategy (filter, order, select, value, and procedure) and the additional feature test. The distribution strategy features have mostly the same meaning and usage as in FD.distribute, for example, all these arguments support procedures as values (for details, see http://www.mozart-oz.org/documentation/system/node26.html). However, the distribution defined by MakeSearchScript always distributes score parameter objects, not plain variables. For example, the predefined select-procedure 'value' is defined as follows
 
    fun {$ X} {X getValue($)} end
-   
+
+   %%
+   %%
    %% MakeSearchScript extends the set of predefined values for filter, order, select, value, and procedure already defined by FD.distribute. The following values are supported. 
    %%
    %% filter:
@@ -571,7 +577,8 @@ define
 %    splitMin: Selects the interval from the lower bound to the middle of the domain (see mid).
 %    splitMax: Selects the interval from the element following the middle to the upper bound of the domain (see mid).
 %    random: Selects a domain value at random. This value ordering is deterministic, i.e., recomputation is supported.
-%    binary procedure P: Takes a variable as first argument, and binds its second argument to a domain descriptor D to serve as the restriction on said variable to be used in a binary distribution step (D in one branch, compl(D) in the other). 
+%    ternary procedure {P X SelectFn ?Dom}: where X is the parameter object selected by order and filter, SelectFn is the function given to the select argument, and Dom is the resulting domain specification. Dom serves as the restriction on the parameter value to be used in a binary distribution step (Dom in one branch, compl(Dom) in the other).
+   %% NB: the interface of this function is changed compared to FD.distribute.
    %%
    %% The feature test expects a unary boolean function: all score parameters fulfilling the test are distributed.
    %%
@@ -606,7 +613,7 @@ define
       then
 	 proc {$ MyScore}
 	    MyScore = {ScoreScript}
-	    {FD.distribute {Adjoin {MakeFDDistribution {Record.subtract DistributionArgs
+	    {FdDistribute {Adjoin {MakeFDDistribution {Record.subtract DistributionArgs
 							value}}
 			    generic(value:{MakeRandomDistributionValue
 					   {GUtils.makeRandomGenerator}})}
@@ -618,7 +625,7 @@ define
       else
 	 proc {$ MyScore}
 	    MyScore = {ScoreScript}
-	    {FD.distribute {MakeFDDistribution DistributionArgs}
+	    {FdDistribute {MakeFDDistribution DistributionArgs}
 	     {MyScore collect($ test:fun {$ X}
 					{X isParameter($)} andthen
 					{Test X}
