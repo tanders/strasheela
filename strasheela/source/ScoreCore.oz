@@ -2978,15 +2978,23 @@ define
 		     {Adjoin DefAs.rdefaults Args.rargs}
 		  else DefAs.rdefaults
 		  end
+	 Super = if {HasFeature Args super} then
+		    Args.super
+		 else DefAs.super
+		 end
+	 Mixins = if {HasFeature Args mixins} then
+		       Args.mixins
+		  else DefAs.mixins
+		  end
 	 As = {Adjoin  {Adjoin DefAs.defaults Args}
 	       unit(iargs: ItemAs
 		    rargs: RuleAs)}
       in
-	 MyScore = {DefAs.super As}
+	 MyScore = {Super As}
 	 if Body \= nil then 
 	    thread {Body MyScore As} end
 	 end
-	 {ForAll DefAs.mixins
+	 {ForAll Mixins
 	  %% threads created already in Mixin (if defined with DefMixinSubscript)
 	  proc {$ Mixin} {Mixin MyScore As} end}
       end
