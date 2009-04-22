@@ -24,7 +24,8 @@ import
    Pattern at 'x-ozlib://anders/strasheela/Pattern/Pattern.ozf'
    
 export
-   KeynumToFreq FreqToKeynum RatioToKeynumInterval KeynumToPC
+   KeynumToFreq FreqToKeynum RatioToKeynumInterval % RatioToCent
+   KeynumToPC
    TransposeRatioIntoStandardOctave RatioToStandardOctaveFloat
    SortRatios SortRatios2
    LevelToDB DBToLevel
@@ -61,6 +62,9 @@ define
       else {FreqToKeynum (Ratio * Freq0) KeysPerOctave}
       end
    end
+%    /** %% Variant of RatioToKeynumInterval which directly outputs a cent value (a float).
+%    %% */
+%    fun {RatioToCent Ratio} {RatioToKeynumInterval Ratio 1200.0} end
    
    /** %% Transforms a keynumber (a float) in an equally tempered scale with KeysPerOctave (a float) into its corresponding pitch class (a float) in [0, PitchesPerOctave).
 % %% */
