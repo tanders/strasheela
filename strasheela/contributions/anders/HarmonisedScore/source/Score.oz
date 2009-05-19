@@ -320,7 +320,7 @@ define
       %% to avoid neg Aux (when CollectionPC=0 and Accidental=0) I
       %% added PitchesPerOctave -- does not change PC meaning of Aux..
       Aux =: CollectionPC + Accidental - AccidentalOffset + PitchesPerOctave      
-      PC =: {FD.modI Aux PitchesPerOctave}
+      PC = {FD.modI Aux PitchesPerOctave}
       {Select.fd CollectionPCs Degree CollectionPC}
    end
 
@@ -2367,7 +2367,7 @@ define
 	     1}
 	    {ForAll {LUtils.matTrans [ScalePCFSs ScaleRoots RelatedScaleBs]}
 	     proc {$ [ScalePCFS ScaleRoot RelatedScaleB]}
-		%% apply constraint for related scale (the is always only
+		%% apply constraint for related scale (there is always only
 		%% one), if note "exists"
 		{FD.impl {FD.conj ExistingNoteB RelatedScaleB}
 		 {Combinator.'reify'
@@ -2450,7 +2450,7 @@ define
 	     1}
 	    {ForAll {LUtils.matTrans [ChordPCFSs ChordRoots RelatedChordBs]}
 	     proc {$ [ChordPCFS ChordRoot RelatedChordB]}
-		%% apply constraint for related scale (the is always only
+		%% apply constraint for related scale (there is always only
 		%% one), if note "exists"
 		{FD.impl {FD.conj ExistingNoteB RelatedChordB}
 		 {Combinator.'reify'
