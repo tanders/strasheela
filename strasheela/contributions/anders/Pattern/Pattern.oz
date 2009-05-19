@@ -348,17 +348,17 @@ define
    end
 
 
-   /** %% Ys (a list of FD ints) are the intervals between Xs (list of FD ints) plus an Offset (a FD int) in order to avoid negative intervals.
+   /** %% Ys (a list of FD ints, implicitly declared) are the intervals between Xs (list of FD ints) plus an Offset (a FD int) in order to avoid negative intervals.
    %% */
    proc {Intervals Xs Ys Offset}
       Ys = {Map2Neighbours Xs
 	    proc {$ X1 X2 ?Interval}
 	       Interval = {FD.decl}
-	        Interval =: X2 - X1 + Offset
+	       Interval =: X2 - X1 + Offset
 	    end}
    end
 
-   /** %% Ys (a list of FD ints) are the absolute intervals between Xs (list of FD ints).
+   /** %% Ys (a list of FD ints, implicitly declared) are the absolute intervals between Xs (list of FD ints).
    %% */
    proc {AbsIntervals Xs Ys}
       Ys = {Map2Neighbours Xs
