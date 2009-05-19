@@ -24,6 +24,7 @@
   - Further bug fixes and changes
     - Oz primitives like IsRecord, IsAtom etc. block on kinded variables (undetermined FD and FS vars), which could cause blocking of various Strasheela definitions. Now Strasheela always uses its new own GUtils.isRecord and GUtils.isAtom etc. which do not have this problem
     - HS.score: GetAdaptiveJIPitch: added arg tuneNonharmonicNotes, added GetAdaptiveJIPitch2, chord root now as in current tuning table or underlying ET (if no tuning table is defined), dependance on scale removed (can be completely wrong, e.g., with just major scale, major nineth of V would be syntonic comma too low)
+    - HS.score.degreeToPC: fixed propagation error 
     - HS.db: Pc2Ratios now returns nil if no ratio was defined for interval
     - Fenv method toList: fixed bug for case N=1
 
