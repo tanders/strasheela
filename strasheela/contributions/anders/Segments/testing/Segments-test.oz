@@ -76,6 +76,39 @@ fun {SymbolicDurToInt Spec} D.Spec end
 F = IntToFloat
 
 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%% Output
+%%
+
+fun {TimeForFileName}
+   MyTime = {OS.localTime}
+in
+   "day_"#MyTime.mDay#'-'#MyTime.mon+1#'-'#MyTime.year+1900#'_time_'#MyTime.hour#'-'#MyTime.min#'-'#MyTime.sec 
+end
+proc {RenderLilypondAndCsound MyScore Args}
+   Default = unit(file: out#'_'#{TimeForFileName}
+		  orc: "pluck.orc")
+   As = {Adjoin Default Args}
+in
+   {Out.renderAndPlayCsound MyScore As}
+%    {Out.outputScoreConstructor MyScore unit(file: As.file)}
+   {ET31.out.renderAndShowLilypond MyScore As}
+end
+{Explorer.object
+ add(information proc {$ I MyScore}
+		    if {Score.isScoreObject MyScore}
+		    then {RenderLilypondAndCsound MyScore unit}
+		    end
+		 end
+     label: 'to Lily + Csound: notes, chords and scales (31 ET)')}
+
+
+
+
+
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%
 %% Distro
@@ -520,22 +553,26 @@ MkPhrase = {PatternedPhrase
  in
     MyScore
     = {Score.make
-       sim([{PatternedSlices
+       sim([{Segs.patternedSlices
 	     unit(n: 3
 		  layers:unit(
-			    unit(constructor: MkArpeggio
-				 iargs: unit(n: 6)
-				 rargs: unit(mostDurs: D.d16)
+			    unit(constructor: Segs.mkArpeggio
+				 iargs: unit(n: 6
+					    duration: D.d8)
+				 rargs: unit(maxPitch: 'C'#5
+					     minPitch: 'C'#3)
 				 pAccessor: fun {$ Motif}
 					       {Pattern.max {Motif mapItems($ getPitch)}}
 					    end
 				 pattern: proc {$ Xs} {Pattern.continuous Xs '<:'} end
 				)
-			    unit(constructor: MkArpeggio
+			    unit(constructor: Segs.mkArpeggio
 				 offsetTime: D.d8 
-				 iargs: unit(n: 8)
-				 rargs: unit(mostDurs: D.t3d8
-					     direction: '>:')
+				 iargs: unit(n: 8
+					     duration: D.d8)
+				 rargs: unit(direction: '>:'
+					     maxPitch: 'C'#5
+					     minPitch: 'C'#3)
 				 pAccessor: fun {$ Motif}
 					       {Motif mapItems($ getPitch)}.1
 % 					     {Pattern.min {Motif mapItems($ getPitch)}}
@@ -552,7 +589,7 @@ MkPhrase = {PatternedPhrase
 	   timeUnit:beats(Beat))
        add(chord:HS.score.chord)}
  end
- TypewiseWithPatternMotifs_LeftToRightTieBreaking_NoChordDurs_Distro}
+ TypewiseWithPatternMotifs_LeftToRightTieBreaking_Distro}
 
 
 
@@ -560,7 +597,7 @@ MkPhrase = {PatternedPhrase
 
 declare
 MyScore
-= {PatternedSlices
+= {Segs.patternedSlices
    unit(n: 3
 	layers: unit(
 		   unit(constructor: Score.makeSeq
