@@ -368,7 +368,8 @@ define
    %% NB: this value ordering is conveniently applied by setting the distribution argument 'value' of any solver to 'random'.
    %% */
    fun {MakeRandomDistributionValue RandGen}
-      fun {$ X}
+      fun {$ X_Param SelectFn}
+	 X = {SelectFn X_Param}
 	 Rand = {GUtils.randIntoRange  {RandGen} % pseudo-random number generated here
 		 {FD.reflect.min X} {FD.reflect.max X}}
       in
