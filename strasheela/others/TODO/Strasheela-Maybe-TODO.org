@@ -467,7 +467,7 @@ InspectorObject = {Inspector.new unit}
 
 * Strasheela documentation				      :MAYBE:STRASHEELA:
 
-** Use a Wiki for doc editing
+** OLD: Use a Wiki for doc editing
 
 *** Advantage of a wiki
 
@@ -620,6 +620,35 @@ InspectorObject = {Inspector.new unit}
 
 
 ** Strasheela tutorial
+
+*** Check out literate programming capabilities of org mode
+
+    Editing code in respective Emacs mode: C-c '
+    http://orgmode.org/org.html#Literal-examples
+
+    built-in support for Noweb
+    http://orgmode.org/worg/org-tutorials/multitarget-tables.php
+    
+    ?? Can I export programs (code) from and org file?
+
+
+**** Example
+
+#+BEGIN_SRC oz -n -r
+local X in
+   {Browse X}    (ref:sc)
+   X=10
+end
+#+END_SRC
+
+Check out [[(sc)]] bla bla
+
+
+   *So, looks like using org-mode would be great for editing the Strasheela tutorial*
+
+   Fully self-contained examples examples I can run as they are. What about examples consisting of multiple text snippets?
+
+
 
 *** Add MIDI out example to music representation chap
 
