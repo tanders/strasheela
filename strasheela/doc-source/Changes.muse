@@ -19,7 +19,9 @@
     - ET31.out: added NoteEt31ToLily_AdaptiveJI2, Meantone_TuningTable, JI_TuningTable
     - Segs: added MakeCounterpoint_PatternMotifs_DurationPitchcontour, MakeCounterpoint_PatternMotifs_OffsetDuration, MakeCounterpoint_PatternMotifs_OffsetDurationPitchcontour. 
     - Segs.makeCounterpoint: added arg clearDissonanceResolution (before this constraint was always enabled). 
-    - HS.rules: added GetRootDegreeIntervals SetBoundaryRoots SetBoundaryTypes NoParallels2. 
+    - HS.rules: added GetRootDegreeIntervals SetBoundaryRoots SetBoundaryTypes NoParallels2.
+    - Pattern: added MinDistinct
+    - HS.score: refactored HarmonicRythmFollowsMarkers: now works also for items with offsetTime > 0 
 
   - Further bug fixes and changes
     - Oz primitives like IsRecord, IsAtom etc. block on kinded variables (undetermined FD and FS vars), which could cause blocking of various Strasheela definitions. Now Strasheela always uses its new own GUtils.isRecord and GUtils.isAtom etc. which do not have this problem
