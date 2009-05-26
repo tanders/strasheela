@@ -3040,7 +3040,7 @@ define
    end
 
    
-   /** %% Constraints the start times of Chords (list of chord objects) to the start times of those items in MyScore (score object) which are marked to start a chord. In addition, the end time of the last chord is constrained to the end time of MyScore. The default chord-start-marker is an info tag 'startChord'. The number of marked score items and the number of chords must be equal.
+   /** %% Constraints the start times of Chords (list of chord objects) to the start times of those items in MyScore (score object) which are marked to start a chord. If the items begin with a rest (offsetTime > 0), then the chord starts with the rest. In addition, the end time of the last chord is constrained to the end time of MyScore. The default chord-start-marker is an info tag 'startChord'. The number of marked score items and the number of chords must be equal.
    %%
    %% Args
    %% 'hasChordStartMarker': a unary Boolean function which tests whether a score object should start with a new chord. The default is
@@ -3067,7 +3067,7 @@ define
 	 %% Actual constraints
 	 {List.forAllInd {LUtils.matTrans [ChordStartingItems Chords]}
 	  proc {$ I [MyItem MyChord]}
-	     {MyItem getStartTime($)} = {MyChord getStartTime($)}
+	     {MyItem getStartTime($)} - {MyItem getOffsetTime($)} =: {MyChord getStartTime($)}
 	  end}
 	 {MyScore getEndTime($)} = {{List.last Chords} getEndTime($)}
       end
