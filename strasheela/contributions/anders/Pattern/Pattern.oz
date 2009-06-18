@@ -956,6 +956,9 @@ define
    /** %% Like PercentTrue, but a range is specified: the percentage of true values in Bs is between MinPercent and MaxPercent (both FD ints, not implicitly declared).
    %% If MinPercent or MaxPercent are undetermined in the CSP, they might be undetermined in the solution too.
    %% */
+   %% TODO:
+   %% - define variant of PercentTrue_Range where only MaxPercent is constrained
+   %% 
    proc {PercentTrue_Range Bs MinPercent MaxPercent}
       Percent = {PercentTrue Bs}
    in
@@ -1745,6 +1748,8 @@ define
 
    /** %% Expects a fenv, and returns its contour with N (int) directions encoded as expected by Pattern.direction.
    %% */
+   %%
+   %% TODO: FenvToMatrixContour
    fun {FenvToContour MyFenv N}
       {Map2Neighbours {MyFenv toList($ N+1)}
        fun {$ Y1 Y2}
