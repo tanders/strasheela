@@ -16,6 +16,14 @@
 %% Disadvantage: the motif identity itself is not constrainable (i.e. the order of motifs is fixed)
 %%
 
+%%
+%% TODO:
+%%
+%% examples with more params defined in prototype
+%% - amp values in prototype and amp fenv in top-level container
+%%   -> amp value for each note is product of note amp * amp value at the note's position in top-level container 
+%%
+
 
 declare
 
