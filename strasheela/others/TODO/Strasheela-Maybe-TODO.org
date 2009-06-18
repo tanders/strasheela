@@ -395,6 +395,31 @@ https://sourceforge.net/tracker/index.php?func=detail&aid=1883454&group_id=16722
 Abstract applied constraint, so the effect is controllable
 
 
+** Realtime example with non-harmonic tones etc. for Eduardo	    :ARCHIVE:
+
+*** Do expresssive performance (timing and velocity)
+
+*** DONE Add more motifs						:URGENT:
+    CLOSED: [2009-04-11 Sat 14:06]
+
+
+** Revised Realtime example for Eduardo				    :ARCHIVE:
+
+*** Create default solutions (in case of fail etc)
+*** DONE See other TODOs in text
+    CLOSED: [2009-01-19 Mon 18:54]
+*** DONE Remove commented code
+    CLOSED: [2009-01-19 Mon 18:54]
+*** DONE Maxpatch: use or copy comments from other Max patch..
+    CLOSED: [2009-01-19 Mon 18:54]
+
+*** DONE ?? add Motifs (?? distinguish cases by triplets vs [duolen])
+    CLOSED: [2009-01-19 Mon 18:54]
+    
+*** ?? Do expresssive performance (timing and velocity)
+
+
+
 * Strasheela Bugs							 :MAYBE:
 
 ** Revise collect method (graph mode)					 :MAYBE:
@@ -466,152 +491,6 @@ InspectorObject = {Inspector.new unit}
 
 
 * Strasheela documentation				      :MAYBE:STRASHEELA:
-
-** OLD: Use a Wiki for doc editing
-
-*** Advantage of a wiki
-
-    - Quick editing 
-    - New content is immediately online
-    - Others can contribute (submitters must be registered, but I would allow for easy registration)
-    - Facilities like searching
-
-*** !!?? How can I backup the wiki content?
-
-    shell access highly recommended! 
-
-
-*** Sourceforge Mediawiki hosted app problems
-
-**** Sourceforge Mediawiki login restricted
-
-     How is login managed for Sourceforge Mediawiki hosted app?
-     It appears wiki editors must be registered at Sourceforge and addditionally granted permissions for the wiki.
-
-     I would like to make registration for wiki contributors as easy as possible. How?? Do I need to set up my own wiki then? Yes, that is the only way (and no changes planned by sourceforge, until projects can configure their own hosted wiki)
-     https://sourceforge.net/tracker/index.php?func=detail&aid=2183367&group_id=1&atid=350001
-
-
-
-**** DONE Not possible to load up sound files
-     CLOSED: [2008-12-01 Mon 13:25]
-
-     Mediawiki does allow for this in principle, but not Sourceforge mediawiki hosted app
-
-     Solution: simply create a link to sound files
-
-**** Sourceforge mediawiki hosted app does not allow customisation
-     
-     https://sourceforge.net/tracker/index.php?func=detail&aid=2147518&group_id=1&atid=200001
-
-     So, consider using a self-administered wiki instead
-     Could even be installed at sourceforge (like the webset). Example
-     http://pipmak.sourceforge.net/wiki/index.php/Main_Page
-     
-
-     Only customisation interface
-     https://apps.sourceforge.net/mediawiki/strasheela/index.php?title=Special:SpecialPages
-
-
-*** Mediawiki backup
-
-    https://apps.sourceforge.net/backup/strasheela/
-    http://www.mediawiki.org/wiki/Manual:Moving_a_wiki
-
-*** Present Sourceforge Mediawiki hosted app status 
-
-    I added 1 page for testing
-    https://apps.sourceforge.net/mediawiki/strasheela/index.php?title=All-interval_series
-
-    I can disable Mediawiki 
-    https://sourceforge.net/project/admin/hostedapp.php?group_id=167225
-
-    
-*** Mediawiki problem
-
-**** Likely very hard to have syntax colouring for Oz code
-
-     Perhaps I can live without syntax colouring?
-     For example, Lily doc does not even have syntax colouring in the actual doc..
-
-     - Extension:Syntax Highlighting GeSHi does not support Oz
-
-     - I cannot paste in pure HTML created y Emacs buffer HTMLize (and even if that would work, it would be tedious)
-
-
-*** Running Own MediaWiki Installation on Sourceforge.net
-
-    Description how
-    http://winhp.sourceforge.net/wiki/index.php/Running_MediaWiki_on_Sourceforge.net
-
-    But there are problems
-    https://sourceforge.net/tracker/index.php?func=detail&aid=2261709&group_id=1&atid=200001
-    Sourceforge replied (how to create a symlink), but never confirmation that/how it now works from orig poster 
-
-
-    * Sourceforge supports MySQL database servers for projects    
-    * PHP script support
-    * SSI (Server-Side Includes) support
-    * CGI (Perl, Python, Tcl, Ruby) script support
-
-
-**** Disk Quota
-
-     *Disk Quota*: Each project is provided 100MB of disk space for their usage. Each user is provided 5 MB of disk space. Any excess usage without prior permission may result in data purge without notice. In the event that your project requires additional disk space, please submit a Support Request. User disk space quotas will not be increased; project data should be placed in the provided project space rather than your home directory.
-     http://alexandria.wiki.sourceforge.net/Project+Web%2C+Shell%2C+VHOST+and+Database+Services
-
-     *!! NOTE: full Strasheela already goes beyond that quota (125MB)*
-
-     !! strasheela/contributions/anders/ET22/doc-DB/ChordsInDecatonicScales/ contains almost 70MB
-
-
-*** ?? Using another wiki platform? 
-
-    http://en.wikipedia.org/wiki/Wiki_software
-    It is hard to determine which wiki engines are the most popular, although a list of lead candidates include TWiki, MoinMoin, PmWiki, DokuWiki and MediaWiki (Google trend history comparison). TWiki, Traction TeamPage and Atlassian Confluence are popular on intranets. TikiWiki CMS/Groupware is a popular Wiki-CMS hybrid. A list of some of those available is included below, and another can be found at Wiki:WikiEngines.
-
-
-    http://en.wikipedia.org/wiki/Comparison_of_wiki_software
-
-    http://c2.com/cgi/wiki?ChoosingaWiki
-    
-    http://www.wikimatrix.org/
-
-*** ?? Drupal
-
-    Content Management System, big sites are run with it
-
-    editing can be wiki-like 
-    http://drupal.org/node/87225
-
-    http://en.wikipedia.org/wiki/Drupal
-    Drupal lacks an intuitive, easy administration user interface
-
-**** !! PmWiki: easy to install and customize, focuses on ease-of-use
-
-     http://en.wikipedia.org/wiki/PmWiki
-     http://www.pmwiki.org/
-     Support for sounds (default includes mp3, but no ogg not midi, default file size limit 50 KB)
-     Code? preformatted text OK, no syntax colouring of specific langs?
-
-
-     uses plain text files, no database needed
-
-**** DokuWiki: aimed at small companies’ documentation needs
-
-     http://en.wikipedia.org/wiki/Dokuwiki
-     http://www.dokuwiki.org/dokuwiki
-     
-
-     uses plain text files, no database needed
-
-     Source: syntax highlighting with GeSHi Generic Syntax Highlighter (as mediawiki)
-
-**** NO: TWiki: structured wiki -- more than I need (content management system)
-
-
-     
-     
 
 ** Installation instruction
 
@@ -881,6 +760,205 @@ piwik_log(piwik_action_name, piwik_idsite, piwik_url);
 
    
    
+** OLD Possibly set up wiki 					    :ARCHIVE:
+
+   *No, instead use Emacs org-mode for tutorial*
+
+   Problem: I would need memory!! 
+
+   Could I instead install a wiki on ICCMR server? There is > 15 GB available... 
+
+   Advantage: I can easily backup, have access to hardware 
+
+*** Required features
+
+    OK in sourceforge - Sound files upload
+    OK in sourceforge - Backup possible
+
+*** other important features 
+
+    - Easy registration for editors
+
+*** Installation
+
+**** Mediawiki
+     
+     http://www.mediawiki.org/wiki/Installation
+     http://www.mediawiki.org/wiki/Manual:Installation_guide
+
+     Check out turn-key solutions
+     http://www.mediawiki.org/wiki/TurnKey_MediaWiki
+     http://www.rpath.org/rbuilder/project/mediawiki
+
+***** Mediawiki Extensions
+
+      http://www.mediawiki.org/wiki/Extension:Matrix
+
+***** Add syntax colouring for Oz
+
+      http://www.mediawiki.org/wiki/Extension:ASHighlight
+      http://www.andre-simon.de/dokuwiki/doku.php?id=en:langdef
+      http://www.andre-simon.de/dokuwiki/doku.php?id=en:regex
+
+
+***** Lilypond support: http://www.mediawiki.org/wiki/Extension:LilyPond
+
+
+***** MP3 
+      http://www.mediawiki.org/wiki/Extension:FlashMP3
+
+
+
+
+
+** OLD: Use a Wiki for doc editing				    :ARCHIVE:
+
+*** Advantage of a wiki
+
+    - Quick editing 
+    - New content is immediately online
+    - Others can contribute (submitters must be registered, but I would allow for easy registration)
+    - Facilities like searching
+
+*** !!?? How can I backup the wiki content?
+
+    shell access highly recommended! 
+
+
+*** Sourceforge Mediawiki hosted app problems
+
+**** Sourceforge Mediawiki login restricted
+
+     How is login managed for Sourceforge Mediawiki hosted app?
+     It appears wiki editors must be registered at Sourceforge and addditionally granted permissions for the wiki.
+
+     I would like to make registration for wiki contributors as easy as possible. How?? Do I need to set up my own wiki then? Yes, that is the only way (and no changes planned by sourceforge, until projects can configure their own hosted wiki)
+     https://sourceforge.net/tracker/index.php?func=detail&aid=2183367&group_id=1&atid=350001
+
+
+
+**** DONE Not possible to load up sound files
+     CLOSED: [2008-12-01 Mon 13:25]
+
+     Mediawiki does allow for this in principle, but not Sourceforge mediawiki hosted app
+
+     Solution: simply create a link to sound files
+
+**** Sourceforge mediawiki hosted app does not allow customisation
+     
+     https://sourceforge.net/tracker/index.php?func=detail&aid=2147518&group_id=1&atid=200001
+
+     So, consider using a self-administered wiki instead
+     Could even be installed at sourceforge (like the webset). Example
+     http://pipmak.sourceforge.net/wiki/index.php/Main_Page
+     
+
+     Only customisation interface
+     https://apps.sourceforge.net/mediawiki/strasheela/index.php?title=Special:SpecialPages
+
+
+*** Mediawiki backup
+
+    https://apps.sourceforge.net/backup/strasheela/
+    http://www.mediawiki.org/wiki/Manual:Moving_a_wiki
+
+*** Present Sourceforge Mediawiki hosted app status 
+
+    I added 1 page for testing
+    https://apps.sourceforge.net/mediawiki/strasheela/index.php?title=All-interval_series
+
+    I can disable Mediawiki 
+    https://sourceforge.net/project/admin/hostedapp.php?group_id=167225
+
+    
+*** Mediawiki problem
+
+**** Likely very hard to have syntax colouring for Oz code
+
+     Perhaps I can live without syntax colouring?
+     For example, Lily doc does not even have syntax colouring in the actual doc..
+
+     - Extension:Syntax Highlighting GeSHi does not support Oz
+
+     - I cannot paste in pure HTML created y Emacs buffer HTMLize (and even if that would work, it would be tedious)
+
+
+*** Running Own MediaWiki Installation on Sourceforge.net
+
+    Description how
+    http://winhp.sourceforge.net/wiki/index.php/Running_MediaWiki_on_Sourceforge.net
+
+    But there are problems
+    https://sourceforge.net/tracker/index.php?func=detail&aid=2261709&group_id=1&atid=200001
+    Sourceforge replied (how to create a symlink), but never confirmation that/how it now works from orig poster 
+
+
+    * Sourceforge supports MySQL database servers for projects    
+    * PHP script support
+    * SSI (Server-Side Includes) support
+    * CGI (Perl, Python, Tcl, Ruby) script support
+
+
+**** Disk Quota
+
+     *Disk Quota*: Each project is provided 100MB of disk space for their usage. Each user is provided 5 MB of disk space. Any excess usage without prior permission may result in data purge without notice. In the event that your project requires additional disk space, please submit a Support Request. User disk space quotas will not be increased; project data should be placed in the provided project space rather than your home directory.
+     http://alexandria.wiki.sourceforge.net/Project+Web%2C+Shell%2C+VHOST+and+Database+Services
+
+     *!! NOTE: full Strasheela already goes beyond that quota (125MB)*
+
+     !! strasheela/contributions/anders/ET22/doc-DB/ChordsInDecatonicScales/ contains almost 70MB
+
+
+*** ?? Using another wiki platform? 
+
+    http://en.wikipedia.org/wiki/Wiki_software
+    It is hard to determine which wiki engines are the most popular, although a list of lead candidates include TWiki, MoinMoin, PmWiki, DokuWiki and MediaWiki (Google trend history comparison). TWiki, Traction TeamPage and Atlassian Confluence are popular on intranets. TikiWiki CMS/Groupware is a popular Wiki-CMS hybrid. A list of some of those available is included below, and another can be found at Wiki:WikiEngines.
+
+
+    http://en.wikipedia.org/wiki/Comparison_of_wiki_software
+
+    http://c2.com/cgi/wiki?ChoosingaWiki
+    
+    http://www.wikimatrix.org/
+
+*** ?? Drupal
+
+    Content Management System, big sites are run with it
+
+    editing can be wiki-like 
+    http://drupal.org/node/87225
+
+    http://en.wikipedia.org/wiki/Drupal
+    Drupal lacks an intuitive, easy administration user interface
+
+**** !! PmWiki: easy to install and customize, focuses on ease-of-use
+
+     http://en.wikipedia.org/wiki/PmWiki
+     http://www.pmwiki.org/
+     Support for sounds (default includes mp3, but no ogg not midi, default file size limit 50 KB)
+     Code? preformatted text OK, no syntax colouring of specific langs?
+
+
+     uses plain text files, no database needed
+
+**** DokuWiki: aimed at small companies’ documentation needs
+
+     http://en.wikipedia.org/wiki/Dokuwiki
+     http://www.dokuwiki.org/dokuwiki
+     
+
+     uses plain text files, no database needed
+
+     Source: syntax highlighting with GeSHi Generic Syntax Highlighter (as mediawiki)
+
+**** NO: TWiki: structured wiki -- more than I need (content management system)
+
+
+     
+     
+
+
+
 * Strasheela design					      :MAYBE:STRASHEELA:
 
 ** Pattern [skyline]
@@ -2194,6 +2272,12 @@ archive init record.
     First rethink whether I simply add such alternative args or wether there are better alternative ideas.. 
 
 
+** ?? Archive Fenvs by approximation (sampling the Fenv)
+
+   I may use linear Fenvs or something similar. May result in long code files (if approximation/sampling has high rate), but this is at least some easy and working solution
+   
+
+
 ** Efficiency
 
 *** Define extendable left-to-right distro strategy		  :NEXT:
@@ -2865,6 +2949,7 @@ This information can be them used
 **** ?? add textual representation of parameters: currently, parameters are not supported my Score.makeScore :MAYBE:
 
      should I add parameter support at all? Score.makeScore _does_ work on note-level. I would only need to create single params, e.g., for item init arg addParameters
+
 
 
 * Strasheela installation						 :MAYBE:

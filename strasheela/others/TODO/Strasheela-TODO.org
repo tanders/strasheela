@@ -2,108 +2,9 @@
 
 * Strasheela release
 
-
-** ?? Possibly set up wiki
-
-   Problem: I would need memory!! 
-
-   Could I instead install a wiki on ICCMR server? There is > 15 GB available... 
-
-   Advantage: I can easily backup, have access to hardware 
-
-*** Required features
-
-    OK in sourceforge - Sound files upload
-    OK in sourceforge - Backup possible
-
-*** other important features 
-
-    - Easy registration for editors
-
-*** Installation
-
-**** Mediawiki
-     
-     http://www.mediawiki.org/wiki/Installation
-     http://www.mediawiki.org/wiki/Manual:Installation_guide
-
-     Check out turn-key solutions
-     http://www.mediawiki.org/wiki/TurnKey_MediaWiki
-     http://www.rpath.org/rbuilder/project/mediawiki
-
-***** Mediawiki Extensions
-
-      http://www.mediawiki.org/wiki/Extension:Matrix
-
-***** Add syntax colouring for Oz
-
-      http://www.mediawiki.org/wiki/Extension:ASHighlight
-      http://www.andre-simon.de/dokuwiki/doku.php?id=en:langdef
-      http://www.andre-simon.de/dokuwiki/doku.php?id=en:regex
-
-
-***** Lilypond support: http://www.mediawiki.org/wiki/Extension:LilyPond
-
-
-***** MP3 
-      http://www.mediawiki.org/wiki/Extension:FlashMP3
-
-
-** Document more examples 
-
-   Move existing example doc to wiki
-   Add more example docs..
-
-
-** Test Windows installation script and complete it
-
-   [[file:~/oz/music/Strasheela/strasheela/trunk/strasheela/scripts/install.bat]]
-
-
-** Repair adaptive JI
-
-   see    [[file:~/oz/music/Strasheela/strasheela/trunk/strasheela/contributions/anders/HarmonisedScore/testing/Score-test.oz::GetAdaptiveJIPitch]]
-
-# ?? did I somewhere replace root by transposition?
-# see 22 ET example..
-
-Soem bug in computing the octave
-
-
 ** Lilypond: output seq (of seq ...) of sims with multiple staffs 
 
-
-** Fix bugs
-
-   HS.rules.maxRepetitions
-
-   HS.rules.expressEssentialChordPCs
-
 * Strasheela examples
-
-
-** Realtime example with non-harmonic tones etc. for Eduardo
-
-*** Do expresssive performance (timing and velocity)
-
-*** DONE Add more motifs						:URGENT:
-    CLOSED: [2009-04-11 Sat 14:06]
-
-** Revised Realtime example for Eduardo
-
-*** Create default solutions (in case of fail etc)
-*** DONE See other TODOs in text
-    CLOSED: [2009-01-19 Mon 18:54]
-*** DONE Remove commented code
-    CLOSED: [2009-01-19 Mon 18:54]
-*** DONE Maxpatch: use or copy comments from other Max patch..
-    CLOSED: [2009-01-19 Mon 18:54]
-
-*** DONE ?? add Motifs (?? distinguish cases by triplets vs [duolen])
-    CLOSED: [2009-01-19 Mon 18:54]
-    
-*** ?? Do expresssive performance (timing and velocity)
-
 
 * Strasheela Bugs
 
@@ -149,6 +50,22 @@ MyTestScore = {Score.makeScore
  unit(file:myTestScore)}
 
 
+** Repair adaptive JI
+
+   see    [[file:~/oz/music/Strasheela/strasheela/trunk/strasheela/contributions/anders/HarmonisedScore/testing/Score-test.oz::GetAdaptiveJIPitch]]
+
+# ?? did I somewhere replace root by transposition?
+# see 22 ET example..
+
+Some bug in computing the octave
+
+
+** Fix bugs
+
+   HS.rules.maxRepetitions
+
+   HS.rules.expressEssentialChordPCs
+
 * Strasheela design						    :STRASHEELA:
 
 ** TODO Fenv.renderAndPlayMidi: add Fenv controlling articulation (note length)
@@ -160,10 +77,7 @@ MyTestScore = {Score.makeScore
    I feel multiplication is more flexible, but sometimes I may want to add instead
    ?? can I somehow generise and allow for both options?
 
-** TODO Archive Fenvs by approximation (sampling the Fenv)
 
-   I may use linear Fenvs or something similar. May result in long code files (if approximation/sampling has high rate), but this is at least some easy and working solution
-   
 ** TODO Create variant for Out.saveScore using pickles
 
    Some score objects (e.g., Fenvs which contain procs) cannot be translated into text (code), i.e. cannot be "archived". However, they could be picked! 
