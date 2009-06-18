@@ -883,11 +883,134 @@ piwik_log(piwik_action_name, piwik_idsite, piwik_url);
    
 * Strasheela design					      :MAYBE:STRASHEELA:
 
+** Pattern [skyline]
+
+   a higher level than contour: 
+
+   {Skyline Xs Ys}
+
+   Ys marks whether values in Xs are 
+   - Y=2: local maximum (contour changes to going down, or contour changes from going up -- two options..)
+   - Y=1: local minimum (contour changes to going up, or contour changes from going down)
+   - Y=0: neither local min or max
+
+   If Xs and Ys are processed in parallel, then both whether some value in Xs is a local max and also its actual value is accessible
+
+
+** Outputting partially determined scores
+
+   Idea: define some score transformation expecting partially determined score and returning copy score that replaces/leaves out all undetermined score objects and only contains the fully determined score objects. Needs user-definable def what a fully determined score object is (e.g., some analytical information may still be left undetermined..)
+
+
+** Counterpoint rule: control local maxima
+
+   - concurrently find stream of local max in melody (list of pitches)
+
+   - concurrently constrain pairs of local max with user-given constraint, e.g., control their directions with fenv (fenv expresses max contour for whole pitch list), and restrict max interval between local max 
+
+     
+
+** Parallel search
+
+*** Summary: Replace all convenience notations like =: in Strasheela source with procedures.
+
+-----
+
+On 23 Mar 2009, at 18:32, Raphael Collet wrote:
+The nice equation syntax does not work with distributed programs :-(
+
+In order to replace all occurances of these operators I tried to come up with a list of their corresponding plain procedures. However, I was unable to find the procedures for =: and \=: 
+
+Here is what I can up with. Any problem here? Did I perhaps miss any convenience notation?  What are the procedures for =: and \=:?  
+
+:: / :::                 - FD.int, FD.decl  
+Addition etc   - FD.sum, FD.plus, FD.minus
+<: etc.              - FD.less, FD.lesseq, FD.greater, FD.greatereq
+=: / \=:              - ??
+
+----------
+
+Longer expressions always try to replace by a single FD.sum and friends: more efficient propagation
+
+On Mar 26, 2009, at 8:26 AM, Raphael Collet wrote:
+all equations and inequations are translated to calls to  
+FD.sum, FD.sumC, and FD.sumCN, depending on the respective  
+complexity of the polynomial involved.  This holds for all the  
+relational operators '=:', '\=:', '<:', '=<:', '>:', and '>=:'.
+
+For instance,
+A+B+C =: 10     =>     {FD.sum [A B C] '=:' 10}
+A+2*B <: C        =>     {FD.sumC [1 2 ~1] [A B C] '<:' 0}
+A+B*C >=: D     =>     {FD.sumCN [1 1 ~1] [[A] [B C] [D]] '>=:' 0}
+
+I think you can observe the translation if you compile a statement  
+to its "core" syntax.  Just be careful, because the core syntax  
+expansion makes direct reference to some builtins that are behind  
+FD.sum*.  You should not use those builtin references directly in  
+your program.
+
+
+-------
+
+On 26 Mar 2009, at 21:44, Raphael Collet wrote:
+
+Dear Torsten
+
+On Thu, Mar 26, 2009 at 10:24 PM, Torsten Anders <torsten.anders@plymouth.ac.uk> wrote:
+Dear Raphael,
+
+I see, thank you very much.
+
+Nevertheless, one last question: when I use the OPI to translate X \=: Y into the core syntax, then I get something like
+
+ {FD.sumC 1#~1 X#Y '\=:' 0}
+
+Does this propagation behave the same as the following (for both, the documentation says "For the relation symbol '\\=:', the propagator waits until at most one non-determined variable is left.")? This latter is more easy for me to read...
+
+ {FD.sum [X] '\=:' Y}
+
+Yes, I think the propagation algorithm has the same effect in both cases.  Note that it is also equivalent to {FD.distinct [X Y]}.  The core syntax expansion somehow transforms the equation to a normalized form, which can explain the statement above.  (The goal of the normalization is also to detect coreferences sooner, and group terms to get the best from the propagation algorithm.)
+
+Cheers,
+raph
+
+-------
+   
+declare
+A B
+A \=: B
+
+
+proc {Uneq X Y}
+   {FD.sum [X] '\=:' Y}
+end
+
+
+proc {Uneq X Y}
+   {FD.sumC 1#~1 X#Y '\=:' 0}
+end
+
+{FD.distinct [X Y]}
+
+
+
+*** Test: example with score 
+
+
+** Expressive performance
+
+   see GTD folder "Expressive Performance"
+
+   idea for simple abstraction to add performance Fenvs to a score without.. 
+
+
 ** Value ordering with access to parameter objects
 
    Copy FD.distribute source somewhere into Strasheela and then adapt it as required
 
+
 ** 
+
 
 ** Conversion of cent values to fractions with continued fractions
 
@@ -920,7 +1043,7 @@ the continued fraction method.
    
    This solution would be much better than storing a fenv by interpolation data..
 
-
+   
 ** Constrain form with graph constraints 
 
 *** Ask Gustavo Gutierrez (gustavo.ggutierrez@gmail.com) about current stage of GeOz
@@ -1299,6 +1422,8 @@ From this viewpoint, there is an interesting polarity between major and harmonic
 
      Indirect resolution: 
 
+
+*** Def abstraction {IsDissonantChord MyChord B}
 
 
 ** Introduce some abstraction for modulation
@@ -2601,6 +2726,16 @@ see Strasheela/private/WorkInProgress/NonmensuralENP->mensuralENP
 
 
 ** Graphical interface 
+
+*** GUIs for extended scripts
+
+    GUIs for extended scripts can be created automatically if info on the extended script interface is available. E.g., extend ozh doc string with details on interface, listing all args and their expected values
+
+This information can be them used
+
+  - for automatically creating an QTk interface (useful for top-level extended scripts, e.g., for creating demos)
+  - for automatically creating an visual language interface (project Strasheela in OM/PWGL..)
+
 
 *** Score Interface for interactive music constraint programming
 

@@ -62,11 +62,22 @@
 
 ** Repair adaptive JI
 
-   see [[file:~/oz/music/Strasheela/strasheela/trunk/strasheela/contributions/anders/HarmonisedScore/testing/Score-test.oz::GetAdaptiveJIPitch]]
+   see    [[file:~/oz/music/Strasheela/strasheela/trunk/strasheela/contributions/anders/HarmonisedScore/testing/Score-test.oz::GetAdaptiveJIPitch]]
+
+# ?? did I somewhere replace root by transposition?
+# see 22 ET example..
+
+Soem bug in computing the octave
 
 
 ** Lilypond: output seq (of seq ...) of sims with multiple staffs 
 
+
+** Fix bugs
+
+   HS.rules.maxRepetitions
+
+   HS.rules.expressEssentialChordPCs
 
 * Strasheela examples
 
@@ -185,7 +196,6 @@ MyTestScore = {Score.makeScore
 ** GeOz 
    
 *** TODO Install GeOz 
-    SCHEDULED: <2009-06-01 Mon>
     
     NOTE: development of Gecode/J is discontinued. So, I better stick with Mozart/Oz. But then it would be a good idea to support gustavo getting Gecode running for Oz. E.g., moral support by installing it and asking questions, also finding bugs perhaps..
 
