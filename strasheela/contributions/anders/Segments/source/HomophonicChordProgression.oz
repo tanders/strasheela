@@ -40,6 +40,9 @@ define
    %% 'restrictMelodicIntervals' (default unit(minPercent:60 maxPercent:100)): if non-false then the intervals between upper voices are a fifths at most, and the bass is a fifths at most or an octave. The args minPercent/maxPercent specify the percentage boudary of the number of steps in the upper voices. Disabled if false.
    %% 'commonPitchesHeldOver' (default true): if true, the notes of the harmonic band stay in the same voice and octave.
    %% 'noParallels' (default true): if true, no parallel perfect consonances are permitted.
+   %% 'playAllChordTones' (default true): if true, all chord tones are played.
+   %% 'noVoiceCrossing' (default true): if true, no voice crossings are permitted.
+   %% 'maxUpperVoiceDistance' (default {HS.db.getPitchesPerOctave}): maximum interval between upper voices (interval to bass can be larger).
    %% 'sliceRule' (default proc {$ Xs} skip end): unary constraint applied to the list MyChords | Notes at each "time slice" (i.e., for each chord and the notes sim to this chord). Notes are the notes in descending order (i.e. Bass last).
    %%
    %% Further Args.iargs, Args.rargs: as for Segs.makeCounterpoint_Seq
@@ -76,6 +79,10 @@ define
 		      noParallels: true
 		      restrictMelodicIntervals: unit(minPercent:60
 						     maxPercent:100)
+% 		      restrictMelodicIntervals_bass: 
+		      playAllChordTones: true
+		      noVoiceCrossing: true
+		      maxUpperVoiceDistance: {HS.db.getPitchesPerOctave}
 		      sliceRule: proc {$ Xs} skip end
 		     )
       As = {GUtils.recursiveAdjoin Defaults Args}
@@ -90,6 +97,7 @@ define
       Nss
       ChordAndNotesSlices
    in
+      %% ?? shall top-level constructor be arg, so that different score topologies are possible?
       MyScore
       = if As.isToplevel then
 	   {Score.make
@@ -133,9 +141,13 @@ define
 	 {ForAll ChordAndNotesSlices
 	  proc {$ C|VoiceNotes}
 	     {Pattern.allEqual {Pattern.mapItems C|VoiceNotes getStartTime}}
-	     {PlayAllChordTones C VoiceNotes}
-	     {NoVoiceCrossing VoiceNotes}
-	     {ConstrainUpperVoiceDistance VoiceNotes}
+	     if As.playAllChordTones \= false then 
+		{PlayAllChordTones C VoiceNotes}
+	     end
+	     if As.noVoiceCrossing \= false then 
+		{NoVoiceCrossing VoiceNotes}
+	     end
+	     {ConstrainUpperVoiceDistance VoiceNotes As.maxUpperVoiceDistance}
 	     if {HS.score.isInversionMixinForChord C} then 
 		%% Note: soprano is ignored here
 		{C getBassPitchClass($)} = {{List.last VoiceNotes} getPitchClass($)}
@@ -224,10 +236,10 @@ define
    end
    /** %% The upper voices are max an ocatve apart of each other. Notes is same args as for NoVoiceCrossing.
    %% */
-   proc {ConstrainUpperVoiceDistance Notes}
+   proc {ConstrainUpperVoiceDistance Notes MaxDistance}
       {Pattern.for2Neighbours Notes.2
        proc {$ N1 N2}
-	  {HS.rules.getInterval N1 N2} =<: {HS.db.getPitchesPerOctave}
+	  {HS.rules.getInterval N1 N2} =<: MaxDistance
        end}
    end
 
