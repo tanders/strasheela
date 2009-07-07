@@ -1,5 +1,18 @@
 #+CATEGORY: Strasheela
 
+* Strasheela advertising
+
+** Consider announcing Strasheela at ohloh (as I already did on freshmeat)
+   
+   ohloh has recently been bought by sourceforge
+   
+   
+   http://www.ohloh.net/
+
+   http://en.wikipedia.org/wiki/Ohloh
+
+
+
 * Strasheela examples					      :MAYBE:STRASHEELA:  
 
 ** Go through test files and collect examples there in files in examples folder :MAYBE:
@@ -960,6 +973,17 @@ piwik_log(piwik_action_name, piwik_idsite, piwik_url);
 
 
 * Strasheela design					      :MAYBE:STRASHEELA:
+
+** Generalise pitch unit
+
+   Currently only specific pitch units are supported:  midi, keynumber, et22, et31, et72, midicent (or midic), frequency (or freq), hz and any equal temperament. User cannot extend definition of Pitch method getValueInMidi by further units 
+[[file:~/oz/music/Strasheela/strasheela/trunk/strasheela/source/ScoreCore.oz::meth%20getValueInMidi%20X%20table%20Table%20nil][file:~/oz/music/Strasheela/strasheela/trunk/strasheela/source/ScoreCore.oz::meth getValueInMidi X table Table nil]]
+
+
+TODO: allow for mapping unit atom -> pitch value compution function (unary function expecting pitch parameter object) set in Init (much like environment)
+If Pitch method getValueInMidi comes across any pitch unit not in its list and no ET, it checks in Init whether uses defined this pitch unit.. 
+
+
 
 ** Pattern [skyline]
 
