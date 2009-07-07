@@ -11,6 +11,7 @@
     - 
 
   - Minor additions 
+    - Added pitch unit mHz (Millihertz)
     - GUtils: added GUtils.recursiveRatio
     - Init: added SetNoteLengthsRecord, SymbolicDurToInt
     - SMapping: added MapTimeslices ForTimeslices
