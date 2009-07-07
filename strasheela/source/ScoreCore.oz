@@ -1327,7 +1327,7 @@ define
 %       meth getValue(?X unit:Unit<=midicents)
 % 	 X={self convertTo($ Unit)}
 %       end
-	 /** %% Returns the parameter value translated to a float representing a Midi keynumber (i.e. 60.5 is a quarternote above middle c). The translation uses the parameter unit which must be bound (otherwise the method suspends, but warns also). Supported units are (represented by these atoms): midi/keynumber, midicent/midic, frequency/freq/hz and et72 (equal temperament with 72 steps per octave).
+	 /** %% Returns the parameter value translated to a float representing a Midi keynumber (i.e. 60.5 is a quarternote above middle c). The translation uses the parameter unit which must be bound (otherwise the method suspends, but warns also). Supported units are (represented by these atoms): midi/keynumber, midicent/midic, frequency/freq/hz, mHz and and arbitrary equal temperaments.
 	 %% A tuning table is used if such a table was either defined with Init.setTuningTable or was specified as optional argument table. 
 	 %% */
 	 meth getValueInMidi(?X table:Table<=nil)
@@ -1357,13 +1357,14 @@ define
 		   [] frequency then {MUtils.freqToKeynum Value 12.0}
 		   [] freq then {MUtils.freqToKeynum Value 12.0}
 		   [] hz then {MUtils.freqToKeynum Value 12.0}
+		   [] mHz then {MUtils.freqToKeynum Value/1000.0 12.0}
 		   else
 		      if {IsET Unit}
 		      then Value * 12.0 / {IntToFloat {GetPitchesPerOctave Unit}}
 		      else 
 			 {Exception.raiseError
 			  strasheela(illParameterUnit Unit self
-				     "Supported units are midi, keynumber, et22, et31, et72, midicent (or midic), frequency (or freq), and hz."
+				     "Supported pitch units are midi, keynumber, midicent (or midic), frequency (or freq), hz, mHz, and arbitrary equal temperaments (notated et<number>)."
 			    % "Unsupported pitch unit."
 				    )}
 			 unit		% never returned
