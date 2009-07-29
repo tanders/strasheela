@@ -66,7 +66,12 @@ Some bug in computing the octave
 
    HS.rules.expressEssentialChordPCs
 
+
 * Strasheela design						    :STRASHEELA:
+
+
+** Diss resolution
+   [[file:Strasheela-Maybe-TODO.org::*Introduce%20some%20generalised%20concept%20of%20resolution%20of%20dissonances][file:Strasheela-Maybe-TODO.org::*Introduce some generalised concept of resolution of dissonances]]
 
 ** TODO Fenv.renderAndPlayMidi: add Fenv controlling articulation (note length)
    

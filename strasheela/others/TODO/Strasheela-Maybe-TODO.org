@@ -1479,7 +1479,20 @@ From this viewpoint, there is an interesting polarity between major and harmonic
    
 ** Introduce some generalised concept of resolution of dissonances
 
+*** !! Idea using note parameter chord degree
+
+    see [[file:~/oz/music/Strasheela/strasheela/trunk/strasheela/examples/Harmony-Examples/Schoenberg-TheoryOfHarmony.oz::proc%20ResolveDissonances_ChordDegree%20Notes%20Args%20Args%20unused][file:~/oz/music/Strasheela/strasheela/trunk/strasheela/examples/Harmony-Examples/Schoenberg-TheoryOfHarmony.oz::proc ResolveDissonances_ChordDegree Notes Args Args unused]]
+
+    simplified for conventional theory: if note's chord degree > 3, then it is 7th, 9th .. i.e. a dissonance. Treatment, e.g., by stepwise resolution 
+
+NB: no preparation possible with this approach, but I could do without that anyway 
+
+For chords like diminished triad, approach must be extended: extended def depending on note's chord index/type besides note's chord degree
+
+
 *** Extend chord music representation: which chord notes are dissonant?
+
+    this approach useful for modelling preparation, for resolution better use idea above
 
 **** DONE Edit default database: which pitch classes are dissonant?
      CLOSED: [2008-03-17 Mon 12:52]
@@ -1495,6 +1508,7 @@ From this viewpoint, there is an interesting polarity between major and harmonic
      Constraint method isDissonantChordNote(PitchClass B): tests
      whether PitchClass (or scale degree?) is specified to be
      dissonant in related chord
+
 
 *** Define constraint {IsDissonanceR MyPitchClass B}
 
