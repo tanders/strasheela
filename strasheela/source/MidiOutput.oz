@@ -351,6 +351,7 @@ define
 	 else nil
 	 end
       end
+      %% Defs for low-level event
       %% GetStart works for subevent lists and NoteOnEvent#NoteOffEvent pairs
       fun {GetStart NoteEvents} NoteEvents.1.time end
       fun {GetEnd NoteEvents} NoteEvents.2.time end
@@ -1011,13 +1012,14 @@ define
 %    end
 
    
-   /** %% Returns the MIDI channel for the temporal item X (an integer). The channel is defined as an info tag of the form channel(Chan) either in X or in some temporal container of X. If no channel definition is found, nil is returned.
+   /** %% Returns the MIDI channel for the temporal item X (an integer). For a midi note, the channel is defined by its respective parameter. Otherwise, the channel is defined as an info tag of the form channel(Chan) either in X or in some temporal container of X. If no channel definition is found, then 0 is returned (i.e. 0 is the default MIDI channel).
    %% */
    %% Possible efficiency issue: the same search for containers with channel def is done over and over. I may consider memoizing the found channel for an item 
    fun {GetChannel X}
-      if {X hasThisInfo($ channel)} then {X getInfoRecord($ channel)}.1
+      if {IsMidiNoteMixin X} then {X getChannel($)}
+      elseif {X hasThisInfo($ channel)} then {X getInfoRecord($ channel)}.1
       elseif {X isTopLevel($)}
-      then nil
+      then 0
 % 	 {Exception.raiseError
 % 	    strasheela(failedRequirement X "No channel info-tag defined.")}
 % 	 unit			% never returned
