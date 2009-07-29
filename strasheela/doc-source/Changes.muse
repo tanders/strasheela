@@ -5,12 +5,13 @@
 * Changes in Version 0.9.11 (no date yet)
 
   - Main additions and changes 
-    - Revised score distribution: value orderings can now access arbitrary score information. 
+    - Revised score distribution: value orderings can now access arbitrary score information 
 
   - Documentation
     - 
 
-  - Minor additions 
+  - Minor additions
+    - Fenv.renderAndPlayMidiFile now supports flexible microtonal MIDI output using pitchbend
     - Added pitch unit mHz (Millihertz)
     - GUtils: added GUtils.recursiveRatio
     - Init: added SetNoteLengthsRecord, SymbolicDurToInt
@@ -31,6 +32,7 @@
     - HS.score.degreeToPC: fixed propagation error 
     - HS.db: Pc2Ratios now returns nil if no ratio was defined for interval
     - Fenv method toList: fixed bug for case N=1
+    - Out.midi.getChannel now uses mini chan param of midi note objects (not only channel info tag)
 
 
   - For further fixes see the [[http://apps.sourceforge.net/trac/strasheela/timeline][Trac Timeline]] or the [[../CHANGELOG.txt]].
