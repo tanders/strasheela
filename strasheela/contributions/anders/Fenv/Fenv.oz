@@ -828,7 +828,7 @@ define
    %% 
    %% The info-tag 'channel', given to a temporal item, sets the MIDI channel for this item and all contained items. Example: channel(0). If a channel is defined multiple times, then a setting in a lower hierarchical level overwrites higher-level settings.
    %%
-   %% The info-tag 'program', given to a temporal item, results in a program change message with the specified program number at the beginning of the item. Example. program(64). Many instruments number patches from 1 to 128 rather than the 0 to 127 used within MIDI files. When interpreting ProgramNum values, note that they may be one less than the patch numbers given in an instrument's documentation.
+   %% The info-tag 'program', given to a temporal item, results in a program change message with the specified program number at the beginning of the item. Example: program(64). Many instruments number patches from 1 to 128 rather than the 0 to 127 actually used within MIDI files. When interpreting ProgramNum values, note that they may be one less than the patch numbers given in an instrument's documentation.
    %%
    %% The info-tag 'fenvs', given to a note or temporal container, specifies a tuple of continuous controllers for the duration this item. Each Fenv spec is a pair Controller#Fenv, where Controller is defined as for Fenv.fenvToMidiCC. Example: (cc#1)#MyFenv. Fenvs directly specify the controller values (e.g., if Controller is pitchBend, then the Fenv range is 0.0 to 16383.0, and the value 8192.0 means no pitchbend). Note that for any controller only a single Fenv should be defined at any time (otherwise they conflict with each other).
    %%
@@ -841,7 +841,7 @@ define
    %% Additional arguments.
    %% ccsPerSecond: how many continuous controller events are created per second for every Fenv (the spacing of CC events may be affected).
    %%
-   %% NOTE: timing/spacing of continuous controller events and tempo curves etc. are _not_ affected by timeshift fenvs (but their start and end are). 
+   %% NOTE: timing/spacing of continuous controller events and tempo curves etc. are _not_ affected by timeshift fenvs, i.e. CC events remain evenly distributed (but timeshift curves etc may shift the start and end time of whole fenvs together with its event). 
    %% */
    %% Probably, it is a good thing that CC etc are not affected by timeshift functions, as it is more efficient.
    proc {RenderAndPlayMidiFile MyScore Args}
