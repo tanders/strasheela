@@ -9,6 +9,9 @@
 %% examples in block comments, one by one.
 %%
 
+%%
+%% Note: Fenv.renderAndPlayMidiFile has buildin support for microtonal music, so this example is only to show how you can define such things yourself :)
+%%
 
 
 %% global definitions 
