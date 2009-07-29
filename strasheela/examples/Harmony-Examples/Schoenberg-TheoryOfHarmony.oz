@@ -225,7 +225,8 @@ MakeNotes
 	idefaults: unit(%% add support for fd # Dom arg specs with Score.makeConstructor
 			constructor: {Score.makeConstructor
 % 				      HS.score.inversionChord
-				      HS.score.scaleDegreeNote
+% 				      HS.score.scaleDegreeNote
+				      HS.score.fullNote
 				      unit}
 			getChords: fun {$ Self}
 				      [{Self findSimultaneousItem($ test:HS.score.isChord)}]
@@ -233,7 +234,8 @@ MakeNotes
 			inChordB:1
 			getScales:fun {$ Self} [{Self findSimultaneousItem($ test:HS.score.isScale)}] end
 			inScaleB:1
-			scaleAccidental:Natural)
+			scaleAccidental:Natural
+			chordAccidental: Natural)
 	rdefaults: unit(minPitch:'C'#3
 			maxPitch:'C'#6
 		       ))
@@ -337,8 +339,12 @@ in
        {RestrictMelodicIntervals_UpperVoices Notes
 	unit(minPercent:70
 	     maxPercent:100)}
+       %% TMP: testing ResolveDissonances_ChordDegree
+       {ResolveDissonances_ChordDegree Notes unit}
     end}
    {RestrictMelodicIntervals_Bass BassNotes}
+   %% TMP: testing ResolveDissonances_ChordDegree
+   {ResolveDissonances_ChordDegree BassNotes unit}
    %%
    %% constraints on pairs for chords and notes 
    {Pattern.for2Neighbours {LUtils.matTrans
@@ -505,6 +511,99 @@ in
     end}
    {IsConsonantR {List.last Chords} 1}
 end
+
+
+/** %% Constraints that
+%%
+%% Notes is list of notes of a voice
+%%
+%% NOTE: this solution is not generic, it only works for chords where dissonances are at the highest chord degrees (e.g., seventh chords, diminished chords). Counter example: ninth chord, where 2nd chord degree is already a dissonance (chord degrees are position of tone in untransposed PC sequence ordered by size, and always starting with the root, cf. HS.db.ratiosInDBEntryToPCs).
+%% Generalisation: in chord DB entry explicitly list the dissonant PCs etc..
+%% 
+%% */
+%%
+%%
+%% NB: this constraint only works for homophonic music
+%% NB: for this constraint to work, chord database must be defined such that dissonances are higher chord degrees -- are PCs of chord DB entries sorted automatically, then this constraint does not necessarily work.
+%%
+%% simplified for conventional theory: if note's chord degree > 3, then it is 7th, 9th .. i.e. a dissonance. Treatment, e.g., by stepwise resolution. Schoenberg: note decends by step, or stays 
+%%
+% NB: no preparation possible with this approach, but I could do without that anyway 
+%%
+%% For chords like diminished triad, approach must be extended: extended def depending on note's chord index/type besides note's chord degree
+%%
+%% Can I access chord itself from note for this constraint instead of adding params to note object -- there is always only a single related chord...
+%%
+%% TODO:
+%% - OK care for diminished ect: need to access chord to access chord index
+%% - Generalise with args for reuse
+%%   - make resolution controllable by arg (e.g. is step up allowed too?)
+%% - !! documentation
+%% - !! generalise such that it constraints chords not only notes, so it can be used for non-homophonic music too (resolution in "wrong" octave OK, but that should actually happen more rarely?)
+%%   -> check whether chord's cardinality > corresponding minDissonanceDegree, and if so then access all PCs of dissonant chord degrees. Constrain that next chord contains PCs that resolve these dissonances   
+%%
+proc {ResolveDissonances_ChordDegree Notes Args /* Args unused */}
+   Default = unit(step: 8#7
+		  %% format:
+		  %% integer feat (denoting min dissonance degree) with list of corresponding chords. Also index integers supported.
+		  %% feat default: default min diss degree
+		  dissonantChordDegrees: unit(3: ['geometric diminished'
+						  'halve-diminished 7th'
+						  'augmented']
+					      default: 4)
+		  lastConsonant: true
+		 )
+   As = {Adjoin Args Default}
+   MaxStep = {HS.score.ratioToInterval As.step}
+   /** %% Expects a chord index and returns the corresponding min chord degree that is dissonant for this index.
+   %% */
+   fun {GetMinDissChordDegree Index}
+      IndexTable = {List.toRecord unit
+		    {LUtils.mappend {Record.toListInd
+				     {Record.subtract As.dissonantChordDegrees default}}
+		     fun {$ MaxDiss#ChordNames}
+			{Map ChordNames
+			 fun {$ ChordName}
+			    Index = if {IsInt ChordName} then ChordName
+				    else {HS.db.getChordIndex ChordName}
+				    end
+			 in
+			    Index#MaxDiss end}
+		     end}}
+   in
+      if {HasFeature IndexTable Index} then 
+	 IndexTable.Index
+      else As.dissonantChordDegrees.default 
+      end
+   end
+in
+   {Pattern.for2Neighbours Notes
+    proc {$ N1 N2}
+       thread  % wait until sim chord accessible
+	  MinDissDegree = {GetMinDissChordDegree {{N1 getChords($)}.1 getIndex($)}}
+       in
+	  {FD.impl
+	   %% if dissonance
+	   ({N1 getChordDegree($)} >=: MinDissDegree)
+	   {FD.conj
+	    %% then proceed at max by MaxStep down or repeat pitch 
+	    {FD.reified.distance {N1 getPitch($)} {N2 getPitch($)} '=<:' MaxStep}
+	    ({N1 getPitch($)} >=: {N2 getPitch($)})}
+	1}
+       end
+    end}
+   if As.lastConsonant then 
+      thread  % wait until sim chord accessible
+	 %% last note consonant
+	 LastMinDissDegree = {GetMinDissChordDegree
+			      {{{List.last Notes} getChords($)}.1 getIndex($)}}
+      in
+	 {{List.last Notes} getChordDegree($)} <: LastMinDissDegree
+      end
+   end
+end
+
+
 
 /** %% [TODO: doc]
 %% */
@@ -956,6 +1055,21 @@ end
 
 
 
+%% NEW: voice-wise dissonance treatment
+%% Allow for seventh and diminished chords. Dissonance treatment by ResolveDissonances_ChordDegree applied in WellformednessEtcConstraints.   
+{GUtils.setRandomGeneratorSeed 0}
+{SDistro.exploreOne
+ {GUtils.extendedScriptToScript HomophonicChordProgression
+  unit(iargs:unit(n:9
+		  bassChordDegree: fd#(1#2))
+       rargs:unit(types: ['major' 'minor' 'geometric diminished' % 'augmented' 
+			  'dominant 7th' 'major 7th' 'minor 7th' 'halve-diminished 7th'
+			 ]
+		  maxPercentSuperstrong:20))}
+ HS.distro.leftToRight_TypewiseTieBreaking}
+
+
+%% NOTE: OLD
 %% allow for seventh and diminished chords.
 %% Note: poor mans diss resolution so far
 {GUtils.setRandomGeneratorSeed 0}
@@ -1010,7 +1124,7 @@ end
 		cadenceN: false	
 		makeScale:{MakeScaleConstructor 'C' 'natural minor'}
 % 		types: ['major' 'minor' 'geometric diminished' 'augmented']
-		types: ['major' 'minor' 'geometric diminished' 
+		types: ['major' 'minor' 'geometric diminished' 'augmented'
 			  'dominant 7th' 'major 7th' 'minor 7th' 'halve-diminished 7th'
 			 ]
 % 		  maxPercentSuperstrong:20
