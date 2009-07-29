@@ -999,6 +999,31 @@ If Pitch method getValueInMidi comes across any pitch unit not in its list and n
    If Xs and Ys are processed in parallel, then both whether some value in Xs is a local max and also its actual value is accessible
 
 
+** Add new Jazz harmony chord & scale database: port from Impro-Visor
+
+   see beginning of [[file:/Applications/improvisor400/vocab/My.voc::scale]]
+
+** Create Jazz motif database: port from Impro-Visor 
+
+   see many many def of cells, idioms, and licks in
+   [[file:/Applications/improvisor400/vocab/My.voc::cell%20notes%20b4%20ab8%20gb8%20eb8%20name%20blues%20chords%20Ab7][file:/Applications/improvisor400/vocab/My.voc::cell notes b4 ab8 gb8 eb8 name blues chords Ab7]]
+
+   see simple motifs in 
+   [[file:/Applications/improvisor400/vocab/My.grammar::rule%20M4%20A4%200%2001][file:/Applications/improvisor400/vocab/My.grammar::rule M4 A4 0 01]]
+
+** Creat Jazz motif database with machine learning by using Impro-Visor's resulting grammar files
+
+   see 
+   file:/Applications/improvisor400/vocab/*.grammar
+
+   and grammars I may create myself
+
+
+>>   I meanwhile found your grammar format largely explained in your SMC 2007 + 2009 paper. Nevertheless, it might be interesting for users (including myself) to have a full reference documentation of any file format associated with improvisor, in particular the format *.grammar but also *.voc and *.sty, and possible *.prefs. BTW: *.solist is a binary format, right? The *.ls format appears to be documented already.
+
+> The .sty is documented in the style editor help window, although it needs updating. The .voc is kind of by example right now, but I will write up something for you. Similar for prefs.
+
+
 ** Outputting partially determined scores
 
    Idea: define some score transformation expecting partially determined score and returning copy score that replaces/leaves out all undetermined score objects and only contains the fully determined score objects. Needs user-definable def what a fully determined score object is (e.g., some analytical information may still be left undetermined..)

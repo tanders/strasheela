@@ -2,9 +2,68 @@
 
 * Strasheela release
 
+** Finish def of ResolveDissonances_ChordDegree
+
+   [[file:~/oz/music/Strasheela/strasheela/trunk/strasheela/examples/Harmony-Examples/Schoenberg-TheoryOfHarmony.oz::proc%20ResolveDissonances_ChordDegree%20Notes%20Args%20Args%20unused][file:~/oz/music/Strasheela/strasheela/trunk/strasheela/examples/Harmony-Examples/Schoenberg-TheoryOfHarmony.oz::proc ResolveDissonances_ChordDegree Notes Args Args unused]]
+
+   e.g., 
+   - documentation
+   - generalise such that it constraints chords not only notes, so it can be used for non-homophonic music too (resolution in "wrong" octave OK, but that should actually happen more rarely?)
+
+** TODO Add support for microtonal music to Fenv.renderAndPlayMidiFile
+
+   [[file:~/oz/music/Strasheela/strasheela/trunk/strasheela/contributions/anders/Fenv/Fenv.oz::proc%20RenderAndPlayMidiFile%20MyScore%20Args][file:~/oz/music/Strasheela/strasheela/trunk/strasheela/contributions/anders/Fenv/Fenv.oz::proc RenderAndPlayMidiFile MyScore Args]]
+
+*** DONE							    :ARCHIVE:
+
+    Approach: user explicitly specifies for each MIDI chan in score (new arg to Fenv.renderAndPlayMidiFile) over which actual MIDI chans it will be distributed. Number of actual MIDI chans should be max number of sim notes of this score chan. Microtonal notes will then be distributed to given MIDI chans in round-robin fashion, and pitchbind will be added according to score pitch.
+    MIDI chans specified zero-based
+
+    ?? Default for unspecified MIDI chans: 
+    - use only this chan, i.e. only supported for monophonic voices
+    - 'warn': user is warned that this chan only supports monophonic MIDI by default
+
+    Args:
+    resolution: pitchbend resolution
+    channelDistribution: tuple specifying which score chan is output to which actual chan, e.g. for distributing chan 0 over chans 0-7 do
+       	unit(0: [0 1 2 3 4 5 6 7])
+
+
+
+*** TODO test microtonal MIDI output
+
+*** TODO 
+
+    If note already has pitchbend fenv, then add offset to this pitchbend fenv such that 0 corresponds to its microtonal pitch
+
+    Use Out.midi.noteToPitchbend to get offset value
+
+    Approach: Change this in Fenv.itemFenvsToMidiCC (i.e. check when Controller==pitchbend and then optionally shift that fenv depending on some new arg to Fenv.itemFenvsToMidiCC), and then also change all defs using it (only defs in Fenv)
+
+
+*** csvmidi seems to support MIDI ports, so I can have > 16 chans in total  
+
+    *Anyway, for now I may simply support single port with 16 chans*
+
+    --------------------
+
+    Doc: http://www.fourmilab.ch/webtools/midicsv/    
+    /Track, Time, MIDI_port, Number/
+    This meta-event specifies that subsequent events in the Track should be sent to MIDI port (bus) Number, between 0 and 255. This meta-event usually appears at the start of a track with Time zero, but may appear within a track should the need arise to change the port while the track is being played. 
+
+    -> I would likely need to refactor MIDI file output such that multiple tracks are output...
+
+
+
 ** Lilypond: output seq (of seq ...) of sims with multiple staffs 
 
+
+* Strasheela automatic SVN repository backup
+
+  see [[file:~/oz/music/Strasheela/sourceforge-howto/backup-howto.muse::In%20Office][file:~/oz/music/Strasheela/sourceforge-howto/backup-howto.muse::In Office]]
+
 * Strasheela examples
+
 
 * Strasheela Bugs
 
