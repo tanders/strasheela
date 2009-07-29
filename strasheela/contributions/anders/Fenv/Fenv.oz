@@ -822,7 +822,7 @@ define
 
 
    
-   /** %% This procedure is like Out.midi.renderAndPlayMidiFile, but it additional supports continuous controllers and a global tempo curve, expressed in the score by fenvs. 
+   /** %% This procedure is like Out.midi.renderAndPlayMidiFile, but it additional supports continuous controllers and a global tempo curve, expressed in the score by fenvs. Also, microtonal music is supported (using pitchbends).
    %%
    %% Supported score format:
    %% 
@@ -840,8 +840,12 @@ define
    %%
    %% Additional arguments.
    %% ccsPerSecond: how many continuous controller events are created per second for every Fenv (the spacing of CC events may be affected).
+   %% resolution (default 2): pitchbend resolution in semitones. Its default value 2 corresponds to the standard pitch bend range of -2..2 semitones, i.e., 4096 steps/100 cents.
+   %% channelDistributions (default unit): Microtonal pitches are detuned by pitch bend, i.e. always all notes of a given channel are detuned. This tuple of lists specifies which score channel (midi note param, info tag or default 0) is output to which actual output channel. For example, for distributing the score channel 0 over the actual channels 0-7 set channelDistributions to unit(0: [0 1 2 3 4 5 6 7]). The number of output channels (8 in the example) should correspond to the maximum number of simultaneous notes in the score channel (0 in the example). Score channels for which no output channels are specified are output to themselves and thus are only suitable for a single monophonic voice. By default, no output channels are specified at all, so there should only be a monophonic voice per MIDI channel. Currently, only 16 MIDI chans are supported in total (no multiple ports).
    %%
-   %% NOTE: timing/spacing of continuous controller events and tempo curves etc. are _not_ affected by timeshift fenvs, i.e. CC events remain evenly distributed (but timeshift curves etc may shift the start and end time of whole fenvs together with its event). 
+   %% NOTE: timing/spacing of continuous controller events and tempo curves etc. are _not_ affected by timeshift fenvs, i.e. CC events remain evenly distributed (but timeshift curves etc may shift the start and end time of whole fenvs together with its event).
+   %%
+   %% NOTE: currently, microtonal pitchbend and pitchbend given explicitly as fenv overwrite each other.
    %% */
    %% Probably, it is a good thing that CC etc are not affected by timeshift functions, as it is more efficient.
    proc {RenderAndPlayMidiFile MyScore Args}
@@ -852,9 +856,30 @@ define
 						  end)
 		      clauses:nil
 		      track:2
-		      %% new arg
-		      ccsPerSecond:10.0)
+		      %% new args
+		      ccsPerSecond:10.0
+		      resolution: 2
+		      channelDistributions: unit)
       As = {Adjoin Defaults Args}
+      FullChanDistributions = {Adjoin unit(0:[0] [1] [2] [3] [4] [5] [6] [7] [8]
+					   [9] [10] [11] [12] [13] [14] [15])
+			       As.channelDistributions}
+      FullChanDistributionLengths = {Record.map FullChanDistributions Length}
+      LastChanPositions = {Record.toDictionary unit(0:1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1)}
+      %% Return next channel specified for channel of N (i.e. first
+      %% access returns first chan of corresponding distribution)
+      fun {GetChan_RoundRobin N}
+	 ScoreChan = {Out.midi.getChannel N}
+	 DistroChans = FullChanDistributions.ScoreChan
+	 LastPos = LastChanPositions.ScoreChan
+	 NextPos = if LastPos < FullChanDistributionLengths.ScoreChan
+		   then LastPos+1
+		   else 1  % again first specified chan 
+		   end
+      in
+	 LastChanPositions.ScoreChan := NextPos
+	 {Nth DistroChans LastPos}
+      end
    in
       {Out.midi.renderAndPlayMidiFile MyScore
        {Adjoin
@@ -865,8 +890,7 @@ define
 		 [%% Note output: output Micro-CC message, note on/off, and all its fenvs (if defined)
 		  isNote
 		  #fun {$ N}
-		      ChanAux = {Out.midi.getChannel N}
-		      Chan = if ChanAux==nil then 0 else ChanAux end  
+		      Chan = {GetChan_RoundRobin N}
 		      Progam = {N getInfoRecord($ program)}
 		   in
 		      {LUtils.accum
@@ -876,8 +900,10 @@ define
 			     {Out.midi.beatsToTicks {N getStartTimeInSeconds($)}}
 			     Chan Progam.1}]
 			end
+			[{Out.midi.noteToPitchbend N unit(channel:Chan)}]
 			{Out.midi.noteToMidi N unit(channel:Chan
 						    round:Round)}
+			%% TODO: shift pitch bend fenv
 			{ItemFenvsToMidiCC N unit(channel:Chan
 						  ccsPerSecond:As.ccsPerSecond)}]
 		       Append}
@@ -885,8 +911,7 @@ define
 		  %% Container with fenv(s) output: output all its fenvs, and tempo curve (if defined)
 		  Score.isTemporalContainer
 		  #fun {$ C}
-		      ChanAux = {Out.midi.getChannel C}
-		      Chan = if ChanAux==nil then 0 else ChanAux end
+		      Chan = {Out.midi.getChannel C}
 		      Progam = {C getInfoRecord($ program)}
 		   in
 		      {LUtils.accum
