@@ -18,7 +18,8 @@ declare
 
 %% NOTE: Enharmonic modulation with 31 ET is less strait forward that with 12 ET. However, using 31 ET is more strait forward for enharmonic notation that using enharmonic notes are -- the chord database does not contain accidental information...
 %% BTW: 12 ET playback would be simple with 31 ET: just create a tuning table which maps 12 ET pitches on the 31 ET pitches :)  
-[ET31] = {ModuleLink ['x-ozlib://anders/strasheela/ET31/ET31.ozf']}
+[ET31 Fenv] = {ModuleLink ['x-ozlib://anders/strasheela/ET31/ET31.ozf'
+			   'x-ozlib://anders/strasheela/Fenv/Fenv.ozf']}
 {HS.db.setDB ET31.db.fullDB}
 
 
@@ -819,6 +820,10 @@ proc {RenderLilypondAndCsound I X}
    then 
       FileName = "Schoenberg-"#I#"-"#{GUtils.getCounterAndIncr}
    in
+      {Fenv.renderAndPlayMidiFile X
+       unit(file: FileName
+	    %% max 8 microtonal voices distributed over 8 MIDI chans
+	    channelDistributions: unit(0:[0 1 2 3 4 5 6 7]))} 
       {ET31.out.renderAndShowLilypond X
        unit(file: FileName
 	    chordDescription:MakeChordDegree
@@ -863,7 +868,7 @@ end
      label: 'to Lily + Csound: Schoenberg (adaptive JI)')}
 {Explorer.object
  add(information RenderLilypondAndCsound
-     label: 'to Lily + Csound: Schoenberg')}
+     label: 'to MIDI, Lily + Csound: Schoenberg')}
 
 
 /* % Explorer output which shows ratios of chord pitches instead of degrees
@@ -907,6 +912,18 @@ end
 
 
 /*
+
+
+%% NOTE: no solution -- check HomophonicChordProgression def why it is overconstraint (has this to do with new diss treatment?)
+{GUtils.setRandomGeneratorSeed 0}
+{SDistro.exploreOne
+ {GUtils.extendedScriptToScript HomophonicChordProgression
+  unit(iargs:unit(n:4)
+       rargs:unit(makeScale:{MakeScaleConstructor 'D' 'major'})
+       lilyKey: "d \\major")}
+ %% left-to-right strategy with breaking ties by type
+ HS.distro.leftToRight_TypewiseTieBreaking}
+
 
 
 {GUtils.setRandomGeneratorSeed 0}
