@@ -974,6 +974,53 @@ piwik_log(piwik_action_name, piwik_idsite, piwik_url);
 
 * Strasheela design					      :MAYBE:STRASHEELA:
 
+** Allow effectively for negative offset times of items in a sequential and simultaneous containers 
+
+   Purpose: extend my homophonic slices such that overlapping notes are possible (e.g., upbeat)
+
+   I would need to extend temporal containers (simultaneous, but for consistency also sequential) such that effectively negative offset times of its contained items are supported 
+   
+   Implementation: add a parameter to temporal container called, e.g., "offsetCorrection"
+   By default it is 0. 
+   - in a simultaneous, its value is subtracted from the start time of every contained item
+   - in a sequential, its value is subtracted from the start time of the first contained item
+
+  As this parameter is usually determined (i.e. 0), it is filtered out by distribution strategies
+
+  NOTE (add to doc of simultaneous/sequential): 
+  Negative start times must be avoided, e.g., by placing some rest before first temporal container.
+  If offsetCorrection is \= 0, then the offsetTimes of all contained items should be explicitly specified. Their default 0 then means that they start *before* their container 
+
+  
+
+** TODO [#A] Interval class and Interval vector
+
+   HS.score.transposePC is ordered pitch-class interval, do also unordered pitch-class interval (interval class)
+
+   http://en.wikipedia.org/wiki/Interval_class
+
+   see [[file:~/oz/music/Strasheela/strasheela/trunk/strasheela/contributions/anders/HarmonisedScore/source/Score.oz::proc%20TransposePC%20UnTranspPC%20TranspositionPC%20TranspPC][file:~/oz/music/Strasheela/strasheela/trunk/strasheela/contributions/anders/HarmonisedScore/source/Score.oz::proc TransposePC UnTranspPC TranspositionPC TranspPC]]
+
+
+   Using the unordered pitch-class interval (interval class) I can then define the Interval vector (the intervalic content)
+   http://en.wikipedia.org/wiki/Interval_vector
+   and the relation between an Interval vector and a pitch class set. 
+
+   Interval vectors can be useful to def concisely a more abstract property of a chord
+   I should consider introducing a pitch class set that is not restricted to a chord/scale index for this purpose..
+
+
+   However, PC sets of the same Interval vector can have very different musical characters, and not all music theorists feel that the relationship is musically significant.
+ 
+
+** Check set theory concepts: what can I use from them?
+
+http://en.wikipedia.org/wiki/Set_theory_(music)
+see also the "See also" section and the "External links"
+
+http://solomonsmusic.net/setheory.htm#Basic%20Definition
+
+
 ** Generalise pitch unit
 
    Currently only specific pitch units are supported:  midi, keynumber, et22, et31, et72, midicent (or midic), frequency (or freq), hz and any equal temperament. User cannot extend definition of Pitch method getValueInMidi by further units 
