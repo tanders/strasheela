@@ -5,14 +5,14 @@
 %% 
 
 declare
-[GUtils] = {ModuleLink ['x-ozlib://anders/music/sdl/GeneralUtils.ozf']}
-[Score] = {ModuleLink ['x-ozlib://anders/music/sdl/ScoreCore.ozf']}
-
-declare
-MyScore = {Score.makeScore seq(items:[note note]) unit}
+MyScore = {Score.makeScore seq(items:[note(duration: 2)
+				      pause(duration: 3)
+				      note(duration:4)])
+	   unit}
 ToPPrintRecord = {GUtils.toProc toPPrintRecord(features:_)}
 IsItem = {GUtils.toProc isItem(_)}
 IsParameter = {GUtils.toProc isParameter(_)}
+
 
 {MyScore toPPrintRecord($)}
 
@@ -27,9 +27,10 @@ IsParameter = {GUtils.toProc isParameter(_)}
 %% OK
 %{ToPPrintRecord {MyScore getItems($)}.1 unit}
 
-%% value '[items]' at 'features' has no effect.. 
-{{GUtils.toProc toPPrintRecord(features:[items])} MyScore unit}
-
+%% default test: isNote
+{{GUtils.toProc mapItems(x getDuration test:isNote)} MyScore unit}
+%% overwritten arg test
+{{GUtils.toProc mapItems(x getDuration test:isNote)} MyScore unit(test:isItem)}
 
 
 %%
