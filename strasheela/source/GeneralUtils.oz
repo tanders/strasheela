@@ -348,15 +348,15 @@ define
    %%
    %% The returned procedure expects one, two or three arguments. The first argument is always the object to which the method is passed. If X is an atom, this is the only argument. E.g. <code> {ToProc test}</code> returns the procedure <code> proc {$ O} {O test} end</code>.
    %%
-   %% If the returned procedure expects more than only one argument, the last argument of the procedure is always the value at feature 1 of the method record. In the score description language, the first method feature is usually defined as the return value of the method. If the method expects only that argument, the procedure returned expects two arguments. E.g. <code> {ToProc isTest(x)} </code> results in the procedure <code> proc {$ O Result} {O test(Result)} end</code>.
+   %% If the returned procedure expects more than only one argument, the last argument of the procedure is always the value at feature 1 of the method record. In Strasheela, the first method feature is usually defined as the return value of the method. If the method expects only that argument, the procedure returned expects two arguments. E.g. <code> {ToProc isTest(x)} </code> results in the procedure <code> proc {$ O Result} {O test(Result)} end</code>.
    %%
-   %% If the method defines multiple arguments, all other arguments are collected in a record in the second argument of the procedure. E.g. <code> {ToProc isTest(x test:x)} </code> results in the procedure <code> proc {$ O Args Result} {O test(Result test:Args.test)} end</code>.
+   %% If the method defines multiple arguments, all other arguments are collected in a record in the second argument of the procedure. E.g. <code> {ToProc isTest(x test:MyTest)} </code> results in the procedure <code> proc {$ O Args Result} {O test(Result test:Args.test)} end</code>. Note that this example was simplified, as all arguments in Arg are optional. If Args.test is not given above, then the procedure is <code> proc {$ O Args Result} {O test(Result test:MyTest)} end</code>. However, the argument specifier at feature 1 always only a "dymmy value" that indicates the return value as in the example above.
    %%*/
    proc {ToProc X ?Res}
       %% !! resulting procedures are less efficient then methods
       %% (need to construct method record for each proc call)
       Res = 
-      if {IsProcedure X} 	% !! do I need this option ?
+      if {IsProcedure X} 
       then X
       elseif {IsAtom2 X}
       then proc {$ O} {O X} end	% method with no arg
@@ -370,13 +370,15 @@ define
 	    in
 	       M.1 = Result
 	       {O M} 
-	    end 
+	    end
+	    %% record with arity > 1
 	 else
 	    proc {$ O Args Result} % method with multiple args
-	       M = {MakeRecord {Label X} 1|{Arity Args}} 
+	       FullArgs = {Record.subtract {Adjoin X Args} 1}
+	       M = {MakeRecord {Label X} 1|{Arity FullArgs}} 
 	    in 
 	       M.1 = Result
-	       {Record.forAllInd Args proc {$ I X} M.I=X end}
+	       {Record.forAllInd FullArgs proc {$ I X} M.I=X end}
 	       {O M}
 	    end
 	 end
