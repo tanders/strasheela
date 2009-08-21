@@ -272,6 +272,9 @@ define
    %% NB: The transposition interval is limited to a PC (i.e. the domain 0#(PitchesPerOctave-1)) to improve propagation. To transpose by a larger interval, constrain the relation of the (larger) Transposition and TranspositionPC by {PitchClassToPitch TranspositionPC#_ Transposition}.
    %%  All PC arguments are implicitly declared to FD ints with the domain 0#(PitchesPerOctave-1).
    %% */
+   %%
+   %% TODO: this is ordered pitch-class interval, do also unordered pitch-class interval
+   %% http://en.wikipedia.org/wiki/Interval_class
    proc {TransposePC UnTranspPC TranspositionPC TranspPC}
       Aux = {FD.decl}
       PitchesPerOctave = {DB.getPitchesPerOctave}
