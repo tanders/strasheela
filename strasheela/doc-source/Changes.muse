@@ -14,6 +14,7 @@
     - Fenv.renderAndPlayMidiFile now supports flexible microtonal MIDI output using pitchbend
     - Added pitch unit mHz (Millihertz)
     - GUtils: added GUtils.recursiveRatio
+    - GUtils.toProc: refactored version now supports optional arguments with default values 
     - Init: added SetNoteLengthsRecord, SymbolicDurToInt
     - SMapping: added MapTimeslices ForTimeslices
     - ET22.db: interval database now defined as ratios for adaptive JI
