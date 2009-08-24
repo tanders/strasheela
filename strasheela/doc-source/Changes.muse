@@ -24,7 +24,7 @@
     - Segs.makeCounterpoint: added arg clearDissonanceResolution (before this constraint was always enabled). 
     - Segs.homophonicChordProgression: added args playAllChordTones, noVoiceCrossing, maxUpperVoiceDistance
     - HS.rules: added GetRootDegreeIntervals SetBoundaryRoots SetBoundaryTypes NoParallels2.
-    - Pattern: added MinDistinct
+    - Pattern: added MinDistinct, DirectionOfContour
     - HS.score: refactored HarmonicRythmFollowsMarkers: now works also for items with offsetTime > 0 
     - Removed proc GUtils.selectArg (better use Adjoin or CondSelect instead)
 
