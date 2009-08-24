@@ -2975,7 +2975,6 @@ define
       DefAs = {Adjoin Default DefArgs}
    in
       proc {$ Args ?MyScore}
-	 %% TODO: refactor these var bindings using GUtils.selectArg
 	 ItemAs = if {HasFeature Args iargs} then
 		     {Adjoin DefAs.idefaults Args.iargs}
 		  else DefAs.idefaults
