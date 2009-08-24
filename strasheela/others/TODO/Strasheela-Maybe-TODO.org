@@ -3104,6 +3104,153 @@ useful for package creators and new users to test whether installation was succe
 ** ?? Define Oz GUI application for creating an OZRC file: pathes for applications and directories are then specified in a GUI :MAYBE:
 
 
+* General Strasheela development
+
+** ??? Consider moving from svn to bzr
+
+   not well integrated with Trac at sourceforge so far
+
+*** Advantages of BZR
+
+    - easy braching 
+
+    - offline commits
+
+    - ...
+
+
+*** Translate svn repository
+
+    installing respective software on MacOS was unsuccessful
+    better try latest version of bzr-svn on Linux next time
+
+**** Email trying to get help..
+
+     	From: 	  torsten.anders@plymouth.ac.uk
+	Subject: 	subvertpy installation problem on Mac (was: Bug of bzr branch)
+	Date: 	19 March 2009 23:16:21 GMT
+	To: 	  jelmer@vernstok.nl
+
+Geachte Meneer Jelmer,
+
+Jelmer Vernooij wrote:
+This particular branch works fine here with bzr-svn 0.5.3 and bzr  
+1.19.
+Please try again with a newer version of bzr.
+
+Thank you very much for your quick reply, and for even testing my  
+subversion branch. I will try a newer version of bzr-svn / bzr.
+
+My actual problem is that I spend hours trying to install bzr-svn on  
+Mac OS X (10.4) without success, I was unable to install its  
+dependency subvertpy. I am telling you this only, because it appears  
+you are the author/maintainer of subvertpy.
+
+The problem is that I was unable to find a Mac version of the  
+development files of subversion (what on Linux would be something  
+like libsvn-dev), required for compiling subvertpy. I also tried the  
+Macports of py25-subvertpy without success -- the compilation fails  
+again because the subversion development files are missing (so, there  
+seems to be a bug in the subvertpy port file -- perhaps a dependency  
+is missing?).
+
+Any help would be highly appreciated!
+
+   (later I tried bzr-svn using my old Linux box, which resulted in  
+the error reported previously ...)
+
+Met vriendelijke Groeten,
+Torsten Anders
+
+--
+Torsten Anders
+Interdisciplinary Centre for Computer Music Research
+University of Plymouth
+Office: +44-1752-586219
+Private: +44-1752-558917
+http://strasheela.sourceforge.net
+http://www.torsten-anders.de
+
+
+Dear Sir/Madam,
+
+When I tried to import a SVN branch into BZR I got the error message
+below.
+
+Thank you!
+
+Best
+Torsten Anders
+
+
+$ bzr branch
+https://strasheela.svn.sourceforge.net/svnroot/strasheela/trunk/
+bzr: ERROR: libsvn._core.SubversionException: ("PROPFIND request  
+failed
+on '/svnroot/strasheela/trunk'", 175002)
+
+Traceback (most recent call last):
+  File "/usr/lib/python2.5/site-packages/bzrlib/commands.py", line  
+817,
+in run_bzr_catch_errors
+    return run_bzr(argv)
+  File "/usr/lib/python2.5/site-packages/bzrlib/commands.py", line  
+779,
+in run_bzr
+    ret = run(*run_argv)
+  File "/usr/lib/python2.5/site-packages/bzrlib/commands.py", line  
+477,
+in run_argv_aliases
+    return self.run(**all_cmd_args)
+  File "/usr/lib/python2.5/site-packages/bzrlib/builtins.py", line  
+885,
+in run
+    possible_transports=[to_transport])
+  File "/usr/lib/python2.5/site-packages/bzrlib/plugins/svn/ 
+format.py",
+line 84, in sprout
+    result_repo = repo.clone(result, revision_id)
+  File "/usr/lib/python2.5/site-packages/bzrlib/decorators.py", line
+127, in read_locked
+    return unbound(self, *args, **kwargs)
+  File "/usr/lib/python2.5/site-packages/bzrlib/repository.py", line
+489, in clone
+    self.copy_content_into(dest_repo, revision_id)
+  File "/usr/lib/python2.5/site-packages/bzrlib/repository.py", line
+412, in copy_content_into
+    return InterRepository.get(self,
+destination).copy_content(revision_id)
+  File "/usr/lib/python2.5/site-packages/bzrlib/plugins/svn/ 
+fetch.py",
+line 490, in copy_content
+    reporter.finish_report(pool)
+  File "/usr/lib/python2.5/site-packages/bzrlib/plugins/svn/ 
+errors.py",
+line 70, in convert
+    raise convert_error(e)
+SubversionException: ("PROPFIND request failed on
+'/svnroot/strasheela/trunk'", 175002)
+
+bzr 0.90.0 on python 2.5.1.final.0 (linux2)
+arguments: ['/usr/bin/bzr', 'branch',
+'https://strasheela.svn.sourceforge.net/svnroot/strasheela/trunk/']
+
+  * please send this report to bazaar@lists.ubuntu.com
+
+
+*** Check workflow for bzr
+
+    how easy is check in etc
+    
+    how is integration with Sourceforge software (e.g. Trac)
+    seems currently non-existant, see
+
+    https://sourceforge.net/tracker/index.php?func=detail&aid=2778613&group_id=1&atid=350001
+    https://sourceforge.net/tracker/index.php?func=detail&aid=2795953&group_id=1&atid=350001
+
+    https://sourceforge.net/apps/trac/strasheela/admin
+
+
 * General Oz todo						      :MAYBE:OZ:
 
 ** Smart/Auto Completion or intellisense for Oz

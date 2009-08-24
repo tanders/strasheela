@@ -57,11 +57,6 @@
 
 ** Lilypond: output seq (of seq ...) of sims with multiple staffs 
 
-
-* Strasheela automatic SVN repository backup
-
-  see [[file:~/oz/music/Strasheela/sourceforge-howto/backup-howto.muse::In%20Office][file:~/oz/music/Strasheela/sourceforge-howto/backup-howto.muse::In Office]]
-
 * Strasheela examples
 
 
