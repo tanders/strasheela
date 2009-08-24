@@ -942,6 +942,20 @@ Zs = {FD.list {Length Xs}-1 0#10}
 
 
 %%
+%% Pattern.directionOfContour
+%%
+
+{ExploreOne
+ proc {$ Xs}
+    Xs = {FD.list 10 0#10}
+    %% NB: having these two constraints is less efficient than having a combined constraint (more propagators)
+    {Pattern.directionOfContour Xs {Pattern.symbolToDirection '+'} 75}
+    {Pattern.directionOfContour Xs {Pattern.symbolToDirection '-'} 20}
+    {FD.distribute ff Xs}
+ end}
+
+
+%%
 %% Pattern.hook
 %%
 

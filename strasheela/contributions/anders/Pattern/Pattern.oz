@@ -100,6 +100,7 @@ export
    WhichTrue
    SymbolToDirection DirectionToSymbol
    Direction DirectionR Contour InverseContour ContourMatrix
+   DirectionOfContour
    Hook Stairs
    DirectionChangeR LocalMaxR
    FdInts FdRanges
@@ -1101,7 +1102,17 @@ define
 			       {Direction X1 X2}
 			    end}
    end
+   
+   /** %% Pattern that constraints contour of Xs, e.g., to be primarily ascending or descending. DirectionOfContour constrains that the minimum number of occurances of directions Dir (FD in 0#2) between elements in Xs (list of FD) is Min (FD int), measured in percent. For example, {DirectionOfContour Xs {SymbolToDirection '+'} 75} constrains that at least 75 percent of the intervals between elements in Xs are ascending. 
+   %% */
+   proc {DirectionOfContour Xs Dir Min}
+      {PercentTrue_Range
+       {Map2Neighbours Xs
+	fun {$ X1 X2} {DirectionR X1 X2 Dir} end}
+       Min 100}
+   end
 
+   
 
    /** %% Contour constraint where all intervals go in the same directions except one. The interval which goes in the opposite direction always either goes up or down (no repetition).
    %%
