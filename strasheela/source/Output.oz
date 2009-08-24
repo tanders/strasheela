@@ -32,9 +32,6 @@
 %%
 %% * Def of lilypond output (ToLilypond) inconsistent: for some classes output is build-in (as for note) and for others the output can be added. More consistent would be a solution which hands all transformers as arg (and supports adding instead of replacing for convenience, similar to Score.makeScore)
 %%
-%% * GUtils.selectArgs is probably better replaced by a construct
-%% using Adjoin: {Adjoin Defaults Args} = EffectiveArgs
-%%
 %% * ?? unit of measurement not in score parameter but (at least optional) given to output transformer
 %%
 
@@ -664,7 +661,7 @@ define
       OrcPath = MySpecs.orcDir#MySpecs.orc
       ScoPath = MySpecs.scoDir#MySpecs.file#".sco"
       SoundPath = MySpecs.soundDir#MySpecs.file#MySpecs.soundExtension
-      Flags = {GUtils.selectArg flags Spec Defaults}
+      Flags = {Adjoin Defaults Spec}.flags
       %% !! Open.pipe is very picky with input format: no
       %% additional whitespace and separate flags either as
       %% separate atoms or without any hyphen between them -- try
