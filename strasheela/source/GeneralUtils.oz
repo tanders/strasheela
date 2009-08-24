@@ -446,16 +446,16 @@ define
    end
    
    
-   /** % SelectArg is a tool, e.g., to define functions with quasi optional values. SelectArg returns the value at Feature in record Spec, if Spec has this feature. Otherwise the value at Feature in the record Defaults is returned. Defaults must have this record.
-   %% !! Often the buildin Adjoin is a better solution: {Adjoin Defaults Args} = EffectiveArgs
-   %% */
-   %% !!?? Shall I remove this?
-   fun {SelectArg Feature Spec Defaults} 
-      if {HasFeature Spec Feature}
-      then Spec.Feature
-      else Defaults.Feature
-      end
-   end
+%    /** % SelectArg is a tool, e.g., to define functions with quasi optional values. SelectArg returns the value at Feature in record Spec, if Spec has this feature. Otherwise the value at Feature in the record Defaults is returned. Defaults must have this record.
+%    %% !! Often the buildin Adjoin is a better solution: {Adjoin Defaults Args} = EffectiveArgs
+%    %% */
+%    %% !!?? Shall I remove this?
+%    fun {SelectArg Feature Spec Default} 
+%       if {HasFeature Spec Feature}
+%       then Spec.Feature
+%       else Default
+%       end
+%    end
 
 
 
