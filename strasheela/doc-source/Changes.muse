@@ -26,6 +26,7 @@
     - HS.rules: added GetRootDegreeIntervals SetBoundaryRoots SetBoundaryTypes NoParallels2.
     - Pattern: added MinDistinct
     - HS.score: refactored HarmonicRythmFollowsMarkers: now works also for items with offsetTime > 0 
+    - Removed proc GUtils.selectArg (better use Adjoin or CondSelect instead)
 
   - Further bug fixes and changes
     - Oz primitives like IsRecord, IsAtom etc. block on kinded variables (undetermined FD and FS vars), which could cause blocking of various Strasheela definitions. Now Strasheela always uses its new own GUtils.isRecord and GUtils.isAtom etc. which do not have this problem
