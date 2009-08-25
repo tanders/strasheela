@@ -102,7 +102,8 @@ export
    Direction DirectionR Contour InverseContour ContourMatrix
    DirectionOfContour
    Hook Stairs
-   DirectionChangeR LocalMaxR
+   DirectionChangeR LocalMaxR LocalMinR
+   GetLocalMax GetLocalMin ConstrainLocalMax ConstrainLocalMin
    FdInts FdRanges
    
    MkUniqueSeq MkUniqueIntervalSeq
@@ -983,20 +984,71 @@ define
       {Select.fd Bs I 1}
    end
    
-   /** %% Returns 0/1-int in B whether Y is either the maximum or the minimum in [X, Y, Z]. X, Y, Z and B are FD integers. NB: Y must either be greater or smaller than both X and Z (i.e. the values 1 1 2 represent not a direction change). 
+   /** %% Returns 0/1-int in B whether Y is either the maximum or the minimum in [X, Y, Z]. X, Y, Z and B are FD integers. Y must either be greater or smaller than both X and Z (i.e. the values 1 1 2 represent not a direction change). 
    %% */
-   %% !!?? Shall I generalise the operators, i.e. allows both <: and =<:
    proc {DirectionChangeR X Y Z ?B}
       {FD.disj
        {FD.conj (X <: Y) (Y >: Z)}
        {FD.conj (X >: Y) (Y <: Z)}
        B}
    end
+      
+
+%    /** %% Variant of DirectionChangeR that addresses repetitions. Like DirectionChangeR, DirectionChange2R returns a 0/1-int in B whether Y is either the maximum or the minimum in [X, Y, Z]. X, Y, Z and B are FD integers. However, DirectionChange2R is defined such that X and Y might be equal values, but Y and Z must not be equal. For example, the values 1 1 2 do represent a direction change.
+%    %% So, if DirectionChange2R is used to identify direction changes in a longer list then the last element of a repeated local max/min is considered a direction change. However, also if there is no actual direction change, but at least one repeated value then the last  is considered the direction change.
+%    %% */
+%    proc {DirectionChange2R X Y Z ?B}
+%       {FD.disj
+%        {FD.conj (X =<: Y) (Y >: Z)}
+%        {FD.conj (X >=: Y) (Y <: Z)}
+%        B}
+%    end
+
+
 
    /** %%  Returns 0/1-int in B whether Y is the maximum in [X, Y, Z]. X, Y, Z and B are FD integers.
    %% */
    proc {LocalMaxR X Y Z ?B}
       B = {FD.conj (X <: Y) (Y >: Z)}
+   end
+   /** %%  Returns 0/1-int in B whether Y is the minimum in [X, Y, Z]. X, Y, Z and B are FD integers.
+   %% */
+   proc {LocalMinR X Y Z ?B}
+      B = {FD.conj (X >: Y) (Y <: Z)}
+   end
+
+   /** %% Returns the local maxima in Xs (list of FD ints). The result is again a list of FD ints, shorter than Xs.
+   %% NB: repeated local max are ignored completely (see Pattern.directionChangeR), and so are the first and last element in Xs.
+   %% */
+   fun {GetLocalMax Xs}
+      {Map {Filter {MapNeighbours Xs 3 GUtils.identity}
+	    fun {$ [X1 X2 X3]} {LocalMaxR X1 X2 X3} == 1 end}
+       fun {$ [_ X _]} X end}
+   end
+   /** %% Returns the local minima in Xs (list of FD ints). The result is again a list of FD ints, shorter than Xs.
+   %% NB: repeated local min are ignored completely (see Pattern.directionChangeR), and so are the first and last element in Xs.
+   %% */
+   fun {GetLocalMin Xs}
+      {Map {Filter {MapNeighbours Xs 3 GUtils.identity}
+	    fun {$ [X1 X2 X3]} {LocalMinR X1 X2 X3} == 1 end}
+       fun {$ [_ X _]} X end}
+   end
+   /** %% Apply the pattern constraint P (a unary proc expecting a stream of FD ints) to the local maxima in Xs.
+   %% NOTE: This constraint can be expensive. For effiency it is might help if elements in Xs are determined in their order in Xs (but local max don't need to be determined to be isolated). Also for efficiency, P should be able to concurrently process a stream instead of a list only.
+   %% */
+   proc {ConstrainLocalMax Xs P}
+      Ys
+   in
+      thread Ys = {GetLocalMax Xs} end
+      thread {P Ys} end
+   end
+   /** %% Same as ConstrainLocalMax for local minima.
+   %% */
+   proc {ConstrainLocalMin Xs P}
+      Ys
+   in
+      thread Ys = {GetLocalMin Xs} end
+      thread {P Ys} end
    end
    
    /** %% Transforms one of the three direction symbols '-', '=' and '+' to the corresponding integer from 0, 1, or 2 representing a direction as used by constraints such as Direction and Contour. 
