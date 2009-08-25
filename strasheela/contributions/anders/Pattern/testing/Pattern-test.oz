@@ -979,6 +979,34 @@ Xs = {FD.list 10 0#10}
 {Pattern.stairs Xs  unit}
 
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%% Pattern.constrainLocalMax, Pattern.constrainLocalMin
+%%
+
+%% Problem: first/last value never considered local max/min
+{ExploreOne
+ proc {$ Xs}
+    Xs = {FD.list 20 0#10}
+    {Pattern.constrainLocalMax Xs
+     %% NB: Pattern.for2Neighbours works concurrently like Map or Filter: defined with Zip
+     proc {$ Ys} {Pattern.for2Neighbours Ys proc {$ X Y} X <: Y end} end}
+    {Pattern.constrainLocalMin Xs
+     %% NOTE: inefficient: blocks until all local min are known 
+     FD.distinct}
+    {Pattern.fenvContour Xs {Fenv.linearFenv [[0.0 0.0]
+					      [0.2 10.0]
+					      [0.4 0.0]
+					      [0.5 10.0]
+					      [0.6 0.0]
+					      [0.8 10.0]
+					      [0.9 0.0]
+					      [1.0 10.0]]}}
+    {FD.distribute ff Xs}
+%     {FD.distribute naive Xs}
+ end}
+
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%
