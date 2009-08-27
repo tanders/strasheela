@@ -27,7 +27,6 @@ export
    MakeTypecheck_NotKinded
    isRecord: IsRecord2
    isAtom: IsAtom2
-   isInt: IsInt2
    
    IsFS MakeSingletonSet IntsToFS
 
@@ -106,7 +105,6 @@ define
    end
    IsRecord2 = {MakeTypecheck_NotKinded IsRecord}
    IsAtom2 = {MakeTypecheck_NotKinded IsAtom}
-   IsInt2 = {MakeTypecheck_NotKinded IsInt}
    
    
    /** %% IsFS returns true if X is a FS variable (determined or not) and false otherwise. This function is necessary, because the primitive Oz functions FS.var.is and FS.value.is behave differently for determined and undetermined FS variables.
