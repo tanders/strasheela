@@ -1034,7 +1034,7 @@ define
        fun {$ [_ X _]} X end}
    end
    /** %% Apply the pattern constraint P (a unary proc expecting a stream of FD ints) to the local maxima in Xs.
-   %% NOTE: This constraint can be expensive. For effiency it is might help if elements in Xs are determined in their order in Xs (but local max don't need to be determined to be isolated). Also for efficiency, P should be able to concurrently process a stream instead of a list only.
+   %% NOTE: This constraint can be expensive, because the constraint application is delayed until the local max are known. Also, note that elements in Xs are processed in their order. Predetermining which elements are local max improves efficiency (e.g., with a contour constraint). Moreover, P should be able to concurrently process a stream (instead of a list only).
    %% */
    proc {ConstrainLocalMax Xs P}
       Ys
