@@ -3009,8 +3009,10 @@ define
    /** %% [Complements DefSubscript]: defines further arguments and applies further constraints to a script defined by DefSubscript. 
    %%
    %% Args:
-   %% 'super' (default GUtils.unarySkip): an optional super-mixin, also defined by DefMixinSubscript.  
-   %% defaults, idefaults, rdefaults: same as for DefSubscript.
+   %% 'super' (default GUtils.unarySkip): an optional super-mixin.  
+   %% 'rdefaults': same as for DefSubscript.
+   %%
+   %% 'idefaults' and 'defaults' are ignored: Note that defining default values for score object initialisation arguments is not supported for mixin scripts (defined values are ignored by the score object initialisation). 
    %%
    %% Body: same as for DefSubscript.
    %%
@@ -3059,7 +3061,7 @@ define
    fun {DefMixinSubscript DefArgs Body}
       Default = unit(super: GUtils.binarySkip
 		     defaults: unit
-		     idefaults: unit
+		     idefaults: unit % ignored! 
 		     rdefaults: unit)
       DefAs = {Adjoin Default DefArgs}
    in
@@ -3072,7 +3074,7 @@ define
 		     {Adjoin DefAs.rdefaults Args.rargs}
 		  else DefAs.rdefaults
 		  end
-	 As = {Adjoin  {Adjoin DefAs.defaults Args}
+	 As = {Adjoin {Adjoin DefAs.defaults Args}
 	       unit(iargs: ItemAs
 		    rargs: RuleAs)}
       in
