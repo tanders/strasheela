@@ -7,6 +7,8 @@
 %% TODO:
 %%
 %% - !!?? translate DefSubscript into Mixin def, so I can combine it with existing subscripts of Segs (e.g., [MakeCounterpoint])
+%%   Problem: not possible, because I change arg n on the fly: must do this before score object is created.
+%%   Alternative: change counterpoint def into mixin
 %%
 %% - def further motif variation functions
 %%
@@ -95,15 +97,16 @@ define
    %% NB: as the number of items in the resulting motif is specified otherwise, DefSubscript does not support the Score.defSubscript DefArgs argument unit(idefaults: unit(n:N)) nor unit(iargs(n:N)). 
    %%
    %% */
+   %% Note: there  cannot be a mixin variant of this definition: transformers must change motif spec (in particular arg n) before score object is initialised from this spec.
    fun {DefSubscript DefArgs Body}
       Default = unit(super:Score.makeContainer
 		     mixins: nil
 		     defaults: unit
 		     idefaults: unit
-		     rdefaults: unit)
+		     rdefaults: unit
+		     motif: unit
+		     transformers: nil)
       DefAs = {Adjoin Default DefArgs}
-      MotifSpec = {CondSelect DefArgs motif unit}
-      Transformers = {CondSelect DefArgs transformers nil}
    in
       proc {$ Args ?MyScore}
 	 ItemAs = if {HasFeature Args iargs} then
@@ -128,11 +131,11 @@ define
 	 /** %% RhythmTransformers is list of functions. TransformRhythm recursively calls these functions on Rhythm.
 	 %% */
 	 fun {Transform Transformers MotifSpec}
-	    case Transformers of nil then MotifSpec
+	    case Transformers of nil then MotifSpec 
 	    else {Transform Transformers.2 {Transformers.1 MotifSpec As}}
 	    end
 	 end
-	 TrueSpec = {Transform Transformers MotifSpec}
+	 TrueSpec = {Transform As.transformers As.motif}
 	 TrueAs = {GUtils.recursiveAdjoin As
 		   unit(iargs: unit(n: {GetMotifLength TrueSpec}))}
 	 proc {TrueBody MyScore Args}
@@ -163,7 +166,6 @@ define
 	  proc {$ Mixin} {Mixin MyScore TrueAs} end}
       end
    end
-
 
 
 
