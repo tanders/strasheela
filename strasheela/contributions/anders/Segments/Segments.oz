@@ -65,7 +65,7 @@ export
    MakeParametersAccessor
    PitchContourAccessor
 
-   MakeCounterpoint MakeCounterpoint_Seq
+   MakeCounterpoint_Mixin MakeCounterpoint MakeCounterpoint_Seq
    MakeCounterpoint_PatternMotifs
    MakeCounterpoint_PatternMotifs_DurationPitchcontour
    MakeCounterpoint_PatternMotifs_OffsetDuration
@@ -74,9 +74,10 @@ export
    %% TMP comment -- fix defs below
 %    MkEvenRhythm_
 
-   MkPitchPattern MkFenvContour MkArpeggio MkArc MkRepetitions MkHook MkStairs
+   PitchPattern FenvContour Arpeggio Arc Repetitions Hook Stairs
    
-   MakeAkkord MakeAkkords MakeAkkords_Seq
+   MakeAkkord_Mixin MakeAkkord
+   MakeAkkords_Mixin MakeAkkords MakeAkkords_Seq
    
    MakeChordSlicesForm
    PatternedPhrase
@@ -126,11 +127,16 @@ define
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-   %%
-   %% Score segment constructors
-   %%
+%%%
+%%% Score segment constructors
+%%%
 
-   /** %% Returns list of notes to which common counterpoint rules are applied: non-harmonic tones are restricted and the first and last tone is constrained to a chord tone.
+   /** %% Mixin script for a list of notes to which common counterpoint rules are applied: non-harmonic tones are restricted and the first and last tone is constrained to a chord tone.
+   %%
+   %% NOTE: this mixin script depends on a suitable super script and note constructor that provide information whether a note is non-harmonic or not.
+   super: Score.makeItems_iargs
+   constructor: {Score.makeConstructor HS.score.note unit(inChordB: fd#(0#1))}
+   %% 
    %%
    %% Args.rargs:
    %% 'minPitch' and 'maxPitch' (default false): domain specification is notation supported by HS.pitch. Disabled if one of them is false.
@@ -140,34 +146,20 @@ define
    %% 'clearDissonanceResolution' (default false): If in one voice there occurs a non-chord tone followed by a chord tone (a dissonance resolution), then no other voice should obscure this resolution by a non-chord tone starting together with the tone resolving the dissonance. Disabled if set to false.
    %% 'step' (default 8#7): ratio spec for the maximum step size permitted which counts for 'minPercentSteps' and maximum step size for dissonance resolutions
    %% 'maxRepetitions' (default false): how many pitch repetitions occur at maximum between consecutive Notes. Disabled if set to false.
-   %% In addition, all arguments of Score.makeItems_iargs are supported.
    %% */
    %% TODO:
    %% - add optional constraint: non-harmonic tone follows and is followed by note at least as long as the non-harmonic tone
    %%
-   MakeCounterpoint
-   = {Score.defSubscript unit(super:Score.makeItems_iargs
-			      rdefaults: unit(minPitch: false
-					      maxPitch: false
-					      maxInterval: 3#1
-					      maxNonharmonicNoteSequence: false
-					      %% BUG: in maxRepetitions
+   MakeCounterpoint_Mixin
+   = {Score.defMixinSubscript unit(rdefaults: unit(minPitch: false
+						   maxPitch: false
+						   maxInterval: 3#1
+						   maxNonharmonicNoteSequence: false
+						   %% BUG: in maxRepetitions
 % 					   maxRepetitions:0
-					      minPercentSteps: false
-					      clearDissonanceResolution: false
-					      step:8#7)
-			      idefaults: unit(
-% 					 getChords: fun {$ Self}
-% 						       [{Self findSimultaneousItem($ test:HS.score.isChord)}]
-% 						    end
-% 					 getScales: fun {$ Self}
-% 						       [{Self findSimultaneousItem($ test:HS.score.isScale)}]
-% 						    end
-					    %% HS.score.note default for inChordB
-					    constructor: {Score.makeConstructor HS.score.note
-							  unit(inChordB: fd#(0#1))}
-% 					 inScaleB:0
-					    ))
+						   minPercentSteps: false
+						   clearDissonanceResolution: false
+						   step:8#7))
       proc {$ Notes Args} % body
 	 if Args.rargs.minPitch \= false andthen Args.rargs.maxPitch \= false then 
 	    {HS.rules.restrictPitchDomain Notes Args.rargs.minPitch Args.rargs.maxPitch}
@@ -192,6 +184,26 @@ define
 	 end
 %       {HS.rules.clearHarmonyAtChordBoundaries SimChords Notes}
       end}
+
+   /** %% Script version of MakeCounterpoint_Mixin. In contrast to MakeCounterpoint_Mixin, MakeCounterpoint uses a suitable super script and note constructor by default.
+   %% In addition, all arguments of Score.makeItems_iargs are supported.
+   %% */
+   MakeCounterpoint
+   = {Score.defSubscript unit(super:Score.makeItems_iargs
+			      mixins: [MakeCounterpoint_Mixin]
+			      idefaults: unit(
+% 					 getChords: fun {$ Self}
+% 						       [{Self findSimultaneousItem($ test:HS.score.isChord)}]
+% 						    end
+% 					 getScales: fun {$ Self}
+% 						       [{Self findSimultaneousItem($ test:HS.score.isScale)}]
+% 						    end
+					    %% HS.score.note default for inChordB
+					    constructor: {Score.makeConstructor HS.score.note
+							  unit(inChordB: fd#(0#1))}
+% 					 inScaleB:0
+					    ))
+      nil}
    /** %% Same as MakeCounterpoint, but returns seq of notes and supports seq args.
    %% */
    MakeCounterpoint_Seq = {Score.itemslistToContainerSubscript MakeCounterpoint seq}
@@ -367,29 +379,28 @@ MakeCounterpoint_PatternMotifs_OffsetDurationPitchcontour
 %       end
 %    end}
 
-   /** %%
+   /** %% Mixin subscript for a note sequence that applies a given pattern constraint to note pitches.
+   %%
    %% Args.rargs
-   %% 'pitchPattern': unary proc constraining list of pitches.
+   %% 'pitchPattern' (default: proc {$ Xs} {Pattern.continuous Xs '<:'} end): unary proc constraining list of pitches.
+   %%           
    %% */
-   MkPitchPattern
-   = {Score.defSubscript unit(super:MakeCounterpoint_Seq
-			      rdefaults: unit(pitchPattern: proc {$ Xs}
-							       {Pattern.continuous Xs '<:'}
-							    end)
-			     )
+   PitchPattern
+   = {Score.defMixinSubscript unit(rdefaults: unit(pitchPattern: proc {$ Xs} {Pattern.continuous Xs '<:'} end)
+				  )
       proc {$ NoteSeq Args}
 	 {Args.rargs.pitchPattern {NoteSeq mapItems($ getPitch)}}
       end}
 
 
-   /** %%
+   /** %% Mixin subscript for a note sequence that constraints pitches to follow a contour specified by a fenv.
+   %%
    %% Args.rargs
    %% 'pitchFenv' (default: strictly ascending Fenv): Fenv constraining the pitch *contour*.
    %%
    %% */
-   MkFenvContour
-   = {Score.defSubscript unit(super:MakeCounterpoint_Seq
-			      rdefaults: unit(pitchFenv: {Fenv.linearFenv [[0.0 0.0] [1.0 1.0]]})
+   FenvContour
+   = {Score.defMixinSubscript unit(rdefaults: unit(pitchFenv: {Fenv.linearFenv [[0.0 0.0] [1.0 1.0]]})
 			     )
       proc {$ NoteSeq Args}
 	 {Pattern.fenvContour {NoteSeq mapItems($ getPitch)}
@@ -397,31 +408,32 @@ MakeCounterpoint_PatternMotifs_OffsetDurationPitchcontour
       end}
 
 
-   /** %%
+   /** %% Mixin subscript for a note sequence that constraints pitch contour to a single direction. 
+   %%
    %% Args.rargs
    %% 'direction': direction of arpeggio as relation atom.
    %%
    %% Note: can result in search problems when some intervals early in arpeggio are relatively large and then the whole arpeggio does not fit into the pitch domain any more. This can be fixed, e.g., by setting rargs.maxInterval to a smaller value.
    %% */
-   MkArpeggio
-   = {Score.defSubscript unit(super:MakeCounterpoint_Seq
-			      rdefaults: unit(direction: '<:')
-			     )
+   Arpeggio
+   = {Score.defMixinSubscript unit(rdefaults: unit(direction: '<:')
+				  )
       proc {$ NoteSeq Args}
 	 {Pattern.continuous {NoteSeq mapItems($ getPitch)}
 	  Args.rargs.direction}
       end}
 
 
-   /** %%
+   /** %% Mixin subscript for a note sequence that constraints pitch contour to form an arc.
+   %%
    %% Args.rargs
    %% 'firstRel': arg of Pattern.arc
    %% 'tuningPointPos': arg of Pattern.arc
    %%
    %% Note: can make search complex (not much propagation?)
    %% */
-   MkArc
-   = {Score.defSubscript unit(super:MakeCounterpoint_Seq
+   Arc
+   = {Score.defMixinSubscript unit(
 % 			   rdefaults: unit(maxInterval: 4#3)
 			     )
       proc {$ NoteSeq Args}
@@ -444,38 +456,35 @@ MakeCounterpoint_PatternMotifs_OffsetDurationPitchcontour
 %        Args.rargs}
 %    end}
 
-   /** %%
+   /** %% Mixin subscript for a note sequence that constraints all notes to equal pitches.
    %% */
-   MkRepetitions
-   = {Score.defSubscript unit(super:MakeCounterpoint_Seq
-			     )
+   Repetitions
+   = {Score.defMixinSubscript unit
       proc {$ NoteSeq Args}
 	 {Pattern.allEqual {NoteSeq mapItems($ getPitch)}}
       end}
 
-   /** %%
+   /** %%  Mixin subscript for a note sequence that constraints the notes pitches to follow a hook pattern.
    %% Args.rargs: args of Hook
    %% */
-   MkHook
-   = {Score.defSubscript unit(super:MakeCounterpoint_Seq
-			      rdefaults: unit
-			     )
+   Hook
+   = {Score.defMixinSubscript unit(rdefaults: unit
+				  )
       proc {$ NoteSeq Args}
 	 {Pattern.hook {NoteSeq mapItems($ getPitch)}
 	  Args.rargs}
       end}
 
-   /** %%
+   /** %%  Mixin subscript for a note sequence that constraints the notes pitches to follow a stairs pattern.
    %% Args.rargs: args of Stairs:
    %% 'n'
    %% 'rel'
    %%
    %% Note: can make search complex (not much propagation?)
    %% */
-   MkStairs
-   = {Score.defSubscript unit(super:MakeCounterpoint_Seq
-			      rdefaults: unit
-			     )
+   Stairs
+   = {Score.defMixinSubscript unit(rdefaults: unit
+				  )
       proc {$ NoteSeq Args}
 	 if {IsOdd Args.iargs.n} then {Browse 'Stairs\' n must be even'} end
 	 {Pattern.stairs {NoteSeq mapItems($ getPitch)}
@@ -484,8 +493,11 @@ MakeCounterpoint_PatternMotifs_OffsetDurationPitchcontour
 
 
 
-   /** %% Extended script creating an "akkord", i.e., a sim of notes (German term chosen to avoid confusion with analytical and silent chord object).
+   /** %% Extended script mixin for creating an "akkord", i.e., a sim of notes (German term chosen to avoid confusion with analytical and silent chord object).
    %% All note durations in the akkord are equal, and pitches are always decreasing (i.e. the highest note is first).
+   %%
+   %% Required args that must be specified by script (see source of script version below for suitable idefaults). 
+   %% super: Score.makeSim or similar
    %%
    %% Args.iargs:
    %% 'n': number of tones per chord.
@@ -496,23 +508,9 @@ MakeCounterpoint_PatternMotifs_OffsetDurationPitchcontour
    %% 'minRange' and 'maxRange' (default false): min and max interval between lowest and highest note of each chord, specified as ratio (pair of ints). Disabled if false.
    %% 'minPcCard' (default 3): min number of different pitch classes expressed per akkord. Disabled if false. Note: make sure that iargs.n and cardiality of all chords is high enough.
    %% */
-   MakeAkkord
-   = {Score.defSubscript
-      unit(super: Score.makeSim
-	   idefaults: unit(n: 3
-			   %% add support for domain spec args
-			   constructor: {Score.makeConstructor HS.score.note
-					 unit}
-			   inChordB:1
-% 			getChords: fun {$ Self}
-% 				      [{Self findSimultaneousItem($ test:HS.score.isChord)}]
-% 				   end
-% 			getScales: fun {$ Self}
-% 				      [{Self findSimultaneousItem($ test:HS.score.isScale)}]
-% 				   end
-% 			inScaleB:0
-			  )
-	   rdefaults: unit(minPitch: false
+   MakeAkkord_Mixin
+   = {Score.defMixinSubscript
+      unit(rdefaults: unit(minPitch: false
 			   maxPitch: false
 			   minRange: false
 			   maxRange: false
@@ -546,9 +544,41 @@ MakeCounterpoint_PatternMotifs_OffsetDurationPitchcontour
 	 end
       end}
 
+   /** %% Script version of MakeAkkord_Mixin. In contrast to MakeAkkord_Mixin, MakeAkkord uses a suitable super script and note constructor by default.
+   %% In addition, all arguments of Score.makeSim are supported.
+   %% */
+   MakeAkkord
+   = {Score.defSubscript unit(super:Score.makeSim
+			      mixins: [MakeAkkord_Mixin]
+			      idefaults: unit(n: 3
+					      %% add support for domain spec args
+					      constructor: {Score.makeConstructor HS.score.note
+							    unit}
+					      inChordB:1
+% 					      getChords: fun {$ Self}
+% 							    [{Self findSimultaneousItem($ test:HS.score.isChord)}]
+% 							 end
+% 					      getScales: fun {$ Self}
+% 							    [{Self findSimultaneousItem($ test:HS.score.isScale)}]
+% 							 end
+% 					      inScaleB:0
+					     ))
+      nil}
 
-
-   /** %% Extended script creating a list of akkords.
+   /** %% Extended script mixin for a list of akkords.
+   %%
+    %% Required args that must be specified by script (see source of script version below for suitable idefaults). 
+   %% super: something like
+   fun {$ Args}
+      Defaults = unit(akkN: 1)
+      As = {Adjoin Defaults Args}
+   in
+      {Score.makeItems  {Adjoin {Record.subtract As akkN}
+			 %% overwrite args 
+			 unit(n: As.akkN
+			      constructor: MakeAkkord
+			     )}}
+   end
    %%
    %% Args:
    %% 'akkN': number of akkords.
@@ -561,20 +591,9 @@ MakeCounterpoint_PatternMotifs_OffsetDurationPitchcontour
    %%
    %% */
    %%
-   MakeAkkords
-   = {Score.defSubscript
-      unit(super: fun {$ Args}
-		     Defaults = unit(akkN: 1)
-		     As = {Adjoin Defaults Args}
-		  in
-		     {Score.makeItems  {Adjoin {Record.subtract As akkN}
-					%% overwrite args 
-					unit(n: As.akkN
-					     constructor: MakeAkkord
-					    )}}
-		  end
-	   idefaults: unit
-	   rdefaults: unit(sopranoPattern: proc {$ Ps} skip end
+   MakeAkkords_Mixin
+   = {Score.defMixinSubscript
+      unit(rdefaults: unit(sopranoPattern: proc {$ Ps} skip end
 			   bassPattern: proc {$ Ps} skip end
 			   rule: proc {$ Cs} skip end))
       proc {$ Akks Args}
@@ -584,6 +603,25 @@ MakeCounterpoint_PatternMotifs_OffsetDurationPitchcontour
 	 {Args.rargs.bassPattern
 	  {Map Akks fun {$ Akk} {List.last {Akk mapItems($ getPitch)}} end}}
       end}
+
+   /** %% Script version of MakeAkkords_Mixin.
+   %% */
+   MakeAkkords
+   =  {Score.defSubscript
+	 unit(super: fun {$ Args}
+			Defaults = unit(akkN: 1)
+			As = {Adjoin Defaults Args}
+		     in
+			{Score.makeItems  {Adjoin {Record.subtract As akkN}
+					   %% overwrite args 
+					   unit(n: As.akkN
+						constructor: MakeAkkord
+					       )}}
+		     end
+	      mixins: [MakeAkkords_Mixin])
+	 nil}
+
+	   
 
    /** %% Same as MakeAkkords, but returns sequential container of akkords.
    %% */
