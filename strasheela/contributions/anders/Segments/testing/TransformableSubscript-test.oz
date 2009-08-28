@@ -22,14 +22,13 @@ MakeTestMotif1
 			{Pattern.map2Neighbours {X mapItems($ getPitch)}
 			 Pattern.direction}
 		     end
-		    offsetTimes: [2 0 0 0 0]#mapItems(_ getOffsetTime)
 		    %% only first offset time specified
-% 		    offsetTimes: [2 _ _ _ _]#mapItems(_ getOffsetTime)
+		    offsetTimes: [2 '_' '_' '_' '_']#mapItems(_ getOffsetTime)
 		   )
 	transformers: [Segs.tSC.removeNotesAtEnd]
 	idefaults: unit(%% to add DomSpec support
 			constructor: {Score.makeConstructor Score.note unit}
-			offsetTime: fd#(0#10)
+			offsetTime: fd#[0 2]
 			pitch: fd#(60#72))
 % 	rdefaults: unit
        )
@@ -56,7 +55,6 @@ MakeTestMotif1
     
 
 */
-
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
