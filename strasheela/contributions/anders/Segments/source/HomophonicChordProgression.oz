@@ -1,4 +1,8 @@
 
+%%
+%% This functor defines a subscript that creates homphonic chord progressions. 
+%%
+
 functor 
 
 import
