@@ -974,6 +974,81 @@ piwik_log(piwik_action_name, piwik_idsite, piwik_url);
 
 * Strasheela design					      :MAYBE:STRASHEELA:
 
+** Define further transformer functions for transformable motifs
+
+   see [[file:~/oz/music/Strasheela/strasheela/trunk/strasheela/contributions/anders/Segments/source/TransformableSubscript.oz::Transformers]]
+
+
+**** ?? add pauses to motifs
+
+**** OK Repetition
+
+     not a variation of course, but an important technique
+
+     Also, if harmony changes a lot then you might consider to keep rhythm more simple..
+
+**** Replace a (longer) duration by multiple shorter durations (of equal length ?) that substitute the longer dur
+
+**** OK Replace a duration by an arbitrary other rhythm
+
+     in principle, this replacement rhythm does not even need to have the same duration as the duration it substitutes
+     
+**** Add an arbitrary short or long note 
+
+     Where?
+
+**** Remove an arbitrary note
+
+     Which note? 
+
+**** Change duration of a note
+
+     e.g., 
+
+     - change dur of longest or last note of motif longer
+
+     - reduce duration of some short note
+
+     - add a dot to some note, or remove a dot
+
+**** Special technique from Tala in Carnatic music
+     
+     http://en.wikipedia.org/wiki/Tala_%28music%29#Tala_in_Carnatic_music
+
+     Multiple duration categories 
+     - 1 pulse
+     - 2 pulses
+     - multiple pulses: 3, 4, 5, 7 or 9
+
+     So, a rhythm can be streched/compressed by changing dur of all long tones
+
+
+**** OK Stretch/compress by multiplying all durations with some constant factor 
+
+**** OK Stretch/compress by adding some constant value to all durations 
+     
+**** OK "Tilted stretching/compressing": add/multiply different durations 
+
+     e.g., multiply all durations with an increasing list of durations 
+
+     Note: this technique is limited when using integer durations only
+
+
+**** Reverse the duration sequence
+
+**** ?? anything like a rhythmic inversion? 
+
+     does that have perceptual relevance?
+
+**** Rotation of the duration sequence 
+
+     e.g., last value becomes first etc
+
+     Note that for motifs that end on a long note (convincing phrasing), this technique can have unconvincing results
+
+**** Successivly apply multiple of the techniques above to by and by change motif 
+        
+
 ** Allow effectively for negative offset times of items in a sequential and simultaneous containers 
 
    Purpose: extend my homophonic slices such that overlapping notes are possible (e.g., upbeat)
