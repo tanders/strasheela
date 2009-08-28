@@ -48,9 +48,9 @@ in
    MyScore
    = {Score.make
       sim([MyScoreSegment
-	   chord(index:{HS.db.getChordIndex 'harmonic 7th'}
-		 transposition:0
-		 endTime:End)]
+	   seq([chord(index:{HS.db.getChordIndex 'harmonic 7th'}
+		      transposition:0
+		      endTime:End)])]
 	  startTime:0
 	  timeUnit:beats(Beat))
       add(chord:HS.score.chord)}
@@ -165,15 +165,14 @@ TypewiseWithPatternMotifs_LeftToRightTieBreaking_Distro
  proc {$ MyScore}
     MyScore = {TestScoreSegment
 	       seq({Segs.makeCounterpoint
-		    unit(iargs: unit(n:2
+		    unit(iargs: unit(n:10
 				     duration: D.d2
 				    )
 			rargs: unit(maxPitch: 'G'#4 % pitch unit and notation is et31
 				    minPitch: 'D'#4
 				  ))})}
  end
- unit
-}
+ unit(value:random)}
 
 */
 
@@ -184,7 +183,7 @@ TypewiseWithPatternMotifs_LeftToRightTieBreaking_Distro
 {SDistro.exploreOne
  proc {$ MyScore}
     MyScore = {TestMotif
-	       unit(iargs: unit(n:2
+	       unit(iargs: unit(n:5
 				duration: D.d2))
 	       Segs.makeCounterpoint_Seq}
  end
@@ -350,6 +349,11 @@ TypewiseWithPatternMotifs_LeftToRightTieBreaking_Distro
 %% specific motifs 
 %%
 
+MkArpeggio
+= {Score.defSubscript unit(super:Segs.makeCounterpoint_Seq
+			   mixins: [Segs.arpeggio])
+   nil}
+
 /* % test motif
 
 {SDistro.exploreOne
@@ -359,7 +363,7 @@ TypewiseWithPatternMotifs_LeftToRightTieBreaking_Distro
 			    duration: D.d2
 			    inChordB: 1)
 		 offsetTime:D.d4)
-	       Segs.mkArpeggio}
+	       MkArpeggio}
  end
  unit
 %  TypewiseWithPatternMotifs_LeftToRightTieBreaking_NoChordDurs_Distro
@@ -372,7 +376,9 @@ TypewiseWithPatternMotifs_LeftToRightTieBreaking_Distro
 			    duration: D.d2
 			    inChordB: 1)
 		 offsetTime:D.d4)
-	       Segs.mkArc}
+	       {Score.defSubscript unit(super:Segs.makeCounterpoint_Seq
+					mixins: [Segs.arc])
+		nil}}
  end
  unit
 }
@@ -384,7 +390,9 @@ TypewiseWithPatternMotifs_LeftToRightTieBreaking_Distro
 			    duration: D.d2
 			    inChordB: 1)
 		 offsetTime:D.d4)
-	       Segs.mkRepetitions}
+	       {Score.defSubscript unit(super:Segs.makeCounterpoint_Seq
+					mixins: [Segs.repetitions])
+		nil}}
  end
  unit
 }
@@ -400,7 +408,9 @@ TypewiseWithPatternMotifs_LeftToRightTieBreaking_Distro
 			     minPitch: 'D'#3
 			    )
 		 offsetTime:D.d4)
-	       Segs.mkHook}
+	       {Score.defSubscript unit(super:Segs.makeCounterpoint_Seq
+					mixins: [Segs.hook])
+		nil}}
  end
  unit
 }
@@ -409,7 +419,7 @@ TypewiseWithPatternMotifs_LeftToRightTieBreaking_Distro
 {SDistro.exploreOne
  proc {$ MyScore}
     MyScore = {TestMotif
-	       a(iargs:unit(n:4
+	       a(iargs:unit(n:6
 			    duration: D.d2
 			    inChordB: 1
 			   )
@@ -417,7 +427,9 @@ TypewiseWithPatternMotifs_LeftToRightTieBreaking_Distro
 			     minPitch: 'D'#3
 			    )
 		 offsetTime:D.d4)
-	       Segs.mkStairs}
+	       {Score.defSubscript unit(super:Segs.makeCounterpoint_Seq
+					mixins: [Segs.stairs])
+		nil}}
  end
  unit
 }
@@ -426,21 +438,28 @@ TypewiseWithPatternMotifs_LeftToRightTieBreaking_Distro
 
 
 %%
-%% Segs.mkFenvContour
+%% Segs.fenvContour
 %%
 
 /*
 
 {SDistro.exploreOne
  fun {$}
-    {TestMotif a(iargs: unit(n: 3
-			     duration: 4
-			     inChordB: 1))
-     Segs.mkFenvContour}
+    {TestMotif a(iargs: unit(n: 5 % 10
+			     duration: Beat
+			     pitch: fd#({HS.pitch 'C'#4}#{HS.pitch 'C'#5})
+			     inChordB: 1)
+		 rargs: unit(pitchFenv: {Fenv.linearFenv [[0.0 0.0] [0.7 1.0] [1.0 0.0]]})
+		)
+     {Score.defSubscript unit(super:Segs.makeCounterpoint_Seq
+			      mixins: [Segs.fenvContour])
+      nil}}
  end
  unit
 %  HS.distro.typewise_LeftToRightTieBreaking
 }
+
+
 
 */
 
@@ -462,10 +481,10 @@ TypewiseWithPatternMotifs_LeftToRightTieBreaking_Distro
     MyScore
     = {Score.make
        sim([seq({Segs.makeAkkords unit(akkN:3
-				  iargs: unit(n: 4
-					      duration: D.d2)
-				  rargs: unit(minPcCard: 4
-					      bassPattern: Pattern.decreasing))}
+				       iargs: unit(n: 4
+						   duration: D.d2)
+				       rargs: unit(minPcCard: 4
+						   bassPattern: Pattern.decreasing))}
 		endTime:End)
 	    chord(index: {HS.db.getChordIndex 'harmonic 7th'}
 		  transposition:0
