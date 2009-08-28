@@ -6,8 +6,7 @@
 %%
 %% TODO:
 %%
-%% !! - for only partical value lists of motif features (see offset time example in test file) introduce something like '_' to indicate dummy values (cf. pattern motifs..)
-%%   It is important that these are not variables, because variables on the toplevel would cause blocking
+%% - !!?? translate DefSubscript into Mixin def, so I can combine it with existing subscripts of Segs (e.g., [MakeCounterpoint])
 %%
 %% - def further motif variation functions
 %%
@@ -74,6 +73,10 @@ define
 	durations: [2 2 4]#mapItems(_ getDuration)
 	pitchContour: [2 0]#fun {$ X} {Pattern.direction {Pattern.map2Neighbours {X getItems($)}}} end)
 
+   %% The dummy value '_' can be used for list elements should be ignored (i.e. no constraint is applied). Only the first duration is constrained in the following example, but there are three items. 
+
+   unit(durations: [2 '_' '_']#fun {$ X} {X mapItems($ getDuration)} end)
+
    %%
    %% 'transformers' (default nil): a list of binary functions that define motif variations. Each function expects a full motif specification and the full argument record of the subscript (i.e. args given to the subscript call and default values for all other args) and returns a somehow transformed full motif specification. A transformer function typically defines its arguments as rarg features. The transformer function Foo below expects the argument 'foo', whose default is 'bar'.
 
@@ -137,11 +140,14 @@ define
 	       {Record.forAll {Record.subtract TrueSpec n}
 		proc {$ Xs#Accessor}
 		   AcessorProc = {GUtils.toProc Accessor}
+		   TrueXs = {Map Xs fun {$ X}
+				       if X == '_' then _ else X end
+				    end}
 		in
-		   Xs = if {ProcedureArity AcessorProc} == 2 then {AcessorProc MyScore}
-			   %% NB: always use only default args specified for method
-			else {AcessorProc MyScore unit}
-			end
+		   TrueXs = if {ProcedureArity AcessorProc} == 2 then {AcessorProc MyScore}
+			       %% NB: always use only default args specified for method
+			    else {AcessorProc MyScore unit}
+			    end
 		end}
 	    end
 	    if Body \= nil then
