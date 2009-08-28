@@ -4,6 +4,9 @@ declare
 			   'x-ozlib://anders/strasheela/Segments/Segments.ozf']}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%% Testing features of motif definitions 
+%%
 
 declare
 /** %% Test DefSubscript
@@ -58,6 +61,9 @@ MakeTestMotif1
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%% Testing transformers
+%%
 
 declare
 /** %% Test DefSubscript
@@ -194,6 +200,14 @@ MakeTestMotif2
  unit}
 
 */
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%% Combining with other subscript defs
+%%
 
 
 
