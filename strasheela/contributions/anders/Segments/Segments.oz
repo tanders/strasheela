@@ -57,6 +57,7 @@ import
    Fenv at 'x-ozlib://anders/strasheela/Fenv/Fenv.ozf'
 
    HCP at 'source/HomophonicChordProgression.ozf'
+   TSC at 'source/TransformableSubscript.ozf'
    
 export
    
@@ -83,7 +84,9 @@ export
 
 %    TestMotif TestScoreSegment
 
-   HomophonicChordProgression 
+   HomophonicChordProgression
+
+   TSC
    
 define
 
@@ -746,7 +749,7 @@ MakeCounterpoint_PatternMotifs_OffsetDurationPitchcontour
 	       fun {$ Segments} sim(Segments) end})}
 	 {Adjoin As.constructors add}}
    end
-
+   
    
 end
 
