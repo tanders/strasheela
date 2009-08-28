@@ -646,7 +646,11 @@ MyRun2 = {MakeRun_PitchDom
 
 declare
 MakeDottedRhythm
-= {Score.defMixinSubscript unit(rdefaults: unit(shortDur: 1))
+= {Score.defMixinSubscript unit(rdefaults: unit(shortDur: 1)
+				%% NOTE: idefaults are ignored for mixins!  
+				idefaults: unit(pitch: 60) % ignored!
+				startTime:0		   % ignored!
+			       )
    proc {$ MyScore Args} % mixin body
       Durs = {MyScore mapItems($ getDuration)}
       %% Durs length must be at least 2
@@ -659,7 +663,8 @@ MakeDottedRhythm
 MakeContinuousNotes
 = {Score.defSubscript unit(super:Score.makeContainer
 			   rdefaults: unit(direction: '<:')
-			   idefaults: unit(n:3))
+			   idefaults: unit(n:3)
+			  )
    proc {$ MyScore Args} % subscript body
       {Pattern.continuous {MyScore mapItems($ getPitch)}
        Args.rargs.direction}
@@ -673,13 +678,15 @@ declare
 MyScore
 = {MakeMyMotif
    unit(iargs:unit(%% number of notes (overwrites default 3)
-		   n: 4)
+		   n: 4
+		  )
 	%% decreasing pitches (overwrites default '<:')
 	rargs:unit(direction:'>:'
 		   shortDur: 2
 		  )
 	%% argument to top-level container 
-	startTime:0)}
+	startTime:0
+       )}
 {Score.init MyScore}
 
 {Browse {MyScore toInitRecord($)}}
