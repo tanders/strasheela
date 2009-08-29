@@ -149,19 +149,19 @@ clearInterval(drawit)
 </span></li><li>HS at "<span class="string">x-ozlib://anders/strasheela/HarmonisedScore/HarmonisedScore.ozf"
 </span></li></ul></code>
 <h3>Export</h3>
-<code><ul><li>&lt;P/3:<a href="#entity474"><span class="functionname">AscendingProgressionR</span></a>&gt;
-</li><li>&lt;P/3:<a href="#entity475"><span class="functionname">AscendingProgression2R</span></a>&gt;
-</li><li>&lt;P/3:<a href="#entity476"><span class="functionname">DescendingProgressionR</span></a>&gt;
-</li><li>&lt;P/3:<a href="#entity477"><span class="functionname">SuperstrongProgressionR</span></a>&gt;
-</li><li>&lt;P/3:<a href="#entity478"><span class="functionname">ConstantProgressionR</span></a>&gt;
-</li><li>&lt;P/3:<a href="#entity479"><span class="functionname">ProgressionStrength</span></a>&gt;
-</li><li>&lt;P/2:<a href="#entity480"><span class="functionname">ResolveDescendingProgressions</span></a>&gt;
-</li><li>&lt;P/2:<a href="#entity481"><span class="functionname">ProgressionSelector</span></a>&gt;
+<code><ul><li>&lt;P/3:<a href="#entity484"><span class="functionname">AscendingProgressionR</span></a>&gt;
+</li><li>&lt;P/3:<a href="#entity485"><span class="functionname">AscendingProgression2R</span></a>&gt;
+</li><li>&lt;P/3:<a href="#entity486"><span class="functionname">DescendingProgressionR</span></a>&gt;
+</li><li>&lt;P/3:<a href="#entity487"><span class="functionname">SuperstrongProgressionR</span></a>&gt;
+</li><li>&lt;P/3:<a href="#entity488"><span class="functionname">ConstantProgressionR</span></a>&gt;
+</li><li>&lt;P/3:<a href="#entity489"><span class="functionname">ProgressionStrength</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity490"><span class="functionname">ResolveDescendingProgressions</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity491"><span class="functionname">ProgressionSelector</span></a>&gt;
 </li></ul></code>
 <h3>Define</h3>
 
 <code>
-<a name="entity474">
+<a name="entity484">
 <span class="keyword">proc</span>{<span class="functionname">AscendingProgressionR</span> X Y B}<br>
 <span class="string"> B=1 <-> the progression from chord/scale X to chord/scale Y is ascending (or strong): X and Y have common pitch classes, but the root of Y does not occur in the set of X's pitchclasses.<BR>
 <BR>
@@ -169,7 +169,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity475">
+<a name="entity485">
 <span class="keyword">proc</span>{<span class="functionname">AscendingProgression2R</span> X Y B}<br>
 <span class="string"> More strict variant of AscendingProgressionR: B=1 <-> the root of Y does not occur in the set of X's pitchclasses, but the root of X is also a pitch class in Y.<BR>
 <BR>
@@ -177,7 +177,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity476">
+<a name="entity486">
 <span class="keyword">proc</span>{<span class="functionname">DescendingProgressionR</span> X Y B}<br>
 <span class="string"> B=1 <-> the progression from chord/scale X to chord/scale Y is descending (or weak): a non-root pitchclass of X is root in Y.<BR>
 <BR>
@@ -185,7 +185,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity477">
+<a name="entity487">
 <span class="keyword">proc</span>{<span class="functionname">SuperstrongProgressionR</span> X Y B}<br>
 <span class="string"> B=1 <-> the progression from chord/scale X to chord/scale Y is superstrong in a Schoenbergian sense (cf. Harmonielehre): X and Y have no common pitch classes.<BR>
 <BR>
@@ -193,12 +193,12 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity478">
+<a name="entity488">
 <span class="keyword">proc</span>{<span class="functionname">ConstantProgressionR</span> X Y B}
 </code><br>
 
 <code>
-<a name="entity479">
+<a name="entity489">
 <span class="keyword">proc</span>{<span class="functionname">ProgressionStrength</span> X Y N}<br>
 <span class="string"> Expects two chord/scale objects X and Y, and returns N (an FD int) expressing the 'strength' of the harmonic progression encoded by a single integer.<BR>
  More specifically, N can be used to distinguish between the following cases.<BR>
@@ -211,7 +211,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity480">
+<a name="entity490">
 <span class="keyword">proc</span>{<span class="functionname">ResolveDescendingProgressions</span> Xs Args}<br>
 <span class="string"> Expects a list of chord/scale objects Xs and constrains them according to Schoenberg's recommendation. For any three successive chords/scales, if the first two chords form a descending progression, then the progression from the first to the third chord forms a strong progression (so the middle chord is quasi a 'passing chord'). Also, the last chord/scale pair forms always a strong progression.<BR>
  Optional Args: allowInterchangeProgression (default is false). If true, then mere interchange progressions (e.g., I V I), are permitted as well. In any case, no two descending progression must follow each other. allowRepetition: if true, two neighbouring chords can have the same root. Defaults to false.<BR>
@@ -220,7 +220,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity481">
+<a name="entity491">
 <span class="keyword">proc</span>{<span class="functionname">ProgressionSelector</span> Cs Selector}<br>
 <span class="string"> [Convenience constraint] Constraints the chord root progression for a list of chord objects Cs, where the actual rule is selected by an argument. Different argument values represent different variants of Schoenbergs rule set. Supported values are (in order of their strictness):<BR>
  - ascending: only ascending chord progressions are permitted<BR>

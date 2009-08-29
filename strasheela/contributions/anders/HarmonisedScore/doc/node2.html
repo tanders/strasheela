@@ -327,11 +327,11 @@ clearInterval(drawit)
 <a name="entity57">
 <span class="keyword">fun</span>{<span class="functionname">Pc2Ratios</span> PC IntervalDB}<br>
 <span class="string"> Returns a list of all ratios which match PC (an int) in IntervalDB (given in its edit form) which was defined using ratios (e.g. {HS.dbs.partch.getIntervals {HS.db.getPitchesPerOctave}}).<BR>
- A ratio consists in two integers and has the form Nom#Denom. If no entry in the database matches PC, nil is returned.<BR>
+ A ratio consists in two integers and has the form Nom#Denom. If no entry in the database matches PC or non matching is defined as ratio, then nil is returned.<BR>
 <BR>
  Two examples:<BR>
-   {PC2Ratios 9 {HS.dbs.partch.getIntervals 12}}<BR>
-   {PC2Ratios 53 {HS.dbs.partch.getIntervals 72}}<BR>
+   {Pc2Ratios 9 {HS.dbs.partch.getIntervals 12}}<BR>
+   {Pc2Ratios 53 {HS.dbs.partch.getIntervals 72}}<BR>
 <BR>
  NB: Pc2Ratios is a deterministic function and no constraint.<BR>
 <BR>

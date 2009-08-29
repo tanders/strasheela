@@ -59,9 +59,10 @@ document.write('<div id="slidemenubar2" style="left:-144" onMouseover="pull()" o
 </script>
 <layer id="slidemenubar" onMouseover="pull()" onMouseout="draw()">
 <table border="0" cellpadding="0" cellspacing="0" width="161"><tr><td bgcolor="#009cff" width="144"><a href="index.html">Index</a>
-</td><td rowspan="4" valign="top" width="16"><img src="menu.gif" width="16"></td></tr><tr><td bgcolor="#009cff" width="144"><a href="node1.html">Segments</a>
+</td><td rowspan="5" valign="top" width="16"><img src="menu.gif" width="16"></td></tr><tr><td bgcolor="#009cff" width="144"><a href="node1.html">Segments</a>
 </td></tr><tr><td bgcolor="#009cff" width="144"><a href="node2.html">HCP</a>
-</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node3.html">Segs</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node3.html">TSC</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node4.html">Segs</a>
 </td></tr></table></layer>
 <script language="JavaScript1.2">
 function regenerate(){
@@ -132,37 +133,46 @@ clearInterval(drawit)
 </span></li><li>LUtils at "<span class="string">x-ozlib://anders/strasheela/source/ListUtils.ozf"
 </span></li><li>MUtils at "<span class="string">x-ozlib://anders/strasheela/source/MusicUtils.ozf"
 </span></li><li>Score at "<span class="string">x-ozlib://anders/strasheela/source/ScoreCore.ozf"
+</span></li><li>Init at "<span class="string">x-ozlib://anders/strasheela/source/Init.ozf"
 </span></li><li>Pattern at "<span class="string">x-ozlib://anders/strasheela/Pattern/Pattern.ozf"
 </span></li><li>HS at "<span class="string">x-ozlib://anders/strasheela/HarmonisedScore/HarmonisedScore.ozf"
 </span></li><li>Fenv at "<span class="string">x-ozlib://anders/strasheela/Fenv/Fenv.ozf"
 </span></li><li><a href="node2.html">HCP</a> at "<span class="string">source/HomophonicChordProgression.ozf"
+</span></li><li><a href="node3.html">TSC</a> at "<span class="string">source/TransformableSubscript.ozf"
 </span></li></ul></code>
 <h3>Export</h3>
-<code><ul><li>&lt;P/2:<a href="#entity25"><span class="functionname">GetNoteIndex</span></a>&gt;
-</li><li>&lt;P/2:<a href="#entity26"><span class="functionname">MakeParametersAccessor</span></a>&gt;
-</li><li>&lt;P/2:<a href="#entity27"><span class="functionname">PitchContourAccessor</span></a>&gt;
+<code><ul><li>&lt;P/2:<a href="#entity34"><span class="functionname">GetNoteIndex</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity35"><span class="functionname">MakeParametersAccessor</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity36"><span class="functionname">PitchContourAccessor</span></a>&gt;
+</li><li><span class="variablename">MakeCounterpoint_Mixin</span>
 </li><li><span class="variablename">MakeCounterpoint</span>
 </li><li><span class="variablename">MakeCounterpoint_Seq</span>
 </li><li><span class="variablename">MakeCounterpoint_PatternMotifs</span>
-</li><li><span class="variablename">MkPitchPattern</span>
-</li><li><span class="variablename">MkFenvContour</span>
-</li><li><span class="variablename">MkArpeggio</span>
-</li><li><span class="variablename">MkArc</span>
-</li><li><span class="variablename">MkRepetitions</span>
-</li><li><span class="variablename">MkHook</span>
-</li><li><span class="variablename">MkStairs</span>
+</li><li><span class="variablename">MakeCounterpoint_PatternMotifs_DurationPitchcontour</span>
+</li><li><span class="variablename">MakeCounterpoint_PatternMotifs_OffsetDuration</span>
+</li><li><span class="variablename">MakeCounterpoint_PatternMotifs_OffsetDurationPitchcontour</span>
+</li><li><span class="variablename">PitchPattern</span>
+</li><li><span class="variablename">FenvContour</span>
+</li><li><span class="variablename">Arpeggio</span>
+</li><li><span class="variablename">Arc</span>
+</li><li><span class="variablename">Repetitions</span>
+</li><li><span class="variablename">Hook</span>
+</li><li><span class="variablename">Stairs</span>
+</li><li><span class="variablename">MakeAkkord_Mixin</span>
 </li><li><span class="variablename">MakeAkkord</span>
+</li><li><span class="variablename">MakeAkkords_Mixin</span>
 </li><li><span class="variablename">MakeAkkords</span>
-</li><li>&lt;P/2:<a href="#entity28"><span class="functionname">MakeAkkords_Seq</span></a>&gt;
-</li><li>&lt;P/2:<a href="#entity29"><span class="functionname">MakeChordSlicesForm</span></a>&gt;
-</li><li>&lt;P/2:<a href="#entity30"><span class="functionname">PatternedPhrase</span></a>&gt;
-</li><li>&lt;P/2:<a href="#entity31"><span class="functionname">PatternedSlices</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity37"><span class="functionname">MakeAkkords_Seq</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity38"><span class="functionname">MakeChordSlicesForm</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity39"><span class="functionname">PatternedPhrase</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity40"><span class="functionname">PatternedSlices</span></a>&gt;
 </li><li><span class="variablename">HomophonicChordProgression</span>
+</li><li><span class="variablename">TSC</span>
 </li></ul></code>
 <h3>Define</h3>
 
 <code>
-<a name="entity25">
+<a name="entity34">
 <span class="keyword">fun</span>{<span class="functionname">GetNoteIndex</span> N}<br>
 <span class="string"> Expects a note with index parameter and returns the index variable value.  <BR>
 <BR>
@@ -170,7 +180,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity26">
+<a name="entity35">
 <span class="keyword">fun</span>{<span class="functionname">MakeParametersAccessor</span> Accessor}<br>
 <span class="string"> Returns accessor function expecting a list of items (notes) and returning list of variables returned by Accessor (unary function or method). Example<BR>
    {MakeParametersAccessor getPitch}<BR>
@@ -179,7 +189,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity27">
+<a name="entity36">
 <span class="keyword">fun</span>{<span class="functionname">PitchContourAccessor</span> Ns}<br>
 <span class="string"> <BR>
 <BR>
@@ -187,7 +197,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity28">
+<a name="entity37">
 <span class="keyword">fun</span>{<span class="functionname">MakeAkkords_Seq</span> Args}<br>
 <span class="string"> Same as MakeAkkords, but returns sequential container of akkords.<BR>
 <BR>
@@ -195,7 +205,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity29">
+<a name="entity38">
 <span class="keyword">proc</span>{<span class="functionname">MakeChordSlicesForm</span> Args MyScore}<br>
 <span class="string"> Returns extended script for musical section where each segment in the section expresses a single chord. <BR>
 <BR>
@@ -214,7 +224,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity30">
+<a name="entity39">
 <span class="keyword">fun</span>{<span class="functionname">PatternedPhrase</span> Args}<br>
 <span class="string"> Generates extended script for creating a phrase consisting of multiple segments, and for applying pattern constraints on these segments.  The resulting score topology is as follows, where the segmenents are form segments created by other extended scripts. <BR>
 <BR>
@@ -237,7 +247,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity31">
+<a name="entity40">
 <span class="keyword">proc</span>{<span class="functionname">PatternedSlices</span> Args MyScore}<br>
 <span class="string"> Extended script for creating a sequence of polyphonic form segments, resulting score topology, where the segmenents are form segments created by other extended scripts. <BR>
 <BR>

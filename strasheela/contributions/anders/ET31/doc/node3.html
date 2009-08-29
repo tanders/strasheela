@@ -136,23 +136,26 @@ clearInterval(drawit)
 </span></li><li><a href="node5.html">ET31_Score</a> at "<span class="string">Score.ozf"
 </span></li></ul></code>
 <h3>Export</h3>
-<code><ul><li>&lt;P/2:<a href="#entity46"><span class="functionname">RenderAndShowLilypond</span></a>&gt;
-</li><li>&lt;P/1:<a href="#entity37"><span class="functionname">AddExplorerOut_ChordsToScore</span></a>&gt;
-</li><li>&lt;P/0:<a href="#entity47"><span class="functionname">AddExplorerOuts_ArchiveInitRecord</span></a>&gt;
-</li><li>&lt;P/2:<a href="#entity43"><span class="functionname">MakeChordComment</span></a>&gt;
-</li><li>&lt;P/2:<a href="#entity44"><span class="functionname">MakeChordRatios</span></a>&gt;
-</li><li>&lt;P/2:<a href="#entity45"><span class="functionname">MakeScaleComment</span></a>&gt;
-</li><li>&lt;P/2:<a href="#entity38"><span class="functionname">IsEt31Note</span></a>&gt;
-</li><li>&lt;P/2:<a href="#entity39"><span class="functionname">IsEt31Chord</span></a>&gt;
-</li><li>&lt;P/2:<a href="#entity40"><span class="functionname">IsEt31Scale</span></a>&gt;
-</li><li>&lt;P/2:<a href="#entity41"><span class="functionname">NoteEt31ToLily</span></a>&gt;
-</li><li>&lt;P/2:<a href="#entity42"><span class="functionname">NoteEt31ToLily_AdaptiveJI</span></a>&gt;
+<code><ul><li>&lt;P/2:<a href="#entity50"><span class="functionname">RenderAndShowLilypond</span></a>&gt;
+</li><li>&lt;P/1:<a href="#entity40"><span class="functionname">AddExplorerOut_ChordsToScore</span></a>&gt;
+</li><li>&lt;P/0:<a href="#entity51"><span class="functionname">AddExplorerOuts_ArchiveInitRecord</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity47"><span class="functionname">MakeChordComment</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity48"><span class="functionname">MakeChordRatios</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity49"><span class="functionname">MakeScaleComment</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity41"><span class="functionname">IsEt31Note</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity42"><span class="functionname">IsEt31Chord</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity43"><span class="functionname">IsEt31Scale</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity44"><span class="functionname">NoteEt31ToLily</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity45"><span class="functionname">NoteEt31ToLily_AdaptiveJI</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity46"><span class="functionname">NoteEt31ToLily_AdaptiveJI2</span></a>&gt;
 </li><li><span class="variablename">Et31AsEt12_TuningTable</span>
+</li><li><span class="variablename">Meantone_TuningTable</span>
+</li><li><span class="variablename">JI_TuningTable</span>
 </li></ul></code>
 <h3>Define</h3>
 
 <code>
-<a name="entity46">
+<a name="entity50">
 <span class="keyword">proc</span>{<span class="functionname">RenderAndShowLilypond</span> MyScore Args}<br>
 <span class="string"> Proc is like Out.renderAndShowLilypond, but provides buildin support for notes and chords with pitch units in et31.<BR>
  Please note that this support is defined by the argument Clauses (see Out.renderAndShowLilypond) -- additional clauses are still possible, but adding new note/chord clauses will overwrite the support for 31 ET.<BR>
@@ -165,7 +168,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity37">
+<a name="entity40">
 <span class="keyword">proc</span>{<span class="functionname">AddExplorerOut_ChordsToScore</span> Args}<br>
 <span class="string"> Creates an Explorer output. The script solution must be a sequential container with chord objects (i.e. without the actual notes).<BR>
  The Explorer output action creates a CSP with expects a chord sequence and returns a homophonic chord progression. AddExplorerOut_ChordsToScore internally uses ET31.score.chordsToScore for this purpose.  <BR>
@@ -178,7 +181,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity47">
+<a name="entity51">
 <span class="keyword">proc</span>{<span class="functionname">AddExplorerOuts_ArchiveInitRecord</span> }<br>
 <span class="string"> Adds ET31 declaration on top of *.ssco file and calls {HS.db.setDB ET31.db.fullDB}<BR>
 <BR>
@@ -186,7 +189,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity43">
+<a name="entity47">
 <span class="keyword">proc</span>{<span class="functionname">MakeChordComment</span> MyChord Result}<br>
 <span class="string"> Expects a chord and returns the chord comment (a VS).<BR>
 <BR>
@@ -194,12 +197,12 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity44">
+<a name="entity48">
 <span class="keyword">proc</span>{<span class="functionname">MakeChordRatios</span> MyChord Result}
 </code><br>
 
 <code>
-<a name="entity45">
+<a name="entity49">
 <span class="keyword">proc</span>{<span class="functionname">MakeScaleComment</span> MyScale Result}<br>
 <span class="string"> Expects a scale and returns the scale comment (a VS). <BR>
 <BR>
@@ -207,7 +210,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity38">
+<a name="entity41">
 <span class="keyword">fun</span>{<span class="functionname">IsEt31Note</span> X}<br>
 <span class="string"> Returns true if X is a note object with pitch unit et31.<BR>
 <BR>
@@ -215,7 +218,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity39">
+<a name="entity42">
 <span class="keyword">fun</span>{<span class="functionname">IsEt31Chord</span> X}<br>
 <span class="string"> Returns true if X is a chord object with root pitch unit et31.<BR>
 <BR>
@@ -223,7 +226,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity40">
+<a name="entity43">
 <span class="keyword">fun</span>{<span class="functionname">IsEt31Scale</span> X}<br>
 <span class="string"> Returns true if X is a scale object with root pitch unit et31.<BR>
 <BR>
@@ -231,7 +234,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity41">
+<a name="entity44">
 <span class="keyword">fun</span>{<span class="functionname">NoteEt31ToLily</span> MyNote}<br>
 <span class="string"> Expects a Strasheela note object and returns the corresponding<BR>
  Lilypond code (a VS). For simplicity, this transformation does not<BR>
@@ -242,9 +245,17 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity42">
+<a name="entity45">
 <span class="keyword">fun</span>{<span class="functionname">NoteEt31ToLily_AdaptiveJI</span> MyNote}<br>
 <span class="string"> Like NoteEt31ToLily, but additionally notates the adaptive JI pitch offset of this note with respect to 31 ET.<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity46">
+<span class="keyword">fun</span>{<span class="functionname">NoteEt31ToLily_AdaptiveJI2</span> MyNote}<br>
+<span class="string"> Like NoteEt31ToLily_AdaptiveJI, but additionally also notates the absolute pitch in cent.<BR>
 <BR>
 </span>
 </code><br>

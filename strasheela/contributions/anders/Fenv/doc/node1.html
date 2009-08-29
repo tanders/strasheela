@@ -515,13 +515,13 @@ clearInterval(drawit)
 <code>
 <a name="entity41">
 <span class="keyword">proc</span>{<span class="functionname">RenderAndPlayMidiFile</span> MyScore Args}<br>
-<span class="string"> This procedure is like Out.midi.renderAndPlayMidiFile, but it additional supports continuous controllers and a global tempo curve, expressed in the score by fenvs. <BR>
+<span class="string"> This procedure is like Out.midi.renderAndPlayMidiFile, but it additional supports continuous controllers and a global tempo curve, expressed in the score by fenvs. Also, microtonal music is supported (using pitchbends).<BR>
 <BR>
  Supported score format:<BR>
  <BR>
  The info-tag 'channel', given to a temporal item, sets the MIDI channel for this item and all contained items. Example: channel(0). If a channel is defined multiple times, then a setting in a lower hierarchical level overwrites higher-level settings.<BR>
 <BR>
- The info-tag 'program', given to a temporal item, results in a program change message with the specified program number at the beginning of the item. Example. program(64). Many instruments number patches from 1 to 128 rather than the 0 to 127 used within MIDI files. When interpreting ProgramNum values, note that they may be one less than the patch numbers given in an instrument's documentation.<BR>
+ The info-tag 'program', given to a temporal item, results in a program change message with the specified program number at the beginning of the item. Example: program(64). Many instruments number patches from 1 to 128 rather than the 0 to 127 actually used within MIDI files. When interpreting ProgramNum values, note that they may be one less than the patch numbers given in an instrument's documentation.<BR>
 <BR>
  The info-tag 'fenvs', given to a note or temporal container, specifies a tuple of continuous controllers for the duration this item. Each Fenv spec is a pair Controller#Fenv, where Controller is defined as for Fenv.fenvToMidiCC. Example: (cc#1)#MyFenv. Fenvs directly specify the controller values (e.g., if Controller is pitchBend, then the Fenv range is 0.0 to 16383.0, and the value 8192.0 means no pitchbend). Note that for any controller only a single Fenv should be defined at any time (otherwise they conflict with each other).<BR>
 <BR>
@@ -533,8 +533,12 @@ clearInterval(drawit)
 <BR>
  Additional arguments.<BR>
  ccsPerSecond: how many continuous controller events are created per second for every Fenv (the spacing of CC events may be affected).<BR>
+ resolution (default 2): pitchbend resolution in semitones. Its default value 2 corresponds to the standard pitch bend range of -2..2 semitones, i.e., 4096 steps/100 cents.<BR>
+ channelDistributions (default unit): Microtonal pitches are detuned by pitch bend, i.e. always all notes of a given channel are detuned. This tuple of lists specifies which score channel (midi note param, info tag or default 0) is output to which actual output channel. For example, for distributing the score channel 0 over the actual channels 0-7 set channelDistributions to unit(0: [0 1 2 3 4 5 6 7]). The number of output channels (8 in the example) should correspond to the maximum number of simultaneous notes in the score channel (0 in the example). Score channels for which no output channels are specified are output to themselves and thus are only suitable for a single monophonic voice. By default, no output channels are specified at all, so there should only be a monophonic voice per MIDI channel. Currently, only 16 MIDI chans are supported in total (no multiple ports).<BR>
 <BR>
- NOTE: timing/spacing of continuous controller events and tempo curves etc. are _not_ affected by timeshift fenvs (but their start and end are). <BR>
+ NOTE: timing/spacing of continuous controller events and tempo curves etc. are _not_ affected by timeshift fenvs, i.e. CC events remain evenly distributed (but timeshift curves etc may shift the start and end time of whole fenvs together with its event).<BR>
+<BR>
+ NOTE: currently, microtonal pitchbend and pitchbend given explicitly as fenv overwrite each other.<BR>
 <BR>
 </span>
 </code><br>

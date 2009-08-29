@@ -59,7 +59,7 @@ document.write('<div id="slidemenubar2" style="left:-144" onMouseover="pull()" o
 </script>
 <layer id="slidemenubar" onMouseover="pull()" onMouseout="draw()">
 <table border="0" cellpadding="0" cellspacing="0" width="161"><tr><td bgcolor="#009cff" width="144"><a href="index.html">Index</a>
-</td><td rowspan="12" valign="top" width="16"><img src="menu.gif" width="16"></td></tr><tr><td bgcolor="#009cff" width="144"><a href="node1.html">Strasheela</a>
+</td><td rowspan="13" valign="top" width="16"><img src="menu.gif" width="16"></td></tr><tr><td bgcolor="#009cff" width="144"><a href="node1.html">Strasheela</a>
 </td></tr><tr><td bgcolor="#009cff" width="144"><a href="node2.html">Init</a>
 </td></tr><tr><td bgcolor="#009cff" width="144"><a href="node3.html">GUtils</a>
 </td></tr><tr><td bgcolor="#009cff" width="144"><a href="node4.html">LUtils</a>
@@ -69,7 +69,8 @@ document.write('<div id="slidemenubar2" style="left:-144" onMouseover="pull()" o
 </td></tr><tr><td bgcolor="#009cff" width="144"><a href="node8.html">SDistro</a>
 </td></tr><tr><td bgcolor="#009cff" width="144"><a href="node9.html">Out</a>
 </td></tr><tr><td bgcolor="#009cff" width="144"><a href="node10.html">Strasheela</a>
-</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node11.html">Midi</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node11.html">FD_edited</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node12.html">Midi</a>
 </td></tr></table></layer>
 <script language="JavaScript1.2">
 function regenerate(){
@@ -150,16 +151,18 @@ clearInterval(drawit)
 </li><li>&lt;P/1:<a href="#entity43"><span class="functionname">SetFullStrasheelaEnv</span></a>&gt;
 </li><li>&lt;P/1:<a href="#entity44"><span class="functionname">SaveStrasheelaEnv</span></a>&gt;
 </li><li>&lt;P/1:<a href="#entity45"><span class="functionname">LoadStrasheelaEnv</span></a>&gt;
-</li><li>&lt;P/1:<a href="#entity46"><span class="functionname">GetBeatDuration</span></a>&gt;
-</li><li>&lt;P/1:<a href="#entity48"><span class="functionname">SetBeatDuration</span></a>&gt;
-</li><li>&lt;P/1:<a href="#entity47"><span class="functionname">GetTempo</span></a>&gt;
-</li><li>&lt;P/1:<a href="#entity49"><span class="functionname">SetTempo</span></a>&gt;
-</li><li>&lt;P/1:<a href="#entity50"><span class="functionname">SetTuningTable</span></a>&gt;
-</li><li>&lt;P/0:<a href="#entity51"><span class="functionname">UnsetTuningTable</span></a>&gt;
-</li><li>&lt;P/1:<a href="#entity52"><span class="functionname">GetTuningTable</span></a>&gt;
-</li><li>&lt;P/1:<a href="#entity53"><span class="functionname">SetMaxLilyRhythm</span></a>&gt;
-</li><li>&lt;P/0:<a href="#entity54"><span class="functionname">AddExplorerOuts_Standard</span></a>&gt;
-</li><li>&lt;P/0:<a href="#entity55"><span class="functionname">AddExplorerOuts_Extended</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity46"><span class="functionname">SetNoteLengthsRecord</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity47"><span class="functionname">SymbolicDurToInt</span></a>&gt;
+</li><li>&lt;P/1:<a href="#entity48"><span class="functionname">GetBeatDuration</span></a>&gt;
+</li><li>&lt;P/1:<a href="#entity50"><span class="functionname">SetBeatDuration</span></a>&gt;
+</li><li>&lt;P/1:<a href="#entity49"><span class="functionname">GetTempo</span></a>&gt;
+</li><li>&lt;P/1:<a href="#entity51"><span class="functionname">SetTempo</span></a>&gt;
+</li><li>&lt;P/1:<a href="#entity52"><span class="functionname">SetTuningTable</span></a>&gt;
+</li><li>&lt;P/0:<a href="#entity53"><span class="functionname">UnsetTuningTable</span></a>&gt;
+</li><li>&lt;P/1:<a href="#entity54"><span class="functionname">GetTuningTable</span></a>&gt;
+</li><li>&lt;P/1:<a href="#entity55"><span class="functionname">SetMaxLilyRhythm</span></a>&gt;
+</li><li>&lt;P/0:<a href="#entity56"><span class="functionname">AddExplorerOuts_Standard</span></a>&gt;
+</li><li>&lt;P/0:<a href="#entity57"><span class="functionname">AddExplorerOuts_Extended</span></a>&gt;
 </li><li><span class="variablename">StrasheelaSourceDir</span>
 </li><li><span class="variablename">StrasheelaInstallDir</span>
 </li></ul></code>
@@ -215,6 +218,25 @@ clearInterval(drawit)
 
 <code>
 <a name="entity46">
+<span class="keyword">proc</span>{<span class="functionname">SetNoteLengthsRecord</span> Beat TupletFractions}<br>
+<span class="string"> Sets the global mapping of symbolic note lengths (atoms which are record features) to duration values (integers). Beat (int) is the timeUnit value in beat(Beat) of the score. TupletFractions (list of ints) is a list of tuplet fractions to take into consideration (e.g., [3 5] denotes triplets and quintuplets).<BR>
+ See MUtils.makeNoteLengthsRecord and MUtils.makeNoteLengthsTable for details.<BR>
+<BR>
+ NB: there is no default defined for this setting, because it depends on the time unit of your score.<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity47">
+<span class="keyword">fun</span>{<span class="functionname">SymbolicDurToInt</span> Spec}<br>
+<span class="string"> Function expecting a symbolic duration name and returning the corresponding numeric duration depending on the global setting.<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity48">
 <span class="keyword">fun</span>{<span class="functionname">GetBeatDuration</span> }<br>
 <span class="string"> Access the current beat duration in seconds (a float, defaults to 0.8).<BR>
 <BR>
@@ -222,7 +244,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity48">
+<a name="entity50">
 <span class="keyword">proc</span>{<span class="functionname">SetBeatDuration</span> Dur}<br>
 <span class="string"> Set the beat duration in seconds to Dur which must be a float.<BR>
 <BR>
@@ -230,7 +252,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity47">
+<a name="entity49">
 <span class="keyword">fun</span>{<span class="functionname">GetTempo</span> }<br>
 <span class="string"> Access the current tempo in beats per minute (a float, defaults to 75.0).<BR>
 <BR>
@@ -238,7 +260,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity49">
+<a name="entity51">
 <span class="keyword">proc</span>{<span class="functionname">SetTempo</span> Tempo}<br>
 <span class="string"> Set the tempo in beats per minute which must be a float.<BR>
 <BR>
@@ -246,7 +268,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity50">
+<a name="entity52">
 <span class="keyword">proc</span>{<span class="functionname">SetTuningTable</span> Table}<br>
 <span class="string"> Globally sets the tuning table to Table. The tuning table is used by all output formats which use the (full) float returned by the pitch parameter method getValueInMidi (e.g. the note method getPitchInMidi, which is used by default by Csound and microtonal MIDI output). The format of the tuning table declaration is somewhat similar to the Scala scale file format (cf. http://www.xs4all.nl/~huygensf/scala/scl_format.html). Table is a tuple of pitch specs. A pitch spec is either a float (measured in cent) or a ratio notated Nom#Den. The first degree is implict (always 1/1 or 0.0). Also the size is implicit (the width of the tuple), in contrast to the Scala scale file format. The last table value is the period interval.<BR>
  It is recommended to set the pitchUnit of notes to a value matching the size of the tuning table so that constraints on pitch classes etc work as expected (e.g., for a tuning table with 31 pitches per octave/period, the pitchUnit et31 is recommended).<BR>
@@ -255,7 +277,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity51">
+<a name="entity53">
 <span class="keyword">proc</span>{<span class="functionname">UnsetTuningTable</span> }<br>
 <span class="string"> By default, no tuning table is set and methods like getPitchInMidi return pitches corresponding to an equal-tempered scale. UnsetTuningTable sets this default behaviour back. <BR>
 <BR>
@@ -263,7 +285,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity52">
+<a name="entity54">
 <span class="keyword">proc</span>{<span class="functionname">GetTuningTable</span> Table}<br>
 <span class="string"> [aux def, not intended for user] Returns a full tuning table (cf. MUtils.fullTuningTable for the format). <BR>
 <BR>
@@ -271,7 +293,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity53">
+<a name="entity55">
 <span class="keyword">proc</span>{<span class="functionname">SetMaxLilyRhythm</span> Dur}<br>
 <span class="string"> When outputting a Lilypond file, Strasheela automatically splits very long notes (or other score objects notated by notes such as chords or scales) into multiple notes connected by ties. The maximum duration notated by a single note can be set with this procedure. Dur is a float measured in quarternotes. For example, 2.0 indicates a halve note and 0.5 an eighth note. The maximum duration supported by Lilypond is a longa (16.0). The default is 4.0 (a whole note).<BR>
  It is recommended to set Dur to the length of your bars (e.g., 4.0 for 4/4).<BR>
@@ -282,7 +304,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity54">
+<a name="entity56">
 <span class="keyword">proc</span>{<span class="functionname">AddExplorerOuts_Standard</span> }<br>
 <span class="string"> Extends the Explorer menu "Notes -> Information Action" by a few entries to output scores into various formats just by clicking the solution nodes in the Explorer.<BR>
  This procedure adds standard output formats like Csound, Lilypond, and MIDI.<BR>
@@ -291,7 +313,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity55">
+<a name="entity57">
 <span class="keyword">proc</span>{<span class="functionname">AddExplorerOuts_Extended</span> }<br>
 <span class="string"> Extends the Explorer menu "Notes -> Information Action" by a few entries to output scores into various formats just by clicking the solution nodes in the Explorer. <BR>
  This procedure complements the formats of AddExplorerOuts_Standard by further formats like ENP and Fomus.<BR>

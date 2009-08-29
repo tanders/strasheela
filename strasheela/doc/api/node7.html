@@ -59,7 +59,7 @@ document.write('<div id="slidemenubar2" style="left:-144" onMouseover="pull()" o
 </script>
 <layer id="slidemenubar" onMouseover="pull()" onMouseout="draw()">
 <table border="0" cellpadding="0" cellspacing="0" width="161"><tr><td bgcolor="#009cff" width="144"><a href="index.html">Index</a>
-</td><td rowspan="12" valign="top" width="16"><img src="menu.gif" width="16"></td></tr><tr><td bgcolor="#009cff" width="144"><a href="node1.html">Strasheela</a>
+</td><td rowspan="13" valign="top" width="16"><img src="menu.gif" width="16"></td></tr><tr><td bgcolor="#009cff" width="144"><a href="node1.html">Strasheela</a>
 </td></tr><tr><td bgcolor="#009cff" width="144"><a href="node2.html">Init</a>
 </td></tr><tr><td bgcolor="#009cff" width="144"><a href="node3.html">GUtils</a>
 </td></tr><tr><td bgcolor="#009cff" width="144"><a href="node4.html">LUtils</a>
@@ -69,7 +69,8 @@ document.write('<div id="slidemenubar2" style="left:-144" onMouseover="pull()" o
 </td></tr><tr><td bgcolor="#009cff" width="144"><a href="node8.html">SDistro</a>
 </td></tr><tr><td bgcolor="#009cff" width="144"><a href="node9.html">Out</a>
 </td></tr><tr><td bgcolor="#009cff" width="144"><a href="node10.html">Strasheela</a>
-</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node11.html">Midi</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node11.html">FD_edited</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node12.html">Midi</a>
 </td></tr></table></layer>
 <script language="JavaScript1.2">
 function regenerate(){
@@ -139,28 +140,30 @@ clearInterval(drawit)
 </span></li><li>Pattern at "<span class="string">x-ozlib://anders/strasheela/Pattern/Pattern.ozf"
 </span></li></ul></code>
 <h3>Export</h3>
-<code><ul><li>&lt;C:<a href="#entity389"><span class="type">FlagsMixin</span></a>&gt;
-</li><li>&lt;C:<a href="#entity390"><span class="type">MappingMixin</span></a>&gt;
-</li><li>&lt;P/2:<a href="#entity391"><span class="functionname">ApplyToContext</span></a>&gt;
-</li><li>&lt;P/3:<a href="#entity392"><span class="functionname">ApplyToContext2</span></a>&gt;
-</li><li>&lt;P/1:<a href="#entity393"><span class="functionname">ApplyToContextR</span></a>&gt;
-</li><li>&lt;P/3:<a href="#entity394"><span class="functionname">ForContexts</span></a>&gt;
-</li><li>&lt;P/4:<a href="#entity395"><span class="functionname">MapContexts</span></a>&gt;
-</li><li>&lt;P/1:<a href="#entity396"><span class="functionname">ForContextsR</span></a>&gt;
-</li><li>&lt;P/4:<a href="#entity397"><span class="functionname">PatternMatchingApply</span></a>&gt;
-</li><li>&lt;P/5:<a href="#entity398"><span class="functionname">PatternMatchingApply2</span></a>&gt;
-</li><li>&lt;P/3:<a href="#entity399"><span class="functionname">ForNumericRange</span></a>&gt;
-</li><li>&lt;P/4:<a href="#entity400"><span class="functionname">ForNumericRange2</span></a>&gt;
-</li><li>&lt;P/4:<a href="#entity401"><span class="functionname">ForNumericRangeArgs</span></a>&gt;
-</li><li>&lt;P/4:<a href="#entity402"><span class="functionname">MapSimultaneousPairs</span></a>&gt;
-</li><li>&lt;P/3:<a href="#entity403"><span class="functionname">ForSimultaneousPairs</span></a>&gt;
-</li><li>&lt;P/3:<a href="#entity404"><span class="functionname">FilterSimultaneous</span></a>&gt;
-</li><li>&lt;P/3:<a href="#entity405"><span class="functionname">FindSimultaneous</span></a>&gt;
-</li><li>&lt;P/3:<a href="#entity406"><span class="functionname">MapScore</span></a>&gt;
+<code><ul><li>&lt;C:<a href="#entity399"><span class="type">FlagsMixin</span></a>&gt;
+</li><li>&lt;C:<a href="#entity400"><span class="type">MappingMixin</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity401"><span class="functionname">ApplyToContext</span></a>&gt;
+</li><li>&lt;P/3:<a href="#entity402"><span class="functionname">ApplyToContext2</span></a>&gt;
+</li><li>&lt;P/1:<a href="#entity403"><span class="functionname">ApplyToContextR</span></a>&gt;
+</li><li>&lt;P/3:<a href="#entity404"><span class="functionname">ForContexts</span></a>&gt;
+</li><li>&lt;P/4:<a href="#entity405"><span class="functionname">MapContexts</span></a>&gt;
+</li><li>&lt;P/1:<a href="#entity406"><span class="functionname">ForContextsR</span></a>&gt;
+</li><li>&lt;P/4:<a href="#entity407"><span class="functionname">PatternMatchingApply</span></a>&gt;
+</li><li>&lt;P/5:<a href="#entity408"><span class="functionname">PatternMatchingApply2</span></a>&gt;
+</li><li>&lt;P/3:<a href="#entity409"><span class="functionname">ForNumericRange</span></a>&gt;
+</li><li>&lt;P/4:<a href="#entity410"><span class="functionname">ForNumericRange2</span></a>&gt;
+</li><li>&lt;P/4:<a href="#entity411"><span class="functionname">ForNumericRangeArgs</span></a>&gt;
+</li><li>&lt;P/4:<a href="#entity412"><span class="functionname">MapTimeslices</span></a>&gt;
+</li><li>&lt;P/3:<a href="#entity413"><span class="functionname">ForTimeslices</span></a>&gt;
+</li><li>&lt;P/4:<a href="#entity414"><span class="functionname">MapSimultaneousPairs</span></a>&gt;
+</li><li>&lt;P/3:<a href="#entity415"><span class="functionname">ForSimultaneousPairs</span></a>&gt;
+</li><li>&lt;P/3:<a href="#entity416"><span class="functionname">FilterSimultaneous</span></a>&gt;
+</li><li>&lt;P/3:<a href="#entity417"><span class="functionname">FindSimultaneous</span></a>&gt;
+</li><li>&lt;P/3:<a href="#entity418"><span class="functionname">MapScore</span></a>&gt;
 </li></ul></code>
 <h3>Define</h3>
 
-<a name="entity389">
+<a name="entity399">
 <p class="margin"><div align="right"><a href="class27.html">[class info]</a></div></p>
 <code>
 
@@ -184,7 +187,7 @@ clearInterval(drawit)
 <span class="keyword">end</span>
 </code><br>
 
-<a name="entity390">
+<a name="entity400">
 <p class="margin"><div align="right"><a href="class28.html">[class info]</a></div></p>
 <code>
 
@@ -196,7 +199,7 @@ clearInterval(drawit)
 </tr></table>
 <span class="string"> [abstract class] A mixin class for various traversing and mapping methods on the whole score hierarchy.<BR>
 </span>
-<span class="keyword">class</span> <span class="type">MappingMixin</span>&nbsp;<span class="keyword">from</span>&nbsp;<a href="#entity389">FlagsMixin</a>
+<span class="keyword">class</span> <span class="type">MappingMixin</span>&nbsp;<span class="keyword">from</span>&nbsp;<a href="#entity399">FlagsMixin</a>
 
 <ul><li><span class="functionname">collect</span>(?Xs excludeSelf:ExcludeSelf level:Level mode:Mode test:Test)<br>
 </li><li><span class="functionname">forAll</span>(Proc excludeSelf:ExcludeSelf level:Level mode:Mode test:Test)<br>
@@ -211,7 +214,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity391">
+<a name="entity401">
 <span class="keyword">proc</span>{<span class="functionname">ApplyToContext</span> Context P}<br>
 <span class="string"> P (a unary proc or method) is applied to Context (any data structure), if this context is not empty. An empty context is represented by nil -- for such a context the application of P is skipped.<BR>
  NB: Application of P blocks until the context is determined.<BR>
@@ -220,7 +223,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity392">
+<a name="entity402">
 <span class="keyword">fun</span>{<span class="functionname">ApplyToContext2</span> Context Fn}<br>
 <span class="string"> Variant of ApplyToContext: Fn (a unary function or method) is applied to Context and the result is returned. For an empty context, nil is returned<BR>
 <BR>
@@ -228,7 +231,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity393">
+<a name="entity403">
 <span class="keyword">proc</span>{<span class="functionname">ApplyToContextR</span> Args}<br>
 <span class="string"> B=1 <-> Rule holds for N non-empty context Candidates which pass the test IsContext.<BR>
  Args is a record with the five feats 'candidates', 'isContext', 'rule', 'n' and 'b'. Candidates is a list of context candidates (any data). IsContext (a unary function or method) expects such a context candidate and returns a 0/1-int reflecting whether the context is a valid or not. Rule (a unary function or method) is a reified constraint applied to any context candidate returning a 0/1-int. N (the atom 'any' or a FD int) specifies for how many contexts IsContext holds (i.e. returns 1). B=1 constrains that Rule holds for all these contexts. Nevertheless, Rule may hold for more candidates.<BR>
@@ -240,7 +243,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity394">
+<a name="entity404">
 <span class="keyword">proc</span>{<span class="functionname">ForContexts</span> Xs GetContext P}<br>
 <span class="string"> P (a unary proc) is applied to the context of every element in Xs (a list) for which the context is not empty.<BR>
  GetContext (a unary function) returns the context of an element in Xs. A context may be any data structure (e.g. a list or record of Strasheela objects). An empty context is reprented by nil, for such contexts the application is skipped.<BR>
@@ -250,7 +253,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity395">
+<a name="entity405">
 <span class="keyword">fun</span>{<span class="functionname">MapContexts</span> Xs GetContext Fn}<br>
 <span class="string"> Fn (a unary function) is applied to the context of every element in Xs (a list) for which the context is not empty. The results are collected and returned.<BR>
  GetContext (a unary function) returns the context of an element in Xs. A context may be any data structure (e.g. a list or record of Strasheela objects). An empty context is reprented by nil. For an empty context the application is skipped and nothing is collected in the result.<BR>
@@ -260,7 +263,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity396">
+<a name="entity406">
 <span class="keyword">proc</span>{<span class="functionname">ForContextsR</span> Args}<br>
 <span class="string"> N=every <-> Rule holds for the context of every element in Xs (context candidates of each element returned by GetCandidates) which passes the test IsContext.<BR>
  Args is a record with the five feats 'xs', 'getCandidates', 'isContext', 'rule', and 'n'.  GetCandidates (a unary function) returns a list of context candidates (any data) of an element in Xs (a list). IsContext (a unary function or method) expects such a context candidate and returns a 0/1-int reflecting whether the context is a valid or not. Rule (a unary function or method) is a reified constraint applied to any context candidate returning a 0/1-int. N (the atom 'every' or a FD int) specifies for how many elements of Xs at least one non-empty context candidate complies both IsContext and Rule.<BR>
@@ -272,7 +275,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity397">
+<a name="entity407">
 <span class="keyword">proc</span>{<span class="functionname">PatternMatchingApply</span> Self Xs PatternMatchingExpr P}<br>
 <span class="string"> Apply unary procedure P (expecting a list) to the sublist from Xs (a list) matching PatternMatchingExpr (a list of atoms: a single 'x' and any number of 'o' in any order). PatternMatchingExpr expresses a sublist of Xs positionally related to Self (an element of Xs). The atom 'x' in PatternMatchingExpr reprents Self and one or more 'o' atoms around 'x' express predecessors or successors of Self in Xs. For instance, <code>{PatternMatchingApply Self Xs [o o x] P}</code> applies P to the list consisting in the two predecessors of Self in Xs and Self (in that order). <BR>
  PatternMatchingApply reduces to skip in case there is no matching sublist in Xs (e.g. the PatternMatchingExpr = [o x] and X is already the first element in Xs).<BR>
@@ -286,7 +289,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity398">
+<a name="entity408">
 <span class="keyword">proc</span>{<span class="functionname">PatternMatchingApply2</span> Self Xs PatternMatchingExpr P ElseP}<br>
 <span class="string"> Generalised variant of PatternMatchingApply: in case no sublist in Xs matches PatternMatchingExpr, PatternMatchingApply2 does _not_ reduce to skip (as PatternMatchingApply) but instead applies the null-ary procedure ElseP.<BR>
 <BR>
@@ -294,7 +297,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity399">
+<a name="entity409">
 <span class="keyword">proc</span>{<span class="functionname">ForNumericRange</span> Xs Decl P}<br>
 <span class="string"> Applies unary procedure P to each element in Xs which index is expressed by Decl. Decl is a list which contains single index integers, or index ranges of the form Min#Max (Min and Max are integers).<BR>
  BTW: ForNumericRange corresponds roughly to one of the rule application mechanisms of Situation. The rule applicator `mapIndex' in Strasheela publications is the function equivalent.<BR>
@@ -303,7 +306,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity400">
+<a name="entity410">
 <span class="keyword">proc</span>{<span class="functionname">ForNumericRange2</span> Xs Decl P ElseP}<br>
 <span class="string"> Generalised variant of ForNumericRange: to every element in Xs to which P is not applied, ElseP (a unary procedure) is applied instead.<BR>
 <BR>
@@ -311,7 +314,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity401">
+<a name="entity411">
 <span class="keyword">proc</span>{<span class="functionname">ForNumericRangeArgs</span> Xs Decl P ElseP}<br>
 <span class="string"> Applies binary procedure P to each element in Xs which index is expressed by Decl -- together with additional arguments for that index. To all other elements of Xs the unary procedure ElseP is applied instead.<BR>
  Decl is a list which contains single index integers plus constraint arguments in the form Ind#Args, or index ranges plus constraint arguments in the form (Min#Max)#Args. The index Ind and the range boundaries Min and Max are integers, Args is a list of arbitrary values (and can be nil).<BR>
@@ -322,7 +325,31 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity402">
+<a name="entity412">
+<span class="keyword">fun</span>{<span class="functionname">MapTimeslices</span> Items Fn Args}<br>
+<span class="string"> Applies Fn (unary function expecting list of items) to sublists of Items (list of items) which are positioned within certain "time slices". A time slice is defined by a start and end time, the items within a timeslice include those that start before or sound longer then this time slice, but some part of them must occur within the time slice. A sequence of time slices with regular durations is defined by the args startTime, endTime (required arg!) and step.<BR>
+<BR>
+ Args:<BR>
+ startTime (default 0): int specifying start of first time slice.<BR>
+ endTime (no default!): int specifying end of last time slice.<BR>
+ step (default 1): int specifying size of all time slices.<BR>
+ 'test': a Boolean function or method for pre-filtering Items.<BR>
+ 'cTest': a Boolean function or method applied within the concurrent filtering of Items. <BR>
+<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity413">
+<span class="keyword">proc</span>{<span class="functionname">ForTimeslices</span> Items P Args}<br>
+<span class="string"> Same as MapTimeslices, but P is unary procedure expecting list of items.<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity414">
 <span class="keyword">fun</span>{<span class="functionname">MapSimultaneousPairs</span> Xs Fn Args}<br>
 <span class="string"> MapSimultaneousPairs traverses Xs (a list of score objects), applies the binary function Fn to pairs of simultaneous score objects, and returns the collected results. <BR>
  MapSimultaneousPairs applies {Fn X Y ?Result} to all pairs X and Y, where X is an element in Xs and Y is a score object which is simultaneous to X, but which is not necessarily contained in Xs. In order to avoid applying the same constraint twice in case both X and Y are contained in Xs, there is an additional restriction related to the hierarchic nesting of X and Y. Simplified, this restriction states that the container of Y must be at a lower position than the container of X -- which usually means that Y is in a higher voice than X. However, MapSimultaneousPairs is more general and works for arbitrary nesting.<BR>
@@ -339,7 +366,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity403">
+<a name="entity415">
 <span class="keyword">proc</span>{<span class="functionname">ForSimultaneousPairs</span> Xs P Args}<br>
 <span class="string"> ForSimultaneousPairs traverses Xs (a list of score objects) and applies the binary procedure P to pairs of simultaneous score objects. <BR>
  ForSimultaneousPairs applies {Fn X Y} to all pairs X and Y, where X is an element in Xs and Y is a score object which is simultaneous to X, but which is not necessarily contained in Xs. In order to avoid applying the same constraint twice in case both X and Y are contained in Xs, there is an additional restriction related to the hierarchic nesting of X and Y. Simplified, this restriction states that the container of Y must be at a lower position than the container of X. However, ForSimultaneousPairs is more general and works for arbitrary nesting.<BR>
@@ -362,7 +389,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity404">
+<a name="entity416">
 <span class="keyword">fun</span>{<span class="functionname">FilterSimultaneous</span> Xs Y}<br>
 <span class="string"> Traverses Xs (a list of temporal items) and returns those from Xs which are simultaneous with Y (a temporal item).<BR>
  Uses internally LUtils.cFilter, i.e. returns score objects as soon as enough information is available whether or not they are simultaneous, but not necessarily in their order in Xs.<BR>
@@ -372,7 +399,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity405">
+<a name="entity417">
 <span class="keyword">fun</span>{<span class="functionname">FindSimultaneous</span> Xs Y}<br>
 <span class="string"> Traverses Xs (a list of temporal items) and returns the first which is simultaneous with Y (a temporal item).<BR>
  Uses internally LUtils.cFind, i.e. returns score objects as soon as enough information is available whether or not they are simultaneous, but not necessarily in their order in Xs.<BR>
@@ -382,7 +409,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity406">
+<a name="entity418">
 <span class="keyword">fun</span>{<span class="functionname">MapScore</span> MyScore Fn}<br>
 <span class="string"> Expects a _textual_ score MyScore (a record) and applies Fn to every contained textual score object. Returns a score where the score object are replaced by the results of Fn. However, any 'items' features are ignored in the result of Fn. Instead, the original nesting is preserved. <BR>
  NB: presently, only tree topology is supported<BR>

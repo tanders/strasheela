@@ -140,22 +140,25 @@ clearInterval(drawit)
 </span></li><li><a href="node6.html">ET22</a> at "<span class="string">../ET22.ozf"
 </span></li></ul></code>
 <h3>Export</h3>
-<code><ul><li>&lt;P/2:<a href="#entity47"><span class="functionname">RenderAndShowLilypond</span></a>&gt;
-</li><li>&lt;P/1:<a href="#entity38"><span class="functionname">SetEnharmonicNotationTable</span></a>&gt;
-</li><li>&lt;P/1:<a href="#entity37"><span class="functionname">AddExplorerOut_ChordsToScore</span></a>&gt;
-</li><li>&lt;P/2:<a href="#entity44"><span class="functionname">MakeChordComment</span></a>&gt;
-</li><li>&lt;P/2:<a href="#entity45"><span class="functionname">MakeChordRatios</span></a>&gt;
-</li><li>&lt;P/2:<a href="#entity46"><span class="functionname">MakeScaleComment</span></a>&gt;
-</li><li>&lt;P/2:<a href="#entity39"><span class="functionname">IsEt22Note</span></a>&gt;
-</li><li>&lt;P/2:<a href="#entity40"><span class="functionname">IsEt22Chord</span></a>&gt;
-</li><li>&lt;P/2:<a href="#entity41"><span class="functionname">IsEt22Scale</span></a>&gt;
-</li><li>&lt;P/2:<a href="#entity42"><span class="functionname">NoteEt22ToLily</span></a>&gt;
-</li><li>&lt;P/2:<a href="#entity43"><span class="functionname">NoteEt22ToLily_AdaptiveJI</span></a>&gt;
+<code><ul><li>&lt;P/2:<a href="#entity51"><span class="functionname">RenderAndShowLilypond</span></a>&gt;
+</li><li>&lt;P/1:<a href="#entity41"><span class="functionname">SetEnharmonicNotationTable</span></a>&gt;
+</li><li>&lt;P/1:<a href="#entity40"><span class="functionname">AddExplorerOut_ChordsToScore</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity48"><span class="functionname">MakeChordComment</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity49"><span class="functionname">MakeChordRatios</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity50"><span class="functionname">MakeScaleComment</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity42"><span class="functionname">IsEt22Note</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity43"><span class="functionname">IsEt22Chord</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity44"><span class="functionname">IsEt22Scale</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity45"><span class="functionname">NoteEt22ToLily</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity46"><span class="functionname">NoteEt22ToLily_AdaptiveJI</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity47"><span class="functionname">NoteEt22ToLily_AdaptiveJI2</span></a>&gt;
+</li><li><span class="variablename">PajaraRMS_TuningTable</span>
+</li><li>ji_TuningTable:<span class="variablename">JI_TuningTable</span>
 </li></ul></code>
 <h3>Define</h3>
 
 <code>
-<a name="entity47">
+<a name="entity51">
 <span class="keyword">proc</span>{<span class="functionname">RenderAndShowLilypond</span> MyScore Args}<br>
 <span class="string"> Proc is like Out.renderAndShowLilypond, but provides buildin support for notes and chords with pitch units in et22.<BR>
  Please note that this support is defined by the argument clauses and wrapper (see Out.toLilypond) -- additional clauses are still possible, but adding new note/chord clauses will overwrite the support for 22 ET (the wrapper can be defined like for Out.renderAndShowLilypond).<BR>
@@ -165,7 +168,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity38">
+<a name="entity41">
 <span class="keyword">proc</span>{<span class="functionname">SetEnharmonicNotationTable</span> Table}<br>
 <span class="string"> The enharmonic notation for 22 ET can be customised by specifying for each numeric 22 ET pitch class how it is notated. Note that this setting will be fixed throughout the score though (e.g., pitch class 7 may be notated as 'E\\', but then it is never 'D#'). The enharmonic notation is specified by a record which maps pitch class integers to pitch names. See ET22.pc and friends for an explanation of the pitch names. The default are the default pitch names in Scala for 22 ET (using E22 notation system).<BR>
  Note that the lowest feature in the table is 0 (i.e., 'C') and not 1 (i.e. Table is not a tuple if all pitch classes are specified, a tuple has no feature 0).<BR>
@@ -175,7 +178,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity37">
+<a name="entity40">
 <span class="keyword">proc</span>{<span class="functionname">AddExplorerOut_ChordsToScore</span> Args}<br>
 <span class="string"> Creates an Explorer output. The script solution must be a sequential container with chord objects (i.e. without the actual notes).<BR>
  The Explorer output action creates a CSP with expects a chord sequence and returns a homophonic chord progression. AddExplorerOut_ChordsToScore internally uses ET22.score.chordsToScore for this purpose.  <BR>
@@ -188,7 +191,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity44">
+<a name="entity48">
 <span class="keyword">proc</span>{<span class="functionname">MakeChordComment</span> MyChord Result}<br>
 <span class="string"> Returns the chord comment (also works for scale). <BR>
 <BR>
@@ -196,12 +199,12 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity45">
+<a name="entity49">
 <span class="keyword">proc</span>{<span class="functionname">MakeChordRatios</span> MyChord Result}
 </code><br>
 
 <code>
-<a name="entity46">
+<a name="entity50">
 <span class="keyword">proc</span>{<span class="functionname">MakeScaleComment</span> MyScale Result}<br>
 <span class="string"> Returns the scale comment. <BR>
 <BR>
@@ -209,7 +212,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity39">
+<a name="entity42">
 <span class="keyword">fun</span>{<span class="functionname">IsEt22Note</span> X}<br>
 <span class="string"> Returns true if X is a note object with pitch unit et22.<BR>
 <BR>
@@ -217,7 +220,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity40">
+<a name="entity43">
 <span class="keyword">fun</span>{<span class="functionname">IsEt22Chord</span> X}<br>
 <span class="string"> Returns true if X is a chord object with root pitch unit et22.<BR>
 <BR>
@@ -225,7 +228,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity41">
+<a name="entity44">
 <span class="keyword">fun</span>{<span class="functionname">IsEt22Scale</span> X}<br>
 <span class="string"> Returns true if X is a scale object with root pitch unit et22.<BR>
 <BR>
@@ -233,7 +236,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity42">
+<a name="entity45">
 <span class="keyword">fun</span>{<span class="functionname">NoteEt22ToLily</span> MyNote}<br>
 <span class="string"> Expects a Strasheela note object and returns the corresponding<BR>
  Lilypond code (a VS). For simplicity, this transformation does not<BR>
@@ -244,9 +247,17 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity43">
+<a name="entity46">
 <span class="keyword">fun</span>{<span class="functionname">NoteEt22ToLily_AdaptiveJI</span> MyNote}<br>
 <span class="string"> Like NoteEt22ToLily, but additionally notates the adaptive JI pitch offset of this note with respect to 22 ET.<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity47">
+<span class="keyword">fun</span>{<span class="functionname">NoteEt22ToLily_AdaptiveJI2</span> MyNote}<br>
+<span class="string"> Like NoteEt22ToLily_AdaptiveJI, but additionally also notates the absolute pitch in cent.<BR>
 <BR>
 </span>
 </code><br>
