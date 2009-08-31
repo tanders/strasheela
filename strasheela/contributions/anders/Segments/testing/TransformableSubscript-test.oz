@@ -78,8 +78,7 @@ MakeTestMotif2
 		       Segs.tSC.augmentAdditively
 		       Segs.tSC.diminishMultiplicatively
 		       Segs.tSC.augmentMultiplicatively]
-	idefaults: unit(%% to add DomSpec support
-			%% test pitch
+	idefaults: unit(%% test pitch
 			pitch: 60)
 % 	rdefaults: unit
        )
