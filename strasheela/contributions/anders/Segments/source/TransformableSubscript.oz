@@ -135,7 +135,7 @@ define
 	    else {Transform Transformers.2 {Transformers.1 MotifSpec As}}
 	    end
 	 end
-	 TrueSpec = {Transform As.transformers As.motif}
+	 TrueSpec = {Transform DefAs.transformers DefAs.motif}
 	 TrueAs = {GUtils.recursiveAdjoin As
 		   unit(iargs: unit(n: {GetMotifLength TrueSpec}))}
 	 proc {TrueBody MyScore Args}
@@ -400,8 +400,13 @@ define
    %% */
    fun {GetMotifLength MotifSpec}
       %% if explicit n, then use this n; otherwise use length of arbitrary first spec
+      MotifArity = {Arity MotifSpec}
+   in
       {CondSelect MotifSpec n
-       {Length {GetMotifList MotifSpec {Arity MotifSpec}.1}}}
+       case MotifArity of nil
+       then 0			%
+       else {Length {GetMotifList MotifSpec MotifArity.1}}
+       end}
    end
 
    /** %% [Util] Returns the value list at Feat of MotifSpec without the corresponding accessor.
