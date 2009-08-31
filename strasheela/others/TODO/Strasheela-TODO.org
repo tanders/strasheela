@@ -10,6 +10,7 @@
    - documentation
    - generalise such that it constraints chords not only notes, so it can be used for non-homophonic music too (resolution in "wrong" octave OK, but that should actually happen more rarely?)
 
+
 ** TODO Add support for microtonal music to Fenv.renderAndPlayMidiFile
 
    [[file:~/oz/music/Strasheela/strasheela/trunk/strasheela/contributions/anders/Fenv/Fenv.oz::proc%20RenderAndPlayMidiFile%20MyScore%20Args][file:~/oz/music/Strasheela/strasheela/trunk/strasheela/contributions/anders/Fenv/Fenv.oz::proc RenderAndPlayMidiFile MyScore Args]]
@@ -59,6 +60,7 @@
 
 
 * Strasheela examples
+
 
 * Strasheela Bugs
 
@@ -123,7 +125,6 @@ Some bug in computing the octave
 
 * Strasheela design						    :STRASHEELA:
 
-
 ** Diss resolution
    [[file:Strasheela-Maybe-TODO.org::*Introduce%20some%20generalised%20concept%20of%20resolution%20of%20dissonances][file:Strasheela-Maybe-TODO.org::*Introduce some generalised concept of resolution of dissonances]]
 
@@ -163,7 +164,7 @@ Some bug in computing the octave
 
 
 
-
+     
 * Other 
 
 ** GeOz 
