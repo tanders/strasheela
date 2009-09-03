@@ -432,10 +432,11 @@ define
       /** %% Only transform atoms (e.g. 'C#'), but leave integers (PCs) and records (ratios, e.g., 1#1) untouched.
       %% */
       fun {Transform MyPitch}
-	 if {GUtils.isAtom MyPitch} then {ET22.pc MyPitch} else MyPitch end
+	 if {GUtils.isAtom MyPitch} then {ET22.pc MyPitch} 
+	 else MyPitch end
       end
    in
-      /** %% [Aux def] Expects a chord or scale declaration, and in case it contains symbolic notes names, these are replaced by their corresponding 31 ET pitch class.  
+      /** %% [Aux def] Expects a chord or scale declaration, and in case it contains symbolic notes names, these are replaced by their corresponding 22 ET pitch class.  
       %% */
       fun {ToStandardDeclaration Decl}
 	 {Record.mapInd Decl
