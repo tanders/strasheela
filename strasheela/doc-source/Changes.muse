@@ -7,6 +7,7 @@
   - Main additions and changes 
     - Revised score distribution: value orderings can now access arbitrary score information 
     - Added support for transformable subscripts ([[../contributions/anders/Segments/doc/_.html][Segs.tSC]])
+    - Added functor [[../contributions/anders/ET41/doc/node1.html][ET41]] for composition in [[http://en.wikipedia.org/wiki/41_equal_temperament][41-tone equal temperament]]
 
   - Documentation
     - 
