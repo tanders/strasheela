@@ -25,10 +25,10 @@ MyScore = {Score.makeScore
 		note:HS.score.note)}
 %% 
 {ET31.out.renderAndShowLilypond MyScore
- unit}
-
+ unit(file:"31ET-test")}
 
 */
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%
