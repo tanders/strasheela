@@ -1,13 +1,22 @@
-/** %% This functor defines Lilypond output (using semitone and quartertone accidentals) and Explorer output actions for 22 ET.
-%%
-%% BUG: Lilypond notation problem: using grace notes (for showing chord and scale notes) seems to disable the Staff.instrumentName display. It is possible that this has to do with the missing \score at the beginning of lilypond 22 ET score data. Yet, setting this causes an error related to the \override of Score.Accidental and Score.KeySignature #'glyph-name-alist for 22 ET. For now, I leave it like this -- either I show Staff.instrumentName or scale/chord pitch classes with grace notes. If I want to publish a score with analytical information using grace notes, I will again look into this matter.
+
+%%% *************************************************************
+%%% Copyright (C) 2005-2009 Torsten Anders (www.torsten-anders.de) 
+%%% This program is free software; you can redistribute it and/or
+%%% modify it under the terms of the GNU General Public License
+%%% as published by the Free Software Foundation; either version 2
+%%% of the License, or (at your option) any later version.
+%%% This program is distributed in the hope that it will be useful,
+%%% but WITHOUT ANY WARRANTY; without even the implied warranty of
+%%% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+%%% GNU General Public License for more details.
+%%% *************************************************************
+
+/** %% This functor defines Lilypond output and Explorer output actions for 22 ET.
 %%
 %% */ 
-%% TODO: ET31.out and the present functor ET22.out share many similarities (code doublication). Recent updates on making Lily output more flexible was only done to ET31.out
-%% Actual todo: generalise and factor out the common code, i.e., reduce/avoid code doublication
 functor
 import
-   OS FS Explorer
+   Explorer
    Resolve
 %   Browser(browse:Browse)
    
@@ -25,108 +34,56 @@ import
 export
    RenderAndShowLilypond SetEnharmonicNotationTable
    AddExplorerOut_ChordsToScore
+   AddExplorerOuts_ArchiveInitRecord
 
-   MakeChordComment MakeChordRatios MakeScaleComment
-
-   IsEt22Note IsEt22Chord IsEt22Scale
-   NoteEt22ToLily NoteEt22ToLily_AdaptiveJI NoteEt22ToLily_AdaptiveJI2
-
-   PajaraRMS_TuningTable ji_TuningTable: JI_TuningTable
+   PajaraRMS_TuningTable
+   ji_TuningTable: JI_TuningTable
    
 define
 
-   %%
-   %% Explorer Output
-   %%
 
-   /** %% Creates an Explorer output. The script solution must be a sequential container with chord objects (i.e. without the actual notes).
-   %% The Explorer output action creates a CSP with expects a chord sequence and returns a homophonic chord progression. AddExplorerOut_ChordsToScore internally uses ET22.score.chordsToScore for this purpose.  
-   %% The result is transformed into music notation (with Lilypond), sound (with Csound), and Strasheela code (archived score objects).
-   %% Args are outname and the arguments of ET22.score.chordsToScore. the outname arg sets the output file name (which gets added the space number in the Explorer and then a random number). outname also sets the name under which this action appears in the Explorer menu.
-   %%
-   %% IMPORTANT: ET22.score.chordsToScore conducts a search which potentially can fail (e.g., if insufficient arguments are provided)!
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%
+%%% Explorer Actions
+%%%
+
+      /** %% Creates an Explorer action for outputting a pure sequence of chords. This is a version of HS.out.addExplorerOut_ChordsToScore, customised for 31 ET. Please see the documentation of HS.out.addExplorerOut_ChordsToScore for further details such as supported arguments.
    %% */
-   %%
-   %% 
-   %% render from within the explorer
-   %%
-   %% OLD: Dir is output directory.
    proc {AddExplorerOut_ChordsToScore Args}
-      Defaults = unit(outname:out)
+      Defaults = unit(outname:out
+% 		      value:random
+% 		      ignoreSopranoChordDegree:true
+		      chordsToScore: ET22.score.chordsToScore
+		      prefix:"declare \n [ET22] = {ModuleLink ['x-ozlib://anders/strasheela/ET22/ET22.ozf']} \n {HS.db.setDB ET22.db.fullDB}\n ChordSeq \n = {Score.makeScore\n")
       As = {Adjoin Defaults Args}
    in
-      {Explorer.object
-       add(information proc {$ I X}
-			  FileName = As.outname#"-"#I#"-"#{OS.rand}
-		       in
-			  if {Score.isScoreObject X}
-			  then
-			     MyScore = {ET22.score.chordsToScore
-					{Map {X collect($ test:HS.score.isChord)}
-					 fun {$ C}
-					    %% timeUnit is not exported by toInitRecord,
-					    %% and ignore sopranoChordDegree
-					    {Adjoin {Record.subtract {C toInitRecord($)}
-						     sopranoChordDegree}
-					     chord(timeUnit:{C getTimeUnit($)})}
-					 end}
-					As}
-			  in
-			     %% Lily
-			     {RenderAndShowLilypond MyScore
-			      unit(file:FileName
-				% dir:Dir
-				  )}
-			     %% Csound output of score
-			     {Out.renderAndPlayCsound MyScore
-			      unit(file:FileName
-				% dir:Dir
-				  )}
-			     %% Archive output
-			     {Out.outputScoreConstructor X
-			      unit(file:FileName
-				% dir:Dir
-				   prefix:"declare \n [ET22] = {ModuleLink ['x-ozlib://anders/strasheela/ET22/ET22.ozf']} \n {HS.db.setDB ET22.db.fullDB}\n ChordSeq \n = {Score.makeScore\n")}
-			  end
-		       end
-	   label: As.outname)}
+      {HS.out.addExplorerOut_ChordsToScore As}
    end
-% /** %% Creates an Explorer output, which writes textual representation of the solution to a file.
-% %% OutName sets the output file name (which gets an index added) and also the name under which it appears in the Explorer menu.
-% %% */
-% proc {AddExplorerOutArchiveChords OutName}
-%    {Explorer.object
-%     add(information proc {$ I X}
-% 		       if {Score.isScoreObject X}
-% 		       then 
-% 			  FileName = OutName#{GUtils.getCounterAndIncr}
-% 		       in
-			  
-% 		       end
-% 		    end
-% 	label: OutName#" (archive)")}
-% end
 
-    
-   %%
-   %% Lilypond output for 22 ET
-   %%
-   %% TODO:
-   %%
-   %%  - chord: make ratio printing optional (use def MakeChordRatios)
-   %%  - chord: make name/comment printing optional (use def MakeChordComment)
-   %%  - chord: print root, bass note, (soprano?), (all pitch classes?)
-   %%  
-   %%
-   %% DECIDE:
-   %%
-   %% Principal Problem: how can I make Lilypond output customisation
-   %% better re-usable? Can I export suitable Lily output clauses from
-   %% the various Strasheela contributions/extensions such as HS, CTT,
-   %% and Measure, ET22 etc. in a way that these clauses can be easily
-   %% combined.
-   %% How about multiple clauses for, say, a plain note object..
-   %%
+   proc {ArchiveInitRecord I X}
+      if {Score.isScoreObject X}
+      then 
+	 FileName = out#{GUtils.getCounterAndIncr}
+      in
+	 {Out.outputScoreConstructor X
+	  unit(file: FileName
+	       prefix:"declare \n [ET22] = {ModuleLink ['x-ozlib://anders/strasheela/ET22/ET22.ozf']} \n {HS.db.setDB ET22.db.fullDB} \n MyScore \n = ")}
+      end
+   end
+   /** %% Adds ET22 declaration on top of *.ssco file and calls {HS.db.setDB ET22.db.fullDB}
+   %% */
+   proc {AddExplorerOuts_ArchiveInitRecord}   
+      {Explorer.object
+       add(information ArchiveInitRecord
+	   label: 'Archive initRecord (ET22)')}
+   end
+
+
+   
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%
+%%% Customised Lilypond output
+%%%
 
    
    local
@@ -167,12 +124,11 @@ define
       proc {SetEnharmonicNotationTable Table}
 	 EnharmonicNotationTable := {Record.map Table PitchnameToLily}
       end
-      fun {Et22PcToLily MyPC}
-	 @EnharmonicNotationTable.MyPC
+      fun {GetEnharmonicNotationTable}
+	 @EnharmonicNotationTable
       end
-      %% set default table
       {SetEnharmonicNotationTable
-       unit(0:'C' 
+       unit(0: 'C' 
 	    1:'Db' 
 	    2:'C#\\' 
 	    3:'C#' 
@@ -196,247 +152,7 @@ define
 	    21:'B'  )}
    end
 
-   /** %% Transforms the pitch class MyPC into a ratio VS. Alternative ratio transformations are given (written like 1/2|1/3). If no transformation existists, 'n/a' is output.
-   %% NB: transformation uses the interval specs defined for 31 ET, but because as a temperament just intonation intervals are ambiguous the returned ratio may be missleading.. 
-   %% */
-   fun {PC2RatioVS MyPC}
-      IntervalDB = DB.fullDB.intervalDB
-      fun {PrettyRatios Rs}
-	 %% alternative ratio transformations written as 1/2|1/3
-	 {Out.listToVS
-	  {Map Rs fun {$ Nom#Den} Nom#'/'#Den end}
-	  '|'}
-      end
-      Ratios = {HS.db.pc2Ratios MyPC IntervalDB}
-   in
-      if Ratios == nil
-      then 'n/a'
-      else {PrettyRatios Ratios}
-      end
-   end
-
-
-   /** %% Returns true if X is a note object with pitch unit et22.
-   %% */
-   fun {IsEt22Note X}
-      {X isNote($)} andthen 
-      {X getPitchUnit($)} == et22
-   end
-   /** %% Returns true if X is a chord object with root pitch unit et22.
-   %% */
-   fun {IsEt22Chord X}
-      {HS.score.isChord X} andthen 
-      {{X getRootParameter($)} getUnit($)} == et22
-   end
-   /** %% Returns true if X is a scale object with root pitch unit et22.
-   %% */
-   fun {IsEt22Scale X}
-      {HS.score.isScale X} andthen 
-      {{X getRootParameter($)} getUnit($)} == et22
-   end
-
-
-   LilyOctaves = octs(",,,," ",,," ",," "," "" "'" "''" "'''" "''''")
-   %% Transform a Pitch (an int) into the corresponding Lily code (a VS)
-   fun {ET22PitchToLily MyPitch}
-      MyPC = {Int.'mod' MyPitch 22}
-      Oct = {Int.'div' MyPitch 22} + 1
-   in
-      {Et22PcToLily MyPC} # LilyOctaves.Oct
-   end
-      
-   /** %% Expects a Strasheela note object and returns the corresponding
-   %% Lilypond code (a VS). For simplicity, this transformation does not
-   %% support any additional expessions (e.g. fingering marks, or articulation
-   %% marks).
-   %% */
-   fun {NoteEt22ToLily MyNote}
-      {{Out.makeNoteToLily2
-	fun {$ N} {ET22PitchToLily {N getPitch($)}} end
-	fun {$ N}
-	   NonChordMarker = if {HS.score.isInChordMixinForNote N}
-			       andthen {N isInChord($)} == 0
-			    then "^x"
-			    else ""
-			    end
-	in
-	   NonChordMarker
-	end}
-       MyNote}
-   end
-
-   /** %% Like NoteEt22ToLily, but additionally notates the adaptive JI pitch offset of this note with respect to 22 ET.
-   %% */
-   fun {NoteEt22ToLily_AdaptiveJI MyNote}
-      {{Out.makeNoteToLily2
-	fun {$ N} {ET22PitchToLily {N getPitch($)}} end
-	fun {$ N}
-	   NonChordMarker = if {HS.score.isInChordMixinForNote N}
-			       andthen {N isInChord($)} == 0
-			    then "^x"
-			    else ""
-			    end
-	   JIPitch = {HS.score.getAdaptiveJIPitch N unit}
-	   ETPitch = {N getPitchInMidi($)}
-	   TuningOffset = if {Abs JIPitch-ETPitch} > 0.001
-			  then "_\\markup{"#{GUtils.roundDigits (JIPitch-ETPitch)*100.0 1}#" c}"
-			  else "_\\markup{0 c}"
-			  end
-	in
-	   NonChordMarker#TuningOffset
-	end}
-       MyNote}
-   end
-   /** %% Like NoteEt22ToLily_AdaptiveJI, but additionally also notates the absolute pitch in cent.
-   %% */
-   fun {NoteEt22ToLily_AdaptiveJI2 MyNote}
-      {{Out.makeNoteToLily2
-	fun {$ N} {ET22PitchToLily {N getPitch($)}} end
-	fun {$ N}
-	   NonChordMarker = if {HS.score.isInChordMixinForNote N}
-			       andthen {N isInChord($)} == 0
-			    then "^x"
-			    else ""
-			    end
-	   JIPitch = {HS.score.getAdaptiveJIPitch N unit}
-	   ETPitch = {N getPitchInMidi($)}
-	   TuningOffset = if {Abs JIPitch-ETPitch} > 0.001
-			  then "_\\markup{\\column {"#{GUtils.roundDigits (JIPitch-ETPitch)*100.0 1}#"c "#JIPitch#"}}"
-			  else "_\\markup{\\column {"#0#"c "#{MyNote getPitchInMidi($)}#"}}"
-			  end
-	in
-	   NonChordMarker#TuningOffset
-	end}
-       MyNote}
-   end
-
-
-   fun {SimTo22LilyChord Sim}
-      Items = {Sim getItems($)}
-      Pitches = {Out.listToVS
-		 {Map Items
-		  fun {$ N} {ET22PitchToLily {N getPitch($)}} end}
-		 " "}
-      Rhythms = {Out.lilyMakeRhythms
-		 {Items.1 getDurationParameter($)}}
-      FirstChord = {Out.getUserLily Sim}#"\n <"#Pitches#">"#Rhythms.1
-   in
-      if {Length Rhythms} == 1
-      then FirstChord
-      else FirstChord#{Out.listToVS
-		       {Map Rhythms.2
-			fun {$ R} " ~ <"#Pitches#">"#R end}
-		       " "}
-      end
-   end
-      
-   /** %% Returns the chord comment (also works for scale). 
-   %% */
-   proc {MakeChordComment MyChord ?Result}
-      Result = '#'('\\column {'
-		   {Out.listToVS {HS.db.getName MyChord} '; '}
-		   ' } ')
-      if {Not {IsVirtualString Result}}
-      then raise noVS(Result) end
-      end
-   end
-   /* %% Expects a chord and returns the chord as ratio spec: Transposition x untransposed PCs (a VS).
-   %% */
-   proc {MakeChordRatios MyChord ?Result}
-      Result = '#'('\\column { '
-		   {PC2RatioVS {MyChord getTransposition($)}}
-		   ' x ('
-		   {Out.listToVS {Map {FS.reflect.lowerBoundList
-				       {MyChord getUntransposedPitchClasses($)}}
-				  PC2RatioVS}
-		    ' '}
-		   ') }')
-      %% 
-      if {Not {IsVirtualString Result}}
-      then raise noVS(Result) end
-      end
-   end
-   /** %% Returns the scale comment. 
-   %% */
-   proc {MakeScaleComment MyScale ?Result}
-      ScaleComment = {HS.db.getInternalScaleDB}.comment.{MyScale getIndex($)}
-   in
-      Result = '#'('\\column {'
-		   if {GUtils.isRecord ScaleComment} andthen {HasFeature ScaleComment comment}
-		   then ScaleComment.comment
-		   else ScaleComment
-		   end
-		   ' } ')
-      %% 
-      if {Not {IsVirtualString Result}}
-      then raise noVS(Result) end
-      end
-   end
-
-   %% NB: much code repetition to NoteEt22ToLily and similar definitions
-   %%
-   fun {ChordEt22ToLily MyChord}
-      Rhythms = {Out.lilyMakeRhythms {MyChord getDurationParameter($)}}
-      ChordDescr = {MakeChordComment MyChord}
-%	 ChordDescr = {MakeChordRatios MyChord} 
-      AddedSigns = '_\\markup{'#ChordDescr#'}'
-   in
-      %% if MyChord is shorter than 64th then skip it (Out.lilyMakeRhythms
-      %% then returns nil)
-      if Rhythms == nil
-      then ''
-      else  
-	 MyRoot = {ET22PitchToLily {MyChord getRoot($)}}
-	 MyPitches = "\\grace <"#{Out.listToVS {Map {HS.score.pcSetToSequence
-						     {MyChord getPitchClasses($)}
-						     {MyChord getRoot($)}}
-						ET22PitchToLily}
-				  %% set Lily grace note duration to quarter notes (4)
-				  " "}#">4 "
-	 FirstChord = MyPitches#MyRoot#Rhythms.1#AddedSigns
-      in
-	 if {Length Rhythms} == 1 % is tied chord?
-	 then FirstChord
-	    %% tied roots
-	 else FirstChord#{Out.listToVS {Map Rhythms.2
-					fun {$ R} " ~ "#MyRoot#R end}
-			  " "}
-	 end
-      end
-   end
-
-      
-   %% Notate all scale pitches as grace notes first, then indicate duration of scale by scale root only 
-   fun {ScaleEt22ToLily MyScale}
-      Rhythms = {Out.lilyMakeRhythms {MyScale getDurationParameter($)}}
-      ScaleDescr = {MakeScaleComment MyScale}
-      AddedSigns = '_\\markup{'#ScaleDescr#'}'
-   in
-      %% if MyChord is shorter than 64th then skip it (Out.lilyMakeRhythms
-      %% then returns nil)
-      if Rhythms == nil
-      then ''
-      else
-	 MyRoot = {ET22PitchToLily {MyScale getRoot($)}}
-	 MyPitches = "\\grace {"#{Out.listToVS {Map {HS.score.pcSetToSequence
-						     {MyScale getPitchClasses($)}
-						     {MyScale getRoot($)}}
-						ET22PitchToLily}
-				  %% set Lily grace note duration to 4
-				  "4 "}#"} "
-	 FirstScale = MyPitches#MyRoot#Rhythms.1#AddedSigns
-      in
-	 if {Length Rhythms} == 1 % is tied scale?
-	 then FirstScale
-	    %% tied scale
-	 else FirstScale#{Out.listToVS {Map Rhythms.2
-					fun {$ R} " ~ "#MyRoot#R end}
-			  " "}
-	 end
-      end
-   end
-
-
+   
    %% code to insert at beginning and end of Lilypond score, defines ET notation 
    LilyHeader = {Out.readFromFile
 		 {{Path.make
@@ -446,34 +162,40 @@ define
    LilyFooter = "\n}"
       
    
-   /** %% Proc is like Out.renderAndShowLilypond, but provides buildin support for notes and chords with pitch units in et22.
-   %% Please note that this support is defined by the argument clauses and wrapper (see Out.toLilypond) -- additional clauses are still possible, but adding new note/chord clauses will overwrite the support for 22 ET (the wrapper can be defined like for Out.renderAndShowLilypond).
-   %% Also, note that convert-ly (which updates) sometimes breaks the 22 ET notation (e.g., when inserting new explicit staffs).
+   /** %% Lilypond output for 22 ET.
+   %%
+   %% Args:
+   %%
+   %% 'upperMarkupMakers': a list of unary functions for creating textual markup placed above the staff over a given score object. Each markup function expects a score object and returns a VS. There exist four cases of score objects for which markup can be applied: note objects, simultaneous containers of notes (notated as a chord in Lilypond), chord objects and scale objects. The definition of each markup function must care for all these cases (e.g., with an if expression test whether the input is a note object and then create some VS or alternatively create the empty VS nil). 
+   %% 'lowerMarkupMakers': same as 'upperMarkupMakers', but for markups placed below the staff.
+   %%
+   %% In addition, the arguments of Out.renderAndShowLilypond are supported.
+   %% 
+   %% Please note that RenderAndShowLilypond is defined by providing Out.renderAndShowLilypond the argument Clauses (via HS.out.renderAndShowLilypond) -- additional clauses are still possible, but adding new note/chord clauses will overwrite the support for defined by this procedure.
    %% */
    proc {RenderAndShowLilypond MyScore Args}
-      Default = unit(chordDescription:MakeChordComment
-		     scaleDescription:MakeScaleComment)
-      As1 = {Adjoin Default Args}
-      AddedClauses = [Out.isLilyChord#SimTo22LilyChord
-		      IsEt22Note#NoteEt22ToLily
-		      IsEt22Chord#ChordEt22ToLily
-		      IsEt22Scale#ScaleEt22ToLily]
       ET22Wrapper = [LilyHeader LilyFooter]
       AddedArgs = unit(wrapper:if {HasFeature Args wrapper}
 			       then [H T] = Args.wrapper in 
 				  [H#ET22Wrapper.1 T]
 			       else ET22Wrapper
-			       end
-		       clauses:if {HasFeature Args clauses}
-			       then {Append Args.clauses AddedClauses}
-			       else AddedClauses
 			       end)
-      As2 = {Adjoin As1 AddedArgs}
+      As = {Adjoin Args AddedArgs}
    in
-      {Out.renderAndShowLilypond MyScore As2}
+      {HS.out.renderAndShowLilypond MyScore
+       {Adjoin As
+	unit(pitchUnit: et22
+	     pcsLilyNames: {GetEnharmonicNotationTable})}}
    end
+   
 
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%
+%%% Tuning tables
+%%%
+
+   
    /** %% Tuning table for Pajara with RMS optimal generator.
    %% */
    PajaraRMS_TuningTable
