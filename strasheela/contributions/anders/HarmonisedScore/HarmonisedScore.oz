@@ -129,10 +129,11 @@
 functor
 import
    DB at 'source/Database.ozf'
-   HSScore at 'source/Score.ozf'
+   HS_Score at 'source/Score.ozf'
    Rules at 'source/Rules.ozf'
    DBs at 'source/databases/Databases.ozf'
-   Distro at 'source/Distribution.ozf'
+   HS_Distro at 'source/Distribution.ozf'
+   HS_Out at 'source/Output.ozf'
 
    %% for Pitch etc.
    ET12 at 'x-ozlib://anders/strasheela/ET12/ET12.ozf'
@@ -140,12 +141,13 @@ import
    ET31 at 'x-ozlib://anders/strasheela/ET31/ET31.ozf'
    
 export
-   db:DB
-   dbs:DBs
-   score:HSScore
-   rules:Rules
-   distro:Distro
-
+   db: DB
+   dbs: DBs
+   score: HS_Score
+   rules: Rules
+   distro: HS_Distro
+   out: HS_Out
+   
    Acc pc:PC pcName:PCName Pitch
    
 define
