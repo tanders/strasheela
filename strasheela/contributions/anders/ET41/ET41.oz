@@ -6,13 +6,13 @@ functor
 import
    HS at 'x-ozlib://anders/strasheela/HarmonisedScore/HarmonisedScore.ozf'
    DB at 'source/DB.ozf'
-%    Out at 'source/Output.ozf' % TMP comment
+   Out at 'source/Output.ozf' 
 %    C at 'source/Convenience.ozf'
 %    Score at 'source/Score.ozf'
    
 export
    db:DB
-%    Out
+   Out
 %    C
 %    Score
    

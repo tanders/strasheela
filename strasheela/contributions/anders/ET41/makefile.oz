@@ -12,7 +12,8 @@
 %%% *************************************************************
 
 makefile(
-   lib: ['ET41.ozf']
+   lib: ['ET41.ozf'
+	 'source/Lilyheader.ly.data']
    uri: 'x-ozlib://anders/strasheela/ET41'
    mogul: 'mogul:/anders/strasheela/ET41'
    author: 'Torsten Anders')

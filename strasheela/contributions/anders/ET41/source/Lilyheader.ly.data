@@ -1,0 +1,14 @@
+%% see http://www.mail-archive.com/lilypond-devel@gnu.org/msg18989.html
+%% and /Applications/LilyPond.app/Contents/Resources/share/lilypond/current/scm/music-functions.scm
+modern = #`(Staff ,(make-accidental-rule 'same-octave 0)
+                  ,(make-accidental-rule 'any-octave 0)
+                  ,(make-accidental-rule 'same-octave 1))
+dodecaphonic = #`(Staff ,(lambda (c p bn mp) '(#f . #t)))
+\layout {
+  \context { \Score % or Staff, or Voice
+	     autoAccidentals = #dodecaphonic
+	     autoCautionaries = #dodecaphonic
+	   }
+}
+
+\score{
