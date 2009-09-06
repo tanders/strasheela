@@ -69,6 +69,7 @@ export
    Element AbstractElement TemporalElement Pause Event Note2 Note
    % funcs/procs
    IsScoreObject IsTemporalItem IsTemporalContainer
+   IsET GetPitchesPerOctave
    MakeScore MakeScore2 InitScore
    make: MakeScore
    make2: MakeScore2
@@ -1298,24 +1299,25 @@ define
       end
    end
 
-   local
-      /** %% Returns true if PitchUnit is an atom which matches the pattern et<Digit>+ such as et31 or et72.
-      %% */
-      fun {IsET PitchUnit}
-	 S = {AtomToString PitchUnit}
-	 H T
-      in
-	 {List.takeDrop S 2 H T}
-	 %% 
-	 H == "et" andthen T \= nil andthen
-	 {All T fun {$ C} {Char.isDigit C} end} 
-      end
-      /** %% Returns the pitches per octave expressed by an ET pitch unit, e.g., for et31 it returns 31. 
-      %% */
-      fun {GetPitchesPerOctave EtPitchUnit}
-	 {StringToInt {List.drop {AtomToString EtPitchUnit} 2}}
-      end
 
+   /** %% Returns true if PitchUnit is an atom which matches the pattern et<Digit>+ such as et31 or et72.
+   %% */
+   fun {IsET PitchUnit}
+      S = {AtomToString PitchUnit}
+      H T
+   in
+      {List.takeDrop S 2 H T}
+      %% 
+      H == "et" andthen T \= nil andthen
+      {All T fun {$ C} {Char.isDigit C} end} 
+   end
+   /** %% Returns the pitches per octave expressed by an ET pitch unit, e.g., for et31 it returns 31. 
+   %% */
+   fun {GetPitchesPerOctave EtPitchUnit}
+      {StringToInt {List.drop {AtomToString EtPitchUnit} 2}}
+   end
+   
+   local
       LastNonmatchingPitchunit = {NewCell midi}
    in
       /** %% [concrete class] 
