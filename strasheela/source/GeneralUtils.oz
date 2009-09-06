@@ -51,7 +51,7 @@ export
    
    EncodeRatio
 %    SelectArg
-   TimeVString
+   TimeVString TimeForFileName
    GetCounterAndIncr ResetCounter
    UnarySkip BinarySkip
    TakeFeatures
@@ -468,7 +468,16 @@ define
       Time.hour#':'#Time.min#':'#Time.sec#', '#Time.mDay#'-'#Time.mon+1#'-'#Time.year+1900
    end
 
- 
+   /** %% Returns a VS of the current time in the form
+   %% day-month-year_hour-min-sec.
+   %%
+   %% This format does not contain any characters that might be problematic in a file name.
+   %% */
+   fun {TimeForFileName}
+      MyTime = {OS.localTime}
+   in
+      MyTime.mDay#'-'#MyTime.mon+1#'-'#MyTime.year+1900#'_'#MyTime.hour#'-'#MyTime.min#'-'#MyTime.sec 
+   end
 
    local
       Counter = {Cell.new 1}
