@@ -62,7 +62,6 @@ MyScore = {Score.makeScore seq(items:[sim(items:{Map [{ET22.pitch 'C'#4}
 			       startTime:0)
 	   unit}
 
-%% NOTE: convert-ly breaks ET22 in this case! 
 {ET22.out.renderAndShowLilypond MyScore
  unit}
 
