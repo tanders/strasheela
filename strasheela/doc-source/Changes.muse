@@ -7,7 +7,8 @@
   - Main additions and changes 
     - Revised score distribution: value orderings can now access arbitrary score information 
     - Added support for transformable subscripts ([[../contributions/anders/Segments/doc/_.html][Segs.tSC]])
-    - Added functor [[../contributions/anders/ET41/doc/node1.html][ET41]] for composition in [[http://en.wikipedia.org/wiki/41_equal_temperament][41-tone equal temperament]]
+    - Added functor [[../contributions/anders/ET41/doc/node1.html][ET41]] for composition in [[http://en.wikipedia.org/wiki/41_equal_temperament][41-tone equal temperament]] and related tunings (e.g. the just intonation tuning of [[http://en.wikipedia.org/wiki/La_Monte_Young][La Monte Young]]'s [[http://www.kylegann.com/wtp.html][The Well-Tuned Piano]]). Supported features for these tunings include a short-hand pitch notation; a database of intervals, chords, and scales; and some minimal music notation support (via Lilypond).
+    - Added HS.out: generalised output for score objects and concepts introduced by HS, e.g., Lilypond output for chord and scale objects and means to define Lilypond output for different temperaments.
 
   - Documentation
     - 
@@ -39,6 +40,7 @@
     - HS.db: Pc2Ratios now returns nil if no ratio was defined for interval
     - Fenv method toList: fixed bug for case N=1
     - Out.midi.getChannel now uses mini chan param of midi note objects (not only channel info tag)
+    - Refactored ET22 and ET31 output: now much reduced code with same functionality using HS.out, several procs before exported by ET22 and ET31 are now moved to HS.out
 
 
   - For further fixes see the [[http://apps.sourceforge.net/trac/strasheela/timeline][Trac Timeline]] or the [[../CHANGELOG.txt]].
