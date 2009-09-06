@@ -119,3 +119,5 @@ etTwentytwoGlyphs = #'((1 . "accidentals.doublesharp")
 % \relative { c4 ccu cscd cs d dcd dfcu df c }
 % }
 
+
+\score{
