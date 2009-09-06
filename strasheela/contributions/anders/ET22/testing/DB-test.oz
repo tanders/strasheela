@@ -35,6 +35,17 @@ in
     add(note:HS.score.note)}
 end
 
+
+%% single scale test
+declare
+MyScore = {MakeScore ET22.db.fullDB.scaleDB.1}
+{ET22.out.renderAndShowLilypond MyScore
+ unit(file:{MyScore getInfoRecord($ doc)}.1)}
+{Out.renderAndPlayCsound MyScore
+ unit(file:{MyScore getInfoRecord($ doc)}.1)}
+
+
+%% all scales
 {Record.forAll ET22.db.fullDB.scaleDB
  proc {$ DB_Entry}
     MyScore = {MakeScore DB_Entry}
