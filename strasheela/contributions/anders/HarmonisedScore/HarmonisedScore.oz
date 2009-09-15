@@ -139,6 +139,7 @@ import
    ET12 at 'x-ozlib://anders/strasheela/ET12/ET12.ozf'
    ET22 at 'x-ozlib://anders/strasheela/ET22/ET22.ozf'
    ET31 at 'x-ozlib://anders/strasheela/ET31/ET31.ozf'
+   ET41 at 'x-ozlib://anders/strasheela/ET41/ET41.ozf'
    
 export
    db: DB
@@ -163,6 +164,7 @@ define
 	    of 12 then {ET12.FnSymbol X}
 	    [] 22 then {ET22.FnSymbol X}
 	    [] 31 then {ET31.FnSymbol X}
+	    [] 41 then {ET41.FnSymbol X}
 	    else 
 	       {Exception.raiseError
 		strasheela(failedRequirement PitchesPerOctave "No symbolic pitch translation supported for "#PitchesPerOctave#" ET.")}
