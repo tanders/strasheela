@@ -36,7 +36,6 @@ define
 		     roots:[4#1]
 % 		     essentialPitchClasses:[]
 		     comment:'opening') % Full name: "The Opening Chord"
-
 	       chord(pitchClasses:[81#1 84#1 108#1 112#1 144#1 192#1]
 		     roots:[192#1] %% TODO:
 % 		     essentialPitchClasses:[]
