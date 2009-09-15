@@ -43,6 +43,8 @@ declare
 
 {HS.db.getEditIntervalDB}
 
+{HS.db.getEditChordDB}
+
 */
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -820,6 +822,5 @@ end
 
 
 */
-
 
 
