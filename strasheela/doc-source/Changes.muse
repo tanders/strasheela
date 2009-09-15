@@ -11,7 +11,7 @@
     - Added HS.out: generalised output for score objects and concepts introduced by HS, e.g., Lilypond output for chord and scale objects and means to define Lilypond output for different temperaments.
 
   - Documentation
-    - 
+    - [[../examples/Harmony-Examples/HarmonicProgressions-41ET.oz][HarmonicProgressions-41ET.oz]] Added 41 ET harmony example, using La Monte Young's The Well-Tuned Piano chords
 
   - Minor additions
     - Fenv.renderAndPlayMidiFile now supports flexible microtonal MIDI output using pitchbend
