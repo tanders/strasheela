@@ -223,26 +223,23 @@ If problems occur ask gustavo.ggutierrez@gmail.com
 
 
 
+
 * Tasks for Le StruM						       :WAIT:
-  
-  [wait for instructions from Eduardo, ~ 12 September 2009]
 
-  Eduardo plans two different options, I will do one of them
+  [Wait for Eduardo to by Ableton Suite]
 
-** More sophisticated version of existing demo
+  see: file:~/texte/Plymouth/Project/
 
-   see previous demo
 
-** New 2nd demo
+** Learn Ableton Suite (overview)
 
-   EEG -> Music 
+** Learn MIDI out capabilities or Waverider
 
-   for hospital project in London
+** Develop strategies how to MIDI remote-control Ableton with Waverider
 
-   Must be easy to install & use.
-   Does not require using Strasheela, e.g., could be a plain Max application
+** Develop little demo session 
 
-   ?? check existing advantages of Max 5 for this purpose, then ask Eduardo to get that...
+
 
 
 
