@@ -23,6 +23,7 @@ import
    LUtils at 'x-ozlib://anders/strasheela/source/ListUtils.ozf'   
    Score at 'x-ozlib://anders/strasheela/source/ScoreCore.ozf'
    Out at 'x-ozlib://anders/strasheela/source/Output.ozf'
+   HS at '../HarmonisedScore.ozf'
    HS_Score at 'Score.ozf'
    HS_DB at 'Database.ozf'
 
@@ -51,7 +52,7 @@ define
    %%
    %% Args:
    %% outname (default out): name under which this action appears in the Explorer menu; and beginning of resulting file names (which get added the space number in the Explorer and then the current time).
-   %% renderAndShowLilypond (default Out.renderAndShowLilypond): binay procedure for outputting the result to Lilypond with the interface {RenderAndShowLilypond MyScore Args}.
+   %% renderAndShowLilypond (default HS.out.renderAndShowLilypond): binay procedure for outputting the result to Lilypond with the interface {RenderAndShowLilypond MyScore Args}.
    %% prefix (default "declare \nChordSeq \n= {Score.makeScore\n"): VS added at the beginning of the resulting Lilypond file. 
    %% chordsToScore (default HS.score.chordsToScore): ternary procedure implementing the CSP used internally for creating the notes for the given chords. Interface: {ChordsToScore ChordSpecs Args ?ScoreWithNotes}. 
    %% Further, all args of chordsToScore are supported.
@@ -64,8 +65,7 @@ define
       Defaults = unit(outname:out
 % 		      value:random
 		      chordsToScore: HS_Score.chordsToScore
-		      %% ?? TMP: replace with RenderAndShowLilypond?
-		      renderAndShowLilypond: Out.renderAndShowLilypond
+		      renderAndShowLilypond: RenderAndShowLilypond
 		      prefix: "declare \nChordSeq \n= {Score.makeScore\n")
       As = {Adjoin Defaults Args}
    in
@@ -86,13 +86,13 @@ define
 					 end}
 					As}
 			  in
+			     %% Csound output of score
+			     {Out.renderAndPlayCsound MyScore
+			      unit(file:FileName)}
 			     %% Lily
 			     {As.renderAndShowLilypond MyScore
 			      unit(file:FileName
 				   prefix: As.prefix)}
-			     %% Csound output of score
-			     {Out.renderAndPlayCsound MyScore
-			      unit(file:FileName)}
 			     %% Archive output
 			     {Out.outputScoreConstructor X
 			      unit(file:FileName)}
@@ -135,7 +135,15 @@ define
 		     pcsLilyNames: pcs(0:c 1:cis 2:d 3:'dis' 4:e 5:f
 				       6:fis 7:g 8:gis 9:a 10:ais 11:b)
 		     upperMarkupMakers: [MakeNonChordTone_Markup]
-		     lowerMarkupMakers: [MakeChordComment_Markup MakeScaleComment_Markup])
+		     lowerMarkupMakers: [MakeChordComment_Markup MakeScaleComment_Markup]
+		     getClef: fun {$ X}
+				 nil % no clef
+% 				 if {All {X getItems($)} HS.score.isPitchClassCollection}
+% 				 then
+% 				 else {Out.averagePitchClef X}
+% 				 end
+			      end
+		    )
       As1 = {Adjoin Default Args}
       PitchesPerOctave = {Score.getPitchesPerOctave As1.pitchUnit}
       fun {IsNote X}
@@ -274,8 +282,10 @@ define
 				       lowerMarkupMakers: LowerMarkupMakers
 				       chordOrScale: ChordOrScale
 				       ...)}
-	 fun {PitchToLily P}
-	    {TemperamentPitchToLily P PCsLilyNames PitchesPerOctave}
+	 fun {PcToLily PC}
+	    %% transpose PC into octave over middle C
+	    {TemperamentPitchToLily PC+{HS.pitch 'C'#4}
+	     PCsLilyNames PitchesPerOctave}
 	 end
       in
 	 fun {$ MyPcColl}
@@ -289,20 +299,20 @@ define
 	    if Rhythms == nil
 	    then ''
 	    else
-	       MyRoot = {PitchToLily {MyPcColl getRoot($)}}
+	       MyRoot = {PcToLily {MyPcColl getRoot($)}}
 	       MyPitches = 
 	       if ChordOrScale == scale then
 		  "{"#{Out.listToVS {Map {HS_Score.pcSetToSequence
 					  {MyPcColl getPitchClasses($)}
 					  {MyPcColl getRoot($)}}
-				     PitchToLily}
+				     PcToLily}
 		       %% set Lily grace note duration to 4
 		       "4 "}#"} "
 	       else %% chord case
 		  "{ <"#{Out.listToVS {Map {HS_Score.pcSetToSequence
 					    {MyPcColl getPitchClasses($)}
 					    {MyPcColl getRoot($)}}
-				       PitchToLily}
+				       PcToLily}
 			 %% set Lily grace note duration to quarter notes (4)
 			 " "}#">4 }"
 	       end
