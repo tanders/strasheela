@@ -79,6 +79,7 @@ export
    PauseToLily LilyRest
    LilyMakeRhythms LilyMakeRhythms2 
    IsOutmostSeq IsOutmostSim IsSingleStaffPolyphony SingleStaffPolyphonyToLily IsLilyChord SimToLilyChord GetUserLily
+   AveragePitchClef
    SetMaxLilyRhythm
    
    %% 
@@ -1050,10 +1051,12 @@ define
        fun {$ C} {Not {C isSimultaneous($)}} end}
    end
 
-   
+
+   /** %% Expects a container and returns a Lilypond clef declaration based on the average value of pitch parameters in this container.  
+   %% */
    %% average pitch decides clef
    %% LilyClefs = clef(bass_8 bass violin "violin^8")
-   fun {DecideClef X}
+   fun {AveragePitchClef X}
       %% simple check avarage pitch got confused with pitch classes
       %% (note pitch class and chord root are also pitches)
       Pitches = {X map($ getValueInMidi test:fun {$ X}
@@ -1225,21 +1228,25 @@ define
 	  fun {$ X}
 	     {X isContainer($)} andthen {As.hasImplicitStaff X} 
 	  end#fun {$ C}  %% Create a staff and clef for C, then output C
-	      Staff = if Args.implicitStaffs
-		      then "\\new Staff "#"{ \\clef "#{DecideClef C}
-		      else ""
-		      end
-	      Closing = if Args.implicitStaffs
-			then " }"
-			else ""
+		 ClefAux = {As.getClef C}
+		 Clef = if ClefAux == nil then nil
+			else "\\clef "#{As.getClef C}
 			end
-	   in
-	      "\n "#Staff#" "#if {C isSequential($)}
-			      then {SeqToLily C As}
-			      elseif {C isSimultaneous($)}
-			      then {SimToLily C As}
-			      end#Closing
-	   end
+		 Staff = if Args.implicitStaffs
+			 then "\\new Staff { "#Clef
+			 else ""
+			 end
+		 Closing = if Args.implicitStaffs 
+			   then " }"
+			   else ""
+			   end
+	      in
+		 "\n "#Staff#" "#if {C isSequential($)}
+				 then {SeqToLily C As}
+				 elseif {C isSimultaneous($)}
+				 then {SimToLily C As}
+				 end#Closing
+	      end
 	  
 	  isSequential#fun {$ X} {SeqToLily X As} end
 
@@ -1319,6 +1326,7 @@ define
    %% 'implicitStaffs' (Boolean): whether staff declarations are created automatically.
    %% 'hasImplicitStaff' (unary Boolan function): test for which containers staff declarations are created automatically (only supported for containers).
    %% 'hasBreak' (Boolean): test after which container \break is inserted.
+   %% 'getClef' (default AveragePitchClef): unary function expecting a container representing a staff and returning a Lily clef (a VS). If the function returns nil, then no clef declaration is inserted.
    %%
    %% Arbitrary Lilypond code can be added to container and note objects via a tuple with the label 'lily' given to the info attribute of the score object. This tuple must only contain VSs which are legal Lilypond code. For containers, this lilypond code is always inserted in the Lilypond output before the container, for notes it is inserted after the note.
    %%
@@ -1340,6 +1348,7 @@ define
 		      implicitStaffs:true
 		      hasImplicitStaff: IsOutmostSeq
 		      hasBreak: fun {$ X} false end
+		      getClef: AveragePitchClef
 		      version:"2.10.0"
 		     )
       As = {Adjoin Default Args}
