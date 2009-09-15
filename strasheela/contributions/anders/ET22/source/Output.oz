@@ -64,7 +64,7 @@ define
    proc {ArchiveInitRecord I X}
       if {Score.isScoreObject X}
       then 
-	 FileName = out#{GUtils.getCounterAndIncr}
+	 FileName = out#{GUtils.timeForFileName}
       in
 	 {Out.outputScoreConstructor X
 	  unit(file: FileName
