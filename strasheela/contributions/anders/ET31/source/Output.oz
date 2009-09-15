@@ -49,6 +49,7 @@ define
       Defaults = unit(outname:out
 		      value:random
 		      ignoreSopranoChordDegree:true
+		      renderAndShowLilypond: RenderAndShowLilypond
 		      chordsToScore: ET31_Score.chordsToScore
 		      prefix:"declare \n [ET31] = {ModuleLink ['x-ozlib://anders/strasheela/ET31/ET31.ozf']} \n {HS.db.setDB ET31.db.fullDB}\n ChordSeq \n = {Score.makeScore\n")
       As = {Adjoin Defaults Args}
