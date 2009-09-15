@@ -53,12 +53,15 @@ define
 %%% Explorer Actions
 %%%
 
-%    /** %% Creates an Explorer action for outputting a pure sequence of chords. This is a version of HS.out.addExplorerOut_ChordsToScore, customised for 31 ET. Please see the documentation of HS.out.addExplorerOut_ChordsToScore for further details such as supported arguments.
+   %% Uncomment after defining ET41.score.chordsToScore
+   %%
+%    /** %% Creates an Explorer action for outputting a pure sequence of chords. This is a version of HS.out.addExplorerOut_ChordsToScore, customised for 41 ET. Please see the documentation of HS.out.addExplorerOut_ChordsToScore for further details such as supported arguments.
 %    %% */
 %    proc {AddExplorerOut_ChordsToScore Args}
 %       Defaults = unit(outname:out
 % % 		      value:random
-% % 		      ignoreSopranoChordDegree:true
+% % 		      ignoreSopranoChordDegree:true		      
+% 		      renderAndShowLilypond: RenderAndShowLilypond
 % 		      chordsToScore: ET41.score.chordsToScore
 % 		      prefix:"declare \n [ET41] = {ModuleLink ['x-ozlib://anders/strasheela/ET41/ET41.ozf']} \n {HS.db.setDB ET41.db.fullDB}\n ChordSeq \n = {Score.makeScore\n")
 %       As = {Adjoin Defaults Args}
