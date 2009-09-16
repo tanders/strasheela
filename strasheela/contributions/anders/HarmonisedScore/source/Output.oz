@@ -118,8 +118,10 @@ define
    %%
    %% 'pitchUnit': a pitch unit atom for which the Lilypond output is defined.
    %% 'pcsLilyNames' (default pcs(0:c 1:cis 2:d 3:'dis' 4:e 5:f 6:fis 7:g 8:gis 9:a 10:ais 11:b)): tuple of atomes that assigns to each pitch class of the temperament a Lilypond pitch name. The width of the tuple should correspond to the pitch unit.
-   %% 'upperMarkupMakers' (default [MakeNonChordTone_Markup]): a list of unary functions for creating textual markup placed above the staff over a given score object. Each markup function expects a score object and returns a VS. There exist four cases of score objects for which markup can be applied: note objects, simultaneous containers of notes (notated as a chord in Lilypond), chord objects and scale objects. The definition of each markup function must care for all these cases (e.g., with an if expression test whether the input is a note object and then create some VS or alternatively create the empty VS nil). 
+   %% 'upperMarkupMakers' (default [MakeNonChordTone_Markup]): a list of unary functions (markup makers) for creating textual markup placed above the staff over a given score object. Each markup function expects a score object and returns a VS. There exist four cases of score objects for which markup can be applied: note objects in general, note objects in simultaneous containers of notes (notated as a chord in Lilypond), chord objects and scale objects. The definition of each markup function must care for all these cases (e.g., with an if expression test whether the input is a note object and then create some VS or alternatively create the empty VS nil). 
    %% 'lowerMarkupMakers' (default [MakeChordComment_Markup MakeScaleComment_Markup]): same as 'upperMarkupMakers', but for markups placed below the staff.
+   %% 'codeBeforeNoteMakers' (default nil): list of unary functions for creating Lilypond code placed directly before a note. Each function expects a note object and returns a VS. There exist two cases of score objects for which markup can be applied: note objects in general, and notes in simultaneous containers of notes (notated as a chord in Lilypond). The definition of each function must care for these cases.
+   %% 'codeBeforePcCollectionMakers' (default nil): list of binary functions for creating Lilypond code placed directly before a Lilypond note that is part of a Lilypond representation of a Strasheela chord/scale. Each function expects a chord/scale object and a pitch class; it returns a VS.
    %%
    %% In addition, the arguments of Out.renderAndShowLilypond are supported. 
    %%
@@ -136,6 +138,8 @@ define
 				       6:fis 7:g 8:gis 9:a 10:ais 11:b)
 		     upperMarkupMakers: [MakeNonChordTone_Markup]
 		     lowerMarkupMakers: [MakeChordComment_Markup MakeScaleComment_Markup]
+		     codeBeforeNoteMakers: nil
+		     codeBeforePcCollectionMakers: nil
 		     getClef: fun {$ X}
 				 nil % no clef
 % 				 if {All {X getItems($)} HS.score.isPitchClassCollection}
@@ -198,29 +202,43 @@ define
       fun {UpperMarkup Markups} {CombineMarkups Markups "^\\markup{"} end
       fun {ColumnMarkup Markups} {CombineMarkups Markups "\\column{"} end
       fun {LineMarkup Markups} {CombineMarkups Markups "\\line{"} end
+      /** %% Expects a VS and returns a VS with " " added at end. If VS is nil then nil is returned. 
+      %% */
+      fun {TrailingSpace VS}
+	 case VS of nil then nil
+	 else VS#" "
+	 end
+      end
    in
       /** %% Expects a Strasheela note object and returns the corresponding
       %% Lilypond code (a VS). 
       %% */
+      %% note: no tie-versions of args (as supported by Out.makeNoteToLily2)
       fun {MakeNoteToLily unit(pcsLilyNames: PCsLilyNames
 			       pitchesPerOctave: PitchesPerOctave
 			       upperMarkupMakers: UpperMarkupMakers
 			       lowerMarkupMakers: LowerMarkupMakers
+			       codeBeforeNoteMakers: CodeBeforeNoteMakers
 			       ...)}
 	 fun {$ MyNote}
 	    {{Out.makeNoteToLily2
-	      fun {$ N}
-		 {TemperamentPitchToLily {N getPitch($)}
-		  PCsLilyNames PitchesPerOctave}
-	      end
-	      fun {$ N}
-		 {LowerMarkup {Map LowerMarkupMakers fun {$ F} {F N} end}}
-		 #{UpperMarkup {Map UpperMarkupMakers fun {$ F} {F N} end}}
-	      end}
+	      unit(makePitch: fun {$ N}
+				 {TemperamentPitchToLily {N getPitch($)}
+				  PCsLilyNames PitchesPerOctave}
+			      end
+		   makeCodeAfter: fun {$ N}
+				     {LowerMarkup {Map LowerMarkupMakers fun {$ F} {F N} end}}
+				     #{UpperMarkup {Map UpperMarkupMakers fun {$ F} {F N} end}}
+				  end
+		   makeCodeBefore: fun {$ N}
+				      {Out.listToVS {Map CodeBeforeNoteMakers fun {$ F} {F N} end}
+				       " "}
+				  end
+		  )}
 	     MyNote}
 	 end
       end
-      
+
       /** %% Outputs Sim (for which IsLilyChord must return true) as a Lilypond chord VS. 
       %%
       %% */
@@ -234,6 +252,7 @@ define
 				   pitchesPerOctave: PitchesPerOctave
 				   upperMarkupMakers: UpperMarkupMakers
 				   lowerMarkupMakers: LowerMarkupMakers
+				   codeBeforeNoteMakers: CodeBeforeNoteMakers
 				   ...)}
 	 fun {$ Sim}
 	    Notes = {Sim getItems($)}
@@ -245,6 +264,19 @@ define
 			    PitchesPerOctave}
 			end}
 		       " "}
+	    CodeBeforeAndPitches 
+	    = {Out.listToVS
+	       {Map Notes
+		fun {$ N}
+		   %% simply call TemperamentPitchToLily again 
+		   {TrailingSpace {Out.listToVS
+				   {Map CodeBeforeNoteMakers fun {$ F} {F N} end}
+				   " "}}
+		   #{TemperamentPitchToLily {N getPitch($)}
+		     PCsLilyNames
+		     PitchesPerOctave}
+		end}
+	       " "}
 	    Rhythms = {Out.lilyMakeRhythms
 		       {Notes.1 getDurationParameter($)}}
 	    Markup = '#'({LowerMarkup
@@ -261,7 +293,7 @@ define
 				{LineMarkup 
 				 {Map UpperMarkupMakers fun {$ F} {F N} end}}
 			     end}}]})
-	    FirstChord = {Out.getUserLily Sim}#"\n <"#Pitches#">"#Rhythms.1#Markup
+	    FirstChord = {Out.getUserLily Sim}#"\n <"#CodeBeforeAndPitches#">"#Rhythms.1#Markup
 	 in
 	    if {Length Rhythms} == 1
 	    then FirstChord
@@ -280,27 +312,32 @@ define
 				       pitchesPerOctave: PitchesPerOctave
 				       upperMarkupMakers: UpperMarkupMakers
 				       lowerMarkupMakers: LowerMarkupMakers
+				       codeBeforePcCollectionMakers: CodeBeforePcCollectionMakers
 				       chordOrScale: ChordOrScale
-				       ...)}
-	 fun {PcToLily PC}
-	    %% transpose PC into octave over middle C
-	    {TemperamentPitchToLily PC+{HS.pitch 'C'#4}
-	     PCsLilyNames PitchesPerOctave}
-	 end
-      in
+				       ...)}	 
 	 fun {$ MyPcColl}
+	    fun {PcToLily PC}	       
+	       %% transpose PC into octave over middle C
+	       TranspPC = PC+{HS.pitch 'C'#4} 
+	    in
+	       {TrailingSpace
+		{Out.listToVS {Map CodeBeforePcCollectionMakers fun {$ F} {F MyPcColl PC} end}
+		 " "}}
+	       #{TemperamentPitchToLily TranspPC PCsLilyNames PitchesPerOctave}
+	    end
 	    Rhythms = {Out.lilyMakeRhythms {MyPcColl getDurationParameter($)}}
 	    AddedSigns = '#'({LowerMarkup {Map LowerMarkupMakers fun {$ F} {F MyPcColl} end}}
 			     #{UpperMarkup {Map UpperMarkupMakers fun {$ F} {F MyPcColl} end}})
 	 in
-%       {Browse rhythms#Rhythms}
 	    %% if MyChord is shorter than 64th then skip it (Out.lilyMakeRhythms
 	    %% then returns nil)
 	    if Rhythms == nil
 	    then ''
 	    else
+	       %% TODO: root should also get "code before"
 	       MyRoot = {PcToLily {MyPcColl getRoot($)}}
-	       MyPitches = 
+	       CodeBeforeAndRoot = {PcToLily {MyPcColl getRoot($)}}
+	       CodeBeforeAndPitches = 
 	       if ChordOrScale == scale then
 		  "{"#{Out.listToVS {Map {HS_Score.pcSetToSequence
 					  {MyPcColl getPitchClasses($)}
@@ -316,7 +353,7 @@ define
 			 %% set Lily grace note duration to quarter notes (4)
 			 " "}#">4 }"
 	       end
-	       FirstPcColl = "\\afterGrace "#MyRoot#Rhythms.1#AddedSigns#MyPitches
+	       FirstPcColl = "\\afterGrace "#CodeBeforeAndRoot#Rhythms.1#AddedSigns#CodeBeforeAndPitches
 	    in
 	       if {Length Rhythms} == 1 % is tied scale?
 	       then FirstPcColl
@@ -324,7 +361,6 @@ define
 	       else FirstPcColl#{Out.listToVS {Map Rhythms.2
 					       %% TMP: tie did not work out of the box with \\afterGrace, simply removed for now
 					       fun {$ R} MyRoot#R end
-% 					 fun {$ R} " ~ "#MyRoot#R end
 					      }
 				 " "}
 	       end
