@@ -97,12 +97,26 @@ define
 	       scale(pitchClasses:{Pattern.dxsToXs [7 6 4 7 4 9] 0}
 		     roots:[0]
 		     comment:'harmonic major')
+	       %% very similar to 'just chromatic': the chromatic steps of 'just chromatic' (e.g., C C#) are replaced by minor semitones (e.g., C Db), which are smaller in 41 ET
 	       scale(pitchClasses:{Pattern.dxsToXs [3 4 3 3 4 3 4 3 3 4 3] 0}
 		     roots:[0]
 		     comment:'schismic')
+	       %% http://en.wikipedia.org/wiki/Magic_temperament
+	       %% http://groups.yahoo.com/group/tuning-math/message/10917|
 	       scale(pitchClasses:{Pattern.dxsToXs [7 2 2 2 7 2 2 2 7 2 2 2] 0}
 		     roots:[0]
-		     comment:'magic')	       
+		     comment:'magic')
+	       %% http://x31eq.com/miracle.htm
+	       scale(pitchClasses:{Pattern.dxsToXs [4 4 4 4 4 4 4 4 4] 0}
+		     roots:[0]
+		     comment:'miracle')
+	       %% http://x31eq.com/miracle.htm
+	       scale(pitchClasses:{Pattern.dxsToXs [1 3 1 3 1 3 1 3 1 3 1 3 1 3 1 3 1 3 1 3] 0}
+		     roots:[0]
+		     comment:'blackjack')
+
+	       
+	       
 	       )
 
    %% TODO, see http://en.wikipedia.org/wiki/41_equal_temperament
