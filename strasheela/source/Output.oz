@@ -874,50 +874,75 @@ define
       LilyPCs.PC#LilyOctaves.Oct
    end
 
-   /** %% [for clause definitions] Returns unary function which expects a note object and returns a Lilypond note output (a VS). Simplified version of MakeNoteToLily2.
+   /** %% [for clause definitions] Returns unary function which expects a note object and a  and a unary function expecting the note and returning a VS of arbitrary Lilypond code, typically an expression, a markup etc. It returns a Lilypond note output (a VS). Simplified version of MakeNoteToLily2.
    %% */
    fun {MakeNoteToLily MakeAddedSigns}
-      {MakeNoteToLily2 fun {$ N} {LilyMakePitch {N getPitchParameter($)}} end
-       MakeAddedSigns}
+      {MakeNoteToLily2 unit(makeCodeAfter: MakeAddedSigns)}
    end
 
-   %% !! TODO: What about notating other Events (e.g. percussion notation)?
-   %% !! TODO: angleichen die verschiedenen Funs   
-   /** %% [for clause definitions] Returns unary function which expects a note object and returns a Lilypond note output (a VS). MakePitch is a unary function expecting the note and returning a Lilypond pitch (a VS). MakeAddedSigns is unary function expecting the note and returning a VS of arbitrary added signs (e.g. fingering marks, articulation marks etc.). MakeNoteToLily2 adds the rhythmic information and cares for ties.
-   %% */
-   fun {MakeNoteToLily2 MakePitch MakeAddedSigns}
-      fun {$ Note}
-	 Rhythms = {LilyMakeRhythms {Note getDurationParameter($)}}
+   local
+      /** %% Expects a VS and returns a VS with " " added at end. If VS is nil then nil is returned. 
+      %% */
+      fun {TrailingSpace VS}
+	 case VS of nil then nil
+	 else VS#" "
+	 end
+      end
+   in
+      /** %% [for clause definitions] Returns unary function which expects a note object and returns a Lilypond note output (a VS). MakeNoteToLily2 adds the rhythmic information and cares for ties.
+      %%
+      %% Args: 
+      %% 'makePitch': a unary function expecting a note object and returning a Lilypond pitch (a VS).
+      %% 'makeCodeBefore': a unary function expecting the note and returning a VS of arbitrary Lilypond code (a VS) placed directly before the note (e.g. for setting some attributes of the note). A whitespace is implicitly added between this code and the note.
+      %%  'makeCodeAfter' a unary function expecting the note and returning a VS of arbitrary Lilypond code (a VS) placed directly after the note (e.g. for fingering marks, articulation marks, markup etc.). No whitespace is added between the note and this code. 
+      %% 'makeCodeBefore_tie'/'makeCodeAfter_tie': a unary function expecting the note and returning a VS of arbitrary Lilypond code (a VS). In case the Strasheela note is split into multiple Lilypond notes connected by ties, this code is inserted before/after each tied Lilypond note. 
+      %% 
+      %% */
+      %%
+      %% !! TODO: What about notating other Events (e.g. percussion notation)?
+      %% !! TODO: angleichen die verschiedenen Funs
+      fun {MakeNoteToLily2 Args}
+	 Default = unit(makePitch: fun {$ N} {LilyMakePitch {N getPitchParameter($)}} end
+			makeCodeBefore: fun {$ N} nil end
+			makeCodeAfter: fun {$ N} nil end
+			makeCodeBefore_tie: fun {$ N} nil end
+			makeCodeAfter_tie: fun {$ N} nil end)
+	 As = {Adjoin Default Args}
       in
-	 if Rhythms == nil
-	 then ''
-	 else
-	    Pitch = {MakePitch Note}
-	    AddedSigns = {MakeAddedSigns Note}
-	    FirstNote = {ListToVS [{OffsetToLilyRest Note} " "
-				   Pitch Rhythms.1
-				   AddedSigns
-				   {GetUserLily Note}]
-			 ""}
-	    % MicroPitch = {LilyMakeMicroPitch {Note getPitchParameter($)}}  % ?? temp fix?
-	    % FirstNote = Pitch#Rhythms.1#MicroPitch
+	 fun {$ Note}
+	    Rhythms = {LilyMakeRhythms {Note getDurationParameter($)}}
 	 in
-	    %% !! ?? generalise (needed elsewhere)
-	    if {Length Rhythms} == 1
-	    then FirstNote
-	       %% all values in Rhythm.2 are tied to predecessor
-	    else FirstNote#{ListToVS
-			    {Map Rhythms.2
-			     fun {$ R}
-				" ~ "#Pitch#R#AddedSigns
-				%" ~ "#Pitch#R#MicroPitch
-			     end}
-			    " "}
+	    if Rhythms == nil
+	    then ''
+	    else
+	       Pitch = {As.makePitch Note}
+	       CodeBefore = {As.makeCodeBefore Note}
+	       CodeAfter = {As.makeCodeAfter Note}
+	       CodeBefore_Tie = {As.makeCodeBefore_tie Note}
+	       CodeAfter_Tie = {As.makeCodeAfter_tie Note}
+	       FirstNote = {ListToVS [{OffsetToLilyRest Note} " "
+				      {TrailingSpace CodeBefore}
+				      Pitch Rhythms.1
+				      CodeAfter
+				      {GetUserLily Note}]
+			    ""}
+	    in
+	       %% !! ?? generalise (needed elsewhere)
+	       if {Length Rhythms} == 1
+	       then FirstNote
+		  %% all values in Rhythm.2 are tied to predecessor
+	       else FirstNote#{ListToVS
+			       {Map Rhythms.2
+				fun {$ R}
+				   " ~ "#{TrailingSpace CodeBefore_Tie}#Pitch#R#CodeAfter_Tie
+				end}
+			       " "}
+	       end
 	    end
 	 end
       end
    end
-
+   
    /** %% [for clause definitions] Expects a pause duration in beats (a float) and returns a Lilypond rest (a VS).  
    %% */
    fun {LilyRest PauseDurInBeats}
@@ -1283,15 +1308,13 @@ define
 	     in
 		{MakeNoteToLily2
 		 %% create enharmonic Lily note
-		 fun {$ N}
-		    Nominal = LilyNominals.{N getCMajorDegree($)}
-		    Accidental = LilyAccidentals.({N getCMajorAccidental($)} + 1)
-		    Octave = LilyOctaves.({N getOctave($)} + 2)
-		 in
-		    Nominal#Accidental#Octave
-		 end
-		 %% no additional articulations etc for now
-		 fun {$ N} nil end}
+		 unit(makePitch: fun {$ N}
+				    Nominal = LilyNominals.{N getCMajorDegree($)}
+				    Accidental = LilyAccidentals.({N getCMajorAccidental($)} + 1)
+				    Octave = LilyOctaves.({N getOctave($)} + 2)
+				 in
+				    Nominal#Accidental#Octave
+				 end)}
 	     end
 	 
 	 isNote#{MakeNoteToLily
