@@ -218,12 +218,6 @@ If problems occur ask gustavo.ggutierrez@gmail.com
 
 
 
-
-
-
-
-
-
 * Tasks for Le StruM						       :WAIT:
 
   [Wait for Eduardo to by Ableton Suite]
@@ -238,9 +232,3 @@ If problems occur ask gustavo.ggutierrez@gmail.com
 ** Develop strategies how to MIDI remote-control Ableton with Waverider
 
 ** Develop little demo session 
-
-
-
-
-
-
