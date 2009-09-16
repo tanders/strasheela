@@ -33,16 +33,14 @@ end
 fun {NoteToLily N}
    {{Out.makeNoteToLily2
      %% create enharmonic Lily note
-     fun {$ N}
-	Nominal = LilyNominals.{N getCMajorDegree($)}
-	Accidental = LilyAccidentals.({N getCMajorAccidental($)} + 1)
-	Octave = LilyOctaves.({N getOctave($)} + 2)
-     in
-	Nominal#Accidental#Octave
-     end
-     %% no additional articulations etc for now
-     fun {$ N} nil end}
-    N}
+     unit(makePitch: fun {$ N}
+			Nominal = LilyNominals.{N getCMajorDegree($)}
+			Accidental = LilyAccidentals.({N getCMajorAccidental($)} + 1)
+			Octave = LilyOctaves.({N getOctave($)} + 2)
+		     in
+			Nominal#Accidental#Octave
+		     end)}
+     N}
 end
 %% Accidentals (incoded as integers): param values of cMajorAccidental
 Sharp = {HS.score.absoluteToOffsetAccidental 1}
