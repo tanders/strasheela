@@ -886,7 +886,14 @@ define
 				   7#5 10#7 3#2 5#3 7#4 25#14 15#8 40#21]
 		     roots:[1#1] 
 		     comment:'full dynamic symmetrical major')
-		   
+
+	       %% http://x31eq.com/miracle.htm
+	       scale(pitchClasses:{Pattern.dxsToXs [3 3 3 3 3 3 3 3 3] 0}
+		     roots:[0]
+		     comment:'miracle')	  
+	       scale(pitchClasses:{Pattern.dxsToXs [1 2 1 2 1 2 1 2 1 2 1 2 1 2 1 2 1 2 1 2] 0}
+		     roots:[0]
+		     comment:'blackjack')
 	       )
 
    %%
