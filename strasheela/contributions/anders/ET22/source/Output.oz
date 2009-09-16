@@ -160,7 +160,7 @@ define
 		   {Resolve.localize
 		    'x-ozlib://anders/strasheela/ET22/source/Lilyheader.ly.data'}.1}
 		  toString($)}}
-   LilyFooter = "\n}"
+   LilyFooter = "\n}\n}"
       
    
    /** %% Lilypond output for 22 ET.
