@@ -13,6 +13,10 @@
 %%
 %% TODO:
 %%
+%% - finish updating ET41_PCDecls
+%% - remove "upper markup" (upperMarkupMakers) and insert codeBeforeNoteMakers and codeBeforePcCollectionMakers
+%%
+%%
 %% - all accidental markups at the same height? Otherwise for chords one cannot see to which note in chord accidental belongs. Or I do for chords something like neutral sign for chord tones without extra accidental over staff.
 %%  ?? property baseline-skip
 %% ?? at what position is markup drawn? Depends on note: can I change that??
@@ -94,72 +98,96 @@ define
 %%% Customised Lilypond output
 %%%
 
+
+%    Natural = "n"
+   Natural7 = ">"
+   Natural77 = "."  
+   NaturalL = "<" 
+   Sharp = "v" 
+   Sharp7 = ">v" 
+%    SharpL = "<v" 
+   Flat = "e" 
+%    Flat7 = ">e" 
+   FlatL = "<e" 
+
    /** %% Format of each entry: LilyPC or LilyPC#AccidentalMarkup. LilyPC (a VS) is a Lily pitch name (e.g., c or cis). AccidentalMarkup (a VS) is a Lilypond markup used above the note to indicate its accidental. 
    %% */
    ET41_PCDecls = unit(0:  c 
-		       1:  c#'7'
-		       2:  des#'L' %  'C77':2  
-		       3:  des  %              'C#L':3 
-		       4:  cis  % 'Db7':4
-		       5:  cis#'7' %           'DLL':5
-		       6:  d#'L'   % 'C#77':6 
+		       1:  c#Natural7
+		       2:  d#FlatL %  'C77':2  
+		       3:  d#Flat  %              'C#L':3 
+		       4:  c#Sharp  % 'Db7':4
+		       5:  c#Sharp7 %           'DLL':5
+		       6:  d#NaturalL   % 'C#77':6 
 		       7:  d
-		       8:  d#'7'  %'Cx': 8   'EbLL':8
-		       9:  es#'L' % 'Fbb': 9     'D77':9
-		       10: es    %           'D#L':10
-		       11: 'dis' % 'Eb7':11
-		       12: 'dis'#'7' %      'ELL':12 
-		       13: fes   %           'EL': 13 % 'D#77':13
+		       8:  d#Natural7  %'Cx': 8   'EbLL':8
+		       %% TODO: only updated until here
+		       9:  e#FlatL % 'Fbb': 9     'D77':9
+		       10: e#Flat    %           'D#L':10
+		       11: d#Sharp % 'Eb7':11
+		       12: d#Sharp7 %      'ELL':12 
+		       13: e#NaturalL % f#Flat  'D#77':13
 		       14: e
-		       15: e#'7' % 'Dx': 15   'FLL':15 
-		       16: f#'L' %'Gbb': 16    'E77':16  
+		       15: e#Natural7 % 'Dx': 15   'FLL':15 
+		       16: f#NaturalL %'Gbb': 16    'E77':16  
 		       17: f
-		       18: f#'7' % 'E#': 18  % 'GbLL':18
-		       19: ges#'L' % 'F77':19
-		       20: ges   %          'F#L':20
-		       21: fis  %     'Gb7':21
-		       22: fis#'7' %'Ex': 22 'GLL':22 
-		       23: g#'L' % 'Abb': 23    'F#77':23
+		       18: f#Natural7 % 'E#': 18  % 'GbLL':18
+		       19: g#FlatL % 'F77':19
+		       20: g#Flat   %          'F#L':20
+		       21: f#Sharp  %     'Gb7':21
+		       22: f#Sharp7 %'Ex': 22 'GLL':22 
+		       23: g#NaturalL % 'Abb': 23    'F#77':23
 		       24: g    
-		       25: g#'7' % 'Fx': 25  'AbLL':25 
-		       26: as#'L' % 'G77':26 
-		       27: as    %   'G#L':27
-		       28: gis   %    'Ab7':28
-		       29: gis#'7' %  'ALL':29 
-		       30: a#'L' % 'Bbb': 30    'G#77':30
+		       25: g#Natural7 % 'Fx': 25  'AbLL':25 
+		       26: a#FlatL % 'G77':26 
+		       27: a#Flat    %   'G#L':27
+		       28: g#Sharp   %    'Ab7':28
+		       29: g#Sharp7 %  'ALL':29 
+		       30: a#NaturalL % 'Bbb': 30    'G#77':30
 		       31: a
-		       32: a#'7' % 'Gx': 32     'BbLL':32   
-		       33: bes#'L' % 'A77':33
-		       34: bes %               'A#L':34
-		       35: ais %     'Bb7':35
-		       36: ais#'7' % 'BLL':36 
-		       37: b#'L' %'A#77':37
+		       32: a#Natural7 % 'Gx': 32     'BbLL':32   
+		       33: b#FlatL % 'A77':33
+		       34: b#Flat %               'A#L':34
+		       35: a#Sharp %     'Bb7':35
+		       36: a#Sharp7 % 'BLL':36 
+		       37: b#NaturalL %'A#77':37
 		       38: b
-		       39: b#'7' % 'Ax': 39
-		       40: b#'77' % c#'L' would result in octave problems..
+		       39: b#Natural7 % 'Ax': 39
+		       40: b#Natural77 % c#'L' would result in octave problems..
 		      )
+
 
    LilyEt41PCs = {Record.map ET41_PCDecls
 		  %% access LilyPC from X
 		  fun {$ X} {CondSelect X 1 X} end}
    
-
-   %% TODO: finish other cases
-   fun {MakeET41Accidentals_Markup X}                 
-      %% for note
-      if {X isNote($)} then
-	 ET41_PCDecl = ET41_PCDecls.{X getPitchClass($)}
+   /** %%
+   %% */
+   fun {MakeET41Accidental X}      
+      %% access Lily markup 
+      fun {GetAccStringForNote N}
+	 ET41_PCDecl = ET41_PCDecls.{N getPitchClass($)}
       in
-	 %% access Lily markup from X
 	 {CondSelect ET41_PCDecl 2 nil}
-	 %% TMP: no accidental within lily chord or Strasheela chord/scale object
+      end
+   in
+      if {Out.isLilyChord {X getTemporalContainer($)}} then
+	 %% X is a note in a Lilypond chord
+	 Acc = {GetAccStringForNote X}
+      in
+	 if Acc == nil then nil else 	 
+	    "\\chordHE \""#Acc#"\""
+	 end
+      elseif {X isNote($)} then
+	 %% X is a note in general
+	 Acc = {GetAccStringForNote X}
+      in
+	 if Acc == nil then nil else
+	    "\\HE \""#Acc#"\""
+	 end
+	 %% this clause should never apply..
       else nil
       end
-      %% for sim of notes
-      %% for notes without extra accidental in a chord come up with some default sign meaning untransposed..
-      %%
-      %% for chord and scale root and their pitch classes (oh -- their pitch classes will even be harder...)
-      %% NOTE: do this later. For now put in some note into score or browse warning saying that accidentals for analytical objects are not supported yet.
    end
 
 
@@ -187,7 +215,21 @@ define
    %%
    %% */
    proc {RenderAndShowLilypond MyScore Args}
-      Defaults = unit(upperMarkupMakers: [MakeET41Accidentals_Markup HS.out.makeNonChordTone_Markup])
+      Defaults = unit(codeBeforeNoteMakers: [MakeET41Accidental]
+		      codeBeforePcCollectionMakers:
+			 [fun {$ MyChord PC}
+			     fun {GetAccStringForPC}
+				ET41_PCDecl = ET41_PCDecls.PC
+			     in
+				{CondSelect ET41_PCDecl 2 nil}
+			     end
+			     %% X is a note in general
+			     Acc = {GetAccStringForPC}
+			  in
+			     if Acc == nil then nil else
+				"\\chordHE \""#Acc#"\""
+			     end
+			  end])
       As1 = {Adjoin Defaults Args}
       ET22Wrapper = [LilyHeader LilyFooter]
       AddedArgs = unit(wrapper:if {HasFeature Args wrapper}
