@@ -1,14 +1,112 @@
-%% see http://www.mail-archive.com/lilypond-devel@gnu.org/msg18989.html
-%% and /Applications/LilyPond.app/Contents/Resources/share/lilypond/current/scm/music-functions.scm
-modern = #`(Staff ,(make-accidental-rule 'same-octave 0)
-                  ,(make-accidental-rule 'any-octave 0)
-                  ,(make-accidental-rule 'same-octave 1))
+
+%%
+%% Microtonal Helmholtz-Ellis notation with Lilypond
+%%
+
+%% Font HE put in as 2nd font, which can be accessed as \sans.
+\paper{
+#(define fonts (make-pango-font-tree "Century Schoolbook L"
+                                     "HE"
+                                     "Bitstream Vera Sans Mono"
+                        1))
+}
+
+%% accessing the accidental of an individual note in a
+%% chord and setting some properties (prop-alist)
+#(define (modify-accidental note-grob prop-alist)
+  ;; notehead before-line-breaking callback
+  (let ((accidental (ly:grob-object note-grob 'accidental-grob)))
+   (if (not (null? accidental))
+    (for-each
+     (lambda (x)
+      (ly:grob-set-property! accidental (car x) (cdr x)))
+     prop-alist))))
+
+%% get the X-extend of a markup used as accidental
+#(define (markup-X-extent markup) 
+  (lambda (grob)
+   (ly:stencil-extent (grob-interpret-markup grob markup) X)))
+
+#(define (markup-X-extent markup)
+  (lambda (grob)
+   (interval-translate (ly:stencil-extent (grob-interpret-markup grob markup) X)     
+;   -0.7
+    -0.5
+  )))
+
+%% setting the text of a chord accidental to a given markup
+#(define (accidental-text markup)
+  (lambda (grob)
+   (modify-accidental grob   
+    `(; show the markup extend as box (for debugging)
+      ; (stencil . ,(lambda (grob) (box-stencil (ly:text-interface::print grob) 0 0)))
+      (stencil . ,ly:text-interface::print)
+      (text . ,markup)       
+      (X-extent . ,(markup-X-extent markup))))))
+
+%% Sets accidental of next note to a markup created with the given string using the HE font.
+HE = 
+#(define-music-function (parser location marktext) (string?)
+  #{
+  %% all accidentals are written as markups
+  \once \override Accidental #'stencil = #ly:text-interface::print
+  %% show the markup extend as box (for debugging)
+%   \once \override Accidental #'stencil = #(lambda (grob) (box-stencil (ly:text-interface::print grob) 0 0))
+  \once \override Accidental #'text = \markup { \sans $marktext }
+  \once \override Accidental #'X-extent = #(markup-X-extent (markup #:sans $marktext))
+  #})
+
+%% expects a markup and sets accidental of next note to that markup
+markupHE =
+#(define-music-function (parser location markup) (markup?)
+  #{
+  %% all accidentals are written as markups
+  \once \override Accidental #'stencil = #ly:text-interface::print
+  %% show the markup extend as box (for debugging)
+%   \once \override Accidental #'stencil = #(lambda (grob) (box-stencil (ly:text-interface::print grob) 0 0))
+  \once \override Accidental #'text = #$markup
+  \once \override Accidental #'X-extent = #(markup-X-extent $markup)
+  #})
+
+%% Sets accidental of next chord note to a markup created with the given string using the HE font.
+%% markup. \override does not work for chords nor for accidentals, so
+%% a special technique is required
+chordHE =
+#(define-music-function (parser location marktext mus) (string? ly:music?)  
+  (set! (ly:music-property mus 'tweaks)        
+   (acons 'before-line-breaking
+    (accidental-text (markup #:sans marktext))               
+    (ly:music-property mus 'tweaks)))
+  mus) 
+
+%% expects a markup and sets accidental of next chord note to that markup
+markupChordAccidental =
+#(define-music-function (parser location mkup mus) (markup? ly:music?)  
+  (set! (ly:music-property mus 'tweaks)        
+   (acons 'before-line-breaking (accidental-text mkup)               
+    (ly:music-property mus 'tweaks)))
+  mus) 
+
+
+%% accidental rule set outside score so it can be defined in \layout
 dodecaphonic = #`(Staff ,(lambda (c p bn mp) '(#f . #t)))
+
 \layout {
-  \context { \Score % or Staff, or Voice
-	     autoAccidentals = #dodecaphonic
-	     autoCautionaries = #dodecaphonic
-	   }
+  \context 
+  { \Score
+    %% there is an accidental for every note 
+    autoAccidentals = #dodecaphonic
+    autoCautionaries = #dodecaphonic
+    %% show the markup extend as box (for debugging)§
+%     \override Accidental #'stencil = #(lambda (grob) (box-stencil (ly:text-interface::print grob) 0 0))
+    %% by default all accidentals are written as markups
+    \override Accidental #'stencil = #ly:text-interface::print
+    %% default is the natural accidental
+    \override Accidental #'text = #(markup #:sans "n")   
+    \override Accidental #'X-extent = #(markup-X-extent (markup #:sans "n"))  
+    %% more space between all notes 
+%     \override SpacingSpanner #'base-shortest-duration = #(ly:make-moment 1 16)
+  }
 }
 
 \score{
