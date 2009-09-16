@@ -20,6 +20,7 @@
     - GUtils.toProc: refactored version now supports optional arguments with default values 
     - Init: added SetNoteLengthsRecord, SymbolicDurToInt
     - Out.toLilypond and friends: implicit clef is now controllable with argument getClef
+    - Out.makeNoteToLily2: function has been completely rewritten with a now more general interface 
     - Out.averagePitchClef added
     - SMapping: added MapTimeslices ForTimeslices
     - ET22.db: interval database now defined as ratios for adaptive JI
