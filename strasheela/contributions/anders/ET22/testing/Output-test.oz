@@ -23,6 +23,7 @@ MyScore = {Score.makeScore
 	       timeUnit:beats)
 	   unit(seq:Score.sequential
 		note:HS.score.note)}
+{MyScore wait}
 {ET22.out.renderAndShowLilypond MyScore
  unit(file:"all-22ET-pitches")}
 
