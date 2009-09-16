@@ -4,12 +4,6 @@ declare
 {HS.db.setDB ET41.db.fullDB}
 
 
-/*
-
-{HS.db.getEditIntervalDB}
-
-*/
-
 
 /*
 
@@ -40,9 +34,8 @@ end
     MyScore = {MakeScore DB_Entry}
  in
     {MyScore wait}
-%% TMP comment
-%     {ET41.out.renderAndShowLilypond MyScore
-%      unit(file:{MyScore getInfoRecord($ doc)}.1)}
+    {ET41.out.renderAndShowLilypond MyScore
+     unit(file:{MyScore getInfoRecord($ doc)}.1)}
     {Out.renderAndPlayCsound MyScore
      unit(file:{MyScore getInfoRecord($ doc)}.1)}
  end}
@@ -81,9 +74,8 @@ end
     MyScore = {MakeScore DB_Entry}
  in
     {MyScore wait}
-%% TMP comment
-%     {ET22.out.renderAndShowLilypond MyScore
-%      unit(file:{MyScore getInfoRecord($ doc)}.1)}
+    {ET41.out.renderAndShowLilypond MyScore
+     unit(file:{MyScore getInfoRecord($ doc)}.1)}
     {Out.renderAndPlayCsound MyScore
      unit(file:{MyScore getInfoRecord($ doc)}.1)}
  end}
@@ -95,7 +87,7 @@ end
 /* 
 
 
-%% chord db with errors..
+%% chord db with tuning errors of JI pitches: most are below 3 cent, only 147/1 has error -5.46
 {Browse {Record.map ET41.db.fullDB.chordDB fun {$ R} R.comment.pitchClasses end}}
 
 
