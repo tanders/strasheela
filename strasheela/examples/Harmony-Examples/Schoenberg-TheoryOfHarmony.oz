@@ -8,7 +8,6 @@
 %%
 %% TODO:
 %%
-%% - output seems broken after I revised 31 ET output
 %%
 %% - I may notate the chord scale degrees with Roman numerals. Seems this is not predefined in lily. So, I would have to specify that the chord seq is ignored in Lily, and then define a special output for the bass notes which accesses the sim chords, translates their scale degree into a text string and prints that with a text markup.
 %%   NOTE: some other Lily users use a \Lyrics context for roman numerals 
