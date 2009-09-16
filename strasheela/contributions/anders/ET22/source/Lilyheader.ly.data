@@ -110,6 +110,10 @@ etTwentytwoGlyphs = #'((1 . "accidentals.doublesharp")
        (-1 . "accidentals.flatflat")
        )
 
+
+
+\score{
+
 { 
 \override Score.Accidental #'glyph-name-alist =  \etTwentytwoGlyphs
 
@@ -118,6 +122,3 @@ etTwentytwoGlyphs = #'((1 . "accidentals.doublesharp")
 % test
 % \relative { c4 ccu cscd cs d dcd dfcu df c }
 % }
-
-
-\score{
