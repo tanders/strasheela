@@ -125,8 +125,17 @@ define
    C={NewCell 1}
    /* %% outputs a Score to a file. */
    proc {WriteLilyFile BaseFilename MyScore}
-      Filename=BaseFilename#@C
+      Filename
+      Pad
    in
+      if (@C<10) then
+        Pad = '000'#@C
+      elseif (@C<100) then
+        Pad = '00'#@C
+      elseif (@C<1000) then
+        Pad = '0'#@C
+      end
+      Filename = BaseFilename#Pad
       {Out.outputLilypond
        MyScore
        unit(file:Filename
