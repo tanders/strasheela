@@ -57,6 +57,7 @@ import
 export
    PlainPattern PlainPattern2
    Continuous AllEqual Increasing Decreasing
+   NoRepetition
    Arc
    InInterval
    Cycle Cycle2 Rotation Heap Random Palindrome Line Accumulation
@@ -101,6 +102,7 @@ export
    SymbolToDirection DirectionToSymbol
    Direction DirectionR Contour InverseContour ContourMatrix
    DirectionOfContour
+   Undulating 
    Hook Stairs
    DirectionChangeR LocalMaxR LocalMinR
    GetLocalMax GetLocalMin ConstrainLocalMax ConstrainLocalMin
@@ -174,6 +176,11 @@ define
    % */
    proc {AllEqual Xs}
       {Continuous Xs '=:'}
+   end
+   /** %% Consecutive values in Xs are not equal.
+   %% */
+   proc {NoRepetition Xs}
+      {Continuous Xs '\\=:'}
    end
 
    
@@ -1164,7 +1171,31 @@ define
        Min 100}
    end
 
-   
+
+   /** %% Restricts the occurances of "changes of direction" (local min/max) in Xs.
+   %%
+   %% Args:
+   %% min (default 3): minimal number of elements in X without a direction change (i.e. change of direction occurs at position min+1 the earliest).
+   %% max (default false): maximal number of elements in X without a direction change (ignored if false).
+   %%
+   %% Note: if a local max/min is repeated, then this does not count as a change of direction! 
+   %%
+   %% */
+   proc {Undulating Xs Args}
+      Defaults = unit(min: 3
+		      max: false)
+      As = {Adjoin Defaults Args}
+      DirChangeBs = {MapNeighbours Xs 3
+		     fun {$ [X Y Z]} {DirectionChangeR X Y Z} end}
+   in
+      {ForNeighbours DirChangeBs As.min
+       proc {$ Ys} {FD.sum Ys '=<:' 1} end}
+      if As.max \= false then
+	 {ForNeighbours DirChangeBs As.max
+	  proc {$ Ys} {FD.sum Ys '>=:' 1} end}
+      end
+   end
+
 
    /** %% Contour constraint where all intervals go in the same directions except one. The interval which goes in the opposite direction always either goes up or down (no repetition).
    %%
