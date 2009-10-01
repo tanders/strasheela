@@ -30,8 +30,8 @@
     - Segs.makeCounterpoint: added arg clearDissonanceResolution (before this constraint was always enabled).
     - Segs: added mixin scripts (partly removing orig extended script altogether): MakeCounterpoint_Mixin, PitchPattern, FenvContour, Arpeggio, Arc, Repetitions, Hook, Stairs, MakeAkkord_Mixin, MakeAkkords_Mixin  
     - Segs.homophonicChordProgression: added args playAllChordTones, noVoiceCrossing, maxUpperVoiceDistance
-    - HS.rules: added GetRootDegreeIntervals SetBoundaryRoots SetBoundaryTypes NoParallels2.
-    - Pattern: added MinDistinct, DirectionOfContour, LocalMinR, GetLocalMax, GetLocalMin, ConstrainLocalMax, ConstrainLocalMin
+    - HS.rules: added GetRootDegreeIntervals SetBoundaryRoots SetBoundaryTypes NoParallels2 Ballistic
+    - Pattern: added MinDistinct, DirectionOfContour, LocalMinR, GetLocalMax, GetLocalMin, ConstrainLocalMax, ConstrainLocalMin, NoRepetition and Undulating
     - HS.score: refactored HarmonicRythmFollowsMarkers: now works also for items with offsetTime > 0 
     - Removed proc GUtils.selectArg (better use Adjoin or CondSelect instead)
     - Removed GUtils.isInt (result wrong for FD ints): use FD.is or IsInt instead
