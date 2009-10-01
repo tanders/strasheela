@@ -955,6 +955,20 @@ Zs = {FD.list {Length Xs}-1 0#10}
  end}
 
 
+
+%%
+%% Pattern.undulating
+%%
+
+{ExploreOne
+ proc {$ Xs}
+    Xs = {FD.list 20 0#20}
+    {Pattern.undulating Xs unit(min:3)}
+    {Pattern.noRepetition Xs}
+    {FD.distribute ff Xs}
+ end}
+
+
 %%
 %% Pattern.hook
 %%
