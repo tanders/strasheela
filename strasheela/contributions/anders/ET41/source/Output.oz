@@ -199,7 +199,10 @@ define
    LilyFooter = "\n}"
       
    
-   /** %% Lilypond output for 41 ET.
+   /** %% Lilypond output for 41 ET. The output uses the accidental font HE, which is available at http://music.calarts.edu/~msabat/ms/pdfs/HE-font-2009.zip. First install the HE font before using ET41.out.renderAndShowLilypond.
+   %%
+   %% ET41.out.renderAndShowLilypond is a customised version of HS.out.renderAndShowLilypond, which in turn customises Out.renderAndShowLilypond.
+   %%
    %%
    %%
    %% Args:
