@@ -180,7 +180,7 @@ export
    ClearDissonanceResolution IntervalBetweenNonharmonicTonesIsConsonant
    MaxInterval MaxNonharmonicNoteSequence MaxNonharmonicNotePercent MaxRepetitions MinPercentSteps
 
-   
+   Ballistic   
    
 define
 
@@ -1294,7 +1294,67 @@ define
       {Pattern.percentTrue_Range Bs MinPercent 100}
    end
 
-   
+
+   /** %% After a skip, either move into the same direction by a smaller skip or step, or move into the opposite direction. Pitches is a list of FD ints.
+   %%
+   %% Args:
+   %% 'maxStep' (default 8#7): maximal step size, specified as ratio (pair of integers).
+   %% 'oppositeIsStep' (default false): if true and direction is changed after a skip, then this first interval into the opposite direction must be a step.
+   %%
+   %% */
+   %%
+   %% BUG:
+   %%
+   %% - [is this bug?] there can be an 'unresolved' skip at the end...
+   %% - [is this bug?] there can be a step upwards before a skip in the same direction -- this is not strictly ballistic..
+   %% 
+   proc {Ballistic Pitches Args}
+      Default = unit(maxStep: 8#7
+		     oppositeIsStep: false)
+      As = {Adjoin Default Args}
+      MaxStep = {FloatToInt {MUtils.ratioToKeynumInterval As.maxStep
+			     {IntToFloat {DB.getPitchesPerOctave}}}}
+   in
+      {Pattern.forNeighbours Pitches 3
+       proc {$ [P1 P2 P3]}
+	  Dist1 = {FD.decl}
+	  Dist2 = {FD.decl}
+	  Dir1 = {Pattern.direction P1 P2}
+	  Dir2 = {Pattern.direction P2 P3}
+       in
+	  Dist1 = {FD.distance P1 P2 '=:'}
+	  Dist2 = {FD.distance P2 P3 '=:'}
+	  %% in case of a skip
+	  {FD.impl (Dist1 >: MaxStep)
+	   {FD.disj
+	    %% either move into the same direction, upwards by a
+	    %% smaller interval and downwards by a bigger interval
+	    {FD.conj
+	     (Dir1 =: Dir2)
+	     {FD.disj
+	      {FD.conj
+	       (Dir1 =: {Pattern.symbolToDirection '+'})
+	       (Dist1 >: Dist2)}
+	      {FD.conj
+	       (Dir1 =: {Pattern.symbolToDirection '-'})
+	       (Dist1 <: Dist2)}}}
+	    %% or move into the opposite direction (and don't simply repeat)
+	    {FD.conj
+	     (Dir1 \=: Dir2)
+	     (Dir2 \=: {Pattern.symbolToDirection '='})}}
+	   1}
+	  if As.oppositeIsStep then
+	     %% in case of a direction change after a skip
+	     {FD.impl {FD.conj
+		       (Dist1 >: MaxStep)
+		       (Dir1 \=: Dir2)}
+	      %% the next interval is a step
+	      (Dist2 =<: MaxStep)
+	      1}	    
+	  end
+       end}
+   end
+
    
    /*
    %% ?? combining multiple  non-harmonic pitch conditions (e.g. for ornamental resolution)
