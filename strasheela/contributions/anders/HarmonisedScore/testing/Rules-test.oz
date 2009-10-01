@@ -364,3 +364,20 @@ Ab_Major = {Score.make chord(index: {HS.db.getChordIndex 'major'}
 	 unit(ignoreUnisons:false)}}
 
 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%% HS.rules.ballistic
+%%
+
+%% not really a convincing test...
+{ExploreOne
+ proc {$ Xs}
+    Xs = {FD.list 20 0#20}
+    {HS.rules.ballistic Xs unit}
+    {FD.distance {Nth Xs 1} {Nth Xs 2}  '>:' 7}
+%    {Pattern.noRepetition Xs}
+    {FD.distribute ff Xs}
+ end}
+
+
