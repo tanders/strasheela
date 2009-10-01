@@ -56,6 +56,59 @@ MakeTestMotif1
  end
  unit}
     
+*/
+
+
+
+declare
+/** %% subscript that creates a list of notes instead of a seq and uses counterpoint mixin.
+%%
+%% */
+MakeTestMotif_NoteList
+= {Segs.tSC.defSubscript
+   unit(super:Score.makeItems_iargs % list of items instead of a container
+	mixins: [Segs.makeCounterpoint_Mixin]
+	motif: unit(%% explicit number of notes to avoid any ambiguity
+		    %% (e.g., pitchContour has less elements) 
+		    n: 5
+		    %% 5 notes specified
+		    durations: [2 2 3 1 6]#fun {$ Ns} {Pattern.mapItems Ns getDuration} end
+		   )
+	transformers: [Segs.tSC.removeNotesAtEnd]
+	idefaults: unit(%% to add DomSpec support
+			constructor: {Score.makeConstructor HS.score.note unit}
+% 			pitch: fd#(60#72)
+		       )
+% 	rdefaults: unit
+       )
+   nil				% Body
+  }
+
+/* 
+
+{SDistro.exploreOne
+ proc {$ MyScore}
+    End
+ in
+    MyScore
+    = {Score.make
+       sim([seq([seq(motif(rargs:unit(removeNotesAtEnd: 0
+				      maxPitch: 'C'#5 
+				      minPitch: 'C'#4)))
+		 seq(motif(rargs:unit(removeNotesAtEnd: 1
+				      maxPitch: 'G'#5 
+				      minPitch: 'G'#4))
+		     endTime: End)])
+	    chord(index:1
+		  transposition:0
+		  endTime: End)]
+	    startTime:0
+	    timeUnit: beats(4))
+       add(motif:MakeTestMotif_NoteList
+	   chord:HS.score.chord)}
+ end
+ unit(value:random)}
+
 
 */
 
