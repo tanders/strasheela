@@ -7,7 +7,7 @@
 %% marked by a "SELECT" in comments.
 %%
 %% Usage: first feed buffer, to feed definitions shared by all
-%% examples. The feed the respective example in a /* comment block */.
+%% examples. Then feed the respective example in a /* comment block */.
 %%
 
 declare
