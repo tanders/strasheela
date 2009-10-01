@@ -42,17 +42,19 @@
     Approach: Change this in Fenv.itemFenvsToMidiCC (i.e. check when Controller==pitchbend and then optionally shift that fenv depending on some new arg to Fenv.itemFenvsToMidiCC), and then also change all defs using it (only defs in Fenv)
 
 
-*** csvmidi seems to support MIDI ports, so I can have > 16 chans in total  
+** MIDI output: use ports/tracks
 
-    *Anyway, for now I may simply support single port with 16 chans*
+   csvmidi seems to support MIDI ports, so I can have > 16 chans in total  
 
-    --------------------
+   !! Ports are used as tracks in Cubase??
 
-    Doc: http://www.fourmilab.ch/webtools/midicsv/    
-    /Track, Time, MIDI_port, Number/
-    This meta-event specifies that subsequent events in the Track should be sent to MIDI port (bus) Number, between 0 and 255. This meta-event usually appears at the start of a track with Time zero, but may appear within a track should the need arise to change the port while the track is being played. 
+   ----
 
-    -> I would likely need to refactor MIDI file output such that multiple tracks are output...
+   Doc: http://www.fourmilab.ch/webtools/midicsv/    
+   /Track, Time, MIDI_port, Number/
+   This meta-event specifies that subsequent events in the Track should be sent to MIDI port (bus) Number, between 0 and 255. This meta-event usually appears at the start of a track with Time zero, but may appear within a track should the need arise to change the port while the track is being played. 
+
+   -> I would likely need to refactor MIDI file output such that multiple tracks are output...
 
 
 
@@ -220,15 +222,4 @@ If problems occur ask gustavo.ggutierrez@gmail.com
 
 * Tasks for Le StruM						       :WAIT:
 
-  [Wait for Eduardo to by Ableton Suite]
-
-  see: file:~/texte/Plymouth/Project/
-
-
-** Learn Ableton Suite (overview)
-
-** Learn MIDI out capabilities or Waverider
-
-** Develop strategies how to MIDI remote-control Ableton with Waverider
-
-** Develop little demo session 
+ 
