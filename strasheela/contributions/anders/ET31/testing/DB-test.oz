@@ -16,7 +16,7 @@ declare
 {Browse {Record.map ET31.db.fullDB.chordDB fun {$ R} R.comment.pitchClasses end}}
 
 
-
+{Width ET31.db.fullDB.scaleDB}
 
 
 
