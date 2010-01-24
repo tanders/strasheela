@@ -703,7 +703,7 @@ define
 
 
    /** %% Applies unary procedure P to each element in Xs which index is expressed by Decl. Decl is a list which contains single index integers, or index ranges of the form Min#Max (Min and Max are integers).
-   %% BTW: ForNumericRange corresponds roughly to one of the rule application mechanisms of Situation. The rule applicator `mapIndex' in Strasheela publications is the function equivalent.
+   %% BTW: ForNumericRange corresponds roughly to one of the rule application mechanisms of Situation. The rule applicator `mapIndex' in some earier Strasheela publications is the function equivalent. However, the CMJ paper on this matter introduces a more complex function under the name `mapIndex' which corresponds to ForNumericRangeArgs without the ElseP argument.
    %% */
    proc {ForNumericRange Xs Decl P}
       {ForNumericRange2 Xs Decl P proc {$ X} skip end}
@@ -737,7 +737,7 @@ define
    /** %% Applies binary procedure P to each element in Xs which index is expressed by Decl -- together with additional arguments for that index. To all other elements of Xs the unary procedure ElseP is applied instead.
    %% Decl is a list which contains single index integers plus constraint arguments in the form Ind#Args, or index ranges plus constraint arguments in the form (Min#Max)#Args. The index Ind and the range boundaries Min and Max are integers, Args is a list of arbitrary values (and can be nil).
    %%  ForNumericRangeArgs implements a generalised variant of ForNumericRange (and ForNumericRange2) which implements an extended syntax for Decl.
-   %% The rule applicator `mapIndexArgs' in Strasheela publications is the function equivalent.
+   %% The rule applicator `mapIndexArgs' in earier Strasheela publications is the function equivalent. However, the CMJ paper on this matter introduces a more complex function under the name `mapIndex' which corresponds to ForNumericRangeArgs without the ElseP argument.
    %% */ 
    proc {ForNumericRangeArgs Xs Decl P ElseP}
       XsLength = {Length Xs}
