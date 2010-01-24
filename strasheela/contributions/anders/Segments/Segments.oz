@@ -664,7 +664,7 @@ MakeCounterpoint_PatternMotifs_OffsetDurationPitchcontour
 	 in
 	    sim([{Adjoin Sim
 		  sim(endTime: End)} 
-		 MyChord])
+		 seq([MyChord])])
 	 end}
    in
       MyScore
@@ -685,7 +685,7 @@ MakeCounterpoint_PatternMotifs_OffsetDurationPitchcontour
    %% All other top-level arguments are given to the top-level seq.
    %%
    %% Args.segments:
-   %% tuple of segment specifications, where each segment specifications is a record of the following arguments. (In principle it can be a record, but then the temporal order of segments depends on the order of features in the record)
+   %% tuple of segment specifications, where each segment specifications is a record of the following arguments. (In principle Args.segments can be a record, but then the temporal order of segments depends on the order of features in the record.)
    %% 'constructor': extended script (binary procedure) for creating the layer, commonly created with Score.defSubscript. Should return a score object (not a list of score objects).
    %% All other arguments in Args.segments are given to this constructor.
    %%
