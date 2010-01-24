@@ -12,6 +12,8 @@
 
 Strasheela is a highly expressive constraint-based music composition system.[2] The Strasheela user declaratively states a music theory and the computer generates music which complies with this theory. A theory is formulated as a constraint satisfaction problem (CSP) by a set of rules (constraints) applied to a music representation in which some aspects are expressed by variables (unknowns). Music constraint programming is style-independent and is well-suited for highly complex theories (e.g. a fully-fledged theory of harmony). User-interface is the programming language Oz. The results can be output into various formats including MIDI, Csound, and Lilypond. 
 
+Strasheela is developed at the [[http://cmr.soc.plymouth.ac.uk/][Interdisciplinary Centre for Computer Music Research (ICCMR)]] at the [[http://www.plymouth.ac.uk/][University of Plymouth]].
+
 <contents depth="1">
 
 * News 
