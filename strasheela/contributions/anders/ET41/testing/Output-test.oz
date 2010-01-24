@@ -28,8 +28,11 @@ MyScore = {Score.makeScore
 {ET41.out.renderAndShowLilypond MyScore
  unit(file:"41ET-test")}
 
+*/
 
-%% chord notation test
+/*
+
+%% Lily chord notation test
 declare
 fun {MakeChord PCs}
    sim({Map PCs
@@ -51,5 +54,28 @@ MyScore = {Score.make
 {ET41.out.renderAndShowLilypond MyScore
  unit(file:"41ET-test2")}
 
+*/
+
+
+/* 
+
+%% chord and scale test
+declare
+MyScore = {Score.make
+	   sim([seq([chord(index:1
+			   transposition:1
+			   duration:4)])
+		seq([scale(index:1
+			   transposition:1
+			   duration:4)])]
+	       startTime:0
+	       timeUnit:beats)
+	   add(note:HS.score.note
+	       chord:HS.score.chord
+	       scale:HS.score.scale)}
+{MyScore wait}
+%% 
+{ET41.out.renderAndShowLilypond MyScore
+ unit(file:"41ET-test3")}
 
 */
