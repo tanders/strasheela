@@ -23,6 +23,7 @@
     - Out.makeNoteToLily2: function has been completely rewritten with a now more general interface 
     - Out.averagePitchClef added
     - SMapping: added MapTimeslices ForTimeslices
+    - SDistro: added SearchBest_Timeout
     - ET22.db: interval database now defined as ratios for adaptive JI
     - ET22.out: added NoteEt22ToLily_AdaptiveJI2, PajaraRMS_TuningTable, JI_TuningTable
     - ET31.out: added NoteEt31ToLily_AdaptiveJI2, Meantone_TuningTable, JI_TuningTable
@@ -30,21 +31,25 @@
     - Segs.makeCounterpoint: added arg clearDissonanceResolution (before this constraint was always enabled).
     - Segs: added mixin scripts (partly removing orig extended script altogether): MakeCounterpoint_Mixin, PitchPattern, FenvContour, Arpeggio, Arc, Repetitions, Hook, Stairs, MakeAkkord_Mixin, MakeAkkords_Mixin  
     - Segs.homophonicChordProgression: added args playAllChordTones, noVoiceCrossing, maxUpperVoiceDistance
-    - HS.rules: added GetRootDegreeIntervals SetBoundaryRoots SetBoundaryTypes NoParallels2 Ballistic
-    - Pattern: added MinDistinct, DirectionOfContour, LocalMinR, GetLocalMax, GetLocalMin, ConstrainLocalMax, ConstrainLocalMin, NoRepetition and Undulating
+    - HS.rules: added GetRootDegreeIntervals, SetBoundaryRoots, SetBoundaryTypes, NoParallels2, Ballistic, MinCard
+    - Pattern: added MinDistinct, DirectionOfContour, LocalMinR, GetLocalMax, GetLocalMin, ConstrainLocalMax, ConstrainLocalMin, FenvContour2, NoRepetition and Undulating
     - HS.score: refactored HarmonicRythmFollowsMarkers: now works also for items with offsetTime > 0 
     - Removed proc GUtils.selectArg (better use Adjoin or CondSelect instead)
     - Removed GUtils.isInt (result wrong for FD ints): use FD.is or IsInt instead
 
   - Further bug fixes and changes
     - Oz primitives like IsRecord, IsAtom etc. block on kinded variables (undetermined FD and FS vars), which could cause blocking of various Strasheela definitions. Now Strasheela always uses its new own GUtils.isRecord and GUtils.isAtom etc. which do not have this problem
+    - Lilypond output: if score started with offset time, then this leading rest was ignored in the Lilypond output (now fixed). Also, score now by default wrapped in braces, and default Lilypond version updated to "2.12.0".
+    - HS.out.renderAndShowLilypond: revised args codeBeforeNoteMakers and codeBeforePcCollectionMakers. Also, chord and scale objects are again notated with grace notes /before/ root (grace notes after the root (using \aftergrace) are incompatible with HE notation). 
     - HS.score: GetAdaptiveJIPitch: added arg tuneNonharmonicNotes, added GetAdaptiveJIPitch2, chord root now as in current tuning table or underlying ET (if no tuning table is defined), dependance on scale removed (can be completely wrong, e.g., with just major scale, major nineth of V would be syntonic comma too low)
     - HS.out.renderAndShowLilypond: changed output of chord pitch classes to octave above middle C
     - HS.score.degreeToPC: fixed propagation error 
     - HS.db: Pc2Ratios now returns nil if no ratio was defined for interval
+    - Fixed HS.pcName
     - Fenv method toList: fixed bug for case N=1
     - Out.midi.getChannel now uses mini chan param of midi note objects (not only channel info tag)
     - Refactored ET22 and ET31 output: now much reduced code with same functionality using HS.out, several procs before exported by ET22 and ET31 are now moved to HS.out
+    - Segs.homophonicChordProgression: replaced arg 'isToplevel' by arg 'makeTopLevel' for generality; fixed bug: constraint of arg maxUpperVoiceDistance now actually applied to upper voices
 
 
   - For further fixes see the [[http://apps.sourceforge.net/trac/strasheela/timeline][Trac Timeline]] or the [[../CHANGELOG.txt]].
