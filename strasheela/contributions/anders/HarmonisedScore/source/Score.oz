@@ -345,9 +345,9 @@ define
       {DegreeToPC CMajorScale Degree#Accidental PC}
    end
       
-   /** %% Constrains the transposition of the degree-represented pitch UntransposedDegree#UntransposedPC by TranspositionDegree#TranspositionPC to reach the degree-represented pitch TransposedDegree#TransposedPC. The transposition interval is specified by a combination of a degree distance (e.g. 5 to represent a fifth) plus the pitch class of this interval (BTW: a similar representation is also used in MusES for an enharmonic representation).
+   /** %% Constrains the transposition of the degree-represented pitch UntransposedDegree#UntransposedPC by TranspositionDegree#TranspositionPC to reach the degree-represented pitch TransposedDegree#TransposedPC. The transposition interval is specified by a combination of a degree distance (e.g. in the C major scale 5 represents a fifth) plus the pitch class of this interval (BTW: a similar representation is also used in MusES for an enharmonic representation).
    %% For example, in case CollectionPCs is C major: II# + fifth = VI# (i.e. d# + fifth = a#)
-   {TransposeDegree [0 2 4 5 7 9 11]
+   {TransposeDegree {GUtils.intsToFS [0 2 4 5 7 9 11]}
     2#3
     5#7
     6#10}
@@ -418,9 +418,9 @@ define
 %       TransposedDegree =: {FD.modI Aux {Length CollectionPCs}}
 %    end
 
-   /** %% Returns the chord/scale degree (FD int) for (FD int). MyPCColl is the chord/scale object to which the degree corresponds.
+   /** %% Returns the chord/scale degree (FD int) for PitchClass (FD int). MyPCColl is the chord/scale object to which the degree corresponds.
    %%
-   %% Args"
+   %% Args:
    %% 'accidentalRange' (int) specifies how many pitch class steps PitchClasses can be "off" (if AccidentalRange==0, then all PitClasses must be in the chord/scale).
    %%
    %% Note: very weak propagation -- MyPCColl must first be determined.
