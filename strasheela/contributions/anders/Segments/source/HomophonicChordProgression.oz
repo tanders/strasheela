@@ -28,17 +28,9 @@ define
 
    /** %% Top-level script or subscript for creating homophonic chord progressions. The individual voices are created with Segs.makeCounterpoint_Seq, the underlying chords (and optionally scales) are given as arguments.
    %%
-   %% Score topology (chords and scales are optional, see below):
-   %%
-   %% sim([seq(note+)+
-   %%      seq(chord+)
-   %%      seq(scale+)])
-   %%
-   %% The number of chords determines the number of notes per voice, the start time of each chord equals the start times of the sim notes (so the resulting score is truely homophonic), and the sim notes must sound all pitch classes of the chord (i.e. arg voiceNo must be high enough, see below). No voice crossing is permitted, the highest voice is the first and so forth. For inversion chords, the bass plays the bass pitch class of the chord (the soprano pitch class is ignored). The upper voices are at maximum an ocatve apart of each other.  
+   %% The number of chords determines the number of notes per voice, the start time of each chord equals the start times of the sim notes (so the resulting score is truely homophonic), and the sim notes must sound all pitch classes of the chord (i.e. arg voiceNo must be high enough, see below). No voice crossing is permitted, the highest voice is the first and so forth. For inversion chords, the bass plays the bass pitch class of the chord (the soprano pitch class is ignored). The upper voices are at maximum an octave apart of each other.  
    %%
    %% Args:
-   %% 'isToplevel' (default true): if true, returns fully initialised score where chords and scales are part of score, otherwise score is not fully initialised and chords/scales are left out. 
-   %% 'voiceNo' (default 4): number of voices
    %% 'chords' (default {HS.score.makeChords unit}): non-nil list of chords. Remember that neither score objects nor variables can be in the top-level space, so the chords (and scales) to HomophonicChordProgression must be created inside a script.  
    %% 'scales' (default nil): list of scales.
    %% 'restrictMelodicIntervals' (default unit(minPercent:60 maxPercent:100)): if non-false then the intervals between upper voices are a fifths at most, and the bass is a fifths at most or an octave. The args minPercent/maxPercent specify the percentage boudary of the number of steps in the upper voices. Disabled if false.
@@ -47,13 +39,55 @@ define
    %% 'playAllChordTones' (default true): if true, all chord tones are played.
    %% 'noVoiceCrossing' (default true): if true, no voice crossings are permitted.
    %% 'maxUpperVoiceDistance' (default {HS.db.getPitchesPerOctave}): maximum interval between upper voices (interval to bass can be larger).
-   %% 'sliceRule' (default proc {$ Xs} skip end): unary constraint applied to the list MyChords | Notes at each "time slice" (i.e., for each chord and the notes sim to this chord). Notes are the notes in descending order (i.e. Bass last).
+   %% 'sliceRule' (default proc {$ Xs} skip end): unary constraint applied to the list MyChord | Notes at each "time slice" (i.e., for each chord and the notes sim to this chord). Notes are the notes in descending order (i.e. Bass last).
+   %% 'makeTopLevel' (a function with the interface {$ Voices End Args}, returning a container): By default, HomophonicChordProgression returns a fully initialised score object with the following topology (chords and scales are optional).
+   %%
+   %% sim([seq(note+)+
+   %%      seq(chord+)
+   %%      seq(scale+)])
+   %%
+   %% This score topology can be overwritting with the argument 'makeTopLevel', which expects a function with the following arguments: Voices is a list of sequential containers containing notes that represent the individual voices; End (an FD int) is the end time that is shared by all voices (can be used to constrain, e.g., the end time of the chord sequence); and Args is the record of arguments expected by HomophonicChordProgression. For example, if you do not want HomophonicChordProgression to return a fully initialised score object and if chords/scales should be left out, then you can set the argument makeTopLevel to the following function.
+   
+   fun {$ Voices End Args}
+      {Score.make2 sim(Voices) 
+       unit}
+   end
+
+   %% The following second example of a makeTopLevel function changes the score topology such that the default Strasheela Lilypond export will export the first 2 voices in the first staff and the rest in the second staff.
+
+   fun {$ Voices End Args}
+      UpperStaffVoices LowerStaffVoices
+   in
+      %% attach first 2 voices to UpperStaffVoices and rest to LowerStaffVoices
+      {List.takeDrop Voices 2 UpperStaffVoices LowerStaffVoices}
+      %%
+      {Score.make
+       sim([%% surrounding seq for default Lily output
+	    %% (which can be customised with Out.toLilypond arg 'hasImplicitStaff')
+	    seq([sim(UpperStaffVoices)])
+	    seq(%% Set to bass clef.
+		%% Invisible grace note necessary to put clef at the very beginning 
+		info:lily("\\clef bass \\grace s")
+		[sim(LowerStaffVoices)])
+	    seq(info:lily("\\set Staff.instrumentName = \"Anal.\"")
+		Args.chords
+		endTime: End)
+	    %% uncomment if scale should be included
+% 	    seq(Args.scales
+% 		endTime: End)
+	   ]
+	   startTime: 0)
+       unit}
+   end
+   
    %%
    %% Further Args.iargs, Args.rargs: as for Segs.makeCounterpoint_Seq
    %% Args.iargs.n overwritten (is length of chords)
    %% Further Args: for top-level sim.
    %%
    %% */
+   %%
+   %% Note: arg isTopLevel has been substituted by the more general argument makeTopLevel. 
    %%
    %% TODO:
    %%
@@ -73,7 +107,27 @@ define
    %% ?? - split HomophonicChordProgression: this subscript only creates notes, chords and scales are extra
    %%
    proc {HomophonicChordProgression Args ?MyScore}
-      Defaults = unit(isToplevel: true
+      Defaults = unit(makeTopLevel:
+			 fun {$ Voices End Args}
+			    {Score.make
+			     {Adjoin sim({Append Voices
+					  {Append
+					   [seq(info:lily("\\set Staff.instrumentName = \"Anal.\"")
+						Args.chords
+						endTime: End)]
+					   case As.scales of nil then nil else
+					      [seq(Args.scales
+						   endTime: End)]
+					   end}}
+					 startTime: 0)
+			      {Record.subtractList
+			       {Adjoin Args sim} % keep toplevel label
+			       [makeTopLevel voiceNo iargs rargs chords scales
+				commonPitchesHeldOver noParallels restrictMelodicIntervals
+				playAllChordTones noVoiceCrossing maxUpperVoiceDistance
+				sliceRule]}}
+			     unit}
+			 end 
 		      voiceNo: 4 % voices
 		      iargs: unit()
 		      rargs: unit
@@ -101,31 +155,7 @@ define
       Nss
       ChordAndNotesSlices
    in
-      %% ?? shall top-level constructor be arg, so that different score topologies are possible?
-      MyScore
-      = if As.isToplevel then
-	   {Score.make
-	    {Adjoin
-	     sim({Append Voices
-		  {Append
-		   [seq(As.chords
-			endTime: End)]
-		   case As.scales of nil then nil else
-		      [seq(As.scales
-			   endTime: End)]
-		   end
-		  }}
-		)
-	     {Adjoin {Record.subtractList As {Arity Defaults}}
-	      sim(startTime: 0)}}
-	    unit}
-	else
-	   {Score.make2 
-	    {Adjoin sim(Voices)
-	     {Adjoin {Record.subtractList As {Arity Defaults}}
-	      sim}}
-	    unit}
-	end
+      MyScore = {As.makeTopLevel Voices End As}
       %%
       %% constraints on individual "note slices"
       %%
@@ -238,10 +268,11 @@ define
 	   1}
        end}
    end
-   /** %% The upper voices are max an ocatve apart of each other. Notes is same args as for NoVoiceCrossing.
+   /** %% The upper voices are at max MaxDistance apart of each other. Notes is same args as for NoVoiceCrossing.
    %% */
    proc {ConstrainUpperVoiceDistance Notes MaxDistance}
-      {Pattern.for2Neighbours Notes.2
+      {Pattern.for2Neighbours
+       {LUtils.butLast Notes} % all notes excerpt the bass
        proc {$ N1 N2}
 	  {HS.rules.getInterval N1 N2} =<: MaxDistance
        end}
