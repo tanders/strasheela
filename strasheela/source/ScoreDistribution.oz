@@ -76,7 +76,7 @@ export
    FdDistribute
    
    %% solver defs
-   SearchOne SearchAll SearchBest
+   SearchOne SearchAll SearchBest SearchBest_Timeout
    SearchOneDepth 
    ExploreOne ExploreAll ExploreBest
 
@@ -657,6 +657,45 @@ define
    fun {SearchBest ScoreScript OrderP Args}
       {Search.base.best {MakeSearchScript ScoreScript Args}
        OrderP}
+   end
+
+
+   local
+      %% Returns the best solution found within MaxTime milliseconds.
+      %% By Raphael Collet (mail to users@mozart-oz.org on 5 Januar 2010).
+
+      %% Drives the search engine by using an object of the class
+      %% Search.object.  Here is an implementation of SearchBest, with
+      %% an extra argument (MaxTime).  It is guaranteed to return the
+      %% best solution found after MaxTime milliseconds.
+
+      proc {SearchBaseBest_Timeout ScriptP OrderP MaxTime ?Xs}
+	 %% the search engine
+	 Engine={New Search.object script(ScriptP OrderP rcd:5)}
+	 
+	 %% iterate through solutions, and return the best solution found
+	 fun {Iterate CurrentSol}
+	    case {Engine next($)} of [X] then
+	       {Iterate [X]}
+	    else
+	       CurrentSol
+	    end
+	 end
+      in
+	 %% stop the engine after MaxTime
+	 thread
+	    {Time.delay MaxTime} {Engine stop}
+	 end
+	 
+	 Xs={Iterate nil}
+      end
+   in
+      /** %% Similar to SearchBest, but after MaxTime milliseconds have passed SearchBestWithTimeout returns the best solution found so far.
+      %% */
+      fun {SearchBest_Timeout ScoreScript OrderP MaxTime Args}
+	 {SearchBaseBest_Timeout {MakeSearchScript ScoreScript Args}
+	  OrderP MaxTime}
+      end
    end
 
    
