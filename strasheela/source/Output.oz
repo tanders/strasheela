@@ -977,15 +977,23 @@ define
    /** %% [for clause definitions] creates Lilypond output (a VS) for a simultaneous container. Args is a record of optional args (clauses and implicitStaffs).
    %% Default Lilypond output uses this definition. Using this function may simplify writing custom output clauses which overwrite the default output.
    %% */
-   fun {SimToLily Sim Args}
-      {ListToVS
-       {GetUserLily Sim} |
-       "\n << " | 
-       {OffsetToLilyRest Sim} |
-       {Append {Map {Sim getItems($)}
-		fun {$ X} {ToLilypond2 X Args} end}
-	["\n>>"]}
-       " "}
+   fun {SimToLily Sim Args}    
+      LeadingRest = if {Sim isTopLevel($)} andthen {Sim getStartTime($)} > 0
+		    then {LilyRest {IntToFloat {Sim getStartTime($)}}}
+		    else ""
+		    end
+   in
+      LeadingRest#if {IsLilyChord Sim} then {SimToLilyChord Sim}
+		  else 
+		     {ListToVS
+		      {GetUserLily Sim} |
+		      "\n << " | 
+		      {OffsetToLilyRest Sim} |
+		      {Append {Map {Sim getItems($)}
+			       fun {$ X} {ToLilypond2 X Args} end}
+		       ["\n>>"]}
+		      " "}
+		  end
    end
 
    /** %% [for clause definitions] Returns true if X can be notated as a chord, i.e. X is a simultaneous which contains only notes with equal offset time, start and end times
@@ -1038,10 +1046,16 @@ define
    /** %% [for clause definitions] creates Lilypond output (a VS) for a sequential container. Args is a record of optional args (clauses and implicitStaffs).
    %% Default Lilypond output uses this definition. Using this function may simplify writing custom output clauses which overwrite the default output.
    %% */
-   fun {SeqToLily Seq Args}
+   fun {SeqToLily Seq Args}      
+      LeadingRest = if {Seq isTopLevel($)} andthen {Seq getStartTime($)} > 0
+		    then {LilyRest {IntToFloat {Seq getStartTime($)}}}
+		    else ""
+		    end
+   in
       {ListToVS
        {GetUserLily Seq} |
        "\n {\n" |
+       LeadingRest |
        {OffsetToLilyRest Seq} | 
        {Append {Map {Seq getItems($)}
 		fun {$ X}  {ToLilypond2 X Args} end}
@@ -1249,8 +1263,7 @@ define
 	 %%
 	 %% NOTE: these are the default Lily output clauses
 	 %%
-	 [
-	  fun {$ X}
+	 [fun {$ X}
 	     {X isContainer($)} andthen {As.hasImplicitStaff X} 
 	  end#fun {$ C}  %% Create a staff and clef for C, then output C
 		 ClefAux = {As.getClef C}
@@ -1277,7 +1290,7 @@ define
 
 	  IsSingleStaffPolyphony#fun {$ X} {SingleStaffPolyphonyToLily X As} end
 	 
-	  IsLilyChord#SimToLilyChord
+%  	  IsLilyChord#SimToLilyChord
 
 	  fun {$ X}
 	     {X isContainer($)} andthen
@@ -1356,23 +1369,23 @@ define
    %% The argument defaults are shown below. 
    
    unit(clauses:nil
-	wrapper:["\\paper {}\n\n\\score{" %% empty paper def
-		 "\n}"]
+	wrapper:["\\paper {}\n\n\\score{\n{" %% empty paper def
+		 "\n}\n}"]
 	implicitStaffs:true
 	hasImplicitStaff: IsOutmostSeq
 	hasBreak: fun {$ X} false end
-	version:"2.10.0")
+	version:"2.12.0")
 
    %% */
    fun {ToLilypond MyScore Args}
       Default =  unit(clauses:nil
-		      wrapper:["\\paper {}\n\n\\score{" %% empty paper def
-			       "\n}"]
+		      wrapper:["\\paper {}\n\n\\score{\n{" %% empty paper def
+			       "\n}\n}"]
 		      implicitStaffs:true
 		      hasImplicitStaff: IsOutmostSeq
 		      hasBreak: fun {$ X} false end
 		      getClef: AveragePitchClef
-		      version:"2.10.0"
+		      version:"2.12.0"
 		     )
       As = {Adjoin Default Args}
    in
