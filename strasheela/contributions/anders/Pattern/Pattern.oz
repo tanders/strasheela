@@ -117,7 +117,7 @@ export
 
    FenvBoundaries
    FenvToContour
-   FenvContour
+   FenvContour FenvContour2
    ApproximateContour
    Approximate
    
@@ -472,7 +472,7 @@ define
       {FD.distance Xs.1 {List.last Xs} A Y}
    end
 
-   /** %% 'Higher-level' pattern constraint: applies the pattern constraint MyPattern to sublists of Xs (a list of FD ints). MyPattern is a binary procedure which expects a list of FD ints as first arg, and one or more single FD ints as remaining args (but see args patternArgs and includeIndex below). Yss is a list of list of FD ints, which are the accumulated "remaining args" of MyPattern. The strength of MetaPattern lies in the fact that Yss can be further constrained!  
+   /** %% 'Higher-level' pattern constraint: applies the pattern constraint MyPattern to sublists of Xs (a list of FD ints). MyPattern is a binary procedure which expects a list of FD ints as first arg, and one or more single FD ints as remaining args (but see args patternArgs and includeIndex below). Yss is a list of list of FD ints, which are the accumulated "remaining args" of MyPattern. The strength of WindowedPattern lies in the fact that Yss can be further constrained!  
    %% 
    %% Args:
    %% 'windowlength' (default 3): length of Xs sublists to which is MyPattern is applied. At the end, sublists can be shorter if minwindowlength < windowlength.
@@ -486,7 +486,7 @@ define
    %% 
    %% Example:
    %%
-   {MetaPattern proc {$ Xs Y} {Pattern.max Xs Y} end
+   {WindowedPattern proc {$ Xs Y} {Pattern.max Xs Y} end
     Xs [Ys]
     unit(windowlength:2
 	 windowoffset:2)}
@@ -545,7 +545,7 @@ define
       As = {Adjoin Defaults Args}
       {Aux Xs {LUtils.matTrans Yss} As 1}
    end
-   /** %% [Aux for WindowedPattern] Returns the number of recursive constraint applications caused by WindowedPattern. WindowedPatternNo is useful, for example, to obtain the length of lists of FD ints given in Yss to WindowedPattern.
+   /** %% [Aux for WindowedPattern] Returns the number of recursive constraint applications caused by WindowedPattern. WindowedPatternRecursions is useful, for example, to obtain the length of lists of FD ints given in Yss to WindowedPattern.
    %%
    %% N is length of Xs given to WindowedPattern, Args is args given to WindowedPattern.
    %% */
@@ -1858,6 +1858,25 @@ define
    %% */
    proc {FenvContour Xs MyFenv}
       {Contour Xs {FenvToContour MyFenv {Length Xs}-1}}
+   end
+
+   /** %% Variant of FenvContour: each interval either follows the direction of MyFenv -- or performs a repetition. For example, if for a certain interval the corresponding subsection of MyFenv ascends then the interval has either the direction '+' or '=' (expressed with the symbols supporterd by SymbolToDirection). Nevertheless, horizontal sections of MyFenv constrain interval directions to '=' only.
+   %% */
+   proc {FenvContour2 Xs MyFenv}
+      Up = {SymbolToDirection '+'}
+      Down = {SymbolToDirection '-'}
+      Repeat = {SymbolToDirection '='}
+      fun {FenvToContour2 MyFenv N}
+	 {Map2Neighbours {MyFenv toList($ N+1)}
+	  fun {$ Y1 Y2}
+	     if Y1 < Y2 then {FD.int [Repeat Up]}
+	     elseif Y1 > Y2 then {FD.int [Down Repeat]}
+	     else Repeat
+	     end
+	  end}
+      end
+   in
+      {Contour Xs {FenvToContour2 MyFenv {Length Xs}-1}}
    end
 
    /** %% Contour Dirs2 (List of FD ints) quasi paraphrases original contour Dirs1 (List of FD ints). In at maximum MaxErrorPercent (FD int) and at least MinPercentError (FD int) cases, an ascending or descending value of Dir1 can be a constant value in Dir2 while constant values can be ascending or descending. In other words the direction values are either the same or differ by one. Dirs1 and Dirs2 must be of same length. 
