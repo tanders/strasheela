@@ -1075,6 +1075,14 @@ MyScore_ScaleNotes = {ExpressScales {MyScore_ScalesOnly
  "/Users/t/sound/tmp/"
 }
 
+
+
+{ShowScaleChords_ET31 {HS.db.getScaleIndex 'miracle'}
+ "Miracle"
+ "/Users/t/sound/tmp/"
+}
+
+
 %% Test
 
 declare
