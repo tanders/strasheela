@@ -130,7 +130,8 @@ export
    Limit3Intervals_2 IsLimit3IntervalR_2
    Limit5Consonances IsLimit5ConsonanceR IsLimit_3_5_ConsonanceR
    IsLimit7ConsonanceR IsLimit_3_5_7_ConsonanceR
-   
+
+   MinCard
 
    %% chord / scale rules
    GetFeature
@@ -242,7 +243,7 @@ define
    %% */
    IsLimit3ConsonanceR
    = {MakeIntervalConstraint Limit3Consonances}
-   /** %% 2nd order 3-limit intervals: fourth/fifth, maj second/min seventh (list of ratios).
+   /** %% 2nd order 3-prime-limit intervals (9-odd-limit): fourth/fifth, maj second/min seventh (list of ratios).
    %% */
    Limit3Intervals_2 = [9#8 4#3 3#2 16#9]
    /** %% Binary constraint {$ PCInterval B}: B=1 <-> Interval 2nd order is 3-limit interval.
@@ -273,7 +274,19 @@ define
    = {MakeIntervalConstraint
       {Append {Append Limit3Consonances Limit5Consonances} Limit7Consonances}}
    
+
+
    
+   /** %% The cardiality of the set of pitchclasses of Notes (list of HS.score.note objects) is at least Card (FD int).
+   %% */
+   proc {MinCard Notes Card}
+      PC_FS = {GUtils.intsToFS {Pattern.mapItems Notes getPitchClass}}
+      AuxCard = {FD.decl}
+   in
+      AuxCard = {FS.card PC_FS}
+      AuxCard >=: Card
+   end
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%
