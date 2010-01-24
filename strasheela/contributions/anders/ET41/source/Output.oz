@@ -165,22 +165,29 @@ define
    %% */
    fun {MakeET41Accidental X}      
       %% access Lily markup 
-      fun {GetAccStringForNote N}
-	 ET41_PCDecl = ET41_PCDecls.{N getPitchClass($)}
+      fun {GetAccStringForPC PC}
+	 ET41_PCDecl = ET41_PCDecls.PC
       in
 	 {CondSelect ET41_PCDecl 2 nil}
       end
    in
       if {Out.isLilyChord {X getTemporalContainer($)}} then
 	 %% X is a note in a Lilypond chord
-	 Acc = {GetAccStringForNote X}
+	 Acc = {GetAccStringForPC {X getPitchClass($)}}
       in
 	 if Acc == nil then nil else 	 
 	    "\\chordHE \""#Acc#"\""
 	 end
       elseif {X isNote($)} then
 	 %% X is a note in general
-	 Acc = {GetAccStringForNote X}
+	 Acc = {GetAccStringForPC {X getPitchClass($)}}
+      in
+	 if Acc == nil then nil else
+	    "\\HE \""#Acc#"\""
+	 end
+      elseif {HS.score.isPitchClassCollection X} then
+	 %% X is a chord/scale
+	 Acc = {GetAccStringForPC {X getRoot($)}}
       in
 	 if Acc == nil then nil else
 	    "\\HE \""#Acc#"\""
@@ -220,7 +227,7 @@ define
    proc {RenderAndShowLilypond MyScore Args}
       Defaults = unit(codeBeforeNoteMakers: [MakeET41Accidental]
 		      codeBeforePcCollectionMakers:
-			 [fun {$ MyChord PC}
+			 [fun {$ X PC}
 			     fun {GetAccStringForPC}
 				ET41_PCDecl = ET41_PCDecls.PC
 			     in
@@ -230,7 +237,12 @@ define
 			     Acc = {GetAccStringForPC}
 			  in
 			     if Acc == nil then nil else
-				"\\chordHE \""#Acc#"\""
+				if {HS.score.isChord X} then
+				   %% chord case
+				   "\\chordHE \""#Acc#"\""
+				   %% scale case
+				else "\\HE \""#Acc#"\""
+				end
 			     end
 			  end])
       As1 = {Adjoin Defaults Args}
