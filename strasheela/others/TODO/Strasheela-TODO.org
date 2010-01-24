@@ -167,10 +167,162 @@ Some bug in computing the octave
 
 
      
+* Strasheela doc
+
+
+** Add org-babel-oz.el to Org-babel
+
+** Write doc for org-babel-oz.el
+
+*** Grab a copy of worg
+
+    see http://orgmode.org/worg/worg-git.php
+
+*** Write file
+
+    file:~/emacs/org-mode/Worg/org-contrib/babel/org-babel-oz.org
+
+    Suggestions:
+    http://orgmode.org/worg/worg-editing.php
+
+    "Templates"
+    file:~/emacs/org-mode/Worg/org-contrib/babel/org-babel-screen.org 
+    file:~/emacs/org-mode/Worg/org-contrib/babel/org-babel.org 
+    
+
+*** Push this file with git
+
+    Learn how to do git push, see http://orgmode.org/worg/worg-git.php
+
+**** First time
+
+cd ~/emacs/org-mode/Worg/org-contrib/babel/
+git add org-babel-oz.org
+git commit -a -m "My changelog"
+git push
+
+
+PERHAPS: if push does not work as above
+
+git remote add public git+ssh://tanders@repo.or.cz/srv/git/Worg.git
+git push public
+
+
+    Use your ssh passphrase (if requested again): bach1685
+
+**** Later
+
+cd ~/emacs/org-mode/Worg/
+git commit -a -m "My ChangeLog"
+git push
+
+  
+** Strasheela tutorial
+
+   Use Worg CCS, but add acknowledgment mentioning CCS authors Bastien Guerry and Sebastian Rose.
+
+** Inform Oz community about org-babel-oz
+
+
 * Other 
 
 ** GeOz 
    
+*** Mail with important info to installation and doc
+
+    [check Mail app for formatted version of this mail]
+
+Dear Gustavo,
+
+I am extremely sorry for the delay (we have 6-month old twins and  
+there has been a flu, later your mail got buried under other stuff).
+
+On 04.10.2009, at 11:52, Gustavo Gutierrez wrote:
+On Wed, Sep 23, 2009 at 3:10 PM, Torsten Anders <torsten.anders@plymouth.ac.uk 
+wrote:
+PS: In the long run, I am interested to update Strasheela (http://strasheela.sourceforge.net 
+) to use Geoz instead of the "classical" Oz constraint facilities.  
+So, I am very much interested in the future of Geoz :)
+
+
+That's really great, I think we can benefit from trying the new  
+mozart implementation with your application. In this way we can  
+identify bugs and fix them before releasing. What do you think?
+
+This certainly makes sense and I would like to go for it.  
+Unfortunately, I currently have hardly any time for Strasheela  
+development at all due to various other duties. If all goes as  
+planned, then I will again have time and even co-workers starting  
+summer 2010. So, my question is: what is your time schedule for Mozart  
+development?
+
+On 04.10.2009, at 11:52, Gustavo Gutierrez wrote:
+On Wed, Sep 23, 2009 at 3:10 PM, Torsten Anders <torsten.anders@plymouth.ac.uk 
+wrote:
+Dear Gustavo,
+
+The question concerning the Oz Explorer vs Gist and Gecode reminded  
+me: what is actually the current status of the Geoz project?  
+Obviously you frequently submit changes to the mozart-gecode  
+branch, but the available public information has not been updated  
+for a long time. E.g., here are a few related links which seem to  
+be out of date.
+
+http://cic.puj.edu.co/wiki/doku.php?id=grupos:avispa:geoz
+http://gna.org/projects/geoz
+
+So, what is the current status? Is the installation process  
+documented somewhere (up to date)?
+
+The installation is not documented, however it is not to difficult.  
+The only thing needed is an specific version of gecode. The best way  
+to do this is try to download the sources and then run configure. It  
+will try to find the right gecode version and will inform you about  
+anything you need.
+
+I see. So, before actually installing Gecode I just ran the configure  
+script on the latest SVN version of mozart-gecode and it told me that  
+Gecode version 2.2.0 is required. Will the required Gecode version be  
+updated later?
+
+Are the changes of Geoz compared with the "classical" Oz constraint  
+facilities documented somehow?
+
+One of the last commits handled this point. If you try to build the  
+documentation then you will see some new sections which are intended  
+to present this facilities. The documentation is not finished and  
+has not been reviewed by anyone so it may contain english errors but  
+anything you need I am willing to help.
+
+It is great to hear that you started updating the documentation to  
+this effect. I will not attempt building the documentation (too many  
+dependencies), but try to study the SGML sources. I just saw that you  
+updated files in doc/fdt/. I will try to find out your changes by  
+checking the SVN history. For example, I found
+
+http://gforge.info.ucl.ac.be/plugins/scmsvn/viewcvs.php?view=rev&root=mozart&revision=17245
+ 	
+I am particularly interested in the graph constraints -- what is  
+the situation there? What version of Gecode is supported?
+
+This is my main current work right now. We have an implementation of  
+graph constraints but it is still in gecode and not in mozart. The  
+thing is that we need to work a lot on efficiency at the c level  
+before bringing the interface to mozart. If you want to try them  
+anyway I can point you in the right direction. So far we have a good  
+design but the problem we are trying to solve has shown us that  
+there is some pending work on handling big graphs. Just to give you  
+an impression of what I am talking about, we have a propagator  
+between two graph variables and one of them is a graph with around  
+11'000.000 edges. This is obviously quite big and we ran out of  
+memory.
+
+Wow, these figures are impressive!
+
+Best wishes,
+Torsten
+
+
 *** TODO Install GeOz 
     
     NOTE: development of Gecode/J is discontinued. So, I better stick with Mozart/Oz. But then it would be a good idea to support gustavo getting Gecode running for Oz. E.g., moral support by installing it and asking questions, also finding bugs perhaps..
@@ -219,7 +371,5 @@ If problems occur ask gustavo.ggutierrez@gmail.com
    know your system, e.g., know all my Patterns 
 
 
-
-* Tasks for Le StruM						       :WAIT:
 
  

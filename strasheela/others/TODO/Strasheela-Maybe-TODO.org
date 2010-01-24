@@ -505,15 +505,211 @@ InspectorObject = {Inspector.new unit}
 
 * Strasheela documentation				      :MAYBE:STRASHEELA:
 
-** Installation instruction
+** DONE Define setup for convenient tutorial editing		    :ARCHIVE:
+   CLOSED: [2009-11-12 Thu 00:34]
+   
+   org-babel looks very promising  
+   http://orgmode.org/worg/org-contrib/babel/org-babel.php
 
-   Add explanation how to edit OZRC file 
-   (e.g., wiki article and create link there in installation instruction)
+   see also
+   file:~/oz/music/Strasheela/StraheelaTutorial/
+
+   Org-mode already supports (for all languages)
+   - Code snippets in files are suitably formatted in HTML and Latex
+   - Fortification of code for HTML export
+   - Code can be edited in major Emacs mode of respective language
+   - References in source code
+   - ...
+
+   Org-babel additionally supports (for supported languages)
+   - Code can be executed and results added automatically to org file
+   - Literate programming (LP): larger code examples can be divided in snippets discussed individually and then combined into longer source files (tangling in LP terminology)
+     --> This can be very useful for explaining examples in detail (don't plan to use that technique for whole Strasheela, though..)
+   - ...
+
+*** TODO Add Oz support to Org-babel
+
+    [documentation of Strasheela examples is paramount -- adds publicity etc]
+
+    It would be very nice to have Oz support in Org-babel. E.g., something like my Schoenberg example HTML file could almost automatically be updated after a change in the source -- now this change is delayed by ages...
+
+    Also, existing language defs look relatively short.
+
+**** Contact Org-babel developer: Eric Schulte, Dan Davison 
+
+     Eric Schulte
+     http://www.cs.unm.edu/~eschulte/
+     mail: Eric Schulte <schulte.eric@gmail.com>
+     Tel: 703.405.0263 
+     
+     Dan Davison 
+     http://www.stats.ox.ac.uk/~davison/
+     Dan Davison <davison@stats.ox.ac.uk> 
 
 
-** Strasheela tutorial
+Subject: Adding Org-babel support for Oz?
 
-*** Check out literate programming capabilities of org mode
+Dear Eric Schulte and Dan Davison,
+
+Thank you very much for your software Org-babel. Just recently I found out about it, and I am really excited about its capabilities, combined with the features plain Org-mode offers already.
+
+I would very much like to use Org-babel to write a tutorial for my software Strasheela, and also to document Strasheela examples in detail and still nicely readable. Strasheela (http://strasheela.sourceforge.net) is a programming environment for modelling music theories and composition, and it is based on the programming language Oz (http://www.mozart-oz.org/, the language is called Oz, the implementation Mozart).
+ 
+I had a brief look at your Org-babel definitions for various programming languages, and I was surprised how concise these definitions are. Is my impression right that it would be relatively strait forward to add support for further languages to Org-babel? Would you help me to extend Org-babel to support the language Oz?
+
+How does the communication between Org-babel and <insert-language-here> work? With Oz, there are at least two different approaches possible. On the one hand, the major emacs mode of Oz allows for interactive code execution (the Emacs mode runs a Mozart compiler in the background). On the other hand, it would be possible to "manually" start a Mozart compiler in a shell, and communicate with this compiler, e.g., via sockets. 
+
+I really like the fact that Org-babel supports automatic insertion of results of computations into an org file. Actually, for the documentation of Strasheela I often need to output multiple results, typically a score picture and some mp3 sound file. Do you think it is possible to somehow extend/customise an Oz extension of Org-babel (once it is there) to allow for automatic output of multiple results (links to files)? 
+
+I should also mention that unfortunately I likely will not have the time to start right away to work on adding Oz/Mozart to Org-babel. However, I am so excited about it that at least I want to ask my questions above right away :) 
+
+Thank you very much indeed! 
+
+Best regards,
+Torsten Anders
+
+--
+Torsten Anders
+Interdisciplinary Centre for Computer Music Research
+University of Plymouth
+Office: +44-1752-586219 
+Private: +44-1752-558917
+http://strasheela.sourceforge.net
+http://www.torsten-anders.de
+
+
+
+
+**** Reply Dan 
+	From: 	davison@stats.ox.ac.uk
+	Subject: 	Re: Subject: Adding Org-babel support for Oz?
+	Date: 	3. November 2009 05:11:34 GMT+00:00
+	To: 	torsten.anders@plymouth.ac.uk
+	Cc: 	schulte.eric@gmail.com
+
+Hi Torsten,
+
+I really like the sound of this and I'll be happy to help out where I
+can (but I don't know anything about Oz.) We seem to be a bit light on
+documentation on how to add support for a new language, so looking at
+the existing language implementations is certainly the way
+forward. (Perhaps we could add a simple, commented skeleton language
+implementation at some point). I'll make a few comments below, but feel
+free to ask any more questions in the lead-up to actually starting work
+on this.
+
+As you've probably seen, the basic requirement is to implement the
+function org-babel-execute:oz, which takes the code body, and an alist
+of parameters and returns the result of evaluating the code. These
+org-babel-execute:<lang> functions are called by
+org-babel-execute-src-block in org-babel.el.[1]
+
+First of all, there are two basic features of our design that you'll
+need to consider: "output" vs. "value" results, and "session" vs.
+"non-session" evaluation. In principal, all 4 pairwise combinations of
+these two pairs are possible, although some may not be meaningful or
+technically possible for a given language.
+
+1. output vs. value results
+':results output' means, basically, that the "results" of the code are
+whatever text it spits out on standard output. ':results value' means
+that the "result" is the value of the last expression in the block of
+code. So in a code block like this
+
+#+begin_src python
+print 'hello'
+print 'hello again'
+print 'bye'
+4
+#+end_src
+
+under :results output the result would be 'hello\nhello
+again\nbye\n'. But under :results value, the result of the block would be
+the number 4.
+
+2. session vs. non-session
+
+You mention this below. Evaluating in a 'session' means that the code if
+evaluated in an interactive emacs major mode dedicated to the language,
+if one exists. 'Non-session evaluation' means that the code is passed to
+an external process to obtain the result.
+
+Eric is the expert on this, but I believe that the easiest thing to
+start off with would usually be ':results output',
+non-session. I.e. collecting the result of standard output from the
+external process. This is often easier than :session evaluation, since
+extracting results from the emacs major mode can be fiddly. ':results
+value' requires some way of identifying the value of the last expression
+evaluated (a feature which e.g. python, ruby and R all have).
+
+<...>
+How does the communication between Org-babel and <insert-language-
+here> work? With Oz, there are at least two different approaches
+possible. On the one hand, the major emacs mode of Oz allows for
+interactive code execution (the Emacs mode runs a Mozart compiler in
+the background).
+
+This would correspond to the :session header argument.
+
+On the other hand, it would be possible to "manually"
+start a Mozart compiler in a shell, and communicate with this
+compiler, e.g., via sockets.
+
+This would be the default (i.e. in the absence of :session)
+
+I really like the fact that Org-babel supports automatic insertion of
+results of computations into an org file. Actually, for the
+documentation of Strasheela I often need to output multiple results,
+typically a score picture and some mp3 sound file. Do you think it is
+possible to somehow extend/customise an Oz extension of Org-babel
+(once it is there) to allow for automatic output of multiple results
+(links to files)?
+
+I would also like to do this. It is currently most pressing in the
+language R, where it is natural to produce both graphics and
+numerical/text output. It's doable.
+
+
+I should also mention that unfortunately I likely will not have the
+time to start right away to work on adding Oz/Mozart to Org-babel.
+
+No worries, we're also both pushed for time at the moment. But this will
+be the first music-producing capabilities for org-mode, so like I said
+I'm happy to help.
+
+Dan
+
+Footnotes:
+
+[1] *[Note that because of the way the org-babel-execute:<lang> functions are called, 4 variables will be 'magically' available inside the org-babel-execute:oz function: session vars result-params result-type. However this is just for convenience as they are extractable from the alist of params]*
+
+**** Reply Eric 
+	From: 	schulte.eric@gmail.com
+	Subject: 	Re: Subject: Adding Org-babel support for Oz?
+	Date: 	3. November 2009 15:53:43 GMT+00:00
+	To: 	davison@stats.ox.ac.uk
+	Cc: 	torsten.anders@plymouth.ac.uk, schulte.eric@gmail.com
+
+Hi Torsten,
+
+I think Dan pretty well covered the landscape.
+
+All I would add is the attached org-babel-template.el which is intended
+to be used as the starting point for any new language.  It includes
+comments and stubs of all of the important functions.  A good first step
+would be to rename org-babel-template to org-babel-oz and do a file-wide
+search/replace of template/oz.
+
+Best of Luck, and please don't hesitate to ask for help -- Eric
+
+*** Info: Further links etc on org-babel, org-mode etc
+
+    !! Check out Org-babel: an org-mode extension for executable source code blocks in org-mode
+    http://orgmode.org/worg/org-contrib/babel/org-babel.php
+
+    http://orgmode.org/manual/Literal-examples.html
+
+    Even syntax colouring is supported.
 
     Editing code in respective Emacs mode: C-c '
     http://orgmode.org/org.html#Literal-examples
@@ -542,7 +738,66 @@ Check out [[(sc)]] bla bla
 
 
 
-*** Add MIDI out example to music representation chap
+
+
+
+** Info: Approach
+
+*** Use Org-babel
+
+*** Define (almost) only Oz statements
+
+    I am also considering whether I should perhaps only use Oz statements (Oz expressions are very unusual at the top-level and could confuse readers), and simply insert results such as score pitctures and MP3 files manually into the Org file. Executing the corresponding code block would generate these files "behind the scene", and their paths would be relative to the Org file. I would then simply insert the same pathnames manually into the Org file. Doing so would ensure that (except for the paths) the code could be used as-is by users. If the definition of the example changes, all output can be conveniently updated just by executing all code blocks again (i.e. all path names stay the same).
+
+*** Use Literate Programming (almost) only for top-level definitions
+
+# I would often like to only automatically execute those code
+# blocks that actually define my program (without any output), but not
+# the code blocks that interactively use this program (e.g., the code
+# blocks that create the actual output). The reason is that each of the
+# latter can take a long time to run (blocking Emacs completely for that
+# time!) and I might only need to execute, say, the last of these which
+# I just newly defined. So, how could I adapt org-babel-execute-buffer
+# and org-babel-execute-subtree such that they skip any code block to
+# which some special header argument is given (e.g., :interactive t).
+
+    You could use Org-babel's :noweb support for defining the top-level definition only. Then you can both "execute" (feed) Oz programs from within Org buffers and also for export files. 
+    You could consider exporting the actual program and solver calls into different files (using two top-level noweb code blocks).
+
+---
+
+
+# there is the ability to tangle code blocks, if you assign each
+# block in the same session the same tangle header argument then they will
+# all be exported to the same file by the `org-babel-tangle' command.
+
+# I would assign different :tangle arguments to the interactive and
+# non-interactive code blocks.  This will tangle them to different files,
+# and from there it should be easy to use them separately.
+
+Ah, when using the same tangle header argument for multiple code blocks then code blocks will be appended in the resulting tangled file? 
+
+
+    ----
+
+    Tonight I further thought how I could simplify the explanation of my Oz/Strasheela examples without actually using Literate Programming constructs. Oz allows a relatively flexible order of "code blocks" anyway (e.g., a function can be used before it is actually defined, because function names are logic variables), so simply having a session would actually be sufficient for most cases (which BTW is rather similar to the quasi Literate Programming support buildin in Haskell). This line of thoughts motivated my question. When using noweb syntax only for the top-level definition, then I could also hide this top-level definition in the woven output, so readers do not need to know about Literate Programming at all. 
+
+
+** Installation instruction
+
+   Add explanation how to edit OZRC file 
+   (e.g., wiki article and create link there in installation instruction)
+
+
+** Strasheela tutorial
+
+   see [[id:370F385D-CA8D-4094-9374-C719975382C8][file:~/oz/music/Strasheela/StrasheelaTutorial/doc-source/StrasheelaTutorial.org]]
+
+*** Move output from wiki into [[file:~/oz/music/Strasheela/StrasheelaTutorial/doc-source/StrasheelaTutorial.org]]
+
+*** Old
+
+**** Add MIDI out example to music representation chap
 
     [I already this added MIDI out example]
 
@@ -605,12 +860,12 @@ unit(file:{Tk.return tk_getSaveFile}
       csvDir:nil)}
 
 
-*** Strasheela tutorial: do music constraint programming 'chapter'
+**** Strasheela tutorial: do music constraint programming 'chapter'
 
 
 
 
-*** ?? Music representation edit: explain explorer out early?
+**** ?? Music representation edit: explain explorer out early?
 
 subject: Re: [Strasheela-users] MIDI output
 On Nov 3, 2008, at 9:25 PM, Emre Sevinc wrote:
@@ -623,9 +878,10 @@ listen its MIDI rendering was... way cool! :)
 You should've shown this at the beginning of music representation
 section of the tutorial not deep down in the examples section.
 
-*** ?? Sec on how to set up the system 
 
-    how to write ~/.ozrc file
+**** ?? Sec on how to set up the system 
+
+     how to write ~/.ozrc file
 
 
 
