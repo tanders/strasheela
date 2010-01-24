@@ -3,7 +3,7 @@
 %%
 %% This file customises Strasheela settings for MacOS X. In particular, for opening files (PDF, midi, aiff) it uses the default application defined for these file type. This is done using the commandline application 'open'.
 %%
-%% You can use this file "as is", but then take care that applications like Lilypond, Csound and midicsv are in your path (e.g., add a corresponding entry to your ~/.profile).
+%% You can use this file "as is", but then take care that applications like Lilypond, Csound and midicsv are in your PATH (e.g., add a corresponding entry to your ~/.profile).
 %%
 %% For convenient Strasheela usage you may consider adding the content
 %% of this file to your Oz init file (e.g. ~/.ozrc) and edit it
@@ -15,12 +15,15 @@
 %% if you don't really know what you are doing :)
 %%
 
+%% The template must start with 'declare' to declare the top-level variables introduced later.
+declare
+
+
 %% Per default, compiler executes each piece of generated code in a separate thread without waiting for it to terminate before proceeding to the next query. Instead, I want to ensure all settings in OZRC are effective before any actual user call is executed. (threadedqueries is switch back 'on' at end of this OZRC). 
 \switch -threadedqueries
 
 /** %% ModuleLink is like Module.link except that multiple calls of ModuleLink share the same module manager (and don't create new managers as Module.link does). For instance, when ModuleLink links multiple functors which refer to a database functor, then all refer to the same database instance (linking with Module.link results into multiple database instances). 
 %% */
-declare
 local
    ModMan = {New Module.manager init}
 in
