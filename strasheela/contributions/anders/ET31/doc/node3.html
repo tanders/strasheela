@@ -128,7 +128,7 @@ clearInterval(drawit)
 <h3>Functor</h3>
 <ul>Out ("<span class="string">/Users/t/oz/music/Strasheela/strasheela/trunk/strasheela/contributions/anders/ET31/source/Output.oz</span>")<br></ul>
 <h3>Import</h3>
-<code><ul><li>OS</li><li>FS</li><li>Explorer</li><li>GUtils at "<span class="string">x-ozlib://anders/strasheela/source/GeneralUtils.ozf"
+<code><ul><li>Explorer</li><li>GUtils at "<span class="string">x-ozlib://anders/strasheela/source/GeneralUtils.ozf"
 </span></li><li>Out at "<span class="string">x-ozlib://anders/strasheela/source/Output.ozf"
 </span></li><li>Score at "<span class="string">x-ozlib://anders/strasheela/source/ScoreCore.ozf"
 </span></li><li>HS at "<span class="string">x-ozlib://anders/strasheela/HarmonisedScore/HarmonisedScore.ozf"
@@ -136,18 +136,9 @@ clearInterval(drawit)
 </span></li><li><a href="node5.html">ET31_Score</a> at "<span class="string">Score.ozf"
 </span></li></ul></code>
 <h3>Export</h3>
-<code><ul><li>&lt;P/2:<a href="#entity50"><span class="functionname">RenderAndShowLilypond</span></a>&gt;
-</li><li>&lt;P/1:<a href="#entity40"><span class="functionname">AddExplorerOut_ChordsToScore</span></a>&gt;
-</li><li>&lt;P/0:<a href="#entity51"><span class="functionname">AddExplorerOuts_ArchiveInitRecord</span></a>&gt;
-</li><li>&lt;P/2:<a href="#entity47"><span class="functionname">MakeChordComment</span></a>&gt;
-</li><li>&lt;P/2:<a href="#entity48"><span class="functionname">MakeChordRatios</span></a>&gt;
-</li><li>&lt;P/2:<a href="#entity49"><span class="functionname">MakeScaleComment</span></a>&gt;
-</li><li>&lt;P/2:<a href="#entity41"><span class="functionname">IsEt31Note</span></a>&gt;
-</li><li>&lt;P/2:<a href="#entity42"><span class="functionname">IsEt31Chord</span></a>&gt;
-</li><li>&lt;P/2:<a href="#entity43"><span class="functionname">IsEt31Scale</span></a>&gt;
-</li><li>&lt;P/2:<a href="#entity44"><span class="functionname">NoteEt31ToLily</span></a>&gt;
-</li><li>&lt;P/2:<a href="#entity45"><span class="functionname">NoteEt31ToLily_AdaptiveJI</span></a>&gt;
-</li><li>&lt;P/2:<a href="#entity46"><span class="functionname">NoteEt31ToLily_AdaptiveJI2</span></a>&gt;
+<code><ul><li>&lt;P/2:<a href="#entity40"><span class="functionname">RenderAndShowLilypond</span></a>&gt;
+</li><li>&lt;P/1:<a href="#entity38"><span class="functionname">AddExplorerOut_ChordsToScore</span></a>&gt;
+</li><li>&lt;P/0:<a href="#entity39"><span class="functionname">AddExplorerOuts_ArchiveInitRecord</span></a>&gt;
 </li><li><span class="variablename">Et31AsEt12_TuningTable</span>
 </li><li><span class="variablename">Meantone_TuningTable</span>
 </li><li><span class="variablename">JI_TuningTable</span>
@@ -155,107 +146,34 @@ clearInterval(drawit)
 <h3>Define</h3>
 
 <code>
-<a name="entity50">
-<span class="keyword">proc</span>{<span class="functionname">RenderAndShowLilypond</span> MyScore Args}<br>
-<span class="string"> Proc is like Out.renderAndShowLilypond, but provides buildin support for notes and chords with pitch units in et31.<BR>
- Please note that this support is defined by the argument Clauses (see Out.renderAndShowLilypond) -- additional clauses are still possible, but adding new note/chord clauses will overwrite the support for 31 ET.<BR>
-<BR>
- Additional Args:<BR>
- 'chordDescription' (default MakeChordComment): unary function expecting a chord and returning a VS used as annotation for chords. <BR>
- 'scaleDescription': (default MakeScaleComment): unary function expecting a scale and returning a VS used as annotation for scale. <BR>
-<BR>
-</span>
-</code><br>
-
-<code>
 <a name="entity40">
-<span class="keyword">proc</span>{<span class="functionname">AddExplorerOut_ChordsToScore</span> Args}<br>
-<span class="string"> Creates an Explorer output. The script solution must be a sequential container with chord objects (i.e. without the actual notes).<BR>
- The Explorer output action creates a CSP with expects a chord sequence and returns a homophonic chord progression. AddExplorerOut_ChordsToScore internally uses ET31.score.chordsToScore for this purpose.  <BR>
- The result is transformed into music notation (with Lilypond), sound (with Csound), and Strasheela code (archived score objects).<BR>
- Args are outname and the arguments of ET31.score.chordsToScore. the outname arg sets the output file name (which gets added the space number in the Explorer and then a random number). outname also sets the name under which this action appears in the Explorer menu.<BR>
+<span class="keyword">proc</span>{<span class="functionname">RenderAndShowLilypond</span> MyScore Args}<br>
+<span class="string"> Lilypond output for 31 ET.<BR>
 <BR>
- IMPORTANT: ET31.score.chordsToScore conducts a search which potentially can fail (e.g., if insufficient arguments are provided)!<BR>
+ Args:<BR>
+<BR>
+ 'upperMarkupMakers': a list of unary functions for creating textual markup placed above the staff over a given score object. Each markup function expects a score object and returns a VS. There exist four cases of score objects for which markup can be applied: note objects, simultaneous containers of notes (notated as a chord in Lilypond), chord objects and scale objects. The definition of each markup function must care for all these cases (e.g., with an if expression test whether the input is a note object and then create some VS or alternatively create the empty VS nil). <BR>
+ 'lowerMarkupMakers': same as 'upperMarkupMakers', but for markups placed below the staff.<BR>
+<BR>
+ In addition, the arguments of Out.renderAndShowLilypond are supported.<BR>
+ <BR>
+ Please note that RenderAndShowLilypond is defined by providing Out.renderAndShowLilypond the argument Clauses (via HS.out.renderAndShowLilypond) -- additional clauses are still possible, but adding new note/chord clauses will overwrite the support for defined by this procedure.<BR>
 <BR>
 </span>
 </code><br>
 
 <code>
-<a name="entity51">
+<a name="entity38">
+<span class="keyword">proc</span>{<span class="functionname">AddExplorerOut_ChordsToScore</span> Args}<br>
+<span class="string"> Creates an Explorer action for outputting a pure sequence of chords. This is a version of HS.out.addExplorerOut_ChordsToScore, customised for 31 ET. Please see the documentation of HS.out.addExplorerOut_ChordsToScore for further details such as supported arguments.<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity39">
 <span class="keyword">proc</span>{<span class="functionname">AddExplorerOuts_ArchiveInitRecord</span> }<br>
 <span class="string"> Adds ET31 declaration on top of *.ssco file and calls {HS.db.setDB ET31.db.fullDB}<BR>
-<BR>
-</span>
-</code><br>
-
-<code>
-<a name="entity47">
-<span class="keyword">proc</span>{<span class="functionname">MakeChordComment</span> MyChord Result}<br>
-<span class="string"> Expects a chord and returns the chord comment (a VS).<BR>
-<BR>
-</span>
-</code><br>
-
-<code>
-<a name="entity48">
-<span class="keyword">proc</span>{<span class="functionname">MakeChordRatios</span> MyChord Result}
-</code><br>
-
-<code>
-<a name="entity49">
-<span class="keyword">proc</span>{<span class="functionname">MakeScaleComment</span> MyScale Result}<br>
-<span class="string"> Expects a scale and returns the scale comment (a VS). <BR>
-<BR>
-</span>
-</code><br>
-
-<code>
-<a name="entity41">
-<span class="keyword">fun</span>{<span class="functionname">IsEt31Note</span> X}<br>
-<span class="string"> Returns true if X is a note object with pitch unit et31.<BR>
-<BR>
-</span>
-</code><br>
-
-<code>
-<a name="entity42">
-<span class="keyword">fun</span>{<span class="functionname">IsEt31Chord</span> X}<br>
-<span class="string"> Returns true if X is a chord object with root pitch unit et31.<BR>
-<BR>
-</span>
-</code><br>
-
-<code>
-<a name="entity43">
-<span class="keyword">fun</span>{<span class="functionname">IsEt31Scale</span> X}<br>
-<span class="string"> Returns true if X is a scale object with root pitch unit et31.<BR>
-<BR>
-</span>
-</code><br>
-
-<code>
-<a name="entity44">
-<span class="keyword">fun</span>{<span class="functionname">NoteEt31ToLily</span> MyNote}<br>
-<span class="string"> Expects a Strasheela note object and returns the corresponding<BR>
- Lilypond code (a VS). For simplicity, this transformation does not<BR>
- support any additional expessions (e.g. fingering marks, or articulation<BR>
- marks).<BR>
-<BR>
-</span>
-</code><br>
-
-<code>
-<a name="entity45">
-<span class="keyword">fun</span>{<span class="functionname">NoteEt31ToLily_AdaptiveJI</span> MyNote}<br>
-<span class="string"> Like NoteEt31ToLily, but additionally notates the adaptive JI pitch offset of this note with respect to 31 ET.<BR>
-<BR>
-</span>
-</code><br>
-
-<code>
-<a name="entity46">
-<span class="keyword">fun</span>{<span class="functionname">NoteEt31ToLily_AdaptiveJI2</span> MyNote}<br>
-<span class="string"> Like NoteEt31ToLily_AdaptiveJI, but additionally also notates the absolute pitch in cent.<BR>
 <BR>
 </span>
 </code><br>

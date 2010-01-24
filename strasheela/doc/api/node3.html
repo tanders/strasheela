@@ -169,20 +169,21 @@ clearInterval(drawit)
 </li><li>&lt;P/2:<a href="#entity111"><span class="functionname">ApplySelected</span></a>&gt;
 </li><li>&lt;P/4:<a href="#entity110"><span class="functionname">EncodeRatio</span></a>&gt;
 </li><li>&lt;P/1:<a href="#entity118"><span class="functionname">TimeVString</span></a>&gt;
-</li><li>&lt;P/1:<a href="#entity119"><span class="functionname">GetCounterAndIncr</span></a>&gt;
-</li><li>&lt;P/0:<a href="#entity120"><span class="functionname">ResetCounter</span></a>&gt;
+</li><li>&lt;P/1:<a href="#entity119"><span class="functionname">TimeForFileName</span></a>&gt;
+</li><li>&lt;P/1:<a href="#entity120"><span class="functionname">GetCounterAndIncr</span></a>&gt;
+</li><li>&lt;P/0:<a href="#entity121"><span class="functionname">ResetCounter</span></a>&gt;
 </li><li>&lt;P/1:<a href="#entity115"><span class="functionname">UnarySkip</span></a>&gt;
 </li><li>&lt;P/2:<a href="#entity116"><span class="functionname">BinarySkip</span></a>&gt;
-</li><li>&lt;P/3:<a href="#entity121"><span class="functionname">TakeFeatures</span></a>&gt;
-</li><li>&lt;P/3:<a href="#entity122"><span class="functionname">RecursiveAdjoin</span></a>&gt;
-</li><li>&lt;P/3:<a href="#entity123"><span class="functionname">KeepList</span></a>&gt;
-</li><li>&lt;P/2:<a href="#entity124"><span class="functionname">ModuleLink</span></a>&gt;
-</li><li>&lt;P/2:<a href="#entity125"><span class="functionname">ModuleApply</span></a>&gt;
-</li><li>&lt;P/2:<a href="#entity126"><span class="functionname">TimeSpend</span></a>&gt;
-</li><li>&lt;P/2:<a href="#entity127"><span class="functionname">Assert</span></a>&gt;
-</li><li>&lt;P/1:<a href="#entity128"><span class="functionname">WarnGUI</span></a>&gt;
-</li><li>&lt;P/1:<a href="#entity129"><span class="functionname">InfoGUI</span></a>&gt;
-</li><li>&lt;P/1:<a href="#entity130"><span class="functionname">ErrorGUI</span></a>&gt;
+</li><li>&lt;P/3:<a href="#entity122"><span class="functionname">TakeFeatures</span></a>&gt;
+</li><li>&lt;P/3:<a href="#entity123"><span class="functionname">RecursiveAdjoin</span></a>&gt;
+</li><li>&lt;P/3:<a href="#entity124"><span class="functionname">KeepList</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity125"><span class="functionname">ModuleLink</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity126"><span class="functionname">ModuleApply</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity127"><span class="functionname">TimeSpend</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity128"><span class="functionname">Assert</span></a>&gt;
+</li><li>&lt;P/1:<a href="#entity129"><span class="functionname">WarnGUI</span></a>&gt;
+</li><li>&lt;P/1:<a href="#entity130"><span class="functionname">InfoGUI</span></a>&gt;
+</li><li>&lt;P/1:<a href="#entity131"><span class="functionname">ErrorGUI</span></a>&gt;
 </li></ul></code>
 <h3>Define</h3>
 
@@ -457,6 +458,17 @@ clearInterval(drawit)
 
 <code>
 <a name="entity119">
+<span class="keyword">fun</span>{<span class="functionname">TimeForFileName</span> }<br>
+<span class="string"> Returns a VS of the current time in the form<BR>
+ day-month-year_hour-min-sec.<BR>
+<BR>
+ This format does not contain any characters that might be problematic in a file name.<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity120">
 <span class="keyword">proc</span>{<span class="functionname">GetCounterAndIncr</span> X}<br>
 <span class="string"> Return an integer and as a side effect increment the integer for the next access.<BR>
 <BR>
@@ -464,7 +476,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity120">
+<a name="entity121">
 <span class="keyword">proc</span>{<span class="functionname">ResetCounter</span> }<br>
 <span class="string"> Resets the counter for GetCounterAndIncr.<BR>
 <BR>
@@ -482,7 +494,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity121">
+<a name="entity122">
 <span class="keyword">fun</span>{<span class="functionname">TakeFeatures</span> R MyFeats}<br>
 <span class="string"> Fun R (a record) and MyFeats (a list of symbols -- potential features in R). TakeFeatures returns a record which consists in all features and their values of MyFeats contained in R. <BR>
 <BR>
@@ -490,7 +502,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity122">
+<a name="entity123">
 <span class="keyword">proc</span>{<span class="functionname">RecursiveAdjoin</span> R1 R2 Result}<br>
 <span class="string"> Like Adjoin, but nested records are processed recursively.<BR>
  R1 and R2 must have the same nesting for recursive processing, otherwise R2 features are taken (like Adjoin).<BR>
@@ -500,7 +512,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity123">
+<a name="entity124">
 <span class="keyword">fun</span>{<span class="functionname">KeepList</span> R Fs}<br>
 <span class="string"> Opposite of Record.subtractList: returns a record like R, but only keeps the features Fs. Fs can contain features not present in R, but these will then be skipped. <BR>
 <BR>
@@ -508,7 +520,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity124">
+<a name="entity125">
 <span class="keyword">fun</span>{<span class="functionname">ModuleLink</span> UrlVs}<br>
 <span class="string"> ModuleLink is like Module.link except that multiple calls of ModuleLink share the same module manager (and don't create new managers as Module.link does). For instance, when ModuleLink links multiple functors which refer to a stateful datum in some functor, then all refer to the same datum instance. By constrast, linking with Module.link results into multiple stateful datum instances.<BR>
  !! On second though, ModuleLink seems to solve a non-existing problem. ModuleLink is an attempt to avoids problems in case some functor is linked more then once in the OPI. Actually, this should happen only in two cases: either you want to create two module instances (with independent stateful data) or you want to reload a functor (e.g. after compilation) without restarting the whole program. In both cases, Module.link does the right thing. So, why did I ever need ModuleLink???<BR>
@@ -518,7 +530,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity125">
+<a name="entity126">
 <span class="keyword">fun</span>{<span class="functionname">ModuleApply</span> UFs}<br>
 <span class="string"> ModuleApply is like Moduel.apply expect that it always uses the same module manager (cf. ModuleLink). <BR>
 <BR>
@@ -526,7 +538,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity126">
+<a name="entity127">
 <span class="keyword">fun</span>{<span class="functionname">TimeSpend</span> P}<br>
 <span class="string"> Returns the time (in msecs) the application of P (a null-ary procedure) took.<BR>
 <BR>
@@ -534,7 +546,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity127">
+<a name="entity128">
 <span class="keyword">proc</span>{<span class="functionname">Assert</span> B MyException}<br>
 <span class="string"> If B is false, then MyException is raised.<BR>
 <BR>
@@ -542,7 +554,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity128">
+<a name="entity129">
 <span class="keyword">proc</span>{<span class="functionname">WarnGUI</span> VS}<br>
 <span class="string"> Opens a warning dialog which displays VS.<BR>
 <BR>
@@ -550,7 +562,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity129">
+<a name="entity130">
 <span class="keyword">proc</span>{<span class="functionname">InfoGUI</span> VS}<br>
 <span class="string"> Opens a warning dialog which displays VS. <BR>
 <BR>
@@ -558,7 +570,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity130">
+<a name="entity131">
 <span class="keyword">proc</span>{<span class="functionname">ErrorGUI</span> VS}<br>
 <span class="string"> Opens an error dialog which displays VS. <BR>
 <BR>

@@ -237,7 +237,7 @@ clearInterval(drawit)
  All other top-level arguments are given to the top-level seq.<BR>
 <BR>
  Args.segments:<BR>
- tuple of segment specifications, where each segment specifications is a record of the following arguments. (In principle it can be a record, but then the temporal order of segments depends on the order of features in the record)<BR>
+ tuple of segment specifications, where each segment specifications is a record of the following arguments. (In principle Args.segments can be a record, but then the temporal order of segments depends on the order of features in the record.)<BR>
  'constructor': extended script (binary procedure) for creating the layer, commonly created with Score.defSubscript. Should return a score object (not a list of score objects).<BR>
  All other arguments in Args.segments are given to this constructor.<BR>
 <BR>

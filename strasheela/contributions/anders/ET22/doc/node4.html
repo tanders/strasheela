@@ -133,16 +133,16 @@ clearInterval(drawit)
 </span></li><li><a href="node6.html">ET22</a> at "<span class="string">../ET22.ozf"
 </span></li></ul></code>
 <h3>Export</h3>
-<code><ul><li>&lt;P/1:<a href="#entity71"><span class="functionname">SetOffset</span></a>&gt;
-</li><li>&lt;P/1:<a href="#entity72"><span class="functionname">SetDuration</span></a>&gt;
-</li><li>&lt;P/1:<a href="#entity73"><span class="functionname">PlayRChord</span></a>&gt;
-</li><li>&lt;P/1:<a href="#entity74"><span class="functionname">PlayPCs</span></a>&gt;
-</li><li>&lt;P/1:<a href="#entity75"><span class="functionname">PlayNames</span></a>&gt;
+<code><ul><li>&lt;P/1:<a href="#entity53"><span class="functionname">SetOffset</span></a>&gt;
+</li><li>&lt;P/1:<a href="#entity54"><span class="functionname">SetDuration</span></a>&gt;
+</li><li>&lt;P/1:<a href="#entity55"><span class="functionname">PlayRChord</span></a>&gt;
+</li><li>&lt;P/1:<a href="#entity56"><span class="functionname">PlayPCs</span></a>&gt;
+</li><li>&lt;P/1:<a href="#entity57"><span class="functionname">PlayNames</span></a>&gt;
 </li></ul></code>
 <h3>Define</h3>
 
 <code>
-<a name="entity71">
+<a name="entity53">
 <span class="keyword">proc</span>{<span class="functionname">SetOffset</span> B}<br>
 <span class="string"> Changes globally the offset time between notes (an int, default is 0), so an arpeggio can be perceived. If global Offset = global Duration, then notes don't overlap. <BR>
 <BR>
@@ -150,12 +150,12 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity72">
+<a name="entity54">
 <span class="keyword">proc</span>{<span class="functionname">SetDuration</span> Dur}
 </code><br>
 
 <code>
-<a name="entity73">
+<a name="entity55">
 <span class="keyword">proc</span>{<span class="functionname">PlayRChord</span> Ratios}<br>
 <span class="string"> Play list of Ratios (list of int pairs) in millicent precision using Csound. 1#1 denotes middle C.<BR>
  Note that the resulting chord is rendered in just intonation -- in contrast to the output of, e.g., PlayPCs and PlayNames. <BR>
@@ -165,7 +165,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity74">
+<a name="entity56">
 <span class="keyword">proc</span>{<span class="functionname">PlayPCs</span> PCs}<br>
 <span class="string"> Plays 31 ET pitch class lists using Csound. 0 denotes middle C.<BR>
  Duration specified globally (10 secs, int in msecs).<BR>
@@ -174,7 +174,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity75">
+<a name="entity57">
 <span class="keyword">proc</span>{<span class="functionname">PlayNames</span> Names}<br>
 <span class="string"> Plays symbolic note names expressing 31 ET pitch class lists using Csound. 0 denotes middle C.<BR>
  Duration specified globally (10 secs, int in msecs).<BR>

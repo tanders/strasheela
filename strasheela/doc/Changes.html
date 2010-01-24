@@ -30,10 +30,10 @@
     <li class="navn"><a href="contact.html">contact</a></li>
   </ul>
   <div id="logo">
-<a href="http://sourceforge.net/projects/strasheela"><img src="http://sflogo.sourceforge.net/sflogo.php?group_id=167225&type=12" width="120" height="30" border="0" alt="Get Strasheela at SourceForge.net. Fast, secure and Free Open Source software downloads" /></a>
+<a href="http://sourceforge.net/projects/strasheela"><img src="http://sflogo.sourceforge.net/sflogo.php?group_id=167225&amp;type=15" width="150" height="40" alt="Get Strasheela at SourceForge.net. Fast, secure and Free Open Source software downloads" /></a>
   </div>
   <div id="logo">
-  <a href="http://cmr.soc.plymouth.ac.uk/"><img src="http://cmr.soc.plymouth.ac.uk/iccmr_logo_2.jpg" width="125"  width="80" height="30" border="0" alt="ICCMR Logo" /></a>
+  <a href="http://cmr.soc.plymouth.ac.uk/"><img src="http://cmr.soc.plymouth.ac.uk/iccmr_logo_2.jpg" width="150" height="40" border="0" alt="ICCMR Logo" /></a>
   </div>
 </div>
     <h1>Changes</h1>
@@ -49,13 +49,15 @@
 <ul>
 <li>Revised score distribution: value orderings can now access arbitrary score information</li>
 <li>Added support for transformable subscripts (<a href="../contributions/anders/Segments/doc/_.html">Segs.tSC</a>)</li>
+<li>Added functor <a href="../contributions/anders/ET41/doc/node1.html">ET41</a> for composition in <a href="http://en.wikipedia.org/wiki/41_equal_temperament">41-tone equal temperament</a> and related tunings (e.g. the just intonation tuning of <a href="http://en.wikipedia.org/wiki/La_Monte_Young">La Monte Young</a>'s <a href="http://www.kylegann.com/wtp.html">The Well-Tuned Piano</a>). Supported features for these tunings include a short-hand pitch notation; a database of intervals, chords, and scales; and some minimal music notation support (via Lilypond).</li>
+<li>Added HS.out: generalised output for score objects and concepts introduced by HS, e.g., Lilypond output for chord and scale objects and means to define Lilypond output for different temperaments.</li>
 </ul></li>
 
 <li>Documentation
 
 <ul>
-<li></li></li>
-</ul>
+<li><a href="../examples/Harmony-Examples/HarmonicProgressions-41ET.oz">HarmonicProgressions-41ET.oz</a> Added 41 ET harmony example, using La Monte Young's The Well-Tuned Piano chords</li>
+</ul></li>
 
 <li>Minor additions
 
@@ -65,7 +67,11 @@
 <li>GUtils: added GUtils.recursiveRatio</li>
 <li>GUtils.toProc: refactored version now supports optional arguments with default values</li>
 <li>Init: added SetNoteLengthsRecord, SymbolicDurToInt</li>
+<li>Out.toLilypond and friends: implicit clef is now controllable with argument getClef</li>
+<li>Out.makeNoteToLily2: function has been completely rewritten with a now more general interface</li>
+<li>Out.averagePitchClef added</li>
 <li>SMapping: added MapTimeslices ForTimeslices</li>
+<li>SDistro: added SearchBest_Timeout</li>
 <li>ET22.db: interval database now defined as ratios for adaptive JI</li>
 <li>ET22.out: added NoteEt22ToLily_AdaptiveJI2, PajaraRMS_TuningTable, JI_TuningTable</li>
 <li>ET31.out: added NoteEt31ToLily_AdaptiveJI2, Meantone_TuningTable, JI_TuningTable</li>
@@ -73,8 +79,8 @@
 <li>Segs.makeCounterpoint: added arg clearDissonanceResolution (before this constraint was always enabled).</li>
 <li>Segs: added mixin scripts (partly removing orig extended script altogether): MakeCounterpoint_Mixin, PitchPattern, FenvContour, Arpeggio, Arc, Repetitions, Hook, Stairs, MakeAkkord_Mixin, MakeAkkords_Mixin</li>
 <li>Segs.homophonicChordProgression: added args playAllChordTones, noVoiceCrossing, maxUpperVoiceDistance</li>
-<li>HS.rules: added GetRootDegreeIntervals SetBoundaryRoots SetBoundaryTypes NoParallels2.</li>
-<li>Pattern: added MinDistinct, DirectionOfContour, LocalMinR, GetLocalMax, GetLocalMin, ConstrainLocalMax, ConstrainLocalMin</li>
+<li>HS.rules: added GetRootDegreeIntervals, SetBoundaryRoots, SetBoundaryTypes, NoParallels2, Ballistic, MinCard</li>
+<li>Pattern: added MinDistinct, DirectionOfContour, LocalMinR, GetLocalMax, GetLocalMin, ConstrainLocalMax, ConstrainLocalMin, FenvContour2, NoRepetition and Undulating</li>
 <li>HS.score: refactored HarmonicRythmFollowsMarkers: now works also for items with offsetTime &gt; 0</li>
 <li>Removed proc GUtils.selectArg (better use Adjoin or CondSelect instead)</li>
 <li>Removed GUtils.isInt (result wrong for FD ints): use FD.is or IsInt instead</li>
@@ -84,11 +90,17 @@
 
 <ul>
 <li>Oz primitives like IsRecord, IsAtom etc. block on kinded variables (undetermined FD and FS vars), which could cause blocking of various Strasheela definitions. Now Strasheela always uses its new own GUtils.isRecord and GUtils.isAtom etc. which do not have this problem</li>
+<li>Lilypond output: if score started with offset time, then this leading rest was ignored in the Lilypond output (now fixed). Also, score now by default wrapped in braces, and default Lilypond version updated to &quot;2.12.0&quot;.</li>
+<li>HS.out.renderAndShowLilypond: revised args codeBeforeNoteMakers and codeBeforePcCollectionMakers. Also, chord and scale objects are again notated with grace notes /before/ root (grace notes after the root (using \aftergrace) are incompatible with HE notation).</li>
 <li>HS.score: GetAdaptiveJIPitch: added arg tuneNonharmonicNotes, added GetAdaptiveJIPitch2, chord root now as in current tuning table or underlying ET (if no tuning table is defined), dependance on scale removed (can be completely wrong, e.g., with just major scale, major nineth of V would be syntonic comma too low)</li>
+<li>HS.out.renderAndShowLilypond: changed output of chord pitch classes to octave above middle C</li>
 <li>HS.score.degreeToPC: fixed propagation error</li>
 <li>HS.db: Pc2Ratios now returns nil if no ratio was defined for interval</li>
+<li>Fixed HS.pcName</li>
 <li>Fenv method toList: fixed bug for case N=1</li>
 <li>Out.midi.getChannel now uses mini chan param of midi note objects (not only channel info tag)</li>
+<li>Refactored ET22 and ET31 output: now much reduced code with same functionality using HS.out, several procs before exported by ET22 and ET31 are now moved to HS.out</li>
+<li>Segs.homophonicChordProgression: replaced arg 'isToplevel' by arg 'makeTopLevel' for generality; fixed bug: constraint of arg maxUpperVoiceDistance now actually applied to upper voices</li>
 </ul></li>
 </ul>
 
@@ -889,7 +901,7 @@ See the documentation for <a href="../contributions/anders/HarmonisedScore/doc/n
 <div id="footer">
 <div id="author">&copy; 
 Torsten Anders</div>
-<div id="date">Last time edited: 2009.08.29</div>
+<div id="date">Last time edited: 2010.01.24</div>
 </div>
   </body>
 </html>
