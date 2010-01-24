@@ -188,7 +188,6 @@ define
       {Out.renderAndShowLilypond MyScore As2}
    end
 
-   
    local
       %% Markups is a list of VS 
       fun {CombineMarkups Markups Lilycode}
@@ -212,16 +211,18 @@ define
 	 end
       end
    in
-      /** %% Expects a Strasheela note object and returns the corresponding
+      
+      %% Expects a Strasheela note object and returns the corresponding
       %% Lilypond code (a VS). 
       %% */
       %% note: no tie-versions of args (as supported by Out.makeNoteToLily2)
-      fun {MakeNoteToLily unit(pcsLilyNames: PCsLilyNames
-			       pitchesPerOctave: PitchesPerOctave
-			       upperMarkupMakers: UpperMarkupMakers
-			       lowerMarkupMakers: LowerMarkupMakers
-			       codeBeforeNoteMakers: CodeBeforeNoteMakers
-			       ...)}
+      fun {MakeNoteToLily Args}
+	 PCsLilyNames = Args.pcsLilyNames
+	 PitchesPerOctave = Args.pitchesPerOctave
+	 UpperMarkupMakers = Args.upperMarkupMakers
+	 LowerMarkupMakers = Args.lowerMarkupMakers
+	 CodeBeforeNoteMakers = Args.codeBeforeNoteMakers
+      in
 	 fun {$ MyNote}
 	    {{Out.makeNoteToLily2
 	      unit(makePitch: fun {$ N}
@@ -250,12 +251,13 @@ define
       %%
       %% TODO: test whether adding an " " results in a space in columns, so the note to which the sign was added can be identified.
       %% Alternative: lily empty markup \null
-      fun {MakeSimToLilyChord unit(pcsLilyNames: PCsLilyNames
-				   pitchesPerOctave: PitchesPerOctave
-				   upperMarkupMakers: UpperMarkupMakers
-				   lowerMarkupMakers: LowerMarkupMakers
-				   codeBeforeNoteMakers: CodeBeforeNoteMakers
-				   ...)}
+      fun {MakeSimToLilyChord  Args}
+	 PCsLilyNames = Args.pcsLilyNames
+	 PitchesPerOctave = Args.pitchesPerOctave
+	 UpperMarkupMakers = Args.upperMarkupMakers
+	 LowerMarkupMakers = Args.lowerMarkupMakers
+	 CodeBeforeNoteMakers = Args.codeBeforeNoteMakers
+      in
 	 fun {$ Sim}
 	    Notes = {Sim getItems($)}
 	    Pitches = {Out.listToVS
@@ -310,14 +312,15 @@ define
       /** %% Creates Lilypond output (VS) for a PC collection (chord or scale). The PC collection's duration and root is notated by a single a note, all pitch classes as grace notes are following.
       %% */
       %%
-      fun {MakePcCollectionToLily unit(pcsLilyNames: PCsLilyNames
-				       pitchesPerOctave: PitchesPerOctave
-				       upperMarkupMakers: UpperMarkupMakers
-				       lowerMarkupMakers: LowerMarkupMakers
-				       codeBeforeNoteMakers: CodeBeforeNoteMakers
-				       codeBeforePcCollectionMakers: CodeBeforePcCollectionMakers
-				       chordOrScale: ChordOrScale
-				       ...)}	 
+      fun {MakePcCollectionToLily Args}
+	 PCsLilyNames = Args.pcsLilyNames
+	 PitchesPerOctave = Args.pitchesPerOctave
+	 UpperMarkupMakers = Args.upperMarkupMakers
+	 LowerMarkupMakers = Args.lowerMarkupMakers
+	 CodeBeforeNoteMakers = Args.codeBeforeNoteMakers
+	 CodeBeforePcCollectionMakers = Args.codeBeforePcCollectionMakers
+	 ChordOrScale = Args.chordOrScale
+      in
 	 fun {$ MyPcColl}
 	    %% BUG: must not be used for chord root...
 	    fun {PcToLily PC}	       

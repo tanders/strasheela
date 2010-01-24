@@ -59,22 +59,23 @@ document.write('<div id="slidemenubar2" style="left:-144" onMouseover="pull()" o
 </script>
 <layer id="slidemenubar" onMouseover="pull()" onMouseout="draw()">
 <table border="0" cellpadding="0" cellspacing="0" width="161"><tr><td bgcolor="#009cff" width="144"><a href="index.html">Index</a>
-</td><td rowspan="17" valign="top" width="16"><img src="menu.gif" width="16"></td></tr><tr><td bgcolor="#009cff" width="144"><a href="node1.html">HarmonisedScore</a>
+</td><td rowspan="18" valign="top" width="16"><img src="menu.gif" width="16"></td></tr><tr><td bgcolor="#009cff" width="144"><a href="node1.html">HarmonisedScore</a>
 </td></tr><tr><td bgcolor="#009cff" width="144"><a href="node2.html">DB</a>
-</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node3.html">HSScore</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node3.html">HS_Score</a>
 </td></tr><tr><td bgcolor="#009cff" width="144"><a href="node4.html">Rules</a>
 </td></tr><tr><td bgcolor="#009cff" width="144"><a href="node5.html">DBs</a>
-</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node6.html">Distro</a>
-</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node7.html">HS</a>
-</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node8.html">Schoenberg</a>
-</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node9.html">Default</a>
-</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node10.html">Jazz</a>
-</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node11.html">Partch</a>
-</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node12.html">Johnston</a>
-</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node13.html">Harrison</a>
-</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node14.html">Chalmers</a>
-</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node15.html">Catler</a>
-</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node16.html">ArithmeticalSeriesChords</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node6.html">HS_Distro</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node7.html">HS_Out</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node8.html">HS</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node9.html">Schoenberg</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node10.html">Default</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node11.html">Jazz</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node12.html">Partch</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node13.html">Johnston</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node14.html">Harrison</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node15.html">Chalmers</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node16.html">Catler</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node17.html">ArithmeticalSeriesChords</a>
 </td></tr></table></layer>
 <script language="JavaScript1.2">
 function regenerate(){
@@ -146,38 +147,38 @@ clearInterval(drawit)
 </span></li><li><a href="node5.html">DBs</a> at "<span class="string">databases/Databases.ozf"
 </span></li></ul></code>
 <h3>Export</h3>
-<code><ul><li>&lt;P/1:<a href="#entity36"><span class="functionname">SetDB</span></a>&gt;
-</li><li>&lt;P/1:<a href="#entity37"><span class="functionname">GetEditChordDB</span></a>&gt;
-</li><li>&lt;P/1:<a href="#entity38"><span class="functionname">GetInternalChordDB</span></a>&gt;
-</li><li>&lt;P/1:<a href="#entity39"><span class="functionname">GetEditScaleDB</span></a>&gt;
-</li><li>&lt;P/1:<a href="#entity40"><span class="functionname">GetInternalScaleDB</span></a>&gt;
-</li><li>&lt;P/1:<a href="#entity41"><span class="functionname">GetEditIntervalDB</span></a>&gt;
-</li><li>&lt;P/1:<a href="#entity42"><span class="functionname">GetInternalIntervalDB</span></a>&gt;
-</li><li>&lt;P/1:<a href="#entity43"><span class="functionname">GetPitchesPerOctave</span></a>&gt;
-</li><li>&lt;P/1:<a href="#entity45"><span class="functionname">GetPitchUnit</span></a>&gt;
-</li><li>&lt;P/1:<a href="#entity44"><span class="functionname">GetAccidentalOffset</span></a>&gt;
-</li><li>&lt;P/1:<a href="#entity46"><span class="functionname">GetOctaveDomain</span></a>&gt;
-</li><li>&lt;P/1:<a href="#entity47"><span class="functionname">MakePitchClassFDInt</span></a>&gt;
-</li><li>&lt;P/1:<a href="#entity48"><span class="functionname">MakeOctaveFDInt</span></a>&gt;
-</li><li>&lt;P/1:<a href="#entity49"><span class="functionname">MakeAccidentalFDInt</span></a>&gt;
-</li><li>&lt;P/1:<a href="#entity50"><span class="functionname">MakeScaleDegreeFDInt</span></a>&gt;
-</li><li>&lt;P/1:<a href="#entity51"><span class="functionname">MakeChordDegreeFDInt</span></a>&gt;
-</li><li>&lt;P/3:<a href="#entity52"><span class="functionname">RatiosInDBEntryToPCs</span></a>&gt;
-</li><li>&lt;P/2:<a href="#entity53"><span class="functionname">WasRatiosDBEntry</span></a>&gt;
-</li><li>&lt;P/3:<a href="#entity57"><span class="functionname">Pc2Ratios</span></a>&gt;
-</li><li>&lt;P/2:<a href="#entity54"><span class="functionname">GetChordIndex</span></a>&gt;
-</li><li>&lt;P/2:<a href="#entity55"><span class="functionname">GetScaleIndex</span></a>&gt;
-</li><li>&lt;P/2:<a href="#entity56"><span class="functionname">GetIntervalIndex</span></a>&gt;
-</li><li>&lt;P/2:<a href="#entity58"><span class="functionname">GetComment</span></a>&gt;
-</li><li>&lt;P/2:<a href="#entity59"><span class="functionname">GetName</span></a>&gt;
-</li><li>&lt;P/2:<a href="#entity60"><span class="functionname">GetUntransposedRatios</span></a>&gt;
-</li><li>&lt;P/2:<a href="#entity61"><span class="functionname">GetUntransposedRootRatio</span></a>&gt;
-</li><li>&lt;P/2:<a href="#entity62"><span class="functionname">GetUntransposedRootRatio_Float</span></a>&gt;
+<code><ul><li>&lt;P/1:<a href="#entity40"><span class="functionname">SetDB</span></a>&gt;
+</li><li>&lt;P/1:<a href="#entity41"><span class="functionname">GetEditChordDB</span></a>&gt;
+</li><li>&lt;P/1:<a href="#entity42"><span class="functionname">GetInternalChordDB</span></a>&gt;
+</li><li>&lt;P/1:<a href="#entity43"><span class="functionname">GetEditScaleDB</span></a>&gt;
+</li><li>&lt;P/1:<a href="#entity44"><span class="functionname">GetInternalScaleDB</span></a>&gt;
+</li><li>&lt;P/1:<a href="#entity45"><span class="functionname">GetEditIntervalDB</span></a>&gt;
+</li><li>&lt;P/1:<a href="#entity46"><span class="functionname">GetInternalIntervalDB</span></a>&gt;
+</li><li>&lt;P/1:<a href="#entity47"><span class="functionname">GetPitchesPerOctave</span></a>&gt;
+</li><li>&lt;P/1:<a href="#entity49"><span class="functionname">GetPitchUnit</span></a>&gt;
+</li><li>&lt;P/1:<a href="#entity48"><span class="functionname">GetAccidentalOffset</span></a>&gt;
+</li><li>&lt;P/1:<a href="#entity50"><span class="functionname">GetOctaveDomain</span></a>&gt;
+</li><li>&lt;P/1:<a href="#entity51"><span class="functionname">MakePitchClassFDInt</span></a>&gt;
+</li><li>&lt;P/1:<a href="#entity52"><span class="functionname">MakeOctaveFDInt</span></a>&gt;
+</li><li>&lt;P/1:<a href="#entity53"><span class="functionname">MakeAccidentalFDInt</span></a>&gt;
+</li><li>&lt;P/1:<a href="#entity54"><span class="functionname">MakeScaleDegreeFDInt</span></a>&gt;
+</li><li>&lt;P/1:<a href="#entity55"><span class="functionname">MakeChordDegreeFDInt</span></a>&gt;
+</li><li>&lt;P/3:<a href="#entity56"><span class="functionname">RatiosInDBEntryToPCs</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity57"><span class="functionname">WasRatiosDBEntry</span></a>&gt;
+</li><li>&lt;P/3:<a href="#entity61"><span class="functionname">Pc2Ratios</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity58"><span class="functionname">GetChordIndex</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity59"><span class="functionname">GetScaleIndex</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity60"><span class="functionname">GetIntervalIndex</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity62"><span class="functionname">GetComment</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity63"><span class="functionname">GetName</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity64"><span class="functionname">GetUntransposedRatios</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity65"><span class="functionname">GetUntransposedRootRatio</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity66"><span class="functionname">GetUntransposedRootRatio_Float</span></a>&gt;
 </li></ul></code>
 <h3>Define</h3>
 
 <code>
-<a name="entity36">
+<a name="entity40">
 <span class="keyword">proc</span>{<span class="functionname">SetDB</span> NewDB}<br>
 <span class="string"> Sets the database which is used by the HarmonisedScore contribution (e.g., its music representation and rules).<BR>
  The syntax of the database is<BR>
@@ -210,57 +211,57 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity37">
+<a name="entity41">
 <span class="keyword">fun</span>{<span class="functionname">GetEditChordDB</span> }
 </code><br>
 
 <code>
-<a name="entity38">
+<a name="entity42">
 <span class="keyword">fun</span>{<span class="functionname">GetInternalChordDB</span> }
 </code><br>
 
 <code>
-<a name="entity39">
+<a name="entity43">
 <span class="keyword">fun</span>{<span class="functionname">GetEditScaleDB</span> }
 </code><br>
 
 <code>
-<a name="entity40">
+<a name="entity44">
 <span class="keyword">fun</span>{<span class="functionname">GetInternalScaleDB</span> }
 </code><br>
 
 <code>
-<a name="entity41">
+<a name="entity45">
 <span class="keyword">fun</span>{<span class="functionname">GetEditIntervalDB</span> }
 </code><br>
 
 <code>
-<a name="entity42">
+<a name="entity46">
 <span class="keyword">fun</span>{<span class="functionname">GetInternalIntervalDB</span> }
 </code><br>
 
 <code>
-<a name="entity43">
+<a name="entity47">
 <span class="keyword">fun</span>{<span class="functionname">GetPitchesPerOctave</span> }
 </code><br>
 
 <code>
-<a name="entity45">
+<a name="entity49">
 <span class="keyword">fun</span>{<span class="functionname">GetPitchUnit</span> }
 </code><br>
 
 <code>
-<a name="entity44">
+<a name="entity48">
 <span class="keyword">fun</span>{<span class="functionname">GetAccidentalOffset</span> }
 </code><br>
 
 <code>
-<a name="entity46">
+<a name="entity50">
 <span class="keyword">fun</span>{<span class="functionname">GetOctaveDomain</span> }
 </code><br>
 
 <code>
-<a name="entity47">
+<a name="entity51">
 <span class="keyword">fun</span>{<span class="functionname">MakePitchClassFDInt</span> }<br>
 <span class="string"> Return a FD integer representing a pitch class (range defined by PitchesPerOctave).<BR>
 <BR>
@@ -268,7 +269,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity48">
+<a name="entity52">
 <span class="keyword">fun</span>{<span class="functionname">MakeOctaveFDInt</span> }<br>
 <span class="string"> Return a FD integer representing an octave (range OctaveDomain).<BR>
 <BR>
@@ -276,7 +277,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity49">
+<a name="entity53">
 <span class="keyword">fun</span>{<span class="functionname">MakeAccidentalFDInt</span> }<br>
 <span class="string"> Return a FD integer representing an accidental (range 0#AccidentalOffset*2). <BR>
 <BR>
@@ -284,7 +285,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity50">
+<a name="entity54">
 <span class="keyword">fun</span>{<span class="functionname">MakeScaleDegreeFDInt</span> }<br>
 <span class="string"> Returns a FD integer representing a scale degree (range 1#MaxScaleLength).<BR>
 <BR>
@@ -292,7 +293,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity51">
+<a name="entity55">
 <span class="keyword">fun</span>{<span class="functionname">MakeChordDegreeFDInt</span> }<br>
 <span class="string"> Returns a FD integer representing a chord degree (range 1#MaxChordLength).<BR>
 <BR>
@@ -300,7 +301,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity52">
+<a name="entity56">
 <span class="keyword">proc</span>{<span class="functionname">RatiosInDBEntryToPCs</span> MyDBEntry KeysPerOctave Out}<br>
 <span class="string"> Processes an entry for a HS database (e.g. for a chord database). HS depends on pitches as keynumbers and pitch classes (all represented by integers or FD ints), both depending on KeysPerOctave. RatiosInDBEntryToPCs, on the other hand, permits also ratios (floats or fractions specs) which are transformed and rounded to the nearest pitch class (a ratio representing an interval exceeding an octave is transformed into an interval within an octave). <BR>
  MyDBEntry is a record with arbitrary features. Each feature value is either an interger, a list of integers, a ratio spec (either a float or a fraction spec in the form &lt;Int&gt;#&lt;Int&gt;), or a list of ratio specs. The output contains each integer/lists of integers unchanged but substitutes each ratio/list of ratios by the nearest pitch class interval (an integer), depending on KeysPerOctave (an integer).<BR>
@@ -316,7 +317,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity53">
+<a name="entity57">
 <span class="keyword">fun</span>{<span class="functionname">WasRatiosDBEntry</span> MyDBEntry}<br>
 <span class="string"> Returns true if MyDBEntry was processed by RatiosInDBEntryToPCs.<BR>
 <BR>
@@ -324,7 +325,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity57">
+<a name="entity61">
 <span class="keyword">fun</span>{<span class="functionname">Pc2Ratios</span> PC IntervalDB}<br>
 <span class="string"> Returns a list of all ratios which match PC (an int) in IntervalDB (given in its edit form) which was defined using ratios (e.g. {HS.dbs.partch.getIntervals {HS.db.getPitchesPerOctave}}).<BR>
  A ratio consists in two integers and has the form Nom#Denom. If no entry in the database matches PC or non matching is defined as ratio, then nil is returned.<BR>
@@ -339,7 +340,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity54">
+<a name="entity58">
 <span class="keyword">fun</span>{<span class="functionname">GetChordIndex</span> MyName}<br>
 <span class="string"> Convenience functions. ChordIndex expects a name (atom) for a chord and returns the corresponding index. This name is either the value stored under the edit database feature 'comment', or the value of a feature 'name' of a record stored under the edit database feature 'comment'. If no database entry with this name is defined, then nil is returned.<BR>
  ScaleIndex and IntervalIndex do the same for scales and intervals.<BR>
@@ -348,17 +349,17 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity55">
+<a name="entity59">
 <span class="keyword">fun</span>{<span class="functionname">GetScaleIndex</span> MyName}
 </code><br>
 
 <code>
-<a name="entity56">
+<a name="entity60">
 <span class="keyword">fun</span>{<span class="functionname">GetIntervalIndex</span> MyName}
 </code><br>
 
 <code>
-<a name="entity58">
+<a name="entity62">
 <span class="keyword">fun</span>{<span class="functionname">GetComment</span> X}<br>
 <span class="string"> Expects a chord, scale or interval object and returns the comment value in its internal database format.<BR>
  Blocks until the index parameter is determined.<BR>
@@ -367,7 +368,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity59">
+<a name="entity63">
 <span class="keyword">fun</span>{<span class="functionname">GetName</span> X}<br>
 <span class="string"> Returns the name of a chord, scale or interval specified in its database entry (a VS, usually an atom). The name is a list of atoms (its a list because there are sometimes multiple name alternatives). Returns nil if no name was found.<BR>
  Blocks until the index parameter is determined.<BR>
@@ -378,7 +379,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity60">
+<a name="entity64">
 <span class="keyword">fun</span>{<span class="functionname">GetUntransposedRatios</span> X}<br>
 <span class="string"> Returns the ratios specs by which X (chord or scale object) is declared in the database. If X was declared by pitch classes instead and thus no ratios are available then nil is returned.<BR>
 <BR>
@@ -386,7 +387,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity61">
+<a name="entity65">
 <span class="keyword">fun</span>{<span class="functionname">GetUntransposedRootRatio</span> X}<br>
 <span class="string"> Returns the ratio specs by which the roots of X (chord or scale object) are declared in the database. If the root was declared by a pitch class instead and thus no ratio is available then nil is returned.<BR>
 <BR>
@@ -394,7 +395,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity62">
+<a name="entity66">
 <span class="keyword">fun</span>{<span class="functionname">GetUntransposedRootRatio_Float</span> X}<br>
 <span class="string">  Returns the frequency ratio of the [first] root of X (chord or scale object) as a float. For example, if the ratio 1#1 or the pitch class 0 is declared as root, then 1.0 is returned; it it is 3#2 then 1.5 is returned.<BR>
 <BR>
