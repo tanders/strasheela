@@ -32,6 +32,7 @@ define
 	       %% Note: Young's "distribution of the pitches over octaves" is lost in this pitch-class representation
 	       %%
 
+	       %% NOTE: 'opening' chord is subset of 'lost ancestral region' (without subminor third)
 	       chord(pitchClasses:[4#1 6#1 7#1 9#1]
 		     roots:[4#1]
 % 		     essentialPitchClasses:[]
@@ -47,7 +48,8 @@ define
 	       chord(pitchClasses:[42#1 54#1 64#1 81#1]
 		       roots:[42#1] %% TODO:
 % 		     essentialPitchClasses:[]
-		       comment:'gamelan')
+		     comment:'gamelan')
+	       %% NOTE: 'tamiar dream' is subset of 'lost ancestral region' (21/1 missing)
 	       chord(pitchClasses:[14#1 18#1 24#1 27#1]
 		       roots:[14#1] %% TODO:
 % 		     essentialPitchClasses:[]
@@ -101,11 +103,17 @@ define
 	       scale(pitchClasses:{Pattern.dxsToXs [3 4 3 3 4 3 4 3 3 4 3] 0}
 		     roots:[0]
 		     comment:'schismic')
+	       scale(pitchClasses:{Pattern.dxsToXs [11 2 11 2 2 11] 0}
+		     roots:[0]
+		     comment:'magic-7')
+	       scale(pitchClasses:{Pattern.dxsToXs [9 2 2 2 9 2 2 9 2] 0}
+		     roots:[0]
+		     comment:'magic-10')
 	       %% http://en.wikipedia.org/wiki/Magic_temperament
 	       %% http://groups.yahoo.com/group/tuning-math/message/10917|
 	       scale(pitchClasses:{Pattern.dxsToXs [7 2 2 2 7 2 2 2 7 2 2 2] 0}
 		     roots:[0]
-		     comment:'magic')
+		     comment:'magic') % Magic-13 
 	       %% http://x31eq.com/miracle.htm
 	       scale(pitchClasses:{Pattern.dxsToXs [4 4 4 4 4 4 4 4 4] 0}
 		     roots:[0]
@@ -114,9 +122,6 @@ define
 	       scale(pitchClasses:{Pattern.dxsToXs [1 3 1 3 1 3 1 3 1 3 1 3 1 3 1 3 1 3 1 3] 0}
 		     roots:[0]
 		     comment:'blackjack')
-
-	       
-	       
 	       )
 
    %% TODO, see http://en.wikipedia.org/wiki/41_equal_temperament
