@@ -120,8 +120,8 @@ define
    %% 'pcsLilyNames' (default pcs(0:c 1:cis 2:d 3:'dis' 4:e 5:f 6:fis 7:g 8:gis 9:a 10:ais 11:b)): tuple of atomes that assigns to each pitch class of the temperament a Lilypond pitch name. The width of the tuple should correspond to the pitch unit.
    %% 'upperMarkupMakers' (default [MakeNonChordTone_Markup]): a list of unary functions (markup makers) for creating textual markup placed above the staff over a given score object. Each markup function expects a score object and returns a VS. There exist four cases of score objects for which markup can be applied: note objects in general, note objects in simultaneous containers of notes (notated as a chord in Lilypond), chord objects and scale objects. The definition of each markup function must care for all these cases (e.g., with an if expression test whether the input is a note object and then create some VS or alternatively create the empty VS nil). 
    %% 'lowerMarkupMakers' (default [MakeChordComment_Markup MakeScaleComment_Markup]): same as 'upperMarkupMakers', but for markups placed below the staff.
-   %% 'codeBeforeNoteMakers' (default nil): list of unary functions for creating Lilypond code placed directly before a note. Each function expects a note object and returns a VS. There exist two cases of score objects for which markup can be applied: note objects in general, and notes in simultaneous containers of notes (notated as a chord in Lilypond). The definition of each function must care for these cases.
-   %% 'codeBeforePcCollectionMakers' (default nil): list of binary functions for creating Lilypond code placed directly before a Lilypond note that is part of a Lilypond representation of a Strasheela chord/scale. Each function expects a chord/scale object and a pitch class; it returns a VS.
+   %% 'codeBeforeNoteMakers' (default nil): list of unary functions for creating Lilypond code placed directly before a note. Each function expects a score object and returns a VS. There exist three cases of score objects for which markup can be applied: note objects in general, notes in simultaneous containers of notes (notated as a chord in Lilypond), and Strasheela chord/scale objects (the resulting Lilypond code is placed before the chord/scale root). The definition of each function must care for these cases.
+   %% 'codeBeforePcCollectionMakers' (default nil): list of binary functions for creating Lilypond code placed directly before a Lilypond note that is part of a Lilypond representation of a Strasheela chord/scale pitch class. Each function expects a chord/scale object and a pitch class; it returns a VS.
    %%
    %% In addition, the arguments of Out.renderAndShowLilypond are supported. 
    %%
@@ -129,7 +129,9 @@ define
    %%
    %% */
    %%
-   %% TODO: Revise: put grace notes after root, see ~/lilypond/ReviseET31/HarmonicProgression-Lilytest.ly
+   %% TODO: This def with its various special-case args is rather complex. Can I somehow refactor this def?
+   %%
+   %% NOTE: grace notes after the root (using \aftergrace) are incompatible with HE notation, so I use plain grace and put the root behind
    %%
    proc {RenderAndShowLilypond MyScore Args}
       Default = unit(pitchUnit: et12
@@ -233,7 +235,7 @@ define
 		   makeCodeBefore: fun {$ N}
 				      {Out.listToVS {Map CodeBeforeNoteMakers fun {$ F} {F N} end}
 				       " "}
-				  end
+				   end
 		  )}
 	     MyNote}
 	 end
@@ -312,10 +314,12 @@ define
 				       pitchesPerOctave: PitchesPerOctave
 				       upperMarkupMakers: UpperMarkupMakers
 				       lowerMarkupMakers: LowerMarkupMakers
+				       codeBeforeNoteMakers: CodeBeforeNoteMakers
 				       codeBeforePcCollectionMakers: CodeBeforePcCollectionMakers
 				       chordOrScale: ChordOrScale
 				       ...)}	 
 	 fun {$ MyPcColl}
+	    %% BUG: must not be used for chord root...
 	    fun {PcToLily PC}	       
 	       %% transpose PC into octave over middle C
 	       TranspPC = PC+{HS.pitch 'C'#4} 
@@ -323,6 +327,15 @@ define
 	       {TrailingSpace
 		{Out.listToVS {Map CodeBeforePcCollectionMakers fun {$ F} {F MyPcColl PC} end}
 		 " "}}
+	       #{TemperamentPitchToLily TranspPC PCsLilyNames PitchesPerOctave}
+	    end
+	    %% code repetition of PcToLily!
+	    fun {RootPcToLily PC}	       
+	       %% transpose PC into octave over middle C
+	       TranspPC = PC+{HS.pitch 'C'#4} 
+	    in
+	       {Out.listToVS {Map CodeBeforeNoteMakers fun {$ F} {F MyPcColl} end}
+		" "}
 	       #{TemperamentPitchToLily TranspPC PCsLilyNames PitchesPerOctave}
 	    end
 	    Rhythms = {Out.lilyMakeRhythms {MyPcColl getDurationParameter($)}}
@@ -336,24 +349,26 @@ define
 	    else
 	       %% TODO: root should also get "code before"
 	       MyRoot = {PcToLily {MyPcColl getRoot($)}}
-	       CodeBeforeAndRoot = {PcToLily {MyPcColl getRoot($)}}
+	       CodeBeforeAndRoot = {RootPcToLily {MyPcColl getRoot($)}}
 	       CodeBeforeAndPitches = 
 	       if ChordOrScale == scale then
+		  %% scale case
 		  "{"#{Out.listToVS {Map {HS_Score.pcSetToSequence
 					  {MyPcColl getPitchClasses($)}
 					  {MyPcColl getRoot($)}}
 				     PcToLily}
-		       %% set Lily grace note duration to 4
+		       %% set Lily grace note duration to 2
 		       "4 "}#"} "
 	       else %% chord case
 		  "{ <"#{Out.listToVS {Map {HS_Score.pcSetToSequence
 					    {MyPcColl getPitchClasses($)}
 					    {MyPcColl getRoot($)}}
 				       PcToLily}
-			 %% set Lily grace note duration to quarter notes (4)
-			 " "}#">4 }"
+			 %% set Lily grace note duration to half notes (2)
+			 " "}#">2 }"
 	       end
-	       FirstPcColl = "\\afterGrace "#CodeBeforeAndRoot#Rhythms.1#AddedSigns#CodeBeforeAndPitches
+% 	       FirstPcColl = "\n\\grace "#CodeBeforeAndPitches#" "#CodeBeforeAndRoot#Rhythms.1#AddedSigns
+	       FirstPcColl = "\n\\grace "#CodeBeforeAndPitches#" "#CodeBeforeAndRoot#Rhythms.1#AddedSigns
 	    in
 	       if {Length Rhythms} == 1 % is tied scale?
 	       then FirstPcColl
