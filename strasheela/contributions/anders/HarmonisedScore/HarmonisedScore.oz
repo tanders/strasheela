@@ -153,40 +153,37 @@ export
    
 define
 
-   %% aux for PC etc
+   %% Aux for PC etc. MakeTranslation simply calls respective function of respective ET<Int> functor, i.e. this works only for specific equal temperaments.
    fun {MakeTranslation FnSymbol}
       fun {$ X}
-	 if {IsInt X} then X
+	 PitchesPerOctave = {DB.getPitchesPerOctave}
+      in
+	 case PitchesPerOctave
+	 of 12 then {ET12.FnSymbol X}
+	 [] 22 then {ET22.FnSymbol X}
+	 [] 31 then {ET31.FnSymbol X}
+	 [] 41 then {ET41.FnSymbol X}
 	 else 
-	    PitchesPerOctave = {DB.getPitchesPerOctave}
-	 in
-	    case PitchesPerOctave
-	    of 12 then {ET12.FnSymbol X}
-	    [] 22 then {ET22.FnSymbol X}
-	    [] 31 then {ET31.FnSymbol X}
-	    [] 41 then {ET41.FnSymbol X}
-	    else 
-	       {Exception.raiseError
-		strasheela(failedRequirement PitchesPerOctave "No symbolic pitch translation supported for "#PitchesPerOctave#" ET.")}
-	       unit		% never returned
-	    end
+	    {Exception.raiseError
+	     strasheela(failedRequirement PitchesPerOctave "No symbolic pitch translation supported for "#PitchesPerOctave#" ET.")}
+	    unit		% never returned
 	 end
       end
    end
 
-   /** %% Transforms symbolic accidental (atom) into the corresponding accidental integer, depending on {HS.db.getPitchesPerOctave}. An integer is returned unaltered.
+   /** %% Transforms symbolic accidental (atom) into the corresponding accidental integer, depending on {HS.db.getPitchesPerOctave}. Note: function only works for specific values of {DB.getPitchesPerOctave} (e.g., 12, 22, 31, 41).
    %% */
    Acc = {MakeTranslation acc}
 
-   /** %% Transforms symbolic note name (atom) into the corresponding pitch class integer, depending on {HS.db.getPitchesPerOctave}. An integer is returned unaltered.
+   /** %% Transforms symbolic note name (atom) into the corresponding pitch class integer, depending on {HS.db.getPitchesPerOctave}. Note: function only works for specific values of {DB.getPitchesPerOctave} (e.g., 12, 22, 31, 41).
    %% */
    PC = {MakeTranslation pc}
 
-   /** %% Transforms symbolic note name (atom) into the corresponding pitch class integer, depending on {HS.db.getPitchesPerOctave}. An integer is returned unaltered.
+   /** %% Transforms pitch class integer into list of corresponding symbolic note names (atoms). Note: function only works for specific values of {DB.getPitchesPerOctave} (e.g., 12, 22, 31, 41).
    %% */
    PCName = {MakeTranslation pcName}  
       
-   /** %% Translates a symbolic pitch P in the format PC#Octave (PC is an atom, Octave is an int) into the corresponding pitch integer, depending on {HS.db.getPitchesPerOctave}. If P is an int, then it is returned unaltered.
+   /** %% Translates a symbolic pitch P in the format PC#Octave (PC is an atom, Octave is an int) into the corresponding pitch integer, depending on {HS.db.getPitchesPerOctave}. Note: function only works for specific values of {DB.getPitchesPerOctave} (e.g., 12, 22, 31, 41).
    %% */
    Pitch = {MakeTranslation pitch}  
    
