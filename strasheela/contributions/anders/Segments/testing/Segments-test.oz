@@ -540,32 +540,53 @@ MkArpeggio
 
 /* % test
 
+%% NOTE: in notation output actual notes and analytical chord objects on same staff...
 declare
-MkPhrase = {PatternedPhrase
-	    unit(segments: unit(unit(constructor: MkRepetitions
-				     iargs: unit(n: 2))
-				unit(constructor: MkRepetitions
-				     iargs: unit(n: 3)))
-		 pAccessor: GUtils.identity
-		 pattern: proc {$ Xs} skip end)}
+MkPhrase = {Segs.patternedPhrase
+	    unit(segments: unit(unit(constructor:
+					{Score.defSubscript
+						   unit(super: Segs.makeCounterpoint_Seq
+							mixins: [Segs.hook])
+					 nil}
+				     iargs: unit(n: 4
+						 duration: D.d2)
+				     rargs: unit(minPitch: 'C'#3
+						 maxPitch: 'C'#4))
+				unit(constructor: Segs.makeCounterpoint_Seq
+				     iargs: unit(n: 5
+						 duration: D.d2)
+				     rargs: unit(minPitch: 'C'#3
+						 maxPitch: 'C'#4)))
+		 %% first segment pitch is always the same
+		 pAccessor: fun {$ X} {X mapItems($ getPitch)}.1 end
+		 pattern: proc {$ Xs} {Pattern.allEqual Xs} end)}
 %%
 {GUtils.setRandomGeneratorSeed 0}
 {SDistro.exploreOne
  fun {$}
     {TestMotif
      %% overwrite some arg of second segment
-     unit(segments: unit(2: unit(rargs: unit(longDur: D.d4))))
+     unit(segments: unit(2: unit(iargs: unit(duration: D.d4))))
      MkPhrase}
  end
- TypewiseWithPatternMotifs_LeftToRightTieBreaking_NoChordDurs_Distro}   
+%  TypewiseWithPatternMotifs_LeftToRightTieBreaking_NoChordDurs_Distro
+ TypewiseWithPatternMotifs_LeftToRightTieBreaking_Distro
+%  HS.distro.typewise_LeftToRightTieBreaking
+}   
 
 */
 
 
 
+
 /* % testing 
 
-
+declare
+Arpeggio = {Score.defSubscript
+	    unit(super: Segs.makeCounterpoint_Seq
+		 mixins: [Segs.arpeggio]
+		 rdefaults: unit(maxNonharmonicNoteSequence: 1))
+	    nil}
 {SDistro.exploreOne
  proc {$ MyScore}
     End
@@ -575,7 +596,7 @@ MkPhrase = {PatternedPhrase
        sim([{Segs.patternedSlices
 	     unit(n: 3
 		  layers:unit(
-			    unit(constructor: Segs.mkArpeggio
+			    unit(constructor: Arpeggio
 				 iargs: unit(n: 6
 					    duration: D.d8)
 				 rargs: unit(maxPitch: 'C'#5
@@ -585,7 +606,7 @@ MkPhrase = {PatternedPhrase
 					    end
 				 pattern: proc {$ Xs} {Pattern.continuous Xs '<:'} end
 				)
-			    unit(constructor: Segs.mkArpeggio
+			    unit(constructor: Arpeggio
 				 offsetTime: D.d8 
 				 iargs: unit(n: 8
 					     duration: D.d8)
@@ -608,81 +629,8 @@ MkPhrase = {PatternedPhrase
 	   timeUnit:beats(Beat))
        add(chord:HS.score.chord)}
  end
- TypewiseWithPatternMotifs_LeftToRightTieBreaking_Distro}
-
-
-
-%%%
-
-declare
-MyScore
-= {Segs.patternedSlices
-   unit(n: 3
-	layers: unit(
-		   unit(constructor: Score.makeSeq
-			iargs: each # [unit(n: 2 
-					    pitch: each # [60 62] % 60 % fenv
-					    duration: 2)
-				       %% NOTE: different end time of layers in this slice
-				       unit(n: 3 
-					    pitch: each # [60 62 64] % 60 % fenv
-					    duration: 3)
-				       unit(n: 3 
-					    pitch: each # [60 62 64] % 60 % fenv
-					    offsetTime: 2
-					    duration: 3)
-				      ]
-			pAccessor: GUtils.identity
-			%% TODO:
-			pattern: proc {$ Xs} skip end)
-		   unit(constructor:
-			   {Score.makeConstructor Score.makeSeq
-			    unit(iargs: unit(pitch: 48
-					     duration: 2))}
-			iargs: each # [unit(n: 2)
-				       unit(n: 3)
-				       unit(n: 4)
-				      ]
-			pAccessor: GUtils.identity
-			%% TODO:
-			pattern: proc {$ Xs} skip end)
-		   unit(constructor: Score.makeSeq
-			iargs: unit(n: 2
-				    pitch: each # [71 72] 
-				    duration: 4)
-			pAccessor: GUtils.identity
-			%% TODO:
-			pattern: proc {$ Xs} skip end)
-		   )
-	%% args for top-level seq
-	startTime:0
-	timeUnit:beats
-	sliceLayersEndTogether: false)}
-{Score.init MyScore}
-
-{MyScore toInitRecord($)}
-
-
-%%%%
-
-
-declare
-MySeqs = {Score.makeItems unit(n: 3
-			       constructor: Score.makeSeq
-			       iargs: each # [unit(n: 2 
-						   pitch: each # [60 62] % 60 % fenv
-						   duration: 2)
-					      unit(n: 3 
-						  pitch: each # [60 62 64] % 60 % fenv
-						   duration: 2)
-					      unit(n: 4 
-						   pitch: each # [60 62 64 65] % 60 % fenv
-						   duration: 2)
-					     ])}
-{ForAll MySeqs Score.init}
-
-{Pattern.mapItems MySeqs toInitRecord}
-
+ TypewiseWithPatternMotifs_LeftToRightTieBreaking_Distro
+}
 
 */
 
