@@ -46,3 +46,7 @@ Strasheela uses the multi-paradigm programming language Oz as its user-interface
 
   [[http://www.mozart-oz.org/mogul/][MOGUL: the MOzart Global User Library]] -- a repository of Mozart packages.
 
+
+; TODO: 
+; introduce and recommend ozfind, flymake for oz, (oz-completion-ui) 
+
