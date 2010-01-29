@@ -6,8 +6,10 @@
 %%
 
 %%
-%% TODO: fix example again: example seems broken (search takes much longer than before -- does it find solution at all?)
-%% .. some problems in distro strategy found meanwhile (some orelse instead of andthen), but still performance worse than it has been once?
+%% NOTE: this example sometimes finds a solution reasonable quickly
+%% (e.g., in 8 secs on my MBP), but at other times the randomised
+%% search takes much longer. Can I prehaps improve the distro
+%% strategy?
 %%
 
 declare
