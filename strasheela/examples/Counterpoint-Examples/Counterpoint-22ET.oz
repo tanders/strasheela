@@ -1,6 +1,6 @@
 
 %%
-%% This file defines contrapuntual examples in 22 ET.
+%% This file defines melody and contrapuntual examples in 22 ET.
 %%
 %%
 %% Usage: first feed buffer, to feed definitions shared by all
@@ -147,6 +147,10 @@ declare
 %%
 %%
 
+% % % % % % % % % % % % % % % %
+%%
+%% First version 
+%%
 
 %%
 %% TODO:
@@ -188,7 +192,7 @@ declare
 %%
 
 
-/* % first version
+/*
 
 declare
 /** %% 
@@ -368,56 +372,72 @@ Motif_B
 */
 
 
+% % % % % % % % % % % % % % % %
+%%
+%% Second version 
+%%
 
 %%
 %% TODO:
 %%
-%% - !!!! restrict motifs more than simply by pitch contour -- too [beliebig]
+%% OK - !!!! restrict motifs more than simply by pitch contour -- too [beliebig]
 %%   e.g. also interval max-min pitch?
 %%
-%% - ?? use scale degree intervals?
-%%   HS.score.scaleDegreeNote: attributes scaleDegree (scaleAccidental should always be neutral)
-%%   - How to apply constraint that each motif uses same scale degree intervals, without determining these?
-%%   - It might be too strict to constrain all motif instances to use same scale degree intervals...
-%%   ?? I could specify that a certain percentage of the motifs scale degree intervals are below a certain size
-%%
-%% - control interval between local maxima of motifs
+%% OK? - control interval between local maxima of motifs
 %%  - control contour with Fenv
 %%  - only steps
 %%  - ?? same for mins?
 %%
 %%
-%% - ?? Make harmony clearer by having longer sections (multiple motifs) with the same underlying harmony
+%% OK - Make harmony clearer by having longer sections (multiple motifs) with the same underlying harmony
 %% 
 %% - ?? Make harmony clear: all/essential chord tones should be there
 %%
-%% - !! There are multiple non-harmonic tones between two harmonic tones in the scale: how to choose convincingly which one is taken?
+%% - !!?? There are multiple non-harmonic tones between two harmonic tones in the scale: how to choose convincingly which one is taken?
 %%   I could somehow constraint to always to use the upper (or lower) one
 %%
 %%
 
-/** %% Returns the scale degree interval (FD int) between the notes N1 and N2 (instances of HS.score.scaleDegreeNote).
-%% Note: blocks until scale is determined.
+% /** %% Returns the scale degree interval (FD int) between the notes N1 and N2 (instances of HS.score.scaleDegreeNote).
+% %% Note: blocks until scale is determined.
+% %% */
+% %% BUG: needs testing...
+% %% .. still unused...
+% proc {ScaleDegreeInterval N1 N2 MyScale ?Interval}
+%    fun {GetDegree N}
+%       {HS.score.getDegree {N getPitchClass($)} MyScale
+%        unit(accidentalRange:0) % only scale tones
+% %        unit(accidentalRange:{HS.db.getAccidentalOffset})
+%       }
+%    end
+%    ScaleCard = {FS.card {MyScale getPitchClasses($)}}
+%    Degree1 = {GetDegree N1}
+%    Degree2 = {GetDegree N2}
+%    Aux = {FD.decl}
+% in
+%    Aux =: Degree1 - Degree2 + ScaleCard % add ScaleCard to avoid neg numbers
+%    Interval = {FD.modI Aux ScaleCard}
+% end
+
+
+/** %% The interval between N1 and N1 is in [1, whole tone raised by a syntonic comma].
 %% */
-%% BUG: needs testing...
-proc {ScaleDegreeInterval N1 N2 MyScale ?Interval}
-   fun {GetDegree N}
-      {HS.score.getDegree {N getPitchClass($)} MyScale
-       unit(accidentalRange:0) % only scale tones
-%        unit(accidentalRange:{HS.db.getAccidentalOffset})
-      }
-   end
-   ScaleCard = {FS.card {MyScale getPitchClasses($)}}
-   Degree1 = {GetDegree N1}
-   Degree2 = {GetDegree N2}
-   Aux = {FD.decl}
-in
-   Aux =: Degree1 - Degree2 + ScaleCard % add ScaleCard to avoid neg numbers
-   Interval = {FD.modI Aux ScaleCard}
+fun {IsStepR N1 N2}
+   {HS.rules.isStepR {N1 getPitch($)} {N2 getPitch($)}
+    {HS.pc 'D/'}
+%     {HS.pc 'E'}
+%     {HS.pc 'D#\\'}
+   }
+end
+proc {IsStep N1 N2}
+   {HS.rules.isStep {N1 getPitch($)} {N2 getPitch($)}
+    {HS.pc 'D/'}
+%     {HS.pc 'E'}
+%     {HS.pc 'D#\\'}
+   }
 end
 
-
-/* % second version
+/* 
 
 declare
 /** %% 
@@ -441,46 +461,30 @@ Motif_A_Ns
 			{Pattern.map2Neighbours {Pattern.mapItems Ns getPitch}
 			 Pattern.direction}
 		     end
-		    %% motif starts with quarter note rest
-		    %% Note: requires appropriate domain at idefaaults.offsetTime 
-% 		    offsetTimes: [D.d4 0 0 0 0]
-% 		    %% ?? Does Segs.tSC.defSubscript already support dumy value '_'?
-% % 		    offsetTimes: [2 '_' '_' '_' '_']
-% 		    #fun {$ Ns} {Pattern.mapItems Ns getOffsetTime} end
+		    isStep: [0 1 1 1 0]
+		      #fun {$ Ns}
+			  {Pattern.map2Neighbours Ns fun {$ N1 N2} {IsStepR N1 N2} end}
+		       end
 		   )
-	transformers: [Segs.tSC.removeShortNotes
-% 		       Segs.tSC.substituteNote
-% 		       Segs.tSC.diminishAdditively
-% 		       Segs.tSC.augmentAdditively
-% 		       Segs.tSC.diminishMultiplicatively
-% 		       Segs.tSC.augmentMultiplicatively
-		      ]
+	transformers: [Segs.tSC.removeShortNotes]
 	idefaults: unit(%% Set note class and add DomSpec support
 			constructor: {Score.makeConstructor HS.score.note
 				      unit(inChordB: fd#(0#1))}
-% 			offsetTime: fd#[0 D.d4]
 			inScaleB: 1
 			rule: proc {$ Ns}
 				 {HS.rules.onlyOrnamentalDissonance_Durations Ns}
-				 %% BUG: needs testing...
-% 				 {Pattern.for2Neighbours Ns
-% 				  proc {$ N1 N2}
-% 				     MyScale = {N1 findSimultaneousItem($ test:HS.score.isScale)}
-% 				     DegreeInterval = {ScaleDegreeInterval N1 N2 MyScale}
-% 				  in
-% 				     DegreeInterval =<: 4
-% 				  end}
 			      end)
        )
    nil				% Body
   }
 %% wrap seq around and set proper args
 fun {Motif_A Args}
-   Default = unit(rargs: unit(maxPitch: 'D'#5 
+   Default = unit(rargs: unit(maxPitch: 'G'#5 
 			      minPitch: 'G'#3
-			      maxInterval: 2#1
+			      maxInterval: 8#5
+% 			      step:8#7
 			      maxNonharmonicNoteSequence: 1
-			      minPercentSteps: 60
+% 			      minPercentSteps: 60
 			     ))
    Notes = {Motif_A_Ns {GUtils.recursiveAdjoin Default Args}}
 in
@@ -500,12 +504,15 @@ Motif_B
 			inScaleB: 1
 			rule: proc {$ Ns}
 				 {HS.rules.onlyOrnamentalDissonance_Durations Ns}
+				 {Pattern.for2Neighbours Ns
+				  proc {$ N1 N2} {IsStep N1 N2} end}
 			      end)
-	rdefaults: unit(maxPitch: 'D'#5 
+	rdefaults: unit(maxPitch: 'G'#5 
 			minPitch: 'G'#3
-			maxInterval: 2#1
+			maxInterval: 8#5
+% 			step:8#7
 			maxNonharmonicNoteSequence: 1
-			minPercentSteps: 60
+% 			minPercentSteps: 60
 			oppositeDir: 2 % last interval goes up
 		       ))
    nil}
@@ -523,55 +530,41 @@ Motif_B
 			       progressionSelector: resolveDescendingProgressions(allowInterchangeProgression: true)
 			      ))}
     MotifSeq
-    %% TMP comment
-%     Akks = {Segs.makeAkkords unit(iargs: unit(n: 4
-% 					      amplitude: 20)
-% 				  rargs: unit(maxPitch: 'C'#5 
-% 					      minPitch: 'C'#3 
-% 					      minPcCard: 4)
-% 				  akkN: ChordNo)}
     End
     fun {GetMaxMotifPitch MyMotif}
-       {Pattern.max {MyMotif mapItems($ getPitch)}}
-    end
-    fun {GetMinMotifPitch MyMotif}
-       {Pattern.min {MyMotif mapItems($ getPitch)}}
+       {Pattern.max {MyMotif mapItems($ getPitch test:isNote)}}
     end
     %% Ps is list of loc max pitch of each motif. Contour follows fenv, and max interval is second
     proc {LocalMaxPattern Ps}
-       {Pattern.fenvContour Ps
-	{Fenv.linearFenv [[0.0 0.0] [0.8 1.0] [1.0 0.0]]}}
-%        {Pattern.undulating Ps unit}
+%        {Pattern.fenvContour Ps
+% 	{Fenv.linearFenv [[0.0 0.0] [0.8 1.0] [1.0 0.0]]}}
 %        {Pattern.increasing Ps}
-       {Pattern.restrictMaxInterval Ps {HS.pc 'D'}}
+       {Pattern.restrictMaxInterval Ps {HS.pc 'D#\\'}}
     end
-    %% 
-%     proc {ExpressEssential}
-%     end
  in
+    %% TODO: find some automatic way to enter bar lines..
     MyScore
     = {Score.make
-       sim([seq(handle: MotifSeq
-		%% number must match ChordNo
-		[motif_a(info: startChord)
-		 motif_a
-		 motif_b
-		 pause(duration:D.d2)
-		 motif_a(info: startChord)
-		 motif_a(rargs:unit(removeShortNotes: 1))
-		 motif_a(rargs:unit(removeShortNotes: 1))
-		 motif_a(rargs:unit(removeShortNotes: 2))
-		 motif_a(rargs:unit(removeShortNotes: 3))
-		 motif_b(info: startChord)
-		 motif_b
-		 pause(duration:D.d2)
-		 motif_a(info: startChord)
+       sim(info: lily("\\cadenzaOn")
+	   [seq(handle: MotifSeq
+		%% number of motifs with info startChord must match ChordNo
+		[seq([motif_a(info: startChord)
+		      motif_a
+		      motif_b
+		      pause(duration:D.d2)
+		     ])
+		 seq([motif_a(info: startChord)
+		      motif_a(rargs:unit(removeShortNotes: 1))
+		      motif_a(rargs:unit(removeShortNotes: 1))
+		      motif_a(rargs:unit(removeShortNotes: 2))
+		      motif_a(rargs:unit(removeShortNotes: 3))])
+		 seq([motif_b(info: startChord)
+		      motif_b
+		      pause(duration:D.d2)
+		     ])
+		 seq([motif_a(info: startChord)])
 		]
 		endTime:End)
-	    %% an akkord per chord
-	    %% TMP comment
-% 	    seq(Akks
-% 		endTime: End)
 	    %% notes are implicitly related to simultaneous chord and scale
 	    seq(Chords
 		endTime: End)
@@ -585,23 +578,24 @@ Motif_B
 	   motif_b: Motif_B
 	   chord:HS.score.chord
 	   scale:HS.score.scale)}
-%      end}
+    %% add bar lines to all but the first motif (with current lily tag
+    %% implementation, these bar lines are always placed *before* the
+    %% motif)
+    {ForAll {MyScore collect($ test: fun {$ X}
+					{X isContainer($)} andthen {All {X mapItems($ isNote)} GUtils.identity}
+				     end)}.2
+     proc {$ MyMotif} {MyMotif addInfo(lily("\\ibar"))} end}
+    %%
     {HS.score.harmonicRythmFollowsMarkers MyScore Chords unit}
-    %% Akks follow harmonic rhythm
-    %% TMP comment
-%     {ForAll {LUtils.matTrans [Chords Akks]}
-%      proc {$ [C A]} {C getStartTime($)} = {A getStartTime($)} end}
     %%
     %% Further constraints
     %%
-    %% TMP comment (causes much search)
-%     {LocalMaxPattern {MotifSeq mapItems($ GetMaxMotifPitch)}}
-%     %% Each motif expresses all essential chord PCs: rather strict constraint
-    %% 
-%     {ForAll {MotifSeq getItems($)}
-%      proc {$ MyMotif}
-% 	{HS.rules.
-% 	{MyMotif mapItems($ getPitc
+    %% NOTE: this constraint can cause much search, because it is
+    %% applied very late (max motif pitches are known very late)
+    {ForAll {MotifSeq getItems($)}
+     proc {$ SubMotifseq}
+	{LocalMaxPattern {SubMotifseq mapItems($ GetMaxMotifPitch test:isSequential)}}
+     end}
  end
  HS.distro.leftToRight_TypewiseTieBreaking
 %  HS.distro.typewise_LeftToRightTieBreaking
@@ -833,6 +827,136 @@ end
 %%
 %%
 %%
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%% variant of previous example
+%%
+%% - less voices
+%% TMP
+%% - less constraints
+%%
+%% TODO: 
+%% - More flexible rhythm
+%% - Pattern motifs
+%% - Make bass as flexible as upper voice and then extra constraint 
+%%
+
+%%
+%% Bass constraint:
+%% - ? local pitch minima in bass must be either chord degree 1 (root) or 2 (third?).
+%% - ? lowest bass tone per chord must be either chord degree 1 (root) or 2 (third?). [this bass tone might be "too late"]
+%%
+
+/*
+
+declare
+{GUtils.setRandomGeneratorSeed 0}
+/** %% Variant of Segs.makeCounterpoint that predefines new default args.
+%% */
+fun {MakeVoiceNotes Args}
+   Defaults = unit(iargs: unit(inScaleB: 1 % only scale tones
+% 			       duration: fd#[D.d8 D.d4 D.d2]
+% 			       offsetTime: fd#[0 D.d4 D.d2]
+			      )
+		   rargs: unit(maxInterval: 2#1
+			       maxNonharmonicNoteSequence: 1
+			       %% hm, likely makes search more complex
+% 			       minPercentSteps: 60
+			      ))
+in
+   {Segs.makeCounterpoint
+    {GUtils.recursiveAdjoin Defaults Args}}
+end
+{SDistro.exploreOne
+ proc {$ MyScore}
+    ChordNo = 5
+    End
+    VoiceNs1 = {MakeVoiceNotes
+		unit(iargs: unit(n: ChordNo*8 % depends also on duration
+				 duration: D.d4
+				)
+		     rargs: unit(maxPitch: 'F'#5 % pitch unit and notation is et22
+				 minPitch: 'A'#3))}
+    VoiceNs2 = {MakeVoiceNotes
+		unit(iargs: unit(n: ChordNo*4
+				 duration: D.d2
+				)
+		     rargs: unit(maxPitch: 'D'#4 
+				 minPitch: 'E'#2
+				 minPercentSteps: false
+				))}
+    Chords = {MakeChords_22ETCounterpoint
+	      unit(iargs: unit(n: ChordNo
+			       duration: D.d1 * 2)
+		   rargs: unit(types: ['harmonic 7th'
+				       'subharmonic 6th']
+			       firstRoot: 'C'
+			       lastRoot: 'C'))}
+    AllNotes
+ in
+    MyScore
+    = {Score.make
+       sim([seq(VoiceNs1
+		endTime:End)
+	    seq(info:lily("\\clef bass")
+		VoiceNs2
+		endTime:End)
+	    %% notes are implicitly related to simultaneous chords and scale
+	    seq(Chords
+		endTime:End)
+	    seq([scale(index:{HS.db.getScaleIndex 'standard pentachordal major'}
+		       transposition: {ET22.pc 'C'}
+		       endTime:End)])]
+	   startTime:0
+	   timeUnit:beats(Beat))
+       add(chord:HS.score.chord
+	   scale:HS.score.scale)}
+    AllNotes = {MyScore collect($ test:isNote)}
+    %%
+    %% TMP comment
+%     {ForAll [VoiceNs1 VoiceNs2]
+%      proc {$ Ns}
+% 	Ps = {Pattern.mapItems Ns getPitch}
+%      in
+%  	%% restrict non-harmonic tones (suspension etc.)
+% 	{HS.rules.clearHarmonyAtChordBoundaries Chords Ns}
+% 	{HS.rules.clearDissonanceResolution Ns}
+% 	{Pattern.noRepetition Ps} % no direct pitch repetition
+% 	%% seems to make search problem more complex..
+% 	{Pattern.undulating Ps
+% 	 unit(min:3
+% 	      max: 8)}
+% 	{HS.rules.ballistic Ps unit(oppositeIsStep: true)}
+%      end}
+%     %%
+%     %% important: always at least 3 different sim PCs
+%     thread
+%        {SMapping.forTimeslices AllNotes
+% 	proc {$ Ns} {MinCard Ns 3} end
+% 	unit(endTime: End
+% 	     %% NOTE: avoid reapplication of constraint for equal consecutive sets of score object
+% 	     step: D.d4		% ?? should be shortest note dur available..
+% 	    )}
+%     end
+    %%
+    %% !! seems to make search problem more complex, it is not really required
+%     thread  % NOTE: ?? move threads into constraint defs themselves?
+%        %% Non-chord tones are consonant to each other.
+%        {HS.rules.intervalBetweenNonharmonicTonesIsConsonant AllNotes
+% 	{MakeConsonancePCs_multipleOctaves 2}}
+%     end
+    {HS.rules.noParallels2 AllNotes unit} 
+ end
+%  HS.distro.typewise_LeftToRightTieBreaking
+ HS.distro.leftToRight_TypewiseTieBreaking
+}
+
+
+*/
 
 
 
@@ -1381,11 +1505,18 @@ LilyHeader
 = {Out.listToLines
    ["\\layout {"
     "\\context {"
-    "\\Voice \\remove \"Note_heads_engraver\""
-    "\\remove \"Forbid_line_break_engraver\""
-    "\\consists \"Completion_heads_engraver\""
-    "}"
-    "} "]}
+    "\\Voice \\remove Note_heads_engraver"
+    "\\remove Forbid_line_break_engraver"
+    "\\consists Completion_heads_engraver"
+    "}" 
+%     "\\context {"
+%     "\\Staff \remove Time_signature_engraver"
+%     "}"
+    "} "
+    Segs.out.unmeteredMusic_LilyHeader
+   ]}
+
+
 	     
 %% Explorer output 
 proc {RenderCsoundAndLilypond I X}
