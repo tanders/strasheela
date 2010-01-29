@@ -80,8 +80,7 @@ LilyHeader =
                 #'base-shortest-duration = #(ly:make-moment 1 32)
     }
   }
-
-\\score{"
+"
 
 proc {RenderLily_ET22 X Args}
    {ET22.out.renderAndShowLilypond X
@@ -129,23 +128,32 @@ fun {AllIntervals Args}
 		   %% duration for each note
 		   noteDuration: 1)
    As = {Adjoin Defaults Args}
+   fun {RatioToVS Nom#Denom}
+      Nom#"/"#Denom
+   end
    fun {MakeNote Pitch}
       note(offsetTime:As.noteOffsetTime
-	   duration:As.noteDuration
-	   pitch:Pitch+As.pitchOffset
-	   amplitude:64)
+	    duration:As.noteDuration
+	    pitch:Pitch+As.pitchOffset
+	    amplitude:64)
    end
-   Intervals = {Record.toList {HS.db.getInternalIntervalDB}.interval}
+   Intervals = {Record.toList {HS.db.getEditIntervalDB}}
 in
-   {Score.makeScore seq(items:{Map Intervals
-			       fun {$ I}
-				  sim(items:[{MakeNote I}
-					     {MakeNote 0}])
-			       end}
-			startTime:0
-			timeUnit:beats)
+   {Score.makeScore
+    seq(items:{Map Intervals
+	       fun {$ Interval}
+		  %% BUG: to get this working I need to place lilycode *after* chord, but info tag lily always put before chord
+% 		  Comment = "_\\markup{"#{RatioToVS Interval.comment.interval.ratio}#"}^\\markup{"#Interval.comment.interval.error#"}"
+% 	       in
+		  sim(%info: lily(Comment)
+		      items:[{MakeNote Interval.interval}
+			     {MakeNote 0}])
+	       end}
+	startTime:0
+	timeUnit:beats)
     add(note:HS.score.note2)}
 end
+
 
 
 /* % output 
@@ -288,7 +296,6 @@ end
 
 declare
 MyScore_ChordsOnly = {AllChords unit(chordDuration:2)}
-
 {MyScore_ChordsOnly wait}
 {RenderLily_ET22 MyScore_ChordsOnly
  unit(file:"ET22-all-chords")}
@@ -299,7 +306,6 @@ MyScore_ChordNotes = {ExpressChords {MyScore_ChordsOnly
 				     collect($ test:HS.score.isChord)}
 		      unit(pitchOffset:{ET22.pitch 'C'#3}
 			   noteDuration:4)}
-
 {MyScore_ChordNotes wait}
 {Init.setTempo 60.0}
 {Out.renderAndPlayCsound MyScore_ChordNotes
@@ -393,7 +399,6 @@ end
 
 declare
 MyScore_ScalesOnly = {AllScales unit(scaleDuration:2)}
-
 {MyScore_ScalesOnly wait}
 {RenderLily_ET22 MyScore_ScalesOnly unit(file: "ET22-all-scales")}
 
@@ -402,7 +407,6 @@ MyScore_ScaleNotes = {ExpressScales {MyScore_ScalesOnly
 				     collect($ test:HS.score.isScale)}
 			  unit(pitchOffset:{ET22.pitch 'C'#4}
 			       scaleOffsetTime:1)}
-
 {MyScore_ScaleNotes wait}
 {Init.setTempo 70.0}
 %% Note: no scale names etc displayed in this Lily output
