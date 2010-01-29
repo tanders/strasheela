@@ -27,6 +27,7 @@
     - SDistro: added SearchBest_Timeout
     - ET22.db: interval database now defined as ratios for adaptive JI
     - ET22.out: added NoteEt22ToLily_AdaptiveJI2, PajaraRMS_TuningTable, JI_TuningTable
+    - 22 ET Lilypond output: revised accidentals (using new arrowed Lily accidentals for representing syntonic commas up/down)
     - ET31.out: added NoteEt31ToLily_AdaptiveJI2, Meantone_TuningTable, JI_TuningTable
     - Segs: added MakeCounterpoint_PatternMotifs_DurationPitchcontour, MakeCounterpoint_PatternMotifs_OffsetDuration, MakeCounterpoint_PatternMotifs_OffsetDurationPitchcontour. 
     - Segs.makeCounterpoint: added arg clearDissonanceResolution (before this constraint was always enabled).
@@ -37,6 +38,7 @@
     - HS.score: refactored HarmonicRythmFollowsMarkers: now works also for items with offsetTime > 0 
     - Removed proc GUtils.selectArg (better use Adjoin or CondSelect instead)
     - Removed GUtils.isInt (result wrong for FD ints): use FD.is or IsInt instead
+    - Segs.out.unmeteredMusic_LilyHeader: String for Lilypond header configuration to support unmetered music (e.g., as in many Messian pieces)
 
   - Further bug fixes and changes
     - Oz primitives like IsRecord, IsAtom etc. block on kinded variables (undetermined FD and FS vars), which could cause blocking of various Strasheela definitions. Now Strasheela always uses its new own GUtils.isRecord and GUtils.isAtom etc. which do not have this problem
