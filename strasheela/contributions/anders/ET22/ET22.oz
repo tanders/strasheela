@@ -25,12 +25,19 @@ define
 %%%
 %%% pitch etc. naming 
 %%%
-
    
    %% syntonic comma sharp, flat (1 step = 54.55 cent): /, \
    %%   with escape char comma flat is \\
-   %% diatonic semitone (2 steps = 109.09 cent): |, !  
-   %% minor whole tone (3 steps = 163.63 cent): #, b 
+   %% diatonic semitone (2 steps = 109.09 cent): #\\ b/ 
+   %% minor whole tone (3 steps = 163.63 cent): #, b
+
+   %%
+   %% Remember that a "Phythagorean third" (i.e. 4 stacked 3:2, 8
+   %% steps in 22 ET) is 436.36 cent wide (i.e. is is very close to
+   %% 9:7). For correting this wide "Phythagorean third", the wide
+   %% syntonic comma of 54.55 cent (1 step) arrives at 381.82 cent (7
+   %% steps in 22 ET), which is only 4.49 cent smaller than 5:4.
+   %%
 
    local
       AccDecls = unit('b':~3
@@ -44,24 +51,24 @@ define
       %% Note: I could/should add more enharmonic equivalents, e.g. 'E|' -- when needed
       PCDecls = unit('C':0
 		     'C/':1   'Db':1
-		     'C|':2 'C#\\':2 'Db/':2 'D!':2
+		     'C#\\':2 'Db/':2 % 'D!':2 'C|':2 
 		     'C#':3   'D\\':3
 		     'D':4
 		     'D/':5   'Eb':5
-		     'D|':6 'D#\\':6 'Eb/':6 'E!':6
+		     'D#\\':6 'Eb/':6 % 'D|':6  'E!':6
 		     'D#':7   'E\\':7
 		     'E':8
 		     'F':9
 		     'F/':10   'Gb':10
-		     'F|':11 'F#\\':11 'Gb/':11 'G!':11
+		     'F#\\':11 'Gb/':11 % 'F|':11 'G!':11
 		     'F#':12   'G\\':12
 		     'G':13
 		     'G/':14   'Ab':14
-		     'G|':15 'G#\\':15 'Ab/':15 'A!':15
+		     'G#\\':15 'Ab/':15 % 'G|':15  'A!':15
 		     'G#':16   'A\\':16
 		     'A':17
 		     'A/':18   'Bb':18
-		     'A|':19 'A#\\':19 'Bb/':19 'B!':19
+		     'A#\\':19 'Bb/':19 % 'A|':19 'B!':19
 		     'A#':20   'B\\':20
 		     'B':21)
    in
