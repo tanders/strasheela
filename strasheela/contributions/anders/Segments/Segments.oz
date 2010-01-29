@@ -58,6 +58,7 @@ import
 
    HCP at 'source/HomophonicChordProgression.ozf'
    TSC at 'source/TransformableSubscript.ozf'
+   SegsOut at 'source/Output.ozf'
    
 export
    
@@ -88,11 +89,12 @@ export
    HomophonicChordProgression
 
    TSC
+
+   out: SegsOut
    
 define
 
    HomophonicChordProgression = HCP.homophonicChordProgression
-
    
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%
@@ -787,7 +789,7 @@ MakeCounterpoint_PatternMotifs_OffsetDurationPitchcontour
 	       fun {$ Segments} sim(Segments) end})}
 	 {Adjoin As.constructors add}}
    end
-   
+
    
 end
 

@@ -12,7 +12,8 @@
 %%% *************************************************************
 
 makefile(
-   lib: ['Segments.ozf']
+   lib: ['Segments.ozf'
+	 'source/UnmeteredMusic-Lilyheader.ly.data']
    uri: 'x-ozlib://anders/strasheela/Segments'
    mogul: 'mogul:/anders/strasheela/Segments'
    author: 'Torsten Anders')

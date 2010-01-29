@@ -1,0 +1,58 @@
+
+%%
+%% Notating unmetered music with Lilypond. 
+%%
+%% The code below takes care of proper accidental notation and
+%% incrementing bar numbers for manually inserted barlines at
+%% arbitrary places
+%%
+%% From Lily snippets (http://lsr.dsi.unimi.it/LSR/Item?id=333)
+%%
+
+%%
+%% Usage: 
+%%
+%% Include this file in Lilypond header. Set \cadenzaOn for
+%% score. Manually enter barlines with \ibar (standard bar) or \nibar
+%% <bar-string> (for special bars, e.g., \nibar "|.").
+%%
+
+\layout {
+\context {
+\Staff \remove Time_signature_engraver
+}
+} 
+
+increaseBarNumber = \applyContext
+#(lambda (x)
+  (let ((measurepos (ly:context-property x 'measurePosition)))
+   ; Only increase bar number if not at start of measure.
+   ; This way we ensure that you won't increase bar number twice
+   ; if two parallel voices call increaseBarNumber simultanously:
+   (if (< 0 (ly:moment-main-numerator measurepos)) ; ugh. ignore grace part
+    (begin
+     (ly:context-set-property!
+      (ly:context-property-where-defined x 'internalBarNumber)
+      'internalBarNumber
+      (1+ (ly:context-property x 'internalBarNumber)))
+     (ly:context-set-property!
+      (ly:context-property-where-defined x 'currentBarNumber)
+      'currentBarNumber
+      (1+ (ly:context-property x 'currentBarNumber)))
+     ; set main part of measurepos to zero, leave grace part as it is:
+     (ly:context-set-property!
+      (ly:context-property-where-defined x 'measurePosition)
+      'measurePosition
+      (ly:make-moment 0 1
+       (ly:moment-grace-numerator measurepos)
+       (ly:moment-grace-denominator measurepos)))))))
+
+% Named Increasing BAR
+nibar = #(define-music-function (parser location x) (string?)
+#{
+  \bar $x
+  \increaseBarNumber
+#})
+
+% Increasing BAR
+ibar = \nibar "|"
