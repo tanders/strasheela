@@ -376,11 +376,10 @@ define
 	       if {Length Rhythms} == 1 % is tied scale?
 	       then FirstPcColl
 		  %% tied scale
-	       else FirstPcColl#{Out.listToVS {Map Rhythms.2
-					       %% TMP: tie did not work out of the box with \\afterGrace, simply removed for now
-					       fun {$ R} MyRoot#R end
-					      }
-				 " "}
+	       else FirstPcColl#" ~ "#{Out.listToVS {Map Rhythms.2
+						     fun {$ R} MyRoot#R end
+						    }
+				       " ~ "}
 	       end
 	    end
 	 end
