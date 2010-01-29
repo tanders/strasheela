@@ -99,20 +99,31 @@ pitchnames = \etTwentytwoPitchNames
 %        (-1 . "accidentals.flatflat")
 %        )
 
+% etTwentytwoGlyphs = #'((1 . "accidentals.doublesharp")
+%        (1/2 . "accidentals.sharp")
+%        (1/3 . "accidentals.sharp.slashslash.stem")
+%        (1/6 . "arrowheads.open.01")
+%        (0 . "accidentals.natural")
+%        (-1/6 . "arrowheads.open.0M1")
+%        (-1/3 . "accidentals.mirroredflat")
+%        (-1/2 . "accidentals.flat")
+%        (-1 . "accidentals.flatflat")
+%        )
+
 etTwentytwoGlyphs = #'((1 . "accidentals.doublesharp")
        (1/2 . "accidentals.sharp")
-       (1/3 . "accidentals.sharp.slashslash.stem")
-       (1/6 . "arrowheads.open.01")
+       (1/3 . "accidentals.sharp.arrowdown")
+       (1/6 . "accidentals.natural.arrowup")
        (0 . "accidentals.natural")
-       (-1/6 . "arrowheads.open.0M1")
-       (-1/3 . "accidentals.mirroredflat")
+       (-1/6 . "accidentals.natural.arrowdown")
+       (-1/3 . "accidentals.flat.arrowup")
        (-1/2 . "accidentals.flat")
        (-1 . "accidentals.flatflat")
        )
 
 
 
-\score{
+% \score{
 
 { 
 \override Score.Accidental #'glyph-name-alist =  \etTwentytwoGlyphs
