@@ -148,7 +148,15 @@ define
 		     roots:[4#1]    
 %				dissonanceDegree:2
 		     essentialPitchClasses:[4#1 5#1 6#1 10#3]
-		     comment:'minor 6th')
+		     comment:'major 6th')
+	       %% NOTE: chord to add?
+% 	       chord(pitchClasses:['C' 'Eb/' 'G' 'A/'] 
+% 		     roots:['C']  % ??
+% 		     essentialPitchClasses:['C' 'Eb/' 'A/']
+% %				dissonanceDegree:2
+% 			 % comment:'reversed dominant seventh'
+% 		     comment:unit(name:['minor 6th' 'minor added 6th'])
+% 		    )
 	       %% same as 'subdiminished 7th (2)', only root differs
 	       chord(pitchClasses:[5#1 6#1 7#1 42#5]
 		     roots:[5#1]    
