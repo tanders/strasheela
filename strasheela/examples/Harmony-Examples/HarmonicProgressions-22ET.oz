@@ -620,19 +620,22 @@ proc {RenderLilypondAndCsound I X}
        unit(file: FileName)} 
    end
 end
-proc {RenderLilypondAndCsound_AdaptiveJI I X}
+proc {RenderCsoundAndLilypond_AdaptiveJI I X}
    if {Score.isScoreObject X}
    then 
       FileName = "test-"#I#"-"#{GUtils.getCounterAndIncr}#"-adaptiveJI"
    in
-      {ET22.out.renderAndShowLilypond X
-       unit(file: FileName
-% 	    chordDescription:ET22.out.makeChordRatios
-	    clauses:[ET22.out.isEt22Note#ET22.out.noteEt22ToLily_AdaptiveJI2]
-	   )}
       {Out.renderAndPlayCsound X
        unit(file: FileName
 	    event2CsoundFn: EventToCsound_adaptiveJI
+	   )}
+      {ET22.out.renderAndShowLilypond X
+       unit(file: FileName
+	    lowerMarkupMakers: [HS.out.makeAdaptiveJI2_Marker
+				HS.out.makeChordComment_Markup
+				HS.out.makeScaleComment_Markup]
+	    wrapper: [LilyHeader 
+		      "\n}\n}"]
 	   )}
    end
 end
@@ -640,7 +643,7 @@ end
  add(information RenderLilypondAndCsound
      label: 'to Lily + Csound: 22 ET')}
 {Explorer.object
- add(information RenderLilypondAndCsound_AdaptiveJI
+ add(information RenderCsoundAndLilypond_AdaptiveJI
      label: 'to Lily + Csound: 22 ET (adaptive JI)')}
 
 
