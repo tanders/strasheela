@@ -1544,8 +1544,10 @@ proc {RenderCsoundAndLilypond_AdaptiveJI I X}
 	   )}
       {ET22.out.renderAndShowLilypond X
        unit(file: FileName
-% 	    chordDescription:ET22.out.makeChordRatios
-	    clauses:[ET22.out.isEt22Note#ET22.out.noteEt22ToLily_AdaptiveJI2]
+	    lowerMarkupMakers: [%HS.out.makeAdaptiveJI_Marker
+				HS.out.makeAdaptiveJI2_Marker
+				HS.out.makeChordComment_Markup
+				HS.out.makeScaleComment_Markup]
 	    wrapper: [LilyHeader 
 		      "\n}\n}"]
 	   )}
