@@ -749,14 +749,18 @@ fun {IntToRoman I}
 	"VI"
 	"VII").I
 end
-/* %% Expects a chord and returns the chord's scale degree (Roman numeral). The scale of a chord must be accessible via the chords info tag chord. 
+/* %% Expects a chord and returns the chord's scale degree (Roman numeral). The scale of a chord must be accessible via the chords info tag chord. (if MyChord is no chord then nil is retured)
 %% */
 fun {MakeChordDegree MyChord}
+   if {HS.score.isChord MyChord}
+   then 
 %    MyScale = {MyChord getInfoRecord($ scale)}.1
-   MyScale = {MyChord getScales($)}.1
-in
-   {IntToRoman
-    {HS.score.getDegree {MyChord getRoot($)} MyScale unit}}
+      MyScale = {MyChord getScales($)}.1
+   in
+      {IntToRoman
+       {HS.score.getDegree {MyChord getRoot($)} MyScale unit}}
+   else nil
+   end
 end
 /** %% Expects soundfile with full path but without extension and renders mp3 file.
 %% */
@@ -826,13 +830,13 @@ proc {RenderLilypondAndCsound I X}
 	    channelDistributions: unit(0:[0 1 2 3 4 5 6 7]))} 
       {ET31.out.renderAndShowLilypond X
        unit(file: FileName
-	    chordDescription:MakeChordDegree
 % 	    flags:["--preview"]  % does not work with newer Lily versions?
 	    flags:["-dbackend=eps" "-dno-gs-load-fonts" "-dinclude-eps-fonts"]
 	    wrapper: [LilyHeader 
 		      "\n}"]
 	    %% Skip notating scales
 	    clauses:[IsScaleSeq#fun {$ _} "" end]
+	    lowerMarkupMakers: [MakeChordDegree]
 	   )}
       {Out.renderAndPlayCsound X
        unit(file: FileName)} 
@@ -846,14 +850,18 @@ proc {RenderLilypondAndCsound_AdaptiveJI I X}
    in
       {ET31.out.renderAndShowLilypond X
        unit(file: FileName
-	    chordDescription:MakeChordDegree
 % 	    flags:["--preview"]  % does not work with newer Lily versions?
 	    flags:["-dbackend=eps" "-dno-gs-load-fonts" "-dinclude-eps-fonts"]
 	    wrapper: [LilyHeader 
 		      "\n}"]
 	    %% Skip notating scales
-	    clauses:[IsScaleSeq#fun {$ _} "" end
-		     ET31.out.isEt31Note#ET31.out.noteEt31ToLily_AdaptiveJI]
+	    clauses:[IsScaleSeq#fun {$ _} "" end]
+	    lowerMarkupMakers: [MakeChordDegree
+				HS.out.makeAdaptiveJI_Marker
+				%% default marking
+% 				HS.out.makeChordComment_Markup
+% 				HS.out.makeScaleComment_Markup
+			       ]
 	   )}
       {Out.renderAndPlayCsound X
        unit(file: FileName
