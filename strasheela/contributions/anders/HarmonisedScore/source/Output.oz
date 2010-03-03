@@ -451,8 +451,8 @@ define
 	 ETPitch = {MyNote getPitchInMidi($)}
       in
 	 if {Abs JIPitch-ETPitch} > 0.001
-	 then {GUtils.roundDigits (JIPitch-ETPitch)*100.0 1}#" c"
-	 else "0 c"
+	 then {GUtils.roundDigits (JIPitch-ETPitch)*100.0 1}#"c"
+	 else "0c"
 	 end
       else nil
       end
@@ -467,8 +467,8 @@ define
 	 ETPitch = {MyNote getPitchInMidi($)}
       in
 	 if {Abs JIPitch-ETPitch} > 0.001
-	 then "\\column {"#{GUtils.roundDigits (JIPitch-ETPitch)*100.0 1}#" c"#JIPitch#"}"
-	 else "\\column {"#0#"c "#{MyNote getPitchInMidi($)}#"}"
+	 then "\\column {"#{GUtils.roundDigits (JIPitch-ETPitch)*100.0 1}#"c "#JIPitch#"c}"
+	 else "\\column {"#0#"c "#{MyNote getPitchInMidi($)}#"c}"
 	 end
       else nil
       end
