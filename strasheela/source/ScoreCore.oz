@@ -27,7 +27,7 @@
 %% <code>{O set&lt;AttributeOrFeature&gt;(X)}</code> is a writer method which binds the AttributeOrFeature of object O destructively to a fresh logic variable and initializes it with X.
 */
 
-%% Todo: 
+%% TODO: 
 %% 
 %% * refactor or remove toPPrintRecord (use toFullRecord only?)
 %%
