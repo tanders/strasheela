@@ -58,9 +58,6 @@ declare
      )}
 
 
-%% sed random seed to date
-{GUtils.setRandomGeneratorSeed 0}
-
 % {Init.setTempo 60.0}
 
 /*
@@ -131,6 +128,7 @@ in
    %% last three chords form cadence
    {HS.rules.cadence MyScale {LUtils.lastN Chords 3}}
 end
+{GUtils.setRandomGeneratorSeed 0}
 {SDistro.exploreOne MyScript unit(order:startTime
 				  value:random
 				  % value:mid
@@ -205,6 +203,7 @@ in
    %% last three chords form cadence
    {HS.rules.cadence MyScale {LUtils.lastN Chords 3}}
 end
+{GUtils.setRandomGeneratorSeed 0}
 {SDistro.exploreAll MyScript unit(order:startTime
 				  value:random
 				  % value:mid
@@ -297,6 +296,7 @@ in
      fun {$ C1 C2} ({TransposeBassPC C1 C2} =<: {ET31.pc 'D|'}) end}
    10 40}
 end
+{GUtils.setRandomGeneratorSeed 0}
 {SDistro.exploreOne MyScript unit(order:startTime
 				  value:random
 				  % value:mid
@@ -376,6 +376,7 @@ in
    %% last three chords form cadence
    {HS.rules.cadence MyScale {LUtils.lastN Chords 3}}
 end
+{GUtils.setRandomGeneratorSeed 0}
 {SDistro.exploreAll MyScript unit(order:startTime
 				  value:random
 				  % value:mid
@@ -482,6 +483,7 @@ in
 % 		   TransposeBassPC}
 %     3}
 end
+{GUtils.setRandomGeneratorSeed 0}
 {SDistro.exploreOne MyScript unit(order:startTime
 				  value:random
 				  % value:mid
@@ -581,6 +583,7 @@ in
    %% last three chords form cadence
    {HS.rules.cadence MyScale {LUtils.lastN Chords 3}}
 end
+{GUtils.setRandomGeneratorSeed 0}
 {SDistro.exploreOne MyScript unit(order:startTime
 				  value:random
 				  % value:mid
@@ -596,7 +599,7 @@ end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%
 %% Chord progression in extended tonality (not simply diatonic),
-%% however ending with cadend in C. Progression forms a sequence
+%% however ending with cadence in C. Progression forms a sequence
 %% (cycle pattern of root intervals, chord indicess etc). Only
 %% ascending chord progressions.
 %%
@@ -709,6 +712,7 @@ in
      end}
     proc {$ Data1 Data2} Data1 = Data2 end}
 end
+{GUtils.setRandomGeneratorSeed 0}
 {SDistro.exploreOne MyScript unit(order:startTime
 				  value:random
 				  % value:mid
@@ -811,6 +815,7 @@ in
      end}
     proc {$ Data1 Data2} Data1 = Data2 end}
 end
+{GUtils.setRandomGeneratorSeed 0}
 {SDistro.exploreOne MyScript unit(order:startTime
 				  value:random
 				  % value:mid
@@ -892,6 +897,7 @@ in
    %% All chords are in root position. 
    {ForAll Chords proc {$ C} {C getBassChordDegree($)} = 1 end}
 end
+{GUtils.setRandomGeneratorSeed 0}
 {SDistro.exploreOne MyScript unit(order:startTime
 				  value:random
 				  % value:mid
@@ -958,6 +964,7 @@ in
    %% All chords are in root position. 
    {ForAll Chords proc {$ C} {C getBassChordDegree($)} = 1 end}
 end
+{GUtils.setRandomGeneratorSeed 0}
 {SDistro.exploreOne
  proc {$ MyScore}
    MyScore = {Segs.homophonicChordProgression
