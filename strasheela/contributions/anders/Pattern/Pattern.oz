@@ -668,7 +668,7 @@ define
       end
    end
 
-   /** %% [aux for UseMotifs] Returns a score item constructor (i.e. returns a function which returns score itmes) with added parameters for pattern motif indices. Constructor is the score item constructor to specialise (a unary function or class, e.g. HS.note). IndexParamNames is a list of atoms used to mark the added parameters (in an info tag motifIndex(IndexParamName) of these parameters).
+   /** %% [aux for UseMotifs] Returns a score item constructor (i.e. returns a function that returns score items) with added parameters for pattern motif indices. Constructor is the score item constructor to specialise (a unary function or class, e.g. HS.note). IndexParamNames is a list of atoms used to mark the added parameters (in an info tag motifIndex(IndexParamName) of these parameters).
    %% The added parameters are created implicitly and not supported by the textual representation (i.e. the method toInitRecord leaves them out as well), but accessible with the function GetMotifIndex (see below) or the method getParameters (which returns a list of all parameter objects).
    %%
    %% Important: for efficiency, the distribution strategy should visit early parameters with info tab 'motifIndex'. Constructors created by MakeIndexConstructor add this info tab to all index parameters.
