@@ -215,6 +215,17 @@ Zs = [3 4 5]
 
 
 
+%%
+%% Deterministic test for simplicitly (these are constraints)
+%%
+
+{Pattern.getLocalMax [1 2 3 4 5 4 3 4 5 6 5 4 3 4 3 2]}
+
+%% NOTE: first and last element are ignored
+{Pattern.getLocalMin [1 2 3 4 5 4 3 4 5 6 5 4 3 4 3 2]}
+
+
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 {Pattern.xsToDxs [1 3 2 4]}
