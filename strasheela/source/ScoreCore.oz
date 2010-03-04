@@ -1329,7 +1329,7 @@ define
 %       meth getValue(?X unit:Unit<=midicents)
 % 	 X={self convertTo($ Unit)}
 %       end
-	 /** %% Returns the parameter value translated to a float representing a Midi keynumber (i.e. 60.5 is a quarternote above middle c). The translation uses the parameter unit which must be bound (otherwise the method suspends, but warns also). Supported units are (represented by these atoms): midi/keynumber, midicent/midic, frequency/freq/hz, mHz and and arbitrary equal temperaments.
+	 /** %% Returns the parameter value translated to a float representing a Midi keynumber (i.e. 60.5 is a quarternote above middle c). The translation uses the parameter unit which must be bound (otherwise the method suspends, but warns also). Supported units are (represented by these atoms): midi, midicent/midic, frequency/freq/hz, mHz and and arbitrary equal temperaments.
 	 %% A tuning table is used if such a table was either defined with Init.setTuningTable or was specified as optional argument table. 
 	 %% */
 	 meth getValueInMidi(?X table:Table<=nil)
@@ -1346,10 +1346,9 @@ define
 	       if {Not {IsDet Unit}}
 	       then {GUtils.warnGUI 'pitch unit unbound'}
 	       end
-	       %% !!?? remove redundancy for e.g. midi or keynumber
 	       X = case Unit
 		   of midi then Value
-		   [] keynumber then Value
+% 		   [] keynumber then Value
 % 		[] et72 then Value / 6.0 % * 12.0 / 72.0
 % 		[] et31 then Value * 12.0 / 31.0 
 % 		[] et22 then Value * 12.0 / 22.0 
@@ -1366,7 +1365,7 @@ define
 		      else 
 			 {Exception.raiseError
 			  strasheela(illParameterUnit Unit self
-				     "Supported pitch units are midi, keynumber, midicent (or midic), frequency (or freq), hz, mHz, and arbitrary equal temperaments (notated et<number>)."
+				     "Supported pitch units are midi, midicent (or midic), frequency (or freq), hz, mHz, and arbitrary equal temperaments (notated et<number>)."
 			    % "Unsupported pitch unit."
 				    )}
 			 unit		% never returned
@@ -2283,10 +2282,10 @@ define
       feat %'class': Note
 	 label: note
       attr pitch 
-	 /** %% The parameter unit of pitch is specified by pitchUnit (default keynumber). 
+	 /** %% The parameter unit of pitch is specified by pitchUnit (default midi). 
 	 %% */
       meth init(%addParameters:AddParams<=nil 
-		pitch:P<=_ pitchUnit:PU<=keynumber ...) = M 
+		pitch:P<=_ pitchUnit:PU<=midi ...) = M 
 	 Event, {Record.subtractList M 
 		 [pitch pitchUnit]}
 	 %% !! tmp commment
@@ -2319,7 +2318,7 @@ define
       meth getInitInfo($ ...)
 	 unit(superclass:Event
 	      args:[pitch#getPitch#{FD.decl}
-		    pitchUnit#getPitchUnit#keynumber])
+		    pitchUnit#getPitchUnit#midi])
       end
       
    end
