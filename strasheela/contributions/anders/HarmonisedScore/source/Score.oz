@@ -504,7 +504,7 @@ define
    %%
    %% Note
    %%
-   %% - I considered using scale ratios for non-harmonic notes, but this was a bad idea: they can be completely wrong for the chord at hand (e.g. for just major scale, nineth of V is syntonic comma too low)
+   %% - I considered using scale ratios for non-harmonic notes, but this was a bad idea: they can be completely wrong for the chord at hand (e.g. for just major scale, nineth of V is 2 syntonic commas too low)
    %% 
    %% 
    fun {GetAdaptiveJIPitch MyNote Args}
@@ -547,67 +547,35 @@ define
       end
    end
 
+   %% [aux vars of GetAdaptiveJIPitch2] Freq0_2 defined outside to avoid recomputation for each note
+   Freq0 = MUtils.freq0
+   Freq0_2 = 2.0*MUtils.freq0
+
    /** %% Returns the adapted JI pitch of MyNote as Midi float. MyNoteRatio (pair of ints) is the ratio over the root of MyChord which corresponds to the pitch of MyNote.
    %%
    %% Args currently unused, intended for later extensions.
    %% */
    fun {GetAdaptiveJIPitch2 MyNote MyNoteRatio MyChord Args}
-      Ratio_Float = {MUtils.transposeRatioIntoStandardOctave
-		     {GUtils.ratioToFloat MyNoteRatio}} 
-      %% MyChord's root as frequency, tempered depending on {HS.db.getPitchesPerOctave} or the current tuning table
+      /** %% Expects a frequency ratio (a float) and octave transposes it into interval [1.0, 2.0]
+      %% */
+      fun {TransposeRatioIntoZeroOctave Freq}	 
+	 if Freq >= Freq0_2 then {TransposeRatioIntoZeroOctave Freq / 2.0}
+	 elseif Freq < Freq0 then {TransposeRatioIntoZeroOctave Freq * 2.0}
+	 else Freq
+	 end
+      end
+      Ratio_Float = {GUtils.ratioToFloat MyNoteRatio} 
+      %% MyChord's root as frequency in lowest MIDI octave, tempered depending on {HS.db.getPitchesPerOctave} or the current tuning table
       Root_Freq = {MUtils.keynumToFreq
 		   {{MyChord getRootParameter($)} getValueInMidi($)}
 		   12.0}
-      UntransposedRoot_Float = {MUtils.transposeRatioIntoStandardOctave
-				{GUtils.ratioToFloat
-				 {DB.getUntransposedRootRatio MyChord}.1}}
-      OctaveOffset = if {MyNote getPitchClass($)} < {MyChord getTransposition($)}
-		     then 0 else 1 end
-      Octave_Float = {Pow 2.0 {IntToFloat {MyNote getOctave($)}+OctaveOffset}}
-      Note_Freq = Octave_Float * Ratio_Float * Root_Freq / {MUtils.transposeRatioIntoStandardOctave
-							    UntransposedRoot_Float} 
-      %% TMP copy from DB
-% 	 fun {PCError PC KeysPerOctave}
-% 	    fun {ToCent X}
-% 	       (X / KeysPerOctave) * 1200.0
-% 	    end
-% 	 in
-% 	    ~{ToCent (PC - {Round PC})}
-% 	 end
+      %% If root ratio in DB is \= 1/1 in database, then all PC ratios are transposed by the root ratio. So, we have to devide in the end any pitch by untransposed root ratio to compensate for this. 
+      UntransposedRoot_Float = {GUtils.ratioToFloat
+				{DB.getUntransposedRootRatio MyChord}.1}
+      Octave_Float = {Pow 2.0 {IntToFloat {MyNote getOctave($)}+1}}
+      Note_Freq = Octave_Float * {TransposeRatioIntoZeroOctave
+				  Ratio_Float * Root_Freq / UntransposedRoot_Float}
    in
-% 	 {Browse unit(chordUntransposedRatios:Ratios
-% 		      chordUntransposedRatios_Float: {Map Ratios GUtils.ratioToFloat}
-% % 		      chordUntransposedRatiosWithRootCorrection_Float:
-% % 			 {Map Ratios fun {$ Ratio} {GUtils.ratioToFloat Ratio} / RootRatio end}
-% 		      %% ratios translated into list of PCs (so I can check degrees) -- PCs must be the same as chordPCs
-% 		      chordUntransposedRatios_PC:
-% 			 {Map Ratios
-% 			  fun {$ Ratio}
-% 			     KeysPerOctave = {IntToFloat {DB.getPitchesPerOctave}}
-% 			     PC = {MUtils.keynumToPC {MUtils.ratioToKeynumInterval Ratio
-% 						      KeysPerOctave}
-% 				   KeysPerOctave}
-% 			  in
-% 			     unit(ratio:Ratio pc:{FloatToInt PC} error:{PCError PC KeysPerOctave}#cent)
-% 			  end}
-% 		      chordUntranposedRootRatio: RootRatio
-% 		      note_untransposedRatio: {Nth Ratios Degree}
-% 		      noteDegree: Degree
-% 		      notePC: {MyNote getPitchClass($)}
-% 		      chordPCs: {MyChord getPitchClasses($)}
-% 		      chordPCs_List_Root: {PcSetToSequence {MyChord getPitchClasses($)}
-% 					   {MyChord getRoot($)}}
-% 		      chordPCs_List_Root: {PcSetToSequence {MyChord getPitchClasses($)}
-% 						    {MyChord getRoot($)}}
-% 		      chordUntransposedPCs: {MyChord getUntransposedPitchClasses($)}
-% 		      note_untransposedRatio_Float:Ratio_Float
-% % 		      note_untransposedRatioWithRootCorrection_Float:Ratio_Float
-% 		      chord: {DB.getName MyChord}
-% 		      chordRoot_PC: {MyChord getRoot($)}
-% % 		      chordRoot_Freq: Root_Freq
-% % 		      note_JI_Freq: Note_Freq
-% 		      note_JI_midiFloat: {MUtils.freqToKeynum Note_Freq 12.0}
-% 		      note_ET_midiFloat: {MyNote getPitchInMidi($)})}
       %% translate to midi float
       {MUtils.freqToKeynum Note_Freq 12.0}
    end
