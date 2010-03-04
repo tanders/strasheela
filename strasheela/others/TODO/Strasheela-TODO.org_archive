@@ -1060,6 +1060,23 @@ MyScore = {Score.makeScore note(info:"test")
   see file:~/oz/music/Strasheela/sourceforge-howto/backup-howto.org
 
 
+* Repair adaptive JI
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2010-03-04 Thu 18:42
+  :ARCHIVE_FILE: ~/oz/music/Strasheela/strasheela/trunk/strasheela/others/TODO/Strasheela-TODO.org
+  :ARCHIVE_OLPATH: Strasheela Bugs
+  :ARCHIVE_CATEGORY: Strasheela
+  :END:
+
+   see    [[file:~/oz/music/Strasheela/strasheela/trunk/strasheela/contributions/anders/HarmonisedScore/testing/Score-test.oz::GetAdaptiveJIPitch]]
+
+# ?? did I somewhere replace root by transposition?
+# see 22 ET example..
+
+Some bug in computing the octave
+
+
+
 
 
 

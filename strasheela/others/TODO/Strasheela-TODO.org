@@ -108,16 +108,6 @@ MyTestScore = {Score.makeScore
  unit(file:myTestScore)}
 
 
-** Repair adaptive JI
-
-   see    [[file:~/oz/music/Strasheela/strasheela/trunk/strasheela/contributions/anders/HarmonisedScore/testing/Score-test.oz::GetAdaptiveJIPitch]]
-
-# ?? did I somewhere replace root by transposition?
-# see 22 ET example..
-
-Some bug in computing the octave
-
-
 ** Fix bugs
 
    HS.rules.maxRepetitions
