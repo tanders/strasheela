@@ -139,7 +139,7 @@ define
 %%%
 
 
-   /** %% Tuning table which assigns 12 ET tuning to the 31 ET pitch classes. Can be useful for comparison.. 
+   /** %% Tuning table that assigns 12 ET tuning to the 31 ET pitch classes. Can be useful for comparison.. 
    %% */
    Et31AsEt12_TuningTable
    = unit(1: 0.0			% C
