@@ -45,7 +45,9 @@
     - Removed redundant (and ambiguous) pitch unit 'keynumber'. Default pitch unit is now 'midi' (equivalent to et12). 
     - Lilypond output: if score started with offset time, then this leading rest was ignored in the Lilypond output (now fixed). Also, score now by default wrapped in braces, and default Lilypond version updated to "2.12.0".
     - HS.out.renderAndShowLilypond: revised args codeBeforeNoteMakers and codeBeforePcCollectionMakers. Also, chord and scale objects are again notated with grace notes /before/ root (grace notes after the root (using \aftergrace) are incompatible with HE notation). 
-    - HS.score: GetAdaptiveJIPitch: added arg tuneNonharmonicNotes, added GetAdaptiveJIPitch2, chord root now as in current tuning table or underlying ET (if no tuning table is defined), dependance on scale removed (can be completely wrong, e.g., with just major scale, major nineth of V would be syntonic comma too low)
+    - HS.score: GetAdaptiveJIPitch: 
+      - Added arg tuneNonharmonicNotes, added GetAdaptiveJIPitch2, chord root now as in current tuning table or underlying ET (if no tuning table is defined), dependance on scale removed (can be completely wrong, e.g., with just major scale, major nineth of V would be syntonic comma too low)
+      - Some notes have been transposed to wrong octave, now fixed
     - HS.out.renderAndShowLilypond: changed output of chord pitch classes to octave above middle C
     - HS.score.degreeToPC: fixed propagation error 
     - HS.db: Pc2Ratios now returns nil if no ratio was defined for interval
