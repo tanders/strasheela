@@ -169,10 +169,16 @@ Some bug in computing the octave
      
 * Strasheela doc
 
+** DONE Ask Oz mailing list: can we feed expressions to OPI and get result back from Emacs Lisp?
+   CLOSED: [2010-03-04 Thu 11:16]
 
-** Add org-babel-oz.el to Org-babel
+** DONE Add org-babel-oz.el to Org-babel
+   CLOSED: [2010-03-04 Thu 11:16]
 
-** Write doc for org-babel-oz.el
+** DONE Write doc for org-babel-oz.el
+   CLOSED: [2010-03-04 Thu 11:16]
+
+   for draft see [[file:~/oz/music/Strasheela/StrasheelaDoc_Rewrite/setup/org-babel-oz-doc.org]]
 
 *** Grab a copy of worg
 
