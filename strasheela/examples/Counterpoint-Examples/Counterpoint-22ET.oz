@@ -19,8 +19,10 @@ declare
 [Segs ET22 Fenv] = {ModuleLink ['x-ozlib://anders/strasheela/Segments/Segments.ozf'
 				'x-ozlib://anders/strasheela/ET22/ET22.ozf'
 				'x-ozlib://anders/strasheela/Fenv/Fenv.ozf']}
-{HS.db.setDB ET22.db.fullDB}
-
+%% set accidentalOffset high enough for chord degree accidentals of non-chord tones 
+{HS.db.setDB {Adjoin ET22.db.fullDB
+	      unit(accidentalOffset: 7)}} % {HS.pc 'E\\'}
+% {HS.db.setDB ET22.db.fullDB}
 
 {Init.setTempo 80.0}
 
@@ -374,7 +376,7 @@ Motif_B
 
 % % % % % % % % % % % % % % % %
 %%
-%% Second version 
+%% !! Second version 
 %%
 
 %%
@@ -614,6 +616,564 @@ Motif_B
 
 
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%% !! Two voice counterpoint
+%%
+%% TODO:
+%% - ?? more smooth melodic line: pitch sequence undulating?, ballistic?
+%% - alternatively, enhance form somehow diffently
+%% - alternatively, pattern motifs
+%% - !! if not motifs: some rhythmic constraints (e.g. related to metric structure)
+%% - ?? fine-tune number of notes per voice 
+%%
+%% OK - get bass moving around more (more skips, less often chord root)
+%% OK - Make bass as flexible as upper voice and then extra constraint
+%% OK - Non-harmonic tones consonant to each other
+%% OK - More flexible rhythm
+%%
+
+/** %% Any local pitch minima of Ns (list of HS.score.chordDegreeMixinForNote instances) must be either chord-tones with either chord degree 1 (root) or 2 ("third"). This constraint is intended for the bass in order to improve the harmonic clarity.
+%%
+%% Note: this constraint is an over-simplified version (e.g., it does not allow for situations like cambiata), but it is already better than simply requiring only roots in bass...
+%% */
+%% Alternative definition: lowest bass tone per chord must be either chord degree 1 (root) or 2 (third?). [this bass tone might be "too late" in chord]
+%%
+%% Concerning getChordAccidentals: I have chord tones and non-chord tones. For chord tones, the accidental is 0.
+% {N getChordAccidental($)}
+proc {RestrictChordDegrees_Bass Ns}
+   %% N is a chord tone with either chord degree 1 or 2 (root or third)
+   fun {IsProperDegree N}
+      {FD.conj {N getInChordB($)}
+       {FS.reified.include {N getChordDegree($)} {GUtils.intsToFS [1 2]}}}
+   end
+in
+   {Pattern.forNeighbours Ns 3
+    proc {$ [N1 N2 N3]}
+       IsLocalMin = {Pattern.localMinR {N1 getPitch($)} {N2 getPitch($)} {N3 getPitch($)}}
+    in
+       {FD.impl IsLocalMin
+	{IsProperDegree N2}
+	1}
+    end}
+   %% first and last note
+   {IsProperDegree Ns.1} = 1
+   {IsProperDegree {List.last Ns}} = 1
+end
+
+% % % % % % % % % % % %
+%%
+%% First version
+%%
+
+/*
+
+%%
+%% NOTE: this CSP can cause much search or not -- it perhaps depends whether a suitable rhythmical structure was found in the beginning 
+%%
+
+%%
+%% If search is too complex for larger score, then create full result from subsections (e.g. two chords at a time)
+%%
+declare
+%% TMP
+% proc {MaxPercentSteps Notes MaxPercent Args}
+%    Default = unit(step:8#7)
+%    As = {Adjoin Args Default}
+%    Bs = {Pattern.map2Neighbours Notes
+% 	 proc {$ N1 N2 B} B = ({HS.rules.getInterval N1 N2} =<: {HS.score.ratioToInterval As.step}) end}
+% in
+%    {Pattern.percentTrue_Range Bs 0 MaxPercent}
+% end
+{GUtils.setRandomGeneratorSeed 0}
+/** %% Variant of Segs.makeCounterpoint that predefines new default args.
+%% */
+fun {MakeVoiceNotes Args}
+   Defaults = unit(iargs: unit(inScaleB: 1 % only scale tones
+% 			       duration: fd#[D.d8 D.d4 D.d2]
+% 			       offsetTime: fd#[0 D.d4 D.d2]
+			      )
+		   rargs: unit(maxInterval: 2#1
+			       maxNonharmonicNoteSequence: 1
+			       %% hm, likely makes search more complex
+% 			       minPercentSteps: 60
+			      ))
+in
+   {Segs.makeCounterpoint
+    {GUtils.recursiveAdjoin Defaults Args}}
+end
+{SDistro.exploreOne
+ proc {$ MyScore}
+    ChordNo = 2
+%     ChordNo = 5
+    End
+    VoiceNs1 = {MakeVoiceNotes
+		unit(iargs: unit(n: ChordNo*8 % depends also on duration
+				 duration: fd#[D.d8 D.d4 D.d2]
+				)
+		     rargs: unit(maxPitch: 'F'#5 % pitch unit and notation is et22
+				 minPitch: 'A'#3))}
+    VoiceNs2 = {MakeVoiceNotes
+		unit(iargs: unit(%% this constructor  only for the bass?
+				 constructor: {Score.makeConstructor HS.score.chordDegreeNote
+					       unit}
+				 n: ChordNo*8
+				 duration: fd#[D.d8 D.d4 D.d2]
+				)
+		     rargs: unit(maxPitch: 'D'#4 
+				 minPitch: 'E'#2
+				 minPercentSteps: false
+				))}
+    Chords = {MakeChords_22ETCounterpoint
+	      unit(iargs: unit(n: ChordNo
+			       duration: D.d1 * 2)
+		   rargs: unit(types: ['harmonic 7th'
+				       'subharmonic 6th']
+			       firstRoot: 'C'
+% 			       lastRoot: 'C'
+			      ))}
+    AllNotes
+ in
+    MyScore
+    = {Score.make
+       sim([seq(VoiceNs1
+		endTime:End)
+	    seq(info:lily("\\clef bass")
+		VoiceNs2
+		endTime:End)
+	    %% notes are implicitly related to simultaneous chords and scale
+	    seq(Chords
+		endTime:End)
+	    seq([scale(index:{HS.db.getScaleIndex 'standard pentachordal major'}
+		       transposition: {ET22.pc 'C'}
+		       endTime:End)])]
+	   startTime:0
+	   timeUnit:beats(Beat))
+       add(chord:HS.score.chord
+	   scale:HS.score.scale)}
+    AllNotes = {MyScore collect($ test:isNote)}
+    %%
+    %% Constraints
+    %% 
+    {ForAll Chords HS.rules.expressEssentialChordPCs}
+    {RestrictChordDegrees_Bass VoiceNs2}
+    {ForAll [VoiceNs1 VoiceNs2]
+     proc {$ Ns}
+	Ps = {Pattern.mapItems Ns getPitch}
+     in
+  	%% restrict non-harmonic tones (suspension etc.)
+% 	{HS.rules.clearHarmonyAtChordBoundaries Chords Ns}
+	{HS.rules.clearDissonanceResolution Ns}
+	{Pattern.noRepetition Ps} % no direct pitch repetition
+	{HS.rules.onlyOrnamentalDissonance_Durations Ns}
+	{Pattern.undulating Ps
+	 unit(min:3
+	      max: 8)}
+% 	{HS.rules.ballistic Ps unit(oppositeIsStep: true)}
+     end}
+    %%
+    %% Always at least 2 different sim PCs
+    %% ?? is this acually effective? It appears sometimes not, but mostly it is fine.
+    thread
+       {SMapping.forTimeslices AllNotes
+	proc {$ Ns} {MinCard Ns 2} end
+	unit(endTime: End
+	     %% NOTE: avoid reapplication of constraint for equal consecutive sets of score object
+	     step: D.d8		% ?? should be shortest note dur available..
+	    )}
+    end
+    %% Non-chord tones are consonant to each other.
+    %% seems to make search problem more complex, it is not really required
+    thread  % NOTE: ?? move threads into constraint defs themselves?
+       {HS.rules.intervalBetweenNonharmonicTonesIsConsonant AllNotes
+	{MakeConsonancePCs_multipleOctaves 2}}
+    end
+    {HS.rules.noParallels2 AllNotes unit} 
+ end
+ %% first determine rhythmic structure (otherwise search realises too late that voices do not end together and with chords). FIxed number of notes likely a problem.
+ HS.distro.typewise_LeftToRightTieBreaking
+%  HS.distro.leftToRight_TypewiseTieBreaking
+}
+
+
+*/
+
+
+% % % % % % % % % % % %
+%%
+%% Second version
+%%
+%% - Added constraints on rhythm
+%%
+
+/** %% No syncopation over bar lines. MyMeasure is a uniform measure object, Ns is list of notes.
+%% */
+proc {NoSyncopationOverBarlines MyMeasure Ns}
+   {ForAll Ns
+    proc {$ N}
+       {MyMeasure overlapsBarlineR($ {N getStartTime($)} {N getEndTime($)})} = 0
+    end}
+end
+
+/** %% Duration of notes at the beginning of a bar is a least a quarter note.
+%% */
+proc {StartBarWithLongNote MyMeasure Ns}
+   {ForAll Ns
+    proc {$ N}
+       {FD.impl {MyMeasure onMeasureStartR($ {N getStartTime($)})}
+	({N getDuration($)} >=: D.d4)
+        1}
+    end}
+end
+
+/* %% Pattern constraint on local max of Ns pitches: max a third away from each other and increasing.
+%% */
+proc {LocalMaxPattern Ns}
+   LocalMax
+in
+   thread
+      LocalMax = {Pattern.getLocalMax {Map Ns fun {$ N} {N getPitch($)} end}}
+   end
+   thread 
+      {Pattern.for2Neighbours LocalMax
+       proc {$ P1 P2}
+       {FD.distance P1 P2 '=<:' {HS.pc 'E'}}
+	  P1 <: P2
+       end}
+   end
+end
+
+/* %% After a skip larger than 'maxStep' (default 5#4) there should be no skip in opposite dur. 
+%% */
+proc {RestrictSkips Pitches Args}
+   Default = unit(maxStep: 5#4)
+   As = {Adjoin Default Args}
+   MaxStep = {FloatToInt {MUtils.ratioToKeynumInterval As.maxStep
+			  {IntToFloat {HS.db.getPitchesPerOctave}}}}
+in
+   {Pattern.forNeighbours Pitches 3
+       proc {$ [P1 P2 P3]}
+	  Dist1 = {FD.decl}
+	  Dist2 = {FD.decl}
+	  Dir1 = {Pattern.direction P1 P2}
+	  Dir2 = {Pattern.direction P2 P3}
+       in
+	  Dist1 = {FD.distance P1 P2 '=:'}
+	  Dist2 = {FD.distance P2 P3 '=:'}
+	  %% in case of a large skip
+	  {FD.impl (Dist1 >: MaxStep)
+	   {FD.nega 
+	    {FD.conj (Dist2 >: MaxStep) (Dir1 \=: Dir2)}}
+	   1}
+	  end}
+end
+
+/* %% Only chord tones on string beats
+%% */
+proc {ChordToneOnStrongBeat MyMeasure Ns}
+   {ForAll Ns
+    proc {$ N}
+       {FD.impl {MyMeasure onAccentR($ {N getStartTime($)})}
+	{N getInChordB($)}
+        1}
+    end}
+end
+
+
+/*
+
+%%
+%% NOTE: this CSP can cause much search or not -- it perhaps depends whether a suitable rhythmical structure was found in the beginning 
+%%
+
+declare
+%%
+%% If search is too complex for larger score, then create full result from subsections (e.g. two chords at a time)
+%%
+{GUtils.setRandomGeneratorSeed 0}
+/** %% Variant of Segs.makeCounterpoint that predefines new default args.
+%% */
+fun {MakeVoiceNotes Args}
+   Defaults = unit(iargs: unit(inScaleB: 1 % only scale tones
+% 			       duration: fd#[D.d8 D.d4 D.d2]
+% 			       offsetTime: fd#[0 D.d4 D.d2]
+			      )
+		   rargs: unit(maxInterval: 2#1
+			       maxNonharmonicNoteSequence: 1
+			       %% hm, likely makes search more complex
+% 			       minPercentSteps: 60
+			      ))
+in
+   {Segs.makeCounterpoint
+    {GUtils.recursiveAdjoin Defaults Args}}
+end
+{SDistro.exploreOne
+ proc {$ MyScore}
+    ChordNo = 2
+%     ChordNo = 5
+    End 
+    VoiceNs1 = {MakeVoiceNotes
+		unit(iargs: unit(n: ChordNo*8 % depends also on duration
+				 duration: fd#[D.d8 D.d4 D.d2]
+				)
+		     rargs: unit(maxPitch: 'F'#5 % pitch unit and notation is et22
+				 minPitch: 'A'#3))}
+    VoiceNs2 = {MakeVoiceNotes
+		unit(iargs: unit(%% this constructor  only for the bass?
+				 constructor: {Score.makeConstructor HS.score.chordDegreeNote
+					       unit}
+				 n: ChordNo*8
+				 duration: fd#[D.d8 D.d4 D.d2]
+				)
+		     rargs: unit(maxPitch: 'D'#4 
+				 minPitch: 'E'#2
+				 minPercentSteps: false
+				))}
+    Chords = {MakeChords_22ETCounterpoint
+	      unit(iargs: unit(n: ChordNo
+			       duration: D.d1 * 2)
+		   rargs: unit(types: ['harmonic 7th'
+				       'subharmonic 6th']
+			       firstRoot: 'C'
+% 			       lastRoot: 'C'
+			      ))}
+    MyMeasure = {Score.make2 measure(beatNumber:4 %% 4/4 beat
+				     beatDuration:D.d4 
+				     endTime:End)
+		 unit(measure:Measure.uniformMeasures)}
+    AllNotes 
+ in
+    MyScore
+    = {Score.make
+       sim([seq(VoiceNs1
+		endTime:End)
+	    seq(info:lily("\\clef bass")
+		VoiceNs2
+		endTime:End)
+	    %% notes are implicitly related to simultaneous chords and scale
+	    seq(Chords
+		endTime:End)
+	    seq([scale(index:{HS.db.getScaleIndex 'standard pentachordal major'}
+		       transposition: {ET22.pc 'C'}
+		       endTime:End)])
+	    MyMeasure
+	   ]
+	   startTime:0
+	   timeUnit:beats(Beat))
+       add(chord:HS.score.chord
+	   scale:HS.score.scale)}
+    AllNotes = {MyScore collect($ test:isNote)}
+    %%
+    %% Constraints
+    %% 
+    {ForAll Chords HS.rules.expressEssentialChordPCs}
+    {RestrictChordDegrees_Bass VoiceNs2}
+    {ForAll [VoiceNs1 VoiceNs2]
+     proc {$ Ns}
+	Ps = {Pattern.mapItems Ns getPitch}
+     in
+  	%% restrict non-harmonic tones (suspension etc.)
+% 	{HS.rules.clearHarmonyAtChordBoundaries Chords Ns}
+	{RestrictSkips Ps unit}
+	{ChordToneOnStrongBeat MyMeasure Ns}
+	{HS.rules.clearDissonanceResolution Ns}
+	{Pattern.noRepetition Ps} % no direct pitch repetition
+	{HS.rules.onlyOrnamentalDissonance_Durations Ns}
+	{Pattern.undulating Ps
+	 unit(min:3
+	      max: 8)}
+	%% TMP: I would like something less strict: after skip > third no skip in opposite dir 
+	{HS.rules.ballistic Ps unit(oppositeIsStep: true)}
+	{NoSyncopationOverBarlines MyMeasure Ns}
+	{StartBarWithLongNote MyMeasure Ns}
+     end}
+    {LocalMaxPattern VoiceNs1}
+    %%
+    %% Always at least 2 different sim PCs
+    %% ?? is this acually effective? It appears sometimes not, but mostly it is fine.
+    thread
+       {SMapping.forTimeslices AllNotes
+	proc {$ Ns} {MinCard Ns 2} end
+	unit(endTime: End
+	     %% NOTE: avoid reapplication of constraint for equal consecutive sets of score object
+	     step: D.d8		% ?? should be shortest note dur available..
+	    )}
+    end
+    %% Non-chord tones are consonant to each other.
+    %% seems to make search problem more complex, it is not really required
+    thread  % NOTE: ?? move threads into constraint defs themselves?
+       {HS.rules.intervalBetweenNonharmonicTonesIsConsonant AllNotes
+	{MakeConsonancePCs_multipleOctaves 2}}
+    end
+    {HS.rules.noParallels2 AllNotes unit} 
+ end
+ %% first determine rhythmic structure (otherwise search realises too late that voices do not end together and with chords). Fixed number of notes likely a problem.
+ HS.distro.typewise_LeftToRightTieBreaking
+%  HS.distro.leftToRight_TypewiseTieBreaking
+}
+
+*/
+
+% % % % % %
+
+%%
+%% NOTE: unfinished
+%%
+
+/* % TMP variant:
+%%
+%% - edit rhythm
+%% - add motifs
+
+declare
+MotifIndexName = multipleParams
+fun {GetNoteIndex N} {Pattern.getMotifIndex N MotifIndexName} end
+{GUtils.setRandomGeneratorSeed 0}
+/** %% Variant of Segs.makeCounterpoint that predefines new default args.
+%% */
+fun {MakeVoiceNotes Args}
+   Defaults = unit(iargs: unit(constructor: {Score.makeConstructor
+					     {Pattern.makeIndexConstructor
+					      HS.score.chordDegreeNote
+					      %% same marker as for Segs.makeIndexNote
+					      [MotifIndexName]}
+					     unit}
+			       inScaleB: 1 % only scale tones
+			       duration: fd#[D.d8 D.d4 D.d4_ D.d2]
+% 			       offsetTime: fd#[0 D.d4 D.d2]
+			      )
+		   rargs: unit(maxInterval: 2#1
+			       maxNonharmonicNoteSequence: 1
+			       %% hm, likely makes search more complex
+% 			       minPercentSteps: 60
+			       motifSpecs:[%% TMP test
+					   [[d4_ '_'] [d8 '+'] [d8 '-'] [d8 '-']]
+					   [[d2 '_'] [d4 '-']]
+% 					   [[d2 '_'] [d2 '-']]
+% 					   [[d4 '_'] [d4 '+'] [d2 '+']]
+% 					   [[d2 '_'] [d2 '-']]
+					  ]
+			       motifSpecTransformers: [SymbolicDurToInt Pattern.symbolToDirection] 
+			      ))
+in
+   {Segs.makeCounterpoint_PatternMotifs_DurationPitchcontour
+    {GUtils.recursiveAdjoin Defaults Args}}
+end
+{SDistro.exploreOne
+ proc {$ MyScore}
+    ChordNo = 2
+%     ChordNo = 5
+    End 
+    VoiceNs1 = {MakeVoiceNotes
+		unit(iargs: unit(n: ChordNo*6 % depends also on duration
+				)
+		     rargs: unit(maxPitch: 'F'#5 % pitch unit and notation is et22
+				 minPitch: 'A'#3))}
+    VoiceNs2 = {MakeVoiceNotes
+		unit(iargs: unit(n: ChordNo*6
+				)
+		     rargs: unit(maxPitch: 'D'#4 
+				 minPitch: 'E'#2
+				 minPercentSteps: false
+				))}
+    Chords = {MakeChords_22ETCounterpoint
+	      unit(iargs: unit(n: ChordNo
+			       duration: D.d2_ * 2)
+		   rargs: unit(types: ['harmonic 7th'
+				       'subharmonic 6th']
+			       firstRoot: 'C'
+% 			       lastRoot: 'C'
+			      ))}
+    MyMeasure = {Score.make2 measure(beatNumber:3 %% 4/4 beat
+				     beatDuration:D.d4 
+				     endTime:End)
+		 unit(measure:Measure.uniformMeasures)}
+    AllNotes 
+ in
+    MyScore
+    = {Score.make
+       sim(info:lily("\\time 3/4")
+	   [seq(VoiceNs1
+		endTime:End)
+	    seq(info:lily("\\clef bass")
+		VoiceNs2
+		endTime:End)
+	    %% notes are implicitly related to simultaneous chords and scale
+	    seq(Chords
+		endTime:End)
+	    seq([scale(index:{HS.db.getScaleIndex 'standard pentachordal major'}
+		       transposition: {ET22.pc 'C'}
+		       endTime:End)])
+	    MyMeasure
+	   ]
+	   startTime:0
+	   timeUnit:beats(Beat))
+       add(chord:HS.score.chord
+	   scale:HS.score.scale)}
+    AllNotes = {MyScore collect($ test:isNote)}
+    %%
+    %% Constraints
+    %% 
+%     {ForAll Chords HS.rules.expressEssentialChordPCs}
+%     {RestrictChordDegrees_Bass VoiceNs2}
+    {ForAll [VoiceNs1 VoiceNs2]
+     proc {$ Ns}
+	Ps = {Pattern.mapItems Ns getPitch}
+     in
+  	%% restrict non-harmonic tones (suspension etc.)
+% 	{HS.rules.clearHarmonyAtChordBoundaries Chords Ns}
+% 	{RestrictSkips Ps unit}
+% 	{ChordToneOnStrongBeat MyMeasure Ns}
+% 	{HS.rules.clearDissonanceResolution Ns}
+% 	{Pattern.noRepetition Ps} % no direct pitch repetition
+% 	{HS.rules.onlyOrnamentalDissonance_Durations Ns}
+% 	{Pattern.undulating Ps
+% 	 unit(min:3
+% 	      max: 8)}
+	%% TMP: I would like something less strict: after skip > third no skip in opposite dir 
+% 	{HS.rules.ballistic Ps unit(oppositeIsStep: true)}
+	{NoSyncopationOverBarlines MyMeasure Ns}
+% 	{StartBarWithLongNote MyMeasure Ns}
+     end}
+%     {LocalMaxPattern VoiceNs1}
+    %%
+    %% Always at least 2 different sim PCs
+    %% ?? is this acually effective? It appears sometimes not, but mostly it is fine.
+%     thread
+%        {SMapping.forTimeslices AllNotes
+% 	proc {$ Ns} {MinCard Ns 2} end
+% 	unit(endTime: End
+% 	     %% NOTE: avoid reapplication of constraint for equal consecutive sets of score object
+% 	     step: D.d8		% ?? should be shortest note dur available..
+% 	    )}
+%     end
+    %% Non-chord tones are consonant to each other.
+    %% seems to make search problem more complex, it is not really required
+%     thread  % NOTE: ?? move threads into constraint defs themselves?
+%        {HS.rules.intervalBetweenNonharmonicTonesIsConsonant AllNotes
+% 	{MakeConsonancePCs_multipleOctaves 2}}
+%     end
+%     {HS.rules.noParallels2 AllNotes unit} 
+ end
+ %% first determine rhythmic structure (otherwise search realises too late that voices do not end together and with chords). Fixed number of notes likely a problem.
+%  HS.distro.typewise_LeftToRightTieBreaking
+%  HS.distro.leftToRight_TypewiseTieBreaking
+ TypewiseWithPatternMotifs_LeftToRightTieBreaking_Distro
+}
+
+*/
+
+
+
+% % % % % % %
+%%
+%% Third version:
+%% - add motifs
+%%
+
+
+
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%
 %% Multiple decatonic lines over a chord progression.
@@ -827,136 +1387,6 @@ end
 %%
 %%
 %%
-
-
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%
-%% variant of previous example
-%%
-%% - less voices
-%% TMP
-%% - less constraints
-%%
-%% TODO: 
-%% - More flexible rhythm
-%% - Pattern motifs
-%% - Make bass as flexible as upper voice and then extra constraint 
-%%
-
-%%
-%% Bass constraint:
-%% - ? local pitch minima in bass must be either chord degree 1 (root) or 2 (third?).
-%% - ? lowest bass tone per chord must be either chord degree 1 (root) or 2 (third?). [this bass tone might be "too late"]
-%%
-
-/*
-
-declare
-{GUtils.setRandomGeneratorSeed 0}
-/** %% Variant of Segs.makeCounterpoint that predefines new default args.
-%% */
-fun {MakeVoiceNotes Args}
-   Defaults = unit(iargs: unit(inScaleB: 1 % only scale tones
-% 			       duration: fd#[D.d8 D.d4 D.d2]
-% 			       offsetTime: fd#[0 D.d4 D.d2]
-			      )
-		   rargs: unit(maxInterval: 2#1
-			       maxNonharmonicNoteSequence: 1
-			       %% hm, likely makes search more complex
-% 			       minPercentSteps: 60
-			      ))
-in
-   {Segs.makeCounterpoint
-    {GUtils.recursiveAdjoin Defaults Args}}
-end
-{SDistro.exploreOne
- proc {$ MyScore}
-    ChordNo = 5
-    End
-    VoiceNs1 = {MakeVoiceNotes
-		unit(iargs: unit(n: ChordNo*8 % depends also on duration
-				 duration: D.d4
-				)
-		     rargs: unit(maxPitch: 'F'#5 % pitch unit and notation is et22
-				 minPitch: 'A'#3))}
-    VoiceNs2 = {MakeVoiceNotes
-		unit(iargs: unit(n: ChordNo*4
-				 duration: D.d2
-				)
-		     rargs: unit(maxPitch: 'D'#4 
-				 minPitch: 'E'#2
-				 minPercentSteps: false
-				))}
-    Chords = {MakeChords_22ETCounterpoint
-	      unit(iargs: unit(n: ChordNo
-			       duration: D.d1 * 2)
-		   rargs: unit(types: ['harmonic 7th'
-				       'subharmonic 6th']
-			       firstRoot: 'C'
-			       lastRoot: 'C'))}
-    AllNotes
- in
-    MyScore
-    = {Score.make
-       sim([seq(VoiceNs1
-		endTime:End)
-	    seq(info:lily("\\clef bass")
-		VoiceNs2
-		endTime:End)
-	    %% notes are implicitly related to simultaneous chords and scale
-	    seq(Chords
-		endTime:End)
-	    seq([scale(index:{HS.db.getScaleIndex 'standard pentachordal major'}
-		       transposition: {ET22.pc 'C'}
-		       endTime:End)])]
-	   startTime:0
-	   timeUnit:beats(Beat))
-       add(chord:HS.score.chord
-	   scale:HS.score.scale)}
-    AllNotes = {MyScore collect($ test:isNote)}
-    %%
-    %% TMP comment
-%     {ForAll [VoiceNs1 VoiceNs2]
-%      proc {$ Ns}
-% 	Ps = {Pattern.mapItems Ns getPitch}
-%      in
-%  	%% restrict non-harmonic tones (suspension etc.)
-% 	{HS.rules.clearHarmonyAtChordBoundaries Chords Ns}
-% 	{HS.rules.clearDissonanceResolution Ns}
-% 	{Pattern.noRepetition Ps} % no direct pitch repetition
-% 	%% seems to make search problem more complex..
-% 	{Pattern.undulating Ps
-% 	 unit(min:3
-% 	      max: 8)}
-% 	{HS.rules.ballistic Ps unit(oppositeIsStep: true)}
-%      end}
-%     %%
-%     %% important: always at least 3 different sim PCs
-%     thread
-%        {SMapping.forTimeslices AllNotes
-% 	proc {$ Ns} {MinCard Ns 3} end
-% 	unit(endTime: End
-% 	     %% NOTE: avoid reapplication of constraint for equal consecutive sets of score object
-% 	     step: D.d4		% ?? should be shortest note dur available..
-% 	    )}
-%     end
-    %%
-    %% !! seems to make search problem more complex, it is not really required
-%     thread  % NOTE: ?? move threads into constraint defs themselves?
-%        %% Non-chord tones are consonant to each other.
-%        {HS.rules.intervalBetweenNonharmonicTonesIsConsonant AllNotes
-% 	{MakeConsonancePCs_multipleOctaves 2}}
-%     end
-    {HS.rules.noParallels2 AllNotes unit} 
- end
-%  HS.distro.typewise_LeftToRightTieBreaking
- HS.distro.leftToRight_TypewiseTieBreaking
-}
-
-
-*/
 
 
 
@@ -1528,6 +1958,8 @@ proc {RenderCsoundAndLilypond I X}
        unit(file: FileName)} 
       {ET22.out.renderAndShowLilypond X
        unit(file: FileName
+	    %% ignore measure objects
+	    clauses:[Measure.isUniformMeasures#fun {$ _} nil end]
 	    wrapper: [LilyHeader 
 		      "\n}\n}"]
 	   )}
