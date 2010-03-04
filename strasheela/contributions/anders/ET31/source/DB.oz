@@ -22,7 +22,7 @@
 %%
 
 %%
-%% Chord name abbrevations adopted from Scale (see Scala file chordnam.par, which has been used for creating this database)  
+%% Chord name abbrevations adopted from Scala (see Scala file chordnam.par, which has been used for creating this database)  
 %%
 %% ASS stands for Anomalous Saturated Suspension.
 %% BP stands for Bohlen-Pierce.
