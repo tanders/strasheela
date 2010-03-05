@@ -443,6 +443,8 @@ define
    end
 
    /** %% [Note markup function] Expects a note and returns a VS that prints the adaptive JI pitch offset of this note in cent. For all other score objects nil is returned.
+   %%
+   %% Note that Lilypond does not necessarily preserve the order marks for multiple parts per staff. 
    %% */
    fun {MakeAdaptiveJI_Marker MyNote}
       if {MyNote isNote($)}
@@ -459,6 +461,8 @@ define
    end
 
    /** %% [Note markup function] Expects a note and returns a VS that prints the adaptive JI pitch offset of this note and additionally the absolute pitch in cent. For all other score objects nil is returned.
+   %%
+   %% Note that Lilypond does not necessarily preserve the order marks for multiple parts per staff.
    %% */
    fun {MakeAdaptiveJI2_Marker MyNote}
       if {MyNote isNote($)}
