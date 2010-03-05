@@ -166,6 +166,10 @@ define
 	 {LUtils.mappend S
 	  fun {$ Char} case Char of &\\ then [&\\ &\\] else [Char] end end}
       end
+      fun {PreserveQuotes S}
+	 {LUtils.mappend S
+	  fun {$ Char} case Char of &" then [&\\ &"] else [Char] end end}
+      end
    in
       /** %% Transforms a (possibly nested) record into a single virtual string with Oz record syntax. RecordToVS also transforms the special Oz records with the labels '|' (i.e. lists) and '#' into their shorthand syntax. The virtual string output is not indented, but every record feature (or list element) starts a new line. As the output is basically a text value (i.e. no 'normal' Oz value anymore), FD and FS variables are transformed into a constructor call (FD.int and FS.var.bounds) which would create these variables when evaluated. 
       %% NB: Value.toVirtualString does something very similar: it transforms nested data into their print representation. However, RecordToVS tries to create code which when executed results in same value, whereas Value.toVirtualString creates print representation. Also, RecordToVS does not expect any max width/depth arguments and attempts to format the output. 
@@ -176,7 +180,7 @@ define
 	 if {IsDet X} then
 	    %% Strings should always be surrounded by double quotes, and all escape sequences should be preseved when printed
 	    %% same for atoms and virtual strings..
-	    if {IsString X} then "\""#{PreserveEscapes X}#"\""
+	    if {IsString X} then "\""#{PreserveQuotes {PreserveEscapes X}}#"\""
 	    elseif {GUtils.isAtom X} then "'"#{PreserveEscapes {AtomToString X}}#"'"
 	    elseif {IsNumber X} then X
 	       %% Note: bytestrings would result in error..
@@ -487,6 +491,7 @@ define
        {ToScoreConstructor MyScore Args}
        Path}
       %% !! BUG: script does not work yet when called from Oz, when called in shell it works fine..
+      %% TODO: get automatic indent working
       %%
       %% ksprotte, svn commit r48, Tue, 05 Sep 2006: 
       %%
@@ -516,7 +521,7 @@ define
       %% the file fns-21.2.1.el is loaded by emacs function symbol-file 
       %%
       %% Plainly doing emacs --batch already shows the problem
-      {Exec {Init.getStrasheelaEnv strasheelaDir}#'/scripts/ozindent.sh' [Path]}
+%       {Exec {Init.getStrasheelaEnv strasheelaDir}#'/scripts/ozindent.sh' [Path]}
    end
 
    /** %% Saves MyScore into a text file which can be compiled and loaded again later with LoadScore.
