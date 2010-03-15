@@ -28,6 +28,24 @@ MyScore = {Score.makeScore
 {ET41.out.renderAndShowLilypond MyScore
  unit(file:"41ET-test")}
 
+
+
+/** %% Notate full 41-TET with HE accidentals as defined in ET41.out.pcDecls, together with pitch classes.
+%% */
+declare
+MyScore = {Score.make seq({Map {List.number 0 41 1}
+			   fun {$ I}
+			      note(info: lily("_\\markup{"#(I mod 41)#"}")
+				   pitch: I+(41*5)
+				   duration:2)
+			   end}
+			 startTime:0
+			 timeUnit:beats)
+	   add(note:HS.score.note)}
+{MyScore wait}
+{ET41.out.renderAndShowLilypond MyScore
+ unit(file:"ET41-notation")}
+
 */
 
 /*
