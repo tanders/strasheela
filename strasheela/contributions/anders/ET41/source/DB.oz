@@ -32,7 +32,7 @@ define
 	       %% Note: Young's "distribution of the pitches over octaves" is lost in this pitch-class representation
 	       %%
 
-	       %% NOTE: 'opening' chord is subset of 'lost ancestral region' (without subminor third)
+	       %% NOTE: 'opening' chord is subset of 'lost ancestral lake region' (without subminor third)
 	       chord(pitchClasses:[4#1 6#1 7#1 9#1]
 		     roots:[4#1]
 % 		     essentialPitchClasses:[]
@@ -49,7 +49,7 @@ define
 		       roots:[42#1] %% TODO:
 % 		     essentialPitchClasses:[]
 		     comment:'gamelan')
-	       %% NOTE: 'tamiar dream' is subset of 'lost ancestral region' (21/1 missing)
+	       %% NOTE: 'tamiar dream' is subset of 'lost ancestral lake region' (21/1 missing)
 	       chord(pitchClasses:[14#1 18#1 24#1 27#1]
 		       roots:[14#1] %% TODO:
 % 		     essentialPitchClasses:[]
@@ -57,7 +57,7 @@ define
 	       chord(pitchClasses:[12#1 14#1 18#1 21#1 27#1]
 		       roots:[12#1] %% TODO:
 % 		     essentialPitchClasses:[]
-		       comment:'lost ancestral region')
+		       comment:'lost ancestral lake region')
 	       chord(pitchClasses:[12#1 14#1 16#1 18#1 21#1]
 		       roots:[12#1] %% TODO:
 % 		     essentialPitchClasses:[]
