@@ -29,6 +29,7 @@
     - ET22.out: added NoteEt22ToLily_AdaptiveJI2, PajaraRMS_TuningTable, JI_TuningTable
     - 22 ET Lilypond output: revised accidentals (using new arrowed Lily accidentals for representing syntonic commas up/down)
     - ET31.out: added NoteEt31ToLily_AdaptiveJI2, Meantone_TuningTable, JI_TuningTable
+    - ET41.out: added ji_TuningTable
     - Segs: added MakeCounterpoint_PatternMotifs_DurationPitchcontour, MakeCounterpoint_PatternMotifs_OffsetDuration, MakeCounterpoint_PatternMotifs_OffsetDurationPitchcontour. 
     - Segs.makeCounterpoint: added arg clearDissonanceResolution (before this constraint was always enabled).
     - Segs: added mixin scripts (partly removing orig extended script altogether): MakeCounterpoint_Mixin, PitchPattern, FenvContour, Arpeggio, Arc, Repetitions, Hook, Stairs, MakeAkkord_Mixin, MakeAkkords_Mixin  
