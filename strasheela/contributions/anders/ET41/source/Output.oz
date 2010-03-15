@@ -38,16 +38,22 @@ import
    Path at 'x-ozlib://anders/tmp/Path/Path.ozf'
 
    GUtils at 'x-ozlib://anders/strasheela/source/GeneralUtils.ozf'
+   MUtils at 'x-ozlib://anders/strasheela/source/MusicUtils.ozf'
    Score at 'x-ozlib://anders/strasheela/source/ScoreCore.ozf'
    Out at 'x-ozlib://anders/strasheela/source/Output.ozf'
    HS at 'x-ozlib://anders/strasheela/HarmonisedScore/HarmonisedScore.ozf'
+%    DB at 'DB.ozf'
 
 export
 
 %    AddExplorerOut_ChordsToScore
    AddExplorerOuts_ArchiveInitRecord
 
+   pcDecls: ET41_PCDecls
+   
    RenderAndShowLilypond
+
+   ji_TuningTable: JI_TuningTable
    
 define
 
@@ -99,65 +105,73 @@ define
 %%%
 
 
-%    Natural = "n"
-   Natural7 = ">"
-   Natural77 = "."  
-   NaturalL = "<" 
-   Sharp = "v" 
-   Sharp7 = ">v" 
-%    SharpL = "<v" 
-   Flat = "e" 
-%    Flat7 = ">e" 
-   FlatL = "<e" 
 
-   /** %% Format of each entry: LilyPC or LilyPC#AccidentalMarkup. LilyPC (a VS) is a Lily pitch name (e.g., c or cis). AccidentalMarkup (a VS) is a Lilypond markup used above the note to indicate its accidental. 
+
+   /** %% Record that maps 41-TET pitch classes to HE notation spec. Each entry is a pair Nominal#Accidental, where nominal is a symbol in {a, b, c, d, e, f, g, b} and Accidental is a symbol in {natural, flat, sharp, natural7, naturalL, sharp7, flatL, natural77}.
+   %% This specification is used by the Lilypond output for the mapping of pitch classes to HE notation, and also for creating the tuning table ET41.out.ji_TuningTable.
    %% */
-   ET41_PCDecls = unit(0:  c 
-		       1:  c#Natural7
-		       2:  d#FlatL %  'C77':2  
-		       3:  d#Flat  %              'C#L':3 
-		       4:  c#Sharp  % 'Db7':4
-		       5:  c#Sharp7 %           'DLL':5
-		       6:  d#NaturalL   % 'C#77':6 
-		       7:  d
-		       8:  d#Natural7  %'Cx': 8   'EbLL':8
-		       %% TODO: only updated until here
-		       9:  e#FlatL % 'Fbb': 9     'D77':9
-		       10: e#Flat    %           'D#L':10
-		       11: d#Sharp % 'Eb7':11
-		       12: d#Sharp7 %      'ELL':12 
-		       13: e#NaturalL % f#Flat  'D#77':13
-		       14: e
-		       15: e#Natural7 % 'Dx': 15   'FLL':15 
-		       16: f#NaturalL %'Gbb': 16    'E77':16  
-		       17: f
-		       18: f#Natural7 % 'E#': 18  % 'GbLL':18
-		       19: g#FlatL % 'F77':19
-		       20: g#Flat   %          'F#L':20
-		       21: f#Sharp  %     'Gb7':21
-		       22: f#Sharp7 %'Ex': 22 'GLL':22 
-		       23: g#NaturalL % 'Abb': 23    'F#77':23
-		       24: g    
-		       25: g#Natural7 % 'Fx': 25  'AbLL':25 
-		       26: a#FlatL % 'G77':26 
-		       27: a#Flat    %   'G#L':27
-		       28: g#Sharp   %    'Ab7':28
-		       29: g#Sharp7 %  'ALL':29 
-		       30: a#NaturalL % 'Bbb': 30    'G#77':30
-		       31: a
-		       32: a#Natural7 % 'Gx': 32     'BbLL':32   
-		       33: b#FlatL % 'A77':33
-		       34: b#Flat %               'A#L':34
-		       35: a#Sharp %     'Bb7':35
-		       36: a#Sharp7 % 'BLL':36 
-		       37: b#NaturalL %'A#77':37
-		       38: b
-		       39: b#Natural7 % 'Ax': 39
-		       40: b#Natural77 % c#'L' would result in octave problems..
+   ET41_PCDecls = unit(0:  c#natural 
+		       1:  c#natural7
+		       2:  d#flatL %  'C77':2  
+		       3:  d#flat  %              'C#L':3 
+		       4:  c#sharp  % 'Db7':4
+		       5:  c#sharp7 %           'DLL':5
+		       6:  d#naturalL   % 'C#77':6 
+		       7:  d#natural
+		       8:  d#natural7  %'Cx': 8   'EbLL':8
+		       9:  e#flatL % 'Fbb': 9     'D77':9
+		       10: e#flat    %           'D#L':10
+		       11: d#sharp % 'Eb7':11
+		       12: d#sharp7 %      'ELL':12 
+		       13: e#naturalL % f#flat  'D#77':13
+		       14: e#natural
+		       15: e#natural7 % 'Dx': 15   'FLL':15 
+		       16: f#naturalL %'Gbb': 16    'E77':16  
+		       17: f#natural
+		       18: f#natural7 % 'E#': 18  % 'GbLL':18
+		       19: g#flatL % 'F77':19
+		       20: g#flat   %          'F#L':20
+		       21: f#sharp  %     'Gb7':21
+		       22: f#sharp7 %'Ex': 22 'GLL':22 
+		       23: g#naturalL % 'Abb': 23    'F#77':23
+		       24: g#natural    
+		       25: g#natural7 % 'Fx': 25  'AbLL':25 
+		       26: a#flatL % 'G77':26 
+		       27: a#flat    %   'G#L':27
+		       28: g#sharp   %    'Ab7':28
+		       29: g#sharp7 %  'ALL':29 
+		       30: a#naturalL % 'Bbb': 30    'G#77':30
+		       31: a#natural
+		       32: a#natural7 % 'Gx': 32     'BbLL':32   
+		       33: b#flatL % 'A77':33
+		       34: b#flat %               'A#L':34
+		       35: a#sharp %     'Bb7':35
+		       36: a#sharp7 % 'BLL':36 
+		       37: b#naturalL %'A#77':37
+		       38: b#natural
+		       39: b#natural7 % 'Ax': 39
+		       40: b#natural77 % c#'L' would result in octave problems..
 		      )
+   ET41_PC_HE_Strings = {Record.map ET41_PCDecls
+			 fun {$ Nominal#Acc}
+			    HE_String = case Acc of 
+					   natural then "" % "n"
+					[] natural7 then ">"
+					[] natural77 then "."  
+					[] naturalL then "<" 
+					[] sharp then "v" 
+					[] sharp7 then ">v" 
+% 					[] SharpL then "<v" 
+					[] flat then "e" 
+% 					[] flat7 then ">e" 
+					[] flatL then "<e"
+					end
+			    in
+			       Nominal#HE_String
+			    end}
 
 
-   LilyEt41PCs = {Record.map ET41_PCDecls
+   LilyEt41PCs = {Record.map ET41_PC_HE_Strings
 		  %% access LilyPC from X
 		  fun {$ X} {CondSelect X 1 X} end}
    
@@ -166,7 +180,7 @@ define
    fun {MakeET41Accidental X}      
       %% access Lily markup 
       fun {GetAccStringForPC PC}
-	 ET41_PCDecl = ET41_PCDecls.PC
+	 ET41_PCDecl = ET41_PC_HE_Strings.PC
       in
 	 {CondSelect ET41_PCDecl 2 nil}
       end
@@ -229,7 +243,7 @@ define
 		      codeBeforePcCollectionMakers:
 			 [fun {$ X PC}
 			     fun {GetAccStringForPC}
-				ET41_PCDecl = ET41_PCDecls.PC
+				ET41_PCDecl = ET41_PC_HE_Strings.PC
 			     in
 				{CondSelect ET41_PCDecl 2 nil}
 			     end
@@ -267,8 +281,39 @@ define
 %%% Tuning tables
 %%%
 
-%% TODO: tuning table for extended version of La Monte Young's Well-tuned piano JI tuning 
-
-   
+   /** %% Tuning table with JI interpretation of 41 ET: intervals correspond to the JI interpretation of the HE accidentals used by Lilypond output.
+   %% */
+   JI_TuningTable = {Adjoin {Record.map
+			     %% leave out PC 0, PC 41 added at end below
+			     {Record.subtract ET41_PCDecls 0}
+			     fun {$ Nominal#Acc}
+				%% ratios of Phythagorean nominals
+				NominalRatio = case Nominal of
+						  c then 1#1
+					       [] d then 9#8
+					       [] e then 81#64
+					       [] f then 4#3
+					       [] g then 3#2
+					       [] a then 27#16
+					       [] b then 243#128
+					       end
+				%% ratios of the 3 and 7-limit accidentals used in the notation
+				AccRatio = case Acc of
+					      natural then 1#1
+					   [] natural7 then 64#63
+					   [] natural77 then 4096#3969 % 64#63 * 64#63 
+					   [] naturalL then 63#64 
+					   [] sharp then 2187#2048
+					   [] sharp7 then 243#224 % 2187#2048 * 64#63
+					   [] flat then 2048#2187
+					   [] flatL then 224#243   % 2048#2187 * 63#64
+					   end
+			     in
+				%% translate ratios to cents and add them
+				{MUtils.ratioToKeynumInterval NominalRatio 1200.0}
+				+ {MUtils.ratioToKeynumInterval AccRatio 1200.0}
+			     end}
+		     %% add octave (necessary?)
+		     unit(41: 1200.0)}
 
 end
