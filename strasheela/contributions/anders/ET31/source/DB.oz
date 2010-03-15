@@ -894,6 +894,24 @@ define
 	       scale(pitchClasses:{Pattern.dxsToXs [1 2 1 2 1 2 1 2 1 2 1 2 1 2 1 2 1 2 1 2] 0}
 		     roots:[0]
 		     comment:'blackjack')
+	       
+	       %% Erlich; see http://launch.groups.yahoo.com/group/tuning/message/22532
+	       local
+		  %% blackjack PCs
+		  BJ = {Pattern.dxsToXs [1 2 1 2 1 2 1 2 1 2 1 2 1 2 1 2 1 2 1 2] 0}
+		  %% degrees of BJ; zero-based
+		  Degrees = [1 3 4 6 8 10 11 13 15 17 18 20]
+	       in 
+		  scale(pitchClasses: {Map Degrees
+				       fun {$ Degree}
+					  %% access the respective blackjack PC;
+					  %% and transpose whole scale down to 0
+					  {Nth BJ Degree+1} - 1
+				       end}
+			roots:[0] 
+			comment:'12-out-of-BlackJack')
+	       end
+	       
 	       )
 
    %%
