@@ -1087,6 +1087,24 @@ MyScore_ScaleNotes = {ExpressScales {MyScore_ScalesOnly
 }
 
 
+{ShowScaleChords_ET31 {HS.db.getScaleIndex 'blackjack'}
+ "Blackjack"
+ "/Users/t/sound/tmp/"
+}
+
+
+{ShowScaleChords_ET31 {HS.db.getScaleIndex '12-out-of-BlackJack'}
+ '12-out-of-BlackJack'
+ "/Users/t/sound/tmp/"
+}
+
+
+{ShowScaleChords_ET31 {HS.db.getScaleIndex 'full dynamic symmetrical major'}
+ 'FullDynamicSymmetricalMajor'
+ "/Users/t/sound/tmp/"
+}
+
+
 %% Test
 
 declare
