@@ -2017,10 +2017,11 @@ define
 				   end}
 			   '=:'}
 	       %% in case of Chords==nil 
-	    else
-	       {FD.impl ExistingNoteB
-		(InChordB =: 0)	% !!?? OK
-		1}
+% 	    else
+% 	       {Browse 'Warning: InChordMixinForNote instance without related chord.'}
+% 	       {FD.impl ExistingNoteB
+% 		(InChordB =: 0)	% !!?? OK
+% 		1}
 	    end
 	 end
       end
@@ -2153,10 +2154,11 @@ define
 				   end}
 			   '=:'}
 	       %% in case of Scales==nil 
-	    else 
-	       {FD.impl ExistingNoteB
-		(InScaleB =: 0)	% !!?? OK
-		1}
+% 	    else 
+% 	       {Browse 'Warning: InScaleMixinForNote instance without related scale.'}
+% 	       {FD.impl ExistingNoteB
+% 		(InScaleB =: 0)	% !!?? OK
+% 		1}
 	    end
 	 end
       end
