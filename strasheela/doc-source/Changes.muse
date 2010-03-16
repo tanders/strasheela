@@ -33,7 +33,7 @@
     - Segs: added MakeCounterpoint_PatternMotifs_DurationPitchcontour, MakeCounterpoint_PatternMotifs_OffsetDuration, MakeCounterpoint_PatternMotifs_OffsetDurationPitchcontour. 
     - Segs.makeCounterpoint: added arg clearDissonanceResolution (before this constraint was always enabled).
     - Segs: added mixin scripts (partly removing orig extended script altogether): MakeCounterpoint_Mixin, PitchPattern, FenvContour, Arpeggio, Arc, Repetitions, Hook, Stairs, MakeAkkord_Mixin, MakeAkkords_Mixin  
-    - Segs.homophonicChordProgression: added args playAllChordTones, noVoiceCrossing, maxUpperVoiceDistance
+    - Segs.homophonicChordProgression: added arguments playAllChordTones, noVoiceCrossing, maxUpperVoiceDistance, generalised argument 'restrictMelodicIntervals'.
     - HS.rules: added GetRootDegreeIntervals, SetBoundaryRoots, SetBoundaryTypes, NoParallels2, Ballistic, MinCard
     - Pattern: added MinDistinct, DirectionOfContour, LocalMinR, GetLocalMax, GetLocalMin, ConstrainLocalMax, ConstrainLocalMin, FenvContour2, NoRepetition and Undulating
     - HS.score: refactored HarmonicRythmFollowsMarkers: now works also for items with offsetTime > 0 
