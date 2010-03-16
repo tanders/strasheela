@@ -33,7 +33,17 @@ define
    %% Args:
    %% 'chords' (default {HS.score.makeChords unit}): non-nil list of chords. Remember that neither score objects nor variables can be in the top-level space, so the chords (and scales) to HomophonicChordProgression must be created inside a script.  
    %% 'scales' (default nil): list of scales.
-   %% 'restrictMelodicIntervals' (default unit(minPercent:60 maxPercent:100)): if non-false then the intervals between upper voices are a fifths at most, and the bass is a fifths at most or an octave. The args minPercent/maxPercent specify the percentage boudary of the number of steps in the upper voices. Disabled if false.
+   %% 'restrictMelodicIntervals' (defaults
+   unit(bassIntervals: unit('=<:': 3#2
+			    '=:': [2#1])
+	upperVoiceIntervals: unit('=<:': 3#2
+				  '=:': nil)
+	step: 8#7
+	minPercent:50
+	maxPercent:100)
+   %% if non-false, then the melodic intervals are constrained as specified by the "sub arguments". The melodic intervals allowed for the bass are given by the arg 'bassIntervals', where the feature '=<:' specifies a ratio for an interval up to which all intervals are permitted and the feature '=:' specifies a list of ratios that are additionally permitted. By default, all intervals up to a fifth and the octave are allowed. The melodic intervals for the upper voices are specified the same way with the argument 'upperVoiceIntervals'.
+   %% The remaining arguments control the required number of steps between upper voices. The maximum interval considered a step is given as a ratio to the argument 'step'. The args 'minPercent'/'maxPercent' specify the percentage boudary of the number of steps in the upper voices. 
+   %% If 'restrictMelodicIntervals' is set to false, then all these constraints are disabled.
    %% 'commonPitchesHeldOver' (default true): if true, the notes of the harmonic band stay in the same voice and octave.
    %% 'noParallels' (default true): if true, no parallel perfect consonances are permitted.
    %% 'playAllChordTones' (default true): if true, all chord tones are played.
@@ -135,8 +145,8 @@ define
 		      scales: nil
 		      commonPitchesHeldOver: true
 		      noParallels: true
-		      restrictMelodicIntervals: unit(minPercent:60
-						     maxPercent:100)
+		      %% restrictMelodicIntervals default args are given in constraint def below, so not all args must be necessarily specified by user
+		      restrictMelodicIntervals: unit
 % 		      restrictMelodicIntervals_bass: 
 		      playAllChordTones: true
 		      noVoiceCrossing: true
@@ -169,7 +179,8 @@ define
 		{RestrictMelodicIntervals_UpperVoices Notes
 		 As.restrictMelodicIntervals}
 	     end}
-	    {RestrictMelodicIntervals_Bass {List.last Nss}}
+	    {RestrictMelodicIntervals_Bass {List.last Nss}
+	     As.restrictMelodicIntervals}
 	 end
 	 %% Constrain 'time slice' of chord and corresponding notes
 	 {ForAll ChordAndNotesSlices
@@ -244,27 +255,44 @@ define
    %% ?? no two skips after each other in same dir? 
    %% */
    proc {RestrictMelodicIntervals_UpperVoices Notes Args}
-      Defaults = unit(minPercent:70
-		      maxPercent:100)
+      %% def defaults from HomophonicChordProgression here, so not all args must be given
+      Defaults = unit(%% percentage of steps
+		      minPercent:50
+		      maxPercent:100
+		      %% max size of a step (ratio)
+		      step: 8#7
+		      %% 
+		      upperVoiceIntervals: unit('=<:': 3#2
+						'=:': nil))
       As = {Adjoin Defaults Args}
       Intervals = {Pattern.map2Neighbours Notes HS.rules.getInterval}
    in
-      {ForAll Intervals proc {$ X} X =<: {HS.score.ratioToInterval 3#2} end}
+      {ForAll Intervals
+       proc {$ X}
+	  {Pattern.disjAll
+	   (X =<: {HS.score.ratioToInterval As.upperVoiceIntervals.'=<:'})
+	   | {Map As.upperVoiceIntervals.'=:' fun {$ Ratio} (X =: {HS.score.ratioToInterval Ratio}) end}
+	   1}
+       end}
       {Pattern.percentTrue_Range {Map Intervals
-				  proc {$ X B} B = (X =<: {HS.score.ratioToInterval 9#8}) end}
+				  proc {$ X B} B = (X =<: {HS.score.ratioToInterval As.step}) end}
        As.minPercent As.maxPercent}
    end
    /** %% Restrict melodic intervals of Notes (list of notes in bass): only skips up to a fifth or an octave.
    %% */
    %% ??  At least sometimes the bass progresses stepwise: min number of steps given
-   proc {RestrictMelodicIntervals_Bass Notes}
+   proc {RestrictMelodicIntervals_Bass Notes Args}
+      %% def defaults from HomophonicChordProgression here, so not all args must be given
+      Defaults = unit(bassIntervals: unit('=<:': 3#2
+					  '=:': [2#1]))
+      As = {Adjoin Defaults Args}
       Intervals = {Pattern.map2Neighbours Notes HS.rules.getInterval}
    in
       {ForAll Intervals
        proc {$ X}
-	  {Pattern.disjAll [(X =<: {HS.score.ratioToInterval 4#3})
-			    (X =: {HS.score.ratioToInterval 3#2})
-			    (X =: {HS.score.ratioToInterval 2#1})]
+	  {Pattern.disjAll
+	   (X =<: {HS.score.ratioToInterval As.bassIntervals.'=<:'})
+	   | {Map As.bassIntervals.'=:' fun {$ Ratio} (X =: {HS.score.ratioToInterval Ratio}) end}
 	   1}
        end}
    end
