@@ -634,8 +634,8 @@ proc {RenderCsoundAndLilypond_AdaptiveJI I X}
 	    lowerMarkupMakers: [HS.out.makeAdaptiveJI2_Marker
 				HS.out.makeChordComment_Markup
 				HS.out.makeScaleComment_Markup]
-	    wrapper: [LilyHeader 
-		      "\n}\n}"]
+% 	    wrapper: [LilyHeader 
+% 		      "\n}\n}"]
 	   )}
    end
 end
