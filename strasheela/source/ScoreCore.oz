@@ -2915,7 +2915,7 @@ define
    %% 'mixins': a list of mixins defined with DefMixinSubscript. 
    %% 'defaults': record of default top-level argument values for resulting script. 
    %% 'idefaults': record of default argument values for args feature 'iargs' of resulting script. 
-   %% 'rdefaults': record of default argument values for args feature 'rargs' of resulting script. 
+   %% 'rdefaults': record of default argument values for args feature 'rargs' of resulting script.
    %%
    %% Default DefArgs:
    unit(super:MakeContainer
@@ -3003,6 +3003,22 @@ define
 	 {ForAll Mixins
 	  %% threads created already in Mixin (if defined with DefMixinSubscript)
 	  proc {$ Mixin} {Mixin MyScore As} end}
+	 %%
+	 %% BUG: blocks
+	 %% Doc, if this is sometimes working...
+	 %% 'isMotif': return value argument. If present, this argument is bound to a unary Boolean function that only returns true for score objects returned by the defined script. Note: using this argument requires that this defined script does actually return a score object (instead of, e.g., a list of score objects).
+	 %% 
+% 	 %% 'isMotif'
+% 	 if {HasFeature DefAs isMotif} then
+% 	    MotifType = testAtom
+% % 	    MotifType = {NewName}
+% 	 in
+% 	    {MyScore addInfo(MotifType)}
+% 	    DefAs.isMotif
+% 	    = fun {$ X}
+% 		 {IsScoreObject X} andthen {X hasThisInfo($ MotifType)}
+% 	      end
+% 	 end
       end
    end
 
