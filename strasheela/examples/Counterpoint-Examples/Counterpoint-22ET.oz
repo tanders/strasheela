@@ -362,7 +362,7 @@ Motif_B
 % 	{HS.rules.
 % 	{MyMotif mapItems($ getPitch)}
 %      end}
-    {HS.score.harmonicRythmFollowsMarkers MyScore Chords unit}
+    {HS.score.harmonicRhythmFollowsMarkers MyScore Chords unit}
     %% Akks follow harmonic rhythm
     {ForAll {LUtils.matTrans [Chords Akks]}
      proc {$ [C A]} {C getStartTime($)} = {A getStartTime($)} end}
@@ -588,7 +588,7 @@ Motif_B
 				     end)}.2
      proc {$ MyMotif} {MyMotif addInfo(lily("\\ibar"))} end}
     %%
-    {HS.score.harmonicRythmFollowsMarkers MyScore Chords unit}
+    {HS.score.harmonicRhythmFollowsMarkers MyScore Chords unit}
     %%
     %% Further constraints
     %%
