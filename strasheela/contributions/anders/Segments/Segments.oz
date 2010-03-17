@@ -508,7 +508,7 @@ MakeCounterpoint_PatternMotifs_OffsetDurationPitchcontour
    %% Args.rargs:
    %% 'minPitch' and 'maxPitch' (default false): domain specification notation supported by HS.pitch. Disabled if one of them is false.
    %% 'minRange' and 'maxRange' (default false): min and max interval between lowest and highest note of each chord, specified as ratio (pair of ints). Disabled if false.
-   %% 'minPcCard' (default 3): min number of different pitch classes expressed per akkord. Disabled if false. Note: make sure that iargs.n and cardiality of all chords is high enough.
+   %% 'minPcCard' (default false): min number of different pitch classes expressed per akkord. Disabled if false. Note: make sure that iargs.n and cardiality of all chords is high enough.
    %% */
    MakeAkkord_Mixin
    = {Score.defMixinSubscript
@@ -516,7 +516,7 @@ MakeCounterpoint_PatternMotifs_OffsetDurationPitchcontour
 			   maxPitch: false
 			   minRange: false
 			   maxRange: false
-			   minPcCard: 3 % false
+			   minPcCard: false % 3 
 			  ))
       proc {$ Akk Args}
 	 Ns = {Akk getItems($)}
