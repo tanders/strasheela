@@ -164,6 +164,17 @@ define
 	 {ForAll Mixins
 	  %% threads created already in Mixin (if defined with DefMixinSubscript)
 	  proc {$ Mixin} {Mixin MyScore TrueAs} end}
+	 %% BUG: blocks
+% 	 %% 'isMotif'
+% 	 if {HasFeature DefAs isMotif} then
+% 	    MotifType = {NewName}
+% 	 in
+% 	    {MyScore addInfo(MotifType)}
+% 	    DefAs.isMotif
+% 	    = fun {$ X}
+% 		 {Score.isScoreObject X} andthen {X hasThisInfo($ MotifType)}
+% 	      end
+% 	 end
       end
    end
 
