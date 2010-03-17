@@ -191,7 +191,7 @@ export
    HarmoniseScore HarmoniseScore2
    HarmoniseMotifs
 
-   HarmonicRythmFollowsMarkers
+   HarmonicRhythmFollowsMarkers
       
 %   ChordStartMixin Simultaneous Sequential
    
@@ -3021,7 +3021,7 @@ define
    %%
    %% Note: score objects with chord-start-marker must not overlap in time.
    %% */
-   proc {HarmonicRythmFollowsMarkers MyScore Chords Args}
+   proc {HarmonicRhythmFollowsMarkers MyScore Chords Args}
       Default = unit(hasChordStartMarker: fun {$ X} {X hasThisInfo($ startChord)} end)
       As = {Adjoin Default Args}
    in
