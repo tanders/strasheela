@@ -1226,7 +1226,7 @@ define
    end
 
    
-   /** %% Allows only for 'ornamental' in contrast to 'emphasized' non-harmonic tones. This definition only takes note durations into account. It restricts that a non-harmonic note must be preceeded and followed by a note which is at least as long as the non-harmonic note itself.
+   /** %% Allows only for 'ornamental' in contrast to 'emphasized' non-harmonic tones. This definition only takes note durations into account. It restricts that a non-harmonic note must be preceeded and followed by a note that is at least as long as the non-harmonic note itself.
    %% */
    %% TODO: ?? complement this constraint by reified constraint so it can be combined with others..
    proc {OnlyOrnamentalDissonance_Durations Notes}
