@@ -98,6 +98,8 @@ proc {MyScript ChordSeq}
    %% only specified chord types are used 
    ChordIndices = {Map ['harmonic 7th'
 			'subharmonic 6th'
+			'major-minor'
+			'minor-major'
 			%% TODO: constraint: two augmented should not follow each other. BTW: how to resolve augmented?
 % 			 'augmented'
 		       ]
