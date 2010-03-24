@@ -260,6 +260,19 @@ define
 		     essentialPitchClasses:[1#4 1#6 2#7 2#9]
 		     comment:'supermajor 6th suspended 4th')
 
+	       %% chords proposed as (quasi) consonant in Paul Erlich's
+	       %% "Tuning, Tonality, and Twenty-Two-Tone Temperament"
+	       chord(pitchClasses:['C' 'E\\' 'G' 'A']
+		     roots:['C']    
+%				dissonanceDegree:2
+		     essentialPitchClasses:['C' 'E\\' 'A']
+		     comment:'major-minor')
+	       chord(pitchClasses:['C' 'Eb/' 'G' 'B']
+		     roots:['C']    
+%				dissonanceDegree:2
+		     essentialPitchClasses:['C' 'Eb/' 'B']
+		     comment:'minor-major')
+	       
 	       
 	       chord(pitchClasses:['C' 'E\\' 'G' 'Bb' 'Eb']
 		     roots:['C']    
