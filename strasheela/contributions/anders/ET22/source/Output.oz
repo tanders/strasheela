@@ -47,7 +47,7 @@ define
 %%% Explorer Actions
 %%%
 
-      /** %% Creates an Explorer action for outputting a pure sequence of chords. This is a version of HS.out.addExplorerOut_ChordsToScore, customised for 31 ET. Please see the documentation of HS.out.addExplorerOut_ChordsToScore for further details such as supported arguments.
+   /** %% Creates an Explorer action for outputting a pure sequence of chords. This is a version of HS.out.addExplorerOut_ChordsToScore, customised for 31 ET. Please see the documentation of HS.out.addExplorerOut_ChordsToScore for further details such as supported arguments.
    %% */
    proc {AddExplorerOut_ChordsToScore Args}
       Defaults = unit(outname:out
@@ -128,6 +128,8 @@ define
       fun {GetEnharmonicNotationTable}
 	 @EnharmonicNotationTable
       end
+      
+      %% default enharmonic notation 
       {SetEnharmonicNotationTable
        unit(0: 'C' 
 	    1:'Db' 
@@ -151,6 +153,31 @@ define
 	    19:'A#\\' 
 	    20:'B\\' 
 	    21:'B'  )}
+%       %% enharmonic notation for relatively easy relations to root C
+%       {ET22.out.setEnharmonicNotationTable
+%        unit(0: 'C' 
+% 	    1:'Db' 
+% 	    2:'C#\\'  % 2:'Db/' 
+% 	    3:'D\\' 
+% 	    4:'D' 
+% 	    5:'Eb'
+% 	    6:'Eb/'
+% 	    7:'E\\'  
+% 	    8:'E' 
+% 	    9:'F' 
+% 	    10:'F/' 
+% 	    11:'F#\\' 
+% 	    12:'G\\' 
+% 	    13:'G'
+% 	    14:'Ab' % 'G/' 
+% 	    15:'Ab/' 
+% 	    16:'A\\' 
+% 	    17:'A'
+% 	    18:'Bb'  
+% 	    19:'A#\\' 
+% 	    20:'B\\' 
+% 	    21:'B' )}
+      
    end
 
    
