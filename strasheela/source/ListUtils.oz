@@ -85,7 +85,8 @@ define
    %%*/	
    %% !! Args should be swapped for consistency
    fun {Position X Ys}
-      CompareFn=Value.'=='	% shall I make this an arg?
+%       CompareFn=Value.'==' 
+      CompareFn=System.eq	% shall I make this an arg?
       fun {Aux X Ys I} 
 	 case Ys
 	 of nil then nil
