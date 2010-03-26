@@ -24,10 +24,11 @@ export
    Mappend
    CollectN RepeatN
    Contains
-   Position Positions FindPosition FindPositions
+   Position Positions FindPosition FindPositions RemovePosition ReplacePosition
    RemoveDuplicates
    Remove
    Find
+   FindBest
    CFilter CFind 
    Substitute Substitute1
    Count
@@ -151,6 +152,21 @@ define
       {Aux Xs 1 nil}
    end
 
+   /** %% Remove the element of Xs at position Pos.
+   %% */
+   fun {RemovePosition Xs Pos}
+      {Append
+       {List.take Xs Pos-1}
+       {List.drop Xs Pos}}
+   end
+   /** %% Replace the element of Xs at position Pos by Y.
+   %% */
+   fun {ReplacePosition Xs Pos Y}
+      {Append
+       {List.take Xs Pos-1}
+       Y | {List.drop Xs Pos}}
+   end
+
    
    /** %% Removes any element in Xs (a list of arbitrary data) which occured already more early in X. Elements are compared with ==.
    %% */
@@ -186,6 +202,26 @@ define
 	   else {Find Xr Fn}
 	   end
       end 
+   end
+
+   local
+      fun {Aux Xs Fn BestSoFar}
+	 case Xs of nil then BestSoFar
+	 else if {Fn Xs.1 BestSoFar}
+	      then {Aux Xs.2 Fn Xs.1}
+	      else {Aux Xs.2 Fn BestSoFar}
+	      end
+	 end
+      end
+   in
+      /** %% Returns the (first) member of Xs that performs best according to the binary Boolean function (comparison function) Fn.
+      %% FindBest is something like sort that only returns the best match.
+      %% */
+      fun {FindBest Xs Fn}
+	 case Xs of nil then nil
+	 else {Aux Xs.2 Fn Xs.1}
+	 end
+      end
    end
 
    /** %% Concurrent variant of Filter. Like Filter, CFilter returns a stream/list of elements in Xs for which F (a Boolean function) returns true. However, CFilter does not necessarily completely block on free variables in Xs. Instead, it returns/skips elements of Xs as soon as enough information is provided to decided either way, possibly changing the order of list elements. If it is known that no elements will be added, then the stream Result will be closed.
