@@ -83,6 +83,9 @@ export
    DefSubscript DefMixinSubscript ItemslistToContainerSubscript
    % ResolveRepeats
    MakeClass
+
+   apply_H: Apply_Heuristic
+   
 prepare
    /** marker of score object type checking */
    %% Defined in 'prepare' to avoid re-evaluation.
@@ -335,7 +338,7 @@ define
       meth setAttribute(A X)
 	 A <- X
       end
-      /** %% [destructive method] Adds X to list in attribute info. The tail of the list at attribute info is the info specified at the init method which defaults to nil.
+      /** %% [destructive method] Adds X to list in attribute info. The tail of the list at attribute info is the info that was specified before with addInfo and was give at the init method (default is nil).
       %% */
       meth addInfo(X)
 	 info <- X | @info
@@ -1015,11 +1018,12 @@ define
    class Parameter from ScoreObject % SMapping.flagsMixin
       feat %'class': Parameter
 	 label: parameter
-      attr item value 'unit'
+      attr item value 'unit' heuristics
       meth init(value:Value<=_ 'unit':Unit<=_ ...)=M
 	 ScoreObject, {Record.subtractList M [value 'unit']}
 	 @'unit' = Unit
 	 @value = Value
+	 @heuristics = nil
       end
       meth isParameter(?B) B=true end
       meth getItem(?X) X=@item end
@@ -1042,6 +1046,19 @@ define
 	 then @value = {FS.var.upperBound Spec}
 	 end
       end
+
+      /** %% Return the list of heuristic constraints applied to the parameter. A heuristic is a record of the following form (see the doc of getHeuristics for the meaning of the variables). 
+      heuristic(constraint:Constraint parameters: Params weight:Weight)
+      %% Note: Instead of calling this method directly, better use Score.apply_H instead.
+      %% */
+      meth getHeuristics(?X) X=@heuristics end
+      /** %% [destructive method] Adds a heuristic constraint to the parameter. Constraint is a heuristic constraint (a function expecting n integers and returning an integer), Params is the list of parameter objects to which the constraint is applied (including self), and Weight (int) is the weight of the constraint (the factor applied to it). 
+      %% Note: Instead of calling this method directly, better use Score.apply_H instead.
+      % */ 
+      meth addHeuristic(constraint:Constraint parameters:Params weight:Weight<=1)
+	 heuristics <- heuristic(parameters: Params constraint:Constraint weight:Weight) | @heuristics
+      end
+      
 %       /** % Is the parameter value determined?
 %       % */
 %       meth isValDet(?B) B={IsDet @value} end
@@ -3241,6 +3258,40 @@ define
 		       end})
 	 end
       end
+   end
+
+
+   %%
+   %% Heuristic constraints
+   %%
+
+   /** %% Applies a heuristic constraint (H_Constraint) to a list of parameter objects (Params) with a cetain weight Weight.
+   %%
+   %% Heuristic constraints restrict the result of a CSP (as strict constraints do), but the expressed constraint is only used as a guidance during the search process that can be violated if it contradicts some strict constraint.
+   %%
+   %% Heuristic constraints are functions that expect n integers (*not* FD variables; FD int domain values) and return an integer. The result indicates how well the constraint is met by the input integers: the larger the number the better. A heuristic constraint is used to judge the quality of individual domain values. In a heuristic search (i.e. heuristic value ordering) the domain value with the highest quality according to all its applied heuristic constraints is selected.
+   %% The returned qualities should cover the interval [0, 100], so that the importance of all heuristic constraints is considered equally. Nevertheless, larger or even negative results are possible as well.
+   %% The weight of a constraint is a factor (int) that is applied to its returned quality and thus affects its importance.
+   %%
+   %% The application of heuristic constraints is strait forward and very similar to the application of strict constraints except for a formal difference. Strict constraints are applied directly to parameter values (i.e. variables). For example, The constraint C is applied to the pitch parameter value of the note N with the following code.
+   {C {N getPitch($)}}
+   %% Instead, heuristic constraints are applied to the score object parameters using Score.apply_H. The heuristic constraint HC is applied to the pitch parameter of the note N with the following code.
+   {Score.apply_H HC {N getPitchParameter($)} 1}
+   %% More generally, parameter objects are accessed with methods like getFooParameter, where Foo is the name of the parameter.
+   %%
+   %% NOTE: When heuristic constraints have been applied, the value ordering of the solver (distribution feature 'value') must be set to 'heuristic'.
+   %%
+   %% For an example, see strasheela/examples/Heuristic-Constraints.oz.
+   %% */
+   %% NB: the heuristic is added to all Params involved: only the parameter visited last during search process makes use of the constraint.
+   %%
+   proc {Apply_Heuristic H_Constraint Params Weight}
+      {ForAll Params
+       proc {$ Param}
+	  {Param addHeuristic(parameters: Params 
+			      constraint: H_Constraint
+			      weight: Weight)}
+       end}
    end
 
 end
