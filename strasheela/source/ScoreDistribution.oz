@@ -88,6 +88,7 @@ export
    MakeMarkNextParam MakeVisitMarkedParamsFirst 
    %% value ordering defs 
    MakeRandomDistributionValue
+   HeuristicValueOrder
    
    %% score distro defs   
    MakeSearchScript
@@ -378,7 +379,77 @@ define
    end
 
 
-   
+   /** %% [value ordering, i.e. should be given to distribution arg 'value']: take heuristic constraints applied with Score.apply_H into account.
+   %% */
+   %% To decide: should this be default value ordering, together with randomised value ordering?
+   %%
+   %% !! TODO:
+   %% (Allow to) randomise solution, but with support for recomputation: replace SelectedDomValue (see below) and "else" clause {FD.reflect.mid Var}
+   %%
+   fun {HeuristicValueOrder Param SelectFn}
+      Var = {SelectFn Param} % getValue...
+      Dom = {FD.reflect.domList Var}
+      %% Heuristics are only applied if current param is only undetermined param involved in heuristic constraint
+      Heuristics   % list of heuristic decls
+      = {Filter {Param getHeuristics($)}
+	 fun {$ MyHeuristic} 
+	    %% !! TODO: efficiency: ParamPos accessed multiple times (below accessed again, somehow store this info instead)
+	    %% position of Param in params of heuristic
+	    ParamPos = {LUtils.position Param MyHeuristic.parameters}
+	 in
+	    {All {LUtils.removePosition MyHeuristic.parameters ParamPos}
+	     fun {$ P} {IsDet {SelectFn P}} end}
+	 end}
+      /** %% Returns a number that indicates the quality of DomVal (int) with respect to Heuristic (record with feats params and heuristic).
+      %% */
+      fun {EvaluateDomValue DomVal Heuristic}
+	 %% !! TODO: efficiency: ParamPos accessed again
+	 %% position of Param in params of heuristic
+	 ParamPos = {LUtils.position Param Heuristic.parameters}
+	 Aux
+      in
+	 %% get quality of DomVal with respect to Heuristic.heuristic
+	 {Procedure.apply Heuristic.constraint
+	  {Append {LUtils.replacePosition {Map Heuristic.parameters fun {$ P} {SelectFn P} end}
+		   ParamPos DomVal}
+	   [Aux]}}
+	 %% multiply quality with weight
+	 Aux * Heuristic.weight
+      end
+   in
+      if Heuristics \= nil
+      then
+	 %% !! TODO: replace FindBest with something like FilterBest where all "best" domain values are collected and then decision amoung these is randomised
+	 SelectedDomValue = {LUtils.findBest Dom
+			     fun {$ DomVal1 DomVal2}
+				{LUtils.accum %% Question: any more efficient summing?
+				 {Map Heuristics
+				  fun {$ H} {EvaluateDomValue DomVal1 H} end}
+				 Number.'+'}
+				>
+				{LUtils.accum 
+				 {Map Heuristics
+				  fun {$ H} {EvaluateDomValue DomVal2 H} end}
+				 Number.'+'}
+			     end}
+      in
+%       {Browse unit(notePosition:{{Param getItem($)}
+% 				 getPosition($ {{Param getItem($)} getTemporalAspect($)})}
+% 		   dom:Dom
+% 		   selectedDomValue: SelectedDomValue
+% 		  )}
+	 SelectedDomValue
+      else
+	 %% Hs is nil
+	 %%
+	 %% !! TODO: make otherwise-value-ordering controllable with arg; this may be a good default, but randomised search is better
+	 {FD.reflect.mid Var}
+	 /* % else
+	 {MakeRandomDistributionValue
+	  {GUtils.makeRandomGenerator}}
+	 */
+      end
+   end
    
    
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -441,6 +512,7 @@ define
 		  mid: mid %FD.reflect.mid
 		  splitMin: splitMin
 		  splitMax: splitMax
+		  heuristic: HeuristicValueOrder
 		  %% NOTE: random value ordering defined directly in
 		  %% MakeSearchScript
 
