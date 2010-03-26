@@ -13,10 +13,16 @@
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%
-%% Module linking: link all Strasheela modules are loaded as
-%% demonstrated in the template init file ../_ozrc
+%% ** HOW TO USE THIS EXAMPLE? **
+%%
+%% First feed the whole buffer. Then scroll down to the section 'Call
+%% solver' (wrapped in a block comment to prevent unintended feeding)
+%% and feed the examples one by one.
+%%
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%% ** EXAMPLE DESCRIPTION **
 %%
 %% Rhythmic patterns: how to find an optimal solution for an
 %% over-contrained problem.

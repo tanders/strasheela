@@ -13,6 +13,15 @@
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%
+%% ** HOW TO USE THIS EXAMPLE? **
+%%
+%% First feed the whole buffer. Then scroll down to the section 'Call
+%% solver' (wrapped in a block comment to prevent unintended feeding)
+%% and feed the examples one by one.
+%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
 %% Module linking: link all Strasheela modules are loaded as
 %% demonstrated in the template init file ../_ozrc
 %% (cf. ../01-AllIntervalSeries.oz and
@@ -20,6 +29,8 @@
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%% ** EXAMPLE DESCRIPTION **
 %%
 %% This example defines two-voice first species counterpoint as
 %% explained by Fux, J. J. (1965, orig. 1725). The Study of

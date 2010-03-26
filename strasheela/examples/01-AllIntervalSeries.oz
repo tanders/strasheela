@@ -12,24 +12,9 @@
 %%% *************************************************************
 
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%
-%% This example defines an all-interval series (a classical CSP) and
-%% outputs the result in a number of different ways as a
-%% demonstration.
-%%
-%% The example stems from dodecaphonic music composition. A series (or
-%% tone row) is a sequence of twelve tone names of the chromatic scale
-%% or twelve pitch classes, in which each pitch class occurs exactly
-%% once. In an all-interval series, also the eleven intervals between
-%% the twelve pitches are all pairwise distinct (i.e. each interval
-%% occurs only once). These intervals are computed in such a way that
-%% they are inversional equivalent: complementary intervals such a
-%% fifth upwards and a fourth downwards count as the same interval
-%% (namely 7).
-%%
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%% ** HOW TO USE THIS EXAMPLE? **
 %%
 %% Module linking and Strasheela initialisation
 %%
@@ -47,6 +32,26 @@
 %% using "Feed Region" from the Oz menu.
 %%
 
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%% ** EXAMPLE DESCRIPTION **
+%%
+%% This example defines an all-interval series (a classical CSP) and
+%% outputs the result in a number of different ways as a
+%% demonstration.
+%%
+%% The example stems from dodecaphonic music composition. A series (or
+%% tone row) is a sequence of twelve tone names of the chromatic scale
+%% or twelve pitch classes, in which each pitch class occurs exactly
+%% once. In an all-interval series, also the eleven intervals between
+%% the twelve pitches are all pairwise distinct (i.e. each interval
+%% occurs only once). These intervals are computed in such a way that
+%% they are inversional equivalent: complementary intervals such a
+%% fifth upwards and a fourth downwards count as the same interval
+%% (namely 7).
+%%
 
 declare
 

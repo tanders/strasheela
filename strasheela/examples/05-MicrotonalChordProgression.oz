@@ -13,6 +13,15 @@
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%
+%% ** HOW TO USE THIS EXAMPLE? **
+%%
+%% First feed the whole buffer. Then scroll down to the section 'Call
+%% solver' (wrapped in a block comment to prevent unintended feeding)
+%% and feed the examples one by one.
+%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
 %% Module linking: link all Strasheela modules are loaded as
 %% demonstrated in the template init file ../_ozrc
 %%
@@ -28,7 +37,9 @@ declare
 [Select] = {ModuleLink ['x-ozlib://duchier/cp/Select.ozf']}
 
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%% ** EXAMPLE DESCRIPTION **
 %%
 %% This example creates a four-voice homophonic chord progression in
 %% extended just intonation. The chords are all transpositions of the

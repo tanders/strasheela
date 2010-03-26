@@ -11,6 +11,14 @@
 %%% GNU General Public License for more details.
 %%% *************************************************************
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%% ** HOW TO USE THIS EXAMPLE? **
+%%
+%% First feed the whole buffer. Then scroll down to the section 'Call
+%% solver' (wrapped in a block comment to prevent unintended feeding)
+%% and feed the examples one by one.
+%%
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%
@@ -31,6 +39,10 @@ declare
 % OutDir = "/home/t/oz/music/Strasheela/private/examples/Standard-Examples-Output/07-Harmonised-L-system/"
 
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%% ** EXAMPLE DESCRIPTION **
+%%
 %%
 %% This example demonstrates how constraint-based algorithmic composition can be combined with 'classical' deterministic algorithmic composition techniques. 
 %%

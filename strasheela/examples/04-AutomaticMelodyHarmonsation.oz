@@ -13,6 +13,15 @@
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%
+%% ** HOW TO USE THIS EXAMPLE? **
+%%
+%% First feed the whole buffer. Then scroll down to the section 'Call
+%% solver' (wrapped in a block comment to prevent unintended feeding)
+%% and feed the examples one by one.
+%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
 %% Module linking: link all Strasheela modules are loaded as
 %% demonstrated in the template init file ../_ozrc
 %%
@@ -26,6 +35,8 @@ declare
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%% ** EXAMPLE DESCRIPTION **
 %%
 %% This example creates a harmony progression which accompanies a
 %% given melody such as a folk tune. In this CSP, voicing is
