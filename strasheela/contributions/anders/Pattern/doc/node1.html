@@ -567,7 +567,7 @@ clearInterval(drawit)
 <code>
 <a name="entity39">
 <span class="keyword">fun</span>{<span class="functionname">MakeIndexConstructor</span> Constructor IndexParamNames}<br>
-<span class="string"> [aux for UseMotifs] Returns a score item constructor (i.e. returns a function which returns score itmes) with added parameters for pattern motif indices. Constructor is the score item constructor to specialise (a unary function or class, e.g. HS.note). IndexParamNames is a list of atoms used to mark the added parameters (in an info tag motifIndex(IndexParamName) of these parameters).<BR>
+<span class="string"> [aux for UseMotifs] Returns a score item constructor (i.e. returns a function that returns score items) with added parameters for pattern motif indices. Constructor is the score item constructor to specialise (a unary function or class, e.g. HS.note). IndexParamNames is a list of atoms used to mark the added parameters (in an info tag motifIndex(IndexParamName) of these parameters).<BR>
  The added parameters are created implicitly and not supported by the textual representation (i.e. the method toInitRecord leaves them out as well), but accessible with the function GetMotifIndex (see below) or the method getParameters (which returns a list of all parameter objects).<BR>
 <BR>
  Important: for efficiency, the distribution strategy should visit early parameters with info tab 'motifIndex'. Constructors created by MakeIndexConstructor add this info tab to all index parameters.<BR>
@@ -586,7 +586,7 @@ clearInterval(drawit)
 <code>
 <a name="entity41">
 <span class="keyword">proc</span>{<span class="functionname">MarkovChain</span> Xs Decl}<br>
-<span class="string"> Constraints Xs (a list of FD ints) to form an nth-order markov chain according to Decl. A Decl clause takes any number of predecessors into account and specifies a single successor. Decl is a list of list pairs in the form <code>PredecessorSeq#PossibleSucessors</code>: after the occurance of PredecessorSeq in a sublist of Xs follows a value in PossibleSucessors. For example, the first order markov chain <code>{MarkovChain_1 Xs unit([1]#[2 3] [2]#[1] [3]#[2])}</code> causes any 1 in Xs to be followed by either 2 or 3 and any 2 by 1 etc.<BR>
+<span class="string"> Constraints Xs (a list of FD ints) to form an nth-order markov chain according to Decl. A Decl clause takes any number of predecessors into account and specifies a single successor. Decl is a list of list pairs in the form <code>PredecessorSeq#PossibleSucessors</code>: after the occurance of PredecessorSeq in a sublist of Xs follows a value in PossibleSucessors. For example, the first order markov chain <code>{MarkovChain Xs [[1]#[2 3] [2]#[1] [3]#[2]]}</code> causes any 1 in Xs to be followed by either 2 or 3 and any 2 by 1 etc.<BR>
  The list in PredecessorSeq can be of any length to specify any markov chain order. However, in all clauses the length should be equal.<BR>
  Additionally, the declaration can use the wildcard symbol 'x' which matches every FD int. For example, the clause <code>[x 1]#[2]</code> states that 1 is followed by 2.<BR>
  NB: The list of declarations in Decl specifies a number of disjunctions without any implicit 'otherwise' clause. An inappropriate Decl can cause no solution.<BR>

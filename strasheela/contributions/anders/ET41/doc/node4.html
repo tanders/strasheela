@@ -133,15 +133,15 @@ clearInterval(drawit)
 <h3>Export</h3>
 <code><ul><li>db:<span class="variablename">DB</span>
 </li><li><span class="variablename">Out</span>
-</li><li>&lt;P/2:<a href="#entity38"><span class="functionname">Acc</span></a>&gt;
-</li><li>pc:&lt;P/2:<a href="#entity39"><span class="functionname">PC</span></a>&gt;
-</li><li>pcName:&lt;P/2:<a href="#entity40"><span class="functionname">PCName</span></a>&gt;
-</li><li>&lt;P/2:<a href="#entity41"><span class="functionname">Pitch</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity43"><span class="functionname">Acc</span></a>&gt;
+</li><li>pc:&lt;P/2:<a href="#entity44"><span class="functionname">PC</span></a>&gt;
+</li><li>pcName:&lt;P/2:<a href="#entity45"><span class="functionname">PCName</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity46"><span class="functionname">Pitch</span></a>&gt;
 </li></ul></code>
 <h3>Define</h3>
 
 <code>
-<a name="entity38">
+<a name="entity43">
 <span class="keyword">fun</span>{<span class="functionname">Acc</span> SymAcc}<br>
 <span class="string"> Transforms symbolic accidental (atom) into the corresponding accidental integer. The following symbolic accidentals are supported: the empty atom '' is natural (!), '7' and 'L' are a septimal comma sharp and flat, '77' and 'LL' are two septimal commas sharp and flat, '#' and 'b' are a semitone sharp and flat, and finally 'x' and 'bb' are two semitones sharp and flat. <BR>
  Note: Returned value depends on {HS.db.getAccidentalOffset}, set the HS database to ET41.db.fullDB.<BR>
@@ -150,7 +150,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity39">
+<a name="entity44">
 <span class="keyword">fun</span>{<span class="functionname">PC</span> SymPC}<br>
 <span class="string"> Tranforms a conventional symbolic note names to the corresponding 31 ET pitch class. Notation of the symbolic note names: 'C' is c natural, 'C7' is c septimal comma sharp etc. See Acc for other accidentals supported.<BR>
  NB: the following pitch class names are undefined (otherwise, the meaning of octave would become inconsistent): any flattened C and any raised B.  <BR>
@@ -159,7 +159,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity40">
+<a name="entity45">
 <span class="keyword">fun</span>{<span class="functionname">PCName</span> MyPC}<br>
 <span class="string"> Expects a PC (an int) and returns a list of the corresponding symbolic note names (a list of atom). Complements function PC.<BR>
 <BR>
@@ -167,7 +167,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity41">
+<a name="entity46">
 <span class="keyword">fun</span>{<span class="functionname">Pitch</span> SymPC#Octave}<br>
 <span class="string"> Transforms a symbolic pair SymPC#Octave into the corresponding pitch (an int). SymPC is a pitch class symbol (an atom) as expected by the function PC, octave is an integer. The returned value depends on PitchesPerOctave.<BR>
 <BR>

@@ -472,7 +472,7 @@ define
       {FD.distance Xs.1 {List.last Xs} A Y}
    end
 
-   /** %% 'Higher-level' pattern constraint: applies the pattern constraint MyPattern to sublists of Xs (a list of FD ints). MyPattern is a binary procedure which expects a list of FD ints as first arg, and one or more single FD ints as remaining args (but see args patternArgs and includeIndex below). Yss is a list of list of FD ints, which are the accumulated "remaining args" of MyPattern. The strength of WindowedPattern lies in the fact that Yss can be further constrained!  
+   /** %% [Higher-level pattern constraint] Applies the pattern constraint MyPattern to sublists of Xs (a list of FD ints). MyPattern is a binary procedure which expects a list of FD ints as first arg, and one or more single FD ints as remaining args (but see args patternArgs and includeIndex below). Yss is a list of list of FD ints, which are the accumulated "remaining args" of MyPattern. The strength of WindowedPattern lies in the fact that Yss can be further constrained!  
    %% 
    %% Args:
    %% 'windowlength' (default 3): length of Xs sublists to which is MyPattern is applied. At the end, sublists can be shorter if minwindowlength < windowlength.
@@ -582,7 +582,7 @@ define
 
 
    
-   /** %% UseMotifs constrains the list Xs to consist only of "motif instances" declared in the list Motifs, a list of motif specs. More specifically, UseMotifs constrains that Xs is quasi the result of elements in Motifs appended in any order and possibly with repetitions. However, UseMotifs is a constraint -- the order of Motif elements in Xs is not fixed by UseMotifs.
+   /** %% [Higher-level pattern constraint] UseMotifs constrains the list Xs to consist only of "motif instances" declared in the list Motifs, a list of motif specs. More specifically, UseMotifs constrains that Xs is quasi the result of elements in Motifs appended in any order and possibly with repetitions. However, UseMotifs is a constraint -- the order of Motif elements in Xs is not fixed by UseMotifs.
    %% Xs can be a list of FD ints. In this case, Motifs must be a list of list of FD its. Elements in Motifs can differ in length. For example, Xs can be the list of note pitches of a voice and Motifs defines possible "pitch motifs". Alternatively, Xs can be the list of intervals between note pitches and Motifs defines "interval motifs" which are transposable. Or Xs is a list of duration factors instead of durations and Motifs defines "duration factor motifs" which can be "stretched".
    %% However, Xs is not limited to a list of FD ints, a list of other values is possible as well. For example, elements in Xs can be pairs of Pitch#Duration. In this case, an element in Motifs would also be a list of FD integer pairs. Although the motifs can differ in length, all elements of Xs and all elements of each motif must be equally nested and only differ in constrained variables so that they can be unified.
    %% A motif spec can contain elements which should be ignored (i.e. don't result in any constraints). These elements are marked with '_'.
@@ -708,7 +708,7 @@ define
 	       end}}
       end
    in
-      /** %% Constraints Xs (a list of FD ints) to form an nth-order markov chain according to Decl. A Decl clause takes any number of predecessors into account and specifies a single successor. Decl is a list of list pairs in the form <code>PredecessorSeq#PossibleSucessors</code>: after the occurance of PredecessorSeq in a sublist of Xs follows a value in PossibleSucessors. For example, the first order markov chain <code>{MarkovChain_1 Xs unit([1]#[2 3] [2]#[1] [3]#[2])}</code> causes any 1 in Xs to be followed by either 2 or 3 and any 2 by 1 etc.
+      /** %% Constraints Xs (a list of FD ints) to form an nth-order markov chain according to Decl. A Decl clause takes any number of predecessors into account and specifies a single successor. Decl is a list of list pairs in the form <code>PredecessorSeq#PossibleSucessors</code>: after the occurance of PredecessorSeq in a sublist of Xs follows a value in PossibleSucessors. For example, the first order markov chain <code>{MarkovChain Xs [[1]#[2 3] [2]#[1] [3]#[2]]}</code> causes any 1 in Xs to be followed by either 2 or 3 and any 2 by 1 etc.
       %% The list in PredecessorSeq can be of any length to specify any markov chain order. However, in all clauses the length should be equal.
       %% Additionally, the declaration can use the wildcard symbol 'x' which matches every FD int. For example, the clause <code>[x 1]#[2]</code> states that 1 is followed by 2.
       %% NB: The list of declarations in Decl specifies a number of disjunctions without any implicit 'otherwise' clause. An inappropriate Decl can cause no solution.
@@ -1903,11 +1903,10 @@ define
    end
    
    
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 %%%
 %%% Unfinished
-%%% 
-  
+%%%   
    %% !! TODO: This is not general enough, because the order of elements are predetermined. Better reimplement this with selection constraints: in principle like the def of random. But collect also all index values and constraint a period of indexes by FD.distinct.
    proc {Heap Xs Ys}
       Heap = {Cell.new Ys}

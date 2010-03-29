@@ -224,7 +224,7 @@ clearInterval(drawit)
 </li><li>&lt;P/5:<a href="#entity181"><span class="functionname">HarmoniseScore</span></a>&gt;
 </li><li>&lt;P/5:<a href="#entity182"><span class="functionname">HarmoniseScore2</span></a>&gt;
 </li><li>&lt;P/2:<a href="#entity180"><span class="functionname">HarmoniseMotifs</span></a>&gt;
-</li><li>&lt;P/3:<a href="#entity183"><span class="functionname">HarmonicRythmFollowsMarkers</span></a>&gt;
+</li><li>&lt;P/3:<a href="#entity183"><span class="functionname">HarmonicRhythmFollowsMarkers</span></a>&gt;
 </li><li>&lt;P/3:<a href="#entity185"><span class="functionname">ChordsToScore</span></a>&gt;
 </li><li>&lt;P/3:<a href="#entity184"><span class="functionname">ChordsToScore_Script</span></a>&gt;
 </li></ul></code>
@@ -278,7 +278,7 @@ clearInterval(drawit)
  What the actual numeric value of a pitch class (and the interval denote by Accidental) means depends on DB.getPitchesPerOctave.<BR>
  To allow the user more flexibility, the accidentalOffset is not automatically set when the user sets the pitchesPerOctave value. Instead, the accidentalOffset can be set independently (see DB.setDB).<BR>
  In case of determined accidentals in the CSP definition, the user should avoid complicating the definition with accidentals encoded this way. Instead, the use of the accidental conversions Score.absoluteToOffsetAccidental or Score.offsetToAbsoluteAccidental is recommended.<BR>
- CollectionPCs should be ordered to avoid confusing the meaning of Degree, although this is not necessary. Regardless, PC and all elements in CollectionPCs should have the domain of a pitch class (you may use {HarmonisedScore.dB.makePitchClassFDInt}). Be careful to correctly define the Accidental domain. For instance, if the Accidental domain spans an entire octave, Degree can be any degree in CollectionPCs (you may use {HarmonisedScore.dB.makeAccidentalFDInt} which in turn uses the accidentalOffset).<BR>
+ CollectionPCs should be ordered to avoid confusing the meaning of Degree, although this is not formally necessary. Regardless, PC and all elements in CollectionPCs should have the domain of a pitch class (you may use {HarmonisedScore.dB.makePitchClassFDInt}). Be careful to correctly define the Accidental domain. For instance, if the Accidental domain spans an entire octave, Degree can be any degree in CollectionPCs (you may use {HarmonisedScore.dB.makeAccidentalFDInt} which in turn uses the accidentalOffset).<BR>
  See also the terminology explanation in the top-level functor.<BR>
 <BR>
  BTW: To define the relation between a pitch class and the respective numeric 'note name' (i.e. the degrees in C-major) plus their accidentals, you could use DegreeToPC with the CollectionPCs for C-major.<BR>
@@ -1289,7 +1289,7 @@ clearInterval(drawit)
 
 <code>
 <a name="entity183">
-<span class="keyword">proc</span>{<span class="functionname">HarmonicRythmFollowsMarkers</span> MyScore Chords Args}<br>
+<span class="keyword">proc</span>{<span class="functionname">HarmonicRhythmFollowsMarkers</span> MyScore Chords Args}<br>
 <span class="string"> Constraints the start times of Chords (list of chord objects) to the start times of those items in MyScore (score object) which are marked to start a chord. If the items begin with a rest (offsetTime > 0), then the chord starts with the rest. In addition, the end time of the last chord is constrained to the end time of MyScore. The default chord-start-marker is an info tag 'startChord'. The number of marked score items and the number of chords must be equal.<BR>
 <BR>
  Args<BR>

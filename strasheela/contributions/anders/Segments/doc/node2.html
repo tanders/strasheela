@@ -59,10 +59,11 @@ document.write('<div id="slidemenubar2" style="left:-144" onMouseover="pull()" o
 </script>
 <layer id="slidemenubar" onMouseover="pull()" onMouseout="draw()">
 <table border="0" cellpadding="0" cellspacing="0" width="161"><tr><td bgcolor="#009cff" width="144"><a href="index.html">Index</a>
-</td><td rowspan="5" valign="top" width="16"><img src="menu.gif" width="16"></td></tr><tr><td bgcolor="#009cff" width="144"><a href="node1.html">Segments</a>
+</td><td rowspan="6" valign="top" width="16"><img src="menu.gif" width="16"></td></tr><tr><td bgcolor="#009cff" width="144"><a href="node1.html">Segments</a>
 </td></tr><tr><td bgcolor="#009cff" width="144"><a href="node2.html">HCP</a>
 </td></tr><tr><td bgcolor="#009cff" width="144"><a href="node3.html">TSC</a>
-</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node4.html">Segs</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node4.html">SegsOut</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node5.html">Segs</a>
 </td></tr></table></layer>
 <script language="JavaScript1.2">
 function regenerate(){
@@ -129,15 +130,15 @@ clearInterval(drawit)
 </span></li><li>Score at "<span class="string">x-ozlib://anders/strasheela/source/ScoreCore.ozf"
 </span></li><li>Pattern at "<span class="string">x-ozlib://anders/strasheela/Pattern/Pattern.ozf"
 </span></li><li>HS at "<span class="string">x-ozlib://anders/strasheela/HarmonisedScore/HarmonisedScore.ozf"
-</span></li><li><a href="node4.html">Segs</a> at "<span class="string">../Segments.ozf"
+</span></li><li><a href="node5.html">Segs</a> at "<span class="string">../Segments.ozf"
 </span></li></ul></code>
 <h3>Export</h3>
-<code><ul><li>&lt;P/2:<a href="#entity76"><span class="functionname">HomophonicChordProgression</span></a>&gt;
+<code><ul><li>&lt;P/2:<a href="#entity79"><span class="functionname">HomophonicChordProgression</span></a>&gt;
 </li></ul></code>
 <h3>Define</h3>
 
 <code>
-<a name="entity76">
+<a name="entity79">
 <span class="keyword">proc</span>{<span class="functionname">HomophonicChordProgression</span> Args MyScore}<br>
 <span class="string"> Top-level script or subscript for creating homophonic chord progressions. The individual voices are created with Segs.makeCounterpoint_Seq, the underlying chords (and optionally scales) are given as arguments.<BR>
 <BR>
@@ -146,7 +147,17 @@ clearInterval(drawit)
  Args:<BR>
  'chords' (default {HS.score.makeChords unit}): non-nil list of chords. Remember that neither score objects nor variables can be in the top-level space, so the chords (and scales) to HomophonicChordProgression must be created inside a script.  <BR>
  'scales' (default nil): list of scales.<BR>
- 'restrictMelodicIntervals' (default unit(minPercent:60 maxPercent:100)): if non-false then the intervals between upper voices are a fifths at most, and the bass is a fifths at most or an octave. The args minPercent/maxPercent specify the percentage boudary of the number of steps in the upper voices. Disabled if false.<BR>
+ 'restrictMelodicIntervals' (defaults<BR>
+   unit(bassIntervals: unit('=<:': 3#2<BR>
+			    '=:': [2#1])<BR>
+	upperVoiceIntervals: unit('=<:': 3#2<BR>
+				  '=:': nil)<BR>
+	step: 8#7<BR>
+	minPercent:50<BR>
+	maxPercent:100)<BR>
+ if non-false, then the melodic intervals are constrained as specified by the "sub arguments". The melodic intervals allowed for the bass are given by the arg 'bassIntervals', where the feature '=<:' specifies a ratio for an interval up to which all intervals are permitted and the feature '=:' specifies a list of ratios that are additionally permitted. By default, all intervals up to a fifth and the octave are allowed. The melodic intervals for the upper voices are specified the same way with the argument 'upperVoiceIntervals'.<BR>
+ The remaining arguments control the required number of steps between upper voices. The maximum interval considered a step is given as a ratio to the argument 'step'. The args 'minPercent'/'maxPercent' specify the percentage boudary of the number of steps in the upper voices. <BR>
+ If 'restrictMelodicIntervals' is set to false, then all these constraints are disabled.<BR>
  'commonPitchesHeldOver' (default true): if true, the notes of the harmonic band stay in the same voice and octave.<BR>
  'noParallels' (default true): if true, no parallel perfect consonances are permitted.<BR>
  'playAllChordTones' (default true): if true, all chord tones are played.<BR>

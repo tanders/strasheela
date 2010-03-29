@@ -140,30 +140,30 @@ clearInterval(drawit)
 </span></li><li>Pattern at "<span class="string">x-ozlib://anders/strasheela/Pattern/Pattern.ozf"
 </span></li></ul></code>
 <h3>Export</h3>
-<code><ul><li>&lt;P/3:<a href="#entity251"><span class="functionname">KeynumToFreq</span></a>&gt;
-</li><li>&lt;P/3:<a href="#entity252"><span class="functionname">FreqToKeynum</span></a>&gt;
-</li><li>&lt;P/3:<a href="#entity253"><span class="functionname">RatioToKeynumInterval</span></a>&gt;
-</li><li>&lt;P/3:<a href="#entity254"><span class="functionname">KeynumToPC</span></a>&gt;
-</li><li>&lt;P/2:<a href="#entity255"><span class="functionname">TransposeRatioIntoStandardOctave</span></a>&gt;
-</li><li>&lt;P/2:<a href="#entity256"><span class="functionname">RatioToStandardOctaveFloat</span></a>&gt;
-</li><li>&lt;P/2:<a href="#entity257"><span class="functionname">SortRatios</span></a>&gt;
-</li><li>&lt;P/3:<a href="#entity258"><span class="functionname">SortRatios2</span></a>&gt;
-</li><li>&lt;P/3:<a href="#entity259"><span class="functionname">LevelToDB</span></a>&gt;
-</li><li>&lt;P/3:<a href="#entity260"><span class="functionname">DBToLevel</span></a>&gt;
+<code><ul><li>&lt;P/3:<a href="#entity257"><span class="functionname">KeynumToFreq</span></a>&gt;
+</li><li>&lt;P/3:<a href="#entity258"><span class="functionname">FreqToKeynum</span></a>&gt;
+</li><li>&lt;P/3:<a href="#entity259"><span class="functionname">RatioToKeynumInterval</span></a>&gt;
+</li><li>&lt;P/3:<a href="#entity260"><span class="functionname">KeynumToPC</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity261"><span class="functionname">TransposeRatioIntoStandardOctave</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity262"><span class="functionname">RatioToStandardOctaveFloat</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity263"><span class="functionname">SortRatios</span></a>&gt;
+</li><li>&lt;P/3:<a href="#entity264"><span class="functionname">SortRatios2</span></a>&gt;
+</li><li>&lt;P/3:<a href="#entity265"><span class="functionname">LevelToDB</span></a>&gt;
+</li><li>&lt;P/3:<a href="#entity266"><span class="functionname">DBToLevel</span></a>&gt;
 </li><li><span class="variablename">Freq0</span>
-</li><li>&lt;P/2:<a href="#entity261"><span class="functionname">FullTuningTable</span></a>&gt;
-</li><li>&lt;P/3:<a href="#entity262"><span class="functionname">MakeNoteLengthsTable</span></a>&gt;
-</li><li>&lt;P/3:<a href="#entity263"><span class="functionname">MakeNoteLengthsRecord</span></a>&gt;
-</li><li>&lt;P/3:<a href="#entity264"><span class="functionname">MakeDurationsRecord</span></a>&gt;
-</li><li>&lt;P/2:<a href="#entity265"><span class="functionname">SetNoteLengthsRecord</span></a>&gt;
-</li><li>&lt;P/2:<a href="#entity266"><span class="functionname">ToDur</span></a>&gt;
-</li><li>&lt;P/2:<a href="#entity267"><span class="functionname">SetDurationsRecord</span></a>&gt;
-</li><li>&lt;P/2:<a href="#entity268"><span class="functionname">ToNoteLengths</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity267"><span class="functionname">FullTuningTable</span></a>&gt;
+</li><li>&lt;P/3:<a href="#entity268"><span class="functionname">MakeNoteLengthsTable</span></a>&gt;
+</li><li>&lt;P/3:<a href="#entity269"><span class="functionname">MakeNoteLengthsRecord</span></a>&gt;
+</li><li>&lt;P/3:<a href="#entity270"><span class="functionname">MakeDurationsRecord</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity271"><span class="functionname">SetNoteLengthsRecord</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity272"><span class="functionname">ToDur</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity273"><span class="functionname">SetDurationsRecord</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity274"><span class="functionname">ToNoteLengths</span></a>&gt;
 </li></ul></code>
 <h3>Define</h3>
 
 <code>
-<a name="entity251">
+<a name="entity257">
 <span class="keyword">fun</span>{<span class="functionname">KeynumToFreq</span> Keynum KeysPerOctave}<br>
 <span class="string"> Transforms a Keynum into the corresponding frequency in an equally tempered scale with KeysPerOctave keys per octave. The function is 'tuned' such that {KeynumToFreq 69.0 12.0} returns 440.0 Hz. All arguments must be floats and a float is returned.<BR>
  NB: The term Keynum here is not limited to a MIDI keynumber but denotes a keynumber in any equidistant tuning. For instance, if KeysPerOctave=1200.0 then Keynum denotes cent values.<BR>
@@ -172,7 +172,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity252">
+<a name="entity258">
 <span class="keyword">fun</span>{<span class="functionname">FreqToKeynum</span> Freq KeysPerOctave}<br>
 <span class="string"> Transforms Freq into the corresponding keynum in an equally tempered scale with KeysPerOctave keys per octave. The function is 'tuned' such that {FreqToKeynum 440.0 12.0} returns 69.0. All arguments must be floats and a float is returned.<BR>
  NB: The term Keynum here is not limited to a MIDI keynumber but denotes a keynumber in any equidistant tuning. For instance, if KeysPerOctave=1200.0 then Keynum denotes cent values.<BR>
@@ -181,7 +181,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity253">
+<a name="entity259">
 <span class="keyword">fun</span>{<span class="functionname">RatioToKeynumInterval</span> Ratio KeysPerOctave}<br>
 <span class="string"> Transforms Ratio (either a float or a fraction specification in the form <Int>#<Int>) into the corresponding keynumber interval in an equally tempered scale with KeysPerOctave (a float) keys per octave. Returns a float.<BR>
  For example, {RatioToKeynumInteval 1.0 12.0}=0.0 or {RatioToKeynum 1.5 12.0}=7.01955). <BR>
@@ -191,7 +191,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity254">
+<a name="entity260">
 <span class="keyword">fun</span>{<span class="functionname">KeynumToPC</span> Keynum PitchesPerOctave}<br>
 <span class="string"> Variant of RatioToKeynumInterval which directly outputs a cent value (a float).<BR>
  */<BR>
@@ -203,7 +203,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity255">
+<a name="entity261">
 <span class="keyword">fun</span>{<span class="functionname">TransposeRatioIntoStandardOctave</span> Freq}<br>
 <span class="string"> Expects a frequency ratio (a float) and octave transposes it into interval [1.0, 2.0]<BR>
 <BR>
@@ -211,7 +211,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity256">
+<a name="entity262">
 <span class="keyword">fun</span>{<span class="functionname">RatioToStandardOctaveFloat</span> Ratio}<br>
 <span class="string"> Expects a ratio (pair of ints Nom#Denom) and returns the corresponding float, octave transposed into interval [1.0, 2.0].<BR>
 <BR>
@@ -219,7 +219,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity257">
+<a name="entity263">
 <span class="keyword">fun</span>{<span class="functionname">SortRatios</span> Ratios}<br>
 <span class="string"> Expects a list of ratios and sorts them in ascending order (assuming all are situated in the same octave). For example, {SortRatios [4#1 5#1 6#1 7#1 9#1 11#1]} returns [4#1 9#1 5#1 11#1 6#1 7#1].<BR>
 <BR>
@@ -227,7 +227,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity258">
+<a name="entity264">
 <span class="keyword">fun</span>{<span class="functionname">SortRatios2</span> Ratios StartRatio}<br>
 <span class="string"> Expects a list of ratios and sorts them in ascending order (assuming all are situated in the same octave). However, the first ratio in the result is StartRatio (which must occur in Ratios), and all smaller ratios are appended at the end. For example, {SortRatios2 [1#3 1#4 1#5 1#7] 1#7} returns [1#7 1#3 1#5 1#4].<BR>
 <BR>
@@ -235,7 +235,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity259">
+<a name="entity265">
 <span class="keyword">fun</span>{<span class="functionname">LevelToDB</span> L LRel}<br>
 <span class="string"> Converts a linear amplitude level L into an logarithmic amplitude (decibels).  LRel is the relativ full level.<BR>
 <BR>
@@ -243,7 +243,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity260">
+<a name="entity266">
 <span class="keyword">fun</span>{<span class="functionname">DBToLevel</span> DB LRel}<br>
 <span class="string">  Converts a logarithmic amplitude DB (decibels) into a linear amplitude level.  LRel is the relativ full level.<BR>
 <BR>
@@ -251,7 +251,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity261">
+<a name="entity267">
 <span class="keyword">fun</span>{<span class="functionname">FullTuningTable</span> TuningTable}<br>
 <span class="string"> Expects a tuning table declaration (see Init.setTuningTable for format) and returns a full tuning table used for pitch computation. The returned full table is a record which contains only pitches measured in cent, has 0.0 added as first table value, and has the two features size and period added.   <BR>
 <BR>
@@ -259,7 +259,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity262">
+<a name="entity268">
 <span class="keyword">fun</span>{<span class="functionname">MakeNoteLengthsTable</span> Beat TupletFractions}<br>
 <span class="string"> MakeNoteLengthsTable creates a list which maps symbolic note lengths to duration values. Expects the duration of a beat (i.e. the timeUnit is beats(Beat)) and a list of tuplet fractions to take into consideration (e.g., [3 5] denotes triplets and quintuplets). The function returns a list of pairs NotationI#DurI. NotationI is denotes a symbolic note length as a virtual string, and DurI is the corresponding duration (an int). <BR>
  Notation of symbolic note lengths:<BR>
@@ -273,7 +273,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity263">
+<a name="entity269">
 <span class="keyword">fun</span>{<span class="functionname">MakeNoteLengthsRecord</span> Beat TupletFractions}<br>
 <span class="string"> Returns a record which maps symbolic note lengths (atoms which are record features) to duration values (integers, feature values in the record). See the documentation of MakeNoteLengthsTable for the arguments Beat and TupletFractions, and also the symbolic note length notation. However, whereas in MakeNoteLengthsTable this notation uses VSs (so it can be easily decomposed) here it uses atoms for convenience.<BR>
 <BR>
@@ -286,7 +286,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity264">
+<a name="entity270">
 <span class="keyword">fun</span>{<span class="functionname">MakeDurationsRecord</span> Beat TupletFractions}<br>
 <span class="string"> Returns a record which maps durations (integers, feature values in the record) to lists of symbolic note lengths (atoms which are record features). See the documentation of MakeNoteLengthsTable for the arguments Beat and TupletFractions, and also the symbolic note length notation.<BR>
 <BR>
@@ -294,7 +294,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity265">
+<a name="entity271">
 <span class="keyword">proc</span>{<span class="functionname">SetNoteLengthsRecord</span> Beat TupletFractions}<br>
 <span class="string"> Initialises transformation for ToDur. See the documentation of MakeNoteLengthsTable for the arguments Beat and TupletFractions.<BR>
 <BR>
@@ -302,7 +302,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity266">
+<a name="entity272">
 <span class="keyword">fun</span>{<span class="functionname">ToDur</span> NoteLength}<br>
 <span class="string"> Expects a symbolic note length (atom) and returns the corresponding duration. Use SetNoteLengthsRecord for initialisation (default is {SetNoteLengthsRecord 4 nil}).<BR>
 <BR>
@@ -310,7 +310,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity267">
+<a name="entity273">
 <span class="keyword">proc</span>{<span class="functionname">SetDurationsRecord</span> Beat TupletFractions}<br>
 <span class="string"> Initialises transformation for ToNoteLengths. See the documentation of MakeNoteLengthsTable for the arguments Beat and TupletFractions.<BR>
 <BR>
@@ -318,7 +318,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity268">
+<a name="entity274">
 <span class="keyword">fun</span>{<span class="functionname">ToNoteLengths</span> Dur}<br>
 <span class="string"> Expects a duration (int) and returns a list of the corresponding symbolic note lengths. Use SetDurationsRecord for initialisation (default is {MakeDurationsRecord 4 nil}).<BR>
 <BR>

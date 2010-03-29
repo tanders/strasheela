@@ -121,23 +121,23 @@ clearInterval(drawit)
 
 <div style="margin-left:160px"><p align="right" class="margin"><div align="right">inheritance tree</div></p>
 <pre>
- <a class="pre" href="node6.html#entity302">NonType</a> <a class="pre" href="node6.html#entity303">Reflection</a>
+ <a class="pre" href="node6.html#entity308">NonType</a> <a class="pre" href="node6.html#entity309">Reflection</a>
     |        |
     `-----+--'
           |
-     <a class="pre" href="node6.html#entity304">ScoreObject</a>
+     <a class="pre" href="node6.html#entity310">ScoreObject</a>
           |
           |
           |
-      <a class="pre" href="node6.html#entity306">Parameter</a>
+      <a class="pre" href="node6.html#entity312">Parameter</a>
           |
           |
           |
-    <a class="pre" href="node6.html#entity309">TimeParameter</a>
+    <a class="pre" href="node6.html#entity315">TimeParameter</a>
           |
          +'
          |
-    <a class="pre" href="node6.html#entity311">TimeInterval</a>
+    <a class="pre" href="node6.html#entity317">TimeInterval</a>
 </pre>
 <hr><p class="margin"><div align="right">class definition</div></p>
 <code>
@@ -154,9 +154,9 @@ clearInterval(drawit)
 <span class="keyword">class</span> <span class="type">TimeInterval</span> (Inheritance-free)<br>
 &nbsp;&nbsp;&nbsp;<span class="keyword">feat</span>&nbsp;!ScoreObjectType&nbsp;label
 <br>
-&nbsp;&nbsp;&nbsp;<span class="keyword">attr</span>&nbsp;id&nbsp;info&nbsp;item&nbsp;unit&nbsp;value
+&nbsp;&nbsp;&nbsp;<span class="keyword">attr</span>&nbsp;heuristics&nbsp;id&nbsp;info&nbsp;item&nbsp;unit&nbsp;value
 <br>
-<ul><li><span class="functionname">addInfo</span>(X)<br>
+<ul><li><span class="functionname">addHeuristic</span>(constraint:Constraint parameters:Params weight:Weight)<br>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
 
@@ -164,7 +164,19 @@ clearInterval(drawit)
 
 
 </tr></table>
-<span class="string"> [destructive method] Adds X to list in attribute info. The tail of the list at attribute info is the info specified at the init method which defaults to nil.<BR>
+<span class="string"> [destructive method] Adds a heuristic constraint to the parameter. Constraint is a heuristic constraint (a function expecting n integers and returning an integer), Params is the list of parameter objects to which the constraint is applied (including self), and Weight (int) is the weight of the constraint (the factor applied to it). <BR>
+ Note: Instead of calling this method directly, better use Score.apply_H instead.<BR>
+<BR>
+</span>
+</li><li><span class="functionname">addInfo</span>(X)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> [destructive method] Adds X to list in attribute info. The tail of the list at attribute info is the info that was specified before with addInfo and was give at the init method (default is nil).<BR>
 <BR>
 </span>
 </li><li><span class="functionname">addInfos</span>(Xs)<br>
@@ -276,6 +288,19 @@ clearInterval(drawit)
 
 </tr></table>
 <span class="string"> Alias for getFeatNames.<BR>
+<BR>
+</span>
+</li><li><span class="functionname">getHeuristics</span>(X)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> Return the list of heuristic constraints applied to the parameter. A heuristic is a record of the following form (see the doc of getHeuristics for the meaning of the variables). <BR>
+      heuristic(constraint:Constraint parameters: Params weight:Weight)<BR>
+ Note: Instead of calling this method directly, better use Score.apply_H instead.<BR>
 <BR>
 </span>
 </li><li><span class="functionname">getID</span>(X)<br>
