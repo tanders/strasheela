@@ -51,8 +51,6 @@ end
 
 {SDistro.exploreOne
  proc {$ MyScore}
-    PPs
- in
     MyScore = {Score.make
 	       seq({LUtils.collectN 7
 		    fun {$} note(pitch: {FD.int 36#84}
@@ -60,14 +58,13 @@ end
 		   startTime: 0
 		   timeUnit: beats)
 	       unit}
-    PPs = {MyScore map($ getPitchParameter test:isNote)}
     %% hard constraint: max interval is major second
-    {Pattern.for2Neighbours Ns
-     proc {$ N1 N2}
-	{FD.distance {N1 getPitch($)} {N2 getPitch($)} '=<:' 2}
+    {Pattern.for2Neighbours {MyScore map($ getPitch test:isNote)}
+     proc {$ P1 P2}
+	{FD.distance P1 P2 '=<:' 2}
      end}
     %% heuristic constraint application: pitches are descending
-    {Pattern.for2Neighbours PPs
+    {Pattern.for2Neighbours {MyScore map($ getPitchParameter test:isNote)}
      proc {$ PP1 PP2}
 	{Score.apply_H Less_H [PP1 PP2] 1}
      end}
@@ -106,14 +103,12 @@ end
     %% heuristic constraint application
     {Pattern.for2Neighbours PPs
      proc {$ PP1 PP2}
-	{Score.apply_H Less_H [PP1 PP2] 1}
-% 	{Score.apply_H Heuristic.less [PP1 PP2] 1}
-% ??	{SMapping.heuristic Less_H [PP1 PP2] 1}
-% 	{Apply_H Less_H [PP1 PP2] 1}
-% 	{Apply_H SmallInterval_H [PP1 PP2] 1}
-% 	{Apply_H LargeInterval_H [PP1 PP2] 1}
-% 	{Apply_H {MakeGivenInterval_H 4} [PP1 PP2] 1}
-% 	{Apply_H NotEqual_H [PP1 PP2] 1}
+% 	{Score.apply_H H.less [PP1 PP2] 1}
+	{Score.apply_H H.more [PP1 PP2] 1}
+	{Score.apply_H H.smallInterval [PP1 PP2] 1}
+% 	{Score.apply_H H.largeInterval [PP1 PP2] 1}
+% 	{Score.apply_H {H.makeGivenInterval 4} [PP1 PP2] 1}
+% 	{Score.apply_H H.notEqual [PP1 PP2] 1}
      end}
  end
  unit(value: heuristic)}
