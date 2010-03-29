@@ -2,6 +2,57 @@
 
 * Strasheela release
 
+** TODO Heuristic constraints support				     :URGENT:
+
+*** Add heuristic defs to functor H
+
+%% - port Jacopos heuristic constraints from JBS-constraints to Strasheela (avoid too much repetition, though: generalise)
+
+%% - port OMClouds constraints as heuristics to Strasheela
+    
+see constraint ideas in TODO section in that functor
+
+*** Revise SDistro.heuristicValueOrder
+
+    - !! Allow to randomise solution, but with support for recomputation
+
+    - Efficiency: ParamPos accessed multiple times (below accessed again, somehow store this info instead)
+
+    - Consider making SDistro.heuristicValueOrder the default ordering
+
+*** Allow for randomised heuristic constraint definitions 
+
+    - randomisation with recomputation support
+
+
+*** Some heuristic constraints depend on variable ordering (e.g., Distinct)
+
+    How to address this problem?
+
+**** Distict (i.e. AllDifferent)
+
+ Problem: effective implementation depends of variable ordering: for
+ every visited parameter of a certain parameter sequence the
+ constraint always takes all parameters values that are already
+ determined into account.
+
+ I would need alternative to Score.apply_H in order to do that (should
+ not add heuristic to all params involved, but only to always only the
+ one that is still undetermined when the heuristic is actually
+ used. Also SDistro.heuristicVariableOrdering would require revision,
+ because I should not need to "search" for current parameter then, but
+ have a different format where the current parameter is given extra or
+ its position in params list is stored as well)
+
+
+*** Revise Score.apply_H doc
+
+*** Show in example that heuristic constraints can be applied to arbitrary contexts
+
+    even contexts that are undetermined in CSP definition, e.g., simultaneous notes if rhythm is undetermined
+    E.g., use Smapping.forSimultaneousPairs
+
+
 ** Finish def of ResolveDissonances_ChordDegree
 
    [[file:~/oz/music/Strasheela/strasheela/trunk/strasheela/examples/Harmony-Examples/Schoenberg-TheoryOfHarmony.oz::proc%20ResolveDissonances_ChordDegree%20Notes%20Args%20Args%20unused][file:~/oz/music/Strasheela/strasheela/trunk/strasheela/examples/Harmony-Examples/Schoenberg-TheoryOfHarmony.oz::proc ResolveDissonances_ChordDegree Notes Args Args unused]]
