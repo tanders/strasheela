@@ -223,3 +223,26 @@ thread {Nth Xs 2} = 6 end
 %% [a b c]
 
 
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%% LUtils.removePosition / LUtils.replacePosition
+%%
+
+
+{LUtils.removePosition [1 2 3 4] 2}
+
+{LUtils.removePosition nil 3}
+
+{LUtils.replacePosition [1 2 3 4] 2 x}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%% LUtils.findBest
+%%
+
+{LUtils.findBest [1 3 2 4 0 5 2] Value.'>'}
+
+

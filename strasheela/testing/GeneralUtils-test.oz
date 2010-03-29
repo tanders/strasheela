@@ -51,8 +51,8 @@ MyNote = {Score.makeScore note(pitch:60) unit}
 %% random
 %% 
 
-declare
-[U] = {ModuleLink ['x-ozlib://anders/music/sdl/GeneralUtils.ozf']}
+% declare
+% [U] = {ModuleLink ['x-ozlib://anders/music/sdl/GeneralUtils.ozf']}
 
 for I in 1..10 do {Browse {GUtils.random 100}} end
 
