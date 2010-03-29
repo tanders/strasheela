@@ -3260,14 +3260,14 @@ define
       end
    end
 
-
+   
    %%
    %% Heuristic constraints
    %%
 
    /** %% Applies a heuristic constraint (H_Constraint) to a list of parameter objects (Params) with a cetain weight Weight.
    %%
-   %% Heuristic constraints restrict the result of a CSP (as strict constraints do), but the expressed constraint is only used as a guidance during the search process that can be violated if it contradicts some strict constraint.
+   %% Heuristic constraints restrict the result of a CSP (as strict constraints do), but the expressed constraint is only used as a guidance during the search process that can be violated if it contradicts some strict constraint. More specifically, heuristic constraints are used to quasi sort the domain values of variables before deciding which domain value to try out first (dynamic value ordering).
    %%
    %% Heuristic constraints are functions that expect n integers (*not* FD variables; FD int domain values) and return an integer. The result indicates how well the constraint is met by the input integers: the larger the number the better. A heuristic constraint is used to judge the quality of individual domain values. In a heuristic search (i.e. heuristic value ordering) the domain value with the highest quality according to all its applied heuristic constraints is selected.
    %% The returned qualities should cover the interval [0, 100], so that the importance of all heuristic constraints is considered equally. Nevertheless, larger or even negative results are possible as well.
@@ -3281,8 +3281,13 @@ define
    %%
    %% NOTE: When heuristic constraints have been applied, the value ordering of the solver (distribution feature 'value') must be set to 'heuristic'.
    %%
+   %% NOTE: Heuristic only used if all but last variables involved are already bound. So, for heuristics with more than 2 variables involved there could additionally be "partial heuristics" that define related heuristics for less variables.
+   %%
    %% For an example, see strasheela/examples/Heuristic-Constraints.oz.
    %% */
+   %%
+   %% NB: only integer input and output supported because (a) domain values are integers anyway and (b) integer processing is more efficient. Nevertheleess, in principle it is possible to use float computations within a heuristic constraint (but all floats must be transformed to integers before returning). 
+   %%
    %% NB: the heuristic is added to all Params involved: only the parameter visited last during search process makes use of the constraint.
    %%
    proc {Apply_Heuristic H_Constraint Params Weight}
