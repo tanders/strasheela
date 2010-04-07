@@ -231,8 +231,8 @@ define
       fun lazy {RandomStream} {OS.rand}|{RandomStream} end   
       RandomNumbers={NewCell {RandomStream}}
    in
-      /** %% Returns a random number generator (a null-ary function) which returns a pseudo-random integer whenever it is called. Every returned random number generator will always produce the same number sequence: all random values are 'recorded' behind the scene in the top-level space. In other words, the random number generator is deterministic. Such a random generator can be used for a randomised value ordering, and the resulting distribution strategy can still apply recomputation (see SDistro.makeRandomDistributionValue). In such as case, MakeRandomGenerator must be called inside script. The convenient Strasheela solvers in SDistro do that implicitly. 
-      %% MakeRandomGenerator can be (re)-initialised with SetRandomGeneratorSeed.
+      /** %% Returns a random number generator (a null-ary function) which returns a pseudo-random integer whenever it is called. Every returned random number generator will always produce the same number sequence: all random values are 'recorded' behind the scene in the top-level space. In other words, the random number generator is deterministic. Such a random generator can be used for a randomised value ordering, and the resulting distribution strategy can still apply recomputation (see SDistro.makeRandomDistributionValue). In such as case, MakeRandomGenerator must be called inside script. The convenient Strasheela solvers in SDistro do that implicitly.
+      %% Only a single instance of a random number generator can be used at a time. This instance can be (re)-initialised with SetRandomGeneratorSeed.
       %% */
       %%
       %% This implementation is based on a suggestion by Raphael Collet (emails Wed, 02 Feb 2005 to users@mozart-oz.org). 
