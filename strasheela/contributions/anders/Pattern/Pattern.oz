@@ -582,7 +582,7 @@ define
 
 
    
-   /** %% [Higher-level pattern constraint] UseMotifs constrains the list Xs to consist only of "motif instances" declared in the list Motifs, a list of motif specs. More specifically, UseMotifs constrains that Xs is quasi the result of elements in Motifs appended in any order and possibly with repetitions. However, UseMotifs is a constraint -- the order of Motif elements in Xs is not fixed by UseMotifs.
+   /** %% [Higher-level pattern constraint] UseMotifs constrains the list Xs to consist of "motif instances" declared in the list Motifs, a list of motif specs. More specifically, UseMotifs constrains that Xs is quasi the result appending declared motifs in any order and possibly with repetitions. However, UseMotifs is a constraint (e.g., the resulting order of motif instances can depend on other constraints).
    %% Xs can be a list of FD ints. In this case, Motifs must be a list of list of FD its. Elements in Motifs can differ in length. For example, Xs can be the list of note pitches of a voice and Motifs defines possible "pitch motifs". Alternatively, Xs can be the list of intervals between note pitches and Motifs defines "interval motifs" which are transposable. Or Xs is a list of duration factors instead of durations and Motifs defines "duration factor motifs" which can be "stretched".
    %% However, Xs is not limited to a list of FD ints, a list of other values is possible as well. For example, elements in Xs can be pairs of Pitch#Duration. In this case, an element in Motifs would also be a list of FD integer pairs. Although the motifs can differ in length, all elements of Xs and all elements of each motif must be equally nested and only differ in constrained variables so that they can be unified.
    %% A motif spec can contain elements which should be ignored (i.e. don't result in any constraints). These elements are marked with '_'.
@@ -599,7 +599,8 @@ define
    %% ?? Could I constrain how often each element in Motifs is used? Then I could also allow for "free" Motif (e.g., I may constrain that 10-30% of Xs elements are non-motif values). Also, could I define which motif follows which like in a markov chain?
    proc {UseMotifs Xs Motifs Args}
       Defaults = unit(workOutEven:false
-		      indices:_)
+% 		      indices:_
+		     )
       As = {Adjoin Defaults Args}
       %% If indices return value is requested, then create a list of FD ints and process it..
       IndicesRequired = {HasFeature Args indices}
