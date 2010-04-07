@@ -49,6 +49,7 @@ end
 
 /* 
 
+{GUtils.setRandomGeneratorSeed 0}
 {SDistro.exploreOne
  proc {$ MyScore}
     MyScore = {Score.make
