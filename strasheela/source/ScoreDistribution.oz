@@ -69,7 +69,7 @@ import
    FD_edited(fdDistribute: FdDistribute)
    
    % Score at 'ScoreCore.ozf'
-   % Browser(browse:Browse) % temp for debugging
+   Browser(browse:Browse) % temp for debugging
    
 export
 
@@ -88,7 +88,7 @@ export
    MakeMarkNextParam MakeVisitMarkedParamsFirst 
    %% value ordering defs 
    MakeRandomDistributionValue
-   HeuristicValueOrder
+   MakeHeuristicValueOrder
    
    %% score distro defs   
    MakeSearchScript
@@ -365,8 +365,8 @@ define
 %%% Distribution strategy defs: value ordering defs  
 %%%
 
-   /** %% Returns randomised value ordering, that is, a unary function for the argument 'value' of FD.distribute. The argument RandGen is a nullary function. If RandGen is created by GUtils.makeRandomGenerator, then the value ordering is randomised but still deterministic: re-executing the distribution will allways yield the same results. Consequently, such a randomised value ordering can be used for recomputation.
-   %% NB: this value ordering is conveniently applied by setting the distribution argument 'value' of any solver to 'random'.
+   /** %% Returns randomised value ordering, that is, a binary function for the argument 'value' of FD.distribute. The argument RandGen is a nullary function. If RandGen is created by GUtils.makeRandomGenerator, then the value ordering is randomised but still deterministic: re-executing the distribution will allways yield the same results. Consequently, such a randomised value ordering can be used for recomputation.
+   %% NOTE: this value ordering is conveniently applied by setting the distribution argument 'value' of any solver to 'random'.
    %% */
    fun {MakeRandomDistributionValue RandGen}
       fun {$ X_Param SelectFn}
@@ -378,79 +378,114 @@ define
       end
    end
 
-
-   /** %% [value ordering, i.e. should be given to distribution arg 'value']: take heuristic constraints applied with Score.apply_H into account.
-   %% */
-   %% To decide: should this be default value ordering, together with randomised value ordering?
-   %%
-   %% !! TODO:
-   %% (Allow to) randomise solution, but with support for recomputation: replace SelectedDomValue (see below) and "else" clause {FD.reflect.mid Var}
-   %%
-   fun {HeuristicValueOrder Param SelectFn}
-      Var = {SelectFn Param} % getValue...
-      Dom = {FD.reflect.domList Var}
-      %% Heuristics are only applied if current param is only undetermined param involved in heuristic constraint
-      Heuristics   % list of heuristic decls
-      = {Filter {Param getHeuristics($)}
-	 fun {$ MyHeuristic} 
-	    %% !! TODO: efficiency: ParamPos accessed multiple times (below accessed again, somehow store this info instead)
-	    %% position of Param in params of heuristic
-	    ParamPos = {LUtils.position Param MyHeuristic.parameters}
+   
+   local
+      %% BestsSoFar is list of values with their quality figures, stored as a list of pairs
+      %% [X1#Quality1 ...]
+      fun {FilterBest_Aux Xs Fn BestsSoFar}
+	 case Xs of nil then {Map BestsSoFar fun {$ X#_} X end}
+	 else
+	    X = Xs.1
+	    CurrQuality = {Fn X}
+	    BestSoFarQuality = BestsSoFar.1.2 
 	 in
-	    {All {LUtils.removePosition MyHeuristic.parameters ParamPos}
-	     fun {$ P} {IsDet {SelectFn P}} end}
-	 end}
-      /** %% Returns a number that indicates the quality of DomVal (int) with respect to Heuristic (record with feats params and heuristic).
+	    if CurrQuality > BestSoFarQuality
+	    then {FilterBest_Aux Xs.2 Fn [X#CurrQuality]}
+	    elseif CurrQuality == BestSoFarQuality
+	    then {FilterBest_Aux Xs.2 Fn X#CurrQuality | BestsSoFar}
+	    else {FilterBest_Aux Xs.2 Fn BestsSoFar}
+	    end
+	 end
+      end
+      /** %% Returns the list of members of Xs that performs best according to the unary evaluation function Fn. Fn returns an integer that denotes the quality of its argument; the higher the returned integer the better the corresponding member of Xs.
       %% */
-      fun {EvaluateDomValue DomVal Heuristic}
-	 %% !! TODO: efficiency: ParamPos accessed again
-	 %% position of Param in params of heuristic
-	 ParamPos = {LUtils.position Param Heuristic.parameters}
-	 Aux
-      in
-	 %% get quality of DomVal with respect to Heuristic.heuristic
-	 {Procedure.apply Heuristic.constraint
-	  {Append {LUtils.replacePosition {Map Heuristic.parameters fun {$ P} {SelectFn P} end}
-		   ParamPos DomVal}
-	   [Aux]}}
-	 %% multiply quality with weight
-	 Aux * Heuristic.weight
+      fun {FilterBest Xs Fn}
+	 case Xs of nil then nil
+	 else {FilterBest_Aux Xs.2 Fn [Xs.1#{Fn Xs.1}]}
+	 end
       end
    in
-      if Heuristics \= nil
-      then
-	 %% !! TODO: replace FindBest with something like FilterBest where all "best" domain values are collected and then decision amoung these is randomised
-	 SelectedDomValue = {LUtils.findBest Dom
-			     fun {$ DomVal1 DomVal2}
-				{LUtils.accum %% Question: any more efficient summing?
-				 {Map Heuristics
-				  fun {$ H} {EvaluateDomValue DomVal1 H} end}
-				 Number.'+'}
-				>
-				{LUtils.accum 
-				 {Map Heuristics
-				  fun {$ H} {EvaluateDomValue DomVal2 H} end}
-				 Number.'+'}
-			     end}
-      in
-%       {Browse unit(notePosition:{{Param getItem($)}
-% 				 getPosition($ {{Param getItem($)} getTemporalAspect($)})}
-% 		   dom:Dom
-% 		   selectedDomValue: SelectedDomValue
-% 		  )}
-	 SelectedDomValue
-      else
-	 %% Hs is nil
-	 %%
-	 %% !! TODO: make otherwise-value-ordering controllable with arg; this may be a good default, but randomised search is better
-	 {FD.reflect.mid Var}
-	 /* % else
-	 {MakeRandomDistributionValue
-	  {GUtils.makeRandomGenerator}}
-	 */
+      /** %% Returns a value ordering, i.e. a binary be given to distribution arg 'value'. This value ordering takes heuristic constraints applied with Score.apply_H into account. In addition, it randomises the decision making. RandGen is a nullary function created by GUtils.makeRandomGenerator.   
+      %% NOTE: this value ordering is conveniently applied by setting the distribution argument 'value' of any solver to 'heuristic'.
+      %% */
+      %% To decide: should this be default value ordering, together with randomised value ordering?
+      %%
+      %% !! TODO:
+      %% Problem: how to randomise heuristic constraints: they would need to also use an deterministic RandGen
+      %% Just try creating further Gutils.makeRandomGenerator instances, one for each "random heursitic" and see how this works...
+      %% Or can I create a single instance and then use that within the CSP and in the value ordering? No, that is not possible: the instance for the value ordering must optionally be created automatically for convenience. 
+      %%
+      fun {MakeHeuristicValueOrder RandGen}
+	 fun {$ Param SelectFn}
+	    Var = {SelectFn Param} % getValue...
+	    Dom = {FD.reflect.domList Var}
+	    %% Heuristics are only applied if current param is only undetermined param involved in heuristic constraint
+	    Heuristics   % list of heuristic decls
+	    = {Filter {Param getHeuristics($)}
+	       fun {$ MyHeuristic} 
+		  %% !! TODO: efficiency: ParamPos accessed multiple times (below accessed again, somehow store this info instead)
+		  %% position of Param in params of heuristic
+		  ParamPos = {LUtils.position Param MyHeuristic.parameters}
+	       in
+		  {All {LUtils.removePosition MyHeuristic.parameters ParamPos}
+		   fun {$ P} {IsDet {SelectFn P}} end}
+	       end}
+	    /** %% Returns a number that indicates the quality of DomVal (int) with respect to Heuristic (record with feats params and heuristic).
+	    %% */
+	    fun {EvaluateDomValue DomVal Heuristic}
+	       %% !! TODO: efficiency: ParamPos accessed again
+	       %% position of Param in params of heuristic
+	       ParamPos = {LUtils.position Param Heuristic.parameters}
+	       Aux
+	    in
+	       %% get quality of DomVal with respect to Heuristic.heuristic
+	       {Procedure.apply Heuristic.constraint
+		{Append {LUtils.replacePosition {Map Heuristic.parameters fun {$ P} {SelectFn P} end}
+			 ParamPos DomVal}
+		 [Aux]}}
+	       %% multiply quality with weight
+	       Aux * Heuristic.weight
+	    end
+	 in
+	    if Heuristics \= nil
+	    then
+	       BestDomValues = {FilterBest Dom
+				fun {$ DomVal}
+				   {LUtils.accum %% Question: any more efficient summing?
+				    {Map Heuristics
+				     fun {$ H} {EvaluateDomValue DomVal H} end}
+				    Number.'+'}
+				end}
+	       SelectedDomValue = {Nth BestDomValues
+				   %% pseudo-random number generated here
+				   {GUtils.randIntoRange {RandGen} 
+				    1 {Length BestDomValues}}}
+	    in
+% 	    {Browse heuristic(notePosition:{{Param getItem($)}
+% 					    getPosition($ {{Param getItem($)} getTemporalAspect($)})}
+% 			      dom:Dom
+% 			      bestDomValues: BestDomValues
+% 			      selectedDomValue: SelectedDomValue
+% 			     )}
+	       SelectedDomValue
+	    else
+	       %% Hs is nil
+	       Rand = {GUtils.randIntoRange {RandGen} % pseudo-random number generated here
+		       {FD.reflect.min Var} {FD.reflect.max Var}}
+	    in
+% 	       {Browse default(notePosition:{{Param getItem($)}
+% 					     getPosition($ {{Param getItem($)} getTemporalAspect($)})}
+% 			       dom:Dom
+% 			       selectedDomValue: {FD.reflect.nextSmaller Var Rand+1}
+% 			       rand:Rand
+% 			      )}
+	       {FD.reflect.nextSmaller Var Rand+1}
+	       %%
+% 	    {FD.reflect.mid Var}
+	    end
+	 end
       end
    end
-   
    
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%
@@ -512,8 +547,7 @@ define
 		  mid: mid %FD.reflect.mid
 		  splitMin: splitMin
 		  splitMax: splitMax
-		  heuristic: HeuristicValueOrder
-		  %% NOTE: random value ordering defined directly in
+		  %% NOTE: 'random' and 'heuristic' value orderings defined directly in
 		  %% MakeSearchScript
 
 		  %%
@@ -677,33 +711,26 @@ define
       DistributionArgs = {Record.subtract ActualArgs test}
       Test = ActualArgs.test
    in
-      %% !!?? TODO: abstract to avoid code-doubling
-      %% TODO: add value:splitRandom
-
-      %% random value ordering? 
-      case DistributionArgs of unit(value:random
-				    ...)
-      then
-	 proc {$ MyScore}
-	    MyScore = {ScoreScript}
-	    {FdDistribute {Adjoin {MakeFDDistribution {Record.subtract DistributionArgs
-							value}}
-			    generic(value:{MakeRandomDistributionValue
-					   {GUtils.makeRandomGenerator}})}
-	     {MyScore collect($ test:fun {$ X}
-					{X isParameter($)} andthen
-					{Test X}
-				     end)}}
-	 end
-      else
-	 proc {$ MyScore}
-	    MyScore = {ScoreScript}
-	    {FdDistribute {MakeFDDistribution DistributionArgs}
-	     {MyScore collect($ test:fun {$ X}
-					{X isParameter($)} andthen
-					{Test X}
-				     end)}}
-	 end
+      proc {$ MyScore}
+	 %% TODO: add value:splitRandom
+	 MyDistro
+	 = case DistributionArgs of unit(value:random ...)
+	   then {Adjoin {MakeFDDistribution {Record.subtract DistributionArgs value}}
+		 generic(value:{MakeRandomDistributionValue
+				{GUtils.makeRandomGenerator}})}
+	   [] unit(value:heuristic ...)
+	   then {Adjoin {MakeFDDistribution {Record.subtract DistributionArgs value}}
+		 generic(value:{MakeHeuristicValueOrder
+				{GUtils.makeRandomGenerator}})}
+	   else {MakeFDDistribution DistributionArgs}
+	   end      
+      in
+	 MyScore = {ScoreScript}
+	 {FdDistribute MyDistro
+	  {MyScore collect($ test:fun {$ X}
+				     {X isParameter($)} andthen
+				     {Test X}
+				  end)}}
       end
    end
    
