@@ -224,6 +224,7 @@ define
       end
    end
 
+      
    /** %% Concurrent variant of Filter. Like Filter, CFilter returns a stream/list of elements in Xs for which F (a Boolean function) returns true. However, CFilter does not necessarily completely block on free variables in Xs. Instead, it returns/skips elements of Xs as soon as enough information is provided to decided either way, possibly changing the order of list elements. If it is known that no elements will be added, then the stream Result will be closed.
    %% Less efficient than Filter (e.g., many threads are created).
    %% */ 
