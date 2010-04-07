@@ -69,7 +69,7 @@ import
    FD_edited(fdDistribute: FdDistribute)
    
    % Score at 'ScoreCore.ozf'
-   Browser(browse:Browse) % temp for debugging
+%    Browser(browse:Browse) % temp for debugging
    
 export
 
