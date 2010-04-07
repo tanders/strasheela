@@ -6,15 +6,16 @@
 
 *** Add heuristic defs to functor H
 
-%% - port Jacopos heuristic constraints from JBS-constraints to Strasheela (avoid too much repetition, though: generalise)
+ see constraint ideas in TODO section in that functor
 
-%% - port OMClouds constraints as heuristics to Strasheela
-    
-see constraint ideas in TODO section in that functor
+# OK - port Jacopos heuristic constraints from JBS-constraints to Strasheela (avoid too much repetition, though: generalise)
+
+# OK - port OMClouds constraints as heuristics to Strasheela
+   
 
 *** Revise SDistro.heuristicValueOrder
 
-    - !! Allow to randomise solution, but with support for recomputation
+#    - OK Allow to randomise solution, but with support for recomputation
 
     - Efficiency: ParamPos accessed multiple times (below accessed again, somehow store this info instead)
 
