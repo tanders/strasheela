@@ -86,7 +86,7 @@
 
 
 %%
-%% * InRange: heuristic domain spec: Can be defined with Less and More
+%% * InRange: heuristic domain spec: Can be defined with Less and Greater
 %%
 %% * IntervalMember: Member for intervals
 %%
@@ -99,6 +99,8 @@
 %% * AvoidInterval: given single number (or list of numbers: AvoidInterval): this interval should be avoided between consecutive parameters (either absolute, or taking direction into account)  
 %%
 %% * Resolve skip: after a skip of at least given size follows a skip (max skip size given) in the opposite direction
+%%
+%% * Heuristic rotation and palindrome pattern (matching elements constrained with EqualContinuous)
 %%
 
 %%
@@ -114,20 +116,25 @@ functor
 import
    LUtils at 'x-ozlib://anders/strasheela/source/ListUtils.ozf'
    Score at 'x-ozlib://anders/strasheela/source/ScoreCore.ozf'
+   Pattern at 'x-ozlib://anders/strasheela/Pattern/Pattern.ozf'
  
 export
    Nega Conj Disj
    
-   '<': Less '=<':LessEq '< C': LessContinuous
-   '>': More  '>=':MoreEq '> C': MoreContinuous
-   '\\=': NotEqual '=': Equal
+   Less LessEq
+   LessContinuous
+   Greater  GreaterEq
+   GreaterContinuous
+   Equal EqualContinuous
+
    SmallInterval LargeInterval
 
    member: Member_H MemberContinuous
    
    MakeGivenInterval_Abs
    Continuous
-   
+
+   Cycle
    FollowList FollowFenv
    
 define
@@ -203,7 +210,7 @@ define
    
    /* %% [Heuristic constraint] X should be greater than Y (the interval size has no influence). 
    %% */
-   fun {More X Y}
+   fun {Greater X Y}
       if X > Y
       then 100
       else 0
@@ -211,7 +218,7 @@ define
    end
    /* %% [Heuristic constraint] X should be greater than Y or equal (the interval size has no influence). 
    %% */
-   fun {MoreEq X Y}
+   fun {GreaterEq X Y}
       if X >= Y
       then 100
       else 0
@@ -222,7 +229,7 @@ define
    %% Note: function has discontinuity: from "X equal Y" to "X more than Y by one" the result jumps by 50.
    %% */
    %% TODO: refine "spacing" of returned values in interval [0, 100] (now step-size 2 and no upper bound)
-   fun {MoreContinuous X Y}
+   fun {GreaterContinuous X Y}
       if X>Y
 	 %% a value > 50
       then X-Y+50
@@ -231,14 +238,14 @@ define
       end
    end
    
-   /* %% [Heuristic constraint] X and Y should be different. 
-   %% */
-   fun {NotEqual X Y}
-      if X \= Y
-      then 100
-      else 0
-      end
-   end
+%    /* %% [Heuristic constraint] X and Y should be different. 
+%    %% */
+%    fun {NotEqual X Y}
+%       if X \= Y
+%       then 100
+%       else 0
+%       end
+%    end
    
    /* %% [Heuristic constraint] X and Y should be equal (small and large intervals are considered equally bad). 
    %% */
@@ -249,13 +256,24 @@ define
       else 0   % {GUtils.random 10}
       end
    end
+
+    /* %% [Heuristic constraint] X and Y should be equal, but if unequal then small intervals are preferred.
+   %% */
+   %% TODO: refine "spacing" of returned values in interval [0, 100] (now step-size 2)
+   %%   Hm -- when would it actually make a difference? If there is a conflict with another heuristic constraint, and it must be decided which only "halve-way" fulfilled constraint is more important 
+   fun {EqualContinuous X Y}
+      100 - ({Abs Y-X} * 2)
+   end
    
-   /* %% [Heuristic constraint] Small intervals or repetition are preferred (the smaller the interval the better).
+   /* %% [Heuristic constraint] Small intervals between X and Y are preferred (the smaller the interval the better). However, equal X and Y are rated very low.
    %% */
    %% TODO: refine "spacing" of returned values in interval [0, 100] (now step-size 2)
    %%   Hm -- when would it actually make a difference? If there is a conflict with another heuristic constraint, and it must be decided which only "halve-way" fulfilled constraint is more important 
    fun {SmallInterval X Y}
-      100 - ({Abs Y-X} * 2)
+      if X == Y
+      then 0
+      else 100 - ({Abs Y-X} * 2)
+      end
    end
    
    /* %% [Heuristic constraint] Large intervals are preferred (the larger the interval the better).
@@ -299,7 +317,7 @@ define
    fun {MemberContinuous X Ys}
       %% Max of distance between X and any element of Ys
       {LUtils.accum 
-       {Map Ys fun {$ Y} {SmallInterval X Y} end}
+       {Map Ys fun {$ Y} {EqualContinuous X Y} end}
        Value.max}
    end
    
@@ -319,6 +337,16 @@ define
 %%% Heuristic pattern constraints: applied to a list of parameters and
 %%% internally applying heuristic "primitives"
 %%%
+
+   /** %% [encapulated heuristic constraint] Every element in Params (list of parameter objects) and its L-th (int) successor are constrained to be equal (EqualContinuous). 
+   %% */
+   proc {Cycle Params L Weight}
+      {Pattern.forNeighbours Params L+1
+       proc {$ Ps}
+	  {Score.apply_H EqualContinuous [Ps.1 {List.last Ps}] Weight}
+       end}
+   end
+   
    
    /** %% [encapulated heuristic constraint] The values of Params (list of parameter objects) "follow" Xs (list of ints), and the smaller the differences the better. Naturally, Xs can be generated with arbitrary deterministic algorithmic composition techniques. Weight (int) is the constraint's weight, use 1 by default.
    %% FollowList internally applies heuristic constraints to Params. Efficient heuristic: for each domain value decision, only a single parameter is involved.
@@ -326,16 +354,17 @@ define
    proc {FollowList Params Xs Weight}
       {ForAll {LUtils.matTrans [Params Xs]}
        proc {$ [Param X]}
-	  {Score.apply_H fun {$ ParamVal} {SmallInterval ParamVal X} end [Param]
+	  {Score.apply_H fun {$ ParamVal} {EqualContinuous ParamVal X} end [Param]
 	   Weight}
        end}
    end
    
    /** %% [encapulated heuristic constraint] The values of Params (list of parameter objects) "follow" MyFenv (Fenv instance), and the smaller the differences the better. Weight (int) is the constraint's weight, use 1 by default.
    %% FollowFenv internally applies heuristic constraints to Params. Efficient heuristic: for each domain value decision, only a single parameter is involved.
+   %% Remember that fenvs are always defined with floats, there are internally converted to integers.
    %% */
    proc {FollowFenv Params MyFenv Weight}
-      {FollowList Params {MyFenv toList($ length: {Length Params})} Weight}
+      {FollowList Params {Map {MyFenv toList($ {Length Params})} FloatToInt} Weight}
    end
 
 
