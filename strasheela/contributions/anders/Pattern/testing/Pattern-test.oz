@@ -1931,7 +1931,7 @@ Dirs2 = {FD.list 10 0#2}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%
-%% Pattern.arc
+%% Pattern.arch
 %%
 
 declare
@@ -1940,7 +1940,7 @@ Xs = {FD.list 10 0#100}
 %% watch propagation
 {Browse Xs}
 
-{Pattern.arc Xs unit(firstRel: '>:'
+{Pattern.arch Xs unit(firstRel: '>:'
 % 		     turningPointPos: 2
 		    )}
 
