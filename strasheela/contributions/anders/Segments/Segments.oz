@@ -429,8 +429,8 @@ MakeCounterpoint_PatternMotifs_OffsetDurationPitchcontour
    /** %% Mixin subscript for a note sequence that constraints pitch contour to form an arc.
    %%
    %% Args.rargs
-   %% 'firstRel': arg of Pattern.arc
-   %% 'tuningPointPos': arg of Pattern.arc
+   %% 'firstRel': arg of Pattern.arch
+   %% 'tuningPointPos': arg of Pattern.arch
    %%
    %% Note: can make search complex (not much propagation?)
    %% */
@@ -439,14 +439,14 @@ MakeCounterpoint_PatternMotifs_OffsetDurationPitchcontour
 % 			   rdefaults: unit(maxInterval: 4#3)
 			     )
       proc {$ NoteSeq Args}
-	 {Pattern.arc {NoteSeq mapItems($ getPitch)}
+	 {Pattern.arch {NoteSeq mapItems($ getPitch)}
 	  Args.rargs}
       end}
 
 % /** %%
 % %% Args.rargs
-% %% 'firstRel': arg of Pattern.arc
-% %% 'tuningPointPos': arg of Pattern.arc
+% %% 'firstRel': arg of Pattern.arch
+% %% 'tuningPointPos': arg of Pattern.arch
 % %%
 % %% Note: can make search complex (not much propagation?)
 % %% */
