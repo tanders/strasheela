@@ -58,7 +58,7 @@ export
    PlainPattern PlainPattern2
    Continuous AllEqual Increasing Decreasing
    NoRepetition
-   Arc
+   Arch
    InInterval
    Cycle Cycle2 Rotation Heap Random Palindrome Line Accumulation
    Intervals AbsIntervals RestrictMaxInterval
@@ -190,7 +190,7 @@ define
    %% 'firstRel' (default '<:'): a relation atom ('<:', '=<:', '>:', '>=:')
    %% 'turningPointPos' (default mid): specifies at which position within Xs the arc changes direction, positive int or atom mid
    %% */
-   proc {Arc Xs Args}
+   proc {Arch Xs Args}
       Default = unit(firstRel: '<:'
 		     turningPointPos: mid)
       As = {Adjoin Default Args}
