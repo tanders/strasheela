@@ -75,7 +75,7 @@ export
    %% TMP comment -- fix defs below
 %    MkEvenRhythm_
 
-   PitchPattern FenvContour Arpeggio Arc Repetitions Hook Stairs
+   PitchPattern FenvContour Arpeggio Arch Repetitions Hook Stairs
    
    MakeAkkord_Mixin MakeAkkord
    MakeAkkords_Mixin MakeAkkords MakeAkkords_Seq
@@ -434,7 +434,7 @@ MakeCounterpoint_PatternMotifs_OffsetDurationPitchcontour
    %%
    %% Note: can make search complex (not much propagation?)
    %% */
-   Arc
+   Arch
    = {Score.defMixinSubscript unit(
 % 			   rdefaults: unit(maxInterval: 4#3)
 			     )
