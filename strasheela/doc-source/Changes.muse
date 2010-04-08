@@ -35,7 +35,7 @@
     - ET41.out: added ji_TuningTable
     - Segs: added MakeCounterpoint_PatternMotifs_DurationPitchcontour, MakeCounterpoint_PatternMotifs_OffsetDuration, MakeCounterpoint_PatternMotifs_OffsetDurationPitchcontour. 
     - Segs.makeCounterpoint: added arg clearDissonanceResolution (before this constraint was always enabled).
-    - Segs: added mixin scripts (partly removing orig extended script altogether): MakeCounterpoint_Mixin, PitchPattern, FenvContour, Arpeggio, Arc, Repetitions, Hook, Stairs, MakeAkkord_Mixin, MakeAkkords_Mixin  
+    - Segs: added mixin scripts (partly removing orig extended script altogether): MakeCounterpoint_Mixin, PitchPattern, FenvContour, Arpeggio, Arch, Repetitions, Hook, Stairs, MakeAkkord_Mixin, MakeAkkords_Mixin  
     - Segs.homophonicChordProgression: added arguments playAllChordTones, noVoiceCrossing, maxUpperVoiceDistance, generalised argument 'restrictMelodicIntervals'.
     - HS.rules: added GetRootDegreeIntervals, SetBoundaryRoots, SetBoundaryTypes, NoParallels2, Ballistic, MinCard
     - Pattern: added MinDistinct, DirectionOfContour, LocalMinR, GetLocalMax, GetLocalMin, ConstrainLocalMax, ConstrainLocalMin, FenvContour2, NoRepetition and Undulating
@@ -57,6 +57,7 @@
     - HS.db: Pc2Ratios now returns nil if no ratio was defined for interval
     - Fixed HS.pcName
     - Fenv method toList: fixed bug for case N=1
+    - Pattern: renamed Arc -> Arch
     - Out.midi.getChannel now uses mini chan param of midi note objects (not only channel info tag)
     - Refactored ET22 and ET31 output: now much reduced code with same functionality using HS.out, several procs before exported by ET22 and ET31 are now moved to HS.out
     - Segs.homophonicChordProgression: replaced arg 'isToplevel' by arg 'makeTopLevel' for generality; fixed bug: constraint of arg maxUpperVoiceDistance now actually applied to upper voices
