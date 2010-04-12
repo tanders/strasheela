@@ -47,7 +47,7 @@ end
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%
-%% Example 1: demonstrates how heuristic constraints (e.g., Less_H defined above) and strict constraints can be combined. In this case, an optimal solution is found, because the heuristic and strict constraints do not contradict each other. Nevertheless, multiple searches result in different solutions as the search process in randomised.
+%% Example: demonstrates how heuristic constraints (e.g., Less_H defined above) and strict constraints can be combined. In this case, an optimal solution is found, because the heuristic and strict constraints do not contradict each other. Nevertheless, multiple searches result in different solutions as the search process in randomised.
 %%
 
 /* 
@@ -83,7 +83,7 @@ end
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%
-%% Example 2: multiple heuristic constraints are applied. Also, the use of a heuristic pattern constraint (H.cycle) is shown.
+%% Example: multiple heuristic constraints are applied. Also, the use of a heuristic pattern constraint (H.cycle) is shown.
 %%
 
 /* 
@@ -126,7 +126,7 @@ end
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%
-%% Example 3: a different combination of heuristic pattern constraints, this time the result "follows" and envelope (a fenv). 
+%% Example: a different combination of heuristic pattern constraints, this time the result "follows" and envelope (a fenv). 
 %%
 
 /* 
@@ -161,7 +161,7 @@ end
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%
-%% Example 4: shows how heuristic constraint combinators (e.g., H.nega) are used.
+%% Example: shows how heuristic constraint combinators (e.g., H.nega) are used.
 %%
 
 /* 
@@ -191,3 +191,49 @@ end
  unit(value: heuristic)}
 
 */
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%% Example/Test: quasi windowed pattern with heuristic constraints 
+%%
+
+
+/* 
+
+{GUtils.setRandomGeneratorSeed 0}
+{SDistro.exploreOne
+ proc {$ MyScore}
+    PPs
+    /** %% Example heuristic pattern, applied to some non-overlapping sublist of PPs
+    %% */
+    proc {Increasing MyPPs Weight}
+       %% all MyPPs are increasing
+       {Pattern.forNeighbours MyPPs 2
+	proc {$ [PP1 PP2]} {Score.apply_H H.less [PP1 PP2] Weight} end}
+    end
+ in
+    MyScore = {Score.make
+	       seq({LUtils.collectN 12
+		    fun {$} note(pitch: {FD.int 36#84}
+				 duration: 2) end}
+		   startTime: 0
+		   timeUnit: beats)
+	       unit}
+    PPs = {MyScore map($ getPitchParameter test:isNote)}
+    %%
+    %% quasi windowed pattern application
+    %% TODO: variant where sublists have different lengths (e.g., see Pattern.forRanges)
+    {ForAll {Pattern.adjoinedSublists PPs 4} % windowlength (can be easily changed)
+     %% uncomment on of the following heuristic patterns 
+%      proc {$ MyPPs} {Increasing MyPPs 1} end
+     proc {$ MyPPs} {H.followFenvIntervals MyPPs {Fenv.linearFenv [[0.0 60.0] [0.75 64.0] [1.0 60.0]]} 1} end 
+    }
+ end
+ unit(value: heuristic)}
+
+*/
+
+
