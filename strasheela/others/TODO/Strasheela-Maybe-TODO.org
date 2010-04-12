@@ -1363,20 +1363,6 @@ If Pitch method getValueInMidi comes across any pitch unit not in its list and n
 
 
 
-** Pattern [skyline]
-
-   a higher level than contour: 
-
-   {Skyline Xs Ys}
-
-   Ys marks whether values in Xs are 
-   - Y=2: local maximum (contour changes to going down, or contour changes from going up -- two options..)
-   - Y=1: local minimum (contour changes to going up, or contour changes from going down)
-   - Y=0: neither local min or max
-
-   If Xs and Ys are processed in parallel, then both whether some value in Xs is a local max and also its actual value is accessible
-
-
 ** Add new Jazz harmony chord & scale database: port from Impro-Visor
 
    see beginning of [[file:/Applications/improvisor400/vocab/My.voc::scale]]
@@ -1513,10 +1499,7 @@ end
 
    Copy FD.distribute source somewhere into Strasheela and then adapt it as required
 
-
-** 
-
-
+   
 ** Conversion of cent values to fractions with continued fractions
 
 I've had Kraig Grady post a simple Excel spreadsheet that approximates 
@@ -1568,13 +1551,6 @@ the continued fraction method.
    Could I have arg "repetition of predecessor" given to a prototype motif spec (which is the equal spec naturally but additionally constrained to really be a repetition)
 
    Be careful, this constraint could contradict other things (e.g. harmony, if harmony is not part of the motifs themselves)
-
-
-** Pattern.useMotifs: add optional arg to mark motif starts 
-
-   Pattern.useMotifs defines already optional arg 'indices'
-
-   Now add optional arg 'startsMotifBs' which returns list of 0/1 vars: its 1 if the corresponding pattern value starts a new motif and 0 otherwise 
 
 
 ** ENP output: change default Out.outputNonmensuralENP default args such that any Strasheela score topology creates some ENP score (i.e. it works for every Strasheela score topology)
@@ -3021,9 +2997,53 @@ See ../../testing/zy_Efficiency/KeepMusicRepresentationOutsideComputationalSpace
     Eric S. Raymond <esr@thyrsus.com>
 
 
-** Develop new expressive patterns					 :MAYBE:
+** Develop new expressive patterns					 
 
-   UseMotifs pattern generalises cycle pattern by introducing multiple alternatives. Can I generalise or variate other pattern constraints similarily. Goal is to create "interestingly" shaped sequences of FD ints and FD int combinations (e.g. pairs) 
+   A number of ideas for new pattern constraints 
+
+   E.g., UseMotifs pattern generalises cycle pattern by introducing multiple alternatives. Can I generalise or variate other pattern constraints similarily. Goal is to create "interestingly" shaped sequences of FD ints and FD int combinations (e.g. pairs) 
+
+
+*** Pattern [skyline]
+
+    a higher level than contour: 
+
+    {Skyline Xs Ys}
+
+    Ys marks whether values in Xs are 
+    - Y=2: local maximum (contour changes to going down, or contour changes from going up -- two options..)
+    - Y=1: local minimum (contour changes to going up, or contour changes from going down)
+    - Y=0: neither local min or max
+
+    If Xs and Ys are processed in parallel, then both whether some value in Xs is a local max and also its actual value is accessible
+
+
+*** Pattern.useMotifs: add optional arg to mark motif starts 
+
+    Pattern.useMotifs defines already optional arg 'indices'
+
+    Now add optional arg 'startsMotifBs' which returns list of 0/1 vars: its 1 if the corresponding pattern value starts a new motif and 0 otherwise 
+
+
+
+*** Pattern {AllowedIntervals Xs Intervals}
+
+    Xs (FD ints) is constrained such that intervals between consecutive vars are only values in Intervals (list of FD ints)
+    Note: Intervals need offset or are considered in both directions 
+
+    Variant: reified version with arg for HowManyTrue
+
+    This constraint is inspired by Jacopo B Schilingi
+    
+    
+*** Variant of Contour with given [anchor points]
+
+    in addition to the direction of intervals, the absolute value of certain pattern elements is given or constrainable. E.g., the absolute value of [turning points].
+
+    Relaxed version: directions only constrained between these given/constrainable [anchor points] and their direct neighbours (i.e. other interval directions are unconstrained)
+
+    This constraint is inspired by F Pachet
+
 
 *** Higher order functions like Map selecting from multiple function alternatives
 
@@ -3046,8 +3066,6 @@ See ../../testing/zy_Efficiency/KeepMusicRepresentationOutsideComputationalSpace
      {DiscontinuousCycleRs Xs Ys Bs}
 
      Xs is list of FD ints. Ys is list of FD ints which is quasi a sublist of Xs, but neighbours in Ys are not necessarily neighbours in Ys. Bs is a list of 0/1 ints of length Xs, specifying whether the corresponding Xs element is an element of Ys and thus part of the cycle or not. If the Xs elements for which Bs element is 0 are ignored, then the remaining Xs elements form a strict cycle pattern (i.e. occur in the order they are in Y, plus wrapping at the end of Ys).
-
-
 
 
 *** Soft contour constraint
@@ -3091,6 +3109,9 @@ See ../../testing/zy_Efficiency/KeepMusicRepresentationOutsideComputationalSpace
 *** Constraint on list of 0/1 variables how evenly these are distributed
 
     e.g., I may want to specify that no two 1 (or two 0) follow each other, or that the sum of N neighbouring elements tends to be the same throughout the list 
+
+
+
 
 
 ** Instrumentation constraints						 :MAYBE:
