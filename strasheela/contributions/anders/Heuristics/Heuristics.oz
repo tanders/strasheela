@@ -135,7 +135,7 @@ export
    Continuous
 
    Cycle
-   FollowList FollowFenv
+   FollowList FollowIntervals FollowFenv FollowFenvIntervals
    
 define
 
@@ -358,6 +358,16 @@ define
 	   Weight}
        end}
    end
+
+   /** %% [encapulated heuristic constraint] The intervals between the values of Params (list of parameter objects) "follow" the intervals between Xs (list of ints), and the smaller the differences the better. Variant of FollowList that allows for transposition.
+   %% */
+   proc {FollowIntervals Params Xs Weight}
+      {Pattern.for2Neighbours {LUtils.matTrans [Params Xs]}
+       proc {$ [Param1 X1] [Param2 X2]}
+	  {Score.apply_H fun {$ P1 P2} {EqualContinuous P2-P1 X2-X1} end [Param1 Param2]
+	   Weight}
+       end}
+   end
    
    /** %% [encapulated heuristic constraint] The values of Params (list of parameter objects) "follow" MyFenv (Fenv instance), and the smaller the differences the better. Weight (int) is the constraint's weight, use 1 by default.
    %% FollowFenv internally applies heuristic constraints to Params. Efficient heuristic: for each domain value decision, only a single parameter is involved.
@@ -365,6 +375,12 @@ define
    %% */
    proc {FollowFenv Params MyFenv Weight}
       {FollowList Params {Map {MyFenv toList($ {Length Params})} FloatToInt} Weight}
+   end
+
+   /** %% [encapulated heuristic constraint] The intervals between values of Params (list of parameter objects) "follow" intervals between corresponding MyFenv (Fenv instance) value, and the smaller the differences the better.
+   %% */
+   proc {FollowFenvIntervals Params MyFenv Weight}
+      {FollowIntervals Params {Map {MyFenv toList($ {Length Params})} FloatToInt} Weight}
    end
 
 
