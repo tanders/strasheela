@@ -36,6 +36,9 @@
 %%
 %% TODO: specific constraint defs
 %%
+%%  * {AllowedIntervals Xs Intervals}
+%%    Xs (FD ints) is constrained such that intervals between consecutive vars are only values in Intervals (list of FD ints). Intervals are either u/down (neg numbers for downwards) or absolute.
+%%
 %% * PropagatorHeuristic: transforms a propagator into a heursitic (internally creating additional spaces). Should only be used with FD propagators with relatively low arity (and not "constraints" that internally apply propagators, because such propagators should better be applied directly as heuristic constraints to parameter objects?)
 %%
 %% * !! Interval up is more likely than down (or the other way round). This requires random. (e.g. up {GUtils.random 100} and down {GUtils.random 10}) and thus special measures for recomputation
