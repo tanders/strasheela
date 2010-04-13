@@ -622,7 +622,9 @@ define
 	     N1A = {As.getPredecessor N1B}
 	     N2A = {As.getPredecessor N2B} 
 	  in
-	     if N1A \= nil andthen N2A \= nil then
+	     if N1A \= nil andthen {N1A isNote($)}
+		andthen N2A \= nil andthen {N2A isNote($)}
+	     then
 		{NoParallel N1A#N1B N2A#N2B}
 	     end
 	  end
