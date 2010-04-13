@@ -27,7 +27,8 @@ export
    MakeTypecheck_NotKinded
    isRecord: IsRecord2
    isAtom: IsAtom2
-   
+
+   IsEqual
    IsFS MakeSingletonSet IntsToFS
 
    RelationComplement ConstrainRelation
@@ -105,7 +106,12 @@ define
    end
    IsRecord2 = {MakeTypecheck_NotKinded IsRecord}
    IsAtom2 = {MakeTypecheck_NotKinded IsAtom}
-   
+
+   /** %% Test equality with either '==' or System.eq (same value node in the store). E.g., records can be '==' while System.eq returns false and for objects its the other way round.
+   %% */
+   fun {IsEqual X Y}
+      {Value.'==' X Y} orelse {System.eq X Y}
+   end
    
    /** %% IsFS returns true if X is a FS variable (determined or not) and false otherwise. This function is necessary, because the primitive Oz functions FS.var.is and FS.value.is behave differently for determined and undetermined FS variables.
    %% */ 
