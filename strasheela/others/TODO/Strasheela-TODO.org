@@ -4,6 +4,7 @@
 
 ** TODO Heuristic constraints support				     :URGENT:
 
+
 *** Add heuristic defs to functor H
 
  see constraint ideas in TODO section in that functor
@@ -12,6 +13,9 @@
 
 # OK - port OMClouds constraints as heuristics to Strasheela
    
+*** Heuristic "global constraints"
+    
+    See 
 
 *** Revise SDistro.heuristicValueOrder
 
@@ -20,6 +24,7 @@
     - Efficiency: ParamPos accessed multiple times (below accessed again, somehow store this info instead)
 
     - Consider making SDistro.heuristicValueOrder the default ordering
+
 
 *** Allow for randomised heuristic constraint definitions 
 

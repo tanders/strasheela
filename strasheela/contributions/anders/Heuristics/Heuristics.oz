@@ -36,6 +36,11 @@
 %%
 %% TODO: specific constraint defs
 %%
+%% * Heuristic "global constraints" such as Distinct
+%%   Approach: given list of parameters should be in the order these parameters are visited by the variable ordering (usually from-left-to-right, even if certain types are visited before other types). So, they would not work for variable orderings that "wildly jump around".
+%%   Implementation of "global constraints" can then rely on this variable ordering. If a different variable ordering is used, constraint would not work properly (but would not cause any fail either).
+%%
+%%
 %%  * {AllowedIntervals Xs Intervals}
 %%    Xs (FD ints) is constrained such that intervals between consecutive vars are only values in Intervals (list of FD ints). Intervals are either u/down (neg numbers for downwards) or absolute.
 %%
