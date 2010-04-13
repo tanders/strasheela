@@ -16,6 +16,7 @@
 
 functor
 import
+   System
    Module OS Combinator Property QTk at 'x-oz://system/wp/QTk.ozf' % Tk
    FD FS
    LUtils at 'ListUtils.ozf'
