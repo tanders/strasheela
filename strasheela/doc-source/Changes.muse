@@ -54,6 +54,7 @@
       - Some notes have been transposed to wrong octave, now fixed
     - HS.out.renderAndShowLilypond: changed output of chord pitch classes to octave above middle C
     - HS.score.degreeToPC: fixed propagation error 
+    - HS.rules.noParallels2: now also works if there are pause (rest) objects in the score
     - HS.db: Pc2Ratios now returns nil if no ratio was defined for interval
     - Fixed HS.pcName
     - Fenv method toList: fixed bug for case N=1
