@@ -104,7 +104,11 @@ define
    in
       if Pos == nil then
 	 {Exception.raiseError
-	  strasheela(failedRequirement StartRatio "ratio not contained in ["#{Out.listToVS Ratios " "}#"]")}
+	  strasheela(failedRequirement StartRatio
+		     "ratio not contained in ["
+		     #{Out.listToVS {Map Ratios fun {$ X} {Value.toVirtualString X 2 2} end}
+		       " "}
+		     #"]")}
 	 unit			% never returned
       else
 	 {List.takeDrop SortedRs Pos-1 Xs Ys}
