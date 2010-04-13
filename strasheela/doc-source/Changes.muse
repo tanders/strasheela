@@ -19,9 +19,9 @@
   - Minor additions
     - Fenv.renderAndPlayMidiFile now supports flexible microtonal MIDI output using pitchbend
     - Added pitch unit mHz (Millihertz)
-    - GUtils: added GUtils.recursiveRatio
+    - GUtils: added IsEqual, RecursiveRatio
     - GUtils.toProc: refactored version now supports optional arguments with default values 
-    - LUtils: added RemovePosition, ReplacePosition, FindBest
+    - LUtils: added RemovePosition, ReplacePosition, FindBest, 
     - Init: added SetNoteLengthsRecord, SymbolicDurToInt
     - Out.toLilypond and friends: implicit clef is now controllable with argument getClef
     - Out.makeNoteToLily2: function has been completely rewritten with a now more general interface 
@@ -63,8 +63,7 @@
     - Segs.homophonicChordProgression: replaced arg 'isToplevel' by arg 'makeTopLevel' for generality; fixed bug: constraint of arg maxUpperVoiceDistance now actually applied to upper voices
     - Out.outputScoreConstructor: strings in archived score were not properly quoted (fixed Out.recordToVS).
     - HS.score.harmonicRhythmFollowsMarkers: spelling correction (was HS.score.harmonicRythmFollowsMarkers)
-    - LUtils.position: changed comparison function to System.eq
-
+    - LUtils: changed comparison function of many defs (Contains, Position, Positions, Substitute, Substitute1) to GUtils.isEqual, which is working for all data types 
 
   - For further fixes see the [[http://apps.sourceforge.net/trac/strasheela/timeline][Trac Timeline]] or the [[../CHANGELOG.txt]].
 
