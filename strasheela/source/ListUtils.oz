@@ -16,7 +16,7 @@
 
 functor 
 import
-   System
+%    System
 %    Browser(browse:Browse)
    GUtils at 'GeneralUtils.ozf'
    
@@ -66,16 +66,17 @@ define
       {Map {MakeList N} fun {$ Y} Y=X end}
    end
 
+
    /** %% Returns true if Ys contains X and false otherwise.
    %% */
    %% !! Args should be swapped for consistency
    fun {Contains X Ys}
-      CompareFn=System.eq	% shall I make this an arg?
-   in
+%       GUtils.isEqual=System.eq	% shall I make this an arg?
+%    in
       case Ys
       of nil then false
       [] Y|Yr  
-      then if {CompareFn X Y}
+      then if {GUtils.isEqual X Y}
 	   then true
 	   else {Contains X Yr}
 	   end
@@ -86,13 +87,13 @@ define
    %%*/	
    %% !! Args should be swapped for consistency
    fun {Position X Ys}
-%       CompareFn=Value.'==' 
-      CompareFn=System.eq	% shall I make this an arg?
+%       GUtils.isEqual=Value.'==' 
+%       GUtils.isEqual=System.eq	% shall I make this an arg?
       fun {Aux X Ys I} 
 	 case Ys
 	 of nil then nil
 	 [] Y|Yr  
-	 then if {CompareFn X Y}
+	 then if {GUtils.isEqual X Y}
 	      then I
 	      else {Aux X Yr I+1}
 	      end
@@ -105,12 +106,12 @@ define
    %%*/	
    %% !! Args should be swapped for consistency
    fun {Positions X Ys}
-      CompareFn=System.eq	% shall I make this an arg?
+%       GUtils.isEqual=System.eq	% shall I make this an arg?
       fun {Aux X Ys I Result} 
 	 case Ys
 	 of nil then {Reverse Result}
 	 [] Y|Yr  
-	 then if {CompareFn X Y}
+	 then if {GUtils.isEqual X Y}
 	      then {Aux X Yr I+1 I|Result}
 	      else {Aux X Yr I+1 Result}
 	      end
@@ -325,12 +326,12 @@ define
    /** %% Replaces all occurances of Old in Xs by New. 
    %% */
    fun {Substitute Xs Old New}   
-      CompareFn=System.eq	% shall I make this an arg?
-   in
+%       GUtils.isEqual=System.eq	% shall I make this an arg?
+%    in
       case Xs
       of nil then nil
       [] X|Xr
-      then if {CompareFn X Old} then New | {Substitute Xr Old New}
+      then if {GUtils.isEqual X Old} then New | {Substitute Xr Old New}
 	   else X | {Substitute Xr Old New}
 	   end
       end 
@@ -338,12 +339,12 @@ define
    /** %% Replaces the first occurance of Old in Xs by New. 
    %% */
    fun {Substitute1 Xs Old New}   
-      CompareFn=System.eq	% shall I make this an arg?
-   in
+%       GUtils.isEqual=System.eq	% shall I make this an arg?
+%    in
       case Xs
       of nil then nil
       [] X|Xr
-      then if {CompareFn X Old} then New | Xr
+      then if {GUtils.isEqual X Old} then New | Xr
 	   else X | {Substitute1 Xr Old New}
 	   end
       end 
