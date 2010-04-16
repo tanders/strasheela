@@ -685,7 +685,7 @@ define
 				    end}
 				end)}
    end
-   /** %% [aux for UseMotifs] Expects X, a score item with added index variable(s) and returns the index variable value associated with the name IndexParamName (an atom).
+   /** %% [aux for UseMotifs] Expects X, a score item with added index variable(s) and returns the index variable value (FD int) associated with the name IndexParamName (an atom), in other words the number of the motif to which X belongs. For example, all notes that are part of an instance of the motif which has been declared first have the motif index value 1 and so forth.
    %% */
    fun {GetMotifIndex X IndexParamName}
       {{LUtils.find {X getParameters($)}
