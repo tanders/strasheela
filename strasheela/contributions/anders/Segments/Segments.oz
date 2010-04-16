@@ -62,7 +62,7 @@ import
    
 export
    
-   GetNoteIndex
+   GetMotifIndexOfNote
    MakeParametersAccessor
    PitchContourAccessor
 
@@ -105,12 +105,12 @@ define
    local
       MotifIndexName = multipleParams
    in
-      /** %% MakeIndexNote is a constructor for HS.score.note which implicitly creates an index parameter.
+      /** %% MakeMotifIndexNote is a constructor for HS.score.note which implicitly creates an index parameter.
       %% */
-      MakeIndexNote = {Pattern.makeIndexConstructor HS.score.note [MotifIndexName]}
-      /** %% Expects a note with index parameter and returns the index variable value.  
+      MakeMotifIndexNote = {Pattern.makeIndexConstructor HS.score.note [MotifIndexName]}
+      /** %% Expects a note that is part of a pattern motif (i.e. a note with a motif index parameter), and returns the motif number of this note (i.e. the index variable value). For example, all notes that are part of an instance of the motif which has been declared first have the motif index value 1 and so forth.
       %% */
-      fun {GetNoteIndex N} {Pattern.getMotifIndex N MotifIndexName} end
+      fun {GetMotifIndexOfNote N} {Pattern.getMotifIndex N MotifIndexName} end
    end
 
    /** %% Returns accessor function expecting a list of items (notes) and returning list of variables returned by Accessor (unary function or method). Example
@@ -239,7 +239,7 @@ define
 			   motifAccessors: requiredArg
 			   workOutEven:false
 			  )
-	   idefaults: unit(constructor:{Score.makeConstructor MakeIndexNote
+	   idefaults: unit(constructor:{Score.makeConstructor MakeMotifIndexNote
 					unit(offsetTime: fd#(0#FD.sup)
 					     inChordB: fd#(0#1))}))
       proc {$ Notes Args}
@@ -258,7 +258,7 @@ define
 		   end}
 	       end}
 	   end}
-	  unit(indices:{Map Notes GetNoteIndex}
+	  unit(indices:{Map Notes GetMotifIndexOfNote}
 	       workOutEven:Args.rargs.workOutEven)}
       end}
 
