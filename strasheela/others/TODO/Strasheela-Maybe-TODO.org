@@ -3004,7 +3004,7 @@ See ../../testing/zy_Efficiency/KeepMusicRepresentationOutsideComputationalSpace
    E.g., UseMotifs pattern generalises cycle pattern by introducing multiple alternatives. Can I generalise or variate other pattern constraints similarily. Goal is to create "interestingly" shaped sequences of FD ints and FD int combinations (e.g. pairs) 
 
 
-*** Pattern [skyline]
+*** !! Pattern [skyline]
 
     a higher level than contour: 
 
@@ -3017,13 +3017,13 @@ See ../../testing/zy_Efficiency/KeepMusicRepresentationOutsideComputationalSpace
 
     If Xs and Ys are processed in parallel, then both whether some value in Xs is a local max and also its actual value is accessible
 
+    !!?? NOTE: skyline of pitches together pitches, can be used to constrain intervals between melodic peaks
 
 *** Pattern.useMotifs: add optional arg to mark motif starts 
 
     Pattern.useMotifs defines already optional arg 'indices'
 
     Now add optional arg 'startsMotifBs' which returns list of 0/1 vars: its 1 if the corresponding pattern value starts a new motif and 0 otherwise 
-
 
 
 *** Pattern {AllowedIntervals Xs Intervals}
