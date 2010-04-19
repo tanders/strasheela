@@ -94,6 +94,8 @@
 
 
 %%
+%% * Heuristic variant of HS.rules.ballistic
+%%
 %% * InRange: heuristic domain spec: Can be defined with Less and Greater
 %%
 %% * IntervalMember: Member for intervals
