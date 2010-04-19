@@ -1736,21 +1736,25 @@ MyScore = {Score.makeScore
 
 declare
 MyScore = {Score.makeScore
-	   sim(items:[ seq(items:[ note(duration: 2
-					pitch: 60
-					amplitude:64)
-				   note(duration: 3
-					pitch: 73
-					amplitude:64)
+	   sim(info: fomus(title: "My Composition")
+	      items:[ seq(info: fomus(inst: oboe)
+			  items:[ note(info: fomus(marks: ["!"])
+					duration: 2
+					pitch: 60)
+				  note(info: fomus(dyn: 0.5 % in 0-1
+						   dyns: yes) 
+				       duration: 3
+					pitch: 73)
 				   note(duration: 1
-					pitch: 72
-					amplitude:64)])
-		       seq(items:[ note(duration: 5 
-					pitch: 63
-					amplitude:64)
-				   note(duration: 1 
-					pitch: 63
-					amplitude:64)])]
+					pitch: 72)])
+		      seq(info: fomus(name: "Electric Viola"
+				      abbr: evla
+				      inst: viola)
+			  items:[pause(duration:2)
+				 note(duration: 5 
+				      pitch: 63)
+				 note(duration: 1 
+				      pitch: 63)])]
 	       startTime:0
 	       timeUnit:beats(4))
 	   unit}
@@ -1761,28 +1765,18 @@ MyScore = {Score.makeScore
 
 {Out.renderFomus MyScore
  unit(file:"fomus-test"
-      getScoreKeywords:fun {$ MyScore}
-			  unit(output: "((:lilypond :view t))"
-			       %% !!?? 'default-beat' has no effect (not yet implemented?)?
-			       % 'default-beat': "1/4"
-			       %% !!?? no effect either?
-			       % global: "(list (make-timesig :off 0 :time '(3 8)) (make-timesig :off 3 :time '(5 8)))"
-			       title: "\"My test score\""
-			       %% quartertones: "t"
-			       instruments: "#.(list (fm:make-instr :treble-bass :clefs '(:treble :bass)))"
-			      )
-		       end
       getEventKeywords:fun {$ MyEvent}
-			  unit(off:{MyEvent getStartTimeInBeats($)}
-			       dur:{MyEvent getDurationInBeats($)}
-			       note:{MyEvent getPitchInMidi($)}
-			       marks: case {GUtils.random 3}
-				      of 1 then "(:staccato)"
-				      [] 2 then "(:accent)"
-				      else "()"
+			  unit(marks: case {GUtils.random 3}
+				      of 1 then ["."]
+				      [] 2 then [">"]
+				      else nil
 				      end)
 		       end
+      %% default is lilypond
+%       output: xml 
      )}
+
+
 
 %%
 %% output to MusicXML
@@ -1819,8 +1813,9 @@ MyScore = {Score.makeScore
 	   unit}
 
 {Out.renderFomus MyScore
- unit(file:test
-      flags:['-x'])}
+ unit(file:"MusicXML-test"
+      output: xml 
+     )}
 
 
 
