@@ -1310,13 +1310,15 @@ define
    end
 
 
-   /** %% After a skip, either move into the same direction by a smaller skip or step, or move into the opposite direction. Pitches is a list of FD ints.
+   /** %% After a upward (downward) skip, either move into the same direction by a smaller (larger) skip or step, or move into the opposite direction. Pitches is a list of FD ints.
    %%
    %% Args:
    %% 'maxStep' (default 8#7): maximal step size, specified as ratio (pair of integers).
    %% 'oppositeIsStep' (default false): if true and direction is changed after a skip, then this first interval into the opposite direction must be a step.
    %%
    %% */
+   %%
+   %% ?? TODO: possible variant (additional optional arg): after any skip also a step in the same direction is possible.
    %%
    %% BUG:
    %%
