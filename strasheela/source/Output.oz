@@ -1956,87 +1956,229 @@ define
 %%% Fomus
 %%%
 
-   /** %% Exports MyScore into Fomus format (as a VS). The Fomus format is rather fixed, whereas the information contained in the Strasheela score format is highly user-customisable. Therefore, the export-process is also highly user-customisable.
-   %% A Fomus score has a fixed topology: <code>score(part(event+)+)</code> (see the Fomus documentation at http://common-lisp.net/project/fomus/doc/). Strasheela, on the other hand, supports various topologies. However, ToFomus does not automatically perform a score topology transformation into the Fomus topology. Instead, ToFomus expects two optional accessor functions as arguments that allow for a user-defined topology transformation: getParts and getEvents. The function given to the argument getParts expects MyScore and returns a list of values corresponding to the Fomus parts. The function given to the argument getEvents expects a part and returns a list of values corresponding to the Fomus events. The default values for these accessor functions require that the topology of MyScore corresponds with the Fomus score topology. That is, for the default accessor functions, MyScore must have the following topology: <code>sim(seq(&lt;arbitrarily nested note&gt;+)+)</code>.
-   %% Any Fomus setting for the score, a part, or event can be specified by the user as well. For this purpose, ToFomus expects three optional attribute accessor functions: getScoreKeywords, getPartKeywords, and getEventKeywords. These functions expect a Strasheela object corresponding to a Fomus score/part/event and return an Oz record whose features are the Fomus keywords for this objects and the feature values are the values for these keywords. For example, getEventKeywords may be set to the following function.
+   /** %% [aux] Accesses info tag (record) with label 'fomus'. 
+   %% */
+   fun {GetUserFomus X}
+      {X getInfoRecord($ fomus)}
+   end
+
+   /** %% Exports MyScore into Fomus format (as a VS); Fomus can then translate MyScore into the music notation formats MusicXML (for import into Sibelius or Finale) and Lilypond.
+   %%
+   %% Fomus supports many values (parameters) and settings (see the Fomus documentation at http://fomus.sourceforge.net/doc.html/). Fomus values/settings can be specified in Strasheela, for example, by an info record with the label 'fomus' given to Strasheela score objects that correspond to the Fomus score, its parts and Fomus events (see below). For example,  
+   %% TODO:
+   %%
+   %% Any marks supported by fomus (see http://fomus.sourceforge.net/doc.html/Marks.html) can be given as a list of VS to the marks feature of events.
+
+   
+   %% Args:
+   %%
+   %% 'output' (possible values: lilypond, xml, midi, default lilypond): sets the output format of Fomus.
+   %% 'dir' (default {Init.getStrasheelaEnv defaultFomusDir}): sets the directory of the resulting fomus file and files created by fomus.
+   %% 'file' (default "test"): sets the basename of the resulting fomus file and files created by fomus.
+   %% 
+   %% getParts/getEvents (functions): The Fomus format is rather fixed, whereas the information contained in the Strasheela score format is highly user-customisable. Therefore, the export-process is also user-customisable.
+   %% A Fomus score has basically a fixed topology: <code>score(part(event+)+)</code> (see the Fomus documentation at http://fomus.sourceforge.net/doc.html/). Strasheela, on the other hand, supports various topologies. However, ToFomus does not automatically perform a score topology transformation into the Fomus topology. Instead, ToFomus expects two optional accessor functions as arguments that allow for a user-defined topology transformation: getParts and getEvents. The function given to the argument getParts expects MyScore and returns a list of values corresponding to the Fomus parts. The function given to the argument getEvents expects a part and returns a list of values corresponding to the Fomus events. The default values for these accessor functions require that the topology of MyScore corresponds with the Fomus score topology. That is, for the default accessor functions, MyScore must have the following topology: <code>sim(seq(&lt;arbitrarily nested note&gt;+)+)</code>.
+   %%
+   %% getScoreSettings/getPartSettings/getEventSettings: 
+   %% Any Fomus setting for the score, a part, or event can be specified by the user as well. For this purpose, ToFomus expects three optional attribute accessor functions: getScoreSettings, getPartSettings, and getEventSettings. These functions expect a Strasheela object corresponding to a Fomus score/part/event and return an Oz record whose features are the Fomus keywords for this objects and the feature values are the values for these keywords. For example, getEventSettings may be set to the following function.
+   %% TODO: revise this def.
    fun {$ MyEvent}
       unit(off:{MyEvent getStartTimeInBeats($)}
 	   dur:{MyEvent getDurationInBeats($)}
 	   note:{MyEvent getPitchInMidi($)})
    end
    %%
+   %% However, remember that you can also specify settings at the score level in your ~/.fomus file.
+   %%
+   %%
+   %% TODO: explain
+   %%
+   %%
+   %% Further args:
+   %%
+   %%
+   %% Please see the file ../testing/Output-test.oz for examples. 
+   %%
+   %%
    %% Please inspect the implementation code to see the default values for the arguments. 
    %% */
    %%
-   %% !! default args file, extension, and dir are given explicitly thrice in ToFomus, OutputFomus, and CallFomus
+   %% TODO:
    %%
-   %% The Oz-created .fms file gets overwritten by fomus, which is kind of fun :) -
+   %% - Documentatiom:
+   %%   - Support for fomus info tag for all levels (score, parts, events)
+   %%   - Effect of getEventSettingsDefault
+   %%   - eventClauses arg (only used for objects returned by getEvents)
    %%
-   %%   it also enables you -- for the time being -- to edit the richer settings by hand...
+   %% - predef clauses for the following objects:
+   %%   - notes
+   %%   - pauses (no extra clause necessary if filtered out by getEvents/isEvent)
+   %%   - HS note (with enharmonic notation) -- in HS functor?
+   %%   - chords (sim of notes)
+   %%
+   %% - revise getParts: replace with isPart?
+   %%   It should be possible to manually mark parts in the score with info tag, including part ID
+   %%   A part can then be "split", e.g., over multiple items in a toplevel sequential container
+   %%
+   %% - once support for clauses is there, add microtonal notation in ET31, ET41, ET22 
+   %%   (at least ET31 for Lily & MusicXML)
+   %%
+   %% - Rewrite Lily output examples file for Fomus
+   %%
+   %% - ?? replace getEvents by isEvent? (default isNote or isObject)?
+   %% 
+   %%
    fun {ToFomus MyScore Args}
       Defaults
       = unit(getParts:fun {$ MyScore} {MyScore getItems($)} end
-	     getEvents:fun {$ MyPart} {MyPart collect($ test: isNote)} end
+	     getEvents:fun {$ MyPart}
+			  {MyPart collect($ test: isNote)}
+		       end
 	     /** %% Outputs a record where the features are later Fomus keywords and the values are the corresponding Fomus values for these keywords.
 	     %% */
-	     getScoreKeywords:fun {$ MyScore}
-				 %% :midi will generate an error message, if fomus has not been installed with cm
-				 %% however, this will not hurt other processing
-				 unit(output: "((:lilypond :view t) (:midi))"
-				      %% filename keyword now hard-wired (see below) to keep interface for all three get*Keywords functions consistent.
-				      quartertones: "t"
-				      %% midi playback will be program 1 - piano
-				      instruments: "#.(list (fm:make-instr :treble-bass :clefs '(:treble :bass) :midiprgch-ex 1))")
-			      end
-	     getPartKeywords:fun {$ MyPart}
-				unit(instr:":treble-bass")
-			     end
-	     getEventKeywords:fun {$ MyEvent}
-				 unit(off:{MyEvent getStartTimeInBeats($)}
-				      dur:{MyEvent getDurationInBeats($)}
-				      note:{MyEvent getPitchInMidi($)})
-			      end
+	     getScoreSettings:fun {$ MyScore} unit end
+	     getPartSettings:fun {$ MyPart} unit end
+	     getEventSettings:fun {$ MyEvent} unit end
+	     %% Note: these event parameters are only overwritten by getEventSettings if the same record features are given.
+	     %% TODO: hide in extra record
+	     getEventSettingsDefault: fun {$ MyEvent}
+					 unit(time:{MyEvent getStartTimeInBeats($)}
+					      dur:{MyEvent getDurationInBeats($)}
+					      %% TODO: revise for microtonal pitches using symbolic notation
+					      pitch:{MyEvent getPitchInMidi($)})
+				      end
+	     %% NB: only for processing items returned by getEvents
+	     eventClauses: nil
+	     %% Predefined eventClauses. User-given clauses are appended to the beginning of this list.
+	     %% TODO: hide in extra record
+	     %% BUG: thhis does currently not work! 
+% 	     defaultEvenvClauses: [%% TODO: simplify this def so that it can serve as clean template for other eventClauses
+% 				   %% ?? Perhapr arg PartId is not even necessary then?
+% 				   %% TODO: debug -- many defs not accessible now...
+% 				   isNote
+% 				   #fun {$ MyEvent PartId}
+% 				       {ListToVS ["note" "part" PartId
+% 						  {Record2FomusEvent
+% 						   {CleanupSettings
+% 						    {Adjoin {As.getEventSettingsDefault MyEvent}
+% 						     {Adjoin {As.getEventSettings MyEvent}
+% 						      {GetUserFomus MyEvent}}}}}]
+% 					" "}
+% 				    end]
+	     output: lilypond 
+	     %% NB: default args file, and dir are given explicitly thrice in ToFomus, OutputFomus, and CallFomus 
 	     file:"test"
-	     extension:".fms"
+% 	     extension:".fms"
 	     dir:{Init.getStrasheelaEnv defaultFomusDir})
       As = {Adjoin Defaults Args}
-      Path = As.dir#As.file#As.extension
-      /** %% [Aux] Transforms a record into a VS, where the record features are lisp keywords and the record values remain as is.
+      FileExportedByFomus = As.dir#As.file#case As.output of
+					      lilypond then ".ly"
+					   [] xml then ".xml"
+					   [] midi then ".midi"
+					   end
+      /** %% Transforms a record into a VS of the form "feat1 val1 ... featn valn ;"
       %% */
-      fun {Record2KeyValPairs X}
+      fun {Record2FomusEvent X}
+	 %% 'time' is always at the beginning, and possible marks at the end
+	 {ListToVS
+	  {Map time#X.time | {Record.toListInd
+			      {Record.subtractList X
+			       [time marks]}}
+	   fun {$ Feat#Val} Feat#":"#Val end}
+	  " "}
+	 %% append marks at end
+	 # if {Value.hasFeature X marks} andthen X.marks\=nil
+	   then " "#{ListToVS {Map X.marks fun {$ M} "["#M#"]" end} " "}
+	   else nil
+	   end
+	 # " ;"
+      end
+      /** %% Transforms a record into a VS of the form "<feat1:val ... featn:valn>"
+      %% */
+      fun {Record2FomusObject X}
+	 "<"#{ListToVS {Map {Record.toListInd X}
+			fun {$ Feat#Val} Feat#":"#Val end}
+	      " "}#">"
+      end
+      /** %% Transforms a record into a VS of the form "feat1=val1\n ... featn=valn\n"
+      %% */
+      fun {Record2FomusSetting X}
 	 {ListToVS {Map {Record.toListInd X}
-		    fun {$ Feat#Val} {LispKeyword Feat}#" "#Val end}
+		    fun {$ Feat#Val} Feat#"="#Val#"\n" end}
 	  " "}
       end
+      /** %% Strings in settings must be surrounded by explicit double-quotes
+      %% */
+      fun {CleanupSettings R}
+	 {Record.map R
+	  fun {$ X}
+	     if {IsString X}
+	     then "\""#X#"\""
+	     else X
+	     end end}
+      end
    in
-      %% score creation
       {ListToLines
-       "init "#{Record2KeyValPairs {Adjoin {As.getScoreKeywords MyScore}
-				    unit(filename: "\""#Path#"\"")}}|
+       %% Score processing
+       {Record2FomusSetting {CleanupSettings
+			     {Adjoin {Adjoin {As.getScoreSettings MyScore}
+				      {GetUserFomus MyScore}}
+			      unit(filename: FileExportedByFomus)}}} |
        {List.mapInd {As.getParts MyScore}
 	fun {$ PartId MyPart}
-	   %% part creation
+	   /** %% Variant of GUtils.cases where clauses support a second arg PartId
+	   %% */
+	   fun {Cases X Clauses}
+	      SucceededClause = {LUtils.find Clauses
+				 fun {$ Test#_} {{GUtils.toFun Test} X} end}
+	   in
+	      if SucceededClause==nil then nil
+	      else
+		 _#Process = SucceededClause
+	      in
+		 {{GUtils.toProc Process} X PartId}
+	      end
+	   end
+	in
+	   %% Parts processing
 	   {ListToLines
-	    {ListToVS ["part" PartId {Record2KeyValPairs {As.getPartKeywords MyPart}}]
+	    {ListToVS ["part" {Record2FomusObject
+			       {CleanupSettings
+				{Adjoin {Adjoin {As.getPartSettings MyPart}
+					 {GetUserFomus MyPart}}
+				 unit(id: PartId)}}}]
 	     " "}|
+	    %% Events processing
 	    {Map {As.getEvents MyPart}
 	     fun {$ MyEvent}
-		%% event creation
-		{ListToVS ["note" PartId {Record2KeyValPairs {As.getEventKeywords MyEvent}}]
-		 " "}
+		{Cases MyEvent {Append As.eventClauses
+				%% BUG: As.defaultEvenvClauses does not work yet with given def
+				%% -> simplify this def, e.g., bu extending Cases with some of the clauses def...
+% 				As.defaultEvenvClauses
+				[isNote
+				 #fun {$ MyEvent PartId}
+				     {ListToVS ["note" "part" PartId
+						{Record2FomusEvent
+						 {CleanupSettings
+						  {Adjoin {As.getEventSettingsDefault MyEvent}
+						   {Adjoin {As.getEventSettings MyEvent}
+						    {GetUserFomus MyEvent}}}}}]
+				      " "}
+				  end]
+			       }}
 	     end}}
-	end}}
-   end
+	   end}}#"\n"
+      end
    
    /** %% Outputs a fomus file with optional Args. The defaults are
    unit(file:"test"
 	extension:".fms"
 	dir:{Init.getStrasheelaEnv defaultFomusDir}
 	...)
-   %% See the doc of ToFomus for further optional arguments.
+   %% See the doc of ToFomus for further information.
    %% */
-   %% !! default args file, extension, and dir are given explicitly thrice in ToFomus, OutputFomus, and CallFomus
-   proc {OutputFomus MyScore Args}      
+   proc {OutputFomus MyScore Args}     
+      %% NB: default args file, extension, and dir are given explicitly thrice in ToFomus, OutputFomus, and CallFomus 
       Defaults = unit(file:"test"
 		      extension:".fms"
 		      dir:{Init.getStrasheelaEnv defaultFomusDir})
@@ -2046,10 +2188,10 @@ define
       {WriteToFile {ToFomus MyScore As} Path}
    end
    
-   /** %% Creates a fomus file from MyScore and calls the fomus command-line application on this file. The argument flags expects a list of fomus flags (default is nil). See the doc of OutputFomus for further arguments.
+   /** %% Creates a fomus file from MyScore and calls the fomus command-line application on this file. The argument flags expects a list of fomus flags (default is nil). See the doc of ToFomus and OutputFomus for further information.
    %% */
-   %% !! default args file, extension, and dir are given explicitly thrice in ToFomus, OutputFomus, and CallFomus
-   proc {RenderFomus MyScore Args}   
+   proc {RenderFomus MyScore Args}    
+      %% NB: default args file, extension, and dir are given explicitly thrice in ToFomus, OutputFomus, and CallFomus 
       Defaults = unit(file:"test"
 		      extension:".fms"
 		      dir:{Init.getStrasheelaEnv defaultFomusDir}
