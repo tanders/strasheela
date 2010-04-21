@@ -2090,7 +2090,7 @@ define
    %% Further args:
    %%
    %%
-   %% Please see the file ../testing/Output-test.oz for examples. 
+   %% Please see the file examples/ControllingOutput-Examples/Fomus-Examples.oz for examples. 
    %%
    %%
    %% Please inspect the implementation code to see the default values for the arguments. 
