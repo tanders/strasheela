@@ -1737,27 +1737,32 @@ MyScore = {Score.makeScore
 declare
 MyScore = {Score.makeScore
 	   sim(info: fomus(title: "My Composition")
-	      items:[ seq(info: fomus(inst: oboe)
-			  items:[ note(info: fomus(marks: ["!"])
+	       items:[ seq(info: fomus(name: "Electric Viola"
+				       abbr: evla
+				       inst: viola)
+			   items:[pause(duration:2) % test pause and offset time
+				  note(offsetTime: 2
+				       duration: 7 % test ties 
+				       pitch: 63)
+				  note(duration: 1 
+				       pitch: 63)])
+		       seq(info: fomus(inst: cello)
+			   items:[ note(info: fomus(clef: bass
+						    marks: ["!"])
 					duration: 2
-					pitch: 60)
-				  note(info: fomus(dyn: 0.5 % in 0-1
-						   dyns: yes) 
-				       duration: 3
+					pitch: 48)
+				   note(info: fomus(clef: tenor
+						    dyn: 0.5 % in 0-1
+						    dyns: yes) 
+					duration: 3
 					pitch: 73)
 				   note(duration: 1
-					pitch: 72)])
-		      seq(info: fomus(name: "Electric Viola"
-				      abbr: evla
-				      inst: viola)
-			  items:[pause(duration:2)
-				 note(duration: 5 
-				      pitch: 63)
-				 note(duration: 1 
-				      pitch: 63)])]
+					pitch: 72)]) ]
 	       startTime:0
 	       timeUnit:beats(4))
 	   unit}
+{Out.renderFomus MyScore
+ unit(file:"fomus-test")}
 
 {Out.toFomus MyScore unit}
 
