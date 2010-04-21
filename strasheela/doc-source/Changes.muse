@@ -13,6 +13,7 @@
     - Added HS.out: generalised output for score objects and concepts introduced by HS, e.g., Lilypond output for chord and scale objects and means to define Lilypond output for different temperaments.
 
   - Documentation
+    - [[../ examples/ControllingOutput-Examples/Fomus-Examples.oz][Fomus-Examples.oz]]: Added examples demonstrating the Fomus output. 
     - [[../examples/Heuristic-Constraints.oz][Heuristic-Constraints.oz]]: demonstrates how heuristic constraints are defined and ued
     - [[../examples/Harmony-Examples/HarmonicProgressions-41ET.oz][HarmonicProgressions-41ET.oz]]: Added 41 ET harmony example, using La Monte Young's The Well-Tuned Piano chords
     - [[../examples/Counterpoint-Examples/Counterpoint-22ET.oz][Counterpoint-22ET.oz]]: Added 22 ET counterpoint examples
