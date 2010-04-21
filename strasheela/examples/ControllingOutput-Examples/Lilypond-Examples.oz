@@ -59,9 +59,9 @@ MyScore = {Score.makeScore seq(items:[note(duration:4
 %% example blocks (does nothing!), because some parameter values are
 %% not determined -- the note pitch is missing!
 %%
-%% Nevertheless, a warning is printed at standard out, which is shown
-%% in the emulator (in the Oz menu, select Show/Hide -> Emulator, or
-%% use the shortcut C-. e)
+%% Nevertheless, a window with a warning is shown (This window may be
+%% hid behing Emacs, you may need to switch to the Oz/QTk application
+%% to see this warning).
 %%
 
 declare
@@ -98,10 +98,8 @@ MyScore = {Score.makeScore seq(items:[note(duration:4
 %%
 %% The Strasheela score topology sim(seq(...)+) results in the typical
 %% Lilypond score layout with an extra staff for each sequential
-%% directly contained in a top-level simultaneous container. Note
-%% that the score can be further nested within the outmost sequential
-%% containers corresponding to staffs. Also, note that item offset
-%% times are notated as rests.
+%% directly contained in a top-level simultaneous container.  Note
+%% that item offset times are notated as rests.
 %%
 
 declare
@@ -112,7 +110,8 @@ MyScore = {Score.makeScore
 				       pitch: 62)
 				  note(duration: 8
 				       pitch: 64)])
-		       seq(items:[note(duration: 4
+		       seq(items:[note(offsetTime: 4
+				       duration: 4
 				       pitch: 72)
 				  note(duration: 8 
 				       pitch: 67)])]
@@ -126,8 +125,9 @@ MyScore = {Score.makeScore
 
 %%%%%
 
-
-%% Further nesting: a seq in a seq and offset times for notes and containers
+%% A score can be further nested within the outmost sequential
+%% containers corresponding to staffs. The following examples features
+%% a seq in a seq and offset times for notes and containers.
 declare
 MyScore = {Score.makeScore
 	   sim(items:[seq(items:[note(duration: 4
