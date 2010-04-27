@@ -2051,6 +2051,35 @@ define
 	 nil
       end
    end
+
+   /** %% [Aux] Collect all parts in MyPart.
+   %% Note: a single part can be split into multiple sections (multiple containers), each marked with the same fomusPart into tag. 
+   %% Note: if some simultaneous container should be notated as a staff with multiple voices, then it must be marked with info tag fomusPart.
+   %% */
+   fun {GetParts MyScore}
+      if {MyScore isEvent($)} orelse {IsFomusChord MyScore} orelse {IsMarkedFomusPart MyScore}
+      then [MyScore]
+	 %% Simultaneous containers or containers that contain marked parts are processed recursively.
+      elseif {MyScore isSimultaneous($)} orelse {Some {MyScore filter($ isContainer)}
+						 IsMarkedFomusPart}
+      then {LUtils.mappend {MyScore getItems($)} GetParts}
+	 %% otherwise, seqs are parts
+      elseif {MyScore isSequential($)} 
+      then [MyScore]
+      else
+	 {GUtils.warnGUI
+	  "No parts can be accessed from score ("#{Value.toVirtualString MyScore 1 1}#") !"}
+	 nil
+      end
+   end
+
+   /** %% [Aux] Container X has been explicitely marked as a fomus part with the info tag fomusPart.
+   %% */
+   fun {IsMarkedFomusPart X}
+%       {X isContainer($)} andthen
+      {X hasThisInfo($ fomusPart)}
+   end
+
    
    /** %% Exports MyScore into Fomus format (as a VS); Fomus can then translate MyScore into the music notation formats MusicXML (for import into Sibelius or Finale) and Lilypond.
    %%
@@ -2090,7 +2119,7 @@ define
    %% Further args:
    %%
    %%
-   %% Please see the file examples/ControllingOutput-Examples/Fomus-Examples.oz for examples. 
+   %% Please see the file examples/ControllingOutput-Examples/Fomus-Examples.oz for many examples. 
    %%
    %%
    %% Please inspect the implementation code to see the default values for the arguments. 
@@ -2111,11 +2140,13 @@ define
    %%
    %% - single staff polyphony can be improved. Also, info tags in "intermediate" containers are currently ignored completely, which is a waste. see Fomus-Examples.oz
    %%
-   %% - revise getParts: replace with isPart?
+   %% ???? - revise getParts: replace with isPart?
    %%   -> perhaps I remove this fun altogether as arg? 
    %%
-   %% - revise getParts def: It should be possible to manually mark parts in the score with info tag, including part ID
-   %%   A part can then be "split", e.g., over multiple items in a toplevel sequential container
+   %% OK - revise getParts def: It should be possible to manually mark
+   %%   parts in the score with info tag, including part ID A part can
+   %%   then be "split", e.g., over multiple items in a toplevel
+   %%   sequential container
    %%
    %% - once support for clauses is there, add microtonal notation in ET31, ET41, ET22 
    %%   (at least ET31 for Lily & MusicXML)
@@ -2129,23 +2160,7 @@ define
    %%
    fun {ToFomus MyScore Args}
       Defaults
-      = unit(getParts:fun {$ MyScore}
-			 if {MyScore isEvent($)} orelse {IsFomusChord MyScore}
-			 then [MyScore]
-			    %% !! TODO: insert clause for collecting containers marked as parts..
-			    %%
-			    %% if top-level is sequential, then everything is notated on single staff (single part)
-			 elseif {MyScore isSequential($)} 
-			 then [MyScore]
-			    %% if top-level is simultaneous, then this simultaneous contains the parts
-			 elseif {MyScore isSimultaneous($)} 
-			 then {MyScore getItems($)}
-			 else
-			    {GUtils.warnGUI
-			     "No parts can be accessed from score ("#{Value.toVirtualString MyScore 1 1}#") !"}
-			    nil
-			 end
-		      end
+      = unit(getParts: GetParts
 	     /** %% Outputs a record where the features are later Fomus keywords and the values are the corresponding Fomus values for these keywords.
 	     %% */
 	     getScoreSettings:fun {$ MyScore} unit end
@@ -2206,6 +2221,7 @@ define
 					   [] xml then ".xml"
 					   [] midi then ".midi"
 					   end
+      PartsDict = {NewDictionary}
    in
       if {Not {MyScore isDet($)}} then
 	 {GUtils.warnGUI "Fomus output may block -- score not fully determined!"}
@@ -2217,8 +2233,12 @@ define
 				     {GetUserFomus MyScore}}
 			     unit(filename: FileExportedByFomus)}} |
        {List.mapInd {As.getParts MyScore}
-	fun {$ PartId MyPart}
-	   /** %% Variant of GUtils.cases where clauses support a second arg PartId
+	fun {$ PartDefaultId MyPart}
+	   PartID = if {IsMarkedFomusPart MyPart} 
+		    then {MyPart getInfoRecord($ fomusPart)}.1
+		    else PartDefaultId
+		    end
+	   /** %% Variant of GUtils.cases where clauses support a second arg PartID
 	   %% */
 	   fun {Cases X Clauses}
 	      SucceededClause = {LUtils.find Clauses
@@ -2226,22 +2246,30 @@ define
 	   in
 	      if SucceededClause==nil then nil
 	      else _#Process = SucceededClause in
-		 {{GUtils.toProc Process} X PartId}
+		 {{GUtils.toProc Process} X PartID}
 	      end
 	   end
+	   %% Only declare a Fomus part if a part with PartID has not been declared before
+	   PartCode = if {Dictionary.member PartsDict PartID}
+		      then nil
+		      else
+			 MyCode = {ListToVS ["part" {Record2FomusObject
+						     {Adjoin {Adjoin {As.getPartSettings MyPart}
+							      {GetUserFomus MyPart}}
+						      unit(id: PartID)}}]
+				   " "}
+		      in
+			 {Dictionary.put PartsDict PartID unit}
+			 MyCode
+		      end
 	in
-	   %% Parts processing
 	   {ListToLines
-	    {ListToVS ["part" {Record2FomusObject
-			       {Adjoin {Adjoin {As.getPartSettings MyPart}
-					 {GetUserFomus MyPart}}
-				 unit(id: PartId)}}]
-	     " "}|
+	    PartCode |
 	    %% Events processing
 	    {Map {GetEvents MyPart}
 	     fun {$ MyEvent} {Cases MyEvent EventClauses} end}}
 	   #"\n" % newline after each part
-	   end}}
+	end}}
       end
    
    /** %% Outputs a fomus file with optional Args. The defaults are
