@@ -256,25 +256,39 @@ MyScore = {Score.makeScore
 %%
 %% Multiple sections can be connected (e.g., by a top-level sequential container),
 %% if corresponding parts are marked with the same id.
-%% 
+%%
 
-%% TODO:
+%%
+%% PartID must be an atom or an integer.
+%%
+
+
 declare
 MyScore = {Score.makeScore
-	   seq(items:[ seq(info: fomusPart(part1)
-			   [note(duration: 4
-				       pitch: 60)
-				  note(duration: 2
-				       pitch: 62)
-				  note(duration: 8
-				       pitch: 64)])
-		       seq(info: fomusPart(part1)
-			   [note(duration: 4
-				       pitch: 72)
-				  note(duration: 8 
-				       pitch: 67)])]
+	   seq([sim([seq(info: [fomusPart(violin)
+				fomus(inst: violin)]
+			 [note(duration: 2
+			       pitch: 60)
+			  note(duration: 2
+			       pitch: 62)
+			  note(duration: 4
+			       pitch: 64)])
+		     seq(info: [fomusPart(viola)
+				fomus(inst: viola)]
+			 [note(duration: 8
+			       pitch: 72)])])
+		sim([seq(info: fomusPart(violin)
+			 [note(duration: 8
+			       pitch: 60)])
+		     seq(info: fomusPart(viola)
+			 [note(duration: 2
+			       pitch: 72)
+			  note(duration: 2
+			       pitch: 69)
+			  note(duration: 4 
+			       pitch: 67)])])]
 	       startTime:0
-	       timeUnit:beats(4))
+	       timeUnit:beats(2))
 	   unit}
 {MyScore wait}
 {Out.renderFomus MyScore
