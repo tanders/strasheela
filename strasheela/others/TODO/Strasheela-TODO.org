@@ -2,6 +2,107 @@
 
 * Strasheela release
 
+** TODO Regular Temperaments as Pitch Representation		     :URGENT:
+
+*** Current Strasheela approach: ETs:
+
+    Regular temperament with a single generator, represented by an (the ET pitch class) 
+    
+    1D regular temperament: octave is actually not another generator (period), therefore I can easily define relation between pitch classes and pitch with modulus.
+
+    generator is alpha=2^(1/n)  : n is number of pitches per octave
+    
+    pitch classes then correspond to 
+    alpha^1, alpha^2, alpha^3, ... alpha^n.
+
+    Example 12-TET
+    alpha=2^(1/n) = 1.0595    : frequency ratio of 12-TET step
+
+    alpha^12 = 2.0 (the octave) 
+    
+
+*** Generalisation: n-D regular temperaments
+
+   Allow for more than one generator, which then together represent a pitch class
+
+   I would then only need some integer formula to map to pitches. However, I likely have no single-integer pitch class anymore..
+   
+   alpha: first generator
+   beta: second generator
+
+**** Using Floats
+
+    alpha^i * beta^j
+
+    In my current approach, beta is fixed to 2.0 (the octave)
+
+
+    Example: Meantone 
+
+    alpha = 5^(1/4) = 1.495348
+    beta = 2.0
+
+    alpha^0 * beta^0 = 1.0      // the root
+    alpha^1 * beta^0 = 1.495348 // the fifth
+    alpha^2 * beta^0 = 2.2361 // the nineth
+    alpha^2 * beta^-1 = 1.118 // the major second
+    ...
+
+**** Using Integers
+
+    Can I redefine this with cents (integers) instead of ratios (floats)
+    I may even consider millicent...
+    
+    Mapping from regular temperament to pitches.
+    alpha*i + beta*j = pitch
+
+    Example Meantone: 
+    alpha = 696 cent (696.578428 cent)
+    beta = 1200 cent
+
+    alpha*0 + beta*0 = 0 // the root 
+    alpha*1 + beta*0 = 696 // the fifth
+    alpha*2 * beta*0 = 1392 // the nineth
+    alpha*2 * beta*-1 = 192 // the major second
+    ...
+
+
+    Example 12-TET:
+    alpha = 100 cent
+    beta = 1200 cent
+
+    alpha*0 + beta*0 = 0 // the root 
+    alpha*1 + beta*0 = 100 // the fifth
+    alpha*2 * beta^0 = 200 // the nineth
+    alpha^1 * beta^1 = 1300 // the minor ninth
+    ...
+
+
+    Example 7-limit JI:
+    NOTE: I possibly better use 3:1, 5:1 etc...
+    alpha = 1200 cent (2:1)
+    beta = 702 cent (3:2)
+    gamma = 386 cent (5:4)
+    delta = 969 cent (7:4)
+    
+    alpha*0 + beta*0 + gamma*0 + delta*0 = 0
+    alpha*0 + beta*0 + gamma*0 + delta*1 = 969 (7:4)
+    alpha*0 + beta*0 + gamma*-1 + delta*1 = 583 (7:5)
+    alpha*1 + beta*0 + gamma*1 + delta*-1 = 617 (10:7)
+
+
+**** NOTE: 
+
+   !!  Only problem: I cannot have negative numbers!  
+
+   There are ways around that using some offset...
+
+
+   The implementation can perhaps use one of the generalised sum propagators for efficiency
+   http://www.mozart-oz.org/documentation/system/node21.html#section.fd.arithmetic
+
+
+
 ** TODO Heuristic constraints support				     :URGENT:
 
 
