@@ -250,6 +250,38 @@ MyScore = {Score.makeScore
  unit(file:defaultTopology4)}
 
 
+%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%% Additional Fomus code can be added to score items with the fomus
+%% info-tag (a record where features are Fomus values/settings and the
+%% record values are then the actual settings).
+%%
+
+declare
+MyScore = {Score.makeScore
+	   sim(info: fomus(title: "My Composition"
+			   author: "Myself"
+			   keysig: dmaj % D major key 
+% 			   'timesig-den': 8
+			   'timesig': '(3 4)' % 3/4 time signature
+			  )
+	       [seq([note(duration:8 pitch:64)
+		     note(duration:8 pitch:64)])
+		seq(info: fomus(inst: violin)
+		    [note(duration:4 pitch:60 info:fomus(marks: "(..")) % marks are given as VS or list of VSs
+		     note(duration:4 pitch:59 info:fomus(marks: ["."]))
+		     note(duration:4 pitch:59 info:fomus(marks: ['-' '>' arco]))
+		     note(duration:4 pitch:57 info:fomus(marks: ["^" "breath<"]))
+		     note(duration:4 pitch:55 info:fomus(marks: ["..)"]))
+		    ])
+	       ]
+	       startTime:0
+	       timeUnit:beats(4))
+	   unit}
+{MyScore wait}
+{Out.renderFomus MyScore unit}
+
+
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%
@@ -265,7 +297,8 @@ MyScore = {Score.makeScore
 
 declare
 MyScore = {Score.makeScore
-	   seq([sim([seq(info: [fomusPart(violin)
+	   seq(info: fomus(title: "My Composition")
+	       [sim([seq(info: [fomusPart(violin)
 				fomus(inst: violin)]
 			 [note(duration: 2
 			       pitch: 60)
@@ -294,34 +327,6 @@ MyScore = {Score.makeScore
 {Out.renderFomus MyScore
  unit(file:multipleSections)}
 
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%
-%%
-%% Additional Fomus code can be added to score items with the fomus
-%% info-tag (a record where features are Fomus values/settings and the
-%% record values are then the actual settings).
-%%
-
-declare
-MyScore = {Score.makeScore
-	   sim(info: fomus(keysig: dmaj % D major key 
-% 			   'timesig-den': 8
-			   'timesig': '(3 4)' % 3/4 time signature
-			  )
-	       [seq([note(duration:8 pitch:64)
-		     note(duration:8 pitch:64)])
-		seq([note(duration:4 pitch:60 info:fomus(marks: ["(.."]))
-		     note(duration:4 pitch:59 info:fomus(marks: ["."]))
-		     note(duration:4 pitch:57 info:fomus(marks: ["^" "breath<"]))
-		     note(duration:4 pitch:55 info:fomus(marks: ["..)"]))
-		    ])
-	       ]
-	       startTime:02
-	       timeUnit:beats(4))
-	   unit}
-{MyScore wait}
-{Out.renderFomus MyScore unit}
 
 
 
