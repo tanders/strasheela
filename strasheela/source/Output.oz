@@ -1976,18 +1976,23 @@ define
    %% The feture time is always put at the beginning, and possible marks at the end.
    %% */
    fun {Record2FomusEvent X}
-      CleanX = {CleanupSettings X}
-   in
       %% 'time' is always at the beginning, and possible marks at the end
       {ListToVS
-       {Map time#CleanX.time | {Record.toListInd
-				{Record.subtractList CleanX
-				 [time marks]}}
+       {Map time#X.time | {Record.toListInd
+			   {Record.subtractList {CleanupSettings X}
+			    [time marks]}}
 	fun {$ Feat#Val} Feat#":"#Val end}
        " "}
       %% append marks at end
-      # if {Value.hasFeature CleanX marks} andthen CleanX.marks\=nil
-	then " "#{ListToVS {Map CleanX.marks fun {$ M} "["#M#"]" end} " "}
+      # if {Value.hasFeature X marks} andthen X.marks\=nil
+	then " "#{ListToVS {Map if {IsVirtualString X.marks}
+				   % transform an individual mark in a list of marks
+				then [X.marks]
+% 				elseif {All ["test"] IsVirtualString}
+% 				then X.marks
+				else X.marks
+				end
+			    fun {$ M} "["#M#"]" end} " "}
 	else nil
 	end
       # " ;"
@@ -2081,56 +2086,58 @@ define
    end
 
    
-   /** %% Exports MyScore into Fomus format (as a VS); Fomus can then translate MyScore into the music notation formats MusicXML (for import into Sibelius or Finale) and Lilypond.
+   /** %% ToFomus exports MyScore into Fomus format (http://fomus.sourceforge.net/). More specifically, ToFomus returns a VS that corresponds to a .fms file (the procedures OutputFomus and RenderFomus are extensions of ToFomus that output a Fomus file and call Fomus on resulting files). Fomus can translate .fms files into the music notation formats MusicXML (for import into Sibelius or Finale) and Lilypond.
    %%
-   %% Fomus supports many values (parameters) and settings (see the Fomus documentation at http://fomus.sourceforge.net/doc.html/). Fomus values/settings can be specified in Strasheela, for example, by an info record with the label 'fomus' given to Strasheela score objects that correspond to the Fomus score, its parts and Fomus events (see below). For example,  
-   %% TODO:
+   %% Strasheela export to Fomus is demonstrated by many examples in the file examples/ControllingOutput-Examples/Fomus-Examples.oz.
    %%
-   %% Any marks supported by fomus (see http://fomus.sourceforge.net/doc.html/Marks.html) can be given as a list of VS to the marks feature of events.
+   %%
+   %% Fomus supports many settings that customise the resulting score. These settings can occur at several hierarchic levels, e.g., globally at the score level, at the part level and at the event level (see the Fomus documentation at http://fomus.sourceforge.net/doc.html/). (Almost?) any Fomus setting can be specified in Strasheela by an info record with the label 'fomus' and with feature value pairs that correspond to the settings given to Strasheela score objects that correspond to the Fomus score, its parts and Fomus events (see below). For example, the title of a score is declared with the global setting title: the corresponding info record is given to the top-level Strasheela container.
 
+   sim(info: fomus(title: "My Composition")
+       ...)
+
+   %% Marks for events (e.g., articulation signs, see http://fomus.sourceforge.net/doc.html/Marks.html) are given in the fomus info record using the feature 'marks', which expects either an individual mark (a VS) or a list of marks (a list of VSs).
+
+   note(duration:4 pitch:60 info:fomus(marks: "."))  % staccato note
+   note(duration:4 pitch:60 info:fomus(marks: ['-' '>']))  %  
    
+   %% ToFomus tries to make a good guess which of the Strasheela items in a given score correspond to which Fomus hierarchy level such as the Fomus score, part or event. The top-level Strasheela container always corresponds to the Fomus score, and Strasheela elements are Fomus events.
+   %% However, Strasheela supports more hierarchic levels than Fomus, and therefore getting parts correctly assigned can be tricky. Users can therefore manually declare certain Strasheela containers as part by tagging it with the info tag fomusPart. Optionally, this info tag can be a record with the Fomus part name at its feature 1 (see example below). Multiple Strasheela containers can that way be assigned to the same Fomus part, a useful features for Strasheela scores with complex nesting (e.g., if the top-level container is a sequential that holds multiple sections and each section should be notated in multiple parts).
+
+   seq(info: [fomusPart(violin)
+	      fomus(inst: violin)]
+       ...)
+
+   %% If tagging parts with the info tag fomusPart is not sufficient for your purpose to locate the Strasheela containers that correspond to parts, then the argument 'getParts' supports and alternative approach.
+   %%
+   %%
    %% Args:
    %%
    %% 'output' (possible values: lilypond, xml, midi, default lilypond): sets the output format of Fomus.
+   %% 'file' (default "test"): sets the basename of the resulting fomus file, and the files created by fomus.
    %% 'dir' (default {Init.getStrasheelaEnv defaultFomusDir}): sets the directory of the resulting fomus file and files created by fomus.
-   %% 'file' (default "test"): sets the basename of the resulting fomus file and files created by fomus.
    %%
    %%
+   %% TODO:
+   %% 'eventClauses' (default nil): [for advanced users]
+   %%  ... only used for objects returned by getEvents
+   %%
+   %%
+   %% TODO:
+   %% 'getParts' (functions): [for expert users]
    %% TODO: revise doc: arg getEvents is removed, and arg getParts only for expert uses. For more complex Strasheela topologies consider using info tag fomusPart(<partname>)... 
-   %% getParts/getEvents (functions): The Fomus format is rather fixed, whereas the information contained in the Strasheela score format is highly user-customisable. Therefore, the export-process is also user-customisable.
+   %% The Fomus format is rather fixed, whereas the information contained in the Strasheela score format is highly user-customisable. Therefore, the export-process is also user-customisable.
    %% A Fomus score has basically a fixed topology: <code>score(part(event+)+)</code> (see the Fomus documentation at http://fomus.sourceforge.net/doc.html/). Strasheela, on the other hand, supports various topologies. However, ToFomus does not automatically perform a score topology transformation into the Fomus topology. Instead, ToFomus expects two optional accessor functions as arguments that allow for a user-defined topology transformation: getParts and getEvents. The function given to the argument getParts expects MyScore and returns a list of values corresponding to the Fomus parts. The function given to the argument getEvents expects a part and returns a list of values corresponding to the Fomus events. The default values for these accessor functions require that the topology of MyScore corresponds with the Fomus score topology. That is, for the default accessor functions, MyScore must have the following topology: <code>sim(seq(&lt;arbitrarily nested note&gt;+)+)</code>.
    %%
-   %% TODO: revise doc: e.g. arg getEventSettings removed now
-   %% getScoreSettings/getPartSettings/getEventSettings: 
-   %% Any Fomus setting for the score, a part, or event can be specified by the user as well. For this purpose, ToFomus expects three optional attribute accessor functions: getScoreSettings, getPartSettings, and getEventSettings. These functions expect a Strasheela object corresponding to a Fomus score/part/event and return an Oz record whose features are the Fomus keywords for this objects and the feature values are the values for these keywords. For example, getEventSettings may be set to the following function.
-   %% TODO: revise this def.
-   fun {$ MyEvent}
-      unit(off:{MyEvent getStartTimeInBeats($)}
-	   dur:{MyEvent getDurationInBeats($)}
-	   note:{MyEvent getPitchInMidi($)})
-   end
-   %%
-   %% However, remember that you can also specify settings at the score level in your ~/.fomus file.
    %%
    %%
-   %% TODO: explain
    %%
    %%
-   %% Further args:
-   %%
-   %%
-   %% Please see the file examples/ControllingOutput-Examples/Fomus-Examples.oz for many examples. 
-   %%
-   %%
-   %% Please inspect the implementation code to see the default values for the arguments. 
    %% */
    %%
    %% TODO:
    %%
-   %% - Documentatiom:
-   %%   - Support for fomus info tag for all levels (score, parts, events)
-   %%   - Effect of getEventSettingsDefault
-   %%   - eventClauses arg (only used for objects returned by getEvents)
+   %% - fomus info records given to score objects that correspond to neither score, part nor event are ignored
    %%
    %% - predef clauses for the following objects:
    %%   OK - notes
@@ -2140,40 +2147,29 @@ define
    %%
    %% - single staff polyphony can be improved. Also, info tags in "intermediate" containers are currently ignored completely, which is a waste. see Fomus-Examples.oz
    %%
-   %% ???? - revise getParts: replace with isPart?
-   %%   -> perhaps I remove this fun altogether as arg? 
-   %%
-   %% OK - revise getParts def: It should be possible to manually mark
-   %%   parts in the score with info tag, including part ID A part can
-   %%   then be "split", e.g., over multiple items in a toplevel
-   %%   sequential container
-   %%
-   %% - once support for clauses is there, add microtonal notation in ET31, ET41, ET22 
+   %% - Add enharmonic and microtonal notation in ET31, ET41, ET22 
    %%   (at least ET31 for Lily & MusicXML)
    %%
-   %% 
+   %% - ?? Extend examples/ControllingOutput-Examples/Fomus-Examples.oz by examples from Fomus doc? E.g., for changing measures, changing keys, grace noes, instrument defs / part defs, score layout, ...
    %%
-   %% - Rewrite Lily output examples file for Fomus
-   %%
-   %% - ?? replace getEvents by isEvent? (default isNote or isObject)?
    %% 
    %%
    fun {ToFomus MyScore Args}
       Defaults
-      = unit(getParts: GetParts
-	     /** %% Outputs a record where the features are later Fomus keywords and the values are the corresponding Fomus values for these keywords.
-	     %% */
-	     getScoreSettings:fun {$ MyScore} unit end
-	     %% !!?? TODO: replace by partClauses?
-	     getPartSettings:fun {$ MyPart} unit end
-% 	     getEventSettings:fun {$ MyEvent} unit end
-	     %% for processing items returned by getEvents
-	     eventClauses: nil
-	     output: lilypond 
+      = unit(output: lilypond 
 	     %% NB: default args file, and dir are given explicitly thrice in ToFomus, OutputFomus, and CallFomus 
 	     file:"test"
-% 	     extension:".fms"
-	     dir:{Init.getStrasheelaEnv defaultFomusDir})
+	     dir:{Init.getStrasheelaEnv defaultFomusDir}
+	     %% for processing items returned by getEvents
+	     eventClauses: nil
+	     getParts: GetParts
+	     /** %% getScoreSettings/getPartSettings: unary function that expects the Strasheela item corresponding to a score/part and returns a record of Fomus settings (same format as the fomus info record).
+	     %% */
+	     %% Perhaps I should remove the following args altogether?
+	     getScoreSettings:fun {$ MyScore} unit end 
+	     %% !!?? TODO: replace by partClauses?
+	     getPartSettings:fun {$ MyPart} unit end 
+	    )
       As = {Adjoin Defaults Args}
       EventClauses = {Append As.eventClauses
 		      [isNote
@@ -2234,7 +2230,7 @@ define
 			     unit(filename: FileExportedByFomus)}} |
        {List.mapInd {As.getParts MyScore}
 	fun {$ PartDefaultId MyPart}
-	   PartID = if {IsMarkedFomusPart MyPart} 
+	   PartID = if {IsMarkedFomusPart MyPart} andthen {HasFeature {MyPart getInfoRecord($ fomusPart)} 1}
 		    then {MyPart getInfoRecord($ fomusPart)}.1
 		    else PartDefaultId
 		    end
@@ -2272,17 +2268,12 @@ define
 	end}}
       end
    
-   /** %% Outputs a fomus file with optional Args. The defaults are
-   unit(file:"test"
-	extension:".fms"
-	dir:{Init.getStrasheelaEnv defaultFomusDir}
-	...)
-   %% See the doc of ToFomus for further information.
+   /** %% Outputs a fomus file. See the doc of ToFomus for further information.
    %% */
    proc {OutputFomus MyScore Args}     
       %% NB: default args file, extension, and dir are given explicitly thrice in ToFomus, OutputFomus, and CallFomus 
       Defaults = unit(file:"test"
-		      extension:".fms"
+		      extension:".fms" % undocumented, users should not change the extension.
 		      dir:{Init.getStrasheelaEnv defaultFomusDir})
       As = {Adjoin Defaults Args}
       Path = As.dir#As.file#As.extension
