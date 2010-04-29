@@ -641,3 +641,112 @@ MyScore = {MakeScore Durations BeatDivision}
 
 
 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%% Instrument Definition
+%%
+
+declare
+MyScore = {Score.makeScore
+	   sim(info: fomus("inst <id: elvla template: viola name: \"Electric Viola\" abbr: \"evla\">"
+			   title: "Instrument Definition Example"
+			   author: "Myself")
+	       [seq(info: fomus(inst: elvla)
+		    [note(duration: 6
+			  pitch: 60)
+		     note(duration: 2
+			  pitch: 62)
+		     note(duration: 8
+			  pitch: 64)])]
+	       startTime:0
+	       timeUnit:beats(4))
+	   unit}
+{MyScore wait}
+{Out.renderFomus MyScore
+ unit(file:instrumentDefinition)}
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%% Measure declaration
+%%
+
+declare
+MyScore = {Score.makeScore
+	   sim(info: fomus(beat: '1/8'  % a beat (duration 1) is notated as eighth note
+% 			   'timesig-den': 8
+			   "time = 0 dur = 3 ||" % triple measure (shorthand notation)
+% 			   "measure <time: 0 dur: 3 timesig-den: 1/8>" % object notation (does not work!)
+% 			   "measure <time: 0 dur: 3 beat: 1/8>" % object notation (does not work!)
+			  ) 
+	       [seq([note(duration: 8
+			  pitch: 60)
+		     note(duration: 4
+			  pitch: 62)
+		     note(duration: 12
+			  pitch: 64)])]
+	       startTime:0
+	       timeUnit:beats(4))
+	   unit}
+{MyScore wait}
+{Out.renderFomus MyScore
+ unit(file:measure)}
+
+
+
+%%
+%% Start new measures with given start time and duration..
+%%
+
+declare
+MyScore = {Score.makeScore
+	   sim(% info: fomus(beat: '1/8')  % a beat (duration 1) is notated as eighth note
+	       [seq([note(info:fomus_before("time = 0 dur = 1 timesig-den = 8 ||")
+			  duration: 8
+			  pitch: 60)
+		     note(duration: 4
+			  pitch: 62)
+		     note(info:fomus_before("time = + dur = 7 ||")
+			  duration: 12
+			  pitch: 64)])]
+	       startTime:0
+	       timeUnit:beats(4))
+	   unit}
+{MyScore wait}
+{Out.renderFomus MyScore
+ unit(file:measure)}
+
+
+%%
+%% TODO: 
+%% How to automatically start new measures with certain notes and let Fomus work out the measure duration?
+%%
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%% Setting keysignatures 
+%%
+
+declare
+MyScore = {Score.makeScore
+	   sim([seq([note(info:fomus_before("time = 0 dur = 3 |keysig: b-maj|") % B-flat major
+			  duration: 8
+			  pitch: 60)
+		     note(duration: 4
+			  pitch: 62)
+		     note(info:fomus_before("time = + dur = 3 |keysig: cmin|") % C minor
+% 			  info:fomus_before("time = + dur = 3 |keysig: gmin|") % Fomus bug: G-minor does not work
+			  duration: 12
+			  pitch: 64)])]
+	       startTime:0
+	       timeUnit:beats(4))
+	   unit}
+{MyScore wait}
+{Out.renderFomus MyScore
+ unit(file:measure)}
+
