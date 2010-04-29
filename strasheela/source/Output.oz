@@ -89,7 +89,8 @@ export
 
    ToFomus OutputFomus RenderFomus
    %% expert Fomus procs
-   GetUserFomus Record2FomusEvent Record2FomusObject Record2FomusSetting 
+   GetUserFomus GetUserFomus_Before GetUserFomus_After
+   Record2FomusEvent Record2FomusObject Record2FomusSetting Record2FomusCode
    
    MakeCMEvent MakeCMScore OutputCMScore
    ToDottedList LispList % LispKeyword
@@ -1971,6 +1972,16 @@ define
    fun {GetUserFomus X}
       {X getInfoRecord($ fomus)}
    end
+   /** %% [for clause definitions etc] Accesses info tag (record) with label 'fomus_before'. 
+   %% */
+   fun {GetUserFomus_Before X}
+      {X getInfoRecord($ fomus_before)}
+   end
+   /** %% [for clause definitions etc] Accesses info tag (record) with label 'fomus_after'. 
+   %% */
+   fun {GetUserFomus_After X}
+      {X getInfoRecord($ fomus_after)}
+   end
    
    /** %% [for clause definitions etc] Transforms a record into a VS of the form "feat1 val1 ... featn valn ;"
    %% The feture time is always put at the beginning, and possible marks at the end.
@@ -1979,7 +1990,7 @@ define
       %% 'time' is always at the beginning, and possible marks at the end
       {ListToVS
        {Map time#X.time | {Record.toListInd
-			   {Record.subtractList {CleanupSettings X}
+			   {Record.subtractList {CleanupFomusSettings X}
 			    [time marks]}}
 	fun {$ Feat#Val} Feat#":"#Val end}
        " "}
@@ -2002,7 +2013,7 @@ define
    %% */
    fun {Record2FomusEvent_Untimed X}
       {ListToVS
-       {Map {Record.toListInd {Record.subtractList {CleanupSettings X}
+       {Map {Record.toListInd {Record.subtractList {CleanupFomusSettings X}
 			       [time marks]}}
 	fun {$ Feat#Val} Feat#":"#Val end}
        " "}# " ;"
@@ -2010,46 +2021,54 @@ define
    /** %% [for clause definitions etc] Transforms a record into a VS of the form "<feat1:val ... featn:valn>"
    %% */
    fun {Record2FomusObject X}
-      "<"#{ListToVS {Map {Record.toListInd {CleanupSettings X}}
+      "<"#{ListToVS {Map {Record.toListInd {CleanupFomusSettings X}}
 		     fun {$ Feat#Val} Feat#":"#Val end}
 	   " "}#">"
    end
-   /** %% [for clause definitions etc] Transforms a record into a VS of the form "feat1=val1\n ... featn=valn\n"
+   /** %% [for clause definitions etc] Transforms a record into a VS of the form "feat1=val1\n ... featn=valN\n". An exception are integer features, where instead only the corresponding value is output like "val1\n ... valN\n". 
    %% */
    fun {Record2FomusSetting X}
-      {ListToVS {Map {Record.toListInd {CleanupSettings X}}
-		 fun {$ Feat#Val} Feat#"="#Val#"\n" end}
-       " "}
+      {ListToVS {Map {Record.toListInd X}
+		 fun {$ Feat#Val} Feat#"="#{CleanupFomusSetting Val}#"\n" end}
+       ""}
+   end
+   /** %% [for clause definitions etc] Transforms a record into a VS of the form "val1\n ... valN\n" (i.e. the record features are ignored, in contrast to Record2FomusSetting). 
+   %% */
+   fun {Record2FomusCode X}
+      {ListToVS {Map {Record.toListInd X}
+		 fun {$ _#Val} Val#"\n" end}
+       ""}
    end
 
    /** %% [Aux] Strings in settings R must be surrounded by explicit double-quotes, \ and " in strings must be escaped.
    %% */
-   fun {CleanupSettings R}
-      {Record.map R
-       fun {$ X}
-	  if {IsString X}
-	  then "\""#{LUtils.mappend X
-		     fun {$ Char}
-			if Char == &\\
-			then [&\\ &\\]
-			elseif Char == &"
-			then [&\\ &"]
-			else [Char]
-			end
-		     end}#"\""
-	  else X
-	  end end}
+   fun {CleanupFomusSetting X}
+      if {IsString X}
+      then "\""#{LUtils.mappend X
+		 fun {$ Char}
+		    if Char == &\\
+		    then [&\\ &\\]
+		    elseif Char == &"
+		    then [&\\ &"]
+		    else [Char]
+		    end
+		 end}#"\""
+      else X
+      end 
+   end
+   fun {CleanupFomusSettings R}
+      {Record.map R CleanupFomusSetting}
    end
    
    /** %% [Aux] Collect all events and "fomus chords" in MyPart.
    %% */
-   fun {GetEvents MyPart}
+   fun {GetFomusEvents MyPart}
       if {MyPart isEvent($)} orelse {IsFomusChord MyPart}
       then [MyPart] 
       elseif {MyPart isContainer($)}
 	 %% containers are processed recursively
       then {LUtils.mappend {MyPart collect($ test: isItem)}
-	    GetEvents}
+	    GetFomusEvents}
       else
 	 {GUtils.warnGUI
 	  "No events can be accessed from part ("#{Value.toVirtualString MyPart 1 1}#") !"}
@@ -2061,13 +2080,13 @@ define
    %% Note: a single part can be split into multiple sections (multiple containers), each marked with the same fomusPart into tag. 
    %% Note: if some simultaneous container should be notated as a staff with multiple voices, then it must be marked with info tag fomusPart.
    %% */
-   fun {GetParts MyScore}
+   fun {GetFomusParts MyScore}
       if {MyScore isEvent($)} orelse {IsFomusChord MyScore} orelse {IsMarkedFomusPart MyScore}
       then [MyScore]
 	 %% Simultaneous containers or containers that contain marked parts are processed recursively.
       elseif {MyScore isSimultaneous($)} orelse {Some {MyScore filter($ isContainer)}
 						 IsMarkedFomusPart}
-      then {LUtils.mappend {MyScore getItems($)} GetParts}
+      then {LUtils.mappend {MyScore getItems($)} GetFomusParts}
 	 %% otherwise, seqs are parts
       elseif {MyScore isSequential($)} 
       then [MyScore]
@@ -2096,11 +2115,21 @@ define
    sim(info: fomus(title: "My Composition")
        ...)
 
+   %% Global settings like the title are output with the Fomus syntax setting = value, e.g., title = "My Composition". Global Fomus declarations that do not follow this format can be specified (quasi) without an explicit feature as follows.
+
+   sim(info: fomus("inst <id: elvla template: viola name: \"Electric Viola\" abbr: \"evla\">")
+       ...)
+   
    %% Marks for events (e.g., articulation signs, see http://fomus.sourceforge.net/doc.html/Marks.html) are given in the fomus info record using the feature 'marks', which expects either an individual mark (a VS) or a list of marks (a list of VSs).
 
    note(duration:4 pitch:60 info:fomus(marks: "."))  % staccato note
-   note(duration:4 pitch:60 info:fomus(marks: ['-' '>']))  %  
+   note(duration:4 pitch:60 info:fomus(marks: ['-' '>']))  %
+
+   %% Fomus code can be inserted before and after events and parts with the info tags fomus_before and fomus_after. These info tags are tuples where each element is output directly as a fomus code line. The following example inserts a measure declaration directly before the note such that the start time of this measure is taken from the end of the preceding note.
    
+   note(info:fomus_before("time = + dur = 3 ||")
+	duration:4 pitch:60)  
+
    %% ToFomus tries to make a good guess which of the Strasheela items in a given score correspond to which Fomus hierarchy level such as the Fomus score, part or event. The top-level Strasheela container always corresponds to the Fomus score, and Strasheela elements are Fomus events.
    %% However, Strasheela supports more hierarchic levels than Fomus, and therefore getting parts correctly assigned can be tricky. Users can therefore manually declare certain Strasheela containers as part by tagging it with the info tag fomusPart. Optionally, this info tag can be a record with the Fomus part name at its feature 1 (see example below). Multiple Strasheela containers can that way be assigned to the same Fomus part, a useful features for Strasheela scores with complex nesting (e.g., if the top-level container is a sequential that holds multiple sections and each section should be notated in multiple parts).
 
@@ -2108,7 +2137,9 @@ define
 	      fomus(inst: violin)]
        ...)
 
-   %% If tagging parts with the info tag fomusPart is not sufficient for your purpose to locate the Strasheela containers that correspond to parts, then the argument 'getParts' supports and alternative approach.
+   %% Note that in principle Strasheela objects can correspond to multiple Fomus hierarchic levels (e.g., when outputting a single Strasheela note it corresponds to the score, a part and an event). However, for many Fomus settings it is necessary to have different Strasheela objects for different Fomus hierarchic levels, because certain settings are only permitted at certain Fomus hierarchic levels.  
+   %%
+   %% If tagging parts with the info tag fomusPart is not sufficient for your purpose to locate the Strasheela containers that correspond to parts, then the argument 'getParts' makes an alternative approach possible (recommended only for expert users).
    %%
    %%
    %% Args:
@@ -2162,7 +2193,7 @@ define
 	     dir:{Init.getStrasheelaEnv defaultFomusDir}
 	     %% for processing items returned by getEvents
 	     eventClauses: nil
-	     getParts: GetParts
+	     getParts: GetFomusParts
 	     /** %% getScoreSettings/getPartSettings: unary function that expects the Strasheela item corresponding to a score/part and returns a record of Fomus settings (same format as the fomus info record).
 	     %% */
 	     %% Perhaps I should remove the following args altogether?
@@ -2180,7 +2211,7 @@ define
 						    dur:{MyEvent getDurationInBeats($)}
 						    pitch:{MyEvent getPitchInMidi($)})
 					{GetUserFomus MyEvent}}}]
-			    " "}
+			     " "}
 			end
 		       %% 
 		       IsFomusChord
@@ -2218,16 +2249,22 @@ define
 					   [] midi then ".midi"
 					   end
       PartsDict = {NewDictionary}
+      ScoreDeclarations ScoreSettings
    in
       if {Not {MyScore isDet($)}} then
 	 {GUtils.warnGUI "Fomus output may block -- score not fully determined!"}
 % 	 {System.showInfo "Warning: Fomus output may block -- score not fully determined!"}
       end
+      %% split score settings in actual settings ("feat=val\n" form) and declarations ("var\n" form)
+      {Record.partitionInd {Adjoin {As.getScoreSettings MyScore} 
+			    {GetUserFomus MyScore}}
+       fun {$ Feat _} {IsInt Feat} end
+       ScoreDeclarations ScoreSettings}
       {ListToLines
        %% Score processing
-       {Record2FomusSetting {Adjoin {Adjoin {As.getScoreSettings MyScore}
-				     {GetUserFomus MyScore}}
-			     unit(filename: FileExportedByFomus)}} |
+       {Record2FomusSetting unit(filename: FileExportedByFomus)} % put filename first
+       #{Record2FomusSetting ScoreSettings} | % then score-level settings
+       {Record2FomusCode ScoreDeclarations} | % then declarations
        {List.mapInd {As.getParts MyScore}
 	fun {$ PartDefaultId MyPart}
 	   PartID = if {IsMarkedFomusPart MyPart} andthen {HasFeature {MyPart getInfoRecord($ fomusPart)} 1}
@@ -2260,10 +2297,16 @@ define
 		      end
 	in
 	   {ListToLines
-	    PartCode |
+	    {Record2FomusCode {GetUserFomus_Before MyPart}}
+	    #PartCode |
 	    %% Events processing
-	    {Map {GetEvents MyPart}
-	     fun {$ MyEvent} {Cases MyEvent EventClauses} end}}
+	    {Map {GetFomusEvents MyPart}
+	     fun {$ MyEvent}
+		{Record2FomusCode {GetUserFomus_Before MyEvent}}
+		#{Cases MyEvent EventClauses}
+		#{Record2FomusCode {GetUserFomus_After MyEvent}}
+	     end}}
+	   #{Record2FomusCode {GetUserFomus_After MyPart}}
 	   #"\n" % newline after each part
 	end}}
       end
