@@ -2,107 +2,6 @@
 
 * Strasheela release
 
-** TODO Regular Temperaments as Pitch Representation		     :URGENT:
-
-*** Current Strasheela approach: ETs:
-
-    Regular temperament with a single generator, represented by an (the ET pitch class) 
-    
-    1D regular temperament: octave is actually not another generator (period), therefore I can easily define relation between pitch classes and pitch with modulus.
-
-    generator is alpha=2^(1/n)  : n is number of pitches per octave
-    
-    pitch classes then correspond to 
-    alpha^1, alpha^2, alpha^3, ... alpha^n.
-
-    Example 12-TET
-    alpha=2^(1/n) = 1.0595    : frequency ratio of 12-TET step
-
-    alpha^12 = 2.0 (the octave) 
-    
-
-*** Generalisation: n-D regular temperaments
-
-   Allow for more than one generator, which then together represent a pitch class
-
-   I would then only need some integer formula to map to pitches. However, I likely have no single-integer pitch class anymore..
-   
-   alpha: first generator
-   beta: second generator
-
-**** Using Floats
-
-    alpha^i * beta^j
-
-    In my current approach, beta is fixed to 2.0 (the octave)
-
-
-    Example: Meantone 
-
-    alpha = 5^(1/4) = 1.495348
-    beta = 2.0
-
-    alpha^0 * beta^0 = 1.0      // the root
-    alpha^1 * beta^0 = 1.495348 // the fifth
-    alpha^2 * beta^0 = 2.2361 // the nineth
-    alpha^2 * beta^-1 = 1.118 // the major second
-    ...
-
-**** Using Integers
-
-    Can I redefine this with cents (integers) instead of ratios (floats)
-    I may even consider millicent...
-    
-    Mapping from regular temperament to pitches.
-    alpha*i + beta*j = pitch
-
-    Example Meantone: 
-    alpha = 696 cent (696.578428 cent)
-    beta = 1200 cent
-
-    alpha*0 + beta*0 = 0 // the root 
-    alpha*1 + beta*0 = 696 // the fifth
-    alpha*2 * beta*0 = 1392 // the nineth
-    alpha*2 * beta*-1 = 192 // the major second
-    ...
-
-
-    Example 12-TET:
-    alpha = 100 cent
-    beta = 1200 cent
-
-    alpha*0 + beta*0 = 0 // the root 
-    alpha*1 + beta*0 = 100 // the fifth
-    alpha*2 * beta^0 = 200 // the nineth
-    alpha^1 * beta^1 = 1300 // the minor ninth
-    ...
-
-
-    Example 7-limit JI:
-    NOTE: I possibly better use 3:1, 5:1 etc...
-    alpha = 1200 cent (2:1)
-    beta = 702 cent (3:2)
-    gamma = 386 cent (5:4)
-    delta = 969 cent (7:4)
-    
-    alpha*0 + beta*0 + gamma*0 + delta*0 = 0
-    alpha*0 + beta*0 + gamma*0 + delta*1 = 969 (7:4)
-    alpha*0 + beta*0 + gamma*-1 + delta*1 = 583 (7:5)
-    alpha*1 + beta*0 + gamma*1 + delta*-1 = 617 (10:7)
-
-
-**** NOTE: 
-
-   !!  Only problem: I cannot have negative numbers!  
-
-   There are ways around that using some offset...
-
-
-   The implementation can perhaps use one of the generalised sum propagators for efficiency
-   http://www.mozart-oz.org/documentation/system/node21.html#section.fd.arithmetic
-
-
-
 ** TODO Heuristic constraints support				     :URGENT:
 
 
@@ -160,63 +59,23 @@
     E.g., use Smapping.forSimultaneousPairs
 
 
-** Finish def of ResolveDissonances_ChordDegree
+** TODO Fomus export						     :URGENT:
 
+*** Documentation of ToFomus 
+
+    [[file:~/oz/music/Strasheela/strasheela/trunk/strasheela/source/Output.oz::]]
+
+*** See todo in Output.oz file 
+
+     [[file:~/oz/music/Strasheela/strasheela/trunk/strasheela/source/Output.oz::]]
+
+
+** Finish def of ResolveDissonances_ChordDegree
    [[file:~/oz/music/Strasheela/strasheela/trunk/strasheela/examples/Harmony-Examples/Schoenberg-TheoryOfHarmony.oz::proc%20ResolveDissonances_ChordDegree%20Notes%20Args%20Args%20unused][file:~/oz/music/Strasheela/strasheela/trunk/strasheela/examples/Harmony-Examples/Schoenberg-TheoryOfHarmony.oz::proc ResolveDissonances_ChordDegree Notes Args Args unused]]
 
    e.g., 
    - documentation
    - generalise such that it constraints chords not only notes, so it can be used for non-homophonic music too (resolution in "wrong" octave OK, but that should actually happen more rarely?)
-
-
-** TODO Add support for microtonal music to Fenv.renderAndPlayMidiFile
-
-   [[file:~/oz/music/Strasheela/strasheela/trunk/strasheela/contributions/anders/Fenv/Fenv.oz::proc%20RenderAndPlayMidiFile%20MyScore%20Args][file:~/oz/music/Strasheela/strasheela/trunk/strasheela/contributions/anders/Fenv/Fenv.oz::proc RenderAndPlayMidiFile MyScore Args]]
-
-*** DONE							    :ARCHIVE:
-
-    Approach: user explicitly specifies for each MIDI chan in score (new arg to Fenv.renderAndPlayMidiFile) over which actual MIDI chans it will be distributed. Number of actual MIDI chans should be max number of sim notes of this score chan. Microtonal notes will then be distributed to given MIDI chans in round-robin fashion, and pitchbind will be added according to score pitch.
-    MIDI chans specified zero-based
-
-    ?? Default for unspecified MIDI chans: 
-    - use only this chan, i.e. only supported for monophonic voices
-    - 'warn': user is warned that this chan only supports monophonic MIDI by default
-
-    Args:
-    resolution: pitchbend resolution
-    channelDistribution: tuple specifying which score chan is output to which actual chan, e.g. for distributing chan 0 over chans 0-7 do
-       	unit(0: [0 1 2 3 4 5 6 7])
-
-
-
-*** TODO test microtonal MIDI output
-
-*** TODO 
-
-    If note already has pitchbend fenv, then add offset to this pitchbend fenv such that 0 corresponds to its microtonal pitch
-
-    Use Out.midi.noteToPitchbend to get offset value
-
-    Approach: Change this in Fenv.itemFenvsToMidiCC (i.e. check when Controller==pitchbend and then optionally shift that fenv depending on some new arg to Fenv.itemFenvsToMidiCC), and then also change all defs using it (only defs in Fenv)
-
-
-** MIDI output: use ports/tracks
-
-   csvmidi seems to support MIDI ports, so I can have > 16 chans in total  
-
-   !! Ports are used as tracks in Cubase??
-
-   ----
-
-   Doc: http://www.fourmilab.ch/webtools/midicsv/    
-   /Track, Time, MIDI_port, Number/
-   This meta-event specifies that subsequent events in the Track should be sent to MIDI port (bus) Number, between 0 and 255. This meta-event usually appears at the start of a track with Time zero, but may appear within a track should the need arise to change the port while the track is being played. 
-
-   -> I would likely need to refactor MIDI file output such that multiple tracks are output...
-
-
-
-** Lilypond: output seq (of seq ...) of sims with multiple staffs 
 
 
 * Strasheela examples
@@ -275,8 +134,930 @@ MyTestScore = {Score.makeScore
 
 * Strasheela design						    :STRASHEELA:
 
-** Diss resolution
-   [[file:Strasheela-Maybe-TODO.org::*Introduce%20some%20generalised%20concept%20of%20resolution%20of%20dissonances][file:Strasheela-Maybe-TODO.org::*Introduce some generalised concept of resolution of dissonances]]
+** Regular Temperament as pitch (pitch class) representation
+
+*** Advantages and Possibilities 
+
+    - Allows for arbitrary regular temperaments, including high-limit JI
+    - Allows for new harmony constraints (e.g., Tenney-distance)
+    
+    - Dynamic tuning (even with only slightly extended current harmony model)
+
+:COMMENT:
+
+If I only have a new note mixin class that maps regular temperaments to a pitch class (i.e. still use the existing chord/scale classes etc), then I can already do dynamic tuning within certain limitations.
+
+**** Email Bill Sethares Excerpt
+
+	From: 	sethares@gmail.com
+	Subject: 	Re: Comments on paper intended for Perspectives of New Music?
+	Date: 	24. April 2010 03:40:54 GMT+01:00
+	To: 	torsten.anders@plymouth.ac.uk
+
+I think I have some good news for you then... here's the beauty of the  
+"continua" that
+Andy Milne and I talk about in our paper. Pick a set of generators and  
+fix all but one.
+Let this one change, and you get a variety of tunings. As long as you  
+stay within some
+pretty generous bounds (the "valid tuning range") then you get the  
+exact same i,j pairs
+for each interval and chord. So for instance, in the syntonic  
+continuum, you have both
+12-ET and 19-ET (along with a bunch of others). If you choose three  
+sets of i,j so as to give you
+a major chord in 12-ET, then the exact same i,j also give a major  
+chord in 19-ET.
+Of course, the exact tuning of the notes changes, but the basic  
+relationships of
+root-third-fifth are obtained in both ETs. The point is that you don't  
+need to redefine
+the chords/scales for every tuning separately, you can inherit from  
+one tuning to another.
+
+:END: 
+  
+
+*** Summary
+
+Constrain the relation between generators of regular temperament, their  
+factors and a 1200-TET pitch class (i.e. cents)
+    
+  (Generator1 * I + Generator2 * j + ...) mod 1200 = PitchClass
+
+
+I would primarily need to write a new mixin for  
+note classes which introduces the variables i, j, ... (and possibly  
+the generators as variables), new chord/scale/interval databases in  
+1200-TET (somehow generalised so that they can be customised for  
+different regular temperaments!), and customised music notation for  
+1200-TET (again customisable for different regular temperaments).  
+Alternatively, I may choose 1200000-TET as pitch resolution (but 1200- 
+TET already results in rather large variable domains witch may hamper  
+efficiency). Anyway, I could keep several thousand related lines of  
+code untouched :)
+
+This idea artificially restricts the model to the octave as a period of a regular temperament with 1 or  
+more further generators. However, as a musician I like to work with  
+pitches without octave components (pitch classes). And I need pitch classes, e.g., to constrain relation to pitch class set of related chords/scales.
+
+A regular temperament I would certainly implement with this approach  
+is JI with some high prime limit. For example, I may use the just  
+fifths and commas represented by a music notation such as Extended  
+Helmholtz-Ellis as generators. I would then have a representation of  
+this notation, which can be constrained.
+
+In the long run, I would consider to introduce variants of the chord  
+and scale classes where the pitches are defined directly by regular  
+temperament generators and their factors instead of pitch classes. I  
+expect this would cause quite some programming problems, and might not  
+even possible, but it would be worth a try (I am currently using  
+selection constrains -- something like a function NTH as constraint --  
+to define the relation, e.g., between a chord index and the  
+corresponding untransposed pitch class set. Instead of a pitch class  
+set I would then instead have multiple sets of generators and factors  
+that are interdependent). It may not be possible, because my language  
+does not support a variable domain like set of tuples of integers. But  
+it would be worth a try, because it would abstract away chord/scale  
+definitions from a single temperament and thus generators could change  
+within a piece (as you describe in your CMJ paper "Isomorphic  
+Controllers and Dynamic Tuning: Invariant Fingering over a Tuning  
+Continuum"), and it would then make also make the generators  
+themselves constrainable (effectively the "tuning bend" would be  
+constrained). Hm. No idea where that leads :)
+
+
+*** Examples: Generator & Factor to PC mapping 
+
+**** Meantone
+
+   (Generator1 * I) mod 1200 = PC
+
+   Generator1 = 696 cent (696.578428 cent)
+   
+   I = 0; PC = 0
+   I = 1; PC = 696 // fifth
+   I = 2; PC = 191 // maj second
+   I = -1; PC = 504 // fourth
+   ...
+
+**** 7-limit JI
+
+     (Generator1 * I1 + Generator2 * I2 + Generator3 * I3) mod 1200 = PC
+
+     Generator1 = 702 // 3:2
+     Generator2 = 386 // 5:4
+     Generator3 = 969 // 7:4
+
+     I1=0; I2=0; I3=0; PC = 0
+     I1=0; I2=-1; I3=1; PC = 583 // 7:5
+     I1=0; I2=1; I3=-1; PC = 617 // 10:7
+
+
+
+*** Another Description: Regular Temperaments as Pitch Representation
+
+**** Current Strasheela approach: ETs:
+
+     Regular temperament with a single generator, represented by an (the ET pitch class) 
+     
+     1D regular temperament: octave is actually not another generator (period), therefore I can easily define relation between pitch classes and pitch with modulus.
+
+     generator is alpha=2^(1/n)  : n is number of pitches per octave
+     
+     pitch classes then correspond to 
+     alpha^1, alpha^2, alpha^3, ... alpha^n.
+
+     Example 12-TET
+     alpha=2^(1/n) = 1.0595    : frequency ratio of 12-TET step
+
+     alpha^12 = 2.0 (the octave) 
+     
+
+**** Generalisation: n-D regular temperaments
+
+    Allow for more than one generator, which then together represent a pitch class
+
+    I would then only need some integer formula to map to pitches. However, I likely have no single-integer pitch class anymore..
+    
+    alpha: first generator
+    beta: second generator
+
+***** Using Floats
+
+     alpha^i * beta^j
+
+     In my current approach, beta is fixed to 2.0 (the octave)
+
+
+     Example: Meantone 
+
+     alpha = 5^(1/4) = 1.495348
+     beta = 2.0
+
+     alpha^0 * beta^0 = 1.0      // the root
+     alpha^1 * beta^0 = 1.495348 // the fifth
+     alpha^2 * beta^0 = 2.2361 // the nineth
+     alpha^2 * beta^-1 = 1.118 // the major second
+     ...
+
+***** Using Integers
+
+     Can I redefine this with cents (integers) instead of ratios (floats)
+     I may even consider millicent...
+     
+     Mapping from regular temperament to pitches.
+     alpha*i + beta*j = pitch
+
+     Example Meantone: 
+     alpha = 696 cent (696.578428 cent)
+     beta = 1200 cent
+
+     alpha*0 + beta*0 = 0 // the root 
+     alpha*1 + beta*0 = 696 // the fifth
+     alpha*2 * beta*0 = 1392 // the nineth
+     alpha*2 * beta*-1 = 192 // the major second
+     ...
+
+
+     Example 12-TET:
+     alpha = 100 cent
+     beta = 1200 cent
+
+     alpha*0 + beta*0 = 0 // the root 
+     alpha*1 + beta*0 = 100 // the fifth
+     alpha*2 * beta^0 = 200 // the nineth
+     alpha^1 * beta^1 = 1300 // the minor ninth
+     ...
+
+
+     Example 7-limit JI:
+     NOTE: I possibly better use 3:1, 5:1 etc...
+     alpha = 1200 cent (2:1)
+     beta = 702 cent (3:2)
+     gamma = 386 cent (5:4)
+     delta = 969 cent (7:4)
+     
+     alpha*0 + beta*0 + gamma*0 + delta*0 = 0
+     alpha*0 + beta*0 + gamma*0 + delta*1 = 969 (7:4)
+     alpha*0 + beta*0 + gamma*-1 + delta*1 = 583 (7:5)
+     alpha*1 + beta*0 + gamma*1 + delta*-1 = 617 (10:7)
+
+
+***** NOTE: 
+
+    !!  Only problem: I cannot have negative numbers!  
+
+    There are ways around that using some offset...
+
+
+    The implementation can perhaps use one of the generalised sum propagators for efficiency
+    http://www.mozart-oz.org/documentation/system/node21.html#section.fd.arithmetic
+
+
+
+*** Info on Regular Temperaments in general
+
+**** Lists of Regular Temperaments 
+
+     Catalog of Linear Temperaments (i.e. rank-2 regular temperaments where one generator is the octave)
+     http://x31eq.com/catalog.htm 
+
+     Another list of Linear Temperaments 
+     http://www.tonalsoft.com/enc/e/equal-temperament.aspx
+
+     Regular Temperament Finder (online application)
+     http://x31eq.com/temper/pregular.html
+
+     http://x31eq.com/temper/net.html
+     
+
+
+***** Graham' list
+
+        From: 	gbreed@gmail.com
+	Subject: 	Re: [tuning] The regular mapping paradigm strikes back
+	Date: 	1. Mai 2010 10:27:39 GMT+01:00
+	To: 	tuning@yahoogroups.com
+	Reply-To: 	tuning@yahoogroups.com
+
+
+Here's the generator for every rank 2 name in my database where the
+period is an octave. That is, every TOP-RMS strictly linear
+temperament based on consecutive primes. It tried to remove anything
+obviously deviant, which would mean it was defined on a
+non-consecutive prime limit. I may have missed some. Duplicate names
+mean similar mappings for different limits.
+
+38.413 Slender
+45.139 Quartonic
+77.191 Tertiaseptal
+77.709 Valentine
+77.881 Valentine
+82.505 Nautilus
+88.076 Octacot
+98.670 Passion
+100.838 Ripple
+116.633 Miracle
+116.675 Miracle
+116.747 Miracle
+125.608 Negrisept
+125.755 Negripent
+130.106 Mohajira
+146.474 Bohpier
+146.545 Bohpier
+154.579 Nusecond
+158.649 Hemikleismic
+158.868 Hystrix
+162.747 Porcupine
+162.880 Porcupine
+163.950 Porcupine
+175.434 Sesquiquartififths
+176.160 Tetracot
+193.201 Luna
+193.244 Hemithirds
+193.898 Hemiwuerschmidt
+228.334 Gorgo
+230.336 Gamera
+230.762 Gidorah
+232.031 Cynder/Mothra
+232.193 Cynder
+233.930 Guiron
+234.459 Rodan
+239.977 Penta
+251.881 Semaphore
+252.635 Semaphore
+259.952 Superpelog
+260.388 Bug
+271.107 Quasiorwell
+271.426 Orwell
+271.509 Orwell
+271.546 Orwell
+271.627 Orson
+310.144 Myna
+310.146 Myna
+310.276 Myna
+315.181 Parakleismic
+315.240 Parakleismic
+316.473 Keemun
+316.732 Catakleismic
+317.007 Hanson
+317.121 Countercata
+317.656 Keemun
+321.847 Superkleismic
+321.930 Superkleismic
+339.519 Amity
+348.119 Vicentino
+348.415 Mohajira
+348.477 Mohajira
+348.558 Mohajira
+348.594 Dicot
+348.736 Mohajira
+348.810 Mohajira
+351.477 Hemififths
+355.904 Beatles
+378.479 Muggles
+380.058 Magic
+380.352 Magic
+380.696 Magic
+380.787 Magic
+386.863 Grendel
+387.383 Wuerschmidt
+387.799 Wuerschmidt
+425.942 Squares
+425.957 Squares
+426.276 Squares
+427.208 Sidi
+441.335 Clyde
+443.058 Sensipent
+443.383 Sensisept
+443.626 Sensi
+443.945 Sensisept
+456.014 Father
+464.845 Semisept
+475.543 Vulture
+475.636 Vulture
+478.431 Mother
+489.709 Superpyth
+489.922 Superpyth
+491.762 Quasisuper
+496.746 Dominant
+496.961 Undecental
+497.384 Kwai
+497.441 Cassandra
+497.629 Schismatic
+497.887 Alt. Cassandra
+497.915 Garibaldi
+498.243 Pontiac
+498.264 Helmholtz
+498.427 Dominant
+498.444 Schism
+498.761 Grackle
+499.860 Sharptone
+503.031 Meantone
+503.358 Meantone
+503.505 Meantone
+503.566 Meanpop
+503.761 Meantone
+503.789 Meanpop
+506.221 Flattone
+516.694 Marvo
+520.194 Mavila
+526.003 Pelogic
+567.594 Liese
+568.865 Triton
+580.267 Tritonic
+580.286 Tritonic
+582.452 Neptune
+
+Graham
+
+
+**** References
+
+     A. Milne, W. A. Sethares, and J. Plamondon, Isomorphic Controllers and Dynamic Tuning - Invariant Fingering Over a Tuning Continuum, Computer Music Journal, Winter 2007
+
+     http://en.wikipedia.org/wiki/Linear_temperament
+
+     http://lumma.org/tuning/gws/regular.html
+
+
+*** Emails with Bill Sethares    
+
+    [chronological order]
+
+***** Bill 
+
+     From: 	sethares@gmail.com
+	Subject: 	Re: Comments on paper intended for Perspectives of New Music?
+	Date: 	22. April 2010 18:21:01 GMT+01:00
+	To: 	torsten.anders@plymouth.ac.uk
+
+Hi Torsten,
+
+Thanks for the sneak preview of your paper. I read your paper (very  
+quickly,
+so I may not have understood some things) but I do have a few thoughts.
+
+First, I would suggest that you motivate the work by stating some
+concrete problem or problems that you are trying to solve.
+As I read the introduction, it kind of sounds like this:
+"here are some cool new features I added to my software Strasheela".
+While I understand that this may be a personal motivation, you can
+probably do better.... for example, you might pose one or more of the  
+examples
+(that you later on demonstrate) as a problem to be solved, and
+then show how the additions to Strasheela help to solve those problems.
+This is more a matter of packaging than of content, but I have to say  
+that
+I was a long way into the paper before I understood what you were
+actually doing.
+
+You say in a couple of places that your method is constrained to  
+problems
+with integer solutions, and that this is why you have not considered  
+JI and
+the meantone tunings directly, but only via approximation by certain  
+ETs. I find this odd.
+First, JI is defined by integer ratios, and it's hard to see why you  
+can't
+consider them in this way. As I understand the setup (and I may be
+mistaken here) you use the integers 1,2,3, ... n to represent n-tone- 
+equal
+temperament, and then solve some kind of constrained optimization  
+problem
+over this set. So, what you are really doing is to take a generator  
+alpha=2^(1/n)
+and to consider all powers of alpha in the solution technique:
+alpha^1, alpha^2, alpha^3, ... alpha^n.
+If you think about the regular tuning paradigm, there is a clear way to
+generalize this: have 2 generators! With alpha and beta as generators,
+you still have integers to search over: you have the set
+alpha^i * beta^j over a set of i in 1, 2, ... n and j in 1, 2, ... m.
+In fact, this is what you are already doing, since you are assuming
+octave reduction, you have just fixed one of the generators at 2.
+This is why it's hard to understand why you have the restriction
+to ETs -- using two generators (like you already are) you can get
+a lot more tunings, just by using different values. And then of course,
+if you can get to 3 or 4 generators, you will have almost every tuning
+you've ever heard of...
+
+Here's a possible criticism that you might want to address somewhere.
+Suppose a reviewer were to say: algorithmic composition makes sense in
+12-ET where we have centuries of knowledge about what the rules are.
+But in a new tuning, one in which one doesn't have much experience,
+how is it possible to define rules that can lead to sensible music?
+In other words, for many people microtonality is an unknown -
+in order to use the software, they are going to have to create rules
+to constrain the creation of the piece. Isn't the real
+problem that we don't know what the rules are?
+(I think you do have an answer to this, by the way, but you
+have not actually spelled it out).
+
+A detail: I think you misunderstand Darreg's word "xenharmony".
+It is not (in his usage) a synonym for microtonality. What he means
+is "music that sounds different from what is possible in 12-ET."
+
+Anyway, thanks again for showing it to me and good luck with
+placing this in Perspectives!
+
+--Bill Sethares
+
+On Apr 21, 2010, at 8:25 AM, Torsten Anders wrote:
+
+Dear Professor Sethares,
+
+attached please find the draft of a paper describing a computational  
+model and application examples for rule-based microtonal music  
+composition, intended for publication in Perspectives of New Music.  
+I would very much appreciate your comments on this paper, if you are  
+interested and have the time (no full formal review necessary).
+
+If at all possibly, please reply before end of May.
+
+Thank you very much indeed!
+
+Yours sincerely,
+Torsten Anders
+
+--
+Torsten Anders
+Interdisciplinary Centre for Computer Music Research
+University of Plymouth
+Office: +44-1752-586219
+Private: +44-1752-558917
+http://strasheela.sourceforge.net
+http://www.torsten-anders.de
+
+<MicrotonalHarmony.pdf>
+
+
+***** Torsten 
+
+Sent:  	 23 April 2010 16:58
+To: 	
+Bill Sethares [sethares@gmail.com]
+Cc: 	
+Eduardo Miranda
+Attachments: 	
+Dear Bill Sethares,
+
+Thank you very much indeed for your quick and extremely helpful reply.
+
+> First, I would suggest that you motivate the work by stating some concrete problem or problems that you are trying to solve.
+
+That makes certainly sense.
+
+> If you think about the regular tuning paradigm, there is a clear way to generalize this: have 2 generators!
+> With alpha and beta as generators, you still have integers to search over
+
+What a great idea!! When I developed the underlying pitch representation years ago I did not know about regular temperaments, and since then it just did not occur to me that I could do this :)
+
+It would be pretty hard to use the approach you are presenting, because constraining the relation between i and j in alpha^i * beta^j on the one hand, and the resulting pitch on the other hand would leave the integer domain. However, I can simply represent the generators and the pitches of notes in cent (or even millicent if necessary), and then this constraint becomes
+
+  generator1*i + generator2*j + ... = pitch
+
+The only problem is still that I am actually limited to non-negative integers, and I would need negative i's, j's etc as well to move in all directions of the n-dimensional space of a regular temperament. However, there are ways around that using some offset... I will certainly further think about this matter :)
+
+> But in a new tuning, one in which one doesn't have much experience, how is it possible to define rules that can lead to sensible music?
+
+Ah, I see. I will address this question. 
+
+> you misunderstand Darreg's word "xenharmony".
+
+Oops, I look it up.
+
+Again, thank you very very much for your valueable input.
+
+Best wishes,
+Torsten
+
+--
+Torsten Anders
+Interdisciplinary Centre for Computer Music Research
+University of Plymouth
+http://strasheela.sourceforge.net
+http://www.torsten-anders.de
+
+
+***** Bill 
+
+From: 	sethares@gmail.com
+	Subject: 	Re: Comments on paper intended for Perspectives of New Music?
+	Date: 	23. April 2010 21:20:19 GMT+01:00
+	To: 	torsten.anders@plymouth.ac.uk
+
+Happy to help...
+
+On Apr 23, 2010, at 10:58 AM, Torsten Anders wrote:
+
+Dear Bill Sethares,
+
+Thank you very much indeed for your quick and extremely helpful reply. 
+
+First, I would suggest that you motivate the work by stating some concrete problem or problems that you are trying to solve.
+
+That makes certainly sense.
+
+If you think about the regular tuning paradigm, there is a clear way to generalize this: have 2 generators! 
+With alpha and beta as generators, you still have integers to search over 
+
+What a great idea!! When I developed the underlying pitch representation years ago I did not know about regular temperaments, and since then it just did not occur to me that I could do this :) 
+
+It would be pretty hard to use the approach you are presenting, because constraining the relation between i and j in alpha^i * beta^j on the one hand, and the resulting pitch on the other hand would leave the integer domain. However, I can simply represent the generators and the pitches of notes in cent (or even millicent if necessary), and then this constraint becomes 
+
+ generator1*i + generator2*j + ... = pitch
+
+Most things are easier in cents!
+
+The only problem is still that I am actually limited to non-negative integers, and I would need negative i's, j's etc as well to move in all directions of the n-dimensional space of a regular temperament. However, there are ways around that using some offset... I will certainly further think about this matter :) 
+
+I'm not sure I understand the data structures involved, but something about this strikes me
+as odd. Even with an n-ET, what you are representing is "all octaves" of a single
+generator. Then you have 
+
+generator*i = pitch
+
+So as you go up in octaves, you are wrapping large positive i back to the range 1,n.
+As you go down in octaves, you are wrapping negative i back to the range 1,n.
+So there is a sense in which you are (probably implicitly) dealing with negative numbers.
+
+If you needed to constrain the optimization itself to positive integers, you could always 
+estimate 
+
+generator1*(-20+i) + generator2*(-30+j) + ... = pitch
+
+in which case you are still estimating positive values of the i and j.
+Of course, I picked the 20 and 30 out of a hat, but I think you get the idea.
+
+But anyway, maybe this is beyond what you want to do -- it just strikes me
+that you're almost all set up for it... and it would  let you directly take care
+of a larger variety of tunings...
+
+But in a new tuning, one in which one doesn't have much experience, how is it possible to define rules that can lead to sensible music?
+
+Ah, I see. I will address this question.  
+
+you misunderstand Darreg's word "xenharmony".
+
+Oops, I look it up.
+
+Again, thank you very very much for your valueable input. 
+
+Best wishes,
+Torsten
+
+--
+Torsten Anders
+Interdisciplinary Centre for Computer Music Research
+University of Plymouth
+http://strasheela.sourceforge.net
+http://www.torsten-anders.de
+
+
+***** Torsten 
+
+	Subject: 	Re: Comments on paper intended for Perspectives of New Music?
+	From: 	torsten.anders@plymouth.ac.uk
+	Date: 	24. April 2010 00:43:03 GMT+01:00
+	To: 	sethares@gmail.com
+
+Dear Bill Sethares,
+
+Thanks you for coming back to this matter.
+
+On 23.04.2010, at 21:20, Bill Sethares wrote:
+On Apr 23, 2010, at 10:58 AM, Torsten Anders wrote:
+The only problem is still that I am actually limited to non- 
+negative integers, and I would need negative i's, j's etc as well  
+to move in all directions of the n-dimensional space of a regular  
+temperament. However, there are ways around that using some  
+offset... I will certainly further think about this matter :)
+
+I'm not sure I understand the data structures involved, but  
+something about this strikes me
+as odd. Even with an n-ET, what you are representing is "all  
+octaves" of a single
+generator. Then you have
+
+generator*i = pitch
+
+Sure, any ET is a 1-D regular temperament. However, I quasi treat ETs  
+as 2-D regular temperaments, because I want an explicit representation  
+of the pitch class and the octave besides the pitch. I am using the  
+pitch classes, for example, to constrain the relation between notes  
+and the underlying harmony and scale (the pitches of a chord/scale,  
+its root and its transposition interval are also all pitch classes),  
+the relation between chords and scales (as in diatonic chords), in  
+chord inversions the bass is represented by a pitch class etc. I also  
+need the pitches (in contrast to pitch classes), e.g., to constrain  
+melodic intervals, intervals between parts etc.
+
+So as you go up in octaves, you are wrapping large positive i back  
+to the range 1,n.
+As you go down in octaves, you are wrapping negative i back to the  
+range 1,n.
+So there is a sense in which you are (probably implicitly) dealing  
+with negative numbers.
+
+
+If you needed to constrain the optimization itself to positive  
+integers, you could always
+estimate
+
+generator1*(-20+i) + generator2*(-30+j) + ... = pitch
+
+in which case you are still estimating positive values of the i and j.
+Of course, I picked the 20 and 30 out of a hat, but I think you get  
+the idea.
+
+Yes, something like this is what I meant with "there are ways around  
+using negative numbers using some offset".
+
+But anyway, maybe this is beyond what you want to do -- it just  
+strikes me
+that you're almost all set up for it... and it would  let you  
+directly take care
+of a larger variety of tunings...
+
+I would certainly like to have a direct representation of regular  
+temperaments, like in the formula above. However, I need to integrate  
+this representation in such a way that not only the pitches of single  
+notes are represented, but that I can also represent, e.g., properties  
+of chords, scales and their interrelation.
+
+As I said, I have to further think about this matter, but here is what  
+I am currently contemplating. I am considering whether it would be a  
+good idea to constrain the relation between the generators, their  
+factors and a 1200-TET pitch class (i.e. cents) as in the following  
+formula.
+
+  (generator1*(i) + generator2*(j) + ...) mod 1200 = pitch class
+
+Using this approach I would primarily need to write a new mixin for  
+note classes which introduces the variables i, j, ... (and possibly  
+the generators as variables), new chord/scale/interval databases in  
+1200-TET (somehow generalised so that they can be customised for  
+different regular temperaments!), and customised music notation for  
+1200-TET (again customisable for different regular temperaments).  
+Alternatively, I may choose 1200000-TET as pitch resolution (but 1200- 
+TET already results in rather large variable domains witch may hamper  
+efficiency). Anyway, I could keep several thousand related lines of  
+code untouched :)
+
+I expect you find this idea a bit odd again. It artificially restricts  
+the model to the octave as a period of a regular temperament with 1 or  
+more further generators. However, as a musician I like to work with  
+pitches without octave components (pitch classes). I would loose this  
+notion if I do not introduce the modulus in the formula above (e.g., I  
+would find it difficult to handle accumulating generators where the  
+resulting pitches get distributed over multiple octaves). (And  
+personally I am actually not very much interested in temperaments that  
+do not repeat at the octave, no idea whether this may change in a few  
+years time :)
+
+A regular temperament I would certainly implement with this approach  
+is JI with some high prime limit. For example, I may use the just  
+fifths and commas represented by a music notation such as Extended  
+Helmholtz-Ellis as generators. I would then have a representation of  
+this notation, which can be constrained.
+
+In the long run, I would consider to introduce variants of the chord  
+and scale classes where the pitches are defined directly by regular  
+temperament generators and their factors instead of pitch classes. I  
+expect this would cause quite some programming problems, and might not  
+even possible, but it would be worth a try (I am currently using  
+selection constrains -- something like a function NTH as constraint --  
+to define the relation, e.g., between a chord index and the  
+corresponding untransposed pitch class set. Instead of a pitch class  
+set I would then instead have multiple sets of generators and factors  
+that are interdependent). It may not be possible, because my language  
+does not support a variable domain like set of tuples of integers. But  
+it would be worth a try, because it would abstract away chord/scale  
+definitions from a single temperament and thus generators could change  
+within a piece (as you describe in your CMJ paper "Isomorphic  
+Controllers and Dynamic Tuning: Invariant Fingering over a Tuning  
+Continuum"), and it would then make also make the generators  
+themselves constrainable (effectively the "tuning bend" would be  
+constrained). Hm. No idea where that leads :)
+
+Anyway, these are currently only rough ideas, they may pop up problems  
+I did not anticipate.
+
+Again, thank you for your valued input to this matter!
+
+Best regards,
+Torsten
+
+--
+Torsten Anders
+Interdisciplinary Centre for Computer Music Research
+University of Plymouth
+Office: +44-1752-586219
+Private: +44-1752-558917
+http://strasheela.sourceforge.net
+http://www.torsten-anders.de
+
+
+***** Bill 
+
+	From: 	sethares@gmail.com
+	Subject: 	Re: Comments on paper intended for Perspectives of New Music?
+	Date: 	24. April 2010 03:40:54 GMT+01:00
+	To: 	torsten.anders@plymouth.ac.uk
+
+
+I would certainly like to have a direct representation of regular  
+temperaments, like in the formula above. However, I need to  
+integrate this representation in such a way that not only the  
+pitches of single notes are represented, but that I can also  
+represent, e.g., properties of chords, scales and their interrelation.
+
+I think I have some good news for you then... here's the beauty of the  
+"continua" that
+Andy Milne and I talk about in our paper. Pick a set of generators and  
+fix all but one.
+Let this one change, and you get a variety of tunings. As long as you  
+stay within some
+pretty generous bounds (the "valid tuning range") then you get the  
+exact same i,j pairs
+for each interval and chord. So for instance, in the syntonic  
+continuum, you have both
+12-ET and 19-ET (along with a bunch of others). If you choose three  
+sets of i,j so as to give you
+a major chord in 12-ET, then the exact same i,j also give a major  
+chord in 19-ET.
+Of course, the exact tuning of the notes changes, but the basic  
+relationships of
+root-third-fifth are obtained in both ETs. The point is that you don't  
+need to redefine
+the chords/scales for every tuning separately, you can inherit from  
+one tuning to another.
+
+As I said, I have to further think about this matter, but here is  
+what I am currently contemplating. I am considering whether it would  
+be a good idea to constrain the relation between the generators,  
+their factors and a 1200-TET pitch class (i.e. cents) as in the  
+following formula.
+
+(generator1*(i) + generator2*(j) + ...) mod 1200 = pitch class
+
+Using this approach I would primarily need to write a new mixin for  
+note classes which introduces the variables i, j, ... (and possibly  
+the generators as variables), new chord/scale/interval databases in  
+1200-TET (somehow generalised so that they can be customised for  
+different regular temperaments!), and customised music notation for  
+1200-TET (again customisable for different regular temperaments).  
+Alternatively, I may choose 1200000-TET as pitch resolution (but  
+1200-TET already results in rather large variable domains witch may  
+hamper efficiency). Anyway, I could keep several thousand related  
+lines of code untouched :)
+
+I expect you find this idea a bit odd again. It artificially  
+restricts the model to the octave as a period of a regular  
+temperament with 1 or more further generators. However, as a  
+musician I like to work with pitches without octave components  
+(pitch classes). I would loose this notion if I do not introduce the  
+modulus in the formula above (e.g., I would find it difficult to  
+handle accumulating generators where the resulting pitches get  
+distributed over multiple octaves). (And personally I am actually  
+not very much interested in temperaments that do not repeat at the  
+octave, no idea whether this may change in a few years time :)
+
+Not at all odd... I have played around with non-octave music, but  
+certainly it's the most popular
+interval ever, and I'd hate to have to live without it! But within the  
+regular tuning setup, the octave
+is no different from any other defining interval: it's just another  
+generator. If you happen to pick
+it always equal to 2, that's a pretty good choice.
+
+
+*** OLD
+
+***** Define program for creating regular temperaments, expecting generator and period intervals
+
+      Generator and Period are cent values
+
+      G is generator
+      P is period
+      N \in 1..max_N
+      M \in 1..max_M
+
+      Pitch_i = (G*N) - (P*M) 
+
+      Total number of pitches N*M
+
+
+      -------
+
+      Python code (Generator and Period are cent values)
+      !! implements different formula
+
+
+      scale = []
+      for nSteps in range(stepsPerPeriod):
+      root = (nSteps*generator)%period
+      for repeat in range(periodsPerOctave):
+      scale.append(period*repeat + root)
+      scale.sort()
+      
+      It assumes the generator and period are specified in cents. 
+      It also assumes periodsPerOctave is given. If you don't 
+      have that you can still get a tuning table for one period.
+      
+      sorted([(n*generator)%period
+      for n in range(stepsPerPeriod)])
+      
+      You always have to choose the number of steps you want. You 
+      may also like the period to be include in the table
+      
+      sorted([(n*generator)%period
+      for n in range(stepsPerPeriod)])+[period]
+
+
+      
+
+      ------
+
+      See email replies "[tuning] Re: Algorithm for 'unfolding' regular temperaments" in my action folder for details
+
+****** DONE [#B] Ask tuning mailing list for regular temperament algorithm
+       CLOSED: [2008-04-07 Mon 22:14]
+
+       Guess: rank two regular temperament: 
+       By adding the GENRATOR repeatedly, namely SIZE times, that number of pitches is obtained. These pitches are then again transposed by the PERIOD (commonly 1200 cent) 
+
+
+** TODO Add support for microtonal music to Fenv.renderAndPlayMidiFile
+
+   [[file:~/oz/music/Strasheela/strasheela/trunk/strasheela/contributions/anders/Fenv/Fenv.oz::proc%20RenderAndPlayMidiFile%20MyScore%20Args][file:~/oz/music/Strasheela/strasheela/trunk/strasheela/contributions/anders/Fenv/Fenv.oz::proc RenderAndPlayMidiFile MyScore Args]]
+
+*** DONE							    :ARCHIVE:
+
+    Approach: user explicitly specifies for each MIDI chan in score (new arg to Fenv.renderAndPlayMidiFile) over which actual MIDI chans it will be distributed. Number of actual MIDI chans should be max number of sim notes of this score chan. Microtonal notes will then be distributed to given MIDI chans in round-robin fashion, and pitchbind will be added according to score pitch.
+    MIDI chans specified zero-based
+
+    ?? Default for unspecified MIDI chans: 
+    - use only this chan, i.e. only supported for monophonic voices
+    - 'warn': user is warned that this chan only supports monophonic MIDI by default
+
+    Args:
+    resolution: pitchbend resolution
+    channelDistribution: tuple specifying which score chan is output to which actual chan, e.g. for distributing chan 0 over chans 0-7 do
+       	unit(0: [0 1 2 3 4 5 6 7])
+
+
+
+*** TODO test microtonal MIDI output
+
+*** TODO 
+
+    If note already has pitchbend fenv, then add offset to this pitchbend fenv such that 0 corresponds to its microtonal pitch
+
+    Use Out.midi.noteToPitchbend to get offset value
+
+    Approach: Change this in Fenv.itemFenvsToMidiCC (i.e. check when Controller==pitchbend and then optionally shift that fenv depending on some new arg to Fenv.itemFenvsToMidiCC), and then also change all defs using it (only defs in Fenv)
 
 ** TODO Fenv.renderAndPlayMidi: add Fenv controlling articulation (note length)
    
@@ -286,6 +1067,24 @@ MyTestScore = {Score.makeScore
    Or is addition better than multiplication
    I feel multiplication is more flexible, but sometimes I may want to add instead
    ?? can I somehow generise and allow for both options?
+
+** MIDI output: use ports/tracks
+
+   csvmidi seems to support MIDI ports, so I can have > 16 chans in total  
+
+   !! Ports are used as tracks in Cubase??
+
+   ----
+
+   Doc: http://www.fourmilab.ch/webtools/midicsv/    
+   /Track, Time, MIDI_port, Number/
+   This meta-event specifies that subsequent events in the Track should be sent to MIDI port (bus) Number, between 0 and 255. This meta-event usually appears at the start of a track with Time zero, but may appear within a track should the need arise to change the port while the track is being played. 
+
+   -> I would likely need to refactor MIDI file output such that multiple tracks are output...
+     
+
+** Diss resolution
+   [[file:Strasheela-Maybe-TODO.org::*Introduce%20some%20generalised%20concept%20of%20resolution%20of%20dissonances][file:Strasheela-Maybe-TODO.org::*Introduce some generalised concept of resolution of dissonances]]
 
 
 ** TODO Create variant for Out.saveScore using pickles
@@ -310,72 +1109,24 @@ MyTestScore = {Score.makeScore
 *** TODO Check my ideas out with simple motif prototype (e.g., with fenvs at different levels) and motif instance args 
 
      See [[file:MidiOut_toTassman/MusicRepresentationForTassmanPiece.org::*Prototype%20Motif%20Variation][file:MidiOut_toTassman/MusicRepresentationForTassmanPiece.org::*Prototype Motif Variation]]
-   
-
-
-
      
+
+** ?? Lilypond: output seq (of seq ...) of sims with multiple staffs 
+
+   Do this instead for fomus?
+
+
+
+
+
 * Strasheela doc
-
-** DONE Ask Oz mailing list: can we feed expressions to OPI and get result back from Emacs Lisp?
-   CLOSED: [2010-03-04 Thu 11:16]
-
-** DONE Add org-babel-oz.el to Org-babel
-   CLOSED: [2010-03-04 Thu 11:16]
-
-** DONE Write doc for org-babel-oz.el
-   CLOSED: [2010-03-04 Thu 11:16]
-
-   for draft see [[file:~/oz/music/Strasheela/StrasheelaDoc_Rewrite/setup/org-babel-oz-doc.org]]
-
-*** Grab a copy of worg
-
-    see http://orgmode.org/worg/worg-git.php
-
-*** Write file
-
-    file:~/emacs/org-mode/Worg/org-contrib/babel/org-babel-oz.org
-
-    Suggestions:
-    http://orgmode.org/worg/worg-editing.php
-
-    "Templates"
-    file:~/emacs/org-mode/Worg/org-contrib/babel/org-babel-screen.org 
-    file:~/emacs/org-mode/Worg/org-contrib/babel/org-babel.org 
-    
-
-*** Push this file with git
-
-    Learn how to do git push, see http://orgmode.org/worg/worg-git.php
-
-**** First time
-
-cd ~/emacs/org-mode/Worg/org-contrib/babel/
-git add org-babel-oz.org
-git commit -a -m "My changelog"
-git push
-
-
-PERHAPS: if push does not work as above
-
-git remote add public git+ssh://tanders@repo.or.cz/srv/git/Worg.git
-git push public
-
-
-    Use your ssh passphrase (if requested again): bach1685
-
-**** Later
-
-cd ~/emacs/org-mode/Worg/
-git commit -a -m "My ChangeLog"
-git push
-
   
 ** Strasheela tutorial
 
    Use Worg CCS, but add acknowledgment mentioning CCS authors Bastien Guerry and Sebastian Rose.
 
-** Inform Oz community about org-babel-oz
+   see 
+   file:~/oz/music/Strasheela/StrasheelaDoc_Rewrite/doc-source/
 
 
 * Other 
