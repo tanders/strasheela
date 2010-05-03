@@ -1046,6 +1046,9 @@ define
 	 then @value = {FS.var.upperBound Spec}
 	 end
       end
+      /** %% Returns true if parameter value is determined, false otherwise.
+      %% */
+      meth isDet($) {IsDet @value} end
 
       /** %% Return the list of heuristic constraints applied to the parameter. A heuristic is a record of the following form (see the doc of getHeuristics for the meaning of the variables). 
       heuristic(constraint:Constraint parameters: Params weight:Weight)
