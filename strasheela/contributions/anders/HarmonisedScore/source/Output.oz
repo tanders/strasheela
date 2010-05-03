@@ -31,6 +31,10 @@ import
 export
    AddExplorerOut_ChordsToScore
 
+   MakeNoteToFomusClause
+   MakeChordToFomusClause
+   MakeScaleToFomusClause
+
    RenderAndShowLilypond
 
    
@@ -100,9 +104,101 @@ define
 		       end
 	   label: As.outname)}
    end
+
+
    
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%
+%%% Customised Fomus output
+%%%
 
+   /** %% [Aux] Expects a pitch class (an int) and a tuple mapping pitch classes to enharmonic notation as supported by Fomus, i.e. an Atom that consist of a pitch nominal in A-G and an accidental. Returns a pair of strings Nominal#Accidental.
+   %% */
+   fun {PcToEnharmonics PC Table}
+      Aux1 = Table.PC
+      Aux2 = if {IsAtom Aux1}
+	     then {AtomToString Aux1}
+	     else Aux1
+	     end
+   in
+      [Aux2.1]#Aux2.2
+   end
+   /** %% MakeNoteToFomusClause adds support for HS notes (instances of class HS.score.pitchClassMixin) to Fomus export with customisable enharmonic notation. More specifically, it returns a clause that can be appended to the given to the argument eventClauses of Out.renderFomus and friends.
+   %% MakeNoteToFomusClause expects Table, a tuplet that maps pitch classes (ints) to Fomus pitch classes (strings or atoms of symbolic note names). A valid Fomus pitch class consists of a nominal and a Fomus accidental (e.g., 'Cn' or 'C#'). See functors like ET31.out for table examples.
+   %% */
+   fun {MakeNoteToFomusClause Table}   
+      HS_Score.isPitchClassMixin
+      # fun {$ MyEvent PartId}
+	   Nominal#Acc = {PcToEnharmonics {MyEvent getPitchClass($)} Table}
+	   Oct = {MyEvent getOctave($)}
+	in
+	   {Out.record2FomusNote unit(part:PartId
+				      time:{MyEvent getStartTimeInBeats($)}
+				      dur:{MyEvent getDurationInBeats($)}
+				      pitch:Nominal#Acc#Oct
+				      acc:Acc)
+	    MyEvent}
+	end
+   end
 
+   /** %% [Aux] Expects a Fomus pitch class table (a tuple, see MakeChordToFomusClause doc) and a Fomus "grace time" (see http://fomus.sourceforge.net/doc.html/Grace-Notes-_0028File_0029.html#Grace-Notes-_0028File_0029). Returns a chord/scale processing function for note-eventClause, which returns the Fomus code for a Strasheela chord/scale object.
+   %% */
+   %% TODO: grace note pitch classes for scale
+/*
+   time 0 dur 1/4
+    grace 0 pitch 50 ;
+    grace + pitch 53 ;
+    grace + pitch 56 ;
+   time 0 dur 1/2 pitch 59 ;
+   */
+   fun {MakePCCollToFomus Table Grace}
+      fun {$ MyChord PartId}
+	 RootNominal#RootAcc = {PcToEnharmonics {MyChord getRoot($)} Table}
+	 Oct = 4
+	 Time = {MyChord getStartTimeInBeats($)}
+	 fun {PcToFomus PC}
+	    Nominal#Acc = {PcToEnharmonics PC Table}
+	    Oct = 4
+	 in
+	    {Out.record2FomusNote unit(part:PartId
+				       grace: Grace
+				       time:Time
+				       dur: 1 % a beat
+				       pitch: Nominal#Acc#Oct
+				       acc: Acc)
+	     nil}
+	 end
+      in
+	 %% PC collection pitch classes
+	 {Out.listToVS {Map {HS_Score.pcSetToSequence {MyChord getPitchClasses($)}
+			     {MyChord getRoot($)}}
+			fun {$ PC} {PcToFomus PC} end}
+	  "\n"}#"\n"
+	 %% PC collection root
+	 #{Out.record2FomusNote unit(part:PartId
+				     time:Time
+				     dur:{MyChord getDurationInBeats($)}
+				     pitch: RootNominal#RootAcc#Oct
+				     acc: RootAcc
+				     %% TODO: make textual mark customisable (e.g., chord/scale name or ratios).
+				     marks: ["x \""#({HS_DB.getName MyChord}.1)#"\""])
+	   MyChord}
+      end
+   end
+   
+  /** %% MakeChordToFomusClause adds support for HS chord objects to Fomus export with customisable enharmonic notation. More specifically, it returns a clause that can be appended to the given to the argument eventClauses of Out.renderFomus and friends.
+   %% MakeChordToFomusClause expects Table, a tuplet that maps pitch classes (ints) to Fomus pitch classes (strings or atoms of symbolic note names). A valid Fomus pitch class consists of a nominal and a Fomus accidental (e.g., 'Cn' or 'C#'). See functors like ET31.out for table examples.
+   %% */ 
+   fun {MakeChordToFomusClause Table}   
+      HS_Score.isChord # {MakePCCollToFomus Table 0}
+   end
+   /** %% MakeScaleToFomusClause adds support for HS scale objects to Fomus export with customisable enharmonic notation. See MakeChordToFomusClause for more information.
+   %% */ 
+   fun {MakeScaleToFomusClause Table}   
+      HS_Score.isScale # {MakePCCollToFomus Table 10}
+   end
+
+   
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%
 %%% Customised Lilypond output
