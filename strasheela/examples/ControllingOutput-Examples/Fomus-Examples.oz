@@ -1,5 +1,10 @@
 
 %%
+%% TODO:
+%% - revise comments concerning score topology: meanwhile very many topologies are supported...
+%%
+
+%%
 %% This file demonstrates features of the Fomus output by a number
 %% of examples. For simplicity, these examples directly create a
 %% determined score and output it to Fomus. Naturally, all these
@@ -270,9 +275,14 @@ MyScore = {Score.makeScore
 		seq(info: fomus(inst: violin)
 		    [note(duration:4 pitch:60 info:fomus(marks: "(..")) % marks are given as VS or list of VSs
 		     note(duration:4 pitch:59 info:fomus(marks: ["."]))
-		     note(duration:4 pitch:59 info:fomus(marks: ['-' '>' arco]))
-		     note(duration:4 pitch:57 info:fomus(marks: ["^" "breath<"]))
-		     note(duration:4 pitch:55 info:fomus(marks: ["..)"]))
+		     note(duration:4 pitch:59 info:fomus(marks: ['-' '>']))
+		     note(duration:4 pitch:57 info:fomus(marks: ["^" "breath>"]))
+		     note(duration:4 pitch:55 info:fomus(% dyns: yes
+							 marks: ["..)"
+								 %% TODO: howto use dyn?
+% 								 "dyn 10"
+								 "f"
+								]))
 		    ])
 	       ]
 	       startTime:0
@@ -338,8 +348,8 @@ MyScore = {Score.makeScore
 
 declare
 MyScore = {Score.makeScore seq(info: fomus(
-% 					'lily-view-exe-args':
-% 					   "--pdf -dbackend=eps -dno-gs-load-fonts -dinclude-eps-fonts" % Fomus ignored?
+					'lily-view-exe-args':
+					   "--pdf -dbackend=eps -dno-gs-load-fonts -dinclude-eps-fonts" % Fomus ignored?
 					'lily-file-header':
 					   "\\header { title = \"Symphony\" composer = \"Me\" opus = \"Op. 42\" }")
 			       [note(info: fomus('lily-insert-after': "\\staccato")
@@ -495,72 +505,97 @@ MyScore = {Score.makeScore
 %%
 
 
-%%
-%% !!! TODO:
-%%
 
 %%%%%%%%%%%%%%%%%%%%%%%%%
 %%
-%% Enharmonic notation is supported for the class
-%% HS.score.enharmonicNote (and other subclasses of
-%% HS.score.enharmonicSpellingMixinForNote). Note that
-%% {HS.db.getPitchePerOctave} must return 12 (which is the default). 
-%%
-%% Alternatively, enharmonic notation is supported for 31-tone equal
+%% Enharmonic notation is supported, e.g., for 31-tone equal
 %% temperament which pitches such as C# or Db are different pitch
 %% classes.
 %%
 
+%% BUG: !
 declare
-%% The functor ET12 exports functions for convenient pitch notation
-%% for the common 12 pitches per octave, including accidentals.
-%%
-%% ET12.pitch returns a pitch integer which is not unambiguous
-%% enharmonically, hence the accidental must be defined as well. The
-%% class HS.score.enharmonicNote defines the parameter
-%% cMajorAccidental (together with cMajorDegree) -- the name is choses
-%% to clearly distinguish it from parameters such as scaleAccidental
-%% or chordAccidental (see the doc of HS for details).
-[ET12] = {ModuleLink ['x-ozlib://anders/strasheela/ET12/ET12.ozf']}
-%%
+[ET31] = {ModuleLink ['x-ozlib://anders/strasheela/ET31/ET31.ozf']}
+{HS.db.setDB ET31.db.fullDB}
 MyScore = {Score.makeScore
-	   seq(info:[lily("\\key d \\major \\time 3/4")]
-	       items:[seq(items:[note(duration:2
-				      %% pitch specified by a pair Pitchclass#Octave
-				      pitch:{ET12.pitch 'D'#4}
-				      %% natural accidental is ''
-				      cMajorAccidental:{ET12.acc ''})
-				 note(duration:1
-				      pitch:{ET12.pitch 'Eb'#4}
-				      %% flat accidental: b
-				      cMajorAccidental:{ET12.acc 'b'})
-				 note(duration:1
-				      pitch:{ET12.pitch 'F#'#4}
-				      cMajorAccidental:{ET12.acc '#'})
-				 note(duration:2
-				      pitch:{ET12.pitch 'G#'#4}
-				      cMajorAccidental:{ET12.acc '#'})])
-		      seq(info:lily("\\key f \\minor")
-			  items:[note(duration:1
-				      pitch:{ET12.pitch 'G'#4}
-				      cMajorAccidental:{ET12.acc ''})
-				 note(duration:1
-				      pitch:{ET12.pitch 'Db'#4}
-				      cMajorAccidental:{ET12.acc 'b'})
-				 note(duration:1
-				      pitch:{ET12.pitch 'E'#4}
-				      cMajorAccidental:{ET12.acc ''})
-				 note(duration:3
-				      pitch:{ET12.pitch 'Gb'#4}
-				      cMajorAccidental:{ET12.acc 'b'})])]
+	   seq([note(duration:2
+		     pitch:{HS.pitch 'D'#4})
+		note(duration:2
+		     pitch:{HS.pitch 'D|'#4})
+		note(duration:2
+		     pitch:{HS.pitch 'D#'#4})
+		note(duration:2
+		     pitch:{HS.pitch 'Eb'#4})
+		note(duration:2
+		     pitch:{HS.pitch 'E;'#4})
+		note(duration:2
+		     pitch:{HS.pitch 'E'#4})
+	       ]
 	       startTime:0
-	       timeUnit:beats(2))
-	   add(note:HS.score.enharmonicNote)}
+	       timeUnit:beats(4))
+	   add(note:HS.score.note2)}
 {MyScore wait}
 %%
 {Out.renderFomus MyScore
- unit(file:enharmonicTest)}
+ unit(file:enharmonicTest
+      eventClauses: [%% NOTE: comment out intended accidental format
+		     %% Version with quarter-tone accidentals
+		     {HS.out.makeNoteToFomusClause ET31.out.fomusPCs_Quartertones}
+		     %% Version with double accidentals
+% 		     {HS.out.makeNoteToFomusClause ET31.out.fomusPCs_DoubleAccs}
+		    ])}
 
+%% NOTE: Before continuing with the next example, unset the 31-TET setting
+%% (i.e. set back the default setting)
+{HS.db.setDB HS.dbs.default.db}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%% Chord and Scale objects 
+%%
+
+declare
+[ET31] = {ModuleLink ['x-ozlib://anders/strasheela/ET31/ET31.ozf']}
+{HS.db.setDB ET31.db.fullDB}
+MyScore = {Score.makeScore
+	   sim([seq([chord(duration: 4
+			  index: {HS.db.getChordIndex 'major'}
+			   transposition: {HS.pc 'G|'})])
+		seq([scale(duration: 4
+			  index: {HS.db.getScaleIndex 'major'}
+			   transposition: {HS.pc 'D|'})])
+	       ]
+	       startTime:0
+	       timeUnit:beats(1))
+	   add(chord:HS.score.chord
+	       scale:HS.score.scale)}
+{MyScore wait}
+%%
+{Out.renderFomus MyScore
+ unit(file:"ChordAndScale"
+      eventClauses: [{HS.out.makeNoteToFomusClause ET31.out.fomusPCs_Quartertones}
+		     {HS.out.makeChordToFomusClause ET31.out.fomusPCs_Quartertones}
+		     {HS.out.makeScaleToFomusClause ET31.out.fomusPCs_Quartertones}
+		    ])}
+
+%% NOTE: Before continuing with the next example, unset the 31-TET setting
+%% (i.e. set back the default setting)
+{HS.db.setDB HS.dbs.default.db}
+
+
+%%
+%% TMP
+%%
+
+declare
+MyChord = {Score.make chord(duration: 4
+			    index: {HS.db.getChordIndex 'major'}
+			    transposition: {HS.pc 'G|'})
+	   unit(chord:HS.score.chord)}
+
+{IsVirtualString '[x "'#{HS.db.getName MyChord}#'"]'}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%
@@ -703,14 +738,61 @@ MyScore = {Score.makeScore
 
 declare
 MyScore = {Score.makeScore
-	   sim(% info: fomus(beat: '1/8')  % a beat (duration 1) is notated as eighth note
-	       [seq([note(info:fomus_before("time = 0 dur = 1 timesig-den = 8 ||")
-			  duration: 8
+	   sim(info: fomus(beat: '1/8')  % a beat (duration 1) is notated as eighth note
+	       [seq([note(info:fomus_before("time = 0 dur = 1 |timesig-den = 16|")
+			  duration: 4
+			  pitch: 60)
+		     note(duration: 2
+			  pitch: 62)
+		     note(info:fomus_before("time = + dur = 7 |timesig-den = 16|")
+			  duration: 6
+			  pitch: 64)])]
+	       startTime:0
+	       timeUnit:beats(2))
+	   unit}
+{MyScore wait}
+{Out.renderFomus MyScore
+ unit(file:measure)}
+
+
+%%
+%% Alternative measure notation
+%%
+
+declare
+MyScore = {Score.makeScore
+	   sim(info: fomus(beat: '1/4')  
+	       [seq([note(info:fomus_before("time = 0 dur = 3 measure < timesig-den = 4 >")
+			  duration: 4
+			  pitch: 60)
+		     note(duration: 2
+			  pitch: 62)
+		     note(% info:fomus_before("time = 0 dur = 1 measure < timesig-den = 16 >")
+			  duration: 6
+			  pitch: 64)])]
+	       startTime:0
+	       timeUnit:beats(2))
+	   unit}
+{MyScore wait}
+{Out.renderFomus MyScore
+ unit(file:measure)}
+
+
+%%
+%% Workaround for offbeat: start with a long rest. You could later fine-tune notation in notation software...
+%%
+
+declare
+MyScore = {Score.makeScore
+	   sim(info: fomus("time = 0 dur = 3 ||")
+	       [seq(offsetTime: 8
+		    [note(duration: 4
+			  pitch: 59)
+		     note(duration: 8
 			  pitch: 60)
 		     note(duration: 4
 			  pitch: 62)
-		     note(info:fomus_before("time = + dur = 7 ||")
-			  duration: 12
+		     note(duration: 12
 			  pitch: 64)])]
 	       startTime:0
 	       timeUnit:beats(4))
@@ -719,11 +801,16 @@ MyScore = {Score.makeScore
 {Out.renderFomus MyScore
  unit(file:measure)}
 
+{{MyScore find($ isNote)} getStartTime($)}
+
 
 %%
 %% TODO: 
 %% How to automatically start new measures with certain notes and let Fomus work out the measure duration?
 %%
+
+%% I've been planning on allowing measures with duration 0 (or no duration), but haven't finished this yet...  At the moment you have to accomplish this by supplying large durations so that fomus trims the overlapping measures.  
+
 
 
 
