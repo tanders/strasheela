@@ -31,6 +31,8 @@ export
    AddExplorerOut_ChordsToScore
    AddExplorerOuts_ArchiveInitRecord
 
+   FomusPCs_Quartertones FomusPCs_DoubleAccs
+
    Et31AsEt12_TuningTable
    Meantone_TuningTable
    JI_TuningTable
@@ -74,7 +76,45 @@ define
        add(information ArchiveInitRecord
 	   label: 'Archive initRecord (ET31)')}
    end
-
+   
+   
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%
+%%% Customised Fomus output
+%%%
+   
+   
+   /** %% Table (tuple) that maps 31-TET pitch classes (ints) to Fomus pitch classes (atoms of symbolic note names). ET31_FomusPCs is intended as an argument for HS.out.makeNoteToFomusClause. 
+   %% ET31_FomusPCs_Quartertones uses quarter tone accidentals for notating certain 31-TET pitch classes. 
+   %%
+   %% NB: ET31_FomusPCs_Quartertones uses the characters v and ^ to denote quarter-tone accidentals down and up. Fomus currently does not define any special quartertone accidentals, but these can be customised with the following setting (e.g., in your ~/.fomus file). 
+   %%
+   %% note-microtones = (v -1/2, ^ 1/2)
+   %% */
+   FomusPCs_Quartertones
+   = pcs(0:'Cn' 1:'C^' 2:'C#' 3:'Db' 4:'Dv' 
+	 5:'Dn' 6:'D^' 7:'D#' 8:'Eb' 9:'Ev'
+	 10:'En' 11:'E^' 12:'Fv' % 'E#'
+	 13:'Fn' 14:'F^' 15:'F#' 16:'Gb' 17:'Gv'
+	 18:'Gn' 19:'G^' 20:'G#' 21:'Ab' 22:'Av'
+	 23:'An' 24:'A^' 25:'A#' 26:'Bb' 27:'Bv'
+	 28:'Bn' 29:'B^' 30:'B#')
+   /** %% Table (tuple) that maps 31-TET pitch classes (ints) to Fomus pitch classes (atoms of symbolic note names). ET31_FomusPCs is intended as an argument for HS.out.makeNoteToFomusClause. 
+   %% ET31_FomusPCs_DoubleAccs uses double accidentals for notating certain 31-TET pitch classes. 
+   %%
+   %% NB: ET31_FomusPCs_DoubleAccs uses the characters bb and x to denote double accidentals down and up. Fomus currently does not define any special double accidentals, but these can be customised with the following setting (e.g., in your ~/.fomus file), which adds these accidentals at the end of the accidentals already supported by Fomus. 
+   %%
+   %% note-accs = (- -1, b -1, f -1, F -1, + 1, # 1, s 1, S 1, n 0, N 0, _ 0,  x 2, bb -2) 
+   %% */
+   FomusPCs_DoubleAccs
+   = pcs(0:'Cn' 1:'Dbb' 2:'C#' 3:'Db' 4:'Cx' 
+	 5:'Dn' 6:'Ebb' 7:'D#' 8:'Eb' 9:'Dx'
+	 10:'En' 11:'Fb' 12:'E#'
+	 13:'Fn' 14:'Gbb' 15:'F#' 16:'Gb' 17:'Fx'
+	 18:'Gn' 19:'Abb' 20:'G#' 21:'Ab' 22:'Gx'
+	 23:'An' 24:'Bbb' 25:'A#' 26:'Bb' 27:'Ax'
+	 %% NB: quarter tone for B^!
+	 28:'Bn' 29:'B^' 30:'B#')   
    
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%
