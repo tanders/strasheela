@@ -18,7 +18,6 @@
 %%
 %% * Many formats output nothing at all if some part of the score is undetermined. Instead, output all events etc. which are already determined (and possibly a warning).  
 %%
-%% OK? * add Fomus output (http://common-lisp.net/project/fomus/)
 %%
 %% * add GUI for output settings (cf. Common Music GUI CMIO, http://commonmusic.sourceforge.net/doc/dict/cmio-topic.html) 
 %%
@@ -90,7 +89,8 @@ export
    ToFomus OutputFomus RenderFomus
    %% expert Fomus procs
    GetUserFomus GetUserFomus_Before GetUserFomus_After
-   Record2FomusEvent Record2FomusObject Record2FomusSetting Record2FomusCode
+   Record2FomusEvent Record2FomusNote Record2FomusObject Record2FomusSetting Record2FomusCode
+   MakeFomusNote
    
    MakeCMEvent MakeCMScore OutputCMScore
    ToDottedList LispList % LispKeyword
@@ -1984,14 +1984,15 @@ define
    end
    
    /** %% [for clause definitions etc] Transforms a record into a VS of the form "feat1 val1 ... featn valn ;"
-   %% The feture time is always put at the beginning, and possible marks at the end.
+   %% The required features time and dur are always put at the beginning, and possible marks at the end.
    %% */
    fun {Record2FomusEvent X}
-      %% 'time' is always at the beginning, and possible marks at the end
+      %% 'time' is always at the beginning, followed by 'dur', and possible marks at the end
       {ListToVS
-       {Map time#X.time | {Record.toListInd
-			   {Record.subtractList {CleanupFomusSettings X}
-			    [time marks]}}
+       {Map time#X.time | dur#X.dur |
+	{Record.toListInd
+	 {Record.subtractList {CleanupFomusSettings X}
+	  [time dur marks]}}
 	fun {$ Feat#Val} Feat#":"#Val end}
        " "}
       %% append marks at end
@@ -2008,6 +2009,31 @@ define
 	end
       # " ;"
    end
+
+   
+   /** %% [for clause definitions etc] Expects a record R, whose features are the Fomus settings of a note and MyItem (typically the note itself). MyItem is used to add the settings in its fomus info tag, if MyNote is nil then these are left out. Record2FomusNote returns the corresponding Fomus code (a VS).
+   %% Required features in R: part, time, dur.
+   %% */
+   fun {Record2FomusNote R MyItem}
+      {ListToVS ["note" "part" R.part
+		 {Record2FomusEvent {Adjoin {Record.subtract R part}
+				     if MyItem == nil
+				     then unit
+				     else {GetUserFomus MyItem}
+				     end}}]
+       " "}
+   end
+   
+   /** %% [for clause definitions etc] note processing function for note-eventClause. Returns the Fomus code for a note where the pitch is the MIDI float of the note.
+   %% */
+   fun {MakeFomusNote MyNote PartId}
+      {Record2FomusNote unit(part:PartId
+			     time:{MyNote getStartTimeInBeats($)}
+			     dur:{MyNote getDurationInBeats($)}
+			     pitch:{MyNote getPitchInMidi($)})
+       MyNote}
+   end
+
    /** %% [for clause definitions etc] Transforms a record into a VS of the form "feat1 val1 ... featn valn ;"
    %% Variant of Record2FomusEvent without time and marking processing.
    %% */
@@ -2018,6 +2044,7 @@ define
 	fun {$ Feat#Val} Feat#":"#Val end}
        " "}# " ;"
    end
+   
    /** %% [for clause definitions etc] Transforms a record into a VS of the form "<feat1:val ... featn:valn>"
    %% */
    fun {Record2FomusObject X}
@@ -2025,6 +2052,7 @@ define
 		     fun {$ Feat#Val} Feat#":"#Val end}
 	   " "}#">"
    end
+   
    /** %% [for clause definitions etc] Transforms a record into a VS of the form "feat1=val1\n ... featn=valN\n". An exception are integer features, where instead only the corresponding value is output like "val1\n ... valN\n". 
    %% */
    fun {Record2FomusSetting X}
@@ -2032,6 +2060,7 @@ define
 		 fun {$ Feat#Val} Feat#"="#{CleanupFomusSetting Val}#"\n" end}
        ""}
    end
+   
    /** %% [for clause definitions etc] Transforms a record into a VS of the form "val1\n ... valN\n" (i.e. the record features are ignored, in contrast to Record2FomusSetting). 
    %% */
    fun {Record2FomusCode X}
@@ -2040,7 +2069,7 @@ define
        ""}
    end
 
-   /** %% [Aux] Strings in settings R must be surrounded by explicit double-quotes, \ and " in strings must be escaped.
+   /** %% [Aux] If X is a string, it must be surrounded by explicit double-quotes, \ and " in strings must be escaped.
    %% */
    fun {CleanupFomusSetting X}
       if {IsString X}
@@ -2056,6 +2085,8 @@ define
       else X
       end 
    end
+   /** %% [Aux] All strings in record R must be surrounded by explicit double-quotes, \ and " in strings must be escaped.
+   %% */
    fun {CleanupFomusSettings R}
       {Record.map R CleanupFomusSetting}
    end
@@ -2063,7 +2094,7 @@ define
    /** %% [Aux] Collect all events and "fomus chords" in MyPart.
    %% */
    fun {GetFomusEvents MyPart}
-      if {MyPart isEvent($)} orelse {IsFomusChord MyPart}
+      if {MyPart isElement($)} orelse {IsFomusChord MyPart}
       then [MyPart] 
       elseif {MyPart isContainer($)}
 	 %% containers are processed recursively
@@ -2130,7 +2161,8 @@ define
    note(info:fomus_before("time = + dur = 3 ||")
 	duration:4 pitch:60)  
 
-   %% ToFomus tries to make a good guess which of the Strasheela items in a given score correspond to which Fomus hierarchy level such as the Fomus score, part or event. The top-level Strasheela container always corresponds to the Fomus score, and Strasheela elements are Fomus events.
+   %% ToFomus tries to make a good guess which of the Strasheela items in a given score correspond to which Fomus hierarchy level such as the Fomus score, part or event. The top-level Strasheela container always corresponds to the Fomus score, and Strasheela elements as well certain containers correspond to Fomus events (these containers are simultaneous containers that only contain notes with the same start/end times, so it can be notated as a chord).
+
    %% However, Strasheela supports more hierarchic levels than Fomus, and therefore getting parts correctly assigned can be tricky. Users can therefore manually declare certain Strasheela containers as part by tagging it with the info tag fomusPart. Optionally, this info tag can be a record with the Fomus part name at its feature 1 (see example below). Multiple Strasheela containers can that way be assigned to the same Fomus part, a useful features for Strasheela scores with complex nesting (e.g., if the top-level container is a sequential that holds multiple sections and each section should be notated in multiple parts).
 
    seq(info: [fomusPart(violin)
@@ -2149,40 +2181,49 @@ define
    %% 'dir' (default {Init.getStrasheelaEnv defaultFomusDir}): sets the directory of the resulting fomus file and files created by fomus.
    %%
    %%
-   %% TODO:
    %% 'eventClauses' (default nil): [for advanced users]
-   %%  ... only used for objects returned by getEvents
+   %% A list of pairs of Boolean function/method and binary event processing functions 
+   [Test1#fun {$ MyEvent PartId} ... end ...]
+   %% This argument is in its effect very similar to the 'clauses' argument of other export procedures (e.g., for Lilypond output). For every Strasheela item that corresponds to a Fomus event (see above) *and* for which some test function/method returns true, the corresponding event processing function is used to create its Fomus output VS. If multiple tests (would) return true, then the first corresponding processing function is used.
    %%
+   %% 'getParts' (unary function): [for expert users]
+   %% This function can be used to customise the way Strasheela containers are identified to correspond to Fomus parts. The function expects the top-level score item and returns a list of items corresponding to the Fomus parts. For an example, see the function GetFomusParts in source/Output.oz, which defines the default 
    %%
-   %% TODO:
-   %% 'getParts' (functions): [for expert users]
-   %% TODO: revise doc: arg getEvents is removed, and arg getParts only for expert uses. For more complex Strasheela topologies consider using info tag fomusPart(<partname>)... 
-   %% The Fomus format is rather fixed, whereas the information contained in the Strasheela score format is highly user-customisable. Therefore, the export-process is also user-customisable.
-   %% A Fomus score has basically a fixed topology: <code>score(part(event+)+)</code> (see the Fomus documentation at http://fomus.sourceforge.net/doc.html/). Strasheela, on the other hand, supports various topologies. However, ToFomus does not automatically perform a score topology transformation into the Fomus topology. Instead, ToFomus expects two optional accessor functions as arguments that allow for a user-defined topology transformation: getParts and getEvents. The function given to the argument getParts expects MyScore and returns a list of values corresponding to the Fomus parts. The function given to the argument getEvents expects a part and returns a list of values corresponding to the Fomus events. The default values for these accessor functions require that the topology of MyScore corresponds with the Fomus score topology. That is, for the default accessor functions, MyScore must have the following topology: <code>sim(seq(&lt;arbitrarily nested note&gt;+)+)</code>.
-   %%
-   %%
-   %%
-   %%
+   %% 'getScoreSettings'/'getPartSettings': [for advanced users] Unary function that expects the Strasheela item corresponding to a score/part and returns a record of Fomus settings (same format as the fomus info record).
    %%
    %% */
    %%
    %% TODO:
    %%
-   %% - fomus info records given to score objects that correspond to neither score, part nor event are ignored
+   %% - info tags fomus, fomus_before and fomus_after can receive function that expects Strasheela item returns the corresponding info record 
+   %%
+   %% - fomus info records given to score objects that correspond to neither score, part nor event are ignored -- shall I change that??
+   %%   e.g., a container corresponding to a measure could have fomus_before info tag that inserts a measure as long as the container (e.g., with fomus_before given a function)
    %%
    %% - predef clauses for the following objects:
    %%   OK - notes
    %%   OK - pauses (no extra clause necessary if filtered out by getEvents/isEvent)
    %%   OK - chords (sim of notes)
-   %%   - HS note (with enharmonic notation) -- in HS functor?
+   %%   OK - HS note (with enharmonic notation) -- in HS functor?
+   %%   !! - Add enharmonic and microtonal notation in ET41, ET22 
+   %%   OK - HS chords and scales
+   %%   - non-harmonic tones marked with an X
+   %%   - adaptive JI marker
+   %% !!    -> consider using predefined functions like HS.out.MakeChordComment_Markup, HS.out.MakeAdaptiveJI_Marker etc.
+   %%   - Strasheela measure objects
+   %%   - grace notes (notes with duration 0) -- clearly document 
+   %%
    %%
    %% - single staff polyphony can be improved. Also, info tags in "intermediate" containers are currently ignored completely, which is a waste. see Fomus-Examples.oz
    %%
-   %% - Add enharmonic and microtonal notation in ET31, ET41, ET22 
-   %%   (at least ET31 for Lily & MusicXML)
-   %%
-   %% - ?? Extend examples/ControllingOutput-Examples/Fomus-Examples.oz by examples from Fomus doc? E.g., for changing measures, changing keys, grace noes, instrument defs / part defs, score layout, ...
-   %%
+   %% 
+   %% - ?? Extend examples/ControllingOutput-Examples/Fomus-Examples.oz by examples from Fomus doc? E.g., for
+   %%      partly OK- changing measures
+   %%      OK - changing keys
+   %%      - grace noes
+   %%      OK? - instrument defs / part defs
+   %%      - score layout
+   %%      - ...
    %% 
    %%
    fun {ToFomus MyScore Args}
@@ -2194,51 +2235,32 @@ define
 	     %% for processing items returned by getEvents
 	     eventClauses: nil
 	     getParts: GetFomusParts
-	     /** %% getScoreSettings/getPartSettings: unary function that expects the Strasheela item corresponding to a score/part and returns a record of Fomus settings (same format as the fomus info record).
-	     %% */
-	     %% Perhaps I should remove the following args altogether?
 	     getScoreSettings:fun {$ MyScore} unit end 
-	     %% !!?? TODO: replace by partClauses?
 	     getPartSettings:fun {$ MyPart} unit end 
 	    )
       As = {Adjoin Defaults Args}
       EventClauses = {Append As.eventClauses
-		      [isNote
-		       #fun {$ MyEvent PartId}
-			   {ListToVS ["note" "part" PartId
-				      {Record2FomusEvent
-				       {Adjoin unit(time:{MyEvent getStartTimeInBeats($)}
-						    dur:{MyEvent getDurationInBeats($)}
-						    pitch:{MyEvent getPitchInMidi($)})
-					{GetUserFomus MyEvent}}}]
-			     " "}
-			end
+		      [isNote#MakeFomusNote
 		       %% 
 		       IsFomusChord
 		       #fun {$ MyChord PartId}
 			    Ns = {MyChord getItems($)}
 			 in
-			    {ListToLines
-			     {ListToVS ["note" "part" PartId
-					{Record2FomusEvent
-					 {Adjoin unit(time:{Ns.1 getStartTimeInBeats($)}
-						      dur:{Ns.1 getDurationInBeats($)}
-						      pitch:{Ns.1 getPitchInMidi($)})
-					  {GetUserFomus Ns.1}}}]
-			      " "} |
-			     {Map Ns.2
-			      fun {$ N}
-				 "  " % indent further chord tones
-				 #{Record2FomusEvent_Untimed
-				       {Adjoin unit(pitch:{N getPitchInMidi($)})
-					{GetUserFomus N}}}
-			      end}}
+			   {ListToLines
+			    {MakeFomusNote Ns.1 PartId} |
+			    {Map Ns.2
+			     fun {$ N}
+				"  " % indent further chord tones
+				#{Record2FomusEvent_Untimed
+				  {Adjoin unit(pitch:{N getPitchInMidi($)})
+				   {GetUserFomus N}}}
+			     end}}
 			end
 		       %% rests are ignored
 		       isPause#fun {$ _ _} "" end
 		       %% Otherwise clause
 		       fun {$ _} true end
-		       #fun {$ X}
+		       #fun {$ X _}
 			   {GUtils.warnGUI "Score contains object ("#{Value.toVirtualString X 1 1}#") for which no Fomus event clause was defined!"}
 %	      {Browse warn#unsupportedClass(X ToFomus)}
 			   ''
