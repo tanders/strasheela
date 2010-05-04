@@ -40,7 +40,11 @@ import
 %    Browser(browse:Browse) % temp for debugging
    Score at 'x-ozlib://anders/strasheela/source/ScoreCore.ozf'
    Pattern at 'x-ozlib://anders/strasheela/Pattern/Pattern.ozf'
+   Out at 'source/Output.ozf'
+   
 export
+   Out
+   
    Measure IsMeasure
    % MeasureSeq IsMeasureSeq
    UniformMeasures IsUniformMeasures
@@ -89,8 +93,9 @@ define
 	 Score.temporalElement, {Record.subtractList M
 			      [beatNumber beatDuration accentIdxDB]}
 	 @beatNumber = {New Score.parameter init(value:BeatNr info:beatNumber)}
-	 @beatDuration = {New Score.parameter init(value:BeatDuration info:beatDuration)}
+	 @beatDuration = {New Score.timeParameter init(value:BeatDuration info:beatDuration)}
 	 {self bilinkParameters([@beatNumber @beatDuration])}
+	 {@beatDuration getUnit($)} = {self getTimeUnit($)}
 	 %%
 	 %% init constraints: 
 	 %%
@@ -354,20 +359,22 @@ define
 		beatDuration:BeatDuration<=_
 		...) = M
 	 Score.temporalElement, {Record.subtractList M
-			      [n beatNumber beatDuration accentIdxDB]}
+				 [n beatNumber beatDuration accentIdxDB]}
 
 	 @n = {New Score.parameter init(value:N info:n)}
 	 %% !! beatNumber and beatDuration are actually @measure parameters. They are 'mirrored' into UniformMeasures to ensure these params are accessible by the usually means (e.g. for distribution). -- I am not happy with this design, just costs more memory during search..
 	 @beatNumber = {New Score.parameter init(value:BeatNr info:beatNumber)}
-	 @beatDuration = {New Score.parameter init(value:BeatDuration
-						   info:beatDuration)}
+	 @beatDuration = {New Score.timeParameter init(value:BeatDuration
+						       info:beatDuration)}
 	 {self bilinkParameters([@n @beatNumber @beatDuration])}
 	 
 	 @measure = {Score.makeScore {Record.subtractList M
 				      [n offsetTime startTime endTime duration]}
 		     unit(init:Measure)}
 	 %% to determine timing params of measure
-	 {@measure getStartTime($)} = 0 
+	 {@measure getStartTime($)} = 0
+	 {@measure getTimeUnit($)} = {self getTimeUnit($)}
+	 {@beatDuration getUnit($)} = {self getTimeUnit($)}
 	 %%
 	 %% initConstraint
 	 %%
@@ -417,6 +424,9 @@ define
       %% */
       meth getMeasureDuration(?X)
 	 X = {@measure getDuration($)}
+      end
+      meth getMeasureDurationParameter(?X)
+	 X = {@measure getDurationParameter($)}
       end
 
       /** %% I is the index of the measure at Time. A measure starts at its start time and ends before its end time. For instance, the index for the first measure is 1, starting at Time 0. Measure 2 starts at MeasureDuration. I and Time are FD integers.
