@@ -89,7 +89,7 @@ export
    ToFomus OutputFomus RenderFomus
    %% expert Fomus procs
    GetUserFomus GetUserFomus_Before GetUserFomus_After
-   Record2FomusEvent Record2FomusNote Record2FomusObject Record2FomusSetting Record2FomusCode
+   Record2FomusEvent Record2FomusNote Record2FomusObject Record2FomusSetting Record2FomusCode Record2FomusMeasure
    MakeFomusNote
    
    MakeCMEvent MakeCMScore OutputCMScore
@@ -2010,6 +2010,29 @@ define
       # " ;"
    end
 
+   /** %% [for clause definitions etc] Transforms a record into a VS of the form "time <time> dur <dur> | <measure-settings> | ".
+   %% The features time and dur are required. 
+   %% */
+   fun {Record2FomusMeasure X}
+      fun {ProcessSettings Xs} 
+	 {ListToVS
+	  {Map Xs fun {$ Feat#Val} Feat#"="#Val end}
+	  " "}
+      end
+      fun {ProcessMeasureFeats Xs} 
+	 {ListToVS
+	  {Map Xs fun {$ Feat#Val} Feat#":"#Val end}
+	  " "}
+      end
+   in
+      %% 'time' is always at the beginning, followed by 'dur'
+      {ProcessSettings [time#X.time dur#X.dur]}
+      # " | "
+      #{ProcessMeasureFeats {Record.toListInd
+			     {Record.subtractList {CleanupFomusSettings X}
+			      [time dur]}}}
+      #" |"
+   end
    
    /** %% [for clause definitions etc] Expects a record R, whose features are the Fomus settings of a note and MyItem (typically the note itself). MyItem is used to add the settings in its fomus info tag, if MyNote is nil then these are left out. Record2FomusNote returns the corresponding Fomus code (a VS).
    %% Required features in R: part, time, dur.
@@ -2169,7 +2192,8 @@ define
 	      fomus(inst: violin)]
        ...)
 
-   %% Note that in principle Strasheela objects can correspond to multiple Fomus hierarchic levels (e.g., when outputting a single Strasheela note it corresponds to the score, a part and an event). However, for many Fomus settings it is necessary to have different Strasheela objects for different Fomus hierarchic levels, because certain settings are only permitted at certain Fomus hierarchic levels.  
+   %% Note that in principle Strasheela objects can correspond to multiple Fomus hierarchic levels (e.g., when outputting a single Strasheela note it corresponds to the score, a part and an event). However, for many Fomus settings it is necessary to have different Strasheela objects for different Fomus hierarchic levels, because certain settings are only permitted at certain Fomus hierarchic levels.
+   %%
    %%
    %% If tagging parts with the info tag fomusPart is not sufficient for your purpose to locate the Strasheela containers that correspond to parts, then the argument 'getParts' makes an alternative approach possible (recommended only for expert users).
    %%
