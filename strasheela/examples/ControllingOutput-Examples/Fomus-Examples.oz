@@ -804,9 +804,49 @@ MyScore = {Score.makeScore
 {{MyScore find($ isNote)} getStartTime($)}
 
 
+% % % % % % % % % % % % % % % % %
+%%
+%% Strasheela measure objects
+%%
+%% Note simple trick to avoid Strasheela measures cause outputting an extra staff: the seq of the measure and the first (and only) actual part of the score are set to the same part ID using the info tag fomusPart.
+%%
+
+declare
+End
+MyScore = {Score.makeScore
+	   sim([seq(info: fomusPart(violin)
+		   [measure(beatNumber:4 %% 4/4 beat
+			    beatDuration:4 
+% 			     endTime:End
+			    )])
+		seq(info: fomusPart(violin)
+		    [note(duration: 4
+			  pitch: 59)
+		     note(duration: 8
+			  pitch: 60)
+		     note(duration: 4
+			  pitch: 62)
+		     note(duration: 16
+			  pitch: 64)]
+% 		    endTime:End
+		   )]
+	       startTime:0
+	       timeUnit:beats(4))
+	   add(measure:Measure.uniformMeasures)}
+
+% {MyScore wait} % end time of measure undetermined!
+{Out.renderFomus MyScore      
+ unit(file:"StrasheelaMeasure"
+      eventClauses: [Measure.out.uniformMeasuresToFomusClause]
+     )}
+
+     
+
+
+
 %%
 %% TODO: 
-%% How to automatically start new measures with certain notes and let Fomus work out the measure duration?
+%% How to automatically start new measure at certain notes and let Fomus work out the measure duration?
 %%
 
 %% I've been planning on allowing measures with duration 0 (or no duration), but haven't finished this yet...  At the moment you have to accomplish this by supplying large durations so that fomus trims the overlapping measures.  
