@@ -2234,7 +2234,7 @@ define
    %%   - non-harmonic tones marked with an X
    %%   - adaptive JI marker
    %% !!    -> consider using predefined functions like HS.out.MakeChordComment_Markup, HS.out.MakeAdaptiveJI_Marker etc.
-   %%   - Strasheela measure objects
+   %%   OK - Strasheela measure objects
    %%   - grace notes (notes with duration 0) -- clearly document 
    %%
    %%
