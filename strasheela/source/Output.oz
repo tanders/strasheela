@@ -2038,12 +2038,24 @@ define
    %% Required features in R: part, time, dur.
    %% */
    fun {Record2FomusNote R MyItem}
+      fun {IsPlainMark X}
+	 X \= nil andthen {IsVirtualString X} 
+      end
+      UserFomus = if MyItem == nil
+		  then unit
+		  else {GetUserFomus MyItem}
+		  end
+      %% append marks in R and UserFomus
+      Marks1 = {CondSelect R marks nil}
+      Marks2 = {CondSelect UserFomus marks nil}
+      Marks = {Append if {IsPlainMark Marks1} then [Marks1] else Marks1 end
+	       if {IsPlainMark Marks2} then [Marks2] else Marks2 end}
+   in
       {ListToVS ["note" "part" R.part
-		 {Record2FomusEvent {Adjoin {Record.subtract R part}
-				     if MyItem == nil
-				     then unit
-				     else {GetUserFomus MyItem}
-				     end}}]
+		 {Record2FomusEvent
+		  {Adjoin {Adjoin {Record.subtract R part}
+			   UserFomus}
+		   unit(marks:Marks)}}]
        " "}
    end
    
