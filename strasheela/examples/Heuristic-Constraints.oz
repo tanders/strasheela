@@ -73,7 +73,11 @@ end
 	{Score.apply_H Less_H [PP1 PP2] 1}
      end}
  end
- unit(value: heuristic)}
+ unit(value: heuristic
+      %% other distribution settings work as before
+      order: timeParams
+      select: value
+      test: fun {$ X} {{X getItem($)} isNote($)} end)}
 
 
 */
