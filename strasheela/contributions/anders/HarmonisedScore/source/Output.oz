@@ -128,16 +128,21 @@ define
    %% */
    fun {MakeNoteToFomusClause Table}   
       HS_Score.isPitchClassMixin
-      # fun {$ MyEvent PartId}
-	   Nominal#Acc = {PcToEnharmonics {MyEvent getPitchClass($)} Table}
-	   Oct = {MyEvent getOctave($)}
+      # fun {$ MyNote PartId}
+	   Nominal#Acc = {PcToEnharmonics {MyNote getPitchClass($)} Table}
+	   Oct = {MyNote getOctave($)}
 	in
-	   {Out.record2FomusNote unit(part:PartId
-				      time:{MyEvent getStartTimeInBeats($)}
-				      dur:{MyEvent getDurationInBeats($)}
-				      pitch:Nominal#Acc#Oct
-				      acc:Acc)
-	    MyEvent}
+	   {Out.record2FomusNote
+	    {Adjoin if {MyNote getInChordB($)} == 0
+		    then unit(marks: 'x "x"')  % mark non-harmonic tones
+		    else unit
+		    end
+	     unit(part:PartId
+		  time:{MyNote getStartTimeInBeats($)}
+		  dur:{MyNote getDurationInBeats($)}
+		  pitch:Nominal#Acc#Oct
+		  acc:Acc)}
+	    MyNote}
 	end
    end
 
