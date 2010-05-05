@@ -405,13 +405,16 @@ define
 	 end
       end
    in
-      /** %% Returns a value ordering, i.e. a binary be given to distribution arg 'value'. This value ordering takes heuristic constraints applied with Score.apply_H into account. In addition, it randomises the decision making. RandGen is a nullary function created by GUtils.makeRandomGenerator.   
-      %% NOTE: this value ordering is conveniently applied by setting the distribution argument 'value' of any solver to 'heuristic'.
+      /** %% Returns a value ordering, i.e. a binary be given to distribution arg 'value'. This value ordering takes heuristic constraints applied with Score.apply_H into account. In addition, it randomises the decision making. RandGen is a nullary function created by GUtils.makeRandomGenerator.
+      %%
+      %% Naturally, any value ordering heuristics is only effective for parameters that are actually distributed. For example, if the pitch classes and octaves of notes are distributed and the note pitches are determined by propagation, then any heuristic constraint applied to the pitches has no effect.
+      %%
+      %% NOTE:  this value ordering is conveniently applied by setting the distribution argument 'value' of any solver to 'heuristic'.
       %% */
       %% To decide: should this be default value ordering, together with randomised value ordering?
       %%
       %% !! TODO:
-      %% Problem: how to randomise heuristic constraints: they would need to also use an deterministic RandGen
+      %% Problem: how to randomise heuristic constraints (i.e. use random within the heuristic constraint definition): they would need to also use an deterministic RandGen
       %% Just try creating further Gutils.makeRandomGenerator instances, one for each "random heursitic" and see how this works...
       %% Or can I create a single instance and then use that within the CSP and in the value ordering? No, that is not possible: the instance for the value ordering must optionally be created automatically for convenience. 
       %%
@@ -461,23 +464,29 @@ define
 				   {GUtils.randIntoRange {RandGen} 
 				    1 {Length BestDomValues}}}
 	    in
-% 	    {Browse heuristic(notePosition:{{Param getItem($)}
-% 					    getPosition($ {{Param getItem($)} getTemporalAspect($)})}
-% 			      dom:Dom
-% 			      bestDomValues: BestDomValues
-% 			      selectedDomValue: SelectedDomValue
-% 			     )}
+% 	       {Browse heuristic(Param#{Param getInfo($)}
+% 				 notePosition:{{Param getItem($)}
+% 					       getPosition($ {{Param getItem($)} getTemporalAspect($)})}
+% 				 dom:Dom
+% 				 bestDomValues: BestDomValues
+% 				 selectedDomValue: SelectedDomValue
+% 				 heuristics: Heuristics
+% 				 allHeuristics: {Param getHeuristics($)}
+% 				)}
 	       SelectedDomValue
 	    else
-	       %% Hs is nil
+	       %% Heuristics is nil
 	       Rand = {GUtils.randIntoRange {RandGen} % pseudo-random number generated here
 		       {FD.reflect.min Var} {FD.reflect.max Var}}
 	    in
-% 	       {Browse default(notePosition:{{Param getItem($)}
+% 	       {Browse default(Param#{Param getInfo($)}
+% 			       notePosition:{{Param getItem($)}
 % 					     getPosition($ {{Param getItem($)} getTemporalAspect($)})}
 % 			       dom:Dom
 % 			       selectedDomValue: {FD.reflect.nextSmaller Var Rand+1}
 % 			       rand:Rand
+% 			       heuristics: Heuristics
+% 			       allHeuristics: {Param getHeuristics($)}
 % 			      )}
 	       {FD.reflect.nextSmaller Var Rand+1}
 	       %%
