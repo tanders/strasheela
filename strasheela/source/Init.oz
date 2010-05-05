@@ -423,7 +423,7 @@ define
 	 then 
 	    FileName = out#{GUtils.getCounterAndIncr}
 	 in
-	    {Out.callFomus X
+	    {Out.renderFomus X
 	     unit(file: FileName)}
 	 end
       end
