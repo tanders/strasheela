@@ -34,12 +34,18 @@ export
    MakeNoteToFomusClause
    MakeChordToFomusClause
    MakeScaleToFomusClause
-
+   VsToFomusForLilyMarks
+   FomusPCs_Default
+   MakeNonChordTone_FomusMarks
+   MakeAdaptiveJI_FomusForLilyMarks MakeAdaptiveJI2_FomusForLilyMarks
+   MakeChordComment_FomusForLilyMarks MakeChordRatios_FomusForLilyMarks MakeScaleComment_FomusForLilyMarks
+   
+   
    RenderAndShowLilypond
 
    
-   MakeNonChordTone_Markup MakeAdaptiveJI_Marker MakeAdaptiveJI2_Marker
-   MakeChordComment_Markup MakeChordRatios_Markup MakeScaleComment_Markup
+   MakeNonChordTone_LilyMarkup MakeAdaptiveJI_Marker MakeAdaptiveJI2_Marker
+   MakeChordComment_LilyMarkup MakeChordRatios_LilyMarkup MakeScaleComment_LilyMarkup
    
    MakeNoteToLily MakeSimToLilyChord MakePcCollectionToLily
 
@@ -124,19 +130,23 @@ define
       [Aux2.1]#Aux2.2
    end
    /** %% MakeNoteToFomusClause adds support for HS notes (instances of class HS.score.pitchClassMixin) to Fomus export with customisable enharmonic notation. More specifically, it returns a clause that can be appended to the given to the argument eventClauses of Out.renderFomus and friends.
-   %% MakeNoteToFomusClause expects Table, a tuplet that maps pitch classes (ints) to Fomus pitch classes (strings or atoms of symbolic note names). A valid Fomus pitch class consists of a nominal and a Fomus accidental (e.g., 'Cn' or 'C#'). See functors like ET31.out for table examples.
+   %%
+   %% Args:
+   %% 'table' (default FomusPCs_Default): a tuplet that maps pitch classes (ints) to Fomus pitch classes (strings or atoms of symbolic note names). A valid Fomus pitch class consists of a nominal and a Fomus accidental (e.g., 'Cn' or 'C#').
+   %% 'getSettings': unary function that expects the processed note and returns a record of fomus settings. This function can be used to arbitrarily customise the notation of each note depending on the note itself (only standard note settings like time etc cannot be overwritten).  
    %% */
-   fun {MakeNoteToFomusClause Table}   
+   fun {MakeNoteToFomusClause Args}
+      Defaults = unit(table: FomusPCs_Default
+		     getSettings: fun {$ _} unit end)
+      As = {Adjoin Defaults Args}
+   in
       HS_Score.isPitchClassMixin
       # fun {$ MyNote PartId}
-	   Nominal#Acc = {PcToEnharmonics {MyNote getPitchClass($)} Table}
+	   Nominal#Acc = {PcToEnharmonics {MyNote getPitchClass($)} As.table}
 	   Oct = {MyNote getOctave($)}
 	in
 	   {Out.record2FomusNote
-	    {Adjoin if {MyNote getInChordB($)} == 0
-		    then unit(marks: 'x "x"')  % mark non-harmonic tones
-		    else unit
-		    end
+	    {Adjoin {As.getSettings MyNote}
 	     unit(part:PartId
 		  time:{MyNote getStartTimeInBeats($)}
 		  dur:{MyNote getDurationInBeats($)}
@@ -146,27 +156,33 @@ define
 	end
    end
 
-   /** %% [Aux] Expects a Fomus pitch class table (a tuple, see MakeChordToFomusClause doc) and a Fomus "grace time" (see http://fomus.sourceforge.net/doc.html/Grace-Notes-_0028File_0029.html#Grace-Notes-_0028File_0029). Returns a chord/scale processing function for note-eventClause, which returns the Fomus code for a Strasheela chord/scale object.
+   /** %% [Aux] Returns a chord/scale processing function for note-eventClause, which returns the Fomus code for a Strasheela chord/scale object.
+   %%
+   %% Args:
+   %% 'table' (default FomusPCs_Default): a tuplet that maps pitch classes (ints) to Fomus pitch classes (strings or atoms of symbolic note names). A valid Fomus pitch class consists of a nominal and a Fomus accidental (e.g., 'Cn' or 'C#').
+   %%
+   %% 'getSettings': unary function that expects the processed chord and returns a record of fomus settings. This function can be used to arbitrarily customise the notation of each root note depending on the note itself (only standard settings like time etc cannot be overwritten).
+   %%
+   %% 'grace': a pair of Fomus "grace time" settings (see http://fomus.sourceforge.net/doc.html/Grace-Notes-_0028File_0029.html#Grace-Notes-_0028File_0029). The first setting is for notating the first pitch class and the second for the remaining pitch classes.
    %% */
-   %% TODO: grace note pitch classes for scale
-/*
-   time 0 dur 1/4
-    grace 0 pitch 50 ;
-    grace + pitch 53 ;
-    grace + pitch 56 ;
-   time 0 dur 1/2 pitch 59 ;
-   */
-   fun {MakePCCollToFomus Table Grace}
+   fun {MakePCCollToFomus Args}
+      Defaults = unit(table: FomusPCs_Default
+		      getSettings: fun {$ _} unit end
+		      grace: 0#0)
+      As = {Adjoin Defaults Args}
+   in
       fun {$ MyChord PartId}
-	 RootNominal#RootAcc = {PcToEnharmonics {MyChord getRoot($)} Table}
+	 RootNominal#RootAcc = {PcToEnharmonics {MyChord getRoot($)} As.table}
 	 Oct = 4
 	 Time = {MyChord getStartTimeInBeats($)}
-	 fun {PcToFomus PC}
-	    Nominal#Acc = {PcToEnharmonics PC Table}
+	 fun {PcToFomus I PC}
+	    Nominal#Acc = {PcToEnharmonics PC As.table}
 	    Oct = 4
 	 in
 	    {Out.record2FomusNote unit(part:PartId
-				       grace: Grace
+				       grace: if I==1 then As.grace.1
+					      else As.grace.2
+					      end
 				       time:Time
 				       dur: 1 % a beat
 				       pitch: Nominal#Acc#Oct
@@ -175,34 +191,156 @@ define
 	 end
       in
 	 %% PC collection pitch classes
-	 {Out.listToVS {Map {HS_Score.pcSetToSequence {MyChord getPitchClasses($)}
+	 {Out.listToVS {List.mapInd {HS_Score.pcSetToSequence {MyChord getPitchClasses($)}
 			     {MyChord getRoot($)}}
-			fun {$ PC} {PcToFomus PC} end}
+			fun {$ I PC} {PcToFomus I PC} end}
 	  "\n"}#"\n"
 	 %% PC collection root
-	 #{Out.record2FomusNote unit(part:PartId
-				     time:Time
-				     dur:{MyChord getDurationInBeats($)}
-				     pitch: RootNominal#RootAcc#Oct
-				     acc: RootAcc
-				     %% TODO: make textual mark customisable (e.g., chord/scale name or ratios).
-				     marks: ["x \""#({HS_DB.getName MyChord}.1)#"\""])
+	 #{Out.record2FomusNote
+	   {Adjoin {As.getSettings MyChord}
+	    unit(part:PartId
+		 time:Time
+		 dur:{MyChord getDurationInBeats($)}
+		 pitch: RootNominal#RootAcc#Oct
+		 acc: RootAcc
+% 		 %% TODO: make textual mark customisable (e.g., chord/scale name or ratios).
+% 		 marks: ["x \""#({HS_DB.getName MyChord}.1)#"\""]
+		)}
 	   MyChord}
       end
    end
    
   /** %% MakeChordToFomusClause adds support for HS chord objects to Fomus export with customisable enharmonic notation. More specifically, it returns a clause that can be appended to the given to the argument eventClauses of Out.renderFomus and friends.
    %% MakeChordToFomusClause expects Table, a tuplet that maps pitch classes (ints) to Fomus pitch classes (strings or atoms of symbolic note names). A valid Fomus pitch class consists of a nominal and a Fomus accidental (e.g., 'Cn' or 'C#'). See functors like ET31.out for table examples.
+   %%
+   %% Args:
+   %% 'table' (default FomusPCs_Default): a tuplet that maps pitch classes (ints) to Fomus pitch classes (strings or atoms of symbolic note names). A valid Fomus pitch class consists of a nominal and a Fomus accidental (e.g., 'Cn' or 'C#').
+   %%
+   %% 'getSettings': unary function that expects the processed chord and returns a record of fomus settings. This function can be used to arbitrarily customise the notation of each root note depending on the note itself (only standard settings like time etc cannot be overwritten).
    %% */ 
-   fun {MakeChordToFomusClause Table}   
-      HS_Score.isChord # {MakePCCollToFomus Table 0}
+   fun {MakeChordToFomusClause Args}   
+      HS_Score.isChord # {MakePCCollToFomus {Adjoin Args unit(grace: 0#0)}}
    end
    /** %% MakeScaleToFomusClause adds support for HS scale objects to Fomus export with customisable enharmonic notation. See MakeChordToFomusClause for more information.
-   %% */ 
-   fun {MakeScaleToFomusClause Table}   
-      HS_Score.isScale # {MakePCCollToFomus Table 10}
+   %% */
+   %% TODO: sequence of grace notes with the following approach -- enable if Fomus supports these properly.
+/*
+   time 0 dur 1/4
+    grace 0 pitch 50 ;
+    grace + pitch 53 ;
+    grace + pitch 56 ;
+   time 0 dur 1/2 pitch 59 ;
+   */
+   fun {MakeScaleToFomusClause Args}   
+      HS_Score.isScale # {MakePCCollToFomus {Adjoin Args unit(% grace: 0#'+'  %% currently not working in Fomus
+							      grace: 10#10)}}
    end
 
+
+   /** %% [markup function] Expects a VS and returns a Fomus settings record with this VS as a Lilypond markup.
+   %%
+   %% Args:
+   %% 'where' (default 'below'): atom where to position markup, either 'above' or 'below'.
+   %% */
+   fun {VsToFomusForLilyMarks VS Args}
+      Default = unit(where: below)
+      As = {Adjoin Default Args}
+      Where = case As.where of
+		 above then "^"
+	      [] below then "_"
+	      end
+   in
+      if {Not {IsVirtualString VS}}
+      then raise noVS(VS) end
+	 unit % never returned 
+      else unit('lily-insert-after': {Out.formatVS Where#"\\markup{"#VS#"}"})
+      end
+   end
+
+   
+   /** %% Fomus PC table for 12-TET intended, e.g., for MakeNoteToFomusClause as arg table.
+   %% */
+   FomusPCs_Default = pcs(0:'Cn' 1:'C#'
+			  2:'Dn' 3:'Eb'
+			  4:'En'
+			  5:'Fn' 6:'F#'
+			  7:'Gn' 8:'Ab' 
+			  9:'An' 10:'Bb' 
+			  11:'Bn')
+
+   /** %% [Note markup function] Expects a note and returns a fomus settings record. Non-harmonic tones are marked with an x, and for all other score objects unit (no settings) is returned. 
+   %% */
+   fun {MakeNonChordTone_FomusMarks MyNote}
+      if {HS_Score.isInChordMixinForNote MyNote}
+	 andthen {MyNote getChords($)} \= nil
+	 andthen {MyNote isInChord($)} == 0
+      then unit(marks: 'x "x"')  % mark non-harmonic tones
+%       then unit(marks: 'xx "x"')  % mark non-harmonic tones: causes Fomus error
+      else unit
+      end
+   end
+
+   /** %% [Note markup function] Expects a note and returns a fomus settings record with a 'lily-insert-after' VS that prints the adaptive JI pitch offset of this note in cent. For all other score objects nil is returned.
+   %%
+   %% Note that Lilypond does not necessarily preserve the order marks for multiple parts per staff. 
+   %% */
+   fun {MakeAdaptiveJI_FomusForLilyMarks MyNote}
+      JIPitch = {HS_Score.getAdaptiveJIPitch MyNote unit}
+      ETPitch = {MyNote getPitchInMidi($)}
+   in
+      if {Abs JIPitch-ETPitch} > 0.001
+      then {VsToFomusForLilyMarks {GUtils.roundDigits (JIPitch-ETPitch)*100.0 1}#"c" unit}
+      else {VsToFomusForLilyMarks "0c" unit} 
+      end
+   end
+
+   /** %% [Note markup function] Expects a note and returns a fomus settings record with a 'lily-insert-after' VS that prints the adaptive JI pitch offset of this note and additionally the absolute pitch in cent. For all other score objects nil is returned.
+   %%
+   %% Note that Lilypond does not necessarily preserve the order marks for multiple parts per staff.
+   %% */
+   fun {MakeAdaptiveJI2_FomusForLilyMarks MyNote}
+      JIPitch = {HS_Score.getAdaptiveJIPitch MyNote unit}
+      ETPitch = {MyNote getPitchInMidi($)}
+   in
+      if {Abs JIPitch-ETPitch} > 0.001
+      then {VsToFomusForLilyMarks "\\column {"#{GUtils.roundDigits (JIPitch-ETPitch)*100.0 1}#"c "#JIPitch#"c}" unit}
+      else {VsToFomusForLilyMarks "\\column {"#0#"c "#{MyNote getPitchInMidi($)}#"c}" unit}
+      end
+   end
+
+                  
+   /** %% [Chord markup function] Expects a chord and returns the chord comment (a fomus settings record with a 'lily-insert-after' VS). For all other score objects nil is returned.
+   %% */
+   fun {MakeChordComment_FomusForLilyMarks MyChord}
+      {VsToFomusForLilyMarks
+       "\\column { "#{HS_DB.getName MyChord}.1#" } "
+       unit}
+   end
+   /* %% [Chord markup function] Expects a chord and returns the chord as ratio spec (a fomus settings record with a 'lily-insert-after' VS): Transposition x untransposed PCs (a VS). For all other score objects nil is returned.
+   %% */
+   fun {MakeChordRatios_FomusForLilyMarks MyChord}
+      {VsToFomusForLilyMarks
+       "\\column { "
+       #{Pc2RatioVS {MyChord getTransposition($)}}
+       #" x ("
+       #{Out.listToVS {Map {FS.reflect.lowerBoundList
+			    {MyChord getUntransposedPitchClasses($)}}
+		       Pc2RatioVS}
+	 " "}
+       #") }"
+       unit}
+   end
+   
+   /** %% [Scale markup function] Expects a scale and returns the scale comment (a fomus settings record with a 'lily-insert-after' VS). For all other score objects nil is returned. 
+   %% */
+   fun {MakeScaleComment_FomusForLilyMarks MyScale}
+      {VsToFomusForLilyMarks
+       "\\column {"
+       # {HS_DB.getName MyScale}.1
+       # " } "
+       unit}
+   end
+   
    
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%
@@ -219,8 +357,8 @@ define
    %%
    %% 'pitchUnit': a pitch unit atom for which the Lilypond output is defined.
    %% 'pcsLilyNames' (default pcs(0:c 1:cis 2:d 3:'dis' 4:e 5:f 6:fis 7:g 8:gis 9:a 10:ais 11:b)): tuple of atomes that assigns to each pitch class of the temperament a Lilypond pitch name. The width of the tuple should correspond to the pitch unit.
-   %% 'upperMarkupMakers' (default [MakeNonChordTone_Markup]): a list of unary functions (markup makers) for creating textual markup placed above the staff over a given score object. Each markup function expects a score object and returns a VS. There exist four cases of score objects for which markup can be applied: note objects in general, note objects in simultaneous containers of notes (notated as a chord in Lilypond), chord objects and scale objects. The definition of each markup function must care for all these cases (e.g., with an if expression test whether the input is a note object and then create some VS or alternatively create the empty VS nil). 
-   %% 'lowerMarkupMakers' (default [MakeChordComment_Markup MakeScaleComment_Markup]): same as 'upperMarkupMakers', but for markups placed below the staff.
+   %% 'upperMarkupMakers' (default [MakeNonChordTone_LilyMarkup]): a list of unary functions (markup makers) for creating textual markup placed above the staff over a given score object. Each markup function expects a score object and returns a VS. There exist four cases of score objects for which markup can be applied: note objects in general, note objects in simultaneous containers of notes (notated as a chord in Lilypond), chord objects and scale objects. The definition of each markup function must care for all these cases (e.g., with an if expression test whether the input is a note object and then create some VS or alternatively create the empty VS nil). 
+   %% 'lowerMarkupMakers' (default [MakeChordComment_LilyMarkup MakeScaleComment_LilyMarkup]): same as 'upperMarkupMakers', but for markups placed below the staff.
    %% 'codeBeforeNoteMakers' (default nil): list of unary functions for creating Lilypond code placed directly before a note. Each function expects a score object and returns a VS. There exist three cases of score objects for which markup can be applied: note objects in general, notes in simultaneous containers of notes (notated as a chord in Lilypond), and Strasheela chord/scale objects (the resulting Lilypond code is placed before the chord/scale root). The definition of each function must care for these cases.
    %% 'codeBeforePcCollectionMakers' (default nil): list of binary functions for creating Lilypond code placed directly before a Lilypond note that is part of a Lilypond representation of a Strasheela chord/scale pitch class. Each function expects a chord/scale object and a pitch class; it returns a VS.
    %%
@@ -239,8 +377,8 @@ define
 		     %%
 		     pcsLilyNames: pcs(0:c 1:cis 2:d 3:'dis' 4:e 5:f
 				       6:fis 7:g 8:gis 9:a 10:ais 11:b)
-		     upperMarkupMakers: [MakeNonChordTone_Markup]
-		     lowerMarkupMakers: [MakeChordComment_Markup MakeScaleComment_Markup]
+		     upperMarkupMakers: [MakeNonChordTone_LilyMarkup]
+		     lowerMarkupMakers: [MakeChordComment_LilyMarkup MakeScaleComment_LilyMarkup]
 		     codeBeforeNoteMakers: nil
 		     codeBeforePcCollectionMakers: nil
 		     getClef: fun {$ X}
@@ -531,7 +669,7 @@ define
    
    /** %% [Note markup function] Expects a note and returns a VS. For harmonic tones the VS is " " and for non-harmonic tones "x". For all other score objects nil is returned.
    %% */
-   fun {MakeNonChordTone_Markup MyNote}
+   fun {MakeNonChordTone_LilyMarkup MyNote}
       if {MyNote isNote($)}
       then if {HS_Score.isInChordMixinForNote MyNote}
 	      andthen {MyNote getChords($)} \= nil
@@ -582,7 +720,7 @@ define
                
    /** %% [Chord markup function] Expects a chord and returns the chord comment (a VS). For all other score objects nil is returned.
    %% */
-   proc {MakeChordComment_Markup MyChord ?Result}
+   proc {MakeChordComment_LilyMarkup MyChord ?Result}
       if {HS_Score.isChord MyChord}
       then Result = '#'('\\column { '
 			{HS_DB.getName MyChord}.1
@@ -596,7 +734,7 @@ define
    end
    /* %% [Chord markup function] Expects a chord and returns the chord as ratio spec: Transposition x untransposed PCs (a VS). For all other score objects nil is returned.
    %% */
-   proc {MakeChordRatios_Markup MyChord ?Result}
+   proc {MakeChordRatios_LilyMarkup MyChord ?Result}
       if {HS_Score.isChord MyChord}
       then Result = '#'('\\column { '
 			{Pc2RatioVS {MyChord getTransposition($)}}
@@ -615,7 +753,7 @@ define
             
    /** %% [Scale markup function] Expects a scale and returns the scale comment (a VS). For all other score objects nil is returned. 
    %% */
-   proc {MakeScaleComment_Markup MyScale ?Result}
+   proc {MakeScaleComment_LilyMarkup MyScale ?Result}
       if {HS_Score.isScale MyScale}
       then
 % 	 ScaleComment = {HS_DB.getInternalScaleDB}.comment.{MyScale getIndex($)}
