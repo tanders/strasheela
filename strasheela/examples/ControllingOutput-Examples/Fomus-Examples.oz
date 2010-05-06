@@ -545,6 +545,16 @@ MyScore = {Score.makeScore
 % 		     {HS.out.makeNoteToFomusClause ET31.out.fomusPCs_DoubleAccs}
 		    ])}
 
+{Out.renderFomus MyScore
+ unit(file:enharmonicTest
+      output:xml
+      eventClauses: [%% NOTE: comment out intended accidental format
+		     %% Version with quarter-tone accidentals
+		     {HS.out.makeNoteToFomusClause ET31.out.fomusPCs_Quartertones}
+		     %% Version with double accidentals
+% 		     {HS.out.makeNoteToFomusClause ET31.out.fomusPCs_DoubleAccs}
+		    ])}
+
 %% NOTE: Before continuing with the next example, unset the 31-TET setting
 %% (i.e. set back the default setting)
 {HS.db.setDB HS.dbs.default.db}
@@ -673,7 +683,9 @@ MyScore = {MakeScore Durations BeatDivision}
 {Out.renderFomus MyScore
  unit(file:'triplet-and-quintuplet-test')}
  
-
+{Out.renderFomus MyScore
+ unit(file:'triplet-and-quintuplet-test'
+      output:xml)}
 
 
 
