@@ -60,7 +60,9 @@ import
 export
    Show
    WriteToFile ReadFromFile
-   RecordToVS RecordToVS_simple ListToVS ListToLines % ListToVS2 ListToVS3 
+   RecordToVS RecordToVS_simple ListToVS ListToLines % ListToVS2 ListToVS3
+   FormatVS FormatString
+   
    MakeEventlist OutputEventlist
    ScoreToEvents
    MakeHierarchicVSScore
@@ -301,6 +303,52 @@ define
 %       [] X|Tail then X#"\n"#{ListToLines Tail}
 %       [] nil then nil
 %       end
+   end
+
+   
+   /** %% If X is a virtual string, it will be surrounded by explicit double-quotes, \ and " in strings must be escaped.
+   %% */
+   fun {FormatVS X}
+      fun {Aux X}
+	 if {IsAtom X} then X
+	 elseif {IsString X}
+	    %% same code as FormatString
+	 then {LUtils.mappend X
+	       fun {$ Char}
+		  if Char == &\\
+		  then [&\\ &\\]
+		  elseif Char == &"
+		  then [&\\ &"]
+		  else [Char]
+		  end
+	       end}
+	 elseif {IsVirtualString X} andthen {IsRecord X}
+	 then {Record.map X Aux}
+	 else X
+	 end
+      end
+   in
+      if {IsVirtualString X} andthen ({IsRecord X} orelse {IsString X})
+      then  "\""#{Aux X}#"\""
+      else X
+      end
+   end
+   
+   /** %% If X is a string, it will be surrounded by explicit double-quotes, \ and " in strings must be escaped.
+   %% */
+   fun {FormatString X}
+      if {IsString X}
+      then "\""#{LUtils.mappend X
+		 fun {$ Char}
+		    if Char == &\\
+		    then [&\\ &\\]
+		    elseif Char == &"
+		    then [&\\ &"]
+		    else [Char]
+		    end
+		 end}#"\""
+      else X
+      end
    end
 
    /** %% [Temp def? Def. not general enough] MakeEventlist generates a virtual string for output from Score. The unary function EventOut generates the output of a single event. The binary function ScoreOut combines all events to a score.
@@ -2092,7 +2140,7 @@ define
    %% */
    fun {Record2FomusSetting X}
       {ListToVS {Map {Record.toListInd X}
-		 fun {$ Feat#Val} Feat#"="#{CleanupFomusSetting Val}#"\n" end}
+		 fun {$ Feat#Val} Feat#"="#{FormatString Val}#"\n" end}
        ""}
    end
    
@@ -2104,26 +2152,11 @@ define
        ""}
    end
 
-   /** %% [Aux] If X is a string, it must be surrounded by explicit double-quotes, \ and " in strings must be escaped.
-   %% */
-   fun {CleanupFomusSetting X}
-      if {IsString X}
-      then "\""#{LUtils.mappend X
-		 fun {$ Char}
-		    if Char == &\\
-		    then [&\\ &\\]
-		    elseif Char == &"
-		    then [&\\ &"]
-		    else [Char]
-		    end
-		 end}#"\""
-      else X
-      end 
-   end
-   /** %% [Aux] All strings in record R must be surrounded by explicit double-quotes, \ and " in strings must be escaped.
+   
+   /** %% [Aux] All strings in record R must be surrounded by explicit double-quotes, \ and " in strings must be escaped. Note that VSs are not automatically "cleaned up", if required call CleanupVS explicitly.
    %% */
    fun {CleanupFomusSettings R}
-      {Record.map R CleanupFomusSetting}
+      {Record.map R FormatString}
    end
    
    /** %% [Aux] Collect all events and "fomus chords" in MyPart.
