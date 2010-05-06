@@ -540,20 +540,20 @@ MyScore = {Score.makeScore
  unit(file:enharmonicTest
       eventClauses: [%% NOTE: comment out intended accidental format
 		     %% Version with quarter-tone accidentals
-		     {HS.out.makeNoteToFomusClause ET31.out.fomusPCs_Quartertones}
+		     {HS.out.makeNoteToFomusClause unit(table:ET31.out.fomusPCs_Quartertones)}
 		     %% Version with double accidentals
-% 		     {HS.out.makeNoteToFomusClause ET31.out.fomusPCs_DoubleAccs}
+% 		     {HS.out.makeNoteToFomusClause unit(table:ET31.out.fomusPCs_DoubleAccs)}
 		    ])}
 
-{Out.renderFomus MyScore
- unit(file:enharmonicTest
-      output:xml
-      eventClauses: [%% NOTE: comment out intended accidental format
-		     %% Version with quarter-tone accidentals
-		     {HS.out.makeNoteToFomusClause ET31.out.fomusPCs_Quartertones}
-		     %% Version with double accidentals
-% 		     {HS.out.makeNoteToFomusClause ET31.out.fomusPCs_DoubleAccs}
-		    ])}
+% {Out.renderFomus MyScore
+%  unit(file:enharmonicTest
+%       output:xml
+%       eventClauses: [%% NOTE: comment out intended accidental format
+% 		     %% Version with quarter-tone accidentals
+% 		     {HS.out.makeNoteToFomusClause unit(table:ET31.out.fomusPCs_Quartertones)}
+% 		     %% Version with double accidentals
+% % 		     {HS.out.makeNoteToFomusClause unit(table:ET31.out.fomusPCs_DoubleAccs)}
+% 		    ])}
 
 %% NOTE: Before continuing with the next example, unset the 31-TET setting
 %% (i.e. set back the default setting)
@@ -585,9 +585,9 @@ MyScore = {Score.makeScore
 %%
 {Out.renderFomus MyScore
  unit(file:"ChordAndScale"
-      eventClauses: [{HS.out.makeNoteToFomusClause ET31.out.fomusPCs_Quartertones}
-		     {HS.out.makeChordToFomusClause ET31.out.fomusPCs_Quartertones}
-		     {HS.out.makeScaleToFomusClause ET31.out.fomusPCs_Quartertones}
+      eventClauses: [{HS.out.makeNoteToFomusClause unit(table:ET31.out.fomusPCs_Quartertones)}
+		     {HS.out.makeChordToFomusClause unit(table:ET31.out.fomusPCs_Quartertones)}
+		     {HS.out.makeScaleToFomusClause unit(table:ET31.out.fomusPCs_Quartertones)}
 		    ])}
 
 %% NOTE: Before continuing with the next example, unset the 31-TET setting
