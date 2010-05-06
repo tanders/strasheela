@@ -1230,6 +1230,13 @@ piwik_log(piwik_action_name, piwik_idsite, piwik_url);
 
 * Strasheela design					      :MAYBE:STRASHEELA:
 
+** Continue Fomus export
+
+*** See todo in Output.oz file 
+
+     [[file:~/oz/music/Strasheela/strasheela/trunk/strasheela/source/Output.oz::]]
+
+
 ** Define further transformer functions for transformable motifs
 
    see [[file:~/oz/music/Strasheela/strasheela/trunk/strasheela/contributions/anders/Segments/source/TransformableSubscript.oz::Transformers]]

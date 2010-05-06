@@ -59,17 +59,6 @@
     E.g., use Smapping.forSimultaneousPairs
 
 
-** TODO Fomus export						     :URGENT:
-
-*** Documentation of ToFomus 
-
-    [[file:~/oz/music/Strasheela/strasheela/trunk/strasheela/source/Output.oz::]]
-
-*** See todo in Output.oz file 
-
-     [[file:~/oz/music/Strasheela/strasheela/trunk/strasheela/source/Output.oz::]]
-
-
 ** Finish def of ResolveDissonances_ChordDegree
    [[file:~/oz/music/Strasheela/strasheela/trunk/strasheela/examples/Harmony-Examples/Schoenberg-TheoryOfHarmony.oz::proc%20ResolveDissonances_ChordDegree%20Notes%20Args%20Args%20unused][file:~/oz/music/Strasheela/strasheela/trunk/strasheela/examples/Harmony-Examples/Schoenberg-TheoryOfHarmony.oz::proc ResolveDissonances_ChordDegree Notes Args Args unused]]
 
