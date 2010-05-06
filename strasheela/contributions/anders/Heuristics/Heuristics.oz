@@ -125,8 +125,10 @@ functor
    
 import
    LUtils at 'x-ozlib://anders/strasheela/source/ListUtils.ozf'
+   MUtils at 'x-ozlib://anders/strasheela/source/MusicUtils.ozf'
    Score at 'x-ozlib://anders/strasheela/source/ScoreCore.ozf'
    Pattern at 'x-ozlib://anders/strasheela/Pattern/Pattern.ozf'
+   HS at 'x-ozlib://anders/strasheela/HarmonisedScore/HarmonisedScore.ozf'
  
 export
    Nega Conj Disj
@@ -138,6 +140,7 @@ export
    Equal EqualContinuous
 
    SmallInterval LargeInterval
+   Step
 
    member: Member_H MemberContinuous
    
@@ -283,6 +286,25 @@ define
       if X == Y
       then 0
       else 100 - ({Abs Y-X} * 2)
+      end
+   end
+
+   /* %% [heuristic constraint] Steps (not unison) between X and Y are preferred, but the stepsize is irrelevant.
+   %%
+   %% Args:
+   %% 'maxStep' (default 8#7): maximal step size, specified as ratio (pair of integers).
+   %% */
+   fun {Step X Y Args}
+      Defaults = unit(maxStep: 8#7)
+      As = {Adjoin Defaults Args}
+      MaxStep = {FloatToInt {MUtils.ratioToKeynumInterval As.maxStep
+			     {IntToFloat {HS.db.getPitchesPerOctave}}}}
+   in
+      if X == Y
+      then 0
+      elseif {Abs Y-X} < MaxStep
+      then 100
+      else 0
       end
    end
    
