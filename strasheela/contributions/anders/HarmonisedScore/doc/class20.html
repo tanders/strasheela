@@ -1,7 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
 <html>
  <head>
-  <title>Class DiatonicChord</title>
+  <title>Class Scale</title>
   <style>BODY {
  background: url(page.gif) repeat-y white;
 }
@@ -130,15 +130,11 @@ clearInterval(drawit)
            |
            |
            |
-  <a class="pre" href="node3.html#entity140">PitchClassCollection</a>
+  <a class="pre" href="node3.html#entity147">PitchClassCollection</a>
            |
            |
            |
-         <a class="pre" href="node3.html#entity142">Chord</a>         <a class="pre" href="node3.html#entity146">InScaleMixinForChord</a>
-           |                    |
-           `----------+---------'
-                      |
-                <a class="pre" href="node3.html#entity148">DiatonicChord</a>
+         <a class="pre" href="node3.html#entity151">Scale</a>
 </pre>
 <hr><p class="margin"><div align="right">class definition</div></p>
 <code>
@@ -149,14 +145,14 @@ clearInterval(drawit)
 
 
 </tr></table>
-<span class="string"> [concrete class] Defines a Chord which relates to a Scale (the Scale is defined by getScales and isRelatedScale). When the parameter value of inScaleB (a 0/1 integer) = 1, then all Chord pitch classes are diatonic, i.e. they are also pitch classes of the related Scale. <BR>
- See doc for Chord and InScaleMixinForChord for further details.<BR>
+<span class="string"> Scale represents an analytical scale, i.e. a scale which is silent when the score is played but is used to constrain notes simultaneous with the scale. For example, Scale instances can be used to express a modulation.<BR>
+ For further information see doc of PitchClassCollection.<BR>
 <BR>
 </span>
-<span class="keyword">class</span> <span class="type">DiatonicChord</span> (Inheritance-free)<br>
-&nbsp;&nbsp;&nbsp;<span class="keyword">feat</span>&nbsp;!ChordType&nbsp;!InScaleMixinForChordType&nbsp;!PitchClassCollectionType&nbsp;label
+<span class="keyword">class</span> <span class="type">Scale</span> (Inheritance-free)<br>
+&nbsp;&nbsp;&nbsp;<span class="keyword">feat</span>&nbsp;!PitchClassCollectionType&nbsp;!ScaleType&nbsp;label
 <br>
-&nbsp;&nbsp;&nbsp;<span class="keyword">attr</span>&nbsp;chordPCsInScale&nbsp;dbFeatures&nbsp;inScaleB&nbsp;index&nbsp;pitchClasses&nbsp;relatedScaleBs&nbsp;root&nbsp;scales&nbsp;transposition&nbsp;untransposedPitchClasses&nbsp;untransposedRoot
+&nbsp;&nbsp;&nbsp;<span class="keyword">attr</span>&nbsp;dbFeatures&nbsp;index&nbsp;pitchClasses&nbsp;root&nbsp;transposition&nbsp;untransposedPitchClasses&nbsp;untransposedRoot
 <br>
 <ul><li><span class="functionname">degreeToPC</span>(Degree Accidental PC)<br>
 
@@ -171,15 +167,6 @@ clearInterval(drawit)
  NOTE: very weak propagation -- self must first be determined<BR>
 <BR>
 </span>
-</li><li><span class="functionname">getChordPCsInScale</span>(X)<br>
-
-<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
-
-
-
-
-</tr></table>
-<span class="string"></span>
 </li><li><span class="functionname">getDB</span>(X)<br>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
@@ -213,24 +200,6 @@ clearInterval(drawit)
 <span class="string"> Returns a record with the additional features defined in the database and 'announced' to self with the init argument dbFeatures.<BR>
 <BR>
 </span>
-</li><li><span class="functionname">getInScaleB</span>(X)<br>
-
-<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
-
-
-
-
-</tr></table>
-<span class="string"></span>
-</li><li><span class="functionname">getInScaleBParameter</span>(X)<br>
-
-<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
-
-
-
-
-</tr></table>
-<span class="string"></span>
 </li><li><span class="functionname">getIndex</span>(X)<br>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
@@ -257,7 +226,10 @@ clearInterval(drawit)
 
 
 </tr></table>
-<span class="string"></span>
+<span class="string"> The parameter 'index' is included if it is undetermined, but it is omitted in case the set of pitch classes, the transposition, and the index are determined. If the index is determined, then the set of pitch classes plus the transposition should be sufficient and the index can be derived from them. Omitting the index makes archived score solutions more stable. Even if the chord/scale database was edited  later (e.g., chords were added) so that the indices changed, the archived score will still work as long as the set of pitch classes for the original chords did not change.<BR>
+ In principle, it is possible that there are two chords with the same pitchclasses and transposition but different additional db features. However, that should be considered a bug in the database. In case alternative db feature values for a single chord/scale are needed, then these should be defined as variable domain values for a single db entry, not as additional entries.  <BR>
+<BR>
+</span>
 </li><li><span class="functionname">getPitchClasses</span>(X)<br>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
@@ -267,17 +239,6 @@ clearInterval(drawit)
 
 </tr></table>
 <span class="string"></span>
-</li><li><span class="functionname">getRelatedScaleBs</span>(X)<br>
-
-<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
-
-
-
-
-</tr></table>
-<span class="string"> Returns a list of 0/1-integers returned by {Map {<getScales>} <isRelatedScale>}. <getScales> and <isRelatedScale> are the functions given to initInScaleMixinForNote.<BR>
-<BR>
-</span>
 </li><li><span class="functionname">getRoot</span>(X)<br>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
@@ -296,17 +257,6 @@ clearInterval(drawit)
 
 </tr></table>
 <span class="string"></span>
-</li><li><span class="functionname">getScales</span>(X)<br>
-
-<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
-
-
-
-
-</tr></table>
-<span class="string"> Returns the list of candidate scale objects, i.e. the value returned by the proc set via the getScales init argument. <BR>
-<BR>
-</span>
 </li><li><span class="functionname">getTransposition</span>(X)<br>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
@@ -352,7 +302,7 @@ clearInterval(drawit)
 
 </tr></table>
 <span class="string"></span>
-</li><li><span class="functionname">init</span>(...)<br>
+</li><li><span class="functionname">init</span>(dbFeatures:DBFeats index:Index pitchClasses:PitchClasses root:Root transposition:Trans untransposedPitchClasses:UntransposedPitchClasses untransposedRoot:UntranspRoot&nbsp;...)<br>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
 
@@ -361,26 +311,6 @@ clearInterval(drawit)
 
 </tr></table>
 <span class="string"></span>
-</li><li><span class="functionname">initInScaleMixinForChord</span>(...)<br>
-
-<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
-
-
-
-
-</tr></table>
-<span class="string"></span>
-</li><li><span class="functionname">isInScale</span>(B)<br>
-
-<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
-
-
-
-
-</tr></table>
-<span class="string"> see doc InChordMixinForNote, isInChord <BR>
-<BR>
-</span>
 </li><li><span class="functionname">toPPrintRecord</span>(X excluded:Excluded features:Features)<br>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">

@@ -1,7 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
 <html>
  <head>
-  <title>Class ScaleDegreeMixinForChord</title>
+  <title>Class InScaleMixinForChord</title>
   <style>BODY {
  background: url(page.gif) repeat-y white;
 }
@@ -126,7 +126,7 @@ clearInterval(drawit)
 
 <div style="margin-left:160px"><p align="right" class="margin"><div align="right">inheritance tree</div></p>
 <pre>
- <a class="pre" href="node3.html#entity149">ScaleDegreeMixinForChord</a>
+ <a class="pre" href="node3.html#entity153">InScaleMixinForChord</a>
 </pre>
 <hr><p class="margin"><div align="right">class definition</div></p>
 <code>
@@ -137,17 +137,19 @@ clearInterval(drawit)
 
 
 </tr></table>
-<span class="string"> [abstract class] ScaleDegreeMixinForChord extends the root pitch representation of the class DiatonicChord (HS.score.diatonicChord). Whereas the DiatonicChord root is expressed by a pitch class, ScaleDegreeMixinForChord additional represents the root as a scale degree. This mixin defines the two parameters rootDegree and rootAccidental. rootDegree denotes the degree of the root's pitch in the scale the chord is related to. rootAccidental denotes an accidental for rootDegree in that scale, encoded as described in the doc for DegreeToPC. The relation between pitchClass, scaleDegree and scaleAccidental is constrained. <BR>
- ScaleDegreeMixinForChord is defined as a mixin to make it more easy to combine this mixin with other extensions to the class DiatonicChord. ScaleDegreeMixinForChord is designed to extend the class DiatonicChord, because this mixin depends on the mixin InScaleMixinForChord (HS.score.inScaleMixinForChord).      <BR>
- NB: the parameters rootDegree and rootAccidental are only constrained in their relation to the parameter root _after_ the related scale is known and fully determined.<BR>
+<span class="string"> [abstract class] Mixin class, indented to extend the Chord class (a class with attribute pitchClasses). InScaleMixinForChord has much similarity with class InChordMixinForNote respectively InScaleMixinForNote -- see doc there for details (this documentation only explains the differences to InChordMixinForNote).<BR>
+ Compared with InChordMixinForNote/InScaleMixinForNote, the present class InScaleMixinForChord defines the additional attribute 'chordPCsInScale' (a FS). The set chordPCsInScale includes all chord pitch classes which are also pitch classes of the scale related to the chord. inScaleB = 1 (i.e. true), in case _all_ chord pitch classes are also pitch classes of the related scale.<BR>
+ Nevertheless, the FS chordPCsInScale can be useful to apply further constraints which control the relation between the chord and the related scale even in case inScaleB=0 (i.e. some chord pitch class is no scale pitch class). For instance, degreeToPC could be used to access a specific pitch class of chord (e.g. its third). By constraining a neutral accidental and by constraining that this pitch class is included in chordPCsInScale, the user constraints, e.g., a diatonic third of the chord. [note: this is not so easy, cf. def. of ScaleDegreeMixinForChord which does something related for the chord's root]<BR>
+ <BR>
+ NB: Contrary to InChordMixinForNote, InScaleMixinForChord does (currently?) not simplify the definition of CSPs involving 'non-existing' notes. Thus, instead of, e.g., setting InScaleB=1 you define something like, {FD.impl {CTT.isExisting MyChord} {MyChord isInChordR($)}}.<BR>
 <BR>
 </span>
-<span class="keyword">class</span> <span class="type">ScaleDegreeMixinForChord</span> (Inheritance-free)<br>
-&nbsp;&nbsp;&nbsp;<span class="keyword">feat</span>&nbsp;!ScaleDegreeMixinForChordType
+<span class="keyword">class</span> <span class="type">InScaleMixinForChord</span> (Inheritance-free)<br>
+&nbsp;&nbsp;&nbsp;<span class="keyword">feat</span>&nbsp;!InScaleMixinForChordType
 <br>
-&nbsp;&nbsp;&nbsp;<span class="keyword">attr</span>&nbsp;rootAccidental&nbsp;rootDegree
+&nbsp;&nbsp;&nbsp;<span class="keyword">attr</span>&nbsp;chordPCsInScale&nbsp;inScaleB&nbsp;relatedScaleBs&nbsp;scales
 <br>
-<ul><li><span class="functionname">getRootAccidental</span>($)<br>
+<ul><li><span class="functionname">getChordPCsInScale</span>(X)<br>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
 
@@ -156,7 +158,7 @@ clearInterval(drawit)
 
 </tr></table>
 <span class="string"></span>
-</li><li><span class="functionname">getRootAccidentalParameter</span>($)<br>
+</li><li><span class="functionname">getInScaleB</span>(X)<br>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
 
@@ -165,7 +167,7 @@ clearInterval(drawit)
 
 </tr></table>
 <span class="string"></span>
-</li><li><span class="functionname">getRootDegree</span>($)<br>
+</li><li><span class="functionname">getInScaleBParameter</span>(X)<br>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
 
@@ -174,7 +176,29 @@ clearInterval(drawit)
 
 </tr></table>
 <span class="string"></span>
-</li><li><span class="functionname">getRootDegreeParameter</span>($)<br>
+</li><li><span class="functionname">getRelatedScaleBs</span>(X)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> Returns a list of 0/1-integers returned by {Map {<getScales>} <isRelatedScale>}. <getScales> and <isRelatedScale> are the functions given to initInScaleMixinForNote.<BR>
+<BR>
+</span>
+</li><li><span class="functionname">getScales</span>(X)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> Returns the list of candidate scale objects, i.e. the value returned by the proc set via the getScales init argument. <BR>
+<BR>
+</span>
+</li><li><span class="functionname">initInScaleMixinForChord</span>(...)<br>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
 
@@ -183,7 +207,7 @@ clearInterval(drawit)
 
 </tr></table>
 <span class="string"></span>
-</li><li><span class="functionname">initScaleDegreeMixinForChord</span>(rootAccidental:Accidental rootDegree:Degree)<br>
+</li><li><span class="functionname">isInScale</span>(B)<br>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
 
@@ -191,7 +215,9 @@ clearInterval(drawit)
 
 
 </tr></table>
-<span class="string"></span>
+<span class="string"> see doc InChordMixinForNote, isInChord <BR>
+<BR>
+</span>
 </li></ul>
 <span class="keyword">end</span>
 </code>

@@ -143,7 +143,7 @@ clearInterval(drawit)
 </span></li><li><a href="node4.html">SegsOut</a> at "<span class="string">source/Output.ozf"
 </span></li></ul></code>
 <h3>Export</h3>
-<code><ul><li>&lt;P/2:<a href="#entity36"><span class="functionname">GetNoteIndex</span></a>&gt;
+<code><ul><li>&lt;P/2:<a href="#entity36"><span class="functionname">GetMotifIndexOfNote</span></a>&gt;
 </li><li>&lt;P/2:<a href="#entity37"><span class="functionname">MakeParametersAccessor</span></a>&gt;
 </li><li>&lt;P/2:<a href="#entity38"><span class="functionname">PitchContourAccessor</span></a>&gt;
 </li><li><span class="variablename">MakeCounterpoint_Mixin</span>
@@ -156,7 +156,7 @@ clearInterval(drawit)
 </li><li><span class="variablename">PitchPattern</span>
 </li><li><span class="variablename">FenvContour</span>
 </li><li><span class="variablename">Arpeggio</span>
-</li><li><span class="variablename">Arc</span>
+</li><li><span class="variablename">Arch</span>
 </li><li><span class="variablename">Repetitions</span>
 </li><li><span class="variablename">Hook</span>
 </li><li><span class="variablename">Stairs</span>
@@ -176,8 +176,8 @@ clearInterval(drawit)
 
 <code>
 <a name="entity36">
-<span class="keyword">fun</span>{<span class="functionname">GetNoteIndex</span> N}<br>
-<span class="string"> Expects a note with index parameter and returns the index variable value.  <BR>
+<span class="keyword">fun</span>{<span class="functionname">GetMotifIndexOfNote</span> N}<br>
+<span class="string"> Expects a note that is part of a pattern motif (i.e. a note with a motif index parameter), and returns the motif number of this note (i.e. the index variable value). For example, all notes that are part of an instance of the motif which has been declared first have the motif index value 1 and so forth.<BR>
 <BR>
 </span>
 </code><br>

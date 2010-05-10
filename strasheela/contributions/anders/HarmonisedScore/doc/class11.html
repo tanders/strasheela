@@ -1,7 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
 <html>
  <head>
-  <title>Class EnharmonicNote</title>
+  <title>Class RegularTemperamentNote</title>
   <style>BODY {
  background: url(page.gif) repeat-y white;
 }
@@ -126,19 +126,19 @@ clearInterval(drawit)
 
 <div style="margin-left:160px"><p align="right" class="margin"><div align="right">inheritance tree</div></p>
 <pre>
- Score.note <a class="pre" href="node3.html#entity157">PitchClassMixin</a>
+ Score.note <a class="pre" href="node3.html#entity164">PitchClassMixin</a>
      |             |
      `--------+----'
               |
-            <a class="pre" href="node3.html#entity170">Note2</a>           <a class="pre" href="node3.html#entity159">InChordMixinForNote</a> <a class="pre" href="node3.html#entity161">InScaleMixinForNote</a>
+            <a class="pre" href="node3.html#entity179">Note2</a>           <a class="pre" href="node3.html#entity168">InChordMixinForNote</a> <a class="pre" href="node3.html#entity170">InScaleMixinForNote</a>
               |                      |                   |
               `------------------+---'-------------------'
                                  |
-                                <a class="pre" href="node3.html#entity171">Note</a>                                <a class="pre" href="node3.html#entity163">EnharmonicSpellingMixinForNote</a>
+                                <a class="pre" href="node3.html#entity180">Note</a>                                <a class="pre" href="node3.html#entity166">RegularTemperamentMixinForNote</a>
                                  |                                                |
                                  `---------------+--------------------------------'
                                                  |
-                                           <a class="pre" href="node3.html#entity173">EnharmonicNote</a>
+                                       <a class="pre" href="node3.html#entity181">RegularTemperamentNote</a>
 </pre>
 <hr><p class="margin"><div align="right">class definition</div></p>
 <code>
@@ -149,15 +149,15 @@ clearInterval(drawit)
 
 
 </tr></table>
-<span class="string"> [concrete class] The class EnharmonicNote extends the class Note (HS.score.note) by a representation for an enharmonic notation. This extension is defined by the mixin class EnharmonicSpellingMixinForNote. See its documentation for details.<BR>
+<span class="string"> [concrete class]<BR>
 <BR>
 </span>
-<span class="keyword">class</span> <span class="type">EnharmonicNote</span> (Inheritance-free)<br>
-&nbsp;&nbsp;&nbsp;<span class="keyword">feat</span>&nbsp;!EnharmonicSpellingMixinForNoteType&nbsp;!InChordMixinForNoteType&nbsp;!InScaleMixinForNoteType&nbsp;!PitchClassMixinType&nbsp;label
+<span class="keyword">class</span> <span class="type">RegularTemperamentNote</span> (Inheritance-free)<br>
+&nbsp;&nbsp;&nbsp;<span class="keyword">feat</span>&nbsp;!InChordMixinForNoteType&nbsp;!InScaleMixinForNoteType&nbsp;!PitchClassMixinType&nbsp;!RegularTemperamentForNoteType
 <br>
-&nbsp;&nbsp;&nbsp;<span class="keyword">attr</span>&nbsp;cMajorAccidental&nbsp;cMajorDegree&nbsp;chords&nbsp;getChords&nbsp;getScales&nbsp;inChordB&nbsp;inScaleB&nbsp;isRelatedChord&nbsp;isRelatedScale&nbsp;octave&nbsp;pitchClass&nbsp;relatedChordBs&nbsp;relatedScaleBs&nbsp;scales
+&nbsp;&nbsp;&nbsp;<span class="keyword">attr</span>&nbsp;chords&nbsp;generatorFactors&nbsp;generatorFactorsOffset&nbsp;generators&nbsp;getChords&nbsp;getScales&nbsp;inChordB&nbsp;inScaleB&nbsp;isRelatedChord&nbsp;isRelatedScale&nbsp;octave&nbsp;pitchClass&nbsp;rank&nbsp;relatedChordBs&nbsp;relatedScaleBs&nbsp;scales
 <br>
-<ul><li><span class="functionname">getCMajorAccidental</span>(X)<br>
+<ul><li><span class="functionname">getAllGeneratorFactorParameters</span>($)<br>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
 
@@ -166,7 +166,29 @@ clearInterval(drawit)
 
 </tr></table>
 <span class="string"></span>
-</li><li><span class="functionname">getCMajorAccidentalParameter</span>(X)<br>
+</li><li><span class="functionname">getAllGeneratorFactors</span>($)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> Returns tuple of all generator factors (FD ints).<BR>
+<BR>
+</span>
+</li><li><span class="functionname">getAllGeneratorFactors_list</span>($)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> Returns list of all generator factors (FD ints).<BR>
+<BR>
+</span>
+</li><li><span class="functionname">getAllGeneratorParameters</span>($)<br>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
 
@@ -175,7 +197,7 @@ clearInterval(drawit)
 
 </tr></table>
 <span class="string"></span>
-</li><li><span class="functionname">getCMajorDegree</span>(X)<br>
+</li><li><span class="functionname">getAllGenerators</span>($)<br>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
 
@@ -183,8 +205,10 @@ clearInterval(drawit)
 
 
 </tr></table>
-<span class="string"></span>
-</li><li><span class="functionname">getCMajorDegreeParameter</span>(X)<br>
+<span class="string"> Returns tuple of all generators (FD ints).<BR>
+<BR>
+</span>
+</li><li><span class="functionname">getAllGenerators_list</span>($)<br>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
 
@@ -192,7 +216,9 @@ clearInterval(drawit)
 
 
 </tr></table>
-<span class="string"></span>
+<span class="string"> Returns list of all generators (FD ints).<BR>
+<BR>
+</span>
 </li><li><span class="functionname">getChords</span>(X)<br>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
@@ -204,6 +230,55 @@ clearInterval(drawit)
 <span class="string"> Returns the list of candidate chord objects, i.e. the value returned by the proc set via the getChords init argument. <BR>
 <BR>
 </span>
+</li><li><span class="functionname">getGenerator</span>($ I)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> Returns the Ith (int) generator of the regular temperament, measured in cent (FD int). Remember that the octave is always an implicit generator.<BR>
+<BR>
+</span>
+</li><li><span class="functionname">getGeneratorFactor</span>($ I)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> Returns the factor (FD int) by which the Ith (int) generator of the regular temperament has been multiplied to obtain the pitch class of this note.<BR>
+<BR>
+</span>
+</li><li><span class="functionname">getGeneratorFactorParameter</span>($ I)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"></span>
+</li><li><span class="functionname">getGeneratorFactorsOffset</span>($)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"></span>
+</li><li><span class="functionname">getGeneratorParameter</span>($ I)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"></span>
 </li><li><span class="functionname">getInChordB</span>(X)<br>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
@@ -285,6 +360,17 @@ clearInterval(drawit)
 
 </tr></table>
 <span class="string"></span>
+</li><li><span class="functionname">getRank</span>($)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> Returns the number of generators of the regular temperament (an int). Remember that the octave is always an implicit generator that is not counted.<BR>
+<BR>
+</span>
 </li><li><span class="functionname">getRelatedChordBs</span>(X)<br>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
@@ -326,16 +412,12 @@ clearInterval(drawit)
 
 
 </tr></table>
-<span class="string"></span>
-</li><li><span class="functionname">initEnharmonicSpellingMixinForNote</span>(cMajorAccidental:Accidental cMajorDegree:Degree)<br>
-
-<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
-
-
-
-
-</tr></table>
-<span class="string"></span>
+<span class="string"> Arguments<BR>
+ see comment in Note, additionally<BR>
+ required arg: generators (list of ints, later perhaps list of FD ints)<BR>
+ optional arg: generatorFactors (list of FD ints, same length as generators), generatorFactorsOffset (int)<BR>
+<BR>
+</span>
 </li><li><span class="functionname">initInChordMixinForNote</span>(...)<br>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
@@ -355,6 +437,15 @@ clearInterval(drawit)
 </tr></table>
 <span class="string"></span>
 </li><li><span class="functionname">initPitchClassMixin</span>(octave:Oct pitchClass:PC)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"></span>
+</li><li><span class="functionname">initRegularTemperamentMixinForNote</span>(generatorFactors:Fs generatorFactorsOffset:Offset generators:Gs)<br>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
 

@@ -1,7 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
 <html>
  <head>
-  <title>Class InScaleMixinForNote</title>
+  <title>Class RegularTemperamentMixinForNote</title>
   <style>BODY {
  background: url(page.gif) repeat-y white;
 }
@@ -126,7 +126,7 @@ clearInterval(drawit)
 
 <div style="margin-left:160px"><p align="right" class="margin"><div align="right">inheritance tree</div></p>
 <pre>
- <a class="pre" href="node3.html#entity161">InScaleMixinForNote</a>
+ <a class="pre" href="node3.html#entity166">RegularTemperamentMixinForNote</a>
 </pre>
 <hr><p class="margin"><div align="right">class definition</div></p>
 <code>
@@ -137,15 +137,18 @@ clearInterval(drawit)
 
 
 </tr></table>
-<span class="string"> [abstract class] Mixin class for a note class with pitchClass parameter. Allows to conveniently define relations between self (i.e. a note) and a scale. This mixin defines for a related scale what InChordMixinForNote defines for a related chord -- see doc there for details.<BR>
+<span class="string"> [abstract class] RegularTemperamentMixinForNote defines a complementary pitch representation that represents note pitch classes in terms of 1 or more generators of a regular temperament and their corresponding factors.<BR>
+<BR>
+ NOTE: arg generators is currently required arg and generators must be determined (ints in cent)<BR>
+<BR>
 <BR>
 </span>
-<span class="keyword">class</span> <span class="type">InScaleMixinForNote</span> (Inheritance-free)<br>
-&nbsp;&nbsp;&nbsp;<span class="keyword">feat</span>&nbsp;!InScaleMixinForNoteType
+<span class="keyword">class</span> <span class="type">RegularTemperamentMixinForNote</span> (Inheritance-free)<br>
+&nbsp;&nbsp;&nbsp;<span class="keyword">feat</span>&nbsp;!RegularTemperamentForNoteType
 <br>
-&nbsp;&nbsp;&nbsp;<span class="keyword">attr</span>&nbsp;getScales&nbsp;inScaleB&nbsp;isRelatedScale&nbsp;relatedScaleBs&nbsp;scales
+&nbsp;&nbsp;&nbsp;<span class="keyword">attr</span>&nbsp;generatorFactors&nbsp;generatorFactorsOffset&nbsp;generators&nbsp;rank
 <br>
-<ul><li><span class="functionname">getInScaleB</span>(X)<br>
+<ul><li><span class="functionname">getAllGeneratorFactorParameters</span>($)<br>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
 
@@ -154,7 +157,29 @@ clearInterval(drawit)
 
 </tr></table>
 <span class="string"></span>
-</li><li><span class="functionname">getInScaleBParameter</span>(X)<br>
+</li><li><span class="functionname">getAllGeneratorFactors</span>($)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> Returns tuple of all generator factors (FD ints).<BR>
+<BR>
+</span>
+</li><li><span class="functionname">getAllGeneratorFactors_list</span>($)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> Returns list of all generator factors (FD ints).<BR>
+<BR>
+</span>
+</li><li><span class="functionname">getAllGeneratorParameters</span>($)<br>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
 
@@ -163,7 +188,7 @@ clearInterval(drawit)
 
 </tr></table>
 <span class="string"></span>
-</li><li><span class="functionname">getRelatedScaleBs</span>(X)<br>
+</li><li><span class="functionname">getAllGenerators</span>($)<br>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
 
@@ -171,10 +196,10 @@ clearInterval(drawit)
 
 
 </tr></table>
-<span class="string"> Returns a list of 0/1-integers returned by {Map {<getScales>} <isRelatedScale>}. <getScales> and <isRelatedScale> are the functions given to initInScaleMixinForNote.<BR>
+<span class="string"> Returns tuple of all generators (FD ints).<BR>
 <BR>
 </span>
-</li><li><span class="functionname">getScales</span>(X)<br>
+</li><li><span class="functionname">getAllGenerators_list</span>($)<br>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
 
@@ -182,10 +207,32 @@ clearInterval(drawit)
 
 
 </tr></table>
-<span class="string"> Returns the list of candidate scale objects, i.e. the value returned by the proc set via the getScale init argument. <BR>
+<span class="string"> Returns list of all generators (FD ints).<BR>
 <BR>
 </span>
-</li><li><span class="functionname">initInScaleMixinForNote</span>(...)<br>
+</li><li><span class="functionname">getGenerator</span>($ I)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> Returns the Ith (int) generator of the regular temperament, measured in cent (FD int). Remember that the octave is always an implicit generator.<BR>
+<BR>
+</span>
+</li><li><span class="functionname">getGeneratorFactor</span>($ I)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> Returns the factor (FD int) by which the Ith (int) generator of the regular temperament has been multiplied to obtain the pitch class of this note.<BR>
+<BR>
+</span>
+</li><li><span class="functionname">getGeneratorFactorParameter</span>($ I)<br>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
 
@@ -194,7 +241,7 @@ clearInterval(drawit)
 
 </tr></table>
 <span class="string"></span>
-</li><li><span class="functionname">isInScale</span>(B)<br>
+</li><li><span class="functionname">getGeneratorFactorsOffset</span>($)<br>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
 
@@ -202,10 +249,8 @@ clearInterval(drawit)
 
 
 </tr></table>
-<span class="string"> see doc isInChord<BR>
-<BR>
-</span>
-</li><li><span class="functionname">nonScalePCConditions</span>(Conditions)<br>
+<span class="string"></span>
+</li><li><span class="functionname">getGeneratorParameter</span>($ I)<br>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
 
@@ -213,9 +258,27 @@ clearInterval(drawit)
 
 
 </tr></table>
-<span class="string"> see doc nonChordPCConditions<BR>
+<span class="string"></span>
+</li><li><span class="functionname">getRank</span>($)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> Returns the number of generators of the regular temperament (an int). Remember that the octave is always an implicit generator that is not counted.<BR>
 <BR>
 </span>
+</li><li><span class="functionname">initRegularTemperamentMixinForNote</span>(generatorFactors:Fs generatorFactorsOffset:Offset generators:Gs)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"></span>
 </li></ul>
 <span class="keyword">end</span>
 </code>

@@ -1,7 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
 <html>
  <head>
-  <title>Class ChordDegreeNote</title>
+  <title>Class EnharmonicNote</title>
   <style>BODY {
  background: url(page.gif) repeat-y white;
 }
@@ -126,19 +126,19 @@ clearInterval(drawit)
 
 <div style="margin-left:160px"><p align="right" class="margin"><div align="right">inheritance tree</div></p>
 <pre>
- Score.note <a class="pre" href="node3.html#entity157">PitchClassMixin</a>
+ Score.note <a class="pre" href="node3.html#entity164">PitchClassMixin</a>
      |             |
      `--------+----'
               |
-            <a class="pre" href="node3.html#entity170">Note2</a>           <a class="pre" href="node3.html#entity159">InChordMixinForNote</a> <a class="pre" href="node3.html#entity161">InScaleMixinForNote</a>
+            <a class="pre" href="node3.html#entity179">Note2</a>           <a class="pre" href="node3.html#entity168">InChordMixinForNote</a> <a class="pre" href="node3.html#entity170">InScaleMixinForNote</a>
               |                      |                   |
               `------------------+---'-------------------'
                                  |
-                                <a class="pre" href="node3.html#entity171">Note</a>                                <a class="pre" href="node3.html#entity167">ChordDegreeMixinForNote</a>
-                                 |                                             |
-                                 `------------+--------------------------------'
-                                              |
-                                       <a class="pre" href="node3.html#entity175">ChordDegreeNote</a>
+                                <a class="pre" href="node3.html#entity180">Note</a>                                <a class="pre" href="node3.html#entity172">EnharmonicSpellingMixinForNote</a>
+                                 |                                                |
+                                 `---------------+--------------------------------'
+                                                 |
+                                           <a class="pre" href="node3.html#entity183">EnharmonicNote</a>
 </pre>
 <hr><p class="margin"><div align="right">class definition</div></p>
 <code>
@@ -149,15 +149,15 @@ clearInterval(drawit)
 
 
 </tr></table>
-<span class="string"> [concrete class] The class ChordDegreeNote extends the class Note (HS.score.note) by a representation for its chord degree. This extension is defined by the mixin class ChordDegreeMixinForNote. See its documentation for details. <BR>
+<span class="string"> [concrete class] The class EnharmonicNote extends the class Note (HS.score.note) by a representation for an enharmonic notation. This extension is defined by the mixin class EnharmonicSpellingMixinForNote. See its documentation for details.<BR>
 <BR>
 </span>
-<span class="keyword">class</span> <span class="type">ChordDegreeNote</span> (Inheritance-free)<br>
-&nbsp;&nbsp;&nbsp;<span class="keyword">feat</span>&nbsp;!ChordDegreeMixinForNoteType&nbsp;!InChordMixinForNoteType&nbsp;!InScaleMixinForNoteType&nbsp;!PitchClassMixinType&nbsp;label
+<span class="keyword">class</span> <span class="type">EnharmonicNote</span> (Inheritance-free)<br>
+&nbsp;&nbsp;&nbsp;<span class="keyword">feat</span>&nbsp;!EnharmonicSpellingMixinForNoteType&nbsp;!InChordMixinForNoteType&nbsp;!InScaleMixinForNoteType&nbsp;!PitchClassMixinType&nbsp;label
 <br>
-&nbsp;&nbsp;&nbsp;<span class="keyword">attr</span>&nbsp;chordAccidental&nbsp;chordDegree&nbsp;chords&nbsp;getChords&nbsp;getScales&nbsp;inChordB&nbsp;inScaleB&nbsp;isRelatedChord&nbsp;isRelatedScale&nbsp;octave&nbsp;pitchClass&nbsp;relatedChordBs&nbsp;relatedScaleBs&nbsp;scales
+&nbsp;&nbsp;&nbsp;<span class="keyword">attr</span>&nbsp;cMajorAccidental&nbsp;cMajorDegree&nbsp;chords&nbsp;getChords&nbsp;getScales&nbsp;inChordB&nbsp;inScaleB&nbsp;isRelatedChord&nbsp;isRelatedScale&nbsp;octave&nbsp;pitchClass&nbsp;relatedChordBs&nbsp;relatedScaleBs&nbsp;scales
 <br>
-<ul><li><span class="functionname">getChordAccidental</span>($)<br>
+<ul><li><span class="functionname">getCMajorAccidental</span>(X)<br>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
 
@@ -166,7 +166,7 @@ clearInterval(drawit)
 
 </tr></table>
 <span class="string"></span>
-</li><li><span class="functionname">getChordAccidentalParameter</span>($)<br>
+</li><li><span class="functionname">getCMajorAccidentalParameter</span>(X)<br>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
 
@@ -175,7 +175,7 @@ clearInterval(drawit)
 
 </tr></table>
 <span class="string"></span>
-</li><li><span class="functionname">getChordDegree</span>($)<br>
+</li><li><span class="functionname">getCMajorDegree</span>(X)<br>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
 
@@ -184,7 +184,7 @@ clearInterval(drawit)
 
 </tr></table>
 <span class="string"></span>
-</li><li><span class="functionname">getChordDegreeParameter</span>($)<br>
+</li><li><span class="functionname">getCMajorDegreeParameter</span>(X)<br>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
 
@@ -327,7 +327,7 @@ clearInterval(drawit)
 
 </tr></table>
 <span class="string"></span>
-</li><li><span class="functionname">initChordDegreeMixinForNote</span>(chordAccidental:Accidental chordDegree:Degree)<br>
+</li><li><span class="functionname">initEnharmonicSpellingMixinForNote</span>(cMajorAccidental:Accidental cMajorDegree:Degree)<br>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
 

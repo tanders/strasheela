@@ -1,7 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
 <html>
  <head>
-  <title>Class Note2</title>
+  <title>Class Note</title>
   <style>BODY {
  background: url(page.gif) repeat-y white;
 }
@@ -126,11 +126,15 @@ clearInterval(drawit)
 
 <div style="margin-left:160px"><p align="right" class="margin"><div align="right">inheritance tree</div></p>
 <pre>
- Score.note <a class="pre" href="node3.html#entity157">PitchClassMixin</a>
+ Score.note <a class="pre" href="node3.html#entity164">PitchClassMixin</a>
      |             |
      `--------+----'
               |
-            <a class="pre" href="node3.html#entity170">Note2</a>
+            <a class="pre" href="node3.html#entity179">Note2</a>           <a class="pre" href="node3.html#entity168">InChordMixinForNote</a> <a class="pre" href="node3.html#entity170">InScaleMixinForNote</a>
+              |                      |                   |
+              `------------------+---'-------------------'
+                                 |
+                                <a class="pre" href="node3.html#entity180">Note</a>
 </pre>
 <hr><p class="margin"><div align="right">class definition</div></p>
 <code>
@@ -141,16 +145,27 @@ clearInterval(drawit)
 
 
 </tr></table>
-<span class="string"> [concrete class] Note2 extends the Strasheela core class Score.note by the parameters pitchClass and octave. In addition, Note2 constrains the relation between the three pitch parameters pitch, pitchClass, and octave. The pitchUnit for Note2 instances are set implicitly and depend on the pitches per octave set by DB.setPitchesPerOctave. <BR>
- For further details, see the doc for PitchClassMixin.<BR>
+<span class="string"> [concrete class] Note is an extension of the class Score.note defined by the Strasheela core. Whereas Score.note is style-neutral, Note is designed for harmonic CSPs.<BR>
+ All extensions of Score.note are defined by the three mixins PitchClassMixin, InChordMixinForNote and InScaleMixinForNote: see the documentation of these classes for further details. <BR>
 <BR>
 </span>
-<span class="keyword">class</span> <span class="type">Note2</span> (Inheritance-free)<br>
-&nbsp;&nbsp;&nbsp;<span class="keyword">feat</span>&nbsp;!PitchClassMixinType
+<span class="keyword">class</span> <span class="type">Note</span> (Inheritance-free)<br>
+&nbsp;&nbsp;&nbsp;<span class="keyword">feat</span>&nbsp;!InChordMixinForNoteType&nbsp;!InScaleMixinForNoteType&nbsp;!PitchClassMixinType
 <br>
-&nbsp;&nbsp;&nbsp;<span class="keyword">attr</span>&nbsp;octave&nbsp;pitchClass
+&nbsp;&nbsp;&nbsp;<span class="keyword">attr</span>&nbsp;chords&nbsp;getChords&nbsp;getScales&nbsp;inChordB&nbsp;inScaleB&nbsp;isRelatedChord&nbsp;isRelatedScale&nbsp;octave&nbsp;pitchClass&nbsp;relatedChordBs&nbsp;relatedScaleBs&nbsp;scales
 <br>
-<ul><li><span class="functionname">getInitInfo</span>($&nbsp;...)<br>
+<ul><li><span class="functionname">getChords</span>(X)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> Returns the list of candidate chord objects, i.e. the value returned by the proc set via the getChords init argument. <BR>
+<BR>
+</span>
+</li><li><span class="functionname">getInChordB</span>(X)<br>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
 
@@ -159,6 +174,45 @@ clearInterval(drawit)
 
 </tr></table>
 <span class="string"></span>
+</li><li><span class="functionname">getInChordBParameter</span>(X)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"></span>
+</li><li><span class="functionname">getInScaleB</span>(X)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"></span>
+</li><li><span class="functionname">getInScaleBParameter</span>(X)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"></span>
+</li><li><span class="functionname">getInitInfo</span>($&nbsp;...)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"><BR>
+ NB: the procedures given as init arguments to InChordMixinForNote and InScaleMixinForNote  are lost when the score is transformed to a literal/textual representation (and thus their implicit constraints).<BR>
+<BR>
+</span>
 </li><li><span class="functionname">getOctave</span>(X)<br>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
@@ -195,7 +249,65 @@ clearInterval(drawit)
 
 </tr></table>
 <span class="string"></span>
-</li><li><span class="functionname">init</span>(octave:Oct pitchClass:PC&nbsp;...)<br>
+</li><li><span class="functionname">getRelatedChordBs</span>(X)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> Returns a list of 0/1-integers returned by {Map {<getChords>} <isRelatedChord>}. <getChords> and <isRelatedChord> are the functions given to initInChordMixinForNote.<BR>
+<BR>
+</span>
+</li><li><span class="functionname">getRelatedScaleBs</span>(X)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> Returns a list of 0/1-integers returned by {Map {<getScales>} <isRelatedScale>}. <getScales> and <isRelatedScale> are the functions given to initInScaleMixinForNote.<BR>
+<BR>
+</span>
+</li><li><span class="functionname">getScales</span>(X)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> Returns the list of candidate scale objects, i.e. the value returned by the proc set via the getScale init argument. <BR>
+<BR>
+</span>
+</li><li><span class="functionname">init</span>(...)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> optional Arguments:<BR>
+ arguments of Score.note: duration (FD int), endTime (FD int), offsetTime (FD int), startTime (FD int), pitch (FD int), amplitude (FD int) amplitudeUnit (atom), ... <BR>
+ Please note that pitchUnit is not supported (it is set implicitly by the pitches per octave setting).<BR>
+ Note supports the following additional arguments: <BR>
+ octave (FD int), pitchClass (FD int), <BR>
+		 inChordB (0/1 int), getChords (proc {$ Self Chords} ... end), isRelatedChord (proc {$ Self Chord B} ... end), inScaleB (0/1 int), getScales (proc {$ Self Scales} ... end), isRelatedScale (proc {$ Self Chord B} ... end)<BR>
+<BR>
+</span>
+</li><li><span class="functionname">initInChordMixinForNote</span>(...)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"></span>
+</li><li><span class="functionname">initInScaleMixinForNote</span>(...)<br>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
 
@@ -213,6 +325,52 @@ clearInterval(drawit)
 
 </tr></table>
 <span class="string"></span>
+</li><li><span class="functionname">isInChord</span>(B)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> Returns an 0/1-int which states whether or not the pitch class of self is included in the pitch classes of its related chord. This definition is an alias for getInChordB.<BR>
+<BR>
+</span>
+</li><li><span class="functionname">isInScale</span>(B)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> see doc isInChord<BR>
+<BR>
+</span>
+</li><li><span class="functionname">nonChordPCConditions</span>(Conditions)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> Defines and applies a 'meta-rule' which conveniently defines a number of conditions which effect self dependent on the value of {self isInChord($)}. Conditions is a list of binary procs expecting self and an 0/1-int (declared within the proc). These conditions form alternative constraints on self. A typical condition example would be a boolean constraint whether self is a passing note, another whether self is a suspension.<BR>
+ If none of the given conditions is true, then self must be 'in' the chord (i.e. 1={self isInChord($)}). Similarily, if self is not in the chord, at least one of the conditions must be true. However, the opposite is not necessarily true: if one or more conditions are the case then self may or may not be in the chord and also if self is in the chord then one or more conditions still may or may not be true.<BR>
+ For instance, this meta-rule never constraints a note to necessarily be a non-chord note. You may however easily do this, e.g, by constraining {self isInChord($)}=0 directly -- which would have the consequence that one of Conditions must be true. <BR>
+<BR>
+</span>
+</li><li><span class="functionname">nonScalePCConditions</span>(Conditions)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> see doc nonChordPCConditions<BR>
+<BR>
+</span>
 </li><li><span class="functionname">noteInterval</span>($ MyNote dbFeatures:DBFeats)<br>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">

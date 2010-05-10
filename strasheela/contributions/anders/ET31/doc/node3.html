@@ -136,9 +136,11 @@ clearInterval(drawit)
 </span></li><li><a href="node5.html">ET31_Score</a> at "<span class="string">Score.ozf"
 </span></li></ul></code>
 <h3>Export</h3>
-<code><ul><li>&lt;P/2:<a href="#entity40"><span class="functionname">RenderAndShowLilypond</span></a>&gt;
-</li><li>&lt;P/1:<a href="#entity38"><span class="functionname">AddExplorerOut_ChordsToScore</span></a>&gt;
-</li><li>&lt;P/0:<a href="#entity39"><span class="functionname">AddExplorerOuts_ArchiveInitRecord</span></a>&gt;
+<code><ul><li>&lt;P/2:<a href="#entity42"><span class="functionname">RenderAndShowLilypond</span></a>&gt;
+</li><li>&lt;P/1:<a href="#entity40"><span class="functionname">AddExplorerOut_ChordsToScore</span></a>&gt;
+</li><li>&lt;P/0:<a href="#entity41"><span class="functionname">AddExplorerOuts_ArchiveInitRecord</span></a>&gt;
+</li><li><span class="variablename">FomusPCs_Quartertones</span>
+</li><li><span class="variablename">FomusPCs_DoubleAccs</span>
 </li><li><span class="variablename">Et31AsEt12_TuningTable</span>
 </li><li><span class="variablename">Meantone_TuningTable</span>
 </li><li><span class="variablename">JI_TuningTable</span>
@@ -146,7 +148,7 @@ clearInterval(drawit)
 <h3>Define</h3>
 
 <code>
-<a name="entity40">
+<a name="entity42">
 <span class="keyword">proc</span>{<span class="functionname">RenderAndShowLilypond</span> MyScore Args}<br>
 <span class="string"> Lilypond output for 31 ET.<BR>
 <BR>
@@ -163,7 +165,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity38">
+<a name="entity40">
 <span class="keyword">proc</span>{<span class="functionname">AddExplorerOut_ChordsToScore</span> Args}<br>
 <span class="string"> Creates an Explorer action for outputting a pure sequence of chords. This is a version of HS.out.addExplorerOut_ChordsToScore, customised for 31 ET. Please see the documentation of HS.out.addExplorerOut_ChordsToScore for further details such as supported arguments.<BR>
 <BR>
@@ -171,7 +173,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity39">
+<a name="entity41">
 <span class="keyword">proc</span>{<span class="functionname">AddExplorerOuts_ArchiveInitRecord</span> }<br>
 <span class="string"> Adds ET31 declaration on top of *.ssco file and calls {HS.db.setDB ET31.db.fullDB}<BR>
 <BR>

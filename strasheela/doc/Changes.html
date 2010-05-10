@@ -47,6 +47,9 @@
 <li>Main additions and changes
 
 <ul>
+<li>Support for heuristic constraints added. See the documentation of the procedure Score.apply_H, the example <a href="../examples/Heuristic-Constraints.oz">Heuristic-Constraints.oz</a>, and the functor <a href="../contributions/anders/Heuristics/doc/node1.html">Heuristics</a></li>
+<li>Revised Fomus output: Strasheela now exports the new format of the Fomus rewrite (<a href="http://fomus.sourceforge.net/">http://fomus.sourceforge.net/</a>), and Strasheela's Fomus export definition have been extended in many ways.</li>
+<li>Constraint problems on arbitrary octave-repeating <a href="http://en.wikipedia.org/wiki/Regular_temperament">regular temperaments</a> (any rank) supported, including <a href="http://en.wikipedia.org/wiki/Just_intonation">just intonation</a> with arbitrary limits (pitches measured, e.g., in cent or millicent).</li>
 <li>Revised score distribution: value orderings can now access arbitrary score information</li>
 <li>Added support for transformable subscripts (<a href="../contributions/anders/Segments/doc/_.html">Segs.tSC</a>)</li>
 <li>Added functor <a href="../contributions/anders/ET41/doc/node1.html">ET41</a> for composition in <a href="http://en.wikipedia.org/wiki/41_equal_temperament">41-tone equal temperament</a> and related tunings (e.g. the just intonation tuning of <a href="http://en.wikipedia.org/wiki/La_Monte_Young">La Monte Young</a>'s <a href="http://www.kylegann.com/wtp.html">The Well-Tuned Piano</a>). Supported features for these tunings include a short-hand pitch notation; a database of intervals, chords, and scales; and some minimal music notation support (via Lilypond).</li>
@@ -56,7 +59,10 @@
 <li>Documentation
 
 <ul>
-<li><a href="../examples/Harmony-Examples/HarmonicProgressions-41ET.oz">HarmonicProgressions-41ET.oz</a> Added 41 ET harmony example, using La Monte Young's The Well-Tuned Piano chords</li>
+<li><a href="../%20examples/ControllingOutput-Examples/Fomus-Examples.oz">Fomus-Examples.oz</a>: Added examples demonstrating the Fomus output.</li>
+<li><a href="../examples/Heuristic-Constraints.oz">Heuristic-Constraints.oz</a>: demonstrates how heuristic constraints are defined and ued</li>
+<li><a href="../examples/Harmony-Examples/HarmonicProgressions-41ET.oz">HarmonicProgressions-41ET.oz</a>: Added 41 ET harmony example, using La Monte Young's The Well-Tuned Piano chords</li>
+<li><a href="../examples/Counterpoint-Examples/Counterpoint-22ET.oz">Counterpoint-22ET.oz</a>: Added 22 ET counterpoint examples</li>
 </ul></li>
 
 <li>Minor additions
@@ -64,8 +70,9 @@
 <ul>
 <li>Fenv.renderAndPlayMidiFile now supports flexible microtonal MIDI output using pitchbend</li>
 <li>Added pitch unit mHz (Millihertz)</li>
-<li>GUtils: added GUtils.recursiveRatio</li>
+<li>GUtils: added IsEqual, RecursiveRatio</li>
 <li>GUtils.toProc: refactored version now supports optional arguments with default values</li>
+<li>LUtils: added RemovePosition, ReplacePosition, FindBest,</li>
 <li>Init: added SetNoteLengthsRecord, SymbolicDurToInt</li>
 <li>Out.toLilypond and friends: implicit clef is now controllable with argument getClef</li>
 <li>Out.makeNoteToLily2: function has been completely rewritten with a now more general interface</li>
@@ -74,38 +81,50 @@
 <li>SDistro: added SearchBest_Timeout</li>
 <li>ET22.db: interval database now defined as ratios for adaptive JI</li>
 <li>ET22.out: added NoteEt22ToLily_AdaptiveJI2, PajaraRMS_TuningTable, JI_TuningTable</li>
+<li>22 ET Lilypond output: revised accidentals (using new arrowed Lily accidentals for representing syntonic commas up/down)</li>
 <li>ET31.out: added NoteEt31ToLily_AdaptiveJI2, Meantone_TuningTable, JI_TuningTable</li>
+<li>ET41.out: added ji_TuningTable</li>
 <li>Segs: added MakeCounterpoint_PatternMotifs_DurationPitchcontour, MakeCounterpoint_PatternMotifs_OffsetDuration, MakeCounterpoint_PatternMotifs_OffsetDurationPitchcontour.</li>
 <li>Segs.makeCounterpoint: added arg clearDissonanceResolution (before this constraint was always enabled).</li>
-<li>Segs: added mixin scripts (partly removing orig extended script altogether): MakeCounterpoint_Mixin, PitchPattern, FenvContour, Arpeggio, Arc, Repetitions, Hook, Stairs, MakeAkkord_Mixin, MakeAkkords_Mixin</li>
-<li>Segs.homophonicChordProgression: added args playAllChordTones, noVoiceCrossing, maxUpperVoiceDistance</li>
+<li>Segs: added mixin scripts (partly removing orig extended script altogether): MakeCounterpoint_Mixin, PitchPattern, FenvContour, Arpeggio, Arch, Repetitions, Hook, Stairs, MakeAkkord_Mixin, MakeAkkords_Mixin</li>
+<li>Segs.homophonicChordProgression: added arguments playAllChordTones, noVoiceCrossing, maxUpperVoiceDistance, generalised argument 'restrictMelodicIntervals'.</li>
 <li>HS.rules: added GetRootDegreeIntervals, SetBoundaryRoots, SetBoundaryTypes, NoParallels2, Ballistic, MinCard</li>
-<li>Pattern: added MinDistinct, DirectionOfContour, LocalMinR, GetLocalMax, GetLocalMin, ConstrainLocalMax, ConstrainLocalMin, FenvContour2, NoRepetition and Undulating</li>
+<li>Pattern: added MinDistinct, DirectionOfContour, LocalMinR, GetLocalMax, GetLocalMin, ConstrainLocalMax, ConstrainLocalMin, FenvContour2, NoRepetition, Undulating, ForCartesianProduct2 and MapCartesianProduct2</li>
 <li>HS.score: refactored HarmonicRythmFollowsMarkers: now works also for items with offsetTime &gt; 0</li>
 <li>Removed proc GUtils.selectArg (better use Adjoin or CondSelect instead)</li>
 <li>Removed GUtils.isInt (result wrong for FD ints): use FD.is or IsInt instead</li>
+<li>Segs.out.unmeteredMusic_LilyHeader: String for Lilypond header configuration to support unmetered music (e.g., as in many Messian pieces)</li>
 </ul></li>
 
 <li>Further bug fixes and changes
 
 <ul>
 <li>Oz primitives like IsRecord, IsAtom etc. block on kinded variables (undetermined FD and FS vars), which could cause blocking of various Strasheela definitions. Now Strasheela always uses its new own GUtils.isRecord and GUtils.isAtom etc. which do not have this problem</li>
+<li>Removed redundant (and ambiguous) pitch unit 'keynumber'. Default pitch unit is now 'midi' (equivalent to et12).</li>
+<li>Score: Fixed bug for TimeMixin method findSimultaneousItem in case object is not contained in any container</li>
 <li>Lilypond output: if score started with offset time, then this leading rest was ignored in the Lilypond output (now fixed). Also, score now by default wrapped in braces, and default Lilypond version updated to &quot;2.12.0&quot;.</li>
 <li>HS.out.renderAndShowLilypond: revised args codeBeforeNoteMakers and codeBeforePcCollectionMakers. Also, chord and scale objects are again notated with grace notes /before/ root (grace notes after the root (using \aftergrace) are incompatible with HE notation).</li>
-<li>HS.score: GetAdaptiveJIPitch: added arg tuneNonharmonicNotes, added GetAdaptiveJIPitch2, chord root now as in current tuning table or underlying ET (if no tuning table is defined), dependance on scale removed (can be completely wrong, e.g., with just major scale, major nineth of V would be syntonic comma too low)</li>
+<li>HS.score: GetAdaptiveJIPitch:
+
+<ul>
+<li>Added arg tuneNonharmonicNotes, added GetAdaptiveJIPitch2, chord root now as in current tuning table or underlying ET (if no tuning table is defined), dependance on scale removed (can be completely wrong, e.g., with just major scale, major nineth of V would be syntonic comma too low)</li>
+<li>Some notes have been transposed to wrong octave, now fixed</li>
+</ul></li>
 <li>HS.out.renderAndShowLilypond: changed output of chord pitch classes to octave above middle C</li>
 <li>HS.score.degreeToPC: fixed propagation error</li>
+<li>HS.rules.noParallels2: now also works if there are pause (rest) objects in the score</li>
 <li>HS.db: Pc2Ratios now returns nil if no ratio was defined for interval</li>
 <li>Fixed HS.pcName</li>
 <li>Fenv method toList: fixed bug for case N=1</li>
+<li>Pattern: renamed Arc -&gt; Arch</li>
 <li>Out.midi.getChannel now uses mini chan param of midi note objects (not only channel info tag)</li>
 <li>Refactored ET22 and ET31 output: now much reduced code with same functionality using HS.out, several procs before exported by ET22 and ET31 are now moved to HS.out</li>
 <li>Segs.homophonicChordProgression: replaced arg 'isToplevel' by arg 'makeTopLevel' for generality; fixed bug: constraint of arg maxUpperVoiceDistance now actually applied to upper voices</li>
+<li>Out.outputScoreConstructor: strings in archived score were not properly quoted (fixed Out.recordToVS).</li>
+<li>HS.score.harmonicRhythmFollowsMarkers: spelling correction (was HS.score.harmonicRythmFollowsMarkers)</li>
+<li>LUtils: changed comparison function of many defs (Contains, Position, Positions, Substitute, Substitute1) to GUtils.isEqual, which is working for all data types</li>
 </ul></li>
-</ul>
 
-
-<ul>
 <li>For further fixes see the <a href="http://apps.sourceforge.net/trac/strasheela/timeline">Trac Timeline</a> or the <a href="../CHANGELOG.txt">../CHANGELOG.txt</a>.</li>
 </ul>
 
@@ -901,7 +920,7 @@ See the documentation for <a href="../contributions/anders/HarmonisedScore/doc/n
 <div id="footer">
 <div id="author">&copy; 
 Torsten Anders</div>
-<div id="date">Last time edited: 2010.01.24</div>
+<div id="date">Last time edited: 2010.05.10</div>
 </div>
   </body>
 </html>

@@ -59,7 +59,9 @@ document.write('<div id="slidemenubar2" style="left:-144" onMouseover="pull()" o
 </script>
 <layer id="slidemenubar" onMouseover="pull()" onMouseout="draw()">
 <table border="0" cellpadding="0" cellspacing="0" width="161"><tr><td bgcolor="#009cff" width="144"><a href="index.html">Index</a>
-</td><td rowspan="2" valign="top" width="16"><img src="menu.gif" width="16"></td></tr><tr><td bgcolor="#009cff" width="144"><a href="node1.html">Measure</a>
+</td><td rowspan="4" valign="top" width="16"><img src="menu.gif" width="16"></td></tr><tr><td bgcolor="#009cff" width="144"><a href="node1.html">Measure</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node2.html">Out</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node3.html">Measure</a>
 </td></tr></table></layer>
 <script language="JavaScript1.2">
 function regenerate(){
@@ -123,16 +125,18 @@ clearInterval(drawit)
 <h3>Import</h3>
 <code><ul><li>FD</li><li>FS</li><li>Score at "<span class="string">x-ozlib://anders/strasheela/source/ScoreCore.ozf"
 </span></li><li>Pattern at "<span class="string">x-ozlib://anders/strasheela/Pattern/Pattern.ozf"
+</span></li><li><a href="node2.html">Out</a> at "<span class="string">source/Output.ozf"
 </span></li></ul></code>
 <h3>Export</h3>
-<code><ul><li>&lt;C:<a href="#entity6"><span class="type">Measure</span></a>&gt;
-</li><li>&lt;P/2:<a href="#entity7"><span class="functionname">IsMeasure</span></a>&gt;
-</li><li>&lt;C:<a href="#entity9"><span class="type">UniformMeasures</span></a>&gt;
-</li><li>&lt;P/2:<a href="#entity10"><span class="functionname">IsUniformMeasures</span></a>&gt;
+<code><ul><li><span class="variablename">Out</span>
+</li><li>&lt;C:<a href="#entity8"><span class="type">Measure</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity9"><span class="functionname">IsMeasure</span></a>&gt;
+</li><li>&lt;C:<a href="#entity11"><span class="type">UniformMeasures</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity12"><span class="functionname">IsUniformMeasures</span></a>&gt;
 </li></ul></code>
 <h3>Define</h3>
 
-<a name="entity6">
+<a name="entity8">
 <p class="margin"><div align="right"><a href="class1.html">[class info]</a></div></p>
 <code>
 
@@ -168,11 +172,11 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity7">
+<a name="entity9">
 <span class="keyword">fun</span>{<span class="functionname">IsMeasure</span> X}
 </code><br>
 
-<a name="entity9">
+<a name="entity11">
 <p class="margin"><div align="right"><a href="class2.html">[class info]</a></div></p>
 <code>
 
@@ -205,6 +209,7 @@ clearInterval(drawit)
 </li><li><span class="functionname">getAccents</span>(X)<br>
 </li><li><span class="functionname">getAccentsFS</span>(X)<br>
 </li><li><span class="functionname">getMeasureDuration</span>(X)<br>
+</li><li><span class="functionname">getMeasureDurationParameter</span>(X)<br>
 </li><li><span class="functionname">getMeasureAt</span>(I Time)<br>
 </li><li><span class="functionname">onMeasureStartR</span>(B Time)<br>
 </li><li><span class="functionname">onMeasureStartDR</span>(B Time)<br>
@@ -219,7 +224,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity10">
+<a name="entity12">
 <span class="keyword">fun</span>{<span class="functionname">IsUniformMeasures</span> X}
 </code><br>
 <h3>End</h3>

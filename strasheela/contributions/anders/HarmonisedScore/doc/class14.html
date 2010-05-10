@@ -1,7 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
 <html>
  <head>
-  <title>Class ScaleNote</title>
+  <title>Class ScaleDegreeNote</title>
   <style>BODY {
  background: url(page.gif) repeat-y white;
 }
@@ -126,11 +126,19 @@ clearInterval(drawit)
 
 <div style="margin-left:160px"><p align="right" class="margin"><div align="right">inheritance tree</div></p>
 <pre>
- Score.note <a class="pre" href="node3.html#entity157">PitchClassMixin</a> <a class="pre" href="node3.html#entity161">InScaleMixinForNote</a> <a class="pre" href="node3.html#entity165">ScaleDegreeMixinForNote</a>
-     |             |                 |                     |
-     `-------------`----------------+'---------------------'
-                                    |
-                                <a class="pre" href="node3.html#entity177">ScaleNote</a>
+ Score.note <a class="pre" href="node3.html#entity164">PitchClassMixin</a>
+     |             |
+     `--------+----'
+              |
+            <a class="pre" href="node3.html#entity179">Note2</a>           <a class="pre" href="node3.html#entity168">InChordMixinForNote</a> <a class="pre" href="node3.html#entity170">InScaleMixinForNote</a>
+              |                      |                   |
+              `------------------+---'-------------------'
+                                 |
+                                <a class="pre" href="node3.html#entity180">Note</a>                                <a class="pre" href="node3.html#entity174">ScaleDegreeMixinForNote</a>
+                                 |                                             |
+                                 `------------+--------------------------------'
+                                              |
+                                       <a class="pre" href="node3.html#entity184">ScaleDegreeNote</a>
 </pre>
 <hr><p class="margin"><div align="right">class definition</div></p>
 <code>
@@ -141,15 +149,44 @@ clearInterval(drawit)
 
 
 </tr></table>
-<span class="string"> [concrete class] Note class extended by scale-related mixins (in contrast to ScaleDegreeNote, it does not inherit from InChordMixinForNote). <BR>
+<span class="string"> [concrete class] The class ScaleDegreeNote extends the class Note (HS.score.note) by a representation for its scale degree. This extension is defined by the mixin class ScaleDegreeMixinForNote. See its documentation for details. <BR>
 <BR>
 </span>
-<span class="keyword">class</span> <span class="type">ScaleNote</span> (Inheritance-free)<br>
-&nbsp;&nbsp;&nbsp;<span class="keyword">feat</span>&nbsp;!InScaleMixinForNoteType&nbsp;!PitchClassMixinType&nbsp;!ScaleDegreeMixinForNoteType
+<span class="keyword">class</span> <span class="type">ScaleDegreeNote</span> (Inheritance-free)<br>
+&nbsp;&nbsp;&nbsp;<span class="keyword">feat</span>&nbsp;!InChordMixinForNoteType&nbsp;!InScaleMixinForNoteType&nbsp;!PitchClassMixinType&nbsp;!ScaleDegreeMixinForNoteType&nbsp;label
 <br>
-&nbsp;&nbsp;&nbsp;<span class="keyword">attr</span>&nbsp;getScales&nbsp;inScaleB&nbsp;isRelatedScale&nbsp;octave&nbsp;pitchClass&nbsp;relatedScaleBs&nbsp;scaleAccidental&nbsp;scaleDegree&nbsp;scales
+&nbsp;&nbsp;&nbsp;<span class="keyword">attr</span>&nbsp;chords&nbsp;getChords&nbsp;getScales&nbsp;inChordB&nbsp;inScaleB&nbsp;isRelatedChord&nbsp;isRelatedScale&nbsp;octave&nbsp;pitchClass&nbsp;relatedChordBs&nbsp;relatedScaleBs&nbsp;scaleAccidental&nbsp;scaleDegree&nbsp;scales
 <br>
-<ul><li><span class="functionname">getInScaleB</span>(X)<br>
+<ul><li><span class="functionname">getChords</span>(X)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> Returns the list of candidate chord objects, i.e. the value returned by the proc set via the getChords init argument. <BR>
+<BR>
+</span>
+</li><li><span class="functionname">getInChordB</span>(X)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"></span>
+</li><li><span class="functionname">getInChordBParameter</span>(X)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"></span>
+</li><li><span class="functionname">getInScaleB</span>(X)<br>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
 
@@ -212,6 +249,17 @@ clearInterval(drawit)
 
 </tr></table>
 <span class="string"></span>
+</li><li><span class="functionname">getRelatedChordBs</span>(X)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> Returns a list of 0/1-integers returned by {Map {<getChords>} <isRelatedChord>}. <getChords> and <isRelatedChord> are the functions given to initInChordMixinForNote.<BR>
+<BR>
+</span>
 </li><li><span class="functionname">getRelatedScaleBs</span>(X)<br>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
@@ -270,7 +318,16 @@ clearInterval(drawit)
 <span class="string"> Returns the list of candidate scale objects, i.e. the value returned by the proc set via the getScale init argument. <BR>
 <BR>
 </span>
-</li><li><span class="functionname">init</span>(octave:Oct pitchClass:PC&nbsp;...)<br>
+</li><li><span class="functionname">init</span>(...)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"></span>
+</li><li><span class="functionname">initInChordMixinForNote</span>(...)<br>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
 
@@ -306,6 +363,17 @@ clearInterval(drawit)
 
 </tr></table>
 <span class="string"></span>
+</li><li><span class="functionname">isInChord</span>(B)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> Returns an 0/1-int which states whether or not the pitch class of self is included in the pitch classes of its related chord. This definition is an alias for getInChordB.<BR>
+<BR>
+</span>
 </li><li><span class="functionname">isInScale</span>(B)<br>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
@@ -317,6 +385,19 @@ clearInterval(drawit)
 <span class="string"> see doc isInChord<BR>
 <BR>
 </span>
+</li><li><span class="functionname">nonChordPCConditions</span>(Conditions)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> Defines and applies a 'meta-rule' which conveniently defines a number of conditions which effect self dependent on the value of {self isInChord($)}. Conditions is a list of binary procs expecting self and an 0/1-int (declared within the proc). These conditions form alternative constraints on self. A typical condition example would be a boolean constraint whether self is a passing note, another whether self is a suspension.<BR>
+ If none of the given conditions is true, then self must be 'in' the chord (i.e. 1={self isInChord($)}). Similarily, if self is not in the chord, at least one of the conditions must be true. However, the opposite is not necessarily true: if one or more conditions are the case then self may or may not be in the chord and also if self is in the chord then one or more conditions still may or may not be true.<BR>
+ For instance, this meta-rule never constraints a note to necessarily be a non-chord note. You may however easily do this, e.g, by constraining {self isInChord($)}=0 directly -- which would have the consequence that one of Conditions must be true. <BR>
+<BR>
+</span>
 </li><li><span class="functionname">nonScalePCConditions</span>(Conditions)<br>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
@@ -326,6 +407,17 @@ clearInterval(drawit)
 
 </tr></table>
 <span class="string"> see doc nonChordPCConditions<BR>
+<BR>
+</span>
+</li><li><span class="functionname">noteInterval</span>($ MyNote dbFeatures:DBFeats)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> Expects a note object MyNote and returns the interval between self and MyNote. If the self is higher than MyNote, then the intervals direction is downwards (i.e. 0). Additional interval features can be specified with the optional argument dbFeatures (default nil).<BR>
 <BR>
 </span>
 </li></ul>
