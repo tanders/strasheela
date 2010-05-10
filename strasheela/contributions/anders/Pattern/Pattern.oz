@@ -80,6 +80,7 @@ export
    ApplyToRange ForRanges MapRanges
    ParallelForAll ParallelMap
    ForCartesianProduct MapCartesianProduct
+   ForCartesianProduct2 MapCartesianProduct2
    Sublists AdjoinedSublists
    ForPairwise MapPairwise
    ForSublists MapSublists
@@ -1485,10 +1486,10 @@ define
    /** %% Applies the binary procedure P on all possible combinations of Xs and Ys. The order of applications is [{P X1 Y1} {P X1 Y2} ... {P X1 Yn} {P X2 Y1} ... {P Xn Yn}].
    %% */
    proc {ForCartesianProduct Xs Ys P}
-      {List.forAllInd Xs
-       proc {$ I X}
-	  {List.forAllInd Ys
-	   proc {$ J Y}
+      {ForAll Xs
+       proc {$ X}
+	  {ForAll Ys
+	   proc {$ Y}
 	      {P X Y}
 	   end}
        end}
@@ -1508,6 +1509,38 @@ define
        end}
       {List.drop Zs {Length Xs}*LYs} = nil % determine tail
    end
+
+   local
+      %% collect all combinations
+      fun {CollectCartesianProduct2 Xss}
+	 L = {Length Xss}
+      in
+	 case L of nil then nil
+	 [] 1 then {Map Xss.1 fun {$ X} [X] end}
+	 [] 2 then {MapCartesianProduct Xss.1 {Nth Xss 2}
+		    fun {$ X Y} [X Y] end}
+	 else
+	    Rest = {CollectCartesianProduct2 Xss.2}
+	 in
+	    {MapCartesianProduct Xss.1 Rest
+	     fun {$ X Ys} X|Ys end}
+	 end
+      end
+   in
+     /** %% Collects the result of applying the unary procedure Fn (expecting a list) on all possible sublist combinations of Xss (a list of lists). ForCartesianProduct2 is a generalisation of ForCartesianProduct of a arbitrary number of lists to combine.
+   %% */
+      proc {ForCartesianProduct2 Xss P}
+	 {ForAll {CollectCartesianProduct2 Xss} P}
+      end
+     /** %% Collects the result of applying the unary function Fn (expecting a list) on all possible sublist combinations of Xss (a list of lists). 
+   %% */
+      fun {MapCartesianProduct2 Xss Fn}
+	 {Map {CollectCartesianProduct2 Xss} Fn}
+      end
+   end
+
+
+   
    /** %% Applies the binary procedure P on all pairwise combinations of Xs, i.e. {P Xs1 Xs2} .. {P Xs1 XsN} {P Xs2 Xs3} .. {P XsN-1 XsN}.
    %% */
    proc {ForPairwise Xs P}
