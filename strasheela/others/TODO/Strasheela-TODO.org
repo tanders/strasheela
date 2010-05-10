@@ -125,6 +125,22 @@ MyTestScore = {Score.makeScore
 
 ** Regular Temperament as pitch (pitch class) representation
 
+*** TODO 
+
+    - Doc HS.db.makeRegularTemperament and HS.db.ratioToRegularTemperamentPC
+      see [[file:~/oz/music/Strasheela/strasheela/trunk/strasheela/contributions/anders/HarmonisedScore/source/Database.oz::fun%20MakeRegularTemperament%20Generators%20GeneratorFactors%20Args][file:~/oz/music/Strasheela/strasheela/trunk/strasheela/contributions/anders/HarmonisedScore/source/Database.oz::fun MakeRegularTemperament Generators GeneratorFactors Args]]
+
+    - Mapping of symbolic notation names (nominals and accidentals) to JI ratios, and then to PCs to temperament
+      see [[file:~/oz/music/Strasheela/strasheela/trunk/strasheela/contributions/anders/RegularTemperament/RegularTemperament.oz::TODO%20ASCII%20notation%20for%20Extended%20Helmholtz%20Notation%20or%20Sagittal%20which%20mean%20their%20JI%20interpretation%20and%20which%20are%20then%20rounded%20into%20temperament%20with%20DB%20ratioToRegularTemperamentPC][file:~/oz/music/Strasheela/strasheela/trunk/strasheela/contributions/anders/RegularTemperament/RegularTemperament.oz::TODO ASCII notation for Extended Helmholtz Notation or Sagittal which mean their JI interpretation and which are then rounded into temperament with DB ratioToRegularTemperamentPC]]
+
+    - Revise RegT.transform
+      see [[file:~/oz/music/Strasheela/strasheela/trunk/strasheela/contributions/anders/RegularTemperament/source/DB.oz::fun%20Transform%20MyPitch][file:~/oz/music/Strasheela/strasheela/trunk/strasheela/contributions/anders/RegularTemperament/source/DB.oz::fun Transform MyPitch]]
+
+    - Music notation output
+
+    - Demonstrating example
+
+
 *** Advantages and Possibilities 
 
     - Allows for arbitrary regular temperaments, including high-limit JI
@@ -346,6 +362,35 @@ constrained). Hm. No idea where that leads :)
 
 
 *** Info on Regular Temperaments in general
+
+**** TODO !! Function/mapping of ratios to corresponding cent values for a given regular temperament 
+
+     I would need a function that expects a set of generators that defines a regular temperament (in cent), and a frequency ratio (pitch class, i.e. without octave component) that expresses an interval and returns the approximation of this interval in the regular temperament (in cent).
+
+     I can then define a single large JI chord/interval/scale database and use it for arbitrary regular temperaments (I would only need to prune the database, removing JI chords/scales/intervals whose approximation in the temperament has a too large error, and possible doublicates).
+
+     Idea for simple implementation: compute all pitches of temperament in cent (sorted tuple of integers). Then, given a JI ratios translated into cent simply search for the temperament pitch that is closest. The difference is the error. 
+
+**** TODO Notation for regular temperaments
+
+     Use Extended Helmholtz-Ellis notation
+
+***** Method 1
+
+      - Specify temperted fifth interval in cent (quasi as generator, whether actually a generator of the regular temperament or not)
+       	-> I can then identify automatically all pitches notated quasi as sequence of Phythagorean fifths
+      - Optionally, specify further tempered commas with their accidental (Strasheela atom and EHE string for Lilypond)
+       	-> I can then identify automatically all notation variants possible for each pitch
+
+***** Method 2 (can both be used)
+
+      - Define table (tuple) that maps 1200-TET pitch classes (cent values) to (i) Strasheela pair Nominal#Accidental and (ii) corresponding Lilypond code for nominals and accidentals
+  
+***** Method 3: simple
+
+      If regular temperament is mapped to keys of Halberstadt keyboard, then I can simply notated these keys, quasi a tabulature :)
+      This approach likely enough for Ethno2 contest (is using 24 tones then notated quarter tones)
+
 
 **** Lists of Regular Temperaments 
 
