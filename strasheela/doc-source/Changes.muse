@@ -7,6 +7,7 @@
   - Main additions and changes 
     - Support for heuristic constraints added. See the documentation of the procedure Score.apply_H, the example [[../examples/Heuristic-Constraints.oz][Heuristic-Constraints.oz]], and the functor [[../contributions/anders/Heuristics/doc/node1.html][Heuristics]]  
     - Revised Fomus output: Strasheela now exports the new format of the Fomus rewrite (http://fomus.sourceforge.net/), and Strasheela's Fomus export definition have been extended in many ways.
+    - Constraint problems on arbitrary octave-repeating [[http://en.wikipedia.org/wiki/Regular_temperament][regular temperaments]] (any rank) supported, including [[http://en.wikipedia.org/wiki/Just_intonation][just intonation]] with arbitrary limits (pitches measured, e.g., in cent or millicent).
     - Revised score distribution: value orderings can now access arbitrary score information 
     - Added support for transformable subscripts ([[../contributions/anders/Segments/doc/_.html][Segs.tSC]])
     - Added functor [[../contributions/anders/ET41/doc/node1.html][ET41]] for composition in [[http://en.wikipedia.org/wiki/41_equal_temperament][41-tone equal temperament]] and related tunings (e.g. the just intonation tuning of [[http://en.wikipedia.org/wiki/La_Monte_Young][La Monte Young]]'s [[http://www.kylegann.com/wtp.html][The Well-Tuned Piano]]). Supported features for these tunings include a short-hand pitch notation; a database of intervals, chords, and scales; and some minimal music notation support (via Lilypond).
@@ -40,7 +41,7 @@
     - Segs: added mixin scripts (partly removing orig extended script altogether): MakeCounterpoint_Mixin, PitchPattern, FenvContour, Arpeggio, Arch, Repetitions, Hook, Stairs, MakeAkkord_Mixin, MakeAkkords_Mixin  
     - Segs.homophonicChordProgression: added arguments playAllChordTones, noVoiceCrossing, maxUpperVoiceDistance, generalised argument 'restrictMelodicIntervals'.
     - HS.rules: added GetRootDegreeIntervals, SetBoundaryRoots, SetBoundaryTypes, NoParallels2, Ballistic, MinCard
-    - Pattern: added MinDistinct, DirectionOfContour, LocalMinR, GetLocalMax, GetLocalMin, ConstrainLocalMax, ConstrainLocalMin, FenvContour2, NoRepetition and Undulating
+    - Pattern: added MinDistinct, DirectionOfContour, LocalMinR, GetLocalMax, GetLocalMin, ConstrainLocalMax, ConstrainLocalMin, FenvContour2, NoRepetition, Undulating, ForCartesianProduct2 and MapCartesianProduct2
     - HS.score: refactored HarmonicRythmFollowsMarkers: now works also for items with offsetTime > 0 
     - Removed proc GUtils.selectArg (better use Adjoin or CondSelect instead)
     - Removed GUtils.isInt (result wrong for FD ints): use FD.is or IsInt instead
@@ -49,6 +50,7 @@
   - Further bug fixes and changes
     - Oz primitives like IsRecord, IsAtom etc. block on kinded variables (undetermined FD and FS vars), which could cause blocking of various Strasheela definitions. Now Strasheela always uses its new own GUtils.isRecord and GUtils.isAtom etc. which do not have this problem
     - Removed redundant (and ambiguous) pitch unit 'keynumber'. Default pitch unit is now 'midi' (equivalent to et12). 
+    - Score: Fixed bug for TimeMixin method findSimultaneousItem in case object is not contained in any container
     - Lilypond output: if score started with offset time, then this leading rest was ignored in the Lilypond output (now fixed). Also, score now by default wrapped in braces, and default Lilypond version updated to "2.12.0".
     - HS.out.renderAndShowLilypond: revised args codeBeforeNoteMakers and codeBeforePcCollectionMakers. Also, chord and scale objects are again notated with grace notes /before/ root (grace notes after the root (using \aftergrace) are incompatible with HE notation). 
     - HS.score: GetAdaptiveJIPitch: 
