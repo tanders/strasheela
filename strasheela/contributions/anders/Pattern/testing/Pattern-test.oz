@@ -403,6 +403,16 @@ Xs = [10 20]
 
 Ys = [1 2 3]
 
+%%
+%% Pattern.mapCartesianProduct2
+%%
+
+{Pattern.mapCartesianProduct2 [[a b c] [1 2 3] [10 11] [100 101]]
+ fun {$ X} X end}
+
+{Pattern.mapCartesianProduct2 [[a b c] [1 2 3] [10 11] [100 101]]
+ fun {$ [A B C D]} [A A B C D] end}
+
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
