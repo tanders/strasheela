@@ -129,7 +129,8 @@ end
       test4:[1.5 1.25]
       comment: 'unisono'
      )
- 72}
+  % 72
+ 31}
 
 %%
 %% testing the comment creation:
@@ -254,4 +255,113 @@ MyInterval = {Score.makeScore
 
 
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%
+%%% Regular temperaments
+%%%
 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%% PitchesPerOctave=1200 
+%%
+
+
+% declare
+% [RegT] = {ModuleLink ['x-ozlib://anders/strasheela/RegularTemperament/RegularTemperament.ozf']}
+% {HS.db.setDB {RegT.db.makeFullDB unit(pitchesPerOctave:1200)}}
+
+
+%%
+%% MakeRegularTemperament
+%%
+
+%% 5-limit JI
+%% generator factors: small range of factors for testing
+{HS.db.makeRegularTemperament [702 386] [~1#1 0#1]
+ unit(pitchesPerOctave:1200)}
+
+{Length
+ {HS.db.makeRegularTemperament [702 386] [~5#5 ~1#1] unit(pitchesPerOctave:1200)}}
+
+
+%% 12-TET
+{HS.db.makeRegularTemperament [100] [0#11] unit(pitchesPerOctave:1200)}
+
+%% 31-TET
+%% Note: if using midicent, accumulating error due to rounding is 9 cent! So, consider using millicent instead.
+% generator 38.71, generate one too much to show accumulating error
+{HS.db.makeRegularTemperament [39] [0#31] unit(pitchesPerOctave:1200)}
+
+%% 1/4 comma meantone
+{HS.db.makeRegularTemperament [697] [~6#6] unit(pitchesPerOctave:1200)}
+
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%% PitchesPerOctave=120000 (millicent) 
+%%
+
+declare
+[RegT] = {ModuleLink ['x-ozlib://anders/strasheela/RegularTemperament/RegularTemperament.ozf']}
+{HS.db.setDB {RegT.db.makeFullDB unit(pitchesPerOctave:120000)}}
+
+
+%%
+%% MakeRegularTemperament
+%%
+
+
+%% 5-limit JI
+%% small range of factors for testing
+%% Note: HS.score.ratioToInterval depends on PitchesPerOctave in database
+{HS.db.makeRegularTemperament [{HS.score.ratioToInterval 3#2} {HS.score.ratioToInterval 5#4}]
+ [~1#1 0#1] unit(pitchesPerOctave:120000)}
+
+%% 31-TET
+%% generate one too much to show error
+%% Note: accumulating error 1 millicent :)
+{HS.db.makeRegularTemperament [3871] [0#31] unit(pitchesPerOctave:120000)}
+
+%% 1/4 comma meantone, computed generator 69659 millicent
+%% (one more than given at http://en.wikipedia.org/wiki/Quarter-comma_meantone: 696.578428 cent)
+%% Note: HS.score.ratioToInterval depends on PitchesPerOctave in database
+{HS.db.makeRegularTemperament
+ [{HS.score.ratioToInterval 3#2} - ({HS.score.ratioToInterval 81#80} div 4)]
+ [~6#6]
+ unit(pitchesPerOctave:120000)}
+
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%% RatioToRegularTemperamentPC
+%%
+
+% declare
+% [RegT] = {ModuleLink ['x-ozlib://anders/strasheela/RegularTemperament/RegularTemperament.ozf']}
+% {HS.db.setDB {RegT.db.makeFullDB unit(pitchesPerOctave:1200)}}
+
+
+%% 12-TET 
+{HS.db.ratioToRegularTemperamentPC 7#4 % 3#2 5#1 7#4
+ {List.toTuple unit
+  {HS.db.makeRegularTemperament [100] [0#11] unit(pitchesPerOctave:1200)}}
+ unit(pitchesPerOctave:1200
+      showError:true)}
+
+%% 1/4-comma Meantone (only cent accuracy results in accumulating error!)
+%% generator: 696.578428 cent
+{HS.db.ratioToRegularTemperamentPC 7#4 % 3#2 5#1 7#4
+ {List.toTuple unit
+  {HS.db.makeRegularTemperament [697] [~10#10] unit(pitchesPerOctave:1200)}}
+ unit(pitchesPerOctave:1200
+      showError:true)}
