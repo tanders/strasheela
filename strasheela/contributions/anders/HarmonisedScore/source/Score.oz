@@ -159,14 +159,16 @@ export
    Interval
    IsInterval
    NoteInterval TransposeNote
-   
+
+   PitchClassMixin IsPitchClassMixin
+   RegularTemperamentMixinForNote IsRegularTemperamentMixinForNote
    InChordMixinForNote IsInChordMixinForNote
    InScaleMixinForNote IsInScaleMixinForNote
-   PitchClassMixin IsPitchClassMixin
    EnharmonicSpellingMixinForNote IsEnharmonicSpellingMixinForNote
    ScaleDegreeMixinForNote IsScaleDegreeMixinForNote
    ChordDegreeMixinForNote IsChordDegreeMixinForNote
-   Note Note2 FullNote EnharmonicNote ScaleDegreeNote ChordDegreeNote ScaleNote ChordNote
+   Note Note2 RegularTemperamentNote
+   FullNote EnharmonicNote ScaleDegreeNote ChordDegreeNote ScaleNote ChordNote
    
    PitchClassCollection IsPitchClassCollection %% !!?? why export this
    Chord IsChord
@@ -213,6 +215,7 @@ prepare
    ScaleDegreeMixinForChordType = {Name.new}
    InversionMixinForChordType = {Name.new}
 
+   RegularTemperamentForNoteType = {Name.new}
    InChordMixinForNoteType = {Name.new}
    InScaleMixinForNoteType = {Name.new}
    PitchClassMixinType = {Name.new}
@@ -477,6 +480,10 @@ define
       {Append Trailing Leading}
 %      end
    end
+
+   %% TODO:
+%    proc {RegularToPC }
+%    end
 
 
 
@@ -1976,6 +1983,134 @@ define
       {Score.isScoreObject X} andthen {HasFeature X PitchClassMixinType}
    end
 
+
+   
+   local
+      %% Simplified: (Generator1 * GeneratorFactor1 + ...) mod PitchesPerOctave = PitchClass
+      proc {InitConstrain X}
+%       thread % don't block init if some information is still missing
+	 Offset = {X getGeneratorFactorsOffset($)}
+	 Sum1 = {FD.decl}
+	 Sum2 = {FD.decl}
+      in
+	 %% TODO: if generators should be FD ints
+% 	 if {All {Record.toList {X getAllGenerators($)}} IsDet}
+% 	 then Sum = {FD.sumC {X getAllGenerators($)} {X getAllGeneratorFactors($)} '=:'}
+% 	 else
+% 	 end
+	 Sum1 = {FD.sumC {X getAllGenerators($)} {X getAllGeneratorFactors($)} '=:'}
+	 %% subtract generators offsets
+	 Sum2 =: (Sum1
+		  - {LUtils.accum {Map {X getAllGenerators_list($)} fun {$ G} G*Offset end}
+		     Number.'+'}
+		  %% add 10 octaves to ensure pos number -- removed by mod
+		  + {DB.getPitchesPerOctave}*10)
+	 {X getPitchClass($)} = {FD.modI Sum2 {DB.getPitchesPerOctave}}
+%       end
+      end
+   in
+      %% TODO: 
+      %% - doc
+      %% - set generators in HS database, not for every note individuyally 
+      %% - def constrain between regular temperament vars and PC in reusable extra proc above, which is then only called in InitConstrain
+      /** %% [abstract class] RegularTemperamentMixinForNote defines a complementary pitch representation that represents note pitch classes in terms of 1 or more generators of a regular temperament and their corresponding factors.
+      %%
+      %% NOTE: arg generators is currently required arg and generators must be determined (ints in cent)
+      %%
+      %% */
+      %%
+      %%
+      %%
+      class RegularTemperamentMixinForNote
+	 feat !RegularTemperamentForNoteType:unit
+	 attr generators generatorFactors rank generatorFactorsOffset
+	    %% args generators and generatorFactors expect list of FD ints with same length; generatorFactors optional
+	 meth initRegularTemperamentMixinForNote(generators:Gs<=_
+						 generatorFactors:Fs<=_
+						 generatorFactorsOffset:Offset<=100) = M
+	    Default = unit(generatorFactorsDomain_1: Offset-12#Offset+12
+			    generatorFactorsDomain_others: Offset-2#Offset+2)
+	 in
+% 	    end
+	    @rank = {Length Gs}  % number of generators
+	    @generators = {MakeTuple unit @rank}
+	    @generatorFactors = {MakeTuple unit @rank}
+	    @generatorFactorsOffset = Offset
+	    %% 
+	    {List.forAllInd Gs
+	     proc {$ I G}
+		@generators.I = {New Score.parameter init(value:G info:generator#I)}
+	     end}
+	    {List.forAllInd if {IsDet Fs}
+			    then Fs
+			    else
+			       {FD.int Default.generatorFactorsDomain_1}
+			       | {Map {List.make @rank-1}
+				  fun {$ _} {FD.int Default.generatorFactorsDomain_others} end}
+			    end
+	     proc {$ I Fac}
+		@generatorFactors.I = {New Score.parameter init(value:Fac info:generatorFactor#I)}
+	     end}
+	    {self bilinkParameters({Append {Record.toList @generators}
+				    {Record.toList @generatorFactors}})} 
+	    %% implicit constrains
+	    {InitConstrain self}
+	 end
+	 /** %% Returns the number of generators of the regular temperament (an int). Remember that the octave is always an implicit generator that is not counted.
+	 %% */
+	 meth getRank($)
+	    @rank
+	 end
+	 meth getGeneratorFactorsOffset($)
+	    @generatorFactorsOffset
+	 end
+	 /** %% Returns the Ith (int) generator of the regular temperament, measured in cent (FD int). Remember that the octave is always an implicit generator.
+	 %% */
+	 meth getGenerator($ I)
+	    {@generators.I getValue($)}
+	 end
+	 meth getGeneratorParameter($ I)
+	    @generators.I
+	 end
+	 /** %% Returns tuple of all generators (FD ints).
+	 %% */
+	 meth getAllGenerators($)
+	    {Record.map @generators fun {$ G} {G getValue($)} end}
+	 end
+	 /** %% Returns list of all generators (FD ints).
+	 %% */
+	 meth getAllGenerators_list($)
+	    {Record.toList {self getAllGenerators($)}}
+	 end
+	 meth getAllGeneratorParameters($)
+	    @generators
+	 end
+	 /** %% Returns the factor (FD int) by which the Ith (int) generator of the regular temperament has been multiplied to obtain the pitch class of this note.
+	 %% */
+	 meth getGeneratorFactor($ I)
+	    {@generatorFactors.I getValue($)}
+	 end
+	 meth getGeneratorFactorParameter($ I)
+	    @generatorFactors.I 
+	 end
+	 /** %% Returns tuple of all generator factors (FD ints).
+	 %% */
+	 meth getAllGeneratorFactors($)
+	    {Record.map @generatorFactors fun {$ G} {G getValue($)} end}
+	 end
+	 /** %% Returns list of all generator factors (FD ints).
+	 %% */
+	 meth getAllGeneratorFactors_list($)
+	    {Record.toList {self getAllGeneratorFactors($)}}
+	 end
+	 meth getAllGeneratorFactorParameters($)
+	    @generatorFactors
+	 end
+      end
+   end  
+   fun {IsRegularTemperamentMixinForNote X}
+      {Score.isScoreObject X} andthen {HasFeature X RegularTemperamentForNoteType}
+   end
       
    local
       /** %% Defines relation between Self (a note) and its related chord. 
@@ -2592,6 +2727,35 @@ define
    end
 
 
+   %% TODO: doc
+   /** %% [concrete class]
+   %% */
+   %% 
+   class RegularTemperamentNote from Note RegularTemperamentMixinForNote
+				   /** %% Arguments
+				   %% see comment in Note, additionally
+				   %% required arg: generators (list of ints, later perhaps list of FD ints)
+				   %% optional arg: generatorFactors (list of FD ints, same length as generators), generatorFactorsOffset (int)
+				   %% */
+      meth init(...) = M
+	 RegularTemperamentMixinForNoteFeats = [generators generatorFactors generatorFactorsOffset]
+      in
+	 Note, {Record.subtractList M RegularTemperamentMixinForNoteFeats}
+	 RegularTemperamentMixinForNote, {Adjoin {GUtils.takeFeatures M
+						  RegularTemperamentMixinForNoteFeats}
+					  %% replace label
+					  initRegularTemperamentMixinForNote}
+      end
+	 
+      
+      meth getInitInfo($ ...)	 
+	 unit(superclass:Note
+	      args:[generators#fun {$ _} {Record.toList {self getAllGenerators($)}} end#noMatch
+		    generatorFactors#fun {$ _} {Record.toList {self getAllGeneratorFactors($)}} end#_
+		   ])
+      end
+   end
+   
    
    /** %% [concrete class] The class FullNote extends the class Note (HS.score.note) by a representation for its scale degree and an enharmonic notation. These extensions are defined by the mixin classes EnharmonicSpellingMixinForNote and ScaleDegreeMixinForNote. See their documentation for details. 
    %% */
