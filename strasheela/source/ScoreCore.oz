@@ -993,16 +993,22 @@ define
       meth findSimultaneousItem(?X test:Test<=fun {$ X} true end
 				cTest: CTest<=fun {$ X} true end)
 	 thread 		% ?? NOTE: thread needed?
-	    TopLevel = {self getTopLevels($ test:fun {$ X} {X isTimeMixin($)} end)}.1
-	    ScoreObjects = {TopLevel collect($ test:Test)}
+	    TopLevels = {self getTopLevels($ test:fun {$ X} {X isTimeMixin($)} end)}
 	 in
-	    X = {LUtils.cFind ScoreObjects
-		 fun {$ X}
-		    X \= self andthen
-		    {X isItem($)} andthen
-		    ({self isSimultaneousItemR($ X)} == 1) andthen
-		    {{GUtils.toFun CTest} X}
-		 end}
+	    if TopLevels == nil
+	    then X = nil
+	    else 
+	       TopLevel = TopLevels.1
+	       ScoreObjects = {TopLevel collect($ test:Test)}
+	    in
+	       X = {LUtils.cFind ScoreObjects
+		    fun {$ X}
+		       X \= self andthen
+		       {X isItem($)} andthen
+		       ({self isSimultaneousItemR($ X)} == 1) andthen
+		       {{GUtils.toFun CTest} X}
+		    end}
+	    end
 	 end
       end
 
