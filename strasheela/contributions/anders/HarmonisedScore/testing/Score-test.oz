@@ -733,6 +733,8 @@ MyNote = {Score.makeScore note(duration:1
 			       startTime:0
 			       timeUnit:beats(4)
 			       pitch:61
+			       inChordB:0	
+			       inScaleB:0
 			      )
 	   add(note:HS.score.note)}
 
@@ -822,7 +824,88 @@ MyScore = {Score.makeScore2
 %% problem/TODO
 %%
 %% * how to define relation between chord and scale in manner as generic and concise as the note args (e.g. chord shall be diatonic..) -- add similar (optional) args to chord init? -- variante von Mixin InScale verwenden? Two 0/1-int attributes/params for chord: RootInScaleB, AllPCsInScaleB
-%% 
+%%
+
+
+
+%% TODO:
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%% RegularTemperamentNote class
+%%
+
+%% test 1: no relation to any chord or scale (default), single generator
+%%
+%% determined note
+declare
+[RegT] = {ModuleLink ['x-ozlib://anders/strasheela/RegularTemperament/RegularTemperament.ozf']}
+%% TMP database
+{HS.db.setDB RegT.db.fullDB}
+MyNote = {Score.makeScore note(duration:1
+			       startTime:0
+			       timeUnit:beats(4)
+			       pitchClass: 498 % 0 702 204 498 
+			       octave: 4
+			       %% 3-limit JI
+			       generators: [702]
+% 			       generatorFactorsOffset: 0
+			      )
+	  add(note:HS.score.regularTemperamentNote)}
+{Browse {MyNote toInitRecord($)}}
+
+
+
+%% test 2: no relation to any chord or scale (default), two generators
+%%
+%% determined note
+declare
+[RegT] = {ModuleLink ['x-ozlib://anders/strasheela/RegularTemperament/RegularTemperament.ozf']}
+%% TMP database
+{HS.db.setDB RegT.db.fullDB}
+[MyNote] = {SDistro.searchOne
+	    fun {$}
+	       {Score.make note(duration:1
+				startTime:0
+				timeUnit:beats(4)
+				%% select the pitch class -- the generatorFactors are searched for
+				%% NOTE: pitch classes that are not part of the regular temperament (withing generator factor boundaries) cause fail
+				pitchClass: 702-386 % 0 702 204 498 % 386 814 702+386
+				octave: 4
+				%% 5-limit JI
+				generators: [702 386]
+% 				generatorFactors: [{FD.int 100-6#100+6} {FD.int 99#101}]
+% 			       generatorFactorsOffset: 100
+		     inChordB:0
+		     inScaleB:0
+			       )
+		add(note:HS.score.regularTemperamentNote)}
+	    end
+	    unit}
+{Browse {MyNote toInitRecord($)}}
+
+
+
+
+%% test 3: no relation to any chord or scale (default), two generators with generators and factors given, pitch class is searched for
+%%
+%% determined note
+declare
+[RegT] = {ModuleLink ['x-ozlib://anders/strasheela/RegularTemperament/RegularTemperament.ozf']}
+%% TMP database
+{HS.db.setDB RegT.db.fullDB}
+MyNote = {Score.make note(duration:1
+			  startTime:0
+			  timeUnit:beats(4)
+% 		     pitchClass: {FD.decl} % 0 702 204 498 % 386 814 702+386
+			  octave: 4
+			  %% 5-limit JI
+			  generators: [702 386]
+			  %% select the factors -- the pitch class is determined by propagation 
+			  generatorFactors: [101 100] %  [101 101][100 100] [101 100] [99 100] [99 101]
+			 )
+	  add(note:HS.score.regularTemperamentNote)}
+{Browse {MyNote toInitRecord($)}}
+
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
