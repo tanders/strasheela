@@ -37,11 +37,16 @@ These functors provide additional functionality.
 
 These extensions simplify the definition of specific musical CSP classes (e.g. style specific CSPs such as harmonic CSPs). These extensions can often be combined (e.g. using the functors Pattern and HS for constraining patterns on harmonic relations).
 
+Note that several of these extensions consist of multiple sub-functors. The links below point only to their top-level functors, the subfunctors are accessible by the links in the top-level's section Import.
+
+
   [[../contributions/anders/Heuristics/doc/node1.html][H (Heuristics)]]  -- heuristic constraints 
 
   [[../contributions/anders/Pattern/doc/node1.html][Pattern]] -- constraints on lists to express patterns in music
 
   [[../contributions/anders/HarmonisedScore/doc/node1.html][HS (HarmonisedScore)]] -- constrainable harmony model 
+
+  [[../contributions/anders/RegularTemperament/doc/node1.html][RegT (RegularTemperament)]] -- composition in arbitrary octave-repeating [[http://en.wikipedia.org/wiki/Regular_temperament][regular temperaments]] (any rank), including [[http://en.wikipedia.org/wiki/Just_intonation][just intonation]] with arbitrary limits (pitches measured, e.g., in cent or millicent). Extends HS
 
   [[../contributions/anders/ET31/doc/node1.html][ET31]] -- composition in [[http://en.wikipedia.org/wiki/31_equal_temperament][31-tone equal temperament]], extends HS
 
