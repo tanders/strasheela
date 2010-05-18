@@ -128,6 +128,8 @@
 
 functor
 import
+   GUtils at 'x-ozlib://anders/strasheela/source/GeneralUtils.ozf'
+
    DB at 'source/Database.ozf'
    HS_Score at 'source/Score.ozf'
    Rules at 'source/Rules.ozf'
@@ -175,18 +177,27 @@ define
    %% */
    Acc = {MakeTranslation acc}
 
-   /** %% Transforms symbolic note name (atom) into the corresponding pitch class integer, depending on {HS.db.getPitchesPerOctave}. Note: function only works for specific values of {DB.getPitchesPerOctave} (e.g., 12, 22, 31, 41).
+   /** %% Transforms symbolic note name (atom) into the corresponding pitch class integer, depending on {HS.db.getPitchesPerOctave}. Note: function only works for specific values of {DB.getPitchesPerOctave} (e.g., 12, 22, 31, 41). If PC is an integer then it is returned unchanged.
    %% */
-   PC = {MakeTranslation pc}
-
+   fun {PC PC}
+      if {GUtils.isAtom PC} then 
+	 {{MakeTranslation pc} PC}
+      elseif {IsInt PC} then PC
+      end
+   end
+	   
    /** %% Transforms pitch class integer into list of corresponding symbolic note names (atoms). Note: function only works for specific values of {DB.getPitchesPerOctave} (e.g., 12, 22, 31, 41).
    %% */
    PCName = {MakeTranslation pcName}  
       
    /** %% Translates a symbolic pitch P in the format PC#Octave (PC is an atom, Octave is an int) into the corresponding pitch integer, depending on {HS.db.getPitchesPerOctave}. Note: function only works for specific values of {DB.getPitchesPerOctave} (e.g., 12, 22, 31, 41).
    %% */
-   Pitch = {MakeTranslation pitch}  
-   
+   fun {Pitch MyPitch}
+      if {IsRecord MyPitch} andthen {Label MyPitch} == '#'  then 
+	 {{MakeTranslation pitch} MyPitch}
+      elseif {IsInt MyPitch} then MyPitch
+      end
+   end
    
    
 end
