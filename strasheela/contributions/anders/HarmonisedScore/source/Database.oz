@@ -51,6 +51,7 @@ export
    GetEditScaleDB GetInternalScaleDB
    GetEditIntervalDB GetInternalIntervalDB
    GetPitchesPerOctave GetPitchUnit GetAccidentalOffset GetOctaveDomain
+   GetGenerators GetGeneratorFactors GetGeneratorFactorsOffset GetTemperament
 
    MakePitchClassFDInt MakeOctaveFDInt MakeAccidentalFDInt
    MakeScaleDegreeFDInt MakeChordDegreeFDInt
@@ -174,7 +175,9 @@ define
 				  elseif {IsInt X}
 				  then X
 				     %% for other values raise exeption
-				  else raise malformedDBEntryFeature(X) end
+				  else {Exception.raiseError
+					strasheela(failedRequirement X "Malformed database entry feature")}
+				     nil % never returned
 				  end
 			       end}}
 			  end}
@@ -210,13 +213,23 @@ define
       AccidentalOffset = {NewCell unit}
       PitchUnit = {NewCell unit}
       OctaveDomain = {NewCell unit}
+      Generators = {NewCell unit}
+      GeneratorFactors = {NewCell unit}
+      GeneratorFactorsOffset = {NewCell unit}
+      Temperament = {NewCell unit}
+      
 
       %% maps db features to the respective setters
       Optional_DB_Setters = unit(chordDB:SetChordDB
 				 scaleDB:SetScaleDB
 				 intervalDB:SetIntervalDB
 				 %% implicitly sets PitchUnit
-				 pitchesPerOctave:SetPitchesPerOctave)
+				 pitchesPerOctave:SetPitchesPerOctave
+				 %%
+				 generators:SetGenerators
+				 generatorFactors:SetGeneratorFactors
+				 generatorFactorsOffset: SetGeneratorFactorsOffset
+				 temperament:SetTemperament)
       %% complements Optional_DB_Setters: always set these features 
       Obligatory_DB_Setters = unit(accidentalOffset:SetAccidentalOffset
 				   octaveDomain:SetOctaveDomain)
@@ -227,11 +240,15 @@ define
       /** %% Sets the database which is used by the HarmonisedScore contribution (e.g., its music representation and rules).
       %% The syntax of the database is
       &lt;DB&gt; ==:: unit([chordDB:&lt;PCGroupDB&gt;]
-		     [scaleDB:&lt;PCGroupDB&gt;]
-		     [intervalDB:&lt;IntervalDB&gt;]
-		     [pitchesPerOctave:&lt;PitchesPerOctave&gt;]
-		     [accidentalOffset:&lt;AccidentalOffset&gt;]
-		     [octaveDomain:&lt;OctaveDomain&gt;])
+			   [scaleDB:&lt;PCGroupDB&gt;]
+			   [intervalDB:&lt;IntervalDB&gt;]
+			   [pitchesPerOctave:&lt;PitchesPerOctave&gt;]
+			   [accidentalOffset:&lt;AccidentalOffset&gt;]
+			   [octaveDomain:&lt;OctaveDomain&gt;]
+			   [generators:&lt;Generators&gt;]
+			   [generatorFactors:&lt;generatorFactors&gt;]
+			   [generatorFactorsOffset:&lt;GeneratorFactorsOffset&gt;]
+			   [temperament:&lt;Temperament&gt;])
       &lt;PCGroupDB&gt; ==:: unit(&lt;PCGroupEntry&gt;+)
       &lt;PCGroupEntry&gt; ==:: unit(pitchClasses:&lt;IntList&gt;
 			       roots:&lt;IntList&gt;
@@ -248,6 +265,8 @@ define
       %%
       %% 'comment' feature of database entries: is either a single value (usually an atom) or a record.
       %% Naming database entries: either by an atom given to the 'comment' feature of a database, or an atom given to the 'name' feature of the record at the 'comment' feature, or -- for multiple alternative names -- a list of atoms given to the 'name' feature of the record at the 'comment' feature.
+      %%
+      %% The settings 'generators', 'generatorFactors', 'generatorFactorsOffset' and 'temperament' are for bookkeeping when using regular temperaments.
       %%
       %% TODO: write a better doc..
       %% */
@@ -299,10 +318,11 @@ define
 	 if {IsTuple NewChordDB} andthen {HasFeature NewChordDB 1} then
 	    EditChordDB := NewChordDB
 	    InternalChordDB := {EditToInteral NewChordDB}
-	 elseif NewChordDB == unit orelse NewChordDB == nil then
-	    EditChordDB := unit
-	    InternalChordDB := unit
-	 else raise malformedChordDB(NewChordDB) end
+	 elseif {Width NewChordDB} == 0 then
+	    EditChordDB := NewChordDB
+	    InternalChordDB := NewChordDB
+	 else {Exception.raiseError
+	       strasheela(failedRequirement NewChordDB "Malformed chord database")}
 	 end 
       end
       %% !!?? unfinished doc?
@@ -314,10 +334,11 @@ define
 	 if {IsTuple NewScaleDB} andthen {HasFeature NewScaleDB 1} then
 	    EditScaleDB := NewScaleDB
 	    InternalScaleDB := {EditToInteral NewScaleDB}
-	 elseif NewScaleDB == unit orelse NewScaleDB == nil then
-	    EditScaleDB := unit
-	    InternalScaleDB := unit
-	 else raise malformedScaleDB(NewScaleDB) end
+	 elseif {Width NewScaleDB} == 0 then
+	    EditScaleDB := NewScaleDB
+	    InternalScaleDB := NewScaleDB
+	 else {Exception.raiseError
+	       strasheela(failedRequirement NewScaleDB "Malformed scale database")}
 	 end 
       end
 
@@ -327,10 +348,11 @@ define
 	 if {IsTuple NewIntervalDB} andthen {HasFeature NewIntervalDB 1} then
 	    EditIntervalDB := NewIntervalDB
 	    InternalIntervalDB := {EditToInteral NewIntervalDB}
-	 elseif NewIntervalDB == unit orelse NewIntervalDB == nil then
-	    EditIntervalDB := unit
-	    InternalIntervalDB := unit
-	 else raise malformedIntervalDB(NewIntervalDB) end
+	 elseif {Width NewIntervalDB} == 0 then
+	    EditIntervalDB := NewIntervalDB
+	    InternalIntervalDB := NewIntervalDB
+	 else {Exception.raiseError
+	       strasheela(failedRequirement NewIntervalDB "Malformed interval database")}
 	 end 
       end
 	    
@@ -368,6 +390,11 @@ define
 	 OctaveDomain := Min#Max
       end
       
+      proc {SetGenerators Xs} Generators := Xs end
+      proc {SetGeneratorFactors Xs} GeneratorFactors := Xs end
+      proc {SetGeneratorFactorsOffset X} GeneratorFactorsOffset := X end
+      proc {SetTemperament R} Temperament := R end
+      
       %% NB: It is of course the responsibility of the user to ensure that any reading of the DB happens only _after_ setting the database.
       /*
       fun {GetEditChordDB} lock MyLock then @EditChordDB end end
@@ -391,6 +418,10 @@ define
       fun {GetAccidentalOffset} @AccidentalOffset end 
       fun {GetPitchUnit} @PitchUnit end 
       fun {GetOctaveDomain} @OctaveDomain end
+      fun {GetGenerators} @Generators end
+      fun {GetGeneratorFactors} @GeneratorFactors end
+      fun {GetGeneratorFactorsOffset} @GeneratorFactorsOffset end
+      fun {GetTemperament} @Temperament end
       
    end
 
@@ -469,9 +500,10 @@ local
 	       KeysPerOctave_F}
       in
 	 unit(ratio:Ratio pc:{FloatToInt PC} ji_error:{PCError PC KeysPerOctave_F}#cent)
-      else PC#Error = {RatioToRegularTemperamentPC Ratio Temperament
-		     unit(pitchesPerOctave:KeysPerOctave
-			  showError:true)}
+      else PC#Error = {RatioToRegularTemperamentPC Ratio 
+		       unit(temperament:Temperament
+			    pitchesPerOctave:KeysPerOctave
+			    showError:true)}
 	 Unit = case KeysPerOctave of
 		   1200 then cent
 		[] 120000 then millicent
@@ -845,7 +877,10 @@ end
 	fun {$ FactorCombination}
 	   ({LUtils.accum {Map {LUtils.matTrans [Generators FactorCombination]}
 			   fun {$ [Generator Factor]} Generator * Factor end}
-	     Number.'+'} + As.pitchesPerOctave*10) mod As.pitchesPerOctave
+	     Number.'+'}
+	    - {LUtils.accum {Map Generators fun {$ G} G*As.generatorFactorsOffset end}
+	       Number.'+'}
+	    + As.pitchesPerOctave*10) mod As.pitchesPerOctave
 	end}
        Value.'=<'}
    end
@@ -865,8 +900,7 @@ end
 	    else Tuplet.UpperBound
 	    end
 	 else
-	    %% NOTE div rounds down, so BDiff=3 is first reduced to BDiff=2
-	    Half_BDiff = (BDiff+1) div 2
+	    Half_BDiff = BDiff div 2
 	    NewVal = Tuplet.(LowerBond+Half_BDiff)
 	 in
 	    if NewVal == X then NewVal
@@ -878,6 +912,7 @@ end
       end
    in
       /** %% Temperament is tuplet of PCs, sorted in ascending order.
+      %% Ratio is either pair of integers Nominator#Denomitator or a float that corresponds to the value of the ratio.
       %%
       %% Args:
       %% 'pitchesPerOctave' (default 1200)
@@ -885,14 +920,18 @@ end
       %% */
       %% TODO:
       %% - doc
-      fun {RatioToRegularTemperamentPC Ratio Temperament Args}
-	 Default = unit(pitchesPerOctave:{GetPitchesPerOctave}
+      %% - Temperament optional arg, defaults to database Temperament
+      fun {RatioToRegularTemperamentPC Ratio Args}
+	 Default = unit(temperament: {GetTemperament}
+			pitchesPerOctave:{GetPitchesPerOctave}
 			showError: false)
 	 As = {Adjoin Default Args}
-	 JI_PC = {FloatToInt
+	 JI_PC = (({FloatToInt
 		  {MUtils.ratioToKeynumInterval Ratio
-		   {IntToFloat As.pitchesPerOctave}}} mod As.pitchesPerOctave
-	 TemperedPC = {FindClosest JI_PC Temperament 1 {Width Temperament}}
+		   {IntToFloat As.pitchesPerOctave}}}
+		   + As.pitchesPerOctave * 10) % avoid neg numbers
+		  mod As.pitchesPerOctave)
+	 TemperedPC = {FindClosest JI_PC As.temperament 1 {Width As.temperament}}
       in
 	 if As.showError
 	 then TemperedPC#(TemperedPC-JI_PC)
