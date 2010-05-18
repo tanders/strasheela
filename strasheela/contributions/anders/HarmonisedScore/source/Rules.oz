@@ -211,10 +211,16 @@ define
    %%  B=1 <-> Interval reduced into a single octave is element in ratios, translated to pitch classes.   
    %% */
    fun {MakeIntervalConstraint Ratios}
+      fun {RatioToPc Ratio}
+	 if {HS.db.getTemperament} == unit %% i.e. no regular temperament
+	 then {HS.score.ratioToInterval Ratio}
+	 else {HS.db.ratioToRegularTemperamentPC Ratio unit}
+	 end
+      end
+   in
       proc {$ Interval B}
 	 %% Intervals must be def in constraint: depents on pitches per octave
-	 Intervals = {FS.value.make
-		      {Sort {Map Ratios HS.score.ratioToInterval} Value.'<'}}
+	 Intervals = {FS.value.make {Sort {Map Ratios RatioToPc} Value.'<'}}
 	 Aux = {FD.decl}
       in
 	 Aux = {FD.modI Interval {HS.db.getPitchesPerOctave}}
