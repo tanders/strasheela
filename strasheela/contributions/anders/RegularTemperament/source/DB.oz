@@ -1,7 +1,7 @@
 
 
 /** %% Defines databases for chords, scales and intervals in arbitrary octave-repeating regular temperaments.
-%% NOTE: recomemndation: reduce the domain of all pitch classes (e.g., of notes, chord/scale roots and transpositions) to the tones of the current temperament. 
+%% NOTE: recommendation: reduce the domain of all pitch classes (e.g., of notes, chord/scale roots and transpositions) to the tones of the current temperament. (this is not necessary if all pitch classes are already reduced to some determined scale :)
 %% */
 
 %%
@@ -14,14 +14,25 @@
 %%
 %% - make PitchesPerOctave controllable by arg (so cent or millicent are possible)
 %%
+%% - add those chords of ET31 DB that are still missing
+%%
+%% - !! Change RegT.db.makeFullDB so that it allows to specify additional features (e.g., essentialPitchClasses) and to automatically filter out those database entries that do not have these features.
+%%
+%% - ?? add essential PCs to La Monte Young chords? 
+%%
+%% - after pitch classes can be specified with symbolic notation then go through all existing databases for material to add
+%%
+%% - create interval database
+%%
 
 functor 
    
 import
-   Browser(browse:Browse) % for debugging
+%    Browser(browse:Browse) % for debugging
    GUtils at 'x-ozlib://anders/strasheela/source/GeneralUtils.ozf'
 %    LUtils at 'x-ozlib://anders/strasheela/source/ListUtils.ozf'
 %    MUtils at 'x-ozlib://anders/strasheela/source/MusicUtils.ozf'
+   Out at 'x-ozlib://anders/strasheela/source/Output.ozf'
 %    Pattern at 'x-ozlib://anders/strasheela/Pattern/Pattern.ozf'
    HS at 'x-ozlib://anders/strasheela/HarmonisedScore/HarmonisedScore.ozf'
    RegT at '../RegT.ozf'
@@ -39,15 +50,267 @@ define
 %%%
 
    Chords = chords(
+   
+	       %%
+	       %% triads
+	       %%
+   
 	       chord(pitchClasses:[4#1 5#1 6#1]
 		     roots:[4#1]
-% 		     essentialPitchClasses:[]
-		     comment:'major')	       
-	       chord(pitchClasses:[6#6 6#5 6#4] % 'C' 'Es' 'G'
-		     roots:[6#6]
-		     essentialPitchClasses:[6#6 6#5]
+		     essentialPitchClasses:[4#1 5#1]
 %				dissonanceDegree:2
-		     comment:'minor')
+		     comment:'major')
+	       chord(pitchClasses:[1#6 1#5 1#4]
+		     roots:[1#6]    
+%				dissonanceDegree:2
+		     essentialPitchClasses:[1#6 1#5]
+		     comment:'minor')  
+	       chord(pitchClasses:[5#1 6#1 7#1]
+		     roots:[5#1]    
+%				dissonanceDegree:2
+		     essentialPitchClasses:[5#1 6#1 7#1]
+		     comment:'otonal subdiminished')  
+	       chord(pitchClasses:[1#5 1#6 1#7]
+		     roots:[1#7]    
+%				dissonanceDegree:2
+		     essentialPitchClasses:[1#5 1#6 1#7]
+		     comment:'utonal subdiminished')  
+	       chord(pitchClasses:[4#1 5#1 25#4]
+		     roots:[4#1]    
+%				dissonanceDegree:2
+		     essentialPitchClasses:[4#1 5#1 25#4]
+		     comment:'augmented')
+	       %% !!
+	       chord(pitchClasses:[6#1 7#1 9#1]
+		     roots:[6#1]    
+%				dissonanceDegree:2
+		     essentialPitchClasses:[6#1 7#1]
+		     comment:'subminor')  
+	       chord(pitchClasses:[1#6 1#7 1#9]
+		     roots:[1#9]    
+%				dissonanceDegree:2
+		     essentialPitchClasses:[1#6 1#7 1#9]
+		     comment:'supermajor')
+	       
+	       %% alt names:
+	       %% 'Italian augmented 6th', 'major subminor 7th no 5th'
+	       chord(pitchClasses:[4#1 5#1 7#1]
+		     roots:[4#1]    
+%				dissonanceDegree:2
+		     essentialPitchClasses:[4#1 5#1 7#1]
+		     comment:'harmonic 7th no 5')  
+
+
+	       %%
+	       %% tetrads, pentads...
+	       %%
+	       
+	       chord(pitchClasses:[4#1 5#1 6#1 15#2]
+		     roots:[4#1]    
+%				dissonanceDegree:2
+		     essentialPitchClasses:[4#1 5#1 15#2]
+		     comment:'major 7th')
+	       %% same as minor 6th, only root differs
+	       chord(pitchClasses:[1#6 1#5 1#4 3#10]
+		     roots:[1#6]    
+%				dissonanceDegree:2
+		     essentialPitchClasses:[1#6 1#5 3#10]
+		     comment:'minor 7th')  
+	       %% same as minor 7th, only root differs
+	       chord(pitchClasses:[4#1 5#1 6#1 10#3]
+		     roots:[4#1]    
+%				dissonanceDegree:2
+		     essentialPitchClasses:[4#1 5#1 6#1 10#3]
+		     comment:'major 6th')
+	       %% NOTE: chord to add?
+% 	       chord(pitchClasses:['C' 'Eb/' 'G' 'A/'] 
+% 		     roots:['C']  % ??
+% 		     essentialPitchClasses:['C' 'Eb/' 'A/']
+% %				dissonanceDegree:2
+% 			 % comment:'reversed dominant seventh'
+% 		     comment:unit(name:['minor 6th' 'minor added 6th'])
+% 		    )
+	       %% same as 'subdiminished 7th (2)', only root differs
+	       chord(pitchClasses:[5#1 6#1 7#1 42#5]
+		     roots:[5#1]    
+%				dissonanceDegree:2
+		     essentialPitchClasses:[5#1 6#1 7#1 42#5]
+		     comment:'subdiminished 7th (1)')  
+	       chord(pitchClasses:[1#7 1#6 1#5 7#30]
+		     roots:[1#7]    
+%				dissonanceDegree:2
+		     essentialPitchClasses:[1#7 1#6 1#5 7#30]
+		     comment:'subdiminished 7th (2)')
+	       %% alt name:
+	       %% 'major subdiminished subminor 7th'
+	       %% NOTE: in 22 ET, this chord equals to 'subminor 7th', even the root equals
+% 	       chord(pitchClasses:[4#1 5#1 40#7 50#7]
+% 		     roots:[4#1]   
+% 		     essentialPitchClasses:[4#1 5#1 40#7 50#7]
+% 		     comment:'')  
+	       chord(pitchClasses:[4#1 5#1 7#1 40#7]
+		     roots:[4#1]    
+		     essentialPitchClasses:[4#1 5#1 7#1 40#7]
+		     comment:'French augmented 6th')
+	       %% alt names:
+	       %% 'major subminor 7th', 'German augmented 6th'
+	       chord(pitchClasses:[4#1 5#1 6#1 7#1]
+		     roots:[4#1]    
+%				dissonanceDegree:2
+		     essentialPitchClasses:[4#1 5#1 7#1]
+		     comment:'harmonic 7th')
+	       %% alt names:
+	       %% 'minor supermajor 6th', 'minor diminished 7th'
+	       %% same as 'half subdiminished 7th', only root differs
+	       chord(pitchClasses:[1#4 1#5 1#6 2#7]
+		     roots:[1#6]    
+%				dissonanceDegree:2
+		     essentialPitchClasses:[1#4 1#5 2#7]
+		     comment:'subharmonic 6th')
+	       chord(pitchClasses:[1#4 1#5 1#6 1#7]
+		     roots:[1#7]    
+%				dissonanceDegree:2
+		     essentialPitchClasses:[1#4 1#5 1#6 1#7]
+		     comment:'half subdiminished 7th')  
+	       chord(pitchClasses:[6#1 7#1 9#1 10#1]
+		     roots:[6#1]    
+%				dissonanceDegree:2
+		     essentialPitchClasses:[6#1 7#1 9#1 10#1]
+		     comment:'subminor major 6th')  
+	       chord(pitchClasses:[5#1 6#1 7#1 9#1]
+		     roots:[9#1]    
+%				dissonanceDegree:2
+		     essentialPitchClasses:[5#1 6#1 7#1 9#1]
+		     comment:'supermajor minor 7th')
+	       %% alt name
+	       %% 'major subminor 7th 9th' 
+	       chord(pitchClasses:[4#1 5#1 6#1 7#1 9#1]
+		     roots:[4#1]    
+%				dissonanceDegree:2
+		     essentialPitchClasses:[4#1 5#1 7#1 9#1]
+		     comment:'harmonic 9th')
+	       %% alt name
+	       %% 'supermajor minor 7th 9th'
+	       chord(pitchClasses:[1#4 1#5 1#6 1#7 1#9]
+		     roots:[1#9]    
+%				dissonanceDegree:2
+		     essentialPitchClasses:[1#4 1#5 1#6 1#7 1#9]
+		     comment:'subharmonic 9th')  
+	       chord(pitchClasses:[6#1 7#1 9#1 21#2]
+		     roots:[6#1]    
+%				dissonanceDegree:2
+		     essentialPitchClasses:[6#1 7#1 9#1 21#2]
+		     comment:'subminor 7th')  
+	       chord(pitchClasses:[1#6 1#7 1#9 2#21]
+		     roots:[1#9]    
+%				dissonanceDegree:2
+		     essentialPitchClasses:[1#6 1#7 1#9 2#21]
+		     comment:'supermajor 6th')  
+	       chord(pitchClasses:[16#3 4#1 6#1 7#1]
+		     roots:[4#1]    
+%				dissonanceDegree:2
+		     essentialPitchClasses:[16#3 4#1 6#1 7#1]
+		     comment:'subminor 7th suspended 4th')
+	       %% following is same as above
+% 	       chord(pitchClasses:[4#1 6#1 7#1 21#4]
+% 		     roots:[4#1]    
+% %				dissonanceDegree:2
+% 		     essentialPitchClasses:[4#1 6#1 7#1 21#4]
+% 		     comment:'subminor 7th suspended 4th (2)')  
+	       chord(pitchClasses:[1#6 1#4 3#16 2#7]
+		     roots:[1#6]    
+%				dissonanceDegree:2
+		     essentialPitchClasses:[1#6 1#4 3#16 2#7]
+		     comment:'supermajor 6th suspended 2nd')
+	       chord(pitchClasses:[4#1 6#1 7#1 9#2]
+		     roots:[4#1]    
+%				dissonanceDegree:2
+		     essentialPitchClasses:[4#1 6#1 7#1 9#2]
+		     comment:'subminor 7th suspended 2nd')  
+	       chord(pitchClasses:[1#4 1#6 2#7 2#9]
+		     roots:[1#6]    
+%				dissonanceDegree:2
+		     essentialPitchClasses:[1#4 1#6 2#7 2#9]
+		     comment:'supermajor 6th suspended 4th')
+
+	       %% chords proposed as (quasi) consonant in Paul Erlich's
+	       %% "Tuning, Tonality, and Twenty-Two-Tone Temperament"
+% 	       chord(pitchClasses:['C' 'E\\' 'G' 'A']
+% 		     roots:['C']    
+% %				dissonanceDegree:2
+% 		     essentialPitchClasses:['C' 'E\\' 'A']
+% 		     comment:'major-minor')
+% 	       chord(pitchClasses:['C' 'Eb/' 'G' 'B']
+% 		     roots:['C']    
+% %				dissonanceDegree:2
+% 		     essentialPitchClasses:['C' 'Eb/' 'B']
+% 		     comment:'minor-major')
+	       
+	       
+% 	       chord(pitchClasses:['C' 'E\\' 'G' 'Bb' 'Eb']
+% 		     roots:['C']    
+% %				dissonanceDegree:2
+% 		     essentialPitchClasses:['C' 'E\\' 'G' 'Bb' 'Eb']
+% 		     comment:'')  
+% 	       chord(pitchClasses:['C' 'D#\\' 'G' 'A' 'D']
+% 		     roots:['C']    
+% %				dissonanceDegree:2
+% 		     essentialPitchClasses:['C' 'D#\\' 'G' 'A' 'D']
+% 		     comment:'')
+	       
+% 	       chord(pitchClasses:['C' 'E\\' 'G' 'A' 'D']
+% 		     roots:['C']    
+% %				dissonanceDegree:2
+% 		     essentialPitchClasses:['C' 'E\\' 'G' 'A' 'D']
+% 		     comment:'')
+
+
+	       %%
+	       %%
+	       %%
+	       
+% 	       %%
+% 	       %% La Monte Young's The Well-Tuned Piano chords
+% 	       %% source: Kyle Gann (1993). La Monte Young's The Well-Tuned Piano. Perspectives of New Music, 31(1), pp. 134-162.
+% 	       %%
+% 	       %% Note: Young's "distribution of the pitches over octaves" is lost in this pitch-class representation
+% 	       %%
+
+% 	       %% NOTE: 'opening' chord is subset of 'lost ancestral lake region' (without subminor third)
+% 	       chord(pitchClasses:[4#1 6#1 7#1 9#1]
+% 		     roots:[4#1]
+% % 		     essentialPitchClasses:[]
+% 		     comment:'opening') % Full name: "The Opening Chord"
+% 	       chord(pitchClasses:[81#1 84#1 108#1 112#1 144#1 192#1]
+% 		     roots:[192#1] %% TODO:
+% % 		     essentialPitchClasses:[]
+% 		     comment:'magic')
+% 	       chord(pitchClasses:[48#1 54#1 56#1 64#1 72#1 81#1 84#1]
+% 		     roots:[48#1] %% TODO:
+% % 		     essentialPitchClasses:[]
+% 		     comment:'romantic')
+% 	       chord(pitchClasses:[42#1 54#1 64#1 81#1]
+% 		     roots:[42#1] %% TODO:
+% % 		     essentialPitchClasses:[]
+% 		     comment:'gamelan')
+% 	       %% NOTE: 'tamiar dream' is subset of 'lost ancestral lake region' (21/1 missing)
+% 	       chord(pitchClasses:[14#1 18#1 24#1 27#1]
+% 		     roots:[14#1] %% TODO:
+% % 		     essentialPitchClasses:[]
+% 		     comment:'tamiar dream')
+% 	       chord(pitchClasses:[12#1 14#1 18#1 21#1 27#1]
+% 		     roots:[12#1] %% TODO:
+% % 		     essentialPitchClasses:[]
+% 		     comment:'lost ancestral lake region')
+% 	       chord(pitchClasses:[12#1 14#1 16#1 18#1 21#1]
+% 		     roots:[12#1] %% TODO:
+% % 		     essentialPitchClasses:[]
+% 		     comment:'brook')
+% 	       chord(pitchClasses:[128#1 144#1 147#1 192#1 224#1]
+% 		     roots:[128#1] %% TODO:
+% % 		     essentialPitchClasses:[]
+% 		     comment:'pool')
+	       
 	       )
 
    Scales = scales(
@@ -55,7 +318,13 @@ define
 		     roots:[1#1]
 		     comment:'major')
 
-	       	       %%
+	       %% adds minor wholetone 10/9, the there is also the fifths D-A available
+	       %% Note: meaning of things like getRootDegree gets rather different :)
+	       scale(pitchClasses:[1#1 10#9 9#8 5#4 4#3 3#2 5#3 15#8]
+		     roots:[1#1]
+		     comment:'major (8 tones)')
+
+	       %%
 	       %% Date: Sat, 19 Dec 1998 14:05:02 -0600 (CST)
 	       %% From: Paul Hahn <manynote@...>
 	       %% To: tuning@...
@@ -128,6 +397,27 @@ define
 	       scale(pitchClasses:[1#1 21#20 15#14 35#32 9#8 5#4 21#16 35#24 3#2 49#32 25#16 105#64 7#4 15#8]
 		     roots:[1#1] 
 		     comment:'stellated hexany')
+
+	       
+	       %%
+	       %% other scales 
+	       %%
+
+	       %% high tuning errors of 11#8 (9.4 cent) and 13#8 (11 cent!)
+	       %% is this good enough anyway? 11#8 tuning error in 12ET is ~50 cent!
+	       scale(pitchClasses:[8#8 9#8 10#8 11#8 12#8 13#8 14#8 15#8]
+		     roots:[8#8]  
+%				dissonanceDegree:2
+		     comment:'harmonic series') % name nicht eindeutig
+
+
+	       %% Decatonic scale with all 6 commas
+	       %% NOTE: 4#3 is a comma away from 21#16, so I may have the latter instead! 
+	       scale(pitchClasses:[1#1 21#20 15#14 7#6 25#21 5#4 21#16 4#3
+				   7#5 10#7 3#2 5#3 7#4 25#14 15#8 40#21]
+		     roots:[1#1] 
+		     comment:'full dynamic symmetrical major')
+
 	       
 	       )
 
@@ -187,24 +477,26 @@ define
 	 end
       end
    in
-      {Record.filter DB
-       fun {$ Entry}
-	  if {HasFeature Entry comment}
-	  then
-	     %% true of OK entry
-	     B = {Record.all Entry.comment
-		  fun {$ X}
-		     if {IsList X} then {All X CheckError}
-		     else {CheckError X}
-		     end
-		  end}
-	  in
-	     %% TMP?
-	     if {Not B} then {Browse removeDbEntry(Entry)} end
-	     B
-	  else true
-	  end
-       end}
+      %% translate DB to list and then back to tuplet in order to avoid "empty" indices
+      {List.toTuple {Label DB}
+       {Filter {Record.toList DB}
+	fun {$ Entry}
+	   if {HasFeature Entry comment}
+	   then
+	      %% true of OK entry
+	      B = {Record.all Entry.comment
+		   fun {$ X}
+		      if {IsList X} then {All X CheckError}
+		      else {CheckError X}
+		      end
+		   end}
+	   in
+	      %% TMP?
+	      if {Not B} then {Out.show removeDbEntry(Entry)} end
+	      B
+	   else true
+	   end
+	end}}
    end
 
 
@@ -221,12 +513,14 @@ define
 		     accidentalOffset:2*100 % TODO: revise	
 		     %% corresponds to MIDI pitch range 12-127+ (for pitchesPerOctave=12)
 		     octaveDomain:0#9
+		     %% TODO: if not given, but pitchesPerOctave are given adjust automatically
 		     maxError:30 % unit depends on pitchesPerOctave
 		    )
       As = {Adjoin Default Args}
       Temperament = {List.toTuple unit
 		     {HS.db.makeRegularTemperament As.generators As.generatorFactors
-		      unit(pitchesPerOctave:As.pitchesPerOctave)}}
+		      unit(generatorFactorsOffset: As.generatorFactorsOffset
+			   pitchesPerOctave: As.pitchesPerOctave)}}
    in
       unit(
 	 chordDB:{FilterDB {Record.map Chords
@@ -248,6 +542,10 @@ define
 	 pitchesPerOctave: As.pitchesPerOctave
 	 accidentalOffset: As.accidentalOffset
 	 octaveDomain: As.octaveDomain
+	 generators: As.generators
+	 generatorFactors: As.generatorFactors
+	 generatorFactorsOffset: As.generatorFactorsOffset
+	 temperament: Temperament
 	 )
    end
 
