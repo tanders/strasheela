@@ -21,6 +21,7 @@ import
    FS Explorer
    GUtils at 'x-ozlib://anders/strasheela/source/GeneralUtils.ozf'
    LUtils at 'x-ozlib://anders/strasheela/source/ListUtils.ozf'   
+   MUtils at 'x-ozlib://anders/strasheela/source/MusicUtils.ozf'   
    Score at 'x-ozlib://anders/strasheela/source/ScoreCore.ozf'
    Out at 'x-ozlib://anders/strasheela/source/Output.ozf'
    HS at '../HarmonisedScore.ozf'
@@ -36,6 +37,7 @@ export
    MakeScaleToFomusClause
    VsToFomusForLilyMarks
    FomusPCs_Default
+   MakeCentOffset_FomusMarks
    MakeNonChordTone_FomusMarks
    MakeAdaptiveJI_FomusForLilyMarks MakeAdaptiveJI2_FomusForLilyMarks
    MakeChordComment_FomusForLilyMarks MakeChordRatios_FomusForLilyMarks MakeScaleComment_FomusForLilyMarks
@@ -118,6 +120,16 @@ define
 %%% Customised Fomus output
 %%%
 
+   /** %% [Aux] If GetPitchClass=pc then PC is returned, otherwise PC is translated to closed MIDI pitch class depending on PitchUnit.
+   %% */
+   %% TODO: better fun name?
+   fun {InterpretPC PC GetPitchClass PitchUnit}
+      case GetPitchClass of midi then
+	 {FloatToInt {MUtils.pitchToMidi PC PitchUnit unit}}
+      [] pc then PC
+      end
+   end
+   
    /** %% [Aux] Expects a pitch class (an int) and a tuple mapping pitch classes to enharmonic notation as supported by Fomus, i.e. an Atom that consist of a pitch nominal in A-G and an accidental. Returns a pair of strings Nominal#Accidental.
    %% */
    fun {PcToEnharmonics PC Table}
@@ -133,16 +145,21 @@ define
    %%
    %% Args:
    %% 'table' (default FomusPCs_Default): a tuplet that maps pitch classes (ints) to Fomus pitch classes (strings or atoms of symbolic note names). A valid Fomus pitch class consists of a nominal and a Fomus accidental (e.g., 'Cn' or 'C#').
-   %% 'getSettings': unary function that expects the processed note and returns a record of fomus settings. This function can be used to arbitrarily customise the notation of each note depending on the note itself (only standard note settings like time etc cannot be overwritten).  
+   %% 'getSettings': unary function that expects the processed note and returns a record of fomus settings. This function can be used to arbitrarily customise the notation of each note depending on the note itself (only standard note settings like time etc cannot be overwritten).
+   %% 'getPitchClass' (either pc or midi, default pc): specification how the pitch class is accessed that is used as index into table. If 'pc' the note's pitch class is used, if 'midi' this value depends on the note's pitchInMidi.
    %% */
    fun {MakeNoteToFomusClause Args}
       Defaults = unit(table: FomusPCs_Default
-		     getSettings: fun {$ _} unit end)
+		      getPitchClass: pc 
+		      getSettings: fun {$ _} unit end)
       As = {Adjoin Defaults Args}
    in
       HS_Score.isPitchClassMixin
       # fun {$ MyNote PartId}
-	   Nominal#Acc = {PcToEnharmonics {MyNote getPitchClass($)} As.table}
+	   Nominal#Acc = {PcToEnharmonics {InterpretPC {MyNote getPitchClass($)}
+					   As.getPitchClass
+					   {{MyNote getPitchClassParameter($)} getUnit($)}}
+			  As.table}
 	   Oct = {MyNote getOctave($)}
 	in
 	   {Out.record2FomusNote
@@ -155,7 +172,6 @@ define
 	    MyNote}
 	end
    end
-
    /** %% [Aux] Returns a chord/scale processing function for note-eventClause, which returns the Fomus code for a Strasheela chord/scale object.
    %%
    %% Args:
@@ -167,16 +183,22 @@ define
    %% */
    fun {MakePCCollToFomus Args}
       Defaults = unit(table: FomusPCs_Default
+		      getPitchClass: pc 
 		      getSettings: fun {$ _} unit end
 		      grace: 0#0)
       As = {Adjoin Defaults Args}
    in
       fun {$ MyChord PartId}
-	 RootNominal#RootAcc = {PcToEnharmonics {MyChord getRoot($)} As.table}
+	 PitchUnit = {{MyChord getRootParameter($)} getUnit($)}
+	 RootNominal#RootAcc = {PcToEnharmonics {InterpretPC {MyChord getRoot($)}
+						 As.getPitchClass
+						 PitchUnit}
+				 As.table}
 	 Oct = 4
 	 Time = {MyChord getStartTimeInBeats($)}
 	 fun {PcToFomus I PC}
-	    Nominal#Acc = {PcToEnharmonics PC As.table}
+	    Nominal#Acc = {PcToEnharmonics {InterpretPC PC As.getPitchClass PitchUnit}
+			   As.table}
 	    Oct = 4
 	 in
 	    {Out.record2FomusNote unit(part:PartId
@@ -192,7 +214,7 @@ define
       in
 	 %% PC collection pitch classes
 	 {Out.listToVS {List.mapInd {HS_Score.pcSetToSequence {MyChord getPitchClasses($)}
-			     {MyChord getRoot($)}}
+				     {MyChord getRoot($)}}
 			fun {$ I PC} {PcToFomus I PC} end}
 	  "\n"}#"\n"
 	 %% PC collection root
@@ -268,6 +290,16 @@ define
 			  9:'An' 10:'Bb' 
 			  11:'Bn')
 
+   /** %% [Note markup function] Expects a note and returns a fomus settings record. The different of the pitch of MyNote and the closest 12-TET is annotated in cent.
+   %% */
+   fun {MakeCentOffset_FomusMarks MyNote}
+      Midi = {MyNote getPitchInMidi($)}
+      CentOffset = (Midi - {Round Midi}) * 100.0
+   in
+      %% Note: VirtualString.toAtom: atoms are not GC-ed
+      unit(marks: {VirtualString.toAtom 'x "'#CentOffset#'c"'})
+   end
+   
    /** %% [Note markup function] Expects a note and returns a fomus settings record. Non-harmonic tones are marked with an x, and for all other score objects unit (no settings) is returned. 
    %% */
    fun {MakeNonChordTone_FomusMarks MyNote}
