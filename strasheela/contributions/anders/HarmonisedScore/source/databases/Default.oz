@@ -198,6 +198,11 @@ define
 	     intervalDB:Intervals
 	     pitchesPerOctave: PitchesPerOctave
 	     accidentalOffset: AccidentalOffset
-	     octaveDomain: OctaveDomain)
+	     octaveDomain: OctaveDomain
+	     generators: nil
+	     generatorFactors: nil
+	     generatorFactorsOffset: 0
+	     temperament: unit
+	    )
    
 end
