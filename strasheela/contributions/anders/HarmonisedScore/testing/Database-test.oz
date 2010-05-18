@@ -317,6 +317,12 @@ declare
 %%
 
 
+%% artificial example for debugging: generators 10 and 1 cent
+%% OK :)
+{HS.db.makeRegularTemperament [10 1] [95#105 99#101] unit(pitchesPerOctave:1200
+							  generatorFactorsOffset:100)}
+
+
 %% 5-limit JI
 %% small range of factors for testing
 %% Note: HS.score.ratioToInterval depends on PitchesPerOctave in database
@@ -353,15 +359,15 @@ declare
 
 %% 12-TET 
 {HS.db.ratioToRegularTemperamentPC 7#4 % 3#2 5#1 7#4
- {List.toTuple unit
-  {HS.db.makeRegularTemperament [100] [0#11] unit(pitchesPerOctave:1200)}}
  unit(pitchesPerOctave:1200
+      temperament:{List.toTuple unit
+		   {HS.db.makeRegularTemperament [100] [0#11] unit(pitchesPerOctave:1200)}}
       showError:true)}
 
 %% 1/4-comma Meantone (only cent accuracy results in accumulating error!)
 %% generator: 696.578428 cent
 {HS.db.ratioToRegularTemperamentPC 7#4 % 3#2 5#1 7#4
- {List.toTuple unit
-  {HS.db.makeRegularTemperament [697] [~10#10] unit(pitchesPerOctave:1200)}}
- unit(pitchesPerOctave:1200
+ unit(temperament:{List.toTuple unit
+		   {HS.db.makeRegularTemperament [697] [~10#10] unit(pitchesPerOctave:1200)}}
+      pitchesPerOctave:1200
       showError:true)}
