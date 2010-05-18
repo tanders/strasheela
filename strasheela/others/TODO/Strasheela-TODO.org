@@ -134,6 +134,7 @@ MyTestScore = {Score.makeScore
       see [[file:~/oz/music/Strasheela/strasheela/trunk/strasheela/contributions/anders/RegularTemperament/RegularTemperament.oz::TODO%20ASCII%20notation%20for%20Extended%20Helmholtz%20Notation%20or%20Sagittal%20which%20mean%20their%20JI%20interpretation%20and%20which%20are%20then%20rounded%20into%20temperament%20with%20DB%20ratioToRegularTemperamentPC][file:~/oz/music/Strasheela/strasheela/trunk/strasheela/contributions/anders/RegularTemperament/RegularTemperament.oz::TODO ASCII notation for Extended Helmholtz Notation or Sagittal which mean their JI interpretation and which are then rounded into temperament with DB ratioToRegularTemperamentPC]]
 
       - Map each nominal and accidental to a ratio
+	Still missing: suitable ASCII representation for EHE notation
       - In RegT.db.makeFullDB, allow to specify a set of possible accidentals to use for a certain temperament 
       - Map nominal/accidental ratios to PCs in current temperament (for some PCs there can be multiple symbolic notations)
       - (as in ET31 etc:) Create tuplet with PCs as features that map to the list of corresponding symbolic notations and the other way round
