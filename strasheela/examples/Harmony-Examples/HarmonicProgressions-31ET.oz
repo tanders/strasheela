@@ -87,7 +87,7 @@ MyScale = {Score.makeScore scale(index:{HS.db.getScaleIndex 'major'}
 				 transposition:{ET31.pc 'C'})
            unit(scale:HS.score.scale)}
 %%
-/** %% CSP with chord sequence solution. Only diatonic chords, follow Schoebergs recommendation on good roor progression, end in cadence. 
+/** %% CSP with chord sequence solution. Only diatonic chords, follow Schoebergs recommendation on good root progression, end in cadence. 
 %% */
 proc {MyScript ChordSeq}
    %% settings
