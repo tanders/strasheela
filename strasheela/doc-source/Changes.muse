@@ -16,6 +16,7 @@
   - Documentation
     - [[../ examples/ControllingOutput-Examples/Fomus-Examples.oz][Fomus-Examples.oz]]: Added examples demonstrating the Fomus output. 
     - [[../examples/Heuristic-Constraints.oz][Heuristic-Constraints.oz]]: demonstrates how heuristic constraints are defined and ued
+    - [[../examples/RegularTemperaments.oz][RegularTemperaments.oz]]: examples related to regular temperaments
     - [[../examples/Harmony-Examples/HarmonicProgressions-41ET.oz][HarmonicProgressions-41ET.oz]]: Added 41 ET harmony example, using La Monte Young's The Well-Tuned Piano chords
     - [[../examples/Counterpoint-Examples/Counterpoint-22ET.oz][Counterpoint-22ET.oz]]: Added 22 ET counterpoint examples
 
@@ -50,7 +51,9 @@
   - Further bug fixes and changes
     - Oz primitives like IsRecord, IsAtom etc. block on kinded variables (undetermined FD and FS vars), which could cause blocking of various Strasheela definitions. Now Strasheela always uses its new own GUtils.isRecord and GUtils.isAtom etc. which do not have this problem
     - Removed redundant (and ambiguous) pitch unit 'keynumber'. Default pitch unit is now 'midi' (equivalent to et12). 
+    - MUtils: added PitchToMidi
     - Score: Fixed bug for TimeMixin method findSimultaneousItem in case object is not contained in any container
+    - Score: removed IsET GetPitchesPerOctave
     - Lilypond output: if score started with offset time, then this leading rest was ignored in the Lilypond output (now fixed). Also, score now by default wrapped in braces, and default Lilypond version updated to "2.12.0".
     - HS.out.renderAndShowLilypond: revised args codeBeforeNoteMakers and codeBeforePcCollectionMakers. Also, chord and scale objects are again notated with grace notes /before/ root (grace notes after the root (using \aftergrace) are incompatible with HE notation). 
     - HS.score: GetAdaptiveJIPitch: 
@@ -59,13 +62,15 @@
     - HS.out.renderAndShowLilypond: changed output of chord pitch classes to octave above middle C
     - HS.score.degreeToPC: fixed propagation error 
     - HS.rules.noParallels2: now also works if there are pause (rest) objects in the score
+    - HS.rules.makeIntervalConstraint: added support for regular temperaments
+    - HS.db: added  GetGenerators GetGeneratorFactors GetGeneratorFactorsOffset GetTemperament
     - HS.db: Pc2Ratios now returns nil if no ratio was defined for interval
     - Fixed HS.pcName
     - Fenv method toList: fixed bug for case N=1
     - Pattern: renamed Arc -> Arch
     - Out.midi.getChannel now uses mini chan param of midi note objects (not only channel info tag)
     - Refactored ET22 and ET31 output: now much reduced code with same functionality using HS.out, several procs before exported by ET22 and ET31 are now moved to HS.out
-    - Segs.homophonicChordProgression: replaced arg 'isToplevel' by arg 'makeTopLevel' for generality; fixed bug: constraint of arg maxUpperVoiceDistance now actually applied to upper voices
+    - Segs.homophonicChordProgression: replaced arg 'isToplevel' by arg 'makeTopLevel' for generality; fixed bug: constraint of arg maxUpperVoiceDistance now actually applied to upper voices; change default for arg commonPitchesHeldOver to false, allow disabling maxUpperVoiceDistance constraints.
     - Out.outputScoreConstructor: strings in archived score were not properly quoted (fixed Out.recordToVS).
     - HS.score.harmonicRhythmFollowsMarkers: spelling correction (was HS.score.harmonicRythmFollowsMarkers)
     - LUtils: changed comparison function of many defs (Contains, Position, Positions, Substitute, Substitute1) to GUtils.isEqual, which is working for all data types 
