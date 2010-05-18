@@ -19,12 +19,15 @@ import
 %    Browser(browse:Browse)
    GUtils at 'GeneralUtils.ozf'
    LUtils at 'ListUtils.ozf'
+   Init at 'Init.ozf'
    Out at 'Output.ozf'
    %% NOTE: dependency to contribution
    Pattern at 'x-ozlib://anders/strasheela/Pattern/Pattern.ozf'
    
 export
-   KeynumToFreq FreqToKeynum RatioToKeynumInterval % RatioToCent
+   KeynumToFreq FreqToKeynum
+   PitchToMidi
+   RatioToKeynumInterval % RatioToCent
    KeynumToPC
    TransposeRatioIntoStandardOctave RatioToStandardOctaveFloat
    SortRatios SortRatios2
@@ -51,6 +54,88 @@ define
    fun {FreqToKeynum Freq KeysPerOctave}
       {GUtils.log (Freq / Freq0) 2.0} * KeysPerOctave
    end
+
+    /** %% Returns true if PitchUnit is an atom which matches the pattern et<Digit>+ such as et31 or et72.
+   %% */
+   fun {IsET PitchUnit}
+      S = {AtomToString PitchUnit}
+      H T
+   in
+      {List.takeDrop S 2 H T}
+      %% 
+      H == "et" andthen T \= nil andthen
+      {All T fun {$ C} {Char.isDigit C} end} 
+   end
+   /** %% Returns the pitches per octave expressed by an ET pitch unit, e.g., for et31 it returns 31. 
+   %% */
+   fun {GetPitchesPerOctave EtPitchUnit}
+      {StringToInt {List.drop {AtomToString EtPitchUnit} 2}}
+   end
+
+   
+   local
+      LastNonmatchingPitchunit = {NewCell midi}
+   in
+      /** %% Transforms Pitch (an int) measured in PitchUnit (an atom) into the corresponding "Midi float" (a float), i.e. a Midi number where positions after the decimal point express microtonal pitch deviations (e.g., 60.5 is middle C raised by a quarter tone). Possible pitch units are midi (i.e., 12-TET), midicent/midic, frequency/freq/hz, mHz and and arbitrary equal temperaments (e.g., et31, et72).
+      %% The transformation takes account a tuning table defined with Init.setTuningTable. Alternatively, a tuning table can be given directly to the optional arg 'table'.
+      %% */
+      proc {PitchToMidi Pitch PitchUnit Args ?Result}
+	 Default = unit(table:nil)
+	 As = {Adjoin Default Args}
+	 FullTable = if As.table==nil
+		     then {Init.getTuningTable}
+		     else {FullTuningTable As.table}
+		     end
+	 Pitch_F = {IntToFloat Pitch}
+      in
+	 if FullTable == nil 
+	 then 
+	    %% !! IsDet does not wait for binding -- quasi side effect. 
+	    if {Not {IsDet PitchUnit}}
+	    then {GUtils.warnGUI 'pitch unit unbound'}
+	    end
+	    Result = case PitchUnit
+		     of midi then Pitch_F
+% 		   [] keynumber then Value
+% 		[] et72 then Value / 6.0 % * 12.0 / 72.0
+% 		[] et31 then Value * 12.0 / 31.0 
+% 		[] et22 then Value * 12.0 / 22.0 
+		     [] midicent then Pitch_F / 100.0
+		     [] midic then Pitch_F / 100.0
+		     [] millimidicent then Pitch_F / 10000.0
+		     [] frequency then {FreqToKeynum Pitch_F 12.0}
+		     [] freq then {FreqToKeynum Pitch_F 12.0}
+		     [] hz then {FreqToKeynum Pitch_F 12.0}
+		     [] mHz then {FreqToKeynum Pitch_F/1000.0 12.0}
+		     else
+			if {IsET PitchUnit}
+			then Pitch_F * 12.0 / {IntToFloat {GetPitchesPerOctave PitchUnit}}
+			else
+			   {Exception.raiseError
+			    strasheela(failedRequirement PitchUnit
+				       "Supported pitch units are midi, midicent (or midic), frequency (or freq), hz, mHz, and arbitrary equal temperaments (notated et<number>).")}
+			   unit		% never returned
+			end
+		     end
+	 else 
+	    PC = Pitch mod FullTable.size
+	    Octave = Pitch div FullTable.size
+	 in
+	    %% warn if pitch unit and tuning table size don't
+	    %% match, but only once until a new pitch unit was
+	    %% found.
+	    if PitchUnit \= @LastNonmatchingPitchunit andthen 
+	       {IsET PitchUnit} andthen 
+	       FullTable.size \= {GetPitchesPerOctave PitchUnit}
+	    then LastNonmatchingPitchunit := PitchUnit
+	       {GUtils.warnGUI
+		"Conflict between size of tuning table ("#FullTable.size#") and pitch unit ("#PitchUnit#")!"}
+	    end
+	    Result = (FullTable.period * {IntToFloat Octave} + FullTable.(PC + 1)) / 100.0
+	 end
+      end
+   end
+   
    /** %% Transforms Ratio (either a float or a fraction specification in the form <Int>#<Int>) into the corresponding keynumber interval in an equally tempered scale with KeysPerOctave (a float) keys per octave. Returns a float.
    %% For example, {RatioToKeynumInteval 1.0 12.0}=0.0 or {RatioToKeynum 1.5 12.0}=7.01955). 
    %% NB: The term Keynum here is not limited to a MIDI keynumber but denotes a keynumber in any equidistant tuning. For instance, if KeysPerOctave=1200.0 then Keynum denotes cent values.
