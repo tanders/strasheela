@@ -44,11 +44,11 @@ define
    %% if non-false, then the melodic intervals are constrained as specified by the "sub arguments". The melodic intervals allowed for the bass are given by the arg 'bassIntervals', where the feature '=<:' specifies a ratio for an interval up to which all intervals are permitted and the feature '=:' specifies a list of ratios that are additionally permitted. By default, all intervals up to a fifth and the octave are allowed. The melodic intervals for the upper voices are specified the same way with the argument 'upperVoiceIntervals'.
    %% The remaining arguments control the required number of steps between upper voices. The maximum interval considered a step is given as a ratio to the argument 'step'. The args 'minPercent'/'maxPercent' specify the percentage boudary of the number of steps in the upper voices. 
    %% If 'restrictMelodicIntervals' is set to false, then all these constraints are disabled.
-   %% 'commonPitchesHeldOver' (default true): if true, the notes of the harmonic band stay in the same voice and octave.
+   %% 'commonPitchesHeldOver' (default false): if true, the notes of the harmonic band stay in the same voice and octave. [this constraint can be problematic]
    %% 'noParallels' (default true): if true, no parallel perfect consonances are permitted.
    %% 'playAllChordTones' (default true): if true, all chord tones are played.
    %% 'noVoiceCrossing' (default true): if true, no voice crossings are permitted.
-   %% 'maxUpperVoiceDistance' (default {HS.db.getPitchesPerOctave}): maximum interval between upper voices (interval to bass can be larger).
+   %% 'maxUpperVoiceDistance' (default {HS.db.getPitchesPerOctave}): maximum interval between upper voices (interval to bass can be larger). Disabled if false.
    %% 'sliceRule' (default proc {$ Xs} skip end): unary constraint applied to the list MyChord | Notes at each "time slice" (i.e., for each chord and the notes sim to this chord). Notes are the notes in descending order (i.e. Bass last).
    %% 'makeTopLevel' (a function with the interface {$ Voices End Args}, returning a container): By default, HomophonicChordProgression returns a fully initialised score object with the following topology (chords and scales are optional).
    %%
@@ -96,6 +96,7 @@ define
    %% Further Args: for top-level sim.
    %%
    %% */
+   %% !!?? BUG: Segs.homophonicChordProgression does not work for chord sequence of length 1
    %%
    %% Note: arg isTopLevel has been substituted by the more general argument makeTopLevel. 
    %%
@@ -120,13 +121,17 @@ define
       Defaults = unit(makeTopLevel:
 			 fun {$ Voices End Args}
 			    {Score.make
-			     {Adjoin sim({Append Voices
+			     {Adjoin sim(info:fomus("inst <id: harm template: soprano name: \"Underlying Harmony\" abbr: \"harm\">"
+						    "inst <id: scale template: soprano name: \"Underlying Scale\" abbr: \"scale\">")
+					{Append Voices
 					  {Append
-					   [seq(info:lily("\\set Staff.instrumentName = \"Anal.\"")
+					   [seq(info:[lily("\\set Staff.instrumentName = \"Anal.\"")
+						      fomus(inst: harm)]
 						Args.chords
 						endTime: End)]
 					   case As.scales of nil then nil else
-					      [seq(Args.scales
+					      [seq(info: fomus(inst: scale)
+						   Args.scales
 						   endTime: End)]
 					   end}}
 					 startTime: 0)
@@ -143,7 +148,7 @@ define
 		      rargs: unit
 		      chords: {HS.score.makeChords unit}
 		      scales: nil
-		      commonPitchesHeldOver: true
+		      commonPitchesHeldOver: false
 		      noParallels: true
 		      %% restrictMelodicIntervals default args are given in constraint def below, so not all args must be necessarily specified by user
 		      restrictMelodicIntervals: unit
@@ -164,6 +169,7 @@ define
 				     endTime: End)}
       Nss
       ChordAndNotesSlices
+      UpperVoices LowerVoices
    in
       MyScore = {As.makeTopLevel Voices End As}
       %%
@@ -192,7 +198,9 @@ define
 	     if As.noVoiceCrossing \= false then 
 		{NoVoiceCrossing VoiceNotes}
 	     end
-	     {ConstrainUpperVoiceDistance VoiceNotes As.maxUpperVoiceDistance}
+	     if As.maxUpperVoiceDistance \= false then 
+		{ConstrainUpperVoiceDistance VoiceNotes As.maxUpperVoiceDistance}
+	     then
 	     if {HS.score.isInversionMixinForChord C} then 
 		%% Note: soprano is ignored here
 		{C getBassPitchClass($)} = {{List.last VoiceNotes} getPitchClass($)}
@@ -211,6 +219,20 @@ define
 	     if As.noParallels then
 		{HS.rules.noParallels NotePairs}
 	     end
+	  end}
+	 %% Hack...
+	 %% fine-tune notation with fomus
+	 {List.takeDrop Voices (As.voiceNo div 2) UpperVoices LowerVoices}
+	 {ForAll LowerVoices
+	  proc {$ MyVoice}
+	     %% notate all voices on only two staffs. Problem with that: Lilypond possibly swaps order of textual annotations of notes in a single staff
+% 	     {MyVoice addInfo(fomusPart(lower))}
+	     {MyVoice addInfo(fomus(inst:bass))}
+	  end}
+	 {ForAll UpperVoices
+	  proc {$ MyVoice}
+% 	     {MyVoice addInfo(fomusPart(upper))}
+	     {MyVoice addInfo(fomus(inst:soprano))}
 	  end}
       end
    end
