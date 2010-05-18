@@ -266,7 +266,7 @@ define
       %% 'comment' feature of database entries: is either a single value (usually an atom) or a record.
       %% Naming database entries: either by an atom given to the 'comment' feature of a database, or an atom given to the 'name' feature of the record at the 'comment' feature, or -- for multiple alternative names -- a list of atoms given to the 'name' feature of the record at the 'comment' feature.
       %%
-      %% The settings 'generators', 'generatorFactors', 'generatorFactorsOffset' and 'temperament' are for bookkeeping when using regular temperaments.
+      %% The optional settings 'generators', 'generatorFactors', 'generatorFactorsOffset' and 'temperament' are for bookkeeping when using regular temperaments.
       %%
       %% TODO: write a better doc..
       %% */
@@ -283,7 +283,10 @@ define
 	     proc {$ Feat Setter} {Setter FullDB.Feat} end}
 	 else
 	    %% if PitchesPerOctave \= 12, then leave missing feats unset 
-	    MissingFeats = {Filter {Arity Optional_DB_Setters}
+	    MissingFeats = {Filter {Arity
+				    {Record.subtractList Optional_DB_Setters
+				     %% Regular temperament feats not compulsory, even if PitchesPerOctave \= 12
+				    [generators generatorFactors generatorFactorsOffset temperament]}}
 			    fun {$ Feat} {Not {HasFeature NewDB Feat}} end}
 	 in
 	    if MissingFeats \= nil then
@@ -296,7 +299,11 @@ define
  	    end
 	    %% set explicitly given feats
 	    {Record.forAllInd Optional_DB_Setters
-	     proc {$ Feat Setter} {Setter NewDB.Feat} end}    
+	     proc {$ Feat Setter}
+		if {HasFeature NewDB Feat} % ignore non-given feats 
+		then {Setter NewDB.Feat}
+		end
+	     end}    
 	    %% always set these
 	    {Record.forAllInd Obligatory_DB_Setters
 	     proc {$ Feat Setter} {Setter FullDB.Feat} end}
