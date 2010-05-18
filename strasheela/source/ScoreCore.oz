@@ -69,7 +69,7 @@ export
    Element AbstractElement TemporalElement Pause Event Note2 Note
    % funcs/procs
    IsScoreObject IsTemporalItem IsTemporalContainer
-   IsET GetPitchesPerOctave
+%  IsET GetPitchesPerOctave
    MakeScore MakeScore2 InitScore
    make: MakeScore
    make2: MakeScore2
@@ -1325,95 +1325,22 @@ define
       end
    end
 
-
-   /** %% Returns true if PitchUnit is an atom which matches the pattern et<Digit>+ such as et31 or et72.
-   %% */
-   fun {IsET PitchUnit}
-      S = {AtomToString PitchUnit}
-      H T
-   in
-      {List.takeDrop S 2 H T}
-      %% 
-      H == "et" andthen T \= nil andthen
-      {All T fun {$ C} {Char.isDigit C} end} 
-   end
-   /** %% Returns the pitches per octave expressed by an ET pitch unit, e.g., for et31 it returns 31. 
-   %% */
-   fun {GetPitchesPerOctave EtPitchUnit}
-      {StringToInt {List.drop {AtomToString EtPitchUnit} 2}}
-   end
    
-   local
-      LastNonmatchingPitchunit = {NewCell midi}
-   in
-      /** %% [concrete class] 
-      %%*/
-      class Pitch from Parameter
-	 feat %'class': Pitch
-	    label: pitch
-	 meth isPitch(?B) B=true end
+   /** %% [concrete class] 
+   %%*/
+   class Pitch from Parameter
+      feat %'class': Pitch
+	 label: pitch
+      meth isPitch(?B) B=true end
 %       meth getValue(?X unit:Unit<=midicents)
 % 	 X={self convertTo($ Unit)}
 %       end
-	 /** %% Returns the parameter value translated to a float representing a Midi keynumber (i.e. 60.5 is a quarternote above middle c). The translation uses the parameter unit which must be bound (otherwise the method suspends, but warns also). Supported units are (represented by these atoms): midi, midicent/midic, frequency/freq/hz, mHz and and arbitrary equal temperaments.
-	 %% A tuning table is used if such a table was either defined with Init.setTuningTable or was specified as optional argument table. 
-	 %% */
-	 meth getValueInMidi(?X table:Table<=nil)
-	    Unit = {self getUnit($)}
-	    Value = {IntToFloat {self getValue($)}}
-	    FullTable = if Table==nil
-			then {Init.getTuningTable}
-			else {MUtils.fullTuningTable Table}
-			end
-	 in
-	    if FullTable == nil 
-	    then 
-	       %% !! IsDet does not wait for binding -- quasi side effect. 
-	       if {Not {IsDet Unit}}
-	       then {GUtils.warnGUI 'pitch unit unbound'}
-	       end
-	       X = case Unit
-		   of midi then Value
-% 		   [] keynumber then Value
-% 		[] et72 then Value / 6.0 % * 12.0 / 72.0
-% 		[] et31 then Value * 12.0 / 31.0 
-% 		[] et22 then Value * 12.0 / 22.0 
-		   [] midicent then Value / 100.0
-		   [] midic then Value / 100.0
-		   [] millimidicent then Value / 10000.0
-		   [] frequency then {MUtils.freqToKeynum Value 12.0}
-		   [] freq then {MUtils.freqToKeynum Value 12.0}
-		   [] hz then {MUtils.freqToKeynum Value 12.0}
-		   [] mHz then {MUtils.freqToKeynum Value/1000.0 12.0}
-		   else
-		      if {IsET Unit}
-		      then Value * 12.0 / {IntToFloat {GetPitchesPerOctave Unit}}
-		      else 
-			 {Exception.raiseError
-			  strasheela(illParameterUnit Unit self
-				     "Supported pitch units are midi, midicent (or midic), frequency (or freq), hz, mHz, and arbitrary equal temperaments (notated et<number>)."
-			    % "Unsupported pitch unit."
-				    )}
-			 unit		% never returned
-		      end
-		   end
-	    else 
-	       PC = {self getValue($)} mod FullTable.size
-	       Octave = {self getValue($)} div FullTable.size
-	    in
-	       %% warn if pitch unit and tuning table size don't
-	       %% match, but only once until a new pitch unit was
-	       %% found.
-	       if Unit \= @LastNonmatchingPitchunit andthen 
-		  {IsET Unit} andthen 
-		  FullTable.size \= {GetPitchesPerOctave Unit}
-	       then LastNonmatchingPitchunit := Unit
-		  {GUtils.warnGUI
-		   "Conflict between size of tuning table ("#FullTable.size#") and pitch unit ("#Unit#")!"}
-	       end
-	       X = (FullTable.period * {IntToFloat Octave} + FullTable.(PC + 1)) / 100.0
-	    end
-	 end
+      /** %% Returns the parameter value translated to a float representing a Midi keynumber (i.e. 60.5 is a quarternote above middle c). The translation uses the parameter unit which must be bound (otherwise the method suspends, but warns also). Supported units are (represented by these atoms): midi, midicent/midic, frequency/freq/hz, mHz and and arbitrary equal temperaments.
+      %% A tuning table is used if such a table was either defined with Init.setTuningTable or was specified as optional argument table. 
+      %% */
+      meth getValueInMidi($ table:Table<=nil)
+	 {MUtils.pitchToMidi {self getValue($)} {self getUnit($)}
+	  unit(table:Table)}
       end
    end
    
