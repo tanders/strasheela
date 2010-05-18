@@ -200,7 +200,7 @@ define
 	     end
 	     if As.maxUpperVoiceDistance \= false then 
 		{ConstrainUpperVoiceDistance VoiceNotes As.maxUpperVoiceDistance}
-	     then
+	     end
 	     if {HS.score.isInversionMixinForChord C} then 
 		%% Note: soprano is ignored here
 		{C getBassPitchClass($)} = {{List.last VoiceNotes} getPitchClass($)}
