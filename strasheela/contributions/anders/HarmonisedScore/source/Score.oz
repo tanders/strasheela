@@ -1987,6 +1987,8 @@ define
    
    local
       %% Simplified: (Generator1 * GeneratorFactor1 + ...) mod PitchesPerOctave = PitchClass
+      %% With offset:
+      %% (Generator1 * GeneratorFactor1 + ... - (Generator1*Offset + ...)) mod PitchesPerOctave = PitchClass
       proc {InitConstrain X}
 %       thread % don't block init if some information is still missing
 	 Offset = {X getGeneratorFactorsOffset($)}
@@ -2025,9 +2027,9 @@ define
 	 feat !RegularTemperamentForNoteType:unit
 	 attr generators generatorFactors rank generatorFactorsOffset
 	    %% args generators and generatorFactors expect list of FD ints with same length; generatorFactors optional
-	 meth initRegularTemperamentMixinForNote(generators:Gs<=_
-						 generatorFactors:Fs<=_
-						 generatorFactorsOffset:Offset<=100) = M
+	 meth initRegularTemperamentMixinForNote(generators:Gs<={DB.getGenerators}
+						 generatorFactors:Fs<={FD.int {DB.getGeneratorFactors}}
+						 generatorFactorsOffset:Offset<={DB.getGeneratorFactorsOffset}) = M
 	    Default = unit(generatorFactorsDomain_1: Offset-12#Offset+12
 			    generatorFactorsDomain_others: Offset-2#Offset+2)
 	 in
