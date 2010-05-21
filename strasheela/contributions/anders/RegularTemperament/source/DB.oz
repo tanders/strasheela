@@ -30,7 +30,7 @@ functor
 import
 %    Browser(browse:Browse) % for debugging
    GUtils at 'x-ozlib://anders/strasheela/source/GeneralUtils.ozf'
-%    LUtils at 'x-ozlib://anders/strasheela/source/ListUtils.ozf'
+   LUtils at 'x-ozlib://anders/strasheela/source/ListUtils.ozf'
 %    MUtils at 'x-ozlib://anders/strasheela/source/MusicUtils.ozf'
    Out at 'x-ozlib://anders/strasheela/source/Output.ozf'
 %    Pattern at 'x-ozlib://anders/strasheela/Pattern/Pattern.ozf'
@@ -48,6 +48,10 @@ define
 %%%
 %%% Chord, Scale and Interval Database Definition 
 %%%
+
+   %%
+   %% NOTE: 'comment' is required feature for any chord/scale/interval database entry
+   %%
 
    Chords = chords(
    
@@ -222,11 +226,14 @@ define
 %				dissonanceDegree:2
 		     essentialPitchClasses:[1#6 1#4 3#16 2#7]
 		     comment:'supermajor 6th suspended 2nd')
+	       %% same as Young's opening chord
+	       %% subset of 'lost ancestral lake region' (without subminor third)
 	       chord(pitchClasses:[4#1 6#1 7#1 9#2]
 		     roots:[4#1]    
 %				dissonanceDegree:2
 		     essentialPitchClasses:[4#1 6#1 7#1 9#2]
-		     comment:'subminor 7th suspended 2nd')  
+		     comment:unit(name:['subminor 7th suspended 2nd'
+					'opening']))  
 	       chord(pitchClasses:[1#4 1#6 2#7 2#9]
 		     roots:[1#6]    
 %				dissonanceDegree:2
@@ -269,47 +276,48 @@ define
 	       %%
 	       %%
 	       
-% 	       %%
-% 	       %% La Monte Young's The Well-Tuned Piano chords
-% 	       %% source: Kyle Gann (1993). La Monte Young's The Well-Tuned Piano. Perspectives of New Music, 31(1), pp. 134-162.
-% 	       %%
-% 	       %% Note: Young's "distribution of the pitches over octaves" is lost in this pitch-class representation
-% 	       %%
+	       %%
+	       %% La Monte Young's The Well-Tuned Piano chords
+	       %% source: Kyle Gann (1993). La Monte Young's The Well-Tuned Piano. Perspectives of New Music, 31(1), pp. 134-162.
+	       %%
+	       %% Note: Young's "distribution of the pitches over octaves" is lost in this pitch-class representation
+	       %%
 
-% 	       %% NOTE: 'opening' chord is subset of 'lost ancestral lake region' (without subminor third)
+	       %% NOTE: 'opening' chord is subset of 'lost ancestral lake region' (without subminor third)
+	       %% same as 'subminor 7th suspended 2nd'
 % 	       chord(pitchClasses:[4#1 6#1 7#1 9#1]
 % 		     roots:[4#1]
 % % 		     essentialPitchClasses:[]
 % 		     comment:'opening') % Full name: "The Opening Chord"
-% 	       chord(pitchClasses:[81#1 84#1 108#1 112#1 144#1 192#1]
-% 		     roots:[192#1] %% TODO:
-% % 		     essentialPitchClasses:[]
-% 		     comment:'magic')
-% 	       chord(pitchClasses:[48#1 54#1 56#1 64#1 72#1 81#1 84#1]
-% 		     roots:[48#1] %% TODO:
-% % 		     essentialPitchClasses:[]
-% 		     comment:'romantic')
-% 	       chord(pitchClasses:[42#1 54#1 64#1 81#1]
-% 		     roots:[42#1] %% TODO:
-% % 		     essentialPitchClasses:[]
-% 		     comment:'gamelan')
-% 	       %% NOTE: 'tamiar dream' is subset of 'lost ancestral lake region' (21/1 missing)
-% 	       chord(pitchClasses:[14#1 18#1 24#1 27#1]
-% 		     roots:[14#1] %% TODO:
-% % 		     essentialPitchClasses:[]
-% 		     comment:'tamiar dream')
-% 	       chord(pitchClasses:[12#1 14#1 18#1 21#1 27#1]
-% 		     roots:[12#1] %% TODO:
-% % 		     essentialPitchClasses:[]
-% 		     comment:'lost ancestral lake region')
-% 	       chord(pitchClasses:[12#1 14#1 16#1 18#1 21#1]
-% 		     roots:[12#1] %% TODO:
-% % 		     essentialPitchClasses:[]
-% 		     comment:'brook')
-% 	       chord(pitchClasses:[128#1 144#1 147#1 192#1 224#1]
-% 		     roots:[128#1] %% TODO:
-% % 		     essentialPitchClasses:[]
-% 		     comment:'pool')
+	       chord(pitchClasses:[81#1 84#1 108#1 112#1 144#1 192#1]
+		     roots:[192#1] %% TODO:
+% 		     essentialPitchClasses:[]
+		     comment:'magic')
+	       chord(pitchClasses:[48#1 54#1 56#1 64#1 72#1 81#1 84#1]
+		     roots:[48#1] %% TODO:
+% 		     essentialPitchClasses:[]
+		     comment:'romantic')
+	       chord(pitchClasses:[42#1 54#1 64#1 81#1]
+		     roots:[42#1] %% TODO:
+% 		     essentialPitchClasses:[]
+		     comment:'gamelan')
+	       %% NOTE: 'tamiar dream' is subset of 'lost ancestral lake region' (21/1 missing)
+	       chord(pitchClasses:[14#1 18#1 24#1 27#1]
+		     roots:[14#1] %% TODO:
+% 		     essentialPitchClasses:[]
+		     comment:'tamiar dream')
+	       chord(pitchClasses:[12#1 14#1 18#1 21#1 27#1]
+		     roots:[12#1] %% TODO:
+% 		     essentialPitchClasses:[]
+		     comment:'lost ancestral lake region')
+	       chord(pitchClasses:[12#1 14#1 16#1 18#1 21#1]
+		     roots:[12#1] %% TODO:
+% 		     essentialPitchClasses:[]
+		     comment:'brook')
+	       chord(pitchClasses:[128#1 144#1 147#1 192#1 224#1]
+		     roots:[128#1] %% TODO:
+% 		     essentialPitchClasses:[]
+		     comment:'pool')
 	       
 	       )
 
@@ -465,10 +473,40 @@ define
       end
    end
 
+   proc {ReportRemovedEntry Why Entry}
+      {Out.show removeDbEntry(Why Entry)}
+%       {Out.show removeDbEntry({Out.recordToVS Entry})}
+   end
 
-   /** %% Expects a chord/scale/interval database (tuple of records) and removes all those entries from the database in which the error of some JI pitch class exceeds MaxError (an int).
+   /** %% Removes any element in database Entries which occured already more early in X (i.e. there is an element for which the values at all ComparisonFeats are the same).
    %% */
-   fun {FilterDB DB MaxError}
+   fun {RemoveDuplicateEntries Entries ComparisonFeats}
+      fun {Aux Xs Accum}
+	 case Xs of nil then {Reverse Accum}
+	 else
+	    EqualEntry = {LUtils.find Accum
+			  fun {$ Previous}
+			     {All ComparisonFeats
+			      fun {$ Feat}
+				 {GUtils.isEqual (Xs.1).Feat Previous.Feat}
+			      end}
+			  end}
+	 in
+	    if EqualEntry \= nil
+	    then
+	       {ReportRemovedEntry dublicateEntry equal(Xs.1 EqualEntry)}
+	       {Aux Xs.2 Accum}
+	    else {Aux Xs.2 Xs.1|Accum}
+	    end
+	 end
+      end
+   in
+      {Aux Entries nil}
+   end
+
+   /** %% Expects a chord/scale/interval database DB (tuple of records) and removes all those entries from the database in which the error of some JI pitch class exceeds MaxError (an int). Also, entries that do not contain all feats in RequiredFeats are removed (feats not listed in RequiredFeats are removed as well). Further, any entry for which ComparisonFeats are the same in a previous entry are removed.
+   %% */
+   fun {FilterDB DB MaxError RequiredFeats ComparisonFeats}
       %% Returns true is errors OK
       fun {CheckError X}
 	 if {IsRecord X} andthen {HasFeature X ji_error}
@@ -476,33 +514,57 @@ define
 	 else true
 	 end
       end
+      fun {CheckFeats X}
+	 %% all required feats are there
+	 {All RequiredFeats fun {$ Feat} {HasFeature X Feat} end}
+      end
    in
       %% translate DB to list and then back to tuplet in order to avoid "empty" indices
       {List.toTuple {Label DB}
-       {Filter {Record.toList DB}
-	fun {$ Entry}
-	   if {HasFeature Entry comment}
-	   then
-	      %% true of OK entry
-	      B = {Record.all Entry.comment
-		   fun {$ X}
-		      if {IsList X} then {All X CheckError}
-		      else {CheckError X}
-		      end
-		   end}
-	   in
-	      %% TMP?
-	      if {Not B} then {Out.show removeDbEntry(Entry)} end
-	      B
-	   else true
-	   end
-	end}}
+       {RemoveDuplicateEntries
+	{Map {Filter {Record.toList DB} 
+	      fun {$ Entry}
+		 %% NOTE: 'comment' is required feat
+		 %% true of OK entry
+		 B1 = {Record.all Entry.comment
+		       fun {$ X}
+			  if {IsList X} then {All X CheckError}
+			  else {CheckError X}
+			  end
+		       end}
+		 B2 = {CheckFeats Entry}
+	      in
+		 if {Not B1} then {ReportRemovedEntry exceedingError Entry} end
+		 if {Not B2} then {ReportRemovedEntry requiredFeatsMissing Entry} end
+		 B1 andthen B2
+	      end}
+	 fun {$ R}
+	    %% remove any non-required feats
+	    {Record.subtractList R
+	     {LUtils.remove {Arity R}
+	      fun {$ Feat} {Member Feat RequiredFeats} end}}
+	 end}
+	ComparisonFeats}}
    end
 
 
-   %% TODO:
-   %% - def
-   %% - doc
+   /** %% Returns a full database specification that can be given as argument to HS.db.setDB. MakeFullDB internally generates a regular temperament (using HS.db.makeRegularTemperament), and "matches" the chord/scale/interval databases defined in this functor so that they are approximated to (i.e. can be played by) this regular temperament. Dublicate database entries (e.g., if the approximation results in the same pitch classes) are removed (reported at standard out).
+   %%
+   %% Args:
+   %% 'generators': list of generators (ints). See HS.db.makeRegularTemperament for details.
+   %% 'generatorFactors': list of generator factor specifications (pairs of ints). See HS.db.makeRegularTemperament for details.
+   %% 'generatorFactorsOffset' (default 0): See HS.db.makeRegularTemperament for details.
+   %% 'pitchesPerOctave' (default 1200): See HS.db.makeRegularTemperament for details.
+   %% 'maxError' (int): maximum error of any original JI pitch classes in a tempered chord/scale/interval. The error's unit of measurement depends on pitchesPerOctave. Any database entry with an approximation error that exceeds maxError is removed (reported at standard out).
+   %%
+   %% 'chords'/'scales'/'intervals' (each tuple of records, default of each is unit): additional chord/scale/interval database entries that are appended before the entries defined internally in this functor.
+   %% 'chordFeatures'/'scaleFeatures'/'intervalFeatures' (each list of atoms, default of each is nil): additional features required in database entries (example: essentialPitchClasses). Database entries that do not contain all the required features are removed from the output (reported at standard out).
+   %%
+   %% 'accidentalOffset'
+   %% 'octaveDomain'
+   %% 
+   %% See examples/RegularTemperaments.oz for usage examples.
+   %% */
    fun {MakeFullDB Args}
       %% TODO: revise defaults: should generators and generatorFactors be required args?
       Default = unit(generators:[702 386] % 5-limit JI
@@ -515,6 +577,12 @@ define
 		     octaveDomain:0#9
 		     %% TODO: if not given, but pitchesPerOctave are given adjust automatically
 		     maxError:30 % unit depends on pitchesPerOctave
+		     chords:unit
+		     scales:unit
+		     intervals:unit
+		     chordFeatures: nil
+		     scaleFeatures: nil
+		     intervalFeatures: nil
 		    )
       As = {Adjoin Default Args}
       Temperament = {List.toTuple unit
@@ -523,22 +591,28 @@ define
 			   pitchesPerOctave: As.pitchesPerOctave)}}
    in
       unit(
-	 chordDB:{FilterDB {Record.map Chords
+	 chordDB:{FilterDB {Record.map {Tuple.append As.chords Chords}
 			    fun {$ X}
 			       {HS.db.ratiosInDBEntryToPCs2 {ToStandardDeclaration X}
 				As.pitchesPerOctave Temperament}
 			    end}
-		  As.maxError}
-	 scaleDB:{FilterDB {Record.map Scales
+		  As.maxError
+		  {Append [pitchClasses roots comment] As.chordFeatures}
+		  [pitchClasses roots]}
+	 scaleDB:{FilterDB {Record.map {Tuple.append As.scales Scales} 
 			    fun {$ X}
 			       {HS.db.ratiosInDBEntryToPCs2 {ToStandardDeclaration X}
 				As.pitchesPerOctave Temperament}
 			    end}
-		  As.maxError}
-	 intervalDB:{FilterDB {Record.map Intervals
+		  As.maxError
+		  {Append [pitchClasses roots comment] As.scaleFeatures}
+		  [pitchClasses roots]}
+	 intervalDB:{FilterDB {Record.map {Tuple.append As.intervals Intervals} 
 			       fun {$ X} {HS.db.ratiosInDBEntryToPCs2 X As.pitchesPerOctave
 					  Temperament} end}
-		     As.maxError}
+		     As.maxError
+		     {Append [interval comment] As.intervalFeatures}
+		     [interval]}
 	 pitchesPerOctave: As.pitchesPerOctave
 	 accidentalOffset: As.accidentalOffset
 	 octaveDomain: As.octaveDomain
@@ -549,26 +623,6 @@ define
 	 )
    end
 
-%    %% TMP remove this def
-%    %% TODO: replace by function
-%    /** %% Full database declaration defined in this functor. 
-%    %% */
-%    DB = unit(
-% 	   chordDB:{Record.map Chords
-% 		    fun {$ X}
-% 		       {HS.db.ratiosInDBEntryToPCs {ToStandardDeclaration X}
-% 			PitchesPerOctave}
-% 		    end}
-% 	   scaleDB:{Record.map Scales
-% 		    fun {$ X}
-% 		       {HS.db.ratiosInDBEntryToPCs {ToStandardDeclaration X}
-% 			  PitchesPerOctave}
-% 		    end}
-% 	   intervalDB:{Record.map Intervals
-% 		       fun {$ X} {HS.db.ratiosInDBEntryToPCs X PitchesPerOctave} end}
-% 	   pitchesPerOctave: PitchesPerOctave
-% 	   accidentalOffset: AccidentalOffset
-% 	   octaveDomain: OctaveDomain)
    
 end
 
