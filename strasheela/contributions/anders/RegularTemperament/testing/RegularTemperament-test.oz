@@ -17,8 +17,8 @@ declare
 % 		   generatorFactors: [94#106] % 13 tones
 		   %% Note: with 21 fifths there is another PC closer to 81/64 than 5/4
 		   %% 8 fifths down (Fb, 427.28 cent) is closer to 81/64 than 5/4 
-		   generatorFactors: [90#110] % 21 tones
-% 		   generatorFactors: [85#115] % 31 tones
+% 		   generatorFactors: [90#110] % 21 tones
+		   generatorFactors: [85#115] % 31 tones
 		   generatorFactorsOffset: 100
 		   pitchesPerOctave:120000
 		   maxError:3000)}}
@@ -35,10 +35,47 @@ declare
 */
 
 
-/*
 %% TODO: revise or delete tests
 
-%% tests
+/*  
+%% NOTE: first globally set 1/4-comman meantone before running these tests
+%% ... there must be enough tones for the accidentals (e.g., 31) 
+
+%% BUG: accidentals '#' and 'b' always produce slightly wrong pitches (both accidentals "too large")
+%% 
+
+%% OK
+{RegT.pc 'C'#''}
+%% OK
+{RegT.pc 'C'#'^'}  %% 38.71 cent in 31-TET
+%% BUG: returns 115908 -- not even in temperament
+{RegT.pc 'D'#'b'#'b'} % 38.71 
+%% BUG: returns 11705
+{RegT.pc 'C'#'#'}  % 77.42
+%% BUG: returns 76.13 -- diatonic and chromatic semitone swapped?
+{RegT.pc 'D'#'b'}  % 116.13
+%% BUG: returns 23410
+{RegT.pc 'C'#'#'#'#'} % 116.13
+%% OK
+{RegT.pc 'D'#'v'} % 154.84
+%% OK
+{RegT.pc 'D'#''} % 193.55
+
+%% Test: sequence of fifths -- always same intervals?
+%% !!!! BUG: Interval B-F# is wrong: it is 46249 instead of 50341 (complement of 69659), i.e. F# is 4092 (^) too high
+{Pattern.map2Neighbours
+ {Map ['C'#'' 'G'#'' 'D'#'' 'A'#'' 'E'#'' 'B'#'' 'F'#'#' 'C'#'#']
+  RegT.pc}
+ fun {$ PC1 PC2} {Abs PC1 - PC2} end}
+
+
+%% Tempered Pythagorean fifths and JI fifths are the same
+%% OK
+{RegT.pc 'E'#''}
+{RegT.jiPC 'E'#'\\'}
+
+
+%%%%%%%%%%
 
 
 {RegT.jiPC 'C'#''}
