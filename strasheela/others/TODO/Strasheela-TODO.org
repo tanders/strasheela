@@ -127,7 +127,7 @@ MyTestScore = {Score.makeScore
 
 *** TODO 
 
-    - Doc HS.db.makeRegularTemperament and HS.db.ratioToRegularTemperamentPC
+    OK - Doc HS.db.makeRegularTemperament and HS.db.ratioToRegularTemperamentPC
       see [[file:~/oz/music/Strasheela/strasheela/trunk/strasheela/contributions/anders/HarmonisedScore/source/Database.oz::fun%20MakeRegularTemperament%20Generators%20GeneratorFactors%20Args][file:~/oz/music/Strasheela/strasheela/trunk/strasheela/contributions/anders/HarmonisedScore/source/Database.oz::fun MakeRegularTemperament Generators GeneratorFactors Args]]
 
     - Mapping of symbolic notation names (nominals and accidentals) to JI ratios, and then to PCs to temperament
@@ -140,6 +140,24 @@ MyTestScore = {Score.makeScore
       - (as in ET31 etc:) Create tuplet with PCs as features that map to the list of corresponding symbolic notations and the other way round
       - ?? Howto decide which notation to use if a specific PC is mapped to multiple symbolic notations? Write manually some tuple for this mapping, as before?
 
+    - Chord / Scale / Interval databases
+      
+      - mapping symbolic note names to PCs in temperaments, then use this mapping in database (e.g., with existing ET31 database)
+      OK - special chord/scale/interval features like dissonanceDegree: only included in database if given explicitely. In that case, entries without this features are filtered out. Report removals.
+      OK - automatically filter out double entries (e.g., different JI database entries could be mapped to same temperament PCs, but then somehow report these removals.
+      OK - optionally, extend chord/scale/interval database with extra entries given as args
+
+
+    - Symbolic pitch notation
+
+      - nominals measured in number of fifth up/down
+      - accidentals # and b also measured in number of fifths up/down
+      - map nominals internally to PCs with accumulated fifths generator 
+	- approximate ratio 3/2 in temperament
+	- if error of fifths larger than 11-comma (33#32, quarter tone) then exception: no symbolic notation
+      - map all other accidentals to approximated JI accidentals
+      - ?? what about quarter-tone accidentals of ET31 DB, should I replace these with 11-comma (33#32) accidental? Would that be too large an error (JI interpretion of accidental and 31-TET interval 38.71)?
+
 
     - Revise RegT.transform
       see [[file:~/oz/music/Strasheela/strasheela/trunk/strasheela/contributions/anders/RegularTemperament/source/DB.oz::fun%20Transform%20MyPitch][file:~/oz/music/Strasheela/strasheela/trunk/strasheela/contributions/anders/RegularTemperament/source/DB.oz::fun Transform MyPitch]]
@@ -151,7 +169,8 @@ MyTestScore = {Score.makeScore
       - Better approach: use mapping PCs -> symbolic notation (see above). Map each symbolic notation accidental to the corresponding EHE notation code for Lilypond etc.
 
 
-    - Demonstrating example
+    - Demonstrating examples
+      see [[file:~/oz/music/Strasheela/strasheela/trunk/strasheela/examples/RegularTemperaments.oz]]
 
 
 *** Info
