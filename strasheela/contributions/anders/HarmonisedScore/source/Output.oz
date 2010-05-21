@@ -144,7 +144,7 @@ define
    /** %% MakeNoteToFomusClause adds support for HS notes (instances of class HS.score.pitchClassMixin) to Fomus export with customisable enharmonic notation. More specifically, it returns a clause that can be appended to the given to the argument eventClauses of Out.renderFomus and friends.
    %%
    %% Args:
-   %% 'table' (default FomusPCs_Default): a tuplet that maps pitch classes (ints) to Fomus pitch classes (strings or atoms of symbolic note names). A valid Fomus pitch class consists of a nominal and a Fomus accidental (e.g., 'Cn' or 'C#').
+   %% 'table' (default FomusPCs_Default): a tuplet that maps pitch classes (ints) to Fomus pitch classes (strings or atoms of symbolic note names). A valid Fomus pitch class consists of a nominal and a Fomus accidental (e.g., 'Cn' or 'C#'). Note, if 'getPitchClass' is set to 'midi', then table must have entries for PCs 0-12 (0 and 12 are 'Cn').
    %% 'getSettings': unary function that expects the processed note and returns a record of fomus settings. This function can be used to arbitrarily customise the notation of each note depending on the note itself (only standard note settings like time etc cannot be overwritten).
    %% 'getPitchClass' (either pc or midi, default pc): specification how the pitch class is accessed that is used as index into table. If 'pc' the note's pitch class is used, if 'midi' this value depends on the note's pitchInMidi.
    %% */
@@ -156,11 +156,15 @@ define
    in
       HS_Score.isPitchClassMixin
       # fun {$ MyNote PartId}
-	   Nominal#Acc = {PcToEnharmonics {InterpretPC {MyNote getPitchClass($)}
-					   As.getPitchClass
-					   {{MyNote getPitchClassParameter($)} getUnit($)}}
-			  As.table}
-	   Oct = {MyNote getOctave($)}
+	   PC = {InterpretPC {MyNote getPitchClass($)}
+		 As.getPitchClass
+		 {{MyNote getPitchClassParameter($)} getUnit($)}}
+	   Nominal#Acc = {PcToEnharmonics PC As.table}
+	   %% "carry over" octave for pitch classes "of next octave"
+	   Oct = {MyNote getOctave($)} + if As.getPitchClass==midi andthen PC==12
+					 then 1
+					 else 0
+					 end
 	in
 	   {Out.record2FomusNote
 	    {Adjoin {As.getSettings MyNote}
@@ -288,7 +292,9 @@ define
 			  5:'Fn' 6:'F#'
 			  7:'Gn' 8:'Ab' 
 			  9:'An' 10:'Bb' 
-			  11:'Bn')
+			  11:'Bn'
+			  %% If InterpretPC rounds to midi, then PC can be 12
+			  12:'Cn')
 
    /** %% [Note markup function] Expects a note and returns a fomus settings record. The different of the pitch of MyNote and the closest 12-TET is annotated in cent.
    %% */
