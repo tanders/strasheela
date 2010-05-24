@@ -1,7 +1,8 @@
 
 
 /** %% Defines databases for chords, scales and intervals in arbitrary octave-repeating regular temperaments.
-%% NOTE: recommendation: reduce the domain of all pitch classes (e.g., of notes, chord/scale roots and transpositions) to the tones of the current temperament. (this is not necessary if all pitch classes are already reduced to some determined scale :)
+%%
+%% NOTE: recommendation when using a regular temperament: reduce the domain of all pitch classes (e.g., of notes, chord/scale roots and transpositions) to the tones of the current temperament. This is not of course necessary if all pitch classes are already reduced to some determined scale.
 %% */
 
 %%
@@ -9,7 +10,11 @@
 %%
 %% - procedure that expects full score and reduces the domain of all PCs in score (e.g., of notes, chord/scale roots and transpositions) to the tones of the current temperament. 
 %%
-%% - temporarily, all chords/scales/intervals are defined for JI only: generalise!
+%% - alternatively to using JI ratios, it would be useful to use a symbolic notation of JI pitch classes (RegT.jiPC). However, tempered pitch classes (RegT.pc) are probably no option within this database, because the database entries should be usable for a wide range of temperaments, and the meaning of tempered pitch classes can differ greatly in different temperaments (e.g., in meantone C-A# is the harmonic 7th, but something very different in Pythagorean tuning, so better notate the intended JI interval).
+%%
+%% - translate chards/scales from et31 with symbolic pitches into JI pitches (RegT.jiPC format) and copy them here
+%%
+%% - ???? temporarily, all chords/scales/intervals are defined for JI only: generalise!
 %%   see [[file:~/oz/music/Strasheela/strasheela/trunk/strasheela/others/TODO/Strasheela-TODO.org::*%20Function%20mapping%20of%20ratios%20to%20corresponding%20cent%20values%20for%20a%20given%20regular%20temperament][!! Function/mapping of ratios to corresponding cent values for a given regular temperament]]
 %%
 %% - make PitchesPerOctave controllable by arg (so cent or millicent are possible)
@@ -17,8 +22,6 @@
 %% - add those chords of ET31 DB that are still missing
 %%
 %% - !! Change RegT.db.makeFullDB so that it allows to specify additional features (e.g., essentialPitchClasses) and to automatically filter out those database entries that do not have these features.
-%%
-%% - ?? add essential PCs to La Monte Young chords? 
 %%
 %% - after pitch classes can be specified with symbolic notation then go through all existing databases for material to add
 %%
@@ -35,7 +38,7 @@ import
    Out at 'x-ozlib://anders/strasheela/source/Output.ozf'
 %    Pattern at 'x-ozlib://anders/strasheela/Pattern/Pattern.ozf'
    HS at 'x-ozlib://anders/strasheela/HarmonisedScore/HarmonisedScore.ozf'
-   RegT at '../RegT.ozf'
+   RegT at '../RegularTemperament.ozf'
    
 export   
 %    fullDB:DB
@@ -68,17 +71,29 @@ define
 		     roots:[1#6]    
 %				dissonanceDegree:2
 		     essentialPitchClasses:[1#6 1#5]
-		     comment:'minor')  
+		     comment:'minor')
+
+	       %% three different diminished triads
+		   
+	       %% !! nice :) 
 	       chord(pitchClasses:[5#1 6#1 7#1]
 		     roots:[5#1]    
 %				dissonanceDegree:2
 		     essentialPitchClasses:[5#1 6#1 7#1]
-		     comment:'otonal subdiminished')  
+		     comment:unit(name:['otonal subdiminished'
+					'harmonic diminished']))  
 	       chord(pitchClasses:[1#5 1#6 1#7]
 		     roots:[1#7]    
 %				dissonanceDegree:2
 		     essentialPitchClasses:[1#5 1#6 1#7]
-		     comment:'utonal subdiminished')  
+		     comment:unit(name:['utonal subdiminished'
+					'utonal diminished']))
+	       chord(pitchClasses:[1#1 6#5 36#25] % 'C' 'Eb' 'Gb'
+			 roots:[1#1]  % ??
+			 essentialPitchClasses:[1#1 6#5 36#25]
+%				dissonanceDegree:2
+		     comment:'geometric diminished')
+	       
 	       chord(pitchClasses:[4#1 5#1 25#4]
 		     roots:[4#1]    
 %				dissonanceDegree:2
@@ -89,7 +104,15 @@ define
 		     roots:[6#1]    
 %				dissonanceDegree:2
 		     essentialPitchClasses:[6#1 7#1]
-		     comment:'subminor')  
+		     comment:'subminor')
+
+	       %% rather dissonant -- is this characteristic enough?
+% 	       chord(pitchClasses:['C' 'E;' 'G']
+% 		     roots:['C']  % ??
+% 		     essentialPitchClasses:['C' 'E;']
+% %				dissonanceDegree:2
+% 		     comment:'neutral triad')
+	       
 	       chord(pitchClasses:[1#6 1#7 1#9]
 		     roots:[1#9]    
 %				dissonanceDegree:2
@@ -104,16 +127,201 @@ define
 		     essentialPitchClasses:[4#1 5#1 7#1]
 		     comment:'harmonic 7th no 5')  
 
+	       %% !! 
+		   chord(pitchClasses:[1#1 3#1 7#1]
+			 roots:[1#1]
+			 essentialPitchClasses:[1#1 3#1 7#1]
+%				dissonanceDegree:2
+			 comment:'4-6-7')
+		   chord(pitchClasses:[5#1 7#1 9#1]
+			 roots:[5#1]
+			 essentialPitchClasses:[5#1 7#1 9#1]
+%				dissonanceDegree:2
+			 comment:'5-7-9')
+		   chord(pitchClasses:[1#1 3#1 5#1 9#1]
+			 roots:[1#1]
+			 essentialPitchClasses:[1#1 3#1 5#1 9#1]
+%				dissonanceDegree:2
+			 comment:'added-2nd')
+
+
+		   chord(pitchClasses:[2#1 4#3 8#7]
+			 roots:[4#3]
+			 essentialPitchClasses:[2#1 4#3 8#7]
+%				dissonanceDegree:2
+			 comment:'subharmonic 4-6-7')
+
+		
+		   chord(pitchClasses:[9#1 7#1 27#1 21#1]
+			 roots:[7#1] %% ??
+			 essentialPitchClasses:[9#1 7#1 27#1 21#1]
+%				dissonanceDegree:2
+			 comment:'submajor 7th')
+		   
 
 	       %%
 	       %% tetrads, pentads...
 	       %%
-	       
-	       chord(pitchClasses:[4#1 5#1 6#1 15#2]
-		     roots:[4#1]    
+
+	       chord(pitchClasses:[3#1 9#1 11#1 33#1] % C G B; F|
+		     roots:[3#1] %% 
+		     essentialPitchClasses:[3#1 9#1 11#1 33#1]
 %				dissonanceDegree:2
-		     essentialPitchClasses:[4#1 5#1 15#2]
-		     comment:'major 7th')
+		     comment:'11-limit ASS')
+	       %% TODO: add pitches
+	       chord(pitchClasses:[5#1 7#1 15#1 35#1] % C F# G A#
+		     roots:[5#1] %% ??
+		     essentialPitchClasses:[5#1 7#1 15#1 35#1]
+%				dissonanceDegree:2
+		     comment:'15-limit ASS 2')
+		   %% !! 
+		   %% harmonic 9th without root (F)
+		   %%
+		   %% mind tiny difference to reversed dominant seventh
+		   %% reversed form of this chord is 'C' 'Fb' 'G' 'Bb' -- un-usable
+		   %%
+		   %% also [3#1 5#1 7#1 9#1]
+		   chord(pitchClasses:[6#1 7#1 9#1 10#1] % C D# G A, same as 'C' 'Eb' 'F#' 'Bb' 
+			 roots:[6#1] %% 
+			 % silentRoots:['F']  
+			 essentialPitchClasses:[6#1 7#1 10#1]
+%				dissonanceDegree:2
+			 comment:unit(name:['subminor 6th' 'harmonic half-diminished 7th'])
+			    )
+		   %% harmonic 11 without root (F)
+		   chord(pitchClasses:[6#1 7#1 9#1 11#1] % C D# G B;
+			 roots:[6#1] %% 
+			 essentialPitchClasses:[6#1 7#1 9#1 11#1]
+%				dissonanceDegree:2
+			 comment:'undecimal subminor 7th')
+		   %% 12:15:21:28 Hendrix Chord (Erlich)
+		   %% Contrast: 4:10:14:19  Hendrix Chord (Monzo)
+		   %%
+		   %% 12#1 15#1 21#1 28#1 Hendrix Chord is same as 3#1 7#1 15#1 21#1 '15-limit ASS 1'
+		   chord(pitchClasses:[12#1 15#1 21#1 28#1] % C E A# D#
+			 roots:[12#1] %% 
+			 essentialPitchClasses:[12#1 15#1 21#1 28#1]
+%				dissonanceDegree:2
+			 comment:unit(name:['Hendrix chord' '15-limit ASS 1']))
+		   chord(pitchClasses:[8#1 10#1 12#1 15#1] % C E G B
+			 roots:[8#1] %% 
+			 essentialPitchClasses:[8#1 10#1 12#1 15#1]
+%				dissonanceDegree:2
+			 comment:'major 7th')
+		   %% Vogel's Tristan Chord
+		   %% Contrast: 5:7:9:12  Tristan Chord, Harmonic Half-diminished Seventh
+		   %%
+		   %% [1#3 1#4 1#5 1#7] is same as [1#4 1#5 1#6 1#7]
+		   chord(pitchClasses:[1#3 1#4 1#5 1#7] % C F# A# D#, same as C Eb G A|
+			 %% ?? C (1/7) or F# (1/5)
+			 roots:[1#7] 
+			 essentialPitchClasses:[1#3 1#4 1#5 1#7]
+%				dissonanceDegree:2
+			 comment:unit(name:['subharmonic 6th' 'Tristan chord' 'subharmonic half-diminished 7th' 'minor septimal 6th']))
+		   %% !!!
+% 		   chord(pitchClasses:['C' 'D#' 'F#' 'A#'] % same as C Eb G A|
+% 			 roots:['D#'] % 'C'
+% 			 % silentRoots:['G#']
+% 			 essentialPitchClasses:['C' 'D#' 'F#' 'A#']
+% %				dissonanceDegree:2
+% %			 comment:'reversed harmonic dominant seventh'
+% 			 comment:unit(name:['subharmonic 6th' 'minor septimal 6th']) 
+% 			)
+		   chord(pitchClasses:[14#1 18#1 21#1 24#1] % C E| G A|
+			 roots:[14#1] %% 
+			 essentialPitchClasses:[14#1 18#1 21#1 24#1] %% ??
+%				dissonanceDegree:2
+			 comment:'supermajor added 6th')
+		   chord(pitchClasses:[16#1 20#1 25#1 28#1] % C E G# A#
+			 roots:[16#1] %% 
+			 essentialPitchClasses:[16#1 20#1 25#1 28#1]
+%				dissonanceDegree:2
+			 comment:'augmented dominant 7th')
+		   chord(pitchClasses:[16#1 20#1 25#1 30#1] % C E G# B
+			 roots:[16#1] %% 
+			 essentialPitchClasses:[16#1 20#1 25#1 30#1]
+%				dissonanceDegree:2
+			 comment:'augmented major 7th')
+		   chord(pitchClasses:[16#1 21#1 24#1 28#1] % C E# G A#
+			 roots:[16#1] %% 
+			 essentialPitchClasses:[16#1 21#1 24#1 28#1]
+%				dissonanceDegree:2
+			 comment:'Pepper\'s Square')
+		   chord(pitchClasses:[18#1 22#1 27#1 33#1] % C E; G B;
+			 roots:[18#1] %% 
+			 essentialPitchClasses:[18#1 22#1 27#1 33#1]
+%				dissonanceDegree:2
+			 comment:'neutral 7th')
+		   %% !!!!
+		   %% non-reversable chord (reversed chord is same chord in ET31)
+		   chord(pitchClasses:[20#1 25#1 28#1 35#1] % C E F# A#  [1#1 5#4 7#5 7#4] 
+			 roots:[20#1] %% 
+			 essentialPitchClasses:[20#1 25#1 28#1 35#1]
+%				dissonanceDegree:2
+			 comment:'french 6th')
+		   chord(pitchClasses:[25#1 30#1 35#1 42#1] % C Eb F# A
+			 roots:[25#1] %% 
+			 essentialPitchClasses:[25#1 30#1 35#1 42#1]
+%				dissonanceDegree:2
+			 comment:'diminished 7th')
+% 		   chord(pitchClasses:['C' 'Eb' 'Gb' 'Bb'] 
+% 			 roots:['C'] %% 
+% 			 essentialPitchClasses:['C' 'Eb' 'Gb' 'Bb']
+% %				dissonanceDegree:2
+% 			 comment:'halve-diminished 7th')
+		   chord(pitchClasses:[44#1 56#1 66#1 77#1] % C Fb G A#
+			 roots:[44#1] %% 
+			 essentialPitchClasses:[44#1 56#1 66#1 77#1]
+%				dissonanceDegree:2
+			 comment:unit(name:['focal 7th' 'NM rebounding 7th']))
+
+	       
+		   %% same as minor with minor seventh, but different root
+		   chord(pitchClasses:[12#1 15#1 18#1 20#1] % 'C' 'E' 'G' 'A'
+			 roots:[12#1]
+			 essentialPitchClasses:[12#1 15#1 18#1 20#1]
+%				dissonanceDegree:2
+			 comment:unit(name:['sixte ajoutee' 'added 6th']))
+	       
+	        %% harmonic 11ths without 9th
+		   chord(pitchClasses:[8#1 10#1 11#1 12#1 14#1] % C E F| G A#
+			 roots:[8#1] %% 
+			 essentialPitchClasses:[8#1 10#1 11#1 14#1]
+%				dissonanceDegree:2
+			 comment:unit(name:'11-limit major prime chord'))
+		   chord(pitchClasses:[660#1 770#1 840#1 924#1 1155#1] % C D# Fb F# A#
+			 roots:[660#1] %% ??
+			 essentialPitchClasses:[660#1 770#1 840#1 924#1 1155#1]
+%				dissonanceDegree:2
+			 comment:unit(name:'11-limit minor prime chord'))
+
+	       chord(pitchClasses:[1#1 3#1 5#1 15#1 9#1]
+			 roots:[1#1]
+			 essentialPitchClasses:[1#1 5#1 15#1 9#1]
+%				dissonanceDegree:2
+			 comment:'major 9th')
+
+		   %% 'major 7th added 6th' and 'minor 9th' have same PC set, but differ in their root
+		   chord(pitchClasses:[1#1 3#1 5#1 15#1 5#3]
+			 roots:[1#1]
+			 essentialPitchClasses:[1#1 5#1 15#1 5#3]
+%				dissonanceDegree:2
+			 comment:'major 7th added 6th')
+
+	       chord(pitchClasses:[3#1 5#1 7#1 15#1 21#1 35#1] % C A D# E A# G;
+			 roots:[3#1] %% 
+			 essentialPitchClasses:[3#1 5#1 7#1 15#1 21#1 35#1]
+%				dissonanceDegree:2
+		     comment:unit(name:'Hexany 1 3 5 7'))
+
+	       chord(pitchClasses:[4#1 5#1 6#1 7#1 9#1 11#1] % C E G A# D F|
+			 roots:[4#1] %% 
+			 essentialPitchClasses:[4#1 9#1 5#1 11#1 7#1]
+%				dissonanceDegree:2
+			 comment:unit(name:'harmonic 11th'))
+
+	       
+
 	       %% same as minor 6th, only root differs
 	       chord(pitchClasses:[1#6 1#5 1#4 3#10]
 		     roots:[1#6]    
@@ -171,16 +379,6 @@ define
 %				dissonanceDegree:2
 		     essentialPitchClasses:[1#4 1#5 2#7]
 		     comment:'subharmonic 6th')
-	       chord(pitchClasses:[1#4 1#5 1#6 1#7]
-		     roots:[1#7]    
-%				dissonanceDegree:2
-		     essentialPitchClasses:[1#4 1#5 1#6 1#7]
-		     comment:'half subdiminished 7th')  
-	       chord(pitchClasses:[6#1 7#1 9#1 10#1]
-		     roots:[6#1]    
-%				dissonanceDegree:2
-		     essentialPitchClasses:[6#1 7#1 9#1 10#1]
-		     comment:'subminor major 6th')  
 	       chord(pitchClasses:[5#1 6#1 7#1 9#1]
 		     roots:[9#1]    
 %				dissonanceDegree:2
@@ -451,10 +649,11 @@ define
    
    local
       %% TODO: revise
-      /** %% Only transform atoms (e.g. 'C#'), but leave integers (PCs) and records (ratios, e.g., 1#1) untouched.
+      /** %% Only transform pairs (e.g. 'C'#'/'), but leave integers (PCs) and records (ratios, e.g., 1#1) untouched.
       %% */
       fun {Transform MyPitch}
-	 if {GUtils.isAtom MyPitch} then {RegT.pc MyPitch}
+	 if {IsRecord MyPitch} andthen {Record.all MyPitch GUtils.isAtom}
+	 then {RegT.jiPC MyPitch}
 	 else MyPitch end
       end
    in
