@@ -119,6 +119,45 @@ chord(comment:chord(comment:'subminor 7th'
 */
 
 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%% Gobally setting a high-limit JI, and then examine the chord/scale database
+%%
+
+%% NOTE: very large number of pitch classes (26244 PCs) -- loading this database takes time!
+%% NOTE: with millicent there are dublicate pitch classes!
+declare
+PitchesPerOctave = 12000000
+PitchesPerOctave_F = {IntToFloat PitchesPerOctave}
+fun {RatioToPC Ratio}
+   {FloatToInt {MUtils.ratioToKeynumInterval Ratio PitchesPerOctave_F}} mod PitchesPerOctave
+end
+{HS.db.setDB {RegT.db.makeFullDB
+	      unit(generators: [{RatioToPC 3#1}
+				{RatioToPC 5#1}
+				{RatioToPC 7#1}
+				{RatioToPC 11#1}
+				{RatioToPC 13#1}
+				{RatioToPC 17#1}
+				{RatioToPC 19#1}
+				{RatioToPC 23#1}]
+		   generatorFactors: [~5#6
+				      ~1#1
+				      ~1#1
+				      ~1#1
+				      ~1#1
+				      ~1#1
+				      ~1#1
+				      ~1#1] 
+		   pitchesPerOctave:120000
+		   %% small error: 1 cent
+		   maxError:100)}}
+
+
+{Width {HS.db.getTemperament}}
+
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%
