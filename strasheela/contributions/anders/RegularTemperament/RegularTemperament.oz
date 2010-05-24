@@ -16,7 +16,7 @@
 
 functor
 import
-   Browser(browse:Browse) % tmp for debugging
+   % Browser(browse:Browse) % tmp for debugging
    GUtils at 'x-ozlib://anders/strasheela/source/GeneralUtils.ozf'
    LUtils at 'x-ozlib://anders/strasheela/source/ListUtils.ozf'
 %    MUtils at 'x-ozlib://anders/strasheela/source/MusicUtils.ozf'
@@ -178,10 +178,11 @@ define
 		 end
 	      end}
    in
-      {Browse pc(nominal:NominalPC#Nominals_FifthsTranpositions.(SymPC.1)
-		 accs:AccPCs#{Map {List.number 2 {Width SymPC} 1}
-			      fun {$ I} JiAccidentals.(SymPC.I) end}
-		 ji_pc:{JiPC SymPC})}
+      {GUtils.warnGUI "RegT.pc definition buggy. E.g., # and b not interpretated correctly"}
+      % {Browse pc(nominal:NominalPC#Nominals_FifthsTranpositions.(SymPC.1)
+      % 		 accs:AccPCs#{Map {List.number 2 {Width SymPC} 1}
+      % 			      fun {$ I} JiAccidentals.(SymPC.I) end}
+      % 		 ji_pc:{JiPC SymPC})}
       ({LUtils.accum NominalPC | AccPCs
        Number.'+'}
        + (10 * PitchesPerOctave)) % avoid negative number
