@@ -279,7 +279,7 @@ define
       if {Not {IsVirtualString VS}}
       then raise noVS(VS) end
 	 unit % never returned 
-      else unit('lily-insert-after': {Out.formatVS Where#"\\markup{"#VS#"}"})
+      else unit('lily-insert': {Out.formatVS Where#"\\markup{"#VS#"}"})
       end
    end
 
@@ -318,7 +318,7 @@ define
       end
    end
 
-   /** %% [Note markup function] Expects a note and returns a fomus settings record with a 'lily-insert-after' VS that prints the adaptive JI pitch offset of this note in cent. For all other score objects nil is returned.
+   /** %% [Note markup function] Expects a note and returns a fomus settings record with a 'lily-insert' VS that prints the adaptive JI pitch offset of this note in cent. For all other score objects nil is returned.
    %%
    %% Note that Lilypond does not necessarily preserve the order marks for multiple parts per staff. 
    %% */
@@ -332,7 +332,7 @@ define
       end
    end
 
-   /** %% [Note markup function] Expects a note and returns a fomus settings record with a 'lily-insert-after' VS that prints the adaptive JI pitch offset of this note and additionally the absolute pitch in cent. For all other score objects nil is returned.
+   /** %% [Note markup function] Expects a note and returns a fomus settings record with a 'lily-insert' VS that prints the adaptive JI pitch offset of this note and additionally the absolute pitch in cent. For all other score objects nil is returned.
    %%
    %% Note that Lilypond does not necessarily preserve the order marks for multiple parts per staff.
    %% */
@@ -347,14 +347,14 @@ define
    end
 
                   
-   /** %% [Chord markup function] Expects a chord and returns the chord comment (a fomus settings record with a 'lily-insert-after' VS). For all other score objects nil is returned.
+   /** %% [Chord markup function] Expects a chord and returns the chord comment (a fomus settings record with a 'lily-insert' VS). For all other score objects nil is returned.
    %% */
    fun {MakeChordComment_FomusForLilyMarks MyChord}
       {VsToFomusForLilyMarks
        "\\column { "#{HS_DB.getName MyChord}.1#" } "
        unit}
    end
-   /* %% [Chord markup function] Expects a chord and returns the chord as ratio spec (a fomus settings record with a 'lily-insert-after' VS): Transposition x untransposed PCs (a VS). For all other score objects nil is returned.
+   /* %% [Chord markup function] Expects a chord and returns the chord as ratio spec (a fomus settings record with a 'lily-insert' VS): Transposition x untransposed PCs (a VS). For all other score objects nil is returned.
    %% */
    fun {MakeChordRatios_FomusForLilyMarks MyChord}
       {VsToFomusForLilyMarks
@@ -369,7 +369,7 @@ define
        unit}
    end
    
-   /** %% [Scale markup function] Expects a scale and returns the scale comment (a fomus settings record with a 'lily-insert-after' VS). For all other score objects nil is returned. 
+   /** %% [Scale markup function] Expects a scale and returns the scale comment (a fomus settings record with a 'lily-insert' VS). For all other score objects nil is returned. 
    %% */
    fun {MakeScaleComment_FomusForLilyMarks MyScale}
       {VsToFomusForLilyMarks
