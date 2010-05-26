@@ -69,6 +69,7 @@ export
    GetUntransposedRootRatio_Float
 
    MakeRegularTemperament
+   AllTemperamentIntervals
    RatioToRegularTemperamentPC
    
 define
@@ -501,16 +502,19 @@ local
    fun {RatioToPC Ratio KeysPerOctave Temperament}
       if Temperament==unit orelse Temperament==nil
       then
+	 %% equal temperament
 	 KeysPerOctave_F = {IntToFloat KeysPerOctave} 
 	 PC = {MUtils.keynumToPC {MUtils.ratioToKeynumInterval Ratio
 				  KeysPerOctave_F}
 	       KeysPerOctave_F}
       in
 	 unit(ratio:Ratio pc:{FloatToInt PC} ji_error:{PCError PC KeysPerOctave_F}#cent)
-      else PC#Error = {RatioToRegularTemperamentPC Ratio 
-		       unit(temperament:Temperament
-			    pitchesPerOctave:KeysPerOctave
-			    showError:true)}
+      else
+	 %% regular temperament
+	 PC#Error = {RatioToRegularTemperamentPC Ratio 
+		     unit(temperament:Temperament
+			  pitchesPerOctave:KeysPerOctave
+			  showError:true)}
 	 Unit = case KeysPerOctave of
 		   1200 then cent
 		[] 120000 then millicent
@@ -896,6 +900,39 @@ end
        Value.'=<'}
    end
 
+   /** %% Expects a regular temperament spec Temperament (tuple of ints) and returns a tuple that contains all intervals contained in this temperament (remember that Temperament contains all intervals available from PC 0, but some intervals may only be available between other pitches).
+   %%
+   %% Args: 
+   %% 'minRepetition' (default 1): the minimum number an interval needs to occur in order to be included. 
+   %% 'pitchesPerOctave' (default {HS.db.getPitchesPerOctave}) the pitches per octave (i.e., pitch unit).
+   %% */
+   fun {AllTemperamentIntervals Temperament Args}
+      Default = unit(minRepetition: 1
+		     pitchesPerOctave: {GetPitchesPerOctave})
+      As = {Adjoin Default Args}
+      Temperament_L = {Record.toList Temperament}
+      PcNumbers = {NewDictionary}
+   in
+      %% compute PC interval between all scale degrees: collect number of occuring PCs in PcNumbers
+      {ForAll Temperament_L
+       proc {$ PC1}
+	  {ForAll Temperament_L
+	   proc {$ PC2}
+	      %% add PitchesPerOctave to avoid neg numbers
+	      Interval = (PC2 - PC1 + As.pitchesPerOctave) mod As.pitchesPerOctave
+	      OldNo = {Dictionary.condGet PcNumbers Interval 0}
+	   in
+	      {Dictionary.put PcNumbers Interval OldNo+1} 
+	   end}
+       end}
+      %% remove entries in PcNumbers with too low As.minRepetition and output as tuple
+      {List.toTuple {Label Temperament}
+       {Arity 
+	{Record.filter {Dictionary.toRecord unit PcNumbers}
+	 fun {$ Number} Number >= As.minRepetition end}}}
+   end
+
+
    local
       /** %% [Aux] Return value in Tuplet (list of ints) that is closest to X (int). LowerBond and UpperBound (ints) are the boundaries of Tuplet-features within which to search; these boundaries narrow recursively. If two values are equally close, the smaller one is taken.
       %% */
@@ -941,7 +978,13 @@ end
 		   {IntToFloat As.pitchesPerOctave}}}
 		   + As.pitchesPerOctave * 10) % avoid neg numbers
 		  mod As.pitchesPerOctave)
-	 TemperedPC = {FindClosest JI_PC As.temperament 1 {Width As.temperament}}
+	 TemperedPC = {FindClosest JI_PC
+		       %% NOTE: this computation is done a lot of times with the same args -- use memoization?
+		       {AllTemperamentIntervals As.temperament
+			unit(minRepetition: 4 %% TODO: make arg to database
+			     pitchesPerOctave: As.pitchesPerOctave)}
+		       1
+		       {Width As.temperament}}
       in
 	 if As.showError
 	 then TemperedPC#(TemperedPC-JI_PC)
