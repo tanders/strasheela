@@ -344,6 +344,26 @@ declare
 
 
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%% HS.db.allTemperamentIntervals
+%%
+
+
+%% Meantone
+{HS.db.setDB {RegT.db.makeFullDB
+	      unit(generators: [69659]
+% 		   generatorFactors: [94#106] % 13 tones
+		   %% Note: with 21 fifths there is another PC closer to 81/64 than 5/4
+		   %% 8 fifths down (Fb, 427.28 cent) is closer to 81/64 than 5/4 
+		   generatorFactors: [90#110] % 21 tones
+		   generatorFactorsOffset: 100
+		   pitchesPerOctave:120000
+		   maxError:3000)}}
+
+{HS.db.allTemperamentIntervals {HS.db.getTemperament} unit}
+
+{HS.db.allTemperamentIntervals {HS.db.getTemperament} unit(minRepetition: 4)}
 
 
 
@@ -371,3 +391,4 @@ declare
 		   {HS.db.makeRegularTemperament [697] [~10#10] unit(pitchesPerOctave:1200)}}
       pitchesPerOctave:1200
       showError:true)}
+
