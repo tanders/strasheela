@@ -23,8 +23,9 @@
   - Minor additions
     - Fenv.renderAndPlayMidiFile now supports flexible microtonal MIDI output using pitchbend
     - Added pitch unit mHz (Millihertz)
-    - GUtils: added IsEqual, RecursiveRatio
+    - GUtils: added IsEqual, RecursiveRatio, PrimeFactors
     - GUtils.toProc: refactored version now supports optional arguments with default values 
+    - MUtils: added RatioToRatioPC OddLimit PrimeLimit
     - LUtils: added RemovePosition, ReplacePosition, FindBest, 
     - Init: added SetNoteLengthsRecord, SymbolicDurToInt
     - Out.toLilypond and friends: implicit clef is now controllable with argument getClef
