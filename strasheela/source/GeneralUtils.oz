@@ -18,7 +18,7 @@ functor
 import
    System
    Module OS Combinator Property QTk at 'x-oz://system/wp/QTk.ozf' % Tk
-   FD FS
+   FD FS RecordC
    LUtils at 'ListUtils.ozf'
 %    Browser(browse:Browse) % temp for debugging
 export
@@ -45,6 +45,7 @@ export
    RatioToFloat
    IsRatio
    RecursiveRatio
+   PrimeFactors
 
    %% MakeConcurrentFn
    ToProc ToFun Procs2Proc
@@ -301,6 +302,35 @@ define
    /** %% Expects a ratio X#Y and returns Y#X.
    %% */
    fun {RecursiveRatio X#Y} Y#X end
+
+   /** %% Expects an int X and returns its prime factors (a list of ints in ascending order). Note: only primes up to 23 are tested, larger prime numbers are simply ignored.
+   %% */
+   fun {PrimeFactors X}
+      PrimesToTest = unit(2 3 5 7 11 17 19 23)
+      PrimesL = {Width PrimesToTest}
+      FoundPrimes = unit(...)
+      fun {TestPrime X PrimeI}
+	 Prime = PrimesToTest.PrimeI
+      in
+	 if X == 1 
+	    %% return result
+	 then {RecordC.reflectArity FoundPrimes} 
+	 elseif {IsDivisible X Prime}
+	 then
+	    FoundPrimes ^ Prime = unit
+	    {TestPrime (X div Prime) PrimeI}
+	 else
+	    if PrimeI==PrimesL
+	       %% return result
+	    then {RecordC.reflectArity FoundPrimes}
+	    else {TestPrime X PrimeI+1}
+	    end
+	 end
+      end
+   in
+      {TestPrime X 1}
+   end
+
    
    %%
    %% Constraint programming utils
