@@ -968,23 +968,28 @@ end
       %%
       %% See examples/RegularTemperaments.oz for usage examples.
       %% */
+      %% TODO:
+      %% - subtemperament clauses: if Ratio returns true for a test function of a clause (e.g. Ratio is below a certain odd limit), then use a given (sub) temperament (typically created with only some subset of the temperament generators). Use case: meantone extended, e.g., with generator harmonic 7ths: all ratios for up to odd-limit 5 should only use the meantone intervals (otherwise the temperament may not work as a meantone anymore, e.g., because there are different PCs for 9#8 and 10#8).
+      %% E.g., use GUtils.primeLimit or GUtils.oddLimit to define clause tests.
+      %%
       fun {RatioToRegularTemperamentPC Ratio Args}
 	 Default = unit(temperament: {GetTemperament}
 			pitchesPerOctave:{GetPitchesPerOctave}
 			showError: false)
 	 As = {Adjoin Default Args}
+	 %% NOTE: this computation is done a lot of times with the same args -- use memoization?
+	 AllIntervals = {AllTemperamentIntervals As.temperament
+			unit(minRepetition: 4 %% TODO: make arg to database
+			     pitchesPerOctave: As.pitchesPerOctave)}
 	 JI_PC = (({FloatToInt
 		  {MUtils.ratioToKeynumInterval Ratio
 		   {IntToFloat As.pitchesPerOctave}}}
 		   + As.pitchesPerOctave * 10) % avoid neg numbers
 		  mod As.pitchesPerOctave)
 	 TemperedPC = {FindClosest JI_PC
-		       %% NOTE: this computation is done a lot of times with the same args -- use memoization?
-		       {AllTemperamentIntervals As.temperament
-			unit(minRepetition: 4 %% TODO: make arg to database
-			     pitchesPerOctave: As.pitchesPerOctave)}
+		       AllIntervals
 		       1
-		       {Width As.temperament}}
+		       {Width AllIntervals}}
       in
 	 if As.showError
 	 then TemperedPC#(TemperedPC-JI_PC)
