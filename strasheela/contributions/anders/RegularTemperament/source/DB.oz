@@ -763,6 +763,10 @@ define
    %% 'octaveDomain'
    %% 
    %% See examples/RegularTemperaments.oz for usage examples.
+   %%
+   %% Note: in current implementation chord and scale database may contain entries where all the chord/scale intervals are available in the temperament, but not in the arrangement of the chord/scale -- so some chord/scale database entries are actually impossible in the temperament.
+   %% 
+   %%
    %% */
    fun {MakeFullDB Args}
       %% TODO: revise defaults: should generators and generatorFactors be required args?
