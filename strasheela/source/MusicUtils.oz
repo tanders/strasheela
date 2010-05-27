@@ -31,6 +31,8 @@ export
    KeynumToPC
    TransposeRatioIntoStandardOctave RatioToStandardOctaveFloat
    SortRatios SortRatios2
+   RatioToRatioPC OddLimit PrimeLimit
+   
    LevelToDB DBToLevel
    Freq0
    FullTuningTable
@@ -201,7 +203,43 @@ define
       end
    end
 
+
+   /* %% Transposes ratios Nom#Denom (pair if ints) into the octave 1#1 to 2#1. Returns ratio (pair of ints).
+   %% */
+   fun {RatioToRatioPC Nom#Denom}
+      Ratio_F = {GUtils.ratioToFloat Nom#Denom}
+   in
+      if Ratio_F > 2.0
+      then {RatioToRatioPC if {IsEven Nom}
+			   then (Nom div 2)#Denom
+			   else Nom#(Denom * 2)
+			   end}
+      elseif Ratio_F < 1.0
+      then {RatioToRatioPC if {IsEven Denom}
+			   then Nom#(Denom div 2)
+			   else (Nom * 2)#Denom
+			   end}
+      else Nom#Denom
+      end
+   end
+   /** %% Returns the odd limit of Ratio (pair of ints).
+   %% Restriction: ratio is in lowest terms.
+   %% */
+   fun {OddLimit Ratio}
+      Nom#Denom = {RatioToRatioPC Ratio}
+   in
+      {Sort {Filter [Nom Denom] IsOdd} Value.'>'}.1
+   end
    
+   /** %% Returns the prime limit of Ratio (pair of ints).
+   %% */
+   fun {PrimeLimit Nom#Denom}
+   %    Nom#Denom = {RatioToRatioPC Ratio}
+   % in
+      {Sort [{List.last {GUtils.primeFactors Nom}}
+	     {List.last {GUtils.primeFactors Denom}}]
+       Value.'>'}.1
+   end
 
    
    /** %% Converts a linear amplitude level L into an logarithmic amplitude (decibels).  LRel is the relativ full level.
