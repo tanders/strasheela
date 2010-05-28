@@ -21,7 +21,7 @@
     - [[../examples/Counterpoint-Examples/Counterpoint-22ET.oz][Counterpoint-22ET.oz]]: Added 22 ET counterpoint examples
 
   - Minor additions
-    - Fenv.renderAndPlayMidiFile now supports flexible microtonal MIDI output using pitchbend
+    - Fenv.makeRenderAndPlayMidiFile_Scala has been added (for microtonal output to statically returned MIDI instruments, e.g., with Scala file support). Also, Fenv.renderAndPlayMidiFile now supports flexible microtonal MIDI output using pitchbend
     - Added pitch unit mHz (Millihertz)
     - GUtils: added IsEqual, RecursiveRatio, PrimeFactors
     - GUtils.toProc: refactored version now supports optional arguments with default values 
