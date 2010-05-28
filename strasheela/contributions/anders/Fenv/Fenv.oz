@@ -53,7 +53,7 @@ export
    
    FenvToMidiCC ItemFenvToMidiCC
    ItemFenvsToMidiCC ItemTempoCurveToMidi
-   RenderAndPlayMidiFile
+   RenderAndPlayMidiFile MakeRenderAndPlayMidiFile_Scala
    
 prepare
    FenvType = {Name.new}
@@ -755,7 +755,7 @@ define
    end
 
    
-   /** %% Expects a temporal item which defines fenvs in a info-tag 'fenvs', and returns a list of continuous MIDI controller events for all its fenvs. Each fenvs is defined by a pair Controller#Fenv, where Controller can take all values defined for FenvToMidiCC. Fenvs directly specify the controller values (e.g., if Controller is pitchBend, then the Fenv range is 0.0 to 16383.0, and the value 8192.0 means no pitchbend). Note that for any controller only a single Fenv should be defined at any time (otherwise they conflict with each other).
+   /** %% Expects a temporal item which defines fenvs in an info-tag 'fenvs', and returns a list of continuous MIDI controller events for all its fenvs. Each fenvs is defined by a pair Controller#Fenv, where Controller can take all values defined for FenvToMidiCC. Fenvs directly specify the controller values (e.g., if Controller is pitchBend, then the Fenv range is 0.0 to 16383.0, and the value 8192.0 means no pitchbend). Note that for any controller only a single Fenv should be defined at any time (otherwise they conflict with each other).
    %% Example: fenvs((cc#1)#{Fenv.linearFenv [[0.0 0.0] [1.0 127.0]]}) 
    %%
    %% Args:
@@ -826,28 +826,33 @@ define
    %%
    %% Supported score format:
    %% 
-   %% The info-tag 'channel', given to a temporal item, sets the MIDI channel for this item and all contained items. Example: channel(0). If a channel is defined multiple times, then a setting in a lower hierarchical level overwrites higher-level settings.
+   %% The info-tag 'channel', given to a note or temporal container, sets the MIDI channel for this item and all contained items. Example: channel(0). If a channel is defined multiple times, then a setting in a lower hierarchical level overwrites higher-level settings.
    %%
-   %% The info-tag 'program', given to a temporal item, results in a program change message with the specified program number at the beginning of the item. Example: program(64). Many instruments number patches from 1 to 128 rather than the 0 to 127 actually used within MIDI files. When interpreting ProgramNum values, note that they may be one less than the patch numbers given in an instrument's documentation.
+   %% The info-tag 'program', given to a note or temporal container, results in a program change message with the specified program number at the beginning of the item. Example: program(64) given to a sequential container changes the program at the beginning of the container (note that programs are not automatically sitched back). Remember that many MIDI instruments number their patches (programs) from 1 to 128 rather than the range 0 to 127 actually used within MIDI files. When interpreting ProgramNum values, note that they may be one less than the patch numbers given in an instrument's documentation.
    %%
-   %% The info-tag 'fenvs', given to a note or temporal container, specifies a tuple of continuous controllers for the duration this item. Each Fenv spec is a pair Controller#Fenv, where Controller is defined as for Fenv.fenvToMidiCC. Example: (cc#1)#MyFenv. Fenvs directly specify the controller values (e.g., if Controller is pitchBend, then the Fenv range is 0.0 to 16383.0, and the value 8192.0 means no pitchbend). Note that for any controller only a single Fenv should be defined at any time (otherwise they conflict with each other).
+   %% With the info-tag 'fenvs', given to a note or temporal container, you can specify a tuple of continuous controllers for the duration this item. Each Fenv spec is a pair Controller#Fenv, where Controller is defined as for Fenv.fenvToMidiCC. Example: fenvs((cc#1)#MyFenv). Fenvs directly specify the controller values (e.g., if Controller is pitchBend, then the Fenv range is 0.0 to 16383.0, and the value 8192.0 means no pitchbend). Note that for any controller only a single Fenv should be defined at any time (otherwise they conflict with each other).
    %%
-   %% The info-tag 'timeshift', given to a temporal container, specifies a time shift function (a fenv). Example: timeshift(MyTimeshiftFenv). Time shift values are specified as time value offsets in the present timeUnit. For example, if a note has the start time 42 and its container specifies a time shift fenv with the y-value -1.0 corresponding to the start time of this note, then the MIDI note on happens at time 41. Hierarchical nesting of time shift functions is supported: if in the example above this note is recursively contained in other containers which also specify a time shift fenv, then their y-values for the note are added to the note's start time as well. Time shift fenvs also affect the timing of CC fenvs.
+   %% The info-tag 'timeshift': see doc of Out.midi.outputMidiFile.
    %%
    %% The info-tag 'globaltempo', given to a temporal container, specifies a tempo curve (a fenv) and is output as MIDI tempo events. Example: globaltempo(MyTempoFenv). Tempo values are specified in BPM. Due to restrictions of the MIDI protocoll, only a single global tempo is supported (note that sequencers may restrict the import of such data in a MIDI files). If multiple tempi are defined "in parallel" or nested, then "conflicting" MIDI tempo events are output.
    %%
    %% All arguments of Out.midi.renderAndPlayMidiFile are supported. RenderAndPlayMidiFile is defined by calling Out.midi.renderAndPlayMidiFile with special clauses (namely for the tests isNote, and Score.isTemporalContainer). Clauses given to RenderAndPlayMidiFile are again appended at the beginning of the list of clauses (and so potentially overwrite the clauses defined by this procedure).
    %%
-   %% Additional arguments.
-   %% ccsPerSecond: how many continuous controller events are created per second for every Fenv (the spacing of CC events may be affected).
-   %% resolution (default 2): pitchbend resolution in semitones. Its default value 2 corresponds to the standard pitch bend range of -2..2 semitones, i.e., 4096 steps/100 cents.
-   %% channelDistributions (default unit): Microtonal pitches are detuned by pitch bend, i.e. always all notes of a given channel are detuned. This tuple of lists specifies which score channel (midi note param, info tag or default 0) is output to which actual output channel. For example, for distributing the score channel 0 over the actual channels 0-7 set channelDistributions to unit(0: [0 1 2 3 4 5 6 7]). The number of output channels (8 in the example) should correspond to the maximum number of simultaneous notes in the score channel (0 in the example). Score channels for which no output channels are specified are output to themselves and thus are only suitable for a single monophonic voice. By default, no output channels are specified at all, so there should only be a monophonic voice per MIDI channel. Currently, only 16 MIDI chans are supported in total (no multiple ports).
+   %% Args:
    %%
-   %% NOTE: timing/spacing of continuous controller events and tempo curves etc. are _not_ affected by timeshift fenvs, i.e. CC events remain evenly distributed (but timeshift curves etc may shift the start and end time of whole fenvs together with its event).
+   %% 'ccsPerSecond' (float, default 2.0): how many continuous controller events are created per second for every Fenv (the spacing of CC events may be affected).
+   %% 'ccsPerEvent' (float or false, default false): how many continuous controller events are created per event. If this argument is not false, then its setting overwrites arg 'ccsPerSecond'.
+   %% 'resolution' (default 2): pitchbend resolution in semitones. Its default value 2 corresponds to the standard pitch bend range of -2..2 semitones, i.e., 4096 steps/100 cents.
+   %% 'channelDistributions' (record of lists with only int features including 0, default unit): Microtonal pitches are detuned by pitch bend, i.e. always all notes of a given channel are detuned. This arg specifies which score channel (midi note param, info tag or default 0) is output to which actual output channel. For example, for distributing the score channel 0 over the actual channels 0-7 set channelDistributions to unit(0: [0 1 2 3 4 5 6 7]). The number of output channels (8 in the example) should correspond to the maximum number of simultaneous notes in the score channel (0 in the example). Score channels for which no output channels are specified are output to themselves and thus are only suitable for a single monophonic voice. By default, no output channels are specified at all, so pitchbend always changes all notes of a channel (fine for microtonal music with only a monophonic voice per MIDI channel). Currently, only 16 MIDI chans are supported in total (no multiple ports).
    %%
-   %% NOTE: currently, microtonal pitchbend and pitchbend given explicitly as fenv overwrite each other.
+   %% Additionally, the args of Out.midi.outputMidiFile are supported.
+   %%
+   %% NOTE: microtonal pitchbend and pitchbend given explicitly as fenv overwrite each other.
+   %%
    %% */
-   %% Probably, it is a good thing that CC etc are not affected by timeshift functions, as it is more efficient.
+   %%
+   %% Probably, it is a good thing that the "spacing" of CC etc are not affected by timeshift functions, as it is more efficient.
+   %%
    proc {RenderAndPlayMidiFile MyScore Args}
       Defaults = unit(%% Process containers for output as well
 		      scoreToEventsArgs:unit(test:fun {$ X}
@@ -858,6 +863,7 @@ define
 		      track:2
 		      %% new args
 		      ccsPerSecond:10.0
+		      ccsPerEvent:false 
 		      resolution: 2
 		      channelDistributions: unit)
       As = {Adjoin Defaults Args}
@@ -880,11 +886,17 @@ define
 	 LastChanPositions.ScoreChan := NextPos
 	 {Nth DistroChans LastPos}
       end
+      fun {GetCCsPerSecond EventDur}
+	 if As.ccsPerEvent \= false 
+	 then As.ccsPerEvent / EventDur 
+	 else As.ccsPerSecond
+	 end
+      end
    in
       {Out.midi.renderAndPlayMidiFile MyScore
        {Adjoin
 	%% remove args not supported by Out.midi.renderAndPlayMidiFile
-	{Record.subtractList As [ccsPerSecond]}
+	{Record.subtractList As [ccsPerSecond resolution channelDistributions]}
 	unit(clauses:
 		{Append As.clauses 
 		 [%% Note output: output Micro-CC message, note on/off, and all its fenvs (if defined)
@@ -903,16 +915,17 @@ define
 			[{Out.midi.noteToPitchbend N unit(channel:Chan)}]
 			{Out.midi.noteToMidi N unit(channel:Chan
 						    round:Round)}
-			%% TODO: shift pitch bend fenv
+			%% ?? TODO: shift pitch bend fenv
 			{ItemFenvsToMidiCC N unit(channel:Chan
-						  ccsPerSecond:As.ccsPerSecond)}]
+						  ccsPerSecond: {GetCCsPerSecond {N getDurationInSeconds($)}})}]
 		       Append}
 		   end
-		  %% Container with fenv(s) output: output all its fenvs, and tempo curve (if defined)
+		  %% Container with fenv(s) output: output all its fenvs, program change messages, and tempo curve (if defined)
 		  Score.isTemporalContainer
 		  #fun {$ C}
 		      Chan = {Out.midi.getChannel C}
 		      Progam = {C getInfoRecord($ program)}
+		      CCsPerSecond = {GetCCsPerSecond {C getDurationInSeconds($)}}
 		   in
 		      {LUtils.accum
 		       [if Progam==nil then nil
@@ -921,15 +934,139 @@ define
 			     {Out.midi.beatsToTicks {C getStartTimeInSeconds($)}}
 			     Chan Progam.1}]
 			end
-		       {ItemFenvsToMidiCC C
-			unit(channel:Chan
-			     ccsPerSecond:As.ccsPerSecond)}
-		       {ItemTempoCurveToMidi C
-			unit(ccsPerSecond:As.ccsPerSecond)}]
+		       {ItemFenvsToMidiCC C unit(channel:Chan
+						 ccsPerSecond:CCsPerSecond)}
+		       {ItemTempoCurveToMidi C unit(ccsPerSecond:CCsPerSecond)}]
 		       Append}
 		   end
 		 ]}
 	    )}}
+   end
+
+   local
+      /** %% Expects note N and a TemperamentMapping (see MakeRenderAndPlayMidiFile_Scala doc). Returns a pair Pitch#ChanOffset (pair of ints), where Pitch is the MIDI note pitch to output and ChanOffset the channel offset that is added to output this Pitch to the correctly retuned channel.
+      %% */
+      fun {NoteToMidiPitch_Scala N TemperamentMapping}
+	 %% PC measured in PitchesPerOctave
+	 PC = {N getPitchClass($)}
+	 Oct = {N getOctave($)}
+      in
+	 if {Not {HasFeature TemperamentMapping PC}}
+	 then {Exception.raiseError
+	       strasheela(failedRequirement PC "Pitch class not contained in temperament mapping "#TemperamentMapping)}
+	    nil % never returned
+	 else
+	    %% PC measured in 12-TET
+	    MidiPC#ChanOffset = TemperamentMapping.PC
+	 in
+	    ((Oct+1) * 12 + MidiPC) # ChanOffset
+	 end
+      end
+   in
+      /** %% MakeRenderAndPlayMidiFile_Scala returns a procedure for outputting microtonal music for MIDI instruments with statically detuned MIDI pitch classes (e.g. with a Scala file). For outputting more than 12 tones per octave, MakeRenderAndPlayMidiFile_Scala assumes that pitches are distributed over multiple MIDI channels with different tunings. The returned function customises RenderAndPlayMidiFile.
+      %%
+      %% Supported score format: see RenderAndPlayMidiFile doc. The behaviour for the following info-tags is changed compared with Fenv.renderAndPlayMidiFile.
+      %% The info-tag 'channel', given to a note or temporal container, sets the MIDI channels (plural!) for this item and all contained items. Because the function returned by MakeRenderAndPlayMidiFile distributes microtonal pitches over multiple MIDI channels, a list of multiple channels should be specified. Example: channel([0 1]). If a channel is defined multiple times, then a setting in a lower hierarchical level overwrites higher-level settings.
+      %% 
+      %% The argument TemperamentMapping (record with int feats and pair values, required arg) specifies the mapping of tempered Strasheela pitch classes (unit of measurement depends on PitchesPerOctave) to pairs MidiPC#ChanOffset, where MidiPC is the corresponding MIDI pitch class and ChanOffset is the channel offset that should be added to output this pitch class to the correctly retuned channel. For example, if you implement 24-TET with your MIDI instrument by 12-TET in a first channel and a second 12-TET transposed up by 50 cent in a second channel, then the 24-TET PC 1 (C raised by 50 cent) would be mapped to the  MidiPC#ChanOffset pair of 0#1 (PC 0 on the second channel, which is raised by 50 cent). In other words, TemperamentMapping for 24-TET could be defined as follows
+      unit(0:0#0 1:0#1 2:1#0 3:1#1 4:2#0 ...)
+      %%
+      %% optional Args (to both MakeRenderAndPlayMidiFile_Scala and the returned procedure, see doc of Fenv.renderAndPlayMidiFile for further args):
+      %%
+      %% 'file_postfix' (default nil): VS that is appended at end of the output filename. It is intended to clearly denote the Scale tuning file for the resulting MIDI file.
+      %%
+      %%
+      %% NOTE: MakeRenderAndPlayMidiFile_Scala should not be used with MIDI notes (instances of Out.midi.midiNoteMixin), as their channel parameter would confuse the channel mapping. 
+      %% */
+      fun {MakeRenderAndPlayMidiFile_Scala TemperamentMapping Args}
+	 Default = unit(file:"test"
+			file_postfix: nil
+			ccsPerSecond:10.0
+			ccsPerEvent:false
+			clauses:nil)
+	 As = {Adjoin Default Args}
+      in
+	 proc {$ MyScore Args2}
+	    As2 = {Adjoin As Args2}
+	    fun {GetCCsPerSecond EventDur}
+	       if As2.ccsPerEvent \= false 
+	       then As2.ccsPerEvent / EventDur 
+	       else As2.ccsPerSecond
+	       end
+	    end
+	    /** %% Expects a TemperamentMapping (see MakeRenderAndPlayMidiFile_Scala doc) and returns a MIDI note output function for a note clause.
+	    %% */
+	    %% def copied from Fenv.renderAndPlayMidiFile, and pitch mapping added
+	    %%
+	    %% TODO: revise Args processing
+	    fun {MakeNoteToMIDI_Scala TemperamentMapping Args}
+	       fun {$ N}
+		  ChanAux = {Out.midi.getChannel N}
+		  Chans = if ChanAux==nil then 0
+			  elseif {IsList ChanAux} then ChanAux
+			  else [ChanAux] end
+		  Progam = {N getInfoRecord($ program)}
+		  NoteOffOffset = ~0.01
+		  MidiPitch#ChanOffset = {NoteToMidiPitch_Scala N TemperamentMapping}
+		  NoteChan = Chans.1 + ChanOffset
+	       in
+		  {LUtils.accum
+		   [if Progam==nil then nil
+		    else
+		       {Map Chans
+			fun {$ Chan}
+			   [{Out.midi.makeProgramChange Args.track
+			     {Out.midi.beatsToTicks {N getStartTimeInSeconds($)}}
+			     Chan Progam.1}]
+			end}
+		    end
+		    {Out.midi.noteToUserEvent N
+		     fun {$ Track Start _ /* Channel */}
+			EndTime = {Out.midi.beatsToTicks
+				   {N getEndTimeInSeconds($)} + NoteOffOffset}
+			Velocity = {FloatToInt {N getAmplitudeInVelocity($)}}
+		     in
+			%% output a list of MIDI events 
+			[{Out.midi.makeNoteOn Track Start NoteChan MidiPitch Velocity}
+			 {Out.midi.makeNoteOff Track EndTime NoteChan MidiPitch Args.noteOffVelocity}]
+		     end
+		     Args}
+		    {Map Chans
+		     fun {$ Chan}
+			{ItemFenvsToMidiCC N
+			 unit(channel:Chan
+			      ccsPerSecond: {GetCCsPerSecond {N getDurationInSeconds($)}})}
+		     end}]
+		   Append}
+	       end
+	    end
+	 in
+	    {RenderAndPlayMidiFile MyScore
+	     {Adjoin As2
+	      unit(removeQuestionableNoteoffs: false
+		   file: As2.file#As2.file_postfix
+		   clauses: {Append As2.clauses
+			     [%% overwrites note clause
+			      isNote#{MakeNoteToMIDI_Scala TemperamentMapping As2}
+			      %% CC fenvs in chords are output
+% 			      HS.score.isChord
+% 			      #fun {$ C}
+% 				  ChanAux = {Out.midi.getChannel C}
+% 				  Chans = if ChanAux==nil then 0
+% 					  elseif {IsList ChanAux} then ChanAux
+% 					  else [ChanAux] end
+% 			       in
+% 				  {Map Chans
+% 				   fun {$ Chan}
+% 				      {ItemFenvsToMidiCC C
+% 				       unit(channel:Chan
+% 					    ccsPerSecond: {GetCCsPerSecond {C getDurationInSeconds($)}})}
+% 				   end}
+% 			       end
+			     ]})
+	     }}
+	 end
+      end
    end
 
    
