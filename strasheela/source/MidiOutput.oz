@@ -449,6 +449,12 @@ define
 
 
    /** %% Creates a MIDI file from MyScore as defined in Spec (see below). OutputMidiFile creates a CSV file which is like an event list (i.e. only a single track is supported) and this file is then transformed into a MIDI file by csvmidi.
+   %%
+   %% Supported score format:
+   %% 
+   %% The info-tag 'timeshift', given to a temporal item, specifies a time shift function (a fenv). Example: timeshift(MyTimeshiftFenv). Time shift values are specified as time value offsets in the present timeUnit. For example, if a note has the start time 42 and its container specifies a time shift fenv with the y-value -1.0 corresponding to the start time of this note, then the MIDI note on happens at time 41. Hierarchical nesting of time shift functions is supported: if in the example above this note is recursively contained in other containers which also specify a time shift fenv, then their y-values for the note are added to the note's start time as well.
+   %% NOTE: Time shift fenvs also affect the timing of CC fenvs. However, the "spacing" (ccsPerSecond) of continuous controller events and tempo curves etc. are _not_ affected by timeshift fenvs, i.e. CC events remain evenly distributed. Timeshift curves etc only shift the start and end time of whole fenvs together with its event.
+   %%
    %% The user can control the transformation process by specifing transformation clauses. The format of such clauses is explain in the documentation of Out.scoreToEvents. In OutputMidiFile, the transformation function of each clause must return a list of MIDI events, which are created with functions like MakeNoteOn or MakeCC. This list can contain any MIDI events which correspond to the score object matching the clause (e.g., for a note, the returned MIDI events may include note-on and note-off events, pitchbend, aftertouch, and CC events etc.). However, if the argument removeQuestionableNoteoffs is true, then there must be at maximum a single noteOn event is present in this list and it is coupled with a corresponding noteOff event. See the documentation of ScoreToEvents_Midi for information on the meaning of removeQuestionableNoteoffs. 
    %%
    %% The default clauses are a transformation where only notes (either instances of Score.note or any subclasses such as MidiNote) are output. Clauses given with the 'clauses' argument are appended before the default clauses (so if you add a clause for MIDI notes, then the default clause still works for other notes).
@@ -477,6 +483,8 @@ define
    %% !! The present implementation interprets score as an event list (thus only a single track). An alternative definition could interpret the hierarchic structure to deduce tracks. But how should that be done? Shall the score have some fixed hierarchic structure for this purpose (e.g. an obligatory sim container as toplevel)? This can probably be done by a special clauses def which processes the containers instead of the midi notes.. 
    %%
    %% ?? shall I give default channel (for non-midi notes) or track as args? (how to access that arg in funs in arg clauses?)
+   %%
+   %% Time shifting is implemented directly in Score.timeParameter.
    proc {OutputMidiFile MyScore Spec}
       DefaultSpec
       = unit(file:"test"
@@ -1012,7 +1020,7 @@ define
 %    end
 
    
-   /** %% Returns the MIDI channel for the temporal item X (an integer). For a midi note, the channel is defined by its respective parameter. Otherwise, the channel is defined as an info tag of the form channel(Chan) either in X or in some temporal container of X. If no channel definition is found, then 0 is returned (i.e. 0 is the default MIDI channel).
+   /** %% Returns the MIDI channel (an integer) for the temporal item X. For a midi note, the channel is defined by its respective parameter. Otherwise, the channel is defined as an info tag of the form channel(Chan) either in X or in some temporal container of X. If no channel definition is found, then 0 is returned (i.e. 0 is the default MIDI channel).
    %% */
    %% Possible efficiency issue: the same search for containers with channel def is done over and over. I may consider memoizing the found channel for an item 
    fun {GetChannel X}
