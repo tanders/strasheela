@@ -953,7 +953,7 @@ define
       in
 	 if {Not {HasFeature TemperamentMapping PC}}
 	 then {Exception.raiseError
-	       strasheela(failedRequirement PC "Pitch class not contained in temperament mapping "#TemperamentMapping)}
+	       strasheela(failedRequirement PC "Pitch class not contained in current temperament.")}
 	    nil % never returned
 	 else
 	    %% PC measured in 12-TET
@@ -979,11 +979,14 @@ define
       %% NOTE: MakeRenderAndPlayMidiFile_Scala should not be used with MIDI notes (instances of Out.midi.midiNoteMixin), as their channel parameter would confuse the channel mapping. 
       %% */
       fun {MakeRenderAndPlayMidiFile_Scala TemperamentMapping Args}
-	 Default = unit(file:"test"
-			file_postfix: nil
+	 Default = unit(file_postfix: nil
+			%% 
+			file:"test"
 			ccsPerSecond:10.0
 			ccsPerEvent:false
-			clauses:nil)
+			clauses:nil
+			noteOffVelocity:0
+			track:2)
 	 As = {Adjoin Default Args}
       in
 	 proc {$ MyScore Args2}
@@ -1013,7 +1016,7 @@ define
 		  {LUtils.accum
 		   [if Progam==nil then nil
 		    else
-		       {Map Chans
+		       {LUtils.mappend Chans
 			fun {$ Chan}
 			   [{Out.midi.makeProgramChange Args.track
 			     {Out.midi.beatsToTicks {N getStartTimeInSeconds($)}}
@@ -1028,10 +1031,11 @@ define
 		     in
 			%% output a list of MIDI events 
 			[{Out.midi.makeNoteOn Track Start NoteChan MidiPitch Velocity}
+			 %% BUG: Args.noteOffVelocity -- Feat not in Args
 			 {Out.midi.makeNoteOff Track EndTime NoteChan MidiPitch Args.noteOffVelocity}]
 		     end
 		     Args}
-		    {Map Chans
+		    {LUtils.mappend Chans
 		     fun {$ Chan}
 			{ItemFenvsToMidiCC N
 			 unit(channel:Chan
@@ -1056,7 +1060,7 @@ define
 % 					  elseif {IsList ChanAux} then ChanAux
 % 					  else [ChanAux] end
 % 			       in
-% 				  {Map Chans
+% 				  {LUtils.mappend Chans
 % 				   fun {$ Chan}
 % 				      {ItemFenvsToMidiCC C
 % 				       unit(channel:Chan
