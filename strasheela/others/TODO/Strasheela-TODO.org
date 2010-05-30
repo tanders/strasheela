@@ -2,7 +2,7 @@
 
 * Strasheela release
 
-** TODO Heuristic constraints support				     :URGENT:
+** Heuristic constraints support
 
 
 *** Add heuristic defs to functor H
