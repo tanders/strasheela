@@ -26,6 +26,7 @@ import
    
 export
    KeynumToFreq FreqToKeynum
+   IsET GetPitchesPerOctave
    PitchToMidi
    RatioToKeynumInterval % RatioToCent
    KeynumToPC
@@ -133,7 +134,9 @@ define
 	       {GUtils.warnGUI
 		"Conflict between size of tuning table ("#FullTable.size#") and pitch unit ("#PitchUnit#")!"}
 	    end
-	    Result = (FullTable.period * {IntToFloat Octave} + FullTable.(PC + 1)) / 100.0
+	    %% ?? BUG: PC + 1 ?
+	    % Result = (FullTable.period * {IntToFloat Octave} + FullTable.(PC + 1)) / 100.0
+	    Result = (FullTable.period * {IntToFloat Octave} + FullTable.PC) / 100.0
 	 end
       end
    end
@@ -256,19 +259,26 @@ define
    /** %% Expects a tuning table declaration (see Init.setTuningTable for format) and returns a full tuning table used for pitch computation. The returned full table is a record which contains only pitches measured in cent, has 0.0 added as first table value, and has the two features size and period added.   
    %% */
    fun {FullTuningTable TuningTable}
-      Size = {Width TuningTable}
-      FullTable =  {List.toTuple unit
-		    0.0 | {Map {Record.toList TuningTable}
-			   fun {$ X}
-			      case X of _#_ 
-			      then {RatioToKeynumInterval X 1200.0}
-			      else X
-			      end
-			   end}}
+      PureTable = {Record.subtractList TuningTable [size period]}
+      FullTable = {Adjoin unit(0: 0.0)
+		   {Record.map PureTable
+		    fun {$ X}
+		       case X of _#_ 
+		       then {RatioToKeynumInterval X 1200.0}
+		       else X
+		       end
+		    end}}
    in
       {Adjoin FullTable
-       unit(size:Size
-	    period:FullTable.(Size+1))}
+       unit(size: if {HasFeature TuningTable size}
+		  then TuningTable.size
+		  else {Width TuningTable}
+		  end
+	    %% NOTE: ?? Required that this is given? Should always be 1200.0 anyway...
+	    period: if {HasFeature TuningTable period}
+		    then TuningTable.period
+		    else FullTable.{LUtils.findBest {Arity PureTable} Value.'>'}
+		    end)}
    end
 
    /** %% MakeNoteLengthsTable creates a list which maps symbolic note lengths to duration values. Expects the duration of a beat (i.e. the timeUnit is beats(Beat)) and a list of tuplet fractions to take into consideration (e.g., [3 5] denotes triplets and quintuplets). The function returns a list of pairs NotationI#DurI. NotationI is denotes a symbolic note length as a virtual string, and DurI is the corresponding duration (an int). 
