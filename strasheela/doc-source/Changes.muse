@@ -52,7 +52,7 @@
   - Further bug fixes and changes
     - Oz primitives like IsRecord, IsAtom etc. block on kinded variables (undetermined FD and FS vars), which could cause blocking of various Strasheela definitions. Now Strasheela always uses its new own GUtils.isRecord and GUtils.isAtom etc. which do not have this problem
     - Removed redundant (and ambiguous) pitch unit 'keynumber'. Default pitch unit is now 'midi' (equivalent to et12). 
-    - MUtils: added PitchToMidi
+    - MUtils: added PitchToMidi, IsET, GetPitchesPerOctave
     - Score: Fixed bug for TimeMixin method findSimultaneousItem in case object is not contained in any container
     - Score: removed IsET GetPitchesPerOctave
     - Lilypond output: if score started with offset time, then this leading rest was ignored in the Lilypond output (now fixed). Also, score now by default wrapped in braces, and default Lilypond version updated to "2.12.0".
