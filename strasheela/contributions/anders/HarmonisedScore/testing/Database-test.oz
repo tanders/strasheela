@@ -363,7 +363,7 @@ declare
 
 {HS.db.allTemperamentIntervals {HS.db.getTemperament} unit}
 
-{HS.db.allTemperamentIntervals {HS.db.getTemperament} unit(minRepetition: 4)}
+{HS.db.allTemperamentIntervals {HS.db.getTemperament} unit(minOccurrences: 4)}
 
 
 
