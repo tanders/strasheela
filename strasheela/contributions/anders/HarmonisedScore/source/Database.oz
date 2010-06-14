@@ -252,11 +252,11 @@ define
 			   [temperament:&lt;Temperament&gt;])
       &lt;PCGroupDB&gt; ==:: unit(&lt;PCGroupEntry&gt;+)
       &lt;PCGroupEntry&gt; ==:: unit(pitchClasses:&lt;IntList&gt;
-			       roots:&lt;IntList&gt;
-			       [&lt;FeatureValuePair&gt;*]
-			       [comment:&lt;Value&gt;])
+				     roots:&lt;IntList&gt;
+				     [&lt;FeatureValuePair&gt;*]
+				     [comment:&lt;Value&gt;])
       &lt;IntervalDB&gt; ==:: unit([&lt;FeatureValuePair&gt;+]
-			     [comment:&lt;Value&gt;])
+				   [comment:&lt;Value&gt;])
       &lt;PitchesPerOctave&gt; ==:: &lt;Int&gt;
       &lt;AccidentalOffset&gt; ==:: &lt;Int&gt;
       &lt;OctaveDomain&gt; ==:: &lt;Int&gt;#&lt;Int&gt;
@@ -287,7 +287,7 @@ define
 	    MissingFeats = {Filter {Arity
 				    {Record.subtractList Optional_DB_Setters
 				     %% Regular temperament feats not compulsory, even if PitchesPerOctave \= 12
-				    [generators generatorFactors generatorFactorsOffset temperament]}}
+				     [generators generatorFactors generatorFactorsOffset temperament]}}
 			    fun {$ Feat} {Not {HasFeature NewDB Feat}} end}
 	 in
 	    if MissingFeats \= nil then
@@ -297,7 +297,7 @@ define
 % 	    {Browse 'HS database setting: non-default PitchesPerOctave, so only explicitly specified database features are set. The following features are set to _'#MissingFeats} 
 % 	       {ForAll MissingFeats
 % 		proc {$ Feat} {Optional_DB_Setters.Feat unit} end}
- 	    end
+	    end
 	    %% set explicitly given feats
 	    {Record.forAllInd Optional_DB_Setters
 	     proc {$ Feat Setter}
@@ -487,170 +487,176 @@ define
    
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-local
-   /** %% Returns the rounding error of rounding a pitch class float into a pitch class int. The meaning of PC (a float) depends on KeysPerOctave (a float). The error is returned in cent (a float).
-   %% */
-   fun {PCError PC KeysPerOctave}
-      fun {ToCent X}
-	 (X / KeysPerOctave) * 1200.0
-      end
-   in
-      ~{ToCent (PC - {Round PC})}
-   end
-   /** %% Transform Ratio (either a float or a fraction specification in the form &lt;Int&gt;#&lt;Int&gt;) into a pitch class interval (an int) depending on KeysPerOctave (an int).
-   %% */
-   fun {RatioToPC Ratio KeysPerOctave Temperament}
-      if Temperament==unit orelse Temperament==nil
-      then
-	 %% equal temperament
-	 KeysPerOctave_F = {IntToFloat KeysPerOctave} 
-	 PC = {MUtils.keynumToPC {MUtils.ratioToKeynumInterval Ratio
-				  KeysPerOctave_F}
-	       KeysPerOctave_F}
+   local
+      /** %% Returns the rounding error of rounding a pitch class float into a pitch class int. The meaning of PC (a float) depends on KeysPerOctave (a float). The error is returned in cent (a float).
+      %% */
+      fun {PCError PC KeysPerOctave}
+	 fun {ToCent X}
+	    (X / KeysPerOctave) * 1200.0
+	 end
       in
-	 unit(ratio:Ratio pc:{FloatToInt PC} ji_error:{PCError PC KeysPerOctave_F}#cent)
-      else
-	 %% regular temperament
-	 PC#Error = {RatioToRegularTemperamentPC Ratio 
-		     unit(temperament:Temperament
-			  pitchesPerOctave:KeysPerOctave
-			  showError:true)}
-	 Unit = case KeysPerOctave of
-		   1200 then cent
-		[] 120000 then millicent
-		else KeysPerOctave#keysPerOctave
-		end
-      in
-	 unit(ratio:Ratio pc:PC ji_error:Error#Unit)
+	 ~{ToCent (PC - {Round PC})}
       end
-   end
-   fun {RatiosToPCs Ratios KeysPerOctave Temperament}
-      {Map Ratios
-       fun {$ X} {RatioToPC X KeysPerOctave Temperament} end}
-   end
-   %% X is either a float or a fraction specification in the form &lt;Int&gt;#&lt;Int&gt;
-   fun {IsRatio X}
-      case X
-      of Nom#Denom  
-      then if {IsInt Nom} andthen {IsInt Denom}
-	   then true
-	   else false
-	   end
-      else if {IsFloat X}
-	   then true
-	   else false
-	   end
-      end
-   end
-   fun {IsIntList X}
-      {IsList X} andthen {List.all X IsInt}
-   end
-   fun {IsRatioList X}
-      {IsList X} andthen {List.all X IsRatio}
-   end
-   %%
-   MyName = {NewName}
-in
-   /** %% Processes an entry for a HS database (e.g. for a chord database). HS depends on pitches as keynumbers and pitch classes (all represented by integers or FD ints), both depending on KeysPerOctave. RatiosInDBEntryToPCs2, on the other hand, permits also ratios (floats or fractions specs) which are transformed and rounded to the nearest pitch class (a ratio representing an interval exceeding an octave is transformed into an interval within an octave). 
-   %% MyDBEntry is a record with arbitrary features. Each feature value is either an interger, a list of integers, a ratio spec (either a float or a fraction spec in the form &lt;Int&gt;#&lt;Int&gt;), or a list of ratio specs. The output contains each integer/lists of integers unchanged but substitutes each ratio/list of ratios by the nearest pitch class interval (an integer), depending on KeysPerOctave (an integer).
-   %% Additionally, a comment feature in MyDBEntry with arbitrary value is permitted. The returned record has always a comment feature with a record as value. The explanation of the comment in the return value is a bit complicated and depends on MyDBEntry. For features in MyDBEntry with a ratio, collect in comment the ratio, its pitch class plus the ji_error (i.e. the difference between the JI ratio and the pitch class it is mapped to), for other features in Test keep the orig value. In case MyDBEntry contains a feature comment as well, this value is preserved: in case MyDBEntry.comment is a record as well, its features are added to the comment record of the result. However, in case MyDBEntry.comment contains a feature 'comment' with the same feature as a feature in MyDBEntry itself, then the feature of MyDBEntry.comment is preferred. See the test file for examples.
-   %% Because the comment feature of the returned DB entry is changed, the function WasRatiosDBEntry recognises a DB entry processed by RatiosInDBEntryToPCs2.
-   %%
-   %% NB: in HS.db, an OctaveDomain is also specified as &lt;Int&gt;#&lt;Int&gt;, but must not be mixed up with a fraction spec.
-   %% 
-   %%
-   %% BUG: reported error signs not correct -- check JI signs (you know what to expect..)
-   %% */
-   %%
-   %%
-   proc {RatiosInDBEntryToPCs MyDBEntry KeysPerOctave ?Result}
-      {RatiosInDBEntryToPCs2 MyDBEntry KeysPerOctave unit ?Result}
-   end
-   /** %% RatiosInDBEntryToPCs2 is a generalised version of RatiosInDBEntryToPCs that additionally expects Temperament, a sorted tuple of integers expressing a regular temperament (as explected by RatioToRegularTemperamentPC). If Temperament is unit (i.e. an empty tuple), then it defaults to an equal temperament depending on KeysPerOctave (which is the behaviour of RatiosInDBEntryToPCs).
-   %% */
-   proc {RatiosInDBEntryToPCs2 MyDBEntry KeysPerOctave Temperament ?Result}
-	 % Comment = {Record.clone MyDBEntry}
-      Comment = {RecordC.tell {Label MyDBEntry}}
-      %% sort PC ratios to start with root -- important for GetDegree (e.g. for adaptive JI) 
-      MyDBEntry_Sorted
-      = {Adjoin MyDBEntry
-	 {Adjoin
-	  if {HasFeature MyDBEntry pitchClasses}
-	  then
-	     PCs = MyDBEntry.pitchClasses
-	     Root = MyDBEntry.roots.1
-	  in
-	     unit(pitchClasses:
-		     if {All PCs GUtils.isRatio}
-		     then
-			%% sorted in ascending order and (first) root is always first.
-			%% important for correct adaptive JI (so HS.score.getDegree returns currect ratio position)
-			{MUtils.sortRatios2 PCs Root}
-		     else RootPos = {LUtils.position Root PCs} in
-			{Append {List.drop PCs RootPos-1} {List.take PCs RootPos-1}} 
-		     end)
-	  else unit
-	  end
-	  {Label MyDBEntry}}}
-   in
-      if {HasFeature MyDBEntry_Sorted comment}
-      then
-	 if {GUtils.isRecord MyDBEntry_Sorted.comment} andthen {Width MyDBEntry_Sorted.comment} > 0
-	 then {Record.forAllInd MyDBEntry_Sorted.comment
-	       proc {$ Feat X}
-		  Comment ^ Feat = X
-	       end}
+      /** %% Transform Ratio (either a float or a fraction specification in the form &lt;Int&gt;#&lt;Int&gt;) into a pitch class interval (an int) depending on KeysPerOctave (an int).
+      %% */
+      fun {RatioToPC Ratio KeysPerOctave Temperament MinOccurrences}
+	 if Temperament==unit orelse Temperament==nil
+	 then
+	    %% equal temperament
+	    KeysPerOctave_F = {IntToFloat KeysPerOctave} 
+	    PC = {MUtils.keynumToPC {MUtils.ratioToKeynumInterval Ratio
+				     KeysPerOctave_F}
+		  KeysPerOctave_F}
+	 in
+	    unit(ratio:Ratio pc:{FloatToInt PC} ji_error:{PCError PC KeysPerOctave_F}#cent)
 	 else
-	    Comment ^ comment = MyDBEntry_Sorted.comment
+	    %% regular temperament
+	    PC#Error = {RatioToRegularTemperamentPC Ratio 
+			unit(temperament:Temperament
+			     pitchesPerOctave:KeysPerOctave
+			     minOccurrences: MinOccurrences
+			     showError:true)}
+	    Unit = case KeysPerOctave of
+		      1200 then cent
+		   [] 120000 then millicent
+		   else KeysPerOctave#keysPerOctave
+		   end
+	 in
+	    unit(ratio:Ratio pc:PC ji_error:Error#Unit)
 	 end
       end
-      Result = {Record.clone {Adjoin
-			      unit(comment:_) %% compulsary feat 'comment'
-			      MyDBEntry_Sorted}}
+      fun {RatiosToPCs Ratios KeysPerOctave Temperament MinOccurrences}
+	 {Map Ratios
+	  fun {$ X} {RatioToPC X KeysPerOctave Temperament MinOccurrences} end}
+      end
+      %% X is either a float or a fraction specification in the form &lt;Int&gt;#&lt;Int&gt;
+      fun {IsRatio X}
+	 case X
+	 of Nom#Denom  
+	 then if {IsInt Nom} andthen {IsInt Denom}
+	      then true
+	      else false
+	      end
+	 else if {IsFloat X}
+	      then true
+	      else false
+	      end
+	 end
+      end
+      fun {IsIntList X}
+	 {IsList X} andthen {List.all X IsInt}
+      end
+      fun {IsRatioList X}
+	 {IsList X} andthen {List.all X IsRatio}
+      end
       %%
-      {Record.forAllInd {Record.subtract MyDBEntry_Sorted comment}
-       proc {$ Feat X}
-	  proc {BindComment Val}
-	     CommentFeat = Comment ^ Feat
-	  in
-	     %% for features which are contained in both MyDBEntry_Sorted
-	     %% and MyDBEntry_Sorted.comment, the (already
-	     %% determined) value of MyDBEntry_Sorted.comment is kept
-	     if {IsFree CommentFeat}
-	     then CommentFeat = Val
+      MyName = {NewName}
+   in
+      /** %% Processes an entry for a HS database (e.g. for a chord database). HS depends on pitches as keynumbers and pitch classes (all represented by integers or FD ints), both depending on KeysPerOctave. RatiosInDBEntryToPCs2, on the other hand, permits also ratios (floats or fractions specs) which are transformed and rounded to the nearest pitch class (a ratio representing an interval exceeding an octave is transformed into an interval within an octave). 
+      %% MyDBEntry is a record with arbitrary features. Each feature value is either an interger, a list of integers, a ratio spec (either a float or a fraction spec in the form &lt;Int&gt;#&lt;Int&gt;), or a list of ratio specs. The output contains each integer/lists of integers unchanged but substitutes each ratio/list of ratios by the nearest pitch class interval (an integer), depending on KeysPerOctave (an integer).
+      %% Additionally, a comment feature in MyDBEntry with arbitrary value is permitted. The returned record has always a comment feature with a record as value. The explanation of the comment in the return value is a bit complicated and depends on MyDBEntry. For features in MyDBEntry with a ratio, collect in comment the ratio, its pitch class plus the ji_error (i.e. the difference between the JI ratio and the pitch class it is mapped to), for other features in Test keep the orig value. In case MyDBEntry contains a feature comment as well, this value is preserved: in case MyDBEntry.comment is a record as well, its features are added to the comment record of the result. However, in case MyDBEntry.comment contains a feature 'comment' with the same feature as a feature in MyDBEntry itself, then the feature of MyDBEntry.comment is preferred. See the test file for examples.
+      %% Because the comment feature of the returned DB entry is changed, the function WasRatiosDBEntry recognises a DB entry processed by RatiosInDBEntryToPCs2.
+      %%
+      %% NB: in HS.db, an OctaveDomain is also specified as &lt;Int&gt;#&lt;Int&gt;, but must not be mixed up with a fraction spec.
+      %% 
+      %%
+      %% BUG: reported error signs not correct -- check JI signs (you know what to expect..)
+      %% */
+      %%
+      %%
+      proc {RatiosInDBEntryToPCs MyDBEntry KeysPerOctave ?Result}
+	 {RatiosInDBEntryToPCs2 MyDBEntry KeysPerOctave unit unit ?Result}
+      end
+      /** %% RatiosInDBEntryToPCs2 is a generalised version of RatiosInDBEntryToPCs that additionally expects Temperament, a sorted tuple of integers expressing a regular temperament (as explected by RatioToRegularTemperamentPC). If Temperament is unit (i.e. an empty tuple), then it defaults to an equal temperament depending on KeysPerOctave (which is the behaviour of RatiosInDBEntryToPCs).
+      %%
+      %% Args:
+      %% 'minOccurrences': the minimum number an interval needs to occur in order to be taken into account. 
+      %% */
+      proc {RatiosInDBEntryToPCs2 MyDBEntry KeysPerOctave Temperament Args ?Result}
+	 Default = unit(minOccurrences: 4)
+	 As = {Adjoin Default Args}
+	 % Comment = {Record.clone MyDBEntry}
+	 Comment = {RecordC.tell {Label MyDBEntry}}
+	 %% sort PC ratios to start with root -- important for GetDegree (e.g. for adaptive JI) 
+	 MyDBEntry_Sorted
+	 = {Adjoin MyDBEntry
+	    {Adjoin
+	     if {HasFeature MyDBEntry pitchClasses}
+	     then
+		PCs = MyDBEntry.pitchClasses
+		Root = MyDBEntry.roots.1
+	     in
+		unit(pitchClasses:
+			if {All PCs GUtils.isRatio}
+			then
+			   %% sorted in ascending order and (first) root is always first.
+			   %% important for correct adaptive JI (so HS.score.getDegree returns currect ratio position)
+			   {MUtils.sortRatios2 PCs Root}
+			else RootPos = {LUtils.position Root PCs} in
+			   {Append {List.drop PCs RootPos-1} {List.take PCs RootPos-1}} 
+			end)
+	     else unit
 	     end
-	  end
-       in
-	  if {IsInt X} orelse {IsIntList X}
-	  then
-	     {BindComment X}
-	     Result.Feat = X
-	  elseif {IsRatio X}
-	  then Aux = {RatioToPC X KeysPerOctave Temperament} in
-	     {BindComment Aux}
-	     Result.Feat = Aux.pc
-	  elseif {IsRatioList X}
-	  then Aux = {RatiosToPCs X KeysPerOctave Temperament} in
-	     {BindComment Aux}
-	     Result.Feat = {Map Aux fun {$ X} X.pc end}
-	  else raise unsupportedValue(RatiosInDBEntryToPCs2 MyDBEntry_Sorted value:X) end
-	  end
-       end}
-      Result.comment = Comment
-      %% add feature for recognising processed records
-      Comment ^ MyName = unit
-      %% close comment
-      {RecordC.width Comment} = {Length {RecordC.reflectArity Comment}}
-   end
-   %%
-   /** %% Returns true if MyDBEntry was processed by RatiosInDBEntryToPCs2.
-   %% */
-   fun {WasRatiosDBEntry MyDBEntry}
-      {HasFeature MyDBEntry comment} andthen
-      {HasFeature MyDBEntry.comment MyName}
-   end
+	     {Label MyDBEntry}}}
+      in
+	 if {HasFeature MyDBEntry_Sorted comment}
+	 then
+	    if {GUtils.isRecord MyDBEntry_Sorted.comment} andthen {Width MyDBEntry_Sorted.comment} > 0
+	    then {Record.forAllInd MyDBEntry_Sorted.comment
+		  proc {$ Feat X}
+		     Comment ^ Feat = X
+		  end}
+	    else
+	       Comment ^ comment = MyDBEntry_Sorted.comment
+	    end
+	 end
+	 Result = {Record.clone {Adjoin
+				 unit(comment:_) %% compulsary feat 'comment'
+				 MyDBEntry_Sorted}}
+	 %%
+	 {Record.forAllInd {Record.subtract MyDBEntry_Sorted comment}
+	  proc {$ Feat X}
+	     proc {BindComment Val}
+		CommentFeat = Comment ^ Feat
+	     in
+		%% for features which are contained in both MyDBEntry_Sorted
+		%% and MyDBEntry_Sorted.comment, the (already
+		%% determined) value of MyDBEntry_Sorted.comment is kept
+		if {IsFree CommentFeat}
+		then CommentFeat = Val
+		end
+	     end
+	  in
+	     if {IsInt X} orelse {IsIntList X}
+	     then
+		{BindComment X}
+		Result.Feat = X
+	     elseif {IsRatio X}
+	     then Aux = {RatioToPC X KeysPerOctave Temperament As.minOccurrences} in
+		{BindComment Aux}
+		Result.Feat = Aux.pc
+	     elseif {IsRatioList X}
+	     then Aux = {RatiosToPCs X KeysPerOctave Temperament As.minOccurrences} in
+		{BindComment Aux}
+		Result.Feat = {Map Aux fun {$ X} X.pc end}
+	     else raise unsupportedValue(RatiosInDBEntryToPCs2 MyDBEntry_Sorted value:X) end
+	     end
+	  end}
+	 Result.comment = Comment
+	 %% add feature for recognising processed records
+	 Comment ^ MyName = unit
+	 %% close comment
+	 {RecordC.width Comment} = {Length {RecordC.reflectArity Comment}}
+      end
+      %%
+      /** %% Returns true if MyDBEntry was processed by RatiosInDBEntryToPCs2.
+      %% */
+      fun {WasRatiosDBEntry MyDBEntry}
+	 {HasFeature MyDBEntry comment} andthen
+	 {HasFeature MyDBEntry.comment MyName}
+      end
 
-end
+   end
 
 
    
@@ -832,7 +838,7 @@ end
 		%% NOTE: simplicitation: just take first root (when is there more than one actually in any database?)
 		{GUtils.ratioToFloat UntransposedRootRatio.1}}
 	    else
-	      PitchesPerOctave = {GetPitchesPerOctave}
+	       PitchesPerOctave = {GetPitchesPerOctave}
 	    in
 	       %% root defined as PC
 	       %%
@@ -900,15 +906,17 @@ end
        Value.'=<'}
    end
 
-   /** %% Expects a regular temperament spec Temperament (tuple of ints) and returns a tuple that contains all intervals contained in this temperament (remember that Temperament contains all intervals available from PC 0, but some intervals may only be available between other pitches).
+   /** %% Expects a regular temperament spec Temperament (tuple of ints) and returns a tuple that contains all intervals contained in this temperament (remember that Temperament contains all intervals available from PC 0, but in addition some intervals may only be available between other pitches).
    %%
    %% Args: 
-   %% 'minRepetition' (default 1): the minimum number an interval needs to occur in order to be included. 
-   %% 'pitchesPerOctave' (default {HS.db.getPitchesPerOctave}) the pitches per octave (i.e., pitch unit).
+   %% 'minOccurrences' (default 1): the minimum number an interval needs to occur in order to be included. 
+   %% 'pitchesPerOctave' (default {HS.db.getPitchesPerOctave}): the pitches per octave (i.e., pitch unit).
+   %% 'reportOccurrences' (default false): if true, AllTemperamentIntervals returns a completely different format that also reports the number of occurances of each interval in the temperament. AllTemperamentIntervals returns a record where the features are the intervals and the values are the number of occurrences.
    %% */
    fun {AllTemperamentIntervals Temperament Args}
-      Default = unit(minRepetition: 1
-		     pitchesPerOctave: {GetPitchesPerOctave})
+      Default = unit(minOccurrences: 1
+		     pitchesPerOctave: {GetPitchesPerOctave}
+		     reportOccurrences:false)
       As = {Adjoin Default Args}
       Temperament_L = {Record.toList Temperament}
       PcNumbers = {NewDictionary}
@@ -925,11 +933,19 @@ end
 	      {Dictionary.put PcNumbers Interval OldNo+1} 
 	   end}
        end}
-      %% remove entries in PcNumbers with too low As.minRepetition and output as tuple
-      {List.toTuple {Label Temperament}
-       {Arity 
-	{Record.filter {Dictionary.toRecord unit PcNumbers}
-	 fun {$ Number} Number >= As.minRepetition end}}}
+      local
+	 %% PcNumbers as record and without PC that are repeated less than As.minRepetition
+	 PcNumbers_R = {Record.filter {Dictionary.toRecord unit PcNumbers}
+			fun {$ Number} Number >= As.minOccurrences end}
+      in
+	 if As.reportOccurrences
+	    %% output as record where the features are the intervals and the values are the number of Occurrences
+	 then PcNumbers_R
+	 else %% output as tuple of intervals
+	    {List.toTuple {Label Temperament}
+	     {Arity  PcNumbers_R}}
+	 end
+      end
    end
 
 
@@ -965,6 +981,7 @@ end
       %% 'temperament' (default {HS.db.getTemperament}): a tuplet of pitch classes (ints), sorted in ascending order, which constitute the temperament.
       %% 'pitchesPerOctave' (default {HS.db.getPitchesPerOctave}): denotes the unit of measurement for the pitch classes of the temperament.
       %% 'showError' (Boolean, default false): if true, RatioToRegularTemperamentPC returns tuple PC#Error, where Error is the difference between the JI interval and the returned tempered interval (unit of measurement depends on Arg pitchesPerOctave).
+      %% 'minOccurrences': the minimum number an interval needs to occur in order to be taken into account. 
       %%
       %% See examples/RegularTemperaments.oz for usage examples.
       %% */
@@ -975,15 +992,16 @@ end
       fun {RatioToRegularTemperamentPC Ratio Args}
 	 Default = unit(temperament: {GetTemperament}
 			pitchesPerOctave:{GetPitchesPerOctave}
+			minOccurrences: 4
 			showError: false)
 	 As = {Adjoin Default Args}
 	 %% NOTE: this computation is done a lot of times with the same args -- use memoization?
 	 AllIntervals = {AllTemperamentIntervals As.temperament
-			unit(minRepetition: 4 %% TODO: make arg to database
-			     pitchesPerOctave: As.pitchesPerOctave)}
+			 unit(minOccurrences: As.minOccurrences
+			      pitchesPerOctave: As.pitchesPerOctave)}
 	 JI_PC = (({FloatToInt
-		  {MUtils.ratioToKeynumInterval Ratio
-		   {IntToFloat As.pitchesPerOctave}}}
+		    {MUtils.ratioToKeynumInterval Ratio
+		     {IntToFloat As.pitchesPerOctave}}}
 		   + As.pitchesPerOctave * 10) % avoid neg numbers
 		  mod As.pitchesPerOctave)
 	 TemperedPC = {FindClosest JI_PC
