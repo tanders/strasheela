@@ -411,7 +411,7 @@ define
    %% NOTE: grace notes after the root (using \aftergrace) are incompatible with HE notation, so I use plain grace and put the root behind
    %%
    proc {RenderAndShowLilypond MyScore Args}
-      Default = unit(pitchUnit: midi % et12 
+      Default = unit(pitchUnit: et12 % midi 
 		     %%
 		     pcsLilyNames: pcs(0:c 1:cis 2:d 3:'dis' 4:e 5:f
 				       6:fis 7:g 8:gis 9:a 10:ais 11:b)
@@ -428,7 +428,7 @@ define
 			      end
 		    )
       As1 = {Adjoin Default Args}
-      PitchesPerOctave = {Score.getPitchesPerOctave As1.pitchUnit}
+      PitchesPerOctave = {MUtils.getPitchesPerOctave As1.pitchUnit}
       fun {IsNote X}
 	 {X isNote($)} andthen 
 	 {X getPitchUnit($)} == As1.pitchUnit
