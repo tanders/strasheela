@@ -2,7 +2,7 @@
 
 /** %% Defines databases for chords, scales and intervals in arbitrary octave-repeating regular temperaments.
 %%
-%% NOTE: recommendation when using a regular temperament: reduce the domain of all pitch classes (e.g., of notes, chord/scale roots and transpositions) to the tones of the current temperament. This is not of course necessary if all pitch classes are already reduced to some determined scale.
+%% NOTE: recommendation when using a regular temperament: reduce the domain of all pitch classes (e.g., of notes, chord/scale roots and transpositions) to the tones of the current temperament using ReduceToTemperament. This is of course not necessary if all pitch classes are already reduced to some determined scale that only consists of temperament PC (which is not automatically the case with all scales and transpositions!).
 %% */
 
 %%
@@ -31,6 +31,7 @@
 functor 
    
 import
+   FS
 %    Browser(browse:Browse) % for debugging
    GUtils at 'x-ozlib://anders/strasheela/source/GeneralUtils.ozf'
    LUtils at 'x-ozlib://anders/strasheela/source/ListUtils.ozf'
@@ -41,11 +42,34 @@ import
    RegT at '../RegularTemperament.ozf'
    
 export   
-%    fullDB:DB
-   
+
+   ReduceToTemperament
    MakeFullDB
 
+   %% TMP
+   % FilterDB
+
 define
+   
+
+   /** %% Reduces all chord/scale pitch class sets and roots as well as all note pitch classes to the pitch classes of the current temperament.
+   %% */
+   proc {ReduceToTemperament MyScore}
+      TemperamentFS = {GUtils.intsToFS {Record.toList {HS.db.getTemperament}}}
+   in
+      {ForAll {MyScore collect($ test:HS.score.isPitchClassCollection)}
+       proc {$ X}
+	  {FS.subset {X getPitchClasses($)} TemperamentFS}
+	  {FS.include {X getRoot($)} TemperamentFS}
+	  {FS.include {X getTransposition($)} TemperamentFS}
+       end}
+      {ForAll {MyScore collect($ test:HS.score.isPitchClassMixin)}
+       proc {$ X}
+	  {FS.include {X getPitchClass($)} TemperamentFS}
+       end}
+   end
+
+
    
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%
@@ -755,6 +779,7 @@ define
    %% 'generatorFactorsOffset' (default 0): See HS.db.makeRegularTemperament for details.
    %% 'pitchesPerOctave' (default 1200): See HS.db.makeRegularTemperament for details.
    %% 'maxError' (int): maximum error of any original JI pitch classes in a tempered chord/scale/interval. The error's unit of measurement depends on pitchesPerOctave. Any database entry with an approximation error that exceeds maxError is removed (reported at standard out).
+   %% 'minOccurrences': the minimum number an interval needs to occur in order to be taken into account. 
    %%
    %% 'chords'/'scales'/'intervals' (each tuple of records, default of each is unit): additional chord/scale/interval database entries that are appended before the entries defined internally in this functor.
    %% 'chordFeatures'/'scaleFeatures'/'intervalFeatures' (each list of atoms, default of each is nil): additional features required in database entries (example: essentialPitchClasses). Database entries that do not contain all the required features are removed from the output (reported at standard out).
@@ -780,6 +805,7 @@ define
 		     octaveDomain:0#9
 		     %% TODO: if not given, but pitchesPerOctave are given adjust automatically
 		     maxError:30 % unit depends on pitchesPerOctave
+		     minOccurrences: 4
 		     chords:unit
 		     scales:unit
 		     intervals:unit
@@ -797,7 +823,7 @@ define
 	 chordDB:{FilterDB {Record.map {Tuple.append As.chords Chords}
 			    fun {$ X}
 			       {HS.db.ratiosInDBEntryToPCs2 {ToStandardDeclaration X}
-				As.pitchesPerOctave Temperament}
+				As.pitchesPerOctave Temperament unit(minOccurrences: As.minOccurrences)}
 			    end}
 		  As.maxError
 		  {Append [pitchClasses roots comment] As.chordFeatures}
@@ -805,14 +831,16 @@ define
 	 scaleDB:{FilterDB {Record.map {Tuple.append As.scales Scales} 
 			    fun {$ X}
 			       {HS.db.ratiosInDBEntryToPCs2 {ToStandardDeclaration X}
-				As.pitchesPerOctave Temperament}
+				As.pitchesPerOctave Temperament unit(minOccurrences: As.minOccurrences)}
 			    end}
 		  As.maxError
 		  {Append [pitchClasses roots comment] As.scaleFeatures}
 		  [pitchClasses roots]}
 	 intervalDB:{FilterDB {Record.map {Tuple.append As.intervals Intervals} 
-			       fun {$ X} {HS.db.ratiosInDBEntryToPCs2 X As.pitchesPerOctave
-					  Temperament} end}
+			       fun {$ X}
+				  {HS.db.ratiosInDBEntryToPCs2 X
+				   As.pitchesPerOctave Temperament unit(minOccurrences: As.minOccurrences)}
+			       end}
 		     As.maxError
 		     {Append [interval comment] As.intervalFeatures}
 		     [interval]}
