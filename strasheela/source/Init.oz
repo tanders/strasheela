@@ -272,9 +272,15 @@ define
    local
       TuningTable = {NewCell nil}
    in
-      /** %% Globally sets the tuning table to Table. The tuning table is used by all output formats which use the (full) float returned by the pitch parameter method getValueInMidi (e.g. the note method getPitchInMidi, which is used by default by Csound and microtonal MIDI output). The format of the tuning table declaration is somewhat similar to the Scala scale file format (cf. http://www.xs4all.nl/~huygensf/scala/scl_format.html). Table is a tuple of pitch specs. A pitch spec is either a float (measured in cent) or a ratio notated Nom#Den. The first degree is implict (always 1/1 or 0.0). Also the size is implicit (the width of the tuple), in contrast to the Scala scale file format. The last table value is the period interval.
-      %% It is recommended to set the pitchUnit of notes to a value matching the size of the tuning table so that constraints on pitch classes etc work as expected (e.g., for a tuning table with 31 pitches per octave/period, the pitchUnit et31 is recommended).
-      %% */ 
+      /** %% Globally sets the tuning table to Table. The tuning table is used by all output formats which use the (full) float returned by the pitch parameter method getValueInMidi (e.g. the note method getPitchInMidi, which is used by default by Csound and microtonal MIDI output). The format of the tuning table declaration is somewhat similar to the Scala scale file format (cf. http://www.xs4all.nl/~huygensf/scala/scl_format.html). Table is a record of integer features (typically a tuple) of pitch specs. A pitch spec is either a float (measured in cent) or a ratio notated Nom#Den. The first degree is implict (always 1/1 or 0.0). The table value with the highest feature (i.e. the last value in a tuple) is the period interval.
+      %%
+      %% Optional features of Table
+      %% 'size' (an int): the pitch class interval that constitutes an octave. By default, the size is implicit (the width of Table).
+      %%
+      %% */
+      %%
+      %% ?? It is recommended to set the pitchUnit of notes to a value matching the size of the tuning table (e.g., for a tuning table with 31 pitches per octave/period, the pitchUnit et31 is recommended). Otherwise, the tuning of some pitch classes is undefined.
+      %%
       proc {SetTuningTable Table}
 	 TuningTable := {MUtils.fullTuningTable Table}
       end
