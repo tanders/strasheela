@@ -61,7 +61,8 @@ import
    SegsOut at 'source/Output.ozf'
    
 export
-   
+
+   MakeMotifIndexNote
    GetMotifIndexOfNote
    MakeParametersAccessor
    PitchContourAccessor
@@ -521,8 +522,10 @@ MakeCounterpoint_PatternMotifs_OffsetDurationPitchcontour
       proc {$ Akk Args}
 	 Ns = {Akk getItems($)}
 	 Ps = {Akk mapItems($ getPitch)}
+	 Durs = {Akk mapItems($ getDuration)}
       in
-	 {Pattern.allEqual {Akk mapItems($ getDuration)}}
+	 {Pattern.allEqual Durs}
+	 {Akk getDuration($)} = Durs.1 % necessary, strange..
 	 {Pattern.decreasing {Akk mapItems($ getPitch)}}
 	 if Args.rargs.minPitch \= false andthen Args.rargs.maxPitch \= false then 
 	    {HS.rules.restrictPitchDomain Ns Args.rargs.minPitch Args.rargs.maxPitch}
