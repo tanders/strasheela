@@ -16,7 +16,10 @@
 %% For further information see the documentation of Score.apply_H.
 %%
 
-
+%%
+%% NOTE: When using the default distribution strategies of the harmony extension (HS), then pitches are determined by propagation only. Instead, for efficiency reasons the search only visits pitch class and octave variables. In effect, constraining note pitches with heuristic constraints has no effect with these default distro strategies.
+%%
+%%
 
 declare
 
@@ -152,7 +155,9 @@ end
     %% Heuristic constraint application
     %%
     %% Heuristic pattern constraint: "follow" given fenv 
-    {H.followFenv PPs {Fenv.linearFenv [[0.0 57.0] [0.75 72.0] [1.0 60.0]]}
+    {H.followFenv PPs
+     {Fenv.linearFenv [[0.0 72.0] [0.75 57.0] [1.0 60.0]]}
+%      {Fenv.linearFenv [[0.0 57.0] [0.75 72.0] [1.0 60.0]]}
      1}
     %% Heuristic cycle pattern constraint (cycle length 4)
     {H.cycle PPs 4 1} 
