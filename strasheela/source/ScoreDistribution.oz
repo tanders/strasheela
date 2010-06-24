@@ -464,6 +464,7 @@ define
 				   {GUtils.randIntoRange {RandGen} 
 				    1 {Length BestDomValues}}}
 	    in
+% 	       %% TMP
 % 	       {Browse heuristic(Param#{Param getInfo($)}
 % 				 notePosition:{{Param getItem($)}
 % 					       getPosition($ {{Param getItem($)} getTemporalAspect($)})}
@@ -479,6 +480,7 @@ define
 	       Rand = {GUtils.randIntoRange {RandGen} % pseudo-random number generated here
 		       {FD.reflect.min Var} {FD.reflect.max Var}}
 	    in
+% 	       %% TMP
 % 	       {Browse default(Param#{Param getInfo($)}
 % 			       notePosition:{{Param getItem($)}
 % 					     getPosition($ {{Param getItem($)} getTemporalAspect($)})}
