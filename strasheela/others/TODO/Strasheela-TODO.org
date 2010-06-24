@@ -123,6 +123,15 @@ MyTestScore = {Score.makeScore
 
 * Strasheela design						    :STRASHEELA:
 
+
+** Pattern motifs: support for motif start parameter
+
+   This support was already added to the Indian Shruti demo for Ethno2, see 
+   [[file:~/Cubase/Ethno2-Demo/oz/Indian-Shrutis-Demo.oz]]
+
+   add this functionality somehow to Pattern.useMotifs
+   
+
 ** Regular Temperament as pitch (pitch class) representation
 
 *** TODO 
