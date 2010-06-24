@@ -221,10 +221,29 @@ define
       proc {SetNoteLengthsRecord Beat TupletFractions}
 	 NoteLengthsRecord := {MUtils.makeNoteLengthsRecord Beat TupletFractions}
       end
-      
-      /** %% Function expecting a symbolic duration name and returning the corresponding numeric duration depending on the global setting.
-      %% */
-      fun {SymbolicDurToInt Spec} @NoteLengthsRecord.Spec end
+
+      local
+	 /** %% Not efficient, but pairs are more convenient to notate than lists..
+	 %% */
+	 fun {PairRest Pair}
+	    {List.toTuple '#' {Record.toList Pair}.2}
+	 end
+      in
+	 /** %% Function expecting a symbolic duration name and returning the corresponding numeric duration depending on the global setting. Tied notes can be notated as pairs of symbolic duration names. If Spec is an integer, it is passed unchanged. 
+	 %% */
+	 fun {SymbolicDurToInt Spec}
+	    case Spec of '#'(...) then
+	       if {Width Spec} > 1 then 
+		  {SymbolicDurToInt Spec.1} + {SymbolicDurToInt {PairRest Spec}}
+	       else {SymbolicDurToInt Spec.1}
+	       end
+	    else 
+	       if {IsInt Spec} then Spec else
+		  @NoteLengthsRecord.Spec
+	       end
+	    end
+	 end
+      end
 
    end
 
