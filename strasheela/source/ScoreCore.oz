@@ -338,6 +338,11 @@ define
       meth setAttribute(A X)
 	 A <- X
       end
+      /** %% [destructive method, for experts only] Statefully sets the value of parameter Param to value X (there must be an attribute Param). Remember that the search itself is indented to be fully stateless.
+      %% */
+      meth setParameterValue(Param X)
+	 {@Param setAttribute(value X)}
+      end
       /** %% [destructive method] Adds X to list in attribute info. The tail of the list at attribute info is the info that was specified before with addInfo and was give at the init method (default is nil).
       %% */
       meth addInfo(X)
