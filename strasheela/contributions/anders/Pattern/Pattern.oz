@@ -676,15 +676,21 @@ define
    %% Important: for efficiency, the distribution strategy should visit early parameters with info tab 'motifIndex'. Constructors created by MakeIndexConstructor add this info tab to all index parameters.
    %% */
    fun {MakeIndexConstructor Constructor IndexParamNames}
-      {Score.makeConstructor Constructor
-       unit(addParameters: fn # fun {$}
-				   {Map IndexParamNames
-				    fun {$ ParamName}
-				       {New Score.parameter
-					init(info:motifIndex(ParamName)
-					     value:{FD.decl})}
-				    end}
-				end)}
+      fun {$ Args}
+	 AddedParams = {Map IndexParamNames
+			fun {$ ParamName}
+			   {New Score.parameter
+			    init(info:motifIndex(ParamName)
+				 value:{FD.decl})}
+			end}
+      in
+	 {Score.make2 
+	  {Adjoin Args unit(addParameters: if {HasFeature Args addParameters}
+					   then {Append Args.addParameters AddedParams}
+					   else AddedParams
+					   end)}
+	  unit(unit:Constructor)}
+      end
    end
    /** %% [aux for UseMotifs] Expects X, a score item with added index variable(s) and returns the index variable value (FD int) associated with the name IndexParamName (an atom), in other words the number of the motif to which X belongs. For example, all notes that are part of an instance of the motif which has been declared first have the motif index value 1 and so forth.
    %% */
