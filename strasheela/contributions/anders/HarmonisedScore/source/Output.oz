@@ -297,13 +297,14 @@ define
 			  12:'Cn')
 
    /** %% [Note markup function] Expects a note and returns a fomus settings record. The different of the pitch of MyNote and the closest 12-TET is annotated in cent.
+   %% TODO: make accuracy argument. Currently accuracy is in cent (i.e. integer) to simplify the notation.
    %% */
    fun {MakeCentOffset_FomusMarks MyNote}
       Midi = {MyNote getPitchInMidi($)}
-      CentOffset = (Midi - {Round Midi}) * 100.0
+      CentOffset = {FloatToInt (Midi - {Round Midi}) * 100.0}
    in
       %% Note: VirtualString.toAtom: atoms are not GC-ed
-      unit(marks: {VirtualString.toAtom 'x "'#CentOffset#'c"'})
+      unit(marks: [{VirtualString.toAtom 'x_ "'#CentOffset#'c"'}])
    end
    
    /** %% [Note markup function] Expects a note and returns a fomus settings record. Non-harmonic tones are marked with an x, and for all other score objects unit (no settings) is returned. 
@@ -312,7 +313,7 @@ define
       if {HS_Score.isInChordMixinForNote MyNote}
 	 andthen {MyNote getChords($)} \= nil
 	 andthen {MyNote isInChord($)} == 0
-      then unit(marks: 'x "x"')  % mark non-harmonic tones
+      then unit(marks: ['x "x"'])  % mark non-harmonic tones
 %       then unit(marks: 'xx "x"')  % mark non-harmonic tones: causes Fomus error
       else unit
       end
