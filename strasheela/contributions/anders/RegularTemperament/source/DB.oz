@@ -54,18 +54,29 @@ define
 
    /** %% Reduces all chord/scale pitch class sets and roots as well as all note pitch classes to the pitch classes of the current temperament.
    %% */
-   proc {ReduceToTemperament MyScore}
-      TemperamentFS = {GUtils.intsToFS {Record.toList {HS.db.getTemperament}}}
+   proc {ReduceToTemperament MyScore}MinOctave#MaxOctave = {HS.db.getOctaveDomain}
+      TemperamentPCs = {Record.toList {HS.db.getTemperament}}
+      TemperamentPC_FS = {GUtils.intsToFS TemperamentPCs}
+      MinOctave#MaxOctave = {HS.db.getOctaveDomain}
+      TemperamentPitch_FS = {GUtils.intsToFS
+			     {LUtils.mappend {List.number MinOctave MaxOctave 1}
+			      fun {$ Octave}
+				 {Map TemperamentPCs
+				  fun {$ TemperamentPC}
+				     TemperamentPC + ({HS.db.getPitchesPerOctave} * (Octave+1))
+				  end}
+			      end}}
    in
       {ForAll {MyScore collect($ test:HS.score.isPitchClassCollection)}
        proc {$ X}
-	  {FS.subset {X getPitchClasses($)} TemperamentFS}
-	  {FS.include {X getRoot($)} TemperamentFS}
-	  {FS.include {X getTransposition($)} TemperamentFS}
+	  {FS.subset {X getPitchClasses($)} TemperamentPC_FS}
+	  {FS.include {X getRoot($)} TemperamentPC_FS}
+	  {FS.include {X getTransposition($)} TemperamentPC_FS}
        end}
       {ForAll {MyScore collect($ test:HS.score.isPitchClassMixin)}
        proc {$ X}
-	  {FS.include {X getPitchClass($)} TemperamentFS}
+	  {FS.include {X getPitchClass($)} TemperamentPC_FS}
+	  {FS.include {X getPitch($)} TemperamentPitch_FS}
        end}
    end
 
@@ -778,6 +789,7 @@ define
    %% 'generatorFactors': list of generator factor specifications (pairs of ints). See HS.db.makeRegularTemperament for details.
    %% 'generatorFactorsOffset' (default 0): See HS.db.makeRegularTemperament for details.
    %% 'pitchesPerOctave' (default 1200): See HS.db.makeRegularTemperament for details.
+   %% 'removeFromTemperament' (default nil): list of pitch classes (ints, or ratios i.e. floats or pairs of ints) that would be part of the temperament as defined by 'generators' and 'generatorFactors' but that nevertheless should be excluded from the resulting temperament. 
    %% 'maxError' (int): maximum error of any original JI pitch classes in a tempered chord/scale/interval. The error's unit of measurement depends on pitchesPerOctave. Any database entry with an approximation error that exceeds maxError is removed (reported at standard out).
    %% 'minOccurrences': the minimum number an interval needs to occur in order to be taken into account. 
    %%
@@ -800,6 +812,7 @@ define
 		     generatorFactors:[~10#10 ~2#2]
 		     generatorFactorsOffset:0
 		     pitchesPerOctave:1200 % 120000
+		     removeFromTemperament: nil
 		     accidentalOffset:2*100 % TODO: revise	
 		     %% corresponds to MIDI pitch range 12-127+ (for pitchesPerOctave=12)
 		     octaveDomain:0#9
@@ -814,10 +827,24 @@ define
 		     intervalFeatures: nil
 		    )
       As = {Adjoin Default Args}
+      %% list
+      FullTemperament_L = {HS.db.makeRegularTemperament As.generators As.generatorFactors
+			   unit(generatorFactorsOffset: As.generatorFactorsOffset
+				pitchesPerOctave: As.pitchesPerOctave)}
+      %% tuple
+      FullTemperament_T = {List.toTuple unit FullTemperament_L}
+      RemoveFromTemperament_Ints = {Map As.removeFromTemperament
+				    fun {$ X}
+				       if {IsInt X} then X
+				       else {HS.db.ratioToRegularTemperamentPC X
+					     unit(temperament: FullTemperament_T
+						  pitchesPerOctave:As.pitchesPerOctave
+						  minOccurrences: As.minOccurrences)}
+				       end
+				    end}
       Temperament = {List.toTuple unit
-		     {HS.db.makeRegularTemperament As.generators As.generatorFactors
-		      unit(generatorFactorsOffset: As.generatorFactorsOffset
-			   pitchesPerOctave: As.pitchesPerOctave)}}
+		     {LUtils.remove FullTemperament_L
+		      fun {$ X} {Member X RemoveFromTemperament_Ints} end}}
    in
       unit(
 	 chordDB:{FilterDB {Record.map {Tuple.append As.chords Chords}
