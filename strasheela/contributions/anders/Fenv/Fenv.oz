@@ -45,7 +45,7 @@ export
    FenvSection
 
    Integrate
-   TempoCurveToTimeMap TempoCurveToTimeShift
+   TempoCurveToTimeMap TempoCurveToTimeShift TempoCurveToTimeShift_KeepingDur
    TimeShiftToTimeMap TimeMapToTimeShift
    ConcatenateTempoCurves
    
@@ -649,10 +649,35 @@ define
        Step}
    end
    /** %% ... this is probably not a good idea, but works for certain cases.
+   %%
+   %% ?? BUG: slower tempo changes between fixed min/max tempo values result in larger [absolute] tempo changes. 
    %% */
    fun {TempoCurveToTimeShift MyFenv Step}
       {TimeMapToTimeShift {TempoCurveToTimeMap MyFenv Step}}
    end
+
+   /** %% [Experimental] Transforms a fenv expressing a normalised tempo curve into a fenv expressing a normalised time shift function. However, the resulting time shift function is deformed such that it always ends in 0.0 (so it ends at score time).
+   %% NB: the resulting time shift function does not faithfully express the tempos of the given tempo curve (this depends on the arg mul, see below), but the overall shape is similar and therefore (hopefully) simplifies creating natural time shift functions expressing tempo changes. 
+   %%
+   %% Args:
+   %% step (default 0.01): stepsize for integration, see there.
+   %% mul (default 1.0): scaling factor for the resulting fenv. Try setting it to some specific note duration... Depends on intended tempo change and also on duration of phrase time shifted.
+   %%
+   %% ?? BUG: slower tempo changes between fixed min/max tempo values result in larger [absolute] tempo changes.
+   %% */
+   fun {TempoCurveToTimeShift_KeepingDur MyFenv Args}
+      Default = unit(step: 0.01
+		     mul: 1.0)
+      As = {Adjoin Default Args}
+      Fenv1 = {TempoCurveToTimeShift MyFenv As.step}
+      Fenv2 = {LinearFenv [[0.0 0.0] [1.0 ~{Fenv1 y($ 1.0)}]]}
+   in
+      {ScaleFenv
+       {ScaleFenv Fenv1 unit(add: Fenv2)}
+       unit(mul: As.mul)}
+   end
+
+   
 
    /** %% Expects a fenv representing a normalised time shift function and returns a fenv representing a normalised time map function. A time shift function expresses how much is added to a score time to yield a performance time, i.e., f(x) = 0 causes performance time to be score time. A normalised time map maps score time to performance time.
    %% Private Terminology: normalised time shift functions, time map functions and tempo curves: fenvs where x values denote the score time (usually of a temporal container) which is mapped into [0,1]: 0 corresponds to the container's start time, and 1 corresponds to the container's end time. See ContainerFenvY.
@@ -840,7 +865,7 @@ define
    %%
    %% Args:
    %%
-   %% 'ccsPerSecond' (float, default 2.0): how many continuous controller events are created per second for every Fenv (the spacing of CC events may be affected).
+   %% 'ccsPerSecond' (float, default 10.0): how many continuous controller events are created per second for every Fenv (the spacing of CC events may be affected).
    %% 'ccsPerEvent' (float or false, default false): how many continuous controller events are created per event. If this argument is not false, then its setting overwrites arg 'ccsPerSecond'.
    %% 'resolution' (default 2): pitchbend resolution in semitones. Its default value 2 corresponds to the standard pitch bend range of -2..2 semitones, i.e., 4096 steps/100 cents.
    %% 'channelDistributions' (record of lists with only int features including 0, default unit): Microtonal pitches are detuned by pitch bend, i.e. always all notes of a given channel are detuned. This arg specifies which score channel (midi note param, info tag or default 0) is output to which actual output channel. For example, for distributing the score channel 0 over the actual channels 0-7 set channelDistributions to unit(0: [0 1 2 3 4 5 6 7]). The number of output channels (8 in the example) should correspond to the maximum number of simultaneous notes in the score channel (0 in the example). Score channels for which no output channels are specified are output to themselves and thus are only suitable for a single monophonic voice. By default, no output channels are specified at all, so pitchbend always changes all notes of a channel (fine for microtonal music with only a monophonic voice per MIDI channel). Currently, only 16 MIDI chans are supported in total (no multiple ports).
@@ -916,8 +941,9 @@ define
 			{Out.midi.noteToMidi N unit(channel:Chan
 						    round:Round)}
 			%% ?? TODO: shift pitch bend fenv
-			{ItemFenvsToMidiCC N unit(channel:Chan
-						  ccsPerSecond: {GetCCsPerSecond {N getDurationInSeconds($)}})}]
+			{ItemFenvsToMidiCC N
+			 unit(channel:Chan
+			      ccsPerSecond: {GetCCsPerSecond {N getDurationInSeconds($)}})}]
 		       Append}
 		   end
 		  %% Container with fenv(s) output: output all its fenvs, program change messages, and tempo curve (if defined)
@@ -956,10 +982,13 @@ define
 	       strasheela(failedRequirement PC "Pitch class not contained in current temperament.")}
 	    nil % never returned
 	 else
-	    %% PC measured in 12-TET
-	    MidiPC#ChanOffset = TemperamentMapping.PC
-	 in
-	    ((Oct+1) * 12 + MidiPC) # ChanOffset
+	    %% MidiPC measured in 12-TET
+	    case TemperamentMapping.PC
+	    of MidiPC#ChanOffset
+	    then ((Oct+1) * 12 + MidiPC) # ChanOffset
+	    [] MidiPC#ChanOffset#OctaveOffset
+	    then ((Oct+1+OctaveOffset) * 12 + MidiPC) # ChanOffset
+	    end
 	 end
       end
    in
@@ -970,6 +999,8 @@ define
       %% 
       %% The argument TemperamentMapping (record with int feats and pair values, required arg) specifies the mapping of tempered Strasheela pitch classes (unit of measurement depends on PitchesPerOctave) to pairs MidiPC#ChanOffset, where MidiPC is the corresponding MIDI pitch class and ChanOffset is the channel offset that should be added to output this pitch class to the correctly retuned channel. For example, if you implement 24-TET with your MIDI instrument by 12-TET in a first channel and a second 12-TET transposed up by 50 cent in a second channel, then the 24-TET PC 1 (C raised by 50 cent) would be mapped to the  MidiPC#ChanOffset pair of 0#1 (PC 0 on the second channel, which is raised by 50 cent). In other words, TemperamentMapping for 24-TET could be defined as follows
       unit(0:0#0 1:0#1 2:1#0 3:1#1 4:2#0 ...)
+      %%
+      %% Optionally, an octave offset value can be given, so that a mapping specification becomes MidiPC#ChanOffset#OctaveOffset. For example, if OctaveOffset is ~1, then the resulting MIDI note will be transposed down by an octave.
       %%
       %% optional Args (to both MakeRenderAndPlayMidiFile_Scala and the returned procedure, see doc of Fenv.renderAndPlayMidiFile for further args):
       %%
