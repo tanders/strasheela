@@ -975,7 +975,7 @@ define
 	 end
       end
    in
-      /** %% Expects a Ratio and returns the corresponding tempered pitch class (an int), i.e. the pitch class that approximates the ratio closest in the temperament. Ratio is either pair of integers Nominator#Denomitator or a float that corresponds to the value of the ratio.
+      /** %% Expects a Ratio (float or pair of ints) and returns the corresponding tempered pitch class (an int), i.e. the pitch class that approximates the ratio closest in the temperament. Ratio is either pair of integers Nominator#Denomitator or a float that corresponds to the value of the ratio.
       %%
       %% Args:
       %% 'temperament' (default {HS.db.getTemperament}): a tuplet of pitch classes (ints), sorted in ascending order, which constitute the temperament.
