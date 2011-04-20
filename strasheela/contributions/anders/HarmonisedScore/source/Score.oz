@@ -2028,10 +2028,11 @@ define
 	 attr generators generatorFactors rank generatorFactorsOffset
 	    %% args generators and generatorFactors expect list of FD ints with same length; generatorFactors optional
 	 meth initRegularTemperamentMixinForNote(generators:Gs<={DB.getGenerators}
-						 generatorFactors:Fs<={FD.int {DB.getGeneratorFactors}}
+						 generatorFactors:Fs<={Map {DB.getGeneratorFactors}
+								       fun {$ D} {FD.int D} end}
 						 generatorFactorsOffset:Offset<={DB.getGeneratorFactorsOffset}) = M
 	    Default = unit(generatorFactorsDomain_1: Offset-12#Offset+12
-			    generatorFactorsDomain_others: Offset-2#Offset+2)
+			   generatorFactorsDomain_others: Offset-2#Offset+2)
 	 in
 % 	    end
 	    @rank = {Length Gs}  % number of generators
