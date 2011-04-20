@@ -442,56 +442,31 @@ define
 				 )
 			)
 
-   
-   PitchesPerOctave=22
-   AccidentalOffset=3		% NOTE: no double accidental
-   %% corresponds to MIDI pitch range 12-127+ (for pitchesPerOctave=12)
-   OctaveDomain=0#9
-
-   
-   local
-      /** %% Only transform atoms (e.g. 'C#'), but leave integers (PCs) and records (ratios, e.g., 1#1) untouched.
-      %% */
-      fun {Transform MyPitch}
-	 if {GUtils.isAtom MyPitch} then {ET22.pc MyPitch} 
-	 else MyPitch end
-      end
+     
+   /** %% Variant of HS.db.makeFullDB with a large number of implicitly defined chords and scales, as well as all intervals for 31-TET. 
+   %% */
+   fun {MakeFullDB Args}
+      Defaults = unit(accidentalOffset: 3		% NOTE: no double accidental
+		      %% corresponds to MIDI pitch range 12-127+ (for pitchesPerOctave=12)
+% 		      octaveDomain: 0#9
+		      chords:unit
+		      scales:unit
+		      intervals:unit)
+      As = {Adjoin Defaults Args}
    in
-      /** %% [Aux def] Expects a chord or scale declaration, and in case it contains symbolic notes names, these are replaced by their corresponding 22 ET pitch class.  
-      %% */
-      fun {ToStandardDeclaration Decl}
-	 {Record.mapInd Decl
-	  fun {$ Feat X}
-	     case Feat
-	     of pitchClasses then {Map X Transform}
-	     [] essentialPitchClasses then {Map X Transform}
-	     [] roots then {Map X Transform}
-	     else X
-	     end
-	  end}
-      end
+      {HS.db.makeFullDB
+       {Adjoin As unit(pitchesPerOctave: 22
+		       symbolToPc: ET22.pc
+		       chords: {Tuple.append As.chords Chords}
+		       scales: {Tuple.append As.scales Scales}
+		       intervals: {Tuple.append As.intervals Intervals})}}
    end
-
-  
 
    /** %% Full database declaration defined in this functor. 
    %% */
-   DB = unit(
-	   chordDB:{Record.map Chords
-		    fun {$ X}
-		       {HS.db.ratiosInDBEntryToPCs {ToStandardDeclaration X}
-			PitchesPerOctave}
-		    end}
-	   scaleDB:{Record.map Scales
-		    fun {$ X}
-		       {HS.db.ratiosInDBEntryToPCs {ToStandardDeclaration X}
-			  PitchesPerOctave}
-		    end}
-	   intervalDB:{Record.map Intervals
-		       fun {$ X} {HS.db.ratiosInDBEntryToPCs X PitchesPerOctave} end}
-	   pitchesPerOctave: PitchesPerOctave
-	   accidentalOffset: AccidentalOffset
-	   octaveDomain: OctaveDomain)
+   DB = {MakeFullDB unit}
+   
+
    
 end
 
