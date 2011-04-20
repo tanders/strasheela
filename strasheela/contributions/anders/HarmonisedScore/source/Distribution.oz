@@ -24,7 +24,8 @@ export
    MakeOrder_TimeScaleChordPitchclass
    MakeOrder_TimeScaleChordPitchclassOctave
    
-   IsNoTimepointNorPitch 
+   IsNoTimepointNorPitch IsNoPcCollectionTimeInterval
+   IsNoContainerNorTimepointNorPitchNorPcCollectionTimeInterval
    typewise: Typewise_Distro
    leftToRight_TypewiseTieBreaking: LeftToRight_TypewiseTieBreaking_Distro
    typewise_LeftToRightTieBreaking: Typewise_LeftToRightTieBreaking_Distro
@@ -91,6 +92,20 @@ define
 	{X hasThisInfo($ notePitch)})}
    end
 
+   /** %% [Parameter filtering test] returns false for time intervals (durations/offset times) of pitch class collections (chords/scale). In most cases, these parameters should be determined only by propagating the time intervals of the actual notes. 
+   %% */
+   fun {IsNoPcCollectionTimeInterval X}
+      {Not ({HS_Score.isPitchClassCollection {X getItem($)}} andthen
+	    {X isTimeInterval($)})}
+   end
+
+   /** %% [Parameter filtering test] Combines IsNoTimepointNorPitch and IsNoPcCollectionTimeInterval above, and returns false for all container parameters. This is the default filtering for all full distribution strategies exported by this functor.
+   %% */
+   fun {IsNoContainerNorTimepointNorPitchNorPcCollectionTimeInterval X}
+      {Not {{X getItem($)} isContainer($)}} andthen 
+      {IsNoTimepointNorPitch X} andthen
+      {IsNoPcCollectionTimeInterval X}
+   end
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%
@@ -137,7 +152,7 @@ define
 		  # [getIndexParameter getTranspositionParameter getRootParameter]]}
 	order:{SDistro.makeVisitMarkedParamsFirst
 	       {MakeOrder_TimeScaleChordPitchclass SDistro.dom}}
-	test: IsNoTimepointNorPitch)
+	test: IsNoContainerNorTimepointNorPitchNorPcCollectionTimeInterval)
 
    
    /** %% Defines a full distribution strategy for harmonic CSPs, which visits parameters type-wise, but breaks ties with a left-to-right variable ordering.
@@ -170,7 +185,7 @@ define
 		 ]}
 	order:{SDistro.makeVisitMarkedParamsFirst {MakeOrder_TimeScaleChordPitchclass
 						   {SDistro.makeLeftToRight SDistro.dom}}}
-	test: IsNoTimepointNorPitch)
+	test: IsNoContainerNorTimepointNorPitchNorPcCollectionTimeInterval)
 
    /** %% Defines a full distribution strategy for harmonic CSPs, where parameters are visited in the order of the start time of the associated items (left-to-right distribution), breaking ties by type checks.
    %%
@@ -183,7 +198,7 @@ define
 	  order: {SDistro.makeLeftToRight
 		  {MakeOrder_TimeScaleChordPitchclassOctave
 		   SDistro.dom}}
-	  test: IsNoTimepointNorPitch
+	  test: IsNoContainerNorTimepointNorPitchNorPcCollectionTimeInterval
 	 )
    
 
