@@ -167,6 +167,11 @@ define
 	      end
 	 end
       end
+      /** %% Returns true for strings that do not need single quotes for tuning them into atoms (e.g., only alphanumeric characters, starts with lower letter).
+      %% */
+      fun {IsCleanAtomString Cs}
+	 {Char.isLower Cs.1} andthen {All Cs Char.isAlNum} 
+      end
       /** %% Double any escape char (\)
       %% */
       fun {PreserveEscapes S}
@@ -188,7 +193,13 @@ define
 	    %% Strings should always be surrounded by double quotes, and all escape sequences should be preseved when printed
 	    %% same for atoms and virtual strings..
 	    if {IsString X} then "\""#{PreserveQuotes {PreserveEscapes X}}#"\""
-	    elseif {GUtils.isAtom X} then "'"#{PreserveEscapes {AtomToString X}}#"'"
+	    elseif {GUtils.isAtom X} then
+	       Cs = {AtomToString X}
+	    in 
+	       if {IsCleanAtomString Cs}
+	       then Cs
+	       else "'"#{PreserveEscapes Cs}#"'"
+	       end
 	    elseif {IsNumber X} then X
 	       %% Note: bytestrings would result in error..
 	    elseif {IsVirtualString X} then {Record.map X RecordToVS}
@@ -204,7 +215,7 @@ define
 		     fun {$ Feat}
 			if {IsNumber Feat}
 			then {RecordToVS X.Feat}
-			else Feat#":"#{RecordToVS X.Feat}
+			else {RecordToVS Feat}#":"#{RecordToVS X.Feat}
 			end
 		     end}}
 		  #")"
