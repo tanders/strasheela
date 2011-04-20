@@ -156,7 +156,9 @@ MyScore = {Score.makeScore
 	   unit}
 {MyScore wait}
 {Out.renderFomus MyScore
- unit(file:defaultTopology)}
+ unit(file:defaultTopology
+%       output:xml
+     )}
 
 
 
@@ -217,7 +219,9 @@ MyScore = {Score.makeScore
 	   unit}
 {MyScore wait}
 {Out.renderFomus MyScore
- unit(file:defaultTopology3)}
+ unit(file:defaultTopology3
+%       output:xml
+     )}
 
 
 %%%%
@@ -266,7 +270,7 @@ declare
 MyScore = {Score.makeScore
 	   sim(info: fomus(title: "My Composition"
 			   author: "Myself"
-			   keysig: dmaj % D major key 
+			   keysig: fmaj % F major key 
 % 			   'timesig-den': 8
 			   'timesig': '(3 4)' % 3/4 time signature
 			  )
@@ -275,7 +279,7 @@ MyScore = {Score.makeScore
 		seq(info: fomus(inst: violin)
 		    [note(duration:4 pitch:60 info:fomus(marks: "(..")) % marks are given as VS or list of VSs
 		     note(duration:4 pitch:59 info:fomus(marks: ["."]))
-		     note(duration:4 pitch:59 info:fomus(marks: ['-' '>']))
+		     note(duration:4 pitch:58 info:fomus(marks: ['-' '>']))
 		     note(duration:4 pitch:57 info:fomus(marks: ["^" "breath>"]))
 		     note(duration:4 pitch:55 info:fomus(% dyns: yes
 							 marks: ["..)"
@@ -289,7 +293,10 @@ MyScore = {Score.makeScore
 	       timeUnit:beats(4))
 	   unit}
 {MyScore wait}
-{Out.renderFomus MyScore unit}
+{Out.renderFomus MyScore
+ unit(file:additionalFomusCode
+      output:xml
+    )}
 
 
 
@@ -486,7 +493,7 @@ MyScore = {Score.makeScore
 					    note(duration:2
 						 pitch:67)])
 				 seq(offsetTime:4
-				     items:[seq([note(info:fomus('lily-insert-before': "\\new Staff")
+				     items:[seq([note(info:fomus('lily-insert': "\\new Staff")
 						      duration:2
 						      pitch:60)
 						 note(duration:2
@@ -500,7 +507,9 @@ MyScore = {Score.makeScore
 	   unit}
 {MyScore wait}
 {Out.renderFomus MyScore
- unit(file:explicitStaff)}
+ unit(file:explicitStaff
+%       output:xml
+     )}
 
 %%
 
@@ -513,7 +522,6 @@ MyScore = {Score.makeScore
 %% classes.
 %%
 
-%% BUG: !
 declare
 [ET31] = {ModuleLink ['x-ozlib://anders/strasheela/ET31/ET31.ozf']}
 {HS.db.setDB ET31.db.fullDB}
@@ -538,11 +546,12 @@ MyScore = {Score.makeScore
 %%
 {Out.renderFomus MyScore
  unit(file:enharmonicTest
+      output:xml
       eventClauses: [%% NOTE: comment out intended accidental format
 		     %% Version with quarter-tone accidentals
-		     {HS.out.makeNoteToFomusClause unit(table:ET31.out.fomusPCs_Quartertones)}
+		     % {HS.out.makeNoteToFomusClause unit(table:ET31.out.fomusPCs_Quartertones)}
 		     %% Version with double accidentals
-% 		     {HS.out.makeNoteToFomusClause unit(table:ET31.out.fomusPCs_DoubleAccs)}
+		     {HS.out.makeNoteToFomusClause unit(table:ET31.out.fomusPCs_DoubleAccs)}
 		    ])}
 
 % {Out.renderFomus MyScore
@@ -572,7 +581,7 @@ declare
 MyScore = {Score.makeScore
 	   sim([seq([chord(duration: 4
 			  index: {HS.db.getChordIndex 'major'}
-			   transposition: {HS.pc 'G|'})])
+			   transposition: {HS.pc 'G;'})])
 		seq([scale(duration: 4
 			  index: {HS.db.getScaleIndex 'major'}
 			   transposition: {HS.pc 'D|'})])
@@ -585,10 +594,17 @@ MyScore = {Score.makeScore
 %%
 {Out.renderFomus MyScore
  unit(file:"ChordAndScale"
+      % output:xml
+      %% Use either quartertones or double accidentals for notating 31-TET
+      %% The latter also works for Sibelius/Finale via MusicXML
+      %% NOTE: PC 29 always notated with quarter tone (B^) -- problem for MusicXML.
+      % eventClauses: [{HS.out.makeNoteToFomusClause unit(table:ET31.out.fomusPCs_DoubleAccs)}
+      % 		     {HS.out.makeChordToFomusClause unit(table:ET31.out.fomusPCs_DoubleAccs)}
+      % 		     {HS.out.makeScaleToFomusClause unit(table:ET31.out.fomusPCs_DoubleAccs)}]
       eventClauses: [{HS.out.makeNoteToFomusClause unit(table:ET31.out.fomusPCs_Quartertones)}
 		     {HS.out.makeChordToFomusClause unit(table:ET31.out.fomusPCs_Quartertones)}
-		     {HS.out.makeScaleToFomusClause unit(table:ET31.out.fomusPCs_Quartertones)}
-		    ])}
+		     {HS.out.makeScaleToFomusClause unit(table:ET31.out.fomusPCs_Quartertones)}]
+     )}
 
 %% NOTE: Before continuing with the next example, unset the 31-TET setting
 %% (i.e. set back the default setting)
@@ -606,6 +622,31 @@ MyChord = {Score.make chord(duration: 4
 	   unit(chord:HS.score.chord)}
 
 {IsVirtualString '[x "'#{HS.db.getName MyChord}#'"]'}
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%% Tied notes
+%%
+
+declare
+MyScore = {Score.makeScore
+	   sim([seq([note(duration: 5
+			  pitch: 60)
+		     note(duration: 7
+			  pitch: 62)
+		     note(duration: 9
+			  pitch: 64)])]
+	       startTime:0
+	       timeUnit:beats(4))
+	   unit}
+{MyScore wait}
+{Out.renderFomus MyScore
+ unit(file:tiedNotes
+%       output:xml
+     )}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%
@@ -652,7 +693,9 @@ BeatDivision = 6
 MyScore = {MakeScore Durations BeatDivision}
 {MyScore wait}
 {Out.renderFomus MyScore
- unit(file:'triplet-test')}
+ unit(file:'triplet-test'
+%       output:xml
+     )}
 
 
 declare
@@ -662,7 +705,9 @@ BeatDivision = 6
 MyScore = {MakeScore Durations BeatDivision}
 {MyScore wait}
 {Out.renderFomus MyScore
- unit(file:'triplet-test-2')}
+ unit(file:'triplet-test-2'
+%       output:xml
+     )}
 
 declare
 %% quintuplets
@@ -671,7 +716,9 @@ BeatDivision = 10
 MyScore = {MakeScore Durations BeatDivision}
 {MyScore wait}
 {Out.renderFomus MyScore
- unit(file:'quintuplet-test')}
+ unit(file:'quintuplet-test'
+%       output:xml
+     )}
 
 
 declare
