@@ -791,7 +791,7 @@ define
    %% 'pitchesPerOctave' (default 1200): See HS.db.makeRegularTemperament for details.
    %% 'removeFromTemperament' (default nil): list of pitch classes (ints, or ratios i.e. floats or pairs of ints) that would be part of the temperament as defined by 'generators' and 'generatorFactors' but that nevertheless should be excluded from the resulting temperament. 
    %% 'maxError' (int): maximum error of any original JI pitch classes in a tempered chord/scale/interval. The error's unit of measurement depends on pitchesPerOctave. Any database entry with an approximation error that exceeds maxError is removed (reported at standard out).
-   %% 'minOccurrences': the minimum number an interval needs to occur in order to be taken into account. 
+   %% 'minOccurrences': the minimum number an interval needs to occur in the regular temperament in order to be taken into account for forming chords etc. 
    %%
    %% 'chords'/'scales'/'intervals' (each tuple of records, default of each is unit): additional chord/scale/interval database entries that are appended before the entries defined internally in this functor.
    %% 'chordFeatures'/'scaleFeatures'/'intervalFeatures' (each list of atoms, default of each is nil): additional features required in database entries (example: essentialPitchClasses). Database entries that do not contain all the required features are removed from the output (reported at standard out).
