@@ -15,6 +15,8 @@
 
 * Strasheela examples					      :MAYBE:STRASHEELA:  
 
+  [[file:~/oz/music/Strasheela/private/examples/TODO.muse::title%20Examples%20TODO][file:~/oz/music/Strasheela/private/examples/TODO.muse::title Examples TODO]]
+
 ** Go through test files and collect examples there in files in examples folder :MAYBE:
 
    In particular, collect example files in contribution examples subfolders centrally in srasheela/examples (possibly in subfolders there)
@@ -434,6 +436,9 @@ Abstract applied constraint, so the effect is controllable
 
 
 * Strasheela Bugs							 :MAYBE:
+
+  [[file:~/oz/music/Strasheela/strasheela/trunk/strasheela/others/TODO/01-BUGS.oz]]
+
 
 ** Revise collect method (graph mode)					 :MAYBE:
 
@@ -1230,7 +1235,44 @@ piwik_log(piwik_action_name, piwik_idsite, piwik_url);
 
 * Strasheela design					      :MAYBE:STRASHEELA:
 
-** Continue Fomus export
+** !! Gradual freezing of solution (Orjans idea)     
+
+   Specify number of notes (or variables??) to be frozen (counted from "left to right")
+
+   Unify these notes/variables of previous solution with corresponding notes/variables of new partial solution 
+
+   Note: 
+   - This approach requires left-to-right distro strategy (which continues working partial solution)
+   - I cannot use existing methods like collect to access notes in question (collect accesses depth-first, not left-to-right)
+   - Previous solution must be stored outside of script, and should be fully determined (otherwise warning) -- all unified variables outside script must be determined! 
+
+   Todo:
+   - Try to define note accessor function that makes use of existing distribution order function definitions, then I can also use different variable orderings strategies 
+
+
+** Parallel search
+
+*** Parallel search in PWGL
+
+    Multiple searches are executed in parallel. If some search is not as efficient as specified, then it will be stopped/killed.
+
+    Default required efficiency (user-definable)
+    60 sec: 50 % of variables
+    120 sec: 75 % of variables
+    360 sec: 95 % of variables
+
+    All (individual ?) search processes can also be killed manually
+
+
+*** Strasheela implementation
+
+    - Define multiple randomised search processes. 
+    - Somehow, distribution process checks whether some condition is met (i.e. how many variables are determined), and this checking is somehow time-dependent.
+    - Some visual feedback to show how far each process advanced (some TK window?)
+    - Once this is working, try to redefine it as distributed program, so multiple processors are used
+    
+
+** Continue Fomus export revision
 
 *** See todo in Output.oz file 
 
@@ -3026,12 +3068,6 @@ See ../../testing/zy_Efficiency/KeepMusicRepresentationOutsideComputationalSpace
 
     !!?? NOTE: skyline of pitches together pitches, can be used to constrain intervals between melodic peaks
 
-*** Pattern.useMotifs: add optional arg to mark motif starts 
-
-    Pattern.useMotifs defines already optional arg 'indices'
-
-    Now add optional arg 'startsMotifBs' which returns list of 0/1 vars: its 1 if the corresponding pattern value starts a new motif and 0 otherwise 
-
 
 *** Pattern {AllowedIntervals Xs Intervals}
 
@@ -3119,6 +3155,12 @@ See ../../testing/zy_Efficiency/KeepMusicRepresentationOutsideComputationalSpace
 
 
 
+
+
+*** Variant of CM heap pattern
+
+    from a given set/list of FD ints select n elements in an arbitrary order, then the next n elements etc
+    (remember repetitions/variations e.g., of pitches in Morton Feldman compositions)
 
 
 ** Instrumentation constraints						 :MAYBE:
