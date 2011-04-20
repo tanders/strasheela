@@ -38,6 +38,7 @@ import
    MUtils at 'x-ozlib://anders/strasheela/source/MusicUtils.ozf'
    Out at 'x-ozlib://anders/strasheela/source/Output.ozf'
    Pattern at 'x-ozlib://anders/strasheela/Pattern/Pattern.ozf'
+   HS at '../HarmonisedScore.ozf'
    HS_Score at 'Score.ozf'
    DBs at 'databases/Databases.ozf'
    
@@ -55,6 +56,8 @@ export
 
    MakePitchClassFDInt MakeOctaveFDInt MakeAccidentalFDInt
    MakeScaleDegreeFDInt MakeChordDegreeFDInt
+
+   MakeFullDB
    
    RatiosInDBEntryToPCs RatiosInDBEntryToPCs2
    WasRatiosDBEntry
@@ -484,6 +487,143 @@ define
 	 {FD.int 1#{GetMaxChordLength}}
       end
    end
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+   local
+      proc {ReportRemovedEntry Why Entry}
+	 {Out.show removeDbEntry(Why Entry)}
+%       {Out.show removeDbEntry({Out.recordToVS Entry})}
+      end
+      /** %% Removes any element in database Entries which occured already more early in X (i.e. there is an element for which the values at all ComparisonFeats are the same).
+      %% */
+      fun {RemoveDuplicateEntries Entries ComparisonFeats}
+	 fun {Aux Xs Accum}
+	    case Xs of nil then {Reverse Accum}
+	    else
+	       EqualEntry = {LUtils.find Accum
+			     fun {$ Previous}
+				{All ComparisonFeats
+				 fun {$ Feat}
+				    {GUtils.isEqual (Xs.1).Feat Previous.Feat}
+				 end}
+			     end}
+	    in
+	       if EqualEntry \= nil
+	       then
+		  {ReportRemovedEntry dublicateEntry equal(Xs.1 EqualEntry)}
+		  {Aux Xs.2 Accum}
+	       else {Aux Xs.2 Xs.1|Accum}
+	       end
+	    end
+	 end
+      in
+	 {Aux Entries nil}
+      end
+      /** %% Expects a chord/scale/interval database DB (tuple of records) and removes all those entries from the database that do not contain all feats in RequiredFeats (feats not listed in RequiredFeats are removed as well). Further, any entry for which ComparisonFeats are the same in a previous entry are removed.
+      %% */
+      fun {FilterDB DB RequiredFeats ComparisonFeats}
+	 fun {CheckFeats X}
+	    %% all required feats are there
+	    {All RequiredFeats fun {$ Feat} {HasFeature X Feat} end}
+	 end
+      in
+	 %% translate DB to list and then back to tuplet in order to avoid "empty" indices
+	 {List.toTuple {Label DB}
+	  {RemoveDuplicateEntries
+	   {Map {Filter {Record.toList DB} 
+		 fun {$ Entry}
+		    B = {CheckFeats Entry}
+		 in
+		    if {Not B} then {ReportRemovedEntry requiredFeatsMissing Entry} end
+		    B
+		 end}
+	    fun {$ R}
+	       %% remove any non-required feats
+	       {Record.subtractList R
+		{LUtils.remove {Arity R}
+		 fun {$ Feat} {Member Feat RequiredFeats} end}}
+	    end}
+	   ComparisonFeats}}
+      end
+      /** %% [Aux def] Expects a chord or scale declaration, and in case it contains symbolic notes names, these are replaced by their corresponding ET pitch class.  
+      %% */
+      fun {ToStandardDeclaration Decl SymbolToPc}
+	 /** %% Only transform atoms (e.g. 'C#'), but leave integers (PCs) and records (ratios, e.g., 1#1) untouched.
+	 %% */
+	 fun {Transform MyPitch}
+	    if {GUtils.isAtom MyPitch} then {SymbolToPc MyPitch}	 
+	    else MyPitch end
+	 end
+      in
+	 {Record.mapInd Decl
+	  fun {$ Feat X}
+	     case Feat
+	     of pitchClasses then {Map X Transform}
+	     [] essentialPitchClasses then {Map X Transform}
+	     [] roots then {Map X Transform}
+	     else X
+	     end
+	  end}
+      end
+   in
+      /** %% Returns a full database specification that can be given as argument to HS.db.setDB.
+      %%
+      %% Args:
+      %%
+      %% 'chords'/'scales'/'intervals' (each tuple of records, default of each is unit): chord/scale/interval database entries that are appended before the entries defined internally in this functor. There features pitchClasses, essentialPitchClasses and roots can be declared as integers (depends on pitchesPerOctave), ratios (pairs of ints) or symbolic note names (as supported by arg symbolToPc, see below) .
+      %% 
+      %% 'chordFeatures'/'scaleFeatures'/'intervalFeatures' (each list of atoms, default of each is nil): additional features required in database entries (example: essentialPitchClasses). Database entries that do not contain all the required features are removed from the output (reported at standard out).
+      %%
+      %% 'symbolToPc' (default HS.pc): function that expects an atom (a symbolic pitch name) and returns the corresponding pitch class. 
+      %%
+      %% 'pitchesPerOctave' (default 12) 
+      %% 'accidentalOffset' (default 2)
+      %% 'octaveDomain' (default 0#9)
+      %% 
+      %% */
+      fun {MakeFullDB Args}
+	 Default = unit(pitchesPerOctave: 12
+			accidentalOffset: 2
+			%% corresponds to MIDI pitch range 12-127+ (for pitchesPerOctave=12)
+			octaveDomain: 0#9
+			chords:unit
+			scales:unit
+			intervals:unit
+			chordFeatures: nil
+			scaleFeatures: nil
+			intervalFeatures: nil
+			symbolToPc: HS.pc
+		       )
+	 As = {Adjoin Default Args}
+      in
+	 unit(
+	    chordDB:{FilterDB {Record.map As.chords
+			       fun {$ X}
+				  {HS.db.ratiosInDBEntryToPCs {ToStandardDeclaration X As.symbolToPc}
+				   As.pitchesPerOctave}
+			       end}
+		     {Append [pitchClasses roots comment] As.chordFeatures}
+		     [pitchClasses roots]}
+	    scaleDB:{FilterDB {Record.map As.scales 
+			       fun {$ X}
+				  {HS.db.ratiosInDBEntryToPCs {ToStandardDeclaration X As.symbolToPc}
+				   As.pitchesPerOctave}
+			       end}
+		     {Append [pitchClasses roots comment] As.scaleFeatures}
+		     [pitchClasses roots]}
+	    intervalDB:{FilterDB {Record.map As.intervals 
+				  fun {$ X} {HS.db.ratiosInDBEntryToPCs X As.pitchesPerOctave} end}
+			{Append [interval comment] As.intervalFeatures}
+			[interval]}
+	    pitchesPerOctave: As.pitchesPerOctave
+	    accidentalOffset: As.accidentalOffset
+	    octaveDomain: As.octaveDomain
+	    )
+      end
+   end
+   
    
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
