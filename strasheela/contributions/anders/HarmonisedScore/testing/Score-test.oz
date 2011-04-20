@@ -834,13 +834,29 @@ MyScore = {Score.makeScore2
 %% RegularTemperamentNote class
 %%
 
+
+%% Pre-test: create a regular-temperament note without defining a regular temperament.
+declare
+MyNote = {Score.makeScore note(duration:1
+			       startTime:0
+			       timeUnit:beats(4)
+			       % pitchClass: 498 % 0 702 204 498 
+			       octave: 4
+			       %% 3-limit JI
+			       generators: [702]
+% 			       generatorFactorsOffset: 0
+			      )
+	  add(note:HS.score.regularTemperamentNote)}
+{Browse {MyNote toInitRecord($)}}
+
+
 %% test 1: no relation to any chord or scale (default), single generator
 %%
 %% determined note
 declare
 [RegT] = {ModuleLink ['x-ozlib://anders/strasheela/RegularTemperament/RegularTemperament.ozf']}
 %% TMP database
-{HS.db.setDB RegT.db.fullDB}
+{HS.db.setDB {RegT.db.makeFullDB unit}}
 MyNote = {Score.makeScore note(duration:1
 			       startTime:0
 			       timeUnit:beats(4)
@@ -905,6 +921,7 @@ MyNote = {Score.make note(duration:1
 			 )
 	  add(note:HS.score.regularTemperamentNote)}
 {Browse {MyNote toInitRecord($)}}
+
 
 
 
