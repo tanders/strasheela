@@ -452,7 +452,7 @@ define
 	 B = {FD.int 0#1}
 	 B =: ({FD.modI Time {self getMeasureDuration($)}} =: 0)
       end
-      /** %% Variant of onAccentR which does domain propagation (which can be very expensive). However, propagation of Time does only happen after B got determined.
+      /** %% Variant of onMeasureStartR which does domain propagation (which can be very expensive). However, propagation of Time does only happen after B got determined.
       %%
       %% !!?? constraint suspends and performs OK if it first calls {Browse Time}?
       %% */
