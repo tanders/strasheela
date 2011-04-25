@@ -11,7 +11,7 @@
 %%% GNU General Public License for more details.
 %%% *************************************************************
 
-/** %% This functor defines constraints on lists which help to express pattern in music. To combine multiple patterns to motifs see the contribution Motifs.
+/** %% This functor defines constraints on lists which help to express pattern in music. To combine multiple patterns to motifs see, e.g., Score.defSubscript, or the contribution Motifs.
 %% */
 
 %% instead of a list I may use a tuplet to represent a pattern?
@@ -41,6 +41,39 @@
 %%
 %% * ?? split functor into multiple functors: procs/funs processing lists of any values and procs/funs processing lists of kinded vars (i.e. FD ints)
 %%
+
+
+%% !! Idea: pattern for, e.g., sequence: cycle, but each period is transposed -- how can I generalise this idea? ... VariatedCycle
+
+%% !! idea: for patterns as cycle etc. the period length is controllable (but pre-determined, or pattern suspends), e.g. by a determined list of period lengths.
+
+%% !!!! TODO: Pattern elements follow list of pairwise relations (specified as a list of procedures) in a cycling fashion. E.g., the contour of the pattern can be constraint to obey the list ['<:' '=<:' '<:' '>:' '>=:'] in a cycling fashion. Additionally, a domain for the interval size may be constrained.
+%% -> the idea to use a list of constraint procs can be generalised, does not need to be cycle (other options: walk through and in the end keep the last proc, use as heap...)
+%% -> pairwise relations ['<:' '=<:' '<:' '>:' '>=:'] could be encoded by FD ints, which can be constrained (see DirectionToSymbol)
+%% ... The constraint above could be very useful for melodic structure. Can I define something similar for the rhythm (needs instead of pairwise relations some factor relations)
+%% !! -> Define some pattern constraint that includes all the above options, but then specialise it for convenience (procs that call the more general proc)
+
+%% !! TODO: All integers in the list given to the pattern are equal with the (rounded) value of envelope Env at the position (position is know e.g. by ForAllInd)
+%% (Xposition - 1) / (LengthXs - 1)
+%% [This pattern just samples an envelope. However, by defining it the same way other patterns are defined -- as a unary procedure with a list as arg -- I can combine this pattern with other patterns]
+%% ?? If pattern length is determined, I could also define fenvs as pattern
+
+
+%% !! idea: make a pattern reified -- then you may, eg., maximise the
+%% number of patterns happening in a score
+
+%% special downwards pattern forces the last value of the pattern to be well below the first one, while all others must lie between those two
+
+%% patterns only constrain their input, they don't return
+%% anything. Therefore, a nested pattern definition can not watch the
+%% output pattern items to detect a nesting (ie. this does not work:
+%% observe whether some pattern returns a pattern as item which then
+%% gets 'inflated'). For a pattern constraint, a nesting must be
+%% detected in the pattern definition.
+
+%% !! CM allows almost all pattern args to be patterns themself
+%% (eg. pattern period length) -- I will hardly go that far...
+
 
 functor
 import
@@ -2237,34 +2270,3 @@ define
    end
    
 end
-
-%% !! Idea: pattern for, e.g., sequence: cycle, but each period is transposed -- how can I generalise this idea? ... VariatedCycle
-
-%% !! idea: for patterns as cycle etc. the period length is controllable (but pre-determined, or pattern suspends), e.g. by a determined list of period lengths.
-
-%% !! TODO: Pattern elements follow list of pairwise relations (specified as a list of procedures) in a cycling fashion. E.g., the contour of the pattern can be constraint to obey the list ['<:' '=<:' '<:' '>:' '>=:'] in a cycling fashion. Additionally, a domain for the interval size may be constrained.
-%% -> the idea to use a list of constraint procs can be generalised, does not need to be cycle (other options: walk through and in the end keep the last proc, use as heap...)
-
-%% !! TODO: All integers in the list given to the pattern are equal with the (rounded) value of envelope Env at the position (position is know e.g. by ForAllInd)
-%% (Xposition - 1) / (LengthXs - 1)
-%% [This pattern just samples an envelope. However, by defining it the same way other patterns are defined -- as a unary procedure with a list as arg -- I can combine this pattern with other patterns]
-%% ?? If pattern length is determined, I could also define fenvs as pattern
-
-%% !! TODO:  The upper and lower domain bounds of a pattern are defined by two envelopes
-
-%% !! TODO: markov chain pattern
-
-%% !! idea: make a pattern reified -- then you may, eg., maximise the
-%% number of patterns happening in a score
-
-%% special downwards pattern forces the last value of the pattern to be well below the first one, while all others must lie between those two
-
-%% patterns only constrain their input, they don't return
-%% anything. Therefore, a nested pattern definition can not watch the
-%% output pattern items to detect a nesting (ie. this does not work:
-%% observe whether some pattern returns a pattern as item which then
-%% gets 'inflated'). For a pattern constraint, a nesting must be
-%% detected in the pattern definition.
-
-%% !! CM allows almost all pattern args to be patterns themself
-%% (eg. pattern period length) -- I will hardly go that far...
