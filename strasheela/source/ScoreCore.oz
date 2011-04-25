@@ -2872,8 +2872,8 @@ define
    %% 'super': the super-script: a procedure with the interface {Script Args ?MyScore} where Args must support the argument 'iargs', and can support any other argument as well. 'iargs' is a record of args in the format expected by Score.makeItems.
    %% 'mixins': a list of mixins defined with DefMixinSubscript. 
    %% 'defaults': record of default top-level argument values for resulting script. 
-   %% 'idefaults': record of default argument values for args feature 'iargs' of resulting script. 
-   %% 'rdefaults': record of default argument values for args feature 'rargs' of resulting script.
+   %% 'idefaults': record of default argument values for args feature 'iargs' of resulting script (idefaults = itemsDefaults). 
+   %% 'rdefaults': record of default argument values for args feature 'rargs' of resulting script (rdefaults = rulesDefaults).
    %%
    %% Default DefArgs:
    unit(super:MakeContainer
@@ -2885,8 +2885,8 @@ define
    %% Body is a procedure with the interface {Body MyScore Args}, where MyScore is the item(s) created by the super-script, and Args is the record of the arguments specified for the resulting script. Body can also be nil (e.g. for combining a super script and a mixin without adding any further constraints). The features of Args are both the arguments supported by the resulting extended script, and the Args expected by body.  
    %% 
    %% Args always has the features 'iargs' and 'rargs'. 
-   %% 'iargs': a record of arguments given to contained items in the format expected by Score.makeItems
-   %% 'rargs': record of arguments for constraints
+   %% 'iargs': a record of arguments given to contained items in the format expected by Score.makeItems (iargs = itemsArgs)
+   %% 'rargs': record of arguments for constraints (rargs = rulesArgs)
    %%
    %% The variable Args of the body only contains the following arguments when they where specified with the extended script application.  
    %% 'super': same as for DefArgs
@@ -2897,7 +2897,7 @@ define
    %%
    %%
    %% Example:
-   %% Motif definition: creates CSP with sequential container of notes (MakeContainer is super CSP), default are 3 notes (default itemsArgs.n is 3). Note pitches are constrained with Pattern.continuous, the direction of this pattern is controlled with the argument rargs.direction, default is '<:'. 
+   %% Motif definition: creates CSP with sequential container of notes (MakeContainer is super CSP), default are 3 notes (idefaults.n is 3, i.e., the default value for iargs.n is 3). Note pitches are constrained with Pattern.continuous, the direction of this pattern is controlled with the argument rargs.direction, default is '<:'. 
    MakeRun
    = {DefSubscript unit(super:MakeContainer
 			rdefaults: unit(direction: '<:')
