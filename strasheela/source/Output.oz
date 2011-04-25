@@ -2202,7 +2202,7 @@ define
       then [MyScore]
       else
 	 {GUtils.warnGUI
-	  "No parts can be accessed from score ("#{Value.toVirtualString MyScore 1 1}#") !"}
+	  "No parts can be accessed from score object ("#{Value.toVirtualString MyScore 1 1}#") !"}
 	 nil
       end
    end
@@ -2247,6 +2247,10 @@ define
    seq(info: [fomusPart(violin)
 	      fomus(inst: violin)]
        ...)
+
+   %% BUG: in the combination above, instrument setting is ignored.
+
+   %% Note that the info tag fomusPart(nil) results in no fomus part declaration, useful for exporting measures at the beginning of the score.
 
    %% Note that in principle Strasheela objects can correspond to multiple Fomus hierarchic levels (e.g., when outputting a single Strasheela note it corresponds to the score, a part and an event). However, for many Fomus settings it is necessary to have different Strasheela objects for different Fomus hierarchic levels, because certain settings are only permitted at certain Fomus hierarchic levels.
    %%
@@ -2385,7 +2389,8 @@ define
 	      end
 	   end
 	   %% Only declare a Fomus part if a part with PartID has not been declared before
-	   PartCode = if {Dictionary.member PartsDict PartID}
+	   %% Also, no Fomus part is declared if the fomusPart(nil) is specified.
+	   PartCode = if {Dictionary.member PartsDict PartID} orelse PartID==nil
 		      then nil
 		      else
 			 MyCode = {ListToVS ["part" {Record2FomusObject
