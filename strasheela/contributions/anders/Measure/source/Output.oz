@@ -21,18 +21,36 @@ import
 
 export
    UniformMeasuresToFomusClause
+   MakeUniformMeasuresToFomusClause
 
 define
 
-   UniformMeasuresToFomusClause
-   = Measure.isUniformMeasures # fun {$ MyMeasure _ /* PartID */}
-				    {Out.record2FomusMeasure
-				     unit(time: {MyMeasure getStartTimeInBeats($)}
-					  dur: {{MyMeasure getMeasureDurationParameter($)} getValueInBeats($)}  
-% 			       dur: {MyMeasure getDurationInBeats($)}
-					  timesig:
-					     "("#{MyMeasure getBeatNumber($)}#" "#({FloatToInt {{MyMeasure getBeatDurationParameter($)} getValueInBeats($)}}*4)#")"
-					 )}
-				 end
+   /* %% MakeUniformMeasuresToFomusClause adds support for UniformMeasures objects to Fomus export.
+   %%
+   %% Args:
+   %% explicitTimeSig (default true): a Boolean specifying wether explicit time signatures are exported to Fomus. If false, then Fomus receives only the duration of the measure and computes the time signature itself. 
+   %%
+   %% */
+   fun {MakeUniformMeasuresToFomusClause Args}
+      Defaults = unit(explicitTimeSig: true)
+      As = {Adjoin Defaults Args}
+   in
+      Measure.isUniformMeasures
+      # fun {$ MyMeasure _ /* PartID */}
+	   {Out.record2FomusMeasure
+	    {Record.adjoin
+	     unit(time: {MyMeasure getStartTimeInBeats($)}
+		  %% if explicitTimeSig is true, then Fomus ignores the dur
+		  dur: {{MyMeasure getMeasureDurationParameter($)}
+			getValueInBeats($)})
+	     if As.explicitTimeSig then
+		unit(timesig:
+			"("#{MyMeasure getBeatNumber($)}#" "#({FloatToInt {{MyMeasure getBeatDurationParameter($)} getValueInBeats($)}}*4)#")")
+	     else unit
+	     end}}
+	end
+   end
+
+   UniformMeasuresToFomusClause = {MakeUniformMeasuresToFomusClause unit}
 
 end
