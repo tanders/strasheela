@@ -467,7 +467,14 @@ define
 			 essentialPitchClasses:[4#1 9#1 5#1 11#1 7#1]
 %				dissonanceDegree:2
 			 comment:unit(name:'harmonic 11th'))
-		   
+
+		   %% all 31-tone PCs (e.g., for test CPS where all tones should be harmonic)
+		   chord(pitchClasses:[0 1 2 3 4 5 6 7 8 9
+				       10 11 12 13 14 15 16 17 18 19
+				       20 21 22 23 24 25 26 27 28 29
+				       30]
+			 roots:[0]
+			 comment:'31-tone')
 		  )
 
    %% 
@@ -914,7 +921,14 @@ define
 			roots:[0] 
 			comment:'12-out-of-BlackJack')
 	       end
-	       
+
+	       %% all 31-tone PCs (e.g., for test CPS where all tones should be harmonic)
+	       scale(pitchClasses:[0 1 2 3 4 5 6 7 8 9
+				   10 11 12 13 14 15 16 17 18 19
+				   20 21 22 23 24 25 26 27 28 29
+				   30]
+		     roots:[0]
+		     comment:'31-tone')
 	       )
 
    %%
