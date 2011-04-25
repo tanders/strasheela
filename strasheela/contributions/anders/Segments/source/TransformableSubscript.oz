@@ -8,7 +8,8 @@
 %%
 %% - !!?? translate DefSubscript into Mixin def, so I can combine it with existing subscripts of Segs (e.g., [MakeCounterpoint])
 %%   Problem: not possible, because I change arg n on the fly: must do this before score object is created.
-%%   Alternative: change counterpoint def into mixin
+%%   Alternative: change counterpoint def into mixin (done)
+%%   TODO: test combination of DefSubscript and Segs.makeCounterpoint_Mixin
 %%
 %% - def further motif variation functions
 %%
