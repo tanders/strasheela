@@ -350,7 +350,7 @@ define
    %% Example: create a record R and then use this record for notating symbolic durations.  
    %% R = {MakeNoteLengthsRecord 15 [3 5]}
    %% R.d4    % quarter note
-   %% R.d4t3  % quarter note triplet
+   %% R.t3d4  % quarter note triplet
    %% */
    fun {MakeNoteLengthsRecord Beat TupletFractions}
       {List.toRecord unit
