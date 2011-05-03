@@ -1234,6 +1234,22 @@ it always equal to 2, that's a pretty good choice.
 
 * Strasheela doc
   
+** Add all new publications to Strasheela website (and to my own)
+   SCHEDULED: <2011-05-16 Mon>
+
+** Add results of microtonal music "content" for MOTU to my website
+   SCHEDULED: <2011-05-16 Mon>
+
+** Add links to musical examples to Strasheela website: Harmony studies, microtonal music "content" for MOTU
+   DEADLINE: <2011-05-16 Mon>
+
+
+** Upload binaries of selection constraints and amend installation instructions 
+   SCHEDULED: <2011-05-16 Mon>
+
+   Mention bug during compilation (Midiimport and OSC support do not compile on MacOS 10.6)
+   Can be disregarded.
+
 ** Strasheela tutorial
 
    Use Worg CCS, but add acknowledgment mentioning CCS authors Bastien Guerry and Sebastian Rose.
@@ -1382,6 +1398,20 @@ If problems occur ask gustavo.ggutierrez@gmail.com
 *** Check out how performance of examples 
 
     Noticable difference of old version?
+
+
+** Mozart compilation 
+
+   I already pull git sources, see 
+   https://github.com/mozart
+   
+
+   see instruction at 
+   http://gforge.info.ucl.ac.be/plugins/wiki/index.php?FAQ&id=17&type=g
+   http://gforge.info.ucl.ac.be/plugins/wiki/index.php?CompilingMozart&id=17&type=g
+
+  - Configuration error of gmp: try deinstalling gmp and instead installing gmp version 4.1.2 (current version at time when Mozart configure script was programed)
+
 
 
 ** TODO Read Strasheela doc						  :EASY:
