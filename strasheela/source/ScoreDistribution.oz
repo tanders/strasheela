@@ -405,7 +405,7 @@ define
 	 end
       end
    in
-      /** %% Returns a value ordering, i.e. a binary be given to distribution arg 'value'. This value ordering takes heuristic constraints applied with Score.apply_H into account. In addition, it randomises the decision making. RandGen is a nullary function created by GUtils.makeRandomGenerator.
+      /** %% Returns a value ordering, i.e. a binary function that will be given to distribution arg 'value'. This value ordering takes heuristic constraints applied with Score.apply_H into account. In addition, it randomises the decision making. RandGen is a nullary function created by GUtils.makeRandomGenerator.
       %%
       %% Naturally, any value ordering heuristics is only effective for parameters that are actually distributed. For example, if the pitch classes and octaves of notes are distributed and the note pitches are determined by propagation, then any heuristic constraint applied to the pitches has no effect.
       %%
