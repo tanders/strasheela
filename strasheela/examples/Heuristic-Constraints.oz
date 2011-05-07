@@ -22,7 +22,6 @@
 %%
 
 declare
-
 [H] = {ModuleLink ['x-ozlib://anders/strasheela/Heuristics/Heuristics.ozf']}
 [Fenv] = {ModuleLink ['x-ozlib://anders/strasheela/Fenv/Fenv.ozf']}
 
@@ -158,7 +157,7 @@ end
     {H.followFenv PPs
      {Fenv.linearFenv [[0.0 72.0] [0.75 57.0] [1.0 60.0]]}
 %      {Fenv.linearFenv [[0.0 57.0] [0.75 72.0] [1.0 60.0]]}
-     1}
+     2} % fenv constraint more important than cycle below
     %% Heuristic cycle pattern constraint (cycle length 4)
     {H.cycle PPs 4 1} 
  end
