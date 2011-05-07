@@ -1,8 +1,11 @@
 
+%% see also strasheela/examples/Heuristic-Constraints.oz
+
+declare
 [H] = {ModuleLink ['x-ozlib://anders/strasheela/Heuristics/Heuristics.ozf']}
 
 declare
-HC = {H.makeGivenInterval_H 4}
+HC = {H.makeGivenInterval_Abs 4}
 
 {HC 4 4}
 {HC 4 2}
