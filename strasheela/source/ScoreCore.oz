@@ -939,7 +939,17 @@ define
 % 	      orelse 
 % 	      (Start2 =< Start1 andthen End2 > Start1))
 	 B = (Start1 < End2) andthen (Start2 < End1)
-      end			
+      end
+      /** %% [Deterministic method] Generalised version of isSimultaneousItem where the offset time Offset is taken into account.
+      %% */
+      meth isSimultaneousItemOffset(?B X Offset)
+	 Start1 = {self getStartTime($)} 
+	 Start2 = {X getStartTime($)}
+	 End1 = {self getEndTime($)} 
+	 End2 = {X getEndTime($)}
+      in
+	 B = ((Start1+Offset) < End2) andthen (Start2 < (End1+Offset))
+      end
       /** % [0/1 Constraint] Returns 0/1-integer whether self and X are simultaneous in time (i.e. somehow overlap in time).
       %% */
       %% @1=?B
@@ -954,6 +964,16 @@ define
 % 	      {FD.conj (Start1 =<: Start2) (End1 >: Start2)}
 % 	      {FD.conj (Start2 =<: Start1) (End2 >: Start1)}}
 	 {FD.conj (Start1 <: End2) (Start2 <: End1) B}
+      end
+      /** %% [0/1 Constraint] Generalised version of isSimultaneousItemR where the offset time Offset is taken into account.
+      %% */
+      meth isSimultaneousItemOffsetR(?B X Offset)	% ?? method name
+	 Start1 = {self getStartTime($)} 
+	 Start2 = {X getStartTime($)}
+	 End1 = {self getEndTime($)} 
+	 End2 = {X getEndTime($)}
+      in
+	 {FD.conj (Start1+Offset <: End2) (Start2 <: End1+Offset) B}
       end			
       /** % [0/1 Constraint] Returns 0/1-integer whether self and X are exactly simultaneous in time (i.e. start and end at the same time).
       %% */
@@ -984,8 +1004,30 @@ define
 	    Xs = {LUtils.cFilter ScoreObjects
 		  fun {$ X}
 		     X \= self andthen
-		     {X isItem($)} andthen
+		     % {X isItem($)} andthen
 		     ({self isSimultaneousItemR($ X)} == 1) andthen
+		     {{GUtils.toFun CTest} X}
+		  end}
+	 end
+      end
+      /** %% [Deterministic method] Generalised version of getSimultaneousItems where the offset time Offset is taken into account.
+      %% */
+      meth getSimultaneousItemsOffset(?Xs Offset
+				      test:Test<=fun {$ X} true end
+				      cTest: CTest<=fun {$ X} true end)
+	 thread 		% ?? NOTE: thread needed?
+	    TopLevel = {self getTopLevels($ test:fun {$ X} {X isTimeMixin($)} end)}.1
+	    ScoreObjects = {TopLevel collect($ test: fun {$ X}
+							%% only test items further
+							{X isItem($)} andthen
+							{{GUtils.toFun Test} X}
+						     end)}
+	 in
+	    Xs = {LUtils.cFilter ScoreObjects
+		  fun {$ X}
+		     X \= self andthen
+		     % {X isItem($)} andthen
+		     ({self isSimultaneousItemOffsetR($ X Offset)} == 1) andthen
 		     {{GUtils.toFun CTest} X}
 		  end}
 	 end
@@ -1485,6 +1527,11 @@ define
       meth filterContainers(?Xs Fn)
 	 Xs = {Filter {self getContainers($)} {GUtils.toFun Fn}}
       end 
+      /** %% Returns the first direct or indirect container of self, which fulfils the boolean function or method Test.
+      %%*/
+      meth findContainerRecursively(?X Test) 
+	 X={LUtils.find {self getContainersRecursively($)} {GUtils.toFun Test}}
+      end
       /** %% Returns the first direct container self is contained in which fulfils the boolean function or method Test.
       %%*/
       meth findContainer(?X Test) 
@@ -1706,14 +1753,14 @@ define
       /** %% Returns the predecessor of object in its TemporalAspect. NB: method returns positional and not a temporal predecessor. 
       %% !!?? Rename to getPredecessorInTemporalAspect ?
       %% */ 
-      meth getTemporalPredecessor(?B)
-	 B= {self getPredecessor($ {self getTemporalAspect($)})}
+      meth getTemporalPredecessor(?X)
+	 X = {self getPredecessor($ {self getTemporalAspect($)})}
       end
       /** %% Returns the successor of object in its TemporalAspect. NB: method returns positional and not a temporal successor. 
       %% !!?? Rename to getSuccessorInTemporalAspect ?
       %% */ 
-      meth getTemporalSuccessor(?B)
-	 B= {self getSuccessor($ {self getTemporalAspect($)})}
+      meth getTemporalSuccessor(?X)
+	 X = {self getSuccessor($ {self getTemporalAspect($)})}
       end
 
 
