@@ -727,8 +727,16 @@ define
       %% create tuple which contains P at all positions contained in
       %% AllIs and ElseP at all other positions.
       MatchingPs = {MakeTuple unit XsLength}
+      MaxX = {List.last {Arity MatchingPs}}
    in
-      {ForAll AllIs  proc {$ X} MatchingPs.X = P end}
+      {ForAll AllIs
+       proc {$ X}
+	  if X > MaxX orelse X < 1
+	  then {Exception.raiseError
+		strasheela(failedRequirement X "ForNumericRange2: Value outside position range in given list.")}
+	  end
+	  MatchingPs.X = P
+       end}
       {Record.forAll MatchingPs proc {$ X} if {IsFree X} then X = ElseP end end}
       %% apply respective proc to each element in Xs
       {List.forAllInd Xs proc {$ I X} {MatchingPs.I X} end}
