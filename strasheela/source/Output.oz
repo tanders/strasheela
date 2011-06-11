@@ -2174,7 +2174,9 @@ define
    %% */
    fun {GetFomusEvents MyPart}
       if {MyPart isElement($)} orelse {IsFomusChord MyPart}
-      then [MyPart] 
+      then if {Not {MyPart isDet($)}} then nil
+	   else [MyPart]
+	   end
       elseif {MyPart isContainer($)}
 	 %% containers are processed recursively
       then {LUtils.mappend {MyPart collect($ test: isItem)}
@@ -2358,7 +2360,7 @@ define
       ScoreDeclarations ScoreSettings
    in
       if {Not {MyScore isDet($)}} then
-	 {GUtils.warnGUI "Fomus output may block -- score not fully determined!"}
+	 {GUtils.warnGUI "Score not fully determined! Undetermined events are skipped."}
 % 	 {System.showInfo "Warning: Fomus output may block -- score not fully determined!"}
       end
       %% split score settings in actual settings ("feat=val\n" form) and declarations ("var\n" form)
