@@ -483,6 +483,15 @@ define
 	     unit(file: FileName#'-'#I)}
 	 end
       end
+      proc {RenderLilypondFomus I X}
+	 if {Score.isScoreObject X}
+	 then 
+	    FileName = out#{GUtils.getCounterAndIncr}
+	 in
+	    {Out.renderFomus X
+	     unit(file: FileName#'-'#I)}
+	 end
+      end
       proc {RenderMidi I X}
 	 if {Score.isScoreObject X}
 	 then 
@@ -527,6 +536,9 @@ define
 	 {Explorer.object
 	  add(information RenderCsound
 	      label: 'to Csound')}
+	 {Explorer.object
+	  add(information RenderLilypondFomus
+	      label: 'to Lilypond (via Fomus)')}
 	 {Explorer.object
 	  add(information RenderLilypond
 	      label: 'to Lilypond')}
