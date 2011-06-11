@@ -134,8 +134,57 @@ MyTestScore = {Score.makeScore
 *** TODO 
 
     - !! Def abstractions for defining multiple texture constraint applications in concise way
+      Possibly using ForNumericRangeArgs (or a new applicator ForTimeRangeArgs) 
+
+Sketch of a possible notation format (args are records and not lists)
+
+#+begin_src oz :results output 
+  proc {MyDependency N1 N2 Args}
+     {Homophonic N1 N2 Args}
+     {HomoDirectional N1 N2 Args}
+  end
+    
+  %% Version 1
+  
+  %% Imitation at the beginning (e.g., Voice2 at time 2 imitates 1st 5 notes of Voice1)
+  {Texture MyDependency Voice1 [Voice2 Voice3 Voice1]
+   unit(numericRange: 1#5
+        offsetTime: [2 4 6])}
+  %% Homophonic ending
+  {Texture Homophonic Voice1 [Voice2 Voice3]
+   unit(numericRange: 6#9)}
+    
+  %% Version 2 -- single texture call, and numeric range was move to front of each "section def"
+  
+  {TextureProgression
+   [%% Imitation at the beginning (e.g., Voice2 at time 2 imitates 1st 5 notes of Voice1)
+    (1#5) # unit(MyDependency Voice1 [Voice2 Voice3 Voice1]  
+                 offsetTime: [2 4 6])
+    %% Homophonic ending
+    (6#9) # unit(Homophonic Voice1 [Voice2 Voice3])
+   ]}
+  
+  % {TextureConstraint Voice1
+  %  [%% Imitation at the beginning
+  %   (1#5)#unit(Voice2
+  %              dependency: MyDependency
+  %              offsetTime: 2)
+  %   (1#5)#unit(Voice3
+  %              dependency: MyDependency
+  %              offsetTime: 4)
+  %   (1#5)#unit(Voice1   % Imitation within same voice
+  %              dependency: MyDependency
+  %              offsetTime: 6)
+  %   %% Homophonic ending
+  %   (6#9)#unit([Voice2 Voice3]
+  %              dependency: Homophonic)
+  %  ] 
+  % }
+#+end_src
+
+
     - Add texture constraint defs to Strasheela
-    - Document these defs
+
     - ?? Add example file to examples folder
       - Demonstrate within one purely rhythmic example homophonic vs heterophonic vs no constraint
       - Demonstrate homodirectional
@@ -265,69 +314,71 @@ MyTestScore = {Score.makeScore
 **** Tests and examples
 
 #+begin_src oz :results output
-  <<MakeTextureConstraint>>
-  
-    %%
-    %% Usage example, implementing a homorhythmic texture
-    %%
+    <<MakeTextureConstraint>>
     
-    MyTextureConstraint
-    = {MakeTextureConstraint 
-       %% NOTE: for constraining direction I would need access to note pairs per part
-       %% Possible solution: have a second version of MakeTextureConstraint for that case
-       %% Alternative solution: access successor from within this proc
-       proc {$ N1 N2 Args} 
-          {Homophonic N1 N2 Args}
-          % {HierarchicHomophonic N1 N2 Args}
-          % {HeuristicHomophonic N1 N2 Args}
-          {HomoDirectional N1 N2 Args}
-       end}
-    
-    {GUtils.setRandomGeneratorSeed 0}
-    {SDistro.exploreOne 
-     proc {$ MyScore}
-        Voice1 Voice2 Voice3
-     in
-        MyScore = {Score.make sim([seq(%info: fomus(inst: 'violin')
-                                       handle:Voice1
-                                       [note note note note note note note note note]
+      %%
+      %% Usage example, implementing a homorhythmic texture
+      %%
+      
+      MyTextureConstraint
+      = {MakeTextureConstraint 
+         %% NOTE: for constraining direction I would need access to note pairs per part
+         %% Possible solution: have a second version of MakeTextureConstraint for that case
+         %% Alternative solution: access successor from within this proc
+         proc {$ N1 N2 Args} 
+            {Homophonic N1 N2 Args}
+            % {HierarchicHomophonic N1 N2 Args}
+            % {HeuristicHomophonic N1 N2 Args}
+            {HomoDirectional N1 N2 Args}
+         end}
+      
+      {GUtils.setRandomGeneratorSeed 0}
+      {SDistro.exploreOne 
+       proc {$ MyScore}
+          Voice1 Voice2 Voice3
+       in
+          MyScore = {Score.make sim([seq(info: fomus(inst: soprano)
+                                         handle:Voice1
+                                         [note note note note note note note note note]
+                                        )
+                                     seq(info: fomus(inst: soprano) 
+                                         handle:Voice2
+                                         [note note note note note note note note note])
+                                     seq(info: fomus(inst: soprano) 
+                                         handle:Voice3
+                                         [note note note note note note note note note])
+                                    ]
+                                   startTime:0
+                                   timeUnit:beats(4))
+                     add(note:fun {$ _}
+                                 {Score.make2
+                                  note(duration: {FD.int [1 2 4]}
+                                       pitch: {FD.int 60#72}
                                       )
-                                   seq(handle:Voice2
-                                       [note note note note note note note note note])
-                                   seq(handle:Voice3
-                                       [note note note note note note note note note])
-                                  ]
-                                 startTime:0
-                                 timeUnit:beats(4))
-                   add(note:fun {$ _}
-                               {Score.make2
-                                note(duration: {FD.int [1 2 4]}
-                                     pitch: {FD.int 60#72}
-                                    )
-                                unit}
-                            end)}
-        {MyTextureConstraint Voice1 Voice2
-         % unit(timeRange: [0#100])
-         unit(numericRange: 1#9
-              offsetTime: 2) 
-        }
-        {MyTextureConstraint Voice1 Voice3
-         % unit(timeRange: [0#100])
-         unit(numericRange: 1#9
-              offsetTime: 4) 
-        }
-        %% voice imitates itself later
-        {MyTextureConstraint Voice1 Voice1
-         % unit(timeRange: [0#100])
-         unit(numericRange: 1#9
-              offsetTime: 6) 
-        }
-     end
-     unit(value: heuristic
-          % value:random
-          order: leftToRight
-         )}
-  
+                                  unit}
+                              end)}
+          {MyTextureConstraint Voice1 Voice2
+           % unit(timeRange: [0#100])
+           unit(numericRange: 1#9
+                offsetTime: 2) 
+          }
+          {MyTextureConstraint Voice1 Voice3
+           % unit(timeRange: [0#100])
+           unit(numericRange: 1#9
+                offsetTime: 4) 
+          }
+          %% voice imitates itself later
+          {MyTextureConstraint Voice1 Voice1
+           % unit(timeRange: [0#100])
+           unit(numericRange: 1#9
+                offsetTime: 6) 
+          }
+       end
+       unit(value: heuristic
+            % value:random
+            order: leftToRight
+           )}
+    
 #+end_src
 
 #+begin_src oz :results output
