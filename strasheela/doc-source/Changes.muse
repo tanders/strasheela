@@ -5,7 +5,8 @@
 * Changes in Version 0.9.11 (no date yet)
 
   - Main additions and changes 
-    - Support for heuristic constraints added. See the documentation of the procedure Score.apply_H, the example [[../examples/Heuristic-Constraints.oz][Heuristic-Constraints.oz]], and the functor [[../contributions/anders/Heuristics/doc/node1.html][Heuristics]]  
+    - Support for heuristic constraints added. See the documentation of the procedure Score.apply_H, the examples in [[../examples/Heuristic-Constraints.oz][Heuristic-Constraints.oz]], and the functor [[../contributions/anders/Heuristics/doc/node1.html][Heuristics]].  
+    - Texture constraints added. See the examples in [[../examples/Form-Examples/Texture-Examples.oz][Texture-Examples.oz]], and the definitions in the functor [[../contributions/anders/Segments/doc/node1.html][Segments.]]  
     - Revised Fomus output: Strasheela now exports the new format of the Fomus rewrite (http://fomus.sourceforge.net/), and Strasheela's Fomus export definition have been extended in many ways.
     - Constraint problems on arbitrary octave-repeating [[http://en.wikipedia.org/wiki/Regular_temperament][regular temperaments]] (any rank) supported, including [[http://en.wikipedia.org/wiki/Just_intonation][just intonation]] with arbitrary limits (pitches measured, e.g., in cent or millicent).
     - Revised score distribution: value orderings can now access arbitrary score information 
