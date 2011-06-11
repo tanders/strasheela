@@ -702,7 +702,7 @@ define
    end
 
 
-   /** %% Applies unary procedure P to each element in Xs which index is expressed by Decl. Decl is a list which contains single index integers, or index ranges of the form Min#Max (Min and Max are integers).
+   /** %% Applies unary procedure P to each element in Xs which index is expressed by Decl. Decl is a list which contains single index integers, or index range pairs of the form Min#Max (Min and Max are integers). Alternatively, Decl can also be a single pair or a single integer.
    %% BTW: ForNumericRange corresponds roughly to one of the rule application mechanisms of Situation. The rule applicator `mapIndex' in some earier Strasheela publications is the function equivalent. However, the CMJ paper on this matter introduces a more complex function under the name `mapIndex' which corresponds to ForNumericRangeArgs without the ElseP argument.
    %% */
    proc {ForNumericRange Xs Decl P}
@@ -712,9 +712,10 @@ define
    /** %% Generalised variant of ForNumericRange: to every element in Xs to which P is not applied, ElseP (a unary procedure) is applied instead.
    %% */ 
    proc {ForNumericRange2 Xs Decl P ElseP}
+      FullDecl = if {IsList Decl} then Decl else [Decl] end
       XsLength = {Length Xs}
       %% instead, I could use LUtils.ranges and then flatten
-      AllIs = {LUtils.mappend Decl fun {$ X}
+      AllIs = {LUtils.mappend FullDecl fun {$ X}
 				      case X
 				      of Min#Max then {List.number Min Max 1}
 				      [] Val then [Val]
@@ -743,14 +744,15 @@ define
    end
 
    /** %% Applies binary procedure P to each element in Xs which index is expressed by Decl -- together with additional arguments for that index. To all other elements of Xs the unary procedure ElseP is applied instead.
-   %% Decl is a list which contains single index integers plus constraint arguments in the form Ind#Args, or index ranges plus constraint arguments in the form (Min#Max)#Args. The index Ind and the range boundaries Min and Max are integers, Args is a list of arbitrary values (and can be nil).
+   %% Decl is a list which contains single index integers plus constraint arguments in the form Ind#Args, or index ranges plus constraint arguments in the form (Min#Max)#Args. The index Ind and the range boundaries Min and Max are integers, Args is a list of arbitrary values (and can be nil). Alternatively, Decl can be a single index Ind#Args or a single range  (Min#Max)#Args.  
    %%  ForNumericRangeArgs implements a generalised variant of ForNumericRange (and ForNumericRange2) which implements an extended syntax for Decl.
    %% The rule applicator `mapIndexArgs' in earier Strasheela publications is the function equivalent. However, the CMJ paper on this matter introduces a more complex function under the name `mapIndex' which corresponds to ForNumericRangeArgs without the ElseP argument.
    %% */ 
    proc {ForNumericRangeArgs Xs Decl P ElseP}
+      FullDecl = if {IsList Decl} then Decl else [Decl] end
       XsLength = {Length Xs}
       %% instead, I could use LUtils.ranges and then flatten
-      IsWithArgs = {LUtils.mappend Decl fun {$ X}
+      IsWithArgs = {LUtils.mappend FullDecl fun {$ X}
 					   case X
 					   of (Min#Max)#Args % andthen {IsList Args} % and Min and Max are both ints and Min < Max
 					   then
