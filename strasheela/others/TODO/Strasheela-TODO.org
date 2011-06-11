@@ -1,5 +1,7 @@
 #+CATEGORY: Strasheela
 
+#+BABEL: :noweb yes :results silent :exports none
+
 * Strasheela release
 
 ** TODO Strasheela release
@@ -129,40 +131,65 @@ MyTestScore = {Score.makeScore
 
 ** Texture constraints
 
-   Texture constraints restrict the independence between parts/voices. In the Strasheela implementation, a texture constraint is applied to (a section of) one part/voice (the ), a specification of the dependent parts (used to access notes in the dependent parts), and a specification of the actual dependance. Dependence examples are homorhythm (simultaneous notes have the same start time and duration), heterorhythm (simultaneous notes have similar start times and durations), contrarhythm (simultaneous notes have different same start times or durations), homodirectional etc.
+*** TODO 
 
-Texture constraints are inspired by Berry, Wallace (1987). Structural functions in music. Courier Dover Publications.
+    - !! Def abstractions for defining multiple texture constraint applications in concise way
+    - Add texture constraint defs to Strasheela
+    - Document these defs
+    - ?? Add example file to examples folder
+      - Demonstrate within one purely rhythmic example homophonic vs heterophonic vs no constraint
+      - Demonstrate homodirectional
+      - Demonstrate imitation (purely rhythmic)
+      - Use Segs.makeCounterpoint and add underlying harmony
 
 
 *** Overall constraint format
 
-#+begin_src oz :results output silent :exports none
+**** Main defs
+
+#+srcname: MakeTextureConstraint
+#+begin_src oz :results output 
   
   declare
   
-  %%
-  %% BUG:
-  %% - offset time not working yet 
-  %%
+  /** %% Texture constraints restrict the independence between parts/voices. Dependence examples are homorhythm (simultaneous notes have the same start time and duration), heterorhythm (simultaneous notes have similar start times and durations), contrarhythm (simultaneous notes have different same start times or durations), homodirectional texture, various degrees of imitation (dependencies like, e.g., homorhythmic and homodirectional texture with a time offset) and many more possibilities. Texture constraints are inspired by Berry, Wallace (1987). Structural functions in music. Courier Dover Publications.
+  %% MakeTextureConstraint returns a texture constraint, a procedure with the following interface.
   
-  /** %%
-  %% The function 
+  {MyTextureConstraint LeadingPart DependantPart Args}
+  
+  %% A texture constraint applies a Dependency (a constraint, see below) between certain notes in a LeadingPart (a container) and certain notes in a DependantPart (a container). 
+  
+  %% A Dependency is a procedure with the following interface.
+  
+  {MyDependency Note1 Note2 Args}
+  
+  %% A Dependency defines a constraint between Note1, a note from the LeadingPart, and Note2, a note from the DependantPart. By default, Note1 and Note2 are simultaneous notes (see the argument offsetTime below for other cases). For example, homophony can be defined by constraining that the start times and durations of Note1 and Note2 are equal. Constraints that require more complex score contexts (e.g., the note succeeding Note1 in LeadingPart) are defined by accessing such contexts from the given notes (e.g., using methods like getTemporalSuccessor). The Dependency argument Args contains values for all optional arguments in the Args argument of a texture constraint (see below). 
+  %% Various dependencies are predefined (e.g., Homophonic, and HomoDirectional), and users can freely define their own.
+  %%
+  %% The argument Args of a texture constraint supports the following optional arguments.
+  %%
+  %% offsetTime (default 0): Using this argument, various forms of imitation can be defined. The dependency constraint is applied to a note in DependantPart that starts the specified amount of offset later than the respective note in LeadingPart.
+  %% Remember that negative offset times are not allowed (if you would need them, simply swap the arguments LeadingPart and DependantPart).
+  %%
+  %% timeRange: TODO
+  %%
+  %% numericRange (default nil): Specifies the positions of the affected notes in LeadingPart. For example, the numeric range [1#3 5#6] affects the notes at position 1-3 and 5-6 in LeadingPart and their simultaneous notes in DependantPart (if offsetTime is the default). numericRange is based on SMapping.forNumericRange, and supports all its index integers notations.  
+  %%
+  %%
   %% */
   %% TODO:
   %% Generalise (or multiple versions?):
-  %% - Sim items is only an option, another is notes at same position, another is sim with an offset
   %% - ?? Using SMapping.forNumericRange is only an option, another is SMapping.forTimeRange
-  %% - Is is correct to only constrain notes? Should that be more general?
-  %% - Consider reducing to only a single numeric range (not a list of it), at least as an option
+  %% - ?? Sim items is only an option, another is notes at same position, another is sim with an offset
+  %% - ?? Is is correct to only constrain notes? Should that be more general?
   %%
-  %% - Doc
-  %% - Revise arg names
   fun {MakeTextureConstraint Dependency}
-     proc {$ LeadPart FollowingPartTest Args}
-        %% TODO: add default args
-        As = Args
+     proc {$ LeadingPart DependantPart Args}
+        Defaults = unit(numericRange: nil
+                        offsetTime: 0)
+        As = {Adjoin Defaults Args}
      in
-        {SMapping.forNumericRange {LeadPart collect($ test:isNote)}
+        {SMapping.forNumericRange {LeadingPart collect($ test:isNote)}
          As.numericRange 
          proc {$ N1}
             DependantNs
@@ -172,64 +199,34 @@ Texture constraints are inspired by Berry, Wallace (1987). Structural functions 
                = {N1 getSimultaneousItemsOffset($ As.offsetTime
                                                 test: fun {$ N2}
                                                          {N2 isNote($)} andthen
-                                                         {N2 findContainerRecursively($ {GUtils.toFun FollowingPartTest})} \= nil
+                                                         {Member DependantPart
+                                                          {N2 getContainersRecursively($)}}
                                                       end)}
             end
             thread
                {ForAll DependantNs
-                proc {$ DependantN}
-                   if DependantN \= nil %% simply ignore non-existing notes (e.g., if offset ranges beyond number of notes)
-                   then {Dependency N1 DependantN}
-                   else {GUtils.warnGUI "MakeTextureConstraint: non-existing note constrained."}
-                   end
-                end}
+                proc {$ DependantN} {Dependency N1 DependantN As} end}
             end
          end}
      end
   end
   
-  
-  % fun {MakeTextureConstraint FollowingPartTests Dependency}
-  %    proc {$ LeadPart Args}
-  %       %% TODO: add default args
-  %       As = Args
-  %    in
-  %       {SMapping.forNumericRange {LeadPart collect($ test:isNote)}
-  %        As.numericRange 
-  %        proc {$ N1}
-  %           thread 
-  %              %% NOTE: sim notes only returned after all sim notes are know.
-  %              %% Too late for constraining rhythmic structure?
-  %              SimNs = {N1 getSimultaneousItems($ test:fun {$ X}
-  %                                                         {X isNote($)} andthen
-  %                                                         {Some FollowingPartTests
-  %                                                          fun {$ Test}
-  %                                                             {X findContainerRecursively($ {GUtils.toFun Test})} \= nil
-  %                                                          end}
-  %                                                      end)}
-  %           in
-  %              {ForAll SimNs
-  %               proc {$ SimN} {Dependency N1 SimN} end}
-  %           end
-  %        end}
-  %    end
-  % end
-  
-  
+   
   /** %%
   %% */
   %% TODO:
   %% - doc
   %% - revise proc name
-  proc {HomoPhonic N1 N2}
-     {N1 getStartTime($)} = {N2 getStartTime($)}
+  proc {Homophonic N1 N2 Args}
+     {N1 getStartTime($)} + Args.offsetTime = {N2 getStartTime($)}
      {N1 getDuration($)} = {N2 getDuration($)}
   end
   
-  /* %% Hetero-phonic
+  /* %% Heterophonic
   %% */
   %% NOTE: Heuristic constraints only affect parameters that are distributed
-  proc {HeuristicHomoPhonic N1 N2} 
+  %% TODO: add + Args.offsetTime to start1
+  proc {HeuristicHomophonic N1 N2 Args} 
      {Score.apply_H H.equal [{N1 getStartTimeParameter($)} {N2 getStartTimeParameter($)}] 1}
      {Score.apply_H H.equal [{N1 getEndTimeParameter($)} {N2 getEndTimeParameter($)}] 1}
   end
@@ -240,8 +237,8 @@ Texture constraints are inspired by Berry, Wallace (1987). Structural functions 
   %% */
   %% BUG: can fail, but such minor inconsistencies may actually be good
   %% Problem: overall, rhythm followed too closely -- but I can easily force it otherwise (e.g., more notes in one layer with same overall end time.
-  proc {HierarchicHomoPhonic N1 N2}
-     Start1 = {N1 getStartTime($)}
+  proc {HierarchicHomophonic N1 N2 Args}
+     Start1 = {N1 getStartTime($)} + Args.offsetTime
      Start2 = {N2 getStartTime($)}
      End2 = {N2 getEndTime($)}
   in
@@ -252,7 +249,7 @@ Texture constraints are inspired by Berry, Wallace (1987). Structural functions 
       1}
   end
   
-  proc {HomoDirectional N1A N2A}
+  proc {HomoDirectional N1A N2A Args}
      N1B = {N1A getTemporalSuccessor($)}
      N2B = {N2A getTemporalSuccessor($)}
   in
@@ -263,56 +260,126 @@ Texture constraints are inspired by Berry, Wallace (1987). Structural functions 
      end
   end
   
-  %%
-  %% Usage example, implementing a homorhythmic texture
-  %%
-  
-  MyTextureConstraint
-  = {MakeTextureConstraint 
-     %% NOTE: for constraining direction I would need access to note pairs per part
-     %% Possible solution: have a second version of MakeTextureConstraint for that case
-     %% Alternative solution: access successor from within this proc
-     proc {$ N1 N2} 
-        {HomoPhonic N1 N2}
-        % {HierarchicHomoPhonic N1 N2}
-        % {HeuristicHomoPhonic N1 N2}
-        {HomoDirectional N1 N2}
-     end}
-  
-  {GUtils.setRandomGeneratorSeed 0}
-  {SDistro.exploreOne 
-   proc {$ MyScore}
-      Voice1
-   in
-      MyScore = {Score.make sim([seq(info: voice1
-                                     handle:Voice1
-                                     [note note note note note note note note note])
-                                 seq(info: voice2
-                                     [note note note note note note note note note])
-                                 seq(info: voice3
-                                     [note note note note note note note note note])]
-                               startTime:0
-                               timeUnit:beats(4))
-                 add(note:fun {$ _}
-                             {Score.make2
-                              note(duration: {FD.int [1 2 4]}
-                                   pitch: {FD.int 60#72})
-                              unit}
-                          end)}
-      {MyTextureConstraint Voice1
-       fun {$ C} {C hasThisInfo($ voice3)} end
-   % unit(timeRange: [0#100])
-       unit(numericRange: [1#9]
-            offsetTime: 0) % TODO: avoid need for negative numbers...
-      }
-   end
-   unit(value: heuristic
-        % value:random
-        order: leftToRight
-       )}
-   
 #+end_src
+
+**** Tests and examples
+
+#+begin_src oz :results output
+  <<MakeTextureConstraint>>
+  
+    %%
+    %% Usage example, implementing a homorhythmic texture
+    %%
     
+    MyTextureConstraint
+    = {MakeTextureConstraint 
+       %% NOTE: for constraining direction I would need access to note pairs per part
+       %% Possible solution: have a second version of MakeTextureConstraint for that case
+       %% Alternative solution: access successor from within this proc
+       proc {$ N1 N2 Args} 
+          {Homophonic N1 N2 Args}
+          % {HierarchicHomophonic N1 N2 Args}
+          % {HeuristicHomophonic N1 N2 Args}
+          {HomoDirectional N1 N2 Args}
+       end}
+    
+    {GUtils.setRandomGeneratorSeed 0}
+    {SDistro.exploreOne 
+     proc {$ MyScore}
+        Voice1 Voice2 Voice3
+     in
+        MyScore = {Score.make sim([seq(%info: fomus(inst: 'violin')
+                                       handle:Voice1
+                                       [note note note note note note note note note]
+                                      )
+                                   seq(handle:Voice2
+                                       [note note note note note note note note note])
+                                   seq(handle:Voice3
+                                       [note note note note note note note note note])
+                                  ]
+                                 startTime:0
+                                 timeUnit:beats(4))
+                   add(note:fun {$ _}
+                               {Score.make2
+                                note(duration: {FD.int [1 2 4]}
+                                     pitch: {FD.int 60#72}
+                                    )
+                                unit}
+                            end)}
+        {MyTextureConstraint Voice1 Voice2
+         % unit(timeRange: [0#100])
+         unit(numericRange: 1#9
+              offsetTime: 2) 
+        }
+        {MyTextureConstraint Voice1 Voice3
+         % unit(timeRange: [0#100])
+         unit(numericRange: 1#9
+              offsetTime: 4) 
+        }
+        %% voice imitates itself later
+        {MyTextureConstraint Voice1 Voice1
+         % unit(timeRange: [0#100])
+         unit(numericRange: 1#9
+              offsetTime: 6) 
+        }
+     end
+     unit(value: heuristic
+          % value:random
+          order: leftToRight
+         )}
+  
+#+end_src
+
+#+begin_src oz :results output
+<<MakeTextureConstraint>>
+
+{Browse hi}
+#+end_src
+
+
+Test method getSimultaneousItemsOffset
+   
+#+begin_src oz :results output
+%% Test
+  
+  declare
+  Voice1
+  MyScore = {Score.make sim([seq(handle:Voice1
+                                 [note(duration:1
+                                       pitch:60)
+                                  note(duration:1
+                                       pitch:61)
+                                  note(duration:2
+                                       pitch:62)
+                                  note(duration:1
+                                       pitch:63)
+                                  note(duration:1
+                                       pitch:64)]
+                                )
+                                   seq(info: voice2
+                                       [note(duration:1
+                                             pitch:50)
+                                        note(duration:1
+                                             pitch:51)
+                                        note(duration:2
+                                             pitch:52)
+                                        note(duration:1
+                                             pitch:53)
+                                        note(duration:1
+                                             pitch:54)])
+                                  ]
+                                 startTime:0
+                                 timeUnit:beats(4))
+             unit}
+  N1 = {Voice1 getItems($)}.1
+  
+  {Map {N1 getSimultaneousItemsOffset($ 2
+                                      test: fun {$ N2}
+                                               {N2 isNote($)} andthen
+                                               {N2 findContainerRecursively($ {GUtils.toFun fun {$ C} {C hasThisInfo($ voice2)} end})} \= nil
+                                            end)}
+   fun {$ X} {X toInitRecord($)} end}
+#+end_src
 
 
     Constraint applied to a container (typically a monophonic part) together with a specification for a time window: constraint is applied to all notes within that container and within that time window
