@@ -13,6 +13,8 @@
 
 /** %% This functor defines re-usable musical segments. These segments are defined as sub-CSPs (extended scripts). They implement relatively specific musical ideas (e.g., a contrapuntual line, a specific motif, or a homophonic chord progression), but they support a number of arguments in order to make them flexible enough that they are interesting for re-use.
 %%
+%% In addition, this functor defines constraints (and expressive constraint applicators) that shape musical segments, such as constraints on the texture.
+%%
 %% Unfortunately, the documentation for many of the definitions here are not automatically extracted in the the HTML reference. Please check the source at ../Segments.oz for the documentation of these definitions. 
 %%
 %% */
@@ -50,12 +52,14 @@ import
    LUtils at 'x-ozlib://anders/strasheela/source/ListUtils.ozf'
    MUtils at 'x-ozlib://anders/strasheela/source/MusicUtils.ozf'
    Score at 'x-ozlib://anders/strasheela/source/ScoreCore.ozf'
+   SMapping at 'x-ozlib://anders/strasheela/source/ScoreMapping.ozf'
    Init at 'x-ozlib://anders/strasheela/source/Init.ozf'
 
    Pattern at 'x-ozlib://anders/strasheela/Pattern/Pattern.ozf'
    HS at 'x-ozlib://anders/strasheela/HarmonisedScore/HarmonisedScore.ozf'
    Fenv at 'x-ozlib://anders/strasheela/Fenv/Fenv.ozf'
-
+   H at 'x-ozlib://anders/strasheela/Heuristics/Heuristics.ozf'
+   
    HCP at 'source/HomophonicChordProgression.ozf'
    TSC at 'source/TransformableSubscript.ozf'
    SegsOut at 'source/Output.ozf'
@@ -87,6 +91,10 @@ export
 
 %    TestMotif TestScoreSegment
 
+   Texture TextureProgression
+   Homophonic HeuristicHomophonic HierarchicHomophonic HomoDirectional
+   
+   
    HomophonicChordProgression
 
    TSC
@@ -641,9 +649,9 @@ MakeCounterpoint_PatternMotifs_OffsetDurationPitchcontour
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-   %%
-   %% Polyphonic form spec
-   %%
+%%%
+%%% Polyphonic form spec
+%%%
 
    /** %% Returns extended script for musical section where each segment in the section expresses a single chord. 
    %%
@@ -793,7 +801,182 @@ MakeCounterpoint_PatternMotifs_OffsetDurationPitchcontour
 	 {Adjoin As.constructors add}}
    end
 
+
    
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%
+%%% Texture constraints
+%%%
+
+     /** %% Texture constraints restrict the independence between parts/voices. Dependence examples are homorhythm (simultaneous notes have the same start time and duration), heterorhythm (simultaneous notes have similar start times and durations), contrarhythm (simultaneous notes have different same start times or durations), homodirectional texture, various degrees of imitation (dependencies like, e.g., homorhythmic and homodirectional texture with a time offset) and many more possibilities. Texture constraints are inspired by Berry, Wallace (1987). Structural functions in music. Courier Dover Publications.
+  
+  %% A texture constraint applies a Dependency (a constraint, see below) between certain notes in a LeadingPart (a container) and certain notes in a DependantParts (a container). DependantParts can be either a single container or a list of container; in the latter case a dependency is applied to multiple parts (e.g., for a fully homophonic texture apply the dependency Homophonic to one voice as LeadingPart and a list with the remaining voices as DependantParts).
+  
+  %% A Dependency is a procedure with the following interface.
+  
+  {MyDependency Note1 Note2 Args}
+  
+  %% A Dependency defines a constraint between Note1, a note from the LeadingPart, and Note2, a note from the DependantPart. By default, Note1 and Note2 are simultaneous notes (see the argument offsetTime below for other cases). For example, homophony can be defined by constraining that the start times and durations of Note1 and Note2 are equal. Constraints that require more complex score contexts (e.g., the note succeeding Note1 in LeadingPart) are defined by accessing such contexts from the given notes (e.g., using methods like getTemporalSuccessor). The Dependency argument Args contains values for all optional arguments in the Args argument of a texture constraint (see below). Various dependencies are predefined (e.g., Homophonic, and HomoDirectional), and users can freely define their own.
+  %%
+  %% The argument Args of a texture constraint supports the following optional arguments.
+  %%
+  %% offsetTime (default 0): Using this argument, various forms of imitation can be defined. The dependency constraint is applied to a note in DependantPart that starts the specified amount of offset later than the respective note in LeadingPart.
+  %% Remember that negative offset times are not allowed (if you would need them, simply swap the arguments LeadingPart and DependantPart).
+  %% In case DependantParts is a list of containers, then a list of individual offset times can be given.
+  %%
+  %% timeRange: TODO
+  %%
+  %% numericRange (default nil): Specifies the positions of the affected notes in LeadingPart. For example, the numeric range [1#3 5#6] affects the notes at position 1-3 and 5-6 in LeadingPart and their simultaneous notes in DependantPart (if offsetTime is the default). numericRange is based on SMapping.forNumericRange, and supports all its index integers notations.
+  %%
+  %% Note that further arguments can be provided, which are then forwarded to the dependency constraints. For example, a transposition dependency may use a transposition argument which would then be included in the Args record for Texture. 
+  %% In case DependantParts is a list of containers, then a list of individual values can be given to any argument.
+  %%
+  %%
+  %% */
+  %% TODO:
+  %% * Generalise (or multiple versions?):
+  %%  - Add an arg like processNoteLists: true OR false (false is the default). If true, then instead of processing one note of LeadingPart at a time, lists of notes are taken (as specified by numericRange). This is useful for constraining non-overlapping score contexts. For example, a dependency where a sequence of pitches are repeated (or transposed) without retaining their order (as Feldman does), or an imitation that should start with a rest (offsetTime > 0) are best defined that way. By specifying an extra argument for this instead of generalising the whole definition, only specific dependency definitions need to deal with such cases, while others can rely on processing of individual notes. 
+  %%  - Using SMapping.forNumericRange is only an option, another is SMapping.forTimeRange
+  %%  - ?? Sim items is only an option, another is notes at same position
+  %%  - ?? Is is correct to only constrain notes? Should that be more general?
+  proc {Texture Dependency LeadingPart DependantParts Args}
+     Defaults = unit(numericRange: nil %% TODO: ?? move this arg elsewhere (strucurally different)? I may want to keep it if I add support for SMapping.forTimeRange
+                     offsetTime: 0)
+     As = {Adjoin Defaults Args}
+     proc {ConstrainPart N1 DependantPart Ags}
+        DependantNs
+     in
+        thread
+           DependantNs
+           = {N1 getSimultaneousItemsOffset($ Ags.offsetTime
+                                            toplevel: DependantPart
+                                            test: isNote)}
+        end
+        thread
+           {ForAll DependantNs
+            proc {$ DependantN} {Dependency N1 DependantN Ags} end}
+        end
+     end
+     fun {DuplicateArgs Ags N}
+        {List.mapInd {List.make N}
+         fun {$ I _}
+            {Record.map Ags
+             fun {$ X}
+                if {IsList X} then {Nth X I} else X end
+             end}
+         end}
+     end
+  in
+     {SMapping.forNumericRange {LeadingPart collect($ test:isNote)}
+      As.numericRange 
+      proc {$ N}
+         if {IsList DependantParts}
+         then
+            {ForAll {LUtils.matTrans
+                     [DependantParts {DuplicateArgs As {Length DependantParts}}]}
+             proc {$ [DependantPart Ags]}
+                {ConstrainPart N DependantPart Ags}
+             end}
+         else {ConstrainPart N DependantParts As}
+         end
+      end}
+  end
+    
+  /** %% Multiple applications of Texture can be programmed slightly more concisely and better readable with TextureProgression. The following two code examples are equivalent (first a version using Texture then using TextureProgression).
+  
+  %% Imitation at the beginning (e.g., Voice2 at time 2 imitates 1st 5 notes of Voice1)
+  {Texture MyDependency Voice1 [Voice2 Voice3 Voice1]
+   unit(numericRange: 1#5
+        offsetTime: [2 4 6])}
+  %% Homophonic section
+  {Texture Homophonic Voice1 [Voice2 Voice3]
+   unit(numericRange: 9#12)}
+  
+  {TextureProgression
+   [%% Imitation at the beginning (e.g., Voice2 at time 2 imitates 1st 5 notes of Voice1)
+    (1#5) # unit(MyDependency Voice1 [Voice2 Voice3 Voice1]  
+                 offsetTime: [2 4 6])
+    %% Homophonic section
+    (8#12) # unit(Homophonic Voice1 [Voice2 Voice3])
+   ]}
+  
+  %% */
+  proc {TextureProgression Specs}
+     {ForAll Specs
+      proc {$ NumericRange#Spc}
+         Dependency = Spc.1
+         LeadingPart = Spc.2
+         DependantParts = Spc.3
+         Args = {Record.subtractList Spc [1 2 3]}
+      in
+         {Texture Dependency LeadingPart DependantParts {Adjoin unit(numericRange:NumericRange) Args}}
+      end}
+  end
+  
+  /** %% [Dependency for Texture] Results in a homophonic texture.
+  %% Note that a truely homophonic texture only results for the default offset time 0, otherwise a time-shifted "homophonic" imitation results.
+  %% */
+  proc {Homophonic N1 N2 Args}
+     {N1 getStartTime($)} + Args.offsetTime = {N2 getStartTime($)}
+     {N1 getDuration($)} = {N2 getDuration($)}
+  end
+  
+  /* %% [Dependency for Texture] Results in a heterophonic texture.
+  %% Note that a truely heterophonic texture only results for the default offset time 0, otherwise a time-shifted "heterophonic" imitation results.
+  %% NOTE: Heuristic constraints only affect parameters that are distributed! Works (probably?) best if end times are distributed (and not durations?).
+  %% */
+  proc {HeuristicHomophonic N1 N2 Args}
+     fun {EqualWithTimeOffset X Y}
+        if X + Args.offsetTime == Y
+        then 100 % {GUtils.random 100}
+        else 0   % {GUtils.random 10}
+        end
+     end
+  in
+     % {Score.apply_H H.equal
+     %  [{N1 getStartTimeParameter($)} {N2 getStartTimeParameter($)}] 1}
+     % {Score.apply_H H.equal
+     %  [{N1 getEndTimeParameter($)} {N2 getEndTimeParameter($)}] 1}
+     {Score.apply_H EqualWithTimeOffset
+      [{N1 getStartTimeParameter($)} {N2 getStartTimeParameter($)}] 1}
+     {Score.apply_H EqualWithTimeOffset
+      [{N1 getEndTimeParameter($)} {N2 getEndTimeParameter($)}] 1}
+     %% just in case (more heuristic constraints do not add computational load :)
+     {Score.apply_H H.equal
+      [{N1 getDurationParameter($)} {N2 getDurationParameter($)}] 1}
+  end
+  
+  
+  /** %% [Dependency for Texture]  Generalised (?) version of "Orjan Sandred's notion of hierarchic rhythm.
+  %% If the start time of N1 occurs between start and end of N2 including, then the start time of these notes are equal. In other words, the notes of N2's voice may be shorter than those of N1's voice, but whenever a longer note starts in the latter voice there also starts a note in the former.
+  %% */
+  %% BUG: can fail, but such minor inconsistencies may actually be good
+  %% Problem: overall, rhythm followed too closely -- but I can easily force it otherwise (e.g., more notes in one layer with same overall end time.
+  proc {HierarchicHomophonic N1 N2 Args}
+     Start1 = {N1 getStartTime($)} + Args.offsetTime
+     Start2 = {N2 getStartTime($)}
+     End2 = {N2 getEndTime($)}
+  in
+     {FD.impl {FD.conj
+               (Start2 =<: Start1)
+               (Start1 =<: End2)}
+      (Start1 =: Start2)
+      1}
+  end
+  
+  /** %% [Dependency for Texture] Results in a homo-directional texture (i.e. parallel pitch contours).
+  %% */
+  proc {HomoDirectional N1A N2A Args}
+     N1B = {N1A getTemporalSuccessor($)}
+     N2B = {N2A getTemporalSuccessor($)}
+  in
+     if N1B \= nil andthen N2B \= nil
+     then
+        {Pattern.direction {N1A getPitch($)} {N1B getPitch($)}}
+        = {Pattern.direction {N2A getPitch($)} {N2B getPitch($)}}
+     end
+  end
+
 end
 
 
