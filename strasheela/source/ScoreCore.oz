@@ -987,14 +987,19 @@ define
 	 {FD.conj (Start1 =: Start2) (End1 =: End2) B}
       end
       /** % [Deterministic method] Returns list of score objects simultaneous to self and fulfilling the optional boolean function or method test.
+      %% If a toplevel Top (a temporal container) is given, then only within that container is searched for simultaneous items to self. Otherwise the temporal top-level of self is search (i.e. usually the whole score).
       %% The implementation uses LUtils.cFilter and the reified constraints method isSimultaneousItemR. Items are returned as soon as the score contains enough information for all score objects in the score to tell whether or not their are simultaneous to self (i.e. rhythmic structure of the whole score must not necessarily be fully determined).
-      %% NB: Test must be a deterministic function/method which does not block (e.g., checks on score object types or their position in the score topology are OK) and which is used for pre-filtering score objects. The argument cTest has the same format (optional Boolean function or method), but it is applied within the concurrent filtering of LUtils.cFilter, together with isSimultaneousItemR. Computationally very expensive tests and in particular tests which can block are better handed to cTest. 
+      %% NB: Test must be a deterministic function/method which does not block (e.g., checks on score object types or their position in the score topology are OK) and which is used for pre-filtering score objects. The argument cTest has the same format (optional Boolean function or method), but it is applied within the concurrent filtering of LUtils.cFilter, together with isSimultaneousItemR. Computationally very expensive tests and in particular tests which can block are better handed to cTest.
       %%*/
       %% @1=?Xs	
       meth getSimultaneousItems(?Xs test:Test<=fun {$ X} true end
-				cTest: CTest<=fun {$ X} true end)
+				cTest: CTest<=fun {$ X} true end
+				toplevel: Top<=false)
 	 thread 		% ?? NOTE: thread needed?
-	    TopLevel = {self getTopLevels($ test:fun {$ X} {X isTimeMixin($)} end)}.1
+	    TopLevel = if Top \= false
+		       then Top
+		       else {self getTopLevels($ test:fun {$ X} {X isTimeMixin($)} end)}.1
+		       end
 	    ScoreObjects = {TopLevel collect($ test: fun {$ X}
 							%% only test items further
 							{X isItem($)} andthen
@@ -1014,9 +1019,13 @@ define
       %% */
       meth getSimultaneousItemsOffset(?Xs Offset
 				      test:Test<=fun {$ X} true end
-				      cTest: CTest<=fun {$ X} true end)
+				      cTest: CTest<=fun {$ X} true end
+				      toplevel: Top<=false)
 	 thread 		% ?? NOTE: thread needed?
-	    TopLevel = {self getTopLevels($ test:fun {$ X} {X isTimeMixin($)} end)}.1
+	    TopLevel = if Top \= false
+		       then Top
+		       else {self getTopLevels($ test:fun {$ X} {X isTimeMixin($)} end)}.1
+		       end
 	    ScoreObjects = {TopLevel collect($ test: fun {$ X}
 							%% only test items further
 							{X isItem($)} andthen
@@ -1034,13 +1043,18 @@ define
       end
 
       /** %% [Deterministic method] Returns the first score object found which is simultaneous to self and fulfilling the optional boolean function or method test.
+      %% If a toplevel Top (a temporal container) is given, then only within that container is searched for simultaneous items to self. Otherwise the temporal top-level of self is search (i.e. usually the whole score).
       %% The implementation uses LUtils.cFind and the reified constraints method isSimultaneousItemR. X is return as soon as the score contains enough information to tell for any score object that it is simultaneous to self (i.e. rhythmic structure of the whole score must not necessarily be fully determined). 
       %% NB: Test must be a deterministic function/method which does not block (e.g., checks on score object types or their position in the score topology are OK) and which is used for pre-filtering score objects. The argument cTest has the same format (optional Boolean function or method), but it is applied within the concurrent filtering of LUtils.cFilter, together with isSimultaneousItemR. Computationally very expensive tests and in particular tests which can block are better handed to cTest. 
       %% */
       meth findSimultaneousItem(?X test:Test<=fun {$ X} true end
-				cTest: CTest<=fun {$ X} true end)
+				cTest: CTest<=fun {$ X} true end
+				toplevel: Top<=false)
 	 thread 		% ?? NOTE: thread needed?
-	    TopLevels = {self getTopLevels($ test:fun {$ X} {X isTimeMixin($)} end)}
+	    TopLevels = if Top \= false
+		       then [Top]
+		       else {self getTopLevels($ test:fun {$ X} {X isTimeMixin($)} end)}
+		       end
 	 in
 	    if TopLevels == nil
 	    then X = nil
