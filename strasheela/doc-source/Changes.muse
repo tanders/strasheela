@@ -5,8 +5,8 @@
 * Changes in Version 0.9.11 (no date yet)
 
   - Main additions and changes 
+    - Texture constraints added. These constraints are inspired by the chapter on texture in [[http://books.google.com/books?id=J4iXm-uoSRUC&printsec=frontcover&dq=structural+functions+in+music&hl=en&src=bmrr&ei=BcwFToS0FcqahQeM2sS8DQ&sa=X&oi=book_result&ct=result&resnum=1&ved=0CCwQ6AEwAA#v=onepage&q&f=false][Berry, Wallace. 1987. Structural Functions in Music. Courier Dover Publications.]] See the examples in [[../examples/Form-Examples/Texture-Examples.oz][Texture-Examples.oz]], and the definitions in the functor [[../contributions/anders/Segments/doc/node1.html][Segments.]]  
     - Support for heuristic constraints added. See the documentation of the procedure Score.apply_H, the examples in [[../examples/Heuristic-Constraints.oz][Heuristic-Constraints.oz]], and the functor [[../contributions/anders/Heuristics/doc/node1.html][Heuristics]].  
-    - Texture constraints added. See the examples in [[../examples/Form-Examples/Texture-Examples.oz][Texture-Examples.oz]], and the definitions in the functor [[../contributions/anders/Segments/doc/node1.html][Segments.]]  
     - Revised Fomus output: Strasheela now exports the new format of the Fomus rewrite (http://fomus.sourceforge.net/), and Strasheela's Fomus export definition have been extended in many ways.
     - Constraint problems on arbitrary octave-repeating [[http://en.wikipedia.org/wiki/Regular_temperament][regular temperaments]] (any rank) supported, including [[http://en.wikipedia.org/wiki/Just_intonation][just intonation]] with arbitrary limits (pitches measured, e.g., in cent or millicent).
     - Revised score distribution: value orderings can now access arbitrary score information 
@@ -16,8 +16,9 @@
     - Partially determined scores can be output to music notation (i.e. Lilypond and Sibelius/Finale) via the Fomus export. (Partially determined scores could be exported into Csound and MIDI already.)
 
   - Documentation
+    -  [[../examples/Form-Examples/Texture-Examples.oz][Texture-Examples.oz]]: Added examples demonstrating texture constraints 
+    - [[../examples/Heuristic-Constraints.oz][Heuristic-Constraints.oz]]: demonstrates how heuristic constraints are defined and used.
     - [[../ examples/ControllingOutput-Examples/Fomus-Examples.oz][Fomus-Examples.oz]]: Added examples demonstrating the Fomus output. 
-    - [[../examples/Heuristic-Constraints.oz][Heuristic-Constraints.oz]]: demonstrates how heuristic constraints are defined and ued
     - [[../examples/RegularTemperaments.oz][RegularTemperaments.oz]]: examples related to regular temperaments
     - [[../examples/Harmony-Examples/HarmonicProgressions-41ET.oz][HarmonicProgressions-41ET.oz]]: Added 41 ET harmony example, using La Monte Young's The Well-Tuned Piano chords
     - [[../examples/Counterpoint-Examples/Counterpoint-22ET.oz][Counterpoint-22ET.oz]]: Added 22 ET counterpoint examples
@@ -77,6 +78,7 @@
     - Out.outputScoreConstructor: strings in archived score were not properly quoted (fixed Out.recordToVS).
     - HS.score.harmonicRhythmFollowsMarkers: spelling correction (was HS.score.harmonicRythmFollowsMarkers)
     - LUtils: changed comparison function of many defs (Contains, Position, Positions, Substitute, Substitute1) to GUtils.isEqual, which is working for all data types 
+    - UniformMeasures method onAccentR fixed -- it did not support irregular accent sequences of time signatures such as 5/4 before. (method onAccentDR removed) 
 
   - For many further fixes see the [[http://apps.sourceforge.net/trac/strasheela/timeline][Trac Timeline]] or the [[../CHANGELOG.txt]].
 
