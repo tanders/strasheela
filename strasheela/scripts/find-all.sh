@@ -13,5 +13,5 @@ cd `dirname $0`
 # FILES=$(find ./test -name '*.oz' -print)
 FILES=$(find .. -name '*.oz' -print)
 
-grep $EXP $FILES
+egrep "$EXP" $FILES
 
