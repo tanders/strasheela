@@ -1043,7 +1043,7 @@ define
       end
 
       /** %% [Deterministic method] Returns the first score object found which is simultaneous to self and fulfilling the optional boolean function or method test.
-      %% If a toplevel Top (a temporal container) is given, then only within that container is searched for simultaneous items to self. Otherwise the temporal top-level of self is search (i.e. usually the whole score).
+      %% If a toplevel Top (a temporal container) is given, then only within that container is searched for simultaneous items to self. Otherwise the temporal top-level of self is searched (i.e. usually the whole score).
       %% The implementation uses LUtils.cFind and the reified constraints method isSimultaneousItemR. X is return as soon as the score contains enough information to tell for any score object that it is simultaneous to self (i.e. rhythmic structure of the whole score must not necessarily be fully determined). 
       %% NB: Test must be a deterministic function/method which does not block (e.g., checks on score object types or their position in the score topology are OK) and which is used for pre-filtering score objects. The argument cTest has the same format (optional Boolean function or method), but it is applied within the concurrent filtering of LUtils.cFilter, together with isSimultaneousItemR. Computationally very expensive tests and in particular tests which can block are better handed to cTest. 
       %% */
