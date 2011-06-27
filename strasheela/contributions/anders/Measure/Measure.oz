@@ -78,20 +78,24 @@ define
 		%% beats:Beats<=_ accents:Accents<=_
 		%%
 		%% AIs.4 = [1 3] means: a measure with beatNumber 4 has an accent on the first and on the third beat.
-		accentIdxDB:AIs<=accents(1:[1] % single (1/2, 1/4, 1/8)
-					 2:[1] % duple (2/2, 2/4, 2/8)
-					 3:[1] % triple (3/2, 3/4, 3/8)
-					 4:[1 3] % quadruple (4/2, 4/4, 4/8)
-					 %% no alternative: quintuple 2/4 + 3/4
-					 5:[1 4] % quintuple 3/4 + 2/4
-					 6:[1 4] % compound duple (6/2, 6/4, 6/8)
-% 					 8:[1 3 5 7]
-					 9:[1 4 7] % compound triple (9/4, 9/8)
-					 12:[1 4 7 10] % compound quadruple (12/4, 12/8, 12/16)
-					)
+		accentIdxDB:AIs<=accents
 		...) = M
+	 DefaultAIs = accents(1:[1] % single (1/2, 1/4, 1/8)
+			      2:[1] % duple (2/2, 2/4, 2/8)
+			      3:[1] % triple (3/2, 3/4, 3/8)
+			      4:[1 3] % quadruple (4/2, 4/4, 4/8)
+			      %% no alternative: quintuple 2/4 + 3/4
+			      5:[1 4] % quintuple 3/4 + 2/4
+			      6:[1 4] % compound duple (6/2, 6/4, 6/8)
+			      7:[1 3 5] % again, only one version
+			      8:[1 3 5 7]
+			      9:[1 4 7] % compound triple (9/4, 9/8)
+			      12:[1 4 7 10] % compound quadruple (12/4, 12/8, 12/16)
+			     )
+	 FullAIs = {Adjoin DefaultAIs AIs}
+      in
 	 Score.temporalElement, {Record.subtractList M
-			      [beatNumber beatDuration accentIdxDB]}
+				 [beatNumber beatDuration accentIdxDB]}
 	 @beatNumber = {New Score.parameter init(value:BeatNr info:beatNumber)}
 	 @beatDuration = {New Score.timeParameter init(value:BeatDuration info:beatDuration)}
 	 {self bilinkParameters([@beatNumber @beatDuration])}
@@ -112,10 +116,10 @@ define
 	 thread
 	    AccentIdxs
 	 in
-	    if {HasFeature AIs BeatNr}
-	    then AccentIdxs = AIs.BeatNr
+	    if {HasFeature FullAIs BeatNr}
+	    then AccentIdxs = FullAIs.BeatNr
 	    else raise error(undefinedAccentsForBeatNr
-			     unit(Measure accentIdxDB:AIs beatNumber:BeatNr))
+			     unit(Measure accentIdxDB:FullAIs beatNumber:BeatNr))
 		 end
 	    end
 	    %% @beats is arithmetic series: length is beatNumber, starts
@@ -326,228 +330,234 @@ define
 
 
    
-%    local
-%       %% !! blocks until measure duration is determined
-%       proc {TimeInMeasure Time MeasureDur ?RelTime}
-% 	 RelTime = {FD.decl}
-% 	 RelTime =: {FD.modI Time MeasureDur}
-%       end
-%    in
+   local
+      %% !! blocks until measure duration is determined (i.e. both beatNumber and beatDuration are determined)
+      proc {TimeInMeasure Time MeasureDur ?RelTime}
+	 RelTime = {FD.decl}
+	 RelTime =: {FD.modI Time MeasureDur}
+      end
+   in
      
-   /** %% UniformMeasures is a silent timed element representing a constant meter of a score for the duration of the UniformMeasures. The parameter 'n' represents the number of measures. The parameter 'beatNumber' and 'beatDuration' represent the meter as in Measure. The further measure parameters and features (e.g. 'beats' and 'accents') are accessible by the same methods as in Measure. However, there is a difference between getDuration and getMeasureDuration: the first returns the duration of the whole UniformMeasures while the second the duration of a single measure.
-   %% The similar class MeasureSeq allows to represent a sequence of measures which differ in beatNumber or beatDuration. However, this makes the constraints for MeasureSeq less efficient then the constraints for UniformMeasures.
-   %%
-   %% NB: The constraints defined for UniformMeasures required both BeatNr and BeatDuration to be determined.
-   %%
-   %% See the Measures doc for more info.
-   %% */
-   %%
-   %% ?? param n not necessarily needed if the duration of UniformMeasures is not needed -- I may have a sequence of UniformMeasures for different parts of the score and then I really need n.
-   class UniformMeasures from Score.temporalElement 
-      feat !UniformMeasuresType:unit
-	 label:uniformMeasures
-
-      attr n beatNumber beatDuration % params
-	 measure % privat (o accessors def.)
-	 
-	 /** %% ... Further init arguments: accentIdxDB (see Measure) ...
-	 %% If the args n, beatNumber, or beatDuration are left unset, you must set them later with their respective accessor methods.
-	 %% */
-	 %% !!?? filter out offsetTime
-      meth init(n:N<=_
-		beatNumber:BeatNr<=_
-		beatDuration:BeatDuration<=_
-		...) = M
-	 Score.temporalElement, {Record.subtractList M
-				 [n beatNumber beatDuration accentIdxDB]}
-
-	 @n = {New Score.parameter init(value:N info:n)}
-	 %% !! beatNumber and beatDuration are actually @measure parameters. They are 'mirrored' into UniformMeasures to ensure these params are accessible by the usually means (e.g. for distribution). -- I am not happy with this design, just costs more memory during search..
-	 @beatNumber = {New Score.parameter init(value:BeatNr info:beatNumber)}
-	 @beatDuration = {New Score.timeParameter init(value:BeatDuration
-						       info:beatDuration)}
-	 {self bilinkParameters([@n @beatNumber @beatDuration])}
-	 
-	 @measure = {Score.makeScore {Record.subtractList M
-				      [n offsetTime startTime endTime duration]}
-		     unit(init:Measure)}
-	 %% to determine timing params of measure
-	 {@measure getStartTime($)} = 0
-	 {@measure getTimeUnit($)} = {self getTimeUnit($)}
-	 {@beatDuration getUnit($)} = {self getTimeUnit($)}
-	 %%
-	 %% initConstraint
-	 %%
-	 thread 		% in case of missing information..
-	    BeatNr = {FD.decl}	% !! needed ?
-	    BeatDuration = {FD.decl} % !! needed ?
-	    %% ?? not already FD int in Score.temporalElement, init
-	    {self getDuration($)} = {FD.decl} % !!?? needed ? 
-	    {self getDuration($)} =: BeatNr * BeatDuration * N
-	    %% ?? Too strict? If I need a non-meter section I should
-	    %% introduce an explicit class
-	    {self getOffsetTime($)} = 0
-	 end
-      end
-      
-      meth getN(?X)
-	 X = {@n getValue($)}
-      end
-      meth getNParameter(?X)
-	 X = @n
-      end
-      meth getBeatNumber(?X)
-	 X = {@beatNumber getValue($)}
-      end
-      meth getBeatNumberParameter(?X)
-	 X = @beatNumber
-      end
-      meth getBeatDuration(?X)
-	 X = {@beatDuration getValue($)}
-      end
-      meth getBeatDurationParameter(?X)
-	 X = @beatDuration
-      end      
-      meth getBeats(?X)
-	 X = {@measure getBeats($)}
-      end    
-      meth getBeatsFS(?X)
-	 X = {@measure getBeatsFS($)}
-      end
-      meth getAccents(?X)
-	 X = {@measure getAccents($)}
-      end
-      meth getAccentsFS(?X)
-	 X = {@measure getAccentsFS($)}
-      end
-      /** %% Returns the duration of a single measure. The duration of the whole UniformMeasures is returned by getDuration.
-      %% */
-      meth getMeasureDuration(?X)
-	 X = {@measure getDuration($)}
-      end
-      meth getMeasureDurationParameter(?X)
-	 X = {@measure getDurationParameter($)}
-      end
-
-      /** %% I is the index of the measure at Time. A measure starts at its start time and ends before its end time. For instance, the index for the first measure is 1, starting at Time 0. Measure 2 starts at MeasureDuration. I and Time are FD integers.
-      %% */
-      meth getMeasureAt(I Time)
-	 %% !!?? is there some cheaper implementation
-	 MDur = {self getMeasureDuration($)}
-      in
-	 (I - 1) * MDur =<: Time
-	 I * MDur >: Time
-      end
-	 
-      /** %% B=1 <-> Time equals the start time of some measure in UniformMeasures. Time is FD int, B is implicitly constrained to 0/1-int.
+      /** %% UniformMeasures is a silent timed element representing a constant meter of a score for the duration of the UniformMeasures. The parameter 'n' represents the number of measures. The parameter 'beatNumber' and 'beatDuration' represent the meter as in Measure. The further measure parameters and features (e.g. 'beats' and 'accents') are accessible by the same methods as in Measure. However, there is a difference between getDuration and getMeasureDuration: the first returns the duration of the whole UniformMeasures while the second the duration of a single measure.
+      %% The similar class MeasureSeq allows to represent a sequence of measures which differ in beatNumber or beatDuration. However, this makes the constraints for MeasureSeq less efficient then the constraints for UniformMeasures.
       %%
-      %% NB: method does not take n into account -- to limit truth value B to the actual time span within start and end time of UniformMeasures add necessary constraints outside of this method.
+      %% NB: The constraints defined for UniformMeasures required both BeatNr and BeatDuration to be determined.
+      %%
+      %% See the Measures doc for more info.
       %% */
-      meth onMeasureStartR(B Time)
-	 %% for old version: NB: constraint blocks until measure duration is determined (i.e. both beatNumber and beatDuration are determined). There is no propagation with neither beatNumber and beatDuration and Time or B.
+      %%
+      %% ?? param n not necessarily needed if the duration of UniformMeasures is not needed -- I may have a sequence of UniformMeasures for different parts of the score and then I really need n.
+      class UniformMeasures from Score.temporalElement 
+	 feat !UniformMeasuresType:unit
+	    label:uniformMeasures
+
+	 attr n beatNumber beatDuration % params
+	    measure % privat (o accessors def.)
+	 
+	    /** %% ... Further init arguments: accentIdxDB (see Measure) ...
+	    %% If the args n, beatNumber, or beatDuration are left unset, you must set them later with their respective accessor methods.
+	    %% */
+	    %% !!?? filter out offsetTime
+	 meth init(n:N<=_
+		   beatNumber:BeatNr<=_
+		   beatDuration:BeatDuration<=_
+		   ...) = M
+	    Score.temporalElement, {Record.subtractList M
+				    [n beatNumber beatDuration accentIdxDB]}
+
+	    @n = {New Score.parameter init(value:N info:n)}
+	    %% !! beatNumber and beatDuration are actually @measure parameters. They are 'mirrored' into UniformMeasures to ensure these params are accessible by the usually means (e.g. for distribution). -- I am not happy with this design, just costs more memory during search..
+	    @beatNumber = {New Score.parameter init(value:BeatNr info:beatNumber)}
+	    @beatDuration = {New Score.timeParameter init(value:BeatDuration
+							  info:beatDuration)}
+	    {self bilinkParameters([@n @beatNumber @beatDuration])}
+	 
+	    @measure = {Score.makeScore {Record.subtractList M
+					 [n offsetTime startTime endTime duration]}
+			unit(init:Measure)}
+	    %% to determine timing params of measure
+	    {@measure getStartTime($)} = 0
+	    {@measure getTimeUnit($)} = {self getTimeUnit($)}
+	    {@beatDuration getUnit($)} = {self getTimeUnit($)}
+	    %%
+	    %% initConstraint
+	    %%
+	    thread 		% in case of missing information..
+	       BeatNr = {FD.decl}	% !! needed ?
+	       BeatDuration = {FD.decl} % !! needed ?
+	       %% ?? not already FD int in Score.temporalElement, init
+	       {self getDuration($)} = {FD.decl} % !!?? needed ? 
+	       {self getDuration($)} =: BeatNr * BeatDuration * N
+	       %% ?? Too strict? If I need a non-meter section I should
+	       %% introduce an explicit class
+	       {self getOffsetTime($)} = 0
+	    end
+	 end
+      
+	 meth getN(?X)
+	    X = {@n getValue($)}
+	 end
+	 meth getNParameter(?X)
+	    X = @n
+	 end
+	 meth getBeatNumber(?X)
+	    X = {@beatNumber getValue($)}
+	 end
+	 meth getBeatNumberParameter(?X)
+	    X = @beatNumber
+	 end
+	 meth getBeatDuration(?X)
+	    X = {@beatDuration getValue($)}
+	 end
+	 meth getBeatDurationParameter(?X)
+	    X = @beatDuration
+	 end      
+	 meth getBeats(?X)
+	    X = {@measure getBeats($)}
+	 end    
+	 meth getBeatsFS(?X)
+	    X = {@measure getBeatsFS($)}
+	 end
+	 meth getAccents(?X)
+	    X = {@measure getAccents($)}
+	 end
+	 meth getAccentsFS(?X)
+	    X = {@measure getAccentsFS($)}
+	 end
+	 /** %% Returns the duration of a single measure. The duration of the whole UniformMeasures is returned by getDuration.
+	 %% */
+	 meth getMeasureDuration(?X)
+	    X = {@measure getDuration($)}
+	 end
+	 meth getMeasureDurationParameter(?X)
+	    X = {@measure getDurationParameter($)}
+	 end
+
+	 /** %% I is the index of the measure at Time. A measure starts at its start time and ends before its end time. For instance, the index for the first measure is 1, starting at Time 0. Measure 2 starts at MeasureDuration. I and Time are FD integers.
+	 %% */
+	 meth getMeasureAt(I Time)
+	    %% !!?? is there some cheaper implementation
+	    MDur = {self getMeasureDuration($)}
+	 in
+	    (I - 1) * MDur =<: Time
+	    I * MDur >: Time
+	 end
+	 
+	 /** %% B=1 <-> Time equals the start time of some measure in UniformMeasures. Time is FD int, B is implicitly constrained to 0/1-int.
+	 %%
+	 %% NB: Constraint blocks until both beatNumber and beatDuration are determined.
+	 %% NB: method does not take n into account -- to limit truth value B to the actual time span within start and end time of UniformMeasures add necessary constraints outside of this method.
+	 %% */
+	 meth onMeasureStartR(B Time)
+	    %% for old version: NB: constraint blocks until measure duration is determined (i.e. both beatNumber and beatDuration are determined). There is no propagation with neither beatNumber and beatDuration and Time or B.
 % 	 B = {FD.int 0#1}
 % 	 B =: ({TimeInMeasure Time {self getMeasureDuration($)}}
 % 	       =: {self getStartTime($)})
+	    %%
+	    B = {FD.int 0#1}
+	    B =: ({FD.modI Time {self getMeasureDuration($)}} =: 0)
+	 end
+	 /** %% Variant of onMeasureStartR which does domain propagation (which can be very expensive). However, propagation of Time does only happen after B got determined.
 	 %%
-	 B = {FD.int 0#1}
-	 B =: ({FD.modI Time {self getMeasureDuration($)}} =: 0)
-      end
-      /** %% Variant of onMeasureStartR which does domain propagation (which can be very expensive). However, propagation of Time does only happen after B got determined.
-      %%
-      %% !!?? constraint suspends and performs OK if it first calls {Browse Time}?
-      %% */
-      %% !! MeasureDuration is constrained anyway in Measure -- here I add the same constraints with domain propagation (however, often MeasureDuration is determined soon anyway).
-      meth onMeasureStartDR(B Time)	 
-	 MeasureDuration = {self getMeasureDuration($)}
-	 RelTime = {FD.decl}
-      in
-	 MeasureDuration = {FD.timesD {self getBeatNumber($)} {self getBeatDuration($)}}
-	 RelTime = {FD.modD Time MeasureDuration}
-	 B = {FD.int 0#1}
-	 B =: (RelTime =: 0)
-      end
-      /** %% B=1 <-> Time equals some strong beat in of some measure in UniformMeasures. Time is FD int, B is implicitly constrained to 0/1-int.
-      %%
-      %% NB: Constraint blocks until BeatNr is determined.
-      %% NB: method does not take n into account -- to limit truth value B to the actual time span within start and end time of UniformMeasures add necessary constraints outside of this method.
-      %% */
-      meth onAccentR(B Time)
-	 %% for old version with {self getAccentsFS($)}: NB: constraint blocks until measure duration is determined (i.e. both beatNumber and beatDuration are determined). There is no propagation with neither beatNumber and beatDuration and Time or B. 
-	 %% !! constrain performs probably very little propagation: Time -- transformed into measure only by bounds propagation -- is constrained whether it is element in set...
-% 	    B = {FD.int 0#1}
-% 	    B =: {FS.reified.include
-% 		  {TimeInMeasure Time {self getMeasureDuration($)}}
-% 		  {self getAccentsFS($)}}
+	 %% !!?? constraint suspends and performs OK if it first calls {Browse Time}?
+	 %% */
+	 %% !! MeasureDuration is constrained anyway in Measure -- here I add the same constraints with domain propagation (however, often MeasureDuration is determined soon anyway).
+	 meth onMeasureStartDR(B Time)	 
+	    MeasureDuration = {self getMeasureDuration($)}
+	    RelTime = {FD.decl}
+	 in
+	    MeasureDuration = {FD.timesD {self getBeatNumber($)} {self getBeatDuration($)}}
+	    RelTime = {FD.modD Time MeasureDuration}
+	    B = {FD.int 0#1}
+	    B =: (RelTime =: 0)
+	 end
+	 /** %% B=1 <-> Time equals some strong beat in some measure in UniformMeasures. Time is FD int, B is implicitly constrained to 0/1-int.
 	 %%
-	 %% !!?? You sure this second implementation is more
-	 %% efficient than the old one?
+	 %% NB: Constraint blocks until both beatNumber and beatDuration are determined.
+	 %% NB: method does not take n into account -- to limit truth value B to the actual time span within start and end time of UniformMeasures add necessary constraints outside of this method.
+	 %% */
+	 meth onAccentR(B Time)
+	    %% Constraint blocks until measure duration is determined (i.e. both beatNumber and beatDuration are determined). There is no propagation with neither beatNumber and beatDuration and Time or B. 
+	    %% !! constrain performs probably very little propagation: Time -- transformed into measure only by bounds propagation -- is constrained whether it is element in set...
+	    B = {FD.int 0#1}
+	    B = {FS.reified.include
+		 {TimeInMeasure Time {self getMeasureDuration($)}}
+		 {self getAccentsFS($)}}
+	    %%
+	    %% Alternative implementation using AccentDur -- does not work, because the IOI between accents may be irregular (e.g., for 5/4 time) and thus a single AccentDur cannot work.
+	    %%
+      % 	 Accents = {self getAccents($)}
+      % 	 %% AccentDur: time between two accented beats
+      % 	 AccentDur = {FD.decl}
+      % in
+      % 	 %% shall I put AccentDur as feature/attribute into measure itself?
+      % 	 if {Length Accents} > 1 then 
+      % 	    AccentDur =: {Nth Accents 2} - Accents.1
+      % 	 else AccentDur = {self getMeasureDuration($)}
+      % 	 end
+      % 	 B = {FD.int 0#1}
+      % 	 B =: ({FD.modI Time AccentDur} =: 0)
+	 end
+	 % /** %% Variant of onAccentR which does domain propagation (which can be very expensive). However, propagation of Time does only happen after B got determined. 
+	 % %%
+	 % %% !!?? constraint suspends and performs OK if it first calls {Browse Time}?
+	 % %%
+	 % %% NOTE: BUGGY -- see comments in alternative implementation in onAccentR
+	 % %% */
+	 % meth onAccentDR(B Time)
+	 %    AccentDur = {FD.decl}
+	 %    RelTime = {FD.decl}
+	 % in
+	 %    AccentDur = {FD.minusD {Nth {self getAccents($)} 2} {self getAccents($)}.1}
+	 %    RelTime = {FD.modD Time AccentDur}
+	 %    B = {FD.int 0#1}
+	 %    B =: (RelTime =: 0)
+	 % end
+	 /** %% B=1 <-> Time equals some beat of some measure in UniformMeasures. For instance, in case beat note value is halve note, that B=1 means that Time is on a halve-note onset or on a strong quarter-note onset.
+	 %% Time is FD int, B is implicitly constrained to 0/1-int.
 	 %%
-	 %% AccentDur: time between two accented beats
-	 AccentDur = {FD.decl}
-      in
-	 %% shall I put AccentDur as feature/attribute into measure itself?
-	 AccentDur =: {Nth {self getAccents($)} 2} - {self getAccents($)}.1
-	 B = {FD.int 0#1}
-	 B =: ({FD.modI Time AccentDur} =: 0)
-      end
-      /** %% Variant of onAccentR which does domain propagation (which can be very expensive). However, propagation of Time does only happen after B got determined. 
-      %%
-      %% !!?? constraint suspends and performs OK if it first calls {Browse Time}?
-      %% */
-      meth onAccentDR(B Time)
-	 AccentDur = {FD.decl}
-	 RelTime = {FD.decl}
-      in
-	 AccentDur = {FD.minusD {Nth {self getAccents($)} 2} {self getAccents($)}.1}
-	 RelTime = {FD.modD Time AccentDur}
-	 B = {FD.int 0#1}
-	 B =: (RelTime =: 0)
-      end
-      /** %% B=1 <-> Time equals some beat of some measure in UniformMeasures. For instance, in case beat note value is halve note, that B=1 means that Time is on a halve-note onset or on a strong quarter-note onset.
-      %% Time is FD int, B is implicitly constrained to 0/1-int.
-      %%
-      %% NB: method does not take n into account -- to limit truth value B to the actual time span within start and end time of UniformMeasures add necessary constraints outside of this method.
-      %% */
-      meth onBeatR(B Time)
-	 %% for old version with {self getBeatsFS($)}: NB: constraint blocks until measure duration is determined (i.e. both beatNumber and beatDuration are determined). There is no propagation with neither beatNumber and beatDuration and Time or B.
-	 %% !! constrain performs probably very little propagation: Time -- transformed into measure only by bounds propagation -- is constrained whether it is element in set...
+	 %% NB: method does not take n into account -- to limit truth value B to the actual time span within start and end time of UniformMeasures add necessary constraints outside of this method.
+	 %% */
+	 meth onBeatR(B Time)
+	    %% for old version with {self getBeatsFS($)}: NB: constraint blocks until measure duration is determined (i.e. both beatNumber and beatDuration are determined). There is no propagation with neither beatNumber and beatDuration and Time or B.
+	    %% !! constrain performs probably very little propagation: Time -- transformed into measure only by bounds propagation -- is constrained whether it is element in set...
 % 	    B = {FD.int 0#1}
 % 	    B =: {FS.reified.include
 % 		  {TimeInMeasure Time {self getMeasureDuration($)}}
 % 		  {self getBeatsFS($)}}
+	    %%
+	    B = {FD.int 0#1}
+	    B =: ({FD.modI Time {self getBeatDuration($)}} =: 0)
+	 end
+	 /** %% Variant of onBeatR which does domain propagation (which can be very expensive). However, propagation of Time does only happen after B got determined.
 	 %%
-	 B = {FD.int 0#1}
-	 B =: ({FD.modI Time {self getBeatDuration($)}} =: 0)
-      end
-      /** %% Variant of onBeatR which does domain propagation (which can be very expensive). However, propagation of Time does only happen after B got determined.
-      %%
-      %% !!?? constraint suspends and performs OK if it first calls {Browse Time}?
-      %% */
-      meth onBeatDR(B Time)
-	 RelTime = {FD.decl}
-      in
-	 RelTime = {FD.modD Time {self getBeatDuration($)}}
-	 B = {FD.int 0#1}
-	 B =: (RelTime =: 0)
-      end
+	 %% !!?? constraint suspends and performs OK if it first calls {Browse Time}?
+	 %% */
+	 meth onBeatDR(B Time)
+	    RelTime = {FD.decl}
+	 in
+	    RelTime = {FD.modD Time {self getBeatDuration($)}}
+	    B = {FD.int 0#1}
+	    B =: (RelTime =: 0)
+	 end
 
-      /** %% B=1 <-> Start and End fall in different measures.
-      %% */
-      %% Note: End is in a new bar if End is at the beginning of a bar
-      meth overlapsBarlineR(B Start End)
-	 %% !!?? expensive: some more efficient implementation? E.g., additional Var as arg?
-	 StartBar = {FD.decl} % index of bar of Start
-	 EndBar = {FD.decl}
-	 Dur = {FD.decl}
-      in
-	 B = {FD.int 0#1}
-	 {self getMeasureAt(StartBar Start)}
-	 {self getMeasureAt(EndBar End)}
-	 Dur =: End - Start
-	 %% If no bar-overlapping happens, then either Start and End are in the same bar, or End is at the beginning for the next bar and Dur is no more than the measure duration. 
-	 B =: {FD.nega {FD.disj (StartBar =: EndBar)
-			{FD.conj {self onMeasureStartR($ End)}
-			 (Dur =<: {self getMeasureDuration($)})}}}
+	 /** %% B=1 <-> Start and End fall in different measures.
+	 %% */
+	 %% Note: End is in a new bar if End is at the beginning of a bar
+	 meth overlapsBarlineR(B Start End)
+	    %% !!?? expensive: some more efficient implementation? E.g., additional Var as arg?
+	    StartBar = {FD.decl} % index of bar of Start
+	    EndBar = {FD.decl}
+	    Dur = {FD.decl}
+	 in
+	    B = {FD.int 0#1}
+	    {self getMeasureAt(StartBar Start)}
+	    {self getMeasureAt(EndBar End)}
+	    Dur =: End - Start
+	    %% If no bar-overlapping happens, then either Start and End are in the same bar, or End is at the beginning for the next bar and Dur is no more than the measure duration. 
+	    B =: {FD.nega {FD.disj (StartBar =: EndBar)
+			   {FD.conj {self onMeasureStartR($ End)}
+			    (Dur =<: {self getMeasureDuration($)})}}}
 % 	 %% StartBar and EndBar are different AND Start and End are not simply on the start times of two consequitive bars.
 % 	 B =: {FD.conj
 % 	       (StartBar \=: EndBar)
@@ -555,7 +565,7 @@ define
 % 		{FD.conj
 % 		 (Dur =: {self getMeasureDuration($)})
 % 		 {self onMeasureStartR($ Start)}}}}
-      end
+	 end
 
 %      meth getAttributes(?Xs)
 %	 Xs = {Append
@@ -580,18 +590,18 @@ define
 % 	     }
 %       end
            
-      meth getInitInfo($ ...)
-	 %% !!?? should timing only be measured in beatNumber + beatDuration, i.e. the other temporal params of Score.temporalElement are excluded? Should I at least keep startTime?
-	 unit(superclass:Score.temporalElement
-	      args:[n#getN#noMatch
-		    beatNumber#getBeatNumber#noMatch
-		    beatDuration#getBeatDuration#noMatch
-		    %% accents#getAccents#noMatch
-		    %% beats#getBeats#noMatch
-		   ])
+	 meth getInitInfo($ ...)
+	    %% !!?? should timing only be measured in beatNumber + beatDuration, i.e. the other temporal params of Score.temporalElement are excluded? Should I at least keep startTime?
+	    unit(superclass:Score.temporalElement
+		 args:[n#getN#noMatch
+		       beatNumber#getBeatNumber#noMatch
+		       beatDuration#getBeatDuration#noMatch
+		       %% accents#getAccents#noMatch
+		       %% beats#getBeats#noMatch
+		      ])
+	 end
       end
    end
-%   end
    fun {IsUniformMeasures X}
       {Score.isScoreObject X} andthen {HasFeature X UniformMeasuresType}
    end 
