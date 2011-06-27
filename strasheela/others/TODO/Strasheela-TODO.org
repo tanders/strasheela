@@ -129,237 +129,620 @@ MyTestScore = {Score.makeScore
 
 * Strasheela design						    :STRASHEELA:
 
+** Accent constraints
+
+   Control various musical aspects that emphasise an accent.
+   Inspired by Berry, Wallace. 1987. Structural Functions in Music. Courier Dover Publications. Chapter on Rhythm.
+
+ 
+*** TODO 
+
+    - Test with rests (offset times)
+
+    - Predefiend accent constraints
+
+    - Application examples
+
+    - Copy these definitions later into the functor Measure.
+
+    - Examples in extra ./examples/ file
+
+    - Update list of changes
+
+    - Upload to SVN repository
+
+
+      
+*** General constraint applicator
+
+#+srcname: output
+#+begin_src oz :results output
+    
+  declare
+  
+  LilyHeader 
+  = {VirtualString.toString
+      {Out.listToLines
+     ["\\paper {"
+     " indent=0\\mm"
+     " line-width=180\\mm" 
+     " oddFooterMarkup=##f"
+     " oddHeaderMarkup=##f"
+     " bookTitleMarkup=#ff"
+     " scoreTitleMarkup=##f"
+      " }"
+      ""
+      "\\layout {"
+      "\\context {"
+      "\\Voice \\remove \"Note_heads_engraver\""
+      "\\remove \"Forbid_line_break_engraver\""
+      "\\consists \"Completion_heads_engraver\""
+      "}"
+      "} "
+      ""
+  %     "\\score{\n{\n"
+     ]}}
+  
+  proc {RenderFomus MyScore Args}
+     %% TMP (replace by new method addToInfoRecord)
+     %% TODO: make this optional
+     {MyScore
+      addInfo(fomus('lily-file-header': LilyHeader
+                    'lily-exe-args': '("--png" "--pdf" "-dbackend=eps" "-dno-gs-load-fonts" "-dinclude-eps-fonts")'
+                    % 'lily-exe-args': '("--format=png" "--format=pdf")'
+                    % 'lily-exe-args': '("-dbackend=eps")'
+                   ))}
+     {Out.renderFomus MyScore
+      {Adjoin unit(eventClauses:
+                      [{HS.out.makeNoteToFomusClause
+                        unit(% getPitchClass: midi
+                             table: ET31.out.fomusPCs_DoubleAccs
+  %                          table:ET31.out.fomusPCs_Quartertones
+                             getSettings: HS.out.makeNonChordTone_FomusMarks
+                            )}
+                       {HS.out.makeChordToFomusClause
+                        unit(% getPitchClass: midi
+                             table: ET31.out.fomusPCs_DoubleAccs
+                             getSettings:HS.out.makeChordComment_FomusForLilyMarks)}
+                       {HS.out.makeScaleToFomusClause
+                        unit(% getPitchClass: midi
+                             table: ET31.out.fomusPCs_DoubleAccs
+                             getSettings:HS.out.makeScaleComment_FomusForLilyMarks)}
+                       {Measure.out.makeUniformMeasuresToFomusClause unit(explicitTimeSig: false)}])
+       Args}}
+  end
+  
+  
+  {Explorer.object
+   add(information
+       proc {$ I X}
+          if {Score.isScoreObject X}
+           then 
+              FileName = out#{GUtils.getCounterAndIncr}
+           in
+              {Out.renderAndPlayCsound X
+               unit(file: FileName
+                    title:I)}
+             {RenderFomus X unit(file: FileName)}
+           end
+       end
+       label: 'to Csound and Lily (with measures)')}
+  
+  {Explorer.object
+   add(information
+       proc {$ I X}
+          if {Score.isScoreObject X}
+           then 
+              FileName = out#{GUtils.getCounterAndIncr}
+           in
+             {RenderFomus X unit(file: FileName)}
+           end
+       end
+       label: 'to Lily (with measures)')}
+  
+#+end_src
+
+
+#+srcname: applicator
+#+begin_src oz :results output
+  
+  declare    
+    /** %% With Accent_If various musical aspects and parameters can be constrained so that the resulting music expresses the underlying metric structure (simultaneous measure objects). This constraint is inspired by the chapter on rhythm in Berry, Wallace. 1987. Structural Functions in Music. Courier Dover Publications. 
+    %% The start time of N coincides with the given "position" in a simultaneous measure (e.g., the measure's start or any accentuated beat), if given a list of given conditions is fulfilled well enough. These conditions (AccentConstraints) are a list of unary functions: the input is N and the return value is a rating of N (an FD int), where 0 means condition not fulfilled and higher values mean that the condition is increasingly better fulfilled. The sum of the return values of all conditions must be equal or exceed a given threshold (arg minRating) in order to trigger that the start time of N is constrained to a certain metric position. Predefined accent constraints include IsLongerThanSurrounding and IsHigherThanSurrounding (see their documentation for further details).
+    %%
+    %% Args:
+    %%
+    %% metricPosition (FD int or atom, default 'accent'): if N sufficiently meets the conditions, then its start time is constrained to this "position" in the measure. The following values are supported.
+    %%   measureStart: N starts with a measure
+    %%   accent: N starts with a strong beat (depends on the measure definition)
+    %%   beat: N starts with a beat
+    %%   an FD int: N starts at a specified time within a measure (e.g., if 0 then N starts on measure start, if 1 it starts on measure start + 1 etc.). Should not be larger than the measure duration.
+    %%
+    %% minRating (FD int, default 1): Minimum accumulated rating of accent constraint outputs. If the sum of the return values of all accent constraints are equal or exceed a minRating, then in order the start time of N is constrained to the metric position metricPosition.
+    %%
+    %% strictness (atom, default 'note'): Must the constrained be fulfilled for all notes meeting the criteria or for all given metric positions? There are three different cases.
+    %%   note: every note/item meeting the accent criteria are on a specified metric position, but there can also be such metric positions without notes meeting such criteria
+    %%   position: every specified metric position has a note/item that meets the accent criteria, but there can also be such notes at other positions
+    %%   noteAndPosition: every note/item meeting the accent criteria in on a specified metric position and vice versa
+    %%
+    %% toplevel (default false): The container in which N is contained that should be considered the top level for finding the simultaneous measure object (if false, then the whole score is searched). This argument is for optimisation purposes only.
+    %%
+    %% measureTest (default Measure.isUniformMeasures): A Boolean function that returns true for the relevant measure objects. (currently only works with uniform measures?)
+    %%
+    %% */
+    proc {Accent_If N AccentConstraints Args}
+       Defaults = unit(metricPosition: accent 
+                      minRating: 1
+                      %% The following is likely too complicated, and not quite worth the effort
+                      % %% Minimum number of accent constraints involved. Note: must be =< than {Length AccentConstraints}. If < than {Length AccentConstraints}, then an accent constraint is applied if at least the given number of AccentConstraints return a value > 0 for N.
+                      % minConstraints: 1
+                      strictness: note
+                      measureTest: Measure.isUniformMeasures
+                      toplevel: false)
+       As = {Adjoin Defaults Args}
+       Relation = case As.strictness of
+                     note then FD.impl
+                  [] position then proc {$ B1 B2 B3} {FD.impl B2 B1 B3} end
+                  [] noteAndPosition then FD.equi
+                  end
+    in
+       thread
+          SimMeasure = {N findSimultaneousItem($ test:As.measureTest toplevel:As.toplevel)}
+          MeasureConstraint
+          = if {FD.is As.metricPosition}
+            then
+               proc {$ N ?B}
+                  %% BUG: currently depends on uniform measure object start, not start time of individual measures. Probably need to use FD.modI...
+                  B = ({FD.modI {N getStartTime($)} {SimMeasure getMeasureDuration($)}}
+                       =: As.metricPosition)
+                  % B = ({N getStartTime($)} =: {SimMeasure getStartTime($)} + As.metricPosition)
+               end
+            else 
+               case As.metricPosition of
+                  measureStart then proc {$ N ?Result}
+                                       {SimMeasure onMeasureStartR(Result {N getStartTime($)})}
+                                    end
+               [] accent then proc {$ N ?Result}
+                                 {SimMeasure onAccentR(Result {N getStartTime($)})}
+                              end
+               [] beat then proc {$ N ?Result}
+                               {SimMeasure onBeatR(Result {N getStartTime($)})}
+                            end
+               end
+            end
+          ConstraintRating = {FD.decl}
+       in
+          ConstraintRating = {FD.sum {Map AccentConstraints
+                                      proc {$ Constraint ?X}
+                                         X = {FD.decl}    % just in case...
+                                         {Constraint N X}
+                                      end}
+                              '=:'}
+          {Relation (ConstraintRating >=: As.minRating)
+           {MeasureConstraint N}
+           1}
+       end
+    end
+    
+#+end_src
+    
+*** Application examples
+
+**** Simple test
+
+#+begin_src oz :results output
+  <<applicator>>
+  <<AccentConstraints>>
+  
+  declare
+  Beat = 4
+  
+  fun {IsQuarterNote N}
+     {N getDuration($)} =: Beat
+  end
+    
+  {GUtils.setRandomGeneratorSeed 0}
+    {SDistro.exploreOne
+     proc {$ MyScore}
+        MyScore = {Score.make sim([seq([note note note note note note note note
+                                        note note note note note note note note])
+                                   seq([measure(n: 8
+                                                beatNumber: 5
+                                                beatDuration: Beat)])]
+                                 startTime:0
+                                 timeUnit:beats(Beat))
+                   add(note: fun {$ _}
+                                {Score.make2 note(duration: {FD.int [2 4]}
+                                                  pitch: {FD.int 60})
+                                 unit}
+                             end
+                       measure: Measure.uniformMeasures)}
+        %% 
+        {ForAll {MyScore collect($ test:isNote)}
+         proc {$ N}
+            {Accent_If N [IsQuarterNote] % IsLongerThanSurrounding
+%% BUG: strictness position can result in matching metric positions that are not expressed by matching note, but this happens seemingly rarely. 
+             unit(strictness: note % note position noteAndPosition
+                  metricPosition: accent % Beat*2 beat accent measureStart
+                 )}
+         end}      
+     end
+     unit(order:leftToRight
+          value:random)}
+    
+#+end_src
+
+
+**** Test with rests 
+
+
+#+begin_src oz :results output
+    <<applicator>>
+    <<AccentConstraints>>
+    
+    declare
+    Beat = 4
+    
+    fun {IsQuarterNote N}
+       {N getDuration($)} =: Beat
+    end
+      
+    {GUtils.setRandomGeneratorSeed 0}
+      {SDistro.exploreOne
+       proc {$ MyScore}
+          MyScore = {Score.make sim([seq([note note note note note note note note
+                                          note note note note note note note note])
+                                     seq([measure(n: 8
+                                                  beatNumber: 5
+                                                  beatDuration: Beat)])]
+                                   startTime:0
+                                   timeUnit:beats(Beat))
+                     add(note: fun {$ _}
+                                  {Score.make2 note(duration: {FD.int [(Beat div 2) Beat]}
+                                                    pitch: {FD.int 60}
+                                                   offsetTime: {FD.int [0 Beat Beat+(Beat div 2)]})
+                                   unit}
+                               end
+                         measure: Measure.uniformMeasures)}
+          %% 
+          {ForAll {MyScore collect($ test:isNote)}
+           proc {$ N}
+              {Accent_If N [IsQuarterNote] % IsLongerThanSurrounding
+  %% BUG: strictness position can result in matching metric positions that are not expressed by matching note, but this happens seemingly rarely. 
+               unit(strictness: noteAndPosition % note position noteAndPosition
+                    metricPosition: measureStart % Beat*2 beat accent measureStart
+                   )}
+           end}
+          %% Restrict total sum of offset times 
+          %% Without heuristic constraints, most rests will be in the beginning (a relevant heursitic constraint would require also distributing the offset times)
+          Beat*5 >: {LUtils.accum {MyScore map($ getOffsetTime test:isNote)}
+                     FD.plus}
+       end
+       unit(order:leftToRight
+            value:random)}
+      
+#+end_src
+
+**** TMP
+
+
+#+begin_src oz :results output
+  
+  declare
+  MyMeasure = {Score.make2 measure(n: 2
+                                   beatNumber: 5
+                                   beatDuration: 4)
+               unit(measure: Measure.uniformMeasures)}
+  MyScore = {Score.make sim([seq([note note note note])
+                             seq([MyMeasure])]
+                            startTime:0
+                            timeUnit:beats(4))
+             add(note: fun {$ _}
+                          {Score.make2 note(duration: {FD.int [2 4]}
+                                            pitch: {FD.int 60})
+                           unit}
+                       end)}
+  
+  
+  {Browse {MyScore toInitRecord($)}}
+  
+  {ForAll {MyScore collect($ test:isNote)}
+   proc {$ N}
+      {Accent_If N [IsLongerThanSurrounding]
+       unit(strictness: position)}
+   end}      
+  
+  
+  {MyMeasure getAccents($)}
+  
+  {MyMeasure getAccentsFS($)}
+  
+  {MyMeasure getBeatsFS($)}
+  
+  {MyMeasure getMeasureDuration($)}
+  
+  {MyMeasure getBeatDuration($)}
+  
+  
+  %% thinking..
+  
+%  B = {FS.reified.include Time-{ThisMeasure getStarTTime}
+%       {MyMeasure getAccentsFS($)}}
+  
+  
+#+end_src
+
+
+*** Constraints supporting accents
+
+    see my notes on paper and Structural Functions in Music, p. 339ff
+    
+#+srcname: AccentConstraints
+#+begin_src oz :results output
+  declare
+  
+  /** %%
+  %% */
+  %% Only direct neighbours so far
+  fun {ApplyToPredecessors_Conj X P}
+     Pre = {X getTemporalSuccessor($)}
+  in
+     if Pre == nil then 1
+     else {P Pre X}
+     end
+  end
+  
+  
+  fun {ApplyToSuccessors_Conj X P}
+     Succ = {X getTemporalPredecessor($)}
+  in
+     if Succ == nil then 1
+     else {P Succ X}
+     end
+  end
+  
+  
+  %% Methods getPredecessors/getTemporalPredecessors getSuccessors/getTemporalSuccessor
+  
+  
+  /** %%
+  %% B=1 <=> Note N is longer than both its preceeding and its succeeding note. If a preceeding/succeeding note does not exist (in the same temporal container) then the condition is considered to be fulfilled.
+  %% */
+  %% 
+  %% simplified version, see my notes
+  %% TODO:
+  %% - make more flexible, see my notes
+  %% - better arg name than B
+  fun {IsLongerThanSurrounding N}
+     fun {IsShorter N1 N2} 
+        ({N1 getDuration($)} <: {N2 getDuration($)})
+     end
+  in
+     {FD.conj {ApplyToPredecessors_Conj N IsShorter}
+      {ApplyToSuccessors_Conj N IsShorter}}
+  end
+  
+  % proc {IsLongerNote_OLD N B}
+  %    N1 = {N getTemporalPredecessor($ N)}
+  %    N2 = N
+  %    N3 = {N getTemporalSuccessor($ N)}
+  % in
+  %    {FD.conj ({N1 getDuration($)} <: {N2 getDuration($)})
+  %     ({N3 getDuration($)} <: {N2 getDuration($)})
+  %     B}
+  % end
+  
+  
+  
+  /** %%
+  %% */
+  proc {IsHigherThanSurrounding N B}
+     skip
+  end
+  
+#+end_src
+
+
 ** Texture constraints
 
 *** TODO 
 
-    - !! Def abstractions for defining multiple texture constraint applications in concise way
-      Possibly using ForNumericRangeArgs (or a new applicator ForTimeRangeArgs) 
+    - See todos in source file [[file:~/oz/music/Strasheela/strasheela/trunk/strasheela/contributions/anders/Segments/Segments.oz::proc%20{Texture%20Dependency%20LeadingPart%20DependantParts%20Args}][file:~/oz/music/Strasheela/strasheela/trunk/strasheela/contributions/anders/Segments/Segments.oz::proc {Texture Dependency LeadingPart DependantParts Args}]]
 
-Sketch of a possible notation format (args are records and not lists)
-
-#+begin_src oz :results output 
-    proc {MyDependency N1 N2 Args}
-       {Homophonic N1 N2 Args}
-       {HomoDirectional N1 N2 Args}
-    end
-      
-    %% Version 1
-    
-    %% Imitation at the beginning (e.g., Voice2 at time 2 imitates 1st 5 notes of Voice1)
-    {Texture MyDependency Voice1 [Voice2 Voice3 Voice1]
-     unit(numericRange: 1#5
-          offsetTime: [2 4 6])}
-    %% Homophonic section
-    {Texture Homophonic Voice1 [Voice2 Voice3]
-     unit(numericRange: 6#9)}
-    %% parallel movement (undefined dependency DegreeTransposition uses arg transposition)
-    {Texture DegreeTransposition Voice1 [Voice2 Voice3]
-     unit(numericRange: 1#5
-          transposition: [2 5])}
-  
-    %% Version 2 -- single texture call, and numeric range was move to front of each "section def"
-    
-    {TextureProgression
-     [%% Imitation at the beginning (e.g., Voice2 at time 2 imitates 1st 5 notes of Voice1)
-      (1#5) # unit(MyDependency Voice1 [Voice2 Voice3 Voice1]  
-                   offsetTime: [2 4 6])
-      %% Homophonic ending
-      (6#9) # unit(Homophonic Voice1 [Voice2 Voice3])
-     ]}
-    
-    % {TextureConstraint Voice1
-    %  [%% Imitation at the beginning
-    %   (1#5)#unit(Voice2
-    %              dependency: MyDependency
-    %              offsetTime: 2)
-    %   (1#5)#unit(Voice3
-    %              dependency: MyDependency
-    %              offsetTime: 4)
-    %   (1#5)#unit(Voice1   % Imitation within same voice
-    %              dependency: MyDependency
-    %              offsetTime: 6)
-    %   %% Homophonic ending
-    %   (6#9)#unit([Voice2 Voice3]
-    %              dependency: Homophonic)
-    %  ] 
-    % }
-#+end_src
-
-
-    - Add texture constraint defs to Strasheela
-
-    - ?? Add example file to examples folder
-      - Demonstrate within one purely rhythmic example homophonic vs heterophonic vs no constraint
-      - Demonstrate homodirectional
-      - Demonstrate imitation (purely rhythmic)
-      - Use Segs.makeCounterpoint and add underlying harmony
-
-
-*** Overall constraint format
+*** Overall constraint format					    :ARCHIVE:
 
 **** Main defs
 
 #+srcname: MakeTextureConstraint
 #+begin_src oz :results output 
-    
-    declare
-    
-    /** %% Texture constraints restrict the independence between parts/voices. Dependence examples are homorhythm (simultaneous notes have the same start time and duration), heterorhythm (simultaneous notes have similar start times and durations), contrarhythm (simultaneous notes have different same start times or durations), homodirectional texture, various degrees of imitation (dependencies like, e.g., homorhythmic and homodirectional texture with a time offset) and many more possibilities. Texture constraints are inspired by Berry, Wallace (1987). Structural functions in music. Courier Dover Publications.
-    
-    %% A texture constraint applies a Dependency (a constraint, see below) between certain notes in a LeadingPart (a container) and certain notes in a DependantParts (a container). DependantParts can be either a single container or a list of container; in the latter case a dependency is applied to multiple parts (e.g., for a fully homophonic texture apply the dependency Homophonic to one voice as LeadingPart and a list with the remaining voices as DependantParts).
   
-  A Dependency can also be applied to several 
-    
-    %% A Dependency is a procedure with the following interface.
-    
-    {MyDependency Note1 Note2 Args}
-    
-    %% A Dependency defines a constraint between Note1, a note from the LeadingPart, and Note2, a note from the DependantPart. By default, Note1 and Note2 are simultaneous notes (see the argument offsetTime below for other cases). For example, homophony can be defined by constraining that the start times and durations of Note1 and Note2 are equal. Constraints that require more complex score contexts (e.g., the note succeeding Note1 in LeadingPart) are defined by accessing such contexts from the given notes (e.g., using methods like getTemporalSuccessor). The Dependency argument Args contains values for all optional arguments in the Args argument of a texture constraint (see below). Various dependencies are predefined (e.g., Homophonic, and HomoDirectional), and users can freely define their own.
-    %%
-    %% The argument Args of a texture constraint supports the following optional arguments.
-    %%
-    %% offsetTime (default 0): Using this argument, various forms of imitation can be defined. The dependency constraint is applied to a note in DependantPart that starts the specified amount of offset later than the respective note in LeadingPart.
-    %% Remember that negative offset times are not allowed (if you would need them, simply swap the arguments LeadingPart and DependantPart).
-    %% In case DependantParts is a list of containers, then a list of individual offset times can be given.
-    %%
-    %% timeRange: TODO
-    %%
-    %% numericRange (default nil): Specifies the positions of the affected notes in LeadingPart. For example, the numeric range [1#3 5#6] affects the notes at position 1-3 and 5-6 in LeadingPart and their simultaneous notes in DependantPart (if offsetTime is the default). numericRange is based on SMapping.forNumericRange, and supports all its index integers notations.
-    %%
-    %% Note that further arguments can be provided, which are then forwarded to the dependency constraints. For example, a transposition dependency may use a transposition argument which would then be included in the Args record for Texture. 
-    %% In case DependantParts is a list of containers, then a list of individual values can be given to any argument.
-    %%
-    %%
-    %% */
-    %% TODO:
-    %% * Generalise (or multiple versions?):
-    %%  - Add an arg like processNoteLists: true OR false (false is the default). If true, then instead of processing one note of LeadingPart at a time, lists of notes are taken (as specified by numericRange). This is useful for constraining non-overlapping score contexts. For example, a dependency where a sequence of pitches are repeated (or transposed) without retaining their order (as Feldman does) can only be defined that way. By specifying an extra argument for this instead of generalising the whole definition, only specific dependency definitions need to deal with such cases, while others can rely on processing of individual notes. 
-    %%  - Using SMapping.forNumericRange is only an option, another is SMapping.forTimeRange
-    %%  - ?? Sim items is only an option, another is notes at same position, another is sim with an offset
-    %%  - ?? Is is correct to only constrain notes? Should that be more general?
-    proc {Texture Dependency LeadingPart DependantParts Args}
-       Defaults = unit(numericRange: nil %% TODO: move this arg elsewhere (strucurally different)
-                       offsetTime: 0)
-       As = {Adjoin Defaults Args}
-       proc {ConstrainPart N1 DependantPart Ags}
-          DependantNs
-       in
-          thread
-             DependantNs
-             = {N1 getSimultaneousItemsOffset($ Ags.offsetTime
-                                              toplevel: DependantPart
-                                              test: isNote)}
-          end
-          thread
-             {ForAll DependantNs
-              proc {$ DependantN} {Dependency N1 DependantN Ags} end}
-          end
-       end
-       fun {DuplicateArgs Ags N}
-          {List.mapInd {List.make N}
-           fun {$ I _}
-              {Record.map Ags
-               fun {$ X}
-                  if {IsList X} then {Nth X I} else X end
-               end}
-           end}
-       end
-    in
-       {SMapping.forNumericRange {LeadingPart collect($ test:isNote)}
-        As.numericRange 
-        proc {$ N}
-           if {IsList DependantParts}
-           then
-              {ForAll {LUtils.matTrans
-                       [DependantParts {DuplicateArgs As {Length DependantParts}}]}
-               proc {$ [DependantPart Ags]}
-                  {ConstrainPart N DependantPart Ags}
-               end}
-           else {ConstrainPart N DependantParts As}
-           end
-        end}
-    end
+  declare
   
-    /** %% TODO: doc
-    %% */
-    proc {TextureProgression Specs}
-       {ForAll Specs
-        proc {$ NumericRange#Spc}
-           Dependency = Spc.1
-           LeadingPart = Spc.2
-           DependantParts = Spc.3
-           Args = {Record.subtractList Spc [1 2 3]}
-        in
-           {Texture Dependency LeadingPart DependantParts {Adjoin unit(numericRange:NumericRange) Args}}
-        end}
-    end
+  /** %% Texture constraints restrict the independence between parts/voices. Dependence examples are homorhythm (simultaneous notes have the same start time and duration), heterorhythm (simultaneous notes have similar start times and durations), contrarhythm (simultaneous notes have different same start times or durations), homodirectional texture, various degrees of imitation (dependencies like, e.g., homorhythmic and homodirectional texture with a time offset) and many more possibilities. Texture constraints are inspired by Berry, Wallace (1987). Structural functions in music. Courier Dover Publications.
+  
+  %% A texture constraint applies a Dependency (a constraint, see below) between certain notes in a LeadingPart (a container) and certain notes in a DependantParts (a container). DependantParts can be either a single container or a list of container; in the latter case a dependency is applied to multiple parts (e.g., for a fully homophonic texture apply the dependency Homophonic to one voice as LeadingPart and a list with the remaining voices as DependantParts).
+  
+  %% A Dependency is a procedure with the following interface.
+  
+  {MyDependency Note1 Note2 Args}
+  
+  %% A Dependency defines a constraint between Note1, a note from the LeadingPart, and Note2, a note from the DependantPart. By default, Note1 and Note2 are simultaneous notes (see the argument offsetTime below for other cases). For example, homophony can be defined by constraining that the start times and durations of Note1 and Note2 are equal. Constraints that require more complex score contexts (e.g., the note succeeding Note1 in LeadingPart) are defined by accessing such contexts from the given notes (e.g., using methods like getTemporalSuccessor). The Dependency argument Args contains values for all optional arguments in the Args argument of a texture constraint (see below). Various dependencies are predefined (e.g., Homophonic, and HomoDirectional), and users can freely define their own.
+  %%
+  %% The argument Args of a texture constraint supports the following optional arguments.
+  %%
+  %% offsetTime (default 0): Using this argument, various forms of imitation can be defined. The dependency constraint is applied to a note in DependantPart that starts the specified amount of offset later than the respective note in LeadingPart.
+  %% Remember that negative offset times are not allowed (if you would need them, simply swap the arguments LeadingPart and DependantPart).
+  %% In case DependantParts is a list of containers, then a list of individual offset times can be given.
+  %%
+  %% timeRange: TODO
+  %%
+  %% numericRange (default nil): Specifies the positions of the affected notes in LeadingPart. For example, the numeric range [1#3 5#6] affects the notes at position 1-3 and 5-6 in LeadingPart and their simultaneous notes in DependantPart (if offsetTime is the default). numericRange is based on SMapping.forNumericRange, and supports all its index integers notations.
+  %%
+  %% Note that further arguments can be provided, which are then forwarded to the dependency constraints. For example, a transposition dependency may use a transposition argument which would then be included in the Args record for Texture. 
+  %% In case DependantParts is a list of containers, then a list of individual values can be given to any argument.
+  %%
+  %%
+  %% */
+  %% TODO:
+  %% * Generalise (or multiple versions?):
+  %%  - Add an arg like processNoteLists: true OR false (false is the default). If true, then instead of processing one note of LeadingPart at a time, lists of notes are taken (as specified by numericRange). This is useful for constraining non-overlapping score contexts. For example, a dependency where a sequence of pitches are repeated (or transposed) without retaining their order (as Feldman does) can only be defined that way. By specifying an extra argument for this instead of generalising the whole definition, only specific dependency definitions need to deal with such cases, while others can rely on processing of individual notes. 
+  %%  - Using SMapping.forNumericRange is only an option, another is SMapping.forTimeRange
+  %%  - ?? Sim items is only an option, another is notes at same position
+  %%  - ?? Is is correct to only constrain notes? Should that be more general?
+  proc {Texture Dependency LeadingPart DependantParts Args}
+     Defaults = unit(numericRange: nil %% TODO: ?? move this arg elsewhere (strucurally different)? I may want to keep it if I add support for SMapping.forTimeRange
+                     offsetTime: 0)
+     As = {Adjoin Defaults Args}
+     proc {ConstrainPart N1 DependantPart Ags}
+        DependantNs
+     in
+        thread
+           DependantNs
+           = {N1 getSimultaneousItemsOffset($ Ags.offsetTime
+                                            toplevel: DependantPart
+                                            test: isNote)}
+        end
+        thread
+           {ForAll DependantNs
+            proc {$ DependantN} {Dependency N1 DependantN Ags} end}
+        end
+     end
+     fun {DuplicateArgs Ags N}
+        {List.mapInd {List.make N}
+         fun {$ I _}
+            {Record.map Ags
+             fun {$ X}
+                if {IsList X} then {Nth X I} else X end
+             end}
+         end}
+     end
+  in
+     {SMapping.forNumericRange {LeadingPart collect($ test:isNote)}
+      As.numericRange 
+      proc {$ N}
+         if {IsList DependantParts}
+         then
+            {ForAll {LUtils.matTrans
+                     [DependantParts {DuplicateArgs As {Length DependantParts}}]}
+             proc {$ [DependantPart Ags]}
+                {ConstrainPart N DependantPart Ags}
+             end}
+         else {ConstrainPart N DependantParts As}
+         end
+      end}
+  end
     
-    /** %%
-    %% Note that a truely homophonic texture only results for the default offset time 0, otherwise a time-shifted "homophonic" imitation results.
-    %% */
-    %% TODO:
-    %% - doc
-    %% - revise proc name
-    proc {Homophonic N1 N2 Args}
-       {N1 getStartTime($)} + Args.offsetTime = {N2 getStartTime($)}
-       {N1 getDuration($)} = {N2 getDuration($)}
-    end
-    
-    /* %% Heterophonic
-    %% */
-    %% NOTE: Heuristic constraints only affect parameters that are distributed
-    %% TODO: add + Args.offsetTime to start1
-    proc {HeuristicHomophonic N1 N2 Args} 
-       {Score.apply_H H.equal [{N1 getStartTimeParameter($)} {N2 getStartTimeParameter($)}] 1}
-       {Score.apply_H H.equal [{N1 getEndTimeParameter($)} {N2 getEndTimeParameter($)}] 1}
-    end
-    
-    
-    /** %% If the start time of N1 occurs between start and end of N2 including, then the start time of these notes are equal. In other words, the notes of N2's voice may be shorter than those of N1's voice, but whenever a longer note starts in the latter voice there also starts a note in the former.
-    %% Generalised (?) version of "Orjan Sandred's notion of hierarchic rhythm.
-    %% */
-    %% BUG: can fail, but such minor inconsistencies may actually be good
-    %% Problem: overall, rhythm followed too closely -- but I can easily force it otherwise (e.g., more notes in one layer with same overall end time.
-    proc {HierarchicHomophonic N1 N2 Args}
-       Start1 = {N1 getStartTime($)} + Args.offsetTime
-       Start2 = {N2 getStartTime($)}
-       End2 = {N2 getEndTime($)}
-    in
-       {FD.impl {FD.conj
-                 (Start2 =<: Start1)
-                 (Start1 =<: End2)}
-        (Start1 =: Start2)
-        1}
-    end
-    
-    proc {HomoDirectional N1A N2A Args}
-       N1B = {N1A getTemporalSuccessor($)}
-       N2B = {N2A getTemporalSuccessor($)}
-    in
-       if N1B \= nil andthen N2B \= nil
-       then
-          {Pattern.direction {N1A getPitch($)} {N1B getPitch($)}}
-          = {Pattern.direction {N2A getPitch($)} {N2B getPitch($)}}
-       end
-    end
-    
+  /** %% Multiple applications of Texture can be programmed slightly more concisely and better readable with TextureProgression. The following two code examples are equivalent (first a version using Texture then using TextureProgression).
+  
+  %% Imitation at the beginning (e.g., Voice2 at time 2 imitates 1st 5 notes of Voice1)
+  {Texture MyDependency Voice1 [Voice2 Voice3 Voice1]
+   unit(numericRange: 1#5
+        offsetTime: [2 4 6])}
+  %% Homophonic section
+  {Texture Homophonic Voice1 [Voice2 Voice3]
+   unit(numericRange: 9#12)}
+  
+  {TextureProgression
+   [%% Imitation at the beginning (e.g., Voice2 at time 2 imitates 1st 5 notes of Voice1)
+    (1#5) # unit(MyDependency Voice1 [Voice2 Voice3 Voice1]  
+                 offsetTime: [2 4 6])
+    %% Homophonic section
+    (8#12) # unit(Homophonic Voice1 [Voice2 Voice3])
+   ]}
+  
+  %% */
+  proc {TextureProgression Specs}
+     {ForAll Specs
+      proc {$ NumericRange#Spc}
+         Dependency = Spc.1
+         LeadingPart = Spc.2
+         DependantParts = Spc.3
+         Args = {Record.subtractList Spc [1 2 3]}
+      in
+         {Texture Dependency LeadingPart DependantParts {Adjoin unit(numericRange:NumericRange) Args}}
+      end}
+  end
+  
+  /** %% [Dependency for Texture] Results in a homophonic texture.
+  %% Note that a truely homophonic texture only results for the default offset time 0, otherwise a time-shifted "homophonic" imitation results.
+  %% */
+  proc {Homophonic N1 N2 Args}
+     {N1 getStartTime($)} + Args.offsetTime = {N2 getStartTime($)}
+     {N1 getDuration($)} = {N2 getDuration($)}
+  end
+  
+  /* %% [Dependency for Texture] Results in a heterophonic texture.
+  %% Note that a truely heterophonic texture only results for the default offset time 0, otherwise a time-shifted "heterophonic" imitation results.
+  %% NOTE: Heuristic constraints only affect parameters that are distributed! Works (probably?) best if end times are distributed (and not durations?).
+  %% */
+  proc {HeuristicHomophonic N1 N2 Args}
+     fun {EqualWithTimeOffset X Y}
+        if X + Args.offsetTime == Y
+        then 100 % {GUtils.random 100}
+        else 0   % {GUtils.random 10}
+        end
+     end
+  in
+     % {Score.apply_H H.equal
+     %  [{N1 getStartTimeParameter($)} {N2 getStartTimeParameter($)}] 1}
+     % {Score.apply_H H.equal
+     %  [{N1 getEndTimeParameter($)} {N2 getEndTimeParameter($)}] 1}
+     {Score.apply_H EqualWithTimeOffset
+      [{N1 getStartTimeParameter($)} {N2 getStartTimeParameter($)}] 1}
+     {Score.apply_H EqualWithTimeOffset
+      [{N1 getEndTimeParameter($)} {N2 getEndTimeParameter($)}] 1}
+     %% just in case (more heuristic constraints do not add computational load :)
+     {Score.apply_H H.equal
+      [{N1 getDurationParameter($)} {N2 getDurationParameter($)}] 1}
+  end
+  
+  
+  /** %% [Dependency for Texture]  Generalised (?) version of "Orjan Sandred's notion of hierarchic rhythm.
+  %% If the start time of N1 occurs between start and end of N2 including, then the start time of these notes are equal. In other words, the notes of N2's voice may be shorter than those of N1's voice, but whenever a longer note starts in the latter voice there also starts a note in the former.
+  %% */
+  %% BUG: can fail, but such minor inconsistencies may actually be good
+  %% Problem: overall, rhythm followed too closely -- but I can easily force it otherwise (e.g., more notes in one layer with same overall end time.
+  proc {HierarchicHomophonic N1 N2 Args}
+     Start1 = {N1 getStartTime($)} + Args.offsetTime
+     Start2 = {N2 getStartTime($)}
+     End2 = {N2 getEndTime($)}
+  in
+     {FD.impl {FD.conj
+               (Start2 =<: Start1)
+               (Start1 =<: End2)}
+      (Start1 =: Start2)
+      1}
+  end
+  
+  /** %% [Dependency for Texture] Results in a homo-directional texture (i.e. parallel pitch contours).
+  %% */
+  proc {HomoDirectional N1A N2A Args}
+     N1B = {N1A getTemporalSuccessor($)}
+     N2B = {N2A getTemporalSuccessor($)}
+  in
+     if N1B \= nil andthen N2B \= nil
+     then
+        {Pattern.direction {N1A getPitch($)} {N1B getPitch($)}}
+        = {Pattern.direction {N2A getPitch($)} {N2B getPitch($)}}
+     end
+  end
+  
 #+end_src
 
 **** Tests and examples
 
 #+begin_src oz :results output
-  <<MakeTextureConstraint>>
   
+declare
   %%
   %% Usage example, implementing a homorhythmic texture
   %%
   
   proc {MyDependency N1 N2 Args} 
-     {Homophonic N1 N2 Args}
-          % {HierarchicHomophonic N1 N2 Args}
-          % {HeuristicHomophonic N1 N2 Args}
-     {HomoDirectional N1 N2 Args}
+     {Segs.homophonic N1 N2 Args}
+     % {Segs.hierarchicHomophonic N1 N2 Args}
+     % {Segs.heuristicHomophonic N1 N2 Args}
+     {Segs.homoDirectional N1 N2 Args}
   end
     
     
@@ -386,21 +769,21 @@ Sketch of a possible notation format (args are records and not lists)
                                                  pitch: {FD.int 60#72})
                                 unit}
                             end)}
-        {TextureProgression
+        {Segs.textureProgression
          [%% Imitation at the beginning (e.g., Voice2 at time 2 imitates 1st 5 notes of Voice1)
           (1#5) # unit(MyDependency Voice1 [Voice2 Voice3 Voice1]  
                        offsetTime: [2 4 6])
           %% Homophonic ending
-          (8#12) # unit(Homophonic Voice1 [Voice2 Voice3])
+          (8#12) # unit(Segs.homophonic Voice1 [Voice2 Voice3])
          ]}
         
-        % {Texture MyDependency Voice1 [Voice2 Voice3 Voice1]
+        % {Segs.texture MyDependency Voice1 [Voice2 Voice3 Voice1]
         %  unit(numericRange: 1#5
         %       offsetTime: [2 4 6])}      
-        % {Texture Homophonic Voice1 [Voice2 Voice3]
+        % {Segs.texture Segs.homophonic Voice1 [Voice2 Voice3]
         %  unit(numericRange: 9#12)}
         
-        % {Texture MyDependency Voice1 Voice2
+        % {Segs.texture MyDependency Voice1 Voice2
         %  unit(numericRange: 1#9
         %       offsetTime: 2)}
         
@@ -448,48 +831,9 @@ Sketch of a possible notation format (args are records and not lists)
 #+end_src
 
 
-Test method getSimultaneousItemsOffset
-   
 #+begin_src oz :results output
 %% Test
   
-  declare
-  Voice1
-  MyScore = {Score.make sim([seq(handle:Voice1
-                                 [note(duration:1
-                                       pitch:60)
-                                  note(duration:1
-                                       pitch:61)
-                                  note(duration:2
-                                       pitch:62)
-                                  note(duration:1
-                                       pitch:63)
-                                  note(duration:1
-                                       pitch:64)]
-                                )
-                                   seq(info: voice2
-                                       [note(duration:1
-                                             pitch:50)
-                                        note(duration:1
-                                             pitch:51)
-                                        note(duration:2
-                                             pitch:52)
-                                        note(duration:1
-                                             pitch:53)
-                                        note(duration:1
-                                             pitch:54)])
-                                  ]
-                                 startTime:0
-                                 timeUnit:beats(4))
-             unit}
-  N1 = {Voice1 getItems($)}.1
-  
-  {Map {N1 getSimultaneousItemsOffset($ 2
-                                      test: fun {$ N2}
-                                               {N2 isNote($)} andthen
-                                               {N2 findContainerRecursively($ {GUtils.toFun fun {$ C} {C hasThisInfo($ voice2)} end})} \= nil
-                                            end)}
-   fun {$ X} {X toInitRecord($)} end}
 #+end_src
 
 
@@ -497,6 +841,7 @@ Test method getSimultaneousItemsOffset
     
 
 Instead of applying a texture constraint to time windows, for now consider using =SMapping.forNumericRange=. Later you should add and the definitions =SMapping.forTimeRange= and =SMapping.mapTimeRange=.
+
 
 
 
@@ -537,11 +882,12 @@ Instead of applying a texture constraint to time windows, for now consider using
     - Disadvantage: less flexible, e.g., cannot deal with cases of different numbers of notes in related parts
   
 
-*** How to implement similarity (hetero-)
+*** How to implement similarity (hetero-)			    :ARCHIVE:
 
     Heuristic constraints? Possibly with a random element (makes recomputation impossible)
      
     Try to avoid modelling it with strict constraints (e.g., using pattern constraints such as HowManyTry) -- inefficient, and unnecessarily strict
+
 
 
 *** Higher-level texture constraints 
