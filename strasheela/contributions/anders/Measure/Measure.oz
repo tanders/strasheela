@@ -38,6 +38,7 @@ functor
 import
    FD FS
 %    Browser(browse:Browse) % temp for debugging
+   LUtils at 'x-ozlib://anders/strasheela/source/ListUtils.ozf'
    Score at 'x-ozlib://anders/strasheela/source/ScoreCore.ozf'
    Pattern at 'x-ozlib://anders/strasheela/Pattern/Pattern.ozf'
    Out at 'source/Output.ozf'
@@ -576,34 +577,30 @@ define
 	    B =: (RelTime =: 0)
 	 end
 
-	 /** %% B=1 <-> Start and End fall in different measures.
-	 %% B=0 means either Start and End are in the same bar, or End is at the beginning for the next bar and the duration between Start and End is no more than the measure's duration.
+	 /** %% B=1 <-> an event lasting from Start to End is a syncope at measure level: Start and End fall in different measures.
 	 %% */
 	 meth overlapsBarlineR(B Start End)
-	    %% !!?? expensive: some more efficient implementation? E.g., additional Var as arg?
 	    StartBar = {FD.decl} % index of bar of Start
 	    EndBar = {FD.decl}
-	    Dur = {FD.decl}
 	 in
 	    B = {FD.int 0#1}
 	    {self getMeasureAt(StartBar Start)}
 	    {self getMeasureAt(EndBar End)}
-	    Dur =: End - Start
-	    %% If no bar-overlapping happens, then either Start and End are in the same bar, or End is at the beginning for the next bar and Dur is no more than the measure duration. 
-	    B =: {FD.nega {FD.disj (StartBar =: EndBar)
-			   {FD.conj {self onMeasureStartR($ End)}
-			    (Dur =<: {self getMeasureDuration($)})}}}
-% 	 %% StartBar and EndBar are different AND Start and End are not simply on the start times of two consequitive bars.
-% 	 B =: {FD.conj
-% 	       (StartBar \=: EndBar)
-% 	       {FD.nega		
-% 		{FD.conj
-% 		 (Dur =: {self getMeasureDuration($)})
-% 		 {self onMeasureStartR($ Start)}}}}
+	    B =: {FD.conj {FD.nega {self onMeasureStartR($ Start)}}
+		  {FD.conj (StartBar \=: EndBar)
+		   %% exclude case that event lasts exactly after the end of StartBar 
+		   {FD.nega {FD.conj {self onMeasureStartR($ End)}
+			     (EndBar - StartBar =: 1)}}}}
 	 end
 
-	 /** %% B=1 <-> Start is not on an accent, and Start and End fall between different accents.
-	 %% BUG: if Start and End are in different measures "at" but not "on" the same accent, then B=0.
+	 /** %% Same as overlapsBarlineR
+	 %% */
+	 meth measureSyncopationR(B Start End)
+	    {self overlapsBarlineR(B Start End)}
+	 end
+
+	 /** %% B=1 <-> an event lasting from Start to End is a syncope at accent level: Start is not on an accent, and Start and End fall between different accents.
+	 %% BUG: B=0 for an event that is a syncope at accent level, but its duration is some multiple of the measure duration.
 	 %% */
 	 meth accentSyncopationR(B Start End)
 	    StartAcc = {FD.decl} % index of beat of Start
@@ -612,11 +609,15 @@ define
 	    B = {FD.int 0#1}
 	    {self getAccentInMeasureAt(StartAcc Start)}
 	    {self getAccentInMeasureAt(EndAcc End)}
-	    B =: {FD.conj (StartAcc \=: EndAcc)
-		  {FD.nega {self onAccentR($ Start)}}}
+	    B =: {FD.conj {FD.nega {self onAccentR($ Start)}}
+		  {FD.conj (StartAcc \=: EndAcc)
+		   %% exclude case that event lasts exactly after the end of StartAcc 
+		   {FD.nega {FD.conj {self onAccentR($ End)}
+			     %% BUG: note that getAccentInMeasureAt is measured only within bar
+			     (EndAcc - StartAcc =: 1)}}}}
 	 end
 	 
-	 /** %% B=1 <-> Start is not on a beat, and Start and End fall between different beats. 
+	 /** %% B=1 <-> an event lasting from Start to End is a syncope at beat level: Start is not on a beat, and Start and End fall between different beats. 
 	 %% */
 	 meth beatSyncopationR(B Start End)
 	    StartBeat = {FD.decl} % index of beat of Start
@@ -625,8 +626,11 @@ define
 	    B = {FD.int 0#1}
 	    {self getBeatAt(StartBeat Start)}
 	    {self getBeatAt(EndBeat End)}
-	    B =: {FD.conj (StartBeat \=: EndBeat)
-		  {FD.nega {self onBeatR($ Start)}}}
+	    B =: {FD.conj {FD.nega {self onBeatR($ Start)}}
+		  {FD.conj (StartBeat \=: EndBeat)
+		   %% exclude case that event lasts exactly after the end of StartBeat 
+		   {FD.nega {FD.conj {self onBeatR($ End)}
+			     (EndBeat - StartBeat =: 1)}}}}
 	 end
 	 
 %      meth getAttributes(?Xs)
