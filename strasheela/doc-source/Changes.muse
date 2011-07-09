@@ -80,6 +80,7 @@
     - HS.score.harmonicRhythmFollowsMarkers: spelling correction (was HS.score.harmonicRythmFollowsMarkers)
     - LUtils: changed comparison function of many defs (Contains, Position, Positions, Substitute, Substitute1) to GUtils.isEqual, which is working for all data types 
     - UniformMeasures method onAccentR fixed -- it did not support irregular accent sequences of time signatures such as 5/4 before. (method onAccentDR removed) 
+    - UniformMeasures method overlapsBarlineR fixed for certain borderline cases 
 
   - For many further fixes see the [[http://apps.sourceforge.net/trac/strasheela/timeline][Trac Timeline]] or the [[../CHANGELOG.txt]].
 
