@@ -133,14 +133,14 @@ define
 	    %% beatsFS is matched FS (used by constraint onBeatR)
 	    @beatsFS = {FS.var.decl}
 	    {FS.int.match @beatsFS @beats}
-	    %% @accents are the beats at AccentIdx in @beats
+	    %% @accents are the beats at AccentIdx in @beats, measured in time units
 	    @accents = {FD.list {Length AccentIdxs} 0#({self getDuration($)}-1)}
 	    for Idx in AccentIdxs
 	       Accent in @accents
 	    do
 	       Accent = {Nth @beats Idx}
 	    end
-	    %% accentsFS is matched FS (used by constraint onAccentR)
+	    %% accentsFS is matched FS (e.g., used by constraint onAccentR)
 	    @accentsFS = {FS.var.decl}
 	    {FS.int.match @accentsFS @accents}
 	 end
@@ -168,12 +168,12 @@ define
       meth getBeatsFS(?X)
 	 X = @beatsFS
       end
-      /** %% Returns the relative startTimes of the strong beats in the measure as a list of FD ints.
+      /** %% Returns the relative startTimes of the strong beats in the measure as a list of FD ints. Accents only accessible after both beatNumber and beatDuration are determined (at which points the accents are determined as well).
       %% */
       meth getAccents(?X)
 	 X = @accents
       end
-      /** %% Returns the relative startTimes of the strong beats in the measure as a FS.
+      /** %% Returns the relative startTimes of the strong beats in the measure as a FS. Accents only accessible after both beatNumber and beatDuration are determined (at which points the accents are determined as well).
       %% */
       meth getAccentsFS(?X)
 	 X = @accentsFS
@@ -433,7 +433,7 @@ define
 	    X = {@measure getDurationParameter($)}
 	 end
 
-	 /** %% I is the index of the measure at Time. A measure starts at its start time and ends before its end time. For instance, the index for the first measure is 1, starting at Time 0. Measure 2 starts at MeasureDuration. I and Time are FD integers.
+	 /** %% I is the index of the measure at Time (one-based). A measure starts at its start time and ends before its end time. For instance, the index for the first measure is 1, starting at Time 0. Measure 2 starts at MeasureDuration. I and Time are FD integers.
 	 %% */
 	 meth getMeasureAt(I Time)
 	    %% !!?? is there some cheaper implementation
@@ -442,6 +442,42 @@ define
 	    (I - 1) * MDur =<: Time
 	    I * MDur >: Time
 	 end
+
+	 /** %% I is the index of the accent at Time (one-based). Accents are only counted within individual measures (the first accent in the 2nd measure is again index 1). If Time is between accents then the index of the accent before Time is returned.
+	 %% Method blocks until measure duration is determined (i.e. both beatNumber and beatDuration are determined).
+	 %% */
+	 meth getAccentInMeasureAt(I Time)
+	    RelTime = {TimeInMeasure Time {self getMeasureDuration($)}}
+	    Accents = {self getAccents($)}
+	 in
+	    I = {LUtils.findPositions {LUtils.matTrans
+				       [Accents
+					{Append Accents [{self getMeasureDuration($)}]}]}
+		 fun {$ A1 A2}
+		    (A1 =<: RelTime) == 1 andthen
+		    (A2 >: RelTime) == 1
+		 end}
+	 end
+	 
+	 /** %% I is the index of the beat at Time (one-based). Beats are counted across all measures in self. If Time is between beats then the intex of the last beat before is returned.
+	 %% */
+	 meth getBeatAt(I Time)
+	    %% !!?? is there some cheaper implementation
+	    BDur = {self getBeatDuration($)}
+	 in
+	    (I - 1) * BDur =<: Time
+	    I * BDur >: Time
+	 end
+	 /** %% I is the index of the beat at Time (one-based). Beats are only counted within individual measures (the first beat in the 2nd measure is again index 1). If Time is between beats then the index of the beat before Time is returned.
+	 %% Constraint blocks until beatNumber is determined.
+	 %% */
+	 meth getBeatInMeasureAt(I Time)
+	    TotalI = {FD.decl}
+	 in
+	    {self getBeatAt(TotalI Time)}
+	    I = {FD.modI TotalI {self getBeatNumber($)}}
+	 end
+	 
 	 
 	 /** %% B=1 <-> Time equals the start time of some measure in UniformMeasures. Time is FD int, B is implicitly constrained to 0/1-int.
 	 %%
@@ -502,7 +538,7 @@ define
 	 % %%
 	 % %% !!?? constraint suspends and performs OK if it first calls {Browse Time}?
 	 % %%
-	 % %% NOTE: BUGGY -- see comments in alternative implementation in onAccentR
+	 % %% BUGGY -- see comments in alternative implementation in onAccentR
 	 % %% */
 	 % meth onAccentDR(B Time)
 	 %    AccentDur = {FD.decl}
@@ -530,9 +566,8 @@ define
 	    B =: ({FD.modI Time {self getBeatDuration($)}} =: 0)
 	 end
 	 /** %% Variant of onBeatR which does domain propagation (which can be very expensive). However, propagation of Time does only happen after B got determined.
-	 %%
-	 %% !!?? constraint suspends and performs OK if it first calls {Browse Time}?
 	 %% */
+	 %% !!?? constraint suspends and performs OK if it first calls {Browse Time}?
 	 meth onBeatDR(B Time)
 	    RelTime = {FD.decl}
 	 in
@@ -567,6 +602,33 @@ define
 % 		 {self onMeasureStartR($ Start)}}}}
 	 end
 
+	 /** %% B=1 <-> Start is not on an accent, and Start and End fall between different accents.
+	 %% BUG: if Start and End are in different measures "at" but not "on" the same accent, then B=0.
+	 %% */
+	 meth accentSyncopationR(B Start End)
+	    StartAcc = {FD.decl} % index of beat of Start
+	    EndAcc = {FD.decl}
+	 in
+	    B = {FD.int 0#1}
+	    {self getAccentInMeasureAt(StartAcc Start)}
+	    {self getAccentInMeasureAt(EndAcc End)}
+	    B =: {FD.conj (StartAcc \=: EndAcc)
+		  {FD.nega {self onAccentR($ Start)}}}
+	 end
+	 
+	 /** %% B=1 <-> Start is not on a beat, and Start and End fall between different beats. 
+	 %% */
+	 meth beatSyncopationR(B Start End)
+	    StartBeat = {FD.decl} % index of beat of Start
+	    EndBeat = {FD.decl}
+	 in
+	    B = {FD.int 0#1}
+	    {self getBeatAt(StartBeat Start)}
+	    {self getBeatAt(EndBeat End)}
+	    B =: {FD.conj (StartBeat \=: EndBeat)
+		  {FD.nega {self onBeatR($ Start)}}}
+	 end
+	 
 %      meth getAttributes(?Xs)
 %	 Xs = {Append
 %	       Score.temporalElement, getAttributes($)
