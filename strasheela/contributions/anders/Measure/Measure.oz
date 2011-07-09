@@ -542,8 +542,8 @@ define
 	 end
 
 	 /** %% B=1 <-> Start and End fall in different measures.
+	 %% B=0 means either Start and End are in the same bar, or End is at the beginning for the next bar and the duration between Start and End is no more than the measure's duration.
 	 %% */
-	 %% Note: End is in a new bar if End is at the beginning of a bar
 	 meth overlapsBarlineR(B Start End)
 	    %% !!?? expensive: some more efficient implementation? E.g., additional Var as arg?
 	    StartBar = {FD.decl} % index of bar of Start
