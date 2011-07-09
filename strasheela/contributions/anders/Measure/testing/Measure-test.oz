@@ -21,8 +21,8 @@ MyScore = {Score.makeScore measure(beatNumber:6
 %% single determined UniformMeasures:
 declare
 MyScore = {Score.makeScore measures(n:3 %{FD.int 1#3}
-				    beatNumber:{FD.int 1#2}
-				    beatDuration:{FD.int 1#2}
+				    beatNumber:{FD.int 1#10}
+				    beatDuration:{FD.int 1#10}
 				    startTime:0
 				    timeUnit:beats(4))
 	   add(measures:Measure.uniformMeasures)}
@@ -32,7 +32,7 @@ MyScore = {Score.makeScore measures(n:3 %{FD.int 1#3}
 
 {MyScore toFullRecord($)}
 
-{MyScore getBeatNumber($)} = 2
+{MyScore getBeatNumber($)} = 5 % 2
 
 {MyScore getBeatDuration($)} = 2
 
@@ -60,6 +60,11 @@ MyScore = {Score.makeScore measures(n:3 %{FD.int 1#3}
 {MyScore onBeatR($ 6)} % -> 1
 
 {MyScore onBeatR($ 7)} % -> 0
+
+
+{MyScore getAccentsFS($)}
+
+{MyScore getAccents($)}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
