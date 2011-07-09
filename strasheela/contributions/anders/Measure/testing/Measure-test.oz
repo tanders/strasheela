@@ -220,15 +220,28 @@ Diff = 2
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%
-%% test
+%% Syncopations
 %%
 
 declare
-M = {FS.var.decl}
-D = {FD.decl}
-B = {FD.int 0#1}
+N1 N2 N3 
+Beat = 4
+MyMeasures = {Score.make2 measure(n: 4
+				  beatNumber: 4 % 4 5
+				  beatDuration: Beat)
+	      unit(measure: Measure.uniformMeasures)}
+MyScore = {Score.make sim([seq([note(handle: N1
+				     duration: 6)
+				note(handle: N2  % this is a beat-level syncope if N2's duration > 2
+				     duration: 300)
+				note(handle: N3
+				     duration: 8)])
+			   MyMeasures]
+			  startTime:0
+			  timeUnit:beats(Beat))
+	   unit}
 
-{Browse M#D#B}
 
-{FS.reified.include D M B}
+{MyMeasures beatSyncopationR($ {N2 getStartTime($)} {N2 getEndTime($)})}
+
 
