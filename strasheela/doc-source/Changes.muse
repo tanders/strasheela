@@ -2,11 +2,13 @@
 ; #author Torsten Anders
 
 
-* Changes in Version 0.9.11 (no date yet)
+* Changes in Version 0.10.0 (no date yet)
 
   - Main additions and changes 
-    - Texture constraints added. These constraints are inspired by the chapter on texture in [[http://books.google.com/books?id=J4iXm-uoSRUC&printsec=frontcover&dq=structural+functions+in+music&hl=en&src=bmrr&ei=BcwFToS0FcqahQeM2sS8DQ&sa=X&oi=book_result&ct=result&resnum=1&ved=0CCwQ6AEwAA#v=onepage&q&f=false][Berry, Wallace. 1987. Structural Functions in Music. Courier Dover Publications.]] See the examples in [[../examples/Form-Examples/Texture-Examples.oz][Texture-Examples.oz]], and the definitions in the functor [[../contributions/anders/Segments/doc/node1.html][Segments.]]  
-    - Support for heuristic constraints added. See the documentation of the procedure Score.apply_H, the examples in [[../examples/Heuristic-Constraints.oz][Heuristic-Constraints.oz]], and the functor [[../contributions/anders/Heuristics/doc/node1.html][Heuristics]].  
+    - Accent constraints added to functor Measure. This framework of constrains controls the rhythmic weight of notes depending on a wide range of musical features (e.g., relative duration, pitch intervals, presence of an anacrusis) and the relation between rhythmic weights and metric positions. Their effect is widely user-controllable. These constraints are inspired by the chapter on rhythm in [[http://books.google.com/books?id=J4iXm-uoSRUC&printsec=frontcover&dq=structural+functions+in+music&hl=en&src=bmrr&ei=BcwFToS0FcqahQeM2sS8DQ&sa=X&oi=book_result&ct=result&resnum=1&ved=0CCwQ6AEwAA#v=onepage&q&f=false][Berry, Wallace. 1987. Structural Functions in Music. Courier Dover Publications.]] 
+; See the examples in [[../examples/Form-Examples/Texture-Examples.oz][Texture-Examples.oz]], 
+    - Texture constraints added to functor Segments. This framework of constrains controls whether a musical section is, say, homophonic, quasi-homophonic, homo-directional etc. Again, this framework is widely user-controllable. These constraints are inspired by the chapter on texture in [[http://books.google.com/books?id=J4iXm-uoSRUC&printsec=frontcover&dq=structural+functions+in+music&hl=en&src=bmrr&ei=BcwFToS0FcqahQeM2sS8DQ&sa=X&oi=book_result&ct=result&resnum=1&ved=0CCwQ6AEwAA#v=onepage&q&f=false][Berry, Wallace. 1987. Structural Functions in Music. Courier Dover Publications.]] See the examples in [[../examples/Form-Examples/Texture-Examples.oz][Texture-Examples.oz]], and the definitions in the functor [[../contributions/anders/Segments/doc/node1.html][Segments.]]  
+   - Support for heuristic constraints added (value ordering heuristics). Heuristic constraints are a form of soft constraints that express only a preference instead of a strict requirement on the solution. See the documentation of the procedure Score.apply_H, the examples in [[../examples/Heuristic-Constraints.oz][Heuristic-Constraints.oz]], and the functor [[../contributions/anders/Heuristics/doc/node1.html][Heuristics]].  
     - Revised Fomus output: Strasheela now exports the new format of the Fomus rewrite (http://fomus.sourceforge.net/), and Strasheela's Fomus export definition have been extended in many ways.
     - Constraint problems on arbitrary octave-repeating [[http://en.wikipedia.org/wiki/Regular_temperament][regular temperaments]] (any rank) supported, including [[http://en.wikipedia.org/wiki/Just_intonation][just intonation]] with arbitrary limits (pitches measured, e.g., in cent or millicent).
     - Revised score distribution: value orderings can now access arbitrary score information 
@@ -15,8 +17,8 @@
     - Added HS.out: generalised output for score objects and concepts introduced by HS, e.g., Lilypond output for chord and scale objects and means to define Lilypond output for different temperaments.
     - Partially determined scores can be output to music notation (i.e. Lilypond and Sibelius/Finale) via the Fomus export. (Partially determined scores could be exported into Csound and MIDI already.)
 
-  - Documentation
-    -  [[../examples/Form-Examples/Texture-Examples.oz][Texture-Examples.oz]]: Added examples demonstrating texture constraints 
+  - Main documentation additions
+    - [[../examples/Form-Examples/Texture-Examples.oz][Texture-Examples.oz]]: Added examples demonstrating texture constraints 
     - [[../examples/Heuristic-Constraints.oz][Heuristic-Constraints.oz]]: demonstrates how heuristic constraints are defined and used.
     - [[../ examples/ControllingOutput-Examples/Fomus-Examples.oz][Fomus-Examples.oz]]: Added examples demonstrating the Fomus output. 
     - [[../examples/RegularTemperaments.oz][RegularTemperaments.oz]]: examples related to regular temperaments
@@ -46,12 +48,13 @@
     - Segs: added mixin scripts (partly removing orig extended script altogether): MakeCounterpoint_Mixin, PitchPattern, FenvContour, Arpeggio, Arch, Repetitions, Hook, Stairs, MakeAkkord_Mixin, MakeAkkords_Mixin  
     - Segs.homophonicChordProgression: added arguments playAllChordTones, noVoiceCrossing, maxUpperVoiceDistance, generalised argument 'restrictMelodicIntervals'.
     - HS.rules: added GetRootDegreeIntervals, SetBoundaryRoots, SetBoundaryTypes, NoParallels2, Ballistic, MinCard
-    - Pattern: added MinDistinct, DirectionOfContour, LocalMinR, GetLocalMax, GetLocalMin, ConstrainLocalMax, ConstrainLocalMin, FenvContour2, NoRepetition, Undulating, ForCartesianProduct2 and MapCartesianProduct2
+    - Pattern: added MinDistinct, DirectionOfContour, LocalMinR, GetLocalMax, GetLocalMin, ConstrainLocalMax, ConstrainLocalMin, FenvContour2, NoRepetition, Undulating, ForCartesianProduct2 and MapCartesianProduct2, FirstNTrue
     - HS.score: refactored HarmonicRythmFollowsMarkers: now works also for items with offsetTime > 0 
     - Removed proc GUtils.selectArg (better use Adjoin or CondSelect instead)
     - Removed GUtils.isInt (result wrong for FD ints): use FD.is or IsInt instead
     - Segs.out.unmeteredMusic_LilyHeader: String for Lilypond header configuration to support unmetered music (e.g., as in many Messian pieces)
     - Measure.uniformMeasures: a number of syncopation-related constraints have been added (methods getBeatAt, getBeatInMeasureAt, getAccentInMeasureAt, beatSyncopation, accentSyncopationR) 
+    - Score: added the temporal items methods getPredecessors, getSuccessors, getTemporalPredecessors, getTemporalSuccessors, getPredecessorsUpToRest, getSuccessorsUpToRest
 
   - Further bug fixes and changes
     - Oz primitives like IsRecord, IsAtom etc. block on kinded variables (undetermined FD and FS vars), which could cause blocking of various Strasheela definitions. Now Strasheela always uses its new own GUtils.isRecord and GUtils.isAtom etc. which do not have this problem
@@ -82,7 +85,7 @@
     - UniformMeasures method onAccentR fixed -- it did not support irregular accent sequences of time signatures such as 5/4 before. (method onAccentDR removed) 
     - UniformMeasures method overlapsBarlineR fixed for certain borderline cases 
 
-  - For many further fixes see the [[http://apps.sourceforge.net/trac/strasheela/timeline][Trac Timeline]] or the [[../CHANGELOG.txt]].
+  - For many further fixes and changes see the [[http://apps.sourceforge.net/trac/strasheela/timeline][Trac Timeline]] or the [[../CHANGELOG.txt]].
 
 
 
