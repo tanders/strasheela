@@ -1687,11 +1687,31 @@ define
       meth getPredecessor(?X Container) 
 	 X={self getPosRelatedItem($ ~1 Container)} 
       end
+      /** %% Returns a list of the N items that precede self in Container, the item closes to self first. If N goes beyond the number of items available then on the available items are returned (i.e. the returned list is shorter than N).
+      %% */
+      meth getPredecessors(?X N Container) 
+	 X = {LUtils.mappend {List.number ~1 (N*~1) ~1}
+	      fun {$ Index}
+		 Y = {self getPosRelatedItem($ Index Container)}
+	      in
+		 case Y of nil then nil else [Y] end
+	      end}
+      end
       /** %% Returns successor item of self in Container.
       %%*/
       %% @1=?X
       meth getSuccessor(?X Container) 
 	 X={self getPosRelatedItem($ 1 Container)} 
+      end
+      /** %% Returns a list of the N items that succeed self in Container. If N goes beyond the number of items available then on the available items are returned (i.e. the returned list is shorter than N).
+      %% */
+      meth getSuccessors(?X N Container) 
+	 X = {LUtils.mappend {List.number 1 N 1}
+	      fun {$ Index}
+		 Y = {self getPosRelatedItem($ Index Container)}
+	      in
+		 case Y of nil then nil else [Y] end
+	      end}
       end
       /** %% Returns a boolean whether self is the first item in Container.
       %%*/
@@ -1765,18 +1785,54 @@ define
 	 end
       end
       /** %% Returns the predecessor of object in its TemporalAspect. NB: method returns positional and not a temporal predecessor. 
-      %% !!?? Rename to getPredecessorInTemporalAspect ?
       %% */ 
       meth getTemporalPredecessor(?X)
 	 X = {self getPredecessor($ {self getTemporalAspect($)})}
       end
+      /** %% Returns a list of the N items that precede self in its TemporalAspect, the item closes to self first. If N goes beyond the number of items available then on the available items are returned (i.e. the returned list is shorter than N).
+      %% */
+      meth getTemporalPredecessors(?X N)
+	 X = {self getPredecessors($ N {self getTemporalAspect($)})}
+      end
       /** %% Returns the successor of object in its TemporalAspect. NB: method returns positional and not a temporal successor. 
-      %% !!?? Rename to getSuccessorInTemporalAspect ?
       %% */ 
       meth getTemporalSuccessor(?X)
 	 X = {self getSuccessor($ {self getTemporalAspect($)})}
       end
+      /** %% Returns a list of the N items that succeed self in its TemporalAspect. If N goes beyond the number of items available then on the available items are returned (i.e. the returned list is shorter than N).
+      %% */
+      meth getTemporalSuccessors(?X N)
+	 X = {self getSuccessors($ N {self getTemporalAspect($)})}
+      end
 
+      /** %% Returns a list of the items that precede self in its TemporalAspect up to any rest (i.e. a pause object or an item with an offset time > 0). A pause object would be excluded, but an item with an offset time > 0 would be included.
+      %% Note: method delayed until offset times are sufficienly determined.
+      %% */
+      meth getPredecessorsUpToRest($)
+	 fun {Aux X}
+	    if X == nil orelse {X isPause($)}
+	    then nil
+	    elseif ({X getOffsetTime($)} >:0) == 1
+	    then [X]
+	    else X | {Aux {X getTemporalPredecessor($)}}
+	    end
+	 end
+      in
+	 {Aux {self getTemporalPredecessor($)}}
+      end
+      /** %% Returns a list of the items that succeed self in its TemporalAspect up to any rest (i.e. a pause object or an item with an offset time > 0). A pause object would be excluded, and so would be an item with an offset time > 0.
+      %% Note: method delayed until offset times are sufficienly determined.
+      %% */
+      meth getSuccessorsUpToRest($)
+	 fun {Aux X}
+	    if X == nil orelse {X isPause($)} orelse ({X getOffsetTime($)} >:0) == 1
+	    then nil
+	    else X | {Aux {X getTemporalSuccessor($)}}
+	    end
+	 end
+      in
+	 {Aux {self getTemporalSuccessor($)}}
+      end
 
       /** %% For all score objects in self (including self itself) which fulfil Test (a function or method name), the method sets the parameter unit accessible by ParameterAccessor (a function or method name) to Unit. Test defaults to isItem.
       %% NB: ParameterAccessor must return the parameter, not the parameter value (e.g. use getPitchParameter instead of getPitch)
@@ -2180,7 +2236,7 @@ define
 
    end  
 
-   /** %% [abstract class] An element is a score item which does not contain items. For instance, a note and a pause are both elements.
+   /** %% [abstract class] An element is a score item which does not contain items. For instance, a note and a pause (rest) are both elements.
    %%*/
    class Element from Item
       feat %'class': Element
@@ -2262,7 +2318,7 @@ define
       
    end   
 
-   /** %% [concrete class] A pause is a score element to produce silence of a given duration. It can, e.g., be used within a sequential to produce an offset between two items in the sequential. However, in such situation a pause could be replaced by the use of the parameter offsetTime of the item after the pause. Nevertheless, a pause in an explicite representation.
+   /** %% [concrete class] A pause (a better name would be rest!) is a score element to produce silence of a given duration. It can, e.g., be used within a sequential to produce an offset between two items in the sequential. However, in such situation a pause (rest) could be replaced by the use of the parameter offsetTime of the item after the pause. Nevertheless, a pause in an explicite representation.
    %% For a documentation of the time unit see doc of TimeMixin.
    %%*/
    class Pause from TemporalElement
