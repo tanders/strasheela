@@ -130,7 +130,9 @@ export
    HowMany Once
    ForN ForPercent NDifferences ForNEither
    AllTrue AllTrueR OneTrue OneTrueR SomeTrue SomeTrueR
-   HowManyTrue HowManyTrueR PercentTrue PercentTrue_Range
+   HowManyTrue HowManyTrueR
+   FirstNTrue
+   PercentTrue PercentTrue_Range
    PercentEqual_Range
    WhichTrue
    SymbolToDirection DirectionToSymbol
@@ -988,6 +990,33 @@ define
       B = {FD.reified.sum Bs '=:' N}
    end
 
+   /** %% The first N (a FD int) elements in Bs (a list of 0/1-ints) are true (i.e. 1). 
+   %% In other words, N is the position of the first element in Bs that is 0.
+   %% (In principle, elements of Bs can be larger than 1, larger values still count as true.)
+   %% */
+   proc {FirstNTrue Bs N}
+      thread 
+	 N = {LUtils.findPosition Bs
+	      fun {$ B}
+		 (B =: 0) == 1
+	      end} 
+      end
+      %% Redundant constraints for improving propagation. This constraint does not reduce Pos to its minimum domain value, though.
+      {Select.fd Bs N 0}
+      % %% implementation 3
+      % %% negate all elements in Xs and multiply them by their position, then collect min non-0 element
+      % %% How to access first non-0 element?
+      % {List.mapInd Xs
+      %  proc {$ I X ?Y}
+      % 	  Y = {FD.decl}
+      % 	  Y =: {FD.nega X} * I
+      %  end}
+   end
+
+% %% TODO 
+% proc {FirstNTrueR}
+% end
+
    /** %% Bs is a list of 0/1 integers (not implicitly declared) and Percent is a FD int (implicitly declared): Percent % elements in Bs are true (i.e. 1).
    %% NOTE: Percent is rounded to integer value -- complementary percent values don't necessarily sum up to exactly 100 (e.g., 1/3 corresponds to 33 percent and 2/3 to 66 percent). Also, there is only a single solution for Percent for a specific determined list Bs (e.g., Bs = [1 1 0] <-> Percent = 66; Percent = 65 causes fail in this case).
    %% Summary: PercentTrue is highly restricted for defining soft of probabilistic CSPs -- I would need true soft multiplication and division propagators instead.
@@ -1141,7 +1170,7 @@ define
 
    
    /** %% DirectionR is the reified version of Direction. B=1 <-> 'Dir represents the direction between X1 and X2'. An interval 'upwards' (the predecessor is smaller than the successor) is represented by 2, an 'horizontal' interval (the predecessor and the successor are equal) is represented by 1, and an interval 'downwards' by 0.
-   %% X1, X2, and Dir are all FD integers. Dir is explicitly constrained to be in 0#2.
+   %% X1, X2, Dir and B are all FD integers. Dir is explicitly constrained to be in 0#2 and B in 0#1.
    %% */
    proc {DirectionR X1 X2 Dir B}
       IsUp = {FD.decl}
