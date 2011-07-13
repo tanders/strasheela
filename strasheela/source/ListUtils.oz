@@ -136,7 +136,7 @@ define
    in
       {Aux Xs 1}
    end
-   /** %% Returns position of the first element in X for which Fn returns true. 
+   /** %% Returns position of all elements in X for which Fn returns true. 
    %%*/	
    fun {FindPositions Xs Fn}
       fun {Aux Xs I Result} 
