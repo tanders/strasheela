@@ -137,38 +137,52 @@ MyTestScore = {Score.makeScore
  
 *** TODO 
 
-    - Test with rests (offset times)
-
-    - Predefiend accent constraints
+    - OK Test with rests (offset times)
+    - OK Predefine accent constraints
+    - OK: Copy these definitions into the functor Measure.
+    - OK Documentation: add ideas for further accent constraints; see my notes on paper and Structural Functions in Music, p. 339ff
 
     - Application examples
+      - !! Write these examples as scetches for organ composition
+      - ?? Fomus output: revise rating display. Add accumulated accent constraint rating to notes as additional param and display that value in music notation
+	- Easy reuse: add note param within Accent_If
 
-    - Copy these definitions later into the functor Measure.
+    - Further accent constraints:
+      - Semitone leading to accent
+      - Add rest (pause object or offset time) after accent to its duration 
+    - Further anacrusis constraints:
+      - Only steps
+      - Direction of all intervals except the but-last two are upwards, and the last two intervals are steps
 
-    - Examples in extra ./examples/ file
+    - Finalise definition NoteAtMetricPosition (or clearly document what is missing)
 
+    - Examples in extra ./examples/ file (including output defs)
     - Update list of changes
-
     - Upload to SVN repository
 
 
       
-*** General constraint applicator
+*** !! Output defs
 
 #+srcname: output
 #+begin_src oz :results output
-
-<<AccentConstraints>>    
-
+  
+  %%
+  %% The Fomus output also prints accent ratings > 0 for notes that inherited the accent rating mixing 
+  %%
+  
   declare
   
   /** %% [Note markup function] Expects two Fomus markup records (e.g., unit(marks: ['x "x"']), the value returned by MakeNonChordTone_FomusMarks) and returns a single record with those marks combined.  
   %% */
-  %% TODO: save in contributions/anders/HarmonisedScore/source/Output.oz
+  %% TODO: save in core Output.oz or contributions/anders/HarmonisedScore/source/Output.oz
   fun {AppendFomusMarks Mark1 Mark2}
      Ms1 = {Value.condSelect Mark1 marks nil} 
      Ms2 = {Value.condSelect Mark2 marks nil}
   in
+     %% TMP:
+     {Browse AppendFomusMarks#{Adjoin unit(marks: {Append Ms1 Ms2})
+      {Adjoin Mark1 Mark2}}}
      {Adjoin unit(marks: {Append Ms1 Ms2})
       {Adjoin Mark1 Mark2}}
   end
@@ -178,7 +192,8 @@ MyTestScore = {Score.makeScore
      %%
      %% Args:
      %% 'where' (default 'x'): atom in Fomus syntax where to position the VS (e.g., 'x', 'x^', 'x_' or 'x!', see http://fomus.sourceforge.net/doc.html/Articulation-Markings-_0028File_0029.html#Articulation-Markings-_0028File_0029). 
-     %% */
+  %% */
+  %% TODO: save in core Output.oz or contributions/anders/HarmonisedScore/source/Output.oz
      fun {VsToFomusMarks VS Args}
         Default = unit(where: 'x')
         As = {Adjoin Default Args}
@@ -224,21 +239,41 @@ MyTestScore = {Score.makeScore
                    ))}
      {Out.renderFomus MyScore
       {Adjoin unit(eventClauses:
-                      [{HS.out.makeNoteToFomusClause
+                      [ %% for HS notes
+                       {HS.out.makeNoteToFomusClause
                         unit(% getPitchClass: midi
                              table: ET31.out.fomusPCs_DoubleAccs
-  %                          table:ET31.out.fomusPCs_Quartertones
+                             % table:ET31.out.fomusPCs_Quartertones
                              getSettings:
                                 fun {$ N}
-                                   TestMarks = {VsToFomusMarks "r:"#{IsLongerThanSurrounding_Rated N}
+                                   TextMarks = {VsToFomusMarks {N getAccentRating($)}
                                                 unit(where: 'x')}
                                 in
-                                   {AppendFomusMarks TestMarks {HS.out.makeNonChordTone_FomusMarks N}}
+                                   {AppendFomusMarks TextMarks {HS.out.makeNonChordTone_FomusMarks N}}
                                 end)}
+                        %% for plain notes
+                        Measure.isAccentRatingMixin
+                        #fun {$ N PartId}
+                            TextMarks = if {N getAccentRating($)} > 0
+                                        then {VsToFomusMarks {N getAccentRating($)}
+                                                    % 'ar:'#{N getAccentRating($)}
+                                              unit(where: 'x^')}
+                                        else unit
+                                        end
+                         in
+                            {Out.record2FomusNote {Adjoin TextMarks
+                                                   unit(part:PartId
+                                                        time:{N getStartTimeInBeats($)}
+                                                        dur:{N getDurationInBeats($)}
+                                                        pitch:{N getPitchInMidi($)})}
+                             N}
+                         end
+                        %% chords
                        {HS.out.makeChordToFomusClause
                         unit(% getPitchClass: midi
                              table: ET31.out.fomusPCs_DoubleAccs
                              getSettings:HS.out.makeChordComment_FomusForLilyMarks)}
+                        %% scales
                        {HS.out.makeScaleToFomusClause
                         unit(% getPitchClass: midi
                              table: ET31.out.fomusPCs_DoubleAccs
@@ -261,7 +296,7 @@ MyTestScore = {Score.makeScore
              {RenderFomus X unit(file: FileName)}
            end
        end
-       label: 'to Csound and Lily (with measures)')}
+       label: 'to Csound and Fomus (with measures and accent ratings)')}
   
   {Explorer.object
    add(information
@@ -273,10 +308,13 @@ MyTestScore = {Score.makeScore
              {RenderFomus X unit(file: FileName)}
            end
        end
-       label: 'to Lily (with measures)')}
+       label: 'to Fomus (with measures and accent ratings)')}
   
 #+end_src
 
+
+
+*** General constraint applicator				    :ARCHIVE:
 
 #+srcname: applicator
 #+begin_src oz :results output
@@ -453,109 +491,128 @@ MyTestScore = {Score.makeScore
 #+end_src
     
 
+
 *** Application examples
 
-**** Simple test
+**** Example with only a single simple accent constraint
 
 #+begin_src oz :results output
-  <<applicator>>
-  <<AccentConstraints>>
-  
+    
+  %%
+  %% Example with only a single simple accent constraint:
+  %% Notes that are at least of duration quarter note count as accentuated notes.
+  %% Every accented note must be on a metric accent of 5/4, but there can be metric accents without such notes. 
+  %% (which is by default the 1st and 4th beat).
+  %% 
+      
   declare
   Beat = 4
-  
-  fun {IsQuarterNote N}
-     {N getDuration($)} =: Beat
+  proc {MyScript MyScore}
+     MyScore = {Score.make sim([seq([note note note note note note note note
+                                     note note note note note note note note])
+                                seq([measure(n: 8
+                                             beatNumber: 5
+                                             beatDuration: Beat)])]
+                               startTime:0
+                               timeUnit:beats(Beat))
+                add(note: fun {$ _}
+                             {Score.make2 note(duration: {FD.int [2 4]}
+                                               pitch: {FD.int 60})
+                              unit(note:Measure.note)}
+                          end
+                    measure: Measure.uniformMeasures)}
+     %% 
+     {ForAll {MyScore collect($ test:isNote)}
+      proc {$ N}
+         {Measure.accent_If N [{Measure.make_HasAtLeastDuration Beat}] 
+          %% BUG: strictness position can result in matching metric positions that are not expressed by matching note, but this happens seemingly rarely. 
+          unit(strictness: note % note position noteAndPosition
+               metricPosition: accent % Beat*2 beat accent measureStart
+              )}
+      end}      
   end
-    
+  
   {GUtils.setRandomGeneratorSeed 0}
-    {SDistro.exploreOne
-     proc {$ MyScore}
-        MyScore = {Score.make sim([seq([note note note note note note note note
-                                        note note note note note note note note])
-                                   seq([measure(n: 8
-                                                beatNumber: 5
-                                                beatDuration: Beat)])]
-                                 startTime:0
-                                 timeUnit:beats(Beat))
-                   add(note: fun {$ _}
-                                {Score.make2 note(duration: {FD.int [2 4]}
-                                                  pitch: {FD.int 60})
-                                 unit}
-                             end
-                       measure: Measure.uniformMeasures)}
-        %% 
-        {ForAll {MyScore collect($ test:isNote)}
-         proc {$ N}
-            {Accent_If N [IsQuarterNote] % IsLongerThanSurrounding
-%% BUG: strictness position can result in matching metric positions that are not expressed by matching note, but this happens seemingly rarely. 
-             unit(strictness: note % note position noteAndPosition
-                  metricPosition: accent % Beat*2 beat accent measureStart
-                 )}
-         end}      
-     end
-     unit(order:leftToRight
-          value:random)}
-    
+  {SDistro.exploreOne MyScript
+   unit(order:leftToRight
+        value:random)}
+  
+  /*
+  
+  declare
+  {GUtils.setRandomGeneratorSeed 0}
+  [MyScore] = {SDistro.searchOne MyScript
+               unit(order:leftToRight
+                    value:random)}
+  
+  {MyScore toInitRecord($)}
+  
+  ,*/
+  
 #+end_src
 
 
 **** Test with rests 
 
-
 #+begin_src oz :results output
-    <<applicator>>
-    <<AccentConstraints>>
-    
+     
     declare
-    Beat = 4
-    
-    fun {IsQuarterNote N}
-       {N getDuration($)} =: Beat
-    end
+     Beat = 4
       
-    {GUtils.setRandomGeneratorSeed 0}
-      {SDistro.exploreOne
-       proc {$ MyScore}
-          MyScore = {Score.make sim([seq([note note note note note note note note
-                                          note note note note note note note note])
-                                     seq([measure(n: 8
-                                                  beatNumber: 5
-                                                  beatDuration: Beat)])]
-                                   startTime:0
-                                   timeUnit:beats(Beat))
-                     add(note: fun {$ _}
-                                  {Score.make2 note(duration: {FD.int [(Beat div 2) Beat]}
-                                                    pitch: {FD.int 60}
-                                                   offsetTime: {FD.int [0 Beat Beat+(Beat div 2)]})
-                                   unit}
-                               end
-                         measure: Measure.uniformMeasures)}
-          %% 
-          {ForAll {MyScore collect($ test:isNote)}
-           proc {$ N}
-              {Accent_If N [IsQuarterNote] % IsLongerThanSurrounding
-  %% BUG: strictness position can result in matching metric positions that are not expressed by matching note, but this happens seemingly rarely. 
-               unit(strictness: noteAndPosition % note position noteAndPosition
-                    metricPosition: measureStart % Beat*2 beat accent measureStart
-                   )}
-           end}
-          %% Restrict total sum of offset times 
-          %% Without heuristic constraints, most rests will be in the beginning (a relevant heursitic constraint would require also distributing the offset times)
-          Beat*5 >: {LUtils.accum {MyScore map($ getOffsetTime test:isNote)}
-                     FD.plus}
-       end
-       unit(order:leftToRight
-            value:random)}
-      
+    /** %% Definition of a simple accent constraint. An accent constraint expects a note (an item) and returns a rating, where higher values mean that the accent constraint's condition is met better by N. In this simple case, IsAtLeastQuarterNote returns 1 for a note with a note value of a beat or more and 0 otherwise.  
+    %% */
+     fun {IsAtLeastQuarterNote N}
+        ({N getDuration($)} >=: Beat)
+     end
+       
+     {GUtils.setRandomGeneratorSeed 0}
+       {SDistro.exploreOne
+        proc {$ MyScore}
+           MyScore = {Score.make sim([seq([note note note note note note note note
+                                           note note note note note note note note]
+                                          offsetTime: {FD.int [0 Beat Beat+(Beat div 2)]})
+                                      seq([measure(n: 8
+                                                   beatNumber: 5
+                                                   beatDuration: Beat)])]
+                                    startTime:0
+                                    timeUnit:beats(Beat))
+                      add(note: fun {$ _}
+                                   {Score.make2 note(duration: {FD.int [(Beat div 2) Beat]}
+                                                     pitch: {FD.int 60}
+                                                    offsetTime: {FD.int [0 Beat Beat+(Beat div 2)]})
+                                    unit(note:Measure.note)}
+                                end
+                          measure: Measure.uniformMeasures)}
+           %% 
+           {ForAll {MyScore collect($ test:isNote)}
+            proc {$ N}
+               {Measure.accent_If N [IsAtLeastQuarterNote] % Measure.isLongerThanSurrounding
+                unit(strictness: noteAndPosition % note position noteAndPosition
+                     metricPosition: measureStart % Beat*2 beat accent measureStart
+                    )}
+            end}
+           %% Restrict total sum of offset times 
+           %% Without heuristic constraints, most rests will be in the beginning (a relevant heursitic constraint would require also distributing the offset times)
+           Beat*5 >: {LUtils.accum {MyScore map($ getOffsetTime test:isNote)}
+                      FD.plus}
+        end
+        unit(order:leftToRight
+             value:random)}
+       
 #+end_src
 
 
-**** IsLongerThanSurrounding_Rated
+**** TODO Example with upbeat: suitable offset time of the seq containing the notes
+
+
+**** Example with reasonably low minRating of Accent_If, but additionally some ratings are constrained to be higher (with Pattern.howManyTrue where how many is at least a certain value)
+
+     Potential problem: those higher ratings are all clustered at the end of the example, because search fixes only the end
+
+
+**** TODO Revise: IsLongerThanSurrounding_Rated
 
 #+begin_src oz :results output
-  <<applicator>>
-  <<AccentConstraints>>
   
   declare
   Beat = 4
@@ -566,7 +623,7 @@ MyTestScore = {Score.makeScore
         MyScore = {Score.make sim([seq([note note note note note note note note
                                         note note note note note note note note])
                                    seq([measure(n: 8
-                                                beatNumber: 3 % 5
+                                                beatNumber: 3 % 4 5
                                                 beatDuration: Beat)])]
                                  startTime:0
                                  timeUnit:beats(Beat))
@@ -581,27 +638,369 @@ MyTestScore = {Score.makeScore
         %% 
         {ForAll {MyScore collect($ test:isNote)}.2 % !! NOTE: skip 1st note! 
          proc {$ N}
-            {Accent_If N [IsLongerThanSurrounding_Rated] 
+            {Measure.accent_If N [Measure.isLongerThanSurrounding_Rated] 
              unit(strictness: noteAndPosition % note position noteAndPosition
                   metricPosition: measureStart % Beat*2 beat accent measureStart
-                  minRating: 2
+                  minRating: 3
                  )}
          end}
-        {ForAll {MyScore collect($ test:Measure.isUniformMeasures)}
-         proc {$ M}
-            {NoteAtMetricPosition M {MyScore collect($ test:isNote)}
-             unit(metricPosition: measureStart
-                  allowRestsAtMetricPosition: true)}
+        %% no syncopations at beat level
+        {ForAll {MyScore collect($ test:isNote)}.2 % !! NOTE: skip 1st note! 
+         proc {$ N}
+            thread 
+               M = {N getSimultaneousItems($ test: Measure.isUniformMeasures)}.1
+            in
+               0 = {M beatSyncopationR($ {N getStartTime($)} {N getEndTime($)})}
+            end
          end}
+        %% There should be notes at specified metric positions
+        % {ForAll {MyScore collect($ test:Measure.isUniformMeasures)}
+        %  proc {$ M}
+        %     {Measure.noteAtMetricPosition M {MyScore collect($ test:isNote)}
+        %      unit(metricPosition: measureStart
+        %           allowRestsAtMetricPosition: true)}
+        %  end}
         %% Restrict total sum of offset times 
         %% Without heuristic constraints, most rests will be in the beginning (a relevant heursitic constraint would require also distributing the offset times)
         Beat >: {LUtils.accum {MyScore map($ getOffsetTime test:isNote)}
-                   FD.plus} 
+                 FD.plus} 
      end
      unit(order:leftToRight
           value:random)}
     
 #+end_src
+
+
+**** TODO Example with anacrusis
+
+Simple case
+
+#+begin_src oz :results output
+       
+  declare
+  Beat = 4
+  proc {MyScript MyScore}
+     Ns
+  in
+     MyScore = {Score.make sim([seq([note note note note note note note note
+                                     note note note note note note note note]
+                                    offsetTime: {FD.int 12#19})
+                                seq([measure(n: 8
+                                             beatNumber: 5
+                                             beatDuration: Beat)])]
+                               startTime:0
+                               timeUnit:beats(Beat))
+                add(note: fun {$ _}
+                             {Score.make2 note(duration: {FD.int [1 2 4]}
+                                                pitch: 60)
+                              unit(note:Measure.note)}
+                          end
+                    measure: Measure.uniformMeasures)}
+     Ns = {MyScore collect($ test:isNote)}
+     %% 
+     {ForAll Ns
+      proc {$ N}
+         {Measure.accent_If N [{Measure.make_HasAnacrusis
+                                unit(ratingPs: [Measure.anacrusis_FirstNEvenDurations]
+                                     requirements: [Measure.anacrusis_AccentLonger])}] 
+          unit(strictness: note % note position noteAndPosition
+               metricPosition: beat % Beat*2 beat accent measureStart
+              )}
+      end}
+     %% NOTE: 1st note with forced accent rating. Otherwise, its rating may be unconstrained and thus some random value
+     {Ns.1 getAccentRating($)} = 0
+  end
+  
+  {GUtils.setRandomGeneratorSeed 0}
+  {SDistro.exploreOne MyScript
+   unit(order:leftToRight
+        value:random)}
+  
+#+end_src
+
+Additional constraints: 
+ - pitch affects anacrusis as well
+ - require a minimum number of higher accent ratings
+ - ensure that the 1st note is not syncopated
+
+
+#+begin_src oz :results output
+        
+    declare
+    Beat = 4
+    proc {MyScript MyScore}
+       Ns Measures
+    in
+       MyScore = {Score.make sim([seq([note note note note note note note note
+                                       note note note note note note note note]
+                                      offsetTime: {FD.int 12#19})
+                                  seq([measure(n: 8
+                                               beatNumber: 5
+                                               beatDuration: Beat)])]
+                                 startTime:0
+                                 timeUnit:beats(Beat))
+                  add(note: fun {$ _}
+                               {Score.make2 note(duration: {FD.int [1 2 4]}
+                                                 pitch: {FD.int 60#72}
+                                                )
+                                unit(note:Measure.note)}
+                            end
+                      measure: Measure.uniformMeasures)}
+       Ns = {MyScore collect($ test:isNote)}
+       [Measures] = {MyScore collect($ test:Measure.isUniformMeasures)}
+       %% 
+       {ForAll Ns
+        proc {$ N}
+           {Measure.accent_If N [{Measure.make_HasAnacrusis
+                                  unit(requirements: [Measure.anacrusis_AccentLonger]
+                                       ratingPs: [Measure.anacrusis_FirstNPossibilyShorterTowardsAccent
+                                                  Measure.anacrusis_FirstNUpwardPitchIntervals])}] 
+            unit(strictness: note % note position noteAndPosition
+                 metricPosition: beat % Beat*2 beat accent measureStart
+                )}
+        end}
+       %% Num1+Num2 notes have at least an accent rating of 3
+       local
+          Num1 = 1
+          Num2 = 2
+          L = {Length Ns}
+          Ns1 Ns2
+       in
+  %%  Make search cheaper by explicitly constraining that a certain amount of higher accent ratings is in certain sections of Ns 
+          {List.takeDrop Ns (L div 2) Ns1 Ns2}
+          {Pattern.howManyTrue {Map Ns1
+                                fun {$ N} {N getAccentRating($)} >=: 3 end}
+           Num1}
+          {Pattern.howManyTrue {Map Ns2
+                                fun {$ N} {N getAccentRating($)} >=: 3 end}
+           Num2}
+       end
+       %% NOTE: 1st note with forced accent rating. Otherwise, its rating may be unconstrained and thus some random value
+       {Ns.1 getAccentRating($)} = 0
+       %% 1st note is *not* syncopated
+       {Measures beatSyncopationR(0 {Ns.1 getStartTime($)} {Ns.1 getEndTime($)})} 
+    end
+    
+    
+    {GUtils.setRandomGeneratorSeed 0}
+    {SDistro.exploreOne MyScript
+     unit(order:leftToRight
+          value:random)}
+    
+    /*
+    
+    declare
+    {GUtils.setRandomGeneratorSeed 0}
+    [MyScore] = {SDistro.searchOne MyScript
+                 unit(order:leftToRight
+                      value:random)}
+    
+    {MyScore toInitRecord($)}
+    
+    ,*/
+    
+    
+    /*
+    
+    declare
+    MyScore = {MyScript}
+    
+    */
+    
+    
+    
+#+end_src
+
+
+TODO:
+ - OK Option: longer note at end of phrase (which will not be accent-syncopated)
+ - Add some overall pitch contour: some pattern on the local pitch maxima
+ - Some additional accent constraints besides anacrusis?
+ - Add rhythmic imitation with  texture constraints
+ - ?? Turn into a sub-script with args: using Score.defSubscript? Are its args confusing?
+
+
+TODO for further examples
+ - A few notes have offset time, separating phrases (necessary if I create longer note sequences than just phrases)
+   - Option 1: Set some minimum number of notes between notes with positive offset times 
+   - Option 2: Try better distribution with heuristic constraint that sets high likelyhood of offsetTime = 0
+ - Add pattern motifs 
+   - Add further note values
+
+
+TODO for a longer example
+ - shift metric accents at some stage and later shift it back to "default" of underlying measure
+
+#+begin_src oz :results output
+      
+        
+    declare
+    Beat = 4
+    %% NOTE: when turning into a sub-CSP, put measure def outside
+    proc {RhythmicPhrase ?MyScore}
+       %% The defaults can later be overwritten by some sub-CSP arguments
+       Defaults = unit(%% of note's seq
+                       offsetTimeDomain: 12#19
+                       durDomain: [1 2 4] % for all but the last note
+                       lastDurDomain: [8] % last note's domain
+                      )
+       Ns Measures
+    in
+       MyScore = {Score.make sim([seq([note note note note note note note note
+                                       note note note note note note note note]
+                                      offsetTime: {FD.int Defaults.offsetTimeDomain})
+                                  seq([measure(n: 8
+                                               beatNumber: 5
+                                               beatDuration: Beat)])]
+                                 startTime:0
+                                 timeUnit:beats(Beat))
+                  add(note: fun {$ _}
+                               {Score.make2 note(% duration: {FD.int Defaults.durDomain}
+                                                 pitch: {FD.int 60#72})
+                                unit(note:Measure.note)}
+                            end
+                      measure: Measure.uniformMeasures)}
+       Ns = {MyScore collect($ test:isNote)}
+       [Measures] = {MyScore collect($ test:Measure.isUniformMeasures)}
+       %% 
+       {ForAll Ns
+        proc {$ N}
+           {Measure.accent_If N [{Measure.make_HasAnacrusis
+                                  unit(requirements: [Measure.anacrusis_AccentLonger]
+                                       ratingPs: [Measure.anacrusis_FirstNPossibilyShorterTowardsAccent
+                                                  Measure.anacrusis_FirstNUpwardPitchIntervals])}] 
+            unit(strictness: note % note position noteAndPosition
+                 metricPosition: beat % Beat*2 beat accent measureStart
+                )}
+        end}
+       %% Dur domains
+       {ForAll {LUtils.butLast Ns}
+        proc {$ N} {N getDuration($)} = {FD.int Defaults.durDomain} end}
+       {{List.last Ns} getDuration($)} = {FD.int Defaults.lastDurDomain}
+       %% Num1+Num2 notes have at least an accent rating of 3
+       local
+          Num1 = 1
+          Num2 = 2
+          L = {Length Ns}
+          Ns1 Ns2
+       in
+  %%  Make search cheaper by explicitly constraining that a certain amount of higher accent ratings is in certain sections of Ns 
+          {List.takeDrop Ns (L div 2) Ns1 Ns2}
+          {Pattern.howManyTrue {Map Ns1
+                                fun {$ N} {N getAccentRating($)} >=: 3 end}
+           Num1}
+          {Pattern.howManyTrue {Map Ns2
+                                fun {$ N} {N getAccentRating($)} >=: 3 end}
+           Num2}
+       end
+       %% NOTE: 1st note with forced accent rating. Otherwise, its rating may be unconstrained and thus some random value
+       {Ns.1 getAccentRating($)} = 0
+       %% 1st note is *not* beat syncopated, nor is the last accent syncopated
+          {Measures beatSyncopationR(0 {Ns.1 getStartTime($)} {Ns.1 getEndTime($)})}
+          {Measures accentSyncopationR(0 {{List.last Ns} getStartTime($)}
+                                       {{List.last Ns} getEndTime($)})}
+    end
+    
+    
+    {GUtils.setRandomGeneratorSeed 0}
+    {SDistro.exploreOne RhythmicPhrase
+     unit(order:leftToRight
+          value:random)}
+    
+    /*
+    
+    declare
+    {GUtils.setRandomGeneratorSeed 0}
+    [MyScore] = {SDistro.searchOne RhythmicPhrase
+                 unit(order:leftToRight
+                      value:random)}
+    
+    {MyScore toInitRecord($)}
+    
+    */
+    
+    
+    /* %% TMP
+  
+    
+    declare
+    MyScore = {RhythmicPhrase}
+    
+    {MyScore toInitRecord($)}
+  
+  declare
+    MyMeasure = {MyScore find($ Measure.isUniformMeasures)}
+  
+  
+    */
+#+end_src
+
+
+**** TODO Demonstrate usefulness of NoteAtMetricPosition (or disallowing any syncopations)
+
+
+**** TODO Example with pattern motifs
+
+#+begin_src oz :results output
+  
+  %% BUG:
+  %% Segs.makeCounterpoint_PatternMotifs_OffsetDuration causes error. There is some unexpecting nil. Perhaps missing sim chord objects o.ae.?
+  
+  declare
+  Beat = 4
+  {Init.setNoteLengthsRecord Beat nil}
+     
+   {GUtils.setRandomGeneratorSeed 0}
+     {SDistro.exploreOne
+      proc {$ MyScore}
+         MyScore = {Score.make sim([{Segs.makeCounterpoint_PatternMotifs_OffsetDuration
+                                     unit(rargs: unit(motifSpecs:[[[d4 d8 '_'] [0 d8 '+'] [0 d2 '+']]
+                                                                  [[d4 d4 '_'] [0 d2 '-']]]))}
+                                    seq([measure(n: 8
+                                                 beatNumber: 5
+                                                 beatDuration: Beat)])]
+                                  startTime:0
+                                  timeUnit:beats(Beat))
+                    add(measure: Measure.uniformMeasures)}
+         %% 
+         {ForAll {MyScore collect($ test:isNote)}
+          proc {$ N}
+             {Measure.accent_If N [TODO] % Measure.isLongerThanSurrounding
+              unit(strictness: noteAndPosition % note position noteAndPosition
+                   metricPosition: measureStart % Beat*2 beat accent measureStart
+                  )}
+             %% Simplify CSP, only rhythmic constraints...
+             {N getPitch($)} = 60
+          end}
+         %% Restrict total sum of offset times 
+         %% Without heuristic constraints, most rests will be in the beginning (a relevant heursitic constraint would require also distributing the offset times)
+         Beat*5 >: {LUtils.accum {MyScore map($ getOffsetTime test:isNote)}
+                    FD.plus}
+      end
+      unit(order:leftToRight
+           value:random)}
+     
+#+end_src
+
+
+
+**** TODO Example involving pitch
+
+
+**** TODO [#A] Combining multiple levels of accents		       :WAIT:
+
+     [Interesting and very important musically, but postpone this for now]
+
+Multiple calls of that share the same accent constraints, but differ in the minimum rating required and in the metric positions for these ratings: higher-level positions for higher ratings. The accent constraints are only applied once, and all calls of Measure.accent_If share the resulting ratings.
+
+TODO: first need new optional arg for Measure.accent_If that prevents accent constraint application (for optimisation only). Or, perhaps better, I define some variant of Measure.accent_If that that not expect accent constraints as args, but the ratings (this constraint would be called internally in Measure.accent_If as well).
+
+
+**** TODO [#A] Higher-than-measure-level accents 		       :WAIT:
+
+     [Interesting and very important musically, but postpone this for now]
+
+TODO: It would be good to somehow have a way to define accents beyond the measure-level. Such definition would expect a list of (uniform) measures and a list of measure indices that receive higher level accents (accents at such higher level should always be defined manually, and not simply repeat, say, every 4 measures, yes?)  
 
 
 **** TMP
@@ -615,190 +1014,474 @@ MyTestScore = {Score.makeScore
                                    beatNumber: 5
                                    beatDuration: 4)
                unit(measure: Measure.uniformMeasures)}
-  MyScore = {Score.make sim([seq([note note note note])
+  MyScore = {Score.make sim([seq([note note note(offsetTime: 4) note note note note note])
                              seq([MyMeasure])]
                             startTime:0
                             timeUnit:beats(4))
-             add(note: fun {$ _}
-                          {Score.make2 note(duration: {FD.int [2 4]}
-                                            pitch: {FD.int 60})
+             add(note: fun {$ Args}
+                          {Score.make2 {Adjoin note(duration: {FD.int [2 4]}
+                                                    pitch: {FD.int 60})
+                                                    Args}
                            unit}
                        end)}
+  LastNote = {List.last {MyScore collect($ test:isNote)}}
+  FirstNote = {MyScore collect($ test:isNote)}.1
   
-      
       
   {MyScore toInitRecord($)}
-    
-  {ForAll {MyScore collect($ test:Measure.isUniformMeasures)}
-   proc {$ M}
-      {SomeAtMeasurePosition M {MyScore collect($ test:isNote)}
-       unit(metricPosition: measureStart)}
-   end}
-  
-    
-  declare
-  MeasureStarts = {List.number {MyMeasure getStartTime($)}
-                   {MyMeasure getEndTime($)}
-                   {MyMeasure  getMeasureDuration($)}}
   
   
   
-  {ForAll MeasureStarts
-   proc {$ MyStart}
-      thread
-         SimNotes = {LUtils.cFilter {MyScore collect($ test:isNote)}
-                     fun {$ N}
-                        {AtTimeR N MyStart} == 1
-                     end}
-      in
-         if SimNotes \= nil
-         then 
-            {FD.sum {Map SimNotes
-                     fun {$ N} ({N getStartTime($)} =: MyStart) end}
-             '>:' 0}
-         end
-      end
-   end}
+  {LastNote getTemporalPredecessors($ 3)}
+  
+  {LastNote getPredecessorsUpToRest($)}
+  
+  {FirstNote getTemporalSuccessors($ 5)}
+  
+  {FirstNote getSuccessorsUpToRest($)}
   
   
-    
   
-  {MyMeasure getAccents($)}
-      
-  {MyMeasure getAccentsFS($)}
-      
-  {MyMeasure getBeatsFS($)}
-      
-  {MyMeasure getMeasureDuration($)}
-      
-  {MyMeasure getBeatDuration($)}
-      
-      
-  %% thinking..
-      
-    %  B = {FS.reified.include Time-{ThisMeasure getStarTTime}
-    %       {MyMeasure getAccentsFS($)}}
-      
-      
 #+end_src
 
 
-*** Constraints supporting accents
+*** TODO Ideas for further accent constraints 
 
-    see my notes on paper and Structural Functions in Music, p. 339ff
+    Remember: an accent constraint is a function expecting a note/item and returning a rating FD int.
+
+    Many ideas for accent constraints are listed on p. 339ff of Berry, Wallace (1987). /Structural Functions in Music/. Courier Dover Publications. 
+
+
+**** !!?? Sum of accumulated accent constraint ratings of all notes starting at the same time
+
+
+**** TODO [#A] Has Anacrusis					    :ARCHIVE:
+
+     Multiple notes "lead" to argument note. This is a very important accent constraint, but it is difficult to formalise.
+
+***** Main problem and solution: how to formalise this score context?
+
+      - How many preceding notes should be included in the score context?
+	- I could go for the minimum: 1-2 notes to have the condition fulfilled
+	- I could require more notes for marking the accent stronger (may need some constraint that forces such accents)
+
+      Pragmatic solution: 
+      - Rated accent constraint: the more notes fulfil the condition the higher the rating
+      - The number of notes considered should be user-definable (i.e., fun Make_HasAnacrusis with relevant args returns accent constraint)
+
+      Alternative solution
+      - Anacrusis context option: go back up to the last previous note with offset time > 0
+
+       	
+***** Features of an anacrusis
+
+      - Primarily/all intervals between notes before in one direction (in particular upwards)
+      - Usually notes of anacrusis are shorter than the accent, at least they should not be longer
+      - Commonly the notes of the anacrusis are of uniform duration
+	- Exception: embellished anacrusis (example of Richard Strauss in /Structural Functions in Music/, p. 420 (endnote g)
+	- ?? Alternative: durations get shorter towards accent
+
+
+***** Implementation
+
+      - Different context options can be choosen by optional arg
+	- Simple version: all elements of this score context fulfill anacrusis features 
+	- Simple version: the last N elements of this score context fulfill anacrusis features, N is resulting rating 
+      - List of constraints (reified procs) decribes features of anacrusis
+
+#+begin_src oz :results output
+  
+  /** %% Make_HasAnacrusis returns an accent constraint, i.e. a function execting a note/item N and returning a rating FD int. The resulting function returns a positive rating for N preceeded by an anacrusis, and 0 otherwise.
+  %%
+  %% Args:
+  %% context (record function, default predecessorsUpToRest): This argument specifies the score context that potentially forms an anacrusis of N. If 'predecessorsUpToRest', then the notes before N up to any rest (offset time or pause object) are taken into account (within the same temporal container). If predecessors(I), then the I (an int) notes before N are taken into account (within the same temporal container). The context can also be defined by a unary function expecting N and returning the items as a list.
+  %% ratingPs (list of constraints {P Xs ?Rating}, default nil): This argument specifies how the quality (rating) of an anacrusis is measured. Each ratingP is a function that expects a list of notes starting with N, then its predecessor and so forth. Each function returns a rating (an FD int). The resulting accent constraint rating is the minimum rating of any ratingP (subject to requirements, see below). Example constraint: N predecessors are of equal length (Anacrusis_FirstNEvenDurations).
+  %% requirements (list of reified constraints {P Xs B}, default nil): This argument specifies requirements that must be met by the score context if it should count at all as an anacrusis. Each requirement is a function that expects a list of notes starting with N, then its predecessor and so forth. Each function returns a 0/1-int. If any requirement returns 0 then the accent constraint returns 0 for this note. If all requirements returns 1, then the value resulting from the ratingPs is returned as rating. Example constraint: N longer than its predecessor (Anacrusis_LongerThanPrevious).
+  %%
+  %% Note: if neither ratingPs nor requirements are given then the accent constraint returns the rating 1 for all notes.
+  %% */
+  fun {Make_HasAnacrusis Args}
+     Defaults = unit(context: predecessorsUpToRest
+                     ratingPs: nil
+                     requirements: nil)
+     As = {Adjoin Defaults Args}
+     proc {$ N ?Rating}
+        Context = if {IsProcedure As.context}
+                  then {As.context N}
+                  else case {Label As.context} of
+                          predecessorsUpToRest then {N getPredecessorsUpToRest($)}
+                       [] predecessors then {N getTemporalPredecessors($ As.context.1)}
+                       end
+                  end
+        FeatsRating = {FD.decl}
+        RequirementsB = {FD.int 0#1}
+     in
+        Rating = {FD.decl}
+        FeatsRating =: case As.ratingPs of nil then 1
+                       else {Pattern.min {Map As.ratingPs fun {$ F} {F Context} end}}
+                       end
+        RequirementsB =: {Pattern.allTrueR {Map As.requirements fun {$ F} {F Context} end}}
+        Rating =: FeatsRating * RequirementsB
+     end
+  end
+  
+  
+  
+  /** %% [anacrusis requirement] The duration of the 1st note in Ns is longer then the 2nd.
+  %% */
+  fun {Anacrusis_LongerThanPrevious Ns}
+     ({Ns.1 getDuration($)} >: {Ns.2.1 getDuration($)})
+  end
+  
+  
+  local
+     fun {ShorterThanAccentRs Ns}
+        N1 = Ns.1
+     in
+        {Map Ns.2 fun {$ N2} ({N2 getDuration($)} <: {N1 getDuration($)}) end}
+     end   
+  in
+     /** %% [anacrusis requirement] B=1 <-> All durations of notes in Ns (a list of notes) are shorter than the accent (the first note in Ns).
+     %% */
+     Anacrusis_ShorterThanAccent = {MakeRequirement ShorterThanAccentRs}
+     /** %% [anacrusis ratingP] The first Rating (an FD int) durations of notes in Ns (a list of notes) are shorter than the accent (the first note in Ns).
+     %% */
+     Anacrusis_FirstNShorterThanAccent = {MakeRatingP ShorterThanAccentRs}
+  end
+  
+  local
+     fun {NoLongerThanAccentRs Ns}
+        N1 = Ns.1
+     in
+        {Map Ns.2 fun {$ N2} ({N2 getDuration($)} =<: {N1 getDuration($)}) end}
+     end   
+  in
+     /** %% [anacrusis requirement] B=1 <-> All durations of notes in Ns (a list of notes) are no longer than the accent (the first note in Ns).
+     %% */
+     Anacrusis_NoLongerThanAccent = {MakeRequirement NoLongerThanAccentRs}
+     /** %% [anacrusis ratingP] The first Rating (an FD int) durations of notes in Ns (a list of notes) are no longer than the accent (the first note in Ns).
+     %% */
+     Anacrusis_FirstNNoLongerThanAccent = {MakeRatingP NoLongerThanAccentRs}
+  end
+  
+  local
+     fun {PossibilyShorterTowardsAccentRs Ns}
+        {Pattern.map2Neighbours {Map Ns.2 {GUtils.toFun getDuration}}
+         fun {$ D1 D2} (D1 =<: D2) end}
+     end   
+  in
+     /** %% [anacrusis requirement] B=1 <-> All notes in Ns (a list of notes) except the first (the accent) have the same duration among themselves or they become shorter towards the accent.
+     %% */
+     Anacrusis_PossibilyShorterTowardsAccent = {MakeRequirement PossibilyShorterTowardsAccentRs}
+     /** %% [anacrusis ratingP] The first Rating (an FD int) notes in Ns (a list of notes) except the first (the accent) have the same duration among themselves or they become shorter towards the accent.
+     %% */
+     Anacrusis_FirstNPossibilyShorterTowardsAccent = {MakeRatingP PossibilyShorterTowardsAccentRs}
+  end
+  
+  local
+     fun {EvenDurationsRs Ns}
+        {Pattern.map2Neighbours {Map Ns.2 {GUtils.toFun getDuration}}
+         fun {$ D1 D2} (D1 =: D2) end}
+     end   
+  in
+     /** %% [anacrusis requirement] B=1 <-> All notes in Ns (a list of notes) except the first (the accent) have the same duration.
+     %% */
+     Anacrusis_EvenDurations = {MakeRequirement EvenDurationsRs}
+     /** %% [anacrusis ratingP] The first Rating (an FD int) notes in Ns (a list of notes) except the first (the accent) have the same duration.
+  %% */
+     Anacrusis_FirstNEvenDurations = {MakeRatingP EvenDurationsRs}
+  end
+  
+  
+  local
+     fun {UpwardPitchIntervalsRs Ns}
+        {Pattern.map2Neighbours {Map Ns {GUtils.toFun getPitch}}
+         fun {$ P1 P2} {Pattern.directionR P1 P2 2} end}
+     end   
+  in
+     /** %% [anacrusis requirement] B=1 <-> All interval directions between the pitches of notes in Ns (a list of notes) are upwards.
+     %% */
+     Anacrusis_UpwardPitchIntervals = {MakeRequirement UpwardPitchIntervalsRs}
+     /** %% [anacrusis ratingP] The first Rating (an FD int) interval directions between the pitches of notes in Ns (a list of notes) are all upwards.
+     %% */
+     Anacrusis_FirstNUpwardPitchIntervals = {MakeRatingP UpwardPitchIntervalsRs}
+  end
+  
+  local
+     fun {SameDirectionPitchIntervalsRs Ns}
+        {Pattern.map2Neighbours
+         {Pattern.map2Neighbours {Map Ns {GUtils.toFun getPitch}}
+          fun {$ P1 P2} {Pattern.direction P1 P2} end}
+         fun {$ Dir1 Dir2} (Dir1 =: Dir2) end}
+     end   
+  in
+     /** %% [anacrusis requirement] B=1 <-> All interval directions between the pitches of notes in Ns (a list of notes) move in the same direction (upwards, downwards or repetition).
+     %% */
+     Anacrusis_SameDirectionPitchIntervals = {MakeRequirement SameDirectionPitchIntervalsRs}
+     /** %% [anacrusis ratingP] The first Rating (an FD int) interval directions between the pitches of notes in Ns (a list of notes)  move all in the same direction (upwards, downwards or repetition).
+     %% */
+     Anacrusis_FirstNSameDirectionPitchIntervals = {MakeRatingP SameDirectionPitchIntervalsRs}
+  end
+  
+  
+  
+  
+  
+  
+  
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  %%%
+  %%% Anacrusis aux defs 
+  %%%
+  
+  
+  /** %% Expects a reified constraint {P Ns ?Bs} that expects a list of notes and returns a list of 0/1-ints. MakeRequirement returns an anacrusis requirement procedure (see doc of Make_HasAnacrusis).
+  %% */
+  fun {MakeRequirement P}
+     fun {$ Ns Rating} {Pattern.allTrue {P Ns}} end
+  end
+  /** %% Expects a reified constraint {P Ns ?Bs} that expects a list of notes and returns a list of 0/1-ints. MakeRatingP returns an anacrusis ratingP procedure (see doc of Make_HasAnacrusis).
+  %% */
+  fun {MakeRatingP P}
+     fun {$ Ns Rating}
+        Rating = {FD.decl}
+        Rating = {Pattern.firstNTrue {P Ns}}
+     end
+  end
+  
+  
+  
+#+end_src
+
+
+
+**** Accent constraints that look at larger context of notes
+
+     *Is this already covered by Anacrusis? Do I also need to look at larger context "behind" a given note?*
+
+     - E.g., highest note of a bar, or a phrase etc. is particular important
+
+     - Problem: how to formalise this score context?
+       for a pragmatic solution see [[*%5B#A%5D%20Has%20Anacrusis][Has Anacrusis]]
+
+
+**** ?? Starts with chord/scale change
+
+     Wallace Berry claims that chord changes are irrelevant for accents, but in case of a slower harmonic rhythm I would not readily agree. 
+
+     Scale change marks definitely an accent  
+
+
+**** ?? Has Ornament
+
+     Idea is similar to anacrusis. Implementation irrelevant as long as I have not somehow introduced ornaments such as grace notes or trills in the music representation.
+
+     
+**** ??? HasDynamicAccent
+
+     With a reasonably intelligent representation of dynamics and articulations such an accent constraint could be defined.
+     Such accent constraint would primarily useful for higher-level accents (i.e. not simply on a level of regular measures)
+
+     Note: the dynamics support of Fomus could be useful in this respect
+
+
+*** Constraints supporting accents				    :ARCHIVE:
+
+#+srcname: AccentConstraints2
+#+begin_src oz :results output
+
+
+#+end_src
     
 #+srcname: AccentConstraints
 #+begin_src oz :results output
-    declare
+  declare
     
-    /** %% If X is not nil then apply F and return the result. Otherwise return 1. 
-    %% */
-    fun {ApplyIfNotnilOrTrue X F}
-       if X == nil then 1
-       else {F X}
-       end
-    end
-    /** %% If X is not nil then apply F and return the result. Otherwise return 0. 
-    %% */
-    fun {ApplyIfNotnilOrFalse X F}
-       if X == nil then 0
-       else {F X}
-       end
-    end
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    %%%
+    %%% Aux defs
+    %%%
     
-    %% Methods getPredecessors/getTemporalPredecessors getSuccessors/getTemporalSuccessor
+      /** %% If X is not nil then apply F and return the result. Otherwise return 1. 
+      %% */
+      fun {ApplyIfNotnilOrTrue X F}
+         if X == nil then 1
+         else {F X}
+         end
+      end
+      /** %% If X is not nil then apply F and return the result. Otherwise return 0. 
+      %% */
+      fun {ApplyIfNotnilOrFalse X F}
+         if X == nil then 0
+         else {F X}
+         end
+      end
     
+    
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    %%%
+    %%% Duration related accent constraints
+    %%%
+  
+  
+      /** %% Returns an accent constraint (a function execting a note/item and returning a rating FD int). This resulting function returns 1 for notes with a duration of Dur or longer and 0 otherwise.
+      %% */
+      fun {Make_HasAtLeastDuration Dur}
+         fun {$ N}
+            ({N getDuration($)} >=: Dur)
+         end
+      end
+      
+      
+      /** %% B=1 <=> Note N is longer than both its preceeding and its succeeding note. If a preceeding or succeeding note does not exist (in the same temporal container) then that part of the condition is considered to be fulfilled.
+    %% TODO: ?? take offset times into account: a note with an offset time > 0 has "no predecessor". If the successor has an offset time > 0 then it has "no successor".
+      %% */
+      fun {IsLongerThanDirectNeighbours N}
+         fun {IsShorter N2} 
+            ({N2 getDuration($)} <: {N getDuration($)})
+         end
+      in
+         {FD.conj {ApplyIfNotnilOrTrue {N getTemporalPredecessor($)} IsShorter}
+          {ApplyIfNotnilOrTrue {N getTemporalSuccessor($)} IsShorter}}
+      end
+      
+      /** %% B=1 <=> Note N is longer than the preceeding note and not shorter than succeeding note. If a preceeding or succeeding note does not exist (in the same temporal container) then that part of the condition is considered to be fulfilled.
+    %% TODO: ?? take offset times into account: a note with an offset time > 0 has "no predecessor". If the successor has an offset time > 0 then it has "no successor".
+      %% */
+      fun {IsLongerThanPredecessor N}
+         fun {IsShorter N2} 
+            ({N2 getDuration($)} <: {N getDuration($)})
+         end
+         fun {IsNotLonger N2} 
+            ({N2 getDuration($)} =<: {N getDuration($)})
+         end
+      in
+         {FD.conj {ApplyIfNotnilOrTrue {N getTemporalPredecessor($)} IsShorter}
+          {ApplyIfNotnilOrTrue {N getTemporalSuccessor($)} IsNotLonger}}
+      end
+      
+      /** %% The higher the value of Rating, the more N is accented by its duration compared to its preceeding note.
+      %% Rating=1: N is longer than its predecessor, or if there exists no predecessor.
+      %% Rating=2: N is at least 2 times as long as its predecessor.
+      %% Rating=3: N is at least 4 times as long as its predecessor.
+      %% Rating is 0 otherwise. Rating is also 0 if N is shorter than its succeeding note.
+      %% */
+    %% TODO: take offset times into account
+      proc {IsLongerThanPredecessor_Rated N ?Rating}
+         Pre = {N getTemporalPredecessor($)}
+         NDur = {N getDuration($)}
+      in
+         Rating = {FD.int 0#3}
+         Rating = {ApplyIfNotnilOrTrue Pre
+                    fun {$ Pre}
+                       PreDur = {Pre getDuration($)}
+                    in
+                       (NDur >: PreDur) + (NDur >=: PreDur * 2) + (NDur >=: PreDur * 4)
+                    end} * {ApplyIfNotnilOrTrue {N getTemporalSuccessor($)}
+                            fun {$ N2} 
+                               ({N2 getDuration($)} =<: NDur)
+                            end}
+      end
+      
+      
+      /** %% The higher the value of Rating, the more N is accented by its duration compared to its surrounding notes.
     %% 
-    %% simplified version, see my notes
-    %% TODO:
-    %% - make more flexible, see my notes
-    %% - better arg name than B
-    
-    /** %% B=1 <=> Note N is longer than both its preceeding and its succeeding note. If a preceeding or succeeding note does not exist (in the same temporal container) then that part of the condition is considered to be fulfilled.
-  %% TODO: ?? take offset times into account: a note with an offset time > 0 has "no predecessor". If the successor has an offset time > 0 then it has "no successor".
-    %% */
-    fun {IsLongerThanDirectNeighbours N}
-       fun {IsShorter N2} 
-          ({N2 getDuration($)} <: {N getDuration($)})
-       end
-    in
-       {FD.conj {ApplyIfNotnilOrTrue {N getTemporalPredecessor($)} IsShorter}
-        {ApplyIfNotnilOrTrue {N getTemporalSuccessor($)} IsShorter}}
-    end
-    
-    /** %% B=1 <=> Note N is longer than the preceeding note and not shorter than succeeding note. If a preceeding or succeeding note does not exist (in the same temporal container) then that part of the condition is considered to be fulfilled.
-  %% TODO: ?? take offset times into account: a note with an offset time > 0 has "no predecessor". If the successor has an offset time > 0 then it has "no successor".
-    %% */
-    fun {IsLongerThanPredecessor N}
-       fun {IsShorter N2} 
-          ({N2 getDuration($)} <: {N getDuration($)})
-       end
-       fun {IsNotLonger N2} 
-          ({N2 getDuration($)} =<: {N getDuration($)})
-       end
-    in
-       {FD.conj {ApplyIfNotnilOrTrue {N getTemporalPredecessor($)} IsShorter}
-        {ApplyIfNotnilOrTrue {N getTemporalSuccessor($)} IsNotLonger}}
-    end
-    
-    /** %% The higher the value of Rating, the more N is accented by its duration compared to its preceeding note.
-    %% Rating=1: N is longer than its predecessor, or if there exists no predecessor.
-    %% Rating=2: N is at least 2 times as long as its predecessor.
-    %% Rating=3: N is at least 4 times as long as its predecessor.
-    %% Rating is 0 otherwise. Rating is also 0 if N is shorter than its succeeding note.
-    %% */
-  %% TODO: take offset times into account
-    proc {IsLongerThanPredecessor_Rated N ?Rating}
-       Pre = {N getTemporalPredecessor($)}
-       NDur = {N getDuration($)}
-    in
-       Rating = {FD.int 0#3}
-       Rating = {ApplyIfNotnilOrTrue Pre
-                  fun {$ Pre}
-                     PreDur = {Pre getDuration($)}
-                  in
-                     (NDur >: PreDur) + (NDur >=: PreDur * 2) + (NDur >=: PreDur * 4)
-                  end} * {ApplyIfNotnilOrTrue {N getTemporalSuccessor($)}
-                          fun {$ N2} 
-                             ({N2 getDuration($)} =<: NDur)
-                          end}
-    end
-    
-    
-    /** %% The higher the value of Rating, the more N is accented by its duration compared to its surrounding notes.
-  %% 
-  %% Note: The rating of the first note in a temporal container is limited to the range [1,2]. 
-    %% */
-    %% TODO:
-    %% - better fun name
-    %% - doc
-    %%
-    %% - ?? Take also multiple predecessors/successors into account? `
-    proc {IsLongerThanSurrounding_Rated N ?Rating}
-       Rating = {FD.decl}
-       Rating =: {IsLongerThanDirectNeighbours N} + {IsLongerThanPredecessor_Rated N}
-    end
-    
-    
-    % proc {IsLongerNote_OLD N B}
-    %    N1 = {N getTemporalPredecessor($ N)}
-    %    N2 = N
-    %    N3 = {N getTemporalSuccessor($ N)}
-    % in
-    %    {FD.conj ({N1 getDuration($)} <: {N2 getDuration($)})
-    %     ({N3 getDuration($)} <: {N2 getDuration($)})
-    %     B}
-    % end
-    
-    
-    
-    /** %%
-    %% */
-    proc {IsHigherThanSurrounding N B}
-       skip
-    end
-    
+    %% Note: The rating of the first note in a temporal container is limited to the range [1,2]. 
+      %% */
+      %% TODO:
+      %% - better fun name
+      %% - doc
+      %%
+      %% - ?? Take also multiple predecessors/successors into account? `
+      %% 
+      %% [??Outdated comment?] simplified version, see my notes
+      %% TODO:
+      %% - make more flexible, see my notes 
+      proc {IsLongerThanSurrounding_Rated N ?Rating}
+         Rating = {FD.decl}
+         Rating =: {IsLongerThanDirectNeighbours N} + {IsLongerThanPredecessor_Rated N}
+      end
+      
+      
+  
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  %%%
+  %%% Pitch related accent constraints
+  %%%
+      
+          
+      /** %% B=1 <=> Note N's pitch is higher than both its preceeding and its succeeding note. If a preceeding or succeeding note does not exist (in the same temporal container) then that part of the condition is considered to be fulfilled.
+    %% TODO: ?? take offset times into account: a note with an offset time > 0 has "no predecessor". If the successor has an offset time > 0 then it has "no successor".
+      %% */
+      fun {IsHigherThanDirectNeighbours N}
+         fun {IsLower N2} 
+            ({N2 getPitch($)} <: {N getPitch($)})
+         end
+      in
+         {FD.conj {ApplyIfNotnilOrTrue {N getTemporalPredecessor($)} IsLower}
+          {ApplyIfNotnilOrTrue {N getTemporalSuccessor($)} IsLower}}
+      end
+      
+      /** %% B=1 <=> Note N's pitch is higher than the preceeding note and not lower than succeeding note. If a preceeding or succeeding note does not exist (in the same temporal container) then that part of the condition is considered to be fulfilled.
+    %% TODO: ?? take offset times into account: a note with an offset time > 0 has "no predecessor". If the successor has an offset time > 0 then it has "no successor".
+      %% */
+      fun {IsHigherThanPredecessor N}
+         fun {IsLower N2} 
+            ({N2 getPitch($)} <: {N getPitch($)})
+         end
+         fun {IsNotHigher N2} 
+            ({N2 getPitch($)} =<: {N getPitch($)})
+         end
+      in
+         {FD.conj {ApplyIfNotnilOrTrue {N getTemporalPredecessor($)} IsLower}
+          {ApplyIfNotnilOrTrue {N getTemporalSuccessor($)} IsNotHigher}}
+      end
+      
+      /** %% The higher the value of Rating, the more N is accented by its pitch compared to its preceeding note.
+      %% Rating=1: N is higher than its predecessor, or if there exists no predecessor.
+      %% Rating=2: N is at least 2 times as high as its predecessor.
+      %% Rating=3: N is at least 4 times as high as its predecessor.
+      %% Rating is 0 otherwise. Rating is also 0 if N is lower than its succeeding note.
+      %% */
+    %% TODO: take offset times into account
+      proc {IsHigherThanPredecessor_Rated N ?Rating}
+         Pre = {N getTemporalPredecessor($)}
+         NPitch = {N getPitch($)}
+      in
+         Rating = {FD.int 0#3}
+         Rating = {ApplyIfNotnilOrTrue Pre
+                    fun {$ Pre}
+                       PrePitch = {Pre getPitch($)}
+                    in
+                       (NPitch >: PrePitch) + (NPitch >=: PrePitch * 2) + (NPitch >=: PrePitch * 4)
+                    end} * {ApplyIfNotnilOrTrue {N getTemporalSuccessor($)}
+                            fun {$ N2} 
+                               ({N2 getPitch($)} =<: NPitch)
+                            end}
+      end
+      
+      
+      /** %% The higher the value of Rating, the more N is accented by its pitch compared to its surrounding notes.
+    %% 
+    %% Note: The rating of the first note in a temporal container is limited to the range [1,2]. 
+      %% */
+      %% TODO:
+      %% - better fun name
+      %% - doc
+      %%
+      %% - ?? Take also multiple predecessors/successors into account? `
+      %% 
+      %% [??Outdated comment?] simplified version, see my notes
+      %% TODO:
+      %% - make more flexible, see my notes 
+      proc {IsHigherThanSurrounding_Rated N ?Rating}
+         Rating = {FD.decl}
+         Rating =: {IsHigherThanDirectNeighbours N} + {IsHigherThanPredecessor_Rated N}
+      end
+      
 #+end_src
+
+
 
 
 ** Texture constraints
@@ -2264,7 +2947,24 @@ it always equal to 2, that's a pretty good choice.
 
 
 * Strasheela doc
+
+** Strasheela tutorial
+
+   [Could become a book in the long term]
+
+   Rewrite tutorial from a music theory and composition point of view
+   - Look at constraining various musical aspects such as rhyth (accent constraints), harmony, melody, texture etc.
+   - Introduce any formal details of Strasheela within such musical contexts
+
+
+*** Format
+
+    Use Worg CCS, but add acknowledgment mentioning CCS authors Bastien Guerry and Sebastian Rose.
+
+    see 
+    file:~/oz/music/Strasheela/StrasheelaDoc_Rewrite/doc-source/
   
+
 ** Add all new publications to Strasheela website (and to my own)
    SCHEDULED: <2011-08-08 Mon>
 
@@ -2284,13 +2984,6 @@ it always equal to 2, that's a pretty good choice.
 
    Mention bug during compilation (Midiimport and OSC support do not compile on MacOS 10.6)
    Can be disregarded.
-
-** Strasheela tutorial
-
-   Use Worg CCS, but add acknowledgment mentioning CCS authors Bastien Guerry and Sebastian Rose.
-
-   see 
-   file:~/oz/music/Strasheela/StrasheelaDoc_Rewrite/doc-source/
 
 
 * Other 
