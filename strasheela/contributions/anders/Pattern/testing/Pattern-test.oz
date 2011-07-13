@@ -1954,3 +1954,34 @@ Xs = {FD.list 10 0#100}
 % 		     turningPointPos: 2
 		    )}
 
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%% Pattern.firstNTrue
+%%
+
+
+declare
+N = {FD.decl}
+Bs = {FD.list 5 0#1}
+
+{Browse N#Bs}
+
+{Pattern.firstNTrue Bs N}
+
+
+{Nth Bs 2} = 1
+
+{Nth Bs 5} = 1
+
+{Nth Bs 3} = 0
+
+{Nth Bs 1} = 1
+
+N = 3
+
+Bs = [1 1 0 0 1]
+
+
+
