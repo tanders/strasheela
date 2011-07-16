@@ -2,7 +2,7 @@
 %%
 %% This example implements a significant subset of Schoenberg's Theory of Harmony. Nevertheless, the example is created in 31 ET (not 12 ET) because this leads to a better enharmonic notation and intonation.
 %% 
-%% Usage: first feed buffer, then feed solver calls in comments are the end.
+%% Usage: first feed buffer, then feed the actual examples (solver calls) in block comments are the end.
 %%
 
 %%
