@@ -18,7 +18,7 @@ functor
 import
    Browser(browse:Browse)
    %% Inspector(inspect:Inspect)
-   Pickle Explorer Error Resolve
+   Pickle Explorer Error Resolve Emacs
    
    Strasheela at '../Strasheela.ozf'
    GUtils at 'GeneralUtils.ozf'
@@ -413,6 +413,18 @@ define
 % 		  getVoices:fun {$ X} [X] end)}
 % 	 end
 %       end
+
+      proc {DeclareMyScore I X}
+	 if {Score.isScoreObject X}
+	 then {Emacs.condSend.compiler
+	       enqueue(feedVirtualString(
+			  "declare MyScore = {Score.make"
+			  #{Out.toScoreConstructor X unit(prefix:"")}
+			  #" unit}"
+			  ))}
+	 end
+      end
+      
       /** %% In case the outer container of X is a sim, then its content is interpreted as ENP parts (each part with a single voice and multiple chords where each chord contains a single note). Otherwise the whole score is output into a single part (with a single voice and multiple chords where each chord contains a single note).
       %% */
       proc {ArchiveENPNonMensural I X}
@@ -530,6 +542,9 @@ define
 	 {Explorer.object
 	  add(information BrowseInitRecord
 	      label: 'Browse initRecord')}
+	 {Explorer.object
+	  add(information DeclareMyScore
+	      label: 'Binds score to MyScore at top level')}
 % 	 {Explorer.object
 % 	  add(information ShowInitRecord
 % 	      label: 'Show initRecord')}
