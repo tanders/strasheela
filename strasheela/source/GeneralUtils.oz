@@ -32,7 +32,8 @@ export
    IsEqual
    IsFS MakeSingletonSet IntsToFS
 
-   RelationComplement ConstrainRelation
+   RelationComplement ConstrainRelation ConstrainRelationR
+   ReifiedDistance
    
    Percent
    
@@ -171,7 +172,28 @@ define
       [] '\\=:' then X \=: Y 
       end
    end
+   /** %% Reified version of BinRelation.
+   %% */
+   fun {ConstrainRelationR X Y A}
+      case A
+      of '>:' then X >: Y
+      [] '>=:' then X >=: Y 
+      [] '<:' then X <: Y  
+      [] '=<:' then X =<: Y  
+      [] '=:' then X =: Y 
+      [] '\\=:' then X \=: Y 
+      end
+   end
 
+   /** %% Simple substitute for FD.reified.distance, which does not propagate enough.
+   %% E.g., check {Browse {FD.reified.distance 64 62 '>:' 3}}, which should return 0 and not {FD.int 0#1}.
+   %% */
+   proc {ReifiedDistance X Y Rel Z B}
+      Dist = {FD.decl}
+   in
+      {FD.distance X Y '=:' Dist}
+      B = {ConstrainRelationR Dist Z Rel}
+  end
 
    %% FS.int.match is better than this..
 %    /** %% Expects MyFS (a FS) and returns Ds, a list of FD ints which are all contained in MyFS.
