@@ -5,8 +5,7 @@
 * Changes in Version 0.10.0 (no date yet)
 
   - Main additions and changes 
-    - Accent constraints added to functor Measure. This framework of constrains controls the rhythmic weight of notes depending on a wide range of musical features (e.g., relative duration, pitch intervals, presence of an anacrusis) and the relation between rhythmic weights and metric positions. Their effect is widely user-controllable. These constraints are inspired by the chapter on rhythm in [[http://books.google.com/books?id=J4iXm-uoSRUC&printsec=frontcover&dq=structural+functions+in+music&hl=en&src=bmrr&ei=BcwFToS0FcqahQeM2sS8DQ&sa=X&oi=book_result&ct=result&resnum=1&ved=0CCwQ6AEwAA#v=onepage&q&f=false][Berry, Wallace. 1987. Structural Functions in Music. Courier Dover Publications.]] 
-; See the examples in [[../examples/Form-Examples/Texture-Examples.oz][Texture-Examples.oz]], 
+    - Accent constraints added to functor Measure. This framework of constrains controls the rhythmic weight of notes depending on a wide range of musical features (e.g., relative duration, pitch intervals, presence of an anacrusis) and the relation between rhythmic weights and metric positions. Their effect is widely user-controllable. These constraints are inspired by the chapter on rhythm in [[http://books.google.com/books?id=J4iXm-uoSRUC&printsec=frontcover&dq=structural+functions+in+music&hl=en&src=bmrr&ei=BcwFToS0FcqahQeM2sS8DQ&sa=X&oi=book_result&ct=result&resnum=1&ved=0CCwQ6AEwAA#v=onepage&q&f=false][Berry, Wallace. 1987. Structural Functions in Music. Courier Dover Publications.]] See the examples in [[../examples/Rhythm-Examples/AccentConstraint-Examples.oz][AccentConstraint-Examples.oz]]. 
     - Texture constraints added to functor Segments. This framework of constrains controls whether a musical section is, say, homophonic, quasi-homophonic, homo-directional etc. Again, this framework is widely user-controllable. These constraints are inspired by the chapter on texture in [[http://books.google.com/books?id=J4iXm-uoSRUC&printsec=frontcover&dq=structural+functions+in+music&hl=en&src=bmrr&ei=BcwFToS0FcqahQeM2sS8DQ&sa=X&oi=book_result&ct=result&resnum=1&ved=0CCwQ6AEwAA#v=onepage&q&f=false][Berry, Wallace. 1987. Structural Functions in Music. Courier Dover Publications.]] See the examples in [[../examples/Form-Examples/Texture-Examples.oz][Texture-Examples.oz]], and the definitions in the functor [[../contributions/anders/Segments/doc/node1.html][Segments.]]  
    - Support for heuristic constraints added (value ordering heuristics). Heuristic constraints are a form of soft constraints that express only a preference instead of a strict requirement on the solution. See the documentation of the procedure Score.apply_H, the examples in [[../examples/Heuristic-Constraints.oz][Heuristic-Constraints.oz]], and the functor [[../contributions/anders/Heuristics/doc/node1.html][Heuristics]].  
     - Revised Fomus output: Strasheela now exports the new format of the Fomus rewrite (http://fomus.sourceforge.net/), and Strasheela's Fomus export definition have been extended in many ways.
@@ -18,6 +17,7 @@
     - Partially determined scores can be output to music notation (i.e. Lilypond and Sibelius/Finale) via the Fomus export. (Partially determined scores could be exported into Csound and MIDI already.)
 
   - Main documentation additions
+    -  [[../examples/Rhythm-Examples/AccentConstraint-Examples.oz][AccentConstraint-Examples.oz]]: Added examples demonstrating how to constrain accents (notes that meet a number of given conditions, e.g., have an anacrusis) to certain metric positions
     - [[../examples/Form-Examples/Texture-Examples.oz][Texture-Examples.oz]]: Added examples demonstrating texture constraints 
     - [[../examples/Heuristic-Constraints.oz][Heuristic-Constraints.oz]]: demonstrates how heuristic constraints are defined and used.
     - [[../ examples/ControllingOutput-Examples/Fomus-Examples.oz][Fomus-Examples.oz]]: Added examples demonstrating the Fomus output. 
@@ -30,13 +30,14 @@
     - Added pitch unit mHz (Millihertz)
     - GUtils: added IsEqual, RecursiveRatio, PrimeFactors
     - GUtils.toProc: refactored version now supports optional arguments with default values 
-    - MUtils: added RatioToRatioPC OddLimit PrimeLimit
+    - MUtils: added FeedNoteLengthVariables (support for convenient note duration variables), RatioToRatioPC OddLimit PrimeLimit
     - LUtils: added RemovePosition, ReplacePosition, FindBest, 
     - Init: added SetNoteLengthsRecord, SymbolicDurToInt
+    - Init: added Explorer information action that binds the score in a node of the Explorer to the variable MyScore at the top-level (very useful for debugging)
     - Out.toLilypond and friends: implicit clef is now controllable with argument getClef
     - Out.makeNoteToLily2: function has been completely rewritten with a now more general interface 
     - Out.averagePitchClef added
-    - SMapping: added MapTimeslices ForTimeslices
+    - SMapping: added MapTimeslices, ForTimeslices, ForTimeRange, ForTimeRangeArgs
     - SDistro: added SearchBest_Timeout
     - ET22.db: interval database now defined as ratios for adaptive JI
     - ET22.out: added NoteEt22ToLily_AdaptiveJI2, PajaraRMS_TuningTable, JI_TuningTable
@@ -54,7 +55,8 @@
     - Removed GUtils.isInt (result wrong for FD ints): use FD.is or IsInt instead
     - Segs.out.unmeteredMusic_LilyHeader: String for Lilypond header configuration to support unmetered music (e.g., as in many Messian pieces)
     - Measure.uniformMeasures: a number of syncopation-related constraints have been added (methods getBeatAt, getBeatInMeasureAt, getAccentInMeasureAt, beatSyncopation, accentSyncopationR) 
-    - Score: added the temporal items methods getPredecessors, getSuccessors, getTemporalPredecessors, getTemporalSuccessors, getPredecessorsUpToRest, getSuccessorsUpToRest
+    - Score: added the temporal items methods getPredecessors, getSuccessors, getTemporalPredecessors, getTemporalSuccessors, getPredecessorsUpToRest, getSuccessorsUpToRest 
+    - Score: added temporal deterministic functions and constraints AtTimeR AtTimeR2 InTimeframe InTimeframeOffset InTimeframeR InTimeframeOffsetR GetItemsInTimeframe GetItemsInTimeframeOffset
 
   - Further bug fixes and changes
     - Oz primitives like IsRecord, IsAtom etc. block on kinded variables (undetermined FD and FS vars), which could cause blocking of various Strasheela definitions. Now Strasheela always uses its new own GUtils.isRecord and GUtils.isAtom etc. which do not have this problem
@@ -76,6 +78,7 @@
     - Fixed HS.pcName
     - Fenv method toList: fixed bug for case N=1
     - Pattern: renamed Arc -> Arch
+    - Pattern: patterns such as Continuous AllEqual Increasing Decreasing caused error for input nil, fixed (in PlainPattern2)
     - Out.midi.getChannel now uses mini chan param of midi note objects (not only channel info tag)
     - Refactored ET22 and ET31 output: now much reduced code with same functionality using HS.out, several procs before exported by ET22 and ET31 are now moved to HS.out
     - Segs.homophonicChordProgression: replaced arg 'isToplevel' by arg 'makeTopLevel' for generality; fixed bug: constraint of arg maxUpperVoiceDistance now actually applied to upper voices; change default for arg commonPitchesHeldOver to false, allow disabling maxUpperVoiceDistance constraints.
