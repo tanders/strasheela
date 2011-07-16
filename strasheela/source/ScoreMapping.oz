@@ -30,6 +30,7 @@ import
    FD
    LUtils at 'ListUtils.ozf' %at 'x-ozlib://anders/music/sdl/Utils.ozf'
    GUtils at 'GeneralUtils.ozf'
+   Score at 'ScoreCore.ozf'
    %% !! functor of Strasheela core depending on extension
    Pattern at 'x-ozlib://anders/strasheela/Pattern/Pattern.ozf'
 %    Browser(browse:Browse) % temp for debugging
@@ -41,6 +42,8 @@ export
    ForContexts MapContexts ForContextsR
    PatternMatchingApply PatternMatchingApply2
    ForNumericRange ForNumericRange2 ForNumericRangeArgs
+   ForTimeRange ForTimeRangeArgs
+   %% TODO: MapTimeRange MapTimeRangeArgs
    MapTimeslices ForTimeslices
    MapSimultaneousPairs ForSimultaneousPairs
    FilterSimultaneous FindSimultaneous
@@ -716,15 +719,15 @@ define
       XsLength = {Length Xs}
       %% instead, I could use LUtils.ranges and then flatten
       AllIs = {LUtils.mappend FullDecl fun {$ X}
-				      case X
-				      of Min#Max then {List.number Min Max 1}
-				      [] Val then [Val]
-				      else {Exception.raiseError
-						 strasheela(failedRequirement X
-							    "format of declaration must be either Min#Max (integer pair) or I (single int).")}
-					 unit   % never returned
-				      end
-				   end}
+					  case X
+					  of Min#Max then {List.number Min Max 1}
+					  [] Val then [Val]
+					  else {Exception.raiseError
+						strasheela(failedRequirement X
+							   "format of declaration must be either Min#Max (integer pair) or I (single int).")}
+					     unit   % never returned
+					  end
+				       end}
       %% create tuple which contains P at all positions contained in
       %% AllIs and ElseP at all other positions.
       MatchingPs = {MakeTuple unit XsLength}
@@ -744,7 +747,8 @@ define
    end
 
    /** %% Applies binary procedure P to each element in Xs which index is expressed by Decl -- together with additional arguments for that index. To all other elements of Xs the unary procedure ElseP is applied instead.
-   %% Decl is a list which contains single index integers plus constraint arguments in the form Ind#Args, or index ranges plus constraint arguments in the form (Min#Max)#Args. The index Ind and the range boundaries Min and Max are integers, Args is a list of arbitrary values (and can be nil). Alternatively, Decl can be a single index Ind#Args or a single range  (Min#Max)#Args.  
+   %% Decl is a list which contains single index integers plus constraint arguments in the form Ind#Args, or index ranges plus constraint arguments in the form (Min#Max)#Args. The index Ind and the range boundaries Min and Max are integers. Alternatively, Decl can be a single index Ind#Args or a single range  (Min#Max)#Args.  
+   %% P expects an item as first argument and its respective Args as second argument (Args can thus be any date). 
    %%  ForNumericRangeArgs implements a generalised variant of ForNumericRange (and ForNumericRange2) which implements an extended syntax for Decl.
    %% The rule applicator `mapIndexArgs' in earier Strasheela publications is the function equivalent. However, the CMJ paper on this matter introduces a more complex function under the name `mapIndex' which corresponds to ForNumericRangeArgs without the ElseP argument.
    %% */ 
@@ -782,7 +786,72 @@ define
        end}
    end
 
+   /** %% Applies unary procedure P to each element in Xs that falls in the time frames expressed by Decl (as defined by Score.atTimeR Score.inTimeframeR). Decl is a list which contains single time points (ints), or time frame pairs of the form Start#End (Start and End are integers). Alternatively, Decl can also be a single pair or a single integer.
+   %% */
+   %% TODO: extensive testing
+   proc {ForTimeRange Xs Decl P}
+      FullDecl = if {IsList Decl} then Decl else [Decl] end
+   in
+      {List.forAllInd FullDecl
+       proc {$ I TimeSpec}
+	  case TimeSpec of
+	     Start#End then Items in
+	     thread Items = {Score.getItemsInTimeframe Xs Start End unit} end
+	     thread {ForAll Items P} end
+	  [] Time then Items in
+	     thread
+		Items = {LUtils.cFilter Xs
+			 fun {$ X} ({Score.atTimeR X Time} == 1) end}
+	     end
+	     thread {ForAll Items P} end
+	  else
+	     {Exception.raiseError
+	      strasheela(failedRequirement TimeSpec
+			 "format of declaration must be either Start#End (integer pair) or Time (single int).")}
+	  end
+       end}
+   end
+   /** %% Generalised variant of ForTimeRange: to every element in Xs to which P is not applied, ElseP (a unary procedure) is applied instead.
+   %% */
+   %% Todo if you need it...
+   % proc {ForTimeRange2 Xs Decl P ElseP}
+   %    %% Call ForTimeRange2
+   %    %% Additionally, check whether there are holes between times in Decl and appply ElseP to those missing time frames
+   % end
 
+   /** %% Applies binary procedure P to each element in Xs that falls in the time frames expressed by Decl (as defined by Score.atTimeR Score.inTimeframeR) -- together with additional arguments for that time frame.
+   %% Decl is a list which contains single time points (ints) plus constraint arguments in the form Time#Args, or time frame pairs plus constraint arguments in the form (Start#Time)#Args (Start and End are integers). Alternatively, Decl can be a single time point Time#Args or a single range (Start#End)#Args.
+   %% P expects an item as first argument and its respective Args as second argument (Args can thus be any date).
+   %% */
+   %% TODO: extensive testing
+   proc {ForTimeRangeArgs Xs Decl P}
+      FullDecl = if {IsList Decl} then Decl else [Decl] end
+   in
+      {List.forAllInd FullDecl
+       proc {$ I TimeSpec}
+	  case TimeSpec of
+	     (Start#End)#Args then Items in
+	     thread Items = {Score.getItemsInTimeframe Xs Start End unit} end
+	     thread {ForAll Items proc {$ X} {P X Args} end} end
+	  [] Time#Args then Items in
+	     thread
+		Items = {LUtils.cFilter Xs
+			 fun {$ X} ({Score.atTimeR X Time} == 1) end}
+	     end
+	     thread {ForAll Items proc {$ X} {P X Args} end} end
+	  else
+	     {Exception.raiseError
+	      strasheela(failedRequirement TimeSpec
+			 "format of declaration must be either Start#End (integer pair) or Time (single int).")}
+	  end
+       end}
+   end
+
+   %%
+   %% TODO: MapTimeRange
+   %% TODO: MapTimeRangeArgs
+   %%
+      
    local
       /** %% Traverses Xs (a list of temporal items) and returns list of those items which sound within time window Start-End. Nevertheless, these items may also start before or sound longer then this time window.
       %% */
