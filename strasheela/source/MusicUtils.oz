@@ -16,6 +16,7 @@
 	    
 functor
 import
+   Emacs
 %    Browser(browse:Browse)
    GUtils at 'GeneralUtils.ozf'
    LUtils at 'ListUtils.ozf'
@@ -39,7 +40,8 @@ export
    FullTuningTable
 
    MakeNoteLengthsTable MakeNoteLengthsRecord MakeDurationsRecord
-   SetNoteLengthsRecord ToDur SetDurationsRecord ToNoteLengths
+   SetNoteLengthsRecord GetNoteLengthsRecord FeedNoteLengthVariables ToDur
+   SetDurationsRecord ToNoteLengths
    
 define
    /** %% freq at keynum 0, keynum 69 = 440 Hz
@@ -391,10 +393,28 @@ define
       proc {SetNoteLengthsRecord Beat TupletFractions}
 	 R := {MakeNoteLengthsRecord Beat TupletFractions}
       end
+      /** %% Returns the full record of symbolic note lengths atomes (record features) and their associated durations (record values).
+      %% */
+      fun {GetNoteLengthsRecord} @R end
       /** %% Expects a symbolic note length (atom) and returns the corresponding duration. Use SetNoteLengthsRecord for initialisation (default is {SetNoteLengthsRecord 4 nil}).
       %% */
       fun {ToDur NoteLength}
 	 @R.NoteLength
+      end
+      /** %% Makes all set symbolic note lengths available as variables in the compiler. The variable names are the same as expected, e.g., by ToDur. For example, the variable D4 will be bound to the duration of the beat. For all (lower-case) note values see {Arity {MUtils.getNoteLengthsRecord}}.
+      %% Use SetNoteLengthsRecord for initialisation (default is {SetNoteLengthsRecord 4 nil}).
+      %% */
+      proc {FeedNoteLengthVariables}
+	 fun {MakeDurnameCode DurAtom#Dur}
+	    DurString = {Atom.toString DurAtom}
+	 in
+	    ({Char.toUpper DurString.1}|DurString.2)#"="#{Int.toString Dur}#"\n"
+	 end
+	 Code = {Out.listToVS
+		 {Map {Record.toListInd {GetNoteLengthsRecord}} MakeDurnameCode}
+		 ""}
+      in
+	 {Emacs.condSend.compiler enqueue(feedVirtualString("declare "#Code))}
       end
    end
    local
