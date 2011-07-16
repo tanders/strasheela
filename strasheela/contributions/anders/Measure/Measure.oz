@@ -82,8 +82,6 @@ export
    Anacrusis_EvenDurations Anacrusis_FirstNEvenDurations
    Anacrusis_UpwardPitchIntervals Anacrusis_FirstNUpwardPitchIntervals
    Anacrusis_SameDirectionPitchIntervals Anacrusis_FirstNSameDirectionPitchIntervals
-
-   AtTimeR AtTimeR2
    
 prepare
    MeasureType = {Name.new}
@@ -1051,8 +1049,8 @@ end
 		     SimNotes = {LUtils.cFilter Notes
 				 fun {$ N}
 				    AtTimeR_Proc = if As.allowRestsAtMetricPosition
-						   then AtTimeR
-						   else AtTimeR2
+						   then Score.atTimeR
+						   else Score.atTimeR2
 						   end
 				 in 
 				    {AtTimeR_Proc N MyStart} == 1
@@ -1207,7 +1205,8 @@ end
    %% */
    fun {IsSkip N}
       fun {BeforeSkip N2}
-	 {FD.reified.distance {N getPitch($)} {N2 getPitch($)} '>:' {HS.pc 'Eb'}}
+	 {GUtils.reifiedDistance {N getPitch($)} {N2 getPitch($)} '>:' {HS.pc 'Eb'}}
+	 % {FD.reified.distance {N getPitch($)} {N2 getPitch($)} '>:' {HS.pc 'Eb'}}
       end
    in
       {ApplyIfNotnilOrTrue {N getTemporalPredecessor($)} BeforeSkip}
@@ -1482,23 +1481,6 @@ end
 %%% Aux defs
 %%%
    
-
-
-   /** % [0/1 Constraint] Returns 0/1-integer whether Time (FD int) is between the start and end time of X (an temporal item), including its start but note the end time.
-   %% */
-   proc {AtTimeR X Time ?B}   
-      {FD.conj ({X getStartTime($)} =<: Time) (Time <: {X getEndTime($)}) B}
-   end
-  
-   /** % [0/1 Constraint] Same as AtTimeR, but the time frame of X takes also the potential rest introduced by its offset time into account.
-   %% */
-   proc {AtTimeR2 X Time ?B}        
-      StartX = {FD.decl}
-   in
-      StartX =: {X getStartTime($)} - {X getOffsetTime($)} 
-      {FD.conj (StartX =<: Time) (Time <: {X getEndTime($)}) B}
-   end
-
    /** %% If X is not nil then apply F and return the result. Otherwise return 1. 
    %% */
    fun {ApplyIfNotnilOrTrue X F}
