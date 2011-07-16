@@ -176,9 +176,12 @@ define
 %*/
    proc {PlainPattern2 Xs Proc}      
       proc {Aux ToProcess Processed N}
-	 {Proc ToProcess.1 Processed N}
-	 if ToProcess.2 \= nil
-	 then {Aux ToProcess.2 ToProcess.1|Processed N+1}
+	 case ToProcess of nil then skip
+	 else 
+	    {Proc ToProcess.1 Processed N}
+	    if ToProcess.2 \= nil
+	    then {Aux ToProcess.2 ToProcess.1|Processed N+1}
+	    end
 	 end
       end
    in
