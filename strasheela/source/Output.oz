@@ -595,6 +595,12 @@ define
 %   %% NB: Only a fully determiend score can be pickled, otherwise an exception is raised.
    %% */
    %% A pickle is not used, because undetermined variables can not be pickled.
+   %%
+   %% NOTE: improvements proposed in Deny's slides Managing Data with Mozart
+   %% http://www.univ-orleans.fr/lifo/membres/duchier/teaching/GSLT-2003/ManagingData/HTML/index.html
+   %% 
+   %% - Generalized Pickler: I would need to add FD and FS to his simplementation, and then could likely process my textual scores
+   %% - Store textual score and/or score object (with Score.make2) in functor in the prepare section -- it will then be computed at compile time (can hopefully be done in the background quasi unnoticed at a multi-core machine), and hopefully can be loaded quickly
    proc {SaveScore MyScore Args}
       {OutputScoreConstructor MyScore
        {Adjoin Args unit}}
@@ -612,7 +618,10 @@ define
 				)}
    in
       /** %% Loads a pickeled score from path.
-      %% NB: If the class definitions for the classes used in the score will have changed meanwhile, the loaded score will still use the new class definitions (it is re-created from the textual specification). 
+      %% NB: If the class definitions for the classes used in the score will have changed meanwhile, the loaded score will still use the new class definitions (it is re-created from the textual specification).
+      %%
+      %% NOTE: Loading large scores can be veeeeeery slooooowww. Instead, pickle score and load pickle (if possible).
+      %% See also Denys Duchiers comments  http://www.univ-orleans.fr/lifo/membres/duchier/teaching/GSLT-2003/ManagingData/HTML/index.html
       %% */
       fun {LoadScore Args}
 	 Defaults = unit(file:"test"
