@@ -27,7 +27,11 @@
 %% <code>{O set&lt;AttributeOrFeature&gt;(X)}</code> is a writer method which binds the AttributeOrFeature of object O destructively to a fresh logic variable and initializes it with X.
 */
 
-%% TODO: 
+%% TODO:
+%%
+%% * Define comprehensive set of temporal relations
+%%   Allen's Interval Algebra (e.g., see http://en.wikipedia.org/wiki/Allen%27s_Interval_Algebra)
+%%   -> would be easy to do, but do I actually need that? 
 %% 
 %% * refactor or remove toPPrintRecord (use toFullRecord only?)
 %%
@@ -85,6 +89,11 @@ export
    MakeClass
 
    apply_H: Apply_Heuristic
+
+   AtTimeR AtTimeR2
+   InTimeframe InTimeframeOffset
+   InTimeframeR InTimeframeOffsetR
+   GetItemsInTimeframe GetItemsInTimeframeOffset
    
 prepare
    /** marker of score object type checking */
@@ -927,55 +936,31 @@ define
       %meth getDurationUnit(?X) X={@duration getUnit($)} end
       %meth getOffsetTimeUnit(?X) X={@offsetTime getUnit($)} end
       /** %% [Deterministic method] Returns boolean whether self and X are simultaneous in time. 
+      %% This relation defines a conjunction of the following Allen's Interval Algebra relations: overlaps, starts, during, finishes and equal; only meets and before/after are excluded.
       %%*/  
       %% @1=?B
       meth isSimultaneousItem(?B X)
-	 Start1 = {self getStartTime($)} 
-	 Start2 = {X getStartTime($)}
-	 End1 = {self getEndTime($)} 
-	 End2 = {X getEndTime($)}
-      in
-% 	 B = ((Start1 =< Start2 andthen End1 > Start2) 
-% 	      orelse 
-% 	      (Start2 =< Start1 andthen End2 > Start1))
-	 B = (Start1 < End2) andthen (Start2 < End1)
+	 B = {InTimeframe X {self getStartTime($)} {self getEndTime($)}}
       end
-      /** %% [Deterministic method] Generalised version of isSimultaneousItem where the offset time Offset is taken into account.
+      /** %% [Deterministic method] Generalised version of isSimultaneousItem where the offset time Offset is taken into account (see InTimeframeOffset).
       %% */
       meth isSimultaneousItemOffset(?B X Offset)
-	 Start1 = {self getStartTime($)} 
-	 Start2 = {X getStartTime($)}
-	 End1 = {self getEndTime($)} 
-	 End2 = {X getEndTime($)}
-      in
-	 B = ((Start1+Offset) < End2) andthen (Start2 < (End1+Offset))
+	 B = {InTimeframeOffset X {self getStartTime($)} {self getEndTime($)} Offset}
       end
       /** % [0/1 Constraint] Returns 0/1-integer whether self and X are simultaneous in time (i.e. somehow overlap in time).
+      %% This relation defines a conjunction of the following Allen's Interval Algebra relations: overlaps, starts, during, finishes and equal; only meets and before/after are excluded.
       %% */
       %% @1=?B
-      meth isSimultaneousItemR(?B X)	% ?? method name
-	 Start1 = {self getStartTime($)} 
-	 Start2 = {X getStartTime($)}
-	 End1 = {self getEndTime($)} 
-	 End2 = {X getEndTime($)}
-	    %B :: 0#1
-      in
-% 	 B = {FD.exor
-% 	      {FD.conj (Start1 =<: Start2) (End1 >: Start2)}
-% 	      {FD.conj (Start2 =<: Start1) (End2 >: Start1)}}
-	 {FD.conj (Start1 <: End2) (Start2 <: End1) B}
+      meth isSimultaneousItemR(?B X)
+	 B = {InTimeframeR X {self getStartTime($)} {self getEndTime($)}}
       end
       /** %% [0/1 Constraint] Generalised version of isSimultaneousItemR where the offset time Offset is taken into account.
       %% */
       meth isSimultaneousItemOffsetR(?B X Offset)	% ?? method name
-	 Start1 = {self getStartTime($)} 
-	 Start2 = {X getStartTime($)}
-	 End1 = {self getEndTime($)} 
-	 End2 = {X getEndTime($)}
-      in
-	 {FD.conj (Start1+Offset <: End2) (Start2 <: End1+Offset) B}
+	 B = {InTimeframeOffsetR X {self getStartTime($)} {self getEndTime($)} Offset}
       end			
       /** % [0/1 Constraint] Returns 0/1-integer whether self and X are exactly simultaneous in time (i.e. start and end at the same time).
+      %% This relation defines the Allen's Interval Algebra relation equal.
       %% */
       %% @1=?B
       meth isExactlySimultaneousItemR(?B X)
@@ -986,60 +971,54 @@ define
       in
 	 {FD.conj (Start1 =: Start2) (End1 =: End2) B}
       end
-      /** % [Deterministic method] Returns list of score objects simultaneous to self and fulfilling the optional boolean function or method test.
+      /** % [Deterministic method] Returns list of score items simultaneous to self and fulfilling the optional Boolean function or method test.
       %% If a toplevel Top (a temporal container) is given, then only within that container is searched for simultaneous items to self. Otherwise the temporal top-level of self is search (i.e. usually the whole score).
-      %% The implementation uses LUtils.cFilter and the reified constraints method isSimultaneousItemR. Items are returned as soon as the score contains enough information for all score objects in the score to tell whether or not their are simultaneous to self (i.e. rhythmic structure of the whole score must not necessarily be fully determined).
-      %% NB: Test must be a deterministic function/method which does not block (e.g., checks on score object types or their position in the score topology are OK) and which is used for pre-filtering score objects. The argument cTest has the same format (optional Boolean function or method), but it is applied within the concurrent filtering of LUtils.cFilter, together with isSimultaneousItemR. Computationally very expensive tests and in particular tests which can block are better handed to cTest.
+      %% See the documentation of GetItemsInTimeframe for further details (e.g., on the arguments test and cTest).
       %%*/
       %% @1=?Xs	
       meth getSimultaneousItems(?Xs test:Test<=fun {$ X} true end
 				cTest: CTest<=fun {$ X} true end
 				toplevel: Top<=false)
-	 thread 		% ?? NOTE: thread needed?
-	    TopLevel = if Top \= false
-		       then Top
-		       else {self getTopLevels($ test:fun {$ X} {X isTimeMixin($)} end)}.1
-		       end
-	    ScoreObjects = {TopLevel collect($ test: fun {$ X}
-							%% only test items further
-							{X isItem($)} andthen
-							{{GUtils.toFun Test} X}
-						     end)}
-	 in
-	    Xs = {LUtils.cFilter ScoreObjects
-		  fun {$ X}
-		     X \= self andthen
-		     % {X isItem($)} andthen
-		     ({self isSimultaneousItemR($ X)} == 1) andthen
-		     {{GUtils.toFun CTest} X}
-		  end}
-	 end
+	 TopLevel = if Top \= false
+		    then Top
+		    else {self getTopLevels($ test:fun {$ X} {X isTimeMixin($)} end)}.1
+		    end
+	 ScoreObjects = {TopLevel collect($ test: fun {$ X}
+						     %% only test items further
+						     {X isItem($)} andthen
+						     {{GUtils.toFun Test} X}
+						  end)}
+      in
+	 Xs = {GetItemsInTimeframe ScoreObjects
+	       {self getStartTime($)} {self getEndTime($)}
+	       unit(cTest: fun {$ X}
+			      X \= self andthen
+			      {{GUtils.toFun CTest} X}
+			   end)}
       end
-      /** %% [Deterministic method] Generalised version of getSimultaneousItems where the offset time Offset is taken into account.
+      /** %% [Deterministic method] Generalised version of getSimultaneousItems where the offset time Offset (FD int) is taken into account. See the doc of InTimeframeOffsetR for the meaning of the Offset.
       %% */
       meth getSimultaneousItemsOffset(?Xs Offset
 				      test:Test<=fun {$ X} true end
 				      cTest: CTest<=fun {$ X} true end
 				      toplevel: Top<=false)
-	 thread 		% ?? NOTE: thread needed?
-	    TopLevel = if Top \= false
-		       then Top
-		       else {self getTopLevels($ test:fun {$ X} {X isTimeMixin($)} end)}.1
-		       end
-	    ScoreObjects = {TopLevel collect($ test: fun {$ X}
-							%% only test items further
-							{X isItem($)} andthen
-							{{GUtils.toFun Test} X}
-						     end)}
-	 in
-	    Xs = {LUtils.cFilter ScoreObjects
-		  fun {$ X}
-		     X \= self andthen
-		     % {X isItem($)} andthen
-		     ({self isSimultaneousItemOffsetR($ X Offset)} == 1) andthen
-		     {{GUtils.toFun CTest} X}
-		  end}
-	 end
+	 TopLevel = if Top \= false
+		    then Top
+		    else {self getTopLevels($ test:fun {$ X} {X isTimeMixin($)} end)}.1
+		    end
+	 ScoreObjects = {TopLevel collect($ test: fun {$ X}
+						     %% only test items further
+						     {X isItem($)} andthen
+						     {{GUtils.toFun Test} X}
+						  end)}
+      in
+	 Xs = {GetItemsInTimeframeOffset ScoreObjects
+	       {self getStartTime($)} {self getEndTime($)}
+	       Offset
+	       unit(cTest: fun {$ X}
+			      X \= self andthen
+			      {{GUtils.toFun CTest} X}
+			   end)}
       end
 
       /** %% [Deterministic method] Returns the first score object found which is simultaneous to self and fulfilling the optional boolean function or method test.
@@ -1047,6 +1026,9 @@ define
       %% The implementation uses LUtils.cFind and the reified constraints method isSimultaneousItemR. X is return as soon as the score contains enough information to tell for any score object that it is simultaneous to self (i.e. rhythmic structure of the whole score must not necessarily be fully determined). 
       %% NB: Test must be a deterministic function/method which does not block (e.g., checks on score object types or their position in the score topology are OK) and which is used for pre-filtering score objects. The argument cTest has the same format (optional Boolean function or method), but it is applied within the concurrent filtering of LUtils.cFilter, together with isSimultaneousItemR. Computationally very expensive tests and in particular tests which can block are better handed to cTest. 
       %% */
+      %% TODO:
+      %% - Revise by finishing and exporting the definition of FindItemInTimeframe below
+      %% - ?? Add definitions FindItemInTimeframeOffset and findSimultaneousItemOffset
       meth findSimultaneousItem(?X test:Test<=fun {$ X} true end
 				cTest: CTest<=fun {$ X} true end
 				toplevel: Top<=false)
@@ -2808,7 +2790,7 @@ define
    end
 
    local
-      /** %% Creates a list of score object parameter values from a specification. Format of Spec is either each#Xs, fenv#MyFenv, or MyVal, see MakeItems doc for details.  
+      /** %% Creates a list of score object parameter values from a specification. Format of Spec is either each#Xs, fd#Spec, fenv#MyFenv, or MyVal, see MakeItems doc for details.  
       %% */
       fun {MakeParameterValues Spec N}
 	 case Spec of
@@ -2818,6 +2800,8 @@ define
 		strasheela(failedRequirement Xs "List must be of length n: "#N)}
 	    end
 	    Xs
+	 [] fd#Spec then
+	    {LUtils.collectN N fun {$} {FD.int Spec} end}
 	 [] fenv#MyFenv then 
 	    {Map {MyFenv toList($ N)} FloatToInt}
 	 else {LUtils.collectN N fun {$} Spec end}
@@ -2842,10 +2826,14 @@ define
       %% 'handle': argument to access the resulting list of items (convenient when MakeItems is used in a nested data structure, cf. ScoreObject init method arg handle)
       %% 'rule': constraint (unary proc) applied to list of all items
       %%
-      %% In addition, all items arguments expected by 'constructors' are supported. If not specially marked, these arguments are shared by all parameters. For specifying individual arguments for the elements, the following special cases are supported. These cases are notated as a pair Label # ArgValue. The following labels are supported. 
-      %% 'each': the ArgValue is a list of length 'n' and specifies argument values for the individual elements. Example Args for specifying individual note pitches.
+      %% In addition, all item arguments expected by 'constructors' are supported. If not specially marked, these arguments are shared by all parameters.
+      %%
+      %% For specifying individual arguments for the elements, the following special cases are supported. These cases are notated as a pair Label # ArgValue. The following labels are supported.
+      %% fd#Spec: each parameter value has the given domain specification Spec. Example:
+      unit(pitch: fd#(60#72)) 
+      %% each#Xs: Xs is a list of length 'n' and specifies argument values for the individual elements. Example for specifying individual note pitches:
       unit(pitch: each#[60 62 64]) 
-      %% 'fenv': the ArgValue is a Fenv. Argument values for the individual elements are obtained by sampling the Fenv (method toList), and converting the results to integers.
+      %% fenv#MyFenv: MyFenv is a Fenv. Argument values for the individual elements are obtained by sampling the Fenv (method toList), and converting the results to integers.
 
       %%
       %% Default Args:
@@ -3357,5 +3345,108 @@ define
        end}
    end
 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%
+%%% Temporal constraints etc.
+%%%
+   
+   /** % [0/1 Constraint] Returns 0/1-integer whether Time (FD int) is between the start and end time of X (an temporal item), including its start but note the end time.
+   %% */
+   proc {AtTimeR X Time ?B}   
+      {FD.conj ({X getStartTime($)} =<: Time) (Time <: {X getEndTime($)}) B}
+   end
+  
+   /** % [0/1 Constraint] Same as AtTimeR, but the time frame of X takes also the potential rest introduced by its offset time into account.
+   %% */
+   proc {AtTimeR2 X Time ?B}        
+      StartX = {FD.decl}
+   in
+      StartX =: {X getStartTime($)} - {X getOffsetTime($)} 
+      {FD.conj (StartX =<: Time) (Time <: {X getEndTime($)}) B}
+   end
+
+
+   /** %% [Deterministic function] Returns boolean whether (some part of) the item X is in the time frame specified by Start and End (ints).
+   %% This relation defines a conjunction of the following Allen's Interval Algebra relations: overlaps, starts, during, finishes and equal; only meets and before/after are excluded.
+   %% */  
+   fun {InTimeframe X Start End}
+      StartX = {X getStartTime($)}
+      EndX = {X getEndTime($)}
+   in
+      (Start < EndX) andthen (StartX < End)
+   end
+
+   /** %% [Deterministic function] Varian of InTimeframe where the offset time Offset (an int) is taken into account. It returns true if the item X would be in the time frame specified by Start and End, if these times would be moved by this offset time.
+   %% */
+   fun {InTimeframeOffset X Start End Offset}
+      StartX = {X getStartTime($)}
+      EndX = {X getEndTime($)}
+   in
+      ((Start+Offset) < EndX) andthen (StartX < (End+Offset))
+   end
+
+   /** % [0/1 Constraint] Returns 0/1-integer whether whether (some part of) the item X is in the time frame specified by Start and End (FD ints).
+   %% This relation defines a conjunction of the following Allen's Interval Algebra relations: overlaps, starts, during, finishes and equal; only meets and before/after are excluded.
+   %% */
+   fun {InTimeframeR X Start End}
+      StartX = {X getStartTime($)}
+      EndX = {X getEndTime($)}
+   in
+      {FD.conj (Start <: EndX) (StartX <: End)}
+   end
+
+  /** %% [0/1 Constraint] Varian of InTimeframeR where the offset time Offset (FD int) is taken into account. It returns true (1) if the item X would be in the time frame specified by Start and End, if these times would be moved by this offset time.
+   %% */
+   fun {InTimeframeOffsetR X Start End Offset}
+      StartX = {X getStartTime($)}
+      EndX = {X getEndTime($)}
+   in
+      {FD.conj (Start+Offset <: EndX) (StartX <: End+Offset)}
+   end
+
+   /** % [Deterministic function] Returns list of score items in Xs (a list of items) in the time frame specified by Start and End (FD ints) -- see doc of InTimeframe -- and fulfilling the optional Boolean function or method test.
+   %% The implementation uses LUtils.cFilter and the reified constraint InTimeframeR. Items are returned as soon as the score contains enough information for all score objects in the score to tell whether or not their are simultaneous to self (i.e. rhythmic structure of the whole score must not necessarily be fully determined).
+   %%
+   %% Args:
+   %% test (unary Boolean function or method): Only items for which this test returns true are collected. This function must be a deterministic function/method which does not block (e.g., checks on score object types or their position in the score topology are OK) and which is used for pre-filtering score objects.
+   %% cTest (unary Boolean function or method):  Only items for which this test returns true are collected. The argument cTest is applied within the concurrent filtering of LUtils.cFilter, together with InTimeframeR. Computationally very expensive tests and in particular tests which can block are better handed to cTest.
+   %%*/
+   fun {GetItemsInTimeframe Xs Start End Args}
+      Defaults = unit(test:fun {$ X} true end
+		      cTest: fun {$ X} true end)
+      As = {Adjoin Defaults Args}
+   in
+      thread
+	 {LUtils.cFilter {Filter Xs {GUtils.toFun As.test}}
+	  fun {$ X}
+	     ({InTimeframeR X Start End} == 1) andthen
+	     {{GUtils.toFun As.cTest} X}
+	  end}
+      end
+   end
+
+   /** %% [Deterministic function] Generalised version of GetItemsInTimeframe where the offset time Offset (FD int) is taken into account. See the doc of InTimeframeOffsetR for the meaning of the Offset.
+   %% */
+   fun {GetItemsInTimeframeOffset Xs Start End Offset Args}
+      Defaults = unit(test:fun {$ X} true end
+		      cTest: fun {$ X} true end)
+      As = {Adjoin Defaults Args}
+   in
+      thread 	
+	 {LUtils.cFilter {Filter Xs {GUtils.toFun As.test}}
+	  fun {$ X}
+	     ({InTimeframeOffsetR X Start End Offset} == 1) andthen
+	     {{GUtils.toFun As.cTest} X}
+	  end}
+      end
+   end
+   % %% TODO: defs to define, then revise the method findSimultaneousItem accordingly 
+   % fun {FindItemInTimeframe MyScore Start End Offset Args}
+   % end
+   %% ?? Needed
+   % fun {FindItemInTimeframeOffset MyScore Start End Offset Args}
+   % end
+   
 end
 
