@@ -3,13 +3,24 @@
 %%
 %% This file lists a number of small-scale examples that demostrate the creation of various textures. For simplicity many these examples only apply texture constraints. However, additional constraints can be added to these examples.  
 %%
-
-%% Each example is wrapped in a block comment, just in case
 %% The first examples are all purely rhythmic
+%%
+
+%%
+%% Usage: first feed buffer, then feed each example (all wrapped in a block comment).
+%%
 
 %%
 %%
-%% 
+%%
+
+declare
+Beat = 4*3
+{MUtils.setNoteLengthsRecord Beat [3]}
+%% Makes all set symbolic note lengths available as variables in the compiler, e.g., D4 is set to Beat. For all (lower-case) note values see {Arity {MUtils.getNoteLengthsRecord}}.
+{MUtils.feedNoteLengthVariables}
+
+
 
 /*
 
@@ -41,7 +52,7 @@
     %% The first 4 notes (range 1#4) of Voice1 are followed homophonically by Voice2 and Voice3.
     %% Also, the notes no 7-12 of Voice1 are followed homophonically by the simultaneous notes of Voice2 and Voice3 (if these notes exist).
     {Segs.texture Segs.homophonic Voice1 [Voice2 Voice3]
-     unit(numericRange: [1#4 7#12])}
+     unit(indexRange: [1#3 7#12])}
  end
  unit(order:leftToRight
       value:random)}
@@ -52,41 +63,90 @@
 /*
 
 %% Basically the same example as before, but this time all parts must end together.
+declare
+proc {MyScript MyScore}
+   fun {MakeNote _}
+      {Score.make2 note(duration: {FD.int [1 2 4]}
+			pitch: 60)
+       unit}
+   end
+   Voice1 Voice2 Voice3
+   End
+in
+   MyScore = {Score.make sim([{Score.makeSeq unit(iargs: unit(n:12
+							      constructor: MakeNote)
+						  handle:Voice1
+						  endTime:End)}
+			      {Score.makeSeq unit(iargs: unit(n:12
+							      constructor: MakeNote)
+						  handle:Voice2
+						  endTime:End)}
+			      {Score.makeSeq unit(iargs: unit(n:12
+							      constructor: MakeNote)
+						  handle:Voice3
+						  endTime:End)}]
+			     startTime:0
+			     timeUnit:beats(4))
+	      unit}
+   %% The first and the last 3 notes are homophonic
+   {Segs.texture Segs.homophonic Voice1 [Voice2 Voice3]
+    unit(indexRange: [1#3 9#12])}
+end
+{GUtils.setRandomGeneratorSeed 0}
+{SDistro.exploreOne MyScript
+ unit(order:leftToRight
+      value:random)}
+
+
+%% testing
+declare
+MyScore = {MyScript}
+
+
+*/
+
+
+
+/*
+
+%% Basically the 1st example, but this time a time frame (instead of positional indices)
+%% are given for the affected items of the leading part
+
 {GUtils.setRandomGeneratorSeed 0}
 {SDistro.exploreOne
  proc {$ MyScore}
     fun {MakeNote _}
+       %% constant pitch and reduced duration domain
        {Score.make2 note(duration: {FD.int [1 2 4]}
 			 pitch: 60)
 	unit}
     end
     Voice1 Voice2 Voice3
-    End
  in
+    %% create a score with 3 parallel parts, each consisting of a sequence of 12 notes
     MyScore = {Score.make sim([{Score.makeSeq unit(iargs: unit(n:12
 							       constructor: MakeNote)
-						   handle:Voice1
-						   endTime:End)}
+						   handle:Voice1)}
 			       {Score.makeSeq unit(iargs: unit(n:12
 							       constructor: MakeNote)
-						   handle:Voice2
-						   endTime:End)}
+						   handle:Voice2)}
 			       {Score.makeSeq unit(iargs: unit(n:12
 							       constructor: MakeNote)
-						   handle:Voice3
-						   endTime:End)}]
+						   handle:Voice3)}]
 			      startTime:0
 			      timeUnit:beats(4))
 	       unit}
-    %% The first and the last 3 notes are homophonic
+    %% The first 4 notes (range 1#4) of Voice1 are followed homophonically by Voice2 and Voice3.
+    %% Also, the notes no 7-12 of Voice1 are followed homophonically by the simultaneous notes of Voice2 and Voice3 (if these notes exist).
     {Segs.texture Segs.homophonic Voice1 [Voice2 Voice3]
-     unit(numericRange: [1#3 9#12])}
+     %% times counted in 16th: ranges are 1st dotted quarter and 4th quarter of 1st bar to middle of next bar
+     unit(timeRange: [0#D4_ D4*3#D4*6])}
  end
  unit(order:leftToRight
       value:random)}
 
-
 */
+
 
 
 /*
@@ -125,7 +185,7 @@ end
 			end)}
     %% Segs.textureProgression is a slighly more concise variant of multiple calls of Segs.texture.
     %% The corresponding calls of Segs.texture are added in comments afterwards.
-    {Segs.textureProgression
+    {Segs.textureProgression_Index
      [%% Imitation at the beginning (e.g., Voice2 at time 2 imitates 1st 5 notes of Voice1)
       (1#5) # unit(MyDependency Voice1 [Voice2 Voice3 Voice1]  
 		   offsetTime: [2 4 6])
@@ -133,15 +193,74 @@ end
       (8#12) # unit(Segs.homophonic Voice1 [Voice2 Voice3])
      ]}
     % {Segs.texture MyDependency Voice1 [Voice2 Voice3 Voice1]
-    %  unit(numericRange: 1#5
+    %  unit(indexRange: 1#5
     % 	  offsetTime: [2 4 6])}      
     % {Segs.texture Segs.homophonic Voice1 [Voice2 Voice3]
-    %  unit(numericRange: 9#12)}
+    %  unit(indexRange: 9#12)}16
  end
  unit(value: heuristic
           % value:random
       order: leftToRight
      )}
+
+*/
+
+
+/*
+
+%%
+%% Basically same example as before, but with specifying time ranges instead of index ranges for the leading part 
+%% 
+
+
+declare
+proc {MyDependency N1 N2 Args} 
+   {Segs.homophonic N1 N2 Args}
+   {Segs.homoDirectional N1 N2 Args}
+end
+proc {MyScript MyScore}
+   Voice1 Voice2 Voice3
+in
+   MyScore = {Score.make sim([seq(handle:Voice1
+				  [note note note note note note note note note note note note])
+			      seq(handle:Voice2
+				  [note note note note note note note note note note note note])
+			      seq(handle:Voice3
+				  [note note note note note note note note note note note note])]
+			     startTime:0
+			     timeUnit:beats(4))
+	      add(note:fun {$ _}
+			  {Score.make2 note(duration: {FD.int [1 2 4]}
+					    pitch: {FD.int 60#72})
+			   unit}
+		       end)}
+   %% Segs.textureProgression is a slighly more concise variant of multiple calls of Segs.texture.
+   %% The corresponding calls of Segs.texture are added in comments afterwards.
+   {Segs.textureProgression_Time
+    [%% Imitation at the beginning 
+     (0#D4_) # unit(MyDependency Voice1 [Voice2 Voice3 Voice1]  
+		  offsetTime: [2 4 6])
+     %% Homophonic ending (if there are still notes!)
+     (D4*6#D4*12) # unit(Segs.homophonic Voice1 [Voice2 Voice3])
+    ]}
+    % {Segs.texture MyDependency Voice1 [Voice2 Voice3 Voice1]
+    %  unit(indexRange: 1#5
+    % 	  offsetTime: [2 4 6])}      
+    % {Segs.texture Segs.homophonic Voice1 [Voice2 Voice3]
+    %  unit(indexRange: 9#12)}
+end
+{GUtils.setRandomGeneratorSeed 0}
+{SDistro.exploreOne 
+ MyScript
+ unit(value: heuristic
+          % value:random
+      order: leftToRight
+     )}
+
+
+%% testing
+declare
+MyScore = {MyScript}
 
 */
 
@@ -196,11 +315,11 @@ end
     		     {Segs.homoDirectional N1 N2 Args}
 		  end
      Voice1 [Voice2 Voice3]
-     unit(numericRange: [1#3 12#16])}
+     unit(indexRange: [1#3 12#16])}
     %% Homophonic middle part
     {Segs.texture Segs.homophonic
      Voice1 [Voice2 Voice3]
-     unit(numericRange: 4#8)}
+     unit(indexRange: 4#8)}
     %% Always at least 2 different PCs
     {ForAll {Voice1 collect($ test:isNote)}
      proc {$ N1}
@@ -224,3 +343,4 @@ end
 
 
 */
+
