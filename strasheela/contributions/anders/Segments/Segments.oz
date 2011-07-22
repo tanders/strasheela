@@ -66,8 +66,8 @@ import
    
 export
 
-   MakeMotifIndexNote
-   GetMotifIndexOfNote
+   % MakeMotifIndexNote
+   % GetMotifIndexOfNote
    MakeParametersAccessor
    PitchContourAccessor
 
@@ -110,17 +110,21 @@ define
 %%% Aux defs (defined at beginning, because code feeding depends on them)
 %%%
 
-   %% Each note belongs to only a single motif (i.e., no isorhythmic music with independend color and talea), but motifs can be compound (e.g., pitch intervals and durations).
-   local
-      MotifIndexName = multipleParams
-   in
-      /** %% MakeMotifIndexNote is a constructor for HS.score.note which implicitly creates an index parameter.
-      %% */
-      MakeMotifIndexNote = {Pattern.makeIndexConstructor HS.score.note [MotifIndexName]}
-      /** %% Expects a note that is part of a pattern motif (i.e. a note with a motif index parameter), and returns the motif number of this note (i.e. the index variable value). For example, all notes that are part of an instance of the motif which has been declared first have the motif index value 1 and so forth.
-      %% */
-      fun {GetMotifIndexOfNote N} {Pattern.getMotifIndex N MotifIndexName} end
-   end
+   %% Obsolete, replaced by Pattern.makeMotifIndexClass
+   %% 
+   % %% Each note belongs to only a single motif (i.e., no isorhythmic music with independend color and talea), but motifs can be compound (e.g., pitch intervals and durations).
+   % local
+   %    MotifIndexName = multipleParams
+   % in
+   %    /** %% MakeMotifIndexNote is a constructor for HS.score.note which implicitly creates an index parameter.
+   %    %% */
+   %    MakeMotifIndexNote = {Pattern.makeIndexConstructor HS.score.note [MotifIndexName]}
+   %    /** %% Expects a note that is part of a pattern motif (i.e. a note with a motif index parameter), and returns the motif number of this note (i.e. the index variable value). For example, all notes that are part of an instance of the motif which has been declared first have the motif index value 1 and so forth.
+   %    %% */
+   %    fun {GetMotifIndexOfNote N} {Pattern.getMotifIndex N MotifIndexName} end
+   % end
+
+   
 
    /** %% Returns accessor function expecting a list of items (notes) and returning list of variables returned by Accessor (unary function or method). Example
    {MakeParametersAccessor getPitch}
@@ -248,7 +252,7 @@ define
 			   motifAccessors: requiredArg
 			   workOutEven:false
 			  )
-	   idefaults: unit(constructor:{Score.makeConstructor MakeMotifIndexNote
+	   idefaults: unit(constructor:{Score.makeConstructor {Pattern.makeMotifIndexClass HS.score.note}
 					unit(offsetTime: fd#(0#FD.sup)
 					     inChordB: fd#(0#1))}))
       proc {$ Notes Args}
@@ -267,7 +271,7 @@ define
 		   end}
 	       end}
 	   end}
-	  unit(indices:{Map Notes GetMotifIndexOfNote}
+	  unit(indices:{Map Notes {GUtils.toFun getMotifIndex}}
 	       workOutEven:Args.rargs.workOutEven)}
       end}
 
