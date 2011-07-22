@@ -1110,6 +1110,16 @@ define
       meth addHeuristic(constraint:Constraint parameters:Params weight:Weight<=1)
 	 heuristics <- heuristic(parameters: Params constraint:Constraint weight:Weight) | @heuristics
       end
+
+
+      /** %% Individual parameters cannot be created with Score.make and friends, so the notion of their init record is somewhat missleading. Nevertheless, it is useful to translate the essential parameter data into a concise "textual" representation.
+      %% */
+      meth getInitInfo($ ...)       
+	 unit(superclass:ScoreObject
+	      %% NOTE: skipped args heuristics (and item)
+	      args:[value#getValue#noMatch
+		    'unit'#getUnit#noMatch]) 
+      end
       
 %       /** % Is the parameter value determined?
 %       % */
