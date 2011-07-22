@@ -102,6 +102,9 @@ export
    WindowedPattern WindowedPatternRecursions
    
    UseMotifs MakeIndexConstructor GetMotifIndex
+   MotifIndexMixin IsMotifIndexMixin MakeMotifIndexClass 
+   MotifStartMixin IsMotifStartMixin MakeMotifStartClass
+   GetMotifStartNotes GetMotifStartIndices
    
    MarkovChain MarkovChain_1
    MakeLSystem MakeLSystem_B MakeLSystem2 LSystemConstsToParams
@@ -156,6 +159,10 @@ export
    FenvContour FenvContour2
    ApproximateContour
    Approximate
+
+prepare 
+   MotifIndexType = {Name.new}
+   MotifStartType = {Name.new}
    
 define
    
@@ -712,7 +719,10 @@ define
    %% The added parameters are created implicitly and not supported by the textual representation (i.e. the method toInitRecord leaves them out as well), but accessible with the function GetMotifIndex (see below) or the method getParameters (which returns a list of all parameter objects).
    %%
    %% Important: for efficiency, the distribution strategy should visit early parameters with info tab 'motifIndex'. Constructors created by MakeIndexConstructor add this info tab to all index parameters.
+   %%
+   %% NOTE: obsolete definition, use MotifIndexMixin instead.
    %% */
+   %% TODO: redefine this (additionally?) as a mixin class  
    fun {MakeIndexConstructor Constructor IndexParamNames}
       fun {$ Args}
 	 AddedParams = {Map IndexParamNames
@@ -731,6 +741,8 @@ define
       end
    end
    /** %% [aux for UseMotifs] Expects X, a score item with added index variable(s) and returns the index variable value (FD int) associated with the name IndexParamName (an atom), in other words the number of the motif to which X belongs. For example, all notes that are part of an instance of the motif which has been declared first have the motif index value 1 and so forth.
+   %%
+   %% NOTE: obsolete definition, use MotifIndexMixin instead.
    %% */
    fun {GetMotifIndex X IndexParamName}
       {{LUtils.find {X getParameters($)}
@@ -739,6 +751,101 @@ define
 	   {Param getInfoRecord($ motifIndex)}.1 == IndexParamName
 	end}
        getValue($)}
+   end
+
+   /** %% MotifIndexMixin extends note classes with the parameter motifIndex, in other words the number of the pattern motif to which self belongs. For example, all notes that are part of an instance of the motif which has been declared first have the motif index value 1 and so forth.
+   %%
+   %% NOTE: the pattern motif indices are not implicitly bound to the parameter motifIndex. This has to be done explicitly using the argument indices of UseMotifs. (This is done already by constructors such as Segs.makeCounterpoint_PatternMotifs).
+   %%
+   %% NOTE: for efficiency, the distribution strategy should visit early parameters with info tab 'motifIndex'. Constructors created by MakeIndexConstructor add this info tab to all index parameters.
+   %% */
+   %% TODO:
+   %% - Decide: do I need to add support for multiple index params (as supported by MakeIndexConstructor)? This would be required for, e.g., isorhythmic music with independend color and talea.
+   class MotifIndexMixin
+      feat !MotifIndexType:unit
+      attr motifIndex 
+      meth initMotifIndexMixin(motifIndex:MI<=_) = M
+	 MI = {FD.decl}
+	 @motifIndex = {New Score.parameter init(value:MI info:motifIndex)}
+	 {self bilinkParameters([@motifIndex])} 
+      end
+      meth getMotifIndex(X)
+	 X = {@motifIndex getValue($)}
+      end
+      meth getMotifIndexParameter(X)
+	 X= @motifIndex
+      end
+   end
+   fun {IsMotifIndexMixin X}
+      {Score.isScoreObject X} andthen {HasFeature X MotifIndexType}
+   end
+   
+   /** %% [concrete class constructor] Expects a note class, and a class that is extended with an motif index parameter (see MotifIndexMixin).
+   %% */
+   fun {MakeMotifIndexClass SuperClass}
+      class $ from SuperClass MotifIndexMixin
+	 meth init(motifIndex:MI<=_
+		   ...) = M
+	    SuperClass, {Record.subtract M motifIndex}
+	    MotifIndexMixin, initMotifIndexMixin(motifIndex:MI)
+	 end
+	 meth getInitInfo($ ...)       
+	    unit(superclass:SuperClass
+		 args:[motifIndex#getMotifIndex#noMatch]) 
+	 end
+      end
+   end
+
+   /** %% MotifStartMixin extends note classes with the parameter motifStartB (0/1-int), which indicates whether a new pattern motifs starts with this note. This definition does not implicitly constraint the motifStartB parameter. Instead, this parameter should be constraint externally (e.g., by specifying {Segs.makeParametersAccessor {GUtils.toFun getMotifStart}} as an argument to motifAccessors of a counterpoint constructor defined in Segs).
+   %% */
+   class MotifStartMixin
+      feat !MotifStartType:unit
+      attr motifStartB 
+      meth initMotifStartMixin(motifStartB:MS<=_) = M
+	 MS = {FD.int 0#1}
+	 @motifStartB = {New Score.parameter init(value:MS info:motifStartB)}
+	 {self bilinkParameters([@motifStartB])} 
+      end
+      meth getMotifStartB(X)
+	 X = {@motifStartB getValue($)}
+      end
+      meth getMotifStartBParameter(X)
+	 X= @motifStartB
+      end
+   end
+   fun {IsMotifStartMixin X}
+      {Score.isScoreObject X} andthen {HasFeature X MotifStartType}
+   end
+
+   /** %% [concrete class constructor] Expects a note class, and a class that is extended  with an motifStartB parameter (see MotifStartMixin).
+   %% */
+   fun {MakeMotifStartClass SuperClass}
+      class $ from SuperClass MotifStartMixin
+	 meth init(motifStartB:AR<=_
+		   ...) = M
+	    SuperClass, {Record.subtract M motifStartB}
+	    MotifStartMixin, initMotifStartMixin(motifStartB:AR)
+	 end
+	 meth getInitInfo($ ...)       
+	    unit(superclass:SuperClass
+		 args:[motifStartB#getMotifStartB#noMatch]) 
+	 end
+      end
+   end
+   
+   /** %% Expects a list of notes created with MakeMotifIndexNote_MotifStart. Returns a concurrent stream of the notes that are the first note of some motif.
+   %% Note: results must be processed concurrently to avoid blocking.
+   %% */
+   fun {GetMotifStartNotes Notes} 
+      thread {Filter Notes fun {$ X} {IsMotifStartMixin X}==1 end} end
+   end
+
+   /** %% Expects a list of notes created with MakeMotifIndexNote_MotifStart. Returns a concurrent stream of the motif indices (motif types) from the first note of some motif. (E.g., can be used to apply a pattern constraint to motif indices)
+   %% Note: results must be processed concurrently to avoid blocking.
+   %% */
+   fun {GetMotifStartIndices Notes}
+      %% TODO: revise: replace Segs.getMotifIndexOfNote 
+      thread {Map {GetMotifStartNotes Notes} {GUtils.toFun getMotifIndex}} end
    end
 
    
@@ -1598,13 +1705,13 @@ define
 	 end
       end
    in
-     /** %% Collects the result of applying the unary procedure Fn (expecting a list) on all possible sublist combinations of Xss (a list of lists). ForCartesianProduct2 is a generalisation of ForCartesianProduct of a arbitrary number of lists to combine.
-   %% */
+      /** %% Collects the result of applying the unary procedure Fn (expecting a list) on all possible sublist combinations of Xss (a list of lists). ForCartesianProduct2 is a generalisation of ForCartesianProduct of a arbitrary number of lists to combine.
+      %% */
       proc {ForCartesianProduct2 Xss P}
 	 {ForAll {CollectCartesianProduct2 Xss} P}
       end
-     /** %% Collects the result of applying the unary function Fn (expecting a list) on all possible sublist combinations of Xss (a list of lists). 
-   %% */
+      /** %% Collects the result of applying the unary function Fn (expecting a list) on all possible sublist combinations of Xss (a list of lists). 
+      %% */
       fun {MapCartesianProduct2 Xss Fn}
 	 {Map {CollectCartesianProduct2 Xss} Fn}
       end
