@@ -92,6 +92,60 @@ MyLoadedScore = {Out.loadScore unit}
 {Browse {MyLoadedScore toInitRecord($)}}
 
 
+%% %% %% %% %%
+
+
+%% Test with a larger score created by some CSP
+%% Browse time in msec
+{Browse {GUtils.timeSpend
+	 proc {$} _ = {Out.saveScore unit}  end}}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%% pickle/unpickle score
+%%
+
+declare
+MyScore = {Score.makeScore seq(items:[note(duration:1
+					   pitch:60)
+				      note(duration:2
+					   pitch:64)
+				      note(duration:3
+					   pitch:{FD.int [65 67]})]
+			       startTime:0
+			       timeUnit:(beats))
+	   unit}
+
+{Out.pickleScore MyScore unit}r
+
+
+declare
+MyUnpickeledScore = {Out.unpickleScore unit(startTime:10)}
+
+{Browse {MyUnpickeledScore toInitRecord($)}}
+
+{Browse {MyUnpickeledScore toFullRecord($)}}
+
+
+declare
+MyUnpickeledScore = {Out.unpickleScore unit(format: uninitialised)}
+
+{Browse {MyUnpickeledScore toInitRecord($)}}
+
+{Score.init MyUnpickeledScore}
+
+
+%% %% %% %% %%
+
+
+%% Test with a larger score created by some CSP
+%% Browse time in msec
+{Browse {GUtils.timeSpend
+	 proc {$} _ = {Out.unpickleScore unit}  end}}
+
+{Browse {GUtils.timeSpend
+	 proc {$} _ = {Out.unpickleScore unit(format:text)}  end}}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%
