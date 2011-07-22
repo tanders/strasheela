@@ -210,16 +210,18 @@ define
    %%
    %% symbolic rhythm representation
    %%
-   local
-      NoteLengthsRecord = {NewCell unit}
-   in
+   %% NOTE: needs cleaning up, some defs here, some defs in MusicUtils.oz
+   % local
+   %    NoteLengthsRecord = {NewCell unit}
+   % in
       /** %% Sets the global mapping of symbolic note lengths (atoms which are record features) to duration values (integers). Beat (int) is the timeUnit value in beat(Beat) of the score. TupletFractions (list of ints) is a list of tuplet fractions to take into consideration (e.g., [3 5] denotes triplets and quintuplets).
       %% See MUtils.makeNoteLengthsRecord and MUtils.makeNoteLengthsTable for details.
       %%
       %% NB: there is no default defined for this setting, because it depends on the time unit of your score.
       %% */
       proc {SetNoteLengthsRecord Beat TupletFractions}
-	 NoteLengthsRecord := {MUtils.makeNoteLengthsRecord Beat TupletFractions}
+	 {MUtils.setNoteLengthsRecord Beat TupletFractions}
+	 % NoteLengthsRecord := {MUtils.makeNoteLengthsRecord Beat TupletFractions}
       end
 
       local
@@ -239,11 +241,12 @@ define
 	       end
 	    else 
 	       if {IsInt Spec} then Spec else
-		  @NoteLengthsRecord.Spec
+		  {MUtils.getNoteLengthsRecord}.Spec
+		  % @NoteLengthsRecord.Spec
 	       end
 	    end
 	 end
-      end
+      % end
 
    end
 
