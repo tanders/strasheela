@@ -35,7 +35,8 @@ Beat = 4
 proc {MyScript MyScore}
    MyScore = {Score.make sim([seq([note note note note note note note note
 				   note note note note note note note note])
-			      seq([measure(n: 8
+			      seq(info:fomusPart(nil) % no extra part for the measures alone
+				  [measure(n: 8
 					   beatNumber: 4
 					   beatDuration: Beat)])]
 			     startTime:0
@@ -96,7 +97,8 @@ Beat = 4
 proc {MyScript MyScore}
    MyScore = {Score.make sim([seq([note note note note note note note note
 				   note note note note note note note note])
-			      seq([measure(n: 8
+			      seq(info:fomusPart(nil)
+				  [measure(n: 8
 					   beatNumber: 5
 					   beatDuration: Beat)])]
 			     startTime:0
@@ -160,7 +162,8 @@ end
     MyScore = {Score.make sim([seq([note note note note note note note note
 				    note note note note note note note note]
 				   offsetTime: {FD.int [0 Beat Beat+(Beat div 2)]})
-			       seq([measure(n: 8
+			       seq(info:fomusPart(nil)
+				  [measure(n: 8
 					    beatNumber: 5
 					    beatDuration: Beat)])]
 			      startTime:0
@@ -208,7 +211,8 @@ in
    MyScore = {Score.make sim([seq([note note note note note note note note
 				   note note note note note note note note]
 				  offsetTime: {FD.int 12#19})
-			      seq([measure(n: 8
+			      seq(info:fomusPart(nil)
+				  [measure(n: 8
 					   beatNumber: 5
 					   beatDuration: Beat)])]
 			     startTime:0
@@ -262,7 +266,8 @@ in
    MyScore = {Score.make sim([seq([note note note note note note note note
 				   note note note note note note note note]
 				  offsetTime: {FD.int 12#19})
-			      seq([measure(n: 8
+			      seq(info:fomusPart(nil)
+				  [measure(n: 8
 					   beatNumber: 5
 					   beatDuration: Beat)])]
 			     startTime:0
@@ -364,7 +369,8 @@ in
 				offsetTime: {FD.int Defaults.offsetTimeDomain})}
    MyScore = {Score.make
 	      sim([MyPart
-		   seq([measure(n: 8
+		   seq(info:fomusPart(nil)
+		       [measure(n: 8
 				beatNumber: 5
 				beatDuration: Beat)])]
 		  startTime:0
