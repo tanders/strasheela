@@ -15,6 +15,7 @@
     - Added functor [[../contributions/anders/ET41/doc/node1.html][ET41]] for composition in [[http://en.wikipedia.org/wiki/41_equal_temperament][41-tone equal temperament]] and related tunings (e.g. the just intonation tuning of [[http://en.wikipedia.org/wiki/La_Monte_Young][La Monte Young]]'s [[http://www.kylegann.com/wtp.html][The Well-Tuned Piano]]). Supported features for these tunings include a short-hand pitch notation; a database of intervals, chords, and scales; and some minimal music notation support (via Lilypond).
     - Added HS.out: generalised output for score objects and concepts introduced by HS, e.g., Lilypond output for chord and scale objects and means to define Lilypond output for different temperaments.
     - Partially determined scores can be output to music notation (i.e. Lilypond and Sibelius/Finale) via the Fomus export. (Partially determined scores could be exported into Csound and MIDI already.)
+    - Easy-to-use persistent data storage of scores with Out.pickleScore/Out.unpickleScore.
 
   - Main documentation additions
     -  [[../examples/Rhythm-Examples/AccentConstraint-Examples.oz][AccentConstraint-Examples.oz]]: Added examples demonstrating how to constrain accents (notes that meet a number of given conditions, e.g., have an anacrusis) to certain metric positions
@@ -38,7 +39,7 @@
     - Out.makeNoteToLily2: function has been completely rewritten with a now more general interface 
     - Out.averagePitchClef added
     - SMapping: added MapTimeslices, ForTimeslices, ForTimeRange, ForTimeRangeArgs
-    - SDistro: added SearchBest_Timeout
+    - SDistro: added MakeLeftToRight2, SearchBest_Timeout
     - ET22.db: interval database now defined as ratios for adaptive JI
     - ET22.out: added NoteEt22ToLily_AdaptiveJI2, PajaraRMS_TuningTable, JI_TuningTable
     - 22 ET Lilypond output: revised accidentals (using new arrowed Lily accidentals for representing syntonic commas up/down)
@@ -49,7 +50,7 @@
     - Segs: added mixin scripts (partly removing orig extended script altogether): MakeCounterpoint_Mixin, PitchPattern, FenvContour, Arpeggio, Arch, Repetitions, Hook, Stairs, MakeAkkord_Mixin, MakeAkkords_Mixin  
     - Segs.homophonicChordProgression: added arguments playAllChordTones, noVoiceCrossing, maxUpperVoiceDistance, generalised argument 'restrictMelodicIntervals'.
     - HS.rules: added GetRootDegreeIntervals, SetBoundaryRoots, SetBoundaryTypes, NoParallels2, Ballistic, MinCard
-    - Pattern: added MinDistinct, DirectionOfContour, LocalMinR, GetLocalMax, GetLocalMin, ConstrainLocalMax, ConstrainLocalMin, FenvContour2, NoRepetition, Undulating, ForCartesianProduct2 and MapCartesianProduct2, FirstNTrue
+    - Pattern: added MinDistinct, DirectionOfContour, LocalMinR, GetLocalMax, GetLocalMin, ConstrainLocalMax, ConstrainLocalMin, FenvContour2, NoRepetition, Undulating, ForCartesianProduct2 and MapCartesianProduct2, FirstNTrue, MotifIndexMixin, IsMotifIndexMixin, MakeMotifIndexClass, MotifStartMixin, IsMotifStartMixin, MakeMotifStartClass, GetMotifStartNotes, GetMotifStartIndices 
     - HS.score: refactored HarmonicRythmFollowsMarkers: now works also for items with offsetTime > 0 
     - Removed proc GUtils.selectArg (better use Adjoin or CondSelect instead)
     - Removed GUtils.isInt (result wrong for FD ints): use FD.is or IsInt instead
@@ -82,13 +83,14 @@
     - Out.midi.getChannel now uses mini chan param of midi note objects (not only channel info tag)
     - Refactored ET22 and ET31 output: now much reduced code with same functionality using HS.out, several procs before exported by ET22 and ET31 are now moved to HS.out
     - Segs.homophonicChordProgression: replaced arg 'isToplevel' by arg 'makeTopLevel' for generality; fixed bug: constraint of arg maxUpperVoiceDistance now actually applied to upper voices; change default for arg commonPitchesHeldOver to false, allow disabling maxUpperVoiceDistance constraints.
+    - Segs: MakeMotifIndexNote and GetMotifIndexOfNote removed (use Pattern.makeMotifIndexClass instead)
     - Out.outputScoreConstructor: strings in archived score were not properly quoted (fixed Out.recordToVS).
     - HS.score.harmonicRhythmFollowsMarkers: spelling correction (was HS.score.harmonicRythmFollowsMarkers)
     - LUtils: changed comparison function of many defs (Contains, Position, Positions, Substitute, Substitute1) to GUtils.isEqual, which is working for all data types 
     - UniformMeasures method onAccentR fixed -- it did not support irregular accent sequences of time signatures such as 5/4 before. (method onAccentDR removed) 
     - UniformMeasures method overlapsBarlineR fixed for certain borderline cases 
 
-  - For many further fixes and changes see the [[http://apps.sourceforge.net/trac/strasheela/timeline][Trac Timeline]] or the [[../CHANGELOG.txt]].
+  - For further details of changes see the [[http://apps.sourceforge.net/trac/strasheela/timeline][Trac Timeline]] or the [[../CHANGELOG.txt]].
 
 
 
