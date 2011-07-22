@@ -67,6 +67,7 @@ export
    ScoreToEvents
    MakeHierarchicVSScore
    ToScoreConstructor OutputScoreConstructor SaveScore LoadScore
+   PickleScore UnpickleScore
    MakeEvent2CsoundFn MakeCsoundScore
    OutputCsoundScore RenderCsound RenderAndPlayCsound
    CallCsound
@@ -263,7 +264,7 @@ define
 		  end}}
 	       #")"
 	    end
-	    %% undetermined other values
+	    %% determined other values
 	 else "'"#{Value.toVirtualString X 10 1000}#"'"
 	 end
       end
@@ -490,7 +491,7 @@ define
    
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%
-%%% Oz record output
+%%% Score export at Oz record 
 %%%
 
    
@@ -589,21 +590,16 @@ define
    end
 
    /** %% Saves MyScore into a text file which can be compiled and loaded again later with LoadScore.
-   %% NB: SaveScore internally uses toInitRecord (because a stateful data structure like an object can not be pickled). Therefore, all present restrictions of toInitRecord apply:  getInitInfo must be defined correctly for all classes and only tree-form score topologys are supported.
-
-%   %% Saves MyScore into a pickle which can be loaded again later with LoadScore.
-%   %% NB: Only a fully determiend score can be pickled, otherwise an exception is raised.
-   %% */
-   %% A pickle is not used, because undetermined variables can not be pickled.
+   %% SaveScore internally uses toInitRecord (because a stateful data structure like an object can not be pickled). Therefore, all present restrictions of toInitRecord apply:  getInitInfo must be defined correctly for all classes and only tree-form score topologys are supported.
    %%
-   %% NOTE: improvements proposed in Deny's slides Managing Data with Mozart
-   %% http://www.univ-orleans.fr/lifo/membres/duchier/teaching/GSLT-2003/ManagingData/HTML/index.html
-   %% 
-   %% - Generalized Pickler: I would need to add FD and FS to his simplementation, and then could likely process my textual scores
-   %% - Store textual score and/or score object (with Score.make2) in functor in the prepare section -- it will then be computed at compile time (can hopefully be done in the background quasi unnoticed at a multi-core machine), and hopefully can be loaded quickly
+   %% Use this definition if you want to edit the resulting Oz code, otherwise better use PickleScore/UnpickleScore.
+   %% */
+   %%
+   %% TODO:
+   %% - Consider storing the textual score and/or score object (with Score.make2) in functor in the prepare section -- it will then be computed at compile time (can hopefully be done in the background quasi unnoticed at a multi-core machine), and hopefully can be loaded quickly
+   %% See also Denys Duchiers comments  http://www.univ-orleans.fr/lifo/membres/duchier/teaching/GSLT-2003/ManagingData/HTML/index.html
    proc {SaveScore MyScore Args}
-      {OutputScoreConstructor MyScore
-       {Adjoin Args unit}}
+      {OutputScoreConstructor MyScore Args}
    end
 
    local
@@ -617,11 +613,13 @@ define
 				% 'Out':Out % .. would be recursive?
 				)}
    in
-      /** %% Loads a pickeled score from path.
-      %% NB: If the class definitions for the classes used in the score will have changed meanwhile, the loaded score will still use the new class definitions (it is re-created from the textual specification).
+      /** %% Loads a score saved as an Oz program from path.
+      %% If the class definitions for the classes used in the score will have changed meanwhile, the loaded score will use the new class definitions (it is re-created from the textual specification).
       %%
-      %% NOTE: Loading large scores can be veeeeeery slooooowww. Instead, pickle score and load pickle (if possible).
-      %% See also Denys Duchiers comments  http://www.univ-orleans.fr/lifo/membres/duchier/teaching/GSLT-2003/ManagingData/HTML/index.html
+      %% Loading large scores can be veeeeeery slooooowww. 
+      %%
+      %% BUG: SaveScore by default saves a statement starting with "declare MyScore =". LoadScore only works with this default.
+      %% BUG: Seemingly LoadScore does not work at all right now
       %% */
       fun {LoadScore Args}
 	 Defaults = unit(file:"test"
@@ -634,7 +632,173 @@ define
 	 Env = {Adjoin CompilerEnvironment
 		{Init.getStrasheelaEnv strasheelaFunctors}}
       in
-	 {Compiler.evalExpression VS Env _}
+	 {Compiler.evalExpression VS#"\nin MyScore" Env _}
+      end
+   end
+
+   
+   
+   
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%
+%%% Score pickling
+%%%
+
+   local
+      fun {Escape S}
+	 case S
+	 of nil then nil
+	 [] &\\|S then &\\|&\\|{Escape S}
+	 [] &" |S then &\\|&" |{Escape S}
+	 []   H|S then       H|{Escape S}
+	 end
+      end
+   in
+      /** %% Transforms a (possibly nested) value of all data types that a textual Strasheela score can contain (e.g., records, FD vars etc) into a generalised pickle as proposed by Denys Duchier (a VS). 
+      %% */
+      fun {ToPickleVS X}
+	 if {GUtils.isFS X} then {ToPickleVS {FS.reflect.lowerBound X}|{FS.reflect.upperBound X}}#s
+	 elseif {IsDet X} then
+	    case X
+	    of unit   then u
+	    [] true   then t
+	    [] false  then f
+	    [] nil    then n
+	    [] H|T    then
+	       if {All X IsDet} andthen {IsString X} then '"'#{Escape X}#'"'
+	       else {ToPickleVS T}#{ToPickleVS H}#'|' end
+	    elsecase {Value.type X}
+	    of atom   then {ToPickleVS {Atom .toString X}}#'A'
+	    [] int    then {ToPickleVS {Int  .toString X}}#'I'
+	    [] float  then {ToPickleVS {Float.toString X}}#'F'
+	    [] tuple  then {ToPickleVS {Label X}|{Record.toList    X}}#'T'
+	    [] record then {ToPickleVS {Label X}|{Record.toListInd X}}#'R'
+	    end
+	 elseif {IsFree X} then v
+	 elseif {FD.is X} then {ToPickleVS {FD.reflect.dom X}}#i
+	 end
+      end
+   end
+   local
+      fun {ReadString S Accu Stack}
+	 case S
+	 of    &"|S then {FromPickleString S {Reverse Accu}|Stack}
+	 [] &\\|C|S then {ReadString S C|Accu Stack}
+	 []     C|S then {ReadString S C|Accu Stack}
+	 end
+      end
+   in
+      /** %% Transforms a generalised pickle as proposed by Denys Duchier (a string) into its original (possibly nested) value. 
+      %% */
+      fun {FromPickleString S Stack}
+	 case S
+	 of  nil then case Stack of [V] then V end
+	 [] &"|S then {ReadString S nil Stack}
+	 [] &i|S then {FromPickleString S {FD.int Stack.1}|Stack.2}
+	 [] &s|S then {FromPickleString S {FS.var.bounds Stack.1.1 Stack.1.2}|Stack.2}
+	 [] &u|S then {FromPickleString S unit|Stack}
+	 [] &t|S then {FromPickleString S true|Stack}
+	 [] &f|S then {FromPickleString S false|Stack}
+	 [] &n|S then {FromPickleString S nil|Stack}
+	 [] &A|S then {FromPickleString S {String.toAtom   Stack.1}|Stack.2}
+	 [] &I|S then {FromPickleString S {String.toInt    Stack.1}|Stack.2}
+	 [] &F|S then {FromPickleString S {String.toFloat  Stack.1}|Stack.2}
+	 [] &||S then {FromPickleString S (Stack.1|Stack.2.1)|Stack.2.2}
+	 [] &T|S then {FromPickleString S {List.toTuple  Stack.1.1 Stack.1.2}|Stack.2}
+	 [] &R|S then {FromPickleString S {List.toRecord Stack.1.1 Stack.1.2}|Stack.2}
+	 [] &v|S then {FromPickleString S _|Stack}
+	 end
+      end
+   end
+
+   /** %%  Stores MyScore (a score object) as persistent data in a file as specified in Args, which can be retrieved by UnpickleScore. For large scores, UnpickleScore is much faster than LoadScore (where the Oz compiler needs to parse etc an Oz program written by SaveScore).
+   %%
+   %% PickleScore uses a customised pickling process (proposed by Denys Duchier). The buildin pickling of Oz does not support undetermined variables (e.g., FD ints), but PickleScore supports these.
+   %%
+   %% Args defaults:
+   unit(file:"test"
+	extension:".sscop"
+	dir:{Init.getStrasheelaEnv defaultSScoDir})
+   %% */
+   proc {PickleScore MyScore Args}
+      Defaults = unit(file:"test"
+		      %% TODO: extension OK?
+		      extension:".sscop"
+		      %% ?? same as defaultSScoDir would make sense
+		      dir:{Init.getStrasheelaEnv defaultSScoDir}
+		     )
+      As = {Adjoin Defaults Args}
+      Path = As.dir#As.file#As.extension
+      % InfoVS = "Score pickle created by Strasheela at "#{GUtils.timeVString}
+      InitClassesVS = {MyScore getInitClassesVS($)}
+      PickledScoreVS = {ToPickleVS [{MyScore toInitRecord($)}
+				    {VirtualString.toString InitClassesVS}]}
+   in
+      {WriteToFile PickledScoreVS
+       Path}
+   end
+   
+   local
+      CompilerEnvironment = {Adjoin OPIEnv.full
+			     env(%'Debug': Debug 
+				 'Path': Path % use my Path fixes
+				 %% Strasheela stuff
+				 'Init':Init 'GUtils':GUtils 'LUtils':LUtils 'MUtils':MUtils
+				 'Score':Score
+				% 'SDistro':SDistro
+				% 'Out':Out % .. would be recursive?
+				)}
+   in
+      /** %% Restores persistent score data stored in a file by PickleScore.
+      %% If the class definitions for the classes used in the score will have changed meanwhile, the loaded score will use the new class definitions (it is re-created from the textual specification).
+      %%
+      %% A score can be restored in different formats, as specified by the argument format:
+      %% 'initialised': a fully initialised score object is returned (the result was createdw with Score.make).
+      %% 'uninitialised': a partially initialised score object is returned, which can still be integrated into a larger score (the result was createdw with Score.make2). 
+      %% 'text': a "textual" score is retured (i.e. a nested record that can be an argument for Score.make).
+      %%
+      %% The startTime of the returned score can be specified. If startTime is set to false, then no start time is included. If it is an FD int (or an int) then this FD int is used as start time. If startTime is set to 'orig', then the original start time of the saved score is retained. 
+      %%
+      %% Unpickling a score in the "textual" format is very fast, but creating the score object takes time (likely for the constraint propagation).
+      %%
+      %% Args defaults:
+      unit(file:"test"
+	   extension:".sscop"
+	   dir:{Init.getStrasheelaEnv defaultSScoDir}
+	   format: initialised
+	   startTime: 0)
+      %% */
+      fun {UnpickleScore Args}
+	 Defaults = unit(file:"test"
+			 %% TODO: extension OK?
+			 extension:".sscop"
+			 dir:{Init.getStrasheelaEnv defaultSScoDir}
+			 %% text, initialised and uninitialised
+			 format: initialised
+			 startTime: 0)
+	 As = {Adjoin Defaults Args}
+	 Path = As.dir#As.file#As.extension
+	 %% !!?? this environment may not be sufficient..
+	 CompilerEnv = {Adjoin CompilerEnvironment
+			{Init.getStrasheelaEnv strasheelaFunctors}}
+	 VS = {ReadFromFile Path}
+	 [TextualScoreOrig InitClassesString] = {FromPickleString VS nil}
+	 TextualScore_NoStartTime = {Record.subtract TextualScoreOrig startTime}
+	 TextualScore = if As.startTime == false then TextualScore_NoStartTime
+			elseif {FD.is As.startTime} then {Adjoin unit(startTime: As.startTime)
+							  TextualScore_NoStartTime}
+			elseif As.startTime == orig then TextualScoreOrig
+			end
+      in
+	 case As.format of
+	    text then TextualScore
+	 [] initialised then 
+	    {Score.make TextualScore
+	     {Compiler.evalExpression InitClassesString CompilerEnv _}}
+	 [] uninitialised then
+	    {Score.make2 TextualScore
+	     {Compiler.evalExpression InitClassesString CompilerEnv _}}
+	 end
       end
    end
    
