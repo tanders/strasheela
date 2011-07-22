@@ -5,7 +5,9 @@
 %%%
 %%% Changes:
 %%%
-%%% - The argument value now has the interface {MyValue X SelectFn ?Dom}, where X is the distributed data structure, SelectFn is the function given to the select argument, and Dom is the resulting domain specification. 
+%%% - The distribution argument 'value' now has the interface {MyValue X SelectFn ?Dom}, where X is the distributed data structure, SelectFn is the function given to the select argument, and Dom is the resulting domain specification.
+%%%
+%%% - Added distribution argument 'trace': if present, each distribution step is traced at STDOUT (*Oz Emulator* buffer).
 %%%
 
 functor
@@ -14,6 +16,7 @@ import
    FDP at 'x-oz://boot/FDP'
    FD
    Space(waitStable)
+   System
 
 export
    FdDistribute
@@ -221,6 +224,11 @@ define
 			{Proc}
 			{Space.waitStable}
 		     end
+		     %% Debugging output
+		     if {HasFeature RawSpec trace} then
+			{ShowTracing E D} 
+		     end
+		     %% Choice point
 		     choice {FD.int D        V}
 		     []     {FD.int compl(D) V}
 		     end
@@ -232,6 +240,16 @@ define
 	    end
 	 end
       end
+   end
+
+   %%
+   %% Aux
+   %%
+
+   proc {ShowTracing Param DomVal}
+      {System.showInfo
+       "Distribute "#{Value.toVirtualString {Param toInitRecord($)} 1000000 1000000}
+       #" to "#DomVal}
    end
 
 end   
