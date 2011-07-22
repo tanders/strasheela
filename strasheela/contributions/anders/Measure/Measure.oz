@@ -46,7 +46,7 @@
 functor
 import
    FD FS
-   Browser(browse:Browse) % temp for debugging
+   % Browser(browse:Browse) % temp for debugging
    GUtils at 'x-ozlib://anders/strasheela/source/GeneralUtils.ozf'
    LUtils at 'x-ozlib://anders/strasheela/source/ListUtils.ozf'
    Score at 'x-ozlib://anders/strasheela/source/ScoreCore.ozf'
@@ -62,7 +62,7 @@ export
    UniformMeasures IsUniformMeasures
 
    AccentRatingMixin IsAccentRatingMixin
-   Note
+   MakeAccentRatingClass Note
    
    Accent_If NoteAtMetricPosition
    Make_HasAtLeastDuration
@@ -724,44 +724,45 @@ define
 %%% Notes with accent rating parameter
 %%%
   
-%%
-%% TODO: add mixin to the HS notes I commonly need
-%%
- 
-/** %% AccentRatingMixin extends note classes with an accent rating parameter. No further constraints are applied.
-%% */
-class AccentRatingMixin
-   feat !AccentRatingType:unit
-   attr accentRating 
-   meth initAccentRatingMixin(accentRating:AR<=_) = M
-      @accentRating = {New Score.parameter init(value:AR info:accentRating)}
-      {self bilinkParameters([@accentRating])} 
+   /** %% AccentRatingMixin extends note classes with an accent rating parameter. No further constraints are applied.
+   %% */
+   class AccentRatingMixin
+      feat !AccentRatingType:unit
+      attr accentRating 
+      meth initAccentRatingMixin(accentRating:AR<=_) = M
+	 @accentRating = {New Score.parameter init(value:AR info:accentRating)}
+	 {self bilinkParameters([@accentRating])} 
+      end
+      meth getAccentRating(X)
+	 X = {@accentRating getValue($)}
+      end
+      meth getAccentRatingParameter(X)
+	 X= @accentRating
+      end
    end
-   meth getAccentRating(X)
-      X = {@accentRating getValue($)}
+   fun {IsAccentRatingMixin X}
+      {Score.isScoreObject X} andthen {HasFeature X AccentRatingType}
    end
-   meth getAccentRatingParameter(X)
-      X= @accentRating
-   end
-end
-fun {IsAccentRatingMixin X}
-   {Score.isScoreObject X} andthen {HasFeature X AccentRatingType}
-end
 
-/** %% [concrete class] The standard note class extended with an accent rating parameter.
-%% */
-class Note from Score.note AccentRatingMixin
-   meth init(accentRating:AR<=_
-             ...) = M
-      Score.note, {Record.subtract M accentRating}
-      AccentRatingMixin, initAccentRatingMixin(accentRating:AR)
+   /** %% [concrete class constructor] Expects a note class, and a class that is extended  with an accent rating parameter (see AccentRatingMixin).
+   %% */
+   fun {MakeAccentRatingClass SuperClass}
+      class $ from SuperClass AccentRatingMixin
+	 meth init(accentRating:AR<=_
+		   ...) = M
+	    SuperClass, {Record.subtract M accentRating}
+	    AccentRatingMixin, initAccentRatingMixin(accentRating:AR)
+	 end
+	 meth getInitInfo($ ...)       
+	    unit(superclass:SuperClass
+		 args:[accentRating#getAccentRating#noMatch]) 
+	 end
+      end
    end
-   
-   meth getInitInfo($ ...)       
-      unit(superclass:Score.note
-           args:[accentRating#getAccentRating#noMatch]) 
-   end
-end
+
+   /** %% [concrete class] The standard note class extended with an accent rating parameter.
+   %% */
+   Note = {MakeAccentRatingClass Score.note}
 
 
 
@@ -919,7 +920,7 @@ end
 %%%
 
 
-/** %% With Accent_If various musical aspects and parameters can be constrained so that the resulting music expresses the underlying metric structure (simultaneous measure objects). This constraint applicator is inspired by the chapter on rhythm in Berry, Wallace. 1987. Structural Functions in Music. Courier Dover Publications. 
+   /** %% With Accent_If various musical aspects and parameters can be constrained so that the resulting music expresses the underlying metric structure (simultaneous measure objects). This constraint applicator is inspired by the chapter on rhythm in Berry, Wallace. 1987. Structural Functions in Music. Courier Dover Publications. 
    %% The start time of N coincides with the given "position" in a simultaneous measure (e.g., the measure's start or any accentuated beat), if given a list of given conditions is fulfilled well enough. These conditions (AccentConstraints) are a list of unary functions: the input is N and the return value is a rating of N (an FD int), where 0 means condition not fulfilled and higher values mean that the condition is increasingly better fulfilled. The sum of the return values of all conditions must be equal or exceed a given threshold (arg minRating) in order to trigger that the start time of N is constrained to a certain metric position. Predefined accent constraints include IsLongerThanSurrounding and IsHigherThanSurrounding (see their documentation for further details).
    %%
    %% Args:
@@ -941,16 +942,16 @@ end
    %% toplevel (default false): The container in which N is contained that should be considered the top level for finding the simultaneous measure object (if false, then the whole score is searched). This argument is for optimisation purposes only.
    %%
    %% measureTest (default IsUniformMeasures): A Boolean function that returns true for the relevant measure objects. (currently only works with uniform measures?)
-%%
-%% rating (an FD int): this argument is bound to the accumulated rating of accent constraint outputs for N. This variable can that way be constrained outside the call of Accent_If (e.g., to constrain the accent structure of some musical section, the number of occurances of some minumum rating or the minimum sum of ratings over multiple notes can be constrained).
-%%
-%% Note: if N inherited from IsAccentRatingMixin then the rating is automatically added to its parameter accentRating. Therefore, Accent_If should only be called once for such a note.
-%% It is often good practice to combine all accent constraints into a single rating anyway. Exceptions would be special cases where, e.g., accents expressed by duration-relations and accents expressed by pitch-relations should fall on different metric positions. In the latter case it is sufficient to avoid using notes that inherited from IsAccentRatingMixin.
+   %%
+   %% rating (an FD int): this argument is bound to the accumulated rating of accent constraint outputs for N. This variable can that way be constrained outside the call of Accent_If (e.g., to constrain the accent structure of some musical section, the number of occurances of some minumum rating or the minimum sum of ratings over multiple notes can be constrained).
+   %%
+   %% Note: if N inherited from IsAccentRatingMixin then the rating is automatically added to its parameter accentRating. Therefore, Accent_If should only be called once for such a note.
+   %% It is often good practice to combine all accent constraints into a single rating anyway. Exceptions would be special cases where, e.g., accents expressed by duration-relations and accents expressed by pitch-relations should fall on different metric positions. In the latter case it is sufficient to avoid using notes that inherited from IsAccentRatingMixin.
    %%
    %% */
    %%
    %% TODO:
-%% - metricPosition: allow for FS as arg value that contains all the "allowed" times for accents within a measure
+   %% - metricPosition: allow for FS as arg value that contains all the "allowed" times for accents within a measure
    proc {Accent_If N AccentConstraints Args}
       Defaults = unit(metricPosition: accent 
 		      minRating: 1
