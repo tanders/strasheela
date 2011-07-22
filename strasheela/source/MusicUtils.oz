@@ -385,6 +385,8 @@ define
 	end}}
    end
 
+   
+   %% NOTE: needs cleaning up, some defs here, some defs in Init.oz
    local
       R = {NewCell {MakeNoteLengthsRecord 4 nil}}
    in
@@ -401,14 +403,15 @@ define
       fun {ToDur NoteLength}
 	 @R.NoteLength
       end
-      /** %% Makes all set symbolic note lengths available as variables in the compiler. The variable names are the same as expected, e.g., by ToDur. For example, the variable D4 will be bound to the duration of the beat. For all (lower-case) note values see {Arity {MUtils.getNoteLengthsRecord}}.
+      /** %% Makes all set symbolic note lengths available as variables in the compiler. The variable names are the same as expected, e.g., by ToDur, but all lower-cases are replaced by upper cases. For example, the variable D4 will be bound to the duration of the beat. For all (lower-case) note values see {Arity {MUtils.getNoteLengthsRecord}}.
       %% Use SetNoteLengthsRecord for initialisation (default is {SetNoteLengthsRecord 4 nil}).
       %% */
       proc {FeedNoteLengthVariables}
 	 fun {MakeDurnameCode DurAtom#Dur}
 	    DurString = {Atom.toString DurAtom}
 	 in
-	    ({Char.toUpper DurString.1}|DurString.2)#"="#{Int.toString Dur}#"\n"
+	    % ({Char.toUpper |DurString.1}|DurString.2)#"="#{Int.toString Dur}#"\n"
+	    {Map DurString Char.toUpper}#"="#{Int.toString Dur}#"\n"
 	 end
 	 Code = {Out.listToVS
 		 {Map {Record.toListInd {GetNoteLengthsRecord}} MakeDurnameCode}
