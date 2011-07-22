@@ -700,7 +700,7 @@ MyTestScore = {Score.makeScore
 #+end_src
 
 
-**** TODO Example with anacrusis				    :ARCHIVE:
+**** Example with anacrusis					    :ARCHIVE:
 
 Simple case
 
