@@ -81,7 +81,7 @@ export
    ExploreOne ExploreAll ExploreBest
 
    %% variable ordering defs
-   Naive Dom Width Deg DomDivDeg MakeDom MakeDeg MakeLeftToRight MakeRightToLeft TimeParams MakeTimeParams
+   Naive Dom Width Deg DomDivDeg MakeDom MakeDeg MakeLeftToRight MakeLeftToRight2 MakeRightToLeft TimeParams MakeTimeParams
    min: ReflectMin
    max: ReflectMax
    MakeSetPreferredOrder MakeSetPreferredOrder2
@@ -219,6 +219,34 @@ define
       end
    end
 
+   /** %% Generalised version of MakeLeftToRight, which returns a left-to-right score variable ordering (a binary function expecting two parameter objects and returning a boolean value): If the start time of the item of either parameter object are undetermined, then the score variable ordering P1 is used to decide which one to ditribute. If both items have the same start time then the score variable ordering P2 is used. Otherwise the parameter that belongs to the "earlier" item is preferred.  
+   %%
+   %% This distribution strategy is useful, e.g., when searching for motifs (e.g., pattern motifs), which determine the temporal structure. The motifs would be addressed in P1 and other parameters in P2.
+   %% */
+   fun {MakeLeftToRight2 P1 P2}
+      fun {$ X Y}
+	 S1 = {{X getItem($)} getStartTime($)}
+	 S2 = {{Y getItem($)} getStartTime($)}
+	 IsS1Bound = ({FD.reflect.size S1}==1)
+      in
+	 %% if start time of both elements are bound
+	 if IsS1Bound andthen ({FD.reflect.size S2}==1)
+	 then
+	    S1 < S2 orelse
+	    %% if start times are equal, break ties with P, otherwise false (prefer Y)
+	    (S1 == S2 andthen {P2 X Y})
+	    %% same meaning, but always needs two computation steps:
+% 	 if S1==S2
+% 	 then {P X Y}
+% 	 else S1 =< S2	
+% 	 end
+	    %%
+	    %% if only one start time is bound, then prefer corresponding
+	    %% param (if none is bound the decision is arbitrary)
+	 else {P1 X Y}
+	 end
+      end
+   end
 
 
    /** %% [variable ordering constructor] Returns a right-to-left score variable ordering, i.e. an ordering which visits score parameters in the decreasing order of the end time of their associated score object. If only one end time is bound, then prefer the corresponding param (if none is bound prefer Y). In case of equal end times, temporal parameters are visited first. It breaks ties (equal start times and both X and Y are/are not time parameters) with the score variable ordering P.
@@ -645,15 +673,13 @@ define
       fun {MakeFDDistribution Spec}
 	 FullSpec = {PreProcessSpec Spec}
       in
-	 {Adjoin
+	 {Adjoin Spec %% preserve args like trace or procedure if present
 	  generic(filter: {SelectFn filter FullSpec}
 		  order: {SelectFn order FullSpec}
 		  select: {SelectFn select FullSpec}
-		  value: {SelectFn value FullSpec})	    
-	  if {HasFeature Spec procedure}
-	  then generic(procedure: Spec.procedure)
-	  else generic
-	  end}
+		  value: {SelectFn value FullSpec}
+		  %% ?? Always include this arg? Likely useful, and does no harm...
+		  trace: unit)}
       end
 
    end				
@@ -698,6 +724,8 @@ define
 %    ternary procedure {P X SelectFn ?Dom}: where X is the parameter object selected by order and filter, SelectFn is the function given to the select argument, and Dom is the resulting domain specification. Dom serves as the restriction on the parameter value to be used in a binary distribution step (Dom in one branch, compl(Dom) in the other).
    %% NB: the interface of this function is changed compared to FD.distribute.
    %%
+   %% Note that each distribution step is always traced at STDOUT (the *Oz Emulator* buffer).
+   %%
    %% The feature test expects a unary boolean function: all score parameters fulfilling the test are distributed.
    %%
    %% The following are the defaults for Args. Note the argument test, which specifies that by default container parameters are ignored by the distribution. 
@@ -708,6 +736,8 @@ define
 	test:fun {Test X}
 		{Not {{X getItem($)} isContainer($)}}
 	     end)
+   %%
+   %% All distribution steps are traced at STDOUT (*Oz Emulator* buffer).
    %% */
    %%
    fun {MakeSearchScript ScoreScript Args}
