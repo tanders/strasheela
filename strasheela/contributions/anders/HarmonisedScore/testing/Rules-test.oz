@@ -381,3 +381,53 @@ Ab_Major = {Score.make chord(index: {HS.db.getChordIndex 'major'}
  end}
 
 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%% HS.rules.modulation
+%%
+
+%%
+%% Performs a modulation C -> F major.
+%% Result is a score consisting only of chord and scale objects, but no notes.
+%%
+
+declare
+{HS.db.setDB {ET31.db.makeFullDB unit}}
+{GUtils.setRandomGeneratorSeed 0}
+proc {MyScript MyScore}
+   OldScale NewScale Chords
+in
+   MyScore = {Score.make sim([seq([chord chord chord chord
+				   chord chord chord chord])
+			      seq([scale(handle: OldScale
+					 duration: 4
+					 index: {HS.db.getScaleIndex 'major'}
+					 root: {ET31.pc 'C'})
+				   scale(handle: NewScale
+					 duration: 4
+					 index: {HS.db.getScaleIndex 'major'}
+					 root: {ET31.pc 'F'})])]
+			     startTime: 0
+			     timeUnit: beats(1))
+	      add(chord: {Score.makeConstructor HS.score.diatonicChord
+			  chord(duration: 1
+				index: fd#{Sort {Map ['major' 'minor' 'dominant 7th' 'sixte ajoutee'] 
+						 HS.db.getChordIndex} Value.'<'}
+				inScaleB: 1)}
+		  scale: HS.score.scale)}
+   Chords = {MyScore collect($ test: HS.score.isChord)}
+   {HS.rules.modulation {List.drop Chords 4} OldScale NewScale 
+    unit(neutralLength: 1)}
+     % {Modulation {List.drop Chords 4} OldScale NewScale 
+     % unit(neutralLength: 0)}
+   {HS.rules.cadence NewScale {LUtils.lastN Chords 3}}
+   {HS.rules.schoenberg.progressionSelector Chords
+    resolveDescendingProgressions}
+     % {OldScale getRoot($)} \=: {NewScale getRoot($)}
+     % {Pattern.for2Neighbours Chords
+     %  proc {$ C1 C2} {C1 getRoot($)} \=: {C2 getRoot($)} end}
+end
+{SDistro.exploreOne MyScript
+ unit(order:leftToRight
+      value:random)}
