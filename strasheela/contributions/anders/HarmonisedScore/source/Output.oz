@@ -36,12 +36,14 @@ export
    MakeChordToFomusClause
    MakeScaleToFomusClause
    VsToFomusForLilyMarks
+   VsToFomusMarks AppendFomusMarks 
    FomusPCs_Default
    MakeCentOffset_FomusMarks
    MakeNonChordTone_FomusMarks
    MakeAdaptiveJI_FomusForLilyMarks MakeAdaptiveJI2_FomusForLilyMarks
-   MakeChordComment_FomusForLilyMarks MakeChordRatios_FomusForLilyMarks MakeScaleComment_FomusForLilyMarks
-   
+   MakeChordComment_FomusForLilyMarks MakeChordRatios_FomusForLilyMarks
+   MakeComment_FomusMarks MakeChordRatios_FomusMarks
+   MakeScaleComment_FomusForLilyMarks
    
    RenderAndShowLilypond
 
@@ -171,6 +173,7 @@ define
 	     unit(part:PartId
 		  time:{MyNote getStartTimeInBeats($)}
 		  dur:{MyNote getDurationInBeats($)}
+		  dynamic: {MyNote getAmplitudeInVelocity($)} / 127.0
 		  pitch:Nominal#Acc#Oct
 		  acc:Acc)}
 	    MyNote}
@@ -183,7 +186,7 @@ define
    %%
    %% 'getSettings': unary function that expects the processed chord and returns a record of fomus settings. This function can be used to arbitrarily customise the notation of each root note depending on the note itself (only standard settings like time etc cannot be overwritten).
    %%
-   %% 'grace': a pair of Fomus "grace time" settings (see http://fomus.sourceforge.net/doc.html/Grace-Notes-_0028File_0029.html#Grace-Notes-_0028File_0029). The first setting is for notating the first pitch class and the second for the remaining pitch classes.
+   %% 'grace': a pair of Fomus grace settings (see http://fomus.sourceforge.net/doc.html/Grace-Notes-_0028File_0029.html#Grace-Notes-_0028File_0029). The first setting is for notating the first pitch class and the second for the remaining pitch classes.
    %% */
    fun {MakePCCollToFomus Args}
       Defaults = unit(table: FomusPCs_Default
@@ -258,8 +261,7 @@ define
    time 0 dur 1/2 pitch 59 ;
    */
    fun {MakeScaleToFomusClause Args}   
-      HS_Score.isScale # {MakePCCollToFomus {Adjoin Args unit(% grace: 0#'+'  %% currently not working in Fomus
-							      grace: 10#10)}}
+      HS_Score.isScale # {MakePCCollToFomus {Adjoin Args unit(grace: 0#'+')}}
    end
 
 
@@ -282,6 +284,34 @@ define
       else unit('lily-insert': {Out.formatVS Where#"\\markup{"#VS#"}"})
       end
    end
+
+   /** %% [markup function] Expects a VS and returns a Fomus markup record.
+   %%
+   %% Args:
+   %% 'where' (default 'x'): atom in Fomus syntax where to position the VS (e.g., 'x', 'x^', 'x_' or 'x!', see http://fomus.sourceforge.net/doc.html/Articulation-Markings-_0028File_0029.html#Articulation-Markings-_0028File_0029). 
+   %% */
+   fun {VsToFomusMarks VS Args}
+      Default = unit(where: 'x')
+      As = {Adjoin Default Args}
+   in
+      if {Not {IsVirtualString VS}}
+      then raise noVS(VS) end
+	 unit % never returned 
+      else unit(marks: [As.where#" \""#VS#"\""])
+      end
+   end
+
+   /** %% [Note markup function] Expects two Fomus markup records (e.g., unit(marks: ['x "x"']), the value returned by MakeNonChordTone_FomusMarks) and returns a single record with those marks combined.  
+   %% */
+   fun {AppendFomusMarks Mark1 Mark2}
+      Ms1 = {Value.condSelect Mark1 marks nil} 
+      Ms2 = {Value.condSelect Mark2 marks nil}
+   in
+      {Adjoin {Adjoin Mark1 Mark2}
+       unit(marks: {Append Ms1 Ms2})}
+   end
+
+
 
    
    /** %% Fomus PC table for 12-TET intended, e.g., for MakeNoteToFomusClause as arg table.
@@ -355,6 +385,7 @@ define
        "\\column { "#{HS_DB.getName MyChord}.1#" } "
        unit}
    end
+   
    /* %% [Chord markup function] Expects a chord and returns the chord as ratio spec (a fomus settings record with a 'lily-insert' VS): Transposition x untransposed PCs (a VS). For all other score objects nil is returned.
    %% */
    fun {MakeChordRatios_FomusForLilyMarks MyChord}
@@ -368,6 +399,27 @@ define
 	 " "}
        #") }"
        unit}
+   end
+   
+   /** %% [Chord markup function] Expects a chord or scale and returns the chord/scale comment in a fomus mark. For all other score objects nil is returned.
+   %% */
+   fun {MakeComment_FomusMarks MyChord}
+      {VsToFomusMarks {HS_DB.getName MyChord}.1
+       unit(where:'x_')}
+   end
+
+   /* %% [Chord markup function] Expects a chord and returns the chord as ratio spec as a fomus mark (on a single line): Transposition x untransposed PCs (a VS). For all other score objects nil is returned.
+   %% */
+   fun {MakeChordRatios_FomusMarks MyChord}
+      {VsToFomusMarks
+       {Pc2RatioVS {MyChord getTransposition($)}}
+       #" x ("
+       #{Out.listToVS {Map {FS.reflect.lowerBoundList
+			    {MyChord getUntransposedPitchClasses($)}}
+		       Pc2RatioVS}
+	 " "}
+       #")"
+       unit(where:'x_')}
    end
    
    /** %% [Scale markup function] Expects a scale and returns the scale comment (a fomus settings record with a 'lily-insert' VS). For all other score objects nil is returned. 
