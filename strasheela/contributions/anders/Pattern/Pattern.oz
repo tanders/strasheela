@@ -638,7 +638,8 @@ define
    %% 'indices': an optional return value, a list of FD ints. For each element in Xs, indices contains an FD int which specifies to which motif index (e.g. position of its motif in Motifs) the Xs element belongs. These variables can be used, for example, to constrain that certain motifs should follow each other or to constrain how often some motif occurs.
    %% Note that the argument 'indices' is particular important in case the elements in Motifs do exclude each other, that is some element in Motifs is fully contained as the beginning in another element of Motifs. For example, if Motifs contains [1 2] and also [1 2 2]. In this case, UseMotif would block internally as it could not decide for any motif and would not apply motif constraints anymore. This behaviour is avoided when the variables at the argument 'indices' are propagated (e.g., add a parameter to the notes to which the parameter values in Xs belong).
    %%
-   %% Note that this constraint processes the elements of Xs "from left to right". Constraining the next motif is always delayed until the previous motif is known, because it depends on the length of the previous motif where the next motif starts. Consequently, the distribution strategy should determine variables in that order.  
+   %% Note that this constraint processes the elements of Xs "from left to right". Constraining the next motif is always delayed until the previous motif is known, because it depends on the length of the previous motif where the next motif starts. Consequently, the distribution strategy should determine variables in that order.
+   %% BUG: always works out even, regardless of the setting of 'workOutEven' -- this did work before!
    %% */
    %% TODO: more efficient variant of this proc using selection constraints would support propagation. Less generic though -- Xs must be list of FD ints.
    %% TODO: allow for motif value which is ignored -- no unification happens, so non-motific sections are possible (not supported yet). Possibly, this would not be a good idea -- then anything can be a solution and I can leave this constraint off entirely..
@@ -1105,11 +1106,15 @@ define
    %% (In principle, elements of Bs can be larger than 1, larger values still count as true.)
    %% */
    proc {FirstNTrue Bs N}
-      thread 
-	 N = {LUtils.findPosition Bs
-	      fun {$ B}
-		 (B =: 0) == 1
-	      end} 
+      thread
+	 AuxN = {LUtils.findPosition Bs
+		 fun {$ B}
+		    (B =: 0) == 1
+		 end}
+      in
+	 if AuxN == nil then N = {Length Bs}
+	 else N = AuxN 
+	 end
       end
       %% Redundant constraints for improving propagation. This constraint does not reduce Pos to its minimum domain value, though.
       {Select.fd Bs N 0}
