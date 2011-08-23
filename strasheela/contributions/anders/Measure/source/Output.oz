@@ -45,7 +45,7 @@ define
 			getValueInBeats($)})
 	     if As.explicitTimeSig then
 		unit(timesig:
-			"("#{MyMeasure getBeatNumber($)}#" "#({FloatToInt {{MyMeasure getBeatDurationParameter($)} getValueInBeats($)}}*4)#")")
+			"("#{MyMeasure getBeatNumber($)}#" "#{FloatToInt 4.0 / {{MyMeasure getBeatDurationParameter($)} getValueInBeats($)}}#")")
 	     else unit
 	     end}}
 	end
