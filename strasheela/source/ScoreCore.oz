@@ -1854,7 +1854,29 @@ define
 % 	 %% !! attr containers is always skipped
 % 	 X = {self toFullRecordAux($ exclude:containers|Exclude)}
 %       end
+
       
+      /** %% Unifies the percentage Percent of the parameter values of self with the corresponding parameter values of ScoreObject. This is useful, for example, for manually controlling the search process by saying that a given percentage of the solution of a CSP is the same as in a given previous solution (e.g., from a pickled score), and then -- given suitable continuations of this solutions -- by and by increasing this percentage. 
+      %% Blocks if self or ScoreObject are not fully determined.
+      %%
+      %% Args:
+      %% test (default fun {$ X} true end): a Boolean function or method which parameters to include in unification and the percentage count.
+      %% */
+      meth partiallyUnify(ScoreObject Percent test:Test<=fun {$ X} true end)
+	 fun {FullTest X}
+	    {X isParameter($)} andthen {{GUtils.toFun Test} X}
+	 end
+	 SelfPs = {self collect($ test: FullTest)}
+	 L = {Length {self collect($ test: FullTest)}}
+	 N = L * Percent div 100
+      in
+	 {ForAll {LUtils.matTrans [{List.take SelfPs N}
+				   {List.take {ScoreObject collect($ test: FullTest)} N}]}
+	  proc {$ [SelfP ScoreObjectP]}
+	     {SelfP getValue($)} = {ScoreObjectP getValue($)}
+	  end}
+      end
+
    end
    
    /** %% [abstract class] A container contains one or more score items. A container is a generalization of a score aspect and a score modifier. The attribute items points to the items contained in a container. Because containers themself are items as well, a container can contain other containers to form a score hierarchy of containers and elements. However, a container must not contain itself.
@@ -1959,7 +1981,8 @@ define
 	  end}
 	 {self forAllItems(proc {$ O} {O wait(unless:Unless)} end)}
       end
-      
+
+           
       /** % Calling the method bilinkItems with Items expresses that Items are contained in the container itself. The method establishes bidirectional links between both self and all Items. Method must not be called by user (only by class designer).
       % */
       meth bilinkItems(Items)
