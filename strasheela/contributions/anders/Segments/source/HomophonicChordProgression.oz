@@ -28,12 +28,12 @@ define
 
    /** %% Top-level script or subscript for creating homophonic chord progressions. The individual voices are created with Segs.makeCounterpoint_Seq, the underlying chords (and optionally scales) are given as arguments.
    %%
-   %% The number of chords determines the number of notes per voice, the start time of each chord equals the start times of the sim notes (so the resulting score is truely homophonic), and the sim notes must sound all pitch classes of the chord (i.e. arg voiceNo must be high enough, see below). No voice crossing is permitted, the highest voice is the first and so forth. For inversion chords, the bass plays the bass pitch class of the chord (the soprano pitch class is ignored). The upper voices are at maximum an octave apart of each other.  
+   %% The number of chords determines the number of notes per voice, the start time of each chord equals the start times of the sim notes (so the resulting score is truely homophonic), and the sim notes must sound all pitch classes of the chord (i.e. arg voiceNo must be high enough, see below). By default, no voice crossing is permitted, the highest voice is the first and so forth. For inversion chords, the bass plays the bass pitch class of the chord (the soprano pitch class is ignored). The upper voices are at maximum an octave apart of each other by default.  
    %%
    %% Args:
    %% 'chords' (default {HS.score.makeChords unit}): non-nil list of chords. Remember that neither score objects nor variables can be in the top-level space, so the chords (and scales) to HomophonicChordProgression must be created inside a script.  
    %% 'scales' (default nil): list of scales.
-   %% 'restrictMelodicIntervals' (defaults
+   %% 'restrictMelodicIntervals' (default as follow)
    unit(bassIntervals: unit('=<:': 3#2
 			    '=:': [2#1])
 	upperVoiceIntervals: unit('=<:': 3#2
@@ -41,15 +41,18 @@ define
 	step: 8#7
 	minPercent:50
 	maxPercent:100)
-   %% if non-false, then the melodic intervals are constrained as specified by the "sub arguments". The melodic intervals allowed for the bass are given by the arg 'bassIntervals', where the feature '=<:' specifies a ratio for an interval up to which all intervals are permitted and the feature '=:' specifies a list of ratios that are additionally permitted. By default, all intervals up to a fifth and the octave are allowed. The melodic intervals for the upper voices are specified the same way with the argument 'upperVoiceIntervals'.
-   %% The remaining arguments control the required number of steps between upper voices. The maximum interval considered a step is given as a ratio to the argument 'step'. The args 'minPercent'/'maxPercent' specify the percentage boudary of the number of steps in the upper voices. 
+   %% If non-false, then the melodic intervals are constrained as specified by the "sub arguments". The melodic intervals allowed for the bass are given by the arg 'bassIntervals', where the feature '=<:' specifies a ratio for an interval up to which all intervals are permitted and the feature '=:' specifies a list of ratios that are additionally permitted.
+   %% For example, the default setting constrains all bass intervals to up to a fifth at maximum and additionally the octave is allowed. The melodic intervals for the upper voices are specified the same way with the argument 'upperVoiceIntervals'.
+   %% The remaining arguments of the settings control the required number of steps between upper voices. The maximum interval considered a step is given as a ratio to the argument 'step'. The args 'minPercent'/'maxPercent' specify the percentage boudary of the number of steps in the upper voices. 
    %% If 'restrictMelodicIntervals' is set to false, then all these constraints are disabled.
    %% 'commonPitchesHeldOver' (default false): if true, the notes of the harmonic band stay in the same voice and octave. [this constraint can be problematic]
    %% 'noParallels' (default true): if true, no parallel perfect consonances are permitted.
    %% 'playAllChordTones' (default true): if true, all chord tones are played.
-   %% 'noVoiceCrossing' (default true): if true, no voice crossings are permitted.
+   %% 'noVoiceCrossing' (possible settings: false, true or strict. default true): if true, no voice crossings are permitted. If strict, not even unisons are permitted (tone doublication in octaves is still fine).
    %% 'maxUpperVoiceDistance' (default {HS.db.getPitchesPerOctave}): maximum interval between upper voices (interval to bass can be larger). Disabled if false.
-   %% 'sliceRule' (default proc {$ Xs} skip end): unary constraint applied to the list MyChord | Notes at each "time slice" (i.e., for each chord and the notes sim to this chord). Notes are the notes in descending order (i.e. Bass last).
+   %% 'sliceRule' (default false): unary constraint applied to the list MyChord | Notes at each "time slice" (i.e., for each chord and the notes sim to this chord). Notes are the notes in descending order (i.e. Bass last). Disabled if false.
+   %% 'sopranoRule' (default false): unary constraint applied to the list of soprano notes, i.e. the notes of the first voice. NB: the first voice is only guaranteed to be the highest voice if 'noVoiceCrossing' is true. Disabled if false.
+   %% 'bassRule' (default false): unary constraint applied to the list of bass notes, i.e. the notes of the last voice. NB: the last voice is only guaranteed to be the lowest voice if 'noVoiceCrossing' is true. Disabled if false.
    %% 'makeTopLevel' (a function with the interface {$ Voices End Args}, returning a container): By default, HomophonicChordProgression returns a fully initialised score object with the following topology (chords and scales are optional).
    %%
    %% sim([seq(note+)+
@@ -96,7 +99,10 @@ define
    %% Further Args: for top-level sim.
    %%
    %% */
-   %% !!?? BUG: Segs.homophonicChordProgression does not work for chord sequence of length 1
+   %% !!?? BUG:
+   %% - Segs.homophonicChordProgression does not work for chord sequence of length 1
+   %% - Fomus inst defs ignored, although this feature works fine in the Fomus examples file
+   %%   (tmp fix: defined these two defs in ~/.fomus)
    %%
    %% Note: arg isTopLevel has been substituted by the more general argument makeTopLevel. 
    %%
@@ -156,7 +162,9 @@ define
 		      playAllChordTones: true
 		      noVoiceCrossing: true
 		      maxUpperVoiceDistance: {HS.db.getPitchesPerOctave}
-		      sliceRule: proc {$ Xs} skip end
+		      sliceRule: false
+		      sopranoRule: false
+		      bassRule: false
 		     )
       As = {GUtils.recursiveAdjoin Defaults Args}
       End = {FD.decl}
@@ -195,8 +203,11 @@ define
 	     if As.playAllChordTones \= false then 
 		{PlayAllChordTones C VoiceNotes}
 	     end
-	     if As.noVoiceCrossing \= false then 
+	     if As.noVoiceCrossing == true then 
 		{NoVoiceCrossing VoiceNotes}
+	     end
+	     if As.noVoiceCrossing == strict then 
+		{NoVoiceCrossing_Strict VoiceNotes}
 	     end
 	     if As.maxUpperVoiceDistance \= false then 
 		{ConstrainUpperVoiceDistance VoiceNotes As.maxUpperVoiceDistance}
@@ -205,7 +216,9 @@ define
 		%% Note: soprano is ignored here
 		{C getBassPitchClass($)} = {{List.last VoiceNotes} getPitchClass($)}
 	     end
-	     {As.sliceRule C|VoiceNotes}
+	     if As.sliceRule \= false then 
+		{As.sliceRule C|VoiceNotes}
+	     end
 	  end}
 	 %% constraints on pairs for chords and notes 
 	 {Pattern.for2Neighbours ChordAndNotesSlices
@@ -234,6 +247,12 @@ define
 % 	     {MyVoice addInfo(fomusPart(upper))}
 	     {MyVoice addInfo(fomus(inst:soprano))}
 	  end}
+	 if As.sopranoRule \= false then 
+	    {As.sopranoRule Nss.1}
+	 end
+	 if As.bassRule \= false then 
+	    {As.bassRule {List.last Nss}}
+	 end
       end
    end
 
@@ -260,6 +279,12 @@ define
       {Pattern.continuous {Pattern.mapItems Notes getPitch}
        '>=:'}
    end
+   /** %% Variant of NoVoiceCrossing where not even unisons are allowed.
+   %% */
+   proc {NoVoiceCrossing_Strict Notes}
+      {Pattern.continuous {Pattern.mapItems Notes getPitch}
+       '>:'}
+   end
    /** %% [strict onstraint for homophonic chord progression] If two consecutive chords C1 and C2 share common pitches (harmonic band), then these occur in the same voice and octave (Schoenberg: harmonischen Band bleibt liegen). NotePairs is a list of two-note-pairs. Each pair consists of consecutive notes in the same voice and NotePairs together expresses C1 and C2. However, the bass notes are excluded. The voices in NotePairs are ordered increasing, so the bass is the first pair which is ignored. 
    %% */
    proc {CommonPitchesHeldOver C1#C2 NotePairs}
@@ -273,7 +298,7 @@ define
 	   1}
        end}
    end
-   /** %% Restrict melodic intervals of Notes (list of notes in a single upper voice): only skips up to a fifths and most intervals (Args.minPercent to Args.maxPercent) are steps or unison.
+   /** %% Restrict melodic intervals of Notes (list of notes in a single upper voice): by default only skips up to a fifths and most intervals (Args.minPercent to Args.maxPercent) are steps or unison.
    %% ?? no two skips after each other in same dir? 
    %% */
    proc {RestrictMelodicIntervals_UpperVoices Notes Args}
@@ -300,7 +325,7 @@ define
 				  proc {$ X B} B = (X =<: {HS.score.ratioToInterval As.step}) end}
        As.minPercent As.maxPercent}
    end
-   /** %% Restrict melodic intervals of Notes (list of notes in bass): only skips up to a fifth or an octave.
+   /** %% Restrict melodic intervals of Notes (list of notes in bass): by default only skips up to a fifth or an octave.
    %% */
    %% ??  At least sometimes the bass progresses stepwise: min number of steps given
    proc {RestrictMelodicIntervals_Bass Notes Args}
