@@ -945,6 +945,8 @@ define
    %%
    %% rating (an FD int): this argument is bound to the accumulated rating of accent constraint outputs for N. This variable can that way be constrained outside the call of Accent_If (e.g., to constrain the accent structure of some musical section, the number of occurances of some minumum rating or the minimum sum of ratings over multiple notes can be constrained).
    %%
+   %% applyConstraint (Boolean, default true). Arg for debugging accent constraints. If false, then the accent ratings are calculated and the accentRating parameter is bound, but no actual rhythmic constraint is applied. 
+   %%
    %% Note: if N inherited from IsAccentRatingMixin then the rating is automatically added to its parameter accentRating. Therefore, Accent_If should only be called once for such a note.
    %% It is often good practice to combine all accent constraints into a single rating anyway. Exceptions would be special cases where, e.g., accents expressed by duration-relations and accents expressed by pitch-relations should fall on different metric positions. In the latter case it is sufficient to avoid using notes that inherited from IsAccentRatingMixin.
    %%
@@ -961,6 +963,7 @@ define
 		      strictness: note
 		      measureTest: IsUniformMeasures
 		      toplevel: false
+		      applyConstraint: true
 		      rating: _)
       As = {Adjoin Defaults Args}
       Relation = case As.strictness of
@@ -1000,9 +1003,11 @@ define
 					{Constraint N Rating}
 				     end}
 			     '=:'}
-	 {Relation (ConstraintRating >=: As.minRating)
-	  {MeasureConstraint N}
-	  1}
+	 if As.applyConstraint \= false then
+	    {Relation (ConstraintRating >=: As.minRating)
+	     {MeasureConstraint N}
+	     1}
+	 end
 	 if {IsAccentRatingMixin N}
 	 then {N getAccentRating($)} = ConstraintRating
 	 end
@@ -1308,7 +1313,7 @@ define
    /** %% Make_HasAnacrusis returns an accent constraint, i.e. a function execting a note/item N and returning a rating FD int. The resulting function returns a positive rating for N preceeded by an anacrusis, and 0 otherwise.
    %%
    %% Args:
-   %% context (record function, default predecessorsUpToRest): This argument specifies the score context that potentially forms an anacrusis of N. If 'predecessorsUpToRest', then the notes before N up to any rest (offset time or pause object) are taken into account (within the same temporal container). If predecessors(I), then the I (an int) notes before N are taken into account (within the same temporal container). The context can also be defined by a unary function expecting N and returning the items as a list.
+   %% context (record or function, default predecessorsUpToRest): This argument specifies the score context that potentially forms an anacrusis of N. If 'predecessorsUpToRest', then the notes before N up to any rest (offset time or pause object) are taken into account (within the same temporal container). If predecessors(I), then the I (an int) notes before N are taken into account (within the same temporal container). The context can also be defined by a unary function expecting N and returning the items as a list.
    %% ratingPs (list of constraints {P Xs ?Rating}, default nil): This argument specifies how the quality (rating) of an anacrusis is measured. Each ratingP is a function that expects a list of notes (of at least length 2) starting with N, then its predecessor and so forth. Each function returns a rating (an FD int). The resulting accent constraint rating is the minimum rating of any ratingP (subject to requirements, see below). Example constraint: N predecessors are of equal length (Anacrusis_FirstNEvenDurations).
    %% requirements (list of reified constraints {P Xs B}, default nil): This argument specifies requirements that must be met by the score context if it should count at all as an anacrusis. Each requirement is a function that expects a list of notes (of at least length 2) starting with N, then its predecessor and so forth. Each function returns a 0/1-int. If any requirement returns 0 then the accent constraint returns 0 for this note. If all requirements returns 1, then the value resulting from the ratingPs is returned as rating. Example constraint: N longer than its predecessor (Anacrusis_LongerThanPrevious).
    %%
@@ -1341,6 +1346,8 @@ define
 			 end
 	    RequirementsB =: {Pattern.allTrueR {Map As.requirements fun {$ F} {F N|Context} end}}
 	    Rating =: AuxRating * RequirementsB
+	 else
+	    Rating = 0
 	 end
       end
    end
