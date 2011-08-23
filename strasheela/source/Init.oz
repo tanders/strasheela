@@ -507,6 +507,32 @@ define
 	     unit(file: FileName#'-'#I)}
 	 end
       end
+      % %% Problem: def depends on PCs per octave, so I should not include that here
+      % proc {RenderLilypondFomus_HS I X}
+      % 	 if {Score.isScoreObject X}
+      % 	 then 
+      % 	    FileName = out#{GUtils.getCounterAndIncr}
+      % 	 in
+      % 	    {Out.renderFomus X
+      % 	     unit(file: FileName#'-'#I
+      % 		 eventClauses:[%% HS notes
+      % 			       {HS.out.makeNoteToFomusClause
+      % 				unit(% getPitchClass: midi
+      % 				     % table: ET31.out.fomusPCs_DoubleAccs
+      % 				     % table:ET31.out.fomusPCs_Quartertones
+      % 				     getSettings: HS.out.makeNonChordTone_FomusMarks)}
+      % 			       {HS.out.makeChordToFomusClause
+      % 				unit(% getPitchClass: midi
+      % 				     % table: ET31.out.fomusPCs_DoubleAccs
+      % 				     getSettings:HS.out.makeChordComment_FomusForLilyMarks)}
+      % 			       {HS.out.makeScaleToFomusClause
+      % 				unit(% getPitchClass: midi
+      % 				     table: ET31.out.fomusPCs_DoubleAccs
+      % 				     getSettings:HS.out.makeScaleComment_FomusForLilyMarks)}
+      % 			       {Measure.out.makeUniformMeasuresToFomusClause
+      % 				unit(explicitTimeSig: false)}])}
+      % 	 end
+      % end
       proc {RenderMidi I X}
 	 if {Score.isScoreObject X}
 	 then 
@@ -557,6 +583,9 @@ define
 	 {Explorer.object
 	  add(information RenderLilypondFomus
 	      label: 'to Lilypond (via Fomus)')}
+	 % {Explorer.object
+	 %  add(information RenderLilypondFomus_HS
+	 %      label: 'to Lilypond (via Fomus, with HS and Measure objects support)')}
 	 {Explorer.object
 	  add(information RenderLilypond
 	      label: 'to Lilypond')}
