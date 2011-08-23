@@ -65,7 +65,7 @@ export
    Pc2Ratios
 
    GetChordIndex GetScaleIndex GetIntervalIndex
-   GetComment GetName
+   GetComment GetName GetAllNames
 
    GetUntransposedRatios
    GetUntransposedRootRatio
@@ -882,9 +882,41 @@ define
 		   then Comment.name
 		   else nil
 		   end
+		else nil
 		end
    in
       if {IsList NameAux} then NameAux else [NameAux] end 
+   end
+
+   /** %% Returns a list of list of all the names (usually atoms) of the entries in the database DB (a database in the format of edit DBs, e.g., {HS.db.getEditScaleDB}). A list of lists is returned because some database entries have multiple names. Note that some entries have no names at all.
+   %%
+   %% Example: how to return a list of all scale names of the named scales in the current database (only their first name).
+   {LUtils.mappend {HS.db.getAllNames {HS.db.getEditScaleDB}}
+    fun {$ Ns}
+       case Ns of nil then nil
+       else [Ns.1]
+       end
+    end}
+   %% */
+   %% NOTE: This def is a quick hack, code dublication compared with GetName
+   fun {GetAllNames DB}
+      fun {Aux Spec}
+	 NameAux = if {GUtils.isRecord Spec} then
+		      if {HasFeature Spec comment} andthen {IsVirtualString Spec.comment}
+		      then Spec.comment
+		      elseif {HasFeature Spec name}
+		      then Spec.name
+		      elseif {GUtils.isRecord Spec.comment}
+		      then {Aux Spec.comment}
+		      else nil
+		      end
+		   else nil
+		   end
+      in
+	 if {IsList NameAux} then NameAux else [NameAux] end 
+      end
+   in
+      {Map {Record.toList DB} Aux}
    end
 
    local
