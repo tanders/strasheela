@@ -193,6 +193,8 @@ define
    %% NB: it is important for this variable ordering that time parameters are determined early so that other start times are determined. So, typically P is defined by {MakeTimeParams Q}, where Q is your actual tie-breaking ordering. The default leftToRight ordering is {MakeLeftToRight TimeParams}.
    %%
    %% NB: P is only called if both start times are determined and equal. So, the overhead added should not be too high.
+   %%
+   %% NOTE: MakeLeftToRight cannot handled undetermined offset times correctly. Left-most items with undetermined offset time are not recognised (because MakeLeftToRight depends on determined start times).
    %% */
    fun {MakeLeftToRight P}
       fun {$ X Y}
@@ -204,12 +206,13 @@ define
 	 if IsS1Bound andthen ({FD.reflect.size S2}==1)
 	 then
 	    S1 < S2 orelse
-	    %% if start times are equal, break ties with P, otherwise false (prefer Y)
+	    %% if start times are equal, break ties with P, otherwise false (prefer Y, because S2 < S1)
 	    (S1 == S2 andthen {P X Y})
+	    %%
 	    %% same meaning, but always needs two computation steps:
 % 	 if S1==S2
 % 	 then {P X Y}
-% 	 else S1 =< S2	
+% 	 else S1 < S2	
 % 	 end
 	    %%
 	    %% if only one start time is bound, then prefer corresponding
@@ -219,35 +222,81 @@ define
       end
    end
 
-   /** %% Generalised version of MakeLeftToRight, which returns a left-to-right score variable ordering (a binary function expecting two parameter objects and returning a boolean value): If the start time of the item of either parameter object are undetermined, then the score variable ordering P1 is used to decide which one to ditribute. If both items have the same start time then the score variable ordering P2 is used. Otherwise the parameter that belongs to the "earlier" item is preferred.  
-   %%
-   %% This distribution strategy is useful, e.g., when searching for motifs (e.g., pattern motifs), which determine the temporal structure. The motifs would be addressed in P1 and other parameters in P2.
-   %% */
-   fun {MakeLeftToRight2 P1 P2}
-      fun {$ X Y}
-	 S1 = {{X getItem($)} getStartTime($)}
-	 S2 = {{Y getItem($)} getStartTime($)}
-	 IsS1Bound = ({FD.reflect.size S1}==1)
+   local
+      /** %% Returns the end time of the predecessor of X. If X is top level then result is 0 (the value is actually irrelevant, we only need a determined int). If X is first element in a sequential container or X is element in a simultaneous container then result the end time of the item preceeding the container. If X is a later element in a sequential container, then the predecessors end time is returned.
+      %% */
+      fun {GetPredecessorEndTime X}
+	 C = {X getTemporalContainer($)}
       in
-	 %% if start time of both elements are bound
-	 if IsS1Bound andthen ({FD.reflect.size S2}==1)
-	 then
-	    S1 < S2 orelse
-	    %% if start times are equal, break ties with P, otherwise false (prefer Y)
-	    (S1 == S2 andthen {P2 X Y})
-	    %% same meaning, but always needs two computation steps:
-% 	 if S1==S2
-% 	 then {P X Y}
-% 	 else S1 =< S2	
-% 	 end
-	    %%
-	    %% if only one start time is bound, then prefer corresponding
-	    %% param (if none is bound the decision is arbitrary)
-	 else {P1 X Y}
+	 %% X is top-level 
+	 if C == nil then 0 
+	 else
+	    if {C isSimultaneous($)} orelse {X getPosition($ C)} == 1
+	    then {GetPredecessorEndTime C}
+	       %% X is in seq at a later position
+	       %% NOTE: expensive
+	    else {{X getPosRelatedItem($ ~1 C)} getEndTime($)}
+	    end
+	 end
+      end
+   in
+      /** %% Generalised version of MakeLeftToRight, which allows for undetermined offset times by not looking at the start time of items but instead at the end time of their predecessors. Because the value of offset time is not taken into account items in a sim (or at first position in other containers nested in a sim) could be processed in any order, even if their later offset times differ.
+      %%
+      %% NOTE: computationally more expensive than MakeLeftToRight (but seemingly not too much).
+      %% */
+      fun {MakeLeftToRight2 P}
+	 fun {$ X Y}
+	    E1 = {GetPredecessorEndTime {X getItem($)}}
+	    E2 = {GetPredecessorEndTime {Y getItem($)}}
+	    IsE1Bound = ({FD.reflect.size E1}==1)
+	 in
+	    %% if preceeding end time of both elements are bound
+	    if IsE1Bound andthen ({FD.reflect.size E2}==1)
+	    then
+	       E1 < E2 orelse
+	       %% if end times are equal, break ties with P, otherwise false (prefer Y, because E2 < E1)
+	       (E1 == E2 andthen {P X Y})
+	       %% if only one end time is bound, then prefer corresponding
+	       %% param (if none is bound the decision is arbitrary)
+	    else IsE1Bound
+	    end
 	 end
       end
    end
 
+%    /** %% Generalised version of MakeLeftToRight, which returns a left-to-right score variable ordering (a binary function expecting two parameter objects and returning a boolean value): If the start time of the item of either parameter object are undetermined, then the score variable ordering P1 is used to decide which one to distribute. If both items have the same start time then the score variable ordering P2 is used. Otherwise the parameter that belongs to the "earlier" item is preferred.  
+%    %%
+%    %% This distribution strategy is useful, e.g., when searching for motifs (e.g., pattern motifs), which determine the temporal structure. The motifs would be addressed in P1 and other parameters in P2.
+%    %%
+%    %% NOTE: distro first visits all params matching P1 and then does left-to-right -- is that actually useful?? Could I get the same result instead (and better comprehensible code) by nesting a MakeLeftToRight call within a MakeSetPreferredOrder call.
+%    %% */
+%    fun {MakeLeftToRight2 P1 P2}
+%       fun {$ X Y}
+% 	 S1 = {{X getItem($)} getStartTime($)}
+% 	 S2 = {{Y getItem($)} getStartTime($)}
+% 	 IsS1Bound = ({FD.reflect.size S1}==1)
+% 	 % IsS2Bound = ({FD.reflect.size S2}==1)
+%       in
+% 	 %% if start time of both elements are bound
+% 	 if IsS1Bound andthen ({FD.reflect.size S2}==1)
+% 	 then
+% 	    S1 < S2 orelse
+% 	    %% if start times are equal, break ties with P2, otherwise false (prefer Y, because S2 < S1)
+% 	    (S1 == S2 andthen {P2 X Y})
+% 	    %% same meaning, but always needs two computation steps:
+% % 	 if S1==S2
+% % 	 then {P X Y}
+% % 	 else S1 =< S2	
+% % 	 end
+% 	 else {P1 X Y}
+% 	    %%
+% 	 % elseif {GUtils.xOr IsS1Bound IsS2Bound}
+% 	 %    %% one start time is bound -- prefer that one
+% 	 % then IsS1Bound
+% 	 % else {P1 X Y}
+% 	 end
+%       end
+%    end
 
    /** %% [variable ordering constructor] Returns a right-to-left score variable ordering, i.e. an ordering which visits score parameters in the decreasing order of the end time of their associated score object. If only one end time is bound, then prefer the corresponding param (if none is bound prefer Y). In case of equal end times, temporal parameters are visited first. It breaks ties (equal start times and both X and Y are/are not time parameters) with the score variable ordering P.
    %%
@@ -679,7 +728,10 @@ define
 		  select: {SelectFn select FullSpec}
 		  value: {SelectFn value FullSpec}
 		  %% ?? Always include this arg? Likely useful, and does no harm...
-		  trace: unit)}
+		  %% It actually seems to slow down search, because emacs is busy
+		  %% (emulator is running with rather low CPU precentage...)
+		  % trace: unit
+		 )}
       end
 
    end				
@@ -863,7 +915,6 @@ define
        OrderP}
    end
 
-   
    
 end				
 
