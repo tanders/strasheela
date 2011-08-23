@@ -76,6 +76,14 @@
 
 * Strasheela Bugs
 
+** TODO !! Pattern.useMotifs: arg 'workOutEven' is ignored (behaves as if always set to true)
+   
+   see test at 
+   [[file:~/oz/music/Strasheela/strasheela/trunk/strasheela/contributions/anders/Pattern/testing/Pattern-test.oz::%25%25%20end%20can%20be%20incomplete%20motif][file:~/oz/music/Strasheela/strasheela/trunk/strasheela/contributions/anders/Pattern/testing/Pattern-test.oz::%% end can be incomplete motif]]
+
+   source
+   [[file:~/oz/music/Strasheela/strasheela/trunk/strasheela/contributions/anders/Pattern/Pattern.oz::proc%20{UseMotifs%20Xs%20Motifs%20Args}][file:~/oz/music/Strasheela/strasheela/trunk/strasheela/contributions/anders/Pattern/Pattern.oz::proc {UseMotifs Xs Motifs Args}]]
+
 ** Replace FD.reified.distance -- does not propagate enough and can thus be completely ineffective 
 
 FD.reified.distance is often used in Strasheela, and may be the cause for various strange bugs (i.e. non-effecting constraint applications)   
@@ -151,6 +159,125 @@ MyTestScore = {Score.makeScore
 
 
 * Strasheela design						    :STRASHEELA:
+
+** Revise music representation to allow for efficient distro stratey for pattern motifs with rests (note offset time > 0) :ARCHIVE:
+
+*** Current situation and problem
+
+    A left-to-right distro strategy is often preferrable to avoid redundant work. Also, if a pattern motif constraint is present, the motif indices should be determined early (i.e. before other note parameters effected, e.g., note durations) for an efficient search.
+
+    However, with pattern motifs a left-to-right strategy is currently not possible if pattern motifs also determined note offset times and thus note offset times are undetermined in the problem definition. The problem is that a left-to-right distro strategy needs to recognise parameters of left-most items, and it currently does so by checking whether the start time of the item is determined. If offset times are undetermined, then start times are undetermined as well and the left-most items cannot be identified.   
+
+
+*** Possible solutions
+
+**** Solution 1
+
+     Check whether end time of predecessor is determined. The problem with this approach is that it does not work for nested scores (predecessors can only be accessed within the same container). 
+
+     It would be possible to extend the definition for accessing predecessors beyond container boundaries (useful in general). However, such definition is difficult (if a sim with 3 seqs is preceeded by a sim with 2 seqs then which note is the predecessor of the first note in the first seq of the second sim?)
+
+     However, for the present problem I would not need an answer for the problem below. If some note is the first note in a container, simply the preceeding container can be returned as predecessor and its start time can be used.
+
+     Perhaps I should def such an accessor directly in the left-to-right distro as aux def:
+
+#+begin_src oz :results output
+  
+  /** %% Returns the end time of the predecessor of X. If X is top level then result is nil. If X is first element in a sequential container or X is element in a simultaneous container then result the end time of the item preceeding the container. If X is a later element in a sequential container, then the predecessors end time is returned.
+  %% */
+  %% TODO:
+  %%
+  %% - revise def (sim/seq distinction unfinished)
+  %% - add to a variant of left-to-right distro (leave the orig left-to-right distro, not to unnecessarily break any other CSPs)
+  %% - ?? update Mov3_SegA_Melody and it's solver calls (allow for undet offset time again and use new distro)
+  fun {GetPredecessorEndTime X}
+     C = {X getTemporalContainer($)}
+  in
+     if C == nil then nil % i.e. top-level 
+     else
+        if {C isSimultaneous($)} orelse {X getPosition($ C)} == 1
+        then {GetPredecessorEndTime C}
+           %% X is in seq at a later position
+        else {{X getPosRelatedItem($ ~1 C)} getEndTime($)}
+        end
+     end
+  end
+#+end_src
+
+
+**** Solution 2
+     
+     Extend the set of timing parameters by a parameter that binds (StartTime - OffsetTime), and constrains this parameter implicitly in the defs of sim and seq.
+
+     Problemchen: doing so would blow up all CSPs by a considerable number of unused variables, which are always automatically determined by propagation.
+
+     
+
+
+** User-Guided search with percentage of previous solution
+
+
+Manually controlling the search process by saying that a given percentage of the solution of a CSP is the same as in a given previous solution.
+Using method partiallyUnify (currently).
+
+
+
+** TODO
+
+  - Redef item method partiallyUnify as proc in ScoreDistribution.oz
+    - Proc PartiallyUnify (better name?) needs to expect one fully determined score object (usually from a pickled score) and the actual score from the current CSP
+    - Parameters of both scores are first sorted in the order of the current distribution strategy (expect exactly same arg as distro strategy, and reuse distro strategy defs), before the /percentage/ parameters are chosen
+      - For this sorting, parameters must be determined, so matTrans all parameters of both scores (which passed test) into pairs [DeterminedScoreParam NewScoreParam], and then sort according by looking at all DeterminedScoreParam
+  - Remove method partiallyUnify again (?)
+  - def some abstract to "bootstrap" the incremental improvement, by creating a score first (e.g., when given percentage is 0)
+  - allow for creating multiple solutions and then to select which to continue (by giving path name extensions)
+
+
+NOTE: partiallyUnify does not yet work as expected
+
+#+begin_src oz :results output
+
+declare
+{GUtils.setRandomGeneratorSeed 0}
+MyOldScore = {Out.unpickleScore unit(file:test)}
+proc {MyScript MyNewScore}
+   MyNewScore = {Score.makeSeq unit(iargs: unit(n: 5
+						duration: fd#(1#8)
+						pitch: fd#(60#72))
+				    timeUnit: beats
+				    startTime: 0)}
+   {Score.init MyNewScore}
+   %% BUG: even with 100 percent "copies" are not equal
+   {MyNewScore partiallyUnify(MyOldScore 80
+			      test: fun {$ X}
+				       {X isPitch($)} orelse
+				       {X isTimeInterval($)}
+				    end
+			     )}
+   % {MyNewScore unify(MyOldScore)} % OK
+end
+[MyScore] = {SDistro.searchOne MyScript
+	     unit(value: random)}
+{MyScore wait}
+{Out.renderFomus MyScore unit(file:test2)}
+{Out.pickleScore MyScore unit(file:test2)}
+
+{MyScore isDet($)}
+
+{MyScore toInitRecord($)}
+
+{MyScore map($ toInitRecord test: isParameter)}
+
+
+{Out.renderFomus {Out.unpickleScore unit(file:test)}
+ unit(file:test3)}
+
+
+{MyOldScore collect($ test: FullTest)}
+
+           
+#+end_src
+
 
 ** Accent constraints
 
