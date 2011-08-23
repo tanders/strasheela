@@ -91,6 +91,7 @@ export
 
    ToFomus OutputFomus RenderFomus
    %% expert Fomus procs
+   IsFomusChord
    GetUserFomus GetUserFomus_Before GetUserFomus_After
    Record2FomusEvent Record2FomusNote Record2FomusObject Record2FomusSetting Record2FomusCode Record2FomusMeasure
    MakeFomusNote
@@ -717,13 +718,12 @@ define
    %%
    %% Args defaults:
    unit(file:"test"
-	extension:".sscop"
+	extension:".psco"
 	dir:{Init.getStrasheelaEnv defaultSScoDir})
    %% */
    proc {PickleScore MyScore Args}
       Defaults = unit(file:"test"
-		      %% TODO: extension OK?
-		      extension:".sscop"
+		      extension:".psco"
 		      %% ?? same as defaultSScoDir would make sense
 		      dir:{Init.getStrasheelaEnv defaultSScoDir}
 		     )
@@ -763,15 +763,14 @@ define
       %%
       %% Args defaults:
       unit(file:"test"
-	   extension:".sscop"
+	   extension:".psco"
 	   dir:{Init.getStrasheelaEnv defaultSScoDir}
 	   format: initialised
 	   startTime: 0)
       %% */
       fun {UnpickleScore Args}
 	 Defaults = unit(file:"test"
-			 %% TODO: extension OK?
-			 extension:".sscop"
+			 extension:".psco"
 			 dir:{Init.getStrasheelaEnv defaultSScoDir}
 			 %% text, initialised and uninitialised
 			 format: initialised
@@ -2297,7 +2296,8 @@ define
       {Record2FomusNote unit(part:PartId
 			     time:{MyNote getStartTimeInBeats($)}
 			     dur:{MyNote getDurationInBeats($)}
-			     pitch:{MyNote getPitchInMidi($)})
+			     pitch:{MyNote getPitchInMidi($)}
+			     dynamic: {MyNote getAmplitudeInVelocity($)} / 127.0)
        MyNote}
    end
 
@@ -2499,22 +2499,26 @@ define
 	    )
       As = {Adjoin Defaults Args}
       EventClauses = {Append As.eventClauses
-		      [isNote#MakeFomusNote
-		       %% 
-		       IsFomusChord
-		       #fun {$ MyChord PartId}
-			    Ns = {MyChord getItems($)}
-			 in
-			   {ListToLines
-			    {MakeFomusNote Ns.1 PartId} |
-			    {Map Ns.2
-			     fun {$ N}
-				"  " % indent further chord tones
-				#{Record2FomusEvent_Untimed
-				  {Adjoin unit(pitch:{N getPitchInMidi($)})
-				   {GetUserFomus N}}}
-			     end}}
-			end
+		      [%% Fomus is rather good at recognising chords itself...
+		       %% TMP: comment
+		       % IsFomusChord
+		       % #fun {$ MyChord PartId}
+		       % 	    Ns = {MyChord getItems($)}
+		       % 	 in
+		       % 	   {ListToLines
+		       % 	    {MakeFomusNote Ns.1 PartId} |
+		       % 	    {Map Ns.2
+		       % 	     fun {$ N}
+		       % 		"  " % indent further chord tones
+		       % 		#{Record2FomusEvent_Untimed
+		       % 		  {Adjoin unit(pitch:{N getPitchInMidi($)})
+		       % 		   {GetUserFomus N}}}
+		       % 	     end}}
+		       % 	end
+		       %% TMP: ignore "chord sims" 
+		       IsFomusChord#fun {$ _ _} "" end 
+		       %%
+		       isNote#MakeFomusNote
 		       %% rests are ignored
 		       isPause#fun {$ _ _} "" end
 		       %% Otherwise clause
