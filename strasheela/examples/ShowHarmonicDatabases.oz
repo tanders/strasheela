@@ -753,35 +753,35 @@ end
 
 {ShowScaleChords_ET22 {HS.db.getScaleIndex 'standard pentachordal major'}
  "StandardPentachordalMajor"
- "/Users/t/sound/tmp/"}
+ "/Users/torsten/sound/tmp/"}
 
 {ShowScaleChords_ET22 {HS.db.getScaleIndex 'static symmetrical major'}
  "StaticPentachordalMajor"
- "/Users/t/sound/tmp/"}
+ "/Users/torsten/sound/tmp/"}
 
 {ShowScaleChords_ET22 {HS.db.getScaleIndex 'alternate pentachordal major'}
  "AlternatePentachordalMajor"
- "/Users/t/sound/tmp/"}
+ "/Users/torsten/sound/tmp/"}
 
 {ShowScaleChords_ET22 {HS.db.getScaleIndex 'dynamic symmetrical major'}
  "DynamicPentachordalMajor"
- "/Users/t/sound/tmp/"}
+ "/Users/torsten/sound/tmp/"}
 
 {ShowScaleChords_ET22 {HS.db.getScaleIndex 'standard pentachordal minor'}
  "StandardPentachordalMinor"
- "/Users/t/sound/tmp/"}
+ "/Users/torsten/sound/tmp/"}
 
 {ShowScaleChords_ET22 {HS.db.getScaleIndex 'static symmetrical minor'}
  "StaticPentachordalMinor"
- "/Users/t/sound/tmp/"}
+ "/Users/torsten/sound/tmp/"}
 
 {ShowScaleChords_ET22 {HS.db.getScaleIndex 'alternate pentachordal minor'}
  "AlternatePentachordalMinor"
- "/Users/t/sound/tmp/"}
+ "/Users/torsten/sound/tmp/"}
 
 {ShowScaleChords_ET22 {HS.db.getScaleIndex 'dynamic symmetrical minor'}
  "DynamicPentachordalMinor"
- "/Users/t/sound/tmp/"}
+ "/Users/torsten/sound/tmp/"}
 
 
 %%%
@@ -946,162 +946,162 @@ MyScore_ScaleNotes = {ExpressScales {MyScore_ScalesOnly
 
 {ProcessScale_ET31 {HS.db.getScaleIndex 'major'}
  "Major"
- "/Users/t/sound/tmp/"
-%  "/Users/t/oz/music/Strasheela/strasheela/trunk/strasheela/contributions/anders/ET31/doc-DB/"
+ "/Users/torsten/sound/tmp/"
+%  "/Users/torsten/oz/music/Strasheela/strasheela/trunk/strasheela/contributions/anders/ET31/doc-DB/"
 }
 
 {ShowScaleChords_ET31 {HS.db.getScaleIndex 'major'}
  'Major'
- "/Users/t/sound/tmp/"
+ "/Users/torsten/sound/tmp/"
 }
 
 {ShowScaleChords_ET31 {HS.db.getScaleIndex 'Secor/Barton no-fives'}
  'SecorBarton'
- "/Users/t/sound/tmp/"
+ "/Users/torsten/sound/tmp/"
 }
 
 
 
 {ShowScaleChords_ET31 {HS.db.getScaleIndex 'septimal natural minor'}
  "SeptimalMinor"
- "/Users/t/sound/tmp/"
+ "/Users/torsten/sound/tmp/"
 }
 
 
 %% !! No chord fits into this scale
 {ShowScaleChords_ET31 {HS.db.getScaleIndex 'Rothenberg generalised diatonic'}
  "RothenbergGeneralisedDiatonic"
- "/Users/t/sound/tmp/"
+ "/Users/torsten/sound/tmp/"
 }
 
 
 {ShowScaleChords_ET31 {HS.db.getScaleIndex 'modus conjunctus'}
  "ModusConjunctus"
- "/Users/t/sound/tmp/"
+ "/Users/torsten/sound/tmp/"
 }
 
 
 {ShowScaleChords_ET31 {HS.db.getScaleIndex 'octatonic'}
  "Octatonic"
- "/Users/t/sound/tmp/"
+ "/Users/torsten/sound/tmp/"
 }
 
 {ShowScaleChords_ET31 {HS.db.getScaleIndex 'Hahn symmetric pentachordal'}
  "HahnSymmetricPentachordal"
- "/Users/t/sound/tmp/"
+ "/Users/torsten/sound/tmp/"
 }
 
 {ShowScaleChords_ET31 {HS.db.getScaleIndex 'Hahn pentachordal'}
  "HahnPentachordal"
- "/Users/t/sound/tmp/"
+ "/Users/torsten/sound/tmp/"
 }
 
 {ShowScaleChords_ET31 {HS.db.getScaleIndex 'Lumma decatonic'}
  "LummaDecatonic"
- "/Users/t/sound/tmp/"
+ "/Users/torsten/sound/tmp/"
 }
 
 
 %% many scale degrees without fitting chord
 {ShowScaleChords_ET31 {HS.db.getScaleIndex 'Orwell'}
  "Orwell"
- "/Users/t/sound/tmp/"
+ "/Users/torsten/sound/tmp/"
 }
 
 
 %% many scale degrees without fitting chord
 {ShowScaleChords_ET31 {HS.db.getScaleIndex 'genus sextum'}
  "GenusSextum"
- "/Users/t/sound/tmp/"
+ "/Users/torsten/sound/tmp/"
 }
 
 
 %% many scale degrees without fitting chord
 {ShowScaleChords_ET31 {HS.db.getScaleIndex 'genus septimum'}
  "GenusSeptimum"
- "/Users/t/sound/tmp/"
+ "/Users/torsten/sound/tmp/"
 }
 
 {ShowScaleChords_ET31 {HS.db.getScaleIndex 'genus enharmonicum instrumentale'}
  "GenusEnharmonicumInstrumentale"
- "/Users/t/sound/tmp/"
+ "/Users/torsten/sound/tmp/"
 }
 
 
 {ShowScaleChords_ET31 {HS.db.getScaleIndex 'neutral diatonic dorian'}
  "NeutralDiatonicDorian"
- "/Users/t/sound/tmp/"
+ "/Users/torsten/sound/tmp/"
 }
 
 {ShowScaleChords_ET31 {HS.db.getScaleIndex 'neutral dorian'}
  "NeutralDorian"
- "/Users/t/sound/tmp/"
+ "/Users/torsten/sound/tmp/"
 }
 
 
 {ShowScaleChords_ET31 {HS.db.getScaleIndex 'Breed 10-tone'}
  "Breed10tone"
- "/Users/t/sound/tmp/"
+ "/Users/torsten/sound/tmp/"
 }
 
 %% very many harmonic possibilities, but has perhaps conventional touch
 %% but certainly reduces 31 tone set to perhaps useful subset
 {ShowScaleChords_ET31 {HS.db.getScaleIndex 'genus bichromaticum'}
  "GenusBichormaticum"
- "/Users/t/sound/tmp/"
+ "/Users/torsten/sound/tmp/"
 }
 
 
 
 {ShowScaleChords_ET31 {HS.db.getScaleIndex 'Hahn 12-pitch 7-limit 1'}
  "Hahn12tone-1"
- "/Users/t/sound/tmp/"
+ "/Users/torsten/sound/tmp/"
 }
 
 {ShowScaleChords_ET31 {HS.db.getScaleIndex 'Hahn 12-pitch 7-limit 2'}
  "Hahn12tone-2"
- "/Users/t/sound/tmp/"
+ "/Users/torsten/sound/tmp/"
 }
 
 {ShowScaleChords_ET31 {HS.db.getScaleIndex 'Fokker 12-pitch 7-limit'}
  "Foker12tone"
- "/Users/t/sound/tmp/"
+ "/Users/torsten/sound/tmp/"
 }
 
 {ShowScaleChords_ET31 {HS.db.getScaleIndex 'stellated hexany'}
  "StellatedHexany"
- "/Users/t/sound/tmp/"
+ "/Users/torsten/sound/tmp/"
 }
 
 
 {ShowScaleChords_ET31 {HS.db.getScaleIndex 'major'}
  "Major"
- "/Users/t/sound/tmp/"
+ "/Users/torsten/sound/tmp/"
 }
 
 
 
 {ShowScaleChords_ET31 {HS.db.getScaleIndex 'miracle'}
  "Miracle"
- "/Users/t/sound/tmp/"
+ "/Users/torsten/sound/tmp/"
 }
 
 
 {ShowScaleChords_ET31 {HS.db.getScaleIndex 'blackjack'}
  "Blackjack"
- "/Users/t/sound/tmp/"
+ "/Users/torsten/sound/tmp/"
 }
 
 
 {ShowScaleChords_ET31 {HS.db.getScaleIndex '12-out-of-BlackJack'}
  '12-out-of-BlackJack'
- "/Users/t/sound/tmp/"
+ "/Users/torsten/sound/tmp/"
 }
 
 
 {ShowScaleChords_ET31 {HS.db.getScaleIndex 'full dynamic symmetrical major'}
  'FullDynamicSymmetricalMajor'
- "/Users/t/sound/tmp/"
+ "/Users/torsten/sound/tmp/"
 }
 
 
@@ -1183,10 +1183,10 @@ MyScore_ChordNotes = {ExpressChords {MyChordSeq
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%
-%% CSP
+%% CSP (unfinished)
 %%
 
-%% Find scale of 7-11 tones in 31 ET
+%% Find scale of 7-11 tones in 31 ET (not restricted to scale database)
 %%
 %% - on each scale degree can be build a tetrad consisting only of scale tones
 %% - the scale uses only 3 different step sizes at maximum
