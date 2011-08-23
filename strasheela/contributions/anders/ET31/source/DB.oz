@@ -789,6 +789,11 @@ define
 	       scale(pitchClasses:['C' 'D' 'D|' 'Fb' 'E#' 'G;' 'G' 'A' 'A|' 'B|' 'B#']
 		     roots:['C'] 
 		     comment:'de Vries 11-tone')
+	       %% Same as 'de Vries 11-tone', but with different root (quasi different mode)
+	       %% This scale (mode) has chords 'subminor 7th' and 'Pepper's Square' both at degree 1.
+	       scale(pitchClasses:['C' 'D' 'D|' 'Fb' 'E#' 'G;' 'G' 'A' 'A|' 'B|' 'B#']
+		     roots:['D'] 
+		     comment:'de Vries 11-tone II')
 	       scale(pitchClasses:{Pattern.dxsToXs [3 1 3 1 3 1 3 1 3 1 3 1 3 1] 0}
 		     roots:['C'] 
 		     comment:'pseudo-Porcupine 15-note')	
