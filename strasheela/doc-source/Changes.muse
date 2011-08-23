@@ -39,7 +39,7 @@
     - Out.makeNoteToLily2: function has been completely rewritten with a now more general interface 
     - Out.averagePitchClef added
     - SMapping: added MapTimeslices, ForTimeslices, ForTimeRange, ForTimeRangeArgs
-    - SDistro: added MakeLeftToRight2, SearchBest_Timeout
+    - SDistro: added MakeLeftToRight2 (left-to-right distribution strategy that takes end times of preceeding items into account, thus allowing for undetermined offset times), SearchBest_Timeout
     - ET22.db: interval database now defined as ratios for adaptive JI
     - ET22.out: added NoteEt22ToLily_AdaptiveJI2, PajaraRMS_TuningTable, JI_TuningTable
     - 22 ET Lilypond output: revised accidentals (using new arrowed Lily accidentals for representing syntonic commas up/down)
@@ -49,7 +49,7 @@
     - Segs.makeCounterpoint: added arg clearDissonanceResolution (before this constraint was always enabled).
     - Segs: added mixin scripts (partly removing orig extended script altogether): MakeCounterpoint_Mixin, PitchPattern, FenvContour, Arpeggio, Arch, Repetitions, Hook, Stairs, MakeAkkord_Mixin, MakeAkkords_Mixin  
     - Segs.homophonicChordProgression: added arguments playAllChordTones, noVoiceCrossing, maxUpperVoiceDistance, generalised argument 'restrictMelodicIntervals'.
-    - HS.rules: added GetRootDegreeIntervals, SetBoundaryRoots, SetBoundaryTypes, NoParallels2, Ballistic, MinCard
+    - HS.rules: added Modulation, GetRootDegreeIntervals, SetBoundaryRoots, SetBoundaryTypes, NoParallels2, Ballistic, MinCard, GetPcInterval, PcInChord
     - Pattern: added MinDistinct, DirectionOfContour, LocalMinR, GetLocalMax, GetLocalMin, ConstrainLocalMax, ConstrainLocalMin, FenvContour2, NoRepetition, Undulating, ForCartesianProduct2 and MapCartesianProduct2, FirstNTrue, MotifIndexMixin, IsMotifIndexMixin, MakeMotifIndexClass, MotifStartMixin, IsMotifStartMixin, MakeMotifStartClass, GetMotifStartNotes, GetMotifStartIndices 
     - HS.score: refactored HarmonicRythmFollowsMarkers: now works also for items with offsetTime > 0 
     - Removed proc GUtils.selectArg (better use Adjoin or CondSelect instead)
@@ -74,7 +74,7 @@
     - HS.score.degreeToPC: fixed propagation error 
     - HS.rules.noParallels2: now also works if there are pause (rest) objects in the score
     - HS.rules.makeIntervalConstraint: added support for regular temperaments
-    - HS.db: added  GetGenerators GetGeneratorFactors GetGeneratorFactorsOffset GetTemperament
+    - HS.db: added  GetGenerators GetGeneratorFactors GetGeneratorFactorsOffset GetTemperament GetAllNames
     - HS.db: Pc2Ratios now returns nil if no ratio was defined for interval
     - Fixed HS.pcName
     - Fenv method toList: fixed bug for case N=1
