@@ -226,7 +226,7 @@ define
 
    /** %% Extended script returning a list of notes following user-specified pattern motifs (and also some counterpoint constraints, see super script MakeCounterpoint).   
    %%
-   %% Args:
+   %% Args.rargs:
    %% 'motifSpecs' (required arg): list of motif specs (lists) of parameter/variable specs (lists). Parameter/variable specs can be symbolic if a corresponding motifSpecTransformers is provided. The order of parameter/variable specs must correspond to the order of motifAccessors and motifSpecTransformers.
    %% 'motifSpecTransformers' : list of unary functions translating symbolic parameter/variable specs into the corresponding FD integers. Note that parameter/variable specs which are already FD ints or the special pattern motif value '_' are used as is (i.e. application of the motifSpecTransformer is skipped). 'motifSpecTransformers' default is [GUtils.identity], i.e. only motifs with single param supported by default.
    %% 'motifAccessors' (required arg): list of unary functions expecting a list of notes and returning a list of variables of the same length as the list of notes. The motifs will be applied to these variables. 
@@ -520,6 +520,7 @@ define
    %%
    %% Args.rargs:
    %% 'minPitch' and 'maxPitch' (default false): domain specification notation supported by HS.pitch. Disabled if one of them is false.
+   %% NB: Arg ignored if not both 'minPitch' and 'maxPitch' are given.
    %% 'minRange' and 'maxRange' (default false): min and max interval between lowest and highest note of each chord, specified as ratio (pair of ints). Disabled if false.
    %% 'minPcCard' (default false): min number of different pitch classes expressed per akkord. Disabled if false. Note: make sure that iargs.n and cardiality of all chords is high enough.
    %% */
@@ -642,6 +643,11 @@ define
 
    /** %% Same as MakeAkkords, but returns sequential container of akkords.
    %% */
+   %% BUG:
+   %% - !! =Segs.makeAkkords_Seq= very cumbersomely to use (likely problem in Score.defSubscript def)
+   %%   - arg =rule= does not work for arbitrary levels
+   %%   - Ideally, short-hand notations such as =duration: each#Durs= should also work at higher levels
+
    fun {MakeAkkords_Seq Args}
       {Score.make2 {Adjoin {Record.subtractList Args [akkN iargs rargs]}
 		    seq({MakeAkkords {GUtils.keepList Args [akkN iargs rargs]}})}
