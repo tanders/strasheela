@@ -122,7 +122,7 @@ export
    Schoenberg
 
    %% interval constraints
-   GetInterval
+   GetInterval GetPcInterval
    ConstrainMaxIntervalR
    MakeIntervalConstraint
    PerfectConsonances IsPerfectConsonanceR
@@ -146,9 +146,11 @@ export
 
    SetBoundaryRoots
    SetBoundaryTypes
+   PcInChord
    
    Cadence
    DiatonicChord NoteInPCCollection
+   Modulation
 
    ResolveDissonances
 
@@ -197,7 +199,13 @@ define
       Interval = {FD.decl}
       {FD.distance {Note1 getPitch($)} {Note2 getPitch($)} '=:' Interval}
    end
-   
+
+  /** %% Returns the pitch class interval (a FD int) between the note objects Note1 and Note2. Interval is implicitly declared a FD int.
+   %% */
+   proc {GetPcInterval Note1 Note2 ?PcInterval}
+      PcInterval = {FD.decl}
+      {FD.distance {Note1 getPitchClass($)} {Note2 getPitchClass($)} '=:' PcInterval}
+   end
    
    /** %% B=1 <-> constraints the absolute pitch interval between Note1 and Note2 (note objects) to MaxInterval (an integer) at most.
    %% */
@@ -482,9 +490,9 @@ define
    /** %% Sets the pitch classe of the first chord root in Chords (list of chords) and potentially constrains the pitch class interval between the first and last chord root. 
    %%
    %% Args:
-   %% 'firstRoot' (default false): root of first chord (pc atom, see HS.pc)
-   %% 'firstToLastRootInterval' (default false): pc interval between first and last chord root (pc atom, e.g., 'C' is 0, or false).
-   %% 'lastRoot' (default false): root of last chord (pc atom, or false)
+   %% 'firstRoot' (default false): root of first chord (pc atom, see HS.pc). Ignored if set to false.
+   %% 'firstToLastRootInterval' (default false): pc interval between first and last chord root (pc atom, e.g., 'C' is 0, or false). Ignored if set to false.
+   %% 'lastRoot' (default false): root of last chord (pc atom, or false). Ignored if set to false.
    %%
    %% */
    %% ?? TODO: def symbolic interval name (instead of using PC)
@@ -509,12 +517,11 @@ define
       end
    end
 
-   
-   
+      
    /** %% Sets the types of the first and last chord in Chords (list of chords).
    %%
    %% Args:
-   %% 'firstType' / 'lastType' (default false): sets the type (index) of the first/last chord in Chords to the type specified, an atom (chord name specified in the database). Disabled if false.
+   %% 'firstType' / 'lastType' (default false): sets the type (index) of the first/last chord in Chords to the type specified, an atom (chord name specified in the database). Ignored if set to false.
    %%
    %% */
    proc {SetBoundaryTypes Chords Args}   
@@ -532,6 +539,12 @@ define
    end
 
    
+   /** %% The pitch class PC (FD int) is included in the pitch class set of the chord C (a chord object).
+   %% */
+   proc {PcInChord PC C}
+      {FS.include PC {C getPitchClasses($)}}
+   end
+
 
    /** %% Constraints the union of the pitch classes of Chords (a list of chord objects) to be the same set as the set of pitch classes of MyScale (a scale object). In other words, all chords only use scale tones (diatonic chords) and all scale tones are played.  Also, the root of the last chord is constrained to the root of the scale.
    %% In common usage, Chords has length three and is applied to the last three chords of a progression.
@@ -553,6 +566,42 @@ define
    %% */
    proc {NoteInPCCollection MyNote MyPCCollection}
       {FS.include {MyNote getPitchClass($)} {MyPCCollection getPitchClasses($)}}
+   end
+
+   /** %% Modulation constraints Chords (a list of chord objects) to perform a modulation. The modulation starts with Args.neutralLength chords that consist solely of pitch classes that are elements of both OldScale (scale object denoting scale before the modulation) and NewScale (scale object denoting scale after the modulation). For example, if As.neutralLength = 1 (the default) then the first chord of Chords will be a "neutral" chord. 
+   %% The chord after the neutra chords is the modulation chord, which contains at least one pitch class of the new scale that was not part of the old scale. Optionally, a cadence is performed after the modulation chord (the modulation chord is part of the cadence) ending in a chord with the root of NewScale as its root.
+   %%
+   %% Args:
+   %% neutralLength (int, default 0): number of neutral chords before the modulation chord.
+   %% cadence (int or false, default false): length of the cadence starting with the modulation chord. If false, no cadence constraint is applied.
+   %%
+   %% NOTE: if OldScale and NewScale share only few pitch classes, then finding a neutral chord can be difficult...
+   %% */
+   %%
+   %% TODO:
+   %% - ?? Refactor such that simultaneous scales are taken into account (would make constraint application more simple)
+   %%   However, do I really want to allow for overlapping scales -- that could introduce all sorts of problems, yes?
+   proc {Modulation Chords OldScale NewScale Args}
+      Defaults = unit(%% (either false of an integer) Whether or not a cadence (all PCs of new scale) is played after the modulation chord. 
+		      cadence: false
+		      neutralLength: 0)
+      As = {Adjoin Defaults Args}
+      NeutralPCs = {FS.var.decl}
+      ModulationPCs = {FS.var.decl}
+      ModulationPC = {FD.decl}
+   in
+      NeutralPCs = {FS.intersect {OldScale getPitchClasses($)} {NewScale getPitchClasses($)}} 
+      ModulationPCs = {FS.diff {NewScale getPitchClasses($)} {OldScale getPitchClasses($)}}
+      %% Neutral chords
+      {ForAll {List.take Chords As.neutralLength}
+       proc {$ C} {FS.subset {C getPitchClasses($)} NeutralPCs} end}
+      %% Modulation chord
+      {FS.include ModulationPC ModulationPCs}
+      {FS.include ModulationPC {{Nth Chords As.neutralLength+1} getPitchClasses($)}}
+      %% Cadence
+      if As.cadence \= false then
+	 {HS.rules.cadence NewScale {List.take {List.drop Chords As.neutralLength} As.cadence}}
+      end
    end
 
 
