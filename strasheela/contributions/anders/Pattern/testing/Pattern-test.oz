@@ -1723,6 +1723,8 @@ Xs.2.1 = 5
 %% 
 
 %% end can be incomplete motif
+%%
+%% BUG: always works out even -- this did work before!
 {ExploreAll
  proc {$ Solution}
     Motifs = [[1 2 3]
