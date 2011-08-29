@@ -51,7 +51,7 @@
     - Segs.homophonicChordProgression: added arguments playAllChordTones, noVoiceCrossing, maxUpperVoiceDistance, generalised argument 'restrictMelodicIntervals'.
     - HS.rules: added Modulation, GetRootDegreeIntervals, SetBoundaryRoots, SetBoundaryTypes, NoParallels2, Ballistic, MinCard, GetPcInterval, PcInChord
     - Pattern: added MinDistinct, DirectionOfContour, LocalMinR, GetLocalMax, GetLocalMin, ConstrainLocalMax, ConstrainLocalMin, FenvContour2, NoRepetition, Undulating, ForCartesianProduct2 and MapCartesianProduct2, FirstNTrue, MotifIndexMixin, IsMotifIndexMixin, MakeMotifIndexClass, MotifStartMixin, IsMotifStartMixin, MakeMotifStartClass, GetMotifStartNotes, GetMotifStartIndices 
-    - HS.score: refactored HarmonicRythmFollowsMarkers: now works also for items with offsetTime > 0 
+    - HS.score: Added class constructors: MakeInScaleChordClass, MakeScaleDegreeChordClass. 
     - Removed proc GUtils.selectArg (better use Adjoin or CondSelect instead)
     - Removed GUtils.isInt (result wrong for FD ints): use FD.is or IsInt instead
     - Segs.out.unmeteredMusic_LilyHeader: String for Lilypond header configuration to support unmetered music (e.g., as in many Messian pieces)
@@ -71,19 +71,19 @@
       - Added arg tuneNonharmonicNotes, added GetAdaptiveJIPitch2, chord root now as in current tuning table or underlying ET (if no tuning table is defined), dependance on scale removed (can be completely wrong, e.g., with just major scale, major nineth of V would be syntonic comma too low)
       - Some notes have been transposed to wrong octave, now fixed
     - HS.out.renderAndShowLilypond: changed output of chord pitch classes to octave above middle C
-    - HS.score.degreeToPC: fixed propagation error 
+    - HS.score: Debugging DegreeToPC: fixed propagation error. Refined PitchClassToPitch and PitchClassToPitch2 (initial PC domain reduced). Refactored HarmonicRythmFollowsMarkers: now works also for items with offsetTime > 0. 
     - HS.rules.noParallels2: now also works if there are pause (rest) objects in the score
     - HS.rules.makeIntervalConstraint: added support for regular temperaments
     - HS.db: added  GetGenerators GetGeneratorFactors GetGeneratorFactorsOffset GetTemperament GetAllNames
     - HS.db: Pc2Ratios now returns nil if no ratio was defined for interval
     - Fixed HS.pcName
     - Fenv method toList: fixed bug for case N=1
-    - Pattern: renamed Arc -> Arch
+    - Pattern: renamed Arc -> Arch. Debugging UseMotifs: arg workOutEven now working again. Debugging FirstNTrue: fixed problem for case that all Bs are 1.
     - Pattern: patterns such as Continuous AllEqual Increasing Decreasing caused error for input nil, fixed (in PlainPattern2)
     - Out.midi.getChannel now uses mini chan param of midi note objects (not only channel info tag)
     - Refactored ET22 and ET31 output: now much reduced code with same functionality using HS.out, several procs before exported by ET22 and ET31 are now moved to HS.out
     - Segs.homophonicChordProgression: replaced arg 'isToplevel' by arg 'makeTopLevel' for generality; fixed bug: constraint of arg maxUpperVoiceDistance now actually applied to upper voices; change default for arg commonPitchesHeldOver to false, allow disabling maxUpperVoiceDistance constraints.
-    - Segs: MakeMotifIndexNote and GetMotifIndexOfNote removed (use Pattern.makeMotifIndexClass instead)
+    - Segs: Debugging PitchContourAccessor: previously pattern motifs constraining the pitch contour with this fun were artificially restricted (interval direction from the note preceeding a motif to the first motif note was always downwards). MakeMotifIndexNote and GetMotifIndexOfNote removed (use Pattern.makeMotifIndexClass instead).
     - Out.outputScoreConstructor: strings in archived score were not properly quoted (fixed Out.recordToVS).
     - HS.score.harmonicRhythmFollowsMarkers: spelling correction (was HS.score.harmonicRythmFollowsMarkers)
     - LUtils: changed comparison function of many defs (Contains, Position, Positions, Substitute, Substitute1) to GUtils.isEqual, which is working for all data types 
