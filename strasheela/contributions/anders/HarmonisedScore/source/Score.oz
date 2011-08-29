@@ -170,13 +170,13 @@ export
    Note Note2 RegularTemperamentNote
    FullNote EnharmonicNote ScaleDegreeNote ChordDegreeNote ScaleNote ChordNote
    
-   PitchClassCollection IsPitchClassCollection %% !!?? why export this
+   PitchClassCollection IsPitchClassCollection 
    Chord IsChord
    Scale IsScale
-   InScaleMixinForChord IsInScaleMixinForChord %% !!?? why export this
-   DiatonicChord
+   InScaleMixinForChord IsInScaleMixinForChord 
+   MakeInScaleChordClass DiatonicChord
    ScaleDegreeMixinForChord IsScaleDegreeMixinForChord
-   ScaleDegreeChord 
+   MakeScaleDegreeChordClass ScaleDegreeChord 
    InversionMixinForChord IsInversionMixinForChord
    MakeInversionChordClass InversionChord
    FullChord
@@ -238,7 +238,7 @@ define
    %% */
    proc {PitchClassToPitch PitchClass#Octave Pitch}
       Pitch = {FD.decl}
-      PitchClass :: 0#{DB.getPitchesPerOctave}
+      PitchClass :: 0#({DB.getPitchesPerOctave}-1)
       Pitch =: PitchClass + (Octave + 1)*{DB.getPitchesPerOctave}
    end
 
@@ -248,7 +248,7 @@ define
    %% */
    proc {PitchClassToPitch2 PitchClass#Octave Pitch}
       Pitch = {FD.decl}
-      PitchClass :: 0#{DB.getPitchesPerOctave}
+      PitchClass :: 0#({DB.getPitchesPerOctave}-1)
       Pitch =: PitchClass + Octave*{DB.getPitchesPerOctave}
    end
    
@@ -1466,21 +1466,21 @@ define
       {Score.isScoreObject X} andthen {HasFeature X InScaleMixinForChordType}
    end
 
-   /** %% [concrete class] Defines a Chord which relates to a Scale (the Scale is defined by getScales and isRelatedScale). When the parameter value of inScaleB (a 0/1 integer) = 1, then all Chord pitch classes are diatonic, i.e. they are also pitch classes of the related Scale. 
-   %% See doc for Chord and InScaleMixinForChord for further details.
+   /** %% [class constructur] Expects a chord class and returns a subclass which inherits from this chord class and InScaleMixinForChord. 
    %% */
-   class DiatonicChord from  Chord InScaleMixinForChord
-      feat label:diatonicChord
+   fun {MakeInScaleChordClass SuperClass} 
+      class $ from  SuperClass InScaleMixinForChord
+	 feat label:inScaleChord
 	 
-      meth init(...) = M
-	 InScaleMixinFeats = [inScaleB getScales isRelatedScale chordPCsInScale]
-      in
-	 Chord, {Record.subtractList M InScaleMixinFeats}
-	 InScaleMixinForChord, {Adjoin
-				{GUtils.takeFeatures M  InScaleMixinFeats}
-				%% replace label
-				initInScaleMixinForChord}
-      end
+	 meth init(...) = M
+	    InScaleMixinFeats = [inScaleB getScales isRelatedScale chordPCsInScale]
+	 in
+	    SuperClass, {Record.subtractList M InScaleMixinFeats}
+	    InScaleMixinForChord, {Adjoin
+				   {GUtils.takeFeatures M  InScaleMixinFeats}
+				   %% replace label
+				   initInScaleMixinForChord}
+	 end
 %      meth getAttributes(?X)
 %	 X = {Append
 %	      Chord, getAttributes($)
@@ -1492,23 +1492,29 @@ define
 % 	      InScaleMixinForChord, toInScaleMixinForChordInitRecord($ exclude:Excluded)}
 %       end
       
-      meth getInitInfo($ ...)	 
-	 unit(superclass:Chord
-	      args:[inScaleB#getInScaleB#{FD.int 0#1}
-		    chordPCsInScale#getChordPCsInScale#noMatch
-		    %% !!?? what to do with init args which get procs
-		    %%
-		    %% I must exclude procedures and classes as init argument if I export into text files.
-		    %% Moreover, these will probably not work for pickling: can I pickle a proc which references an object??
-		    %%
-		    %% ?? when do I need procedures and classes as init argument: if I what to recreate a CSP (e.g. after hand-editing results). I probably don't need these args for score objects which are fully determined and are only archived..
+	 meth getInitInfo($ ...)	 
+	    unit(superclass:SuperClass
+		 args:[inScaleB#getInScaleB#{FD.int 0#1}
+		       chordPCsInScale#getChordPCsInScale#noMatch
+		       %% !!?? what to do with init args which get procs
+		       %%
+		       %% I must exclude procedures and classes as init argument if I export into text files.
+		       %% Moreover, these will probably not work for pickling: can I pickle a proc which references an object??
+		       %%
+		       %% ?? when do I need procedures and classes as init argument: if I what to recreate a CSP (e.g. after hand-editing results). I probably don't need these args for score objects which are fully determined and are only archived..
 %		     getScales#fun {$ X} X.getScales end#proc {$ Self Scales} Scales=nil end
 %		     isRelatedScale#fun {$ X} X.isRelatedScale end#proc {$ Self Scale B} B=1 end
-		   ])
+		      ])
+	 end
       end
    end
 
-   
+   /** %% [concrete class] Defines a Chord which relates to a Scale (the Scale is defined by getScales and isRelatedScale). When the parameter value of inScaleB (a 0/1 integer) = 1, then all Chord pitch classes are diatonic, i.e. they are also pitch classes of the related Scale. 
+   %% See doc for Chord and InScaleMixinForChord for further details.
+   %% */
+   DiatonicChord = {MakeInScaleChordClass Chord}
+
+      
    local
       /** %% Initialise domains of params and relate them.
       %% */
@@ -1596,27 +1602,33 @@ define
       {Score.isScoreObject X} andthen {HasFeature X ScaleDegreeMixinForChordType}
    end
 
-   /** %% [concrete class] ScaleDegreeChord is a chord related to a scale (see DiatonicChord) whose root is additionally expressed in terms of a scale degree with respect to that scale. See the doc of the superclasses DiatonicChord and ScaleDegreeMixinForChord for details.
+   /** %% [class constructur] Expects a chord class and returns a subclass which inherits from this chord class and ScaleDegreeMixinForChord. 
    %% */
-   class ScaleDegreeChord from  DiatonicChord ScaleDegreeMixinForChord
-      feat label:scaleDegreeChord
+   fun {MakeScaleDegreeChordClass SuperClass} 
+      class $ from  SuperClass ScaleDegreeMixinForChord
+	 feat label:scaleDegreeChord
 	 
-      meth init(...) = M
-	 MixinFeats = [rootDegree rootAccidental]
-      in
-	 DiatonicChord, {Record.subtractList M MixinFeats}
-	 ScaleDegreeMixinForChord, {Adjoin
-				    {GUtils.takeFeatures M  MixinFeats}
-				    %% replace label
-				    initScaleDegreeMixinForChord}
-      end
+	 meth init(...) = M
+	    MixinFeats = [rootDegree rootAccidental]
+	 in
+	    SuperClass, {Record.subtractList M MixinFeats}
+	    ScaleDegreeMixinForChord, {Adjoin
+				       {GUtils.takeFeatures M  MixinFeats}
+				       %% replace label
+				       initScaleDegreeMixinForChord}
+	 end
       
-      meth getInitInfo($ ...)	 
-	 unit(superclass:DiatonicChord
-	      args:[rootDegree#getRootDegree#{FD.decl}
-		    rootAccidental#getRootAccidental#{DB.makeAccidentalFDInt}])
+	 meth getInitInfo($ ...)	 
+	    unit(superclass:SuperClass
+		 args:[rootDegree#getRootDegree#{FD.decl}
+		       rootAccidental#getRootAccidental#{DB.makeAccidentalFDInt}])
+	 end
       end
    end
+
+   /** %% [concrete class] ScaleDegreeChord is a chord related to a scale (see DiatonicChord) whose root is additionally expressed in terms of a scale degree with respect to that scale. See the doc of the superclasses DiatonicChord and ScaleDegreeMixinForChord for details.
+   %% */
+   ScaleDegreeChord = {MakeScaleDegreeChordClass DiatonicChord}
 
    
    local
