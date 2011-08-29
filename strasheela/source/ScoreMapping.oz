@@ -853,15 +853,15 @@ define
    %%
       
    local
-      /** %% Traverses Xs (a list of temporal items) and returns list of those items which sound within time window Start-End. Nevertheless, these items may also start before or sound longer then this time window.
+      /** %% Traverses Xs (a list of temporal items) and returns list of those items which sound somewhen within time window Start-End. Nevertheless, these items may also start before or sound longer then this time window, and they do not need to last over the whole time window.
       %% */
       fun {FilterInTimeWindow Xs Start End CTest}
 	 thread
 	    {LUtils.cFilter Xs
 	     fun {$ X}
-		{CTest X} andthen
 		({X getStartTime($)} <: End) == 1 andthen 
-		({X getEndTime($)} >: Start) == 1 
+		({X getEndTime($)} >: Start) == 1 andthen
+		{CTest X Start End} 
 	     end}
 	 end
       end
@@ -873,15 +873,15 @@ define
       %% endTime (no default!): int specifying end of last time slice.
       %% step (default 1): int specifying size of all time slices.
       %% 'test': a Boolean function or method for pre-filtering Items.
-      %% 'cTest': a Boolean function or method applied within the concurrent filtering of Items. 
+      %% 'cTest': a Boolean function {F X Start End} applied within the concurrent filtering of Items. X is an item, Start and End are the start and end time of the time window. 
       %%
       %% */
       %%
       %% TODO:
-      %% - if consecutive time frames have same set of objects: consider skipping?
+      %% - if consecutive time frames have identical set of objects: consider skipping (i.e. avoid re-applying constraints to the same objects)?
       fun {MapTimeslices Items Fn Args}
 	 Defaults = unit(test: fun {$ X} true end
-			 cTest: fun {$ X} true end
+			 cTest: fun {$ X Start End} true end
 			 startTime: 0
 % 		      endTime: _
 			 step: 1)
@@ -891,7 +891,7 @@ define
       in
 	 {Pattern.map2Neighbours Times
 	  fun {$ Start End}
-	     {Fn {FilterInTimeWindow FilteredItems Start End {GUtils.toFun As.cTest}}}
+	     {Fn {FilterInTimeWindow FilteredItems Start End As.cTest}}
 	  end}
       end
 
