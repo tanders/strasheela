@@ -636,14 +636,15 @@ define
    %% UseMotifs expects the following optional arguments
    %% 'workOutEven': If 'workOutEven' is false (the default), then the end of Xs may only contain the beginning of a Motifs element. By contrast, Xs contains only full elements of Motifs if 'workOutEven' is true.
    %% 'indices': an optional return value, a list of FD ints. For each element in Xs, indices contains an FD int which specifies to which motif index (e.g. position of its motif in Motifs) the Xs element belongs. These variables can be used, for example, to constrain that certain motifs should follow each other or to constrain how often some motif occurs.
-   %% Note that the argument 'indices' is particular important in case the elements in Motifs do exclude each other, that is some element in Motifs is fully contained as the beginning in another element of Motifs. For example, if Motifs contains [1 2] and also [1 2 2]. In this case, UseMotif would block internally as it could not decide for any motif and would not apply motif constraints anymore. This behaviour is avoided when the variables at the argument 'indices' are propagated (e.g., add a parameter to the notes to which the parameter values in Xs belong).
+   %% Note that the argument 'indices' is particular important in case the elements in Motifs do include each other, that is some element in Motifs is fully contained as the beginning in another element of Motifs. For example, if Motifs contains [1 2] and also [1 2 2]. In this case, UseMotif would block internally as it could not decide for any motif and would not apply motif constraints anymore. This behaviour is avoided when the variables at the argument 'indices' are distributed (e.g., add a parameter to the notes to which the parameter values in Xs belong).
    %%
    %% Note that this constraint processes the elements of Xs "from left to right". Constraining the next motif is always delayed until the previous motif is known, because it depends on the length of the previous motif where the next motif starts. Consequently, the distribution strategy should determine variables in that order.
-   %% BUG: always works out even, regardless of the setting of 'workOutEven' -- this did work before!
    %% */
    %% TODO: more efficient variant of this proc using selection constraints would support propagation. Less generic though -- Xs must be list of FD ints.
    %% TODO: allow for motif value which is ignored -- no unification happens, so non-motific sections are possible (not supported yet). Possibly, this would not be a good idea -- then anything can be a solution and I can leave this constraint off entirely..
+   %%   -> is this todo item already answered with support for '_' motif value (see do above)? 
    %% ?? Could I constrain how often each element in Motifs is used? Then I could also allow for "free" Motif (e.g., I may constrain that 10-30% of Xs elements are non-motif values). Also, could I define which motif follows which like in a markov chain?
+   %%   -> I can already freely constrain motif indices (and starts of motifs) outside this constraint
    proc {UseMotifs Xs Motifs Args}
       Defaults = unit(workOutEven:false
 % 		      indices:_
@@ -672,19 +673,22 @@ define
       end
       proc {Constrain I MyMotif Xs Indices N}
 	 XsPart
+	 MotifL = {Length MyMotif}
       in
-	 N = {Length MyMotif}
-	 XsPart = {List.take Xs N}
-	 %% if motifs shall work out even, then there are enough elements
+	 %% at end of Xs, XsPart can be shorter than MotifL
+	 XsPart = {List.take Xs MotifL} 
+	 %% if motifs shall work out even, then there must be enough elements
 	 %% in Xs to bring full motif
 	 if As.workOutEven
-	 then N = {Length XsPart}
+	 then N = MotifL
+	 else N = {Length XsPart} 
 	 end
 	 %% bind Indices if requested
 	 if IndicesRequired
 	 then {ForAll {List.take Indices N} proc {$ Index} Index=I end}
 	 end
-	 {UnifyLists MyMotif XsPart}
+	 {UnifyLists if As.workOutEven then MyMotif else {List.take MyMotif N} end
+	  XsPart}
       end
       proc {Aux Xs Indices}
 	 if Xs \= nil
@@ -1102,22 +1106,23 @@ define
    end
 
    /** %% The first N (a FD int) elements in Bs (a list of 0/1-ints) are true (i.e. 1). 
-   %% In other words, N is the position of the first element in Bs that is 0.
+   %% In other words, N is the position of the first element in Bs that is 0. If there is no 0 in Bs, then N = {Length Bs}.
    %% (In principle, elements of Bs can be larger than 1, larger values still count as true.)
    %% */
    proc {FirstNTrue Bs N}
       thread
 	 AuxN = {LUtils.findPosition Bs
-		 fun {$ B}
-		    (B =: 0) == 1
-		 end}
+		 fun {$ B} (B =: 0) == 1 end}
       in
 	 if AuxN == nil then N = {Length Bs}
 	 else N = AuxN 
 	 end
       end
-      %% Redundant constraints for improving propagation. This constraint does not reduce Pos to its minimum domain value, though.
-      {Select.fd Bs N 0}
+      %% Redundant constraints for somewhat improving propagation (only effective once some element is 0 already). This constraint does not reduce N to its minimum domain value, though.
+      %% NOTE: should I remove this?
+      {FD.impl {FS.reified.include 0 {GUtils.intsToFS Bs}}
+       {Combinator.'reify' proc {$} {Select.fd Bs N 0} end}
+       1}
       % %% implementation 3
       % %% negate all elements in Xs and multiply them by their position, then collect min non-0 element
       % %% How to access first non-0 element?
