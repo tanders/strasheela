@@ -1723,12 +1723,10 @@ Xs.2.1 = 5
 %% 
 
 %% end can be incomplete motif
-%%
-%% BUG: always works out even -- this did work before!
 {ExploreAll
  proc {$ Solution}
     Motifs = [[1 2 3]
-	      [10 11 12 13]
+	      % [10 11 12 13]
 	      [4 5]]
  in
     Solution = {FD.list 10 0#20}
@@ -1737,12 +1735,13 @@ Xs.2.1 = 5
  end}
 
 
-%% Solution must contain only full motifs -- less solutions (17 instead of 71)
+%% Solution must contain only full motifs -- less solutions (7 instead of 21)
 {ExploreAll
  proc {$ Solution}
     Motifs = [[1 2 3]
-	      [10 11 12 13]
-	      [4 5]]
+	      % [10 11 12 13]
+	      [4 5]
+	     ]
  in
     Solution = {FD.list 10 0#20}
     {Pattern.useMotifs Solution Motifs unit(workOutEven:true)} 
@@ -1975,11 +1974,13 @@ Bs = {FD.list 5 0#1}
 
 {Nth Bs 2} = 1
 
+{Nth Bs 5} = 0
 {Nth Bs 5} = 1
 
 {Nth Bs 3} = 0
 
 {Nth Bs 1} = 1
+
 
 N = 3
 
