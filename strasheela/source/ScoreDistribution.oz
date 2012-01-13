@@ -448,10 +448,14 @@ define
    fun {MakeRandomDistributionValue RandGen}
       fun {$ X_Param SelectFn}
 	 X = {SelectFn X_Param}
-	 Rand = {GUtils.randIntoRange  {RandGen} % pseudo-random number generated here
-		 {FD.reflect.min X} {FD.reflect.max X}}
+	 Rand = {GUtils.randIntoRange2 {RandGen} % pseudo-random number generated here
+		 {FD.reflect.min X} {FD.reflect.max X} {Pow 2 64}}
       in
-	 {FD.reflect.nextSmaller X Rand+1}
+	 % {FD.reflect.nextSmaller X Rand+1}
+	 {LUtils.findBest {FD.reflect.domList X}
+	  fun {$ X1 X2}
+	     {Abs X1 - Rand} =< {Abs X2 - Rand}
+	  end}
       end
    end
 
@@ -538,8 +542,8 @@ define
 				end}
 	       SelectedDomValue = {Nth BestDomValues
 				   %% pseudo-random number generated here
-				   {GUtils.randIntoRange {RandGen} 
-				    1 {Length BestDomValues}}}
+				   {GUtils.randIntoRange2 {RandGen} 
+				    1 {Length BestDomValues} {Pow 2 64}}}
 	    in
 % 	       %% TMP
 % 	       {Browse heuristic(Param#{Param getInfo($)}
@@ -554,8 +558,8 @@ define
 	       SelectedDomValue
 	    else
 	       %% Heuristics is nil
-	       Rand = {GUtils.randIntoRange {RandGen} % pseudo-random number generated here
-		       {FD.reflect.min Var} {FD.reflect.max Var}}
+	       Rand = {GUtils.randIntoRange2 {RandGen} % pseudo-random number generated here
+		       {FD.reflect.min Var} {FD.reflect.max Var} {Pow 2 64}}
 	    in
 % 	       %% TMP
 % 	       {Browse default(Param#{Param getInfo($)}
@@ -567,7 +571,11 @@ define
 % 			       heuristics: Heuristics
 % 			       allHeuristics: {Param getHeuristics($)}
 % 			      )}
-	       {FD.reflect.nextSmaller Var Rand+1}
+	       % {FD.reflect.nextSmaller Var Rand+1}
+	       {LUtils.findBest {FD.reflect.domList Var}
+		fun {$ X1 X2}
+		   {Abs X1 - Rand} =< {Abs X2 - Rand}
+		end}
 	       %%
 % 	    {FD.reflect.mid Var}
 	    end
