@@ -398,7 +398,7 @@ define
       end
       proc {BrowseInitRecord I X}
 	 if {Score.isScoreObject X}
-	 then {Browse {X toInitRecord($)}}
+	 then {Browse I#{X toInitRecord($)}}
 	 end
       end
 %       proc {ShowInitRecord I X}
