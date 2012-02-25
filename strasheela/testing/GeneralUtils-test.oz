@@ -58,6 +58,43 @@ for I in 1..10 do {Browse {GUtils.random 100}} end
 
 for I in 1..10 do {Browse {GUtils.random 3}} end
 
+
+%%%%%%
+
+%% OK, both max and min are among solutions
+{LUtils.collectN 20 fun {$} {GUtils.randIntoRange {OS.rand} 0 10} end}
+
+
+
+%% Random quality of OS.rand improved (in particular 1st value) by seed from GUtils.devRandom
+declare
+{OS.srand {GUtils.devRandom}}
+{Browse {LUtils.collectN 10 fun {$} {GUtils.randIntoRange {OS.rand} 0 100}end}}
+
+
+%% Nevertheless, GUtils.knuthRandom is even better
+declare
+{GUtils.setKnuthRandomSeed {GUtils.devRandom}}
+{Browse {LUtils.collectN 10 fun {$} {GUtils.randIntoRange2 {GUtils.knuthRandom}  0 100 {Pow 2 64}} end}}
+
+
+%% compare effeciency of GUtils.knuthRandom and OS.rand
+%% OS.rand is about double as fast, but the time required is still very small. GUtils.randIntoRange2 again more than doubles that amount
+{GUtils.timeSpend
+ proc {$} _ = {LUtils.collectN 100000 fun {$} {GUtils.randIntoRange2 {GUtils.knuthRandom}  0 100 {Pow 2 64}} end} end}
+
+{GUtils.timeSpend
+ proc {$} _ = {LUtils.collectN 100000 fun {$} {GUtils.knuthRandom} end} end}
+
+{GUtils.timeSpend
+ proc {$} _ = {LUtils.collectN 100000 fun {$} {OS.rand} end} end}
+
+
+
+
+
+
+
 %%%%%%
 
 {GUtils.arithmeticSeries 1.0 1.0/4.0 4} 

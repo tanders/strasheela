@@ -427,38 +427,83 @@ proc {$ X} {Browse elseCase#X} end}
 %% SMapping.mapTimeslices, SMapping.forTimeslices
 %% 
 
-
 declare
-MyScore = {Score.make sim([seq([note(duration: 1
+MyScore = {Score.make sim([seq([note(offsetTime: {FD.int 0#1}
+				     duration: 1
 				     pitch: 1)
-				note(duration: 2
+				note(duration: 1
 				     pitch: 2)
-				note(duration: 1
+				note(duration: 2
 				     pitch: 3)
+				note(duration: 2  % has start time 5 or 6
+				     pitch: 4)
 				note(duration: 2
-				     pitch: 4)])
-			   seq([note(duration: 2
 				     pitch: 5)
-				note(duration: 1
-				     pitch: 6)
 				note(duration: 2
-				     pitch: 7)
+				     pitch: 6)])
+			   seq([note(duration: 2
+				     pitch: 11)
+				note(duration: 2
+				     pitch: 12)
+				note(offsetTime: 1
+				     duration: 1
+				     pitch: 13)
+				%% The note pairs up to here should be processed by SMapping.mapTimeslices below, but the fourth note pair is delayed until this offset time is determined
+				%% BUG: all are delayed
+				note(offsetTime: {FD.int 0#1} % has start time 6 or later
+				     duration: 2
+				     pitch: 14)
+				note(offsetTime: {FD.int 0#1}
+				     duration: 2
+				     pitch: 15)
+				note(offsetTime: {FD.int 0#3}
+				     duration: 2
+				     pitch: 16)])
+			   seq([note(duration: 2
+				     pitch: 21)
 				note(duration: 1
-				     pitch: 7)])]
+				     pitch: 22)
+				note(duration: 2
+				     pitch: 23)
+				note(duration: 2  % has start time 6
+				     pitch: 24)
+				note(duration: 2
+				     pitch: 25)
+				note(duration: 2
+				     pitch: 26)])]
 			  startTime:0
 			  timeUnit: beats)
 	   unit}
 
 
-{Browse
- {SMapping.mapTimeslices {MyScore collect($ test:isNote)}
-  fun {$ Xs} {Pattern.mapItems Xs toInitRecord} end
-  unit(endTime: 6)}}
+%% Now bind undetermined offset time
+{{Nth {{Nth {MyScore getItems($)} 1} getItems($)} 1} getOffsetTime($)} = 1
 
+%% BUG ? undetermined offset time of note with pitch 1 causes blocking of time slice start=1 end=2 and others
+%% Problem occurs, because program does not know in which time slice the first notes of all parts will occur together
+%% Is that OK, because these time slices are after this note and will not cause problems with left-to-right variable ordering?
 
 {SMapping.forTimeslices {MyScore collect($ test:isNote)}
-  proc {$ Xs} {Browse {Pattern.mapItems Xs toInitRecord}} end
-  unit(endTime: 6)}
+ proc {$ Xs}
+    {Browse {Map Xs fun {$ X}
+		       {Adjoin unit(start: {X getStartTime($)} 'end': {X getEndTime($)})
+			{X toInitRecord($)}}
+		    end}}
+ end
+ unit(endTime: {FD.reflect.max {MyScore getEndTime($)}})}
+
+
+{Browse
+ {SMapping.mapTimeslices {MyScore collect($ test:isNote)}
+  fun {$ Xs}
+     {Map Xs fun {$ X}
+		{Adjoin unit(start: {X getStartTime($)} 'end': {X getEndTime($)})
+		 {X toInitRecord($)}}
+	     end}
+  end
+  unit(endTime: {FD.reflect.max {MyScore getEndTime($)}})}}
+
+% 
 
 
 
@@ -479,6 +524,7 @@ MyScore = {Score.makeScore sim(items:[seq(items:[note(handle:N1
 			       startTime:0
 			       timeUnit:beats)
 	   unit}
+
 
 {MyScore toInitRecord($)}
 
@@ -503,6 +549,134 @@ MyScore = {Score.makeScore sim(items:[seq(items:[note(handle:N1
 %% browses [n2]#[n1]
 
 
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%
+
+declare
+MyScore = {Score.make sim([seq([note(offsetTime: {FD.int 0#1}
+				     duration: 1
+				     pitch: 1)
+				note(duration: 1
+				     pitch: 2)
+				note(duration: 2
+				     pitch: 3)
+				note(duration: 2  % has start time 5
+				     pitch: 4)
+				note(duration: 2
+				     pitch: 5)
+				note(duration: 2
+				     pitch: 6)])
+			   seq([note(duration: 1
+				     pitch: 11)
+				note(duration: 2
+				     pitch: 12)
+				note(offsetTime: 1
+				     duration: 1
+				     pitch: 13)
+				%% The note pairs up to here should be processed by SMapping.mapTimeslices below, but the fourth note pair is delayed until this offset time is determined
+				note(offsetTime: {FD.int 0#1} % has start time 5 or later
+				     duration: 1
+				     pitch: 14)
+				note(offsetTime: {FD.int 0#1}
+				     duration: 2
+				     pitch: 15)
+				note(offsetTime: {FD.int 0#3}
+				     duration: 2
+				     pitch: 16)])
+			   seq([note(duration: 2
+				     pitch: 21)
+				note(duration: 1
+				     pitch: 22)
+				note(duration: 2
+				     pitch: 23)
+				note(duration: 2  % has start time 5
+				     pitch: 24)
+				note(duration: 2
+				     pitch: 25)
+				note(duration: 2
+				     pitch: 26)])]
+			  startTime:0
+			  timeUnit: beats)
+	   unit}
+
+
+{SMapping.forSimultaneousPairs {MyScore collect($ test:isNote)}
+ proc {$ X Y}
+    {Browse {Adjoin unit(start: {X getStartTime($)} 'end': {X getEndTime($)}) {X toInitRecord($)}}
+     #{Adjoin unit(start: {Y getStartTime($)} 'end': {Y getEndTime($)}) {Y toInitRecord($)}}}
+ end
+ unit(test: isNote)}
+
+
+%% BUG: blocks -- should return what it can so far, i.e. a list with unbound end?
+{SMapping.mapSimultaneousPairs {MyScore collect($ test:isNote)}
+ fun {$ X Y}
+    {Adjoin unit(start: {X getStartTime($)} 'end': {X getEndTime($)}) {X toInitRecord($)}}
+    #{Adjoin unit(start: {Y getStartTime($)} 'end': {X getEndTime($)}) {Y toInitRecord($)}}
+ end
+ unit(test: isNote)}
+
+
+
+
+%% Now bind undetermined offset time
+{{Nth {{Nth {MyScore getItems($)} 1} getItems($)} 4} getOffsetTime($)} = 1
+
+{{Nth {{Nth {MyScore getItems($)} 1} getItems($)} 5} getOffsetTime($)} = 0
+ 
+{{Nth {{Nth {MyScore getItems($)} 1} getItems($)} 6} getOffsetTime($)} = 0
+
+
+{{Nth {{Nth {MyScore getItems($)} 1} getItems($)} 4} getOffsetTime($)} = 3
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%% SMapping.forSimultaneousPairs -- with partially determined score
+%%
+
+declare
+N1 N2 N3
+N11 N12 N13
+MyScore = {Score.make sim([seq([note(handle:N1
+				     duration: 2
+				     pitch: 1)
+				note(handle:N2
+				     duration: 1
+				     pitch: 2)
+				note(handle:N3
+				     duration: 2
+				     pitch: 3)])
+			   seq([note(handle:N11
+				     duration: 2
+				     pitch: 11)
+				%% This note is already known to be in time window 1-4
+				note(handle:N12
+				     offsetTime: {FD.int 0#1}
+				     % duration: 1
+				     pitch: 12)
+				note(handle:N13
+				     pitch: 13)])]
+			  startTime:0
+			 timeUnit:beats)
+	   unit}
+
+%% BUG: does not work if sim notes are not contained in given list
+{SMapping.forSimultaneousPairs [N1 N2 N3]
+ proc {$ N_1 N_2}
+    {Browse {Pattern.mapItems [N_1 N_2] toInitRecord}}
+ end
+ unit(test: isNote)}
+
+{SMapping.forSimultaneousPairs {MyScore collect($ test:isNote)}
+ proc {$ N_1 N_2}
+    {Browse {Pattern.mapItems [N_1 N_2] toInitRecord}}
+ end
+ unit(test: isNote)}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%

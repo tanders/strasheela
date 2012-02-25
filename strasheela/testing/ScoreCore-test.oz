@@ -776,6 +776,64 @@ end
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%
+%% GetItemsInTimeframe
+%%
+
+declare
+N1 N2 N3
+N11 N12 N13
+MyScore = {Score.make sim([seq([note(handle:N1
+				     duration: 2
+				     pitch: 1)
+				note(handle:N2
+				     duration: 1
+				     pitch: 2)
+				note(handle:N3
+				     duration: 2
+				     pitch: 3)])
+			   seq([note(handle:N11
+				     duration: 2
+				     pitch: 11)
+				%% This note is already known to be in time window 1-4
+				note(handle:N12
+				     offsetTime: {FD.int 0#1}
+				     % duration: 1
+				     pitch: 12)
+				note(handle:N13
+				     pitch: 13)])]
+			  startTime:0
+			 timeUnit:beats)
+	   unit}
+
+
+{ForAll
+ {Score.getItemsInTimeframe {MyScore collect($ test:isNote)}
+  1 4
+  unit}
+ proc {$ N} {Browse {N toInitRecord($)}} end}
+
+{N12 getOffsetTime($)} = 1
+
+{Score.inTimeframe N12 1 3}
+
+{N12 getStartTime($)}
+
+{N12 getEndTime($)}
+
+{N12 getOffsetTime($)} = 0 
+{N12 getDuration($)} = 1
+
+{N12 getOffsetTime($)} = 1
+{N12 getDuration($)} >: 0
+
+{N13 getStartTime($)}
+
+
+
+
+ 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
 %% isSimultaneousItemR [unfinished test]
 %%
 
