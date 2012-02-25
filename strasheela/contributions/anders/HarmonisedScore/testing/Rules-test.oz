@@ -431,3 +431,35 @@ end
 {SDistro.exploreOne MyScript
  unit(order:leftToRight
       value:random)}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%% test HS.rules.noParallels2 
+%%
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%% HS.rules.isPerfectConsonanceR
+%%
+
+%% 12-TET
+{HS.rules.isPerfectConsonanceR 12} % 1
+
+{HS.rules.isPerfectConsonanceR {HS.pc 'G'}} % 1
+
+{HS.rules.isPerfectConsonanceR {HS.pc 'F'}} % 0 -- why?
+
+
+
+%% 31-TET
+{HS.db.setDB {ET31.db.makeFullDB unit}}
+
+{HS.rules.isPerfectConsonanceR 31} % 1
+
+{HS.rules.isPerfectConsonanceR {HS.pc 'G'}} % 1
+
+{HS.rules.isPerfectConsonanceR {HS.pc 'F'}} % 0 -- why?
+
