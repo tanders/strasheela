@@ -1398,7 +1398,7 @@ define
    %% - ?? Is it a good idea to return 1 for all notes if neither ratingPs nor requirements are given then the accent constraint? How realistic is this case anyway?
    %% - test this constraint applicator and its constraints. Because this applicator is very flexible (good) I did not test all its possibilities (no time before Fokker-organ composition deadline
    %% BUG:
-   %% - First note seems to be completely ignored in accent rating calculation
+   %% - First note seems to be completely ignored in accent rating calculation (last as well?)
    fun {Make_HasAnacrusis Args}
       Defaults = unit(context: predecessorsUpToRest
 		      ratingPs: nil
