@@ -76,6 +76,8 @@
 
 * Strasheela Bugs
 
+** Bugs in procs for tranversing partially determined scores, e.g., SMapping.mapSimultaneousPairs and SMapping.forSimultaneousPairs
+
 ** TODO !! Pattern.useMotifs: arg 'workOutEven' is ignored (behaves as if always set to true)
    
    see test at 
@@ -214,6 +216,13 @@ MyTestScore = {Score.makeScore
      
 
 
+** Chord/scale inversion support
+
+   - Pairs of chords/scale objects: add inversion constraint 
+   - Make sure that chord/scale databases always contain an inversion of each chord/scale in database
+   - Consider to (automatically) add to chord/scale database a feature with the index of the inversion of the chord/scale in question
+
+
 ** User-Guided search with percentage of previous solution
 
 
@@ -280,19 +289,269 @@ end
 
 
 ** Accent constraints
+   :PROPERTIES:
+   :ID:       FCEF953D-4903-4E26-8E2C-1988F46D0C34
+   :END:
 
    Control various musical aspects that emphasise an accent.
    Inspired by Berry, Wallace. 1987. Structural Functions in Music. Courier Dover Publications. Chapter on Rhythm.
 
- 
+*** TODO Further accent constraints from [Berry, 1987] 
+
+    - Large skip into accent, in particular to local max/min, in particular upwards [Berry, 1987, p. 339, point 2]
+    - Succession of skips (or intervals in same direction?), in particular upwards, cf. anacrusis [Berry, 1987, p. 339, point 3]
+
+      There are more, see in particular [Berry, 1987, p. 342ff]
+
+  
+*** TODO Ideas for further accent constraints 
+
+    Remember: an accent constraint is a function expecting a note/item and returning a rating FD int.
+
+    Many ideas for accent constraints are listed on p. 339ff of Berry, Wallace (1987). /Structural Functions in Music/. Courier Dover Publications. 
+
+
+**** !!?? Sum of accumulated accent constraint ratings of all notes starting at the same time
+
+
+**** TODO [#A] Has Anacrusis					    :ARCHIVE:
+
+     Multiple notes "lead" to argument note. This is a very important accent constraint, but it is difficult to formalise.
+
+***** Main problem and solution: how to formalise this score context?
+
+      - How many preceding notes should be included in the score context?
+	- I could go for the minimum: 1-2 notes to have the condition fulfilled
+	- I could require more notes for marking the accent stronger (may need some constraint that forces such accents)
+
+      Pragmatic solution: 
+      - Rated accent constraint: the more notes fulfil the condition the higher the rating
+      - The number of notes considered should be user-definable (i.e., fun Make_HasAnacrusis with relevant args returns accent constraint)
+
+      Alternative solution
+      - Anacrusis context option: go back up to the last previous note with offset time > 0
+
+       	
+***** Features of an anacrusis
+
+      - Primarily/all intervals between notes before in one direction (in particular upwards)
+      - Usually notes of anacrusis are shorter than the accent, at least they should not be longer
+      - Commonly the notes of the anacrusis are of uniform duration
+	- Exception: embellished anacrusis (example of Richard Strauss in /Structural Functions in Music/, p. 420 (endnote g)
+	- ?? Alternative: durations get shorter towards accent
+
+
+***** Implementation
+
+      - Different context options can be choosen by optional arg
+	- Simple version: all elements of this score context fulfill anacrusis features 
+	- Simple version: the last N elements of this score context fulfill anacrusis features, N is resulting rating 
+      - List of constraints (reified procs) decribes features of anacrusis
+
+#+begin_src oz :results output
+  
+  /** %% Make_HasAnacrusis returns an accent constraint, i.e. a function execting a note/item N and returning a rating FD int. The resulting function returns a positive rating for N preceeded by an anacrusis, and 0 otherwise.
+  %%
+  %% Args:
+  %% context (record function, default predecessorsUpToRest): This argument specifies the score context that potentially forms an anacrusis of N. If 'predecessorsUpToRest', then the notes before N up to any rest (offset time or pause object) are taken into account (within the same temporal container). If predecessors(I), then the I (an int) notes before N are taken into account (within the same temporal container). The context can also be defined by a unary function expecting N and returning the items as a list.
+  %% ratingPs (list of constraints {P Xs ?Rating}, default nil): This argument specifies how the quality (rating) of an anacrusis is measured. Each ratingP is a function that expects a list of notes starting with N, then its predecessor and so forth. Each function returns a rating (an FD int). The resulting accent constraint rating is the minimum rating of any ratingP (subject to requirements, see below). Example constraint: N predecessors are of equal length (Anacrusis_FirstNEvenDurations).
+  %% requirements (list of reified constraints {P Xs B}, default nil): This argument specifies requirements that must be met by the score context if it should count at all as an anacrusis. Each requirement is a function that expects a list of notes starting with N, then its predecessor and so forth. Each function returns a 0/1-int. If any requirement returns 0 then the accent constraint returns 0 for this note. If all requirements returns 1, then the value resulting from the ratingPs is returned as rating. Example constraint: N longer than its predecessor (Anacrusis_LongerThanPrevious).
+  %%
+  %% Note: if neither ratingPs nor requirements are given then the accent constraint returns the rating 1 for all notes.
+  %% */
+  fun {Make_HasAnacrusis Args}
+     Defaults = unit(context: predecessorsUpToRest
+                     ratingPs: nil
+                     requirements: nil)
+     As = {Adjoin Defaults Args}
+     proc {$ N ?Rating}
+        Context = if {IsProcedure As.context}
+                  then {As.context N}
+                  else case {Label As.context} of
+                          predecessorsUpToRest then {N getPredecessorsUpToRest($)}
+                       [] predecessors then {N getTemporalPredecessors($ As.context.1)}
+                       end
+                  end
+        FeatsRating = {FD.decl}
+        RequirementsB = {FD.int 0#1}
+     in
+        Rating = {FD.decl}
+        FeatsRating =: case As.ratingPs of nil then 1
+                       else {Pattern.min {Map As.ratingPs fun {$ F} {F Context} end}}
+                       end
+        RequirementsB =: {Pattern.allTrueR {Map As.requirements fun {$ F} {F Context} end}}
+        Rating =: FeatsRating * RequirementsB
+     end
+  end
+  
+  
+  
+  /** %% [anacrusis requirement] The duration of the 1st note in Ns is longer then the 2nd.
+  %% */
+  fun {Anacrusis_LongerThanPrevious Ns}
+     ({Ns.1 getDuration($)} >: {Ns.2.1 getDuration($)})
+  end
+  
+  
+  local
+     fun {ShorterThanAccentRs Ns}
+        N1 = Ns.1
+     in
+        {Map Ns.2 fun {$ N2} ({N2 getDuration($)} <: {N1 getDuration($)}) end}
+     end   
+  in
+     /** %% [anacrusis requirement] B=1 <-> All durations of notes in Ns (a list of notes) are shorter than the accent (the first note in Ns).
+     %% */
+     Anacrusis_ShorterThanAccent = {MakeRequirement ShorterThanAccentRs}
+     /** %% [anacrusis ratingP] The first Rating (an FD int) durations of notes in Ns (a list of notes) are shorter than the accent (the first note in Ns).
+     %% */
+     Anacrusis_FirstNShorterThanAccent = {MakeRatingP ShorterThanAccentRs}
+  end
+  
+  local
+     fun {NoLongerThanAccentRs Ns}
+        N1 = Ns.1
+     in
+        {Map Ns.2 fun {$ N2} ({N2 getDuration($)} =<: {N1 getDuration($)}) end}
+     end   
+  in
+     /** %% [anacrusis requirement] B=1 <-> All durations of notes in Ns (a list of notes) are no longer than the accent (the first note in Ns).
+     %% */
+     Anacrusis_NoLongerThanAccent = {MakeRequirement NoLongerThanAccentRs}
+     /** %% [anacrusis ratingP] The first Rating (an FD int) durations of notes in Ns (a list of notes) are no longer than the accent (the first note in Ns).
+     %% */
+     Anacrusis_FirstNNoLongerThanAccent = {MakeRatingP NoLongerThanAccentRs}
+  end
+  
+  local
+     fun {PossibilyShorterTowardsAccentRs Ns}
+        {Pattern.map2Neighbours {Map Ns.2 {GUtils.toFun getDuration}}
+         fun {$ D1 D2} (D1 =<: D2) end}
+     end   
+  in
+     /** %% [anacrusis requirement] B=1 <-> All notes in Ns (a list of notes) except the first (the accent) have the same duration among themselves or they become shorter towards the accent.
+     %% */
+     Anacrusis_PossibilyShorterTowardsAccent = {MakeRequirement PossibilyShorterTowardsAccentRs}
+     /** %% [anacrusis ratingP] The first Rating (an FD int) notes in Ns (a list of notes) except the first (the accent) have the same duration among themselves or they become shorter towards the accent.
+     %% */
+     Anacrusis_FirstNPossibilyShorterTowardsAccent = {MakeRatingP PossibilyShorterTowardsAccentRs}
+  end
+  
+  local
+     fun {EvenDurationsRs Ns}
+        {Pattern.map2Neighbours {Map Ns.2 {GUtils.toFun getDuration}}
+         fun {$ D1 D2} (D1 =: D2) end}
+     end   
+  in
+     /** %% [anacrusis requirement] B=1 <-> All notes in Ns (a list of notes) except the first (the accent) have the same duration.
+     %% */
+     Anacrusis_EvenDurations = {MakeRequirement EvenDurationsRs}
+     /** %% [anacrusis ratingP] The first Rating (an FD int) notes in Ns (a list of notes) except the first (the accent) have the same duration.
+  %% */
+     Anacrusis_FirstNEvenDurations = {MakeRatingP EvenDurationsRs}
+  end
+  
+  
+  local
+     fun {UpwardPitchIntervalsRs Ns}
+        {Pattern.map2Neighbours {Map Ns {GUtils.toFun getPitch}}
+         fun {$ P1 P2} {Pattern.directionR P1 P2 2} end}
+     end   
+  in
+     /** %% [anacrusis requirement] B=1 <-> All interval directions between the pitches of notes in Ns (a list of notes) are upwards.
+     %% */
+     Anacrusis_UpwardPitchIntervals = {MakeRequirement UpwardPitchIntervalsRs}
+     /** %% [anacrusis ratingP] The first Rating (an FD int) interval directions between the pitches of notes in Ns (a list of notes) are all upwards.
+     %% */
+     Anacrusis_FirstNUpwardPitchIntervals = {MakeRatingP UpwardPitchIntervalsRs}
+  end
+  
+  local
+     fun {SameDirectionPitchIntervalsRs Ns}
+        {Pattern.map2Neighbours
+         {Pattern.map2Neighbours {Map Ns {GUtils.toFun getPitch}}
+          fun {$ P1 P2} {Pattern.direction P1 P2} end}
+         fun {$ Dir1 Dir2} (Dir1 =: Dir2) end}
+     end   
+  in
+     /** %% [anacrusis requirement] B=1 <-> All interval directions between the pitches of notes in Ns (a list of notes) move in the same direction (upwards, downwards or repetition).
+     %% */
+     Anacrusis_SameDirectionPitchIntervals = {MakeRequirement SameDirectionPitchIntervalsRs}
+     /** %% [anacrusis ratingP] The first Rating (an FD int) interval directions between the pitches of notes in Ns (a list of notes)  move all in the same direction (upwards, downwards or repetition).
+     %% */
+     Anacrusis_FirstNSameDirectionPitchIntervals = {MakeRatingP SameDirectionPitchIntervalsRs}
+  end
+  
+  
+  
+  
+  
+  
+  
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  %%%
+  %%% Anacrusis aux defs 
+  %%%
+  
+  
+  /** %% Expects a reified constraint {P Ns ?Bs} that expects a list of notes and returns a list of 0/1-ints. MakeRequirement returns an anacrusis requirement procedure (see doc of Make_HasAnacrusis).
+  %% */
+  fun {MakeRequirement P}
+     fun {$ Ns Rating} {Pattern.allTrue {P Ns}} end
+  end
+  /** %% Expects a reified constraint {P Ns ?Bs} that expects a list of notes and returns a list of 0/1-ints. MakeRatingP returns an anacrusis ratingP procedure (see doc of Make_HasAnacrusis).
+  %% */
+  fun {MakeRatingP P}
+     fun {$ Ns Rating}
+        Rating = {FD.decl}
+        Rating = {Pattern.firstNTrue {P Ns}}
+     end
+  end
+  
+  
+  
+#+end_src
+
+
+
+**** Accent constraints that look at larger context of notes
+
+     *Is this already covered by Anacrusis? Do I also need to look at larger context "behind" a given note?*
+
+     - E.g., highest note of a bar, or a phrase etc. is particular important
+
+     - Problem: how to formalise this score context?
+       for a pragmatic solution see [[*%5B#A%5D%20Has%20Anacrusis][Has Anacrusis]]
+
+
+**** ?? Starts with chord/scale change
+
+     Wallace Berry claims that chord changes are irrelevant for accents, but in case of a slower harmonic rhythm I would not readily agree. 
+
+     Scale change marks definitely an accent  
+
+
+**** ?? Has Ornament
+
+     Idea is similar to anacrusis. Implementation irrelevant as long as I have not somehow introduced ornaments such as grace notes or trills in the music representation.
+
+     
+**** ??? HasDynamicAccent
+
+     With a reasonably intelligent representation of dynamics and articulations such an accent constraint could be defined.
+     Such accent constraint would primarily useful for higher-level accents (i.e. not simply on a level of regular measures)
+
+     Note: the dynamics support of Fomus could be useful in this respect
+
+
 *** TODO 
 
     - !! Finalise definition NoteAtMetricPosition (or clearly document what is missing)
 
     - Further accent constraints:
       - Semitone leading to accent
-      - Only steps form an anacrusis preceeing the accent
-      - Only intervals in the same direction, except for the last two intervals, but these are steps
+      - ? Only steps form an anacrusis preceeing the accent
+      - ? Only intervals in the same direction, except for the last two intervals, but these are steps
       - ?? Syncopation at beat level
       - Add rest (pause object or offset time) after accent to its duration 
 
@@ -1252,246 +1511,6 @@ TODO: It would be good to somehow have a way to define accents beyond the measur
   
   
 #+end_src
-
-
-*** TODO Ideas for further accent constraints 
-
-    Remember: an accent constraint is a function expecting a note/item and returning a rating FD int.
-
-    Many ideas for accent constraints are listed on p. 339ff of Berry, Wallace (1987). /Structural Functions in Music/. Courier Dover Publications. 
-
-
-**** !!?? Sum of accumulated accent constraint ratings of all notes starting at the same time
-
-
-**** TODO [#A] Has Anacrusis					    :ARCHIVE:
-
-     Multiple notes "lead" to argument note. This is a very important accent constraint, but it is difficult to formalise.
-
-***** Main problem and solution: how to formalise this score context?
-
-      - How many preceding notes should be included in the score context?
-	- I could go for the minimum: 1-2 notes to have the condition fulfilled
-	- I could require more notes for marking the accent stronger (may need some constraint that forces such accents)
-
-      Pragmatic solution: 
-      - Rated accent constraint: the more notes fulfil the condition the higher the rating
-      - The number of notes considered should be user-definable (i.e., fun Make_HasAnacrusis with relevant args returns accent constraint)
-
-      Alternative solution
-      - Anacrusis context option: go back up to the last previous note with offset time > 0
-
-       	
-***** Features of an anacrusis
-
-      - Primarily/all intervals between notes before in one direction (in particular upwards)
-      - Usually notes of anacrusis are shorter than the accent, at least they should not be longer
-      - Commonly the notes of the anacrusis are of uniform duration
-	- Exception: embellished anacrusis (example of Richard Strauss in /Structural Functions in Music/, p. 420 (endnote g)
-	- ?? Alternative: durations get shorter towards accent
-
-
-***** Implementation
-
-      - Different context options can be choosen by optional arg
-	- Simple version: all elements of this score context fulfill anacrusis features 
-	- Simple version: the last N elements of this score context fulfill anacrusis features, N is resulting rating 
-      - List of constraints (reified procs) decribes features of anacrusis
-
-#+begin_src oz :results output
-  
-  /** %% Make_HasAnacrusis returns an accent constraint, i.e. a function execting a note/item N and returning a rating FD int. The resulting function returns a positive rating for N preceeded by an anacrusis, and 0 otherwise.
-  %%
-  %% Args:
-  %% context (record function, default predecessorsUpToRest): This argument specifies the score context that potentially forms an anacrusis of N. If 'predecessorsUpToRest', then the notes before N up to any rest (offset time or pause object) are taken into account (within the same temporal container). If predecessors(I), then the I (an int) notes before N are taken into account (within the same temporal container). The context can also be defined by a unary function expecting N and returning the items as a list.
-  %% ratingPs (list of constraints {P Xs ?Rating}, default nil): This argument specifies how the quality (rating) of an anacrusis is measured. Each ratingP is a function that expects a list of notes starting with N, then its predecessor and so forth. Each function returns a rating (an FD int). The resulting accent constraint rating is the minimum rating of any ratingP (subject to requirements, see below). Example constraint: N predecessors are of equal length (Anacrusis_FirstNEvenDurations).
-  %% requirements (list of reified constraints {P Xs B}, default nil): This argument specifies requirements that must be met by the score context if it should count at all as an anacrusis. Each requirement is a function that expects a list of notes starting with N, then its predecessor and so forth. Each function returns a 0/1-int. If any requirement returns 0 then the accent constraint returns 0 for this note. If all requirements returns 1, then the value resulting from the ratingPs is returned as rating. Example constraint: N longer than its predecessor (Anacrusis_LongerThanPrevious).
-  %%
-  %% Note: if neither ratingPs nor requirements are given then the accent constraint returns the rating 1 for all notes.
-  %% */
-  fun {Make_HasAnacrusis Args}
-     Defaults = unit(context: predecessorsUpToRest
-                     ratingPs: nil
-                     requirements: nil)
-     As = {Adjoin Defaults Args}
-     proc {$ N ?Rating}
-        Context = if {IsProcedure As.context}
-                  then {As.context N}
-                  else case {Label As.context} of
-                          predecessorsUpToRest then {N getPredecessorsUpToRest($)}
-                       [] predecessors then {N getTemporalPredecessors($ As.context.1)}
-                       end
-                  end
-        FeatsRating = {FD.decl}
-        RequirementsB = {FD.int 0#1}
-     in
-        Rating = {FD.decl}
-        FeatsRating =: case As.ratingPs of nil then 1
-                       else {Pattern.min {Map As.ratingPs fun {$ F} {F Context} end}}
-                       end
-        RequirementsB =: {Pattern.allTrueR {Map As.requirements fun {$ F} {F Context} end}}
-        Rating =: FeatsRating * RequirementsB
-     end
-  end
-  
-  
-  
-  /** %% [anacrusis requirement] The duration of the 1st note in Ns is longer then the 2nd.
-  %% */
-  fun {Anacrusis_LongerThanPrevious Ns}
-     ({Ns.1 getDuration($)} >: {Ns.2.1 getDuration($)})
-  end
-  
-  
-  local
-     fun {ShorterThanAccentRs Ns}
-        N1 = Ns.1
-     in
-        {Map Ns.2 fun {$ N2} ({N2 getDuration($)} <: {N1 getDuration($)}) end}
-     end   
-  in
-     /** %% [anacrusis requirement] B=1 <-> All durations of notes in Ns (a list of notes) are shorter than the accent (the first note in Ns).
-     %% */
-     Anacrusis_ShorterThanAccent = {MakeRequirement ShorterThanAccentRs}
-     /** %% [anacrusis ratingP] The first Rating (an FD int) durations of notes in Ns (a list of notes) are shorter than the accent (the first note in Ns).
-     %% */
-     Anacrusis_FirstNShorterThanAccent = {MakeRatingP ShorterThanAccentRs}
-  end
-  
-  local
-     fun {NoLongerThanAccentRs Ns}
-        N1 = Ns.1
-     in
-        {Map Ns.2 fun {$ N2} ({N2 getDuration($)} =<: {N1 getDuration($)}) end}
-     end   
-  in
-     /** %% [anacrusis requirement] B=1 <-> All durations of notes in Ns (a list of notes) are no longer than the accent (the first note in Ns).
-     %% */
-     Anacrusis_NoLongerThanAccent = {MakeRequirement NoLongerThanAccentRs}
-     /** %% [anacrusis ratingP] The first Rating (an FD int) durations of notes in Ns (a list of notes) are no longer than the accent (the first note in Ns).
-     %% */
-     Anacrusis_FirstNNoLongerThanAccent = {MakeRatingP NoLongerThanAccentRs}
-  end
-  
-  local
-     fun {PossibilyShorterTowardsAccentRs Ns}
-        {Pattern.map2Neighbours {Map Ns.2 {GUtils.toFun getDuration}}
-         fun {$ D1 D2} (D1 =<: D2) end}
-     end   
-  in
-     /** %% [anacrusis requirement] B=1 <-> All notes in Ns (a list of notes) except the first (the accent) have the same duration among themselves or they become shorter towards the accent.
-     %% */
-     Anacrusis_PossibilyShorterTowardsAccent = {MakeRequirement PossibilyShorterTowardsAccentRs}
-     /** %% [anacrusis ratingP] The first Rating (an FD int) notes in Ns (a list of notes) except the first (the accent) have the same duration among themselves or they become shorter towards the accent.
-     %% */
-     Anacrusis_FirstNPossibilyShorterTowardsAccent = {MakeRatingP PossibilyShorterTowardsAccentRs}
-  end
-  
-  local
-     fun {EvenDurationsRs Ns}
-        {Pattern.map2Neighbours {Map Ns.2 {GUtils.toFun getDuration}}
-         fun {$ D1 D2} (D1 =: D2) end}
-     end   
-  in
-     /** %% [anacrusis requirement] B=1 <-> All notes in Ns (a list of notes) except the first (the accent) have the same duration.
-     %% */
-     Anacrusis_EvenDurations = {MakeRequirement EvenDurationsRs}
-     /** %% [anacrusis ratingP] The first Rating (an FD int) notes in Ns (a list of notes) except the first (the accent) have the same duration.
-  %% */
-     Anacrusis_FirstNEvenDurations = {MakeRatingP EvenDurationsRs}
-  end
-  
-  
-  local
-     fun {UpwardPitchIntervalsRs Ns}
-        {Pattern.map2Neighbours {Map Ns {GUtils.toFun getPitch}}
-         fun {$ P1 P2} {Pattern.directionR P1 P2 2} end}
-     end   
-  in
-     /** %% [anacrusis requirement] B=1 <-> All interval directions between the pitches of notes in Ns (a list of notes) are upwards.
-     %% */
-     Anacrusis_UpwardPitchIntervals = {MakeRequirement UpwardPitchIntervalsRs}
-     /** %% [anacrusis ratingP] The first Rating (an FD int) interval directions between the pitches of notes in Ns (a list of notes) are all upwards.
-     %% */
-     Anacrusis_FirstNUpwardPitchIntervals = {MakeRatingP UpwardPitchIntervalsRs}
-  end
-  
-  local
-     fun {SameDirectionPitchIntervalsRs Ns}
-        {Pattern.map2Neighbours
-         {Pattern.map2Neighbours {Map Ns {GUtils.toFun getPitch}}
-          fun {$ P1 P2} {Pattern.direction P1 P2} end}
-         fun {$ Dir1 Dir2} (Dir1 =: Dir2) end}
-     end   
-  in
-     /** %% [anacrusis requirement] B=1 <-> All interval directions between the pitches of notes in Ns (a list of notes) move in the same direction (upwards, downwards or repetition).
-     %% */
-     Anacrusis_SameDirectionPitchIntervals = {MakeRequirement SameDirectionPitchIntervalsRs}
-     /** %% [anacrusis ratingP] The first Rating (an FD int) interval directions between the pitches of notes in Ns (a list of notes)  move all in the same direction (upwards, downwards or repetition).
-     %% */
-     Anacrusis_FirstNSameDirectionPitchIntervals = {MakeRatingP SameDirectionPitchIntervalsRs}
-  end
-  
-  
-  
-  
-  
-  
-  
-  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-  %%%
-  %%% Anacrusis aux defs 
-  %%%
-  
-  
-  /** %% Expects a reified constraint {P Ns ?Bs} that expects a list of notes and returns a list of 0/1-ints. MakeRequirement returns an anacrusis requirement procedure (see doc of Make_HasAnacrusis).
-  %% */
-  fun {MakeRequirement P}
-     fun {$ Ns Rating} {Pattern.allTrue {P Ns}} end
-  end
-  /** %% Expects a reified constraint {P Ns ?Bs} that expects a list of notes and returns a list of 0/1-ints. MakeRatingP returns an anacrusis ratingP procedure (see doc of Make_HasAnacrusis).
-  %% */
-  fun {MakeRatingP P}
-     fun {$ Ns Rating}
-        Rating = {FD.decl}
-        Rating = {Pattern.firstNTrue {P Ns}}
-     end
-  end
-  
-  
-  
-#+end_src
-
-
-
-**** Accent constraints that look at larger context of notes
-
-     *Is this already covered by Anacrusis? Do I also need to look at larger context "behind" a given note?*
-
-     - E.g., highest note of a bar, or a phrase etc. is particular important
-
-     - Problem: how to formalise this score context?
-       for a pragmatic solution see [[*%5B#A%5D%20Has%20Anacrusis][Has Anacrusis]]
-
-
-**** ?? Starts with chord/scale change
-
-     Wallace Berry claims that chord changes are irrelevant for accents, but in case of a slower harmonic rhythm I would not readily agree. 
-
-     Scale change marks definitely an accent  
-
-
-**** ?? Has Ornament
-
-     Idea is similar to anacrusis. Implementation irrelevant as long as I have not somehow introduced ornaments such as grace notes or trills in the music representation.
-
-     
-**** ??? HasDynamicAccent
-
-     With a reasonably intelligent representation of dynamics and articulations such an accent constraint could be defined.
-     Such accent constraint would primarily useful for higher-level accents (i.e. not simply on a level of regular measures)
-
-     Note: the dynamics support of Fomus could be useful in this respect
 
 
 *** Constraints supporting accents				    :ARCHIVE:
@@ -3175,21 +3194,14 @@ it always equal to 2, that's a pretty good choice.
   
 
 ** Add all new publications to Strasheela website (and to my own)
-   SCHEDULED: <2011-08-08 Mon>
 
-** Add results of microtonal music "content" for MOTU to my website
-   SCHEDULED: <2011-08-08 Mon>
+   - Also add results of microtonal music "content" for MOTU to my website
 
 ** TODO Add full source code of all examples in PNM paper to Strasheela site
-   SCHEDULED: <2011-08-08 Mon>
 
 ** Add links to musical examples to Strasheela website: Harmony studies, microtonal music "content" for MOTU
-   SCHEDULED: <2011-08-08 Mon>
-
-
 
 ** Upload binaries of selection constraints and amend installation instructions 
-   SCHEDULED: <2011-08-08 Mon>
 
    Mention bug during compilation (Midiimport and OSC support do not compile on MacOS 10.6)
    Can be disregarded.
