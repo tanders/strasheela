@@ -401,11 +401,16 @@ define
        unit}
    end
    
-   /** %% [Chord markup function] Expects a chord or scale and returns the chord/scale comment in a fomus mark. For all other score objects nil is returned.
+   /** %% [Chord markup function] Expects a chord or scale and returns the chord/scale comment in a fomus mark. For all other score objects nil is returned (Is it??).
    %% */
    fun {MakeComment_FomusMarks MyChord}
-      {VsToFomusMarks {HS_DB.getName MyChord}.1
-       unit(where:'x_')}
+      ChordName = {HS_DB.getName MyChord}
+   in
+      if ChordName \= nil then  
+	 {VsToFomusMarks ChordName.1
+	  unit(where:'x_')}
+      else nil
+      end
    end
 
    /* %% [Chord markup function] Expects a chord and returns the chord as ratio spec as a fomus mark (on a single line): Transposition x untransposed PCs (a VS). For all other score objects nil is returned.
