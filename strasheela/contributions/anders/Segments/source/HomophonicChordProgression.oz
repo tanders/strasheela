@@ -92,7 +92,8 @@ define
 	   startTime: 0)
        unit}
    end
-   
+
+   %% 'voiceArgs' (default unit): arbitrary arguments given to the constructure Score.makeItems, which creates the list of all voices.
    %%
    %% Further Args.iargs, Args.rargs: as for Segs.makeCounterpoint_Seq
    %% Args.iargs.n overwritten (is length of chords)
@@ -152,6 +153,7 @@ define
 		      voiceNo: 4 % voices
 		      iargs: unit()
 		      rargs: unit
+		      voiceArgs: unit
 		      chords: {HS.score.makeChords unit}
 		      scales: nil
 		      commonPitchesHeldOver: false
@@ -168,13 +170,14 @@ define
 		     )
       As = {GUtils.recursiveAdjoin Defaults Args}
       End = {FD.decl}
-      Voices = {Score.makeItems unit(n: As.voiceNo
-				     %% ?? hard-coded constructor?
-				     constructor: Segs.makeCounterpoint_Seq
-				     iargs: {Adjoin As.iargs
-					     unit(n: {Length As.chords})}
-				     rargs: As.rargs
-				     endTime: End)}
+      Voices = {Score.makeItems {Adjoin unit(n: As.voiceNo
+					     %% ?? hard-coded constructor?
+					     constructor: Segs.makeCounterpoint_Seq
+					     iargs: {Adjoin As.iargs
+						     unit(n: {Length As.chords})}
+					     rargs: As.rargs
+					     endTime: End)
+				 As. voiceArgs}}
       Nss
       ChordAndNotesSlices
       UpperVoices LowerVoices
