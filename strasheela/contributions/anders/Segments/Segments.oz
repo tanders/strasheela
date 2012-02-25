@@ -69,7 +69,7 @@ export
    % MakeMotifIndexNote
    % GetMotifIndexOfNote
    MakeParametersAccessor
-   PitchContourAccessor
+   PitchContourAccessor PitchContourAccessor2
 
    MakeCounterpoint_Mixin MakeCounterpoint MakeCounterpoint_Seq
    MakeCounterpoint_PatternMotifs
@@ -133,14 +133,17 @@ define
       fun {$ Ns} {Pattern.mapItems Ns Accessor} end
    end
 
-   /** %% The function PitchContourAccessor is intended as a value for the argument motifAccessors of MakeCounterpoint_PatternMotifs and friends. Note that for this def of PitchContourAccessor the first direction in a motif spec is the direction from the note preceeding a motif to the first motif note. 
+   /** %% The function PitchContourAccessor is intended as a value for the argument motifAccessors of MakeCounterpoint_PatternMotifs and friends. Note that for this def of PitchContourAccessor the last direction in a motif spec is the direction from the  last motif note to the note following the motif.
    %% */
    fun {PitchContourAccessor Ns}
+      %% list of pitch contours is by one shorter, so a dummy is added at the end
+      {Append {Pattern.contour {Pattern.mapItems Ns getPitch}} [_]}
+   end
+   /** %% Variant of PitchContourAccessor, where the first direction in a motif spec is the direction from the note preceeding a motif to the first motif note. 
+   %% */
+   fun {PitchContourAccessor2 Ns}
       %% list of pitch contours is by one shorter, so a dummy is added at the beginning
       _ | {Pattern.contour {Pattern.mapItems Ns getPitch}}
-      %% list of pitch contours is by one shorter, so a dummy is added at the end
-      %% NOTE: Use this version if the last direction in a motif spec should be the direction from the  last motif note to the note following the motif.
-      % {Append {Pattern.contour {Pattern.mapItems Ns getPitch}} [_]}
    end
 
 
