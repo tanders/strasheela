@@ -30,10 +30,7 @@
     <li class="navn"><a href="contact.html">contact</a></li>
   </ul>
   <div id="logo">
-<a href="http://sourceforge.net/projects/strasheela"><img src="http://sflogo.sourceforge.net/sflogo.php?group_id=167225&type=12" width="120" height="30" border="0" alt="Get Strasheela at SourceForge.net. Fast, secure and Free Open Source software downloads" /></a>
-  </div>
-  <div id="logo">
-  <a href="http://cmr.soc.plymouth.ac.uk/"><img src="http://cmr.soc.plymouth.ac.uk/iccmr_logo_2.jpg" width="125"  width="80" height="30" border="0" alt="ICCMR Logo" /></a>
+<a href="http://sourceforge.net/projects/strasheela"><img src="http://sflogo.sourceforge.net/sflogo.php?group_id=167225&amp;type=15" width="150" height="40" alt="Get Strasheela at SourceForge.net. Fast, secure and Free Open Source software downloads" /></a>
   </div>
 </div>
     <h1>Harmonised Lindenmayer-System</h1>
@@ -108,14 +105,14 @@ A 'Free' Motif</h3>
 The <a href="../examples/07-Harmonised-L-system.oz">source</a> demonstrates how the solver is called with this CSP &mdash; search for <code>MakeMyFreeMotif</code> in the code...</p>
 
 <pre class="src">
-{Score<span style="color: #a020f0;">.</span>makeScore
+{Score<span style="color: #7f007f;">.</span>makeScore
  sim(items:[{MakeMyFreeMotif}
-            chord(duration:4<span style="color: #a020f0;">*</span>4                  <span style="color: #b22222;">% </span><span style="color: #b22222;">motif note no * motif note duration
+            chord(duration:4<span style="color: #7f007f;">*</span>4                  <span style="color: #b22222;">% </span><span style="color: #b22222;">motif note no * motif note duration
 </span>                  index:1
                   transposition:0)]
      startTime:0
      timeUnit:beats(16))                        <span style="color: #b22222;">% </span><span style="color: #b22222;">duration 16 is a quarter note
-</span> Aux<span style="color: #a020f0;">.</span>myCreators}
+</span> Aux<span style="color: #7f007f;">.</span>myCreators}
 </pre>
 
 <p><a class="image-link" href="../examples/Output/07-Harmonised-L-system-ex5.mp3">
@@ -128,18 +125,18 @@ The <a href="../examples/07-Harmonised-L-system.oz">source</a> demonstrates how 
 <p>The motif constructure <code>MakeMyFreeMotif</code> defines the motif quasi literally. Everything is fixed, only the note pitches are set to variables of the domain {48, ..., 72} (i.e. midi pitches two octaves around middle <em>c</em>). The function <code>Score.makeScore</code> has already been used in several examples before. <a href="../doc/api/node6.html#entity199">Score.makeScore2</a> is a cousin which does not fully initialise the score, and that way allows for the combination of its result with other parts of the final score.</p>
 
 <pre class="src">
-<span style="color: #a020f0;">proc</span><span style="color: #b8860b;"> </span>{<span style="color: #0000ff;">MakeMyFreeMotif</span> MyMotif}
-   MyMotif = {Score<span style="color: #a020f0;">.</span>makeScore2
+<span style="color: #7f007f;">proc</span><span style="color: #a0522d;"> </span>{<span style="color: #0000ff;">MakeMyFreeMotif</span> MyMotif}
+   MyMotif = {Score<span style="color: #7f007f;">.</span>makeScore2
               seq(info:freeMotif
                   items:[<span style="color: #b22222;">%% </span><span style="color: #b22222;">duration 4 is a sixtienth,
 </span>                         <span style="color: #b22222;">%% </span><span style="color: #b22222;">pitch is measured in MIDI keynumbers
-</span>                         note(duration:4 pitch:{FD<span style="color: #a020f0;">.</span>int 48<span style="color: #a020f0;">#</span>72})
-                         note(duration:4 pitch:{FD<span style="color: #a020f0;">.</span>int 48<span style="color: #a020f0;">#</span>72})
-                         note(duration:4 pitch:{FD<span style="color: #a020f0;">.</span>int 48<span style="color: #a020f0;">#</span>72})
-                         note(duration:4 pitch:{FD<span style="color: #a020f0;">.</span>int 48<span style="color: #a020f0;">#</span>72})])
-              Aux<span style="color: #a020f0;">.</span>myCreators}
+</span>                         note(duration:4 pitch:{FD<span style="color: #7f007f;">.</span>int 48<span style="color: #7f007f;">#</span>72})
+                         note(duration:4 pitch:{FD<span style="color: #7f007f;">.</span>int 48<span style="color: #7f007f;">#</span>72})
+                         note(duration:4 pitch:{FD<span style="color: #7f007f;">.</span>int 48<span style="color: #7f007f;">#</span>72})
+                         note(duration:4 pitch:{FD<span style="color: #7f007f;">.</span>int 48<span style="color: #7f007f;">#</span>72})])
+              Aux<span style="color: #7f007f;">.</span>myCreators}
    <span style="color: #b22222;">%%  </span><span style="color: #b22222;">Arbitrary further constraints on MyMotif can be added here...
-</span><span style="color: #a020f0;">end</span>
+</span><span style="color: #7f007f;">end</span>
 </pre>
 
 
@@ -150,7 +147,7 @@ A Parameterised Free Motif</h3>
 <p class="first">The following example variates the example <code>MakeMyFreeMotif</code> above by introducing additional user control via arguments to the new motif constructor <code>MakeMyFreeMotif2</code>. For example, the user may want to control the number of notes in the motif and the duration of each note:</p>
 
 <pre class="src">
-{MakeMyFreeMotif2 <span style="color: #a020f0;">unit</span>(n:6
+{MakeMyFreeMotif2 <span style="color: #7f007f;">unit</span>(n:6
                        noteDuration:8)}
 </pre>
 
@@ -161,7 +158,7 @@ A Parameterised Free Motif</h3>
 <p>All arguments are optional. For example,</p>
 
 <pre class="src">
-{MakeMyFreeMotif2 <span style="color: #a020f0;">unit</span>}
+{MakeMyFreeMotif2 <span style="color: #7f007f;">unit</span>}
 </pre>
 
 <p>creates the same output as</p>
@@ -174,24 +171,24 @@ A Parameterised Free Motif</h3>
 <p>Following is the definition of <code>MakeMyFreeMotif2</code>. Support for optional arguments is defined uses Oz' <a href="http://www.mozart-oz.org/documentation/base/record.html#section.records.records">Adjoin</a>: the variable <code>Settings</code> is bound to a record which adjoins the <code>Default</code> settings and the user-specified arguments in <code>Args</code> (features in <code>Args</code> take precedence over <code>Default</code>). <code>MakeMyFreeMotif2</code> is defined in such a way that it also 'forwards' arbitrary optional arguments to the constructor of the sequential container which <code>MakeMyFreeMotif2</code> returns. For example, <code>MakeMyFreeMotif2</code> handles the argument <code>startTime</code> or <code>endTime</code> properly.</p>
 
 <pre class="src">
-<span style="color: #a020f0;">proc</span><span style="color: #b8860b;"> </span>{<span style="color: #0000ff;">MakeMyFreeMotif2</span> Args MyMotif}
-   Default = <span style="color: #a020f0;">unit</span>(n:4
+<span style="color: #7f007f;">proc</span><span style="color: #a0522d;"> </span>{<span style="color: #0000ff;">MakeMyFreeMotif2</span> Args MyMotif}
+   Default = <span style="color: #7f007f;">unit</span>(n:4
                   noteDuration:4)
    Settings = {Adjoin Default Args}
-<span style="color: #a020f0;">in</span>
-   MyMotif = {Score<span style="color: #a020f0;">.</span>makeScore2
+<span style="color: #7f007f;">in</span>
+   MyMotif = {Score<span style="color: #7f007f;">.</span>makeScore2
               <span style="color: #b22222;">%% </span><span style="color: #b22222;">filtering out settings specific for MakeMyFreeMotif2 and
 </span>              <span style="color: #b22222;">%% </span><span style="color: #b22222;">'forward' all other arguments to the seq container
-</span>              {Adjoin {Record<span style="color: #a020f0;">.</span>subtractList Settings
+</span>              {Adjoin {Record<span style="color: #7f007f;">.</span>subtractList Settings
                        [n noteDuration isStartingWithChord]}
                seq(info:freeMotif
-                   items: {LUtils<span style="color: #a020f0;">.</span>collectN Settings<span style="color: #a020f0;">.</span>n
-                           <span style="color: #a020f0;">fun</span><span style="color: #b8860b;"> </span>{<span style="color: #0000ff;">$</span>}
-                              note(duration:Settings<span style="color: #a020f0;">.</span>noteDuration
-                                   pitch:{FD<span style="color: #a020f0;">.</span>int 48<span style="color: #a020f0;">#</span>72})
-                           <span style="color: #a020f0;">end</span>})}
-              Aux<span style="color: #a020f0;">.</span>myCreators}
-<span style="color: #a020f0;">end</span>
+                   items: {LUtils<span style="color: #7f007f;">.</span>collectN Settings<span style="color: #7f007f;">.</span>n
+                           <span style="color: #7f007f;">fun</span><span style="color: #a0522d;"> </span>{<span style="color: #0000ff;">$</span>}
+                              note(duration:Settings<span style="color: #7f007f;">.</span>noteDuration
+                                   pitch:{FD<span style="color: #7f007f;">.</span>int 48<span style="color: #7f007f;">#</span>72})
+                           <span style="color: #7f007f;">end</span>})}
+              Aux<span style="color: #7f007f;">.</span>myCreators}
+<span style="color: #7f007f;">end</span>
 </pre>
 
 
@@ -219,15 +216,15 @@ The run motif creates a little run and allows for non-harmonic passing tones.</p
 <p>The run motif, the chord repetition motif, and the arpeggio motif all support a few parameters. For example, the following code creates an arpeggio of 5 notes (argument <code>n</code>), which is ascending (argument <code>direction</code>).</p>
 
 <pre class="src">
-{Score<span style="color: #a020f0;">.</span>makeScore
- sim(items:[{MakeArpeggio <span style="color: #a020f0;">unit</span>(n:5                <span style="color: #b22222;">% </span><span style="color: #b22222;">No. of motif notes
-</span>                               direction:<span style="color: #bc8f8f;">'&lt;:'</span>)}   <span style="color: #b22222;">% </span><span style="color: #b22222;">relation to predecessor
-</span>            chord(duration:5<span style="color: #a020f0;">*</span>8 <span style="color: #b22222;">% </span><span style="color: #b22222;">(motif n * motif note duration)
+{Score<span style="color: #7f007f;">.</span>makeScore
+ sim(items:[{MakeArpeggio <span style="color: #7f007f;">unit</span>(n:5                <span style="color: #b22222;">% </span><span style="color: #b22222;">No. of motif notes
+</span>                               direction:<span style="color: #8b2252;">'&lt;:'</span>)}   <span style="color: #b22222;">% </span><span style="color: #b22222;">relation to predecessor
+</span>            chord(duration:5<span style="color: #7f007f;">*</span>8 <span style="color: #b22222;">% </span><span style="color: #b22222;">(motif n * motif note duration)
 </span>                  index:1
                   transposition:0)]
      startTime:0
      timeUnit:beats(16))
- Aux<span style="color: #a020f0;">.</span>myCreators}
+ Aux<span style="color: #7f007f;">.</span>myCreators}
 </pre>
 
 <p><a class="image-link" href="../examples/Output/07-Harmonised-L-system-ex3b.mp3">
@@ -258,17 +255,17 @@ seq(items:[arpeggio run arpeggio])
 
 <pre class="src">
 {HarmoniseScore seq(items:[arpeggio(n:4
-                                    direction:<span style="color: #bc8f8f;">'&lt;:'</span>
-                                    isStartingWithChord:<span style="color: #a020f0;">unit</span>)
-                           chordRepetition(isStartingWithChord:<span style="color: #a020f0;">unit</span>)
-                           chordRepetition(isStartingWithChord:<span style="color: #a020f0;">unit</span>)
+                                    direction:<span style="color: #8b2252;">'&lt;:'</span>
+                                    isStartingWithChord:<span style="color: #7f007f;">unit</span>)
+                           chordRepetition(isStartingWithChord:<span style="color: #7f007f;">unit</span>)
+                           chordRepetition(isStartingWithChord:<span style="color: #7f007f;">unit</span>)
                            arpeggio(n:3
-                                    direction:<span style="color: #bc8f8f;">'&gt;:'</span>
-                                    isStartingWithChord:<span style="color: #a020f0;">unit</span>)
+                                    direction:<span style="color: #8b2252;">'&gt;:'</span>
+                                    isStartingWithChord:<span style="color: #7f007f;">unit</span>)
                            arpeggio(n:4
-                                    direction:<span style="color: #bc8f8f;">'&gt;:'</span>
-                                    isStartingWithChord:<span style="color: #a020f0;">unit</span>)])
- <span style="color: #a020f0;">unit</span>(arpeggio:MakeArpeggio
+                                    direction:<span style="color: #8b2252;">'&gt;:'</span>
+                                    isStartingWithChord:<span style="color: #7f007f;">unit</span>)])
+ <span style="color: #7f007f;">unit</span>(arpeggio:MakeArpeggio
       chordRepetition:MakeChordRepetition)}
 </pre>
 
@@ -296,17 +293,17 @@ Harmonic Rules</h3>
 <p>Most motif notes express their underlying harmony. Exceptions are only the passing notes in the run motif. Such non-harmonic notes are marked with an x above the note head. Following is another motif sequence which uses a few more motifs.</p>
 
 <pre class="src">
-{HarmoniseScore seq(items:[run(isStartingWithChord:<span style="color: #a020f0;">unit</span>)
-                           chordRepetition(isStartingWithChord:<span style="color: #a020f0;">unit</span>)
-                           run(isStartingWithChord:<span style="color: #a020f0;">unit</span>)
-                           chordRepetition(isStartingWithChord:<span style="color: #a020f0;">unit</span>)
-                           chordRepetition(isStartingWithChord:<span style="color: #a020f0;">unit</span>)
+{HarmoniseScore seq(items:[run(isStartingWithChord:<span style="color: #7f007f;">unit</span>)
+                           chordRepetition(isStartingWithChord:<span style="color: #7f007f;">unit</span>)
+                           run(isStartingWithChord:<span style="color: #7f007f;">unit</span>)
+                           chordRepetition(isStartingWithChord:<span style="color: #7f007f;">unit</span>)
+                           chordRepetition(isStartingWithChord:<span style="color: #7f007f;">unit</span>)
                            freeMotif(n:7
                                      noteDuration:4)
                            arpeggio(n:6
-                                    direction:<span style="color: #bc8f8f;">'&gt;:'</span>
-                                    isStartingWithChord:<span style="color: #a020f0;">unit</span>)])
- <span style="color: #a020f0;">unit</span>(arpeggio:MakeArpeggio
+                                    direction:<span style="color: #8b2252;">'&gt;:'</span>
+                                    isStartingWithChord:<span style="color: #7f007f;">unit</span>)])
+ <span style="color: #7f007f;">unit</span>(arpeggio:MakeArpeggio
       chordRepetition:MakeChordRepetition
       run:MakeRun
       freeMotif:MakeMyFreeMotif2)}
@@ -324,10 +321,10 @@ Algorithmic Creation of the Global Form</h2>
 <p class="first">The gobal musical form &mdash; a motif sequence &mdash; was manually created in the last examples. This section creates motif sequences by algorithmic means. A <a href="http://en.wikipedia.org/wiki/L-system">Lindenmayer system</a> (L-system) is a formal grammar which can output self-similar fractals. L-systems are an established technique in algorithmic composition (cf. <a href="http://commonmusic.sourceforge.net/doc/cm.html">Common Music</a>'s <a href="http://commonmusic.sourceforge.net/doc/dict/rewrite-cls.html">rewrite pattern</a>). The example's <a href="../examples/07-Harmonised-L-system.oz">source</a> defines the L-system generator <code>MyLSystemMotifs</code>. The following L-system definition implements an L-system example which is explained <a href="http://en.wikipedia.org/wiki/L-system#Example_1:_Algae">here</a>. The example returns the 7th generation of an L-system with the two rules (a -&gt; a b) and (b -&gt; a).</p>
 
 <pre class="src">
-{MyLSystemMotifs <span style="color: #a020f0;">unit</span>(n:7                                 ; generation to output
+{MyLSystemMotifs <span style="color: #7f007f;">unit</span>(n:7                                 ; generation to output
                       axiom: [b]                          ; starting sequence
-                      rules: <span style="color: #a020f0;">unit</span>(a: <span style="color: #a020f0;">fun</span><span style="color: #b8860b;"> </span>{<span style="color: #0000ff;">$</span> R} [a b] <span style="color: #a020f0;">end</span>  ; transformation specifications
-                                  b: <span style="color: #a020f0;">fun</span><span style="color: #b8860b;"> </span>{<span style="color: #0000ff;">$</span> R} [a] <span style="color: #a020f0;">end</span>))}
+                      rules: <span style="color: #7f007f;">unit</span>(a: <span style="color: #7f007f;">fun</span><span style="color: #a0522d;"> </span>{<span style="color: #0000ff;">$</span> R} [a b] <span style="color: #7f007f;">end</span>  ; transformation specifications
+                                  b: <span style="color: #7f007f;">fun</span><span style="color: #a0522d;"> </span>{<span style="color: #0000ff;">$</span> R} [a] <span style="color: #7f007f;">end</span>))}
 </pre>
 
 <p>This definition results in the following symbol sequence.</p>
@@ -343,35 +340,35 @@ Algorithmic Creation of the Global Form</h2>
 The default settings for <code>MyLSystemMotif</code> generate a sequence of specifications for the motifs defined above. The third generation of this L-system is generated with the following call.</p>
 
 <pre class="src">
-{MyLSystemMotifs <span style="color: #a020f0;">unit</span>(n:3)}
+{MyLSystemMotifs <span style="color: #7f007f;">unit</span>(n:3)}
 </pre>
 
 
 <p>This call outputs the following motif sequence.</p>
 
 <pre class="src">
-[arpeggio(direction:<span style="color: #bc8f8f;">'&gt;:'</span>
-          isStartingWithChord:<span style="color: #a020f0;">unit</span>
+[arpeggio(direction:<span style="color: #8b2252;">'&gt;:'</span>
+          isStartingWithChord:<span style="color: #7f007f;">unit</span>
           n:4)
- arpeggio(direction:<span style="color: #bc8f8f;">'&gt;:'</span>
+ arpeggio(direction:<span style="color: #8b2252;">'&gt;:'</span>
           n:2)
  chordRepetition
- arpeggio(direction:<span style="color: #bc8f8f;">'&gt;:'</span>
-          isStartingWithChord:<span style="color: #a020f0;">unit</span>
+ arpeggio(direction:<span style="color: #8b2252;">'&gt;:'</span>
+          isStartingWithChord:<span style="color: #7f007f;">unit</span>
           n:3)
- arpeggio(direction:<span style="color: #bc8f8f;">'&gt;:'</span>
+ arpeggio(direction:<span style="color: #8b2252;">'&gt;:'</span>
           n:2)
  chordRepetition
  run
- arpeggio(direction:<span style="color: #bc8f8f;">'&gt;:'</span>
-          isStartingWithChord:<span style="color: #a020f0;">unit</span>
+ arpeggio(direction:<span style="color: #8b2252;">'&gt;:'</span>
+          isStartingWithChord:<span style="color: #7f007f;">unit</span>
           n:2)
- arpeggio(direction:<span style="color: #bc8f8f;">'&lt;:'</span>
+ arpeggio(direction:<span style="color: #8b2252;">'&lt;:'</span>
           n:2)
- arpeggio(direction:<span style="color: #bc8f8f;">'&gt;:'</span>
-          isStartingWithChord:<span style="color: #a020f0;">unit</span>
+ arpeggio(direction:<span style="color: #8b2252;">'&gt;:'</span>
+          isStartingWithChord:<span style="color: #7f007f;">unit</span>
           n:3)
- arpeggio(direction:<span style="color: #bc8f8f;">'&gt;:'</span>
+ arpeggio(direction:<span style="color: #8b2252;">'&gt;:'</span>
           n:2)
  chordRepetition]
 </pre>
@@ -418,8 +415,8 @@ The default settings for <code>MyLSystemMotif</code> generate a sequence of spec
 <!-- Footer -->
 <div id="footer">
 <div id="author">&copy; 
-Torsten Anders</div>
-<div id="date">Last time edited: 2009.03.27</div>
+torsten</div>
+<div id="date">Last time edited: 2011.12.28</div>
 </div>
   </body>
 </html>

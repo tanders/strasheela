@@ -12,17 +12,17 @@
 
 Strasheela is a highly expressive constraint-based music composition system.[2] The Strasheela user declaratively states a music theory and the computer generates music which complies with this theory. A theory is formulated as a constraint satisfaction problem (CSP) by a set of rules (constraints) applied to a music representation in which some aspects are expressed by variables (unknowns). Music constraint programming is style-independent and is well-suited for highly complex theories (e.g. a fully-fledged theory of harmony). User-interface is the programming language Oz. The results can be output into various formats including MIDI, Csound, and Lilypond. 
 
-Strasheela is developed at the [[http://cmr.soc.plymouth.ac.uk/][Interdisciplinary Centre for Computer Music Research (ICCMR)]] at the [[http://www.plymouth.ac.uk/][University of Plymouth]].
-
 <contents depth="1">
 
 * News 
 
   For the lates changes check the [[http://apps.sourceforge.net/trac/strasheela/timeline][Trac Timeline]] 
 
-  [[https://sourceforge.net/projects/strasheela/][Strasheela 0.9.10 released]] ([[Changes]])  (28 March 2009)
+  *28 December 2011*: Since its last release in 2009 the development of Strasheela has somewhat slowed down. I have now various other responsibilities  as a father of twins on the on hand, and as lecturer and course leader on the other hand. Nevertheless, work on Strasheela is still ongoing. I just added several recent Strasheela-related papers including 4 Journal articles to the list of [[Publications]]. I also used Strasheela for [[http://cmr.soc.plymouth.ac.uk/tanders/music.htm][several recent compositions]].
 
-  Strasheela 0.9.9 released ([[Changes]])  (9 March 2009)
+  Also, several important extensions have meanwhile been added to the code repository, including texture constraints (controls whether a musical section is, say, homophonic, quasi-homophonic, homo-directional etc.); constraints on rhythmic accents (controls the rhythmic weight of notes depending on a wide range of musical feature -- including relative duration, pitch intervals, presence of an anacrusis ++ and the relation between rhythmic weights and metric positions); and support for arbitrary regular temperaments including extended just intonation.  
+
+  *28 March 2009*: [[https://sourceforge.net/projects/strasheela/][Strasheela 0.9.10 released]] ([[Changes]])  
 
   [[OldNews][Old news]]
 
@@ -72,9 +72,10 @@ Strasheela is developed at the [[http://cmr.soc.plymouth.ac.uk/][Interdisciplina
   [[Contributing]]
 
 
-------------
 
-  *Strasheela is developed at the [[http://cmr.soc.plymouth.ac.uk/index.html][Interdisciplinary Centre of Computer Music Research]] at the [[http://www.plymouth.ac.uk/][University of Plymouth]], and funded by the [[http://www.lestrum.org/Site/Welcome.html][Le StruM project]].* 
+* History
+
+  The development of Strasheela began at the [[http://www.sarc.qub.ac.uk/][Sonic Arts Research Centre]] at [[http://www.qub.ac.uk/][Queen's University Belfast]] as part of the PhD of Torsten Anders. The development was continued at the [[http://cmr.soc.plymouth.ac.uk/index.html][Interdisciplinary Centre of Computer Music Research]] at the [[http://www.plymouth.ac.uk/][University of Plymouth]] (funded by the [[http://www.lestrum.org/Site/Welcome.html][Le StruM project]]), and presently at the [[http://www.beds.ac.uk/][University of Bedfordshire]].
 
 ------------
 

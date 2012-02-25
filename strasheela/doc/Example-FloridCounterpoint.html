@@ -30,10 +30,7 @@
     <li class="navn"><a href="contact.html">contact</a></li>
   </ul>
   <div id="logo">
-<a href="http://sourceforge.net/projects/strasheela"><img src="http://sflogo.sourceforge.net/sflogo.php?group_id=167225&type=12" width="120" height="30" border="0" alt="Get Strasheela at SourceForge.net. Fast, secure and Free Open Source software downloads" /></a>
-  </div>
-  <div id="logo">
-  <a href="http://cmr.soc.plymouth.ac.uk/"><img src="http://cmr.soc.plymouth.ac.uk/iccmr_logo_2.jpg" width="125"  width="80" height="30" border="0" alt="ICCMR Logo" /></a>
+<a href="http://sourceforge.net/projects/strasheela"><img src="http://sflogo.sourceforge.net/sflogo.php?group_id=167225&amp;type=15" width="150" height="40" alt="Get Strasheela at SourceForge.net. Fast, secure and Free Open Source software downloads" /></a>
   </div>
 </div>
     <h1>Florid Counterpoint</h1>
@@ -100,35 +97,35 @@ the following form (<code>items</code> is the argument of a container listing th
 contained score objects).</p>
 
 <pre class="src">
-sim(items:[seq(items:[note1 <span style="color: #a020f0;">...</span> noteN])
-           seq(items:[note1 <span style="color: #a020f0;">...</span> noteN])])
+sim(items:[seq(items:[note1 <span style="color: #7f007f;">...</span> noteN])
+           seq(items:[note1 <span style="color: #7f007f;">...</span> noteN])])
 </pre>
 
 <p>Such a textual music representation specification is transformed into a nested score object (with an extensive <a href="http://mitpress.mit.edu/sicp/full-text/book/book-Z-H-13.html#%_chap_2">data abstraction</a> interface for accessing score information) by the function <a href="api/node6.html#entity200">Score.makeScore</a>. The following code snippet shows the music representation specification in full detail. Here, notes are created by the function <code>MakeNote</code>. <code>MakeNote</code> returns a note specification with individual variables at the parameters duration and pitch &mdash; in contrast to the Fuxian example, not only all note pitches but also all note durations are searched for.
 Functions are <a href="http://en.wikipedia.org/wiki/First-class_function">first-class objects</a> in Oz (e.g. a function can expect other functions as arguments).<sup><a class="footref" name="fnr.1" href="#fn.1">1</a></sup> The function <a href="api/node4.html#entity95">LUtils.collectN</a> receives <code>MakeNote</code> as an argument, calls it multiple times, and returns the collected results.</p>
 
 <pre class="src">
-<span style="color: #a020f0;">fun</span><span style="color: #b8860b;"> </span>{<span style="color: #0000ff;">MakeNote</span> PitchDomain}
+<span style="color: #7f007f;">fun</span><span style="color: #a0522d;"> </span>{<span style="color: #0000ff;">MakeNote</span> PitchDomain}
   <span style="color: #b22222;">%% </span><span style="color: #b22222;">duration domain {eighth, quarter, halve note} -- depends on timeUnit set below
-</span>  note(duration: {FD<span style="color: #a020f0;">.</span>int [2 4 8]}
-       pitch: {FD<span style="color: #a020f0;">.</span>int 53<span style="color: #a020f0;">#</span>72}               <span style="color: #b22222;">% </span><span style="color: #b22222;">midi keynumbers in {53, ..., 72}
+</span>  note(duration: {FD<span style="color: #7f007f;">.</span>int [2 4 8]}
+       pitch: {FD<span style="color: #7f007f;">.</span>int 53<span style="color: #7f007f;">#</span>72}               <span style="color: #b22222;">% </span><span style="color: #b22222;">midi keynumbers in {53, ..., 72}
 </span>       amplitude: 80)
-<span style="color: #a020f0;">end</span>
+<span style="color: #7f007f;">end</span>
 
-MyScore = {Score<span style="color: #a020f0;">.</span>makeScore
+MyScore = {Score<span style="color: #7f007f;">.</span>makeScore
            sim(items: [seq(handle:Voice1   <span style="color: #b22222;">% </span><span style="color: #b22222;">bind variable Voice1 to instance of seq
-</span>                           items: {LUtils<span style="color: #a020f0;">.</span>collectN 17 MakeNote}
+</span>                           items: {LUtils<span style="color: #7f007f;">.</span>collectN 17 MakeNote}
                            offsetTime:0
                            <span style="color: #b22222;">%% </span><span style="color: #b22222;">Voice1 and Voice2 end at same EndTime
 </span>                           endTime:EndTime)
                        seq(handle:Voice2
-                           items: {LUtils<span style="color: #a020f0;">.</span>collectN 15 MakeNote}
+                           items: {LUtils<span style="color: #7f007f;">.</span>collectN 15 MakeNote}
                            <span style="color: #b22222;">%% </span><span style="color: #b22222;">Voice2 starts whole note later
 </span>                           offsetTime:16
                            endTime:EndTime)]
                startTime: 0
                timeUnit:beats(4))  <span style="color: #b22222;">% </span><span style="color: #b22222;">a beat has length 4 (i.e. 1 denotes a sixteenth note)
-</span>           <span style="color: #a020f0;">unit</span>}
+</span>           <span style="color: #7f007f;">unit</span>}
 </pre>
 
 <p>The two sequential containers are accessible via the variables <code>Voice1</code> and
@@ -238,28 +235,28 @@ Rule Definition and Application</h2>
 
 
 <pre class="src">
-<span style="color: #a020f0;">proc</span><span style="color: #b8860b;"> </span>{<span style="color: #0000ff;">InCMajor</span> MyNote}
-   PitchClass = {FD<span style="color: #a020f0;">.</span>modI {MyNote getPitch($)} 12}
-<span style="color: #a020f0;">in</span>
-   {List<span style="color: #a020f0;">.</span>forAll [1 3 6 8 10]
-    <span style="color: #a020f0;">proc</span><span style="color: #b8860b;"> </span>{<span style="color: #0000ff;">$</span> BlackKey} PitchClass <span style="color: #a020f0;">\=:</span> BlackKey <span style="color: #a020f0;">end</span>}
-<span style="color: #a020f0;">end</span>
+<span style="color: #7f007f;">proc</span><span style="color: #a0522d;"> </span>{<span style="color: #0000ff;">InCMajor</span> MyNote}
+   PitchClass = {FD<span style="color: #7f007f;">.</span>modI {MyNote getPitch($)} 12}
+<span style="color: #7f007f;">in</span>
+   {List<span style="color: #7f007f;">.</span>forAll [1 3 6 8 10]
+    <span style="color: #7f007f;">proc</span><span style="color: #a0522d;"> </span>{<span style="color: #0000ff;">$</span> BlackKey} PitchClass <span style="color: #7f007f;">\=:</span> BlackKey <span style="color: #7f007f;">end</span>}
+<span style="color: #7f007f;">end</span>
 </pre>
 
 <p>The rule <code>IsCanon</code> constrains <code>Voice1</code> and <code>Voice2</code> to form a canon in the fifth. The rule loops in parallel through the first <code>CanonNo</code> notes of each voice. It constrains note pairs at the same position in their containing voice to equal durations and to pitches exactly 7 apart (i.e. a fifth measured in semitones).</p>
 
 <pre class="src">
-<span style="color: #a020f0;">proc</span><span style="color: #b8860b;"> </span>{<span style="color: #0000ff;">IsCanon</span> Voice1 Voice2}
+<span style="color: #7f007f;">proc</span><span style="color: #a0522d;"> </span>{<span style="color: #0000ff;">IsCanon</span> Voice1 Voice2}
    CanonNo = 10
-<span style="color: #a020f0;">in</span>
-   <span style="color: #a020f0;">for</span>
-      Note1 <span style="color: #a020f0;">in</span> {List<span style="color: #a020f0;">.</span>take {Voice1 getItems($)} CanonNo}
-      Note2 <span style="color: #a020f0;">in</span> {List<span style="color: #a020f0;">.</span>take {Voice2 getItems($)} CanonNo}
-   <span style="color: #a020f0;">do</span>
-      {Note1 getDuration($)} <span style="color: #a020f0;">=:</span> {Note2 getDuration($)}
-      {Note1 getPitch($)} <span style="color: #a020f0;">+</span> 7 <span style="color: #a020f0;">=:</span> {Note2 getPitch($)}
-   <span style="color: #a020f0;">end</span>
-<span style="color: #a020f0;">end</span>
+<span style="color: #7f007f;">in</span>
+   <span style="color: #7f007f;">for</span>
+      Note1 <span style="color: #7f007f;">in</span> {List<span style="color: #7f007f;">.</span>take {Voice1 getItems($)} CanonNo}
+      Note2 <span style="color: #7f007f;">in</span> {List<span style="color: #7f007f;">.</span>take {Voice2 getItems($)} CanonNo}
+   <span style="color: #7f007f;">do</span>
+      {Note1 getDuration($)} <span style="color: #7f007f;">=:</span> {Note2 getDuration($)}
+      {Note1 getPitch($)} <span style="color: #7f007f;">+</span> 7 <span style="color: #7f007f;">=:</span> {Note2 getPitch($)}
+   <span style="color: #7f007f;">end</span>
+<span style="color: #7f007f;">end</span>
 </pre>
 
 
@@ -307,8 +304,8 @@ Rule Definition and Application</h2>
 <!-- Footer -->
 <div id="footer">
 <div id="author">&copy; 
-Torsten Anders</div>
-<div id="date">Last time edited: 2009.03.18</div>
+torsten</div>
+<div id="date">Last time edited: 2011.12.28</div>
 </div>
   </body>
 </html>

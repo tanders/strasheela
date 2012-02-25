@@ -30,10 +30,7 @@
     <li class="navn"><a href="contact.html">contact</a></li>
   </ul>
   <div id="logo">
-    <a href="http://sourceforge.net"><img src="http://sflogo.sourceforge.net/sflogo.php?group_id=167225&amp;type=1" width="88" height="31" border="0" alt="SourceForge.net Logo" /></a>
-  </div>
-  <div id="logo">
-  <a href="http://cmr.soc.plymouth.ac.uk/"><img src="http://cmr.soc.plymouth.ac.uk/iccmr_logo_2.jpg" width="125"  width="88" height="31" border="0" alt="ICCMR Logo" /></a>
+<a href="http://sourceforge.net/projects/strasheela"><img src="http://sflogo.sourceforge.net/sflogo.php?group_id=167225&amp;type=15" width="150" height="40" alt="Get Strasheela at SourceForge.net. Fast, secure and Free Open Source software downloads" /></a>
   </div>
 </div>
     <h1>Realtime Constraint Programming: A Simple Counterpoint Example</h1>
@@ -127,8 +124,8 @@ Strasheela OSC Interface</h3>
 <p class="first">Strasheela currently uses the UNIX applications <code>sendOSC</code> and <code>dumpOSC</code> (available <a href="http://www.cnmat.berkeley.edu/OpenSoundControl/">here</a>) for its OSC interface. Hence, the OSC interface (and also this example) is only supported on UNIX systems (e.g., Linux or MacOS X). Firstly, we must load the Strasheela functors required for realtime constraint programming. <code>ModuleLink</code> should be defined in your Oz initialisation file (cf. <a href="../_ozrc">../_ozrc</a>), and you may add the following code to this file as well. Please remember that variables (e.g., <code>OSC</code> and <code>RT</code>) must be declared first (e.g., by preceding the keyword <code>declare</code> at the beginning of your Oz initialisation file).</p>
 
 <pre class="src">
-[OSC RT] = {ModuleLink [<span style="color: #bc8f8f;">'x-ozlib://anders/strasheela/OSC/OSC.ozf'</span>
-                        <span style="color: #bc8f8f;">'x-ozlib://anders/strasheela/Realtime/Realtime.ozf'</span>]}
+[OSC RT] = {ModuleLink [<span style="color: #8b2252;">'x-ozlib://anders/strasheela/OSC/OSC.ozf'</span>
+                        <span style="color: #8b2252;">'x-ozlib://anders/strasheela/Realtime/Realtime.ozf'</span>]}
 </pre>
 
 <p>The following four lines set up OSC input at port 7777 and output to port 57120 (the port of sclang, the Supercollider language application).<sup><a class="footref" name="fnr.1" href="#fn.1">1</a></sup></p>
@@ -136,8 +133,8 @@ Strasheela OSC Interface</h3>
 <pre class="src">
 OutPort = 57120                 <span style="color: #b22222;">% </span><span style="color: #b22222;">sclang port
 </span>InPort = 7777
-MySendOSC = {New OSC<span style="color: #a020f0;">.</span>sendOSC init(port:OutPort)}
-MyDumpOSC = {New OSC<span style="color: #a020f0;">.</span>dumpOSC init(port:InPort)}
+MySendOSC = {New OSC<span style="color: #7f007f;">.</span>sendOSC init(port:OutPort)}
+MyDumpOSC = {New OSC<span style="color: #7f007f;">.</span>dumpOSC init(port:InPort)}
 </pre>
 
 <h4>Testing</h4>
@@ -146,8 +143,8 @@ MyDumpOSC = {New OSC<span style="color: #a020f0;">.</span>dumpOSC init(port:InPo
 
 <pre class="src">
 OutPort = InPort = 1234
-MySendOSC = {New OSC<span style="color: #a020f0;">.</span>sendOSC init(port:OutPort)}
-MyDumpOSC = {New OSC<span style="color: #a020f0;">.</span>dumpOSC init(port:InPort)}
+MySendOSC = {New OSC<span style="color: #7f007f;">.</span>sendOSC init(port:OutPort)}
+MyDumpOSC = {New OSC<span style="color: #7f007f;">.</span>dumpOSC init(port:InPort)}
 </pre>
 
 <p>The following code line will cause Strasheela to browse all OSC package received at port <code>InPort</code>. The method <code>getOSCs</code> returns a stream of packages (i.e. a list whose tail is unbound and which can therefore be extended).</p>
@@ -159,27 +156,27 @@ MyDumpOSC = {New OSC<span style="color: #a020f0;">.</span>dumpOSC init(port:InPo
 <p>Instead, the next line installs an OSC responder which reacts only to messages with the address pattern '/note'. Whenever a message with this address is received, the corresponding procedure is called. Here, the procedure also just browses the message. The responder also receives a timetag, which is 1 in case a single message was sent. In case the message was sent within a bundle, then the timetag of the enclosing bundle is received. See below for details.</p>
 
 <pre class="src">
-{MyDumpOSC setResponder(<span style="color: #bc8f8f;">'/note'</span> <span style="color: #a020f0;">proc</span><span style="color: #b8860b;"> </span>{<span style="color: #0000ff;">$</span> Timetag Msg} {Browse responder<span style="color: #a020f0;">#</span>Msg} <span style="color: #a020f0;">end</span>)}
+{MyDumpOSC setResponder(<span style="color: #8b2252;">'/note'</span> <span style="color: #7f007f;">proc</span><span style="color: #a0522d;"> </span>{<span style="color: #0000ff;">$</span> Timetag Msg} {Browse responder<span style="color: #7f007f;">#</span>Msg} <span style="color: #7f007f;">end</span>)}
 </pre>
 
 <p>OSC messages may contain strings, which are not properly displayed by the Browser by default (remember that strings are just lists of character, which in turn are just integers). You can customise the Browser either via its GUI (in menu &quot;Options&quot;, entry &quot;Representation...&quot; tick Strings), or feed the following line.</p>
 
 <pre class="src">
-{Browser<span style="color: #a020f0;">.</span>object option(representation strings:<span style="color: #a020f0;">true</span>)}
+{Browser<span style="color: #7f007f;">.</span>object option(representation strings:<span style="color: #7f007f;">true</span>)}
 </pre>
 
 <p>Now, we are ready to send test messages from <code>MySendOSC</code> to <code>MyDumpOSC</code>. The <code>'\note'</code> parameters of this example are only intended for testing, and have no further meaning.</p>
 
 <pre class="src">
-{MySendOSC send(test(some <span style="color: #bc8f8f;">"test message"</span>))}
-{MySendOSC send(<span style="color: #bc8f8f;">'/note'</span>(0 1 2<span style="color: #a020f0;">.</span>0))}
+{MySendOSC send(test(some <span style="color: #8b2252;">"test message"</span>))}
+{MySendOSC send(<span style="color: #8b2252;">'/note'</span>(0 1 2<span style="color: #7f007f;">.</span>0))}
 </pre>
 
 <p>Please note that OSC messages are expressed simply by Oz tuples for the <code>send</code> method, and the the received messages have the same format. The Strasheela interface also supports OSC bundles, including timetags. A bundle is a list, and the first bundle element is optionally a timetag. Bundles can be nested. Different timetag formats are supported, but the default is an integer denoting the milliseconds since midnight UTC of January 1, 1970. The following example sends a bundle with a timetag 1000 msec later than now and a single message. Please see the <a href="../contributions/anders/OSC/doc/node1.html">documentation</a> for further details on the format of OSC packets in Strasheela.</p>
 
 <pre class="src">
-{MySendOSC send([{OSC<span style="color: #a020f0;">.</span>timeNow} <span style="color: #a020f0;">+</span> 1000
-                 <span style="color: #bc8f8f;">'/note'</span>(0 1 2<span style="color: #a020f0;">.</span>0)])}
+{MySendOSC send([{OSC<span style="color: #7f007f;">.</span>timeNow} <span style="color: #7f007f;">+</span> 1000
+                 <span style="color: #8b2252;">'/note'</span>(0 1 2<span style="color: #7f007f;">.</span>0)])}
 </pre>
 
 
@@ -191,8 +188,8 @@ Supercollider OSC Interface</h3>
 <p class="first">We now come to the Supercollider side of our communication process. Supercollider already receives OSC per default at the port 57120. We only need to define what Supercollider should do when it receives OSC packets (see below). The following two lines define an interface for sending OSC.</p>
 
 <pre class="src">
-<span style="color: #b8860b;">~outPort</span> = 7777;
-<span style="color: #b8860b;">~mySendOSC</span> = <span style="color: #228b22;">NetAddr</span>(<span style="color: #bc8f8f;">"localhost"</span>, <span style="color: #b8860b;">~outPort</span>);
+~outPort = 7777;
+~mySendOSC = NetAddr(<span style="color: #8b2252;">"localhost"</span>, ~outPort);
 </pre>
 
 
@@ -201,24 +198,24 @@ Supercollider OSC Interface</h3>
 <p class="first">Assuming that OSC messages are still browsed on the Strasheela side, we can test the communication from Supercollider to Strasheela with the following code.</p>
 
 <pre class="src">
-<span style="color: #b8860b;">~mySendOSC</span>.sendMsg(<span style="color: #5f9ea0;">'test'</span>, <span style="color: #5f9ea0;">'some'</span>, <span style="color: #bc8f8f;">"test message"</span>);
-<span style="color: #b8860b;">~mySendOSC</span>.sendMsg(<span style="color: #5f9ea0;">'/note'</span>, 0, 1, 2.0);
+~mySendOSC.sendMsg('test', 'some', <span style="color: #8b2252;">"test message"</span>);
+~mySendOSC.sendMsg('/note', 0, 1, 2.0);
 </pre>
 
 <p>Finally, we test sending OSC from Strasheela to Supercollider. The following Supercollider code defines a function which is called whenever Supercollider receives any OSC message. This function simply prints any received message. However, once Supercollider's localhost synthesis server <code>scsynth</code> is started, it also sends OSC messages to the Supercollider language application. As we are not interested in the messages from the <code>scsynth</code>, the <code>if</code> conditional ensures that those messages do not cause any additional action.</p>
 
 <pre class="src">
-<span style="color: #a020f0;">thisProcess</span>.recvOSCfunc = { <span style="color: #a020f0;">arg</span> time, addr, msg;
-    <span style="color: #0000ff;">if</span> ( addr.port != 57110, <span style="color: #b22222;">// </span><span style="color: #b22222;">ignore scsynth messages
-</span>    { msg.postln; })
+thisProcess.recvOSCfunc = { arg time, addr, msg;
+        if ( addr.port != 57110, // ignore scsynth messages
+        { msg.postln; })
 };
 </pre>
 
 <p>We send OSC messages from Strasheela as before.</p>
 
 <pre class="src">
-{MySendOSC send(test(some <span style="color: #bc8f8f;">"test message"</span>))}
-{MySendOSC send(<span style="color: #bc8f8f;">'/note'</span>(0 1 2<span style="color: #a020f0;">.</span>0))}
+{MySendOSC send(test(some <span style="color: #8b2252;">"test message"</span>))}
+{MySendOSC send(<span style="color: #8b2252;">'/note'</span>(0 1 2<span style="color: #7f007f;">.</span>0))}
 </pre>
 
 
@@ -237,16 +234,16 @@ s.boot;
 <p>The following code defines our 'synth' and sends it to the server. The synth expects the following optional parameters: the duration <code>dur</code> (measured in secs), the pitch <code>freq</code> (measured in Hz), the loudness <code>amp</code> (a float in the interval [0,1]), and the filter cutoff-frequency <code>ffreq</code> (also measured in Hz). If you don't know the Supercollider language, please refer to the Supercollider documentation for understanding this definition.</p>
 
 <pre class="src">
-<span style="color: #228b22;">SynthDef</span>(<span style="color: #bc8f8f;">"Strasheela-playback"</span>, { <span style="color: #a020f0;">arg</span> dur=1, freq=440, amp=0.3, ffreq=1000;
-  <span style="color: #a020f0;">var</span> env = <span style="color: #228b22;">EnvGen</span>.<span style="color: #0000ff;">kr</span>(<span style="color: #228b22;">Env</span>.perc(0.05, dur-0.05, 1, -2), 1.0, <span style="color: #b8860b;">doneAction:</span> 2);
-  <span style="color: #228b22;">Out</span>.<span style="color: #0000ff;">ar</span>(0, <span style="color: #228b22;">RLPF</span>.<span style="color: #0000ff;">ar</span>(<span style="color: #228b22;">Saw</span>.<span style="color: #0000ff;">ar</span>(freq, amp*env), ffreq, 0.1))
+SynthDef(<span style="color: #8b2252;">"Strasheela-playback"</span>, { arg dur=1, freq=440, amp=0.3, ffreq=1000;
+  var env = EnvGen.kr(Env.perc(0.05, dur-0.05, 1, -2), 1.0, doneAction: 2);
+  Out.ar(0, RLPF.ar(Saw.ar(freq, amp*env), ffreq, 0.1))
 }).send(s);
 </pre>
 
 <p>We test our synth &quot;Strasheela-playback&quot; with the following call.</p>
 
 <pre class="src">
-<span style="color: #228b22;">Synth</span>(<span style="color: #bc8f8f;">"Strasheela-playback"</span>, [<span style="color: #5f9ea0;">\dur</span>, 3, <span style="color: #5f9ea0;">\freq</span>, 72.midicps, <span style="color: #5f9ea0;">\amp</span>, 1, <span style="color: #5f9ea0;">\ffreq</span>, 2000]);
+Synth(<span style="color: #8b2252;">"Strasheela-playback"</span>, [\dur, 3, \freq, 72.midicps, \amp, 1, \ffreq, 2000]);
 </pre>
 
 <p>In the example, the two different voices will use different filter settings in order to make them better distinguishable.</p>
@@ -261,38 +258,38 @@ Defining the CSP in Strasheela</h2>
 <p>A harmonic rule &mdash; stating that simultaneous notes must be consonant &mdash; is implemented by two procedures. The procedure <code>IsConsonance</code> defines the actual rule, and the procedure <code>GetInterval</code> makes the definition of this and the rule more simple. <code>GetInterval</code> expects two notes and returns a fresh finite domain integer (FD int), constrained to the absolute distance between the pitches of these notes.</p>
 
 <pre class="src">
-<span style="color: #a020f0;">proc</span><span style="color: #b8860b;"> </span>{<span style="color: #0000ff;">GetInterval</span> Note1 Note2 Interval}
-   Interval = {FD<span style="color: #a020f0;">.</span>decl}
-   {FD<span style="color: #a020f0;">.</span>distance {Note1 getPitch($)} {Note2 getPitch($)} <span style="color: #bc8f8f;">'=:'</span> Interval}
-<span style="color: #a020f0;">end</span>
+<span style="color: #7f007f;">proc</span><span style="color: #a0522d;"> </span>{<span style="color: #0000ff;">GetInterval</span> Note1 Note2 Interval}
+   Interval = {FD<span style="color: #7f007f;">.</span>decl}
+   {FD<span style="color: #7f007f;">.</span>distance {Note1 getPitch($)} {Note2 getPitch($)} <span style="color: #8b2252;">'=:'</span> Interval}
+<span style="color: #7f007f;">end</span>
 </pre>
 
 <p><code>IsConsonance</code> constrains the interval between two simultaneous notes (a FD int) to a perfect or imperfect consonance up to an octave plus a major third at maximum. Note that the unison (<code>Interval</code> equals 0) is not permitted.</p>
 
 <pre class="src">
-<span style="color: #a020f0;">proc</span><span style="color: #b8860b;"> </span>{<span style="color: #0000ff;">IsConsonance</span> Interval}
-   Interval <span style="color: #a020f0;">::</span> [3 4 7 8 9 12 15 16]
-<span style="color: #a020f0;">end</span>
+<span style="color: #7f007f;">proc</span><span style="color: #a0522d;"> </span>{<span style="color: #0000ff;">IsConsonance</span> Interval}
+   Interval <span style="color: #7f007f;">::</span> [3 4 7 8 9 12 15 16]
+<span style="color: #7f007f;">end</span>
 </pre>
 
 <p>The melodic rule <code>RestrictMelodicInterval</code> is very similar to <code>IsConsonance</code>: it expects the interval between two successive melodic notes (a FD int) and constrains it to either anything between a minor second and a fourth, or to a fifth, or to an octave. Again, the interval 0 (i.e. pitch repetition) is not permitted.</p>
 
 <pre class="src">
-<span style="color: #a020f0;">proc</span><span style="color: #b8860b;"> </span>{<span style="color: #0000ff;">RestrictMelodicInterval</span> Interval}
-   Interval <span style="color: #a020f0;">::</span> [1<span style="color: #a020f0;">#</span>5 7 12]
-<span style="color: #a020f0;">end</span>
+<span style="color: #7f007f;">proc</span><span style="color: #a0522d;"> </span>{<span style="color: #0000ff;">RestrictMelodicInterval</span> Interval}
+   Interval <span style="color: #7f007f;">::</span> [1<span style="color: #7f007f;">#</span>5 7 12]
+<span style="color: #7f007f;">end</span>
 </pre>
 
 <p>Finally, the rule <code>IsDiatonic</code> restricts the domain of a single note to pitch classes of the  C major scale.</p>
 
 <pre class="src">
-<span style="color: #a020f0;">local</span>
+<span style="color: #7f007f;">local</span>
    ScalePCs = [0 2 4 5 7 9 11] <span style="color: #b22222;">% </span><span style="color: #b22222;">list of pitch classes in c-major scale
-</span><span style="color: #a020f0;">in</span>
-   <span style="color: #a020f0;">proc</span><span style="color: #b8860b;"> </span>{<span style="color: #0000ff;">IsDiatonic</span> MyNote}
-      {FD<span style="color: #a020f0;">.</span>modI {MyNote getPitch($)} 12} <span style="color: #a020f0;">::</span> ScalePCs
-   <span style="color: #a020f0;">end</span>
-<span style="color: #a020f0;">end</span>
+</span><span style="color: #7f007f;">in</span>
+   <span style="color: #7f007f;">proc</span><span style="color: #a0522d;"> </span>{<span style="color: #0000ff;">IsDiatonic</span> MyNote}
+      {FD<span style="color: #7f007f;">.</span>modI {MyNote getPitch($)} 12} <span style="color: #7f007f;">::</span> ScalePCs
+   <span style="color: #7f007f;">end</span>
+<span style="color: #7f007f;">end</span>
 </pre>
 
 
@@ -305,31 +302,31 @@ Transforming OSC Packets to a Strasheela Score and Back</h2>
 <p>The transformations shown below depend on the variable <code>Now</code>. <code>Now</code> is bound to some value which serves as reference for the start time 0. The function <code>OSC.timeNow</code> returns the number of milliseconds since midnight UTC of January 1, 1970 (an int).</p>
 
 <pre class="src">
-Now = {OSC<span style="color: #a020f0;">.</span>timeNow}
+Now = {OSC<span style="color: #7f007f;">.</span>timeNow}
 </pre>
 
 <p>The function <code>MakeScoreNote</code> expects a <code>Timetag</code> and an OSC message representing a note. It returns a corresponding Strasheela note object. Supercollider sends the note parameters in the correct unit of measurement (temporal parameters are measured in msecs, <code>Pitch</code> is a MIDI key-number, and <code>Amplitude</code> is a MIDI velocity &mdash; all values are integers). Note that the note's start time is the <code>Timetag</code> minus <code>Now</code> (the <code>Timetag</code> itself is beyond the domain of a FD int). When a note is transformed back to OSC, <code>Now</code> is added to the note's start time (see below).</p>
 
 <pre class="src">
-<span style="color: #a020f0;">fun</span><span style="color: #b8860b;"> </span>{<span style="color: #0000ff;">MakeScoreNote</span> Timetag <span style="color: #bc8f8f;">'/note'</span>(Duration Pitch Amplitude)}
-   {Score<span style="color: #a020f0;">.</span>makeScore note(startTime: Timetag <span style="color: #a020f0;">-</span> Now
+<span style="color: #7f007f;">fun</span><span style="color: #a0522d;"> </span>{<span style="color: #0000ff;">MakeScoreNote</span> Timetag <span style="color: #8b2252;">'/note'</span>(Duration Pitch Amplitude)}
+   {Score<span style="color: #7f007f;">.</span>makeScore note(startTime: Timetag <span style="color: #7f007f;">-</span> Now
                          duration: Duration
                          pitch: Pitch
                          amplitude: Amplitude
                          timeUnit:msecs)
-    <span style="color: #a020f0;">unit</span>}
-<span style="color: #a020f0;">end</span>
+    <span style="color: #7f007f;">unit</span>}
+<span style="color: #7f007f;">end</span>
 </pre>
 
 <p>The corresponding function <code>MakeOSCNote</code> expects a Strasheela note object and returns an OSC bundle representing the note. The note's start time plus <code>Now</code> is the bundle's timetag. The note duration is transformed into seconds (a float) for more easy processing at the Supercollider side.</p>
 
 <pre class="src">
-<span style="color: #a020f0;">fun</span><span style="color: #b8860b;"> </span>{<span style="color: #0000ff;">MakeOSCNote</span> MyNote}
-   [{MyNote getStartTime($)} <span style="color: #a020f0;">+</span> Now
-    <span style="color: #bc8f8f;">'/note'</span>({MyNote getDurationInSeconds($)}
+<span style="color: #7f007f;">fun</span><span style="color: #a0522d;"> </span>{<span style="color: #0000ff;">MakeOSCNote</span> MyNote}
+   [{MyNote getStartTime($)} <span style="color: #7f007f;">+</span> Now
+    <span style="color: #8b2252;">'/note'</span>({MyNote getDurationInSeconds($)}
             {MyNote getPitch($)}
             {MyNote getAmplitude($)})]
-<span style="color: #a020f0;">end</span>
+<span style="color: #7f007f;">end</span>
 </pre>
 
 
@@ -344,24 +341,24 @@ Calling a Realtime Capable Constraint Solver</h2>
 <p><code>MyScript</code> accesses two arguments from <code>Args</code>: the note which is simultaneous to <code>NewNote</code> and the melodic predecessor of <code>NewNote</code>. The simultaneous note is the note coming from Supercollider: the OSC responder hands this note to the scripts argument <code>Args.inputScore</code> (see below). The melodic predecessor note is the solution of the previous call of the CSP. Previous solutions (and previous input) are collected automatically by the solver and are made available in reverse order at the scripts argument <code>Args.outputScores</code> (respectively <code>Args.inputScores</code>).<sup><a class="footref" name="fnr.2" href="#fn.2">2</a></sup></p>
 
 <pre class="src">
-<span style="color: #a020f0;">proc</span><span style="color: #b8860b;"> </span>{<span style="color: #0000ff;">MyScript</span> Args NewNote}
-   SimNote = Args<span style="color: #a020f0;">.</span>inputScore
+<span style="color: #7f007f;">proc</span><span style="color: #a0522d;"> </span>{<span style="color: #0000ff;">MyScript</span> Args NewNote}
+   SimNote = Args<span style="color: #7f007f;">.</span>inputScore
    <span style="color: #b22222;">%% </span><span style="color: #b22222;">PrevNote can be nil (for first note and in case of no solution)
-</span>   PrevNote = Args<span style="color: #a020f0;">.</span>outputScores<span style="color: #a020f0;">.</span>1 <span style="color: #b22222;">% </span><span style="color: #b22222;">immediate predecessor of NewNote
-</span><span style="color: #a020f0;">in</span>
-   NewNote = {Score<span style="color: #a020f0;">.</span>makeScore note(startTime:{SimNote getStartTime($)}
+</span>   PrevNote = Args<span style="color: #7f007f;">.</span>outputScores<span style="color: #7f007f;">.</span>1 <span style="color: #b22222;">% </span><span style="color: #b22222;">immediate predecessor of NewNote
+</span><span style="color: #7f007f;">in</span>
+   NewNote = {Score<span style="color: #7f007f;">.</span>makeScore note(startTime:{SimNote getStartTime($)}
                                    duration:{SimNote getDuration($)}
-                                   pitch:{FD<span style="color: #a020f0;">.</span>int 48<span style="color: #a020f0;">#</span>72}  <span style="color: #b22222;">% </span><span style="color: #b22222;">MIDI key-number
+                                   pitch:{FD<span style="color: #7f007f;">.</span>int 48<span style="color: #7f007f;">#</span>72}  <span style="color: #b22222;">% </span><span style="color: #b22222;">MIDI key-number
 </span>                                   amplitude:64  <span style="color: #b22222;">% </span><span style="color: #b22222;">MIDI velocity
 </span>                                   timeUnit:msecs)
-              <span style="color: #a020f0;">unit</span>}
+              <span style="color: #7f007f;">unit</span>}
    <span style="color: #b22222;">%% </span><span style="color: #b22222;">three simple rules
 </span>   {IsDiatonic NewNote}
    {IsConsonance {GetInterval SimNote NewNote}}
-   <span style="color: #a020f0;">if</span> PrevNote <span style="color: #a020f0;">\=</span> nil
-   <span style="color: #a020f0;">then</span> {RestrictMelodicInterval {GetInterval NewNote PrevNote}}
-   <span style="color: #a020f0;">end</span>
-<span style="color: #a020f0;">end</span>
+   <span style="color: #7f007f;">if</span> PrevNote <span style="color: #7f007f;">\=</span> nil
+   <span style="color: #7f007f;">then</span> {RestrictMelodicInterval {GetInterval NewNote PrevNote}}
+   <span style="color: #7f007f;">end</span>
+<span style="color: #7f007f;">end</span>
 </pre>
 
 <p>The rest of <code>MyScript</code> is strait forward. A note object is created and bound to <code>NewNote</code> and the rules shown before are applied to this note and its simultaneous note (or its melodic predecessor). Please observe that the constraint <code>RestrictIntervalDomain</code> is only applied in case the previous note is not <code>nil</code> (which is the case for the very first note and happens if the previous CSP call found no solution, see below).</p>
@@ -369,32 +366,32 @@ Calling a Realtime Capable Constraint Solver</h2>
 <p>As mentioned above, a maximum search time is given to the constraint solver. If no solution is found within that time, or if the search failed, then a default solution is returned. The following code defines the constraint solver object <code>MySearcher</code>, an instance of the class <code>RT.scoreSearcherWithTimeout</code>. The solver is an object, because it maintains an internal state between solver calls (e.g., the previous solutions). The solver is given the constraint script <code>MyScript</code>, a maximum search time of 30 msecs, and the default solution <code>nil</code>. Additionally, the list of initial output scores is specified as <code>[nil]</code> (i.e. the previous note of the very first note is <code>nil</code>), and the value selection of the score distribution is randomised.<sup><a class="footref" name="fnr.3" href="#fn.3">3</a></sup> See the <a href="../contributions/anders/Realtime/doc/node1.html">RT documentation</a> for additional information on <code>RT.scoreSearcherWithTimeout</code>.</p>
 
 <pre class="src">
-MySearcher = {New RT<span style="color: #a020f0;">.</span>scoreSearcherWithTimeout
+MySearcher = {New RT<span style="color: #7f007f;">.</span>scoreSearcherWithTimeout
               init(MyScript
                    maxSearchTime:30     <span style="color: #b22222;">% </span><span style="color: #b22222;">in msec
 </span>                   defaultSolution:nil
                    outputScores:[nil]
-                   distroArgs:<span style="color: #a020f0;">unit</span>(value:random))}
+                   distroArgs:<span style="color: #7f007f;">unit</span>(value:random))}
 </pre>
 
 
 <p>The following OSC responder reacts to OSC messages with the address pattern '/note'. Any received note message is first transformed into a Strasheela note using the function <code>MakeScoreNote</code> (see above, the OSC responder takes for granted that note messages have the format suitable for the function <code>MakeScoreNote</code>). Then, the constraint solver <code>MySearcher</code> is called: the method <code>next</code> invokes the solver and returns the next solution &mdash; in this example the next counterpoint note. Arbitrary arguments can be handed to the scripts <code>Args</code> argument (see above) by handing them as arguments to the solver's <code>next</code> method. We use this mechanism to forward the freshly received note <code>SimNote</code> to the script. Finally, the solver's output is tested whether it is the default solution <code>nil</code> (i.e., whether a timeout or failure happened). If this is not the case, then the note output by the solver is transformed into an OSC bundle (using <code>MakeOSCNote</code>, see above) and send to Supercollider.</p>
 
 <pre class="src">
-{MyDumpOSC setResponder(<span style="color: #bc8f8f;">'/note'</span> <span style="color: #a020f0;">proc</span><span style="color: #b8860b;"> </span>{<span style="color: #0000ff;">$</span> Timetag Msg}
+{MyDumpOSC setResponder(<span style="color: #8b2252;">'/note'</span> <span style="color: #7f007f;">proc</span><span style="color: #a0522d;"> </span>{<span style="color: #0000ff;">$</span> Timetag Msg}
                                    <span style="color: #b22222;">%% </span><span style="color: #b22222;">optional, for debugging
 </span>                                   <span style="color: #b22222;">%% </span><span style="color: #b22222;">{Browse input#Start#Msg}
 </span>                                   <span style="color: #b22222;">%% </span><span style="color: #b22222;">OSC to Strasheela note
 </span>                                   SimNote = {MakeScoreNote Timetag Msg}
                                    <span style="color: #b22222;">%% </span><span style="color: #b22222;">call solver
 </span>                                   NewNote = {MySearcher next($ inputScore:SimNote)}
-                                <span style="color: #a020f0;">in</span>
-                                   <span style="color: #a020f0;">if</span> NewNote <span style="color: #a020f0;">\=</span> nil
-                                   <span style="color: #a020f0;">then</span> <span style="color: #b22222;">%% </span><span style="color: #b22222;">transform note to OSC and send it back
+                                <span style="color: #7f007f;">in</span>
+                                   <span style="color: #7f007f;">if</span> NewNote <span style="color: #7f007f;">\=</span> nil
+                                   <span style="color: #7f007f;">then</span> <span style="color: #b22222;">%% </span><span style="color: #b22222;">transform note to OSC and send it back
 </span>                                      {MySendOSC send({MakeOSCNote NewNote})}
-                                   <span style="color: #a020f0;">else</span> {Browse <span style="color: #bc8f8f;">'no solution found'</span>}
-                                   <span style="color: #a020f0;">end</span>
-                                <span style="color: #a020f0;">end</span>)}
+                                   <span style="color: #7f007f;">else</span> {Browse <span style="color: #8b2252;">'no solution found'</span>}
+                                   <span style="color: #7f007f;">end</span>
+                                <span style="color: #7f007f;">end</span>)}
 </pre>
 
 
@@ -407,27 +404,27 @@ Defining a Voice Generation Routine in Supercollider</h2>
 <p>For the sake of simplicity, the first pattern is extremely simple: all note amplitudes have the MIDI velocity 64.</p>
 
 <pre class="src">
-<span style="color: #b8860b;">~amps</span> = 64.asStream;
+~amps = 64.asStream;
 </pre>
 
 <p>The pattern for the durations is slightly more complex. The pattern randomly selects from three different sequence patterns. These sequence patterns are chosen such that the resulting durations always express a triple meter. For example, in each of these sequence patterns all its values sum up to three. The note durations are measured in seconds, but the pattern values will later be multipled by some tempo factor (see below).</p>
 
 <pre class="src">
-<span style="color: #b8860b;">~durs</span> = <span style="color: #228b22;">Prand</span>([<span style="color: #228b22;">Pseq</span>([2.0, 1.0]), <span style="color: #228b22;">Pseq</span>([1.0, 1.0, 1.0]), 3.0], <span style="color: #da70d6;">inf</span>).asStream;
+~durs = Prand([Pseq([2.0, 1.0]), Pseq([1.0, 1.0, 1.0]), 3.0], inf).asStream;
 </pre>
 
 <p>The pitch pattern performs a random walk through the pitches in the C major scale, expressed by MIDI key-numbers. The walk starts at the tonic 60 (the third element, using zero-based indexing), the maximum pitch interval is a fourth up or downwards, but small intervals are preferred.</p>
 
 <pre class="src">
-<span style="color: #b8860b;">~pitches</span> = <span style="color: #228b22;">Pwalk</span>(<span style="color: #b22222;">// </span><span style="color: #b22222;">pitches in C major from g to c over 1 1/2 octaves
-</span>                 [55, 57, 59, 60, 62, 64, 65, 67, 69, 71, 72],
-                 <span style="color: #b22222;">// </span><span style="color: #b22222;">steps up to 3 in either direction, but no repetition,
-</span>                 <span style="color: #b22222;">// </span><span style="color: #b22222;">and weighted toward positive
-</span>                 <span style="color: #228b22;">Pwrand</span>([-3, -2, -1, 1, 2, 3],
-                        [0.02, 0.05, 0.4, 0.4, 0.1, 0.03].normalizeSum, <span style="color: #da70d6;">inf</span>),
-                 1,     <span style="color: #b22222;">// </span><span style="color: #b22222;">reverse direction at boundaries
-</span>                 3      <span style="color: #b22222;">// </span><span style="color: #b22222;">start at tonic
-</span>         ).asStream;
+~pitches = Pwalk(// pitches in C major from g to c over 1 1/2 octaves
+                 [55, 57, 59, 60, 62, 64, 65, 67, 69, 71, 72],
+                 // steps up to 3 in either direction, but no repetition,
+                 // and weighted toward positive
+                 Pwrand([-3, -2, -1, 1, 2, 3],
+                        [0.02, 0.05, 0.4, 0.4, 0.1, 0.03].normalizeSum, inf),
+                 1,     // reverse direction at boundaries
+                 3      // start at tonic
+                 ).asStream;
 </pre>
 
 
@@ -442,43 +439,43 @@ Getting is Running</h2>
 <p>Please note the two variables <code>~latency</code> and <code>~tempoFactor</code>. The tempo factor is simply a factor for the note durations, allowing to speed up or slow down the music. To allow for a synchronised playback of both voices, the latency compensates for the processing time needed by Strasheela. The latency is used as timetag when OSC bundles are send to Strasheela and the scsynth. The scsynth delays the playback of the received notes by this amount (50 msecs in this example). Strasheela preserves this timetag in its newly generated note (see above) so that exactly the same timetag is used when this note is send to the scsynth (see below).</p>
 
 <pre class="src">
-<span style="color: #b8860b;">~latency</span> = 0.05;   <span style="color: #b22222;">// </span><span style="color: #b22222;">in secs
-</span><span style="color: #b8860b;">~tempoFactor</span> = 0.6;
-<span style="color: #b8860b;">~myRoutine</span> = <span style="color: #228b22;">Routine</span>.new({
-    <span style="color: #da70d6;">inf</span>.do({ <span style="color: #a020f0;">arg</span> i;
-             <span style="color: #a020f0;">var</span> dur, pitch, amp;
-             <span style="color: #b22222;">// </span><span style="color: #b22222;">fetch pattern values
-</span>             dur = <span style="color: #b8860b;">~durs</span>.next * <span style="color: #b8860b;">~tempoFactor</span>;
-             amp = <span style="color: #b8860b;">~amps</span>.next;
-             pitch = <span style="color: #b8860b;">~pitches</span>.next;
-             <span style="color: #b22222;">// </span><span style="color: #b22222;">send note to Strasheela
-</span>             <span style="color: #b8860b;">~mySendOSC</span>.sendBundle(<span style="color: #b8860b;">~latency</span>, [<span style="color: #5f9ea0;">'/note'</span>, (dur*1000).asInt, pitch, amp]);
-             <span style="color: #b22222;">// </span><span style="color: #b22222;">play note on scserver
-</span>             s.makeBundle(<span style="color: #b8860b;">~latency</span>,
-               {<span style="color: #228b22;">Synth</span>(<span style="color: #bc8f8f;">"Strasheela-playback"</span>, [<span style="color: #5f9ea0;">\dur</span>, dur, <span style="color: #5f9ea0;">\freq</span>, pitch.midicps, <span style="color: #5f9ea0;">\amp</span>, amp/127, <span style="color: #5f9ea0;">\ffreq</span>, 500, <span style="color: #5f9ea0;">\pan</span>, 0.9]);});
+~latency = 0.05;   // in secs
+~tempoFactor = 0.6;
+~myRoutine = Routine.new({
+    inf.do({ arg i;
+             var dur, pitch, amp;
+             // fetch pattern values
+             dur = ~durs.next * ~tempoFactor;
+             amp = ~amps.next;
+             pitch = ~pitches.next;
+             // send note to Strasheela
+             ~mySendOSC.sendBundle(~latency, ['/note', (dur*1000).asInt, pitch, amp]);
+             // play note on scserver
+             s.makeBundle(~latency,
+               {Synth(<span style="color: #8b2252;">"Strasheela-playback"</span>, [\dur, dur, \freq, pitch.midicps, \amp, amp/127, \ffreq, 500, \pan, 0.9]);});
              dur.wait;
     });
-    <span style="color: #bc8f8f;">"done"</span>.postln;
+    <span style="color: #8b2252;">"done"</span>.postln;
 });
 </pre>
 
 <p>The following function is called whenever a note is received from Strasheela (cf. the definition of a <code>recvOSCfunc</code> function above). This note is then played back on the scsynth.</p>
 
 <pre class="src">
-<span style="color: #a020f0;">thisProcess</span>.recvOSCfunc = { <span style="color: #a020f0;">arg</span> time, addr, msg;
-    <span style="color: #0000ff;">if</span> ( addr.port != 57110, <span style="color: #b22222;">// </span><span style="color: #b22222;">ignore scsynth messages
-</span>    { <span style="color: #a020f0;">var</span> address, dur, pitch, amp;
-      # address, dur, pitch, amp = msg;
-      s.makeBundle(time-<span style="color: #a020f0;">thisThread</span>.seconds,
-           {<span style="color: #228b22;">Synth</span>(<span style="color: #bc8f8f;">"Strasheela-playback"</span>, [<span style="color: #5f9ea0;">\dur</span>, dur, <span style="color: #5f9ea0;">\freq</span>, pitch.midicps, <span style="color: #5f9ea0;">\amp</span>, amp/127, <span style="color: #5f9ea0;">\ffreq</span>, 2000, <span style="color: #5f9ea0;">\pan</span>, -0.9]);});
-     };)
+thisProcess.recvOSCfunc = { arg time, addr, msg;
+        if ( addr.port != 57110, // ignore scsynth messages
+        { var address, dur, pitch, amp;
+          # address, dur, pitch, amp = msg;
+          s.makeBundle(time-thisThread.seconds,
+               {Synth(<span style="color: #8b2252;">"Strasheela-playback"</span>, [\dur, dur, \freq, pitch.midicps, \amp, amp/127, \ffreq, 2000, \pan, -0.9]);});
+         };)
 };
 </pre>
 
 <p>We are finally in the position to run the example. The method <code>play</code> starts the routine. The routine creates note events with the patterns, sends these notes to Strasheela and the scsynth. Strasheela creates a new notes, which it sends back. The recvOSCfunc receives these notes from Strasheela and sends them to the scsynth. Simultaneous notes are played exactly in sync (if the latency is high enough).</p>
 
 <pre class="src">
-<span style="color: #228b22;">SystemClock</span>.play(<span style="color: #b8860b;">~myRoutine</span>);
+SystemClock.play(~myRoutine);
 </pre>
 
 
@@ -521,8 +518,8 @@ Discussion</h2>
 <!-- Footer -->
 <div id="footer">
 <div id="author">&copy; 
-Torsten Anders</div>
-<div id="date">Last time edited: 2009.03.08</div>
+torsten</div>
+<div id="date">Last time edited: 2011.12.28</div>
 </div>
   </body>
 </html>

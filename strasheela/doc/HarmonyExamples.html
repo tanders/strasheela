@@ -30,10 +30,7 @@
     <li class="navn"><a href="contact.html">contact</a></li>
   </ul>
   <div id="logo">
-    <a href="http://sourceforge.net"><img src="http://sflogo.sourceforge.net/sflogo.php?group_id=167225&amp;type=1" width="88" height="31" border="0" alt="SourceForge.net Logo" /></a>
-  </div>
-  <div id="logo">
-  <a href="http://cmr.soc.plymouth.ac.uk/"><img src="http://cmr.soc.plymouth.ac.uk/iccmr_logo_2.jpg" width="125"  width="88" height="31" border="0" alt="ICCMR Logo" /></a>
+<a href="http://sourceforge.net/projects/strasheela"><img src="http://sflogo.sourceforge.net/sflogo.php?group_id=167225&amp;type=15" width="150" height="40" alt="Get Strasheela at SourceForge.net. Fast, secure and Free Open Source software downloads" /></a>
   </div>
 </div>
     <h1>A Collection of of Harmonic Constraint Satisfaction Problems</h1>
@@ -114,10 +111,10 @@ Forming Music which Expresses a Harmony</h2>
 <p class="first">Strasheela's harmony model makes use of user-defined harmonic material such as chords, scales and intervals. The user specifies this material by filling 'databases' provided by the model. The following code fragment defines a chord database consisting of a single major chord. A chord database entry usually contains the features <code>pitchClasses</code> and <code>roots</code>. The example specifies the chord pitch classes <code>[0 4 7]</code> (denoting <em>c</em>, <em>e</em>, and <em>g</em>), the only possible root of this chord 0 (i.e. <em>c</em>), and a short description at the <code>comment</code> feature. Other chords may have multiple root pitch class candidates. For example, the diminished seventh chord <code>[0 3 6 9]</code> is very ambiguous and allows for the following four possible root pitch classes <code>[2 5 8 11]</code>, depending on the interpretation of the chord (<a href="http://www.amazon.com/gp/product/0520049446/qid=1149574943/sr=2-2/ref=pd_bbs_b_2_2/104-1993379-1061553?s=books&amp;v=glance&amp;n=283155">Schoenberg (1911)</a> calls such chords <em>vagrant harmonies</em>).</p>
 
 <pre class="src">
-  MajorChordSpec = chord(comment:<span style="color: #bc8f8f;">'major'</span>
+  MajorChordSpec = chord(comment:<span style="color: #8b2252;">'major'</span>
                          pitchClasses:[0 4 7]
                          roots:[0])
-  {HS<span style="color: #a020f0;">.</span>db<span style="color: #a020f0;">.</span>setDB <span style="color: #a020f0;">unit</span>(chordDB:chords(MajorChordSpec))}
+  {HS<span style="color: #7f007f;">.</span>db<span style="color: #7f007f;">.</span>setDB <span style="color: #7f007f;">unit</span>(chordDB:chords(MajorChordSpec))}
 </pre>
 
 <p>A chord database consists of untransposed chord types. For example, a database may consist in the three chord types major chord, minor chord, and major seventh chord. The database chords can then be transposed in the CSP. For example, an instance of the major chord in the database can be transposed by 2 such that it becomes a D major chord (as in the music notation above).</p>
@@ -131,24 +128,24 @@ The chord is determined to the first chord in the database above (index 1) and i
 
 <p><a name="firstExampleCode" id="firstExampleCode"></a>
 <pre class="src">
-  <span style="color: #a020f0;">proc</span><span style="color: #b8860b;"> </span>{<span style="color: #0000ff;">MyScript</span> HarmonisedScore}
+  <span style="color: #7f007f;">proc</span><span style="color: #a0522d;"> </span>{<span style="color: #0000ff;">MyScript</span> HarmonisedScore}
      N=12 EndTime
-  <span style="color: #a020f0;">in</span>
-     HarmonisedScore = {Score<span style="color: #a020f0;">.</span>makeScore
-                        sim(items:[seq(items:{LUtils<span style="color: #a020f0;">.</span>collectN N
-                                              <span style="color: #a020f0;">fun</span><span style="color: #b8860b;"> </span>{<span style="color: #0000ff;">$</span>}
+  <span style="color: #7f007f;">in</span>
+     HarmonisedScore = {Score<span style="color: #7f007f;">.</span>makeScore
+                        sim(items:[seq(items:{LUtils<span style="color: #7f007f;">.</span>collectN N
+                                              <span style="color: #7f007f;">fun</span><span style="color: #a0522d;"> </span>{<span style="color: #0000ff;">$</span>}
                                                  note(duration:4
-                                                      pitch:{FD<span style="color: #a020f0;">.</span>int 60<span style="color: #a020f0;">#</span>72}
+                                                      pitch:{FD<span style="color: #7f007f;">.</span>int 60<span style="color: #7f007f;">#</span>72}
                                                       amplitude:64)
-                                              <span style="color: #a020f0;">end</span>}
+                                              <span style="color: #7f007f;">end</span>}
                                        endTime:EndTime)
                                    chord(endTime:EndTime
                                          index:1
                                          transposition:2)]
                             startTime:0
                             timeUnit:beats(4))
-                        Aux<span style="color: #a020f0;">.</span>myCreators}
-  <span style="color: #a020f0;">end</span>
+                        Aux<span style="color: #7f007f;">.</span>myCreators}
+  <span style="color: #7f007f;">end</span>
 </pre></p>
 
 <p>The actual 'magic' of the example &mdash; the established relation between the notes and the chord is hidded 'backstage' for simplicity: the note creator function &mdash; which is part of <code>Aux.myCreators</code> &mdash; constrains the pitch of each note it creates to express the harmony of the simultaneous chord object. This technique will be explained <a href="#noteToChordRelation">later</a>.
@@ -190,30 +187,30 @@ Besides, this example also changes the chord in the database and sets it to a mi
 
 <p><a name="increasingPitchesCode" id="increasingPitchesCode"></a>
 <pre class="src">
-<span style="color: #a020f0;">proc</span><span style="color: #b8860b;"> </span>{<span style="color: #0000ff;">MyScript</span> HarmonisedScore}
+<span style="color: #7f007f;">proc</span><span style="color: #a0522d;"> </span>{<span style="color: #0000ff;">MyScript</span> HarmonisedScore}
    N=8
    EndTime MyNoteSeq MyChord
-<span style="color: #a020f0;">in</span>
-   HarmonisedScore = {Score<span style="color: #a020f0;">.</span>makeScore
+<span style="color: #7f007f;">in</span>
+   HarmonisedScore = {Score<span style="color: #7f007f;">.</span>makeScore
                       sim(items:[seq(handle:MyNoteSeq  <span style="color: #b22222;">% </span><span style="color: #b22222;">bind seq object to MyNoteSeq
-</span>                                     items:{LUtils<span style="color: #a020f0;">.</span>collectN N
-                                            <span style="color: #a020f0;">fun</span><span style="color: #b8860b;"> </span>{<span style="color: #0000ff;">$</span>}
+</span>                                     items:{LUtils<span style="color: #7f007f;">.</span>collectN N
+                                            <span style="color: #7f007f;">fun</span><span style="color: #a0522d;"> </span>{<span style="color: #0000ff;">$</span>}
                                                note(duration:4
-                                                    pitch:{FD<span style="color: #a020f0;">.</span>int 48<span style="color: #a020f0;">#</span>72}
+                                                    pitch:{FD<span style="color: #7f007f;">.</span>int 48<span style="color: #7f007f;">#</span>72}
                                                     amplitude:64)
-                                            <span style="color: #a020f0;">end</span>}
+                                            <span style="color: #7f007f;">end</span>}
                                      endTime:EndTime)
                                  chord(handle:MyChord
                                        endTime:EndTime
                                        transposition:2)]
                           startTime:0
                           timeUnit:beats(4))
-                      Aux<span style="color: #a020f0;">.</span>myCreators}
+                      Aux<span style="color: #7f007f;">.</span>myCreators}
    <span style="color: #b22222;">%% </span><span style="color: #b22222;">pitch class of first note is chord root
 </span>   {{Nth {MyNoteSeq getItems($)} 1} getPitchClass($)} = {MyChord getRoot($)}
    <span style="color: #b22222;">%% </span><span style="color: #b22222;">constrain pitches of the note in NoteSeq to raise continuously
-</span>   {Pattern<span style="color: #a020f0;">.</span>increasing {MyNoteSeq mapItems($ getPitch)}}
-<span style="color: #a020f0;">end</span>
+</span>   {Pattern<span style="color: #7f007f;">.</span>increasing {MyNoteSeq mapItems($ getPitch)}}
+<span style="color: #7f007f;">end</span>
 </pre></p>
 
 <p>The additional rules (the last two lines in the example) are explained in the following. Firstly, how is the pitch class of the first note set to the chord root?
@@ -250,8 +247,8 @@ The first melody pitch is accessed with the following expression (the method <co
 <p>This example replaces the two melody constraint code lines shown <a href="#increasingPitchesCode">above</a> by the following two lines. <a href="../contributions/anders/Pattern/doc/node1.html#entity16">Pattern.cycle</a> constrains the pitch classes to form a cycle pattern of length 4. <a href="http://www.mozart-oz.org/documentation/system/node22.html#section.fd.nonlinear">FD.distinct</a> forces all pitches in the melody (in contrast to the pitch classes) to be pairwise distinct.</p>
 
 <pre class="src">
-{Pattern<span style="color: #a020f0;">.</span>cycle {MyNoteSeq mapItems($ getPitchClass)} 4}
-{FD<span style="color: #a020f0;">.</span>distinct {MyNoteSeq mapItems($ getPitch)}}
+{Pattern<span style="color: #7f007f;">.</span>cycle {MyNoteSeq mapItems($ getPitchClass)} 4}
+{FD<span style="color: #7f007f;">.</span>distinct {MyNoteSeq mapItems($ getPitch)}}
 </pre>
 
 <p>Many more <a href="../contributions/anders/Pattern/doc/node1.html">pattern constrains</a> could be used to constrain the melody pitches, pitch classes, or dependent variables. For example, the <em>intervals</em> between the melody pitches may be constrained to form a <a href="../contributions/anders/Pattern/doc/node1.html#entity17">rotation pattern</a>. Alternatively, a pattern constraint could be applied to only a subsequence of the melody notes. For example, the first <code>N</code> note pitches may be constrained to increase, whereas the remaining note pitches may decrease.</p>
@@ -298,10 +295,10 @@ In addition, the example constrains the melodic contour of the melody. The melod
 <p class="first">The last two examples constrained every melody note to fit into a given scale. This section explains how this relation between notes and a scale is defined. First of all, the examples add a scale to their harmony database. A scale has a collection of (untransposed) scale pitch classes and a collection of (untransposed) root pitch class candidates. There is unusally only a single scale root candidate, nevertheless a scale database entry has the same format as a chord database entry for consistency.</p>
 
 <pre class="src">
-{HS<span style="color: #a020f0;">.</span>db<span style="color: #a020f0;">.</span>setDB <span style="color: #a020f0;">unit</span>(chordDB:chords(chord(comment:<span style="color: #bc8f8f;">'minor'</span>
+{HS<span style="color: #7f007f;">.</span>db<span style="color: #7f007f;">.</span>setDB <span style="color: #7f007f;">unit</span>(chordDB:chords(chord(comment:<span style="color: #8b2252;">'minor'</span>
                                        pitchClasses:[0 3 7]
                                        roots:[0]))
-                  scaleDB:scales(scale(comment:<span style="color: #bc8f8f;">'minor'</span>
+                  scaleDB:scales(scale(comment:<span style="color: #8b2252;">'minor'</span>
                                        pitchClasses:[0 2 3 5 7 8 10]
                                        roots:[0])))}
 </pre>
@@ -309,8 +306,8 @@ In addition, the example constrains the melodic contour of the melody. The melod
 <p>Next, the examples instantiate a scale object. Former examples instantiated chord objects as part of the temporal score. This approach is also valid for a scale object, but for the present examples it is more simple to instantiate this object `directly'. The <code>index</code> of the scale can be omitted and is derived implicitly (there is only a single scale in the database). The transposition is set to 2, that is the resulting scale represents the D minor scale.</p>
 
 <pre class="src">
-D_Minor = {Score<span style="color: #a020f0;">.</span>makeScore2 scale(transposition:2)
-           Aux<span style="color: #a020f0;">.</span>myCreators}
+D_Minor = {Score<span style="color: #7f007f;">.</span>makeScore2 scale(transposition:2)
+           Aux<span style="color: #7f007f;">.</span>myCreators}
 </pre>
 
 
@@ -326,9 +323,9 @@ In the note specification below, the function <code>getScales</code> simply retu
 
 <pre class="src">
 note(duration: 4
-     pitch: {FD<span style="color: #a020f0;">.</span>int 60<span style="color: #a020f0;">#</span>72}
-     getScales: <span style="color: #a020f0;">proc</span><span style="color: #b8860b;"> </span>{<span style="color: #0000ff;">$</span> MyNote MyScales} MyScales = [D_Minor] <span style="color: #a020f0;">end</span>
-     isRelatedScale: <span style="color: #a020f0;">proc</span><span style="color: #b8860b;"> </span>{<span style="color: #0000ff;">$</span> MyNote MyScale B} B = 1 <span style="color: #a020f0;">end</span>
+     pitch: {FD<span style="color: #7f007f;">.</span>int 60<span style="color: #7f007f;">#</span>72}
+     getScales: <span style="color: #7f007f;">proc</span><span style="color: #a0522d;"> </span>{<span style="color: #0000ff;">$</span> MyNote MyScales} MyScales = [D_Minor] <span style="color: #7f007f;">end</span>
+     isRelatedScale: <span style="color: #7f007f;">proc</span><span style="color: #a0522d;"> </span>{<span style="color: #0000ff;">$</span> MyNote MyScale B} B = 1 <span style="color: #7f007f;">end</span>
      inScaleB: 1
      amplitude: 64)
 </pre>
@@ -370,13 +367,13 @@ In the example above, the function <code>getScales</code> returns a list with on
 
 <pre class="src">
 note(duration:4
-     pitch:{FD<span style="color: #a020f0;">.</span>int 60<span style="color: #a020f0;">#</span>72}
+     pitch:{FD<span style="color: #7f007f;">.</span>int 60<span style="color: #7f007f;">#</span>72}
      amplitude:64
-     inChordB:{FD<span style="color: #a020f0;">.</span>int 0<span style="color: #a020f0;">#</span>1}
-     getChords:<span style="color: #a020f0;">proc</span><span style="color: #b8860b;"> </span>{<span style="color: #0000ff;">$</span> Self Chords}
-                  Chords = {Self getSimultaneousItems($ test:HS<span style="color: #a020f0;">.</span>score<span style="color: #a020f0;">.</span>isChord)}
-               <span style="color: #a020f0;">end</span>
-     isRelatedChord:<span style="color: #a020f0;">proc</span><span style="color: #b8860b;"> </span>{<span style="color: #0000ff;">$</span> Self Chord B} B=1 <span style="color: #a020f0;">end</span>)
+     inChordB:{FD<span style="color: #7f007f;">.</span>int 0<span style="color: #7f007f;">#</span>1}
+     getChords:<span style="color: #7f007f;">proc</span><span style="color: #a0522d;"> </span>{<span style="color: #0000ff;">$</span> Self Chords}
+                  Chords = {Self getSimultaneousItems($ test:HS<span style="color: #7f007f;">.</span>score<span style="color: #7f007f;">.</span>isChord)}
+               <span style="color: #7f007f;">end</span>
+     isRelatedChord:<span style="color: #7f007f;">proc</span><span style="color: #a0522d;"> </span>{<span style="color: #0000ff;">$</span> Self Chord B} B=1 <span style="color: #7f007f;">end</span>)
 </pre>
 
 
@@ -418,29 +415,29 @@ note(duration:4
 
 <pre class="src">
 {MyNoteSeq
- forAllItems(<span style="color: #a020f0;">proc</span><span style="color: #b8860b;"> </span>{<span style="color: #0000ff;">$</span> MyNote}
-               {MyNote nonChordPCConditions([Aux<span style="color: #a020f0;">.</span>isPassingNoteR])}
-             <span style="color: #a020f0;">end</span>)}
+ forAllItems(<span style="color: #7f007f;">proc</span><span style="color: #a0522d;"> </span>{<span style="color: #0000ff;">$</span> MyNote}
+               {MyNote nonChordPCConditions([Aux<span style="color: #7f007f;">.</span>isPassingNoteR])}
+             <span style="color: #7f007f;">end</span>)}
 </pre>
 
 
 <p>The passing note rule is already predefined for convenience (<code>Aux.isPassingNoteR</code> calls <a href="../contributions/anders/HarmonisedScore/doc/node4.html#entity146">HS.rules.isPassingNoteR</a> from Strasheela's harmony model). Nevertheless, you can also define such non-chord conditions yourself. For example, the rule <code>ResolveStepwiseR</code> constrains that a non-chord tone is always resolved stepwise: the interval to its successor note is 2 at maximum. This rule is a generalisation of a passing tone and a <a href="http://en.wikipedia.org/wiki/Nonchord_tone#Neighbour_tone">neighbour tone</a> (or auxiliary tone), where multiple non-chord tone can also follow each other. This rule also states that the first and last note in the melody must be chord tones.</p>
 
 <pre class="src">
-<span style="color: #a020f0;">proc</span><span style="color: #b8860b;"> </span>{<span style="color: #0000ff;">ResolveStepwiseR</span> Note1 B}
+<span style="color: #7f007f;">proc</span><span style="color: #a0522d;"> </span>{<span style="color: #0000ff;">ResolveStepwiseR</span> Note1 B}
    MaxStep = 2
    Container = {Note1 getTemporalAspect($)}
-<span style="color: #a020f0;">in</span>
-   <span style="color: #a020f0;">if</span> {Note1 isFirstItem($ Container)}
-      <span style="color: #a020f0;">orelse</span> {Not {Note1 hasSuccessor($ Container)}}
+<span style="color: #7f007f;">in</span>
+   <span style="color: #7f007f;">if</span> {Note1 isFirstItem($ Container)}
+      <span style="color: #7f007f;">orelse</span> {Not {Note1 hasSuccessor($ Container)}}
       <span style="color: #b22222;">%% </span><span style="color: #b22222;">the first note and the last note must be chord tones
-</span>   <span style="color: #a020f0;">then</span> B=0
+</span>   <span style="color: #7f007f;">then</span> B=0
       <span style="color: #b22222;">%% </span><span style="color: #b22222;">the interval to the following note is MaxStep at maximum
-</span>   <span style="color: #a020f0;">else</span> Note2 = {Note1 getSuccessor($ Container)} <span style="color: #a020f0;">in</span>
-      B = {FD<span style="color: #a020f0;">.</span>reified<span style="color: #a020f0;">.</span>distance
-           {Note1 getPitch($)} {Note2 getPitch($)} <span style="color: #bc8f8f;">'=&lt;:'</span> MaxStep}
-   <span style="color: #a020f0;">end</span>
-<span style="color: #a020f0;">end</span>
+</span>   <span style="color: #7f007f;">else</span> Note2 = {Note1 getSuccessor($ Container)} <span style="color: #7f007f;">in</span>
+      B = {FD<span style="color: #7f007f;">.</span>reified<span style="color: #7f007f;">.</span>distance
+           {Note1 getPitch($)} {Note2 getPitch($)} <span style="color: #8b2252;">'=&lt;:'</span> MaxStep}
+   <span style="color: #7f007f;">end</span>
+<span style="color: #7f007f;">end</span>
 </pre>
 
 <p>A non-chord condition constrains the boolean variable <code>B</code> to 1 (i.e. true) in case non-chord tones are permitted for the note argument (<code>Note1</code>), and to 0 in case only chord tones are valid. When the passing note rule is replaced by the rule <code>ResolveStepwiseR,</code> we get the following result.</p>
@@ -560,10 +557,10 @@ Please note that all techniques shown above can also be applied to examples wher
 <p>Setting the harmony database</p>
 
 <pre class="src">
-{HS<span style="color: #a020f0;">.</span>db<span style="color: #a020f0;">.</span>setDB <span style="color: #a020f0;">unit</span>(chordDB:chords(chord(comment:<span style="color: #bc8f8f;">'maj'</span>
+{HS<span style="color: #7f007f;">.</span>db<span style="color: #7f007f;">.</span>setDB <span style="color: #7f007f;">unit</span>(chordDB:chords(chord(comment:<span style="color: #8b2252;">'maj'</span>
                                        pitchClasses:[0 4 7]
                                        roots:[0])
-                                 chord(comment:<span style="color: #bc8f8f;">'min'</span>
+                                 chord(comment:<span style="color: #8b2252;">'min'</span>
                                        pitchClasses:[0 3 7]
                                        roots:[0])))}
 </pre>
@@ -573,16 +570,16 @@ Defining the Music Representation</h3>
 
 <pre class="src">
 sim(items:[seq(handle:MyVoice
-               items:{LUtils<span style="color: #a020f0;">.</span>collectN NoteNo
-                      <span style="color: #a020f0;">fun</span><span style="color: #b8860b;"> </span>{<span style="color: #0000ff;">$</span>}
+               items:{LUtils<span style="color: #7f007f;">.</span>collectN NoteNo
+                      <span style="color: #7f007f;">fun</span><span style="color: #a0522d;"> </span>{<span style="color: #0000ff;">$</span>}
                          note(duration:NoteDur
-                              pitch:{FD<span style="color: #a020f0;">.</span>int 60<span style="color: #a020f0;">#</span>72}
+                              pitch:{FD<span style="color: #7f007f;">.</span>int 60<span style="color: #7f007f;">#</span>72}
                               amplitude:64)
-                      <span style="color: #a020f0;">end</span>})
+                      <span style="color: #7f007f;">end</span>})
            <span style="color: #b22222;">%% </span><span style="color: #b22222;">chord indices and transpositions specified explicitly
 </span>           seq(handle:ChordSeq
-               items:{LUtils<span style="color: #a020f0;">.</span>collectN ChordNo
-                      <span style="color: #a020f0;">fun</span><span style="color: #b8860b;"> </span>{<span style="color: #0000ff;">$</span>} chord(duration:ChordDur) <span style="color: #a020f0;">end</span>})]
+               items:{LUtils<span style="color: #7f007f;">.</span>collectN ChordNo
+                      <span style="color: #7f007f;">fun</span><span style="color: #a0522d;"> </span>{<span style="color: #0000ff;">$</span>} chord(duration:ChordDur) <span style="color: #7f007f;">end</span>})]
     startTime:0
     timeUnit:beats(4))
 </pre>
@@ -593,12 +590,12 @@ Defining a Simple Theory of Harmony</h3>
 
 <pre class="src">
 <span style="color: #b22222;">%% </span><span style="color: #b22222;">different root neighbours
-</span>{Pattern<span style="color: #a020f0;">.</span>for2Neighbours Chords
- <span style="color: #a020f0;">proc</span><span style="color: #b8860b;"> </span>{<span style="color: #0000ff;">$</span> Chord1 Chord2} {Chord1 getRoot($)} <span style="color: #a020f0;">\=:</span> {Chord2 getRoot($)} <span style="color: #a020f0;">end</span>}
+</span>{Pattern<span style="color: #7f007f;">.</span>for2Neighbours Chords
+ <span style="color: #7f007f;">proc</span><span style="color: #a0522d;"> </span>{<span style="color: #0000ff;">$</span> Chord1 Chord2} {Chord1 getRoot($)} <span style="color: #7f007f;">\=:</span> {Chord2 getRoot($)} <span style="color: #7f007f;">end</span>}
 <span style="color: #b22222;">%% </span><span style="color: #b22222;">harmonic band
-</span>{HS<span style="color: #a020f0;">.</span>rules<span style="color: #a020f0;">.</span>neighboursWithCommonPCs Chords}
+</span>{HS<span style="color: #7f007f;">.</span>rules<span style="color: #7f007f;">.</span>neighboursWithCommonPCs Chords}
 <span style="color: #b22222;">%% </span><span style="color: #b22222;">start and end with c
-</span>0 = {Chords<span style="color: #a020f0;">.</span>1 getRoot($)} = {{List<span style="color: #a020f0;">.</span>last Chords} getRoot($)}
+</span>0 = {Chords<span style="color: #7f007f;">.</span>1 getRoot($)} = {{List<span style="color: #7f007f;">.</span>last Chords} getRoot($)}
 </pre>
 
 
@@ -695,8 +692,8 @@ Defining a Simple Theory of Harmony</h3>
 <!-- Footer -->
 <div id="footer">
 <div id="author">&copy; 
-Torsten Anders</div>
-<div id="date">Last time edited: 2009.03.08</div>
+torsten</div>
+<div id="date">Last time edited: 2011.12.28</div>
 </div>
   </body>
 </html>

@@ -30,6 +30,7 @@
     - Fenv.makeRenderAndPlayMidiFile_Scala has been added (for microtonal output to statically returned MIDI instruments, e.g., with Scala file support). Also, Fenv.renderAndPlayMidiFile now supports flexible microtonal MIDI output using pitchbend
     - Added pitch unit mHz (Millihertz)
     - GUtils: added IsEqual, RecursiveRatio, PrimeFactors
+    - GUtils: added better pseudo-random number generators: DevRandom, KnuthRandom, SetKnuthRandomSeed, RandIntoRange2.  
     - GUtils.toProc: refactored version now supports optional arguments with default values 
     - MUtils: added FeedNoteLengthVariables (support for convenient note duration variables), RatioToRatioPC OddLimit PrimeLimit
     - LUtils: added RemovePosition, ReplacePosition, FindBest, 
@@ -40,6 +41,7 @@
     - Out.averagePitchClef added
     - SMapping: added MapTimeslices, ForTimeslices, ForTimeRange, ForTimeRangeArgs
     - SDistro: added MakeLeftToRight2 (left-to-right distribution strategy that takes end times of preceeding items into account, thus allowing for undetermined offset times), SearchBest_Timeout
+    - SDistro: Randomised distributions use better pseudo-random number generator.
     - ET22.db: interval database now defined as ratios for adaptive JI
     - ET22.out: added NoteEt22ToLily_AdaptiveJI2, PajaraRMS_TuningTable, JI_TuningTable
     - 22 ET Lilypond output: revised accidentals (using new arrowed Lily accidentals for representing syntonic commas up/down)
@@ -60,6 +62,7 @@
     - Score: added temporal deterministic functions and constraints AtTimeR AtTimeR2 InTimeframe InTimeframeOffset InTimeframeR InTimeframeOffsetR GetItemsInTimeframe GetItemsInTimeframeOffset
 
   - Further bug fixes and changes
+    - GUtils: Improved randomness of number sequence returned by (calling of) MakeRandomGenerator. 
     - Oz primitives like IsRecord, IsAtom etc. block on kinded variables (undetermined FD and FS vars), which could cause blocking of various Strasheela definitions. Now Strasheela always uses its new own GUtils.isRecord and GUtils.isAtom etc. which do not have this problem
     - Removed redundant (and ambiguous) pitch unit 'keynumber'. Default pitch unit is now 'midi' (equivalent to et12). 
     - MUtils: added PitchToMidi, IsET, GetPitchesPerOctave

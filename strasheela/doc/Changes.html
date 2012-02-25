@@ -41,26 +41,33 @@
 
 
 
-<h2>Changes in Version 0.9.11 (no date yet)</h2>
+<h2>Changes in Version 0.10.0 (no date yet)</h2>
 
 <ul>
 <li>Main additions and changes
 
 <ul>
-<li>Support for heuristic constraints added. See the documentation of the procedure Score.apply_H, the example <a href="../examples/Heuristic-Constraints.oz">Heuristic-Constraints.oz</a>, and the functor <a href="../contributions/anders/Heuristics/doc/node1.html">Heuristics</a></li>
+<li>Accent constraints added to functor Measure. This framework of constrains controls the rhythmic weight of notes depending on a wide range of musical features (e.g., relative duration, pitch intervals, presence of an anacrusis) and the relation between rhythmic weights and metric positions. Their effect is widely user-controllable. These constraints are inspired by the chapter on rhythm in <a href="http://books.google.com/books?id=J4iXm-uoSRUC&amp;printsec=frontcover&amp;dq=structural+functions+in+music&amp;hl=en&amp;src=bmrr&amp;ei=BcwFToS0FcqahQeM2sS8DQ&amp;sa=X&amp;oi=book_result&amp;ct=result&amp;resnum=1&amp;ved=0CCwQ6AEwAA#v=onepage&amp;q&amp;f=false">Berry, Wallace. 1987. Structural Functions in Music. Courier Dover Publications.</a> See the examples in <a href="../examples/Rhythm-Examples/AccentConstraint-Examples.oz">AccentConstraint-Examples.oz</a>.</li>
+<li>Texture constraints added to functor Segments. This framework of constrains controls whether a musical section is, say, homophonic, quasi-homophonic, homo-directional etc. Again, this framework is widely user-controllable. These constraints are inspired by the chapter on texture in <a href="http://books.google.com/books?id=J4iXm-uoSRUC&amp;printsec=frontcover&amp;dq=structural+functions+in+music&amp;hl=en&amp;src=bmrr&amp;ei=BcwFToS0FcqahQeM2sS8DQ&amp;sa=X&amp;oi=book_result&amp;ct=result&amp;resnum=1&amp;ved=0CCwQ6AEwAA#v=onepage&amp;q&amp;f=false">Berry, Wallace. 1987. Structural Functions in Music. Courier Dover Publications.</a> See the examples in <a href="../examples/Form-Examples/Texture-Examples.oz">Texture-Examples.oz</a>, and the definitions in the functor <a href="../contributions/anders/Segments/doc/node1.html">Segments.</a>
+- Support for heuristic constraints added (value ordering heuristics). Heuristic constraints are a form of soft constraints that express only a preference instead of a strict requirement on the solution. See the documentation of the procedure Score.apply_H, the examples in <a href="../examples/Heuristic-Constraints.oz">Heuristic-Constraints.oz</a>, and the functor <a href="../contributions/anders/Heuristics/doc/node1.html">Heuristics</a>.</li>
 <li>Revised Fomus output: Strasheela now exports the new format of the Fomus rewrite (<a href="http://fomus.sourceforge.net/">http://fomus.sourceforge.net/</a>), and Strasheela's Fomus export definition have been extended in many ways.</li>
 <li>Constraint problems on arbitrary octave-repeating <a href="http://en.wikipedia.org/wiki/Regular_temperament">regular temperaments</a> (any rank) supported, including <a href="http://en.wikipedia.org/wiki/Just_intonation">just intonation</a> with arbitrary limits (pitches measured, e.g., in cent or millicent).</li>
 <li>Revised score distribution: value orderings can now access arbitrary score information</li>
 <li>Added support for transformable subscripts (<a href="../contributions/anders/Segments/doc/_.html">Segs.tSC</a>)</li>
 <li>Added functor <a href="../contributions/anders/ET41/doc/node1.html">ET41</a> for composition in <a href="http://en.wikipedia.org/wiki/41_equal_temperament">41-tone equal temperament</a> and related tunings (e.g. the just intonation tuning of <a href="http://en.wikipedia.org/wiki/La_Monte_Young">La Monte Young</a>'s <a href="http://www.kylegann.com/wtp.html">The Well-Tuned Piano</a>). Supported features for these tunings include a short-hand pitch notation; a database of intervals, chords, and scales; and some minimal music notation support (via Lilypond).</li>
 <li>Added HS.out: generalised output for score objects and concepts introduced by HS, e.g., Lilypond output for chord and scale objects and means to define Lilypond output for different temperaments.</li>
+<li>Partially determined scores can be output to music notation (i.e. Lilypond and Sibelius/Finale) via the Fomus export. (Partially determined scores could be exported into Csound and MIDI already.)</li>
+<li>Easy-to-use persistent data storage of scores with Out.pickleScore/Out.unpickleScore.</li>
 </ul></li>
 
-<li>Documentation
+<li>Main documentation additions
 
 <ul>
+<li><a href="../examples/Rhythm-Examples/AccentConstraint-Examples.oz">AccentConstraint-Examples.oz</a>: Added examples demonstrating how to constrain accents (notes that meet a number of given conditions, e.g., have an anacrusis) to certain metric positions</li>
+<li><a href="../examples/Form-Examples/Texture-Examples.oz">Texture-Examples.oz</a>: Added examples demonstrating texture constraints</li>
+<li><a href="../examples/Heuristic-Constraints.oz">Heuristic-Constraints.oz</a>: demonstrates how heuristic constraints are defined and used.</li>
 <li><a href="../%20examples/ControllingOutput-Examples/Fomus-Examples.oz">Fomus-Examples.oz</a>: Added examples demonstrating the Fomus output.</li>
-<li><a href="../examples/Heuristic-Constraints.oz">Heuristic-Constraints.oz</a>: demonstrates how heuristic constraints are defined and ued</li>
+<li><a href="../examples/RegularTemperaments.oz">RegularTemperaments.oz</a>: examples related to regular temperaments</li>
 <li><a href="../examples/Harmony-Examples/HarmonicProgressions-41ET.oz">HarmonicProgressions-41ET.oz</a>: Added 41 ET harmony example, using La Monte Young's The Well-Tuned Piano chords</li>
 <li><a href="../examples/Counterpoint-Examples/Counterpoint-22ET.oz">Counterpoint-22ET.oz</a>: Added 22 ET counterpoint examples</li>
 </ul></li>
@@ -68,17 +75,19 @@
 <li>Minor additions
 
 <ul>
-<li>Fenv.renderAndPlayMidiFile now supports flexible microtonal MIDI output using pitchbend</li>
+<li>Fenv.makeRenderAndPlayMidiFile_Scala has been added (for microtonal output to statically returned MIDI instruments, e.g., with Scala file support). Also, Fenv.renderAndPlayMidiFile now supports flexible microtonal MIDI output using pitchbend</li>
 <li>Added pitch unit mHz (Millihertz)</li>
-<li>GUtils: added IsEqual, RecursiveRatio</li>
+<li>GUtils: added IsEqual, RecursiveRatio, PrimeFactors</li>
 <li>GUtils.toProc: refactored version now supports optional arguments with default values</li>
+<li>MUtils: added FeedNoteLengthVariables (support for convenient note duration variables), RatioToRatioPC OddLimit PrimeLimit</li>
 <li>LUtils: added RemovePosition, ReplacePosition, FindBest,</li>
 <li>Init: added SetNoteLengthsRecord, SymbolicDurToInt</li>
+<li>Init: added Explorer information action that binds the score in a node of the Explorer to the variable MyScore at the top-level (very useful for debugging)</li>
 <li>Out.toLilypond and friends: implicit clef is now controllable with argument getClef</li>
 <li>Out.makeNoteToLily2: function has been completely rewritten with a now more general interface</li>
 <li>Out.averagePitchClef added</li>
-<li>SMapping: added MapTimeslices ForTimeslices</li>
-<li>SDistro: added SearchBest_Timeout</li>
+<li>SMapping: added MapTimeslices, ForTimeslices, ForTimeRange, ForTimeRangeArgs</li>
+<li>SDistro: added MakeLeftToRight2 (left-to-right distribution strategy that takes end times of preceeding items into account, thus allowing for undetermined offset times), SearchBest_Timeout</li>
 <li>ET22.db: interval database now defined as ratios for adaptive JI</li>
 <li>ET22.out: added NoteEt22ToLily_AdaptiveJI2, PajaraRMS_TuningTable, JI_TuningTable</li>
 <li>22 ET Lilypond output: revised accidentals (using new arrowed Lily accidentals for representing syntonic commas up/down)</li>
@@ -88,12 +97,15 @@
 <li>Segs.makeCounterpoint: added arg clearDissonanceResolution (before this constraint was always enabled).</li>
 <li>Segs: added mixin scripts (partly removing orig extended script altogether): MakeCounterpoint_Mixin, PitchPattern, FenvContour, Arpeggio, Arch, Repetitions, Hook, Stairs, MakeAkkord_Mixin, MakeAkkords_Mixin</li>
 <li>Segs.homophonicChordProgression: added arguments playAllChordTones, noVoiceCrossing, maxUpperVoiceDistance, generalised argument 'restrictMelodicIntervals'.</li>
-<li>HS.rules: added GetRootDegreeIntervals, SetBoundaryRoots, SetBoundaryTypes, NoParallels2, Ballistic, MinCard</li>
-<li>Pattern: added MinDistinct, DirectionOfContour, LocalMinR, GetLocalMax, GetLocalMin, ConstrainLocalMax, ConstrainLocalMin, FenvContour2, NoRepetition, Undulating, ForCartesianProduct2 and MapCartesianProduct2</li>
-<li>HS.score: refactored HarmonicRythmFollowsMarkers: now works also for items with offsetTime &gt; 0</li>
+<li>HS.rules: added Modulation, GetRootDegreeIntervals, SetBoundaryRoots, SetBoundaryTypes, NoParallels2, Ballistic, MinCard, GetPcInterval, PcInChord</li>
+<li>Pattern: added MinDistinct, DirectionOfContour, LocalMinR, GetLocalMax, GetLocalMin, ConstrainLocalMax, ConstrainLocalMin, FenvContour2, NoRepetition, Undulating, ForCartesianProduct2 and MapCartesianProduct2, FirstNTrue, MotifIndexMixin, IsMotifIndexMixin, MakeMotifIndexClass, MotifStartMixin, IsMotifStartMixin, MakeMotifStartClass, GetMotifStartNotes, GetMotifStartIndices</li>
+<li>HS.score: Added class constructors: MakeInScaleChordClass, MakeScaleDegreeChordClass.</li>
 <li>Removed proc GUtils.selectArg (better use Adjoin or CondSelect instead)</li>
 <li>Removed GUtils.isInt (result wrong for FD ints): use FD.is or IsInt instead</li>
 <li>Segs.out.unmeteredMusic_LilyHeader: String for Lilypond header configuration to support unmetered music (e.g., as in many Messian pieces)</li>
+<li>Measure.uniformMeasures: a number of syncopation-related constraints have been added (methods getBeatAt, getBeatInMeasureAt, getAccentInMeasureAt, beatSyncopation, accentSyncopationR)</li>
+<li>Score: added the temporal items methods getPredecessors, getSuccessors, getTemporalPredecessors, getTemporalSuccessors, getPredecessorsUpToRest, getSuccessorsUpToRest</li>
+<li>Score: added temporal deterministic functions and constraints AtTimeR AtTimeR2 InTimeframe InTimeframeOffset InTimeframeR InTimeframeOffsetR GetItemsInTimeframe GetItemsInTimeframeOffset</li>
 </ul></li>
 
 <li>Further bug fixes and changes
@@ -101,7 +113,9 @@
 <ul>
 <li>Oz primitives like IsRecord, IsAtom etc. block on kinded variables (undetermined FD and FS vars), which could cause blocking of various Strasheela definitions. Now Strasheela always uses its new own GUtils.isRecord and GUtils.isAtom etc. which do not have this problem</li>
 <li>Removed redundant (and ambiguous) pitch unit 'keynumber'. Default pitch unit is now 'midi' (equivalent to et12).</li>
+<li>MUtils: added PitchToMidi, IsET, GetPitchesPerOctave</li>
 <li>Score: Fixed bug for TimeMixin method findSimultaneousItem in case object is not contained in any container</li>
+<li>Score: removed IsET GetPitchesPerOctave</li>
 <li>Lilypond output: if score started with offset time, then this leading rest was ignored in the Lilypond output (now fixed). Also, score now by default wrapped in braces, and default Lilypond version updated to &quot;2.12.0&quot;.</li>
 <li>HS.out.renderAndShowLilypond: revised args codeBeforeNoteMakers and codeBeforePcCollectionMakers. Also, chord and scale objects are again notated with grace notes /before/ root (grace notes after the root (using \aftergrace) are incompatible with HE notation).</li>
 <li>HS.score: GetAdaptiveJIPitch:
@@ -111,21 +125,27 @@
 <li>Some notes have been transposed to wrong octave, now fixed</li>
 </ul></li>
 <li>HS.out.renderAndShowLilypond: changed output of chord pitch classes to octave above middle C</li>
-<li>HS.score.degreeToPC: fixed propagation error</li>
+<li>HS.score: Debugging DegreeToPC: fixed propagation error. Refined PitchClassToPitch and PitchClassToPitch2 (initial PC domain reduced). Refactored HarmonicRythmFollowsMarkers: now works also for items with offsetTime &gt; 0.</li>
 <li>HS.rules.noParallels2: now also works if there are pause (rest) objects in the score</li>
+<li>HS.rules.makeIntervalConstraint: added support for regular temperaments</li>
+<li>HS.db: added  GetGenerators GetGeneratorFactors GetGeneratorFactorsOffset GetTemperament GetAllNames</li>
 <li>HS.db: Pc2Ratios now returns nil if no ratio was defined for interval</li>
 <li>Fixed HS.pcName</li>
 <li>Fenv method toList: fixed bug for case N=1</li>
-<li>Pattern: renamed Arc -&gt; Arch</li>
+<li>Pattern: renamed Arc -&gt; Arch. Debugging UseMotifs: arg workOutEven now working again. Debugging FirstNTrue: fixed problem for case that all Bs are 1.</li>
+<li>Pattern: patterns such as Continuous AllEqual Increasing Decreasing caused error for input nil, fixed (in PlainPattern2)</li>
 <li>Out.midi.getChannel now uses mini chan param of midi note objects (not only channel info tag)</li>
 <li>Refactored ET22 and ET31 output: now much reduced code with same functionality using HS.out, several procs before exported by ET22 and ET31 are now moved to HS.out</li>
-<li>Segs.homophonicChordProgression: replaced arg 'isToplevel' by arg 'makeTopLevel' for generality; fixed bug: constraint of arg maxUpperVoiceDistance now actually applied to upper voices</li>
+<li>Segs.homophonicChordProgression: replaced arg 'isToplevel' by arg 'makeTopLevel' for generality; fixed bug: constraint of arg maxUpperVoiceDistance now actually applied to upper voices; change default for arg commonPitchesHeldOver to false, allow disabling maxUpperVoiceDistance constraints.</li>
+<li>Segs: Debugging PitchContourAccessor: previously pattern motifs constraining the pitch contour with this fun were artificially restricted (interval direction from the note preceeding a motif to the first motif note was always downwards). MakeMotifIndexNote and GetMotifIndexOfNote removed (use Pattern.makeMotifIndexClass instead).</li>
 <li>Out.outputScoreConstructor: strings in archived score were not properly quoted (fixed Out.recordToVS).</li>
 <li>HS.score.harmonicRhythmFollowsMarkers: spelling correction (was HS.score.harmonicRythmFollowsMarkers)</li>
 <li>LUtils: changed comparison function of many defs (Contains, Position, Positions, Substitute, Substitute1) to GUtils.isEqual, which is working for all data types</li>
+<li>UniformMeasures method onAccentR fixed &mdash; it did not support irregular accent sequences of time signatures such as 5/4 before. (method onAccentDR removed)</li>
+<li>UniformMeasures method overlapsBarlineR fixed for certain borderline cases</li>
 </ul></li>
 
-<li>For further fixes see the <a href="http://apps.sourceforge.net/trac/strasheela/timeline">Trac Timeline</a> or the <a href="../CHANGELOG.txt">../CHANGELOG.txt</a>.</li>
+<li>For further details of changes see the <a href="http://apps.sourceforge.net/trac/strasheela/timeline">Trac Timeline</a> or the <a href="../CHANGELOG.txt">../CHANGELOG.txt</a>.</li>
 </ul>
 
 
@@ -919,8 +939,8 @@ See the documentation for <a href="../contributions/anders/HarmonisedScore/doc/n
 <!-- Footer -->
 <div id="footer">
 <div id="author">&copy; 
-Torsten Anders</div>
-<div id="date">Last time edited: 2010.05.10</div>
+torsten</div>
+<div id="date">Last time edited: 2011.12.28</div>
 </div>
   </body>
 </html>

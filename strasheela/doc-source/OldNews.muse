@@ -1,6 +1,8 @@
 #title Old Strasheela News
 
-  Latest changes are always shown in the [[http://apps.sourceforge.net/trac/strasheela/timeline][new Trac Timeline]] (18 February 2009)
+  Latest changes are always shown in the [[http://apps.sourceforge.net/trac/strasheela/timeline][new Trac Timeline]] 
+
+  Strasheela 0.9.9 released ([[Changes]])  (9 March 2009)
 
   Strasheela 0.9.8 released ([[Changes]])  (4 December 2008)
 

@@ -30,10 +30,7 @@
     <li class="navn"><a href="contact.html">contact</a></li>
   </ul>
   <div id="logo">
-<a href="http://sourceforge.net/projects/strasheela"><img src="http://sflogo.sourceforge.net/sflogo.php?group_id=167225&type=12" width="120" height="30" border="0" alt="Get Strasheela at SourceForge.net. Fast, secure and Free Open Source software downloads" /></a>
-  </div>
-  <div id="logo">
-  <a href="http://cmr.soc.plymouth.ac.uk/"><img src="http://cmr.soc.plymouth.ac.uk/iccmr_logo_2.jpg" width="125"  width="80" height="30" border="0" alt="ICCMR Logo" /></a>
+<a href="http://sourceforge.net/projects/strasheela"><img src="http://sflogo.sourceforge.net/sflogo.php?group_id=167225&amp;type=15" width="150" height="40" alt="Get Strasheela at SourceForge.net. Fast, secure and Free Open Source software downloads" /></a>
   </div>
 </div>
     <h1>All-Interval Series</h1>
@@ -76,26 +73,26 @@ Definition</h2>
 <p class="first">The actual CSP definition is brief. <code>AllIntervalSeries</code> returns the all-interval series <code>Xs</code>, which is a list of pitch classes represented by finite domain (FD) integers. For convenience, also the list of intervals between the series pitches can be output (<code>Dxs</code>, also a list of FD integers). <code>AllIntervalSeries</code> expects the length of the series to generate as argument <code>L</code> (an integer).</p>
 
 <pre class="src">
-<span style="color: #a020f0;">proc</span><span style="color: #b8860b;"> </span>{<span style="color: #0000ff;">AllIntervalSeries</span> L ?Dxs ?Xs}
-   Xs = {FD<span style="color: #a020f0;">.</span>list L 0<span style="color: #a020f0;">#</span>L<span style="color: #a020f0;">-</span>1}              <span style="color: #b22222;">% </span><span style="color: #b22222;">Xs is list of L FD integers in {0, ..., L-1}
-</span>   Dxs = {FD<span style="color: #a020f0;">.</span>list L<span style="color: #a020f0;">-</span>1 1<span style="color: #a020f0;">#</span>L<span style="color: #a020f0;">-</span>1}
+<span style="color: #7f007f;">proc</span><span style="color: #a0522d;"> </span>{<span style="color: #0000ff;">AllIntervalSeries</span> L ?Dxs ?Xs}
+   Xs = {FD<span style="color: #7f007f;">.</span>list L 0<span style="color: #7f007f;">#</span>L<span style="color: #7f007f;">-</span>1}              <span style="color: #b22222;">% </span><span style="color: #b22222;">Xs is list of L FD integers in {0, ..., L-1}
+</span>   Dxs = {FD<span style="color: #7f007f;">.</span>list L<span style="color: #7f007f;">-</span>1 1<span style="color: #7f007f;">#</span>L<span style="color: #7f007f;">-</span>1}
    <span style="color: #b22222;">%% </span><span style="color: #b22222;">Loop constrains intervals: inversionalEquivalentInterval(X_i, X_i+1, Dx_i)
-</span>   <span style="color: #a020f0;">for</span> I <span style="color: #a020f0;">in</span> 1<span style="color: #a020f0;">..</span>L<span style="color: #a020f0;">-</span>1
-   <span style="color: #a020f0;">do</span>
+</span>   <span style="color: #7f007f;">for</span> I <span style="color: #7f007f;">in</span> 1<span style="color: #7f007f;">..</span>L<span style="color: #7f007f;">-</span>1
+   <span style="color: #7f007f;">do</span>
        X1 = {Nth Xs I}
-       X2 = {Nth Xs I<span style="color: #a020f0;">+</span>1}
+       X2 = {Nth Xs I<span style="color: #7f007f;">+</span>1}
        Dx = {Nth Dxs I}
-    <span style="color: #a020f0;">in</span>
+    <span style="color: #7f007f;">in</span>
        {InversionalEquivalentInterval X1 X2 Dx}
-   <span style="color: #a020f0;">end</span>
-   {FD<span style="color: #a020f0;">.</span>distinctD Xs}                   <span style="color: #b22222;">% </span><span style="color: #b22222;">no PC repetition
-</span>   {FD<span style="color: #a020f0;">.</span>distinctD Dxs}                  <span style="color: #b22222;">% </span><span style="color: #b22222;">no interval repetition
+   <span style="color: #7f007f;">end</span>
+   {FD<span style="color: #7f007f;">.</span>distinctD Xs}                   <span style="color: #b22222;">% </span><span style="color: #b22222;">no PC repetition
+</span>   {FD<span style="color: #7f007f;">.</span>distinctD Dxs}                  <span style="color: #b22222;">% </span><span style="color: #b22222;">no interval repetition
 </span>   <span style="color: #b22222;">%% </span><span style="color: #b22222;">add knowledge from the literature: first series note is 0 and last is L/2
-</span>   Xs<span style="color: #a020f0;">.</span>1 = 0
-   {List<span style="color: #a020f0;">.</span>last Xs} = L <span style="color: #a020f0;">div</span> 2
+</span>   Xs<span style="color: #7f007f;">.</span>1 = 0
+   {List<span style="color: #7f007f;">.</span>last Xs} = L <span style="color: #7f007f;">div</span> 2
    <span style="color: #b22222;">%% </span><span style="color: #b22222;">Search strategy: first fail distribution
-</span>   {FD<span style="color: #a020f0;">.</span>distribute ff Xs}
-<span style="color: #a020f0;">end</span>
+</span>   {FD<span style="color: #7f007f;">.</span>distribute ff Xs}
+<span style="color: #7f007f;">end</span>
 </pre>
 
 <p>The CSP first creates two lists of FD integers and unifies them with <code>Xs</code> and <code>Dxs</code>. Then, it constrains the relation between series pitch classes and their intervals with the constraint <code>InversionalEquivalentInterval</code> (see below). The elements in <code>Xs</code> and <code>Dxs</code> are constrained to be pairwise distinct. We know from the <a href="http://www.amazon.de/Zw%C3%B6lfton-Kontrapunkt-Studien-ED-4203-Ernst-Krenek/dp/3795724902/sr=8-1/qid=1170156812/ref=sr_1_1/028-6460302-9489368?ie=UTF8&amp;s=books">literature</a> that the first pitch class of an all-interval series is always 0 and that the last pitch class is the integer L/2. Finally, the CSP states a <a href="http://www.mozart-oz.org/documentation/fdt/node2.html#chapter.constraints">distribution strategy</a>.</p>
@@ -103,13 +100,13 @@ Definition</h2>
 <p>The CSP makes use of the user-defined constraint <code>InversionalEquivalentInterval</code>. <code>InversionalEquivalentInterval</code> constrains <code>Interval</code> to be an inversional equivalent interval between the two pitch classes <code>Pitch1</code> and <code>Pitch2</code>.</p>
 
 <pre class="src">
-<span style="color: #a020f0;">proc</span><span style="color: #b8860b;"> </span>{<span style="color: #0000ff;">InversionalEquivalentInterval</span> Pitch1 Pitch2 Interval}
-   Aux = {FD<span style="color: #a020f0;">.</span>decl}                       <span style="color: #b22222;">% </span><span style="color: #b22222;">create an auxiliary variable
-</span><span style="color: #a020f0;">in</span>
+<span style="color: #7f007f;">proc</span><span style="color: #a0522d;"> </span>{<span style="color: #0000ff;">InversionalEquivalentInterval</span> Pitch1 Pitch2 Interval}
+   Aux = {FD<span style="color: #7f007f;">.</span>decl}                       <span style="color: #b22222;">% </span><span style="color: #b22222;">create an auxiliary variable
+</span><span style="color: #7f007f;">in</span>
    <span style="color: #b22222;">%% </span><span style="color: #b22222;">adding 12 has no effect for mod 12, but the FD int Aux must be positive
-</span>   Aux <span style="color: #a020f0;">=:</span> Pitch2<span style="color: #a020f0;">-</span>Pitch1<span style="color: #a020f0;">+</span>12
-   {FD<span style="color: #a020f0;">.</span>modI Aux 12 Interval}
-<span style="color: #a020f0;">end</span>
+</span>   Aux <span style="color: #7f007f;">=:</span> Pitch2<span style="color: #7f007f;">-</span>Pitch1<span style="color: #7f007f;">+</span>12
+   {FD<span style="color: #7f007f;">.</span>modI Aux 12 Interval}
+<span style="color: #7f007f;">end</span>
 </pre>
 
 <p>Because of its simplicity, this CSP does not require any Strasheela constructs. Strasheela was only used to output solutions, for example, into music notation.
@@ -124,8 +121,8 @@ For more complex musical CSPs, however, Strasheela considerably helps to express
 <!-- Footer -->
 <div id="footer">
 <div id="author">&copy; 
-Torsten Anders</div>
-<div id="date">Last time edited: 2009.03.18</div>
+torsten</div>
+<div id="date">Last time edited: 2011.12.28</div>
 </div>
   </body>
 </html>

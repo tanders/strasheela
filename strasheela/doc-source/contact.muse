@@ -2,16 +2,6 @@
 
 Torsten Anders
 
-> [[http://cmr.soc.plymouth.ac.uk/index.html][Interdisciplinary Centre for Computer Music Research]], [[http://www.plymouth.ac.uk/][University of Plymouth]]
-> torsten dot anders at plymouth dot ac dot uk
+> torsten dot anders at beds dot ac dot uk
 > [[http://www.torsten-anders.de][www.torsten-anders.de]]
-
-> Snail mail: 
-
->   University of Plymouth
->   Interdisciplinary Centre of Computer Music Research
->   Smeaton Building, Room 206
->   Drake Circus
->   Plymouth PL4 8AA
->   United Kingdom 
 
