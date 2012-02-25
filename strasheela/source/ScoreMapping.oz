@@ -33,7 +33,7 @@ import
    Score at 'ScoreCore.ozf'
    %% !! functor of Strasheela core depending on extension
    Pattern at 'x-ozlib://anders/strasheela/Pattern/Pattern.ozf'
-%    Browser(browse:Browse) % temp for debugging
+   % Browser(browse:Browse) % temp for debugging
 export
    
    FlagsMixin MappingMixin
@@ -854,26 +854,27 @@ define
       
    local
       /** %% Traverses Xs (a list of temporal items) and returns list of those items which sound somewhen within time window Start-End. Nevertheless, these items may also start before or sound longer then this time window, and they do not need to last over the whole time window.
+      %% (Similar to Score.getItemsInTimeframe, but certain differences to validate extra def, e.g., CTest expects three args here).
       %% */
       fun {FilterInTimeWindow Xs Start End CTest}
-	 thread
-	    {LUtils.cFilter Xs
-	     fun {$ X}
-		({X getStartTime($)} <: End) == 1 andthen 
-		({X getEndTime($)} >: Start) == 1 andthen
-		{CTest X Start End} 
-	     end}
-	 end
+	 {LUtils.cFilter Xs
+	  fun {$ X}
+	     ({X getStartTime($)} <: End) == 1 andthen 
+	     ({X getEndTime($)} >: Start) == 1 andthen
+	     {CTest X Start End} 
+	  end}
       end
    in
       /** %% Applies Fn (unary function expecting list of items) to sublists of Items (list of items) which are positioned within certain "time slices". A time slice is defined by a start and end time, the items within a timeslice include those that start before or sound longer then this time slice, but some part of them must occur within the time slice. A sequence of time slices with regular durations is defined by the args startTime, endTime (required arg!) and step.
       %%
       %% Args:
       %% startTime (default 0): int specifying start of first time slice.
-      %% endTime (no default!): int specifying end of last time slice.
+      %% endTime (no default!): int specifying end of last time slice. NOTE: make sure the value given to endTime is determined (i.e. usually not simply {MyScore getEndTime($)}).
       %% step (default 1): int specifying size of all time slices.
       %% 'test': a Boolean function or method for pre-filtering Items.
-      %% 'cTest': a Boolean function {F X Start End} applied within the concurrent filtering of Items. X is an item, Start and End are the start and end time of the time window. 
+      %% 'cTest': a Boolean function {F X Start End} applied within the concurrent filtering of Items. X is an item, Start and End are the start and end time of the time window.
+      %%
+      %% Note: this constraint applicator requires a variable ordering (distribution strategy) like left-to-right in order to have its constraints applied as early as possible.
       %%
       %% */
       %%
@@ -891,15 +892,22 @@ define
       in
 	 {Pattern.map2Neighbours Times
 	  fun {$ Start End}
-	     {Fn {FilterInTimeWindow FilteredItems Start End As.cTest}}
+	     thread {Fn {FilterInTimeWindow FilteredItems Start End As.cTest}} end
 	  end}
+	 % {Pattern.map2Neighbours Times
+	 %  fun {$ Start End}
+	 %     TimeWindowItems
+	 %  in
+	 %     thread TimeWindowItems = {FilterInTimeWindow FilteredItems Start End As.cTest} end 
+	 %     thread {Fn TimeWindowItems} end
+	 %  end}
       end
 
-      /** %% Same as MapTimeslices, but P is unary procedure expecting list of items.
+      /** %% Similar to MapTimeslices, but P is unary procedure expecting list of items.
       %% */
       proc {ForTimeslices Items P Args}
 	 Defaults = unit(test: fun {$ X} true end
-			 cTest: fun {$ X} true end
+			 cTest: fun {$ X Start End} true end
 			 startTime: 0
 % 		      endTime: _
 			 step: 1)
@@ -909,8 +917,15 @@ define
       in
 	 {Pattern.for2Neighbours Times
 	  proc {$ Start End}
-	     {P {FilterInTimeWindow FilteredItems Start End {GUtils.toFun As.cTest}}}
+	     thread {P {FilterInTimeWindow FilteredItems Start End As.cTest}} end
 	  end}
+	 % {Pattern.for2Neighbours Times
+	 %  proc {$ Start End}
+	 %     TimeWindowItems
+	 %  in
+	 %     thread TimeWindowItems = {FilterInTimeWindow FilteredItems Start End As.cTest} end 
+	 %     thread {P TimeWindowItems} end
+	 %  end}
       end
    end
 
@@ -959,31 +974,40 @@ define
       %%
       %% Note that MapSimultaneousPairs even works if the rhythmical structure is indetermined in the CSP definition, but it will block until the rhythmic structure is determined enough to tell which score objects are simultaneous. Therefore, a distribution strategy which determines the rhythmical structure relatively early (e.g., left to right) is recommended.
       %%
-      %% See ForSimPairs doc for an example. 
+      %% See ForSimPairs doc for an example.
+      %%
+      %% BUG: does not work for score with partially undetermined temporal structure -- which makes this def pretty useless for CSPs so far. 
       %% */
       fun {MapSimultaneousPairs Xs Fn Args}
 	 Defaults = unit(test: fun {$ X} true end
 			 cTest: fun {$ X} true end)
 	 As = {Adjoin Defaults Args}
+	 Aux
       in
-	 {Flatten
-	  {Map Xs
-	   fun {$ X}
-	      {Map
-	       {X getSimultaneousItems($ cTest: {GUtils.toFun As.cTest}
-				       test:fun {$ Y}
-					       {{GUtils.toFun As.test} Y} andthen
-					       Y \= X andthen 
-					       local 
-						  PosX#PosY = {FindHierarchicDifferencePosition
-							       X Y}
-					       in
-						  %% Y must be in "voice" with lower position, i.e. usually a higher voice (e.g. printed in an upper staff). Voice is in quotes, because this def works for arbitrary nestings
-						  PosX > PosY
-					       end
-					    end)}
-	       fun {$ Y} {Fn X Y} end}
-	   end}}
+	 thread
+	    Aux = {Map Xs
+		   fun {$ X}
+		      thread 
+			 {Map
+			  {X getSimultaneousItems($ cTest: {GUtils.toFun As.cTest}
+						  test:fun {$ Y}
+							  {{GUtils.toFun As.test} Y} andthen
+							  Y \= X andthen 
+							  local 
+							     PosX#PosY = {FindHierarchicDifferencePosition
+									  X Y}
+							  in
+							     %% Y must be in "voice" with lower position, i.e. usually a higher voice (e.g. printed in an upper staff). Voice is in quotes, because this def works for arbitrary nestings
+							     PosX > PosY
+							  end
+						       end)}
+			  fun {$ Y} {Fn X Y} end}
+		      end
+		   end}
+	 end
+	 thread 
+	    {Flatten Aux}
+	 end
       end
       /** %% ForSimultaneousPairs traverses Xs (a list of score objects) and applies the binary procedure P to pairs of simultaneous score objects. 
       %% ForSimultaneousPairs applies {P X Y} to all pairs X and Y, where X is an element in Xs and Y is a score object which is simultaneous to X, but which is not necessarily contained in Xs. In order to avoid applying the same constraint twice in case both X and Y are contained in Xs, there is an additional restriction related to the hierarchic nesting of X and Y. Simplified, this restriction states that the container of Y must be at a lower position than the container of X. However, ForSimultaneousPairs is more general and works for arbitrary nesting.
@@ -1001,29 +1025,37 @@ define
       {ForSimultaneousPairs {MyScore collect($ test:isNote)} IsConsonant unit(test:isNote)}
       %% Application of a harmonic constraint to all note pairs consisting of a bass note and a note from a higher voice. MyBass is a container which contains all the bass notes. 
       {ForSimultaneousPairs {MyBass collect($ test:isNote)} IsConsonant unit(test:isNote)}
+      %%
+      %% BUG: does only work for sim notes that are already contained in Xs? Possibly this is only a bug in the documentation..
       %% */
       proc {ForSimultaneousPairs Xs P Args}
 	 Defaults = unit(test: fun {$ X} true end
 			 cTest: fun {$ X} true end)
 	 As = {Adjoin Defaults Args}
       in
-	 {ForAll Xs
-	  proc {$ X}
-	     {ForAll
-	      {X getSimultaneousItems($ cTest: {GUtils.toFun As.cTest}
-				      test:fun {$ Y}
-					      Y \= X andthen 
-					      {{GUtils.toFun As.test} Y} andthen
-					      local 
-						 PosX#PosY = {FindHierarchicDifferencePosition
-							      X Y}
-					      in
-						 %% Y must be in "voice" with lower position, i.e. usually a higher voice (e.g. printed in an upper staff). Voice is in quotes, because this def works for arbitrary nestings
-						 PosX > PosY
-					      end
-					   end)}
-	      proc {$ Y} {P X Y} end}
-	  end}
+	 thread 
+	    {ForAll Xs
+	     proc {$ X}
+		SimItems in
+		thread
+		   %% getSimultaneousItems internally uses LUtils.cFilter, which supports
+		   %% concurrent processing (e.g., can return a partially determined list)
+		   SimItems = {X getSimultaneousItems($ cTest: {GUtils.toFun As.cTest}
+						      test:fun {$ Y}
+							      Y \= X andthen 
+							      {{GUtils.toFun As.test} Y} andthen
+							      local 
+								 PosX#PosY = {FindHierarchicDifferencePosition
+									      X Y}
+							      in
+								 %% Y must be in "voice" with lower position, i.e. usually a higher voice (e.g. printed in an upper staff). Voice is in quotes, because this def works for arbitrary nestings
+								 PosX > PosY
+							      end
+							   end)}
+		end
+		thread {ForAll SimItems proc {$ Y} {P X Y} end} end
+	     end}
+	 end
       end
    end
 
