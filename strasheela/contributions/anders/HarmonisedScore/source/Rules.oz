@@ -654,12 +654,12 @@ define
 
    
 
-   /** %% Open and hidden parallel fifths and fourth are not permitted: perfect consonances must not be reached by both voices in the same direction. NotePairs is a list of two-note-pairs. Each pair consists of consecutive notes in the same voice and NotePairs together are the simultaneous note pairs of all voices. In particular, the second element of each pair in NotePairs are all simultaneous notes -- if any of these form a perfect consonance, then the first notes of these pairs should not progress into these sim notes in the same direction. 
+   /** %% Open and hidden parallel fifths or octaves are permitted: perfect consonances must not be reached by both voices in the same direction. NotePairs is a list of two-note-pairs. Each pair consists of consecutive notes in the same voice and NotePairs together are the simultaneous note pairs of all voices. In particular, the second element of each pair in NotePairs are all simultaneous notes -- if any of these form a perfect consonance, then the first notes of these pairs should not progress into these sim notes in the same direction. 
    %% */
    proc {NoParallels NotePairs}
       {Pattern.forPairwise NotePairs NoParallel}
    end
-   /** %% Open and hidden parallel fifths and fourth are not permitted: perfect consonances must not be reached by both voices in the same direction. Notes is the list of all notes to which the constraint is applied (e.g., the list of all notes in the score).
+   /** %% Neither open nor hidden parallel fifths or octaves are permitted: perfect consonances must not be reached by both voices in the same direction. Notes is the list of all notes to which the constraint is applied (e.g., the list of all notes in the score).
    %%
    %% Args:
    %% getPredecessor: unary function expecting a note and returning the preceding note in the same voice. Default:
@@ -686,17 +686,22 @@ define
 	  unit(test:isNote)}
       end
    end
-   /** %%  Open and hidden parallel fifths and fourth are not permitted: perfect consonances must not be reached by both voices in the same direction. The pairs N1A#N1B and N2A#N2B are pairs of consecutive melodic notes,  whereas N1B and N2B are simultaneous notes. 
-   %% */
-   proc {NoParallel N1A#N1B N2A#N2B}
-      Dir1 = {Pattern.direction {N1A getPitch($)} {N1B getPitch($)}}
-      Dir2 = {Pattern.direction {N2A getPitch($)} {N2B getPitch($)}}
+   local
+      IsOctaveOrFifthR = {MakeIntervalConstraint [1#1 3#2]}
    in
-      {FD.impl
-       %% interval between sim successor notes
-       {IsPerfectConsonanceR {GetInterval N1B N2B}}
-       (Dir1 \=: Dir2)
-       1}
+      /** %% Neither open nor hidden parallels fifths or octaves are permitted: perfect consonances must not be reached by both voices in the same direction. The pairs N1A#N1B and N2A#N2B are pairs of consecutive melodic notes,  whereas N1B and N2B are simultaneous notes.
+      %% NB: fourth is not considered perfect consonance by IsPerfectConsonanceR. 
+      %% */
+      proc {NoParallel N1A#N1B N2A#N2B}
+	 Dir1 = {Pattern.direction {N1A getPitch($)} {N1B getPitch($)}}
+	 Dir2 = {Pattern.direction {N2A getPitch($)} {N2B getPitch($)}}
+      in
+	 {FD.impl
+	  %% interval between sim successor notes
+	  {IsOctaveOrFifthR {GetInterval N1B N2B}}
+	  (Dir1 \=: Dir2)
+	  1}
+      end
    end
    
 
