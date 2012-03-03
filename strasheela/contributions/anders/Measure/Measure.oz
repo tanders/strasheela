@@ -380,11 +380,35 @@ define
 
 
    
-   local
+   local      
+      % /** %% B=1 <=> Time is no less that the start time of MyMeasures.
+      % %% */
+      % proc {AtLeastStartTime Time MyMeasures B}
+      % 	 B = (Time >=: {MyMeasures getStartTime($)})
+      % end
+      
+      /** %% B=1 <=> Time is no less that the start time and no more than end time of MyMeasures.
+      %% */
+      proc {IsWithinMeasures Time MyMeasures ?B}
+	 B = {FD.int 0#1}
+	 B = {FD.conj (Time >=: {MyMeasures getStartTime($)})
+	      (Time =<: {MyMeasures getEndTime($)})}
+      end
+
+      /** %% Expects an FD int Time and a uniform measures instance MyMeasures and returns an FD int = Time - {MyMeasures getStartTime($)}. 
+      %% */
+      proc {TimeInUniformMeasures Time MyMeasures ?TimeAux}
+	 TimeAux = {FD.decl}
+	 TimeAux =: Time - {MyMeasures getStartTime($)}
+      end
+
+      /** %% Expects an FD int Time and a uniform measures instance MyMeasures and returns an FD int that is the time within a single measure of MyMeasures.
+      %% NOTE: results in failure if Time < {MyMeasures getStartTime($)}
+      %% */
       %% blocks until measure duration is determined (i.e. both beatNumber and beatDuration are determined)
-      proc {TimeInMeasure Time MeasureDur ?RelTime}
+      proc {TimeInMeasure Time MyMeasures ?RelTime}
 	 RelTime = {FD.decl}
-	 RelTime =: {FD.modI Time MeasureDur}
+	 RelTime =: {FD.modI {TimeInUniformMeasures Time MyMeasures} {MyMeasures getMeasureDuration($)}}
       end
    in
      
@@ -483,45 +507,70 @@ define
 	    X = {@measure getDurationParameter($)}
 	 end
 
+
 	 /** %% I is the index of the measure at Time (one-based). A measure starts at its start time and ends before its end time. For instance, the index for the first measure is 1, starting at Time 0. Measure 2 starts at MeasureDuration. I and Time are FD integers.
+	 %% If Time is outside the boundaries of self, then I = 0.
 	 %% */
 	 meth getMeasureAt(I Time)
-	    %% !!?? is there some cheaper implementation
-	    MDur = {self getMeasureDuration($)}
-	 in
-	    (I - 1) * MDur =<: Time
-	    I * MDur >: Time
+	    thread
+	       if {IsWithinMeasures Time self} == 1
+	       then 
+		  %% !!?? is there some cheaper implementation
+		  MDur = {self getMeasureDuration($)}
+		  TimeAux = {TimeInUniformMeasures Time self}
+	       in
+		  (I - 1) * MDur =<: TimeAux
+		  I * MDur >: TimeAux
+	       else I = 0
+	       end
+	    end
 	 end
 
 	 /** %% I is the index of the accent at Time (one-based). Accents are only counted within individual measures (the first accent in the 2nd measure is again index 1). If Time is between accents then the index of the accent before Time is returned.
+	 %% If Time is outside the boundaries of self, then I = 0.
 	 %% Method delayed until measure duration is determined (i.e. both beatNumber and beatDuration are determined).
 	 %% */
 	 meth getAccentInMeasureAt(I Time)
-	    RelTime = {TimeInMeasure Time {self getMeasureDuration($)}}
-	    Accents = {self getAccents($)}
-	 in
 	    thread
-	       I = {LUtils.findPosition {LUtils.matTrans
-					 [Accents
-					  {Append Accents.2 [{self getMeasureDuration($)}]}]}
-		    fun {$ [A1 A2]}
-		       (A1 =<: RelTime) == 1 andthen
-		       (A2 >: RelTime) == 1
-		    end}
+	       if {IsWithinMeasures Time self} == 1
+	       then 
+		  RelTime = {TimeInMeasure Time {self getMeasureDuration($)}}
+		  Accents = {self getAccents($)}
+	       in
+		  thread
+		     I = {LUtils.findPosition {LUtils.matTrans
+					       [Accents
+						{Append Accents.2 [{self getMeasureDuration($)}]}]}
+			  fun {$ [A1 A2]}
+			     (A1 =<: RelTime) == 1 andthen
+			     (A2 >: RelTime) == 1
+			  end}
+		  end
+	       else I = 0
+	       end
 	    end
 	 end
 	 
-	 /** %% I is the index of the beat at Time (one-based). Beats are counted across all measures in self. If Time is between beats then the intex of the last beat before is returned.
+	 /** %% I is the index of the beat at Time (one-based). Beats are counted across all measures in self. If Time is between beats then the index of the last beat before is returned.
+	 %% If Time is outside the boundaries of self, then I = 0.
 	 %% */
 	 meth getBeatAt(I Time)
-	    %% !!?? is there some cheaper implementation
-	    BDur = {self getBeatDuration($)}
-	 in
-	    (I - 1) * BDur =<: Time
-	    I * BDur >: Time
+	    thread
+	       if {IsWithinMeasures Time self} == 1
+	       then 
+		  %% !!?? is there some cheaper implementation
+		  BDur = {self getBeatDuration($)}
+		  TimeAux = {TimeInUniformMeasures Time self}	       
+	       in
+		  (I - 1) * BDur =<: TimeAux
+		  I * BDur >: TimeAux
+	       else I = 0
+	       end
+	    end
 	 end
 	 /** %% I is the index of the beat at Time (one-based). Beats are only counted within individual measures (the first beat in the 2nd measure is again index 1). If Time is between beats then the index of the beat before Time is returned.
 	 %% Constraint blocks until beatNumber is determined.
+	 %% If Time is outside the boundaries of self, then I = 0.
 	 %% */
 	 meth getBeatInMeasureAt(I Time)
 	    TotalI = {FD.decl}
@@ -533,6 +582,7 @@ define
 	 
 	 /** %% B=1 <-> Time equals the start time of some measure in UniformMeasures. Time is FD int, B is implicitly constrained to 0/1-int.
 	 %%
+	 %% NB: blocks until Time is known to be at least size of start time of self.
 	 %% NB: Constraint blocks until both beatNumber and beatDuration are determined.
 	 %% NB: method does not take n into account -- to limit truth value B to the actual time span within start and end time of UniformMeasures add necessary constraints outside of this method.
 	 %% */
@@ -542,8 +592,14 @@ define
 % 	 B =: ({TimeInMeasure Time {self getMeasureDuration($)}}
 % 	       =: {self getStartTime($)})
 	    %%
-	    B = {FD.int 0#1}
-	    B =: ({FD.modI Time {self getMeasureDuration($)}} =: 0)
+	    thread
+	       if {IsWithinMeasures Time self} == 1
+	       then 
+		  B = {FD.int 0#1}
+		  B =: ({FD.modI {TimeInUniformMeasures Time self} {self getMeasureDuration($)}} =: 0)
+	       else B = 0
+	       end
+	    end
 	 end
 	 /** %% Variant of onMeasureStartR which does domain propagation (which can be very expensive). However, propagation of Time does only happen after B got determined.
 	 %%
@@ -551,13 +607,19 @@ define
 	 %% */
 	 %% !! MeasureDuration is constrained anyway in Measure -- here I add the same constraints with domain propagation (however, often MeasureDuration is determined soon anyway).
 	 meth onMeasureStartDR(B Time)	 
-	    MeasureDuration = {self getMeasureDuration($)}
-	    RelTime = {FD.decl}
-	 in
-	    MeasureDuration = {FD.timesD {self getBeatNumber($)} {self getBeatDuration($)}}
-	    RelTime = {FD.modD Time MeasureDuration}
-	    B = {FD.int 0#1}
-	    B =: (RelTime =: 0)
+	    thread
+	       if {IsWithinMeasures Time self} == 1
+	       then 
+		  MeasureDuration = {self getMeasureDuration($)}
+		  RelTime = {FD.decl}
+	       in
+		  MeasureDuration = {FD.timesD {self getBeatNumber($)} {self getBeatDuration($)}}
+		  RelTime = {FD.modD {TimeInUniformMeasures Time self} MeasureDuration}
+		  B = {FD.int 0#1}
+		  B =: (RelTime =: 0)
+	       else B = 0
+	       end
+	    end
 	 end
 	 /** %% B=1 <-> Time equals some strong beat in some measure in UniformMeasures. Time is FD int, B is implicitly constrained to 0/1-int.
 	 %%
@@ -567,10 +629,16 @@ define
 	 meth onAccentR(B Time)
 	    %% Constraint blocks until measure duration is determined (i.e. both beatNumber and beatDuration are determined). There is no propagation with neither beatNumber and beatDuration and Time or B. 
 	    %% !! constrain performs probably very little propagation: Time -- transformed into measure only by bounds propagation -- is constrained whether it is element in set...
-	    B = {FD.int 0#1}
-	    B = {FS.reified.include
-		 {TimeInMeasure Time {self getMeasureDuration($)}}
-		 {self getAccentsFS($)}}
+	    thread
+	       if {IsWithinMeasures Time self} == 1
+	       then 
+		  B = {FD.int 0#1}
+		  B = {FS.reified.include
+		       {TimeInMeasure Time {self getMeasureDuration($)}}
+		       {self getAccentsFS($)}}
+	       else B = 0
+	       end
+	    end
 	    %%
 	    %% Alternative implementation using AccentDur -- does not work, because the IOI between accents may be irregular (e.g., for 5/4 time) and thus a single AccentDur cannot work.
 	    %%
@@ -614,34 +682,64 @@ define
 % 		  {TimeInMeasure Time {self getMeasureDuration($)}}
 % 		  {self getBeatsFS($)}}
 	    %%
-	    B = {FD.int 0#1}
-	    B =: ({FD.modI Time {self getBeatDuration($)}} =: 0)
+	    thread
+	       if {IsWithinMeasures Time self} == 1
+	       then 
+		  B = {FD.int 0#1}
+		  B =: ({FD.modI {TimeInUniformMeasures Time self} {self getBeatDuration($)}} =: 0)
+	       else B = 0
+	       end
+	    end
 	 end
 	 /** %% Variant of onBeatR which does domain propagation (which can be very expensive). However, propagation of Time does only happen after B got determined.
 	 %% */
 	 %% !!?? constraint suspends and performs OK if it first calls {Browse Time}?
 	 meth onBeatDR(B Time)
-	    RelTime = {FD.decl}
-	 in
-	    RelTime = {FD.modD Time {self getBeatDuration($)}}
-	    B = {FD.int 0#1}
-	    B =: (RelTime =: 0)
+	    thread
+	       if {IsWithinMeasures Time self} == 1
+	       then 
+		  RelTime = {FD.decl}
+	       in
+		  RelTime = {FD.modD {TimeInUniformMeasures Time self} {self getBeatDuration($)}}
+		  B = {FD.int 0#1}
+		  B =: (RelTime =: 0)
+	       else B = 0
+	       end
+	    end
 	 end
 
-	 /** %% B=1 <-> an event lasting from Start to End is a syncope at measure level: Start and End fall in different measures.
+	 /** %% B=1 <-> an event lasting from Start to End is a syncope at measure level: Start and End fall in different measures (either within self or beyond).
+	 %% Note: if both Start and End are outside self then 0 is return (even though the respective event might be a syncope at measure level for other uniform measures instances).
 	 %% */
 	 meth overlapsBarlineR(B Start End)
-	    StartBar = {FD.decl} % index of bar of Start
-	    EndBar = {FD.decl}
-	 in
-	    B = {FD.int 0#1}
-	    {self getMeasureAt(StartBar Start)}
-	    {self getMeasureAt(EndBar End)}
-	    B =: {FD.conj {FD.nega {self onMeasureStartR($ Start)}}
-		  {FD.conj (StartBar \=: EndBar)
-		   %% exclude case that event lasts exactly after the end of StartBar 
-		   {FD.nega {FD.conj {self onMeasureStartR($ End)}
-			     (EndBar - StartBar =: 1)}}}}
+	    thread 
+	       if {IsWithinMeasures Start self} == 1
+	       then
+		  if {IsWithinMeasures End self} == 1
+		  then 
+		     StartBar = {FD.decl} % index of bar of Start
+		     EndBar = {FD.decl}
+		  in
+		     B = {FD.int 0#1}
+		     {self getMeasureAt(StartBar Start)}
+		     {self getMeasureAt(EndBar End)}
+		     B =: {FD.conj {FD.nega {self onMeasureStartR($ Start)}}
+			   {FD.conj (StartBar \=: EndBar)
+			    %% exclude case that event lasts exactly after the end of StartBar 
+			    {FD.nega {FD.conj {self onMeasureStartR($ End)}
+				      (EndBar - StartBar =: 1)}}}}
+		     %% overlapping end of self
+		  else B = 1
+		  end
+	       else 
+		  if {IsWithinMeasures End self} == 1
+		     %% overlapping beginning of self
+		  then B = 1
+		     %% both Start and End outside self
+		  else B = 0
+		  end
+	       end
+	    end
 	 end
 
 	 /** %% Same as overlapsBarlineR
@@ -651,37 +749,51 @@ define
 	 end
 
 	 /** %% B=1 <-> an event lasting from Start to End is a syncope at accent level: Start is not on an accent, and Start and End fall between different accents.
+	 %% Note: if either Start or End are outside self then 0 is returned (even though the respective event might be a syncope in other uniform measures instances).
 	 %% BUG: B=0 for an event that is a syncope at accent level, but its duration is some multiple of the measure duration.
 	 %% */
 	 meth accentSyncopationR(B Start End)
-	    StartAcc = {FD.decl} % index of beat of Start
-	    EndAcc = {FD.decl}
-	 in
-	    B = {FD.int 0#1}
-	    {self getAccentInMeasureAt(StartAcc Start)}
-	    {self getAccentInMeasureAt(EndAcc End)}
-	    B =: {FD.conj {FD.nega {self onAccentR($ Start)}}
-		  {FD.conj (StartAcc \=: EndAcc)
-		   %% exclude case that event lasts exactly after the end of StartAcc 
-		   {FD.nega {FD.conj {self onAccentR($ End)}
-			     %% BUG: note that getAccentInMeasureAt is measured only within bar
-			     (EndAcc - StartAcc =: 1)}}}}
+	    thread
+	       if {FD.conj {IsWithinMeasures Start self} {IsWithinMeasures End self}} == 1
+	       then
+		  StartAcc = {FD.decl} % index of beat of Start
+		  EndAcc = {FD.decl}
+	       in
+		  B = {FD.int 0#1}
+		  {self getAccentInMeasureAt(StartAcc Start)}
+		  {self getAccentInMeasureAt(EndAcc End)}
+		  B =: {FD.conj {FD.nega {self onAccentR($ Start)}}
+			{FD.conj (StartAcc \=: EndAcc)
+			 %% exclude case that event lasts exactly after the end of StartAcc 
+			 {FD.nega {FD.conj {self onAccentR($ End)}
+				   %% BUG: note that getAccentInMeasureAt is measured only within bar
+				   (EndAcc - StartAcc =: 1)}}}}
+	       else B = 0
+	       end
+	    end
 	 end
 	 
-	 /** %% B=1 <-> an event lasting from Start to End is a syncope at beat level: Start is not on a beat, and Start and End fall between different beats. 
+	 /** %% B=1 <-> an event lasting from Start to End is a syncope at beat level: Start is not on a beat, and Start and End fall between different beats.
+	 %% Note: if either Start or End are outside self then 0 is returned (even though the respective event might be a syncope in other uniform measures instances).
 	 %% */
 	 meth beatSyncopationR(B Start End)
-	    StartBeat = {FD.decl} % index of beat of Start
-	    EndBeat = {FD.decl}
-	 in
-	    B = {FD.int 0#1}
-	    {self getBeatAt(StartBeat Start)}
-	    {self getBeatAt(EndBeat End)}
-	    B =: {FD.conj {FD.nega {self onBeatR($ Start)}}
-		  {FD.conj (StartBeat \=: EndBeat)
-		   %% exclude case that event lasts exactly after the end of StartBeat 
-		   {FD.nega {FD.conj {self onBeatR($ End)}
-			     (EndBeat - StartBeat =: 1)}}}}
+	    thread 
+	       if {FD.conj {IsWithinMeasures Start self} {IsWithinMeasures End self}} == 1
+	       then
+		  StartBeat = {FD.decl} % index of beat of Start
+		  EndBeat = {FD.decl}
+	       in
+		  B = {FD.int 0#1}
+		  {self getBeatAt(StartBeat Start)}
+		  {self getBeatAt(EndBeat End)}
+		  B =: {FD.conj {FD.nega {self onBeatR($ Start)}}
+			{FD.conj (StartBeat \=: EndBeat)
+			 %% exclude case that event lasts exactly after the end of StartBeat 
+			 {FD.nega {FD.conj {self onBeatR($ End)}
+				   (EndBeat - StartBeat =: 1)}}}}
+	       else B = 0
+	       end
+	    end
 	 end
 	 
 %      meth getAttributes(?Xs)
