@@ -93,7 +93,7 @@ export
    %% expert Fomus procs
    IsFomusChord
    GetUserFomus GetUserFomus_Before GetUserFomus_After
-   Record2FomusEvent Record2FomusNote Record2FomusObject Record2FomusSetting Record2FomusCode Record2FomusMeasure
+   Record2FomusEvent Record2FomusEvent_Untimed Record2FomusNote Record2FomusObject Record2FomusSetting Record2FomusCode Record2FomusMeasure
    MakeFomusNote
    
    MakeCMEvent MakeCMScore OutputCMScore
