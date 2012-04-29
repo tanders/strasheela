@@ -55,7 +55,7 @@
 functor 
    
 import
-   GUtils at 'x-ozlib://anders/strasheela/source/GeneralUtils.ozf'
+   % GUtils at 'x-ozlib://anders/strasheela/source/GeneralUtils.ozf'
 %    MUtils at 'x-ozlib://anders/strasheela/source/MusicUtils.ozf'
    HS at 'x-ozlib://anders/strasheela/HarmonisedScore/HarmonisedScore.ozf'
    ET22 at '../ET22.ozf'
