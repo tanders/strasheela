@@ -1,0 +1,247 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<html>
+ <head>
+  <title>Class Measure</title>
+  <style>BODY {
+ background: url(page.gif) repeat-y white;
+}
+#slidemenubar, #slidemenubar2{
+ position:absolute;
+ left:-144px;
+ width:160px;
+ top:10px;
+ border:0px solid black;
+ font:bold 12px Verdana;
+ line-height:10px;
+}
+.margin {
+ position: absolute;
+ left: 10px;
+ width: 130px;
+}
+BODY, P, H1, H2, H3, A {
+ font-family: sans-serif;
+}
+PRE, CODE {
+ font-family: courier, monospace;
+}
+P {
+ text-align: justify;
+}
+H1     { color: #9B0000; }
+H2     { color: #FF9933; }
+H3, H4 { color: #881155; }
+CODE              { color: #663366; }
+.code CODE        { color: #000000; }
+SPAN.comment      { color: #B22222; }
+SPAN.keyword      { color: #A020F0; }
+SPAN.string       { color: #BC8F8F; }
+SPAN.functionname { color: #0000FF; }
+SPAN.type         { color: #228B22; }
+SPAN.variablename { color: #B8860B; }
+SPAN.reference    { color: #5F9EA0; }
+SPAN.builtin      { color: #DA70D6; }
+A:link {
+ color: #666666;
+}
+A:visited {
+ color: black;
+}
+A.pre { font-family: courier, monospace;
+ color: #228B22;
+}
+</style>
+ </head>
+<body>
+<script language="JavaScript1.2">
+if (document.all)
+document.write('<div id="slidemenubar2" style="left:-144" onMouseover="pull()" onMouseout="draw()">')
+</script>
+<layer id="slidemenubar" onMouseover="pull()" onMouseout="draw()">
+<table border="0" cellpadding="0" cellspacing="0" width="161"><tr><td bgcolor="#009cff" width="144"><a href="index.html">Index</a>
+</td><td rowspan="4" valign="top" width="16"><img src="menu.gif" width="16"></td></tr><tr><td bgcolor="#009cff" width="144"><a href="node1.html">Measure</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node2.html">Out</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node3.html">Measure</a>
+</td></tr></table></layer>
+<script language="JavaScript1.2">
+function regenerate(){
+window.location.reload()
+}
+function regenerate2(){
+if (document.layers)
+setTimeout("window.onresize=regenerate",400)
+}
+window.onload=regenerate2
+if (document.all){
+document.write('</div>')
+themenu=document.all.slidemenubar2.style
+rightboundary=0
+leftboundary=-144
+}
+else{
+themenu=document.layers.slidemenubar
+rightboundary=144
+leftboundary=0
+}
+function pull(){
+if (window.drawit)
+clearInterval(drawit)
+pullit=setInterval("pullengine()",20)
+}
+function draw(){
+clearInterval(pullit)
+drawit=setInterval("drawengine()",50)
+}
+function pullengine(){
+if (document.all&&themenu.pixelLeft<rightboundary)
+themenu.pixelLeft+=5
+else if(document.layers&&themenu.left<rightboundary)
+themenu.left+=5
+else if (window.pullit)
+clearInterval(pullit)
+}
+function drawengine(){
+if (document.all&&themenu.pixelLeft>leftboundary)
+themenu.pixelLeft-=5
+else if(document.layers&&themenu.left>leftboundary)
+themenu.left-=5
+else if (window.drawit)
+clearInterval(drawit)
+}
+</script>
+
+<div style="margin-left:160px"><p align="right" class="margin"><div align="right">inheritance tree</div></p>
+<pre>
+ Score.temporalElement
+           |
+           |
+           |
+        <a class="pre" href="node3.html#entity128">Measure</a>
+</pre>
+<hr><p class="margin"><div align="right">class definition</div></p>
+<code>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> Measure is a silent timed element representing the meter of a score for the duration of the Measure. Measures are contained in a silent MeasureSeq/UniformMeasures and a MeasureSeq/UniformMeasures runs in parallel to the actual (i.e. sounding) score. That way, the metric structure is freely constrainable independent of other parameters and the hierarchic structure of the rest of the score. <BR>
+ The Measure parameters 'beatNumber' and 'beatDuration' represent the meter of the measure. For instance, in case the time unit of the score is beats(4) and thus 4 represents a quarter note (see doc Score.timeMixin) then the meter 3/8 is represented by beatNumber=3 and beatDuration=2. Usually, beatDuration will equal the number of ticks per beat defined in the time unit of the score (exceptions are needed in case the score contains measures with different beat durations).<BR>
+ The attribute 'beats' (a list of FD ints) represents the relative startTimes of the beats in the measure (i.e., the start times counting from the beginning of the measure). For instance, in case beatNumber=3 and beatDuration=2 then beats=[0 2 4].<BR>
+ The attribute 'accents' (a list of FD ints) represents the relative startTimes of the strong beats in the measure. The strong beats depend on the beatNumber of the measure. The accent patterns in common praxis music are highly standardised (e.g. the meter 4/4 has strong beats on the first and the third beat). Nonetheless, Measure allows to freely define these accent patterns for each possible beatNumber value for each Measure at the optional init method argument 'accentIdxDB'. This argument expects a record (with only integer features) of lists of integers to specify an accent pattern for each beatNumber. For instance, the specification of the common praxis tripel and quadruple meter is unit(3:[1] 4:[1 3]).<BR>
+ The default of 'accentIdxDB' defines the usual common praxis accent patterns for single (1/2, 1/4, 1/8), duple (2/2, 2/4, 2/8), triple (3/2, 3/4, 3/8), and quadruple (4/2, 4/4, 4/8) meter, as well as compound duple (6/2, 6/4, 6/8), compound triple (9/4, 9/8), and compound quadruple (12/4, 12/8, 12/16) meter. The compound meters may also be used to express 'prolatione perfecta' for old music, while the non-coumpound meters express 'prolatione imperfecta'. For the quintuple meter (5/4 etc.), the accent pattern 3/4 + 2/4 is the default. <BR>
+  NB: the initialisation constraints for both beats and accents are delayed until beatNumber is determined (i.e. in a CSP the beatNumber of each beat is either predetermined or the distribution strategy should determine all beatNumbers before other parameter values which are related to the measure by constraints).<BR>
+<BR>
+ Note that the class UniformMeasures is more comprehensive than this class.<BR>
+<BR>
+</span>
+<span class="keyword">class</span> <span class="type">Measure</span> (Inheritance-free)<br>
+&nbsp;&nbsp;&nbsp;<span class="keyword">feat</span>&nbsp;!MeasureType&nbsp;label
+<br>
+&nbsp;&nbsp;&nbsp;<span class="keyword">attr</span>&nbsp;accents&nbsp;accentsFS&nbsp;beatDuration&nbsp;beatNumber&nbsp;beats&nbsp;beatsFS
+<br>
+<ul><li><span class="functionname">getAccents</span>(X)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> Returns the relative startTimes of the strong beats in the measure as a list of FD ints. Accents only accessible after both beatNumber and beatDuration are determined (at which points the accents are determined as well).<BR>
+<BR>
+</span>
+</li><li><span class="functionname">getAccentsFS</span>(X)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> Returns the relative startTimes of the strong beats in the measure as a FS. Accents only accessible after both beatNumber and beatDuration are determined (at which points the accents are determined as well).<BR>
+<BR>
+</span>
+</li><li><span class="functionname">getBeatDuration</span>(X)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"></span>
+</li><li><span class="functionname">getBeatDurationParameter</span>(X)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"></span>
+</li><li><span class="functionname">getBeatNumber</span>(X)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"></span>
+</li><li><span class="functionname">getBeatNumberParameter</span>(X)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"></span>
+</li><li><span class="functionname">getBeats</span>(X)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> Returns the relative startTimes of the beats in the measure as a list of FD ints.<BR>
+<BR>
+</span>
+</li><li><span class="functionname">getBeatsFS</span>(X)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> Returns the relative startTimes of the beats in the measure as a FS.<BR>
+<BR>
+</span>
+</li><li><span class="functionname">getInitInfo</span>($&nbsp;...)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"></span>
+</li><li><span class="functionname">init</span>(accentIdxDB:AIs beatDuration:BeatDuration beatNumber:BeatNr&nbsp;...)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"></span>
+</li></ul>
+<span class="keyword">end</span>
+</code>
+</div></body>
+</html>

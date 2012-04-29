@@ -1,0 +1,191 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<html>
+ <head>
+  <title>RegularTemperament</title>
+  <style>BODY {
+ background: url(page.gif) repeat-y white;
+}
+#slidemenubar, #slidemenubar2{
+ position:absolute;
+ left:-144px;
+ width:160px;
+ top:10px;
+ border:0px solid black;
+ font:bold 12px Verdana;
+ line-height:10px;
+}
+.margin {
+ position: absolute;
+ left: 10px;
+ width: 130px;
+}
+BODY, P, H1, H2, H3, A {
+ font-family: sans-serif;
+}
+PRE, CODE {
+ font-family: courier, monospace;
+}
+P {
+ text-align: justify;
+}
+H1     { color: #9B0000; }
+H2     { color: #FF9933; }
+H3, H4 { color: #881155; }
+CODE              { color: #663366; }
+.code CODE        { color: #000000; }
+SPAN.comment      { color: #B22222; }
+SPAN.keyword      { color: #A020F0; }
+SPAN.string       { color: #BC8F8F; }
+SPAN.functionname { color: #0000FF; }
+SPAN.type         { color: #228B22; }
+SPAN.variablename { color: #B8860B; }
+SPAN.reference    { color: #5F9EA0; }
+SPAN.builtin      { color: #DA70D6; }
+A:link {
+ color: #666666;
+}
+A:visited {
+ color: black;
+}
+A.pre { font-family: courier, monospace;
+ color: #228B22;
+}
+</style>
+ </head>
+<body>
+<script language="JavaScript1.2">
+if (document.all)
+document.write('<div id="slidemenubar2" style="left:-144" onMouseover="pull()" onMouseout="draw()">')
+</script>
+<layer id="slidemenubar" onMouseover="pull()" onMouseout="draw()">
+<table border="0" cellpadding="0" cellspacing="0" width="161"><tr><td bgcolor="#009cff" width="144"><a href="index.html">Index</a>
+</td><td rowspan="4" valign="top" width="16"><img src="menu.gif" width="16"></td></tr><tr><td bgcolor="#009cff" width="144"><a href="node1.html">RegularTemperament</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node2.html">DB</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node3.html">RegT</a>
+</td></tr></table></layer>
+<script language="JavaScript1.2">
+function regenerate(){
+window.location.reload()
+}
+function regenerate2(){
+if (document.layers)
+setTimeout("window.onresize=regenerate",400)
+}
+window.onload=regenerate2
+if (document.all){
+document.write('</div>')
+themenu=document.all.slidemenubar2.style
+rightboundary=0
+leftboundary=-144
+}
+else{
+themenu=document.layers.slidemenubar
+rightboundary=144
+leftboundary=0
+}
+function pull(){
+if (window.drawit)
+clearInterval(drawit)
+pullit=setInterval("pullengine()",20)
+}
+function draw(){
+clearInterval(pullit)
+drawit=setInterval("drawengine()",50)
+}
+function pullengine(){
+if (document.all&&themenu.pixelLeft<rightboundary)
+themenu.pixelLeft+=5
+else if(document.layers&&themenu.left<rightboundary)
+themenu.left+=5
+else if (window.pullit)
+clearInterval(pullit)
+}
+function drawengine(){
+if (document.all&&themenu.pixelLeft>leftboundary)
+themenu.pixelLeft-=5
+else if(document.layers&&themenu.left>leftboundary)
+themenu.left-=5
+else if (window.drawit)
+clearInterval(drawit)
+}
+</script>
+
+<div style="margin-left:160px"><span class="string">
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> Top-level functor for definitions related to regular temperaments, such as chord/scale/interval databases and notation output.<BR>
+<BR>
+</span>
+</span>
+<h3>Functor</h3>
+<ul>RegularTemperament ("<span class="string">RegularTemperament.oz</span>")<br></ul>
+<h3>Import</h3>
+<code><ul><li>GUtils at "<span class="string">x-ozlib://anders/strasheela/source/GeneralUtils.ozf"
+</span></li><li>LUtils at "<span class="string">x-ozlib://anders/strasheela/source/ListUtils.ozf"
+</span></li><li>HS at "<span class="string">x-ozlib://anders/strasheela/HarmonisedScore/HarmonisedScore.ozf"
+</span></li><li><a href="node2.html">DB</a> at "<span class="string">source/DB.ozf"
+</span></li></ul></code>
+<h3>Export</h3>
+<code><ul><li>db:<span class="variablename">DB</span>
+</li><li>&lt;P/2:<a href="#entity6"><span class="functionname">JiPC</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity7"><span class="functionname">JiPitch</span></a>&gt;
+</li><li>pc:&lt;P/2:<a href="#entity8"><span class="functionname">PC</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity9"><span class="functionname">Pitch</span></a>&gt;
+</li></ul></code>
+<h3>Define</h3>
+
+<code>
+<a name="entity6">
+<span class="keyword">fun</span>{<span class="functionname">JiPC</span> SymPC}<br>
+<span class="string"> Transforms symbolic accidental (atom) into the corresponding accidental integer. The following symbolic accidentals are supported: the empty atom '' is natural (!), '7' and 'L' are a septimal comma sharp and flat, '77' and 'LL' are two septimal commas sharp and flat, '#' and 'b' are a semitone sharp and flat, and finally 'x' and 'bb' are two semitones sharp and flat. <BR>
+ Note: Returned value depends on {HS.db.getAccidentalOffset}, set the HS database to ET41.db.fullDB.<BR>
+ */<BR>
+ TODO: umkehroperation..<BR>
+       fun {Acc SymAcc}<BR>
+ 	 AccDecls.SymAcc + {HS.db.getAccidentalOffset} <BR>
+       end<BR>
+<BR>
+<BR>
+/** %% Tranforms a symbolic note name for a JI pitch class into the corresponding regular temperament pitch class (an int). SymPC is a pair of the form Nominal#Acc or  Nominal#Acc1# ... #AccN. Nominal is one of the 7 neminals 'C', 'D', .. 'B', which express a chain of Pythagorean fifths. The following accidentals are supported.<BR>
+ '#' and 'b': a Pythagorean apotome up/down<BR>
+ '/' and '\\': a Syntonic comma up/down<BR>
+ '7' and 'L': a Septimal comma 64/63 up/down<BR>
+ '^' and 'v': a 11-limit quartertone 33/32 up/down<BR>
+<BR>
+ Note that the mapping of JI notation to regular temperament PCs may not correspond to the common notation for the temperament in question. For example, using common notation for 1/4-comma meantone the interval C-Fb is closer to the Pythagorean third 81/64 than C-E. Therefore for this temperament, if SymPC is 'E' (i.e. the Pythagorean third 81/64) then JiPC returns the pitch class that correspond to the tone usually notated Fb (given a high-enough generatorFactors).<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity7">
+<span class="keyword">fun</span>{<span class="functionname">JiPitch</span> Spec}<br>
+<span class="string"> Tranforms a symbolic note name for a JI pitch into the corresponding regular temperament pitch (an int). Spec is pair of the form Nominal#Acc#Octave or  Nominal#Acc1# ... #AccN#Octave. See JiPitch for the meaning of nominal and accidentals. Octave is an integer. The returned value depends on PitchesPerOctave.<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity8">
+<span class="keyword">fun</span>{<span class="functionname">PC</span> SymPC}<br>
+<span class="string"> Tranforms a symbolic note name for a tempered pitch class into the corresponding regular temperament pitch class (an int). PC is used exactly like JiPC, see there for details.<BR>
+ The difference to JiPC is that PC internally uses tempered intervals. For example, in  1/4-comma meantone the Pythagorean third 81/64 is mapped to the PC of the interval 'C'-'E', because it takes tempered fifths into account.<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity9">
+<span class="keyword">fun</span>{<span class="functionname">Pitch</span> Spec}<br>
+<span class="string"> Tranforms a symbolic note name for a tempered pitch into the corresponding regular temperament pitch (an int). Pitch is used exactly like JiPitch, and the different between Pitch and JiPitch is the same as the difference between PC and JiPC.<BR>
+<BR>
+</span>
+</code><br>
+<h3>End</h3>
+</div></body>
+</html>

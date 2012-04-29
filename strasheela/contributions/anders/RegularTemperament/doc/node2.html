@@ -1,0 +1,180 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<html>
+ <head>
+  <title>DB</title>
+  <style>BODY {
+ background: url(page.gif) repeat-y white;
+}
+#slidemenubar, #slidemenubar2{
+ position:absolute;
+ left:-144px;
+ width:160px;
+ top:10px;
+ border:0px solid black;
+ font:bold 12px Verdana;
+ line-height:10px;
+}
+.margin {
+ position: absolute;
+ left: 10px;
+ width: 130px;
+}
+BODY, P, H1, H2, H3, A {
+ font-family: sans-serif;
+}
+PRE, CODE {
+ font-family: courier, monospace;
+}
+P {
+ text-align: justify;
+}
+H1     { color: #9B0000; }
+H2     { color: #FF9933; }
+H3, H4 { color: #881155; }
+CODE              { color: #663366; }
+.code CODE        { color: #000000; }
+SPAN.comment      { color: #B22222; }
+SPAN.keyword      { color: #A020F0; }
+SPAN.string       { color: #BC8F8F; }
+SPAN.functionname { color: #0000FF; }
+SPAN.type         { color: #228B22; }
+SPAN.variablename { color: #B8860B; }
+SPAN.reference    { color: #5F9EA0; }
+SPAN.builtin      { color: #DA70D6; }
+A:link {
+ color: #666666;
+}
+A:visited {
+ color: black;
+}
+A.pre { font-family: courier, monospace;
+ color: #228B22;
+}
+</style>
+ </head>
+<body>
+<script language="JavaScript1.2">
+if (document.all)
+document.write('<div id="slidemenubar2" style="left:-144" onMouseover="pull()" onMouseout="draw()">')
+</script>
+<layer id="slidemenubar" onMouseover="pull()" onMouseout="draw()">
+<table border="0" cellpadding="0" cellspacing="0" width="161"><tr><td bgcolor="#009cff" width="144"><a href="index.html">Index</a>
+</td><td rowspan="4" valign="top" width="16"><img src="menu.gif" width="16"></td></tr><tr><td bgcolor="#009cff" width="144"><a href="node1.html">RegularTemperament</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node2.html">DB</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node3.html">RegT</a>
+</td></tr></table></layer>
+<script language="JavaScript1.2">
+function regenerate(){
+window.location.reload()
+}
+function regenerate2(){
+if (document.layers)
+setTimeout("window.onresize=regenerate",400)
+}
+window.onload=regenerate2
+if (document.all){
+document.write('</div>')
+themenu=document.all.slidemenubar2.style
+rightboundary=0
+leftboundary=-144
+}
+else{
+themenu=document.layers.slidemenubar
+rightboundary=144
+leftboundary=0
+}
+function pull(){
+if (window.drawit)
+clearInterval(drawit)
+pullit=setInterval("pullengine()",20)
+}
+function draw(){
+clearInterval(pullit)
+drawit=setInterval("drawengine()",50)
+}
+function pullengine(){
+if (document.all&&themenu.pixelLeft<rightboundary)
+themenu.pixelLeft+=5
+else if(document.layers&&themenu.left<rightboundary)
+themenu.left+=5
+else if (window.pullit)
+clearInterval(pullit)
+}
+function drawengine(){
+if (document.all&&themenu.pixelLeft>leftboundary)
+themenu.pixelLeft-=5
+else if(document.layers&&themenu.left>leftboundary)
+themenu.left-=5
+else if (window.drawit)
+clearInterval(drawit)
+}
+</script>
+
+<div style="margin-left:160px"><span class="string">
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> Defines databases for chords, scales and intervals in arbitrary octave-repeating regular temperaments.<BR>
+<BR>
+ NOTE: recommendation when using a regular temperament: reduce the domain of all pitch classes (e.g., of notes, chord/scale roots and transpositions) to the tones of the current temperament using ReduceToTemperament. This is of course not necessary if all pitch classes are already reduced to some determined scale that only consists of temperament PC (which is not automatically the case with all scales and transpositions!).<BR>
+<BR>
+</span>
+</span>
+<h3>Functor</h3>
+<ul>DB ("<span class="string">/Users/torsten/oz/music/Strasheela/strasheela/trunk/strasheela/contributions/anders/RegularTemperament/source/DB.oz</span>")<br></ul>
+<h3>Import</h3>
+<code><ul><li>FS</li><li>GUtils at "<span class="string">x-ozlib://anders/strasheela/source/GeneralUtils.ozf"
+</span></li><li>LUtils at "<span class="string">x-ozlib://anders/strasheela/source/ListUtils.ozf"
+</span></li><li>Out at "<span class="string">x-ozlib://anders/strasheela/source/Output.ozf"
+</span></li><li>HS at "<span class="string">x-ozlib://anders/strasheela/HarmonisedScore/HarmonisedScore.ozf"
+</span></li><li><a href="node3.html">RegT</a> at "<span class="string">../RegularTemperament.ozf"
+</span></li></ul></code>
+<h3>Export</h3>
+<code><ul><li>&lt;P/1:<a href="#entity21"><span class="functionname">ReduceToTemperament</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity22"><span class="functionname">MakeFullDB</span></a>&gt;
+</li></ul></code>
+<h3>Define</h3>
+
+<code>
+<a name="entity21">
+<span class="keyword">proc</span>{<span class="functionname">ReduceToTemperament</span> MyScore}<br>
+<span class="string"> Reduces all chord/scale pitch class sets and roots as well as all note pitch classes to the pitch classes of the current temperament.<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity22">
+<span class="keyword">fun</span>{<span class="functionname">MakeFullDB</span> Args}<br>
+<span class="string"> Returns a full database specification that can be given as argument to HS.db.setDB. MakeFullDB internally generates a regular temperament (using HS.db.makeRegularTemperament), and "matches" the chord/scale/interval databases defined in this functor so that they are approximated to (i.e. can be played by) this regular temperament. Dublicate database entries (e.g., if the approximation results in the same pitch classes) are removed (reported at standard out).<BR>
+<BR>
+ Args:<BR>
+ 'generators': list of generators (ints). See HS.db.makeRegularTemperament for details.<BR>
+ 'generatorFactors': list of generator factor specifications (pairs of ints). See HS.db.makeRegularTemperament for details.<BR>
+ 'generatorFactorsOffset' (default 0): See HS.db.makeRegularTemperament for details.<BR>
+ 'pitchesPerOctave' (default 1200): See HS.db.makeRegularTemperament for details.<BR>
+ 'removeFromTemperament' (default nil): list of pitch classes (ints, or ratios i.e. floats or pairs of ints) that would be part of the temperament as defined by 'generators' and 'generatorFactors' but that nevertheless should be excluded from the resulting temperament. <BR>
+ 'maxError' (int): maximum error of any original JI pitch classes in a tempered chord/scale/interval. The error's unit of measurement depends on pitchesPerOctave. Any database entry with an approximation error that exceeds maxError is removed (reported at standard out).<BR>
+ 'minOccurrences': the minimum number an interval needs to occur in the regular temperament in order to be taken into account for forming chords etc. <BR>
+<BR>
+ 'chords'/'scales'/'intervals' (each tuple of records, default of each is unit): additional chord/scale/interval database entries that are appended before the entries defined internally in this functor.<BR>
+ 'chordFeatures'/'scaleFeatures'/'intervalFeatures' (each list of atoms, default of each is nil): additional features required in database entries (example: essentialPitchClasses). Database entries that do not contain all the required features are removed from the output (reported at standard out).<BR>
+<BR>
+ 'accidentalOffset'<BR>
+ 'octaveDomain'<BR>
+ <BR>
+ See examples/RegularTemperaments.oz for usage examples.<BR>
+<BR>
+ Note: in current implementation chord and scale database may contain entries where all the chord/scale intervals are available in the temperament, but not in the arrangement of the chord/scale -- so some chord/scale database entries are actually impossible in the temperament.<BR>
+ <BR>
+<BR>
+<BR>
+</span>
+</code><br>
+<h3>End</h3>
+</div></body>
+</html>

@@ -1,0 +1,397 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<html>
+ <head>
+  <title>Segs</title>
+  <style>BODY {
+ background: url(page.gif) repeat-y white;
+}
+#slidemenubar, #slidemenubar2{
+ position:absolute;
+ left:-144px;
+ width:160px;
+ top:10px;
+ border:0px solid black;
+ font:bold 12px Verdana;
+ line-height:10px;
+}
+.margin {
+ position: absolute;
+ left: 10px;
+ width: 130px;
+}
+BODY, P, H1, H2, H3, A {
+ font-family: sans-serif;
+}
+PRE, CODE {
+ font-family: courier, monospace;
+}
+P {
+ text-align: justify;
+}
+H1     { color: #9B0000; }
+H2     { color: #FF9933; }
+H3, H4 { color: #881155; }
+CODE              { color: #663366; }
+.code CODE        { color: #000000; }
+SPAN.comment      { color: #B22222; }
+SPAN.keyword      { color: #A020F0; }
+SPAN.string       { color: #BC8F8F; }
+SPAN.functionname { color: #0000FF; }
+SPAN.type         { color: #228B22; }
+SPAN.variablename { color: #B8860B; }
+SPAN.reference    { color: #5F9EA0; }
+SPAN.builtin      { color: #DA70D6; }
+A:link {
+ color: #666666;
+}
+A:visited {
+ color: black;
+}
+A.pre { font-family: courier, monospace;
+ color: #228B22;
+}
+</style>
+ </head>
+<body>
+<script language="JavaScript1.2">
+if (document.all)
+document.write('<div id="slidemenubar2" style="left:-144" onMouseover="pull()" onMouseout="draw()">')
+</script>
+<layer id="slidemenubar" onMouseover="pull()" onMouseout="draw()">
+<table border="0" cellpadding="0" cellspacing="0" width="161"><tr><td bgcolor="#009cff" width="144"><a href="index.html">Index</a>
+</td><td rowspan="6" valign="top" width="16"><img src="menu.gif" width="16"></td></tr><tr><td bgcolor="#009cff" width="144"><a href="node1.html">Segments</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node2.html">HCP</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node3.html">TSC</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node4.html">SegsOut</a>
+</td></tr><tr><td bgcolor="#009cff" width="144"><a href="node5.html">Segs</a>
+</td></tr></table></layer>
+<script language="JavaScript1.2">
+function regenerate(){
+window.location.reload()
+}
+function regenerate2(){
+if (document.layers)
+setTimeout("window.onresize=regenerate",400)
+}
+window.onload=regenerate2
+if (document.all){
+document.write('</div>')
+themenu=document.all.slidemenubar2.style
+rightboundary=0
+leftboundary=-144
+}
+else{
+themenu=document.layers.slidemenubar
+rightboundary=144
+leftboundary=0
+}
+function pull(){
+if (window.drawit)
+clearInterval(drawit)
+pullit=setInterval("pullengine()",20)
+}
+function draw(){
+clearInterval(pullit)
+drawit=setInterval("drawengine()",50)
+}
+function pullengine(){
+if (document.all&&themenu.pixelLeft<rightboundary)
+themenu.pixelLeft+=5
+else if(document.layers&&themenu.left<rightboundary)
+themenu.left+=5
+else if (window.pullit)
+clearInterval(pullit)
+}
+function drawengine(){
+if (document.all&&themenu.pixelLeft>leftboundary)
+themenu.pixelLeft-=5
+else if(document.layers&&themenu.left>leftboundary)
+themenu.left-=5
+else if (window.drawit)
+clearInterval(drawit)
+}
+</script>
+
+<div style="margin-left:160px"><span class="string">
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> This functor defines re-usable musical segments. These segments are defined as sub-CSPs (extended scripts). They implement relatively specific musical ideas (e.g., a contrapuntual line, a specific motif, or a homophonic chord progression), but they support a number of arguments in order to make them flexible enough that they are interesting for re-use.<BR>
+<BR>
+ In addition, this functor defines constraints (and expressive constraint applicators) that shape musical segments, such as constraints on the texture.<BR>
+<BR>
+ Unfortunately, the documentation for many of the definitions here are not automatically extracted in the the HTML reference. Please check the source at ../Segments.oz for the documentation of these definitions. <BR>
+<BR>
+<BR>
+</span>
+</span>
+<h3>Functor</h3>
+<ul>Segs ("<span class="string">/Users/torsten/oz/music/Strasheela/strasheela/trunk/strasheela/contributions/anders/Segments/Segments.oz</span>")<br></ul>
+<h3>Import</h3>
+<code><ul><li>FD</li><li>FS</li><li>Browser(browse:Browse)</li><li>GUtils at "<span class="string">x-ozlib://anders/strasheela/source/GeneralUtils.ozf"
+</span></li><li>LUtils at "<span class="string">x-ozlib://anders/strasheela/source/ListUtils.ozf"
+</span></li><li>MUtils at "<span class="string">x-ozlib://anders/strasheela/source/MusicUtils.ozf"
+</span></li><li>Score at "<span class="string">x-ozlib://anders/strasheela/source/ScoreCore.ozf"
+</span></li><li>SMapping at "<span class="string">x-ozlib://anders/strasheela/source/ScoreMapping.ozf"
+</span></li><li>Init at "<span class="string">x-ozlib://anders/strasheela/source/Init.ozf"
+</span></li><li>Pattern at "<span class="string">x-ozlib://anders/strasheela/Pattern/Pattern.ozf"
+</span></li><li>HS at "<span class="string">x-ozlib://anders/strasheela/HarmonisedScore/HarmonisedScore.ozf"
+</span></li><li>Fenv at "<span class="string">x-ozlib://anders/strasheela/Fenv/Fenv.ozf"
+</span></li><li>H at "<span class="string">x-ozlib://anders/strasheela/Heuristics/Heuristics.ozf"
+</span></li><li><a href="node2.html">HCP</a> at "<span class="string">source/HomophonicChordProgression.ozf"
+</span></li><li><a href="node3.html">TSC</a> at "<span class="string">source/TransformableSubscript.ozf"
+</span></li><li><a href="node4.html">SegsOut</a> at "<span class="string">source/Output.ozf"
+</span></li></ul></code>
+<h3>Export</h3>
+<code><ul><li>&lt;P/2:<a href="#entity170"><span class="functionname">MakeParametersAccessor</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity171"><span class="functionname">PitchContourAccessor</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity172"><span class="functionname">PitchContourAccessor2</span></a>&gt;
+</li><li><span class="variablename">MakeCounterpoint_Mixin</span>
+</li><li><span class="variablename">MakeCounterpoint</span>
+</li><li><span class="variablename">MakeCounterpoint_Seq</span>
+</li><li><span class="variablename">MakeCounterpoint_PatternMotifs</span>
+</li><li><span class="variablename">MakeCounterpoint_PatternMotifs_DurationPitchcontour</span>
+</li><li><span class="variablename">MakeCounterpoint_PatternMotifs_OffsetDuration</span>
+</li><li><span class="variablename">MakeCounterpoint_PatternMotifs_OffsetDurationPitchcontour</span>
+</li><li><span class="variablename">PitchPattern</span>
+</li><li><span class="variablename">FenvContour</span>
+</li><li><span class="variablename">Arpeggio</span>
+</li><li><span class="variablename">Arch</span>
+</li><li><span class="variablename">Repetitions</span>
+</li><li><span class="variablename">Hook</span>
+</li><li><span class="variablename">Stairs</span>
+</li><li><span class="variablename">MakeAkkord_Mixin</span>
+</li><li><span class="variablename">MakeAkkord</span>
+</li><li><span class="variablename">MakeAkkords_Mixin</span>
+</li><li><span class="variablename">MakeAkkords</span>
+</li><li>&lt;P/2:<a href="#entity173"><span class="functionname">MakeAkkords_Seq</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity174"><span class="functionname">MakeChordSlicesForm</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity175"><span class="functionname">PatternedPhrase</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity176"><span class="functionname">PatternedSlices</span></a>&gt;
+</li><li>&lt;P/4:<a href="#entity177"><span class="functionname">Texture</span></a>&gt;
+</li><li>&lt;P/1:<a href="#entity178"><span class="functionname">TextureProgression_Index</span></a>&gt;
+</li><li>&lt;P/1:<a href="#entity179"><span class="functionname">TextureProgression_Time</span></a>&gt;
+</li><li>&lt;P/3:<a href="#entity180"><span class="functionname">Homophonic</span></a>&gt;
+</li><li>&lt;P/3:<a href="#entity181"><span class="functionname">HeuristicHomophonic</span></a>&gt;
+</li><li>&lt;P/3:<a href="#entity182"><span class="functionname">HierarchicHomophonic</span></a>&gt;
+</li><li>&lt;P/3:<a href="#entity183"><span class="functionname">HomoDirectional</span></a>&gt;
+</li><li><span class="variablename">HomophonicChordProgression</span>
+</li><li><span class="variablename">TSC</span>
+</li><li>out:<span class="variablename">SegsOut</span>
+</li></ul></code>
+<h3>Define</h3>
+
+<code>
+<a name="entity170">
+<span class="keyword">fun</span>{<span class="functionname">MakeParametersAccessor</span> Accessor}<br>
+<span class="string"> MakeMotifIndexNote is a constructor for HS.score.note which implicitly creates an index parameter.<BR>
+ */<BR>
+    MakeMotifIndexNote = {Pattern.makeIndexConstructor HS.score.note [MotifIndexName]}<BR>
+    /** %% Expects a note that is part of a pattern motif (i.e. a note with a motif index parameter), and returns the motif number of this note (i.e. the index variable value). For example, all notes that are part of an instance of the motif which has been declared first have the motif index value 1 and so forth.<BR>
+ */<BR>
+    fun {GetMotifIndexOfNote N} {Pattern.getMotifIndex N MotifIndexName} end<BR>
+ end<BR>
+<BR>
+<BR>
+<BR>
+/** %% Returns accessor function expecting a list of items (notes) and returning list of variables returned by Accessor (unary function or method). Example<BR>
+   {MakeParametersAccessor getPitch}<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity171">
+<span class="keyword">fun</span>{<span class="functionname">PitchContourAccessor</span> Ns}<br>
+<span class="string"> The function PitchContourAccessor is intended as a value for the argument motifAccessors of MakeCounterpoint_PatternMotifs and friends. Note that for this def of PitchContourAccessor the last direction in a motif spec is the direction from the  last motif note to the note following the motif.<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity172">
+<span class="keyword">fun</span>{<span class="functionname">PitchContourAccessor2</span> Ns}<br>
+<span class="string"> Variant of PitchContourAccessor, where the first direction in a motif spec is the direction from the note preceeding a motif to the first motif note. <BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity173">
+<span class="keyword">fun</span>{<span class="functionname">MakeAkkords_Seq</span> Args}<br>
+<span class="string"> Same as MakeAkkords, but returns sequential container of akkords.<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity174">
+<span class="keyword">proc</span>{<span class="functionname">MakeChordSlicesForm</span> Args MyScore}<br>
+<span class="string"> Returns extended script for musical section where each segment in the section expresses a single chord. <BR>
+<BR>
+ Args:<BR>
+ 'segments' (required): list of textual score specs: each spec which "express" one chord. <BR>
+ 'chords' (required): function returning list of chord objects (wrapped in function to protect variables).<BR>
+ 'constructors' (required): constructors as expected by Score.make.<BR>
+ further args: handed to top-level sequential.<BR>
+<BR>
+ NB: Each segment must be sim, and sim items are specified at feat 1.<BR>
+ NB: List of segments and list of chords must be of the same length (shorter list of chords causes fail).<BR>
+<BR>
+ Note: this def is rather restricted in generality.. Alternatives are, e.g., HS.score.harmoniseScore.<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity175">
+<span class="keyword">fun</span>{<span class="functionname">PatternedPhrase</span> Args}<br>
+<span class="string"> Generates extended script for creating a phrase consisting of multiple segments, and for applying pattern constraints on these segments.  The resulting score topology is as follows, where the segmenents are form segments created by other extended scripts. <BR>
+<BR>
+ seq(segment+)<BR>
+<BR>
+ Args:<BR>
+ 'constructors': constructor spec for the top-level sims and seq, format as expected by Score.make. Features should be 'sim' and 'seq'. <BR>
+ 'pAccessor' (default GUtils.identity): unary function applied to each segment, returning a value for the argument pattern, e.g, a parameter value (FD int) or a score object (see below). <BR>
+ 'pattern' (default proc {$ Xs} skip end): unary procedure expecting/constraining the list of values returned by 'pAccessor' for all segments. <BR>
+ All other top-level arguments are given to the top-level seq.<BR>
+<BR>
+ Args.segments:<BR>
+ tuple of segment specifications, where each segment specifications is a record of the following arguments. (In principle Args.segments can be a record, but then the temporal order of segments depends on the order of features in the record.)<BR>
+ 'constructor': extended script (binary procedure) for creating the layer, commonly created with Score.defSubscript. Should return a score object (not a list of score objects).<BR>
+ All other arguments in Args.segments are given to this constructor.<BR>
+<BR>
+ The arguments of the returned extended script correspond to Args.<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity176">
+<span class="keyword">proc</span>{<span class="functionname">PatternedSlices</span> Args MyScore}<br>
+<span class="string"> Extended script for creating a sequence of polyphonic form segments, resulting score topology, where the segmenents are form segments created by other extended scripts. <BR>
+<BR>
+ seq(sim(segment+)+)<BR>
+<BR>
+ The simultaneous containers can be though of as formal "slices", consisting of layers (the segmenents). Note that all slices are uniform in the sense that each slices consists of the same layers (i.e. the layers of each slices are created with the same constructors). However, depending on the flexibility of these layer constructors (e.g., their set of arguments) corresponding layers can also considerably differ across slices. Also, pattern constraints can be applied conveniently to lists of corresponding layers accross slices.<BR>
+<BR>
+ PatternedSlices can be used, for example, to create the score with the actual notes for a harmonic CSP. For example, each slices could express its own harmony (e.g., sim chord object).<BR>
+<BR>
+ Args:<BR>
+ 'n': number of sims in the top-level seq (number of slices).<BR>
+ 'constructors': constructor spec for the top-level sims and seq, format as expected by Score.make. Features should be 'sim' and 'seq'. <BR>
+<BR>
+ Args.layer:<BR>
+ record/tuple of layer specifications, where each layer specifications is a record of the following arguments. Each layer specification is used for creating all instances of this layer accross the slices. <BR>
+ iargs.constructor: extended script (binary procedure) for creating the layer, commonly created with Score.defSubscript. Should return a score object (not a list of score objects).<BR>
+ 'pAccessor' (default GUtils.identity): unary function applied to each layer instance, returning a value for the argument pattern, e.g, a parameter value (FD int) or a score object (see below). <BR>
+ 'pattern' (default proc {$ Xs} skip end): unary procedure expecting/constraining the list of values returned by 'pAccessor' for all instances of the present layer across slices. <BR>
+ In addition, (almost) all other constructor arguments are supported. These constructor arguments are supported in all formats introduced by Score.makeItems, such as each-args. However, it may be necessary to specify composite argument as each-args. For example, in order to specify an "rargs argument", the whole rargs record must be specified as each-args such as<BR>
+   unit(rargs: each # [unit(<args1>) unit(<args2>) ...] ...)<BR>
+<BR>
+ NB: arguments expected by Score.makeItems (n, constructor, handle, rule) *cannot* be handed to the layer constructors! <BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity177">
+<span class="keyword">proc</span>{<span class="functionname">Texture</span> Dependency LeadingPart DependantParts Args}<br>
+<span class="string"> Texture constraints restrict the independence between parts/voices. Dependence examples are homorhythm (simultaneous notes have the same start time and duration), heterorhythm (simultaneous notes have similar start times and durations), contrarhythm (simultaneous notes have different same start times or durations), homodirectional texture, various degrees of imitation (dependencies like, e.g., homorhythmic and homodirectional texture with a time offset) and many more possibilities. Texture constraints are inspired by Berry, Wallace (1987). Structural functions in music. Courier Dover Publications.<BR>
+   <BR>
+ A texture constraint applies a Dependency (a constraint, see below) between certain notes in a LeadingPart (a container) and certain notes in a DependantParts (a container). DependantParts can be either a single container or a list of container; in the latter case a dependency is applied to multiple parts (e.g., for a fully homophonic texture apply the dependency Homophonic to one voice as LeadingPart and a list with the remaining voices as DependantParts).<BR>
+   <BR>
+ A Dependency is a procedure with the following interface.<BR>
+   <BR>
+   {MyDependency Note1 Note2 Args}<BR>
+   <BR>
+ A Dependency defines a constraint between Note1, a note from the LeadingPart, and Note2, a note from the DependantPart. By default, Note1 and Note2 are simultaneous notes (see the argument offsetTime below for other cases). For example, homophony can be defined by constraining that the start times and durations of Note1 and Note2 are equal. Constraints that require more complex score contexts (e.g., the note succeeding Note1 in LeadingPart) are defined by accessing such contexts from the given notes (e.g., using methods like getTemporalSuccessor). The Dependency argument Args contains values for optional arguments in the Args argument of a texture constraint (see below). Various dependencies are predefined (e.g., Homophonic, and HomoDirectional), and users can freely define their own.<BR>
+<BR>
+ The argument Args of Texture supports the following optional arguments.<BR>
+<BR>
+ offsetTime (default 0): Using this argument, various forms of imitation can be defined. The dependency constraint is applied to a note in DependantPart that starts the specified amount of offset later than the respective note in LeadingPart.<BR>
+ Remember that negative offset times are not allowed (if you would need them, simply swap the arguments LeadingPart and DependantPart).<BR>
+ In case DependantParts is a list of containers, then a list of individual offset times can be given.<BR>
+<BR>
+ timeRange (default nil): Specifies the time frames of the affected notes in LeadingPart. For example, the time frame [0#4 8#12] affects the notes that are in the time frames 0-4 and 8-12 in LeadingPart and their simultaneous notes in DependantPart (if offsetTime is the default). timeRange is based on SMapping.forTimeRange, and supports all its time frame notations. The arguments timeRange and indexRange exclude each other (only one must be given).<BR>
+<BR>
+ indexRange (default nil): Specifies the positions of the affected notes in LeadingPart. For example, the numeric range [1#3 5#6] affects the notes at position 1-3 and 5-6 in LeadingPart and their simultaneous notes in DependantPart (if offsetTime is the default). indexRange is based on SMapping.forNumericRange, and supports all its index integers notations. The arguments timeRange and indexRange exclude each other (only one must be given).<BR>
+<BR>
+ Note that further arguments can be provided, which are then forwarded to the dependency constraints. For example, a transposition dependency may use a transposition argument which would then be included in the Args record for Texture. <BR>
+ In case DependantParts is a list of containers, then a list of individual values can be given to any argument.<BR>
+<BR>
+<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity178">
+<span class="keyword">proc</span>{<span class="functionname">TextureProgression_Index</span> Specs}<br>
+<span class="string"> Multiple applications of Texture can be programmed slightly more concisely and better readable with TextureProgression. The following two code examples are equivalent (first a version using Texture then using TextureProgression).<BR>
+  <BR>
+ Imitation at the beginning (e.g., Voice2 at time 2 imitates 1st 5 notes of Voice1)<BR>
+   {Texture MyDependency Voice1 [Voice2 Voice3 Voice1]<BR>
+    unit(indexRange: 1#5<BR>
+	 offsetTime: [2 4 6])}<BR>
+ Homophonic section<BR>
+   {Texture Homophonic Voice1 [Voice2 Voice3]<BR>
+    unit(indexRange: 9#12)}<BR>
+  <BR>
+   {TextureProgression_Index<BR>
+    [%% Imitation at the beginning (e.g., Voice2 at time 2 imitates 1st 5 notes of Voice1)<BR>
+     (1#5) # unit(MyDependency Voice1 [Voice2 Voice3 Voice1]  <BR>
+		  offsetTime: [2 4 6])<BR>
+ Homophonic section<BR>
+     (8#12) # unit(Homophonic Voice1 [Voice2 Voice3])<BR>
+    ]}<BR>
+  <BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity179">
+<span class="keyword">proc</span>{<span class="functionname">TextureProgression_Time</span> Specs}<br>
+<span class="string"> Same as TextureProgression_Index, but with leading time values instead of indices.<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity180">
+<span class="keyword">proc</span>{<span class="functionname">Homophonic</span> N1 N2 Args}<br>
+<span class="string"> [Dependency for Texture] Results in a homophonic texture.<BR>
+ Note that a truely homophonic texture only results for the default offset time 0, otherwise a time-shifted "homophonic" imitation results.<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity181">
+<span class="keyword">proc</span>{<span class="functionname">HeuristicHomophonic</span> N1 N2 Args}
+</code><br>
+
+<code>
+<a name="entity182">
+<span class="keyword">proc</span>{<span class="functionname">HierarchicHomophonic</span> N1 N2 Args}<br>
+<span class="string"> [Dependency for Texture]  Generalised (?) version of "Orjan Sandred's notion of hierarchic rhythm.<BR>
+ If the start time of N1 occurs between start and end of N2 including, then the start time of these notes are equal. In other words, the notes of N2's voice may be shorter than those of N1's voice, but whenever a longer note starts in the latter voice there also starts a note in the former.<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity183">
+<span class="keyword">proc</span>{<span class="functionname">HomoDirectional</span> N1A N2A Args}<br>
+<span class="string"> [Dependency for Texture] Results in a homo-directional texture (i.e. parallel pitch contours).<BR>
+<BR>
+</span>
+</code><br>
+<h3>End</h3>
+</div></body>
+</html>
