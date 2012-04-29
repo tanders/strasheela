@@ -287,7 +287,7 @@ define
 
    local
       MyCompiler = {CustomCompiler.makeCompiler}
-      % {FeedInitFile MyCompiler}
+      {CustomCompiler.feedInitFile MyCompiler}
    in
       /** %% Execute example code in CodeTextH with compiler
       %% */
