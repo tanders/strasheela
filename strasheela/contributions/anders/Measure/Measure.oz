@@ -68,7 +68,7 @@ export
    Accent_If Accent_If2 SetAccentRating NoteAtMetricPosition
    Make_HasAtLeastDuration
    IsFirstItem
-   IsLongerThanDirectNeighbours IsLongerThanPredecessor
+   IsLongerThanDirectNeighbours IsLongerThanPredecessor IsLongerThanPredecessorSimple
    IsLongerThanPredecessor_Rated IsLongerThanSurrounding_Rated
    IsFirstOfEqualNoteValues
    IsHigherThanDirectNeighbours IsHigherThanPredecessor
@@ -106,7 +106,7 @@ define
    
    /** %% Measure is a silent timed element representing the meter of a score for the duration of the Measure. Measures are contained in a silent MeasureSeq/UniformMeasures and a MeasureSeq/UniformMeasures runs in parallel to the actual (i.e. sounding) score. That way, the metric structure is freely constrainable independent of other parameters and the hierarchic structure of the rest of the score. 
    %% The Measure parameters 'beatNumber' and 'beatDuration' represent the meter of the measure. For instance, in case the time unit of the score is beats(4) and thus 4 represents a quarter note (see doc Score.timeMixin) then the meter 3/8 is represented by beatNumber=3 and beatDuration=2. Usually, beatDuration will equal the number of ticks per beat defined in the time unit of the score (exceptions are needed in case the score contains measures with different beat durations).
-   %% The attribute 'beats' (a list of FD ints) represents the relative startTimes of the beats in the measure. For instance, in case beatNumber=3 and beatDuration=2 then beats=[0 2 4].
+   %% The attribute 'beats' (a list of FD ints) represents the relative startTimes of the beats in the measure (i.e., the start times counting from the beginning of the measure). For instance, in case beatNumber=3 and beatDuration=2 then beats=[0 2 4].
    %% The attribute 'accents' (a list of FD ints) represents the relative startTimes of the strong beats in the measure. The strong beats depend on the beatNumber of the measure. The accent patterns in common praxis music are highly standardised (e.g. the meter 4/4 has strong beats on the first and the third beat). Nonetheless, Measure allows to freely define these accent patterns for each possible beatNumber value for each Measure at the optional init method argument 'accentIdxDB'. This argument expects a record (with only integer features) of lists of integers to specify an accent pattern for each beatNumber. For instance, the specification of the common praxis tripel and quadruple meter is unit(3:[1] 4:[1 3]).
    %% The default of 'accentIdxDB' defines the usual common praxis accent patterns for single (1/2, 1/4, 1/8), duple (2/2, 2/4, 2/8), triple (3/2, 3/4, 3/8), and quadruple (4/2, 4/4, 4/8) meter, as well as compound duple (6/2, 6/4, 6/8), compound triple (9/4, 9/8), and compound quadruple (12/4, 12/8, 12/16) meter. The compound meters may also be used to express 'prolatione perfecta' for old music, while the non-coumpound meters express 'prolatione imperfecta'. For the quintuple meter (5/4 etc.), the accent pattern 3/4 + 2/4 is the default. 
    %%  NB: the initialisation constraints for both beats and accents are delayed until beatNumber is determined (i.e. in a CSP the beatNumber of each beat is either predetermined or the distribution strategy should determine all beatNumbers before other parameter values which are related to the measure by constraints).
@@ -332,7 +332,7 @@ define
 % 				 B = {FD.int 0#1}
 % 				 %% !!?? does FS.reified.include determine stuff too easily?
 % 				 B =: {FS.reified.include
-% 				       {TimeInMeasure Time MeasureStart}
+% 				       {TimeInMeasure Time MyMeasure}
 % 				       {MyMeasure getAccentsFS($)}}
 % 			      end)}
 % 	     B}
@@ -349,7 +349,7 @@ define
 % 			      in
 % 				 B = {FD.int 0#1}
 % 				 B =: {FS.reified.include
-% 				       {TimeInMeasure Time MeasureStart}
+% 				       {TimeInMeasure Time MyMeasure}
 % 				       {MyMeasure getBeatsFS($)}}
 % 			      end)}
 % 	     B}
@@ -381,11 +381,14 @@ define
 
    
    local      
-      % /** %% B=1 <=> Time is no less that the start time of MyMeasures.
-      % %% */
-      % proc {AtLeastStartTime Time MyMeasures B}
+      /** %% B=1 <=> Time is no less that the start time of MyMeasures.
+      %% */
+      % proc {GreaterEqualStartTime Time MyMeasures B}
       % 	 B = (Time >=: {MyMeasures getStartTime($)})
       % end
+      proc {LessEqualEndTime Time MyMeasures B}
+      	 B = (Time =<: {MyMeasures getEndTime($)})
+      end
       
       /** %% B=1 <=> Time is no less that the start time and no more than end time of MyMeasures.
       %% */
@@ -394,7 +397,15 @@ define
 	 B = {FD.conj (Time >=: {MyMeasures getStartTime($)})
 	      (Time =<: {MyMeasures getEndTime($)})}
       end
+      /** %% B=1 <=> Start is before and End is after MyMeasures.
+      %% */
+      proc {IsSurroundingMeasures Start End MyMeasures ?B}
+	 B = {FD.int 0#1}
+	 B = {FD.conj (Start =<: {MyMeasures getStartTime($)})
+	      (End >=: {MyMeasures getEndTime($)})}
+      end
 
+      
       /** %% Expects an FD int Time and a uniform measures instance MyMeasures and returns an FD int = Time - {MyMeasures getStartTime($)}. 
       %% */
       proc {TimeInUniformMeasures Time MyMeasures ?TimeAux}
@@ -534,7 +545,7 @@ define
 	    thread
 	       if {IsWithinMeasures Time self} == 1
 	       then 
-		  RelTime = {TimeInMeasure Time {self getMeasureDuration($)}}
+		  RelTime = {TimeInMeasure Time self}
 		  Accents = {self getAccents($)}
 	       in
 		  thread
@@ -589,7 +600,7 @@ define
 	 meth onMeasureStartR(B Time)
 	    %% for old version: NB: constraint blocks until measure duration is determined (i.e. both beatNumber and beatDuration are determined). There is no propagation with neither beatNumber and beatDuration and Time or B.
 % 	 B = {FD.int 0#1}
-% 	 B =: ({TimeInMeasure Time {self getMeasureDuration($)}}
+% 	 B =: ({TimeInMeasure Time self}
 % 	       =: {self getStartTime($)})
 	    %%
 	    thread
@@ -634,7 +645,7 @@ define
 	       then 
 		  B = {FD.int 0#1}
 		  B = {FS.reified.include
-		       {TimeInMeasure Time {self getMeasureDuration($)}}
+		       {TimeInMeasure Time self}
 		       {self getAccentsFS($)}}
 	       else B = 0
 	       end
@@ -679,7 +690,7 @@ define
 	    %% !! constrain performs probably very little propagation: Time -- transformed into measure only by bounds propagation -- is constrained whether it is element in set...
 % 	    B = {FD.int 0#1}
 % 	    B =: {FS.reified.include
-% 		  {TimeInMeasure Time {self getMeasureDuration($)}}
+% 		  {TimeInMeasure Time self}
 % 		  {self getBeatsFS($)}}
 	    %%
 	    thread
@@ -709,13 +720,14 @@ define
 	 end
 
 	 /** %% B=1 <-> an event lasting from Start to End is a syncope at measure level: Start and End fall in different measures (either within self or beyond).
-	 %% Note: if both Start and End are outside self then 0 is return (even though the respective event might be a syncope at measure level for other uniform measures instances).
+	 %% Note: if both Start and End are outside self then B = 0 (even though the respective event might be a syncope at measure level for other uniform measures instances).
 	 %% */
 	 meth overlapsBarlineR(B Start End)
 	    thread 
 	       if {IsWithinMeasures Start self} == 1
 	       then
-		  if {IsWithinMeasures End self} == 1
+		  if {LessEqualEndTime End self} == 1
+		     %% Start and End within self
 		  then 
 		     StartBar = {FD.decl} % index of bar of Start
 		     EndBar = {FD.decl}
@@ -732,10 +744,11 @@ define
 		  else B = 1
 		  end
 	       else 
-		  if {IsWithinMeasures End self} == 1
-		     %% overlapping beginning of self
+		  if {IsWithinMeasures End self} == 1 orelse
+		     {IsSurroundingMeasures Start End self} == 1
+		     %% overlapping start of self or start before and end after measure
 		  then B = 1
-		     %% both Start and End outside self
+		     %% both Start and End outside self, either before or after
 		  else B = 0
 		  end
 	       end
@@ -749,49 +762,77 @@ define
 	 end
 
 	 /** %% B=1 <-> an event lasting from Start to End is a syncope at accent level: Start is not on an accent, and Start and End fall between different accents.
-	 %% Note: if either Start or End are outside self then 0 is returned (even though the respective event might be a syncope in other uniform measures instances).
+	 %% Note: if both Start or End are outside self then B = 0 (even though the respective event might be a syncope in other uniform measures instances).
 	 %% BUG: B=0 for an event that is a syncope at accent level, but its duration is some multiple of the measure duration.
 	 %% */
+	 %% BUG: seems not always to work -- debug carefully
 	 meth accentSyncopationR(B Start End)
 	    thread
-	       if {FD.conj {IsWithinMeasures Start self} {IsWithinMeasures End self}} == 1
+	       if {IsWithinMeasures Start self} == 1
 	       then
-		  StartAcc = {FD.decl} % index of beat of Start
-		  EndAcc = {FD.decl}
-	       in
-		  B = {FD.int 0#1}
-		  {self getAccentInMeasureAt(StartAcc Start)}
-		  {self getAccentInMeasureAt(EndAcc End)}
-		  B =: {FD.conj {FD.nega {self onAccentR($ Start)}}
-			{FD.conj (StartAcc \=: EndAcc)
-			 %% exclude case that event lasts exactly after the end of StartAcc 
-			 {FD.nega {FD.conj {self onAccentR($ End)}
-				   %% BUG: note that getAccentInMeasureAt is measured only within bar
-				   (EndAcc - StartAcc =: 1)}}}}
-	       else B = 0
+		  if {LessEqualEndTime End self} == 1
+		     %% Start and End within self
+		  then
+		     StartAcc = {FD.decl} % index of beat of Start
+		     EndAcc = {FD.decl}
+		  in
+		     B = {FD.int 0#1}
+		     {self getAccentInMeasureAt(StartAcc Start)}
+		     {self getAccentInMeasureAt(EndAcc End)}
+		     B =: {FD.conj {FD.nega {self onAccentR($ Start)}}
+			   {FD.conj (StartAcc \=: EndAcc)
+			    %% exclude case that event lasts exactly after the end of StartAcc 
+			    {FD.nega {FD.conj {self onAccentR($ End)}
+				      %% BUG: note that getAccentInMeasureAt is measured only within bar
+				      (EndAcc - StartAcc =: 1)}}}}
+		     %% overlapping end of self
+		  else B = 1
+		  end
+	       else 
+		  if {IsWithinMeasures End self} == 1 orelse
+		     {IsSurroundingMeasures Start End self} == 1
+		     %% overlapping start of self or start before and end after measure
+		  then B = 1
+		     %% both Start and End outside self, either before or after
+		  else B = 0
+		  end
 	       end
 	    end
 	 end
 	 
 	 /** %% B=1 <-> an event lasting from Start to End is a syncope at beat level: Start is not on a beat, and Start and End fall between different beats.
-	 %% Note: if either Start or End are outside self then 0 is returned (even though the respective event might be a syncope in other uniform measures instances).
+	 %% Note: if both Start or End are outside self then B = 0 (even though the respective event might be a syncope in other uniform measures instances).
 	 %% */
+	 %% BUG: seems not always to work -- debug carefully
 	 meth beatSyncopationR(B Start End)
 	    thread 
-	       if {FD.conj {IsWithinMeasures Start self} {IsWithinMeasures End self}} == 1
+	       if {IsWithinMeasures Start self} == 1
 	       then
-		  StartBeat = {FD.decl} % index of beat of Start
-		  EndBeat = {FD.decl}
-	       in
-		  B = {FD.int 0#1}
-		  {self getBeatAt(StartBeat Start)}
-		  {self getBeatAt(EndBeat End)}
-		  B =: {FD.conj {FD.nega {self onBeatR($ Start)}}
-			{FD.conj (StartBeat \=: EndBeat)
-			 %% exclude case that event lasts exactly after the end of StartBeat 
-			 {FD.nega {FD.conj {self onBeatR($ End)}
-				   (EndBeat - StartBeat =: 1)}}}}
-	       else B = 0
+		  if {LessEqualEndTime End self} == 1
+		     %% Start and End within self
+		  then
+		     StartBeat = {FD.decl} % index of beat of Start
+		     EndBeat = {FD.decl}
+		  in
+		     B = {FD.int 0#1}
+		     {self getBeatAt(StartBeat Start)}
+		     {self getBeatAt(EndBeat End)}
+		     B =: {FD.conj {FD.nega {self onBeatR($ Start)}}
+			   {FD.conj (StartBeat \=: EndBeat)
+			    %% exclude case that event lasts exactly after the end of StartBeat 
+			    {FD.nega {FD.conj {self onBeatR($ End)}
+				      (EndBeat - StartBeat =: 1)}}}}
+		     %% overlapping end of self
+		  else B = 1
+		  end
+	       else 
+		  if {IsWithinMeasures End self} == 1 orelse
+		     {IsSurroundingMeasures Start End self} == 1
+		     %% overlapping start of self or start before and end after measure
+		  then B = 1
+		     %% both Start and End outside self, either before or after
+		  else B = 0
+		  end
 	       end
 	    end
 	 end
@@ -1051,10 +1092,10 @@ define
    %% minRating (FD int, default 1): Minimum accumulated rating of accent constraint outputs. If the sum of the return values of all accent constraints are equal or exceed a minRating, then in order the start time of N is constrained to the metric position metricPosition.
    %%
    %% strictness (atom, default 'note'): Must the constrained be fulfilled for all notes meeting the criteria or for all given metric positions? There are three different cases.
-   %%   note: every note/item meeting the accent criteria are on a specified metric position, but there can also be such metric positions without notes meeting such criteria
-   %%   position: every note at a specified metric position must meet the accent criteria, but there can also be such notes at other positions
-   %%   noteAndPosition: every note/item meeting the accent criteria in on a specified metric position and vice versa
-   %% NOTE: no value of strictness enforces that there actually is a note at any metric position specified in metricPosition. Use the constraint NoteAtMeasurePosition for this purpose.
+   %%   note: if note/item meets the accent criteria it must be on a specified metric position, but even if this constraint is applied to all notes there can be accentuated metric positions without notes meeting such criteria
+   %%   position: if note/item is at a specified metric position then it must meet the accent criteria, but even if this constraint is applied to all notes there can be accentuated notes at other positions. 
+   %%   noteAndPosition: if note/item meets the accent criteria it is on a specified metric position and vice versa
+   %% NOTE: none of the possible values for strictness enforces that there actually starts a note at any metric position specified in metricPosition. Use the constraint NoteAtMetricPosition for this purpose.
    %%
    %% toplevel (default false): The container in which N is contained that should be considered the top level for finding the simultaneous measure object (if false, then the whole score is searched). This argument is for optimisation purposes only.
    %%
@@ -1286,6 +1327,21 @@ define
    in
       {FD.conj {ApplyIfNotnilOrTrue {N getTemporalPredecessor($)} IsShorter}
        {ApplyIfNotnilOrTrue {N getTemporalSuccessor($)} IsNotLonger}}
+   end
+
+   /** %% B=1 <=> Note N is longer than the preceeding note (duration + offsetTime used for calculating the perceived duration). If a preceeding or succeeding note does not exist (in the same temporal container) then that part of the condition is considered to be fulfilled.
+   %% */
+   fun {IsLongerThanPredecessorSimple N}
+      Dur1={FD.decl} 
+      Dur1 = {N getDuration($)} + {N getOffsetTime($)}
+      fun {IsShorter N2} 
+	 Dur2={FD.decl}
+      in
+	 Dur2 = {N2 getDuration($)} + {N2 getOffsetTime($)}
+	 (Dur2 <: Dur1)
+      end
+   in
+      {ApplyIfNotnilOrTrue {N getTemporalPredecessor($)} IsShorter}
    end
       
    /** %% The higher the value of Rating, the more N is accented by its duration compared to its preceeding note (duration + offsetTime used for calculating the perceived duration).
