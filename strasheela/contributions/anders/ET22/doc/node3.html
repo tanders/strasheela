@@ -138,17 +138,17 @@ clearInterval(drawit)
 </span></li><li><a href="node6.html">ET22</a> at "<span class="string">../ET22.ozf"
 </span></li></ul></code>
 <h3>Export</h3>
-<code><ul><li>&lt;P/2:<a href="#entity41"><span class="functionname">RenderAndShowLilypond</span></a>&gt;
-</li><li>&lt;P/1:<a href="#entity40"><span class="functionname">SetEnharmonicNotationTable</span></a>&gt;
-</li><li>&lt;P/1:<a href="#entity38"><span class="functionname">AddExplorerOut_ChordsToScore</span></a>&gt;
-</li><li>&lt;P/0:<a href="#entity39"><span class="functionname">AddExplorerOuts_ArchiveInitRecord</span></a>&gt;
+<code><ul><li>&lt;P/2:<a href="#entity40"><span class="functionname">RenderAndShowLilypond</span></a>&gt;
+</li><li>&lt;P/1:<a href="#entity39"><span class="functionname">SetEnharmonicNotationTable</span></a>&gt;
+</li><li>&lt;P/1:<a href="#entity37"><span class="functionname">AddExplorerOut_ChordsToScore</span></a>&gt;
+</li><li>&lt;P/0:<a href="#entity38"><span class="functionname">AddExplorerOuts_ArchiveInitRecord</span></a>&gt;
 </li><li><span class="variablename">PajaraRMS_TuningTable</span>
 </li><li>ji_TuningTable:<span class="variablename">JI_TuningTable</span>
 </li></ul></code>
 <h3>Define</h3>
 
 <code>
-<a name="entity41">
+<a name="entity40">
 <span class="keyword">proc</span>{<span class="functionname">RenderAndShowLilypond</span> MyScore Args}<br>
 <span class="string"> Lilypond output for 22 ET.<BR>
 <BR>
@@ -165,7 +165,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity40">
+<a name="entity39">
 <span class="keyword">proc</span>{<span class="functionname">SetEnharmonicNotationTable</span> Table}<br>
 <span class="string"> The enharmonic notation for 22 ET can be customised by specifying for each numeric 22 ET pitch class how it is notated. Note that this setting will be fixed throughout the score though (e.g., pitch class 7 may be notated as 'E\\', but then it is never 'D#'). The enharmonic notation is specified by a record which maps pitch class integers to pitch names. See ET22.pc and friends for an explanation of the pitch names. The default are the default pitch names in Scala for 22 ET (using E22 notation system).<BR>
  Note that the lowest feature in the table is 0 (i.e., 'C') and not 1 (i.e. Table is not a tuple if all pitch classes are specified, a tuple has no feature 0).<BR>
@@ -175,7 +175,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity38">
+<a name="entity37">
 <span class="keyword">proc</span>{<span class="functionname">AddExplorerOut_ChordsToScore</span> Args}<br>
 <span class="string"> Creates an Explorer action for outputting a pure sequence of chords. This is a version of HS.out.addExplorerOut_ChordsToScore, customised for 31 ET. Please see the documentation of HS.out.addExplorerOut_ChordsToScore for further details such as supported arguments.<BR>
 <BR>
@@ -183,7 +183,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity39">
+<a name="entity38">
 <span class="keyword">proc</span>{<span class="functionname">AddExplorerOuts_ArchiveInitRecord</span> }<br>
 <span class="string"> Adds ET22 declaration on top of *.ssco file and calls {HS.db.setDB ET22.db.fullDB}<BR>
 <BR>
