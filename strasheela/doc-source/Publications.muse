@@ -6,17 +6,17 @@ The following publications describe concepts of Strasheela.
 
 ** General
 
-  Torsten Anders (2007). [[http://strasheela.sourceforge.net/documents/TorstenAnders-PhDThesis.pdf][Composing Music by Composing Rules: Design and Usage of a Generic Music Constraint System]]. PhD thesis, Queen's University, Belfast. 
-
-  Anders, T., E. Miranda (2009). [[http://cmr.soc.plymouth.ac.uk/tanders/publications/AndersMiranda-CMR-2009-draft.doc][Interfacing Manual and Machine Composition]]. *Contemporary Music Review*. 28(2).
-
   Anders, T., E. Miranda (2011). [[http://dl.acm.org/citation.cfm?id=1978809][A Survey of Constraint Programming Systems for Modeling Music Theories and Composition]]. *ACM Computing Surveys*. 43(4).
-
-  Anders, T., E. Miranda (2010). [[http://cmr.soc.plymouth.ac.uk/tanders/publications/AndersMiranda-CMJ-2010.pdf][Constraint Application with Higher-Order Programming for Modeling Music Theories]]. *Computer Music Journal*. 34(2).
 
   Anders, T. (2011). [[http://cmr.soc.plymouth.ac.uk/tanders/publications/Anders-VariableOrderings-2011-draft.pdf][Variable Orderings for Solving Musical Constraint Satisfaction Problems]]. In G. Assayag, C. Truchet (Eds.), *Constraint Programming in Music*. Wiley. 
 
+  Anders, T., E. Miranda (2009). [[http://cmr.soc.plymouth.ac.uk/tanders/publications/AndersMiranda-CMR-2009-draft.doc][Interfacing Manual and Machine Composition]]. *Contemporary Music Review*. 28(2).
+
+  Anders, T., E. Miranda (2010). [[http://cmr.soc.plymouth.ac.uk/tanders/publications/AndersMiranda-CMJ-2010.pdf][Constraint Application with Higher-Order Programming for Modeling Music Theories]]. *Computer Music Journal*. 34(2).
+
   Torsten Anders, Eduardo R. Miranda (2008). [[http://cmr.soc.plymouth.ac.uk/tanders/publications/Anders-ConstraintApplicators-ICMC2008.pdf][Higher-Order Constraint Applicators for Music Constraint Programming]]. In *Proceedings of the 2008 International Computer Music Conference*. Belfast, UK.  
+
+  Torsten Anders (2007). [[http://strasheela.sourceforge.net/documents/TorstenAnders-PhDThesis.pdf][Composing Music by Composing Rules: Design and Usage of a Generic Music Constraint System]]. PhD thesis, Queen's University, Belfast. 
 
   Torsten Anders, Christina Anagnostopoulou, and Michael Alcorn (2005). [[http://cmr.soc.plymouth.ac.uk/tanders/publications/TorstenAnders-MOZ2004.pdf][Strasheela: Design and Usage of a Music Composition Environment Based on the Oz Programming Model]]. In Peter van Roy, editor, *Multiparadigm Programming in Mozart/OZ: Second International Conference, MOZ 2004*, LNCS 3389. Springer-Verlag.
   

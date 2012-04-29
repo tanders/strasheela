@@ -48,11 +48,13 @@ Note that several of these extensions consist of multiple sub-functors. The link
 
   [[../contributions/anders/RegularTemperament/doc/node1.html][RegT (RegularTemperament)]] -- composition in arbitrary octave-repeating [[http://en.wikipedia.org/wiki/Regular_temperament][regular temperaments]] (any rank), including [[http://en.wikipedia.org/wiki/Just_intonation][just intonation]] with arbitrary limits (pitches measured, e.g., in cent or millicent). Extends HS
 
-  [[../contributions/anders/ET31/doc/node1.html][ET31]] -- composition in [[http://en.wikipedia.org/wiki/31_equal_temperament][31-tone equal temperament]], extends HS
+  [[../contributions/anders/ET12/doc/node1.html][ET12]] -- simplified pitch notation for the common 12-tone equal temperament 
 
   [[../contributions/anders/ET22/doc/node1.html][ET22]] -- composition in [[http://en.wikipedia.org/wiki/22_equal_temperament][22-tone equal temperament]], extends HS
 
-  [[../contributions/anders/ET12/doc/node1.html][ET12]] -- simplified pitch notation for the common 12-tone equal temperament 
+  [[../contributions/anders/ET31/doc/node1.html][ET31]] -- composition in [[http://en.wikipedia.org/wiki/31_equal_temperament][31-tone equal temperament]], extends HS
+
+  [[../contributions/anders/ET41/doc/node1.html][ET41]] -- composition in [[http://en.wikipedia.org/wiki/41_equal_temperament][41-tone equal temperament]], extends HS
 
   [[../contributions/anders/Segments/doc/node1.html][Segs (Segments)]] -- ready-made constructors for musical segments such as contrapuntual lines, homophonic chord progressions, or specific motifs
 
