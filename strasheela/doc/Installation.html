@@ -30,10 +30,7 @@
     <li class="navn"><a href="contact.html">contact</a></li>
   </ul>
   <div id="logo">
-<a href="http://sourceforge.net/projects/strasheela"><img src="http://sflogo.sourceforge.net/sflogo.php?group_id=167225&type=12" width="120" height="30" border="0" alt="Get Strasheela at SourceForge.net. Fast, secure and Free Open Source software downloads" /></a>
-  </div>
-  <div id="logo">
-  <a href="http://cmr.soc.plymouth.ac.uk/"><img src="http://cmr.soc.plymouth.ac.uk/iccmr_logo_2.jpg" width="125"  width="80" height="30" border="0" alt="ICCMR Logo" /></a>
+<a href="http://sourceforge.net/projects/strasheela"><img src="http://sflogo.sourceforge.net/sflogo.php?group_id=167225&amp;type=15" width="150" height="40" alt="Get Strasheela at SourceForge.net. Fast, secure and Free Open Source software downloads" /></a>
   </div>
 </div>
     <h1>Strasheela Installation</h1>
@@ -118,6 +115,9 @@
 
 <p>This page provides installation instructions for Strasheela, a constraint-based computer aided composition environment. To install Strasheela on either Linux, Windows, or MacOS X conduct the following installation steps.</p>
 
+<p><strong>However, please note that Strasheela's feature set on Windows is severely limited.</strong> (Selection constraints cannot be installed, see below. As a result, music theory models like Strasheela's harmony model are not available.)</p>
+
+
 <h2><a name="sec1" id="sec1"></a>
 Install Emacs</h2>
 
@@ -146,6 +146,9 @@ Install Mozart</h2>
 
 <p class="first">Simply get a package ready to install from the <a href="http://www.mozart-oz.org/download">Download Mozart</a> page. In case of troubles or for compiling from source consult the Mozart <a href="http://www.mozart-oz.org/documentation/install/index.html">Installation Manual</a>.</p>
 
+<p>Note that in November 2011 the binary Mozart 1.4.0 releases was updated (e.g., earlier the compilation of certain Strasheela packages did not work on recent Apple machines with 64 architecture, but that works fine now). Make sure you get a recent installation in case you installed Mozart before.</p>
+
+
 <h3><a name="sec6" id="sec6"></a>
 Addressing Windows Problems</h3>
 
@@ -153,8 +156,8 @@ Addressing Windows Problems</h3>
 
 
 
-
 <p>A usual Windows problem is that Mozart does not find Emacs if it has to be invoked with a different name (e.g., <code>runemacs.exe</code> as the Win-Emacs-Version recommended above). In that case, set the environment variable <code>OZEMACS</code> to the path of your Emacs application (e.g., <code>C:\Program Files\emacs-22.1\bin\runemacs.exe</code>) as described <a href="http://support.microsoft.com/default.aspx?scid=kb;en-us;310519">here</a>.</p>
+
 
 
 <h3><a name="sec7" id="sec7"></a>
@@ -196,7 +199,7 @@ Selection Constraints</h3>
 $ ozmake --install --package=http://www.mozart-oz.org/mogul/populate/duchier/select/duchier-select__1.3.0__source__1.8.pkg
 </pre>
 
-<p>NB: Unfortunately, it has been found that on Mozart 1.3.2 <code>ozmake</code> hangs when invoking the GNU compiler on Windows.<sup><a class="footref" name="fnr.4" href="#fn.4">4</a></sup></p>
+<p>NB: Unfortunately, it has been found that <code>ozmake</code> on Mozart since version 1.3.2 hangs when invoking the GNU compiler on Windows.<sup><a class="footref" name="fnr.4" href="#fn.4">4</a></sup></p>
 
 
 <h3><a name="sec10" id="sec10"></a>
@@ -426,7 +429,7 @@ export PATH=/usr/X11R6/bin/:$PATH
 <p>Strasheela tries to simplify the package creation process. The above-mentioned script <code>install-all</code> supports all options of <a href="http://www.mozart-oz.org/documentation/mozart-ozmake/index.html">ozmake</a>. For exammple, you can specify an installation directory with the option <code>--prefix</code> (default <code>~/.oz</code>). The Strasheela functors are installed in <code>&lt;PREFIX&gt;/cache/x-ozlib</code> (most stuff goes into <code>/cache/x-ozlib/anders/strasheela/</code>, but there are additional folders created for user contributions). Mozart must find these installed files. For a 'global' installation, you may give the Mozart installation directory <code>$OZHOME</code> as prefix (recommended). Any other directory is possible as well, but then you must tell Mozart to search in this directory by setting the environment variable <code>$OZLOAD</code> (or <code>OZ_SEARCH_LOAD</code>) to a suitable value. For example, if Mozart should first look into the user's home directory, then into some folder given as prefix to ozmake during the Strasheela installation, and finally into the Mozart installation folder you specify the following.</p>
 
 <pre class="src">
-<span style="color: #b8860b;">OZLOAD</span>=<span style="color: #b8860b;">cache</span>=${<span style="color: #b8860b;">HOME</span>}/.oz/cache:<span style="color: #b8860b;">cache</span>=$(<span style="color: #ff00ff;">MYNEWCACHE</span>):<span style="color: #b8860b;">cache</span>=$(<span style="color: #ff00ff;">OZHOME</span>)/cache
+<span style="color: #a0522d;">OZLOAD</span>=<span style="color: #a0522d;">cache</span>=${<span style="color: #a0522d;">HOME</span>}/.oz/cache:<span style="color: #a0522d;">cache</span>=$(<span style="color: #ff00ff;">MYNEWCACHE</span>):<span style="color: #a0522d;">cache</span>=$(<span style="color: #ff00ff;">OZHOME</span>)/cache
 </pre>
 
 <p>Per default, Mozart first searches in the home directory, and then in the Mozart installation folder &mdash; which means that the user can shadow files installed in the Mozart installation folder.</p>
@@ -437,15 +440,15 @@ export PATH=/usr/X11R6/bin/:$PATH
 <p>In case you are building your package in a <a href="http://en.wikipedia.org/wiki/Chroot">chroot</a> (e.g., to model some specific target system which differs from your running system), then some additional configuration is necessary. The <code>ozmake</code> calls by the script <code>install-all.sh</code> must find the compiled <code>*.ozf</code> files during the installation process. So, for the build process please specify your build root for Mozart via the environment variable <code>$OZLOAD</code> (see above), for example, as following (thanks to Toni Graffy for pointing this out).</p>
 
 <pre class="src">
-<span style="color: #da70d6;">export</span> <span style="color: #b8860b;">INSTALLDIR</span>=/usr/local  <span style="color: #b22222;"># </span><span style="color: #b22222;">your installation prefix
-</span><span style="color: #da70d6;">export</span> <span style="color: #b8860b;">BUILDROOT</span>=/var/tmp/strasheela <span style="color: #b22222;"># </span><span style="color: #b22222;">your build root
-</span><span style="color: #da70d6;">export</span> <span style="color: #b8860b;">PATH</span>=$<span style="color: #b8860b;">INSTALLDIR</span>/mozart/bin:$<span style="color: #b8860b;">PATH</span> <span style="color: #b22222;"># </span><span style="color: #b22222;">adding the mozart executables
-</span><span style="color: #da70d6;">export</span> <span style="color: #b8860b;">OZHOME</span>=$<span style="color: #b8860b;">INSTALLDIR</span>/mozart
+<span style="color: #7a378b;">export</span> <span style="color: #a0522d;">INSTALLDIR</span>=/usr/local  <span style="color: #b22222;"># </span><span style="color: #b22222;">your installation prefix
+</span><span style="color: #7a378b;">export</span> <span style="color: #a0522d;">BUILDROOT</span>=/var/tmp/strasheela <span style="color: #b22222;"># </span><span style="color: #b22222;">your build root
+</span><span style="color: #7a378b;">export</span> <span style="color: #a0522d;">PATH</span>=$<span style="color: #a0522d;">INSTALLDIR</span>/mozart/bin:$<span style="color: #a0522d;">PATH</span> <span style="color: #b22222;"># </span><span style="color: #b22222;">adding the mozart executables
+</span><span style="color: #7a378b;">export</span> <span style="color: #a0522d;">OZHOME</span>=$<span style="color: #a0522d;">INSTALLDIR</span>/mozart
 <span style="color: #b22222;"># </span><span style="color: #b22222;">NB: include BUILDROOT in OZLOAD
-</span><span style="color: #da70d6;">export</span> <span style="color: #b8860b;">OZLOAD</span>=<span style="color: #b8860b;">cache</span>=${<span style="color: #b8860b;">BUILDROOT</span>}$<span style="color: #b8860b;">OZHOME</span>/cache:<span style="color: #b8860b;">cache</span>=$<span style="color: #b8860b;">OZHOME</span>/cache
-scripts/install-all.sh <span style="color: #bc8f8f;">\</span>
-        --prefix=${<span style="color: #b8860b;">BUILDROOT</span>}${<span style="color: #b8860b;">INSTALLDIR</span>}/mozart <span style="color: #bc8f8f;">\</span>
-        --bindir=${<span style="color: #b8860b;">BUILDROOT</span>}${<span style="color: #b8860b;">INSTALLDIR</span>}/mozart/bin
+</span><span style="color: #7a378b;">export</span> <span style="color: #a0522d;">OZLOAD</span>=<span style="color: #a0522d;">cache</span>=${<span style="color: #a0522d;">BUILDROOT</span>}$<span style="color: #a0522d;">OZHOME</span>/cache:<span style="color: #a0522d;">cache</span>=$<span style="color: #a0522d;">OZHOME</span>/cache
+scripts/install-all.sh <span style="color: #8b2252;">\</span>
+        --prefix=${<span style="color: #a0522d;">BUILDROOT</span>}${<span style="color: #a0522d;">INSTALLDIR</span>}/mozart <span style="color: #8b2252;">\</span>
+        --bindir=${<span style="color: #a0522d;">BUILDROOT</span>}${<span style="color: #a0522d;">INSTALLDIR</span>}/mozart/bin
 </pre>
 
 
@@ -481,8 +484,8 @@ scripts/install-all.sh <span style="color: #bc8f8f;">\</span>
 <!-- Footer -->
 <div id="footer">
 <div id="author">&copy; 
-Torsten Anders</div>
-<div id="date">Last time edited: 2009.08.29</div>
+torsten</div>
+<div id="date">Last time edited: 2012.04.29</div>
 </div>
   </body>
 </html>

@@ -2,7 +2,7 @@
 ; #author Torsten Anders
 
 
-* Changes in Version 0.10.0 (no date yet)
+* Changes in Version 0.10.0 (29 April 2012)
 
   - Main additions and changes 
     - Accent constraints added to functor Measure. This framework of constrains controls the rhythmic weight of notes depending on a wide range of musical features (e.g., relative duration, pitch intervals, presence of an anacrusis) and the relation between rhythmic weights and metric positions. Their effect is widely user-controllable. These constraints are inspired by the chapter on rhythm in [[http://books.google.com/books?id=J4iXm-uoSRUC&printsec=frontcover&dq=structural+functions+in+music&hl=en&src=bmrr&ei=BcwFToS0FcqahQeM2sS8DQ&sa=X&oi=book_result&ct=result&resnum=1&ved=0CCwQ6AEwAA#v=onepage&q&f=false][Berry, Wallace. 1987. Structural Functions in Music. Courier Dover Publications.]] See the examples in [[../examples/Rhythm-Examples/AccentConstraint-Examples.oz][AccentConstraint-Examples.oz]]. 
