@@ -3207,6 +3207,22 @@ it always equal to 2, that's a pretty good choice.
    Can be disregarded.
 
 
+* ? Strasheela redesign
+
+  ?? Port to Python (Cyton) using Denys Duchier's Gecode bindings for Python
+  https://launchpad.net/gecode-python
+
+  Advantage of Python
+
+  - Language more widely known -- more easy to attract other contributors
+  - Other computer music developments exist for Python, see 
+    http://wiki.python.org/moin/PythonInMusic
+  - ?? More modern development tools?
+  - Access to many other libraries: GUI...
+
+
+  
+
 * Other 
 
 ** GeOz 
