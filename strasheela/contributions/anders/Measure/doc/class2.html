@@ -116,7 +116,7 @@ clearInterval(drawit)
            |
            |
            |
-    <a class="pre" href="node1.html#entity11">UniformMeasures</a>
+    <a class="pre" href="node1.html#entity27">UniformMeasures</a>
 </pre>
 <hr><p class="margin"><div align="right">class definition</div></p>
 <code>
@@ -140,7 +140,45 @@ clearInterval(drawit)
 <br>
 &nbsp;&nbsp;&nbsp;<span class="keyword">attr</span>&nbsp;beatDuration&nbsp;beatNumber&nbsp;measure&nbsp;n
 <br>
-<ul><li><span class="functionname">getAccents</span>(X)<br>
+<ul><li><span class="functionname">accentSyncopationR</span>(B Start End)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> B=1 <-> an event lasting from Start to End is a syncope at accent level: Start is not on an accent, and Start and End fall between different accents.<BR>
+ Note: if both Start or End are outside self then B = 0 (even though the respective event might be a syncope in other uniform measures instances).<BR>
+ BUG: B=0 for an event that is a syncope at accent level, but its duration is some multiple of the measure duration.<BR>
+<BR>
+</span>
+</li><li><span class="functionname">beatSyncopationR</span>(B Start End)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> B=1 <-> an event lasting from Start to End is a syncope at beat level: Start is not on a beat, and Start and End fall between different beats.<BR>
+ Note: if both Start or End are outside self then B = 0 (even though the respective event might be a syncope in other uniform measures instances).<BR>
+<BR>
+</span>
+</li><li><span class="functionname">getAccentInMeasureAt</span>(I Time)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> I is the index of the accent at Time (one-based). Accents are only counted within individual measures (the first accent in the 2nd measure is again index 1). If Time is between accents then the index of the accent before Time is returned.<BR>
+ If Time is outside the boundaries of self, then I = 0.<BR>
+ Method delayed until measure duration is determined (i.e. both beatNumber and beatDuration are determined).<BR>
+<BR>
+</span>
+</li><li><span class="functionname">getAccents</span>(X)<br>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
 
@@ -158,6 +196,18 @@ clearInterval(drawit)
 
 </tr></table>
 <span class="string"></span>
+</li><li><span class="functionname">getBeatAt</span>(I Time)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> I is the index of the beat at Time (one-based). Beats are counted across all measures in self. If Time is between beats then the index of the last beat before is returned.<BR>
+ If Time is outside the boundaries of self, then I = 0.<BR>
+<BR>
+</span>
 </li><li><span class="functionname">getBeatDuration</span>(X)<br>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
@@ -176,6 +226,19 @@ clearInterval(drawit)
 
 </tr></table>
 <span class="string"></span>
+</li><li><span class="functionname">getBeatInMeasureAt</span>(I Time)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> I is the index of the beat at Time (one-based). Beats are only counted within individual measures (the first beat in the 2nd measure is again index 1). If Time is between beats then the index of the beat before Time is returned.<BR>
+ Constraint blocks until beatNumber is determined.<BR>
+ If Time is outside the boundaries of self, then I = 0.<BR>
+<BR>
+</span>
 </li><li><span class="functionname">getBeatNumber</span>(X)<br>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
@@ -229,7 +292,8 @@ clearInterval(drawit)
 
 
 </tr></table>
-<span class="string"> I is the index of the measure at Time. A measure starts at its start time and ends before its end time. For instance, the index for the first measure is 1, starting at Time 0. Measure 2 starts at MeasureDuration. I and Time are FD integers.<BR>
+<span class="string"> I is the index of the measure at Time (one-based). A measure starts at its start time and ends before its end time. For instance, the index for the first measure is 1, starting at Time 0. Measure 2 starts at MeasureDuration. I and Time are FD integers.<BR>
+ If Time is outside the boundaries of self, then I = 0.<BR>
 <BR>
 </span>
 </li><li><span class="functionname">getMeasureDuration</span>(X)<br>
@@ -282,7 +346,7 @@ clearInterval(drawit)
  If the args n, beatNumber, or beatDuration are left unset, you must set them later with their respective accessor methods.<BR>
 <BR>
 </span>
-</li><li><span class="functionname">onAccentDR</span>(B Time)<br>
+</li><li><span class="functionname">measureSyncopationR</span>(B Start End)<br>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
 
@@ -290,9 +354,7 @@ clearInterval(drawit)
 
 
 </tr></table>
-<span class="string"> Variant of onAccentR which does domain propagation (which can be very expensive). However, propagation of Time does only happen after B got determined. <BR>
-<BR>
- !!?? constraint suspends and performs OK if it first calls {Browse Time}?<BR>
+<span class="string"> Same as overlapsBarlineR<BR>
 <BR>
 </span>
 </li><li><span class="functionname">onAccentR</span>(B Time)<br>
@@ -303,9 +365,9 @@ clearInterval(drawit)
 
 
 </tr></table>
-<span class="string"> B=1 <-> Time equals some strong beat in of some measure in UniformMeasures. Time is FD int, B is implicitly constrained to 0/1-int.<BR>
+<span class="string"> B=1 <-> Time equals some strong beat in some measure in UniformMeasures. Time is FD int, B is implicitly constrained to 0/1-int.<BR>
 <BR>
- NB: Constraint blocks until BeatNr is determined.<BR>
+ NB: Constraint blocks until both beatNumber and beatDuration are determined.<BR>
  NB: method does not take n into account -- to limit truth value B to the actual time span within start and end time of UniformMeasures add necessary constraints outside of this method.<BR>
 <BR>
 </span>
@@ -319,8 +381,6 @@ clearInterval(drawit)
 </tr></table>
 <span class="string"> Variant of onBeatR which does domain propagation (which can be very expensive). However, propagation of Time does only happen after B got determined.<BR>
 <BR>
- !!?? constraint suspends and performs OK if it first calls {Browse Time}?<BR>
-<BR>
 </span>
 </li><li><span class="functionname">onBeatR</span>(B Time)<br>
 
@@ -330,7 +390,22 @@ clearInterval(drawit)
 
 
 </tr></table>
-<span class="string"> B=1 <-> Time equals some beat of some measure in UniformMeasures. For instance, in case beat note value is halve note, that B=1 means that Time is on a halve-note onset or on a strong quarter-note onset.<BR>
+<span class="string"> Variant of onAccentR which does domain propagation (which can be very expensive). However, propagation of Time does only happen after B got determined. <BR>
+<BR>
+ !!?? constraint suspends and performs OK if it first calls {Browse Time}?<BR>
+<BR>
+ BUGGY -- see comments in alternative implementation in onAccentR<BR>
+ */<BR>
+ meth onAccentDR(B Time)<BR>
+    AccentDur = {FD.decl}<BR>
+    RelTime = {FD.decl}<BR>
+ in<BR>
+    AccentDur = {FD.minusD {Nth {self getAccents($)} 2} {self getAccents($)}.1}<BR>
+    RelTime = {FD.modD Time AccentDur}<BR>
+    B = {FD.int 0#1}<BR>
+    B =: (RelTime =: 0)<BR>
+ end<BR>
+/** %% B=1 <-> Time equals some beat of some measure in UniformMeasures. For instance, in case beat note value is halve note, that B=1 means that Time is on a halve-note onset or on a strong quarter-note onset.<BR>
  Time is FD int, B is implicitly constrained to 0/1-int.<BR>
 <BR>
  NB: method does not take n into account -- to limit truth value B to the actual time span within start and end time of UniformMeasures add necessary constraints outside of this method.<BR>
@@ -344,7 +419,7 @@ clearInterval(drawit)
 
 
 </tr></table>
-<span class="string"> Variant of onAccentR which does domain propagation (which can be very expensive). However, propagation of Time does only happen after B got determined.<BR>
+<span class="string"> Variant of onMeasureStartR which does domain propagation (which can be very expensive). However, propagation of Time does only happen after B got determined.<BR>
 <BR>
  !!?? constraint suspends and performs OK if it first calls {Browse Time}?<BR>
 <BR>
@@ -359,6 +434,8 @@ clearInterval(drawit)
 </tr></table>
 <span class="string"> B=1 <-> Time equals the start time of some measure in UniformMeasures. Time is FD int, B is implicitly constrained to 0/1-int.<BR>
 <BR>
+ NB: blocks until Time is known to be at least size of start time of self.<BR>
+ NB: Constraint blocks until both beatNumber and beatDuration are determined.<BR>
  NB: method does not take n into account -- to limit truth value B to the actual time span within start and end time of UniformMeasures add necessary constraints outside of this method.<BR>
 <BR>
 </span>
@@ -370,7 +447,8 @@ clearInterval(drawit)
 
 
 </tr></table>
-<span class="string"> B=1 <-> Start and End fall in different measures.<BR>
+<span class="string"> B=1 <-> an event lasting from Start to End is a syncope at measure level: Start and End fall in different measures (either within self or beyond).<BR>
+ Note: if both Start and End are outside self then B = 0 (even though the respective event might be a syncope at measure level for other uniform measures instances).<BR>
 <BR>
 </span>
 </li></ul>

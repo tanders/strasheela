@@ -121,27 +121,27 @@ clearInterval(drawit)
 
 <div style="margin-left:160px"><p align="right" class="margin"><div align="right">inheritance tree</div></p>
 <pre>
- <a class="pre" href="node6.html#entity310">NonType</a> <a class="pre" href="node6.html#entity311">Reflection</a>       <a class="pre" href="node7.html#entity415">FlagsMixin</a>
+ <a class="pre" href="node6.html#entity346">NonType</a> <a class="pre" href="node6.html#entity347">Reflection</a>       <a class="pre" href="node7.html#entity464">FlagsMixin</a>
     |        |                |
     `-----+--'                |
           |                   |
-     <a class="pre" href="node6.html#entity312">ScoreObject</a>    <a class="pre" href="node7.html#entity416">SMapping.mappingMixin</a>
+     <a class="pre" href="node6.html#entity348">ScoreObject</a>    <a class="pre" href="node7.html#entity465">SMapping.mappingMixin</a>
           |                   |
           `---------+---------'
                     |
-                   <a class="pre" href="node6.html#entity325">Item</a>
+                   <a class="pre" href="node6.html#entity359">Item</a>
                     |
                     `+
                      |
-                  <a class="pre" href="node6.html#entity332">Element</a>                 <a class="pre" href="node6.html#entity313">TimeMixin</a>
+                  <a class="pre" href="node6.html#entity366">Element</a>                 <a class="pre" href="node6.html#entity349">TimeMixin</a>
                      |                        |
                      `----+-------------------'
                           |
-                   <a class="pre" href="node6.html#entity334">TemporalElement</a>
+                   <a class="pre" href="node6.html#entity368">TemporalElement</a>
                           |
                           |
                           |
-                        <a class="pre" href="node6.html#entity336">Event</a>
+                        <a class="pre" href="node6.html#entity370">Event</a>
 </pre>
 <hr><p class="margin"><div align="right">class definition</div></p>
 <code>
@@ -363,6 +363,17 @@ clearInterval(drawit)
 <span class="string"> Returns the first direct container self is contained in which fulfils the boolean function or method Test.<BR>
 <BR>
 </span>
+</li><li><span class="functionname">findContainerRecursively</span>(X Test)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> Returns the first direct or indirect container of self, which fulfils the boolean function or method Test.<BR>
+<BR>
+</span>
 </li><li><span class="functionname">findParameter</span>(X Test)<br>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
@@ -374,7 +385,7 @@ clearInterval(drawit)
 <span class="string"> Returns the first direct parameter of self which fulfils the boolean function or method Test.<BR>
 <BR>
 </span>
-</li><li><span class="functionname">findSimultaneousItem</span>(X cTest:CTest test:Test)<br>
+</li><li><span class="functionname">findSimultaneousItem</span>(X cTest:CTest test:Test toplevel:Top)<br>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
 
@@ -383,6 +394,7 @@ clearInterval(drawit)
 
 </tr></table>
 <span class="string"> [Deterministic method] Returns the first score object found which is simultaneous to self and fulfilling the optional boolean function or method test.<BR>
+ If a toplevel Top (a temporal container) is given, then only within that container is searched for simultaneous items to self. Otherwise the temporal top-level of self is searched (i.e. usually the whole score).<BR>
  The implementation uses LUtils.cFind and the reified constraints method isSimultaneousItemR. X is return as soon as the score contains enough information to tell for any score object that it is simultaneous to self (i.e. rhythmic structure of the whole score must not necessarily be fully determined). <BR>
  NB: Test must be a deterministic function/method which does not block (e.g., checks on score object types or their position in the score topology are OK) and which is used for pre-filtering score objects. The argument cTest has the same format (optional Boolean function or method), but it is applied within the concurrent filtering of LUtils.cFilter, together with isSimultaneousItemR. Computationally very expensive tests and in particular tests which can block are better handed to cTest. <BR>
 <BR>
@@ -805,7 +817,7 @@ clearInterval(drawit)
 <span class="string"> Returns predecessor item of self in Container.<BR>
 <BR>
 </span>
-</li><li><span class="functionname">getSimultaneousItems</span>(?Xs cTest:CTest test:Test)<br>
+</li><li><span class="functionname">getPredecessors</span>(X N Container)<br>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
 
@@ -813,9 +825,43 @@ clearInterval(drawit)
 
 
 </tr></table>
-<span class="string"> [Deterministic method] Returns list of score objects simultaneous to self and fulfilling the optional boolean function or method test.<BR>
- The implementation uses LUtils.cFilter and the reified constraints method isSimultaneousItemR. Items are returned as soon as the score contains enough information for all score objects in the score to tell whether or not their are simultaneous to self (i.e. rhythmic structure of the whole score must not necessarily be fully determined).<BR>
- NB: Test must be a deterministic function/method which does not block (e.g., checks on score object types or their position in the score topology are OK) and which is used for pre-filtering score objects. The argument cTest has the same format (optional Boolean function or method), but it is applied within the concurrent filtering of LUtils.cFilter, together with isSimultaneousItemR. Computationally very expensive tests and in particular tests which can block are better handed to cTest. <BR>
+<span class="string"> Returns a list of the N items that precede self in Container, the item closes to self first. If N goes beyond the number of items available then on the available items are returned (i.e. the returned list is shorter than N).<BR>
+<BR>
+</span>
+</li><li><span class="functionname">getPredecessorsUpToRest</span>($)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> Returns a list of the items that precede self in its TemporalAspect up to any rest (i.e. a pause object or an item with an offset time > 0). A pause object would be excluded, but an item with an offset time > 0 would be included.<BR>
+ Note: method delayed until offset times are sufficienly determined.<BR>
+<BR>
+</span>
+</li><li><span class="functionname">getSimultaneousItems</span>(?Xs cTest:CTest test:Test toplevel:Top)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> [Deterministic method] Returns list of score items simultaneous to self and fulfilling the optional Boolean function or method test.<BR>
+ If a toplevel Top (a temporal container) is given, then only within that container is searched for simultaneous items to self. Otherwise the temporal top-level of self is searched (i.e. usually the whole score).<BR>
+ See the documentation of GetItemsInTimeframe for further details (e.g., on the argument cTest).<BR>
+<BR>
+</span>
+</li><li><span class="functionname">getSimultaneousItemsOffset</span>(Xs Offset cTest:CTest test:Test toplevel:Top)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> [Deterministic method] Generalised version of getSimultaneousItems where the offset time Offset (FD int) is taken into account. See the doc of InTimeframeOffsetR for the meaning of the Offset.<BR>
 <BR>
 </span>
 </li><li><span class="functionname">getStartTime</span>(X)<br>
@@ -865,6 +911,29 @@ clearInterval(drawit)
 <span class="string"> Returns successor item of self in Container.<BR>
 <BR>
 </span>
+</li><li><span class="functionname">getSuccessors</span>(X N Container)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> Returns a list of the N items that succeed self in Container. If N goes beyond the number of items available then on the available items are returned (i.e. the returned list is shorter than N).<BR>
+<BR>
+</span>
+</li><li><span class="functionname">getSuccessorsUpToRest</span>($)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> Returns a list of the items that succeed self in its TemporalAspect up to any rest (i.e. a pause object or an item with an offset time > 0). A pause object would be excluded, and so would be an item with an offset time > 0.<BR>
+ Note: method delayed until offset times are sufficienly determined.<BR>
+<BR>
+</span>
 </li><li><span class="functionname">getTemporalAspect</span>(X)<br>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
@@ -898,7 +967,7 @@ clearInterval(drawit)
 <span class="string"> Returns the index of self in its temporal container (temporal aspect).<BR>
 <BR>
 </span>
-</li><li><span class="functionname">getTemporalPredecessor</span>(B)<br>
+</li><li><span class="functionname">getTemporalPredecessor</span>(X)<br>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
 
@@ -907,10 +976,20 @@ clearInterval(drawit)
 
 </tr></table>
 <span class="string"> Returns the predecessor of object in its TemporalAspect. NB: method returns positional and not a temporal predecessor. <BR>
- !!?? Rename to getPredecessorInTemporalAspect ?<BR>
 <BR>
 </span>
-</li><li><span class="functionname">getTemporalSuccessor</span>(B)<br>
+</li><li><span class="functionname">getTemporalPredecessors</span>(X N)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> Returns a list of the N items that precede self in its TemporalAspect, the item closes to self first. If N goes beyond the number of items available then on the available items are returned (i.e. the returned list is shorter than N).<BR>
+<BR>
+</span>
+</li><li><span class="functionname">getTemporalSuccessor</span>(X)<br>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
 
@@ -919,7 +998,17 @@ clearInterval(drawit)
 
 </tr></table>
 <span class="string"> Returns the successor of object in its TemporalAspect. NB: method returns positional and not a temporal successor. <BR>
- !!?? Rename to getSuccessorInTemporalAspect ?<BR>
+<BR>
+</span>
+</li><li><span class="functionname">getTemporalSuccessors</span>(X N)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> Returns a list of the N items that succeed self in its TemporalAspect. If N goes beyond the number of items available then on the available items are returned (i.e. the returned list is shorter than N).<BR>
 <BR>
 </span>
 </li><li><span class="functionname">getTemporalToplevel</span>(Xs test:Test)<br>
@@ -1168,6 +1257,7 @@ clearInterval(drawit)
 
 </tr></table>
 <span class="string"> [0/1 Constraint] Returns 0/1-integer whether self and X are exactly simultaneous in time (i.e. start and end at the same time).<BR>
+ This relation defines the Allen's Interval Algebra relation equal.<BR>
 <BR>
 </span>
 </li><li><span class="functionname">isFirstItem</span>(?B Container)<br>
@@ -1282,6 +1372,29 @@ clearInterval(drawit)
 
 </tr></table>
 <span class="string"> [Deterministic method] Returns boolean whether self and X are simultaneous in time. <BR>
+ This relation defines a conjunction of the following Allen's Interval Algebra relations: overlaps, starts, during, finishes and equal; only meets and before/after are excluded.<BR>
+<BR>
+</span>
+</li><li><span class="functionname">isSimultaneousItemOffset</span>(B X Offset)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> [Deterministic method] Generalised version of isSimultaneousItem where the offset time Offset is taken into account (see InTimeframeOffset).<BR>
+<BR>
+</span>
+</li><li><span class="functionname">isSimultaneousItemOffsetR</span>(B X Offset)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> [0/1 Constraint] Generalised version of isSimultaneousItemR where the offset time Offset is taken into account.<BR>
 <BR>
 </span>
 </li><li><span class="functionname">isSimultaneousItemR</span>(?B X)<br>
@@ -1293,6 +1406,7 @@ clearInterval(drawit)
 
 </tr></table>
 <span class="string"> [0/1 Constraint] Returns 0/1-integer whether self and X are simultaneous in time (i.e. somehow overlap in time).<BR>
+ This relation defines a conjunction of the following Allen's Interval Algebra relations: overlaps, starts, during, finishes and equal; only meets and before/after are excluded.<BR>
 <BR>
 </span>
 </li><li><span class="functionname">isTemporalAspect</span>(B)<br>
@@ -1426,6 +1540,21 @@ clearInterval(drawit)
 <span class="string"> The method map maps the function Fn (which must return a list) to a number of collected score objects and returns a list with all results appended. Fn may also be an atom representing a unary method understood by all objects in self fulfilling Test. The method supports the features <code> mode</code>, <code> level</code>, <code> test</code>, and <code> excludeSelf</code>. These features have the same meaning as in the method collect.<BR>
 <BR>
 </span>
+</li><li><span class="functionname">partiallyUnify</span>(ScoreObject Percent test:Test)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> Unifies the percentage Percent of the parameter values of self with the corresponding parameter values of ScoreObject. This is useful, for example, for manually controlling the search process by saying that a given percentage of the solution of a CSP is the same as in a given previous solution (e.g., from a pickled score), and then -- given suitable continuations of this solutions -- by and by increasing this percentage. <BR>
+ Blocks if self or ScoreObject are not fully determined.<BR>
+<BR>
+ Args:<BR>
+ test (default fun {$ X} true end): a Boolean function or method which parameters to include in unification and the percentage count.<BR>
+<BR>
+</span>
 </li><li><span class="functionname">percentageIsDet</span>($ exclude:Exclude)<br>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
@@ -1530,6 +1659,17 @@ clearInterval(drawit)
 
 </tr></table>
 <span class="string"> [destructive method] Statefully sets attribute A to value X. The method is indented for editing a score after search, the search itself is indented to be fully stateless.<BR>
+<BR>
+</span>
+</li><li><span class="functionname">setParameterValue</span>(Param X)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> [destructive method, for experts only] Statefully sets the value of parameter Param to value X (there must be an attribute Param). Remember that the search itself is indented to be fully stateless.<BR>
 <BR>
 </span>
 </li><li><span class="functionname">toFullRecord</span>(X exclude:Exclude unbind:Unbind)<br>

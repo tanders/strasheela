@@ -160,16 +160,18 @@ clearInterval(drawit)
 </li><li>&lt;P/3:<a href="#entity29"><span class="functionname">Integrate</span></a>&gt;
 </li><li>&lt;P/3:<a href="#entity30"><span class="functionname">TempoCurveToTimeMap</span></a>&gt;
 </li><li>&lt;P/3:<a href="#entity31"><span class="functionname">TempoCurveToTimeShift</span></a>&gt;
-</li><li>&lt;P/2:<a href="#entity32"><span class="functionname">TimeShiftToTimeMap</span></a>&gt;
-</li><li>&lt;P/2:<a href="#entity33"><span class="functionname">TimeMapToTimeShift</span></a>&gt;
-</li><li>&lt;P/2:<a href="#entity34"><span class="functionname">ConcatenateTempoCurves</span></a>&gt;
-</li><li>&lt;P/5:<a href="#entity35"><span class="functionname">TemporalFenvY</span></a>&gt;
-</li><li>&lt;P/4:<a href="#entity36"><span class="functionname">ItemFenvY</span></a>&gt;
-</li><li>&lt;P/8:<a href="#entity37"><span class="functionname">FenvToMidiCC</span></a>&gt;
-</li><li>&lt;P/7:<a href="#entity38"><span class="functionname">ItemFenvToMidiCC</span></a>&gt;
-</li><li>&lt;P/3:<a href="#entity39"><span class="functionname">ItemFenvsToMidiCC</span></a>&gt;
-</li><li>&lt;P/3:<a href="#entity40"><span class="functionname">ItemTempoCurveToMidi</span></a>&gt;
-</li><li>&lt;P/2:<a href="#entity41"><span class="functionname">RenderAndPlayMidiFile</span></a>&gt;
+</li><li>&lt;P/3:<a href="#entity32"><span class="functionname">TempoCurveToTimeShift_KeepingDur</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity33"><span class="functionname">TimeShiftToTimeMap</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity34"><span class="functionname">TimeMapToTimeShift</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity35"><span class="functionname">ConcatenateTempoCurves</span></a>&gt;
+</li><li>&lt;P/5:<a href="#entity36"><span class="functionname">TemporalFenvY</span></a>&gt;
+</li><li>&lt;P/4:<a href="#entity37"><span class="functionname">ItemFenvY</span></a>&gt;
+</li><li>&lt;P/8:<a href="#entity38"><span class="functionname">FenvToMidiCC</span></a>&gt;
+</li><li>&lt;P/7:<a href="#entity39"><span class="functionname">ItemFenvToMidiCC</span></a>&gt;
+</li><li>&lt;P/3:<a href="#entity40"><span class="functionname">ItemFenvsToMidiCC</span></a>&gt;
+</li><li>&lt;P/3:<a href="#entity41"><span class="functionname">ItemTempoCurveToMidi</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity42"><span class="functionname">RenderAndPlayMidiFile</span></a>&gt;
+</li><li>&lt;P/3:<a href="#entity43"><span class="functionname">MakeRenderAndPlayMidiFile_Scala</span></a>&gt;
 </li></ul></code>
 <h3>Define</h3>
 
@@ -412,11 +414,28 @@ clearInterval(drawit)
 <span class="keyword">fun</span>{<span class="functionname">TempoCurveToTimeShift</span> MyFenv Step}<br>
 <span class="string"> ... this is probably not a good idea, but works for certain cases.<BR>
 <BR>
+ ?? BUG: slower tempo changes between fixed min/max tempo values result in larger [absolute] tempo changes. <BR>
+<BR>
 </span>
 </code><br>
 
 <code>
 <a name="entity32">
+<span class="keyword">fun</span>{<span class="functionname">TempoCurveToTimeShift_KeepingDur</span> MyFenv Args}<br>
+<span class="string"> [Experimental] Transforms a fenv expressing a normalised tempo curve into a fenv expressing a normalised time shift function. However, the resulting time shift function is deformed such that it always ends in 0.0 (so it ends at score time).<BR>
+ NB: the resulting time shift function does not faithfully express the tempos of the given tempo curve (this depends on the arg mul, see below), but the overall shape is similar and therefore (hopefully) simplifies creating natural time shift functions expressing tempo changes. <BR>
+<BR>
+ Args:<BR>
+ step (default 0.01): stepsize for integration, see there.<BR>
+ mul (default 1.0): scaling factor for the resulting fenv. Try setting it to some specific note duration... Depends on intended tempo change and also on duration of phrase time shifted.<BR>
+<BR>
+ ?? BUG: slower tempo changes between fixed min/max tempo values result in larger [absolute] tempo changes.<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity33">
 <span class="keyword">fun</span>{<span class="functionname">TimeShiftToTimeMap</span> TS}<br>
 <span class="string"> Expects a fenv representing a normalised time shift function and returns a fenv representing a normalised time map function. A time shift function expresses how much is added to a score time to yield a performance time, i.e., f(x) = 0 causes performance time to be score time. A normalised time map maps score time to performance time.<BR>
  Private Terminology: normalised time shift functions, time map functions and tempo curves: fenvs where x values denote the score time (usually of a temporal container) which is mapped into [0,1]: 0 corresponds to the container's start time, and 1 corresponds to the container's end time. See ContainerFenvY.<BR>
@@ -426,7 +445,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity33">
+<a name="entity34">
 <span class="keyword">fun</span>{<span class="functionname">TimeMapToTimeShift</span> MyFenv}<br>
 <span class="string"> ... this is perhaps not a good idea, but works for certain cases.<BR>
 <BR>
@@ -434,7 +453,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity34">
+<a name="entity35">
 <span class="keyword">fun</span>{<span class="functionname">ConcatenateTempoCurves</span> Specs}<br>
 <span class="string"> Concatenates a sequence of successive tempo curve fenvs. Specs is a list of pairs and has the form [Fenv1#Dur1 Fenv2#Dur2 ... FenvN#DurN], where FenvI is a tempo curve fenv and DurI (a float) is the score time duration of this tempo curve. Returned is a single tempo curve fenv.<BR>
  NB: in most use-cases the sequence of successive tempo curve fenvs should start at score time 0 and span over the entire score so that the global tempo curve fenv is the result. If you concatenate a tempo curve sequence which does not start at score time 0, you should decide whether the resulting tempo curve fenv starts at the performance or score start time of its first sub-tempo curve (i.e., whether a smooth continuation of previous tempo changes is intended or not). <BR>
@@ -443,7 +462,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity35">
+<a name="entity36">
 <span class="keyword">fun</span>{<span class="functionname">TemporalFenvY</span> MyFenv Start Duration MyTime}<br>
 <span class="string"> Accesses the y-value of MyFenv which starts at time point Start (a float) for time interval Duration (a float). The fenv x-value 0.0 corresponds to the start time and the fenv x-value 1.0 coresponds to the resulting end time. MyTime (a float) is any time between the start and end time. All times are score times measured in the same time unit.<BR>
 <BR>
@@ -451,7 +470,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity36">
+<a name="entity37">
 <span class="keyword">fun</span>{<span class="functionname">ItemFenvY</span> MyFenv MyItem MyTime}<br>
 <span class="string"> Accesses the y-value of MyFenv which is associated with a temporal item MyItem. The fenv x-value 0.0 corresponds to the item's start time and the fenv x-value 1.0 coresponds to the item's end time. MyTime (a float) is any time between MyItem's start and end time. MyTime is a score time measured in the time unit of MyItem.<BR>
 <BR>
@@ -459,7 +478,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity37">
+<a name="entity38">
 <span class="keyword">fun</span>{<span class="functionname">FenvToMidiCC</span> MyFenv N Track StartTime EndTime Channel Controller}<br>
 <span class="string"> Transforms a Fenv into a list of continuous MIDI controller events. N events are output between StartTime and EndTime (two ints, given in MIDI ticks) at Channel (an int). <BR>
  Controller denotes which controller is output. Possible values are one of the atoms pitchbend, and channelAftertouch, or one of the pairs cc#Number (Number is the controller number) and polyAftertouch#Note (Note denotes the note pitch). <BR>
@@ -473,7 +492,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity38">
+<a name="entity39">
 <span class="keyword">fun</span>{<span class="functionname">ItemFenvToMidiCC</span> MyFenv N Track MyItem Channel Controller}<br>
 <span class="string"> Like FenvToMidiCC, but here the Fenv is associated with a temporal item MyItem, whose start and end times are taken. <BR>
  NOTE: no support for any tempo curves etc. <BR>
@@ -482,9 +501,9 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity39">
+<a name="entity40">
 <span class="keyword">fun</span>{<span class="functionname">ItemFenvsToMidiCC</span> MyItem Args}<br>
-<span class="string"> Expects a temporal item which defines fenvs in a info-tag 'fenvs', and returns a list of continuous MIDI controller events for all its fenvs. Each fenvs is defined by a pair Controller#Fenv, where Controller can take all values defined for FenvToMidiCC. Fenvs directly specify the controller values (e.g., if Controller is pitchBend, then the Fenv range is 0.0 to 16383.0, and the value 8192.0 means no pitchbend). Note that for any controller only a single Fenv should be defined at any time (otherwise they conflict with each other).<BR>
+<span class="string"> Expects a temporal item which defines fenvs in an info-tag 'fenvs', and returns a list of continuous MIDI controller events for all its fenvs. Each fenvs is defined by a pair Controller#Fenv, where Controller can take all values defined for FenvToMidiCC. Fenvs directly specify the controller values (e.g., if Controller is pitchBend, then the Fenv range is 0.0 to 16383.0, and the value 8192.0 means no pitchbend). Note that for any controller only a single Fenv should be defined at any time (otherwise they conflict with each other).<BR>
  Example: fenvs((cc#1)#{Fenv.linearFenv [[0.0 0.0] [1.0 127.0]]}) <BR>
 <BR>
  Args:<BR>
@@ -498,7 +517,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity40">
+<a name="entity41">
 <span class="keyword">fun</span>{<span class="functionname">ItemTempoCurveToMidi</span> MyItem Args}<br>
 <span class="string"> Expects a temporal item which defines a tempo curve Fenv in a info-tag 'globaltempo', and returns a list of MIDI tempo events. Returns nil in case MyItem defines no tempo curve. The tempo fenv values are in beats per minute. Due to restrictions of the MIDI protocoll, only a single global tempo is supported (note that sequencers may restrict the import of such data in a MIDI files). If multiple tempi are defined "in parallel" or nested, then "conflicting" MIDI tempo events are output.<BR>
  Example: globaltempo({Fenv.linearFenv [[0.0 30.0] [1.0 240.0]]})<BR>
@@ -513,32 +532,58 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity41">
+<a name="entity42">
 <span class="keyword">proc</span>{<span class="functionname">RenderAndPlayMidiFile</span> MyScore Args}<br>
 <span class="string"> This procedure is like Out.midi.renderAndPlayMidiFile, but it additional supports continuous controllers and a global tempo curve, expressed in the score by fenvs. Also, microtonal music is supported (using pitchbends).<BR>
 <BR>
  Supported score format:<BR>
  <BR>
- The info-tag 'channel', given to a temporal item, sets the MIDI channel for this item and all contained items. Example: channel(0). If a channel is defined multiple times, then a setting in a lower hierarchical level overwrites higher-level settings.<BR>
+ The info-tag 'channel', given to a note or temporal container, sets the MIDI channel for this item and all contained items. Example: channel(0). If a channel is defined multiple times, then a setting in a lower hierarchical level overwrites higher-level settings.<BR>
 <BR>
- The info-tag 'program', given to a temporal item, results in a program change message with the specified program number at the beginning of the item. Example: program(64). Many instruments number patches from 1 to 128 rather than the 0 to 127 actually used within MIDI files. When interpreting ProgramNum values, note that they may be one less than the patch numbers given in an instrument's documentation.<BR>
+ The info-tag 'program', given to a note or temporal container, results in a program change message with the specified program number at the beginning of the item. Example: program(64) given to a sequential container changes the program at the beginning of the container (note that programs are not automatically sitched back). Remember that many MIDI instruments number their patches (programs) from 1 to 128 rather than the range 0 to 127 actually used within MIDI files. When interpreting ProgramNum values, note that they may be one less than the patch numbers given in an instrument's documentation.<BR>
 <BR>
- The info-tag 'fenvs', given to a note or temporal container, specifies a tuple of continuous controllers for the duration this item. Each Fenv spec is a pair Controller#Fenv, where Controller is defined as for Fenv.fenvToMidiCC. Example: (cc#1)#MyFenv. Fenvs directly specify the controller values (e.g., if Controller is pitchBend, then the Fenv range is 0.0 to 16383.0, and the value 8192.0 means no pitchbend). Note that for any controller only a single Fenv should be defined at any time (otherwise they conflict with each other).<BR>
+ With the info-tag 'fenvs', given to a note or temporal container, you can specify a tuple of continuous controllers for the duration this item. Each Fenv spec is a pair Controller#Fenv, where Controller is defined as for Fenv.fenvToMidiCC. Example: fenvs((cc#1)#MyFenv). Fenvs directly specify the controller values (e.g., if Controller is pitchBend, then the Fenv range is 0.0 to 16383.0, and the value 8192.0 means no pitchbend). Note that for any controller only a single Fenv should be defined at any time (otherwise they conflict with each other).<BR>
 <BR>
- The info-tag 'timeshift', given to a temporal container, specifies a time shift function (a fenv). Example: timeshift(MyTimeshiftFenv). Time shift values are specified as time value offsets in the present timeUnit. For example, if a note has the start time 42 and its container specifies a time shift fenv with the y-value -1.0 corresponding to the start time of this note, then the MIDI note on happens at time 41. Hierarchical nesting of time shift functions is supported: if in the example above this note is recursively contained in other containers which also specify a time shift fenv, then their y-values for the note are added to the note's start time as well. Time shift fenvs also affect the timing of CC fenvs.<BR>
+ The info-tag 'timeshift': see doc of Out.midi.outputMidiFile.<BR>
 <BR>
  The info-tag 'globaltempo', given to a temporal container, specifies a tempo curve (a fenv) and is output as MIDI tempo events. Example: globaltempo(MyTempoFenv). Tempo values are specified in BPM. Due to restrictions of the MIDI protocoll, only a single global tempo is supported (note that sequencers may restrict the import of such data in a MIDI files). If multiple tempi are defined "in parallel" or nested, then "conflicting" MIDI tempo events are output.<BR>
 <BR>
  All arguments of Out.midi.renderAndPlayMidiFile are supported. RenderAndPlayMidiFile is defined by calling Out.midi.renderAndPlayMidiFile with special clauses (namely for the tests isNote, and Score.isTemporalContainer). Clauses given to RenderAndPlayMidiFile are again appended at the beginning of the list of clauses (and so potentially overwrite the clauses defined by this procedure).<BR>
 <BR>
- Additional arguments.<BR>
- ccsPerSecond: how many continuous controller events are created per second for every Fenv (the spacing of CC events may be affected).<BR>
- resolution (default 2): pitchbend resolution in semitones. Its default value 2 corresponds to the standard pitch bend range of -2..2 semitones, i.e., 4096 steps/100 cents.<BR>
- channelDistributions (default unit): Microtonal pitches are detuned by pitch bend, i.e. always all notes of a given channel are detuned. This tuple of lists specifies which score channel (midi note param, info tag or default 0) is output to which actual output channel. For example, for distributing the score channel 0 over the actual channels 0-7 set channelDistributions to unit(0: [0 1 2 3 4 5 6 7]). The number of output channels (8 in the example) should correspond to the maximum number of simultaneous notes in the score channel (0 in the example). Score channels for which no output channels are specified are output to themselves and thus are only suitable for a single monophonic voice. By default, no output channels are specified at all, so there should only be a monophonic voice per MIDI channel. Currently, only 16 MIDI chans are supported in total (no multiple ports).<BR>
+ Args:<BR>
 <BR>
- NOTE: timing/spacing of continuous controller events and tempo curves etc. are _not_ affected by timeshift fenvs, i.e. CC events remain evenly distributed (but timeshift curves etc may shift the start and end time of whole fenvs together with its event).<BR>
+ 'ccsPerSecond' (float, default 10.0): how many continuous controller events are created per second for every Fenv (the spacing of CC events may be affected).<BR>
+ 'ccsPerEvent' (float or false, default false): how many continuous controller events are created per event. If this argument is not false, then its setting overwrites arg 'ccsPerSecond'.<BR>
+ 'resolution' (default 2): pitchbend resolution in semitones. Its default value 2 corresponds to the standard pitch bend range of -2..2 semitones, i.e., 4096 steps/100 cents.<BR>
+ 'channelDistributions' (record of lists with only int features including 0, default unit): Microtonal pitches are detuned by pitch bend, i.e. always all notes of a given channel are detuned. This arg specifies which score channel (midi note param, info tag or default 0) is output to which actual output channel. For example, for distributing the score channel 0 over the actual channels 0-7 set channelDistributions to unit(0: [0 1 2 3 4 5 6 7]). The number of output channels (8 in the example) should correspond to the maximum number of simultaneous notes in the score channel (0 in the example). Score channels for which no output channels are specified are output to themselves and thus are only suitable for a single monophonic voice. By default, no output channels are specified at all, so pitchbend always changes all notes of a channel (fine for microtonal music with only a monophonic voice per MIDI channel). Currently, only 16 MIDI chans are supported in total (no multiple ports).<BR>
 <BR>
- NOTE: currently, microtonal pitchbend and pitchbend given explicitly as fenv overwrite each other.<BR>
+ Additionally, the args of Out.midi.outputMidiFile are supported.<BR>
+<BR>
+ NOTE: microtonal pitchbend and pitchbend given explicitly as fenv overwrite each other.<BR>
+<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity43">
+<span class="keyword">fun</span>{<span class="functionname">MakeRenderAndPlayMidiFile_Scala</span> TemperamentMapping Args}<br>
+<span class="string"> MakeRenderAndPlayMidiFile_Scala returns a procedure for outputting microtonal music for MIDI instruments with statically detuned MIDI pitch classes (e.g. with a Scala file). For outputting more than 12 tones per octave, MakeRenderAndPlayMidiFile_Scala assumes that pitches are distributed over multiple MIDI channels with different tunings. The returned function customises RenderAndPlayMidiFile.<BR>
+<BR>
+ Supported score format: see RenderAndPlayMidiFile doc. The behaviour for the following info-tags is changed compared with Fenv.renderAndPlayMidiFile.<BR>
+ The info-tag 'channel', given to a note or temporal container, sets the MIDI channels (plural!) for this item and all contained items. Because the function returned by MakeRenderAndPlayMidiFile distributes microtonal pitches over multiple MIDI channels, a list of multiple channels should be specified. Example: channel([0 1]). If a channel is defined multiple times, then a setting in a lower hierarchical level overwrites higher-level settings.<BR>
+ <BR>
+ The argument TemperamentMapping (record with int feats and pair values, required arg) specifies the mapping of tempered Strasheela pitch classes (unit of measurement depends on PitchesPerOctave) to pairs MidiPC#ChanOffset, where MidiPC is the corresponding MIDI pitch class and ChanOffset is the channel offset that should be added to output this pitch class to the correctly retuned channel. For example, if you implement 24-TET with your MIDI instrument by 12-TET in a first channel and a second 12-TET transposed up by 50 cent in a second channel, then the 24-TET PC 1 (C raised by 50 cent) would be mapped to the  MidiPC#ChanOffset pair of 0#1 (PC 0 on the second channel, which is raised by 50 cent). In other words, TemperamentMapping for 24-TET could be defined as follows<BR>
+      unit(0:0#0 1:0#1 2:1#0 3:1#1 4:2#0 ...)<BR>
+<BR>
+ Optionally, an octave offset value can be given, so that a mapping specification becomes MidiPC#ChanOffset#OctaveOffset. For example, if OctaveOffset is ~1, then the resulting MIDI note will be transposed down by an octave.<BR>
+<BR>
+ optional Args (to both MakeRenderAndPlayMidiFile_Scala and the returned procedure, see doc of Fenv.renderAndPlayMidiFile for further args):<BR>
+<BR>
+ 'file_postfix' (default nil): VS that is appended at end of the output filename. It is intended to clearly denote the Scale tuning file for the resulting MIDI file.<BR>
+<BR>
+<BR>
+ NOTE: MakeRenderAndPlayMidiFile_Scala should not be used with MIDI notes (instances of Out.midi.midiNoteMixin), as their channel parameter would confuse the channel mapping. <BR>
 <BR>
 </span>
 </code><br>

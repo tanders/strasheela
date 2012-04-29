@@ -1,7 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
 <html>
  <head>
-  <title>Class DiatonicChord</title>
+  <title>Class ScaleDegreeMixinForChord</title>
   <style>BODY {
  background: url(page.gif) repeat-y white;
 }
@@ -126,19 +126,7 @@ clearInterval(drawit)
 
 <div style="margin-left:160px"><p align="right" class="margin"><div align="right">inheritance tree</div></p>
 <pre>
- Score.temporalElement
-           |
-           |
-           |
-  <a class="pre" href="node3.html#entity147">PitchClassCollection</a>
-           |
-           |
-           |
-         <a class="pre" href="node3.html#entity149">Chord</a>         <a class="pre" href="node3.html#entity153">InScaleMixinForChord</a>
-           |                    |
-           `----------+---------'
-                      |
-                <a class="pre" href="node3.html#entity155">DiatonicChord</a>
+ <a class="pre" href="node3.html#entity174">ScaleDegreeMixinForChord</a>
 </pre>
 <hr><p class="margin"><div align="right">class definition</div></p>
 <code>
@@ -149,29 +137,17 @@ clearInterval(drawit)
 
 
 </tr></table>
-<span class="string"> [concrete class] Defines a Chord which relates to a Scale (the Scale is defined by getScales and isRelatedScale). When the parameter value of inScaleB (a 0/1 integer) = 1, then all Chord pitch classes are diatonic, i.e. they are also pitch classes of the related Scale. <BR>
- See doc for Chord and InScaleMixinForChord for further details.<BR>
+<span class="string"> [abstract class] ScaleDegreeMixinForChord extends the root pitch representation of the class DiatonicChord (HS.score.diatonicChord). Whereas the DiatonicChord root is expressed by a pitch class, ScaleDegreeMixinForChord additional represents the root as a scale degree. This mixin defines the two parameters rootDegree and rootAccidental. rootDegree denotes the degree of the root's pitch in the scale the chord is related to. rootAccidental denotes an accidental for rootDegree in that scale, encoded as described in the doc for DegreeToPC. The relation between pitchClass, scaleDegree and scaleAccidental is constrained. <BR>
+ ScaleDegreeMixinForChord is defined as a mixin to make it more easy to combine this mixin with other extensions to the class DiatonicChord. ScaleDegreeMixinForChord is designed to extend the class DiatonicChord, because this mixin depends on the mixin InScaleMixinForChord (HS.score.inScaleMixinForChord).      <BR>
+ NB: the parameters rootDegree and rootAccidental are only constrained in their relation to the parameter root _after_ the related scale is known and fully determined.<BR>
 <BR>
 </span>
-<span class="keyword">class</span> <span class="type">DiatonicChord</span> (Inheritance-free)<br>
-&nbsp;&nbsp;&nbsp;<span class="keyword">feat</span>&nbsp;!ChordType&nbsp;!InScaleMixinForChordType&nbsp;!PitchClassCollectionType&nbsp;label
+<span class="keyword">class</span> <span class="type">ScaleDegreeMixinForChord</span> (Inheritance-free)<br>
+&nbsp;&nbsp;&nbsp;<span class="keyword">feat</span>&nbsp;!ScaleDegreeMixinForChordType
 <br>
-&nbsp;&nbsp;&nbsp;<span class="keyword">attr</span>&nbsp;chordPCsInScale&nbsp;dbFeatures&nbsp;inScaleB&nbsp;index&nbsp;pitchClasses&nbsp;relatedScaleBs&nbsp;root&nbsp;scales&nbsp;transposition&nbsp;untransposedPitchClasses&nbsp;untransposedRoot
+&nbsp;&nbsp;&nbsp;<span class="keyword">attr</span>&nbsp;rootAccidental&nbsp;rootDegree
 <br>
-<ul><li><span class="functionname">degreeToPC</span>(Degree Accidental PC)<br>
-
-<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
-
-
-
-
-</tr></table>
-<span class="string"> Constraints PC (FD int) to Degree with Accidental (FD ints) in self.<BR>
-<BR>
- NOTE: very weak propagation -- self must first be determined<BR>
-<BR>
-</span>
-</li><li><span class="functionname">getChordPCsInScale</span>(X)<br>
+<ul><li><span class="functionname">getRootAccidental</span>($)<br>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
 
@@ -180,40 +156,7 @@ clearInterval(drawit)
 
 </tr></table>
 <span class="string"></span>
-</li><li><span class="functionname">getDB</span>(X)<br>
-
-<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
-
-
-
-
-</tr></table>
-<span class="string"> The chord database is defined by DB.setDB. getDB returns the internal representation of this database (see the DB.setDB for more details).<BR>
-<BR>
-</span>
-</li><li><span class="functionname">getDBFeature</span>(X Feat)<br>
-
-<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
-
-
-
-
-</tr></table>
-<span class="string"> Returns the value (FD int or FS) of the additional feature Feat.<BR>
-<BR>
-</span>
-</li><li><span class="functionname">getDBFeatures</span>(X)<br>
-
-<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
-
-
-
-
-</tr></table>
-<span class="string"> Returns a record with the additional features defined in the database and 'announced' to self with the init argument dbFeatures.<BR>
-<BR>
-</span>
-</li><li><span class="functionname">getInScaleB</span>(X)<br>
+</li><li><span class="functionname">getRootAccidentalParameter</span>($)<br>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
 
@@ -222,7 +165,7 @@ clearInterval(drawit)
 
 </tr></table>
 <span class="string"></span>
-</li><li><span class="functionname">getInScaleBParameter</span>(X)<br>
+</li><li><span class="functionname">getRootDegree</span>($)<br>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
 
@@ -231,7 +174,7 @@ clearInterval(drawit)
 
 </tr></table>
 <span class="string"></span>
-</li><li><span class="functionname">getIndex</span>(X)<br>
+</li><li><span class="functionname">getRootDegreeParameter</span>($)<br>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
 
@@ -240,148 +183,7 @@ clearInterval(drawit)
 
 </tr></table>
 <span class="string"></span>
-</li><li><span class="functionname">getIndexParameter</span>(X)<br>
-
-<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
-
-
-
-
-</tr></table>
-<span class="string"></span>
-</li><li><span class="functionname">getInitInfo</span>($&nbsp;...)<br>
-
-<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
-
-
-
-
-</tr></table>
-<span class="string"></span>
-</li><li><span class="functionname">getPitchClasses</span>(X)<br>
-
-<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
-
-
-
-
-</tr></table>
-<span class="string"></span>
-</li><li><span class="functionname">getRelatedScaleBs</span>(X)<br>
-
-<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
-
-
-
-
-</tr></table>
-<span class="string"> Returns a list of 0/1-integers returned by {Map {<getScales>} <isRelatedScale>}. <getScales> and <isRelatedScale> are the functions given to initInScaleMixinForNote.<BR>
-<BR>
-</span>
-</li><li><span class="functionname">getRoot</span>(X)<br>
-
-<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
-
-
-
-
-</tr></table>
-<span class="string"></span>
-</li><li><span class="functionname">getRootParameter</span>(X)<br>
-
-<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
-
-
-
-
-</tr></table>
-<span class="string"></span>
-</li><li><span class="functionname">getScales</span>(X)<br>
-
-<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
-
-
-
-
-</tr></table>
-<span class="string"> Returns the list of candidate scale objects, i.e. the value returned by the proc set via the getScales init argument. <BR>
-<BR>
-</span>
-</li><li><span class="functionname">getTransposition</span>(X)<br>
-
-<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
-
-
-
-
-</tr></table>
-<span class="string"></span>
-</li><li><span class="functionname">getTranspositionParameter</span>(X)<br>
-
-<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
-
-
-
-
-</tr></table>
-<span class="string"></span>
-</li><li><span class="functionname">getUntransposedPitchClasses</span>(X)<br>
-
-<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
-
-
-
-
-</tr></table>
-<span class="string"></span>
-</li><li><span class="functionname">getUntransposedRoot</span>(X)<br>
-
-<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
-
-
-
-
-</tr></table>
-<span class="string"></span>
-</li><li><span class="functionname">getUntransposedRootParameter</span>(X)<br>
-
-<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
-
-
-
-
-</tr></table>
-<span class="string"></span>
-</li><li><span class="functionname">init</span>(...)<br>
-
-<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
-
-
-
-
-</tr></table>
-<span class="string"></span>
-</li><li><span class="functionname">initInScaleMixinForChord</span>(...)<br>
-
-<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
-
-
-
-
-</tr></table>
-<span class="string"></span>
-</li><li><span class="functionname">isInScale</span>(B)<br>
-
-<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
-
-
-
-
-</tr></table>
-<span class="string"> see doc InChordMixinForNote, isInChord <BR>
-<BR>
-</span>
-</li><li><span class="functionname">toPPrintRecord</span>(X excluded:Excluded features:Features)<br>
+</li><li><span class="functionname">initScaleDegreeMixinForChord</span>(rootAccidental:Accidental rootDegree:Degree)<br>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
 

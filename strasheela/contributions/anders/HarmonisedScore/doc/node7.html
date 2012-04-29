@@ -137,10 +137,11 @@ clearInterval(drawit)
 </span>
 </span>
 <h3>Functor</h3>
-<ul>HS_Out ("<span class="string">/Users/t/oz/music/Strasheela/strasheela/trunk/strasheela/contributions/anders/HarmonisedScore/source/Output.oz</span>")<br></ul>
+<ul>HS_Out ("<span class="string">/Users/torsten/oz/music/Strasheela/strasheela/trunk/strasheela/contributions/anders/HarmonisedScore/source/Output.oz</span>")<br></ul>
 <h3>Import</h3>
 <code><ul><li>FS</li><li>Explorer</li><li>GUtils at "<span class="string">x-ozlib://anders/strasheela/source/GeneralUtils.ozf"
 </span></li><li>LUtils at "<span class="string">x-ozlib://anders/strasheela/source/ListUtils.ozf"
+</span></li><li>MUtils at "<span class="string">x-ozlib://anders/strasheela/source/MusicUtils.ozf"
 </span></li><li>Score at "<span class="string">x-ozlib://anders/strasheela/source/ScoreCore.ozf"
 </span></li><li>Out at "<span class="string">x-ozlib://anders/strasheela/source/Output.ozf"
 </span></li><li><a href="node8.html">HS</a> at "<span class="string">../HarmonisedScore.ozf"
@@ -148,34 +149,39 @@ clearInterval(drawit)
 </span></li><li><a href="node2.html">HS_DB</a> at "<span class="string">Database.ozf"
 </span></li></ul></code>
 <h3>Export</h3>
-<code><ul><li>&lt;P/1:<a href="#entity484"><span class="functionname">AddExplorerOut_ChordsToScore</span></a>&gt;
-</li><li>&lt;P/2:<a href="#entity485"><span class="functionname">MakeNoteToFomusClause</span></a>&gt;
-</li><li>&lt;P/2:<a href="#entity486"><span class="functionname">MakeChordToFomusClause</span></a>&gt;
-</li><li>&lt;P/2:<a href="#entity487"><span class="functionname">MakeScaleToFomusClause</span></a>&gt;
-</li><li>&lt;P/3:<a href="#entity488"><span class="functionname">VsToFomusForLilyMarks</span></a>&gt;
+<code><ul><li>&lt;P/1:<a href="#entity515"><span class="functionname">AddExplorerOut_ChordsToScore</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity516"><span class="functionname">MakeNoteToFomusClause</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity517"><span class="functionname">MakeChordToFomusClause</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity518"><span class="functionname">MakeScaleToFomusClause</span></a>&gt;
+</li><li>&lt;P/3:<a href="#entity519"><span class="functionname">VsToFomusForLilyMarks</span></a>&gt;
+</li><li>&lt;P/3:<a href="#entity520"><span class="functionname">VsToFomusMarks</span></a>&gt;
+</li><li>&lt;P/3:<a href="#entity521"><span class="functionname">AppendFomusMarks</span></a>&gt;
 </li><li><span class="variablename">FomusPCs_Default</span>
-</li><li>&lt;P/2:<a href="#entity489"><span class="functionname">MakeNonChordTone_FomusMarks</span></a>&gt;
-</li><li>&lt;P/2:<a href="#entity490"><span class="functionname">MakeAdaptiveJI_FomusForLilyMarks</span></a>&gt;
-</li><li>&lt;P/2:<a href="#entity491"><span class="functionname">MakeAdaptiveJI2_FomusForLilyMarks</span></a>&gt;
-</li><li>&lt;P/2:<a href="#entity492"><span class="functionname">MakeChordComment_FomusForLilyMarks</span></a>&gt;
-</li><li>&lt;P/2:<a href="#entity493"><span class="functionname">MakeChordRatios_FomusForLilyMarks</span></a>&gt;
-</li><li>&lt;P/2:<a href="#entity494"><span class="functionname">MakeScaleComment_FomusForLilyMarks</span></a>&gt;
-</li><li>&lt;P/2:<a href="#entity495"><span class="functionname">RenderAndShowLilypond</span></a>&gt;
-</li><li>&lt;P/2:<a href="#entity500"><span class="functionname">MakeNonChordTone_LilyMarkup</span></a>&gt;
-</li><li>&lt;P/2:<a href="#entity501"><span class="functionname">MakeAdaptiveJI_Marker</span></a>&gt;
-</li><li>&lt;P/2:<a href="#entity502"><span class="functionname">MakeAdaptiveJI2_Marker</span></a>&gt;
-</li><li>&lt;P/2:<a href="#entity503"><span class="functionname">MakeChordComment_LilyMarkup</span></a>&gt;
-</li><li>&lt;P/2:<a href="#entity504"><span class="functionname">MakeChordRatios_LilyMarkup</span></a>&gt;
-</li><li>&lt;P/2:<a href="#entity505"><span class="functionname">MakeScaleComment_LilyMarkup</span></a>&gt;
-</li><li>&lt;P/2:<a href="#entity496"><span class="functionname">MakeNoteToLily</span></a>&gt;
-</li><li>&lt;P/2:<a href="#entity497"><span class="functionname">MakeSimToLilyChord</span></a>&gt;
-</li><li>&lt;P/2:<a href="#entity498"><span class="functionname">MakePcCollectionToLily</span></a>&gt;
-</li><li>&lt;P/2:<a href="#entity499"><span class="functionname">Pc2RatioVS</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity522"><span class="functionname">MakeCentOffset_FomusMarks</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity523"><span class="functionname">MakeNonChordTone_FomusMarks</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity524"><span class="functionname">MakeAdaptiveJI_FomusForLilyMarks</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity525"><span class="functionname">MakeAdaptiveJI2_FomusForLilyMarks</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity526"><span class="functionname">MakeChordComment_FomusForLilyMarks</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity527"><span class="functionname">MakeChordRatios_FomusForLilyMarks</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity528"><span class="functionname">MakeComment_FomusMarks</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity529"><span class="functionname">MakeChordRatios_FomusMarks</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity530"><span class="functionname">MakeScaleComment_FomusForLilyMarks</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity531"><span class="functionname">RenderAndShowLilypond</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity536"><span class="functionname">MakeNonChordTone_LilyMarkup</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity537"><span class="functionname">MakeAdaptiveJI_Marker</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity538"><span class="functionname">MakeAdaptiveJI2_Marker</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity539"><span class="functionname">MakeChordComment_LilyMarkup</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity540"><span class="functionname">MakeChordRatios_LilyMarkup</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity541"><span class="functionname">MakeScaleComment_LilyMarkup</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity532"><span class="functionname">MakeNoteToLily</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity533"><span class="functionname">MakeSimToLilyChord</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity534"><span class="functionname">MakePcCollectionToLily</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity535"><span class="functionname">Pc2RatioVS</span></a>&gt;
 </li></ul></code>
 <h3>Define</h3>
 
 <code>
-<a name="entity484">
+<a name="entity515">
 <span class="keyword">proc</span>{<span class="functionname">AddExplorerOut_ChordsToScore</span> Args}<br>
 <span class="string"> Creates an Explorer action for outputting a pure sequence of chords. The solution of the script for which this explorer action is used must be a sequential container with chord objects (i.e. without the actual notes). The Explorer output action creates a CSP with expects a chord sequence and returns a homophonic chord progression. The result is transformed into music notation (with Lilypond), sound (with Csound), and Strasheela code (archived score objects).<BR>
 <BR>
@@ -194,19 +200,20 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity485">
+<a name="entity516">
 <span class="keyword">fun</span>{<span class="functionname">MakeNoteToFomusClause</span> Args}<br>
 <span class="string"> MakeNoteToFomusClause adds support for HS notes (instances of class HS.score.pitchClassMixin) to Fomus export with customisable enharmonic notation. More specifically, it returns a clause that can be appended to the given to the argument eventClauses of Out.renderFomus and friends.<BR>
 <BR>
  Args:<BR>
- 'table' (default FomusPCs_Default): a tuplet that maps pitch classes (ints) to Fomus pitch classes (strings or atoms of symbolic note names). A valid Fomus pitch class consists of a nominal and a Fomus accidental (e.g., 'Cn' or 'C#').<BR>
- 'getSettings': unary function that expects the processed note and returns a record of fomus settings. This function can be used to arbitrarily customise the notation of each note depending on the note itself (only standard note settings like time etc cannot be overwritten).  <BR>
+ 'table' (default FomusPCs_Default): a tuplet that maps pitch classes (ints) to Fomus pitch classes (strings or atoms of symbolic note names). A valid Fomus pitch class consists of a nominal and a Fomus accidental (e.g., 'Cn' or 'C#'). Note, if 'getPitchClass' is set to 'midi', then table must have entries for PCs 0-12 (0 and 12 are 'Cn').<BR>
+ 'getSettings': unary function that expects the processed note and returns a record of fomus settings. This function can be used to arbitrarily customise the notation of each note depending on the note itself (only standard note settings like time etc cannot be overwritten).<BR>
+ 'getPitchClass' (either pc or midi, default pc): specification how the pitch class is accessed that is used as index into table. If 'pc' the note's pitch class is used, if 'midi' this value depends on the note's pitchInMidi.<BR>
 <BR>
 </span>
 </code><br>
 
 <code>
-<a name="entity486">
+<a name="entity517">
 <span class="keyword">fun</span>{<span class="functionname">MakeChordToFomusClause</span> Args}<br>
 <span class="string"> MakeChordToFomusClause adds support for HS chord objects to Fomus export with customisable enharmonic notation. More specifically, it returns a clause that can be appended to the given to the argument eventClauses of Out.renderFomus and friends.<BR>
  MakeChordToFomusClause expects Table, a tuplet that maps pitch classes (ints) to Fomus pitch classes (strings or atoms of symbolic note names). A valid Fomus pitch class consists of a nominal and a Fomus accidental (e.g., 'Cn' or 'C#'). See functors like ET31.out for table examples.<BR>
@@ -220,7 +227,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity487">
+<a name="entity518">
 <span class="keyword">fun</span>{<span class="functionname">MakeScaleToFomusClause</span> Args}<br>
 <span class="string"> MakeScaleToFomusClause adds support for HS scale objects to Fomus export with customisable enharmonic notation. See MakeChordToFomusClause for more information.<BR>
  */<BR>
@@ -235,7 +242,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity488">
+<a name="entity519">
 <span class="keyword">fun</span>{<span class="functionname">VsToFomusForLilyMarks</span> VS Args}<br>
 <span class="string"> [markup function] Expects a VS and returns a Fomus settings record with this VS as a Lilypond markup.<BR>
 <BR>
@@ -246,7 +253,35 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity489">
+<a name="entity520">
+<span class="keyword">fun</span>{<span class="functionname">VsToFomusMarks</span> VS Args}<br>
+<span class="string"> [markup function] Expects a VS and returns a Fomus markup record.<BR>
+<BR>
+ Args:<BR>
+ 'where' (default 'x'): atom in Fomus syntax where to position the VS (e.g., 'x', 'x^', 'x_' or 'x!', see http://fomus.sourceforge.net/doc.html/Articulation-Markings-_0028File_0029.html#Articulation-Markings-_0028File_0029). <BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity521">
+<span class="keyword">fun</span>{<span class="functionname">AppendFomusMarks</span> Mark1 Mark2}<br>
+<span class="string"> [Note markup function] Expects two Fomus markup records (e.g., unit(marks: ['x "x"']), the value returned by MakeNonChordTone_FomusMarks) and returns a single record with those marks combined.  <BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity522">
+<span class="keyword">fun</span>{<span class="functionname">MakeCentOffset_FomusMarks</span> MyNote}<br>
+<span class="string"> [Note markup function] Expects a note and returns a fomus settings record. The different of the pitch of MyNote and the closest 12-TET is annotated in cent.<BR>
+ TODO: make accuracy argument. Currently accuracy is in cent (i.e. integer) to simplify the notation.<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity523">
 <span class="keyword">fun</span>{<span class="functionname">MakeNonChordTone_FomusMarks</span> MyNote}<br>
 <span class="string"> [Note markup function] Expects a note and returns a fomus settings record. Non-harmonic tones are marked with an x, and for all other score objects unit (no settings) is returned. <BR>
 <BR>
@@ -254,9 +289,9 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity490">
+<a name="entity524">
 <span class="keyword">fun</span>{<span class="functionname">MakeAdaptiveJI_FomusForLilyMarks</span> MyNote}<br>
-<span class="string"> [Note markup function] Expects a note and returns a fomus settings record with a 'lily-insert-after' VS that prints the adaptive JI pitch offset of this note in cent. For all other score objects nil is returned.<BR>
+<span class="string"> [Note markup function] Expects a note and returns a fomus settings record with a 'lily-insert' VS that prints the adaptive JI pitch offset of this note in cent. For all other score objects nil is returned.<BR>
 <BR>
  Note that Lilypond does not necessarily preserve the order marks for multiple parts per staff. <BR>
 <BR>
@@ -264,9 +299,9 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity491">
+<a name="entity525">
 <span class="keyword">fun</span>{<span class="functionname">MakeAdaptiveJI2_FomusForLilyMarks</span> MyNote}<br>
-<span class="string"> [Note markup function] Expects a note and returns a fomus settings record with a 'lily-insert-after' VS that prints the adaptive JI pitch offset of this note and additionally the absolute pitch in cent. For all other score objects nil is returned.<BR>
+<span class="string"> [Note markup function] Expects a note and returns a fomus settings record with a 'lily-insert' VS that prints the adaptive JI pitch offset of this note and additionally the absolute pitch in cent. For all other score objects nil is returned.<BR>
 <BR>
  Note that Lilypond does not necessarily preserve the order marks for multiple parts per staff.<BR>
 <BR>
@@ -274,28 +309,41 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity492">
+<a name="entity526">
 <span class="keyword">fun</span>{<span class="functionname">MakeChordComment_FomusForLilyMarks</span> MyChord}<br>
-<span class="string"> [Chord markup function] Expects a chord and returns the chord comment (a fomus settings record with a 'lily-insert-after' VS). For all other score objects nil is returned.<BR>
+<span class="string"> [Chord markup function] Expects a chord and returns the chord comment (a fomus settings record with a 'lily-insert' VS). For all other score objects nil is returned.<BR>
 <BR>
 </span>
 </code><br>
 
 <code>
-<a name="entity493">
+<a name="entity527">
 <span class="keyword">fun</span>{<span class="functionname">MakeChordRatios_FomusForLilyMarks</span> MyChord}
 </code><br>
 
 <code>
-<a name="entity494">
-<span class="keyword">fun</span>{<span class="functionname">MakeScaleComment_FomusForLilyMarks</span> MyScale}<br>
-<span class="string"> [Scale markup function] Expects a scale and returns the scale comment (a fomus settings record with a 'lily-insert-after' VS). For all other score objects nil is returned. <BR>
+<a name="entity528">
+<span class="keyword">fun</span>{<span class="functionname">MakeComment_FomusMarks</span> MyChord}<br>
+<span class="string"> [Chord markup function] Expects a chord or scale and returns the chord/scale comment in a fomus mark. For all other score objects nil is returned (Is it??).<BR>
 <BR>
 </span>
 </code><br>
 
 <code>
-<a name="entity495">
+<a name="entity529">
+<span class="keyword">fun</span>{<span class="functionname">MakeChordRatios_FomusMarks</span> MyChord}
+</code><br>
+
+<code>
+<a name="entity530">
+<span class="keyword">fun</span>{<span class="functionname">MakeScaleComment_FomusForLilyMarks</span> MyScale}<br>
+<span class="string"> [Scale markup function] Expects a scale and returns the scale comment (a fomus settings record with a 'lily-insert' VS). For all other score objects nil is returned. <BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity531">
 <span class="keyword">proc</span>{<span class="functionname">RenderAndShowLilypond</span> MyScore Args}<br>
 <span class="string"> HS.out.renderAndShowLilypond is a variant of Out.renderAndShowLilypond that additionally notates chord and scale objects and also supports different temperaments beyond 12 ET.<BR>
 <BR>
@@ -317,7 +365,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity500">
+<a name="entity536">
 <span class="keyword">fun</span>{<span class="functionname">MakeNonChordTone_LilyMarkup</span> MyNote}<br>
 <span class="string"> [Note markup function] Expects a note and returns a VS. For harmonic tones the VS is " " and for non-harmonic tones "x". For all other score objects nil is returned.<BR>
 <BR>
@@ -325,7 +373,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity501">
+<a name="entity537">
 <span class="keyword">fun</span>{<span class="functionname">MakeAdaptiveJI_Marker</span> MyNote}<br>
 <span class="string"> [Note markup function] Expects a note and returns a VS that prints the adaptive JI pitch offset of this note in cent. For all other score objects nil is returned.<BR>
 <BR>
@@ -335,7 +383,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity502">
+<a name="entity538">
 <span class="keyword">fun</span>{<span class="functionname">MakeAdaptiveJI2_Marker</span> MyNote}<br>
 <span class="string"> [Note markup function] Expects a note and returns a VS that prints the adaptive JI pitch offset of this note and additionally the absolute pitch in cent. For all other score objects nil is returned.<BR>
 <BR>
@@ -345,7 +393,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity503">
+<a name="entity539">
 <span class="keyword">proc</span>{<span class="functionname">MakeChordComment_LilyMarkup</span> MyChord Result}<br>
 <span class="string"> [Chord markup function] Expects a chord and returns the chord comment (a VS). For all other score objects nil is returned.<BR>
 <BR>
@@ -353,12 +401,12 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity504">
+<a name="entity540">
 <span class="keyword">proc</span>{<span class="functionname">MakeChordRatios_LilyMarkup</span> MyChord Result}
 </code><br>
 
 <code>
-<a name="entity505">
+<a name="entity541">
 <span class="keyword">proc</span>{<span class="functionname">MakeScaleComment_LilyMarkup</span> MyScale Result}<br>
 <span class="string"> [Scale markup function] Expects a scale and returns the scale comment (a VS). For all other score objects nil is returned. <BR>
 <BR>
@@ -366,12 +414,12 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity496">
+<a name="entity532">
 <span class="keyword">fun</span>{<span class="functionname">MakeNoteToLily</span> Args}
 </code><br>
 
 <code>
-<a name="entity497">
+<a name="entity533">
 <span class="keyword">fun</span>{<span class="functionname">MakeSimToLilyChord</span> Args}<br>
 <span class="string"> Outputs Sim (for which IsLilyChord must return true) as a Lilypond chord VS. <BR>
 <BR>
@@ -380,7 +428,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity498">
+<a name="entity534">
 <span class="keyword">fun</span>{<span class="functionname">MakePcCollectionToLily</span> Args}<br>
 <span class="string"> Creates Lilypond output (VS) for a PC collection (chord or scale). The PC collection's duration and root is notated by a single a note, all pitch classes as grace notes are following.<BR>
 <BR>
@@ -388,7 +436,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity499">
+<a name="entity535">
 <span class="keyword">fun</span>{<span class="functionname">Pc2RatioVS</span> MyPC}<br>
 <span class="string"> Transforms the pitch class MyPC into a ratio VS. Alternative ratio transformations are given (written like 1/2|1/3). If no transformation existists, 'n/a' is output.<BR>
  NOTE: transformation uses the current interval database, so it only works for interval databases defined with rations. Also,  because just intonation interval interpretations for intervals of a temperament are ambiguous the returned ratio may be missleading.. <BR>

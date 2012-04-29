@@ -1,7 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
 <html>
  <head>
-  <title>Class ScaleDegreeMixinForChord</title>
+  <title>Class InversionMixinForChord</title>
   <style>BODY {
  background: url(page.gif) repeat-y white;
 }
@@ -126,7 +126,7 @@ clearInterval(drawit)
 
 <div style="margin-left:160px"><p align="right" class="margin"><div align="right">inheritance tree</div></p>
 <pre>
- <a class="pre" href="node3.html#entity156">ScaleDegreeMixinForChord</a>
+ <a class="pre" href="node3.html#entity177">InversionMixinForChord</a>
 </pre>
 <hr><p class="margin"><div align="right">class definition</div></p>
 <code>
@@ -137,17 +137,20 @@ clearInterval(drawit)
 
 
 </tr></table>
-<span class="string"> [abstract class] ScaleDegreeMixinForChord extends the root pitch representation of the class DiatonicChord (HS.score.diatonicChord). Whereas the DiatonicChord root is expressed by a pitch class, ScaleDegreeMixinForChord additional represents the root as a scale degree. This mixin defines the two parameters rootDegree and rootAccidental. rootDegree denotes the degree of the root's pitch in the scale the chord is related to. rootAccidental denotes an accidental for rootDegree in that scale, encoded as described in the doc for DegreeToPC. The relation between pitchClass, scaleDegree and scaleAccidental is constrained. <BR>
- ScaleDegreeMixinForChord is defined as a mixin to make it more easy to combine this mixin with other extensions to the class DiatonicChord. ScaleDegreeMixinForChord is designed to extend the class DiatonicChord, because this mixin depends on the mixin InScaleMixinForChord (HS.score.inScaleMixinForChord).      <BR>
- NB: the parameters rootDegree and rootAccidental are only constrained in their relation to the parameter root _after_ the related scale is known and fully determined.<BR>
+<span class="string"> [abstract class] This mixin class extends a chord (sub-)class by information about the bass note (i.e., the chord inversion) and the soprano note (German: die Akkordlage). It defines the following additional parameters: bassChordDegree and sopranoChordDegree (together with bassChordAccidental and sopranoChordAccidental). These parameters represent the chord degree of the bass and the soprano. The chord degree is the position of the bass/soprano pitch class in the ordered list of chord pitch classes starting from the chord root. For example, the PC set of the A-major chord is {1, 4, 9}, and the root pitch class is 9 (PitchesPerOctave=12). The corresponding sorted pitch class sequence is thus [9 1 4]. If the bassChordDegree is set to 2, this means that the chord is a sixth-chord (if the chord is a triad), and the bass pitch class is 1 (the second element of the ordered pitch class sequence). Note that the sorted pitch class sequence always would start with the root. If the root is not contained in the chord pitch classes, then the sequence starts with the first pitch class which would follow the root.<BR>
+ Often, only the bass is interesting, and the sopranoChordDegree is not used. Therefore, the sopranoChordDegree defaults to 1.<BR>
+ The parameters bassChordAccidental and sopranoChordAccidental allow to specify chord note alterations in the soprano or bass. Note that these parameters default to the neutral accidental (i.e., {HS.score.absoluteToOffsetAccidental 0}).<BR>
+ The parameters bassPitchClass and sopranoPitchClass represent the pitch classes which correspond to the bassChordDegree and sopranoChordDegree (together with bassChordAccidental and sopranoChordAccidental).<BR>
+<BR>
+ NB: the propagation of the constraints on the parameter values of this mixin are delayed until the chord pitch classes and its root is determined! <BR>
 <BR>
 </span>
-<span class="keyword">class</span> <span class="type">ScaleDegreeMixinForChord</span> (Inheritance-free)<br>
-&nbsp;&nbsp;&nbsp;<span class="keyword">feat</span>&nbsp;!ScaleDegreeMixinForChordType
+<span class="keyword">class</span> <span class="type">InversionMixinForChord</span> (Inheritance-free)<br>
+&nbsp;&nbsp;&nbsp;<span class="keyword">feat</span>&nbsp;!InversionMixinForChordType
 <br>
-&nbsp;&nbsp;&nbsp;<span class="keyword">attr</span>&nbsp;rootAccidental&nbsp;rootDegree
+&nbsp;&nbsp;&nbsp;<span class="keyword">attr</span>&nbsp;bassChordAccidental&nbsp;bassChordDegree&nbsp;bassPitchClass&nbsp;sopranoChordAccidental&nbsp;sopranoChordDegree&nbsp;sopranoPitchClass
 <br>
-<ul><li><span class="functionname">getRootAccidental</span>($)<br>
+<ul><li><span class="functionname">getBassChordAccidental</span>($)<br>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
 
@@ -156,7 +159,7 @@ clearInterval(drawit)
 
 </tr></table>
 <span class="string"></span>
-</li><li><span class="functionname">getRootAccidentalParameter</span>($)<br>
+</li><li><span class="functionname">getBassChordAccidentalParameter</span>($)<br>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
 
@@ -165,7 +168,7 @@ clearInterval(drawit)
 
 </tr></table>
 <span class="string"></span>
-</li><li><span class="functionname">getRootDegree</span>($)<br>
+</li><li><span class="functionname">getBassChordDegree</span>($)<br>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
 
@@ -174,7 +177,7 @@ clearInterval(drawit)
 
 </tr></table>
 <span class="string"></span>
-</li><li><span class="functionname">getRootDegreeParameter</span>($)<br>
+</li><li><span class="functionname">getBassChordDegreeParameter</span>($)<br>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
 
@@ -183,7 +186,79 @@ clearInterval(drawit)
 
 </tr></table>
 <span class="string"></span>
-</li><li><span class="functionname">initScaleDegreeMixinForChord</span>(rootAccidental:Accidental rootDegree:Degree)<br>
+</li><li><span class="functionname">getBassPitchClass</span>($)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"></span>
+</li><li><span class="functionname">getBassPitchClassParameter</span>($)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"></span>
+</li><li><span class="functionname">getSopranoChordAccidental</span>($)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"></span>
+</li><li><span class="functionname">getSopranoChordAccidentalParameter</span>($)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"></span>
+</li><li><span class="functionname">getSopranoChordDegree</span>($)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"></span>
+</li><li><span class="functionname">getSopranoChordDegreeParameter</span>($)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"></span>
+</li><li><span class="functionname">getSopranoPitchClass</span>($)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"></span>
+</li><li><span class="functionname">getSopranoPitchClassParameter</span>($)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"></span>
+</li><li><span class="functionname">initInversionMixinForChord</span>(bassChordAccidental:BAccidental bassChordDegree:BDegree bassPitchClass:BassPC sopranoChordAccidental:SAccidental sopranoChordDegree:SDegree sopranoPitchClass:SopranoPC)<br>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
 

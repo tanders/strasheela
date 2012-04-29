@@ -122,6 +122,8 @@ clearInterval(drawit)
 </tr></table>
 <span class="string"> This functor defines re-usable musical segments. These segments are defined as sub-CSPs (extended scripts). They implement relatively specific musical ideas (e.g., a contrapuntual line, a specific motif, or a homophonic chord progression), but they support a number of arguments in order to make them flexible enough that they are interesting for re-use.<BR>
 <BR>
+ In addition, this functor defines constraints (and expressive constraint applicators) that shape musical segments, such as constraints on the texture.<BR>
+<BR>
  Unfortunately, the documentation for many of the definitions here are not automatically extracted in the the HTML reference. Please check the source at ../Segments.oz for the documentation of these definitions. <BR>
 <BR>
 <BR>
@@ -134,18 +136,20 @@ clearInterval(drawit)
 </span></li><li>LUtils at "<span class="string">x-ozlib://anders/strasheela/source/ListUtils.ozf"
 </span></li><li>MUtils at "<span class="string">x-ozlib://anders/strasheela/source/MusicUtils.ozf"
 </span></li><li>Score at "<span class="string">x-ozlib://anders/strasheela/source/ScoreCore.ozf"
+</span></li><li>SMapping at "<span class="string">x-ozlib://anders/strasheela/source/ScoreMapping.ozf"
 </span></li><li>Init at "<span class="string">x-ozlib://anders/strasheela/source/Init.ozf"
 </span></li><li>Pattern at "<span class="string">x-ozlib://anders/strasheela/Pattern/Pattern.ozf"
 </span></li><li>HS at "<span class="string">x-ozlib://anders/strasheela/HarmonisedScore/HarmonisedScore.ozf"
 </span></li><li>Fenv at "<span class="string">x-ozlib://anders/strasheela/Fenv/Fenv.ozf"
+</span></li><li>H at "<span class="string">x-ozlib://anders/strasheela/Heuristics/Heuristics.ozf"
 </span></li><li><a href="node2.html">HCP</a> at "<span class="string">source/HomophonicChordProgression.ozf"
 </span></li><li><a href="node3.html">TSC</a> at "<span class="string">source/TransformableSubscript.ozf"
 </span></li><li><a href="node4.html">SegsOut</a> at "<span class="string">source/Output.ozf"
 </span></li></ul></code>
 <h3>Export</h3>
-<code><ul><li>&lt;P/2:<a href="#entity36"><span class="functionname">GetMotifIndexOfNote</span></a>&gt;
-</li><li>&lt;P/2:<a href="#entity37"><span class="functionname">MakeParametersAccessor</span></a>&gt;
-</li><li>&lt;P/2:<a href="#entity38"><span class="functionname">PitchContourAccessor</span></a>&gt;
+<code><ul><li>&lt;P/2:<a href="#entity38"><span class="functionname">MakeParametersAccessor</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity39"><span class="functionname">PitchContourAccessor</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity40"><span class="functionname">PitchContourAccessor2</span></a>&gt;
 </li><li><span class="variablename">MakeCounterpoint_Mixin</span>
 </li><li><span class="variablename">MakeCounterpoint</span>
 </li><li><span class="variablename">MakeCounterpoint_Seq</span>
@@ -164,10 +168,17 @@ clearInterval(drawit)
 </li><li><span class="variablename">MakeAkkord</span>
 </li><li><span class="variablename">MakeAkkords_Mixin</span>
 </li><li><span class="variablename">MakeAkkords</span>
-</li><li>&lt;P/2:<a href="#entity39"><span class="functionname">MakeAkkords_Seq</span></a>&gt;
-</li><li>&lt;P/2:<a href="#entity40"><span class="functionname">MakeChordSlicesForm</span></a>&gt;
-</li><li>&lt;P/2:<a href="#entity41"><span class="functionname">PatternedPhrase</span></a>&gt;
-</li><li>&lt;P/2:<a href="#entity42"><span class="functionname">PatternedSlices</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity41"><span class="functionname">MakeAkkords_Seq</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity42"><span class="functionname">MakeChordSlicesForm</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity43"><span class="functionname">PatternedPhrase</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity44"><span class="functionname">PatternedSlices</span></a>&gt;
+</li><li>&lt;P/4:<a href="#entity45"><span class="functionname">Texture</span></a>&gt;
+</li><li>&lt;P/1:<a href="#entity46"><span class="functionname">TextureProgression_Index</span></a>&gt;
+</li><li>&lt;P/1:<a href="#entity47"><span class="functionname">TextureProgression_Time</span></a>&gt;
+</li><li>&lt;P/3:<a href="#entity48"><span class="functionname">Homophonic</span></a>&gt;
+</li><li>&lt;P/3:<a href="#entity49"><span class="functionname">HeuristicHomophonic</span></a>&gt;
+</li><li>&lt;P/3:<a href="#entity50"><span class="functionname">HierarchicHomophonic</span></a>&gt;
+</li><li>&lt;P/3:<a href="#entity51"><span class="functionname">HomoDirectional</span></a>&gt;
 </li><li><span class="variablename">HomophonicChordProgression</span>
 </li><li><span class="variablename">TSC</span>
 </li><li>out:<span class="variablename">SegsOut</span>
@@ -175,32 +186,42 @@ clearInterval(drawit)
 <h3>Define</h3>
 
 <code>
-<a name="entity36">
-<span class="keyword">fun</span>{<span class="functionname">GetMotifIndexOfNote</span> N}<br>
-<span class="string"> Expects a note that is part of a pattern motif (i.e. a note with a motif index parameter), and returns the motif number of this note (i.e. the index variable value). For example, all notes that are part of an instance of the motif which has been declared first have the motif index value 1 and so forth.<BR>
-<BR>
-</span>
-</code><br>
-
-<code>
-<a name="entity37">
+<a name="entity38">
 <span class="keyword">fun</span>{<span class="functionname">MakeParametersAccessor</span> Accessor}<br>
-<span class="string"> Returns accessor function expecting a list of items (notes) and returning list of variables returned by Accessor (unary function or method). Example<BR>
+<span class="string"> MakeMotifIndexNote is a constructor for HS.score.note which implicitly creates an index parameter.<BR>
+ */<BR>
+    MakeMotifIndexNote = {Pattern.makeIndexConstructor HS.score.note [MotifIndexName]}<BR>
+    /** %% Expects a note that is part of a pattern motif (i.e. a note with a motif index parameter), and returns the motif number of this note (i.e. the index variable value). For example, all notes that are part of an instance of the motif which has been declared first have the motif index value 1 and so forth.<BR>
+ */<BR>
+    fun {GetMotifIndexOfNote N} {Pattern.getMotifIndex N MotifIndexName} end<BR>
+ end<BR>
+<BR>
+<BR>
+<BR>
+/** %% Returns accessor function expecting a list of items (notes) and returning list of variables returned by Accessor (unary function or method). Example<BR>
    {MakeParametersAccessor getPitch}<BR>
 <BR>
 </span>
 </code><br>
 
 <code>
-<a name="entity38">
+<a name="entity39">
 <span class="keyword">fun</span>{<span class="functionname">PitchContourAccessor</span> Ns}<br>
-<span class="string"> <BR>
+<span class="string"> The function PitchContourAccessor is intended as a value for the argument motifAccessors of MakeCounterpoint_PatternMotifs and friends. Note that for this def of PitchContourAccessor the last direction in a motif spec is the direction from the  last motif note to the note following the motif.<BR>
 <BR>
 </span>
 </code><br>
 
 <code>
-<a name="entity39">
+<a name="entity40">
+<span class="keyword">fun</span>{<span class="functionname">PitchContourAccessor2</span> Ns}<br>
+<span class="string"> Variant of PitchContourAccessor, where the first direction in a motif spec is the direction from the note preceeding a motif to the first motif note. <BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity41">
 <span class="keyword">fun</span>{<span class="functionname">MakeAkkords_Seq</span> Args}<br>
 <span class="string"> Same as MakeAkkords, but returns sequential container of akkords.<BR>
 <BR>
@@ -208,7 +229,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity40">
+<a name="entity42">
 <span class="keyword">proc</span>{<span class="functionname">MakeChordSlicesForm</span> Args MyScore}<br>
 <span class="string"> Returns extended script for musical section where each segment in the section expresses a single chord. <BR>
 <BR>
@@ -227,7 +248,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity41">
+<a name="entity43">
 <span class="keyword">fun</span>{<span class="functionname">PatternedPhrase</span> Args}<br>
 <span class="string"> Generates extended script for creating a phrase consisting of multiple segments, and for applying pattern constraints on these segments.  The resulting score topology is as follows, where the segmenents are form segments created by other extended scripts. <BR>
 <BR>
@@ -250,7 +271,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity42">
+<a name="entity44">
 <span class="keyword">proc</span>{<span class="functionname">PatternedSlices</span> Args MyScore}<br>
 <span class="string"> Extended script for creating a sequence of polyphonic form segments, resulting score topology, where the segmenents are form segments created by other extended scripts. <BR>
 <BR>
@@ -273,6 +294,101 @@ clearInterval(drawit)
    unit(rargs: each # [unit(<args1>) unit(<args2>) ...] ...)<BR>
 <BR>
  NB: arguments expected by Score.makeItems (n, constructor, handle, rule) *cannot* be handed to the layer constructors! <BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity45">
+<span class="keyword">proc</span>{<span class="functionname">Texture</span> Dependency LeadingPart DependantParts Args}<br>
+<span class="string"> Texture constraints restrict the independence between parts/voices. Dependence examples are homorhythm (simultaneous notes have the same start time and duration), heterorhythm (simultaneous notes have similar start times and durations), contrarhythm (simultaneous notes have different same start times or durations), homodirectional texture, various degrees of imitation (dependencies like, e.g., homorhythmic and homodirectional texture with a time offset) and many more possibilities. Texture constraints are inspired by Berry, Wallace (1987). Structural functions in music. Courier Dover Publications.<BR>
+   <BR>
+ A texture constraint applies a Dependency (a constraint, see below) between certain notes in a LeadingPart (a container) and certain notes in a DependantParts (a container). DependantParts can be either a single container or a list of container; in the latter case a dependency is applied to multiple parts (e.g., for a fully homophonic texture apply the dependency Homophonic to one voice as LeadingPart and a list with the remaining voices as DependantParts).<BR>
+   <BR>
+ A Dependency is a procedure with the following interface.<BR>
+   <BR>
+   {MyDependency Note1 Note2 Args}<BR>
+   <BR>
+ A Dependency defines a constraint between Note1, a note from the LeadingPart, and Note2, a note from the DependantPart. By default, Note1 and Note2 are simultaneous notes (see the argument offsetTime below for other cases). For example, homophony can be defined by constraining that the start times and durations of Note1 and Note2 are equal. Constraints that require more complex score contexts (e.g., the note succeeding Note1 in LeadingPart) are defined by accessing such contexts from the given notes (e.g., using methods like getTemporalSuccessor). The Dependency argument Args contains values for optional arguments in the Args argument of a texture constraint (see below). Various dependencies are predefined (e.g., Homophonic, and HomoDirectional), and users can freely define their own.<BR>
+<BR>
+ The argument Args of Texture supports the following optional arguments.<BR>
+<BR>
+ offsetTime (default 0): Using this argument, various forms of imitation can be defined. The dependency constraint is applied to a note in DependantPart that starts the specified amount of offset later than the respective note in LeadingPart.<BR>
+ Remember that negative offset times are not allowed (if you would need them, simply swap the arguments LeadingPart and DependantPart).<BR>
+ In case DependantParts is a list of containers, then a list of individual offset times can be given.<BR>
+<BR>
+ timeRange (default nil): Specifies the time frames of the affected notes in LeadingPart. For example, the time frame [0#4 8#12] affects the notes that are in the time frames 0-4 and 8-12 in LeadingPart and their simultaneous notes in DependantPart (if offsetTime is the default). timeRange is based on SMapping.forTimeRange, and supports all its time frame notations. The arguments timeRange and indexRange exclude each other (only one must be given).<BR>
+<BR>
+ indexRange (default nil): Specifies the positions of the affected notes in LeadingPart. For example, the numeric range [1#3 5#6] affects the notes at position 1-3 and 5-6 in LeadingPart and their simultaneous notes in DependantPart (if offsetTime is the default). indexRange is based on SMapping.forNumericRange, and supports all its index integers notations. The arguments timeRange and indexRange exclude each other (only one must be given).<BR>
+<BR>
+ Note that further arguments can be provided, which are then forwarded to the dependency constraints. For example, a transposition dependency may use a transposition argument which would then be included in the Args record for Texture. <BR>
+ In case DependantParts is a list of containers, then a list of individual values can be given to any argument.<BR>
+<BR>
+<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity46">
+<span class="keyword">proc</span>{<span class="functionname">TextureProgression_Index</span> Specs}<br>
+<span class="string"> Multiple applications of Texture can be programmed slightly more concisely and better readable with TextureProgression. The following two code examples are equivalent (first a version using Texture then using TextureProgression).<BR>
+  <BR>
+ Imitation at the beginning (e.g., Voice2 at time 2 imitates 1st 5 notes of Voice1)<BR>
+   {Texture MyDependency Voice1 [Voice2 Voice3 Voice1]<BR>
+    unit(indexRange: 1#5<BR>
+	 offsetTime: [2 4 6])}<BR>
+ Homophonic section<BR>
+   {Texture Homophonic Voice1 [Voice2 Voice3]<BR>
+    unit(indexRange: 9#12)}<BR>
+  <BR>
+   {TextureProgression_Index<BR>
+    [%% Imitation at the beginning (e.g., Voice2 at time 2 imitates 1st 5 notes of Voice1)<BR>
+     (1#5) # unit(MyDependency Voice1 [Voice2 Voice3 Voice1]  <BR>
+		  offsetTime: [2 4 6])<BR>
+ Homophonic section<BR>
+     (8#12) # unit(Homophonic Voice1 [Voice2 Voice3])<BR>
+    ]}<BR>
+  <BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity47">
+<span class="keyword">proc</span>{<span class="functionname">TextureProgression_Time</span> Specs}<br>
+<span class="string"> Same as TextureProgression_Index, but with leading time values instead of indices.<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity48">
+<span class="keyword">proc</span>{<span class="functionname">Homophonic</span> N1 N2 Args}<br>
+<span class="string"> [Dependency for Texture] Results in a homophonic texture.<BR>
+ Note that a truely homophonic texture only results for the default offset time 0, otherwise a time-shifted "homophonic" imitation results.<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity49">
+<span class="keyword">proc</span>{<span class="functionname">HeuristicHomophonic</span> N1 N2 Args}
+</code><br>
+
+<code>
+<a name="entity50">
+<span class="keyword">proc</span>{<span class="functionname">HierarchicHomophonic</span> N1 N2 Args}<br>
+<span class="string"> [Dependency for Texture]  Generalised (?) version of "Orjan Sandred's notion of hierarchic rhythm.<BR>
+ If the start time of N1 occurs between start and end of N2 including, then the start time of these notes are equal. In other words, the notes of N2's voice may be shorter than those of N1's voice, but whenever a longer note starts in the latter voice there also starts a note in the former.<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity51">
+<span class="keyword">proc</span>{<span class="functionname">HomoDirectional</span> N1A N2A Args}<br>
+<span class="string"> [Dependency for Texture] Results in a homo-directional texture (i.e. parallel pitch contours).<BR>
 <BR>
 </span>
 </code><br>

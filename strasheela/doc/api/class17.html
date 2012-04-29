@@ -121,7 +121,7 @@ clearInterval(drawit)
 
 <div style="margin-left:160px"><p align="right" class="margin"><div align="right">inheritance tree</div></p>
 <pre>
- <a class="pre" href="node6.html#entity313">TimeMixin</a>
+ <a class="pre" href="node6.html#entity349">TimeMixin</a>
 </pre>
 <hr><p class="margin"><div align="right">class definition</div></p>
 <code>
@@ -157,7 +157,7 @@ clearInterval(drawit)
 <span class="string"> After full creation of score hierarchy, method must be called with every TimeMixin subclass instance in score to init the timing attributes/features <BR>
 <BR>
 </span>
-</li><li><span class="functionname">findSimultaneousItem</span>(X cTest:CTest test:Test)<br>
+</li><li><span class="functionname">findSimultaneousItem</span>(X cTest:CTest test:Test toplevel:Top)<br>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
 
@@ -166,6 +166,7 @@ clearInterval(drawit)
 
 </tr></table>
 <span class="string"> [Deterministic method] Returns the first score object found which is simultaneous to self and fulfilling the optional boolean function or method test.<BR>
+ If a toplevel Top (a temporal container) is given, then only within that container is searched for simultaneous items to self. Otherwise the temporal top-level of self is searched (i.e. usually the whole score).<BR>
  The implementation uses LUtils.cFind and the reified constraints method isSimultaneousItemR. X is return as soon as the score contains enough information to tell for any score object that it is simultaneous to self (i.e. rhythmic structure of the whole score must not necessarily be fully determined). <BR>
  NB: Test must be a deterministic function/method which does not block (e.g., checks on score object types or their position in the score topology are OK) and which is used for pre-filtering score objects. The argument cTest has the same format (optional Boolean function or method), but it is applied within the concurrent filtering of LUtils.cFilter, together with isSimultaneousItemR. Computationally very expensive tests and in particular tests which can block are better handed to cTest. <BR>
 <BR>
@@ -278,7 +279,7 @@ clearInterval(drawit)
 
 </tr></table>
 <span class="string"></span>
-</li><li><span class="functionname">getSimultaneousItems</span>(?Xs cTest:CTest test:Test)<br>
+</li><li><span class="functionname">getSimultaneousItems</span>(?Xs cTest:CTest test:Test toplevel:Top)<br>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
 
@@ -286,9 +287,20 @@ clearInterval(drawit)
 
 
 </tr></table>
-<span class="string"> [Deterministic method] Returns list of score objects simultaneous to self and fulfilling the optional boolean function or method test.<BR>
- The implementation uses LUtils.cFilter and the reified constraints method isSimultaneousItemR. Items are returned as soon as the score contains enough information for all score objects in the score to tell whether or not their are simultaneous to self (i.e. rhythmic structure of the whole score must not necessarily be fully determined).<BR>
- NB: Test must be a deterministic function/method which does not block (e.g., checks on score object types or their position in the score topology are OK) and which is used for pre-filtering score objects. The argument cTest has the same format (optional Boolean function or method), but it is applied within the concurrent filtering of LUtils.cFilter, together with isSimultaneousItemR. Computationally very expensive tests and in particular tests which can block are better handed to cTest. <BR>
+<span class="string"> [Deterministic method] Returns list of score items simultaneous to self and fulfilling the optional Boolean function or method test.<BR>
+ If a toplevel Top (a temporal container) is given, then only within that container is searched for simultaneous items to self. Otherwise the temporal top-level of self is searched (i.e. usually the whole score).<BR>
+ See the documentation of GetItemsInTimeframe for further details (e.g., on the argument cTest).<BR>
+<BR>
+</span>
+</li><li><span class="functionname">getSimultaneousItemsOffset</span>(Xs Offset cTest:CTest test:Test toplevel:Top)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> [Deterministic method] Generalised version of getSimultaneousItems where the offset time Offset (FD int) is taken into account. See the doc of InTimeframeOffsetR for the meaning of the Offset.<BR>
 <BR>
 </span>
 </li><li><span class="functionname">getStartTime</span>(X)<br>
@@ -367,6 +379,7 @@ clearInterval(drawit)
 
 </tr></table>
 <span class="string"> [0/1 Constraint] Returns 0/1-integer whether self and X are exactly simultaneous in time (i.e. start and end at the same time).<BR>
+ This relation defines the Allen's Interval Algebra relation equal.<BR>
 <BR>
 </span>
 </li><li><span class="functionname">isSimultaneousItem</span>(?B X)<br>
@@ -378,6 +391,29 @@ clearInterval(drawit)
 
 </tr></table>
 <span class="string"> [Deterministic method] Returns boolean whether self and X are simultaneous in time. <BR>
+ This relation defines a conjunction of the following Allen's Interval Algebra relations: overlaps, starts, during, finishes and equal; only meets and before/after are excluded.<BR>
+<BR>
+</span>
+</li><li><span class="functionname">isSimultaneousItemOffset</span>(B X Offset)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> [Deterministic method] Generalised version of isSimultaneousItem where the offset time Offset is taken into account (see InTimeframeOffset).<BR>
+<BR>
+</span>
+</li><li><span class="functionname">isSimultaneousItemOffsetR</span>(B X Offset)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> [0/1 Constraint] Generalised version of isSimultaneousItemR where the offset time Offset is taken into account.<BR>
 <BR>
 </span>
 </li><li><span class="functionname">isSimultaneousItemR</span>(?B X)<br>
@@ -389,6 +425,7 @@ clearInterval(drawit)
 
 </tr></table>
 <span class="string"> [0/1 Constraint] Returns 0/1-integer whether self and X are simultaneous in time (i.e. somehow overlap in time).<BR>
+ This relation defines a conjunction of the following Allen's Interval Algebra relations: overlaps, starts, during, finishes and equal; only meets and before/after are excluded.<BR>
 <BR>
 </span>
 </li></ul>

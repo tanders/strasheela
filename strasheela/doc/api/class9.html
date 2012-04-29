@@ -121,19 +121,19 @@ clearInterval(drawit)
 
 <div style="margin-left:160px"><p align="right" class="margin"><div align="right">inheritance tree</div></p>
 <pre>
- <a class="pre" href="node6.html#entity310">NonType</a> <a class="pre" href="node6.html#entity311">Reflection</a>
+ <a class="pre" href="node6.html#entity346">NonType</a> <a class="pre" href="node6.html#entity347">Reflection</a>
     |        |
     `-----+--'
           |
-     <a class="pre" href="node6.html#entity312">ScoreObject</a>
+     <a class="pre" href="node6.html#entity348">ScoreObject</a>
           |
           |
           |
-      <a class="pre" href="node6.html#entity314">Parameter</a>
+      <a class="pre" href="node6.html#entity350">Parameter</a>
           |
           |
           |
-      <a class="pre" href="node6.html#entity320">Amplitude</a>
+      <a class="pre" href="node6.html#entity356">Amplitude</a>
 </pre>
 <hr><p class="margin"><div align="right">class definition</div></p>
 <code>
@@ -380,23 +380,7 @@ clearInterval(drawit)
 
 
 </tr></table>
-<span class="string"> Returns information required to reconstruct the init method. Every newly defined ScoreObject subclass which introduces new init arguments should define its own getInitInfo. This documentation therefore explains also implementational details for this method.<BR>
-<BR>
- The returned information hase the following form:<BR>
-      <BR>
-      unit(superclass:Super<BR>
-	   args:[Argument1#Accessor1#Default1<BR>
-		 ...<BR>
-		 ArgumentN#AccessorN#DefaultN])<BR>
-      <BR>
- Super is a single superclass of self which defines/inherits a method getInitInfo extending the present method definition (can be nil in case of no superclass). Argument is an init method argument (an atom), Accessor is a unary accessor function or method returning the value of the object corresponding with Argument, and Default is the default value or 'noMatch' if no default value was given. Excluded is the same arg as for toInitRecord: this argument is only required if getInitInfo recuresively calls toInitRecord. A typical getInitInfo definition follows<BR>
-<BR>
-<BR>
-      meth getInitInfo($ ...)<BR>
-	 unit(superclass:MySuperClass<BR>
-	      args:[myParameter#getMyParameter#noMatch])<BR>
-      end<BR>
-      <BR>
+<span class="string"> Individual parameters cannot be created with Score.make and friends, so the notion of their init record is somewhat missleading. Nevertheless, it is useful to translate the essential parameter data into a concise "textual" representation.<BR>
 <BR>
 </span>
 </li><li><span class="functionname">getItem</span>(X)<br>
@@ -741,6 +725,17 @@ clearInterval(drawit)
 
 </tr></table>
 <span class="string"> [destructive method] Statefully sets attribute A to value X. The method is indented for editing a score after search, the search itself is indented to be fully stateless.<BR>
+<BR>
+</span>
+</li><li><span class="functionname">setParameterValue</span>(Param X)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> [destructive method, for experts only] Statefully sets the value of parameter Param to value X (there must be an attribute Param). Remember that the search itself is indented to be fully stateless.<BR>
 <BR>
 </span>
 </li><li><span class="functionname">toFullRecord</span>(X exclude:Exclude unbind:Unbind)<br>

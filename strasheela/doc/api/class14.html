@@ -121,23 +121,23 @@ clearInterval(drawit)
 
 <div style="margin-left:160px"><p align="right" class="margin"><div align="right">inheritance tree</div></p>
 <pre>
- <a class="pre" href="node6.html#entity310">NonType</a> <a class="pre" href="node6.html#entity311">Reflection</a>       <a class="pre" href="node7.html#entity415">FlagsMixin</a>
+ <a class="pre" href="node6.html#entity346">NonType</a> <a class="pre" href="node6.html#entity347">Reflection</a>       <a class="pre" href="node7.html#entity464">FlagsMixin</a>
     |        |                |
     `-----+--'                |
           |                   |
-     <a class="pre" href="node6.html#entity312">ScoreObject</a>    <a class="pre" href="node7.html#entity416">SMapping.mappingMixin</a>
+     <a class="pre" href="node6.html#entity348">ScoreObject</a>    <a class="pre" href="node7.html#entity465">SMapping.mappingMixin</a>
           |                   |
           `---------+---------'
                     |
-                   <a class="pre" href="node6.html#entity325">Item</a>
+                   <a class="pre" href="node6.html#entity359">Item</a>
                     |
                     `+
                      |
-                 <a class="pre" href="node6.html#entity326">Container</a>
+                 <a class="pre" href="node6.html#entity360">Container</a>
                      |
                     +'
                     |
-                 <a class="pre" href="node6.html#entity327">Modifier</a>
+                 <a class="pre" href="node6.html#entity361">Modifier</a>
 </pre>
 <hr><p class="margin"><div align="right">class definition</div></p>
 <code>
@@ -391,6 +391,17 @@ clearInterval(drawit)
 
 </tr></table>
 <span class="string"> Returns the first direct container self is contained in which fulfils the boolean function or method Test.<BR>
+<BR>
+</span>
+</li><li><span class="functionname">findContainerRecursively</span>(X Test)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> Returns the first direct or indirect container of self, which fulfils the boolean function or method Test.<BR>
 <BR>
 </span>
 </li><li><span class="functionname">findItem</span>(X Test)<br>
@@ -780,6 +791,29 @@ clearInterval(drawit)
 <span class="string"> Returns predecessor item of self in Container.<BR>
 <BR>
 </span>
+</li><li><span class="functionname">getPredecessors</span>(X N Container)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> Returns a list of the N items that precede self in Container, the item closes to self first. If N goes beyond the number of items available then on the available items are returned (i.e. the returned list is shorter than N).<BR>
+<BR>
+</span>
+</li><li><span class="functionname">getPredecessorsUpToRest</span>($)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> Returns a list of the items that precede self in its TemporalAspect up to any rest (i.e. a pause object or an item with an offset time > 0). A pause object would be excluded, but an item with an offset time > 0 would be included.<BR>
+ Note: method delayed until offset times are sufficienly determined.<BR>
+<BR>
+</span>
 </li><li><span class="functionname">getSuccessor</span>(?X Container)<br>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
@@ -789,6 +823,29 @@ clearInterval(drawit)
 
 </tr></table>
 <span class="string"> Returns successor item of self in Container.<BR>
+<BR>
+</span>
+</li><li><span class="functionname">getSuccessors</span>(X N Container)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> Returns a list of the N items that succeed self in Container. If N goes beyond the number of items available then on the available items are returned (i.e. the returned list is shorter than N).<BR>
+<BR>
+</span>
+</li><li><span class="functionname">getSuccessorsUpToRest</span>($)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> Returns a list of the items that succeed self in its TemporalAspect up to any rest (i.e. a pause object or an item with an offset time > 0). A pause object would be excluded, and so would be an item with an offset time > 0.<BR>
+ Note: method delayed until offset times are sufficienly determined.<BR>
 <BR>
 </span>
 </li><li><span class="functionname">getTemporalAspect</span>(X)<br>
@@ -824,7 +881,7 @@ clearInterval(drawit)
 <span class="string"> Returns the index of self in its temporal container (temporal aspect).<BR>
 <BR>
 </span>
-</li><li><span class="functionname">getTemporalPredecessor</span>(B)<br>
+</li><li><span class="functionname">getTemporalPredecessor</span>(X)<br>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
 
@@ -833,10 +890,20 @@ clearInterval(drawit)
 
 </tr></table>
 <span class="string"> Returns the predecessor of object in its TemporalAspect. NB: method returns positional and not a temporal predecessor. <BR>
- !!?? Rename to getPredecessorInTemporalAspect ?<BR>
 <BR>
 </span>
-</li><li><span class="functionname">getTemporalSuccessor</span>(B)<br>
+</li><li><span class="functionname">getTemporalPredecessors</span>(X N)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> Returns a list of the N items that precede self in its TemporalAspect, the item closes to self first. If N goes beyond the number of items available then on the available items are returned (i.e. the returned list is shorter than N).<BR>
+<BR>
+</span>
+</li><li><span class="functionname">getTemporalSuccessor</span>(X)<br>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
 
@@ -845,7 +912,17 @@ clearInterval(drawit)
 
 </tr></table>
 <span class="string"> Returns the successor of object in its TemporalAspect. NB: method returns positional and not a temporal successor. <BR>
- !!?? Rename to getSuccessorInTemporalAspect ?<BR>
+<BR>
+</span>
+</li><li><span class="functionname">getTemporalSuccessors</span>(X N)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> Returns a list of the N items that succeed self in its TemporalAspect. If N goes beyond the number of items available then on the available items are returned (i.e. the returned list is shorter than N).<BR>
 <BR>
 </span>
 </li><li><span class="functionname">getTemporalToplevel</span>(Xs test:Test)<br>
@@ -1301,6 +1378,21 @@ clearInterval(drawit)
 <span class="string"> The method map maps the function Fn (which must return a list) to a number of collected score objects and returns a list with all results appended. Fn may also be an atom representing a unary method understood by all objects in self fulfilling Test. The method supports the features <code> mode</code>, <code> level</code>, <code> test</code>, and <code> excludeSelf</code>. These features have the same meaning as in the method collect.<BR>
 <BR>
 </span>
+</li><li><span class="functionname">partiallyUnify</span>(ScoreObject Percent test:Test)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> Unifies the percentage Percent of the parameter values of self with the corresponding parameter values of ScoreObject. This is useful, for example, for manually controlling the search process by saying that a given percentage of the solution of a CSP is the same as in a given previous solution (e.g., from a pickled score), and then -- given suitable continuations of this solutions -- by and by increasing this percentage. <BR>
+ Blocks if self or ScoreObject are not fully determined.<BR>
+<BR>
+ Args:<BR>
+ test (default fun {$ X} true end): a Boolean function or method which parameters to include in unification and the percentage count.<BR>
+<BR>
+</span>
 </li><li><span class="functionname">percentageIsDet</span>($ exclude:Exclude)<br>
 
 <table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
@@ -1405,6 +1497,17 @@ clearInterval(drawit)
 
 </tr></table>
 <span class="string"> [destructive method] Statefully sets attribute A to value X. The method is indented for editing a score after search, the search itself is indented to be fully stateless.<BR>
+<BR>
+</span>
+</li><li><span class="functionname">setParameterValue</span>(Param X)<br>
+
+<table border="0" cellpadding="2" cellspacing="2"><tr bgcolor="#eeeecc">
+
+
+
+
+</tr></table>
+<span class="string"> [destructive method, for experts only] Statefully sets the value of parameter Param to value X (there must be an attribute Param). Remember that the search itself is indented to be fully stateless.<BR>
 <BR>
 </span>
 </li><li><span class="functionname">toFullRecord</span>(X exclude:Exclude unbind:Unbind)<br>

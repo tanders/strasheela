@@ -123,7 +123,7 @@ clearInterval(drawit)
 <span class="string"></span>
 </span>
 <h3>Functor</h3>
-<ul>HCP ("<span class="string">/Users/t/oz/music/Strasheela/strasheela/trunk/strasheela/contributions/anders/Segments/source/HomophonicChordProgression.oz</span>")<br></ul>
+<ul>HCP ("<span class="string">/Users/torsten/oz/music/Strasheela/strasheela/trunk/strasheela/contributions/anders/Segments/source/HomophonicChordProgression.oz</span>")<br></ul>
 <h3>Import</h3>
 <code><ul><li>FD</li><li>FS</li><li>GUtils at "<span class="string">x-ozlib://anders/strasheela/source/GeneralUtils.ozf"
 </span></li><li>LUtils at "<span class="string">x-ozlib://anders/strasheela/source/ListUtils.ozf"
@@ -133,21 +133,21 @@ clearInterval(drawit)
 </span></li><li><a href="node5.html">Segs</a> at "<span class="string">../Segments.ozf"
 </span></li></ul></code>
 <h3>Export</h3>
-<code><ul><li>&lt;P/2:<a href="#entity79"><span class="functionname">HomophonicChordProgression</span></a>&gt;
+<code><ul><li>&lt;P/2:<a href="#entity95"><span class="functionname">HomophonicChordProgression</span></a>&gt;
 </li></ul></code>
 <h3>Define</h3>
 
 <code>
-<a name="entity79">
+<a name="entity95">
 <span class="keyword">proc</span>{<span class="functionname">HomophonicChordProgression</span> Args MyScore}<br>
 <span class="string"> Top-level script or subscript for creating homophonic chord progressions. The individual voices are created with Segs.makeCounterpoint_Seq, the underlying chords (and optionally scales) are given as arguments.<BR>
 <BR>
- The number of chords determines the number of notes per voice, the start time of each chord equals the start times of the sim notes (so the resulting score is truely homophonic), and the sim notes must sound all pitch classes of the chord (i.e. arg voiceNo must be high enough, see below). No voice crossing is permitted, the highest voice is the first and so forth. For inversion chords, the bass plays the bass pitch class of the chord (the soprano pitch class is ignored). The upper voices are at maximum an octave apart of each other.  <BR>
+ The number of chords determines the number of notes per voice, the start time of each chord equals the start times of the sim notes (so the resulting score is truely homophonic), and the sim notes must sound all pitch classes of the chord (i.e. arg voiceNo must be high enough, see below). By default, no voice crossing is permitted, the highest voice is the first and so forth. For inversion chords, the bass plays the bass pitch class of the chord (the soprano pitch class is ignored). The upper voices are at maximum an octave apart of each other by default.  <BR>
 <BR>
  Args:<BR>
  'chords' (default {HS.score.makeChords unit}): non-nil list of chords. Remember that neither score objects nor variables can be in the top-level space, so the chords (and scales) to HomophonicChordProgression must be created inside a script.  <BR>
  'scales' (default nil): list of scales.<BR>
- 'restrictMelodicIntervals' (defaults<BR>
+ 'restrictMelodicIntervals' (default as follow)<BR>
    unit(bassIntervals: unit('=<:': 3#2<BR>
 			    '=:': [2#1])<BR>
 	upperVoiceIntervals: unit('=<:': 3#2<BR>
@@ -155,15 +155,18 @@ clearInterval(drawit)
 	step: 8#7<BR>
 	minPercent:50<BR>
 	maxPercent:100)<BR>
- if non-false, then the melodic intervals are constrained as specified by the "sub arguments". The melodic intervals allowed for the bass are given by the arg 'bassIntervals', where the feature '=<:' specifies a ratio for an interval up to which all intervals are permitted and the feature '=:' specifies a list of ratios that are additionally permitted. By default, all intervals up to a fifth and the octave are allowed. The melodic intervals for the upper voices are specified the same way with the argument 'upperVoiceIntervals'.<BR>
- The remaining arguments control the required number of steps between upper voices. The maximum interval considered a step is given as a ratio to the argument 'step'. The args 'minPercent'/'maxPercent' specify the percentage boudary of the number of steps in the upper voices. <BR>
+ If non-false, then the melodic intervals are constrained as specified by the "sub arguments". The melodic intervals allowed for the bass are given by the arg 'bassIntervals', where the feature '=<:' specifies a ratio for an interval up to which all intervals are permitted and the feature '=:' specifies a list of ratios that are additionally permitted.<BR>
+ For example, the default setting constrains all bass intervals to up to a fifth at maximum and additionally the octave is allowed. The melodic intervals for the upper voices are specified the same way with the argument 'upperVoiceIntervals'.<BR>
+ The remaining arguments of the settings control the required number of steps between upper voices. The maximum interval considered a step is given as a ratio to the argument 'step'. The args 'minPercent'/'maxPercent' specify the percentage boudary of the number of steps in the upper voices. <BR>
  If 'restrictMelodicIntervals' is set to false, then all these constraints are disabled.<BR>
- 'commonPitchesHeldOver' (default true): if true, the notes of the harmonic band stay in the same voice and octave.<BR>
+ 'commonPitchesHeldOver' (default false): if true, the notes of the harmonic band stay in the same voice and octave. [this constraint can be problematic]<BR>
  'noParallels' (default true): if true, no parallel perfect consonances are permitted.<BR>
  'playAllChordTones' (default true): if true, all chord tones are played.<BR>
- 'noVoiceCrossing' (default true): if true, no voice crossings are permitted.<BR>
- 'maxUpperVoiceDistance' (default {HS.db.getPitchesPerOctave}): maximum interval between upper voices (interval to bass can be larger).<BR>
- 'sliceRule' (default proc {$ Xs} skip end): unary constraint applied to the list MyChord | Notes at each "time slice" (i.e., for each chord and the notes sim to this chord). Notes are the notes in descending order (i.e. Bass last).<BR>
+ 'noVoiceCrossing' (possible settings: false, true or strict. default true): if true, no voice crossings are permitted. If strict, not even unisons are permitted (tone doublication in octaves is still fine).<BR>
+ 'maxUpperVoiceDistance' (default {HS.db.getPitchesPerOctave}): maximum interval between upper voices (interval to bass can be larger). Disabled if false.<BR>
+ 'sliceRule' (default false): unary constraint applied to the list MyChord | Notes at each "time slice" (i.e., for each chord and the notes sim to this chord). Notes are the notes in descending order (i.e. Bass last). Disabled if false.<BR>
+ 'sopranoRule' (default false): unary constraint applied to the list of soprano notes, i.e. the notes of the first voice. NB: the first voice is only guaranteed to be the highest voice if 'noVoiceCrossing' is true. Disabled if false.<BR>
+ 'bassRule' (default false): unary constraint applied to the list of bass notes, i.e. the notes of the last voice. NB: the last voice is only guaranteed to be the lowest voice if 'noVoiceCrossing' is true. Disabled if false.<BR>
  'makeTopLevel' (a function with the interface {$ Voices End Args}, returning a container): By default, HomophonicChordProgression returns a fully initialised score object with the following topology (chords and scales are optional).<BR>
 <BR>
  sim([seq(note+)+<BR>
@@ -203,7 +206,8 @@ clearInterval(drawit)
 	   startTime: 0)<BR>
        unit}<BR>
    end<BR>
-   <BR>
+<BR>
+ 'voiceArgs' (default unit): arbitrary arguments given to the constructure Score.makeItems, which creates the list of all voices.<BR>
 <BR>
  Further Args.iargs, Args.rargs: as for Segs.makeCounterpoint_Seq<BR>
  Args.iargs.n overwritten (is length of chords)<BR>

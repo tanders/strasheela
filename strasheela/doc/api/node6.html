@@ -143,7 +143,7 @@ clearInterval(drawit)
 </span>
 </span>
 <h3>Functor</h3>
-<ul>Score ("<span class="string">/Users/t/oz/music/Strasheela/strasheela/trunk/strasheela/source/ScoreCore.oz</span>")<br></ul>
+<ul>Score ("<span class="string">/Users/torsten/oz/music/Strasheela/strasheela/trunk/strasheela/source/ScoreCore.oz</span>")<br></ul>
 <h3>Import</h3>
 <code><ul><li>System</li><li>FD</li><li>FS</li><li>RecordC</li><li>Boot_Object at "<span class="string">x-oz://boot/Object"
 </span></li><li>Boot_Name at "<span class="string">x-oz://boot/Name"
@@ -156,61 +156,67 @@ clearInterval(drawit)
 </span></li><li>Browser(browse:Browse)</li><li>Fenv at "<span class="string">x-ozlib://anders/strasheela/Fenv/Fenv.ozf"
 </span></li></ul></code>
 <h3>Export</h3>
-<code><ul><li>&lt;C:<a href="#entity312"><span class="type">ScoreObject</span></a>&gt;
-</li><li>&lt;C:<a href="#entity314"><span class="type">Parameter</span></a>&gt;
-</li><li>&lt;C:<a href="#entity317"><span class="type">TimeParameter</span></a>&gt;
-</li><li>&lt;C:<a href="#entity318"><span class="type">TimePoint</span></a>&gt;
-</li><li>&lt;C:<a href="#entity319"><span class="type">TimeInterval</span></a>&gt;
-</li><li>&lt;C:<a href="#entity320"><span class="type">Amplitude</span></a>&gt;
-</li><li>&lt;C:<a href="#entity323"><span class="type">Pitch</span></a>&gt;
-</li><li>&lt;C:<a href="#entity315"><span class="type">LeaveUninitialisedParameterMixin</span></a>&gt;
-</li><li>&lt;P/2:<a href="#entity316"><span class="functionname">IsLeaveUninitialisedParameter</span></a>&gt;
-</li><li>&lt;C:<a href="#entity325"><span class="type">Item</span></a>&gt;
-</li><li>&lt;C:<a href="#entity326"><span class="type">Container</span></a>&gt;
-</li><li>&lt;C:<a href="#entity327"><span class="type">Modifier</span></a>&gt;
-</li><li>&lt;C:<a href="#entity328"><span class="type">Aspect</span></a>&gt;
-</li><li>&lt;C:<a href="#entity329"><span class="type">TemporalAspect</span></a>&gt;
-</li><li>&lt;C:<a href="#entity330"><span class="type">Sequential</span></a>&gt;
-</li><li>&lt;C:<a href="#entity331"><span class="type">Simultaneous</span></a>&gt;
-</li><li>&lt;C:<a href="#entity332"><span class="type">Element</span></a>&gt;
-</li><li>&lt;C:<a href="#entity333"><span class="type">AbstractElement</span></a>&gt;
-</li><li>&lt;C:<a href="#entity334"><span class="type">TemporalElement</span></a>&gt;
-</li><li>&lt;C:<a href="#entity335"><span class="type">Pause</span></a>&gt;
-</li><li>&lt;C:<a href="#entity336"><span class="type">Event</span></a>&gt;
-</li><li>&lt;C:<a href="#entity337"><span class="type">Note2</span></a>&gt;
-</li><li>&lt;C:<a href="#entity338"><span class="type">Note</span></a>&gt;
-</li><li>&lt;P/2:<a href="#entity339"><span class="functionname">IsScoreObject</span></a>&gt;
-</li><li>&lt;P/2:<a href="#entity340"><span class="functionname">IsTemporalItem</span></a>&gt;
-</li><li>&lt;P/2:<a href="#entity341"><span class="functionname">IsTemporalContainer</span></a>&gt;
-</li><li>&lt;P/2:<a href="#entity321"><span class="functionname">IsET</span></a>&gt;
-</li><li>&lt;P/2:<a href="#entity322"><span class="functionname">GetPitchesPerOctave</span></a>&gt;
-</li><li>&lt;P/3:<a href="#entity344"><span class="functionname">MakeScore</span></a>&gt;
-</li><li>&lt;P/3:<a href="#entity343"><span class="functionname">MakeScore2</span></a>&gt;
-</li><li>&lt;P/1:<a href="#entity342"><span class="functionname">InitScore</span></a>&gt;
-</li><li>make:&lt;P/3:<a href="#entity344"><span class="functionname">MakeScore</span></a>&gt;
-</li><li>make2:&lt;P/3:<a href="#entity343"><span class="functionname">MakeScore2</span></a>&gt;
-</li><li>&lt;P/2:<a href="#entity346"><span class="functionname">CopyScore</span></a>&gt;
-</li><li>&lt;P/2:<a href="#entity345"><span class="functionname">CopyScore2</span></a>&gt;
-</li><li>init:&lt;P/1:<a href="#entity342"><span class="functionname">InitScore</span></a>&gt;
-</li><li>&lt;P/3:<a href="#entity348"><span class="functionname">TransformScore</span></a>&gt;
-</li><li>&lt;P/3:<a href="#entity347"><span class="functionname">TransformScore2</span></a>&gt;
-</li><li>transform:&lt;P/3:<a href="#entity348"><span class="functionname">TransformScore</span></a>&gt;
-</li><li>transform2:&lt;P/3:<a href="#entity347"><span class="functionname">TransformScore2</span></a>&gt;
-</li><li>&lt;P/3:<a href="#entity349"><span class="functionname">MakeConstructor</span></a>&gt;
-</li><li>&lt;P/2:<a href="#entity350"><span class="functionname">MakeItems</span></a>&gt;
-</li><li>&lt;P/2:<a href="#entity351"><span class="functionname">MakeItems_iargs</span></a>&gt;
-</li><li>&lt;P/2:<a href="#entity352"><span class="functionname">MakeContainer</span></a>&gt;
-</li><li>&lt;P/2:<a href="#entity353"><span class="functionname">MakeSim</span></a>&gt;
-</li><li>&lt;P/2:<a href="#entity354"><span class="functionname">MakeSeq</span></a>&gt;
-</li><li>&lt;P/3:<a href="#entity355"><span class="functionname">DefSubscript</span></a>&gt;
-</li><li>&lt;P/3:<a href="#entity356"><span class="functionname">DefMixinSubscript</span></a>&gt;
-</li><li>&lt;P/3:<a href="#entity357"><span class="functionname">ItemslistToContainerSubscript</span></a>&gt;
-</li><li>&lt;P/4:<a href="#entity358"><span class="functionname">MakeClass</span></a>&gt;
-</li><li>apply_H:&lt;P/3:<a href="#entity359"><span class="functionname">Apply_Heuristic</span></a>&gt;
+<code><ul><li>&lt;C:<a href="#entity348"><span class="type">ScoreObject</span></a>&gt;
+</li><li>&lt;C:<a href="#entity350"><span class="type">Parameter</span></a>&gt;
+</li><li>&lt;C:<a href="#entity353"><span class="type">TimeParameter</span></a>&gt;
+</li><li>&lt;C:<a href="#entity354"><span class="type">TimePoint</span></a>&gt;
+</li><li>&lt;C:<a href="#entity355"><span class="type">TimeInterval</span></a>&gt;
+</li><li>&lt;C:<a href="#entity356"><span class="type">Amplitude</span></a>&gt;
+</li><li>&lt;C:<a href="#entity357"><span class="type">Pitch</span></a>&gt;
+</li><li>&lt;C:<a href="#entity351"><span class="type">LeaveUninitialisedParameterMixin</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity352"><span class="functionname">IsLeaveUninitialisedParameter</span></a>&gt;
+</li><li>&lt;C:<a href="#entity359"><span class="type">Item</span></a>&gt;
+</li><li>&lt;C:<a href="#entity360"><span class="type">Container</span></a>&gt;
+</li><li>&lt;C:<a href="#entity361"><span class="type">Modifier</span></a>&gt;
+</li><li>&lt;C:<a href="#entity362"><span class="type">Aspect</span></a>&gt;
+</li><li>&lt;C:<a href="#entity363"><span class="type">TemporalAspect</span></a>&gt;
+</li><li>&lt;C:<a href="#entity364"><span class="type">Sequential</span></a>&gt;
+</li><li>&lt;C:<a href="#entity365"><span class="type">Simultaneous</span></a>&gt;
+</li><li>&lt;C:<a href="#entity366"><span class="type">Element</span></a>&gt;
+</li><li>&lt;C:<a href="#entity367"><span class="type">AbstractElement</span></a>&gt;
+</li><li>&lt;C:<a href="#entity368"><span class="type">TemporalElement</span></a>&gt;
+</li><li>&lt;C:<a href="#entity369"><span class="type">Pause</span></a>&gt;
+</li><li>&lt;C:<a href="#entity370"><span class="type">Event</span></a>&gt;
+</li><li>&lt;C:<a href="#entity371"><span class="type">Note2</span></a>&gt;
+</li><li>&lt;C:<a href="#entity372"><span class="type">Note</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity373"><span class="functionname">IsScoreObject</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity374"><span class="functionname">IsTemporalItem</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity375"><span class="functionname">IsTemporalContainer</span></a>&gt;
+</li><li>&lt;P/3:<a href="#entity378"><span class="functionname">MakeScore</span></a>&gt;
+</li><li>&lt;P/3:<a href="#entity377"><span class="functionname">MakeScore2</span></a>&gt;
+</li><li>&lt;P/1:<a href="#entity376"><span class="functionname">InitScore</span></a>&gt;
+</li><li>make:&lt;P/3:<a href="#entity378"><span class="functionname">MakeScore</span></a>&gt;
+</li><li>make2:&lt;P/3:<a href="#entity377"><span class="functionname">MakeScore2</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity380"><span class="functionname">CopyScore</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity379"><span class="functionname">CopyScore2</span></a>&gt;
+</li><li>init:&lt;P/1:<a href="#entity376"><span class="functionname">InitScore</span></a>&gt;
+</li><li>&lt;P/3:<a href="#entity382"><span class="functionname">TransformScore</span></a>&gt;
+</li><li>&lt;P/3:<a href="#entity381"><span class="functionname">TransformScore2</span></a>&gt;
+</li><li>transform:&lt;P/3:<a href="#entity382"><span class="functionname">TransformScore</span></a>&gt;
+</li><li>transform2:&lt;P/3:<a href="#entity381"><span class="functionname">TransformScore2</span></a>&gt;
+</li><li>&lt;P/3:<a href="#entity383"><span class="functionname">MakeConstructor</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity384"><span class="functionname">MakeItems</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity385"><span class="functionname">MakeItems_iargs</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity386"><span class="functionname">MakeContainer</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity387"><span class="functionname">MakeSim</span></a>&gt;
+</li><li>&lt;P/2:<a href="#entity388"><span class="functionname">MakeSeq</span></a>&gt;
+</li><li>&lt;P/3:<a href="#entity389"><span class="functionname">DefSubscript</span></a>&gt;
+</li><li>&lt;P/3:<a href="#entity390"><span class="functionname">DefMixinSubscript</span></a>&gt;
+</li><li>&lt;P/3:<a href="#entity391"><span class="functionname">ItemslistToContainerSubscript</span></a>&gt;
+</li><li>&lt;P/4:<a href="#entity392"><span class="functionname">MakeClass</span></a>&gt;
+</li><li>apply_H:&lt;P/3:<a href="#entity393"><span class="functionname">Apply_Heuristic</span></a>&gt;
+</li><li>&lt;P/3:<a href="#entity394"><span class="functionname">AtTimeR</span></a>&gt;
+</li><li>&lt;P/3:<a href="#entity395"><span class="functionname">AtTimeR2</span></a>&gt;
+</li><li>&lt;P/4:<a href="#entity396"><span class="functionname">InTimeframe</span></a>&gt;
+</li><li>&lt;P/5:<a href="#entity397"><span class="functionname">InTimeframeOffset</span></a>&gt;
+</li><li>&lt;P/4:<a href="#entity398"><span class="functionname">InTimeframeR</span></a>&gt;
+</li><li>&lt;P/5:<a href="#entity399"><span class="functionname">InTimeframeOffsetR</span></a>&gt;
+</li><li>&lt;P/5:<a href="#entity400"><span class="functionname">GetItemsInTimeframe</span></a>&gt;
+</li><li>&lt;P/6:<a href="#entity401"><span class="functionname">GetItemsInTimeframeOffset</span></a>&gt;
 </li></ul></code>
 <h3>Define</h3>
 
-<a name="entity312">
+<a name="entity348">
 <p class="margin"><div align="right"><a href="class2.html">[class info]</a></div></p>
 <code>
 
@@ -225,7 +231,7 @@ clearInterval(drawit)
  The feature label binds an atom naming the class. The attribute info can be used for arbitrary user information.<BR>
 <BR>
 </span>
-<span class="keyword">class</span> <span class="type">ScoreObject</span>&nbsp;<span class="keyword">from</span>&nbsp;<a href="#entity310">NonType</a>&nbsp;<a href="#entity311">Reflection</a>
+<span class="keyword">class</span> <span class="type">ScoreObject</span>&nbsp;<span class="keyword">from</span>&nbsp;<a href="#entity346">NonType</a>&nbsp;<a href="#entity347">Reflection</a>
 <br>&nbsp;&nbsp;&nbsp;<span class="keyword">feat</span>&nbsp;!ScoreObjectType&nbsp;label
 
 <ul><li><span class="functionname">init</span>(handle:H id:ID info:Info&nbsp;...)<br>
@@ -233,6 +239,7 @@ clearInterval(drawit)
 </li><li><span class="functionname">getID</span>(X)<br>
 </li><li><span class="functionname">getInfo</span>(X)<br>
 </li><li><span class="functionname">setAttribute</span>(A X)<br>
+</li><li><span class="functionname">setParameterValue</span>(Param X)<br>
 </li><li><span class="functionname">addInfo</span>(X)<br>
 </li><li><span class="functionname">addInfos</span>(Xs)<br>
 </li><li><span class="functionname">hasThisInfo</span>(B Info)<br>
@@ -250,7 +257,7 @@ clearInterval(drawit)
 <span class="keyword">end</span>
 </code><br>
 
-<a name="entity310">
+<a name="entity346">
 <p class="margin"><div align="right"><a href="class3.html">[class info]</a></div></p>
 <code>
 
@@ -290,7 +297,7 @@ clearInterval(drawit)
 <span class="keyword">end</span>
 </code><br>
 
-<a name="entity311">
+<a name="entity347">
 <p class="margin"><div align="right"><a href="class4.html">[class info]</a></div></p>
 <code>
 
@@ -322,7 +329,7 @@ clearInterval(drawit)
 <span class="keyword">end</span>
 </code><br>
 
-<a name="entity314">
+<a name="entity350">
 <p class="margin"><div align="right"><a href="class5.html">[class info]</a></div></p>
 <code>
 
@@ -337,7 +344,7 @@ clearInterval(drawit)
  PS: The attribute 'unit' is mainly used for output.<BR>
 <BR>
 </span>
-<span class="keyword">class</span> <span class="type">Parameter</span>&nbsp;<span class="keyword">from</span>&nbsp;<a href="#entity312">ScoreObject</a>
+<span class="keyword">class</span> <span class="type">Parameter</span>&nbsp;<span class="keyword">from</span>&nbsp;<a href="#entity348">ScoreObject</a>
 <br>&nbsp;&nbsp;&nbsp;<span class="keyword">feat</span>&nbsp;label
 
 <ul><li><span class="functionname">init</span>(unit:Unit value:Value&nbsp;...)<br>
@@ -350,12 +357,13 @@ clearInterval(drawit)
 </li><li><span class="functionname">isDet</span>($)<br>
 </li><li><span class="functionname">getHeuristics</span>(X)<br>
 </li><li><span class="functionname">addHeuristic</span>(constraint:Constraint parameters:Params weight:Weight)<br>
+</li><li><span class="functionname">getInitInfo</span>($&nbsp;...)<br>
 </li><li><span class="functionname">toPPrintRecord</span>(?X excluded:Excluded features:Features)<br>
 </li></ul>
 <span class="keyword">end</span>
 </code><br>
 
-<a name="entity317">
+<a name="entity353">
 <p class="margin"><div align="right"><a href="class6.html">[class info]</a></div></p>
 <code>
 
@@ -366,7 +374,7 @@ clearInterval(drawit)
 
 </tr></table>
 <span class="string"></span>
-<span class="keyword">class</span> <span class="type">TimeParameter</span>&nbsp;<span class="keyword">from</span>&nbsp;<a href="#entity314">Parameter</a>
+<span class="keyword">class</span> <span class="type">TimeParameter</span>&nbsp;<span class="keyword">from</span>&nbsp;<a href="#entity350">Parameter</a>
 <br>&nbsp;&nbsp;&nbsp;<span class="keyword">feat</span>&nbsp;label
 
 <ul><li><span class="functionname">isTimeParameter</span>(B)<br>
@@ -376,7 +384,7 @@ clearInterval(drawit)
 <span class="keyword">end</span>
 </code><br>
 
-<a name="entity318">
+<a name="entity354">
 <p class="margin"><div align="right"><a href="class7.html">[class info]</a></div></p>
 <code>
 
@@ -389,7 +397,7 @@ clearInterval(drawit)
 <span class="string"> [concrete class] <BR>
 <BR>
 </span>
-<span class="keyword">class</span> <span class="type">TimePoint</span>&nbsp;<span class="keyword">from</span>&nbsp;<a href="#entity317">TimeParameter</a>
+<span class="keyword">class</span> <span class="type">TimePoint</span>&nbsp;<span class="keyword">from</span>&nbsp;<a href="#entity353">TimeParameter</a>
 <br>&nbsp;&nbsp;&nbsp;<span class="keyword">feat</span>&nbsp;label
 
 <ul><li><span class="functionname">isTimePoint</span>(B)<br>
@@ -397,7 +405,7 @@ clearInterval(drawit)
 <span class="keyword">end</span>
 </code><br>
 
-<a name="entity319">
+<a name="entity355">
 <p class="margin"><div align="right"><a href="class8.html">[class info]</a></div></p>
 <code>
 
@@ -410,7 +418,7 @@ clearInterval(drawit)
 <span class="string"> [concrete class]<BR>
 <BR>
 </span>
-<span class="keyword">class</span> <span class="type">TimeInterval</span>&nbsp;<span class="keyword">from</span>&nbsp;<a href="#entity317">TimeParameter</a>
+<span class="keyword">class</span> <span class="type">TimeInterval</span>&nbsp;<span class="keyword">from</span>&nbsp;<a href="#entity353">TimeParameter</a>
 <br>&nbsp;&nbsp;&nbsp;<span class="keyword">feat</span>&nbsp;label
 
 <ul><li><span class="functionname">isTimeInterval</span>(B)<br>
@@ -418,7 +426,7 @@ clearInterval(drawit)
 <span class="keyword">end</span>
 </code><br>
 
-<a name="entity320">
+<a name="entity356">
 <p class="margin"><div align="right"><a href="class9.html">[class info]</a></div></p>
 <code>
 
@@ -431,7 +439,7 @@ clearInterval(drawit)
 <span class="string"> [concrete class]<BR>
 <BR>
 </span>
-<span class="keyword">class</span> <span class="type">Amplitude</span>&nbsp;<span class="keyword">from</span>&nbsp;<a href="#entity314">Parameter</a>
+<span class="keyword">class</span> <span class="type">Amplitude</span>&nbsp;<span class="keyword">from</span>&nbsp;<a href="#entity350">Parameter</a>
 <br>&nbsp;&nbsp;&nbsp;<span class="keyword">feat</span>&nbsp;label
 
 <ul><li><span class="functionname">isAmplitude</span>(B)<br>
@@ -441,7 +449,7 @@ clearInterval(drawit)
 <span class="keyword">end</span>
 </code><br>
 
-<a name="entity323">
+<a name="entity357">
 <p class="margin"><div align="right"><a href="class10.html">[class info]</a></div></p>
 <code>
 
@@ -454,16 +462,16 @@ clearInterval(drawit)
 <span class="string"> [concrete class] <BR>
 <BR>
 </span>
-<span class="keyword">class</span> <span class="type">Pitch</span>&nbsp;<span class="keyword">from</span>&nbsp;<a href="#entity314">Parameter</a>
+<span class="keyword">class</span> <span class="type">Pitch</span>&nbsp;<span class="keyword">from</span>&nbsp;<a href="#entity350">Parameter</a>
 <br>&nbsp;&nbsp;&nbsp;<span class="keyword">feat</span>&nbsp;label
 
 <ul><li><span class="functionname">isPitch</span>(B)<br>
-</li><li><span class="functionname">getValueInMidi</span>(X table:Table)<br>
+</li><li><span class="functionname">getValueInMidi</span>($ table:Table)<br>
 </li></ul>
 <span class="keyword">end</span>
 </code><br>
 
-<a name="entity315">
+<a name="entity351">
 <p class="margin"><div align="right"><a href="class11.html">[class info]</a></div></p>
 <code>
 
@@ -486,14 +494,14 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity316">
+<a name="entity352">
 <span class="keyword">fun</span>{<span class="functionname">IsLeaveUninitialisedParameter</span> X}<br>
 <span class="string"> Returns true if X inherits from LeaveUninitialisedParameterMixin (or is an instance of LeaveUninitialisedParameterMixin), and false otherwise. <BR>
 <BR>
 </span>
 </code><br>
 
-<a name="entity325">
+<a name="entity359">
 <p class="margin"><div align="right"><a href="class12.html">[class info]</a></div></p>
 <code>
 
@@ -506,7 +514,7 @@ clearInterval(drawit)
 <span class="string"> [abstract class] An item is a generalization of score containers and elements. An item can be contained in one or more containers, the feature containers points to them.<BR>
 <BR>
 </span>
-<span class="keyword">class</span> <span class="type">Item</span>&nbsp;<span class="keyword">from</span>&nbsp;<a href="#entity312">ScoreObject</a>&nbsp;<span class="reference"><a href="node7.html#entity416">SMapping.mappingMixin</a></span>
+<span class="keyword">class</span> <span class="type">Item</span>&nbsp;<span class="keyword">from</span>&nbsp;<a href="#entity348">ScoreObject</a>&nbsp;<span class="reference"><a href="node7.html#entity465">SMapping.mappingMixin</a></span>
 <br>&nbsp;&nbsp;&nbsp;<span class="keyword">feat</span>&nbsp;label
 
 <ul><li><span class="functionname">init</span>(addParameters:AddParams containers:Containers&nbsp;...)<br>
@@ -525,6 +533,7 @@ clearInterval(drawit)
 </li><li><span class="functionname">forAllContainers</span>(Proc)<br>
 </li><li><span class="functionname">mapContainers</span>(Xs Fn)<br>
 </li><li><span class="functionname">filterContainers</span>(Xs Fn)<br>
+</li><li><span class="functionname">findContainerRecursively</span>(X Test)<br>
 </li><li><span class="functionname">findContainer</span>(X Test)<br>
 </li><li><span class="functionname">getTemporalAspect</span>(X)<br>
 </li><li><span class="functionname">getTemporalContainer</span>($)<br>
@@ -543,7 +552,9 @@ clearInterval(drawit)
 </li><li><span class="functionname">getPosRelatedItem</span>(?X N Container)<br>
 </li><li><span class="functionname">hasPosRelatedItem</span>(B N Container)<br>
 </li><li><span class="functionname">getPredecessor</span>(?X Container)<br>
+</li><li><span class="functionname">getPredecessors</span>(X N Container)<br>
 </li><li><span class="functionname">getSuccessor</span>(?X Container)<br>
+</li><li><span class="functionname">getSuccessors</span>(X N Container)<br>
 </li><li><span class="functionname">isFirstItem</span>(?B Container)<br>
 </li><li><span class="functionname">hasPredecessor</span>(?B Container)<br>
 </li><li><span class="functionname">isLastItem</span>(?B Container)<br>
@@ -553,14 +564,19 @@ clearInterval(drawit)
 </li><li><span class="functionname">wait</span>(unless:Unless)<br>
 </li><li><span class="functionname">hasTemporalPredecessor</span>(B)<br>
 </li><li><span class="functionname">hasTemporalSuccessor</span>(B)<br>
-</li><li><span class="functionname">getTemporalPredecessor</span>(B)<br>
-</li><li><span class="functionname">getTemporalSuccessor</span>(B)<br>
+</li><li><span class="functionname">getTemporalPredecessor</span>(X)<br>
+</li><li><span class="functionname">getTemporalPredecessors</span>(X N)<br>
+</li><li><span class="functionname">getTemporalSuccessor</span>(X)<br>
+</li><li><span class="functionname">getTemporalSuccessors</span>(X N)<br>
+</li><li><span class="functionname">getPredecessorsUpToRest</span>($)<br>
+</li><li><span class="functionname">getSuccessorsUpToRest</span>($)<br>
 </li><li><span class="functionname">setAllParameterUnits</span>(ParameterAccessor Unit test:Test)<br>
+</li><li><span class="functionname">partiallyUnify</span>(ScoreObject Percent test:Test)<br>
 </li></ul>
 <span class="keyword">end</span>
 </code><br>
 
-<a name="entity326">
+<a name="entity360">
 <p class="margin"><div align="right"><a href="class13.html">[class info]</a></div></p>
 <code>
 
@@ -573,7 +589,7 @@ clearInterval(drawit)
 <span class="string"> [abstract class] A container contains one or more score items. A container is a generalization of a score aspect and a score modifier. The attribute items points to the items contained in a container. Because containers themself are items as well, a container can contain other containers to form a score hierarchy of containers and elements. However, a container must not contain itself.<BR>
 <BR>
 </span>
-<span class="keyword">class</span> <span class="type">Container</span>&nbsp;<span class="keyword">from</span>&nbsp;<a href="#entity325">Item</a>
+<span class="keyword">class</span> <span class="type">Container</span>&nbsp;<span class="keyword">from</span>&nbsp;<a href="#entity359">Item</a>
 <br>&nbsp;&nbsp;&nbsp;<span class="keyword">feat</span>&nbsp;label
 
 <ul><li><span class="functionname">init</span>(<N:1>:??? items:Items2&nbsp;...)<br>
@@ -597,7 +613,7 @@ clearInterval(drawit)
 <span class="keyword">end</span>
 </code><br>
 
-<a name="entity327">
+<a name="entity361">
 <p class="margin"><div align="right"><a href="class14.html">[class info]</a></div></p>
 <code>
 
@@ -616,7 +632,7 @@ clearInterval(drawit)
  !! NB: currently, the score output functions (see ./Output.oz) ignore the Modifier which is therefore without effect!<BR>
 <BR>
 </span>
-<span class="keyword">class</span> <span class="type">Modifier</span>&nbsp;<span class="keyword">from</span>&nbsp;<a href="#entity326">Container</a>
+<span class="keyword">class</span> <span class="type">Modifier</span>&nbsp;<span class="keyword">from</span>&nbsp;<a href="#entity360">Container</a>
 <br>&nbsp;&nbsp;&nbsp;<span class="keyword">feat</span>&nbsp;label
 
 <ul><li><span class="functionname">isModifier</span>(B)<br>
@@ -625,7 +641,7 @@ clearInterval(drawit)
 <span class="keyword">end</span>
 </code><br>
 
-<a name="entity328">
+<a name="entity362">
 <p class="margin"><div align="right"><a href="class15.html">[class info]</a></div></p>
 <code>
 
@@ -638,7 +654,7 @@ clearInterval(drawit)
 <span class="string"> [semi abstract class] An aspect contains one or more score items to group them and to provide additional information to its items. For instance, a sequential groups items and imposes them in a sequential order in time.<BR>
 <BR>
 </span>
-<span class="keyword">class</span> <span class="type">Aspect</span>&nbsp;<span class="keyword">from</span>&nbsp;<a href="#entity326">Container</a>
+<span class="keyword">class</span> <span class="type">Aspect</span>&nbsp;<span class="keyword">from</span>&nbsp;<a href="#entity360">Container</a>
 <br>&nbsp;&nbsp;&nbsp;<span class="keyword">feat</span>&nbsp;label
 
 <ul><li><span class="functionname">isAspect</span>(B)<br>
@@ -646,7 +662,7 @@ clearInterval(drawit)
 <span class="keyword">end</span>
 </code><br>
 
-<a name="entity329">
+<a name="entity363">
 <p class="margin"><div align="right"><a href="class16.html">[class info]</a></div></p>
 <code>
 
@@ -660,7 +676,7 @@ clearInterval(drawit)
  For a documentation of the time related attributes/parameters see doc of TimeMixin.<BR>
 <BR>
 </span>
-<span class="keyword">class</span> <span class="type">TemporalAspect</span>&nbsp;<span class="keyword">from</span>&nbsp;<a href="#entity328">Aspect</a>&nbsp;<a href="#entity313">TimeMixin</a>
+<span class="keyword">class</span> <span class="type">TemporalAspect</span>&nbsp;<span class="keyword">from</span>&nbsp;<a href="#entity362">Aspect</a>&nbsp;<a href="#entity349">TimeMixin</a>
 <br>&nbsp;&nbsp;&nbsp;<span class="keyword">feat</span>&nbsp;label
 
 <ul><li><span class="functionname">init</span>(duration:Duration endTime:EndTime offsetTime:OffsetTime startTime:StartTime timeUnit:TimeUnit&nbsp;...)<br>
@@ -671,7 +687,7 @@ clearInterval(drawit)
 <span class="keyword">end</span>
 </code><br>
 
-<a name="entity313">
+<a name="entity349">
 <p class="margin"><div align="right"><a href="class17.html">[class info]</a></div></p>
 <code>
 
@@ -714,15 +730,18 @@ clearInterval(drawit)
 </li><li><span class="functionname">getTimeUnit</span>(X)<br>
 </li><li><span class="functionname">hasAbsoluteTimeUnit</span>(B)<br>
 </li><li><span class="functionname">isSimultaneousItem</span>(?B X)<br>
+</li><li><span class="functionname">isSimultaneousItemOffset</span>(B X Offset)<br>
 </li><li><span class="functionname">isSimultaneousItemR</span>(?B X)<br>
+</li><li><span class="functionname">isSimultaneousItemOffsetR</span>(B X Offset)<br>
 </li><li><span class="functionname">isExactlySimultaneousItemR</span>(?B X)<br>
-</li><li><span class="functionname">getSimultaneousItems</span>(?Xs cTest:CTest test:Test)<br>
-</li><li><span class="functionname">findSimultaneousItem</span>(X cTest:CTest test:Test)<br>
+</li><li><span class="functionname">getSimultaneousItems</span>(?Xs cTest:CTest test:Test toplevel:Top)<br>
+</li><li><span class="functionname">getSimultaneousItemsOffset</span>(Xs Offset cTest:CTest test:Test toplevel:Top)<br>
+</li><li><span class="functionname">findSimultaneousItem</span>(X cTest:CTest test:Test toplevel:Top)<br>
 </li></ul>
 <span class="keyword">end</span>
 </code><br>
 
-<a name="entity330">
+<a name="entity364">
 <p class="margin"><div align="right"><a href="class18.html">[class info]</a></div></p>
 <code>
 
@@ -737,7 +756,7 @@ clearInterval(drawit)
  NB: A negative offsetTime value is not possible if the offsetTime is a FD integer (which presently is the only option).<BR>
 <BR>
 </span>
-<span class="keyword">class</span> <span class="type">Sequential</span>&nbsp;<span class="keyword">from</span>&nbsp;<a href="#entity329">TemporalAspect</a>
+<span class="keyword">class</span> <span class="type">Sequential</span>&nbsp;<span class="keyword">from</span>&nbsp;<a href="#entity363">TemporalAspect</a>
 <br>&nbsp;&nbsp;&nbsp;<span class="keyword">feat</span>&nbsp;label
 
 <ul><li><span class="functionname">isSequential</span>(B)<br>
@@ -746,7 +765,7 @@ clearInterval(drawit)
 <span class="keyword">end</span>
 </code><br>
 
-<a name="entity331">
+<a name="entity365">
 <p class="margin"><div align="right"><a href="class19.html">[class info]</a></div></p>
 <code>
 
@@ -760,7 +779,7 @@ clearInterval(drawit)
  For a documentation of the time unit see doc of TimeMixin.<BR>
 <BR>
 </span>
-<span class="keyword">class</span> <span class="type">Simultaneous</span>&nbsp;<span class="keyword">from</span>&nbsp;<a href="#entity329">TemporalAspect</a>
+<span class="keyword">class</span> <span class="type">Simultaneous</span>&nbsp;<span class="keyword">from</span>&nbsp;<a href="#entity363">TemporalAspect</a>
 <br>&nbsp;&nbsp;&nbsp;<span class="keyword">feat</span>&nbsp;label
 
 <ul><li><span class="functionname">isSimultaneous</span>(B)<br>
@@ -769,7 +788,7 @@ clearInterval(drawit)
 <span class="keyword">end</span>
 </code><br>
 
-<a name="entity332">
+<a name="entity366">
 <p class="margin"><div align="right"><a href="class20.html">[class info]</a></div></p>
 <code>
 
@@ -779,10 +798,10 @@ clearInterval(drawit)
 
 
 </tr></table>
-<span class="string"> [abstract class] An element is a score item which does not contain items. For instance, a note and a pause are both elements.<BR>
+<span class="string"> [abstract class] An element is a score item which does not contain items. For instance, a note and a pause (rest) are both elements.<BR>
 <BR>
 </span>
-<span class="keyword">class</span> <span class="type">Element</span>&nbsp;<span class="keyword">from</span>&nbsp;<a href="#entity325">Item</a>
+<span class="keyword">class</span> <span class="type">Element</span>&nbsp;<span class="keyword">from</span>&nbsp;<a href="#entity359">Item</a>
 <br>&nbsp;&nbsp;&nbsp;<span class="keyword">feat</span>&nbsp;label
 
 <ul><li><span class="functionname">isElement</span>(B)<br>
@@ -791,7 +810,7 @@ clearInterval(drawit)
 <span class="keyword">end</span>
 </code><br>
 
-<a name="entity333">
+<a name="entity367">
 <p class="margin"><div align="right"><a href="class21.html">[class info]</a></div></p>
 <code>
 
@@ -804,7 +823,7 @@ clearInterval(drawit)
 <span class="string"> [semi abstract class] An AbstractElement is an element without timing information. For instance, an instrument definition for a sound synthesis language such as Csound could be represented by an instance of a subclass of AbstractElement.<BR>
 <BR>
 </span>
-<span class="keyword">class</span> <span class="type">AbstractElement</span>&nbsp;<span class="keyword">from</span>&nbsp;<a href="#entity332">Element</a>
+<span class="keyword">class</span> <span class="type">AbstractElement</span>&nbsp;<span class="keyword">from</span>&nbsp;<a href="#entity366">Element</a>
 <br>&nbsp;&nbsp;&nbsp;<span class="keyword">feat</span>&nbsp;label
 
 <ul><li><span class="functionname">isAbstractElement</span>(B)<br>
@@ -812,7 +831,7 @@ clearInterval(drawit)
 <span class="keyword">end</span>
 </code><br>
 
-<a name="entity334">
+<a name="entity368">
 <p class="margin"><div align="right"><a href="class22.html">[class info]</a></div></p>
 <code>
 
@@ -825,7 +844,7 @@ clearInterval(drawit)
 <span class="string"> [abstract class] A TemporalElement is an element with timing information. For instance, any action of a performer is a TemporalElement -- whether the action is heard or not. An unheard action can a change of the instrument (as muting it) is a TemporalElement, a heard action the performance of a note. <BR>
 <BR>
 </span>
-<span class="keyword">class</span> <span class="type">TemporalElement</span>&nbsp;<span class="keyword">from</span>&nbsp;<a href="#entity332">Element</a>&nbsp;<a href="#entity313">TimeMixin</a>
+<span class="keyword">class</span> <span class="type">TemporalElement</span>&nbsp;<span class="keyword">from</span>&nbsp;<a href="#entity366">Element</a>&nbsp;<a href="#entity349">TimeMixin</a>
 <br>&nbsp;&nbsp;&nbsp;<span class="keyword">feat</span>&nbsp;label
 
 <ul><li><span class="functionname">init</span>(duration:Duration endTime:EndTime offsetTime:OffsetTime startTime:StartTime timeUnit:TimeUnit&nbsp;...)<br>
@@ -836,7 +855,7 @@ clearInterval(drawit)
 <span class="keyword">end</span>
 </code><br>
 
-<a name="entity335">
+<a name="entity369">
 <p class="margin"><div align="right"><a href="class23.html">[class info]</a></div></p>
 <code>
 
@@ -846,11 +865,11 @@ clearInterval(drawit)
 
 
 </tr></table>
-<span class="string"> [concrete class] A pause is a score element to produce silence of a given duration. It can, e.g., be used within a sequential to produce an offset between two items in the sequential. However, in such situation a pause could be replaced by the use of the parameter offsetTime of the item after the pause. Nevertheless, a pause in an explicite representation.<BR>
+<span class="string"> [concrete class] A pause (a better name would be rest!) is a score element to produce silence of a given duration. It can, e.g., be used within a sequential to produce an offset between two items in the sequential. However, in such situation a pause (rest) could be replaced by the use of the parameter offsetTime of the item after the pause. Nevertheless, a pause in an explicite representation.<BR>
  For a documentation of the time unit see doc of TimeMixin.<BR>
 <BR>
 </span>
-<span class="keyword">class</span> <span class="type">Pause</span>&nbsp;<span class="keyword">from</span>&nbsp;<a href="#entity334">TemporalElement</a>
+<span class="keyword">class</span> <span class="type">Pause</span>&nbsp;<span class="keyword">from</span>&nbsp;<a href="#entity368">TemporalElement</a>
 <br>&nbsp;&nbsp;&nbsp;<span class="keyword">feat</span>&nbsp;label
 
 <ul><li><span class="functionname">isPause</span>(B)<br>
@@ -858,7 +877,7 @@ clearInterval(drawit)
 <span class="keyword">end</span>
 </code><br>
 
-<a name="entity336">
+<a name="entity370">
 <p class="margin"><div align="right"><a href="class24.html">[class info]</a></div></p>
 <code>
 
@@ -876,7 +895,7 @@ clearInterval(drawit)
  For a documentation of the time unit see doc of TimeMixin.<BR>
 <BR>
 </span>
-<span class="keyword">class</span> <span class="type">Event</span>&nbsp;<span class="keyword">from</span>&nbsp;<a href="#entity334">TemporalElement</a>
+<span class="keyword">class</span> <span class="type">Event</span>&nbsp;<span class="keyword">from</span>&nbsp;<a href="#entity368">TemporalElement</a>
 <br>&nbsp;&nbsp;&nbsp;<span class="keyword">feat</span>&nbsp;label
 
 <ul><li><span class="functionname">isEvent</span>(B)<br>
@@ -884,7 +903,7 @@ clearInterval(drawit)
 <span class="keyword">end</span>
 </code><br>
 
-<a name="entity337">
+<a name="entity371">
 <p class="margin"><div align="right"><a href="class25.html">[class info]</a></div></p>
 <code>
 
@@ -898,7 +917,7 @@ clearInterval(drawit)
  A note inherits various timing parameters from the event class. The full set of non-optional note parameters (i.e. parameters which are not only bound to the attribute parameters, but which have extra attributes) is startTime, duration, endTime, offsetTime}, and pitch. Additional parameters can be specified optionally (e.g. by the feature addParameters of the init method).<BR>
 <BR>
 </span>
-<span class="keyword">class</span> <span class="type">Note2</span>&nbsp;<span class="keyword">from</span>&nbsp;<a href="#entity336">Event</a>
+<span class="keyword">class</span> <span class="type">Note2</span>&nbsp;<span class="keyword">from</span>&nbsp;<a href="#entity370">Event</a>
 <br>&nbsp;&nbsp;&nbsp;<span class="keyword">feat</span>&nbsp;label
 
 <ul><li><span class="functionname">init</span>(pitch:P pitchUnit:PU&nbsp;...)<br>
@@ -912,7 +931,7 @@ clearInterval(drawit)
 <span class="keyword">end</span>
 </code><br>
 
-<a name="entity338">
+<a name="entity372">
 <p class="margin"><div align="right"><a href="class26.html">[class info]</a></div></p>
 <code>
 
@@ -926,7 +945,7 @@ clearInterval(drawit)
  NOTE: unlike most other arguments, the amplitude argument defaults to a determined number. <BR>
 <BR>
 </span>
-<span class="keyword">class</span> <span class="type">Note</span>&nbsp;<span class="keyword">from</span>&nbsp;<a href="#entity337">Note2</a>
+<span class="keyword">class</span> <span class="type">Note</span>&nbsp;<span class="keyword">from</span>&nbsp;<a href="#entity371">Note2</a>
 <br>&nbsp;&nbsp;&nbsp;<span class="keyword">feat</span>&nbsp;label
 
 <ul><li><span class="functionname">init</span>(amplitude:A amplitudeUnit:AU&nbsp;...)<br>
@@ -942,7 +961,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity339">
+<a name="entity373">
 <span class="keyword">fun</span>{<span class="functionname">IsScoreObject</span> X}<br>
 <span class="string"> Returns a boolean whether X is an Object with the class/superclass ScoreObject. <BR>
 <BR>
@@ -950,37 +969,21 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity340">
+<a name="entity374">
 <span class="keyword">fun</span>{<span class="functionname">IsTemporalItem</span> X}<br>
 <span class="string"> Returns a boolean whether X is an item which inherits from TimeMixin (i.e. X is either a TemporalElement or a TemporalAspect).<BR>
 </span>
 </code><br>
 
 <code>
-<a name="entity341">
+<a name="entity375">
 <span class="keyword">fun</span>{<span class="functionname">IsTemporalContainer</span> X}<br>
 <span class="string"> Returns a boolean whether X is a container which inherits from TimeMixin. This is an alias type check whether X is a TemporalAspect.<BR>
 </span>
 </code><br>
 
 <code>
-<a name="entity321">
-<span class="keyword">fun</span>{<span class="functionname">IsET</span> PitchUnit}<br>
-<span class="string"> Returns true if PitchUnit is an atom which matches the pattern et<Digit>+ such as et31 or et72.<BR>
-<BR>
-</span>
-</code><br>
-
-<code>
-<a name="entity322">
-<span class="keyword">fun</span>{<span class="functionname">GetPitchesPerOctave</span> EtPitchUnit}<br>
-<span class="string"> Returns the pitches per octave expressed by an ET pitch unit, e.g., for et31 it returns 31. <BR>
-<BR>
-</span>
-</code><br>
-
-<code>
-<a name="entity344">
+<a name="entity378">
 <span class="keyword">proc</span>{<span class="functionname">MakeScore</span> ScoreSpec Constructors X}<br>
 <span class="string"> MakeScore returns an object-oriented hierarchic score representation according to a record-based score representation in ScoreSpec. In general, MakeScore transforms (possibly nested) class init records into (nested) class instances with bi-directional links (e.g. links from the container to the contained item and vice-versa). The label of each init record specifies its class, e.g.,<BR>
 <code>{Score.makeScore note(startTime:0) unit}}</code><BR>
@@ -1020,7 +1023,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity343">
+<a name="entity377">
 <span class="keyword">proc</span>{<span class="functionname">MakeScore2</span> ScoreSpec Constructors X}<br>
 <span class="string"> MakeScore2 is a variant of MakeScore with the same arguments and the same functionality. However, the implicit initialisation of MakeScore2 is unfinished, such that the returned score hierarchy can still be extended (use the method bilinkItems or bilinkContainers to combine multiple score hierarchy parts created with MakeScore2). After the extention of the score, the score must be fully initialised (using InitScore). See strasheela/testing/ScoreCore-test.oz for an example.<BR>
 <BR>
@@ -1028,7 +1031,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity346">
+<a name="entity380">
 <span class="keyword">proc</span>{<span class="functionname">CopyScore</span> MyScore MyCopy}<br>
 <span class="string"> CopyScore returns a deep copy of MyScore. The resulting MyCopy has the same score topology and its objects are created from the same classes as MyScore. However, undetermined variables in MyScore are replaced by fresh variables with the same domain. <BR>
  NB: CopyScore internally uses toInitRecord. Therefore, all present restrictions of toInitRecord apply: getInitInfo must be defined correctly for all classes and only tree-form score topologies are supported.<BR>
@@ -1038,7 +1041,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity345">
+<a name="entity379">
 <span class="keyword">fun</span>{<span class="functionname">CopyScore2</span> MyScore}<br>
 <span class="string"> Like CopyScore, but MyScore is not fully initialised (cf. MakeScore2 vs. MakeScore).<BR>
 <BR>
@@ -1046,7 +1049,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity342">
+<a name="entity376">
 <span class="keyword">proc</span>{<span class="functionname">InitScore</span> X}<br>
 <span class="string"> InitScore is an auxilary procedure to finish the initialisation of score hierarchies created by MakeScore2 and combined by the method bilinkItems or bilinkContainers. Using InitScore directly on the result of MakeScore2 is the same as generating a score by MakeScore.<BR>
 <BR>
@@ -1054,7 +1057,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity348">
+<a name="entity382">
 <span class="keyword">proc</span>{<span class="functionname">TransformScore</span> MyScore Args TransformedScore}<br>
 <span class="string"> TransformScore returns a transformed copy of MyScore. <BR>
 <BR>
@@ -1070,7 +1073,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity347">
+<a name="entity381">
 <span class="keyword">fun</span>{<span class="functionname">TransformScore2</span> MyScore Args}<br>
 <span class="string"> Like TransformScore, but the resulting score is not fully initialised (cf. MakeScore2 vs. MakeScore).<BR>
 <BR>
@@ -1078,7 +1081,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity349">
+<a name="entity383">
 <span class="keyword">fun</span>{<span class="functionname">MakeConstructor</span> Constructor Defaults}<br>
 <span class="string"> Returns a score item constructor function with interface {F Args} which creates essentially the same item as Constructor (unary function or class), but uses the default arguments Defaults (record of init arguments). Defaults and Args can be nested records, in which case nested default specs are not overwritten if Args specifies same higher-level arg (i.e. Default and Arg are combined with GUtils.recursiveAdjoin instead of just Adjoin). The item returned by the constructor is not fully initialised. <BR>
  In addition, the resulting constructor function supports convenience notations for certain values. The following notations are supported (both as default arguments and as actual arguments). <BR>
@@ -1094,7 +1097,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity350">
+<a name="entity384">
 <span class="keyword">proc</span>{<span class="functionname">MakeItems</span> Args Elements}<br>
 <span class="string"> Extended script which returns a list of 'n' score items (e.g., notes), where many parameters can be still undetermined, and the objects are not fully initialised. <BR>
 <BR>
@@ -1104,10 +1107,14 @@ clearInterval(drawit)
  'handle': argument to access the resulting list of items (convenient when MakeItems is used in a nested data structure, cf. ScoreObject init method arg handle)<BR>
  'rule': constraint (unary proc) applied to list of all items<BR>
 <BR>
- In addition, all items arguments expected by 'constructors' are supported. If not specially marked, these arguments are shared by all parameters. For specifying individual arguments for the elements, the following special cases are supported. These cases are notated as a pair Label # ArgValue. The following labels are supported. <BR>
- 'each': the ArgValue is a list of length 'n' and specifies argument values for the individual elements. Example Args for specifying individual note pitches.<BR>
+ In addition, all item arguments expected by 'constructors' are supported. If not specially marked, these arguments are shared by all parameters.<BR>
+<BR>
+ For specifying individual arguments for the elements, the following special cases are supported. These cases are notated as a pair Label # ArgValue. The following labels are supported.<BR>
+ fd#Spec: each parameter value has the given domain specification Spec. Example:<BR>
+      unit(pitch: fd#(60#72)) <BR>
+ each#Xs: Xs is a list of length 'n' and specifies argument values for the individual elements. Example for specifying individual note pitches:<BR>
       unit(pitch: each#[60 62 64]) <BR>
- 'fenv': the ArgValue is a Fenv. Argument values for the individual elements are obtained by sampling the Fenv (method toList), and converting the results to integers.<BR>
+ fenv#MyFenv: MyFenv is a Fenv. Argument values for the individual elements are obtained by sampling the Fenv (method toList), and converting the results to integers.<BR>
 <BR>
 <BR>
  Default Args:<BR>
@@ -1121,7 +1128,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity351">
+<a name="entity385">
 <span class="keyword">fun</span>{<span class="functionname">MakeItems_iargs</span> Args}<br>
 <span class="string"> Same as Score.makeItems, but all Score.makeItems arguments are wrapped in arg iargs for compatibility with DefSubscript.<BR>
  Note: arg processing (each-args etc) only supported for iargs, but not rarg, and also not for iargs.n. The reason is that only a single value of these args is needed for items creation (e.g., only one iargs.n is needed). <BR>
@@ -1130,7 +1137,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity352">
+<a name="entity386">
 <span class="keyword">proc</span>{<span class="functionname">MakeContainer</span> Args MyMotif}<br>
 <span class="string"> Extended script which returns a container with items, not fully initialised and where many parameters can be still undetermined. The contained elements are created with Score.makeItems.<BR>
 <BR>
@@ -1147,7 +1154,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity353">
+<a name="entity387">
 <span class="keyword">fun</span>{<span class="functionname">MakeSim</span> Args}<br>
 <span class="string"> Extended script which returns a simultaneous container with items, not fully initialised and where many parameters can be still undetermined. Specialisation of MakeContainer where the constructor is Simultaneous. See MakeContainer for further information.<BR>
 <BR>
@@ -1155,7 +1162,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity354">
+<a name="entity388">
 <span class="keyword">fun</span>{<span class="functionname">MakeSeq</span> Args}<br>
 <span class="string"> Extended script which returns a sequential container with items, not fully initialised and where many parameters can be still undetermined. Specialisation of MakeContainer where the constructor is Sequential. See MakeContainer for further information.<BR>
 <BR>
@@ -1163,7 +1170,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity355">
+<a name="entity389">
 <span class="keyword">fun</span>{<span class="functionname">DefSubscript</span> DefArgs Body}<br>
 <span class="string"> Extended script creator for reusable (and hierarchical) sub-CSP definition: returns an extended script (a procedure with the interface {Script Args ?MyScore}) which specialises a "super" extended script. The super-script returns either an item (typically a container with items) or a list of items; possible super-scripts are, e.g., Score.makeItems_iargs, MakeContainer or any user-defined extended script, possibly also created with DefSubscript. The resulting score object(s) are not fully initialised, and can thus be integrated withing a higher-level container.<BR>
  <BR>
@@ -1173,8 +1180,8 @@ clearInterval(drawit)
  'super': the super-script: a procedure with the interface {Script Args ?MyScore} where Args must support the argument 'iargs', and can support any other argument as well. 'iargs' is a record of args in the format expected by Score.makeItems.<BR>
  'mixins': a list of mixins defined with DefMixinSubscript. <BR>
  'defaults': record of default top-level argument values for resulting script. <BR>
- 'idefaults': record of default argument values for args feature 'iargs' of resulting script. <BR>
- 'rdefaults': record of default argument values for args feature 'rargs' of resulting script.<BR>
+ 'idefaults': record of default argument values for args feature 'iargs' of resulting script (idefaults = itemsDefaults). <BR>
+ 'rdefaults': record of default argument values for args feature 'rargs' of resulting script (rdefaults = rulesDefaults).<BR>
 <BR>
  Default DefArgs:<BR>
    unit(super:MakeContainer<BR>
@@ -1186,8 +1193,8 @@ clearInterval(drawit)
  Body is a procedure with the interface {Body MyScore Args}, where MyScore is the item(s) created by the super-script, and Args is the record of the arguments specified for the resulting script. Body can also be nil (e.g. for combining a super script and a mixin without adding any further constraints). The features of Args are both the arguments supported by the resulting extended script, and the Args expected by body.  <BR>
  <BR>
  Args always has the features 'iargs' and 'rargs'. <BR>
- 'iargs': a record of arguments given to contained items in the format expected by Score.makeItems<BR>
- 'rargs': record of arguments for constraints<BR>
+ 'iargs': a record of arguments given to contained items in the format expected by Score.makeItems (iargs = itemsArgs)<BR>
+ 'rargs': record of arguments for constraints (rargs = rulesArgs)<BR>
 <BR>
  The variable Args of the body only contains the following arguments when they where specified with the extended script application.  <BR>
  'super': same as for DefArgs<BR>
@@ -1198,7 +1205,7 @@ clearInterval(drawit)
 <BR>
 <BR>
  Example:<BR>
- Motif definition: creates CSP with sequential container of notes (MakeContainer is super CSP), default are 3 notes (default itemsArgs.n is 3). Note pitches are constrained with Pattern.continuous, the direction of this pattern is controlled with the argument rargs.direction, default is '<:'. <BR>
+ Motif definition: creates CSP with sequential container of notes (MakeContainer is super CSP), default are 3 notes (idefaults.n is 3, i.e., the default value for iargs.n is 3). Note pitches are constrained with Pattern.continuous, the direction of this pattern is controlled with the argument rargs.direction, default is '<:'. <BR>
    MakeRun<BR>
    = {DefSubscript unit(super:MakeContainer<BR>
 			rdefaults: unit(direction: '<:')<BR>
@@ -1230,7 +1237,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity356">
+<a name="entity390">
 <span class="keyword">fun</span>{<span class="functionname">DefMixinSubscript</span> DefArgs Body}<br>
 <span class="string"> [Complements DefSubscript]: defines further arguments and applies further constraints to a script defined by DefSubscript. <BR>
 <BR>
@@ -1288,7 +1295,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity357">
+<a name="entity391">
 <span class="keyword">fun</span>{<span class="functionname">ItemslistToContainerSubscript</span> Subscript ContainerLabel}<br>
 <span class="string"> Expects a subscript which returns a list of items, and returns a variant of this subscript which wraps a container around this items list. The subscript arguments iargs and rargs are handed to the Subscript (usually created with Score.defSubscript), all other subscript arguments are given to the container. ContainerLabel is a label such as seq or sim.<BR>
  Purpose of this function: simplifies creation (& avoids code doubling) of two variants of a subscript, e.g., one returning plain list of notes (defined with DefSubscript), and one wrapping these notes in a container (defined with ItemslistToContainerSubscript from existing script).  <BR>
@@ -1297,7 +1304,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity358">
+<a name="entity392">
 <span class="keyword">fun</span>{<span class="functionname">MakeClass</span> Super FeatT Args}<br>
 <span class="string"> MakeClass returns a subclass of the (score object) class Super. FeatT is a tuple with the additional subclass features, the label of FeatT defines the value at the feature 'label' of the new class. Args supports optional arguments, the defaults are:<BR>
    unit(initRecord:init<BR>
@@ -1323,7 +1330,7 @@ clearInterval(drawit)
 </code><br>
 
 <code>
-<a name="entity359">
+<a name="entity393">
 <span class="keyword">proc</span>{<span class="functionname">Apply_Heuristic</span> H_Constraint Params Weight}<br>
 <span class="string"> Applies a heuristic constraint (H_Constraint) to a list of parameter objects (Params) with a cetain weight Weight.<BR>
 <BR>
@@ -1344,6 +1351,77 @@ clearInterval(drawit)
  NOTE: Heuristic only used if all but last variables involved are already bound. So, for heuristics with more than 2 variables involved there could additionally be "partial heuristics" that define related heuristics for less variables.<BR>
 <BR>
  For an example, see strasheela/examples/Heuristic-Constraints.oz.<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity394">
+<span class="keyword">proc</span>{<span class="functionname">AtTimeR</span> X Time B}<br>
+<span class="string"> [0/1 Constraint] Returns 0/1-integer whether Time (FD int) is between the start and end time of X (an temporal item), including its start but note the end time.<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity395">
+<span class="keyword">proc</span>{<span class="functionname">AtTimeR2</span> X Time B}<br>
+<span class="string"> [0/1 Constraint] Same as AtTimeR, but the time frame of X takes also the potential rest introduced by its offset time into account.<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity396">
+<span class="keyword">fun</span>{<span class="functionname">InTimeframe</span> X Start End}<br>
+<span class="string"> [Deterministic function] Returns boolean whether (some part of) the item X is in the time frame specified by Start and End (ints).<BR>
+ This relation defines a conjunction of the following Allen's Interval Algebra relations: overlaps, starts, during, finishes and equal; only meets and before/after are excluded.<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity397">
+<span class="keyword">fun</span>{<span class="functionname">InTimeframeOffset</span> X Start End Offset}<br>
+<span class="string"> [Deterministic function] Varian of InTimeframe where the offset time Offset (an int) is taken into account. It returns true if the item X would be in the time frame specified by Start and End, if these times would be moved by this offset time.<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity398">
+<span class="keyword">fun</span>{<span class="functionname">InTimeframeR</span> X Start End}<br>
+<span class="string"> [0/1 Constraint] Returns 0/1-integer whether (some part of) the item X is in the time frame specified by Start and End (FD ints).<BR>
+ This relation defines a conjunction of the following Allen's Interval Algebra relations: overlaps, starts, during, finishes and equal; only meets and before/after are excluded.<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity399">
+<span class="keyword">fun</span>{<span class="functionname">InTimeframeOffsetR</span> X Start End Offset}<br>
+<span class="string"> [0/1 Constraint] Varian of InTimeframeR where the offset time Offset (FD int) is taken into account. It returns true (1) if the item X would be in the time frame specified by Start and End, if these times would be moved by this offset time.<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity400">
+<span class="keyword">proc</span>{<span class="functionname">GetItemsInTimeframe</span> Xs Start End Args Result}<br>
+<span class="string"> [Deterministic function] Returns list of score items in Xs (a list of items) in the time frame specified by Start and End (FD ints) -- see doc of InTimeframe -- and fulfilling the optional Boolean function or method test.<BR>
+ The implementation uses LUtils.cFilter and the reified constraint InTimeframeR. Items are returned as soon as the score contains enough information for all score objects in the score to tell whether or not they are simultaneous to self (i.e. rhythmic structure of the whole score must not necessarily be fully determined).<BR>
+<BR>
+ Args:<BR>
+ test (unary Boolean function or method): Only items for which this test returns true are collected. This function must be a deterministic function/method which does not block (e.g., checks on score object types or their position in the score topology are OK) and which is used for pre-filtering score objects.<BR>
+ cTest (unary Boolean function or method):  Only items for which this test returns true are collected. The argument cTest is applied within the concurrent filtering of LUtils.cFilter, together with InTimeframeR. Computationally very expensive tests and in particular tests which can block are better handed to cTest.<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity401">
+<span class="keyword">proc</span>{<span class="functionname">GetItemsInTimeframeOffset</span> Xs Start End Offset Args Result}<br>
+<span class="string"> [Deterministic function] Generalised version of GetItemsInTimeframe where the offset time Offset (FD int) is taken into account. See the doc of InTimeframeOffsetR for the meaning of the Offset.<BR>
 <BR>
 </span>
 </code><br>

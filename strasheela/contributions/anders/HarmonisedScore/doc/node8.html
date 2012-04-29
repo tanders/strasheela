@@ -181,9 +181,10 @@ clearInterval(drawit)
 </span>
 </span>
 <h3>Functor</h3>
-<ul>HS ("<span class="string">/Users/t/oz/music/Strasheela/strasheela/trunk/strasheela/contributions/anders/HarmonisedScore/HarmonisedScore.oz</span>")<br></ul>
+<ul>HS ("<span class="string">/Users/torsten/oz/music/Strasheela/strasheela/trunk/strasheela/contributions/anders/HarmonisedScore/HarmonisedScore.oz</span>")<br></ul>
 <h3>Import</h3>
-<code><ul><li><a href="node2.html">DB</a> at "<span class="string">source/Database.ozf"
+<code><ul><li>GUtils at "<span class="string">x-ozlib://anders/strasheela/source/GeneralUtils.ozf"
+</span></li><li><a href="node2.html">DB</a> at "<span class="string">source/Database.ozf"
 </span></li><li><a href="node3.html">HS_Score</a> at "<span class="string">source/Score.ozf"
 </span></li><li><a href="node4.html">Rules</a> at "<span class="string">source/Rules.ozf"
 </span></li><li><a href="node5.html">DBs</a> at "<span class="string">source/databases/Databases.ozf"
@@ -202,11 +203,27 @@ clearInterval(drawit)
 </li><li>distro:<span class="variablename">HS_Distro</span>
 </li><li>out:<span class="variablename">HS_Out</span>
 </li><li><span class="variablename">Acc</span>
-</li><li>pc:<span class="variablename">PC</span>
+</li><li>pc:&lt;P/2:<a href="#entity589"><span class="functionname">PC</span></a>&gt;
 </li><li>pcName:<span class="variablename">PCName</span>
-</li><li><span class="variablename">Pitch</span>
+</li><li>&lt;P/2:<a href="#entity590"><span class="functionname">Pitch</span></a>&gt;
 </li></ul></code>
 <h3>Define</h3>
+
+<code>
+<a name="entity589">
+<span class="keyword">fun</span>{<span class="functionname">PC</span> PC}<br>
+<span class="string"> Transforms symbolic note name (atom) into the corresponding pitch class integer, depending on {HS.db.getPitchesPerOctave}. Note: function only works for specific values of {DB.getPitchesPerOctave} (e.g., 12, 22, 31, 41). If PC is an integer then it is returned unchanged.<BR>
+<BR>
+</span>
+</code><br>
+
+<code>
+<a name="entity590">
+<span class="keyword">fun</span>{<span class="functionname">Pitch</span> MyPitch}<br>
+<span class="string"> Translates a symbolic pitch P in the format PC#Octave (PC is an atom, Octave is an int) into the corresponding pitch integer, depending on {HS.db.getPitchesPerOctave}. Note: function only works for specific values of {DB.getPitchesPerOctave} (e.g., 12, 22, 31, 41).<BR>
+<BR>
+</span>
+</code><br>
 <h3>End</h3>
 </div></body>
 </html>
