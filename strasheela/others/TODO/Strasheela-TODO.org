@@ -71,8 +71,37 @@
    - generalise such that it constraints chords not only notes, so it can be used for non-homophonic music too (resolution in "wrong" octave OK, but that should actually happen more rarely?)
 
 
-* Strasheela examples
+* Strasheela applications and examples
 
+** Critical Listening exercises generator for intervals, harmonies, etc.
+
+   Use new Strasheela-PWGL/OpenMusic interface for creating exercises which students can use on their own
+
+  - Interval identification
+    - Melodic as well as harmonic
+    - Different instruments rather than only piano
+    - Matching similar intervals 
+      - Harmonic categories: perfect/imperfect consonance; mild/sharp dissonance
+      - Melodic categories: similar size
+      - Idea: play one interval and then (after rest) 3-4 other intervals in same or different category, different range, perhaps even with different instruments -- students should say which of the later interval(s) is/are similar to first interval 
+      - Note: students may have more problems with terminology than actual listening -- this exercise eliminates terminology problem
+
+  - Chord identification
+    - Melodic as well as harmonic
+    - Different instruments (including mix of orchestral instruments)
+    - ? Matching similar chords? (Similar dissonance degree)
+
+  - ?? Some exercise for cadences
+
+
+  This program would take into account that
+  - Students may have more difficulties with terminology than with the actual listening process -- these exercises can eleminate the terminology problem
+  - Learnign supported by making students aware of similarities between sets of all intervals
+  - Leaning supported by more varied exercises
+  - Explicit practising of "dimensions" (harmonic and melodic similarities, register, and orchestration)
+
+  A proper research paper then would also report how this application worked in class (e.g., somehow measure improvement of student learning)
+  
 
 * Strasheela Bugs
 
@@ -160,7 +189,324 @@ MyTestScore = {Score.makeScore
    HS.rules.expressEssentialChordPCs
 
 
-* Strasheela design						    :STRASHEELA:
+* Strasheela design and development 				 :STRASHEELA:
+
+** TODO Move Strasheela sources to GitHub			       :SOON:
+
+
+*** Todo for transfer
+
+**** Learn Git etc.
+
+     Just had a little look -- very promising after my previous experience with Subversion and my tools with that
+
+***** Git
+
+***** Git emacs interface
+
+      Use magit (version 1.1.1 already installed)
+
+      Get started
+      M-x magit-status
+
+      Tutorial video
+      http://vimeo.com/2871241    
+
+      Cheatsheet
+      http://daemianmack.com/magit-cheatsheet.html
+
+      Manual
+      http://magit.github.com/magit/magit.html
+***** GitHub
+
+
+**** Transfer Strasheela subversion repository to git
+
+     - See which tools Sourceforge offers to move svn repository to git
+       -> seemingly none: I have to do the transfer and then use git from then on
+
+
+***** Test one-way transfer with git itself
+
+     This seems to work fine:
+
+cd /Users/torsten/oz/music/Strasheela/strasheela-git      
+git svn clone http://strasheela.svn.sourceforge.net/svnroot/strasheela strasheela.git
+
+
+***** Idea: have a local git repository				    :ARCHIVE:
+
+
+      SubGit
+      http://blog.tfnico.com/2011/12/git-svn-mirror-product-subgit.html
+      -> Only works with local svn repository (or SubGit runs on server)
+
+
+
+**** Upload Strasheela git repository to git hu
+
+
+*** What stays at Sourceforge
+
+    - Releases and their downloads
+    - Website
+    - Mailing lists
+    - Apps: Track, 	Piwik..
+    - ...
+
+
+*** What moves to GitHub
+
+    - The application sources and their development
+
+
+*** General Info
+
+**** Advantages of GitHub
+
+     - !! More likely collaboration of other developers
+     - Better user interface and navigation than Sourceforge
+     - Distributed versioning system 
+       - Off-line commits, and more often commits
+       - More easy to fork
+     - Lets see... if I can use both svn and git alongsise..
+
+
+**** GitHub info
+
+     - Storage limited to 300 MB (?)
+       -> not a problem even with my current mp3s (repository currently ~65 MB)
+
+
+** TODO Add support for grace notes				       :NEXT:
+
+   Duration value 0 
+
+   Consider some way to distinguish between option that notes are either grace notes or "not existing" (CTT), e.g.,
+   - Grace notes are always before some note with duration > 0, while "non-existing" notes are at the end of a container
+   - Def some global switch (in Init.oz) to generally enable or disable grace note support
+
+   Grace notes are then automatically recognised by Fomus and notated accordingly
+
+   Consider defining in Measure.oz special accent constraint for notes with duration > 0 following 1 or more grace notes
+   
+
+
+** TODO [#A] Add =articulation= parameter (FD) per note 	       :NEXT:
+   
+   Consider: define mixin class in ScoreCore.oz, and make this part of standard note class
+
+   The value of this parameter expresses differences between articulations affecting the sounding duration of a note. The value can be, e.g., a percentage unit of measurement. The parameter can be used both for notation and for playback. 
+
+   Possible mapping between ranges of percentages and notation 
+
+   staccatissimo: ~ 30 %
+   staccato: ~ 50 %
+   tenuto:
+   non-legato (default): 100 
+   legato: 110
+   ...
+
+   Notating a legato slur: sequence of legato notes, but last note of slur is non-legato  
+
+
+** TODO Somehow add tempo statement to score 			     :NEXT:
+
+   How to express changing tempi?
+
+** TODO Add constrainable =marks= FS per note 			     :NEXT:
+
+   /Similar approach as constrainable =instruments= FS/, see [[*Add%20constrainable%20%3Dinstruments%3D%20FS%20per%20note][Add constrainable =instruments= FS per note]] 
+
+   Consider: define mixin class in ScoreCore.oz, and make this part of standard note class
+
+   Problems:
+   - What about marks that require arguments (e.g., added text) -- shall I simply ignore this option?
+   - What about marks that mark a group (e.g., piano pedalling -- a single pedalling mark is not sufficient, as I may want to have a long sequence of pedalled notes, but the pedal needs to be raised at times) 
+     
+
+   See Fomus supported marks at http://fomus.sourceforge.net/doc.html/Marks.html#Marks
+
+
+
+** TODO Add constrainable =instruments= FS per note 		     :NEXT:
+
+   Consider: define mixin class in ScoreCore.oz, but to which note classes to add?
+
+   - Per note add FS, where set elements represent instruments that play this note
+     - Same note can be played by multiple instruments simultaneously, so set cardiality can be > 1
+   - Some user-defineable tuple (global def) defines mapping of FS integers to instrument names
+     - Position in tuple is integer
+     - Default value of this tuple contains all instruments defined by Fomus
+   - Note argument =instruments= expects either FS or list; list contains instrument names (atoms, must be contained in instrument tuple) 
+
+
+   Consider defining some resonable constraints, e.g.,
+   [Leave these ideas as comments in source file, but do not spend much time, if you may not use this at all]
+   - Limit number of sim instruments per note: constrain cardiality of =instruments= FS
+   - Limit number of changing instrumentation: min number of consecutive notes any instrument must be engaged (e.g., do not have a note only playing a single note of a melody, but always at least three at a time)
+   - Careful: limit pitch domain depending on instrument (I better rely on, say, Sibelius to show me this)
+   - Careful: limit possible playing techniques (constrainable [articulation] FS) depending on instrument
+     Better control this manually?
+
+   - ?? More complex instrumentation/orchestration constraints (e.g., which instruments fuse well...)
+     Likely way too complex. I would need some higher level representation (e.g., some extra analytical objects with more abstract information like how well instruments should fuse etc.)
+     -> Save this for extra research project, or do such things manually. 
+
+
+   - Check whether notation of dynamics still works which changing instrumentation within a single "voice" (seq of notes)
+
+
+** TODO Note amplitudes -> music notation with Fomus 		     :NEXT:
+
+   [This should work already, just check]
+   
+   Just make sure that 
+
+   - If same amp value is repeated over several notes within a voice (seq of notes) then [static] dynamic values (p, f, ff) are only printed once
+   - If amp values change progressively within a voice (seq of notes) then cresc. or dim. hairpins should be created
+   - [Static] dynamic values are only printed at local max and min within such change of amp values
+
+   Create example file demonstrating these features
+
+
+** TODO Define interface to integrate Strasheela into OpenMusic or PWGL :NEXT:
+
+   see [[file:~/oz/music/Strasheela/strasheela/trunk/strasheela/contributions/anders/PW_OM_Interface/Brainstorming.org]]
+
+
+** TODO [#A] Define Strasheela score transformations (instead of plain generation as so far) :NEXT:
+
+   Remember importance of transformations stressed by Tristan Murail in Interview in Hirs' OpenMusic book
+
+*** Define Strasheela scripts that expect score as input of which variation will be created
+
+    - These scripts will expect various args, as the Segs sub-CSPs (extended scripts), such as constraints to switch on/off certain constraints 
+
+    - Additional args (funs/procs for flexibility) control what to remove from given score or how to simplify it, e.g.,
+      - Remove underlying harmony such as score or scale objects (if given)
+      - Reduce absolute pitches to scale degrees, matrix pitch contour, or plain pitch contour or.. (i.e. transform determined pitches to variables with given domain, but apply constraint for pitch contour or whatever)
+      - Reduce determined durations to ...
+
+    - Make underlying harmony to add an extra arg (by default harmony will be computed from scratch, but (partially) determined harmony can also be given by users)
+
+
+*** Define score transformations 
+
+**** Platform 
+
+     Define these transformations in Strasheela with higher-order programming
+     (faster to do in Strasheela, so I can focus on their musical use)
+
+     I may later consider to port them to PWGl/OpenMusic
+
+
+     - I would have liked to use PWGl/OpenMusic instead, but their music representation interfaces are not sufficiently documented (or not powerful enough, if I use their plain "textual" interface -- I would first need to define various accessors etc)
+       - Various [simple] score transformations defined in PWGl/OpenMusic: there the result can be easily displayed in score editor, be further processed... 
+       - Consider using PWGLs score scripts for defining score transformations
+       - Alternatively/additionally define 1 or more higher-order functions in PWGl/OpenMusic for score transformations 
+     - I know the Strasheela representation..
+     - Potential problem: I then always deal with variables and propagation, which slows down processing?
+
+       
+
+***** Info on PWGL scripts
+
+      [I could not find any reference for ENP, so be very careful whether you want to use that for anything slightly larger]
+
+      See PWGL-book.pdf (documentation collection), Section 2.3.5, Scripting
+
+      Scripting uses pattern matching syntax, so for defining arbitrary selections other means are necessary.
+
+
+****** PWGL script questions 
+
+       - Can objects such as notes be added/removed? 
+	 Yes, see example 2.3.5.4.3, Chopin-Octaves
+       - Changing the rhythm tree: see example 2.3.5.4.4, RTM-Modification
+
+
+****** Slur all note groups that are separated by rests
+
+Hans,
+
+It's a bit tricky using ENP-script in this case... I'd use the code-box and the following piece of code:
+
+(let (group)
+ (dolist (voice (collect-enp-objects score :voice))
+   (dolist (chord (collect-enp-objects voice :chord))
+     (if (rest-p chord)
+         (progn
+           (when (cdr group)
+             (insert-expression (reverse group) expression))
+           (setq group NIL))
+       (push chord group)))))
+
+Expression is a keyword naming the expression, e.g., :slur
+
+Mika
+
+On 14.5.2012, at 19:06, Tutschku Hans wrote:
+
+What ENP script syntax should be used to slur all note groups, which are separated by rests?
+As the position of the rests and the length of the note groups varies, I can't think of a solution
+using index variables. And obviously, single notes between rests should not be slurred.
+
+Any help is very much appreciated.
+
+Best, Hans
+
+
+
+**** Transformations
+
+     Transformation examples 
+     - Transform all notes by the same function (mapping), e.g., 
+       - Transpose the pitch by a constant summand or factor
+       - Stretch/shrink durations by a constant summand or factor
+       - ...
+     - Transform (or remove) notes with a certain feature, e.g.,
+       - Some parameter (duration, pitch, articulation...) has a certain value or is above/below a certain value, e.g.,
+	 - Lengthen all durations that exceed a given thresh-hold by a given summand or factor
+       Concrete examples	  
+       - Transpose all notes with a certain duration or more up by a certain interval
+       - Remove notes that are below a certain pitch threshold (substitute with a rest) 
+       - Transform individual notes that meet certain criteria into chords, e.g.,
+	 - Implement transformations inspired by sound processing techniques (e.g., ring modulation, frequency modulation..) by adding the respective notes
+       - Transform chords into figurations
+     - Transform all notes that meet certain test by same function, where one (or more) function argument(s) change(s) for different notes, e.g., given as
+       - BPF where the value depends on the note's start time (or position in a part)
+       - A list of values where the index is the note's position in a part
+       - A pattern -- can I somehow have Common Music pattern (possibly form an older Common Music version) important into PWGL/OpenMusic?
+       - A function (e.g., a random function)
+       Concrete examples: 
+       - "Tilt" or otherwise deform the whole score (or certain parts) in pitch, where the pitch change is given as a BPF
+       - Transform pitch of score controlled by a special BPF for each of its parts
+     - Transform all notes that meet certain test by same function, where one (or more) function argument(s) depend on the note's list of predecessors/successors (and possibly also some BPF etc as above)
+       Concrete examples	  
+       - Transpose all notes with a certain duration or more up so that they form local maxima (higher than both predecessor and successor)
+     - !! Transform (or remove) notes with a certain feature, where the feature test function expects an additional arg, e.g., given as BPF, list, pattern or function
+       Concrete examples: 
+       - Notes that exceed a certain duration are somehow transformed, but the duration threshold changes over time
+
+     Other rough ideas
+     - Diminution: e.g., as proposed by Stockhausen's Ausmultipizieren, or (other) fractal techniques substituting, e.g., long notes by certain phrases (ornamentations)
+     - Augmentation: e.g., as proposed by Stockhausen, leaving out certain detail 
+     - Granular synthesis: short fragments of score (grains) extracted and somehow arranged in time
+
+
+     TODO: how can I transform a score depending on another?	
+     Rough ideas first
+     - Convolution (possibly in theory, but I should probably reduce data later..)
+     - Some interpolation
+     - Some mixing (how? control different "levels", i.e. how much they contribute to final result)
+     - Other sound processing inspired ideas: ring modulation, FM (?)
+
+
+
+**** TODO Collect more examples in Hirs' OpenMusic book when she discusses work of Murail
+
+
 
 ** Revise music representation to allow for efficient distro stratey for pattern motifs with rests (note offset time > 0) :ARCHIVE:
 
