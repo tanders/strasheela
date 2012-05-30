@@ -1108,8 +1108,12 @@ define
    %%
    %% */
    %%
+   %% BUG:
+   %% - Is first note ignored in accent rating calculation?
+   %%
    %% TODO:
    %% - metricPosition: allow for FS as arg value that contains all the "allowed" times for accents within a measure
+   %%
    proc {Accent_If N AccentConstraints Args}
       %% SetAccentRating and Accent_If2 share the same Args.rating
       Rating = {FD.decl}
