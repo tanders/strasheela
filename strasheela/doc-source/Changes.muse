@@ -1,6 +1,19 @@
 #title Changes 
 ; #author Torsten Anders
 
+* Changes in Version 0.10.2 (30 April 2012)
+
+  - Main additions and changes 
+
+  - Main documentation additions
+
+  - Minor additions
+
+  - Further bug fixes and changes
+    - Strasheela development moved from SourceForge to [[https://github.com/tanders/strasheela/tree/master/strasheela][GitHub]] (and is now using [[http://en.wikipedia.org/wiki/Git_%28software%29][Git]] instead of [[http://en.wikipedia.org/wiki/Subversion_%28software%29][Subversion]]). Nevertheless, other things stay at SourceForge (e.g., the website, mailing lists, releases).
+
+  - For further details see the [[https://github.com/tanders/strasheela/commits/master][list of commits at GitHub]].
+
 
 * Changes in Version 0.10.1 (30 April 2012)
 
