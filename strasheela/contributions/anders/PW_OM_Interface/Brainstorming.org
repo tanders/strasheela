@@ -1,0 +1,57 @@
+#+TITLE: Integration of Strasheela into PWGL or OpenMusic
+
+
+* Approach idea
+
+OpenMusic/PWGL establishes connection to some OzServer instance (see file:~/oz/music/Strasheela/strasheela/trunk/strasheela/contributions/anders/OzServer/) or starts such a server. Ideally, this server uses the Oz compiler that runs also by the OPI, so that Oz code can always conveniently sent from Emacs, but this is not necessary.
+
+
+Some OpenMusic/PWGL object executes Strasheela score scripts and receives the results. This object sends in the background code to the server started before.
+Arguments
+  - Optional: Some Oz/Strasheela definition, given either as string or path to an *.oz source file.
+    This code is intended to define the score script that is called.
+    This code will be fed initially. Feeding it always before makes sure that any change to the code is immediately reflected the next time this object is evaluated.
+  - Name of script
+  - List with args of script 
+    How can I suitably input a complex nested list/record of arguments in PWGL or OpenMusic
+    - Tmp solution: simply a keywords list, but find some GUI-based solution later
+
+
+Output
+  - Score in ENP format
+
+
+ that receives as input 
+
+  - 
+
+
+** !! Oz <-> Lisp Interface 
+
+   see file:~/oz/music/Strasheela/strasheela/trunk/strasheela/contributions/anders/OzServer/clients/oz-server-lisp-client
+   and file:~/PWGL-User/0-TorstensOtherStuff/StrasheelaInterface/ENP2Strasheela.lisp
+   and the older file:~/lisp/own-projects/lisp-to-oz
+
+   Use ompw: file:~/lisp/foreign-projects/ompw
+   
+
+** !! Interface ENP score object -> Strasheela score 
+
+   I could use that right away, even without realising the Integration of Strasheela into PWGL or OpenMusic
+   E.g., for defining motifs.. 
+
+   Goal: easily post Strasheela score code into Lisp listening by evaluating ENP score
+   - Define Lisp->Oz syntax translation of simple data structures within Lisp
+   - Define ENP -> Strasheela score translation within Lisp
+
+
+
+
+
+
+
+
+
+
+
+
