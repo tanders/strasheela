@@ -16,21 +16,16 @@ Strasheela is a highly expressive constraint-based music composition system.[2] 
 
 * News 
 
-  For the lates changes check the development at [[https://github.com/tanders/strasheela/tree/master/strasheela][GitHub]].
+  For the lates changes check the development at [[https://github.com/tanders/strasheela/commits/master][GitHub]].
 ; the [[http://apps.sourceforge.net/trac/strasheela/timeline][Trac Timeline]] 
 
-  *31 May 2012*: Strasheela development moved from SourceForge to [[https://github.com/tanders/strasheela/tree/master/strasheela][GitHub]] (and is now using [[http://en.wikipedia.org/wiki/Git_%28software%29][Git]] instead of [[http://en.wikipedia.org/wiki/Subversion_%28software%29][Subversion]]). Nevertheless, other things stay at sourceforge (e.g., the website, mailing lists, releases).  
+  *31 May 2012*: Strasheela development moved from SourceForge to [[https://github.com/tanders/strasheela/tree/master/strasheela][GitHub]] (and is now using [[http://en.wikipedia.org/wiki/Git_%28software%29][Git]] instead of [[http://en.wikipedia.org/wiki/Subversion_%28software%29][Subversion]]). Nevertheless, other things stay at SourceForge (e.g., the website, mailing lists, releases).  
 
   *30 April 2012*: [[https://sourceforge.net/projects/strasheela/][Strasheela 0.10.1 released]]<br> 
   This is the first release within the last three years. Several important extensions have been added. For example, constraints are available that control the rhythmic accent of notes (their rhythmic weight) depending on a wide range of musical features, including differences in duration, pitch intervals, presence of an anacrusis etc. The metric position of notes can depend on their accent in various ways. Texture constraints control whether a musical section is, say, homophonic, quasi-homophonic, homo-directional etc. Arbitrary regular temperaments including extended just intonation are now supported. Many further features were added, and bug fixes have been made as well (see [[Changes]]).  
 
-  *28 December 2011*: Since its last release in 2009 the development of Strasheela has somewhat slowed down. I have now various other responsibilities  as a father of twins on the on hand, and as lecturer and course leader on the other hand. Nevertheless, work on Strasheela is still ongoing. I just added several recent Strasheela-related papers including 4 Journal articles to the list of [[Publications]]. I also used Strasheela for [[http://cmr.soc.plymouth.ac.uk/tanders/music.htm][several recent compositions]].
-
-  Also, several important extensions have meanwhile been added to the code repository, including texture constraints (controls whether a musical section is, say, homophonic, quasi-homophonic, homo-directional etc.); constraints on rhythmic accents (controls the rhythmic weight of notes depending on a wide range of musical feature -- including relative duration, pitch intervals, presence of an anacrusis ++ and the relation between rhythmic weights and metric positions); and support for arbitrary regular temperaments including extended just intonation.  
-
-  *28 March 2009*: [[https://sourceforge.net/projects/strasheela/][Strasheela 0.9.10 released]] ([[Changes]])  
-
   [[OldNews][Old news]]
+
 
 * Background Information 
 

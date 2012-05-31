@@ -1,7 +1,7 @@
 #title Changes 
 ; #author Torsten Anders
 
-* Changes in Version 0.10.2 (30 April 2012)
+* Changes in Version 0.10.2 (no date yet)
 
   - Main additions and changes 
 
