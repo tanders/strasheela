@@ -327,6 +327,242 @@ git svn clone http://strasheela.svn.sourceforge.net/svnroot/strasheela strasheel
        -> not a problem even with my current mp3s (repository currently ~65 MB)
 
 
+** TODO Get Oz syntax highlighting at GitHub			       :SOON:
+
+   Write Oz lexer for Pygments (using Python)
+
+   *!! Pieter Belmans (pbelmans) used Strasheela and Oz before and has experience with Pygments !!*
+   He and may want to help me write a lexer for Oz
+   !! A lexer definition by pbelmans (Pieter Belmans) for the GAP language
+   http://pbelmans.wordpress.com/2012/04/20/a-pygments-lexer-for-gap/
+   https://github.com/pbelmans/gap-pygments-lexer
+   (Oz/Strasheela related: http://pbelmans.wordpress.com/category/music/) 
+
+
+   Doc: Pygments Introduction and Quickstart
+   http://pygments.org/docs/quickstart/
+
+   Doc: Write your own lexer
+   http://pygments.org/docs/lexerdevelopment/
+
+   Available lexers
+   http://pygments.org/docs/lexers/
+
+   Pygments development and source at bitbucket
+   https://bitbucket.org/birkenfeld/pygments-main/src
+   They have several open pull requests including some lexers 
+   
+   Full lexers definition sources in 
+   https://bitbucket.org/birkenfeld/pygments-main/src/5cc94956e233/pygments/lexers
+
+
+*** First step: define Lexer that simply highlights Oz keywords 
+
+    I need some full and simple template, then this is actually very easy to define
+    -> No, they want lexers that highlight the full syntax, but that should be possible too -- see Roy book, p. 835ff for Oz syntax details (not very much..)
+    
+    *List of Oz keywords from van Roy book, p. 841 (lated PDF draft)*
+
+andthen default
+false feat finally for from fun functor if import in
+lazy
+local
+lock return meth	self mod	skip not	then of	thread or 	true orelse	try prepare 	unit proc
+prop raise require 
+at attr break case catch choice class collect cond  continue declare
+define dis  div do else elsecase  elseif elseof  end
+export fail
+
+
+*** Consider later to refine/extend that lexer
+
+*** Make my Lexer available for the Pygments team and send them pull request
+
+    Add an example file to tests/examplefiles that exercises as much of the syntax as possible
+    (And please don't commit on named branches. But I can fix that on my end as well.)
+
+
+    Note that it can take several weeks until they react (see http://groups.google.com/group/pocoo-libs/browse_thread/thread/fbf52b3da5759d00?pli=1)
+
+Example lexer pull request (with some minor errors)
+https://bitbucket.org/birkenfeld/pygments-main/pull-request/61/
+
+Google, e.g., pygments lexer for more examples..
+
+
+*** Notify GitHub about new Oz lexer
+
+
+** TODO [#A] Try to clean up score script parameters -- simplify if possible! :NEXT:
+
+   Do this in a git branch, just to make sure...
+
+*** Brainstorming
+
+    General goal: clean up [inherited] argument lists of score scripts, or alternatively document them better (e.g., can I somehow automatically document all args?)
+
+
+*** Revise defs in ScoreCore.oz
+
+    MakeConstructor
+    MakeItems MakeItems_iargs MakeContainer MakeSim MakeSeq
+    DefSubscript DefMixinSubscript
+
+    *Note: pointer into master branch*
+    See [[file:~/oz/music/Strasheela/strasheela/strasheela/source/ScoreCore.oz::fun%20{MakeConstructor%20Constructor%20Defaults}][file:~/oz/music/Strasheela/strasheela/strasheela/source/ScoreCore.oz::fun {MakeConstructor Constructor Defaults}]]
+
+
+*** Revise contribution Segs
+
+    *Note: pointer into master branch*
+    See [[file:~/oz/music/Strasheela/strasheela/strasheela/contributions/anders/Segments/Segments.oz][file:~/oz/music/Strasheela/strasheela/strasheela/contributions/anders/Segments/Segments.oz}]]
+
+
+*** !! Finally, revise all calls to these defs
+
+    - Revise all calls within Strasheela sources
+    - Revise all calls of composition projects that are work in progress
+    - Mark older/recent composition projects: they should use Strasheela version 0.10.1
+      (last release before these changes)
+
+
+** TODO [#A] Define Strasheela score transformations (instead of plain generation as so far) :NEXT:
+
+   Remember importance of transformations stressed by Tristan Murail in Interview in Hirs' OpenMusic book
+
+*** Define Strasheela scripts that expect score as input of which variation will be created
+
+    - These scripts will expect various args, as the Segs sub-CSPs (extended scripts), such as constraints to switch on/off certain constraints 
+
+    - Additional args (funs/procs for flexibility) control what to remove from given score or how to simplify it, e.g.,
+      - Remove underlying harmony such as score or scale objects (if given)
+      - Reduce absolute pitches to scale degrees, matrix pitch contour, or plain pitch contour or.. (i.e. transform determined pitches to variables with given domain, but apply constraint for pitch contour or whatever)
+      - Reduce determined durations to ...
+
+    - Make underlying harmony to add an extra arg (by default harmony will be computed from scratch, but (partially) determined harmony can also be given by users)
+
+
+*** Define score transformations 
+
+    Define these transformations in Strasheela with higher-order programming
+    Faster to do in Strasheela (and also likely more expressive), so I can focus on their musical use
+
+   See ScoreCore.oz:
+   TransformScore TransformScore2
+   ? CopyScore CopyScore2
+
+**** Transformations
+
+     Transformation examples 
+     - Transform all notes by the same function (mapping), e.g., 
+       - Transpose the pitch by a constant summand or factor
+       - "Scatter" pitches, but keep the harmony by transposing individual notes or small groups of notes (e.g., non-harmonic notes and the consecutive harmonic note) by a random number of octaves up or down
+       - Stretch/shrink durations by a constant summand or factor
+       - ...
+     - Transform (or remove) notes with a certain feature, e.g.,
+       - Some parameter (duration, pitch, articulation...) has a certain value or is above/below a certain value, e.g.,
+	 - Lengthen all durations that exceed a given thresh-hold by a given summand or factor
+       Concrete examples	  
+       - Transpose all notes with a certain duration or more up by a certain interval
+       - Remove notes that are below a certain pitch threshold (substitute with a rest) 
+       - Transform individual notes that meet certain criteria into chords, e.g.,
+	 - Implement transformations inspired by sound processing techniques (e.g., ring modulation, frequency modulation..) by adding the respective notes
+       - Transform chords into figurations
+     - Transform all notes that meet certain test by same function, where one (or more) function argument(s) change(s) for different notes, e.g., given as
+       - BPF where the value depends on the note's start time (or position in a part)
+       - A list of values where the index is the note's position in a part
+       - A pattern -- can I somehow have Common Music pattern (possibly form an older Common Music version) important into PWGL/OpenMusic?
+       - A function (e.g., a random function)
+       Concrete examples: 
+       - "Tilt" or otherwise deform the whole score (or certain parts) in pitch, where the pitch change is given as a BPF
+       - "Scatter" pitches, but keep the harmony by transposing individual notes or small groups of notes (e.g., non-harmonic notes and the consecutive harmonic note) by octaves up/down, so that the contour of local max/min is controlled by a BPF
+       - Transform pitch of score controlled by a special BPF for each of its parts
+     - Transform all notes that meet certain test by same function, where one (or more) function argument(s) depend on the note's list of predecessors/successors (and possibly also some BPF etc as above)
+       Concrete examples	  
+       - Transpose all notes with a certain duration or more up so that they form local maxima (higher than both predecessor and successor)
+     - !! Transform (or remove) notes with a certain feature, where the feature test function expects an additional arg, e.g., given as BPF, list, pattern or function
+       Concrete examples: 
+       - Notes that exceed a certain duration are somehow transformed, but the duration threshold changes over time
+
+     Other rough ideas
+     - Diminution: e.g., as proposed by Stockhausen's Ausmultipizieren, or (other) fractal techniques substituting, e.g., long notes by certain phrases (ornamentations)
+     - Augmentation: e.g., as proposed by Stockhausen, leaving out certain detail 
+     - Granular synthesis: short fragments of score (grains) extracted and somehow arranged in time
+
+
+     TODO: how can I transform a score depending on another?	
+     Rough ideas first
+     - Convolution (possibly in theory, but I should probably reduce data later..)
+     - Some interpolation
+     - Some mixing (how? control different "levels", i.e. how much they contribute to final result)
+     - Other sound processing inspired ideas: ring modulation, FM (?)
+
+
+
+**** Todo: Collect more examples in Hirs' OpenMusic book when she discusses work of Murail
+
+**** Platform							    :ARCHIVE:
+
+     Define these transformations in Strasheela with higher-order programming
+     (faster to do in Strasheela, so I can focus on their musical use)
+
+     I may later consider to port them to PWGl/OpenMusic
+
+
+     - I would have liked to use PWGl/OpenMusic instead, but their music representation interfaces are not sufficiently documented (or not powerful enough, if I use their plain "textual" interface -- I would first need to define various accessors etc)
+       - Various [simple] score transformations defined in PWGl/OpenMusic: there the result can be easily displayed in score editor, be further processed... 
+       - Consider using PWGLs score scripts for defining score transformations
+       - Alternatively/additionally define 1 or more higher-order functions in PWGl/OpenMusic for score transformations 
+     - I know the Strasheela representation..
+     - Potential problem: I then always deal with variables and propagation, which slows down processing?
+
+***** Info on PWGL scripts
+
+      [I could not find any reference for ENP, so be very careful whether you want to use that for anything slightly larger]
+
+      See PWGL-book.pdf (documentation collection), Section 2.3.5, Scripting
+
+      Scripting uses pattern matching syntax, so for defining arbitrary selections other means are necessary.
+
+
+****** PWGL script questions 
+
+       - Can objects such as notes be added/removed? 
+	 Yes, see example 2.3.5.4.3, Chopin-Octaves
+       - Changing the rhythm tree: see example 2.3.5.4.4, RTM-Modification
+
+
+****** Slur all note groups that are separated by rests
+
+Hans,
+
+It's a bit tricky using ENP-script in this case... I'd use the code-box and the following piece of code:
+
+(let (group)
+ (dolist (voice (collect-enp-objects score :voice))
+   (dolist (chord (collect-enp-objects voice :chord))
+     (if (rest-p chord)
+         (progn
+           (when (cdr group)
+             (insert-expression (reverse group) expression))
+           (setq group NIL))
+       (push chord group)))))
+
+Expression is a keyword naming the expression, e.g., :slur
+
+Mika
+
+On 14.5.2012, at 19:06, Tutschku Hans wrote:
+
+What ENP script syntax should be used to slur all note groups, which are separated by rests?
+As the position of the rests and the length of the note groups varies, I can't think of a solution
+using index variables. And obviously, single notes between rests should not be slurred.
+
+Any help is very much appreciated.
+
+Best, Hans
+
+
 ** TODO Add support for grace notes				       :NEXT:
 
    Duration value 0 
@@ -422,140 +658,6 @@ git svn clone http://strasheela.svn.sourceforge.net/svnroot/strasheela strasheel
 ** TODO Define interface to integrate Strasheela into OpenMusic or PWGL :NEXT:
 
    see [[file:~/oz/music/Strasheela/strasheela/strasheela/contributions/anders/PW_OM_Interface/Brainstorming.org]]
-
-
-** TODO [#A] Define Strasheela score transformations (instead of plain generation as so far) :NEXT:
-
-   Remember importance of transformations stressed by Tristan Murail in Interview in Hirs' OpenMusic book
-
-*** Define Strasheela scripts that expect score as input of which variation will be created
-
-    - These scripts will expect various args, as the Segs sub-CSPs (extended scripts), such as constraints to switch on/off certain constraints 
-
-    - Additional args (funs/procs for flexibility) control what to remove from given score or how to simplify it, e.g.,
-      - Remove underlying harmony such as score or scale objects (if given)
-      - Reduce absolute pitches to scale degrees, matrix pitch contour, or plain pitch contour or.. (i.e. transform determined pitches to variables with given domain, but apply constraint for pitch contour or whatever)
-      - Reduce determined durations to ...
-
-    - Make underlying harmony to add an extra arg (by default harmony will be computed from scratch, but (partially) determined harmony can also be given by users)
-
-
-*** Define score transformations 
-
-**** Platform 
-
-     Define these transformations in Strasheela with higher-order programming
-     (faster to do in Strasheela, so I can focus on their musical use)
-
-     I may later consider to port them to PWGl/OpenMusic
-
-
-     - I would have liked to use PWGl/OpenMusic instead, but their music representation interfaces are not sufficiently documented (or not powerful enough, if I use their plain "textual" interface -- I would first need to define various accessors etc)
-       - Various [simple] score transformations defined in PWGl/OpenMusic: there the result can be easily displayed in score editor, be further processed... 
-       - Consider using PWGLs score scripts for defining score transformations
-       - Alternatively/additionally define 1 or more higher-order functions in PWGl/OpenMusic for score transformations 
-     - I know the Strasheela representation..
-     - Potential problem: I then always deal with variables and propagation, which slows down processing?
-
-       
-
-***** Info on PWGL scripts
-
-      [I could not find any reference for ENP, so be very careful whether you want to use that for anything slightly larger]
-
-      See PWGL-book.pdf (documentation collection), Section 2.3.5, Scripting
-
-      Scripting uses pattern matching syntax, so for defining arbitrary selections other means are necessary.
-
-
-****** PWGL script questions 
-
-       - Can objects such as notes be added/removed? 
-	 Yes, see example 2.3.5.4.3, Chopin-Octaves
-       - Changing the rhythm tree: see example 2.3.5.4.4, RTM-Modification
-
-
-****** Slur all note groups that are separated by rests
-
-Hans,
-
-It's a bit tricky using ENP-script in this case... I'd use the code-box and the following piece of code:
-
-(let (group)
- (dolist (voice (collect-enp-objects score :voice))
-   (dolist (chord (collect-enp-objects voice :chord))
-     (if (rest-p chord)
-         (progn
-           (when (cdr group)
-             (insert-expression (reverse group) expression))
-           (setq group NIL))
-       (push chord group)))))
-
-Expression is a keyword naming the expression, e.g., :slur
-
-Mika
-
-On 14.5.2012, at 19:06, Tutschku Hans wrote:
-
-What ENP script syntax should be used to slur all note groups, which are separated by rests?
-As the position of the rests and the length of the note groups varies, I can't think of a solution
-using index variables. And obviously, single notes between rests should not be slurred.
-
-Any help is very much appreciated.
-
-Best, Hans
-
-
-
-**** Transformations
-
-     Transformation examples 
-     - Transform all notes by the same function (mapping), e.g., 
-       - Transpose the pitch by a constant summand or factor
-       - "Scatter" pitches, but keep the harmony by transposing individual notes or small groups of notes (e.g., non-harmonic notes and the consecutive harmonic note) by a random number of octaves up or down
-       - Stretch/shrink durations by a constant summand or factor
-       - ...
-     - Transform (or remove) notes with a certain feature, e.g.,
-       - Some parameter (duration, pitch, articulation...) has a certain value or is above/below a certain value, e.g.,
-	 - Lengthen all durations that exceed a given thresh-hold by a given summand or factor
-       Concrete examples	  
-       - Transpose all notes with a certain duration or more up by a certain interval
-       - Remove notes that are below a certain pitch threshold (substitute with a rest) 
-       - Transform individual notes that meet certain criteria into chords, e.g.,
-	 - Implement transformations inspired by sound processing techniques (e.g., ring modulation, frequency modulation..) by adding the respective notes
-       - Transform chords into figurations
-     - Transform all notes that meet certain test by same function, where one (or more) function argument(s) change(s) for different notes, e.g., given as
-       - BPF where the value depends on the note's start time (or position in a part)
-       - A list of values where the index is the note's position in a part
-       - A pattern -- can I somehow have Common Music pattern (possibly form an older Common Music version) important into PWGL/OpenMusic?
-       - A function (e.g., a random function)
-       Concrete examples: 
-       - "Tilt" or otherwise deform the whole score (or certain parts) in pitch, where the pitch change is given as a BPF
-       - "Scatter" pitches, but keep the harmony by transposing individual notes or small groups of notes (e.g., non-harmonic notes and the consecutive harmonic note) by octaves up/down, so that the contour of local max/min is controlled by a BPF
-       - Transform pitch of score controlled by a special BPF for each of its parts
-     - Transform all notes that meet certain test by same function, where one (or more) function argument(s) depend on the note's list of predecessors/successors (and possibly also some BPF etc as above)
-       Concrete examples	  
-       - Transpose all notes with a certain duration or more up so that they form local maxima (higher than both predecessor and successor)
-     - !! Transform (or remove) notes with a certain feature, where the feature test function expects an additional arg, e.g., given as BPF, list, pattern or function
-       Concrete examples: 
-       - Notes that exceed a certain duration are somehow transformed, but the duration threshold changes over time
-
-     Other rough ideas
-     - Diminution: e.g., as proposed by Stockhausen's Ausmultipizieren, or (other) fractal techniques substituting, e.g., long notes by certain phrases (ornamentations)
-     - Augmentation: e.g., as proposed by Stockhausen, leaving out certain detail 
-     - Granular synthesis: short fragments of score (grains) extracted and somehow arranged in time
-
-
-     TODO: how can I transform a score depending on another?	
-     Rough ideas first
-     - Convolution (possibly in theory, but I should probably reduce data later..)
-     - Some interpolation
-     - Some mixing (how? control different "levels", i.e. how much they contribute to final result)
-     - Other sound processing inspired ideas: ring modulation, FM (?)
-
-
-
-**** TODO Collect more examples in Hirs' OpenMusic book when she discusses work of Murail
 
 
 
@@ -3779,9 +3881,5 @@ If problems occur ask gustavo.ggutierrez@gmail.com
 ** TODO Read Strasheela doc						  :EASY:
 
    know your system, e.g., know all my Patterns 
-
-
-
- 
 
 
