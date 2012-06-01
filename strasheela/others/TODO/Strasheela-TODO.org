@@ -661,6 +661,10 @@ Best, Hans
 
 
 
+** Implement morpology (analysis) constraints (proposed by P Aralla etc.)
+
+   See draft at [[file:~/oz/music/Strasheela/tmp/Morphology.oz::%25%25][file:~/oz/music/Strasheela/tmp/Morphology.oz::%%]]
+
 ** Revise music representation to allow for efficient distro stratey for pattern motifs with rests (note offset time > 0) :ARCHIVE:
 
 *** Current situation and problem
@@ -2668,7 +2672,8 @@ periods in an octave.
     
     - Dynamic tuning (even with only slightly extended current harmony model)
 
-:COMMENT:
+
+**** COMMENT 
 
 If I only have a new note mixin class that maps regular temperaments to a pitch class (i.e. still use the existing chord/scale classes etc), then I can already do dynamic tuning within certain limitations.
 
@@ -2699,9 +2704,6 @@ root-third-fifth are obtained in both ETs. The point is that you don't
 need to redefine
 the chords/scales for every tuning separately, you can inherit from  
 one tuning to another.
-
-:END: 
-  
 
 **** Summary
 
