@@ -9,8 +9,10 @@
 
   - Minor additions
 
-  - Further bug fixes and changes
+  - Bug fixes and further changes
     - Strasheela development moved from SourceForge to [[https://github.com/tanders/strasheela/tree/master/strasheela][GitHub]] (and is now using [[http://en.wikipedia.org/wiki/Git_%28software%29][Git]] instead of [[http://en.wikipedia.org/wiki/Subversion_%28software%29][Subversion]]). Nevertheless, other things stay at SourceForge (e.g., the website, mailing lists, releases).
+    - Fixed method getInitArgDefaults (defined for all score classes). This method is useful, e.g., for automatic documentation of all the arguments supported by the init method of a certain class.
+    - Extended DefSubscript: resulting subscripts now support automatic documentation of their arguments.
 
   - For further details see the [[https://github.com/tanders/strasheela/commits/master][list of commits at GitHub]].
 

@@ -562,7 +562,8 @@ MyScore = {Score.make seq(items:{Score.makeItems items(n:3
 
 {Browse {MyScore toInitRecord($)}}
 
-
+%% get subscript documentation
+{MakeRun getDefaults}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -627,6 +628,13 @@ MyRun2 = {MakeRun_PitchDom
 {MyRun toInitRecord($)}
 
 {MyRun2 toInitRecord($)}
+
+
+%% Get documentation
+{MakeRun getDefaults}
+
+{MakeRun_PitchDom getDefaults}
+
 
 
 {SDistro.exploreOne
@@ -938,6 +946,22 @@ N2 = {Seqs.2.1 getItems($)}.1
 	   value:mid)}
      {MyScore collect($ test:isParameter)}}
  end}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%5
+%%
+%% getInitInfo and getInitArgDefaults
+%%
+
+
+declare
+MyChord = {Score.make chord unit(chord:HS.score.diatonicChord)}
+
+{MyChord getInitArgDefaults($)}
+
+{MyChord getInitInfo($)}
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%5
 %%

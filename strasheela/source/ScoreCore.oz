@@ -180,7 +180,7 @@ define
 		  end)
 
    
-   /** %% [abstract class] Defines reflection capabilities for objects. Please note: this class uses undocumented Oz features, which are possibly not intended for end users ;-) 
+   /** %% [abstract class] Defines reflection capabilities for objects. Please note: this class uses undocumented Oz features, which are possibly not intended for Oz end users ;-) 
    %% */
    class Reflection
       meth getClass($)
@@ -234,7 +234,9 @@ define
       %% */
 %      meth getInitArgs($) 
 %      end
-      /** %% Returns a record where the features are all supported arguments of the init method of self with their default as value (_ indicates that no default exist).
+      
+      /** %% Returns a record where the features are all supported arguments of the init method of self with their default as value (_ indicates that no default exist). This method is useful, e.g., for automatic documentation of all the arguments supported by the init method of a certain class (but the method must be send to a class instance).
+      %%
       %% NB: this method relies on the correct implementation of the method getInitArgs for its class and all its superclasses. 
       %% */
       meth getInitArgDefaults($)
@@ -608,16 +610,21 @@ define
 
       /** %% Returns information required to reconstruct the init method. Every newly defined ScoreObject subclass which introduces new init arguments should define its own getInitInfo. This documentation therefore explains also implementational details for this method.
       %%
-      %% The returned information hase the following form:
+      %% The information returned by getInitInfo has the following form:
       
       unit(superclass:Super
 	   args:[Argument1#Accessor1#Default1
 		 ...
 		 ArgumentN#AccessorN#DefaultN])
       
-      %% Super is a single superclass of self which defines/inherits a method getInitInfo extending the present method definition (can be nil in case of no superclass). Argument is an init method argument (an atom), Accessor is a unary accessor function or method returning the value of the object corresponding with Argument, and Default is the default value or 'noMatch' if no default value was given. Excluded is the same arg as for toInitRecord: this argument is only required if getInitInfo recuresively calls toInitRecord. A typical getInitInfo definition follows
+      %% Super is a single superclass of self which defines/inherits a method getInitInfo extending the present method definition (can be nil in case of no superclass). Argument is an init method argument (an atom), Accessor is a unary accessor function or method returning the value of the object corresponding with Argument, and Default is the default value or 'noMatch' if no default value was given. Excluded is the same arg as for toInitRecord: this argument is only required if getInitInfo recursively calls toInitRecord. A typical getInitInfo definition follows
       %%
-
+      %% Args: getInitInfo($ excluded: Excluded clauses: Clauses)
+      %% The defaults of both arguments should be nil, but this can be overwritting in principle in subclasses.
+      %% 
+      %% Excluded is a list of arguments (atoms) which must be excluded concurrently.
+      %% Clauses is a list of pairs TestI#FunI which can be used to overwrite the default init record creation (defined by the class' method getInitInfo) of specific score objects. TestI is a Boolean function or method, and FunI is a unary function expecting a score object and returning a record. For each object for which some TestI returns true, the corresponding FunI will be used for creating the init records for this object.
+      %%
       meth getInitInfo($ ...)
 	 unit(superclass:MySuperClass
 	      args:[myParameter#getMyParameter#noMatch])
@@ -2028,7 +2035,7 @@ define
 % 	      Item, toInitRecord($ exclude: items#getItems#nil | Excluded)}
 %       end
 
-      meth getInitInfo($ exclude:Excluded clauses:Clauses)
+      meth getInitInfo($ exclude:Excluded<=nil clauses:Clauses<=nil)
 	 unit(superclass:Item
 	      args:[items#fun {$ X}
 			     {X mapItems($ fun {$ X}
@@ -2115,6 +2122,7 @@ define
 % 	       Excluded}}
 %       end
 
+      %% Note how this getInitInfo handles the mixin class: only a single superclass returned, and mixin init args are added to args.
       meth getInitInfo($ ...)
 	 unit(superclass:Aspect
 	      %% general guideline: better specify too much information, than removing information
@@ -2855,7 +2863,7 @@ define
       %% 'handle': argument to access the resulting list of items (convenient when MakeItems is used in a nested data structure, cf. ScoreObject init method arg handle)
       %% 'rule': constraint (unary proc) applied to list of all items
       %%
-      %% In addition, all item arguments expected by 'constructors' are supported. If not specially marked, these arguments are shared by all parameters.
+      %% In addition, all item arguments expected by 'constructor' are supported. If not specially marked, these arguments are shared by all parameters.
       %%
       %% For specifying individual arguments for the elements, the following special cases are supported. These cases are notated as a pair Label # ArgValue. The following labels are supported.
       %% fd#Spec: each parameter value has the given domain specification Spec. Example:
@@ -2869,48 +2877,72 @@ define
       unit(n: 1
 	   constructor: Score.note)
       %%
+      %%
+      %% TODO: document Args = 'getDefaults'
+      %% !! TODO: The args depend on constructor -- I should somehow allow for handing over different constructor
+      %%
       %% NB: constructor must not expect any of the args expected by MakeItems (n, constructor, handle, rule), as these are affected by MakeItems. This fact limits the recursive use of MakeItems (where the constructor is created by MakeItems).
       %%
       %%*/
       %% - !!?? TODO: should arg constructor be generalised to additionally support case each#Constructors, where Constructors is list of length n with individual constructor for each returned item? Users should likely better use Score.make for that purpose..
       %% TODO: alternative arg format based on indices, so that for specific indices (and index ranges) I can specify specific args
       proc {MakeItems Args ?Elements}
+	 proc {Skip Xs} skip end
 	 Defaults = unit(n: 1
 			 constructor: Note
 			 handle:_
-			 rule: proc {$ Xs} skip end
+			 rule: Skip
 			)
-	 As = {Adjoin Defaults Args}
-	 L = element			% element label
-	 RawSpec = {Record.subtractList As {Arity Defaults}}
-	 Specs = if {IsLiteral RawSpec} then
-		    {LUtils.collectN As.n fun {$} L end}
-		 else 
-		    SpecWithLists = {Record.map RawSpec
-				     fun {$ Param} {MakeParameterValues Param As.n} end}
-		 in
-		    {RecordMatTrans SpecWithLists}
-		 end
-      in 
-	 Elements = {Map Specs
-		     fun {$ Spec}
-			{MakeScore2 {Adjoin Spec L} % overwrite label
-			 unit(L:As.constructor)}
-		     end}
-	 As.handle = Elements 
-	 thread			% rule may block until Elements are determined
-	    {As.rule Elements}
+      in
+	 %% auto-documentation
+	 case Args of 'getDefaults' then
+	    Elements =  {Adjoin Defaults
+			 %% TODO: refactor so that returned args depend on constructor given in Args
+			 {{MakeScore x unit(x:Defaults.constructor)}
+			  getInitArgDefaults($)}}
+	 else			% usual use
+	    As = {Adjoin Defaults Args}
+	    L = element			% element label
+	    RawSpec = {Record.subtractList As {Arity Defaults}}
+	    Specs = if {IsLiteral RawSpec} then
+		       {LUtils.collectN As.n fun {$} L end}
+		    else 
+		       SpecWithLists = {Record.map RawSpec
+					fun {$ Param} {MakeParameterValues Param As.n} end}
+		    in
+		       {RecordMatTrans SpecWithLists}
+		    end
+	 in 
+	    Elements = {Map Specs
+			fun {$ Spec}
+			   {MakeScore2 {Adjoin Spec L} % overwrite label
+			    unit(L:As.constructor)}
+			end}
+	    As.handle = Elements 
+	    thread			% rule may block until Elements are determined
+	       {As.rule Elements}
+	    end
 	 end
       end
 
       /** %% Same as Score.makeItems, but all Score.makeItems arguments are wrapped in arg iargs for compatibility with DefSubscript.
+      %%
+      %% TODO: document Args = 'getDefaults'
+      %%
       %% Note: arg processing (each-args etc) only supported for iargs, but not rarg, and also not for iargs.n. The reason is that only a single value of these args is needed for items creation (e.g., only one iargs.n is needed). 
       %% */
       fun {MakeItems_iargs Args}	 
 	 Default = unit(iargs:unit)
-	 As = {Adjoin Default Args}
       in
-	 {MakeItems As.iargs}
+	 %% auto-documentation
+	 case Args of 'getDefaults' then
+	    %% TODO: refactor so that returned iargs depend on given constructor
+	    unit(iargs: {MakeItems 'getDefaults'})
+	 else			% usual use
+	    As = {Adjoin Default Args}
+	 in
+	    {MakeItems As.iargs}
+	 end
       end
 
       %% Some attempt to add arg processing (each-args etc) for rargs, but this approach was not a good idea. Kept here just in case...
@@ -2968,24 +3000,40 @@ define
    %% 'iargs': arguments for the creation of container items, a record of args in the format expected by Score.makeItems  
    %% Any other container argument is supported as well.
    %%
+   %% TODO: document Args = 'getDefaults'
+   %%
    %% Default Args:
    unit(iargs:unit
 	constructor: Sequential)
    %% */
    proc {MakeContainer Args ?MyMotif}
       Default = unit(iargs:unit
+		     %% TODO: revise why I need this arg here -- if needed improve next comment line 
+		     %%
 		     %% arg ignored, but filtered out of container args
 		     rargs:unit
 		     constructor: Sequential
 		    )
-      As = {Adjoin Default Args}
-      %% just caution in case I later change Default.iargs
-      ItemAs = {Adjoin Default.iargs Args.iargs} 
-      MyNotes = {MakeItems ItemAs}
    in 
-      MyMotif = {MakeScore2 {Adjoin {Record.subtractList As {Arity Default}}
-			      {Adjoin seq(items:MyNotes) container}}
-		 unit(container:As.constructor)}
+      %% auto-documentation
+      case Args of 'getDefaults' then
+	 MyMotif = {Adjoin unit(%% TODO: refactor so that iargs depend on constructor
+				iargs: {MakeItems 'getDefaults'}
+				%% arg ignored, but filtered out of container args
+				rargs:unit#ignored)
+		    %% TODO: refactor so that outer args depend on given constructor
+		    {{MakeScore x unit(x:Default.constructor)}
+		     getInitArgDefaults($)}}
+      else			% usual use
+	 As = {Adjoin Default Args}
+	 %% just caution in case I later change Default.iargs
+	 ItemAs = {Adjoin Default.iargs Args.iargs} 
+	 MyNotes = {MakeItems ItemAs}
+      in 
+	 MyMotif = {MakeScore2 {Adjoin {Record.subtractList As {Arity Default}}
+				{Adjoin seq(items:MyNotes) container}}
+		    unit(container:As.constructor)}
+      end
    end
    /** %% Extended script which returns a simultaneous container with items, not fully initialised and where many parameters can be still undetermined. Specialisation of MakeContainer where the constructor is Simultaneous. See MakeContainer for further information.
    %% */
@@ -2998,7 +3046,7 @@ define
       {MakeContainer {Adjoin Args unit(constructor:Sequential)}}
    end
 
-   /** %% Extended script creator for reusable (and hierarchical) sub-CSP definition: returns an extended script (a procedure with the interface {Script Args ?MyScore}) which specialises a "super" extended script. The super-script returns either an item (typically a container with items) or a list of items; possible super-scripts are, e.g., Score.makeItems_iargs, MakeContainer or any user-defined extended script, possibly also created with DefSubscript. The resulting score object(s) are not fully initialised, and can thus be integrated withing a higher-level container.
+   /** %% Extended script creator for reusable (and hierarchical) sub-CSP definition: returns an extended script (a procedure with the interface {Script Args ?MyScore}), which specialises a "super" extended script. The super-script returns either an item (typically a container with items) or a list of items. Possible super-scripts are, e.g., Score.makeItems_iargs, MakeContainer or any user-defined extended script, possibly also created with DefSubscript. The resulting score object(s) are not fully initialised, and can thus be integrated withing a higher-level container.
    %% 
    %% DefArgs is a record of optional arguments for declaring the super-script and the default arguments of the resulting script.
    %%
@@ -3029,6 +3077,7 @@ define
    %% 
    %% More specifically, Args contains the arguments provided when calling the resulting script plus the default values of omitted arguments specified with 'defaults', 'idefaults' and 'rdefaults' for this specific script. Default arguments specified for any super-script are absent from Args, if you need the defaults of the super-script in Body, declare them again for this script.
    %%
+   %% TODO: document Args = 'getDefaults'
    %%
    %% Example:
    %% Motif definition: creates CSP with sequential container of notes (MakeContainer is super CSP), default are 3 notes (idefaults.n is 3, i.e., the default value for iargs.n is 3). Note pitches are constrained with Pattern.continuous, the direction of this pattern is controlled with the argument rargs.direction, default is '<:'. 
@@ -3067,39 +3116,57 @@ define
 		     rdefaults: unit)
       DefAs = {Adjoin Default DefArgs}
    in
+      %% TODO: change arg name MyScore into, e.g., Result -- but then I need to carefully think where I need to change this arg name in doc as well
+      %% Perhaps I should leave it MyScore after all, as that is the most usual use case
       proc {$ Args ?MyScore}
-	 ItemAs = if {HasFeature Args iargs} then
-		     {Adjoin DefAs.idefaults Args.iargs}
-		  else DefAs.idefaults
-		  end
-	 RuleAs = if {HasFeature Args rargs} then
-		     {Adjoin DefAs.rdefaults Args.rargs}
-		  else DefAs.rdefaults
-		  end
-	 Super = if {HasFeature Args super} then
-		    Args.super
-		 else DefAs.super
-		 end
-	 Mixins = if {HasFeature Args mixins} then
-		       Args.mixins
-		  else DefAs.mixins
-		  end
-	 As = {Adjoin  {Adjoin DefAs.defaults Args}
-	       unit(iargs: ItemAs
-		    rargs: RuleAs)}
-      in
-	 MyScore = {Super As}
-	 if Body \= nil then 
-	    thread {Body MyScore As} end
-	 end
-	 {ForAll Mixins
-	  %% threads created already in Mixin (if defined with DefMixinSubscript)
-	  proc {$ Mixin} {Mixin MyScore As} end}
-	 %%
-	 %% BUG: blocks
-	 %% Doc, if this is sometimes working...
-	 %% 'isMotif': return value argument. If present, this argument is bound to a unary Boolean function that only returns true for score objects returned by the defined script. Note: using this argument requires that this defined script does actually return a score object (instead of, e.g., a list of score objects).
-	 %% 
+	 %% auto-documentation
+	 case Args of 'getDefaults' then
+	    %% TODO: get args from super script
+	    %% - Add some mechanism for all relevant proc defs above
+	    %% - Add some fun that can extract such info from a class def
+	    %%   Use method getInitArgDefaults on class instance for this
+	    
+	    %% TODO: check whether mixins can introduce new args
+	    %% {Map DefAs.mixins fun {$ F} {F 'getDefaults'} end}
+
+	    MyScore = {GUtils.recursiveAdjoin 
+		       {DefAs.super 'getDefaults'}
+		       {Adjoin DefAs.defaults
+			unit(iargs: DefAs.idefaults
+			     rargs: DefAs.rdefaults)}}	    
+	 else			% usual use
+	    ItemAs = if {HasFeature Args iargs} then
+			{Adjoin DefAs.idefaults Args.iargs}
+		     else DefAs.idefaults
+		     end
+	    RuleAs = if {HasFeature Args rargs} then
+			{Adjoin DefAs.rdefaults Args.rargs}
+		     else DefAs.rdefaults
+		     end
+	    Super = if {HasFeature Args super} then
+		       Args.super
+		    else DefAs.super
+		    end
+	    Mixins = if {HasFeature Args mixins} then
+			Args.mixins
+		     else DefAs.mixins
+		     end
+	    As = {Adjoin  {Adjoin DefAs.defaults Args}
+		  unit(iargs: ItemAs
+		       rargs: RuleAs)}
+	 in
+	    MyScore = {Super As}
+	    if Body \= nil then 
+	       thread {Body MyScore As} end
+	    end
+	    {ForAll Mixins
+	     %% threads created already in Mixin (if defined with DefMixinSubscript)
+	     proc {$ Mixin} {Mixin MyScore As} end}
+	    %%
+	    %% BUG: blocks
+	    %% Doc, if this is sometimes working...
+	    %% 'isMotif': return value argument. If present, this argument is bound to a unary Boolean function that only returns true for score objects returned by the defined script. Note: using this argument requires that this defined script does actually return a score object (instead of, e.g., a list of score objects).
+	    %% 
 % 	 %% 'isMotif'
 % 	 if {HasFeature DefAs isMotif} then
 % 	    MotifType = testAtom
@@ -3111,6 +3178,7 @@ define
 % 		 {IsScoreObject X} andthen {X hasThisInfo($ MotifType)}
 % 	      end
 % 	 end
+	 end
       end
    end
 
