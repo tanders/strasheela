@@ -1,6 +1,17 @@
 # Compiled source #
 ###################
 *.ozf
+*.exe
+
+# Gump parser output #
+###################
+*.so-darwin-i386
+*.output
+*.simplified
+*.l
+*.o
+
+# Note that Gump generated C files are ignored individually
 
 # Packages #
 ############
@@ -26,3 +37,5 @@
 ehthumbs.db
 Icon?
 Thumbs.db
+/strasheela/contributions/anders/MidiInput/source/CSV_Scanner.C
+/strasheela/contributions/anders/OSC/source/OSC_Scanner.C
