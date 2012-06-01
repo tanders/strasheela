@@ -8,7 +8,7 @@
 
 ** Finish regular temperament definition (e.g., doc incomplete)
 
-   see [[file:~/oz/music/Strasheela/strasheela/trunk/strasheela/contributions/anders/HarmonisedScore/source/Score.oz::class%20RegularTemperamentMixinForNote][file:~/oz/music/Strasheela/strasheela/trunk/strasheela/contributions/anders/HarmonisedScore/source/Score.oz::class RegularTemperamentMixinForNote]]
+   see [[file:~/oz/music/Strasheela/strasheela/trunk/strasheela/contributions/anders/HarmonisedScore/source/Score.oz::class%20RegularTemperamentMixinForNote][file:~/oz/music/Strasheela/strasheela/strasheela/contributions/anders/HarmonisedScore/source/Score.oz::class RegularTemperamentMixinForNote]]
 
 ** Heuristic constraints support
 
@@ -64,7 +64,7 @@
 
 
 ** Finish def of ResolveDissonances_ChordDegree
-   [[file:~/oz/music/Strasheela/strasheela/trunk/strasheela/examples/Harmony-Examples/Schoenberg-TheoryOfHarmony.oz::proc%20ResolveDissonances_ChordDegree%20Notes%20Args%20Args%20unused][file:~/oz/music/Strasheela/strasheela/trunk/strasheela/examples/Harmony-Examples/Schoenberg-TheoryOfHarmony.oz::proc ResolveDissonances_ChordDegree Notes Args Args unused]]
+   [[file:~/oz/music/Strasheela/strasheela/strasheela/examples/Harmony-Examples/Schoenberg-TheoryOfHarmony.oz::proc%20ResolveDissonances_ChordDegree%20Notes%20Args%20Args%20unused][file:~/oz/music/Strasheela/strasheela/strasheela/examples/Harmony-Examples/Schoenberg-TheoryOfHarmony.oz::proc ResolveDissonances_ChordDegree Notes Args Args unused]]
 
    e.g., 
    - documentation
@@ -110,10 +110,10 @@
 ** TODO !! Pattern.useMotifs: arg 'workOutEven' is ignored (behaves as if always set to true)
    
    see test at 
-   [[file:~/oz/music/Strasheela/strasheela/trunk/strasheela/contributions/anders/Pattern/testing/Pattern-test.oz::%25%25%20end%20can%20be%20incomplete%20motif][file:~/oz/music/Strasheela/strasheela/trunk/strasheela/contributions/anders/Pattern/testing/Pattern-test.oz::%% end can be incomplete motif]]
+   [[file:~/oz/music/Strasheela/strasheela/strasheela/contributions/anders/Pattern/testing/Pattern-test.oz::%25%25%20end%20can%20be%20incomplete%20motif][file:~/oz/music/Strasheela/strasheela/strasheela/contributions/anders/Pattern/testing/Pattern-test.oz::%% end can be incomplete motif]]
 
    source
-   [[file:~/oz/music/Strasheela/strasheela/trunk/strasheela/contributions/anders/Pattern/Pattern.oz::proc%20{UseMotifs%20Xs%20Motifs%20Args}][file:~/oz/music/Strasheela/strasheela/trunk/strasheela/contributions/anders/Pattern/Pattern.oz::proc {UseMotifs Xs Motifs Args}]]
+   [[file:~/oz/music/Strasheela/strasheela/strasheela/contributions/anders/Pattern/Pattern.oz::proc%20{UseMotifs%20Xs%20Motifs%20Args}][file:~/oz/music/Strasheela/strasheela/strasheela/contributions/anders/Pattern/Pattern.oz::proc {UseMotifs Xs Motifs Args}]]
 
 ** Replace FD.reified.distance -- does not propagate enough and can thus be completely ineffective 
 
@@ -122,7 +122,7 @@ FD.reified.distance is often used in Strasheela, and may be the cause for variou
 This only works on Torsten's machine ...
 
 #+begin_src sh
-cd ~/oz/music/Strasheela/strasheela/trunk/strasheela & ./scripts/find-all.sh FD.reified.distance
+cd ~/oz/music/Strasheela/strasheela/strasheela & ./scripts/find-all.sh FD.reified.distance
 #+end_src
 
 Example: this should clearly result in 0 and not {FD.int 0#1}
@@ -193,14 +193,31 @@ MyTestScore = {Score.makeScore
 
 ** TODO Move Strasheela sources to GitHub			       :SOON:
 
-
 *** Todo for transfer
+
+**** DONE Open questions
+     CLOSED: [2012-06-01 Fri 01:56]
+
+     - How to exclude certain files from including them into git repository (how to hide them by default)
+       File types: *.ozf
+       Solution: include a file .gitignore in the top-level Strasheela directory that lists file types to ignore etc
+       cf. file:~/emacs/org-mode/.gitignore
+       http://help.github.com/ignore-files/
+
+
+***** .gitignore
+
+*~
+*.ozf
+
 
 **** Learn Git etc.
 
      Just had a little look -- very promising after my previous experience with Subversion and my tools with that
 
 ***** Git
+
+      http://git-scm.com/book
 
 ***** Git emacs interface
 
@@ -217,22 +234,53 @@ MyTestScore = {Score.makeScore
 
       Manual
       http://magit.github.com/magit/magit.html
-***** GitHub
+
+***** Github
 
 
-**** Transfer Strasheela subversion repository to git
+**** DONE Transfer Strasheela subversion repository to git
+     CLOSED: [2012-06-01 Fri 01:57]
 
-     - See which tools Sourceforge offers to move svn repository to git
-       -> seemingly none: I have to do the transfer and then use git from then on
+       http://help.github.com/import-from-subversion/
+
+***** !! svn2git -- preferred approach
+
+      *Strasheela git repository at file:~/oz/music/Strasheela/strasheela-git*
 
 
-***** Test one-way transfer with git itself
+      svn2git is designed to provide a complete svn import. Unlike git-svn, it will create proper git tags from your svn “tags”.
+
+      https://github.com/nirvdrum/svn2git
+
+
+cd /Users/torsten/oz/music/Strasheela/strasheela      
+/Users/torsten/.gem/ruby/1.8/bin/svn2git http://strasheela.svn.sourceforge.net/svnroot/strasheela 
+
+     *NOTE:* 
+
+     Later changes to the svn repository can be added 
+
+cd /Users/torsten/oz/music/Strasheela/strasheela && svn2git --rebase
+
+     Changes to the git repository can also be added back to the online svn repository
+     but "... working with Git-based remote versions of your projects concurrently with a Subversion server isn’t a good idea"
+     http://git-scm.com/book/en/Git-and-Other-Systems-Git-and-Subversion#Committing-Back-to-Subversion
+
+cd /Users/torsten/oz/music/Strasheela/strasheela
+git svn dcommit
+
+***** git-svn: one-way transfer quasi with git itself 
 
      This seems to work fine:
 
 cd /Users/torsten/oz/music/Strasheela/strasheela-git      
 git svn clone http://strasheela.svn.sourceforge.net/svnroot/strasheela strasheela.git
 
+
+***** Info: no help from Sourceforge
+
+     - See which tools Sourceforge offers to move svn repository to git
+       -> seemingly none: I have to do the transfer and then use git from then on
 
 ***** Idea: have a local git repository				    :ARCHIVE:
 
@@ -243,7 +291,8 @@ git svn clone http://strasheela.svn.sourceforge.net/svnroot/strasheela strasheel
 
 
 
-**** Upload Strasheela git repository to git hu
+**** DONE Upload Strasheela git repository to GitHub
+     CLOSED: [2012-06-01 Fri 01:57]
 
 
 *** What stays at Sourceforge
@@ -372,7 +421,7 @@ git svn clone http://strasheela.svn.sourceforge.net/svnroot/strasheela strasheel
 
 ** TODO Define interface to integrate Strasheela into OpenMusic or PWGL :NEXT:
 
-   see [[file:~/oz/music/Strasheela/strasheela/trunk/strasheela/contributions/anders/PW_OM_Interface/Brainstorming.org]]
+   see [[file:~/oz/music/Strasheela/strasheela/strasheela/contributions/anders/PW_OM_Interface/Brainstorming.org]]
 
 
 ** TODO [#A] Define Strasheela score transformations (instead of plain generation as so far) :NEXT:
@@ -463,6 +512,7 @@ Best, Hans
      Transformation examples 
      - Transform all notes by the same function (mapping), e.g., 
        - Transpose the pitch by a constant summand or factor
+       - "Scatter" pitches, but keep the harmony by transposing individual notes or small groups of notes (e.g., non-harmonic notes and the consecutive harmonic note) by a random number of octaves up or down
        - Stretch/shrink durations by a constant summand or factor
        - ...
      - Transform (or remove) notes with a certain feature, e.g.,
@@ -481,6 +531,7 @@ Best, Hans
        - A function (e.g., a random function)
        Concrete examples: 
        - "Tilt" or otherwise deform the whole score (or certain parts) in pitch, where the pitch change is given as a BPF
+       - "Scatter" pitches, but keep the harmony by transposing individual notes or small groups of notes (e.g., non-harmonic notes and the consecutive harmonic note) by octaves up/down, so that the contour of local max/min is controlled by a BPF
        - Transform pitch of score controlled by a special BPF for each of its parts
      - Transform all notes that meet certain test by same function, where one (or more) function argument(s) depend on the note's list of predecessors/successors (and possibly also some BPF etc as above)
        Concrete examples	  
@@ -2062,7 +2113,7 @@ TODO: It would be good to somehow have a way to define accents beyond the measur
 
 *** TODO 
 
-    - See todos in source file [[file:~/oz/music/Strasheela/strasheela/trunk/strasheela/contributions/anders/Segments/Segments.oz::proc%20{Texture%20Dependency%20LeadingPart%20DependantParts%20Args}][file:~/oz/music/Strasheela/strasheela/trunk/strasheela/contributions/anders/Segments/Segments.oz::proc {Texture Dependency LeadingPart DependantParts Args}]]
+    - See todos in source file [[file:~/oz/music/Strasheela/strasheela/strasheela/contributions/anders/Segments/Segments.oz::proc%20{Texture%20Dependency%20LeadingPart%20DependantParts%20Args}][file:~/oz/music/Strasheela/strasheela/strasheela/contributions/anders/Segments/Segments.oz::proc {Texture Dependency LeadingPart DependantParts Args}]]
 
 *** Overall constraint format					    :ARCHIVE:
 
@@ -2440,10 +2491,10 @@ Instead of applying a texture constraint to time windows, for now consider using
 *** TODO 
 
     OK - Doc HS.db.makeRegularTemperament and HS.db.ratioToRegularTemperamentPC
-      see [[file:~/oz/music/Strasheela/strasheela/trunk/strasheela/contributions/anders/HarmonisedScore/source/Database.oz::fun%20MakeRegularTemperament%20Generators%20GeneratorFactors%20Args][file:~/oz/music/Strasheela/strasheela/trunk/strasheela/contributions/anders/HarmonisedScore/source/Database.oz::fun MakeRegularTemperament Generators GeneratorFactors Args]]
+      see [[file:~/oz/music/Strasheela/strasheela/strasheela/contributions/anders/HarmonisedScore/source/Database.oz::fun%20MakeRegularTemperament%20Generators%20GeneratorFactors%20Args][file:~/oz/music/Strasheela/strasheela/strasheela/contributions/anders/HarmonisedScore/source/Database.oz::fun MakeRegularTemperament Generators GeneratorFactors Args]]
 
     - Mapping of symbolic notation names (nominals and accidentals) to JI ratios, and then to PCs to temperament
-      see [[file:~/oz/music/Strasheela/strasheela/trunk/strasheela/contributions/anders/RegularTemperament/RegularTemperament.oz::TODO%20ASCII%20notation%20for%20Extended%20Helmholtz%20Notation%20or%20Sagittal%20which%20mean%20their%20JI%20interpretation%20and%20which%20are%20then%20rounded%20into%20temperament%20with%20DB%20ratioToRegularTemperamentPC][file:~/oz/music/Strasheela/strasheela/trunk/strasheela/contributions/anders/RegularTemperament/RegularTemperament.oz::TODO ASCII notation for Extended Helmholtz Notation or Sagittal which mean their JI interpretation and which are then rounded into temperament with DB ratioToRegularTemperamentPC]]
+      see [[file:~/oz/music/Strasheela/strasheela/strasheela/contributions/anders/RegularTemperament/RegularTemperament.oz::TODO%20ASCII%20notation%20for%20Extended%20Helmholtz%20Notation%20or%20Sagittal%20which%20mean%20their%20JI%20interpretation%20and%20which%20are%20then%20rounded%20into%20temperament%20with%20DB%20ratioToRegularTemperamentPC][file:~/oz/music/Strasheela/strasheela/strasheela/contributions/anders/RegularTemperament/RegularTemperament.oz::TODO ASCII notation for Extended Helmholtz Notation or Sagittal which mean their JI interpretation and which are then rounded into temperament with DB ratioToRegularTemperamentPC]]
 
       - Map each nominal and accidental to a ratio
 	Still missing: suitable ASCII representation for EHE notation
@@ -2472,7 +2523,7 @@ Instead of applying a texture constraint to time windows, for now consider using
 
 
     - Revise RegT.transform
-      see [[file:~/oz/music/Strasheela/strasheela/trunk/strasheela/contributions/anders/RegularTemperament/source/DB.oz::fun%20Transform%20MyPitch][file:~/oz/music/Strasheela/strasheela/trunk/strasheela/contributions/anders/RegularTemperament/source/DB.oz::fun Transform MyPitch]]
+      see [[file:~/oz/music/Strasheela/strasheela/strasheela/contributions/anders/RegularTemperament/source/DB.oz::fun%20Transform%20MyPitch][file:~/oz/music/Strasheela/strasheela/strasheela/contributions/anders/RegularTemperament/source/DB.oz::fun Transform MyPitch]]
 
     - Music notation output
 
@@ -2482,7 +2533,7 @@ Instead of applying a texture constraint to time windows, for now consider using
 
 
     - Demonstrating examples
-      see [[file:~/oz/music/Strasheela/strasheela/trunk/strasheela/examples/RegularTemperaments.oz]]
+      see [[file:~/oz/music/Strasheela/strasheela/strasheela/examples/RegularTemperaments.oz]]
 
 
 *** Info
@@ -3432,7 +3483,7 @@ it always equal to 2, that's a pretty good choice.
 
 ** TODO Add support for microtonal music to Fenv.renderAndPlayMidiFile
 
-   [[file:~/oz/music/Strasheela/strasheela/trunk/strasheela/contributions/anders/Fenv/Fenv.oz::proc%20RenderAndPlayMidiFile%20MyScore%20Args][file:~/oz/music/Strasheela/strasheela/trunk/strasheela/contributions/anders/Fenv/Fenv.oz::proc RenderAndPlayMidiFile MyScore Args]]
+   [[file:~/oz/music/Strasheela/strasheela/strasheela/contributions/anders/Fenv/Fenv.oz::proc%20RenderAndPlayMidiFile%20MyScore%20Args][file:~/oz/music/Strasheela/strasheela/strasheela/contributions/anders/Fenv/Fenv.oz::proc RenderAndPlayMidiFile MyScore Args]]
 
 *** DONE							    :ARCHIVE:
 
