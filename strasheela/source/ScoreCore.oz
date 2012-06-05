@@ -71,7 +71,7 @@ export
    LeaveUninitialisedParameterMixin IsLeaveUninitialisedParameter
    Item Container Modifier Aspect TemporalAspect Sequential Simultaneous 
    Element AbstractElement TemporalElement Pause Event Note2
-   IsArticulationMixin IsAmplitudeMixin
+   MakeArticulationClass IsArticulationMixin MakeAmplitudeClass IsAmplitudeMixin
    Note
    % funcs/procs
    IsScoreObject IsTemporalItem IsTemporalContainer
