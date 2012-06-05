@@ -70,7 +70,9 @@ export
    ScoreObject Parameter TimeParameter TimePoint TimeInterval Amplitude Pitch
    LeaveUninitialisedParameterMixin IsLeaveUninitialisedParameter
    Item Container Modifier Aspect TemporalAspect Sequential Simultaneous 
-   Element AbstractElement TemporalElement Pause Event Note2 Note
+   Element AbstractElement TemporalElement Pause Event Note2
+   IsArticulationMixin IsAmplitudeMixin
+   Note
    % funcs/procs
    IsScoreObject IsTemporalItem IsTemporalContainer
 %  IsET GetPitchesPerOctave
@@ -99,6 +101,8 @@ prepare
    /** marker of score object type checking */
    %% Defined in 'prepare' to avoid re-evaluation.
    ScoreObjectType = {Name.new}
+   ArticulationMixinType = {Name.new}
+   AmplitudeMixinType = {Name.new}
    LeaveUninitialisedParameterMixinType = {Name.new}
    
 define
@@ -2052,6 +2056,7 @@ define
    %%
    %% The attribute modifier binds the modification function.
    %%
+   %% NOTE: the Modifier class was never used so far (even many years after its definition). So, consider removing it.
    %% !! NB: currently, the score output functions (see ./Output.oz) ignore the Modifier which is therefore without effect!
    %%*/
    class Modifier from Container
@@ -2409,52 +2414,83 @@ define
       
    end
 
-
-   /** %% [concrete class] Extends class Note2 by parameter amplitude. These two classes exist because an amplitude is usually needed if a sound synthesis format is output but may not be needed if only a music notation format is output.
-   %% NOTE: unlike most other arguments, the amplitude argument defaults to a determined number. 
+   /** %% [abstract mixin class] ArticulationMixin extends note classes with an articulation parameter.
+   %% No further constraints are applied.
+   %%
+   %% NB: the articulationUnit is currently only a placeholder (this unit is ignoed).
    %% */
-   class Note from Note2
-      feat %'class': Note
-	 label: note
+   class ArticulationMixin
+      feat !ArticulationMixinType:unit
+      attr articulation
+      meth initArticulationMixin(articulation:A<=_ articulationUnit:AU<=percent) = M 
+	 @articulation = {New Parameter init(value:A info:articulation 'unit':AU)}
+	 {self bilinkParameters([@articulation])} 
+      end
+      meth getArticulation(X) X = {@articulation getValue($)} end
+      meth getArticulationParameter(X) X= @articulation end
+   end
+   fun {IsArticulationMixin X}
+      {IsScoreObject X} andthen {HasFeature X ArticulationMixinType}
+   end
+
+   /** %% [concrete class constructor] Expects a note class, and returns this class extended by an articulation parameter (see ArticulationMixin).
+   %% */
+   fun {MakeArticulationClass SuperClass}
+      class $ from SuperClass ArticulationMixin
+	 meth init(articulation:A<=_ articulationUnit:AU<=percent ...) = M
+	    SuperClass, {Record.subtractList M [articulation articulationUnit]}
+	    ArticulationMixin, initArticulationMixin(articulation:A)
+	 end
+	 meth getInitInfo($ ...)       
+	    unit(superclass:SuperClass
+		 args:[articulation#getArticulation#noMatch]) 
+	 end
+      end
+   end
+   
+   
+   /** %% [abstract mixin class] AmplitudeMixin extends note classes with an amplitude parameter.
+   %% NOTE: unlike most other arguments, the amplitude parameter defaults to a determined integer. 
+   %% No further constraints are applied.
+   %% */
+   class AmplitudeMixin
+      feat !AmplitudeMixinType:unit
       attr amplitude
-      meth init(%addParameters:AddParams<=nil 
-		amplitude:A<=64 amplitudeUnit:AU<=velocity 
-		...) = M 
-	 Note2, {Record.subtractList M
-		 [amplitude amplitudeUnit]}
-	 @amplitude = {New Amplitude init(value:A 'unit':AU)}
-	 %{self getAmplitude(A)} {self getAmplitudeUnit(AU)}
-	 {self bilinkParameters([@amplitude])}
-      end	
-      meth isNote(?B) B=true end
-      meth getAmplitude(?X) X={@amplitude getValue($)} end
+      meth initAmplitudeMixin(amplitude:A<=64 amplitudeUnit:AU<=velocity) = M 
+	 @amplitude = {New Amplitude init(value:A info:amplitude 'unit':AU)}
+	 {self bilinkParameters([@amplitude])} 
+      end
+      meth getAmplitude(X) X = {@amplitude getValue($)} end
       meth getAmplitudeInNormalized(?X) X={@amplitude getValueInNormalized($)} end
       meth getAmplitudeInVelocity(?X) X={@amplitude getValueInVelocity($)} end
       meth getAmplitudeParameter(?X) X=@amplitude end
       meth getAmplitudeUnit(?X) X={@amplitude getUnit($)} end
-%      meth getAttributes(?X)
-%	 X = {Append
-%	      [amplitude]
-%	      Note2, getAttributes($)}
-%      end
-%       meth toInitRecord(?X exclude:Excluded<=DefaultInitRecordExcluded)
-% 	 X = {Adjoin
-% 	      Note2, toInitRecord($ exclude:Excluded)
-% 	      {Record.subtractList
-% 	       {self
-% 		makeInitRecord($ [amplitude#getAmplitude#noMatch
-% 				  amplitudeUnit#getAmplitudeUnit#velocity])}
-% 	       Excluded}}
-%       end
-      
-      meth getInitInfo($ ...)
-	 unit(superclass:Note2
-	      args:[amplitude#getAmplitude#64
-		    amplitudeUnit#getAmplitudeUnit#velocity])
-      end
-      
+   end
+   fun {IsAmplitudeMixin X}
+      {IsScoreObject X} andthen {HasFeature X AmplitudeMixinType}
    end
 
+   /** %% [concrete class constructor] Expects a note class, and returns this class extended by an amplitude parameter (see AmplitudeMixin).
+   %% NOTE: unlike most other arguments, the amplitude parameter defaults to a determined integer. 
+   %% */
+   fun {MakeAmplitudeClass SuperClass}
+      class $ from SuperClass AmplitudeMixin
+	 meth init(amplitude:A<=64 amplitudeUnit:AU<=velocity ...) = M
+	    SuperClass, {Record.subtractList M [amplitude amplitudeUnit]}
+	    AmplitudeMixin, {Adjoin M initAmplitudeMixin}
+	 end
+	 meth getInitInfo($ ...)       
+	    unit(superclass:SuperClass
+		 args:[amplitude#getAmplitude#64
+		       amplitudeUnit#getAmplitudeUnit#velocity]) 
+	 end
+      end
+   end
+   
+
+   /** %% [concrete class] The class Note extends class Note2 by the parameters articulation and amplitude. 
+   %% */
+   Note = {MakeArticulationClass {MakeAmplitudeClass Note2}}
 
    
    %
@@ -3261,7 +3297,7 @@ define
     newNote(foo fooParameter)
     unit(initRecord:newNote(foo:0)
 	 init:proc {$ Self Args}
-		 Self.fooParameter = {New Score.parameter init(value:Args.foo info:foo)}
+		 Self.fooParameter = {New Parameter init(value:Args.foo info:foo)}
 		 Self.foo = {Self.fooParameter getValue($)}
 		 {Self bilinkParameters([Self.fooParameter])}
 	      end)}
