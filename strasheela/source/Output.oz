@@ -393,7 +393,7 @@ define
 					 [{Out.listToVS
 					   [i1
 					    {MyNote getStartTimeInSeconds($)}
-					    {MyNote getDurationInSeconds($)}
+					    {MyNote getPerformanceDurationInSeconds($)}
 					    {MyNote getPitchInMidi($)}
 					    {MyNote getAmplitudeInVelocity($)}]
 					   " "}]
@@ -859,7 +859,7 @@ define
 		      header:nil
 		      event2CsoundFn:{MakeEvent2CsoundFn 1
 				      [getStartTimeParameter#getValueInSeconds
-				       fun {$ X} X end#getDurationInSeconds
+				       fun {$ X} X end#getPerformanceDurationInSeconds
 				       getAmplitudeParameter#getValueInNormalized
 				       getPitchParameter#getValueInMidi]}
 		      test:fun {$ X}
@@ -1739,7 +1739,7 @@ define
    fun {MakeSCEventOutFn PlayerOut}
       fun {$ X}
 	 Player = {PlayerOut X}
-	 Dur = {X getDurationInBeats($)}
+	 Dur = {X getPerformanceDurationInBeats($)}
 	 Offset = {X getOffsetTimeInBeats($)}
       in
 	 "SEvent("#Player#", "#Dur#", "#Offset#")"
@@ -2650,7 +2650,7 @@ define
       fun {EventOut MyNote}
 	 {MakeCMEvent MyNote
 	  midi(time:getStartTimeInSeconds
-	       duration:getDurationInSeconds
+	       duration:getPerformanceDurationInSeconds
 	       keynum:getPitchInMidi
 	       amplitude:getAmplitudeInNormalized)} 
       end

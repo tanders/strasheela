@@ -906,7 +906,23 @@ define
       meth getOffsetTime(?X) X={@offsetTime getValue($)} end
       meth getStartTimeInSeconds(?X) X={@startTime getValueInSeconds($)} end
       meth getEndTimeInSeconds(?X) X={@endTime getValueInSeconds($)} end
+      meth getPerformanceEndTimeInSeconds(?X)
+	 if {IsArticulationMixin self} 
+	 then X = {self getStartTimeInSeconds($)} + {self getPerformanceDurationInSeconds($)}
+	 else X={@endTime getValueInSeconds($)}
+	 end
+      end
       meth getDurationInSeconds($) {self getEndTimeInSeconds($)} - {self getStartTimeInSeconds($)} end
+      /** %% The performance duration takes articulation (duration percentage) into account.
+      %% */
+      meth getPerformanceDurationInSeconds($)
+	 if {IsArticulationMixin self} 
+	 then 
+	    ({self getEndTimeInSeconds($)} - {self getStartTimeInSeconds($)})
+	    * {IntToFloat {self getArticulation($)}} / 100.0
+	 else {self getEndTimeInSeconds($)} - {self getStartTimeInSeconds($)}
+	 end
+      end
 %       meth getDurationInSeconds(?X) X={@duration getValueInSeconds($)} end
       meth getOffsetTimeInSeconds(?X)
 	 %% BUG: no dependency to tempo curve or time shift function defined yet, depends on type of container, cf def for getDurationInSeconds
@@ -915,7 +931,23 @@ define
       end
       meth getStartTimeInBeats(?X) X={@startTime getValueInBeats($)} end
       meth getEndTimeInBeats(?X) X={@endTime getValueInBeats($)} end
+      meth getPerformanceEndTimeInBeats(?X)
+	 if {IsArticulationMixin self} 
+	 then X = {self getStartTimeInBeats($)} + {self getPerformanceDurationInBeats($)}
+	 else X={@endTime getValueInBeats($)}
+	 end
+      end
       meth getDurationInBeats(?X) X={@duration getValueInBeats($)} end
+      /** %% The performance duration takes articulation (duration percentage) into account.
+      %% */
+      meth getPerformanceDurationInBeats($)
+	 if {IsArticulationMixin self} 
+	 then 
+	    ({self getEndTimeInBeats($)} - {self getStartTimeInBeats($)})
+	    * {IntToFloat {self getArticulation($)}} / 100.0
+	 else {self getEndTimeInBeats($)} - {self getStartTimeInBeats($)}
+	 end
+      end
       meth getOffsetTimeInBeats(?X) X={@offsetTime getValueInBeats($)} end
       meth getStartTimeParameter(?X) X=@startTime end
       meth getEndTimeParameter(?X) X=@endTime end

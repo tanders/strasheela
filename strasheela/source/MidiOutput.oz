@@ -906,7 +906,7 @@ define
       {NoteToUserEvent MyNote
        fun {$ Track Start Channel}
 	  EndTime = {BeatsToTicks
-		     {MyNote getEndTimeInSeconds($)} + As.noteOffOffset}
+		     {MyNote getPerformanceEndTimeInSeconds($)} + As.noteOffOffset}
 	  Pitch = {FloatToInt {As.round {MyNote getPitchInMidi($)}}}
 	  Velocity = {FloatToInt {MyNote getAmplitudeInVelocity($)}}
        in
@@ -976,7 +976,7 @@ define
 %       StartTime = {BeatsToTicks
 % 		   {MyNote getStartTimeInSeconds($)}}
 %       EndTime = {BeatsToTicks
-% 		 {MyNote getEndTimeInSeconds($)}}
+% 		 {MyNote getEndTimeInSeconds($)}}  % getPerformanceEndTimeInSeconds
 %       Channel = if  As.channel \= nil
 % 		then As.channel
 % 		elseif {IsMidiNoteMixin MyNote}
