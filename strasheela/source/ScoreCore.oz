@@ -2416,13 +2416,14 @@ define
 
    /** %% [abstract mixin class] ArticulationMixin extends note classes with an articulation parameter.
    %% No further constraints are applied.
+   %% NOTE: unlike most other parameters, the articulation parameter defaults to a determined integer (meaning non-legato). 
    %%
    %% NB: the articulationUnit is currently only a placeholder (this unit is ignoed).
    %% */
    class ArticulationMixin
       feat !ArticulationMixinType:unit
       attr articulation
-      meth initArticulationMixin(articulation:A<=_ articulationUnit:AU<=percent) = M 
+      meth initArticulationMixin(articulation:A<=100 articulationUnit:AU<=percent ...) = M 
 	 @articulation = {New Parameter init(value:A info:articulation 'unit':AU)}
 	 {self bilinkParameters([@articulation])} 
       end
@@ -2437,9 +2438,9 @@ define
    %% */
    fun {MakeArticulationClass SuperClass}
       class $ from SuperClass ArticulationMixin
-	 meth init(articulation:A<=_ articulationUnit:AU<=percent ...) = M
+	 meth init(articulation:A<=100 articulationUnit:AU<=percent ...) = M
 	    SuperClass, {Record.subtractList M [articulation articulationUnit]}
-	    ArticulationMixin, initArticulationMixin(articulation:A)
+	    ArticulationMixin, {Adjoin M initArticulationMixin}
 	 end
 	 meth getInitInfo($ ...)       
 	    unit(superclass:SuperClass
@@ -2450,13 +2451,15 @@ define
    
    
    /** %% [abstract mixin class] AmplitudeMixin extends note classes with an amplitude parameter.
-   %% NOTE: unlike most other arguments, the amplitude parameter defaults to a determined integer. 
+   %% NOTE: unlike most other parameters, the amplitude parameter defaults to a determined integer (meaning mezzoforte).
+   %% Note: Music notation output via Fomus takes amplitude values into account (changes in amplitude are even expressed with hairpins). However, Fomus must be instructed to do so (e.g., with the global setting dyns = yes in the ~/.fomus file).
+   %% Sound synthesis output (e.g., MIDI and Csound) also output amplitude values (of course).
    %% No further constraints are applied.
    %% */
    class AmplitudeMixin
       feat !AmplitudeMixinType:unit
       attr amplitude
-      meth initAmplitudeMixin(amplitude:A<=64 amplitudeUnit:AU<=velocity) = M 
+      meth initAmplitudeMixin(amplitude:A<=64 amplitudeUnit:AU<=velocity ...) = M 
 	 @amplitude = {New Amplitude init(value:A info:amplitude 'unit':AU)}
 	 {self bilinkParameters([@amplitude])} 
       end
@@ -2471,7 +2474,6 @@ define
    end
 
    /** %% [concrete class constructor] Expects a note class, and returns this class extended by an amplitude parameter (see AmplitudeMixin).
-   %% NOTE: unlike most other arguments, the amplitude parameter defaults to a determined integer. 
    %% */
    fun {MakeAmplitudeClass SuperClass}
       class $ from SuperClass AmplitudeMixin
@@ -2488,7 +2490,7 @@ define
    end
    
 
-   /** %% [concrete class] The class Note extends class Note2 by the parameters articulation and amplitude. 
+   /** %% [concrete class] The class Note extends class Note2 by the parameters articulation and amplitude. See the documentation of the classes ArticulationMixin and AmplitudeMixin.
    %% */
    Note = {MakeArticulationClass {MakeAmplitudeClass Note2}}
 
