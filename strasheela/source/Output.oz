@@ -2194,6 +2194,7 @@ define
 %%% Fomus
 %%%
 
+
    /** %% [for clause definitions] Returns true if X can be notated as a chord, i.e. X is a simultaneous which contains only notes with equal offset time, start and end times
    %% */
    IsFomusChord = IsLilyChord
@@ -2290,14 +2291,63 @@ define
        " "}
    end
    
-   /** %% [for clause definitions etc] note processing function for note-eventClause. Returns the Fomus code for a note where the pitch is the MIDI float of the note.
+   /** %% [for clause definitions etc] Note processing function for note-eventClause. Returns the Fomus code for a note where the pitch is the MIDI float of the note.
+   %% Note that the correct notation of spanner marks (e.g., legato) currently only works within the same sequential container.
    %% */
    fun {MakeFomusNote MyNote PartId}
-      {Record2FomusNote unit(part:PartId
-			     time:{MyNote getStartTimeInBeats($)}
-			     dur:{MyNote getDurationInBeats($)}
-			     pitch:{MyNote getPitchInMidi($)}
-			     dynamic: {MyNote getAmplitudeInVelocity($)} / 127.0)
+      {Record2FomusNote
+       {Adjoin unit(part:PartId
+		    time:{MyNote getStartTimeInBeats($)}
+		    dur:{MyNote getDurationInBeats($)}
+		    pitch:{MyNote getPitchInMidi($)}
+		    dynamic: {MyNote getAmplitudeInVelocity($)} / 127.0)
+	%% add articulation marks 
+	if {Score.isArticulationMixin MyNote}
+	then
+	   FomusArticulation = {Init.getFomusArticulation {MyNote getArticulation($)}}
+	in
+	   %% Deal spanner marks (e.g., legato begin and end), which are returned as a list.
+	   case FomusArticulation of [BeginA ContinueA EndA] then
+	      %% Is note first within the spanner articulation in question?
+	      IsFirst = if {MyNote hasTemporalPredecessor($)}
+			then Pre = {MyNote getTemporalPredecessor($)} in
+			   if {Score.isArticulationMixin Pre}
+			   then
+			      {Not
+			       {Init.getArticulationSymbol {Pre getArticulation($)}}
+			       == {Init.getArticulationSymbol {MyNote getArticulation($)}}}
+			   else true
+			   end
+			else true
+			end
+	      IsVeryLast = {Not IsFirst} andthen {Not {MyNote hasTemporalSuccessor($)}}
+	   in
+	      unit(marks: if IsFirst
+			  then BeginA
+			  elseif IsVeryLast
+			  then EndA 
+			  else ContinueA
+			  end)  
+	   else
+	      %% Add ending mark of preceeding spanner range?
+	      Mark1 = if {MyNote hasTemporalPredecessor($)}
+		      then  Pre = {MyNote getTemporalPredecessor($)} in
+			 if {Score.isArticulationMixin Pre}
+			 then case {Init.getFomusArticulation {Pre getArticulation($)}}
+			      of [_ _ EndA]
+			      then [EndA]
+			      else nil
+			      end
+			 else nil
+			 end
+		      else nil
+		      end
+	      Mark2 = {Init.getFomusArticulation {MyNote getArticulation($)}}
+	   in
+	      unit(marks: {Append Mark1 case Mark2 of nil then nil else [Mark2] end})
+	   end
+	else unit
+	end}
        MyNote}
    end
 

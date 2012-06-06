@@ -22,6 +22,7 @@ import
    
    Strasheela at '../Strasheela.ozf'
    GUtils at 'GeneralUtils.ozf'
+   LUtils at 'ListUtils.ozf'
    MUtils at 'MusicUtils.ozf'
    Score at 'ScoreCore.ozf'
    Out at 'Output.ozf'
@@ -59,6 +60,7 @@ export
    SetNoteLengthsRecord SymbolicDurToInt
    GetBeatDuration SetBeatDuration GetTempo SetTempo
    SetTuningTable UnsetTuningTable GetTuningTable
+   SetArticulationMap GetArticulationSymbol SetFomusArticulationMap GetFomusArticulation
    SetMaxLilyRhythm
    AddExplorerOuts_Standard AddExplorerOuts_Extended
 %   StrasheelaDir
@@ -330,6 +332,73 @@ define
    end
 
 
+   local
+      ArticulationMap = {NewCell nil}
+      FomusArticulationMap = {NewCell nil}
+   in
+      /** %% Sets the mapping of an (average) articulation value to the corresponding symbolic articulation. This articulation symbol is abstract and for music output must be mapped to the marks of the corresponding output format (e.g., Fomus or ENP). The default is
+      unit(25: staccatissimo
+	   50: staccato
+	   70: 'mezzo staccato'
+	   90: 'non legato'
+	   102: legato)
+      %%
+      %% When overwriting this default you should only change the integers, but not the symbolic names. Changing these values is useful for fine-tuning which articulation percentage value corresponds to which symbolic articulation. You can also leave out symbolic articulations, e.g., remove the 'mezzo staccato' and 'staccatissimo' to simplify your resulting notation.
+      %% */
+      proc {SetArticulationMap Map}
+	 ArticulationMap := Map
+      end
+      %% Default Map
+      {SetArticulationMap unit(25: staccatissimo
+			       50: staccato
+			       70: 'mezzo staccato'
+			       95: 'non legato'
+			  % 90: portato
+			       107: legato)}
+      /** %% Expects an articulation parameter value (an int, percentage of duration). Returns the symbolic articulation (an atom) of the given articulation parameter.
+      %% */
+      fun {GetArticulationSymbol Articulation}
+	 ArtMap = @ArticulationMap
+	 NumKeys = {Arity ArtMap}
+	 MatchingMin = {LUtils.findBest NumKeys
+			fun {$ Key1 Key2}
+			   {Abs Key1 - Articulation} < {Abs Key2 - Articulation}
+			end}
+      in
+	 ArtMap.MatchingMin
+      end
+      
+      /** %% Sets the mapping of symbolic articulations (see SetArticulationMap) to the corresponding Fomus marks. The default is
+      unit(staccatissimo: '!' 
+	   staccato: '.' 
+	   'mezzo staccato': '/.'
+	   'non legato': nil
+	   %% start/continue/end legato slur
+	   legato: ['(..' '.(.' '..)'] 
+	  )
+
+      %% When overwriting this default you should only change the Fomus values, but not the symbolic names.
+      
+      %% Note that Fomus also supports other legato varieties, depending on whether the mark can (not) span rests, and marks can (not) touch, see http://fomus.sourceforge.net/doc.html/Marks.html.
+      %% */
+      proc {SetFomusArticulationMap Map}
+	 FomusArticulationMap := Map
+      end
+      %% Default Map
+      {SetFomusArticulationMap unit(staccatissimo: '!' 
+				    staccato: '.' 
+				    'mezzo staccato': '/.'
+				    'non legato': nil
+				    legato: ['(..' '.(.' '..)'] 
+				   )}
+      
+      /** %% Expects an articulation parameter value (an int, percentage of duration). Returns the corresponding Fomus mark(s).
+      %% */
+      fun {GetFomusArticulation Articulation}
+	 @FomusArticulationMap.{GetArticulationSymbol Articulation}
+      end
+      
+   end
    
    
    local

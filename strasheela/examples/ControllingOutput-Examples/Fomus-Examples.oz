@@ -1003,3 +1003,25 @@ MyScore = {Score.makeSeq unit(iargs: unit(n:14
 {MyScore wait}
 {Out.renderFomus MyScore
  unit(file:"Amplitude-moreComplex2")}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%% Articulations with articulation parameter
+%%
+
+declare
+MyScore = {Score.makeSeq unit(iargs: unit(n:15
+					  duration: 2
+					  pitch: 60
+					  articulation: each#[10 20 30 40 50 60 70 80 90 100 110 110 110 50 100])
+			      startTime: 0
+			      timeUnit: beats)}
+{Score.init MyScore}
+
+%% Fomus notates different articulations
+{Out.renderFomus MyScore
+ unit(file:"ArticulationTest")}
+
+
+
