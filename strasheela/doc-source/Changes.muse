@@ -8,6 +8,7 @@
   - Main documentation additions
 
   - Minor additions
+    - Added a parameter articulation to Score.note, both playback and notation output supported
 
   - Further bug fixes and changes
     - Strasheela development moved from SourceForge to [[https://github.com/tanders/strasheela/tree/master/strasheela][GitHub]] (and is now using [[http://en.wikipedia.org/wiki/Git_%28software%29][Git]] instead of [[http://en.wikipedia.org/wiki/Subversion_%28software%29][Subversion]]). Nevertheless, other things stay at SourceForge (e.g., the website, mailing lists, releases).
