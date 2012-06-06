@@ -655,6 +655,23 @@ Best, Hans
    How to express changing tempi?
 
 
+** TODO [Difficult] Generalise accessors hasTemporalPredecessor, hasTemporalSuccessor :SOON:
+
+   also getTemporalPredecessor, getTemporalPredecessors, getTemporalSuccessor, getTemporalSuccessors, 
+   getPredecessorsUpToRest, getSuccessorsUpToRest
+
+   Design goal: such accessors should work over container boundaries 
+
+   Problem:
+   - Current definition is for positional and not temporal predecessor/successor and I want to keep it like that (does not block at undetermined score).
+   - It would be rather strait forward to say that the predecessor for a note in a seq of seqs, where the note is the first item in a subseq, is the last note in the preceeding seq
+   - However, other cases are not so easy
+     - What if the corresponding predecessor of a note is container? Should I return the container or its last contained note? 
+     - If I generalise these defs, how should I handle simultaneous containers? Only access predecessors of a first object in a container if the container of the container is a sequential? But these are positional accessors, and I should not mix in temporal concerns..
+
+  Hm...     
+
+
 ** DONE Note amplitudes -> music notation with Fomus		       :NEXT:
    CLOSED: [2012-06-05 Tue 17:51]
 
@@ -678,6 +695,7 @@ Best, Hans
 ** Implement morpology (analysis) constraints (proposed by P Aralla etc.)
 
    See draft at [[file:~/oz/music/Strasheela/tmp/Morphology.oz::%25%25][file:~/oz/music/Strasheela/tmp/Morphology.oz::%%]]
+
 
 ** Revise music representation to allow for efficient distro stratey for pattern motifs with rests (note offset time > 0) :ARCHIVE:
 
