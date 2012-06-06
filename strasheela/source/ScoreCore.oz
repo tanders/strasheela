@@ -82,6 +82,7 @@ export
    TransformScore TransformScore2
    transform: TransformScore
    transform2: TransformScore2
+   GetDefaults
    MakeConstructor
    MakeItems MakeItems_iargs MakeContainer MakeSim MakeSeq
    DefSubscript DefMixinSubscript ItemslistToContainerSubscript
@@ -235,7 +236,7 @@ define
 %      meth getInitArgs($) 
 %      end
       
-      /** %% Returns a record where the features are all supported arguments of the init method of self with their default as value (_ indicates that no default exist). This method is useful, e.g., for automatic documentation of all the arguments supported by the init method of a certain class (but the method must be send to a class instance).
+      /** %% Returns a record where the features are all supported arguments of the init method of self with their default as value ('_' indicates that no default exist). This method is useful, e.g., for automatic documentation of all the arguments supported by the init method of a certain class (but the method must be send to a class instance).
       %%
       %% NB: this method relies on the correct implementation of the method getInitArgs for its class and all its superclasses. 
       %% */
@@ -243,11 +244,11 @@ define
 	 Excluded = nil
 	 fun {TransformArgs Args}
 	    {Map Args fun {$ Arg#_#Init}
-			 if Init==noMatch
-			 then Arg#_
-			 else Arg#Init
-			 end
-		      end}
+	 		 if Init==noMatch
+	 		 then Arg#'_'
+	 		 else Arg#Init
+	 		 end
+	 	      end}
 	 end
 	 fun {AppendArgs unit(superclass:Super args:Args)}
 	    if Super == nil
@@ -255,7 +256,8 @@ define
 	    else
 	       {Append
 		{AppendArgs (Super, getInitInfo($ exclude:Excluded))}
-		{TransformArgs Args}}
+		{TransformArgs Args}
+	       }
 	    end
 	 end
       in
@@ -2800,11 +2802,26 @@ define
    end
 
 
+
+   /** %% Auto-documentation definition: For constructor functions defined with Score.makeConstructor, Score.defSubscript and friends but also classes: return a (possibly nested) record with all arguments and their default values.
+   %% */
+   fun {GetDefaults X}
+      if {IsProcedure X} andthen {ProcedureArity X} == 2
+      then {X 'getDefaults'}
+      elseif {IsClass X}
+      then {{MakeScore x unit(x:X)} getInitArgDefaults($)}
+      else {Exception.raiseError
+	    strasheela(failedRequirement X "Not an auto-documented value")}
+	 unit % never returned
+      end
+   end
    
    /** %% Returns a score item constructor function with interface {F Args} which creates essentially the same item as Constructor (unary function or class), but uses the default arguments Defaults (record of init arguments). Defaults and Args can be nested records, in which case nested default specs are not overwritten if Args specifies same higher-level arg (i.e. Default and Arg are combined with GUtils.recursiveAdjoin instead of just Adjoin). The item returned by the constructor is not fully initialised. 
    %% In addition, the resulting constructor function supports convenience notations for certain values. The following notations are supported (both as default arguments and as actual arguments). 
    %% fn # MyFun: the actual value is returned by the function MyFun (remember that handing undetermined variables to constructors is only possible if the constructor call is wrapped in the script or some other procedure; otherwise the search blocks).   
    %% fd # DomSpec: DomSpec is the specification expected by FD.int.
+   %%
+   %% Returned functions support the auto-documentation with GetDefaults.
    %%
    %% Example
    {Score.makeConstructor Score.note
@@ -2814,15 +2831,21 @@ define
    %% TODO: add support for fs # DomSpec : what format should DomSpec be in that case?
    fun {MakeConstructor Constructor Defaults}
       fun {$ Args}
-	 {MakeScore2 {Record.map {GUtils.recursiveAdjoin Defaults
-				  {Adjoin Args unit}}
-		      fun {$ X}
-			 case X of fd # DomSpec then {FD.int DomSpec}
-			 [] fn # F then {F}
-			 else X
-			 end
-		      end}
-	  unit(unit:Constructor)}
+	 %% auto-documentation
+	 case Args of 'getDefaults' then
+	    {Adjoin {GetDefaults Constructor}
+	     Defaults}
+	 else  			% normal use case
+	    {MakeScore2 {Record.map {GUtils.recursiveAdjoin Defaults
+				     {Adjoin Args unit}}
+			 fun {$ X}
+			    case X of fd # DomSpec then {FD.int DomSpec}
+			    [] fn # F then {F}
+			    else X
+			    end
+			 end}
+	     unit(unit:Constructor)}
+	 end
       end
    end
 
@@ -2878,7 +2901,7 @@ define
 	   constructor: Score.note)
       %%
       %%
-      %% TODO: document Args = 'getDefaults'
+      %%
       %% !! TODO: The args depend on constructor -- I should somehow allow for handing over different constructor
       %%
       %% NB: constructor must not expect any of the args expected by MakeItems (n, constructor, handle, rule), as these are affected by MakeItems. This fact limits the recursive use of MakeItems (where the constructor is created by MakeItems).
@@ -2897,9 +2920,7 @@ define
 	 %% auto-documentation
 	 case Args of 'getDefaults' then
 	    Elements =  {Adjoin Defaults
-			 %% TODO: refactor so that returned args depend on constructor given in Args
-			 {{MakeScore x unit(x:Defaults.constructor)}
-			  getInitArgDefaults($)}}
+			 {GetDefaults Defaults.constructor}}
 	 else			% usual use
 	    As = {Adjoin Defaults Args}
 	    L = element			% element label
@@ -2927,7 +2948,6 @@ define
 
       /** %% Same as Score.makeItems, but all Score.makeItems arguments are wrapped in arg iargs for compatibility with DefSubscript.
       %%
-      %% TODO: document Args = 'getDefaults'
       %%
       %% Note: arg processing (each-args etc) only supported for iargs, but not rarg, and also not for iargs.n. The reason is that only a single value of these args is needed for items creation (e.g., only one iargs.n is needed). 
       %% */
@@ -2937,7 +2957,7 @@ define
 	 %% auto-documentation
 	 case Args of 'getDefaults' then
 	    %% TODO: refactor so that returned iargs depend on given constructor
-	    unit(iargs: {MakeItems 'getDefaults'})
+	    unit(iargs: {GetDefaults MakeItems})
 	 else			% usual use
 	    As = {Adjoin Default Args}
 	 in
@@ -3000,7 +3020,6 @@ define
    %% 'iargs': arguments for the creation of container items, a record of args in the format expected by Score.makeItems  
    %% Any other container argument is supported as well.
    %%
-   %% TODO: document Args = 'getDefaults'
    %%
    %% Default Args:
    unit(iargs:unit
@@ -3018,7 +3037,7 @@ define
       %% auto-documentation
       case Args of 'getDefaults' then
 	 MyMotif = {Adjoin unit(%% TODO: refactor so that iargs depend on constructor
-				iargs: {MakeItems 'getDefaults'}
+				iargs: {GetDefaults MakeItems}
 				%% arg ignored, but filtered out of container args
 				rargs:unit#ignored)
 		    %% TODO: refactor so that outer args depend on given constructor
@@ -3045,6 +3064,7 @@ define
    fun {MakeSeq Args}
       {MakeContainer {Adjoin Args unit(constructor:Sequential)}}
    end
+
 
    /** %% Extended script creator for reusable (and hierarchical) sub-CSP definition: returns an extended script (a procedure with the interface {Script Args ?MyScore}), which specialises a "super" extended script. The super-script returns either an item (typically a container with items) or a list of items. Possible super-scripts are, e.g., Score.makeItems_iargs, MakeContainer or any user-defined extended script, possibly also created with DefSubscript. The resulting score object(s) are not fully initialised, and can thus be integrated withing a higher-level container.
    %% 
@@ -3077,7 +3097,9 @@ define
    %% 
    %% More specifically, Args contains the arguments provided when calling the resulting script plus the default values of omitted arguments specified with 'defaults', 'idefaults' and 'rdefaults' for this specific script. Default arguments specified for any super-script are absent from Args, if you need the defaults of the super-script in Body, declare them again for this script.
    %%
-   %% TODO: document Args = 'getDefaults'
+   %% Returned functions support the auto-documentation with GetDefaults.
+   %%
+   %% Problem: The defaults of init arguments for constructors can be reported wrongly, as the defaults of the class are reported, which could have been overwritten, e.g., by Score.makeConstructor. 
    %%
    %% Example:
    %% Motif definition: creates CSP with sequential container of notes (MakeContainer is super CSP), default are 3 notes (idefaults.n is 3, i.e., the default value for iargs.n is 3). Note pitches are constrained with Pattern.continuous, the direction of this pattern is controlled with the argument rargs.direction, default is '<:'. 
@@ -3121,19 +3143,27 @@ define
       proc {$ Args ?MyScore}
 	 %% auto-documentation
 	 case Args of 'getDefaults' then
-	    %% TODO: get args from super script
-	    %% - Add some mechanism for all relevant proc defs above
-	    %% - Add some fun that can extract such info from a class def
-	    %%   Use method getInitArgDefaults on class instance for this
-	    
-	    %% TODO: check whether mixins can introduce new args
+	    %% TODO: check whether mixins can introduce new args -- yes, for rargs!
+	    %% Add those args
 	    %% {Map DefAs.mixins fun {$ F} {F 'getDefaults'} end}
-
-	    MyScore = {GUtils.recursiveAdjoin 
-		       {DefAs.super 'getDefaults'}
+	    MyScore = {GUtils.recursiveAdjoin
+		       {GetDefaults DefAs.super}
+		       %% TODO: also process top-level arg 'constructor' 
 		       {Adjoin DefAs.defaults
-			unit(iargs: DefAs.idefaults
-			     rargs: DefAs.rdefaults)}}	    
+			unit(iargs: if {HasFeature DefAs.idefaults constructor}
+				    then {Adjoin {GetDefaults DefAs.idefaults.constructor} DefAs.idefaults}
+				    else DefAs.idefaults
+				    end
+			     rargs: DefAs.rdefaults)}}
+	    %% PROBLEM: how to get any unique name for the returned subscript?
+	 % [] 'getSources' then
+	 %    MyScore = {GUtils.recursiveAdjoin
+	 % 	       %% TODO:
+	 % 	       % {DefAs.super 'getSources'}
+	 % 	       unit 
+	 % 	       {Adjoin DefAs.defaults
+	 % 		unit(iargs: DefAs.idefaults
+	 % 		     rargs: DefAs.rdefaults)}}
 	 else			% usual use
 	    ItemAs = if {HasFeature Args iargs} then
 			{Adjoin DefAs.idefaults Args.iargs}
