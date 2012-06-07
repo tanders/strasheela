@@ -608,6 +608,8 @@ define
    /** %% Like Adjoin, but nested records are processed recursively.
    %% R1 and R2 must have the same nesting for recursive processing, otherwise R2 features are taken (like Adjoin).
    %% NB: lists and pairs are treated as elementary values, only 'normal' records are processed recursively.
+   %%
+   %% NOTE: can block on free values in records.
    %% */
    proc {RecursiveAdjoin R1 R2 ?Result}
       Feats = {LUtils.removeDuplicates {Append {Arity R1} {Arity R2}}}

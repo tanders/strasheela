@@ -4,6 +4,7 @@
 * Changes in Version 0.10.2 (no date yet)
 
   - Main additions and changes 
+     - Added some auto-documentation to a range of definitions (e.g., functions defined with Score.makeConstructor and Score.defSubscript, but also score classes): Score.getDefaults returns a record with all their creation arguments and default values. 
 
   - Main documentation additions
 
@@ -12,7 +13,6 @@
   - Bug fixes and further changes
     - Strasheela development moved from SourceForge to [[https://github.com/tanders/strasheela/tree/master/strasheela][GitHub]] (and is now using [[http://en.wikipedia.org/wiki/Git_%28software%29][Git]] instead of [[http://en.wikipedia.org/wiki/Subversion_%28software%29][Subversion]]). Nevertheless, other things stay at SourceForge (e.g., the website, mailing lists, releases).
     - Fixed method getInitArgDefaults (defined for all score classes). This method is useful, e.g., for automatic documentation of all the arguments supported by the init method of a certain class.
-    - Extended DefSubscript: resulting subscripts now support automatic documentation of their arguments.
 
   - For further details see the [[https://github.com/tanders/strasheela/commits/master][list of commits at GitHub]].
 

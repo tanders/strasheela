@@ -545,7 +545,8 @@ MyScore = {Score.make seq([note(duration:2)
 declare
 MakeRun			
 = {Score.defSubscript unit(rdefaults: unit(direction: '<:')
-			   idefaults: unit(n:5))
+			   idefaults: unit(n:5
+					  constructor: HS.score.note))
    proc {$ MyMotif Args} % body
       {Pattern.continuous {MyMotif mapItems($ getPitch)}
        Args.rargs.direction}
@@ -560,10 +561,52 @@ MyScore = {Score.make seq(items:{Score.makeItems items(n:3
 			  timeUnit:beats)
 	   unit}
 
-{Browse {MyScore toInitRecord($)}}
+{MyScore toInitRecord($)}
 
-%% get subscript documentation
-{MakeRun getDefaults}
+%% get subscript auto-documentation
+{Score.getDefaults MakeRun}
+
+
+
+declare
+Args = unit(n:5
+	    duration: 3
+	    constructor: HS.score.note)
+
+{Adjoin {Score.getDefaults Args.constructor} Args}
+
+
+
+fun {IsNormalRecord X}
+   {IsRecord2 X}
+   andthen {Not {IsList X}}
+   andthen {Not {Label X}=='#'}
+   andthen {Not {IsAtom2 X}}
+end
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%% Auto-documentation (see also other uses of Score.getDefaults in this buffer)
+%%
+
+declare
+MakeNote1 = {Score.makeConstructor Score.note % HS.score.note
+	     unit(pitch: fd#(60#72)
+		  duration: fn#fun {$} {FD.int 1#10} end)}
+MakeNote2 = {Score.makeConstructor MakeNote1
+	     unit(amplitude:30)}
+
+{Score.getDefaults MakeNote2}
+
+
+declare
+MakeNote3 = {Score.makeConstructor {Pattern.makeMotifIndexClass HS.score.note}
+	     unit(offsetTime: fd#(0#FD.sup)
+		  inChordB: fd#(0#1))}
+
+{Score.getDefaults MakeNote3}
+
+
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -630,10 +673,10 @@ MyRun2 = {MakeRun_PitchDom
 {MyRun2 toInitRecord($)}
 
 
-%% Get documentation
-{MakeRun getDefaults}
+%% Get auto-documentation
+{Score.getDefaults MakeRun}
 
-{MakeRun_PitchDom getDefaults}
+{Score.getDefaults MakeRun_PitchDom}
 
 
 
