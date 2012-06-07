@@ -191,7 +191,8 @@ MyTestScore = {Score.makeScore
 
 * Strasheela design and development 				 :STRASHEELA:
 
-** TODO Move Strasheela sources to GitHub			       :SOON:
+** DONE Move Strasheela sources to GitHub		       :SOON:ARCHIVE:
+   CLOSED: [2012-06-07 Thu 11:00]
 
 *** Todo for transfer
 
@@ -290,7 +291,7 @@ git svn clone http://strasheela.svn.sourceforge.net/svnroot/strasheela strasheel
       -> Only works with local svn repository (or SubGit runs on server)
 
 
-
+      
 **** DONE Upload Strasheela git repository to GitHub
      CLOSED: [2012-06-01 Fri 01:57]
 
@@ -397,33 +398,54 @@ Google, e.g., pygments lexer for more examples..
 
    Do this in a git branch, just to make sure...
 
-*** Brainstorming
+*** Still missing
 
-    General goal: clean up [inherited] argument lists of score scripts, or alternatively document them better (e.g., can I somehow automatically document all args?)
+    - Args of top-level container
+    - Args (rargs) of mixins
 
+**** Cannot be done						    :ARCHIVE:
 
-*** Revise defs in ScoreCore.oz
+     [At least not without some extrem effort, like writing some extra parser...]
 
-    MakeConstructor
-    MakeItems MakeItems_iargs MakeContainer MakeSim MakeSeq
-    DefSubscript DefMixinSubscript
+     - consider whether I can have a function like GetSources, which would return where each feature has been defined
+       - Problem: I have no name
+       - Idea: Can I return the file and position in that file to the def source code?
+	 ... unfortunately, for dynamically generated funs Debug.procedureCoord returns the pos of the fun that generated the fun we are interested in, but ignores where that generating fun was called
 
-    *Note: pointer into master branch*
-    See [[file:~/oz/music/Strasheela/strasheela/strasheela/source/ScoreCore.oz::fun%20{MakeConstructor%20Constructor%20Defaults}][file:~/oz/music/Strasheela/strasheela/strasheela/source/ScoreCore.oz::fun {MakeConstructor Constructor Defaults}]]
-
-
-*** Revise contribution Segs
-
-    *Note: pointer into master branch*
-    See [[file:~/oz/music/Strasheela/strasheela/strasheela/contributions/anders/Segments/Segments.oz][file:~/oz/music/Strasheela/strasheela/strasheela/contributions/anders/Segments/Segments.oz}]]
+	 Example
+	 {Debug.procedureCoord Segs.makeCounterpoint_PatternMotifs}
 
 
-*** !! Finally, revise all calls to these defs
 
-    - Revise all calls within Strasheela sources
-    - Revise all calls of composition projects that are work in progress
-    - Mark older/recent composition projects: they should use Strasheela version 0.10.1
-      (last release before these changes)
+*** Old
+
+**** Brainstorming
+
+     General goal: clean up [inherited] argument lists of score scripts, or alternatively document them better (e.g., can I somehow automatically document all args?)
+
+
+**** Revise defs in ScoreCore.oz
+
+     MakeConstructor
+     MakeItems MakeItems_iargs MakeContainer MakeSim MakeSeq
+     DefSubscript DefMixinSubscript
+
+     *Note: pointer into master branch*
+     See [[file:~/oz/music/Strasheela/strasheela/strasheela/source/ScoreCore.oz::fun%20{MakeConstructor%20Constructor%20Defaults}][file:~/oz/music/Strasheela/strasheela/strasheela/source/ScoreCore.oz::fun {MakeConstructor Constructor Defaults}]]
+
+
+**** Revise contribution Segs
+
+     *Note: pointer into master branch*
+     See [[file:~/oz/music/Strasheela/strasheela/strasheela/contributions/anders/Segments/Segments.oz][file:~/oz/music/Strasheela/strasheela/strasheela/contributions/anders/Segments/Segments.oz}]]
+
+
+**** !! Finally, revise all calls to these defs
+
+     - Revise all calls within Strasheela sources
+     - Revise all calls of composition projects that are work in progress
+     - Mark older/recent composition projects: they should use Strasheela version 0.10.1
+       (last release before these changes)
 
 
 ** TODO [#A] Define Strasheela score transformations (instead of plain generation as so far) :NEXT:
@@ -577,7 +599,7 @@ Best, Hans
    
 
 
-** DONE [#A] Add =articulation= parameter (FD) per note		       :NEXT:
+** DONE [#A] Add =articulation= parameter (FD) per note	       :NEXT:ARCHIVE:
    CLOSED: [2012-06-06 Wed 01:08]
    
    Consider: define mixin class in ScoreCore.oz, and make this part of standard note class
@@ -599,6 +621,7 @@ Best, Hans
    Define symbolic articulation outputs for Fomus 
 
    Define sound synthesis outputs (MIDI, Csound...) with customised note end
+
 
 
 ** TODO Debug  MIDI output of legato articulation 		       :NEXT:
