@@ -604,6 +604,24 @@ MakeSeq = {Score.makeConstructor Score.makeSeq
 {Score.getDefaults Score.makeContainer}
 
 
+%%
+%% Get auto-documentation of larger existing subscripts (defined in contribution Segs)
+%%
+
+%% get subscript documentation
+{Score.getDefaults Segs.makeCounterpoint_PatternMotifs}
+
+{Score.getDefaults Segs.makeCounterpoint}
+
+
+{Score.getDefaults Score.makeSeq}
+
+{Score.getDefaults Segs.makeCounterpoint_Seq}
+
+
+{Score.getDefaults Score.makeItems_iargs}
+
+
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
