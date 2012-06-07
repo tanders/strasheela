@@ -2879,7 +2879,9 @@ define
       if {IsProcedure X} andthen {ProcedureArity X} == 2
       then {X 'getDefaults'}
       elseif {IsClass X}
-      then {{MakeScore x unit(x:X)} getInitArgDefaults($)}
+      then {Record.map {{MakeScore x unit(x:X)} getInitArgDefaults($)}
+	    %% Avoid free variables for doc (avoid blocking elsewhere)
+	    fun {$ X} if {IsFree X} then '_' else X end end}
       else {Exception.raiseError
 	    strasheela(failedRequirement X "Not an auto-documented value")}
 	 unit % never returned
@@ -2990,7 +2992,8 @@ define
 	 %% auto-documentation
 	 case Args of 'getDefaults' then
 	    Elements =  {Adjoin Defaults
-			 {GetDefaults Defaults.constructor}}
+			 {Adjoin unit(handle:'_') % avoid blocking
+			  {GetDefaults Defaults.constructor}}}
 	 else			% usual use
 	    As = {Adjoin Defaults Args}
 	    L = element			% element label
@@ -3105,7 +3108,8 @@ define
 		    )
    in 
       %% auto-documentation
-      case Args of 'getDefaults' then
+      case Args of 'getDefaults'(...) % MakeSim / MakeSeq would call with getDefaults(constructor:Val)
+      then
 	 MyMotif = {Adjoin unit(%% TODO: refactor so that iargs depend on constructor
 				iargs: {GetDefaults MakeItems}
 				%% arg ignored, but filtered out of container args
@@ -3196,8 +3200,6 @@ define
 
    %% For testing purposes, you can call these definitions outside any top-level script and look at the result with the following lines
    {Score.init MyScore}
-
-   %% then do
    {Browse {MyScore toInitRecord($)}}
    %%
    %% */
@@ -3326,8 +3328,6 @@ define
 
    %% For testing purposes, you can call these definitions outside any top-level script and look at the result with the following lines
    {Score.init MyScore}
-    
-   %% then do
    {Browse {MyScore toInitRecord($)}}
    %% */
    fun {DefMixinSubscript DefArgs Body}
@@ -3343,12 +3343,8 @@ define
       DefAs = {Adjoin Default DefArgs}
    in
       proc {$ Args MyScore}
-	 {Browse torsten1}
 	 %% auto-documentation
 	 case Args of 'getDefaults' then
-	    {Browse torsten2}
-	    {Browse unit({GetDefaults DefAs.super}
-			 unit(rargs: DefAs.rdefaults))}
 	    MyScore = {GUtils.recursiveAdjoin {GetDefaults DefAs.super}
 		       unit(rargs: DefAs.rdefaults)}
 	 else			% usual use
@@ -3379,16 +3375,23 @@ define
    %% */
    fun {ItemslistToContainerSubscript Subscript ContainerLabel}
       fun {$ Args}
-	 %% make sure some value for iargs and rargs is there..
-	 FullArgs = {Adjoin unit(iargs:unit
-				 rargs:unit)
-		     Args}
-      in
-	 {MakeScore2
-	  {Adjoin {Record.subtractList Args [iargs rargs]}
-	   ContainerLabel({Subscript unit(iargs:FullArgs.iargs
-					  rargs:FullArgs.rargs)})}
-	  unit}
+	 %% auto-documentation
+	 case Args of 'getDefaults' then
+	    {GUtils.recursiveAdjoin 
+	     {GetDefaults unit(seq:MakeSeq sim:MakeSim).ContainerLabel}
+	     {GetDefaults Subscript}}
+	 else			% usual use	    
+	    %% make sure some value for iargs and rargs is there..
+	    FullArgs = {Adjoin unit(iargs:unit
+				    rargs:unit)
+			Args}
+	 in
+	    {MakeScore2
+	     {Adjoin {Record.subtractList Args [iargs rargs]}
+	      ContainerLabel({Subscript unit(iargs:FullArgs.iargs
+					     rargs:FullArgs.rargs)})}
+	     unit}
+	 end
       end
    end
 
