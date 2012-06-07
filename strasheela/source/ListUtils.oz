@@ -369,8 +369,10 @@ define
    
    /** %% Binds the accumulation of the binary function Fn on all neighbors in Xs to Y. E.g., Accum returns the sum in Xs if Fn is Number.'+'.
    % */
-   proc {Accum Xs Fn Y}
-      {List.foldL Xs.2 Fn Xs.1 Y}
+   fun {Accum Xs Fn}
+      case Xs of nil then nil
+      else {List.foldL Xs.2 Fn Xs.1}
+      end
    end
    
    /** %% SubtractList returns a list which contains all elements of Xs except the (leftmost occurrences of) elements in Ys if they are in Xs. 
