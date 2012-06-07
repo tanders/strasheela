@@ -3127,12 +3127,13 @@ define
    /** %% Extended script which returns a simultaneous container with items, not fully initialised and where many parameters can be still undetermined. Specialisation of MakeContainer where the constructor is Simultaneous. See MakeContainer for further information.
    %% */
    fun {MakeSim Args}
-      {MakeContainer {Adjoin Args unit(constructor:Simultaneous)}}
+      %% Args can be 'getDefaults', so I do not want to overwrite that...
+      {MakeContainer {Adjoin unit(constructor:Simultaneous) Args}}
    end
    /** %% Extended script which returns a sequential container with items, not fully initialised and where many parameters can be still undetermined. Specialisation of MakeContainer where the constructor is Sequential. See MakeContainer for further information.
    %% */
    fun {MakeSeq Args}
-      {MakeContainer {Adjoin Args unit(constructor:Sequential)}}
+      {MakeContainer {Adjoin unit(constructor:Sequential) Args}}
    end
 
 
@@ -3167,7 +3168,7 @@ define
    %% 
    %% More specifically, Args contains the arguments provided when calling the resulting script plus the default values of omitted arguments specified with 'defaults', 'idefaults' and 'rdefaults' for this specific script. Default arguments specified for any super-script are absent from Args, if you need the defaults of the super-script in Body, declare them again for this script.
    %%
-   %% Returned functions support the auto-documentation with GetDefaults.
+   %% Returned functions support the auto-documentation of their arguments with GetDefaults.
    %%
    %% Problem: The defaults of init arguments for constructors can be reported wrongly, as the defaults of the class are reported, which could have been overwritten, e.g., by Score.makeConstructor. 
    %%
@@ -3208,32 +3209,26 @@ define
 		     rdefaults: unit)
       DefAs = {Adjoin Default DefArgs}
    in
-      %% TODO: change arg name MyScore into, e.g., Result -- but then I need to carefully think where I need to change this arg name in doc as well
-      %% Perhaps I should leave it MyScore after all, as that is the most usual use case
+      %% Note: interface of body {$ MyScore Args} but returned subscript reversed order {$ Args ?MyScore}. Not a principle problem, but can be confusing. Changing this to the uniform order {$ Args ?MyScore} would require changing all calls to DefSubscript.
       proc {$ Args ?MyScore}
 	 %% auto-documentation
+	 %% BTW: no support for accessing where args have been defined (no additional arg 'getSources'), because instead of the actual definition I would always get this proc returned by DefSubscript
 	 case Args of 'getDefaults' then
-	    %% TODO: check whether mixins can introduce new args -- yes, for rargs!
-	    %% Add those args
-	    %% {Map DefAs.mixins fun {$ F} {F 'getDefaults'} end}
 	    MyScore = {GUtils.recursiveAdjoin
-		       {GetDefaults DefAs.super}
-		       %% TODO: also process top-level arg 'constructor' 
-		       {Adjoin DefAs.defaults
+		       {GUtils.recursiveAdjoin
+			{GetDefaults DefAs.super}			
+			{LUtils.accum {Map DefAs.mixins fun {$ F} {GetDefaults F} end}
+			 GUtils.recursiveAdjoin}}
+		       {Adjoin
+			if {HasFeature DefAs constructor}
+			then {Adjoin {GetDefaults DefAs.constructor} DefAs.defaults}
+			else DefAs.defaults
+			end
 			unit(iargs: if {HasFeature DefAs.idefaults constructor}
 				    then {Adjoin {GetDefaults DefAs.idefaults.constructor} DefAs.idefaults}
 				    else DefAs.idefaults
 				    end
 			     rargs: DefAs.rdefaults)}}
-	    %% PROBLEM: how to get any unique name for the returned subscript?
-	 % [] 'getSources' then
-	 %    MyScore = {GUtils.recursiveAdjoin
-	 % 	       %% TODO:
-	 % 	       % {DefAs.super 'getSources'}
-	 % 	       unit 
-	 % 	       {Adjoin DefAs.defaults
-	 % 		unit(iargs: DefAs.idefaults
-	 % 		     rargs: DefAs.rdefaults)}}
 	 else			% usual use
 	    ItemAs = if {HasFeature Args iargs} then
 			{Adjoin DefAs.idefaults Args.iargs}
@@ -3261,7 +3256,7 @@ define
 	    end
 	    {ForAll Mixins
 	     %% threads created already in Mixin (if defined with DefMixinSubscript)
-	     proc {$ Mixin} {Mixin MyScore As} end}
+	     proc {$ Mixin} {Mixin As MyScore} end}
 	    %%
 	    %% BUG: blocks
 	    %% Doc, if this is sometimes working...
@@ -3286,12 +3281,12 @@ define
    /** %% [Complements DefSubscript]: defines further arguments and applies further constraints to a script defined by DefSubscript. 
    %%
    %% Args:
-   %% 'super' (default GUtils.unarySkip): an optional super-mixin.  
+   %% 'super' (default is equivalent of GUtils.unarySkip): an optional super-mixin.  
    %% 'rdefaults': same as for DefSubscript.
    %%
-   %% 'idefaults' and 'defaults' are ignored: Note that defining default values for score object initialisation arguments is not supported for mixin scripts (defined values are ignored by the score object initialisation). 
+   %% NOTE: 'idefaults' and 'defaults' are ignored: Defining default values for score object initialisation arguments is not supported for mixin scripts (defined values are ignored by the score object initialisation). 
    %%
-   %% Body: same as for DefSubscript.
+   %% Body: A procedure with the interface {Body MyScore Args}, where MyScore is the item(s) created by the super-script, and Args is the record of the arguments specified for the resulting script. Body can also be nil.   
    %%
    %% Example:
    %% Motif definition where the pitch structure is defined with DefSubscript, and the rythmic structure by a mixin subscipt.
@@ -3336,29 +3331,46 @@ define
    {Browse {MyScore toInitRecord($)}}
    %% */
    fun {DefMixinSubscript DefArgs Body}
-      Default = unit(super: GUtils.binarySkip
+      Default = unit(super: proc {$ Args MyScore}
+			       case Args of 'getDefaults'
+			       then MyScore = unit 
+			       else skip
+			       end
+			    end
 		     defaults: unit
 		     idefaults: unit % ignored! 
 		     rdefaults: unit)
       DefAs = {Adjoin Default DefArgs}
    in
-      proc {$ MyScore Args}
-	 ItemAs = if {HasFeature Args iargs} then
-		     {Adjoin DefAs.idefaults Args.iargs}
-		  else DefAs.idefaults
-		  end
-	 RuleAs = if {HasFeature Args rargs} then
-		     {Adjoin DefAs.rdefaults Args.rargs}
-		  else DefAs.rdefaults
-		  end
-	 As = {Adjoin {Adjoin DefAs.defaults Args}
-	       unit(iargs: ItemAs
-		    rargs: RuleAs)}
-      in
-	 %% thread created already in DefAs.super (if defined with DefMixinSubscript)
-	 {DefAs.super MyScore As} 
-	 thread {Body MyScore As} end
-      end   
+      proc {$ Args MyScore}
+	 {Browse torsten1}
+	 %% auto-documentation
+	 case Args of 'getDefaults' then
+	    {Browse torsten2}
+	    {Browse unit({GetDefaults DefAs.super}
+			 unit(rargs: DefAs.rdefaults))}
+	    MyScore = {GUtils.recursiveAdjoin {GetDefaults DefAs.super}
+		       unit(rargs: DefAs.rdefaults)}
+	 else			% usual use
+	    ItemAs = if {HasFeature Args iargs} then
+			{Adjoin DefAs.idefaults Args.iargs}
+		     else DefAs.idefaults
+		     end
+	    RuleAs = if {HasFeature Args rargs} then
+			{Adjoin DefAs.rdefaults Args.rargs}
+		     else DefAs.rdefaults
+		     end
+	    As = {Adjoin {Adjoin DefAs.defaults Args}
+		  unit(iargs: ItemAs
+		       rargs: RuleAs)}
+	 in
+	    %% thread created already in DefAs.super (if defined with DefMixinSubscript)
+	    {DefAs.super As MyScore}
+	    if Body \= nil then 
+	       thread {Body MyScore As} end
+	    end
+	 end
+      end
    end
 
    
