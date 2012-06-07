@@ -774,7 +774,7 @@ define
    %% */ 
    fun {ItemFenvToMidiCC MyFenv N Track MyItem Channel Controller}
       StartTime = {Out.midi.beatsToTicks {MyItem getStartTimeInSeconds($)}}
-      EndTime = {Out.midi.beatsToTicks {MyItem getEndTimeInSeconds($)}}
+      EndTime = {Out.midi.beatsToTicks {MyItem getPerformanceEndTimeInSeconds($)}}
    in
       {FenvToMidiCC MyFenv N Track StartTime EndTime Channel Controller}
    end
@@ -808,7 +808,7 @@ define
       {LUtils.mappend {Record.toList Fenvs}
        fun {$ Controller#MyFenv}
 	  StartTime = {Out.midi.beatsToTicks {MyItem getStartTimeInSeconds($)}}
-	  EndTime = {Out.midi.beatsToTicks {MyItem getEndTimeInSeconds($)}}
+	  EndTime = {Out.midi.beatsToTicks {MyItem getPerformanceEndTimeInSeconds($)}}
        in
 	  {FenvToMidiCC MyFenv N As.track StartTime EndTime Channel Controller}
        end}
@@ -833,7 +833,7 @@ define
 	 Tempo = TempoInfo.1
 	 N = {FloatToInt {MyItem getDurationInSeconds($)} * As.ccsPerSecond}
 	 StartTime = {Out.midi.beatsToTicks {MyItem getStartTimeInSeconds($)}}
-	 EndTime = {Out.midi.beatsToTicks {MyItem getEndTimeInSeconds($)}}
+	 EndTime = {Out.midi.beatsToTicks {MyItem getPerformanceEndTimeInSeconds($)}}
       in
 	 {FenvToMidiCC Tempo N As.track StartTime EndTime _/*Channel*/
 	  fun {$ Track Time _/*Channel*/ Value}
@@ -1057,7 +1057,7 @@ define
 		    {Out.midi.noteToUserEvent N
 		     fun {$ Track Start _ /* Channel */}
 			EndTime = {Out.midi.beatsToTicks
-				   {N getEndTimeInSeconds($)} + NoteOffOffset}
+				   {N getPerformanceEndTimeInSeconds($)} + NoteOffOffset}
 			Velocity = {FloatToInt {N getAmplitudeInVelocity($)}}
 		     in
 			%% output a list of MIDI events 

@@ -70,7 +70,9 @@ export
    ScoreObject Parameter TimeParameter TimePoint TimeInterval Amplitude Pitch
    LeaveUninitialisedParameterMixin IsLeaveUninitialisedParameter
    Item Container Modifier Aspect TemporalAspect Sequential Simultaneous 
-   Element AbstractElement TemporalElement Pause Event Note2 Note
+   Element AbstractElement TemporalElement Pause Event Note2
+   MakeArticulationClass IsArticulationMixin MakeAmplitudeClass IsAmplitudeMixin
+   Note
    % funcs/procs
    IsScoreObject IsTemporalItem IsTemporalContainer
 %  IsET GetPitchesPerOctave
@@ -100,6 +102,8 @@ prepare
    /** marker of score object type checking */
    %% Defined in 'prepare' to avoid re-evaluation.
    ScoreObjectType = {Name.new}
+   ArticulationMixinType = {Name.new}
+   AmplitudeMixinType = {Name.new}
    LeaveUninitialisedParameterMixinType = {Name.new}
    
 define
@@ -911,7 +915,23 @@ define
       meth getOffsetTime(?X) X={@offsetTime getValue($)} end
       meth getStartTimeInSeconds(?X) X={@startTime getValueInSeconds($)} end
       meth getEndTimeInSeconds(?X) X={@endTime getValueInSeconds($)} end
+      meth getPerformanceEndTimeInSeconds(?X)
+	 if {IsArticulationMixin self} 
+	 then X = {self getStartTimeInSeconds($)} + {self getPerformanceDurationInSeconds($)}
+	 else X={@endTime getValueInSeconds($)}
+	 end
+      end
       meth getDurationInSeconds($) {self getEndTimeInSeconds($)} - {self getStartTimeInSeconds($)} end
+      /** %% The performance duration takes articulation (duration percentage) into account.
+      %% */
+      meth getPerformanceDurationInSeconds($)
+	 if {IsArticulationMixin self} 
+	 then 
+	    ({self getEndTimeInSeconds($)} - {self getStartTimeInSeconds($)})
+	    * {IntToFloat {self getArticulation($)}} / 100.0
+	 else {self getEndTimeInSeconds($)} - {self getStartTimeInSeconds($)}
+	 end
+      end
 %       meth getDurationInSeconds(?X) X={@duration getValueInSeconds($)} end
       meth getOffsetTimeInSeconds(?X)
 	 %% BUG: no dependency to tempo curve or time shift function defined yet, depends on type of container, cf def for getDurationInSeconds
@@ -920,7 +940,23 @@ define
       end
       meth getStartTimeInBeats(?X) X={@startTime getValueInBeats($)} end
       meth getEndTimeInBeats(?X) X={@endTime getValueInBeats($)} end
+      meth getPerformanceEndTimeInBeats(?X)
+	 if {IsArticulationMixin self} 
+	 then X = {self getStartTimeInBeats($)} + {self getPerformanceDurationInBeats($)}
+	 else X={@endTime getValueInBeats($)}
+	 end
+      end
       meth getDurationInBeats(?X) X={@duration getValueInBeats($)} end
+      /** %% The performance duration takes articulation (duration percentage) into account.
+      %% */
+      meth getPerformanceDurationInBeats($)
+	 if {IsArticulationMixin self} 
+	 then 
+	    ({self getEndTimeInBeats($)} - {self getStartTimeInBeats($)})
+	    * {IntToFloat {self getArticulation($)}} / 100.0
+	 else {self getEndTimeInBeats($)} - {self getStartTimeInBeats($)}
+	 end
+      end
       meth getOffsetTimeInBeats(?X) X={@offsetTime getValueInBeats($)} end
       meth getStartTimeParameter(?X) X=@startTime end
       meth getEndTimeParameter(?X) X=@endTime end
@@ -2061,6 +2097,7 @@ define
    %%
    %% The attribute modifier binds the modification function.
    %%
+   %% NOTE: the Modifier class was never used so far (even many years after its definition). So, consider removing it.
    %% !! NB: currently, the score output functions (see ./Output.oz) ignore the Modifier which is therefore without effect!
    %%*/
    class Modifier from Container
@@ -2419,52 +2456,85 @@ define
       
    end
 
-
-   /** %% [concrete class] Extends class Note2 by parameter amplitude. These two classes exist because an amplitude is usually needed if a sound synthesis format is output but may not be needed if only a music notation format is output.
-   %% NOTE: unlike most other arguments, the amplitude argument defaults to a determined number. 
+   /** %% [abstract mixin class] ArticulationMixin extends note classes with an articulation parameter.
+   %% No further constraints are applied.
+   %% NOTE: unlike most other parameters, the articulation parameter defaults to a determined integer (meaning non-legato). 
+   %%
+   %% NB: the articulationUnit is currently only a placeholder (this unit is ignoed).
    %% */
-   class Note from Note2
-      feat %'class': Note
-	 label: note
+   class ArticulationMixin
+      feat !ArticulationMixinType:unit
+      attr articulation
+      meth initArticulationMixin(articulation:A<=100 articulationUnit:AU<=percent ...) = M 
+	 @articulation = {New Parameter init(value:A info:articulation 'unit':AU)}
+	 {self bilinkParameters([@articulation])} 
+      end
+      meth getArticulation(X) X = {@articulation getValue($)} end
+      meth getArticulationParameter(X) X= @articulation end
+   end
+   fun {IsArticulationMixin X}
+      {IsScoreObject X} andthen {HasFeature X ArticulationMixinType}
+   end
+
+   /** %% [concrete class constructor] Expects a note class, and returns this class extended by an articulation parameter (see ArticulationMixin).
+   %% */
+   fun {MakeArticulationClass SuperClass}
+      class $ from SuperClass ArticulationMixin
+	 meth init(articulation:A<=100 articulationUnit:AU<=percent ...) = M
+	    SuperClass, {Record.subtractList M [articulation articulationUnit]}
+	    ArticulationMixin, {Adjoin M initArticulationMixin}
+	 end
+	 meth getInitInfo($ ...)       
+	    unit(superclass:SuperClass
+		 args:[articulation#getArticulation#noMatch]) 
+	 end
+      end
+   end
+   
+   
+   /** %% [abstract mixin class] AmplitudeMixin extends note classes with an amplitude parameter.
+   %% NOTE: unlike most other parameters, the amplitude parameter defaults to a determined integer (meaning mezzoforte).
+   %% Note: Music notation output via Fomus takes amplitude values into account (changes in amplitude are even expressed with hairpins). However, Fomus must be instructed to do so (e.g., with the global setting dyns = yes in the ~/.fomus file).
+   %% Sound synthesis output (e.g., MIDI and Csound) also output amplitude values (of course).
+   %% No further constraints are applied.
+   %% */
+   class AmplitudeMixin
+      feat !AmplitudeMixinType:unit
       attr amplitude
-      meth init(%addParameters:AddParams<=nil 
-		amplitude:A<=64 amplitudeUnit:AU<=velocity 
-		...) = M 
-	 Note2, {Record.subtractList M
-		 [amplitude amplitudeUnit]}
-	 @amplitude = {New Amplitude init(value:A 'unit':AU)}
-	 %{self getAmplitude(A)} {self getAmplitudeUnit(AU)}
-	 {self bilinkParameters([@amplitude])}
-      end	
-      meth isNote(?B) B=true end
-      meth getAmplitude(?X) X={@amplitude getValue($)} end
+      meth initAmplitudeMixin(amplitude:A<=64 amplitudeUnit:AU<=velocity ...) = M 
+	 @amplitude = {New Amplitude init(value:A info:amplitude 'unit':AU)}
+	 {self bilinkParameters([@amplitude])} 
+      end
+      meth getAmplitude(X) X = {@amplitude getValue($)} end
       meth getAmplitudeInNormalized(?X) X={@amplitude getValueInNormalized($)} end
       meth getAmplitudeInVelocity(?X) X={@amplitude getValueInVelocity($)} end
       meth getAmplitudeParameter(?X) X=@amplitude end
       meth getAmplitudeUnit(?X) X={@amplitude getUnit($)} end
-%      meth getAttributes(?X)
-%	 X = {Append
-%	      [amplitude]
-%	      Note2, getAttributes($)}
-%      end
-%       meth toInitRecord(?X exclude:Excluded<=DefaultInitRecordExcluded)
-% 	 X = {Adjoin
-% 	      Note2, toInitRecord($ exclude:Excluded)
-% 	      {Record.subtractList
-% 	       {self
-% 		makeInitRecord($ [amplitude#getAmplitude#noMatch
-% 				  amplitudeUnit#getAmplitudeUnit#velocity])}
-% 	       Excluded}}
-%       end
-      
-      meth getInitInfo($ ...)
-	 unit(superclass:Note2
-	      args:[amplitude#getAmplitude#64
-		    amplitudeUnit#getAmplitudeUnit#velocity])
-      end
-      
+   end
+   fun {IsAmplitudeMixin X}
+      {IsScoreObject X} andthen {HasFeature X AmplitudeMixinType}
    end
 
+   /** %% [concrete class constructor] Expects a note class, and returns this class extended by an amplitude parameter (see AmplitudeMixin).
+   %% */
+   fun {MakeAmplitudeClass SuperClass}
+      class $ from SuperClass AmplitudeMixin
+	 meth init(amplitude:A<=64 amplitudeUnit:AU<=velocity ...) = M
+	    SuperClass, {Record.subtractList M [amplitude amplitudeUnit]}
+	    AmplitudeMixin, {Adjoin M initAmplitudeMixin}
+	 end
+	 meth getInitInfo($ ...)       
+	    unit(superclass:SuperClass
+		 args:[amplitude#getAmplitude#64
+		       amplitudeUnit#getAmplitudeUnit#velocity]) 
+	 end
+      end
+   end
+   
+
+   /** %% [concrete class] The class Note extends class Note2 by the parameters articulation and amplitude. See the documentation of the classes ArticulationMixin and AmplitudeMixin.
+   %% */
+   Note = {MakeArticulationClass {MakeAmplitudeClass Note2}}
 
    
    %
@@ -3359,7 +3429,7 @@ define
     newNote(foo fooParameter)
     unit(initRecord:newNote(foo:0)
 	 init:proc {$ Self Args}
-		 Self.fooParameter = {New Score.parameter init(value:Args.foo info:foo)}
+		 Self.fooParameter = {New Parameter init(value:Args.foo info:foo)}
 		 Self.foo = {Self.fooParameter getValue($)}
 		 {Self bilinkParameters([Self.fooParameter])}
 	      end)}

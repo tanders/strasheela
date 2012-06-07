@@ -577,13 +577,14 @@ Best, Hans
    
 
 
-** TODO [#A] Add =articulation= parameter (FD) per note 	       :NEXT:
+** DONE [#A] Add =articulation= parameter (FD) per note		       :NEXT:
+   CLOSED: [2012-06-06 Wed 01:08]
    
    Consider: define mixin class in ScoreCore.oz, and make this part of standard note class
 
    The value of this parameter expresses differences between articulations affecting the sounding duration of a note. The value can be, e.g., a percentage unit of measurement. The parameter can be used both for notation and for playback. 
 
-   Possible mapping between ranges of percentages and notation 
+   Possible mapping between ranges of percentages and notation (user-definable mappings, defaults defined in Init.oz)
 
    staccatissimo: ~ 30 %
    staccato: ~ 50 %
@@ -595,9 +596,16 @@ Best, Hans
    Notating a legato slur: sequence of legato notes, but last note of slur is non-legato  
 
 
-** TODO Somehow add tempo statement to score 			     :NEXT:
+   Define symbolic articulation outputs for Fomus 
 
-   How to express changing tempi?
+   Define sound synthesis outputs (MIDI, Csound...) with customised note end
+
+
+** TODO Debug  MIDI output of legato articulation 		       :NEXT:
+
+   arg removeQuestionableNoteoffs of Out.midi.outputMidiFile does not quite work...
+   [[file:~/oz/music/Strasheela/strasheela/strasheela/source/MidiOutput.oz::proc%20{OutputMidiFile%20MyScore%20Spec}][file:~/oz/music/Strasheela/strasheela/strasheela/source/MidiOutput.oz::proc {OutputMidiFile MyScore Spec}]]
+
 
 ** TODO Add constrainable =marks= FS per note 			     :NEXT:
 
@@ -642,15 +650,38 @@ Best, Hans
    - Check whether notation of dynamics still works which changing instrumentation within a single "voice" (seq of notes)
 
 
-** TODO Note amplitudes -> music notation with Fomus 		     :NEXT:
+** TODO Somehow add tempo statement to score 			     :NEXT:
+
+   How to express changing tempi?
+
+
+** TODO [Difficult] Generalise accessors hasTemporalPredecessor, hasTemporalSuccessor :SOON:
+
+   also getTemporalPredecessor, getTemporalPredecessors, getTemporalSuccessor, getTemporalSuccessors, 
+   getPredecessorsUpToRest, getSuccessorsUpToRest
+
+   Design goal: such accessors should work over container boundaries 
+
+   Problem:
+   - Current definition is for positional and not temporal predecessor/successor and I want to keep it like that (does not block at undetermined score).
+   - It would be rather strait forward to say that the predecessor for a note in a seq of seqs, where the note is the first item in a subseq, is the last note in the preceeding seq
+   - However, other cases are not so easy
+     - What if the corresponding predecessor of a note is container? Should I return the container or its last contained note? 
+     - If I generalise these defs, how should I handle simultaneous containers? Only access predecessors of a first object in a container if the container of the container is a sequential? But these are positional accessors, and I should not mix in temporal concerns..
+
+  Hm...     
+
+
+** DONE Note amplitudes -> music notation with Fomus		       :NEXT:
+   CLOSED: [2012-06-05 Tue 17:51]
 
    [This should work already, just check]
    
    Just make sure that 
 
    - If same amp value is repeated over several notes within a voice (seq of notes) then [static] dynamic values (p, f, ff) are only printed once
-   - If amp values change progressively within a voice (seq of notes) then cresc. or dim. hairpins should be created
    - [Static] dynamic values are only printed at local max and min within such change of amp values
+   - OK If amp values change progressively within a voice (seq of notes) then cresc. or dim. hairpins should be created
 
    Create example file demonstrating these features
 
@@ -664,6 +695,7 @@ Best, Hans
 ** Implement morpology (analysis) constraints (proposed by P Aralla etc.)
 
    See draft at [[file:~/oz/music/Strasheela/tmp/Morphology.oz::%25%25][file:~/oz/music/Strasheela/tmp/Morphology.oz::%%]]
+
 
 ** Revise music representation to allow for efficient distro stratey for pattern motifs with rests (note offset time > 0) :ARCHIVE:
 

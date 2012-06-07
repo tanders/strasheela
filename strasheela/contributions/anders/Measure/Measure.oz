@@ -882,7 +882,7 @@ define
 %%% Notes with accent rating parameter
 %%%
   
-   /** %% AccentRatingMixin extends note classes with an accent rating parameter. No further constraints are applied.
+   /** %% [abstract mixin class] AccentRatingMixin extends note classes with an accent rating parameter. No further constraints are applied.
    %% */
    class AccentRatingMixin
       feat !AccentRatingType:unit
@@ -902,12 +902,11 @@ define
       {Score.isScoreObject X} andthen {HasFeature X AccentRatingType}
    end
 
-   /** %% [concrete class constructor] Expects a note class, and a class that is extended  with an accent rating parameter (see AccentRatingMixin).
+   /** %% [concrete class constructor] Expects a note class, and returns this class extended by an accent rating parameter (see AccentRatingMixin).
    %% */
    fun {MakeAccentRatingClass SuperClass}
       class $ from SuperClass AccentRatingMixin
-	 meth init(accentRating:AR<=_
-		   ...) = M
+	 meth init(accentRating:AR<=_ ...) = M
 	    SuperClass, {Record.subtract M accentRating}
 	    AccentRatingMixin, initAccentRatingMixin(accentRating:AR)
 	 end

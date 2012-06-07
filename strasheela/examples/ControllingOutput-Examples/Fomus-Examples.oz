@@ -936,3 +936,92 @@ MyScore = {Score.makeScore
 {Out.renderFomus MyScore
  unit(file:measure)}
 
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%% Dynamics
+%%
+
+%% Music notation output via Fomus takes amplitude values into account (changes in amplitude are even expressed with hairpins). However, Fomus must be instructed to do so (e.g., with the global setting dyns = yes in the ~/.fomus file).
+
+
+%% Fomus notates ppp <cresc-hairpin< ff
+declare
+MyScore = {Score.makeSeq unit(iargs: unit(n:12
+					  duration: 2
+					  pitch: 60
+					  amplitude: each#[10 20 30 40 50 60 70 80 90 100 110 120])
+			      startTime: 0
+			      timeUnit: beats)}
+{MyScore wait}
+{Out.renderFomus MyScore
+ unit(file:"Amplitude-Crescendo")}
+
+%%
+%% Further fomus tests
+%%
+
+%% static amplitude values 
+declare
+MyScore = {Score.makeSeq unit(iargs: unit(n:6
+					  duration: 2
+					  pitch: 60
+					  amplitude: each#[30 30 30 80 80 80])
+			      startTime: 0
+			      timeUnit: beats)}
+{Score.init MyScore}
+{MyScore wait}
+{Out.renderFomus MyScore
+ unit(file:"Amplitude-static")}
+
+
+% %% More complex amp values
+% declare
+% MyScore = {Score.makeSeq unit(iargs: unit(n:12
+% 					  duration: 2
+% 					  pitch: 60
+% 					  amplitude: each#[30 30 1 10 50 127 60 20 20 80 80 80])
+% 			      startTime: 0
+% 			      timeUnit: beats)}
+% {Score.init MyScore}
+% {MyScore wait}
+% {Out.renderFomus MyScore
+%  unit(file:"Amplitude-moreComplex1")}
+
+%% More complex amp values
+%% Note that hairpin are not drawn as these dynamic changes are not regular enough for Fomus.
+%% I requested at the Fomus mailing list that this is improved
+declare
+MyScore = {Score.makeSeq unit(iargs: unit(n:14
+					  duration: 2
+					  pitch: 60
+					  amplitude: each#[30 30 30 1 20 50 80 127 60 20 20 80 80 80])
+			      startTime: 0
+			      timeUnit: beats)}
+{Score.init MyScore}
+{MyScore wait}
+{Out.renderFomus MyScore
+ unit(file:"Amplitude-moreComplex2")}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%% Articulations with articulation parameter
+%%
+
+declare
+MyScore = {Score.makeSeq unit(iargs: unit(n:15
+					  duration: 2
+					  pitch: 60
+					  articulation: each#[10 20 30 40 50 60 70 80 90 100 110 110 110 50 100])
+			      startTime: 0
+			      timeUnit: beats)}
+{Score.init MyScore}
+
+%% Fomus notates different articulations
+{Out.renderFomus MyScore
+ unit(file:"ArticulationTest")}
+
+
+

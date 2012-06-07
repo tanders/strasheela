@@ -1877,6 +1877,68 @@ MyScore = {Score.makeScore
      )}
 
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%% Testing parameter amplitude
+%%
+
+declare
+MyScore = {Score.makeSeq unit(iargs: unit(n:12
+					  duration: 2
+					  pitch: 60
+					  amplitude: each#[10 20 30 40 50 60 70 80 90 100 110 120])
+			      startTime: 0
+			      timeUnit: beats)}
+{Score.init MyScore}
+
+{MyScore toInitRecord($)}
+
+%% Fomus notates ppp cresc-hairpin ff
+{Out.renderFomus MyScore
+ unit(file:"AmplitudeTest")}
+
+%% OK
+{Out.renderAndPlayCsound MyScore
+ unit(file:"AmplitudeTest")}
+
+%% OK
+{Out.midi.renderAndPlayMidiFile MyScore
+ unit(file:"AmplitudeTest")}
+
+%% See Fomus example file for more: strasheela/examples/ControllingOutput-Examples/Fomus-Examples.oz
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%% Testing parameter articulation
+%%
+
+declare
+MyScore = {Score.makeSeq unit(iargs: unit(n:15
+					  duration: 2
+					  pitch: 60
+					  articulation: each#[10 20 30 40 50 60 70 80 90 100 110 110 110 50 100])
+			      startTime: 0
+			      timeUnit: beats)}
+{Score.init MyScore}
+
+{MyScore toInitRecord($)}
+
+%% Fomus notates different articulations
+{Out.renderFomus MyScore
+ unit(file:"ArticulationTest")}
+
+%% Playback of Csound plays different articulations
+{Out.renderAndPlayCsound MyScore
+ unit(file:"ArticulationTest")}
+
+%% Likewise for MIDI
+%% Legato not perfect yet..
+{Out.midi.renderAndPlayMidiFile MyScore
+ unit(file:"ArticulationTest"
+      removeQuestionableNoteoffs: true)}
+
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%
