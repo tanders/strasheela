@@ -19,7 +19,8 @@ declare
 %% get subscript documentation
 {Score.getDefaults Segs.makeCounterpoint_PatternMotifs}
 
-
+%% I cannot find where this function was actually defined (Debug.procedureCoord points to the proc returned by Score.defSubscript -- which is also correct, but not what I wanted..
+{Debug.procedureCoord Segs.makeCounterpoint_PatternMotifs}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

@@ -544,7 +544,9 @@ MyScore = {Score.make seq([note(duration:2)
 
 declare
 MakeRun			
-= {Score.defSubscript unit(rdefaults: unit(direction: '<:')
+= {Score.defSubscript unit(constructor: {Score.makeConstructor Score.makeSeq
+					 unit(offsetTime: 7)}
+			   rdefaults: unit(direction: '<:')
 			   idefaults: unit(n:5
 					  constructor: HS.score.note))
    proc {$ MyMotif Args} % body
@@ -566,23 +568,7 @@ MyScore = {Score.make seq(items:{Score.makeItems items(n:3
 %% get subscript auto-documentation
 {Score.getDefaults MakeRun}
 
-
-
-declare
-Args = unit(n:5
-	    duration: 3
-	    constructor: HS.score.note)
-
-{Adjoin {Score.getDefaults Args.constructor} Args}
-
-
-
-fun {IsNormalRecord X}
-   {IsRecord2 X}
-   andthen {Not {IsList X}}
-   andthen {Not {Label X}=='#'}
-   andthen {Not {IsAtom2 X}}
-end
+{Adjoin {Score.getDefaults GUtils.binarySkip} unit}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%
@@ -605,6 +591,17 @@ MakeNote3 = {Score.makeConstructor {Pattern.makeMotifIndexClass HS.score.note}
 		  inChordB: fd#(0#1))}
 
 {Score.getDefaults MakeNote3}
+
+declare
+MakeSeq = {Score.makeConstructor Score.makeSeq
+	   unit(offsetTime: 7)}
+
+
+{Score.getDefaults MakeSeq}
+
+{Score.getDefaults Score.makeSeq}
+
+{Score.getDefaults Score.makeContainer}
 
 
 
