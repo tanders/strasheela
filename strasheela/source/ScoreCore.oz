@@ -80,6 +80,8 @@ export
    make: MakeScore
    make2: MakeScore2
    CopyScore CopyScore2
+   copy: CopyScore
+   copy2: CopyScore2
    init: InitScore
    TransformScore TransformScore2
    transform: TransformScore
@@ -2835,7 +2837,9 @@ define
 	 {MakeScore2 {CopyVars {MyScore toInitRecord($ exclude:nil)}}
 	  {MyScore getInitClasses($)}}
       end
-      /** %% CopyScore returns a deep copy of MyScore. The resulting MyCopy has the same score topology and its objects are created from the same classes as MyScore. However, undetermined variables in MyScore are replaced by fresh variables with the same domain. 
+      /** %% CopyScore returns a deep copy of MyScore. The resulting MyCopy has the same score topology and its objects are created from the same classes as MyScore. However, undetermined variables in MyScore are replaced by fresh variables with the same domain.
+      %% CopyScore blocks if MyScore is not fully initialised.
+      %%
       %% NB: CopyScore internally uses toInitRecord. Therefore, all present restrictions of toInitRecord apply: getInitInfo must be defined correctly for all classes and only tree-form score topologies are supported.
       %% !!! NB: if the output of toInitRecord contains stateful data, then this data is not copied but used as is (i.e. such stateful data is shared between the copies). 
       %% */
@@ -2853,18 +2857,18 @@ define
 		      constructors:{Adjoin {MyScore getInitClasses($)} add})
       As = {Adjoin Defaults Args}
    in
-      {MakeScore2 {MyScore toInitRecord($ clauses:As.clauses)}
+      {MakeScore2 {{CopyScore MyScore} toInitRecord($ clauses:As.clauses)}
        As.constructors}
    end
-   /** %% TransformScore returns a transformed copy of MyScore. 
+   /** %% TransformScore returns a transformed copy of MyScore. TransformScore blocks if MyScore is not fully initialised. 
    %%
-   %% The following optional arguments are supports via Args.
+   %% The following optional arguments are supported via Args.
    %% 'clauses': a list of pairs TestI#FunI. TestI is a Boolean function or method, and FunI is a unary function expecting a score object and returning either a textual score object specification (a record), or a score object (which must not be fully initialised). For each object for which some TestI returns true, the corresponding FunI will be used for creating a score object which will replace the original object. 
    %% 'constructors': the contructors used for creating the transformed score from a textual score (cf. MakeScore). Default are the classes of MyScore: {MyScore getInitClasses($)}, plus the default constructors.
    %%
-   %% Note that TransformScore does not support recursive transformations. For example, if you change the content of a container during a transformation, this new content will not be recursively processed (but you could explicitly call TransformScore again with the resulting score). 
+   %% Note that TransformScore does not support recursive transformations. For example, if you change the content of a container during a transformation, this new content will not be recursively processed. Nevertheless, you could explicitly call TransformScore again with the resulting score (you would need to call Score.init on that "inner" score first). 
    %%
-   %% NB: CopyScore internally uses toInitRecord. Therefore, all present restrictions of toInitRecord apply: getInitInfo must be defined correctly for all classes and only tree-form score topologies are supported.
+   %% NB: TransformScore internally uses toInitRecord. Therefore, all present restrictions of toInitRecord apply: getInitInfo must be defined correctly for all classes and only tree-form score topologies are supported.
    %% */
    proc {TransformScore MyScore Args ?TransformedScore}
       {TransformScore2 MyScore Args TransformedScore}
@@ -3172,16 +3176,16 @@ define
    %% 
    %% More specifically, Args contains the arguments provided when calling the resulting script plus the default values of omitted arguments specified with 'defaults', 'idefaults' and 'rdefaults' for this specific script. Default arguments specified for any super-script are absent from Args, if you need the defaults of the super-script in Body, declare them again for this script.
    %%
-   %% Returned functions support the auto-documentation of their arguments with GetDefaults.
+   %% NOTE: Returned functions support the auto-documentation of their arguments with GetDefaults. Example (using MakeRun defined below):
+   {Score.getDefaults MakeRun}
    %%
    %% Problem: The defaults of init arguments for constructors can be reported wrongly, as the defaults of the class are reported, which could have been overwritten, e.g., by Score.makeConstructor. 
    %%
    %% Example:
    %% Motif definition: creates CSP with sequential container of notes (MakeContainer is super CSP), default are 3 notes (idefaults.n is 3, i.e., the default value for iargs.n is 3). Note pitches are constrained with Pattern.continuous, the direction of this pattern is controlled with the argument rargs.direction, default is '<:'. 
    MakeRun
-   = {DefSubscript unit(super:MakeContainer
-			rdefaults: unit(direction: '<:')
-			idefaults: unit(n:3))
+   = {Score.defSubscript unit(rdefaults: unit(direction: '<:')
+			      idefaults: unit(n:3))
       proc {$ MyScore Args} % body
 	 {Pattern.continuous {MyScore mapItems($ getPitch)}
 	  Args.rargs.direction}
