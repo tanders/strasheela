@@ -29,6 +29,8 @@ import
 	   renderCSVFile:RenderCSVFile) at 'source/ParserWrapper.ozf'
    
 export
+   ToScore
+   
    ParseCSVFile
    RenderCSVFile
 
@@ -42,6 +44,27 @@ define
 %   RenderCSVFile = MyParser.renderCSVFile
 
 
+   /** %% Expects a MIDI file and returns a corresponding "textual" score.
+   %% The supported arguments in Args and their defaults are as follows.
+   %% 
+   unit(file:"test"
+	csvDir:{Init.getStrasheelaEnv defaultCSVDir}
+	midiDir:{Init.getStrasheelaEnv defaultMidiDir}
+	csvExtension:".csv"
+	midiExtension:".mid"
+	midicsv:{Init.getStrasheelaEnv midicsv}
+	%% !!?? is flags control needed?
+	flags:{Init.getStrasheelaEnv defaultCSVFlags}
+	clauses: <List of Test#Process pairs>)
+
+   %% For further information about the argument clauses see NestedEventsToScore.
+   %% */
+   fun {ToScore Args}
+      {RenderCSVFile Args}
+      {NestedEventsToScore {EventsToNestedEvents {ParseCSVFile Args}}
+       Args}
+   end
+   
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%
 %%%% Process event lists
