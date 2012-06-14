@@ -1,5 +1,5 @@
 #+CATEGORY: Strasheela
-
+ 
 * Strasheela advertising
 
 ** Consider announcing Strasheela at ohloh (as I already did on freshmeat)
@@ -1234,6 +1234,73 @@ piwik_log(piwik_action_name, piwik_idsite, piwik_url);
 
 
 * Strasheela design					      :MAYBE:STRASHEELA:
+
+
+** Get Oz syntax highlighting at GitHub
+
+   Write Oz lexer for Pygments (using Python)
+
+   *!! Pieter Belmans (pbelmans) used Strasheela and Oz before and has experience with Pygments !!*
+   He and may want to help me write a lexer for Oz
+   !! A lexer definition by pbelmans (Pieter Belmans) for the GAP language
+   http://pbelmans.wordpress.com/2012/04/20/a-pygments-lexer-for-gap/
+   https://github.com/pbelmans/gap-pygments-lexer
+   (Oz/Strasheela related: http://pbelmans.wordpress.com/category/music/) 
+
+
+   Doc: Pygments Introduction and Quickstart
+   http://pygments.org/docs/quickstart/
+
+   Doc: Write your own lexer
+   http://pygments.org/docs/lexerdevelopment/
+
+   Available lexers
+   http://pygments.org/docs/lexers/
+
+   Pygments development and source at bitbucket
+   https://bitbucket.org/birkenfeld/pygments-main/src
+   They have several open pull requests including some lexers 
+   
+   Full lexers definition sources in 
+   https://bitbucket.org/birkenfeld/pygments-main/src/5cc94956e233/pygments/lexers
+
+
+*** First step: define Lexer that simply highlights Oz keywords 
+
+    I need some full and simple template, then this is actually very easy to define
+    -> No, they want lexers that highlight the full syntax, but that should be possible too -- see Roy book, p. 835ff for Oz syntax details (not very much..)
+    
+    *List of Oz keywords from van Roy book, p. 841 (lated PDF draft)*
+
+andthen default
+false feat finally for from fun functor if import in
+lazy
+local
+lock return meth	self mod	skip not	then of	thread or 	true orelse	try prepare 	unit proc
+prop raise require 
+at attr break case catch choice class collect cond  continue declare
+define dis  div do else elsecase  elseif elseof  end
+export fail
+
+
+*** Consider later to refine/extend that lexer
+
+*** Make my Lexer available for the Pygments team and send them pull request
+
+    Add an example file to tests/examplefiles that exercises as much of the syntax as possible
+    (And please don't commit on named branches. But I can fix that on my end as well.)
+
+
+    Note that it can take several weeks until they react (see http://groups.google.com/group/pocoo-libs/browse_thread/thread/fbf52b3da5759d00?pli=1)
+
+Example lexer pull request (with some minor errors)
+https://bitbucket.org/birkenfeld/pygments-main/pull-request/61/
+
+Google, e.g., pygments lexer for more examples..
+
+
+*** Notify GitHub about new Oz lexer
+
 
 ** !! Gradual freezing of solution (Orjans idea)     
 

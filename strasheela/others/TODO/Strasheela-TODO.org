@@ -4,8 +4,6 @@
 
 * Strasheela release
 
-** TODO Strasheela release
-
 ** Finish regular temperament definition (e.g., doc incomplete)
 
    see [[file:~/oz/music/Strasheela/strasheela/trunk/strasheela/contributions/anders/HarmonisedScore/source/Score.oz::class%20RegularTemperamentMixinForNote][file:~/oz/music/Strasheela/strasheela/strasheela/contributions/anders/HarmonisedScore/source/Score.oz::class RegularTemperamentMixinForNote]]
@@ -394,7 +392,7 @@ Google, e.g., pygments lexer for more examples..
 *** Notify GitHub about new Oz lexer
 
 
-** TODO [#A] Try to clean up score script parameters -- simplify if possible! :NEXT:
+** TODO [#A] Try to clean up score script parameters -- simplify if possible! :NEXT:ARCHIVE:
 
    Do this in a git branch, just to make sure...
 
@@ -448,71 +446,108 @@ Google, e.g., pygments lexer for more examples..
        (last release before these changes)
 
 
+** TODO [#A] Define interface to integrate Strasheela into OpenMusic or PWGL :NEXT:
+
+   see [[file:~/oz/music/Strasheela/strasheela/strasheela/contributions/anders/PW_OM_Interface/Brainstorming.org]]
+
+
 ** TODO [#A] Define Strasheela score transformations (instead of plain generation as so far) :NEXT:
 
    Remember importance of transformations stressed by Tristan Murail in Interview in Hirs' OpenMusic book
+   
+   See [[file:~/oz/music/Strasheela/strasheela/strasheela/testing/ScoreCore-test.oz::%25%25][file:~/oz/music/Strasheela/strasheela/strasheela/testing/ScoreCore-test.oz::%%]]
+   and [[file:~/oz/music/Strasheela/strasheela/strasheela/source/ScoreCore.oz::fun%20{TransformScore2%20MyScore%20Args}][file:~/oz/music/Strasheela/strasheela/strasheela/source/ScoreCore.oz::fun {TransformScore2 MyScore Args}]]
+   and [[file:~/oz/music/Strasheela/strasheela/strasheela/examples/ScoreTransformations/ScoreTransformations.oz]]
 
-*** Define Strasheela scripts that expect score as input of which variation will be created
+   Define these transformations in Strasheela with higher-order programming
+   Faster to do in Strasheela (and also likely more expressive), so I can focus on their musical use
 
-    - These scripts will expect various args, as the Segs sub-CSPs (extended scripts), such as constraints to switch on/off certain constraints 
+  See ScoreCore.oz:
+  TransformScore TransformScore2
+  ? CopyScore CopyScore2
 
-    - Additional args (funs/procs for flexibility) control what to remove from given score or how to simplify it, e.g.,
-      - Remove underlying harmony such as score or scale objects (if given)
-      - Reduce absolute pitches to scale degrees, matrix pitch contour, or plain pitch contour or.. (i.e. transform determined pitches to variables with given domain, but apply constraint for pitch contour or whatever)
-      - Reduce determined durations to ...
+*** Transformations
 
-    - Make underlying harmony to add an extra arg (by default harmony will be computed from scratch, but (partially) determined harmony can also be given by users)
+    Transformation examples 
+    
+**** TODO Code examples and collect them in Transformations.oz example file   
+
+     see [[file:~/oz/music/Strasheela/strasheela/strasheela/examples/ScoreTransformations/ScoreTransformations.oz]]
+
+**** ? Refactor Score.transform (and method toInitRecord) 
+
+     Arg clauses: 
 
 
-*** Define score transformations 
+**** Transform all notes by the same function (mapping)
 
-    Define these transformations in Strasheela with higher-order programming
-    Faster to do in Strasheela (and also likely more expressive), so I can focus on their musical use
+     Implemented by Score.transformScore (define a clause with test isNote)
 
-   See ScoreCore.oz:
-   TransformScore TransformScore2
-   ? CopyScore CopyScore2
-
-**** Transformations
-
-     Transformation examples 
-     - Transform all notes by the same function (mapping), e.g., 
+     Application examples
        - Transpose the pitch by a constant summand or factor
-       - "Scatter" pitches, but keep the harmony by transposing individual notes or small groups of notes (e.g., non-harmonic notes and the consecutive harmonic note) by a random number of octaves up or down
        - Stretch/shrink durations by a constant summand or factor
+
+       - "Scatter" pitches, but keep the harmony by transposing individual notes or small groups of notes (e.g., non-harmonic notes and the consecutive harmonic note) by a random number of octaves up or down
+
        - ...
-     - Transform (or remove) notes with a certain feature, e.g.,
+
+**** Transform (or remove) notes with a certain feature, e.g.,
+
+     Implemented by Score.transformScore (define a clause with refined test)
+
+     Feature examples
        - Some parameter (duration, pitch, articulation...) has a certain value or is above/below a certain value, e.g.,
 	 - Lengthen all durations that exceed a given thresh-hold by a given summand or factor
-       Concrete examples	  
+
+       Concrete application examples	  
        - Transpose all notes with a certain duration or more up by a certain interval
-       - Remove notes that are below a certain pitch threshold (substitute with a rest) 
        - Transform individual notes that meet certain criteria into chords, e.g.,
 	 - Implement transformations inspired by sound processing techniques (e.g., ring modulation, frequency modulation..) by adding the respective notes
        - Transform chords into figurations
-     - Transform all notes that meet certain test by same function, where one (or more) function argument(s) change(s) for different notes, e.g., given as
+
+
+**** Remove notes with a certain feature, e.g.,
+
+     Implemented by Score.transformScore (define a clause with refined test that returns a pause/rest object)
+
+     Concrete application examples	  
+       - Remove notes that are below a certain pitch threshold (substitute with a rest) 
+
+
+**** Todo: Transform all notes that meet certain test by same function, where one (or more) function argument(s) change(s) for different notes
+
+     The changes are given as, e.g., 
+
        - BPF where the value depends on the note's start time (or position in a part)
        - A list of values where the index is the note's position in a part
        - A pattern -- can I somehow have Common Music pattern (possibly form an older Common Music version) important into PWGL/OpenMusic?
        - A function (e.g., a random function)
+
        Concrete examples: 
        - "Tilt" or otherwise deform the whole score (or certain parts) in pitch, where the pitch change is given as a BPF
        - "Scatter" pitches, but keep the harmony by transposing individual notes or small groups of notes (e.g., non-harmonic notes and the consecutive harmonic note) by octaves up/down, so that the contour of local max/min is controlled by a BPF
        - Transform pitch of score controlled by a special BPF for each of its parts
-     - Transform all notes that meet certain test by same function, where one (or more) function argument(s) depend on the note's list of predecessors/successors (and possibly also some BPF etc as above)
+
+**** Todo: Transform all notes that meet certain test by same function, where one (or more) function argument(s) depend on the note's list of predecessors/successors (and possibly also some BPF etc as above)
+
        Concrete examples	  
        - Transpose all notes with a certain duration or more up so that they form local maxima (higher than both predecessor and successor)
-     - !! Transform (or remove) notes with a certain feature, where the feature test function expects an additional arg, e.g., given as BPF, list, pattern or function
+
+**** !! Todo: Transform (or remove) notes with a certain feature, where the feature test function expects an additional arg, e.g., given as BPF, list, pattern or function
+
        Concrete examples: 
        - Notes that exceed a certain duration are somehow transformed, but the duration threshold changes over time
 
-     Other rough ideas
+
+**** Todo: Other rough ideas
+
      - Diminution: e.g., as proposed by Stockhausen's Ausmultipizieren, or (other) fractal techniques substituting, e.g., long notes by certain phrases (ornamentations)
      - Augmentation: e.g., as proposed by Stockhausen, leaving out certain detail 
      - Granular synthesis: short fragments of score (grains) extracted and somehow arranged in time
 
 
-     TODO: how can I transform a score depending on another?	
+**** Todo: how can I transform a score depending on another?
+
      Rough ideas first
      - Convolution (possibly in theory, but I should probably reduce data later..)
      - Some interpolation
@@ -521,40 +556,41 @@ Google, e.g., pygments lexer for more examples..
 
 
 
-**** Todo: Collect more examples in Hirs' OpenMusic book when she discusses work of Murail
-
-**** Platform							    :ARCHIVE:
-
-     Define these transformations in Strasheela with higher-order programming
-     (faster to do in Strasheela, so I can focus on their musical use)
-
-     I may later consider to port them to PWGl/OpenMusic
+*** Todo: Collect more examples in Hirs' OpenMusic book when she discusses work of Murail
 
 
-     - I would have liked to use PWGl/OpenMusic instead, but their music representation interfaces are not sufficiently documented (or not powerful enough, if I use their plain "textual" interface -- I would first need to define various accessors etc)
-       - Various [simple] score transformations defined in PWGl/OpenMusic: there the result can be easily displayed in score editor, be further processed... 
-       - Consider using PWGLs score scripts for defining score transformations
-       - Alternatively/additionally define 1 or more higher-order functions in PWGl/OpenMusic for score transformations 
-     - I know the Strasheela representation..
-     - Potential problem: I then always deal with variables and propagation, which slows down processing?
+*** Platform							    :ARCHIVE:
 
-***** Info on PWGL scripts
+    Define these transformations in Strasheela with higher-order programming
+    (faster to do in Strasheela, so I can focus on their musical use)
 
-      [I could not find any reference for ENP, so be very careful whether you want to use that for anything slightly larger]
-
-      See PWGL-book.pdf (documentation collection), Section 2.3.5, Scripting
-
-      Scripting uses pattern matching syntax, so for defining arbitrary selections other means are necessary.
+    I may later consider to port them to PWGl/OpenMusic
 
 
-****** PWGL script questions 
+    - I would have liked to use PWGl/OpenMusic instead, but their music representation interfaces are not sufficiently documented (or not powerful enough, if I use their plain "textual" interface -- I would first need to define various accessors etc)
+      - Various [simple] score transformations defined in PWGl/OpenMusic: there the result can be easily displayed in score editor, be further processed... 
+      - Consider using PWGLs score scripts for defining score transformations
+      - Alternatively/additionally define 1 or more higher-order functions in PWGl/OpenMusic for score transformations 
+    - I know the Strasheela representation..
+    - Potential problem: I then always deal with variables and propagation, which slows down processing?
 
-       - Can objects such as notes be added/removed? 
-	 Yes, see example 2.3.5.4.3, Chopin-Octaves
-       - Changing the rhythm tree: see example 2.3.5.4.4, RTM-Modification
+**** Info on PWGL scripts
+
+     [I could not find any reference for ENP, so be very careful whether you want to use that for anything slightly larger]
+
+     See PWGL-book.pdf (documentation collection), Section 2.3.5, Scripting
+
+     Scripting uses pattern matching syntax, so for defining arbitrary selections other means are necessary.
 
 
-****** Slur all note groups that are separated by rests
+***** PWGL script questions 
+
+      - Can objects such as notes be added/removed? 
+	Yes, see example 2.3.5.4.3, Chopin-Octaves
+      - Changing the rhythm tree: see example 2.3.5.4.4, RTM-Modification
+
+
+***** Slur all note groups that are separated by rests
 
 Hans,
 
@@ -583,6 +619,18 @@ using index variables. And obviously, single notes between rests should not be s
 Any help is very much appreciated.
 
 Best, Hans
+
+
+** TODO Define Strasheela scripts that expect score as input of which variation will be created :NEXT:
+
+   - These scripts will expect various args, as the Segs sub-CSPs (extended scripts), such as constraints to switch on/off certain constraints 
+
+   - Additional args (funs/procs for flexibility) control what to remove from given score or how to simplify it, e.g.,
+     - Remove underlying harmony such as score or scale objects (if given)
+     - Reduce absolute pitches to scale degrees, matrix pitch contour, or plain pitch contour or.. (i.e. transform determined pitches to variables with given domain, but apply constraint for pitch contour or whatever)
+     - Reduce determined durations to ...
+
+   - Make underlying harmony to add an extra arg (by default harmony will be computed from scratch, but (partially) determined harmony can also be given by users)
 
 
 ** TODO Add support for grace notes				       :NEXT:
@@ -675,7 +723,20 @@ Best, Hans
 
 ** TODO Somehow add tempo statement to score 			     :NEXT:
 
-   How to express changing tempi?
+   Idea: Extra tempo objects added to score
+   - Tempo objects running in parallel to other objects in temporal score
+   - Changing tempi (accell., rit.) are special objects
+   - Output of tempo to Fomus, and also Csound/MIDI is strait forward if there is only a single tempo at any time
+   TODO: Integrate existing tempo and timing fenvs  
+
+
+   Alternative idea, based on OpenMusic approach
+   - Add tempo FD integer to temporal objects 
+     http://repmus.ircam.fr/openmusic/dev-resources/containers
+     If tempo defaults to 60, then I would not at all break compatibility with older Strasheela versions
+
+     However, in contrast to OM, the time unit in Strasheela is always constant, and so would the tempo be. Is that useful? (I cannot have variable time unit or tempo visible within the CSP, because then the result of the temporal accessors could be non-integers)
+
 
 
 ** TODO [Difficult] Generalise accessors hasTemporalPredecessor, hasTemporalSuccessor :SOON:
@@ -707,11 +768,6 @@ Best, Hans
    - OK If amp values change progressively within a voice (seq of notes) then cresc. or dim. hairpins should be created
 
    Create example file demonstrating these features
-
-
-** TODO Define interface to integrate Strasheela into OpenMusic or PWGL :NEXT:
-
-   see [[file:~/oz/music/Strasheela/strasheela/strasheela/contributions/anders/PW_OM_Interface/Brainstorming.org]]
 
 
 
@@ -3730,6 +3786,29 @@ it always equal to 2, that's a pretty good choice.
 
 
 
+* Strasheela cleanup and refactoring
+
+** Reduce score hierarchy to temporal tree
+
+
+
+** Reduce abstract score classes that I did never use
+
+   For example remove ScoreCore.oz classes
+   - Modifier
+   - Aspect
+   - TemporalAspect
+   - Container always means temporal container
+   
+
+** Move some essential contributions into core of Strasheela 
+
+   - Fenvs
+   - ? HS
+   - ? Patterns
+   - MidiInput.oz -- no that is just not quit up for production yet.. (and I better use the tools of OpenMusic etc. with their buildin quantisation)
+
+
 * Strasheela doc
 
 ** Strasheela tutorial
@@ -3740,6 +3819,7 @@ it always equal to 2, that's a pretty good choice.
    - Look at constraining various musical aspects such as rhyth (accent constraints), harmony, melody, texture etc.
    - Introduce any formal details of Strasheela within such musical contexts
 
+   see [[file:~/texte/0-Publications/10-Book-ModellingTheoryAndComposition/Anders-ModellingTheoryAndComposition.org]]
 
 *** Format
 
@@ -3749,21 +3829,26 @@ it always equal to 2, that's a pretty good choice.
     file:~/oz/music/Strasheela/StrasheelaDoc_Rewrite/doc-source/
   
 
-** Add all new publications to Strasheela website (and to my own)
+*** TODO Collect examples for Strasheela tutorial		       :SOON:
+
+
+** Consider transforming all Strasheela example files into *.org mode files with code blocks, notation outputs, and brief comments -- then I can publish them all online
+
+   Ideally the code blocks could be "folded" in an out in the resulting HTML fil. Such feature would also be useful for other writings of mine with (extensive) code.
+
+   Such "folding" in be realised with CSS / Javascript 
+   E.g., see http://www.randomsnippets.com/2008/02/12/how-to-hide-and-show-your-div/
+   http://webdesign.about.com/od/dhtml/a/aa101507.htm
+   
+** Add section with compositions to Strasheela website (and to my own)
 
    - Also add results of microtonal music "content" for MOTU to my website
 
-** TODO Add full source code of all examples in PNM paper to Strasheela site
-
-** Add links to musical examples to Strasheela website: Harmony studies, microtonal music "content" for MOTU
-
-** Upload binaries of selection constraints and amend installation instructions 
-
-   Mention bug during compilation (Midiimport and OSC support do not compile on MacOS 10.6)
-   Can be disregarded.
+   - ? Harmony studies
+   - ? Microtonal music "content" for MOTU
 
 
-* ? Strasheela redesign
+* ? Strasheela redesign						    :ARCHIVE:
 
   ?? Port to Python (Cyton) using Denys Duchier's Gecode bindings for Python
   https://launchpad.net/gecode-python
@@ -3779,9 +3864,27 @@ it always equal to 2, that's a pretty good choice.
 
   
 
+
 * Other 
 
-** GeOz 
+** TODO Read Strasheela doc				    :@READ:SOON:EASY:
+
+   know your system, e.g., know all my Patterns 
+
+
+** Mozart compilation 
+
+   I already pull git sources, see 
+   https://github.com/mozart
+   
+
+   see instruction at 
+   http://gforge.info.ucl.ac.be/plugins/wiki/index.php?FAQ&id=17&type=g
+   http://gforge.info.ucl.ac.be/plugins/wiki/index.php?CompilingMozart&id=17&type=g
+
+  - Configuration error of gmp: try deinstalling gmp and instead installing gmp version 4.1.2 (current version at time when Mozart configure script was programed)
+
+** GeOz -- is this still relevant?
    
 *** Mail with important info to installation and doc
 
@@ -3921,22 +4024,4 @@ If problems occur ask gustavo.ggutierrez@gmail.com
     Noticable difference of old version?
 
 
-** Mozart compilation 
-
-   I already pull git sources, see 
-   https://github.com/mozart
    
-
-   see instruction at 
-   http://gforge.info.ucl.ac.be/plugins/wiki/index.php?FAQ&id=17&type=g
-   http://gforge.info.ucl.ac.be/plugins/wiki/index.php?CompilingMozart&id=17&type=g
-
-  - Configuration error of gmp: try deinstalling gmp and instead installing gmp version 4.1.2 (current version at time when Mozart configure script was programed)
-
-
-
-** TODO Read Strasheela doc						  :EASY:
-
-   know your system, e.g., know all my Patterns 
-
-
