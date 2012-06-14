@@ -28,12 +28,31 @@ Output
 
 ** !! Oz <-> Lisp Interface 
 
-   see file:~/oz/music/Strasheela/strasheela/trunk/strasheela/contributions/anders/OzServer/clients/oz-server-lisp-client
+   see file:~/oz/music/Strasheela/strasheela/strasheela/contributions/anders/OzServer/clients/oz-server-lisp-client
    and file:~/PWGL-User/0-TorstensOtherStuff/StrasheelaInterface/ENP2Strasheela.lisp
+   and [[file:~/oz/music/Strasheela/strasheela/strasheela/goodies/Lisp/Lisp2Oz.lisp]]
    and the older file:~/lisp/own-projects/lisp-to-oz
 
    Use ompw: file:~/lisp/foreign-projects/ompw
    
+   LispWorks has build-in socket support, perhaps I use that (as both PWGL and OpenMusic are built on top of LW)
+   http://www.lispworks.com/documentation/lw61/RNIG/html/readme-393.htm
+
+
+** !! OpenMusic score objects -> Strasheela score 
+
+   OpenMusic
+   http://repmus.ircam.fr/openmusic/
+
+   Containers and simple containers
+   http://repmus.ircam.fr/openmusic/dev-resources/containers
+
+   OpenMusic music representation of basic objects strikingly similar to Strasheela's, but their higher-level objects go beyond that 
+
+   Help for exploring objects 
+   http://support.ircam.fr/forum-ol-doc/om/om6-manual/co/LowLevel.html
+
+
 
 ** !! Interface ENP score object -> Strasheela score 
 
@@ -46,6 +65,63 @@ Output
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+* PWGL benefits and disadvantages
+
+** Advantages
+
+   - ENP
+
+   - Cleaner user interface
+
+*** Less important
+
+   - Supports ASDF
+
+
+** Disadvantages
+
+   - Lisp editor always linked to a patch (e.g., no Lisp file editing) and with less features (no find-definition)
+     However, this is usable
+     
+
+* OpenMusic benefits and disadvantages
+
+** Advantages
+
+   - Suitable Lisp editor for my purposes
+     - Lisp source code files can be edited
+     - Convenient editing features (e.g., even for finding code)
+
+   - Is open source
+
+   - Maquette
+
+
+*** Less important
+
+   - Nice Lisp function boxes (e.g., create inputs for function arguments automatically)
+
+
+** Disadvantages
+
+   - Limited score editors, compared with ENP
+
+*** Less important
+    
+   - No ASDF supports (but that should be reasonably easy to add..)
+
+   - I find the workspace overkill
 
 
 
