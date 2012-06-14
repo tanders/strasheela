@@ -12,6 +12,10 @@
 *.l
 *.o
 
+# Music software temp output #
+############
+*.csv
+
 # Packages #
 ############
 # it's better to unpack these files and commit the raw source
@@ -29,6 +33,7 @@
 ######################
 *.log
 *~
+.#*
 
 # OS generated files #
 ######################
