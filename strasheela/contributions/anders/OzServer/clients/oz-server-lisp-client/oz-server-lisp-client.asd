@@ -1,14 +1,11 @@
 ;;;; -*- Mode: Lisp; Syntax: ANSI-Common-Lisp; Base: 10 -*-
-;;
-;; 
-
 
 (unless (find-package :oz-server-lisp-client)
   (make-package :oz-server-lisp-client
                 :nicknames '(:oz)
                 :use '(:common-lisp)))
 
-(defsystem oz-server-lisp-client
+(asdf:defsystem oz-server-lisp-client
   :long-description "A lisp-side client for the OzServer, which is part of Strasheela. oz-server-lisp-client allows a Lisp program to execute arbitrary Oz code by calling on the OzServer." 
   :author "Torsten Anders"
   :serial t ;; the dependencies are linear.
