@@ -1184,14 +1184,14 @@ MyScore = {Score.makeScore sim(items:[seq(items:[note
 %%
 
 declare
-MyScore = {Score.makeScore seq(items:[note(duration:1
-					   pitch:60)
-				      note(duration:1
-					   pitch:62)
-				      note(duration:1
-					   pitch:63)]
-			       startTime:0
-			       timeUnit:(beats))
+MyScore = {Score.make seq([note(duration:1
+				pitch:60)
+			   note(duration:1
+				pitch:62)
+			   note(duration:1
+				pitch:63)]
+			  startTime:0
+			  timeUnit:(beats))
 	   unit}
 
 %% Transpose score by 2 semitones
@@ -1206,13 +1206,10 @@ MyScore = {Score.makeScore seq(items:[note(duration:1
 %% Reverse notes in container
 {{Score.transformScore MyScore
   unit(clauses:[isSequential#fun {$ C}
-				{Adjoin {C toInitRecord($)}
-				 %% NOTE: explicitly create textual versions of the contained score objects
-				 seq(items:{Reverse {C mapItems($ toInitRecord)}})}
+				Seq = {C toInitRecord($)} in	
+				{Adjoin Seq seq(items:{Reverse Seq.items})}
 			     end])}
  toInitRecord($)}
-
-
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%5

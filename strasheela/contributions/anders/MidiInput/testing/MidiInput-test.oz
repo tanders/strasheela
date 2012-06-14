@@ -6,6 +6,37 @@ declare
 [MidiIn] = {ModuleLink ['x-ozlib://anders/strasheela/MidiInput/MidiInput.ozf']}
 
 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%% Testing the main function
+%%
+
+declare
+MyScoreText= {MidiIn.toScore unit(file:"bach"
+				   midiExtension:".midi"
+				   midiDir:{OS.getCWD}#"/"
+				   csvDir:{OS.getCWD}#"/")}
+MyScore = {Score.makeScore {Adjoin MyScoreText
+			    seq(startTime:0
+				timeUnit:beats(4))}
+	   add(note:Out.midi.midiNote)}
+
+
+{Out.renderFomus MyScore
+ unit}
+
+{Out.renderAndPlayCsound MyScore
+ unit}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%% Other tests
+%%
+
+
 %% first test: parse existing csv file
 {Browse {MidiIn.parseCSVFile unit(file:"Test"
 				  csvExtension:'.csv'
@@ -92,7 +123,6 @@ MyScore = {Score.makeScore {Adjoin ChannelSeq
 
 {Out.renderAndShowLilypond MyScore
  unit}
-
 
 
 

@@ -117,7 +117,7 @@ MyScore = {Score.makeScore seq(items:[note(duration:1
 			       timeUnit:(beats))
 	   unit}
 
-{Out.pickleScore MyScore unit}r
+{Out.pickleScore MyScore unit}
 
 
 declare
