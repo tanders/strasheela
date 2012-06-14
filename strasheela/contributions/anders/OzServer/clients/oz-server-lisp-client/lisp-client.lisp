@@ -21,8 +21,7 @@
 ;;
 ;; http://cl-cookbook.sourceforge.net/sockets.html: The socket functions provided by PORT currently work without modifications on a wide range of Common Lisp implementations (Allegro, Lispworks, CLISP, CMU CL, SBCL, GCL).
 
-(defparameter *default-oz-server* "~/.oz/1.3.1/bin/OzServer")
-;(defparameter *default-oz-server* "~/.oz/1.3.2/bin/OzServer")
+(defparameter *default-oz-server* "~/.oz/1.4.0/bin/OzServer")
 ; (defparameter *default-oz-server* "OzServer")
 (defparameter *default-oz-init-file* "~/.ozrc")
 
