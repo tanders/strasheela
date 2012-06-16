@@ -112,7 +112,7 @@ define
       /** %% Feeds MyCompiler Input (Input is next string from InSocket) and optionally writes a result in socket (via ResultsPort).
       %% The header convention (used, e.g., to switch into 'expression-mode') is explained in top-level functor.
       %% */
-      proc {CallCompiler MyCompiler Input ResultsPort} 
+      proc {CallCompiler MyCompiler MyServer Input ResultsPort} 
 	 Directive = {GetDirective Input}
       in
 	 if Directive==nil orelse Directive== "statement"
@@ -143,29 +143,30 @@ define
 	 then {MyCompiler enqueue(feedFile({GetCodeAfterDirective Input}))}
 	 elseif Directive=="quit"
 	 then
+	    {MyServer close} % close sockets
 	    {System.showInfo "% OzServer quits"}
 	    {Application.exit 0}
 	 else raise illFormedExpr(Directive) end
 	 end
       end   
    in
-      /** %% FeedAllInput reads code sends from MySocket and feeds them to MyCompiler. Socket input uses the format <code>["%!"<DIRECTIVE>\n]&lt;CODE&gt;</code>, as explained in top-level doc. Expression results are writting back into the socket (in the order their corresponding expressions were fed).
+      /** %% FeedAllInput reads code sends from MyClient (a socket) and feeds them to MyCompiler. Socket input uses the format <code>["%!"<DIRECTIVE>\n]&lt;CODE&gt;</code>, as explained in top-level doc. Expression results are writting back into the socket (in the order their corresponding expressions were fed).
       %% Args is record with features size and resultFormat.
       %% */ 
-      proc {FeedAllInput MyCompiler MySocket Args}
+      proc {FeedAllInput MyCompiler MyServer MyClient Args}
 	 Results
 	 ResultsPort = {NewPort Results}
       in 
 	 thread 
-	    {ForAll {Socket.readToStream MySocket Args.size}
+	    {ForAll {Socket.readToStream MyClient Args.size}
 	     proc {$ Input}
-		{CallCompiler MyCompiler Input ResultsPort}
+		{CallCompiler MyCompiler MyServer Input ResultsPort}
 	     end}
 	 end
 	 thread
 	    {ForAll Results
 	     proc {$ Result}
-		{Socket.write MySocket
+		{Socket.write MyClient
 		 {TransformResult Result Args.resultFormat}}
 	     end}
 	 end
