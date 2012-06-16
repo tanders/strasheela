@@ -35,8 +35,24 @@ Output
 
    Use ompw: file:~/lisp/foreign-projects/ompw
    
-   LispWorks has build-in socket support, perhaps I use that (as both PWGL and OpenMusic are built on top of LW)
-   http://www.lispworks.com/documentation/lw61/RNIG/html/readme-393.htm
+*** DONE Socket communication
+    CLOSED: [2012-06-14 Thu 20:21]
+
+    LispWorks has build-in socket support, perhaps I use that (as both PWGL and OpenMusic are built on top of LW)
+    http://www.lispworks.com/documentation/lw61/RNIG/html/readme-393.htm
+
+*** DONE Oz data -> Lisp data
+    CLOSED: [2012-06-14 Thu 20:21]
+
+*** Lisp data -> Oz data
+
+    partially done, see [[file:~/OpenMusic/TorstensLibraries/oz-server-interface/sources/lisp-to-oz.lisp::%3B%3B%20this%20is%20work%20in%20progress...][file:~/OpenMusic/TorstensLibraries/oz-server-interface/sources/lisp-to-oz.lisp::;; this is work in progress...]]
+
+*** Lisp data -> Oz program
+
+    In addition to data (see above) only add procedure application
+
+    e.g., (oz-call <OzProcName> &rest args)
 
 
 ** !! OpenMusic score objects -> Strasheela score 
@@ -74,6 +90,19 @@ Output
 
 
 
+
+
+** OpenMusic / PWGL modules for Strasheela subscripts
+
+   - Automatically generate OMPW box definition for a given Strasheela subscript, but asking the subscript for its arguments and their defaults
+
+*** Howto combine multiple Strasheela subscripts in OpenMusic / PWGL 
+
+    Why? E.g., have separate subscripts for underlying harmony and actual score
+
+    Have extra box: ToOzCode and/or EvalOzCode
+
+    Individual subscript definitions generate Oz code (or its Lisp equivalent), but do not yet call the Oz server (and thus no solver). I can then simply combine such parts of an Oz program into an actual oz program 
 
 
 * PWGL benefits and disadvantages
