@@ -1919,7 +1919,10 @@ define
       end
       %%
       fun {Atom2LispSymbol X}	
-	 if {Some {AtomToString X} Char.isSpace}
+	 if local Str = {AtomToString X} in
+	       {Some Str Char.isSpace} orelse
+	       ({Some Str Char.isLower} andthen {Some Str Char.isUpper})
+	    end
 	 then '|'#X#'|'
 	 elseif  X==nil then
 	    "nil"
@@ -1963,14 +1966,14 @@ define
       end
    in
       /** %% OzToLisp transforms a literal Oz value (i.e. a value with a textual representation) into a corresponding literal Lisp value expressed by a VS. 
-      %% Supported Oz values are integers, floats, atoms, records/tuples, lists and virtual strings. These values can be freely nested. In principle, characters and strings are supported as well, see below. Not supported are Oz values without a textual representation (e.g. names, procedures, and chunks).
-      %% Oz characters are equivalent to integers and Oz strings are equivalent to lists of integers. Therefore, the users must decide for either integer or character/string transformation. For this purpose, Arg expects the optional arguments charTransform and stringTransform (both default to false, i.e. characters and strings are per default transformed into Lisp integers / integers lists).
+      %% Supported Oz values are integers, floats, atoms, records/tuples, lists and virtual strings. These values can be freely nested. In principle, characters and strings are supported as well, see below. Oz values without a textual representation (e.g. names, procedures, and chunks) raise an exception.
+      %% Oz characters are equivalent to integers and Oz strings are equivalent to lists of integers. Therefore, the users must decide for either integer or character/string transformation. For this purpose, Arg expects the optional arguments charTransform and stringTransform (both default to false, i.e. characters and strings are per default transformed into Lisp integers or Lisp integer lists respecitvely).
       %% The following list details how values are transformed:  
       %%
       %% boolean -> boolean: true -> T, false -> nil [NB: Lisp2Oz: nil can also be empty list..]
       %% integer -> integer: 1 -> 1 [only decimal notation supported, NB: tilde ~ as unary minus for int and float supported]
       %% float -> float: 1.0 -> 1.0  [exponential notation supported]
-      %% atom -> symbol: abc -> abc 
+      %% atom -> symbol: abc -> abc; 'CamelCase' -> |CamelCase|; 'hi there' -> |hi there| 
       %% record -> keyword list: unit(a:1 b:2) -> (:a 1 :b 2 :record-label unit)
       %% tuple -> keyword list: test(a b) -> (a b :record-label test)
       %% list -> list: [a b c] -> (a b c)
@@ -1983,11 +1986,10 @@ define
       %% NB: the keyword-value pair :record-label <label> is always the last two elements in a record/tuple list.
       %% 
       %% NB: OzToLisp is very similar to RecordToLispKeywordList. The main difference is that OzToLisp can handle more cases truely in Lisp syntax (e.g. outputs something as 'Hi there' as |Hi there|). Moreover, the values are transformed in such a way that no information is lost and backtransformation (LispToOz) would be possible as well (e.g. the label of a record is preserved and the presence of the label marks a difference to a plain list).
+      %% 
+      %% */
       %%
       %% TODO:
-      %% 
-      %% * Lisp does not distinguish between cases, but for back-transformation of symbols etc in CamelCase I should possibly use symbols like |CamelCase|.
-      %% */
       %%
       %% * shall I add support for the following values? 
       %%
@@ -2017,9 +2019,9 @@ define
 	     kernel(type
 		    'Out.ozToLisp'
 		    [X Args _]		% args
-		    'bool, unit, atom, number, list, VS, nor record' % type
+		    'bool, unit, atom, number, list, VS, or record' % type
 		    1 % arg position
-		    "Transformation only defined for an boolean, unit, atom, number (including chars), list (including strings), VS, nor a record."
+		    "Transformation only defined for an boolean, unit, atom, number (including chars), list (including strings), VS, or a record."
 		   )}
 	    unit % never returned
 	 end
