@@ -11,7 +11,7 @@
 %%% GNU General Public License for more details.
 %%% *************************************************************
 
-/** %% This is an application which serves as a 'headless' OPI: its starts a full Oz compiler and the compiler awaits arbitrary Oz code (even compiler directives) send via a socket. This allows, for example, another application (e.g. another language such as Lisp, C, ..) to start a full Oz evaluator/compiler and to execute arbitrary Oz code from within that other application. The code is executed concurrently, i.e. without waiting for it to terminate before proceeding to the next fed input.
+/** %% This is an application which serves as a 'headless' OPI: its starts a full Oz compiler and the compiler awaits arbitrary Oz code (even compiler directives) sent via a socket. This allows, for example, another application (e.g. another language such as Lisp, C, ..) to start a full Oz evaluator/compiler and to execute arbitrary Oz code from within that other application. The code is executed concurrently, i.e. without waiting for it to terminate before proceeding to the next fed input.
 %% On its initialisation, the full environment (comparable to the OPI) is loaded to the compiler and it is fed an OZRC file according conventions (cf. oz/doc/opi/node4.html). As interface, the compiler panel GUI is opened. To quit the compiler, quit this application by C-c (closing the panel is not sufficient) or send the OzServer directive quit (see below). When compared with the OPI, the compiler panel (messages panel) serves as Oz Compiler buffer and the standard out of the shell in which the OzServer was started serves as Oz Emulator buffer. 
 %%
 %%
@@ -133,6 +133,9 @@ import
    
 define
    
+   %% MyServer is a socket
+   MyServer 
+   
    proc{ShowHelp M}
       {System.printError
        if M==unit then nil else "Command line option error: "#M#"\n" end#
@@ -157,6 +160,7 @@ define
 					 'help'(single char:&h type:bool default:false)
 				      % 'version'(single char:&v type:bool default:false)
 					)}
+
       
    in
       
@@ -175,14 +179,15 @@ define
       %% However, it appears most possible errors are reported by compiler panel already. E.g., in case a file is loaded with the arg 'file' which does not exist, then the error is reported in the compiler panel. For more error possibilities see test file
       %% Other errors are reported in shell starting the OzServer (e.g. the OzServer is called with an undefined arg). Nevertheless, the application may still return 0... -- TO CHECK
        
-       local 
-	  MyClient = {Socket.makeServer localhost Args.port _/*MyServer*/}
+       local
+	  %% MyClient is a socket
+	  MyClient = {Socket.makeServer localhost Args.port MyServer}
 	  MyCompiler = {CustomCompiler.makeFullCompiler}
        in
 	  if Args.file \= ""
 	  then {MyCompiler enqueue(feedFile(Args.file))}
 	  end
-	  {CustomCompiler.feedAllInput MyCompiler MyClient Args}
+	  {CustomCompiler.feedAllInput MyCompiler MyServer MyClient Args}
        end
        
 %   {Wait _}
@@ -190,6 +195,8 @@ define
        
    catch X then
       case X of quit then
+	 {MyServer close}
+	 {System.showInfo "% OzServer quits"}
 	 {Application.exit 0}
       elseof error(ap(usage M) ...) then
 	 {ShowHelp M}
