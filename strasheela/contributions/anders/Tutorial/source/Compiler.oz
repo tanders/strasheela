@@ -93,7 +93,7 @@ define
 %      MyInterface = {New Compiler.interface init(MyCompiler)}
 %      _/*MyPanel*/ = {New CompilerPanel.'class' init(MyCompiler)}
 %      _/*MyPanel*/ = {New CompilerPanel.'class' init(MyCompiler /*IconifiedB:*/true)}
-      %% prints error messages to standard error (only reports static analysis errors, but runtime errors are not catched)
+      %% prints error messages to standard error (only reports static analysis errors, but runtime errors are not caught)
       _/*MyErrorListener*/ = {New ErrorListener.'class' init(MyCompiler unit auto)}
       {MyCompiler enqueue(mergeEnv(CompilerEnvironment))}
       %% NB: queries are processed concurrently
@@ -126,8 +126,8 @@ define
       in
 	 if InitFile \= nil
 	 then
-	    {MyCompiler enqueue(setSwitch(expression false))}
-	    {MyCompiler enqueue(feedFile(InitFile))}
+	    {MyCompiler enqueue([setSwitch(expression false)
+				 feedFile(InitFile)])}
 	 end
       end
    end
@@ -135,15 +135,15 @@ define
    /** %% Feeds statement MyCode (VS) to MyCompiler. 
    %% */
    proc {FeedStatement MyCode MyCompiler}
-      {MyCompiler enqueue(setSwitch(expression false))}
-      {MyCompiler enqueue(feedVirtualString(MyCode))}
+      {MyCompiler enqueue([setSwitch(expression false)
+			   feedVirtualString(MyCode)])}
    end
 
    /** %% Feeds expression MyCode (VS) to MyCompiler and returns Result.
    %% */ 
    proc {FeedExpression MyCode MyCompiler ?Result}
-      {MyCompiler enqueue(setSwitch(expression true))}
-      {MyCompiler enqueue(feedVirtualString(MyCode return(result: ?Result)))}
+      {MyCompiler enqueue([setSwitch(expression true)
+			   feedVirtualString(MyCode return(result: ?Result))])}
    end
    
 end
