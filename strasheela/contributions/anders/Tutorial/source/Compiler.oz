@@ -125,7 +125,9 @@ define
 	 InitFile = {GetInitFile}
       in
 	 if InitFile \= nil
-	 then {MyCompiler enqueue(feedFile(InitFile))}
+	 then
+	    {MyCompiler enqueue(setSwitch(expression false))}
+	    {MyCompiler enqueue(feedFile(InitFile))}
 	 end
       end
    end
