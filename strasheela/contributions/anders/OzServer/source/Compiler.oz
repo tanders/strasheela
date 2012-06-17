@@ -117,6 +117,7 @@ define
       in
 	 if Directive==nil orelse Directive== "statement"
 	 then
+	    {MyCompiler enqueue(setSwitch(expression false))}
 	    {MyCompiler enqueue(feedVirtualString(Input))}
 	 elseif Directive=="expression"
 	 then Result in
@@ -124,23 +125,22 @@ define
 	    {MyCompiler enqueue(feedVirtualString(Input return(result: ?Result)))}
 	    {Wait Result}
 	    {Send ResultsPort Result}
-	    {MyCompiler enqueue(setSwitch(expression false))}
 	 elseif Directive=="browse"
 	 then Result in
 	    {MyCompiler enqueue(setSwitch(expression true))}
 	    {MyCompiler enqueue(feedVirtualString(Input return(result: ?Result)))}
 	    {Wait Result}
 	    {Browse ?Result}
-	    {MyCompiler enqueue(setSwitch(expression false))}
 	 elseif Directive=="inspect"
 	 then Result in
 	    {MyCompiler enqueue(setSwitch(expression true))}
 	    {MyCompiler enqueue(feedVirtualString(Input return(result: ?Result)))}
 	    {Wait Result}
 	    {Inspect ?Result}
-	    {MyCompiler enqueue(setSwitch(expression false))}
 	 elseif Directive=="file"
-	 then {MyCompiler enqueue(feedFile({GetCodeAfterDirective Input}))}
+	 then
+	    {MyCompiler enqueue(setSwitch(expression false))}
+	    {MyCompiler enqueue(feedFile({GetCodeAfterDirective Input}))}
 	 elseif Directive=="quit"
 	 then
 	    {MyServer close} % close sockets
