@@ -23,7 +23,8 @@ import
 
    %% vars essential for functionality of code below 
    Compiler CompilerPanel OS System Application
-
+   % ErrorListener
+   
    Browser(browse:Browse)
    Inspector(inspect:Inspect)
    
@@ -35,6 +36,7 @@ import
    Socket at 'Socket.ozf' 
 
    Out at 'x-ozlib://anders/strasheela/source/Output.ozf'
+   LUtils at 'x-ozlib://anders/strasheela/source/ListUtils.ozf'
    
 export
    MakeFullCompiler
@@ -54,10 +56,15 @@ define
       %% As a convenient interface, a GUI CompilerPanel for MyCompiler is created. 
       %% */
       %% this is an greatly edited/simplified version of Compiler.evalExpression (cf. oz/doc/compiler/node4.html) -- see that for possible extensions like killing the compiler etc.
-      proc {MakeCompiler Env InitFile ?MyCompiler} % later extra arg: ?Kill 
+      %% TODO: new arg MyInterface ..
+      proc {MakeCompiler Env InitFile ?MyInterface ?MyCompiler} % TODO: later extra arg: ?Kill 
 	 MyCompiler = {New Compiler.engine init()}
 	 %% ?? later, GUI interface should be opend only conditionally, and alternatively everything is printed on standard out and error out
 	 _/*MyPanel*/ = {New CompilerPanel.'class' init(MyCompiler)}
+	 %% prints error messages to standard error (only reports static analysis errors, but runtime errors are not caught)
+	 % _/*MyErrorListener*/ = {New ErrorListener.'class' init(MyCompiler unit auto)}
+	 %% Compiler.interface an ErrorListener.'class' subclass 
+	 MyInterface = {New Compiler.interface init(MyCompiler auto)}
 	 {MyCompiler enqueue(mergeEnv(Env))}
 	 %% NB: queries are processed concurrently
 	 {MyCompiler enqueue(setSwitch(threadedqueries true))}
@@ -69,7 +76,7 @@ define
    in
       /** %% Returns a new compiler with the full environment (comparable to the OPI) and fed the ozrc file according conventions (cf. oz/doc/opi/node4.html).
       %% */
-      fun {MakeFullCompiler}
+      proc {MakeFullCompiler ?MyInterface ?MyCompiler}
 	 %% !! tmp: last slash: weirdness of Path.exists
 	 InitFile = if {OS.getEnv 'OZRC'} \= false
 		    then {OS.getEnv 'OZRC'}
@@ -85,7 +92,7 @@ define
 % 				fun {$ X} "'"#X#"': "#X end}
 % 		  "\n"}
 %        "/tmp/Env.txt"}
-	 {MakeCompiler CompilerEnvironment InitFile}
+	 {MakeCompiler CompilerEnvironment InitFile MyInterface MyCompiler}
       end
    end
    
@@ -112,35 +119,75 @@ define
       /** %% Feeds MyCompiler Input (Input is next string from InSocket) and optionally writes a result in socket (via ResultsPort).
       %% The header convention (used, e.g., to switch into 'expression-mode') is explained in top-level functor.
       %% */
-      proc {CallCompiler MyCompiler MyServer Input ResultsPort} 
+      proc {CallCompiler MyCompiler MyInterface MyServer Input ResultsPort}
+	 /** %% If compilation caused errors then return 'error' otherwise Result.
+ 	 %% */
+	 fun {HandleErrors Result}
+	    thread 
+	       {MyInterface sync()}
+	       if {MyInterface hasErrors($)}
+	       then
+		  %% reset interface so that previous errors are forgotten
+		  %% BUG: does not work yet
+		  {MyCompiler interrupt}
+		  {MyCompiler clearQueue}
+		  {MyInterface close}
+		  {MyInterface init(MyCompiler auto)}
+		  error
+	       else Result
+	       end
+	    end
+	 end
+	 %% TODO: shall I remove AddErrorCatcher_Statement and AddErrorCatcher_Expression? They did not work, and I now let the compiler interface instead catch errors..
+	 %% Catch runtime errors of given code 
+	 fun {AddErrorCatcher_Statement Code}
+	    {LUtils.accum ["try\n"
+			   "skip\n" % do something in any case..
+			   Code
+			   "\ncatch E then {Error.printException E} end\n"]
+	     List.append}
+	 end
+	 %% Catch runtime errors of given code and return nil in case
+	 fun {AddErrorCatcher_Expression Code}
+	    {LUtils.accum ["try\n"
+			   "skip\n" % do something in any case..
+			   Code
+			   "\ncatch E then {Error.printException E} nil end\n"]
+	     List.append}
+	 end
 	 Directive = {GetDirective Input}
       in
 	 if Directive==nil orelse Directive== "statement"
 	 then
-	    {MyCompiler enqueue(setSwitch(expression false))}
-	    {MyCompiler enqueue(feedVirtualString(Input))}
+	    {MyCompiler enqueue([setSwitch(expression false)
+				 feedVirtualString({AddErrorCatcher_Statement Input})])}
 	 elseif Directive=="expression"
 	 then Result in
-	    {MyCompiler enqueue(setSwitch(expression true))}
-	    {MyCompiler enqueue(feedVirtualString(Input return(result: ?Result)))}
-	    {Wait Result}
-	    {Send ResultsPort Result}
+	    {MyCompiler enqueue([setSwitch(expression true)
+				 feedVirtualString({AddErrorCatcher_Expression Input}
+						   return(result: ?Result))])}
+	    % {Wait Result}
+	    % {Send ResultsPort Result}
+	    {Send ResultsPort {HandleErrors Result}}
 	 elseif Directive=="browse"
 	 then Result in
-	    {MyCompiler enqueue(setSwitch(expression true))}
-	    {MyCompiler enqueue(feedVirtualString(Input return(result: ?Result)))}
+	    {MyCompiler enqueue([setSwitch(expression true)
+				 feedVirtualString({AddErrorCatcher_Expression Input}
+						   return(result: ?Result))])}
 	    {Wait Result}
 	    {Browse ?Result}
 	 elseif Directive=="inspect"
 	 then Result in
-	    {MyCompiler enqueue(setSwitch(expression true))}
-	    {MyCompiler enqueue(feedVirtualString(Input return(result: ?Result)))}
+	    {MyCompiler enqueue([setSwitch(expression true)
+				 feedVirtualString({AddErrorCatcher_Expression Input}
+						   return(result: ?Result))])}
 	    {Wait Result}
 	    {Inspect ?Result}
 	 elseif Directive=="file"
 	 then
-	    {MyCompiler enqueue(setSwitch(expression false))}
-	    {MyCompiler enqueue(feedFile({GetCodeAfterDirective Input}))}
+	    %% TODO: how can I add an error catcher here?
+	    {MyCompiler enqueue([setSwitch(expression false)
+				 feedFile({GetCodeAfterDirective Input})])}
 	 elseif Directive=="quit"
 	 then
 	    {MyServer close} % close sockets
@@ -153,14 +200,14 @@ define
       /** %% FeedAllInput reads code sends from MyClient (a socket) and feeds them to MyCompiler. Socket input uses the format <code>["%!"<DIRECTIVE>\n]&lt;CODE&gt;</code>, as explained in top-level doc. Expression results are writting back into the socket (in the order their corresponding expressions were fed).
       %% Args is record with features size and resultFormat.
       %% */ 
-      proc {FeedAllInput MyCompiler MyServer MyClient Args}
+      proc {FeedAllInput MyCompiler MyInterface MyServer MyClient Args}
 	 Results
 	 ResultsPort = {NewPort Results}
       in 
 	 thread 
 	    {ForAll {Socket.readToStream MyClient Args.size}
 	     proc {$ Input}
-		{CallCompiler MyCompiler MyServer Input ResultsPort}
+		{CallCompiler MyCompiler MyInterface MyServer Input ResultsPort}
 	     end}
 	 end
 	 thread

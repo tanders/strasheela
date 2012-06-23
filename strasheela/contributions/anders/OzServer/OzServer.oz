@@ -182,12 +182,13 @@ define
        local
 	  %% MyClient is a socket
 	  MyClient = {Socket.makeServer localhost Args.port MyServer}
-	  MyCompiler = {CustomCompiler.makeFullCompiler}
+	  MyInterface MyCompiler 
        in
+	  {CustomCompiler.makeFullCompiler MyInterface MyCompiler}
 	  if Args.file \= ""
 	  then {MyCompiler enqueue(feedFile(Args.file))}
 	  end
-	  {CustomCompiler.feedAllInput MyCompiler MyServer MyClient Args}
+	  {CustomCompiler.feedAllInput MyCompiler MyInterface MyServer MyClient Args}
        end
        
 %   {Wait _}
