@@ -1782,6 +1782,57 @@ MyScore = {Score.makeScore
 %% getChords: fun {$ X} X end
 
 
+%%
+%% Various topologies output with default args
+%%
+
+declare
+MyScore_Note = {Score.make note(duration: 2 
+				pitch: 63
+				startTime:0
+				timeUnit:beats(4))
+		unit}
+%% Interpreted as chord
+MyScore_Chord = {Score.make sim([note(duration: 2
+				      pitch: 60)
+				 note(duration: 2
+				      pitch: 64)]
+				startTime:0
+				timeUnit:beats(4))
+		 unit}
+MyScore_SeqOfNotes = {Score.make seq([note(duration: 2
+					   pitch: 60)
+				      note(duration: 2
+					   pitch: 64)]
+				     startTime:0
+				     timeUnit:beats(4))
+		      unit}
+%% Interpreted as two parts 
+MyScore_SimOfSeqs = {Score.make
+		     sim([seq([note(duration: 4
+				    pitch: 60)
+			       note(duration: 2
+				    pitch: 62)
+			       note(duration: 8
+				    pitch: 64)])
+			  seq([note(offsetTime: 4
+				    duration: 4
+				    pitch: 72)
+			       note(duration: 8 
+				    pitch: 67)])]
+			 startTime:0
+			 timeUnit:beats(4))
+		     unit}
+
+{Out.toNonmensuralENP MyScore_Note unit}
+
+{Out.toNonmensuralENP MyScore_Chord unit}
+
+{Out.toNonmensuralENP MyScore_SeqOfNotes unit}
+
+{Out.toNonmensuralENP MyScore_SimOfSeqs unit}
+
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%
@@ -1877,7 +1928,7 @@ MyScore = {Score.makeScore
      )}
 
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%with %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%
 %% Testing parameter amplitude
 %%
