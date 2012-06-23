@@ -450,6 +450,32 @@ Google, e.g., pygments lexer for more examples..
 
    see [[file:~/oz/music/Strasheela/strasheela/strasheela/contributions/anders/PW_OM_Interface/Brainstorming.org]]
 
+*** TODO Fix that OzServer compiler or runtime errors result in a blocking (e.g., block OpenMusic)
+
+    Partial success: OzServer does not block anymore but instead returns 'error' for fed expressions
+    
+    However, once and error occurred nothing else than 'error' is returned, even for later computations without problems
+
+*** TODO Extend Lisp->Oz data translation to correspond to existing Lisp-> translations 
+
+    Perhaps this is already the case :)
+
+*** TODO Increment OzServer port number automatically (again)
+
+    Avoids simply some problems of users who do not know what they are doing here :)
+
+*** TODO Fix setting of Lisp variable *is-server-running?* 
+    
+    Currently this variable often contains a wrong value when the OzServer crashed etc
+
+    This is difficult to fix, but once I did this properly then I can actually automatically start the OzServer and users do not need to do that manually any more -- will help users like my students..
+
+
+** TODO Define ENP score -> Strasheela score			       :NEXT:
+
+   See file:~/PWGL-User/0-TorstensOtherStuff/StrasheelaInterface/ENP2Strasheela.lisp
+
+
 
 ** TODO [#A] Define Strasheela score transformations (instead of plain generation as so far) :NEXT:
 
