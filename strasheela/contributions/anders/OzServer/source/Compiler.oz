@@ -128,7 +128,7 @@ define
 	       if {MyInterface hasErrors($)}
 	       then
 		  %% reset interface so that previous errors are forgotten
-		  %% BUG: does not work yet
+		  %% !! BUG: does not work yet -- all further compilations show that an error happened, regardless
 		  {MyCompiler interrupt}
 		  {MyCompiler clearQueue}
 		  {MyInterface close}
