@@ -2068,18 +2068,22 @@ define
 %%% PWGL output
 %%%
 
+%%%
+%%% NOTE: Decision: ToNonmensuralENP is inappropriate for importing Strasheela scores into ENP (regardless whether I use non-mensural ENP or simple2score), because I use all metrical information contained in Strasheela scores. 
+%%%
+
    /** %% Exports TheScore (a Strasheela score) into a non-mensural ENP score (a VS). The ENP format is rather fixed, whereas the information contained in the Strasheela score format is highly user-customisable. Therefore, the export-process is also highly user-customisable. 
    %% An ENP score has a fixed topology. The non-mensural ENP has the following nesting: <code>score(part(voice(chord(note+)+)+)+)</code>. See the PWGL documentation for details. 
-   %% Strasheela, on the other hand, supports various topologies. However, ToNonmensuralENP does not automatically perform a score topology transformation into the ENP topology. Instead, ToNonmensuralENP expects a number of optional accessor functions as arguments (e.g. getScore, getParts, getVoices) which allow for a user-defined topology transformation. These functions expect a (subpart of the) score and return the contained objects according to the ENP topology. For instance, the function getVoices expects a Strasheela object corresponding to an ENP part and returns a list of Strasheela object corresponding to ENP voices. The default values for these accessor functions require that the topology of TheScore fully corresponds with the ENP score topology. That is, for the default accessor functions, TheScore must have the following topology: <code>sim(sim(seq(sim(note+)+)+)+)</code>. The set of all supported accessor functions (together with their default values) is given below.
+   %% Strasheela, on the other hand, supports various topologies. However, ToNonmensuralENP does not automatically perform a score topology transformation into the ENP topology. Instead, ToNonmensuralENP expects a number of optional accessor functions as arguments (e.g. getScore, getParts, getVoices) which allow for a user-defined topology transformation. These functions expect a (subpart of the) score and return the contained objects according to the ENP topology. For instance, the function getVoices expects a Strasheela object corresponding to an ENP part and returns a list of Strasheela object corresponding to ENP voices. The default values for these accessor functions support a Strasheela score with the ENP topology: <code>sim(sim(seq(sim(note+)+)+)+)</code>, or any topology that leaves out some ENP layers (e.g., a seq of notes is supported, as is a sim of seqs of notes).
    %% Any ENP attribute of a score object can be specified by the user. For this purpose, ToNonmensuralENP expects a number of optional attribute accessor functions (e.g. getScoreKeywords, getPartKeywords). These functions expect a Strasheela object corresponding to an ENP part and returns an Oz record whose features are the ENP keywords for this objects and the feature values are the values for these ENP keywords. See the default of getNoteKeywords for an example.
-   %% In addition, enp syntax can be given directly to score objects via an info tag/record with the label 'enp' where the keywords are the record features with their associated values (e.g., enp(expression: [accent])). In case a keyword is defined both with an acessor function (e.g., getVoiceKeywords) and directly as an enp info tag, then the info tag is taken instead. 
+   %% In addition, ENP syntax can be given directly to score objects via an info tag/record with the label 'enp' where the keywords are the record features with their associated values (e.g., enp(expressions: [accent])). In case a keyword is defined both with an acessor function (e.g., getVoiceKeywords) and directly as an enp info tag, then the info tag is taken instead. 
    %%
    %% Default arguments: 
    unit(getScore:fun {$ X} X end
-	getParts:fun {$ MyScore} {MyScore getItems($)} end
-	getVoices:fun {$ MyPart} {MyPart getItems($)} end
-	getChords:fun {$ MyVoice} {MyVoice getItems($)} end
-	getNotes:fun {$ MyChord} {MyChord getItems($)} end
+	getParts: <a function>
+	getVoices: <a function>
+	getChords: <a function>
+	getNotes: <a function>
 	getScoreKeywords:fun {$ MyScore}
 			    unit % put further ENP score keywords here
 			 end
@@ -2098,17 +2102,47 @@ define
 			end)
    %%
    %% Note: this function also works for the format expected by the simple format of the PWGL library KSQuant. You need to set the argument toKSQuant to true for this purpose.
+   %% BUG: does not work yet, as the simple format seemingly does not support note attributes.
    %% 
    %% */
    %%
    %% NB: output unit of measurement of chord start times and note offset times hard-wired to seconds
+   %%
+   %% TODO:
+   %% - OK: revise accessor args, so that various Strasheela scores (tree of temporal containers) are supported -- ENP layers can be missing, but they cannot be otherwise different
+   %% - handle offsetTime parameter: only include if \= 0
    fun {ToNonmensuralENP TheScore Args}
       Defaults
-      = unit(getScore:fun {$ X} X end
-	     getParts:fun {$ MyScore} {MyScore getItems($)} end
-	     getVoices:fun {$ MyPart} {MyPart getItems($)} end
-	     getChords:fun {$ MyVoice} {MyVoice getItems($)} end
-	     getNotes:fun {$ MyChord} {MyChord getItems($)} end
+      = unit(%% ENP topology: sim 
+	     getScore:fun {$ X} X end
+	     %% ENP topology: sim containing sims
+	     %% In case the outer container of MyScore is a sim, then its content is interpreted as ENP parts. Otherwise the whole score is output into a single part (with a single voice and multiple chords where each chord contains a single note).
+	     getParts:fun {$ MyScore}
+			 if {MyScore isSimultaneous($)} andthen {Not {IsLilyChord MyScore}}
+			 then {MyScore getItems($)}
+			 else [MyScore] end 
+		      end
+	     %% ENP topology: sim containing seqs
+	     getVoices:fun {$ MyPart}
+			 if {MyPart isSimultaneous($)} andthen {Not {IsLilyChord MyPart}}
+			 then {MyPart getItems($)}
+			 else [MyPart] end 
+		       end
+	     %% ENP topology: seq containing sims
+	     getChords:fun {$ MyVoice}
+			  if {MyVoice isSequential($)} then {MyVoice getItems($)} else [MyVoice] end
+		       end
+	     %% ENP topology: sim containing notes
+	     getNotes:fun {$ MyChord}
+			 if {IsLilyChord MyChord}
+			 then {MyChord getItems($)}
+			 elseif {MyChord isNote($)}
+			 then [MyChord] 
+			 else {Exception.raiseError
+			       strasheela(failedRequirement MyChord "This object cannot be exported as an ENP chord.")}
+			    nil % never returned
+			 end
+		      end
 	     getScoreKeywords:fun {$ MyScore}
 				 %% put further ENP score keywords here
 				 unit
@@ -2127,12 +2161,18 @@ define
 			      end
 	     getNoteKeywords:fun {$ MyNote}
 				%% put further ENP note keywords here
-				unit('offset-time': {MyNote getOffsetTimeInSeconds($)})
+				%% TODO: generalise to include various ENP note keywords here, but only if they are not the default (e.g., :offset-time \= 0)
+				%% TODO: note duration missing
+				%% 
+				OTime = {MyNote getOffsetTimeInSeconds($)} in
+				case OTime of 0.0
+				then unit
+				else unit('offset-time': {MyNote getOffsetTimeInSeconds($)})
+				end
 			     end
 	     toKSQuant:false)
       As = {Adjoin Defaults Args}
-      fun {Object2Record MyObject
-	   GetSubObjects MakeSubObjectRecord GetKeywords}
+      fun {Object2Record MyObject GetSubObjects MakeSubObjectRecord GetKeywords}
 	 {Adjoin {Adjoin {GetKeywords MyObject}
 		  {MyObject getInfoRecord($ 'enp')}}
 	  {List.toTuple unit {Map {GetSubObjects MyObject}
@@ -2163,14 +2203,19 @@ define
 	 end
       end
       fun {MakeChordRecord MyChord}
-	 {Adjoin
-	  {As.getChordKeywords MyChord}
+	 Ns = {As.getNotes MyChord}
+      in
+	 {Adjoin {As.getChordKeywords MyChord}
 	  unit(1:{MyChord getStartTimeInSeconds($)}
-	       notes:{Map {As.getNotes MyChord}
-		      fun {$ MyNote}
-			 {Adjoin {As.getNoteKeywords MyNote}
-			  unit(1:{MyNote getPitchInMidi($)})}
-		      end})}
+	       notes:{Map Ns fun {$ MyNote}
+				NoteKeys = {As.getNoteKeywords MyNote}
+			     in
+				case NoteKeys of unit
+				then {MyNote getPitchInMidi($)} 
+				else {Adjoin unit(1:{MyNote getPitchInMidi($)})
+				      NoteKeys}
+				end
+			     end})}
       end
    in
       {RecordToLispKeywordList {MakeScoreRecord TheScore}}
