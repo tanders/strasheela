@@ -54,8 +54,9 @@ import
    Midi at 'MidiOutput.ozf'
 %   Score at 'ScoreCore.ozf'
 
-   %% NOTE: adds dependency to Strasheela extension
+   %% NOTE: adds dependencies to Strasheela extensions
    HS at 'x-ozlib://anders/strasheela/HarmonisedScore/HarmonisedScore.ozf'
+   Measure at 'x-ozlib://anders/strasheela/Measure/Measure.ozf'
    
 export
    Show
@@ -88,6 +89,7 @@ export
    OutputSCScore MakeSCScore MakeSCEventOutFn
    SendOsc SendSCserver SendSClang
    ToNonmensuralENP OutputNonmensuralENP
+   ToENP
 
    ToFomus OutputFomus RenderFomus
    %% expert Fomus procs
@@ -2072,7 +2074,7 @@ define
 %%% NOTE: Decision: ToNonmensuralENP is inappropriate for importing Strasheela scores into ENP (regardless whether I use non-mensural ENP or simple2score), because I use all metrical information contained in Strasheela scores. 
 %%%
 
-   /** %% Exports TheScore (a Strasheela score) into a non-mensural ENP score (a VS). The ENP format is rather fixed, whereas the information contained in the Strasheela score format is highly user-customisable. Therefore, the export-process is also highly user-customisable. 
+   /** %% Exports MyScore (a Strasheela score) into a non-mensural ENP score (a VS). The ENP format is rather fixed, whereas the information contained in the Strasheela score format is highly user-customisable. Therefore, the export-process is also highly user-customisable. 
    %% An ENP score has a fixed topology. The non-mensural ENP has the following nesting: <code>score(part(voice(chord(note+)+)+)+)</code>. See the PWGL documentation for details. 
    %% Strasheela, on the other hand, supports various topologies. However, ToNonmensuralENP does not automatically perform a score topology transformation into the ENP topology. Instead, ToNonmensuralENP expects a number of optional accessor functions as arguments (e.g. getScore, getParts, getVoices) which allow for a user-defined topology transformation. These functions expect a (subpart of the) score and return the contained objects according to the ENP topology. For instance, the function getVoices expects a Strasheela object corresponding to an ENP part and returns a list of Strasheela object corresponding to ENP voices. The default values for these accessor functions support a Strasheela score with the ENP topology: <code>sim(sim(seq(sim(note+)+)+)+)</code>, or any topology that leaves out some ENP layers (e.g., a seq of notes is supported, as is a sim of seqs of notes).
    %% Any ENP attribute of a score object can be specified by the user. For this purpose, ToNonmensuralENP expects a number of optional attribute accessor functions (e.g. getScoreKeywords, getPartKeywords). These functions expect a Strasheela object corresponding to an ENP part and returns an Oz record whose features are the ENP keywords for this objects and the feature values are the values for these ENP keywords. See the default of getNoteKeywords for an example.
@@ -2111,7 +2113,7 @@ define
    %% TODO:
    %% - OK: revise accessor args, so that various Strasheela scores (tree of temporal containers) are supported -- ENP layers can be missing, but they cannot be otherwise different
    %% - handle offsetTime parameter: only include if \= 0
-   fun {ToNonmensuralENP TheScore Args}
+   fun {ToNonmensuralENP MyScore Args}
       Defaults
       = unit(%% ENP topology: sim 
 	     getScore:fun {$ X} X end
@@ -2218,7 +2220,7 @@ define
 			     end})}
       end
    in
-      {RecordToLispKeywordList {MakeScoreRecord TheScore}}
+      {RecordToLispKeywordList {MakeScoreRecord MyScore}}
    end
    
    /** %%  Exports MyScore (a Strasheela score) into a text file with a non-mensural ENP score. The file path is specified with the arguments file, extension and dir. For further arguments see the ToNonmensuralENP documentation.
@@ -2234,6 +2236,193 @@ define
        As.dir#As.file#As.extension}
    end
 
+
+
+
+   %% If MyScore does not contain any metrical information (i.e. neither instances of Measure.measure nor Measure.uniformMeasure) then a non-mensural ENP score is returned, otherwise in mensural ENP score.
+   %% NOTE: unfinished def.
+   fun {ToENP MyScore Args}
+      Defaults
+      = unit(%% ENP topology: sim 
+	     %% returns item
+	     getScore:fun {$ X} X end
+	     %% ENP topology: sim containing sims
+	     %% In case the outer container of MyScore is a sim, then its content is interpreted as ENP parts. Otherwise the whole score is output into a single part (with a single voice and multiple chords where each chord contains a single note).
+	     %% returns list of items
+	     getParts:fun {$ MyScore}
+			 if {MyScore isSimultaneous($)} andthen {Not {IsLilyChord MyScore}}
+			 then {MyScore getItems($)}
+			 else [MyScore] end 
+		      end
+	     %% ENP topology: sim containing seqs
+	     %% returns list of items
+	     getVoices:fun {$ MyPart}
+			 if {MyPart isSimultaneous($)} andthen {Not {IsLilyChord MyPart}}
+			 then {MyPart getItems($)}
+			 else [MyPart] end 
+		       end
+	     %% voice -> measures 
+	     %% returns list of ENP measures, each in format unit(MeasItems strasheelaMeasure: SMeas)
+	     getMeasures:
+		fun {$ MyVoice}
+		   %% TODO: later -- revise once I introduced support for poly metrical music with multiple sim measure objects
+		   StrasheelaMeasures
+		   = {MyVoice getSimultaneousItems($ test: fun {$ X}
+							      {Measure.isMeasure X} orelse
+							      {Measure.isUniformMeasures X}
+							   end)}
+		in
+		   case StrasheelaMeasures of nil
+		   then {Exception.raiseError
+			 strasheela(failedRequirement MyVoice "No measure objects for voice available.")}
+		      nil % never returned
+		   else {LUtils.mappend StrasheelaMeasures
+			 %% Returns record unit(MeasureObjects strasheelaMeasure: SMeas)
+			 fun {$ SMeas}
+			    SMeasItems
+			    = if {Score.isTemporalContainer MyVoice}
+				 %% !!! TODO: remove all those notes that are already contained in some sim (chord)
+			      then {SMeas getSimultaneousItems($ test: fun {$ X}
+									  {IsLilyChord X} orelse
+									  {X isNote($)}  
+								       end
+							       toplevel: MyVoice)}
+			      else [MyVoice]
+			      end
+			 in
+			    %% TODO: deal with objects crossing measures -- I need to explicitly represent tied objects
+			    %% ?? use uniform measure method overlapsBarlineR(B Start End) -- no such method for "plain" measure objects
+			    if {Measure.isMeasure SMeas}
+			    then [unit(SMeasItems strasheelaMeasure: SMeas)]
+			    else % SMeas is UniformMeasures
+			       %% TMP: to get running code for testing
+			       %% TODO: split objects related to a single UniformMeasure
+			       [unit(SMeasItems strasheelaMeasure: SMeas)]
+			       % {SMeas getMeasureDuration($)}
+			       % {SMeas getN($)}
+			    end
+			 end}
+		   end
+		end
+	     %% measure -> nested beats 
+	     %% TODO: define
+	     %% split into beats, recognise ties overlapping beats (or instead notate as longer notes?)
+	     %% returns list of nested beats, each in format unit(BeatItems i:I strasheelaMeasure: SMeas), where I is the ENP 'beat count' and BeatItems is again a list of this format recursively until it contains only a single element
+	     getNestedBeats: fun {$ unit(MeasureObjects strasheelaMeasure: SMeas)}
+			     % 	{SMeas getBeatDuration($)}
+			     % 	{SMeas getBeats($)} % relative start times of beats
+			     % in
+				%% !! TMP: dummy for testing
+				[unit(MeasureObjects i:1 strasheelaMeasure:SMeas)]
+			     end
+	     % %% ENP topology: seq containing sims
+	     % %% TODO: revise
+	     %% returns list of items
+	     getChords:fun {$ MyBeat}
+	     		  if {MyBeat isSequential($)} then {MyBeat getItems($)} else [MyBeat] end
+	     	       end
+	     %% ENP topology: sim containing notes
+	     %% TODO: revise
+	     %% returns list of items
+	     getNotes:fun {$ MyChord}
+			 if {IsLilyChord MyChord}
+			 then {MyChord getItems($)}
+			 elseif {MyChord isNote($)}
+			 then [MyChord] 
+			 else {Exception.raiseError
+			       strasheela(failedRequirement MyChord "This object cannot be exported as an ENP chord.")}
+			    nil % never returned
+			 end
+		      end
+	     getScoreKeywords:fun {$ MyScore}
+				 %% put further ENP score keywords here
+				 unit
+			      end
+	     getPartKeywords:fun {$ MyPart}
+				%% put further ENP part keywords here
+				unit
+			     end
+	     getVoiceKeywords:fun {$ MyPart}
+				 %% put further ENP part keywords here
+				 unit
+			      end
+	     getMeasureKeywords:fun {$ MyMeasure}
+				 %% put further ENP voice keywords here
+				 unit
+			      end
+	     getBeatKeywords:fun {$ MyBeat}
+				 %% put further ENP voice keywords here
+				 unit
+			      end
+	     getChordKeywords:fun {$ MyChord}
+				 %% put further ENP chord keywords here
+				 unit
+			      end
+	     getNoteKeywords:fun {$ MyNote}
+				%% put further ENP note keywords here
+				%% TODO: generalise to include various ENP note keywords here, but only if they are not the default (e.g., :offset-time \= 0)
+				%% TODO: note duration missing
+				%% 
+				OTime = {MyNote getOffsetTimeInSeconds($)} in
+				case OTime of 0.0
+				then unit
+				else unit('offset-time': {MyNote getOffsetTimeInSeconds($)})
+				end
+			     end
+	     toKSQuant:false)
+      As = {Adjoin Defaults Args}
+      %% MyObject is either item or record in format unit(items ...)
+      %% BUG: MyObject can either be a Strasheela item or a record, e.g., unit(BeatItems i:I strasheelaMeasure: SMeas). Calling method getInfoRecord does not work in latter case..
+      fun {Object2Record MyObject GetSubObjects MakeSubObjectRecord GetKeywords}
+	 {Adjoin {Adjoin {GetKeywords MyObject} {MyObject getInfoRecord($ 'enp')}}
+	  {List.toTuple unit {Map {GetSubObjects MyObject}
+			      MakeSubObjectRecord}}}
+      end
+      fun {MakeScoreRecord MyScore}
+	 {Object2Record MyScore As.getParts MakePartRecord As.getScoreKeywords}
+      end
+      fun {MakePartRecord MyPart}
+	 {Object2Record MyPart As.getVoices MakeVoiceRecord As.getPartKeywords}
+      end
+      %% BUG: instead of Object2Record better call some function still to define to handle records returned by As.getMeasures (or extend Object2Record)
+      fun {MakeVoiceRecord MyVoice}
+      	 {Object2Record MyVoice As.getMeasures MakeMeasureRecord As.getVoiceKeywords}
+      end
+      %% BUG: instead of Object2Record better call some function still to define to handle records
+      fun {MakeMeasureRecord MyMeasure}
+	 {Object2Record MyMeasure As.getNestedBeats MakeBeatRecord As.getMeasureKeywords}
+      end
+      fun {MakeBeatRecord MyBeat}
+	 {Object2Record MyBeat As.getChords MakeChordRecord As.getBeatKeywords}
+      end
+      fun {MakeChordRecord MyChord}
+	 Ns = {As.getNotes MyChord}
+      in
+	 {Adjoin {As.getChordKeywords MyChord}
+	  unit(1:{MyChord getStartTimeInSeconds($)}
+	       notes:{Map Ns fun {$ MyNote}
+				NoteKeys = {As.getNoteKeywords MyNote}
+			     in
+				case NoteKeys of unit
+				then {MyNote getPitchInMidi($)} 
+				else {Adjoin unit(1:{MyNote getPitchInMidi($)})
+				      NoteKeys}
+				end
+			     end})}
+      end
+   in
+      case {MyScore collect($ test: fun {$ X}
+					{Measure.isMeasure X} orelse
+					{Measure.isUniformMeasures X}
+				     end)}
+      of nil then {ToNonmensuralENP MyScore Args}
+      else
+	 %% TMP: return record
+	 {MakeScoreRecord MyScore}
+	 % {RecordToLispKeywordList {MakeScoreRecord MyScore}}
+      end
+   end
+   
    
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
