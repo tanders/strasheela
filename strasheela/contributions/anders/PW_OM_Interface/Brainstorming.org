@@ -82,16 +82,6 @@ Output
 
 
 
-
-
-
-
-
-
-
-
-
-
 ** OpenMusic / PWGL modules for Strasheela subscripts
 
    - Automatically generate OMPW box definition for a given Strasheela subscript, but asking the subscript for its arguments and their defaults
@@ -110,6 +100,7 @@ Output
 ** Advantages
 
    - ENP
+   - Meta score
 
    - Cleaner user interface
 
@@ -134,7 +125,7 @@ Output
 
    - Is open source
 
-   - Maquette
+#   - Maquette (forthcoming PWGL Meta Score is better :)
 
 
 *** Less important
