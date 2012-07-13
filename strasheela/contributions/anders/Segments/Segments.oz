@@ -162,6 +162,7 @@ define
    %% Args.rargs:
    %% 'minPitch' and 'maxPitch' (default false): domain specification is notation supported by HS.pitch. Disabled if one of them is false.
    %% 'maxInterval' (default 3#1): ratio spec for the maximum melodic interval size permitted
+   %% 'resolveNonharmonicNotesStepwise' (default true): whether or not to apply melodic constraint HS.rules.resolveNonharmonicNotesStepwise
    %% 'maxNonharmonicNoteSequence (default false)': Restrict the number of consecutive non-harmonic Notes to given maximum. Disabled if set to false.
    %% 'minPercentSteps' (default false): there are at least the specified percentage steps. Disabled if set to false.
    %% 'clearDissonanceResolution' (default false): If in one voice there occurs a non-chord tone followed by a chord tone (a dissonance resolution), then no other voice should obscure this resolution by a non-chord tone starting together with the tone resolving the dissonance. Disabled if set to false.
@@ -175,6 +176,7 @@ define
    = {Score.defMixinSubscript unit(rdefaults: unit(minPitch: false
 						   maxPitch: false
 						   maxInterval: 3#1
+						   resolveNonharmonicNotesStepwise: true
 						   maxNonharmonicNoteSequence: false
 						   %% BUG: in maxRepetitions
 % 					   maxRepetitions:0
@@ -199,7 +201,9 @@ define
 	 end
 	 %% BUG: in HS.rules.maxRepetitions
 %       {HS.rules.maxRepetitions Notes Args.rargs.maxRepetitions}
-	 {HS.rules.resolveNonharmonicNotesStepwise Notes unit(maxInterval:Args.rargs.step)}
+	 if Args.rargs.resolveNonharmonicNotesStepwise \= false  then 
+	    {HS.rules.resolveNonharmonicNotesStepwise Notes unit(maxInterval:Args.rargs.step)}
+	 end  
 	 if Args.rargs.clearDissonanceResolution \= false then 
 	    {HS.rules.clearDissonanceResolution Notes} % ??
 	 end
