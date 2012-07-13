@@ -1833,6 +1833,63 @@ MyScore_SimOfSeqs = {Score.make
 {Out.toNonmensuralENP MyScore_SimOfSeqs unit}
 
 
+% % % % % % % % % % % % % % % % % % % % % %
+
+%%
+%% Various topologies output with default args
+%%
+
+declare
+Beat = 4
+% MyScore_Note = {Score.make note(duration: 2 
+% 				pitch: 63
+% 				startTime:0
+% 				timeUnit:beats(4))
+% 		add(note:Measure.note)}
+%% Interpreted as chord
+MyScore_Chord = {Score.make sim([note(duration: 2
+				      pitch: 60)
+				 note(duration: 2
+				      pitch: 64)
+				 measure(n: 8
+					 beatNumber: 4
+					 beatDuration: Beat)]
+				startTime:0
+				timeUnit:beats(Beat))
+		 add(note:Measure.note
+		     measure: Measure.uniformMeasures)}
+% MyScore_SeqOfNotes = {Score.make seq([note(duration: 2
+% 					   pitch: 60)
+% 				      note(duration: 2
+% 					   pitch: 64)]
+% 				     startTime:0
+% 				     timeUnit:beats(Beat))
+% 		      add(note:Measure.note
+% 			  measure: Measure.uniformMeasures)}
+%% Interpreted as two parts 
+MyScore_SimOfSeqs = {Score.make
+		     sim([seq([note(duration: 4
+				    pitch: 60)
+			       note(duration: 2
+				    pitch: 62)
+			       note(duration: 8
+				    pitch: 64)])
+			  seq([note(offsetTime: 4
+				    duration: 4
+				    pitch: 72)
+			       note(duration: 8 
+				    pitch: 67)])
+			  measure(n: 8
+				  beatNumber: 4
+				  beatDuration: Beat)]
+			 startTime:0
+			 timeUnit:beats(Beat))
+		     add(note:Measure.note
+			 measure: Measure.uniformMeasures)}
+
+
+{Out.toENP MyScore_Chord unit}
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%
