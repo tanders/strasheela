@@ -620,6 +620,11 @@ define
 	    pitchesPerOctave: As.pitchesPerOctave
 	    accidentalOffset: As.accidentalOffset
 	    octaveDomain: As.octaveDomain
+	    %% dummy default so that RegularTemperamentNote objects can be created without failure (e.g., required for exporting score archive)
+	    generators: [0]    
+	    generatorFactors: [0#1] % dummy default
+	    generatorFactorsOffset: 0
+	    temperament: unit
 	    )
       end
    end
