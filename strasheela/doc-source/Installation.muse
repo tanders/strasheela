@@ -63,7 +63,9 @@ Selection constraints provide powerful constraints for selecting list elements. 
 
 Please note that you need a C++ compiler in order to install these constraints. The GNU C++ compiler is usually already installed on Linux. On MacOS X, install Apple's developer tool Xcode (available either from your MacOS installation CDs, or from [[http://developer.apple.com/tools/xcode/][here]] if this online version is newer). On Windows, you may consider installing this compiler under [[http://www.cygwin.com/][Cygwin]]. You can install the selection constraints by typing (of course, you do not type the leading promt yourself, here =$=).
 
-  <example>$ ozmake --install --package=http://www.mozart-oz.org/mogul/populate/duchier/select/duchier-select__1.3.0__source__1.8.pkg</example>
+<example>
+$ ozmake --install --package=http://www.mozart-oz.org/mogul/populate/duchier/select/duchier-select__1.3.0__source__1.8.pkg
+</example>
 
 NB: Unfortunately, it has been found that =ozmake= on Mozart since version 1.3.2 hangs when invoking the GNU compiler on Windows.[4] 
 
@@ -83,18 +85,18 @@ $ ozmake --install --package=mogul:/tack/iozsef
 
 **  How to obtain Strasheela?
 
-You can either obtain a Strasheela [[http://sourceforge.net/project/showfiles.php?group_id=167225][release]] or a [[http://strasheela.svn.sourceforge.net/viewvc/strasheela/trunk/strasheela.tar.gz?view=tar][development snapshot]] (releases are done at irregular intervals whenenver some development stage was finished). Both are =tar.gz=  archive files, which must be unpacked.[5] 
+Please download a Strasheela [[http://sourceforge.net/project/showfiles.php?group_id=167225][release]] (releases are done at irregular intervals whenever some development stage was finished). Strasheela releases are distributed as =tar.gz=  archive files, which must be unpacked.[5] 
 
-Alternatively, you can check out the Subversion repository with the following command (this option allows for easy updates later, but requires installing [[http://en.wikipedia.org/wiki/Subversion_(software)][Subversion]]).
+Alternatively, you can check out the development version as a Git repository with the following command (this option allows for easy updates later, but requires installing [[http://en.wikipedia.org/wiki/Git_(software)][Git]]). This command downloads the Strasheela sources into your current directory.
 
 <example>
-$ svn co https://strasheela.svn.sourceforge.net/svnroot/strasheela/trunk/strasheela/ strasheela 
+$ git clone git://github.com/tanders/strasheela.git
 </example>
 
-You can then later update your Subversion repository by moving into the =strasheela= top-level directory and typing this.
+You can then later update your Git repository by moving into the =strasheela= top-level directory and typing this.
 
 <example>
-$ svn update
+$ git fetch 
 </example>
 
 
@@ -272,4 +274,4 @@ Have fun with Strasheela!
 [4] See http://www.ps.uni-sb.de/pipermail/mozart-users/2006/015298.html. Nevertheless, the selection constraints have been installed successfully on Windows with earlier Mozart versions (cf. the installation of the [[http://sourcesup.cru.fr/xmg/][XMG - eXtensible MetaGrammar]]). 
 ; http://www.mozart-oz.org/home/doc/changes/node14.html#section.m131.internal
 
-[5] In order to reduce the file size of the release archive, the release does not contain the sound files which are part of the documentation of the examples (the sound files blow up the size to an archive 10 times as big!). For running Strasheela these missing sounds don't make any difference, and these files are always available as part of the online documentation of Strasheela. Nevertheless, if you do not have a permanent network connection, you may consider using a [[http://strasheela.svn.sourceforge.net/viewvc/strasheela/trunk/strasheela.tar.gz?view=tar][development snapshot]] or the Subversion repository, because these contain also the sound files of the documentation examples. 
+[5] In order to reduce the file size of the release archive, the release does not contain the sound files which are part of the documentation of the examples (the sound files blow up the size to an archive 10 times as big!). For running Strasheela these missing sounds don't make any difference, and these files are always available as part of the online documentation of Strasheela.
