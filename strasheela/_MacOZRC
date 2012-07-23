@@ -15,12 +15,12 @@
 %% if you don't really know what you are doing :)
 %%
 
-%% The template must start with 'declare' to declare the top-level variables introduced later.
-declare
-
 
 %% Per default, compiler executes each piece of generated code in a separate thread without waiting for it to terminate before proceeding to the next query. Instead, I want to ensure all settings in OZRC are effective before any actual user call is executed. (threadedqueries is switch back 'on' at end of this OZRC). 
 \switch -threadedqueries
+
+%% The template must start with 'declare' to declare the top-level variables introduced later.
+declare
 
 /** %% ModuleLink is like Module.link except that multiple calls of ModuleLink share the same module manager (and don't create new managers as Module.link does). For instance, when ModuleLink links multiple functors which refer to a database functor, then all refer to the same database instance (linking with Module.link results into multiple database instances). 
 %% */
