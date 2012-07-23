@@ -2,7 +2,7 @@
 
 
 * Approach idea
-
+  
 OpenMusic/PWGL establishes connection to some OzServer instance (see file:~/oz/music/Strasheela/strasheela/trunk/strasheela/contributions/anders/OzServer/) or starts such a server. Ideally, this server uses the Oz compiler that runs also by the OPI, so that Oz code can always conveniently sent from Emacs, but this is not necessary.
 
 
@@ -149,5 +149,36 @@ Output
 
 
 
+
+
+
+
+
+* !!! Segmenting Oz code cleanly in an PWGL patch
+
+  Idea: I would like to break down my definition of Oz programs in a PWGL patch into multiple PWGL boxes for flexibility. For example, the rules for a constraint problem should be available separately, and also the constraint applicators should be available separately, so that they can be combined freely at will.
+
+  Problem: these boxes generate Oz snippets that cannot be executed individually, and I do not want the PWGL user to get confused by these strings.
+
+  Idea for a solution: these boxes return some Lisp data structure (object?) that wraps up the generated Oz code string. This wrapping Lisp data structure expresses the resulting Oz data structure (e.g., a proc, list, ...  -- also more specific cases: Strasheela constraint (with arity and what objects can be passed as input), Strasheela constraint applicator, ...). I can then introduce convenient features such as type checking, where other boxes of this PWGl-Oz interface only accept certain types as input (type checking). Ideally, these connections could not even be made in the PWGL interface, and instead a warning is immediately shown.
+  More easy solution: if some unsuitable connection is made then through an exception, where the error message clearly says which box gets at which argument a wrong input.
+
+  Some oz-inspect box could return the oz code string (for those who want to see that, e.g., for debugging or in order to better understand what they are doing).
+
+
+* Goal: hide Oz server interface from users
+
+  - If some Oz code is run for the first time then the Oz server is started automatically
+  - If some box generates code that can be directly sent to the Oz server, then this is done, so that users can directly use the result by some other PWGL box, without an extra run-oz box
+  - Other boxes (e.g., constraint applicators) return some abstract data type (object) -- clearly indicating that this can only be used by some special boxes
+  - If PWGL is quit, then the Oz server is quit as well
+
+    Hm, allowing users also manually to start/stop the server is probably a good idea (e.g., if server crashes etc.)
+
+  Note: this approach requires that OzServer processes potentially many calls during a single PWGL evaluation without mixing results up. Should the OzServer perhaps run always in expression mode (i.e. non-concurrently) when called by Lisp?
+  But for concurrent use with Max I would perhaps better somehow label inputs and outputs to avoid that they can be mixed up...
+   
+
+* !? (Automatically) translate the library of constraint definitions by Jacopo into Oz syntax for use in resulting PWGL-Strasheela
 
 

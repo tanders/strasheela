@@ -326,72 +326,6 @@ git svn clone http://strasheela.svn.sourceforge.net/svnroot/strasheela strasheel
        -> not a problem even with my current mp3s (repository currently ~65 MB)
 
 
-** TODO Get Oz syntax highlighting at GitHub			       :SOON:
-
-   Write Oz lexer for Pygments (using Python)
-
-   *!! Pieter Belmans (pbelmans) used Strasheela and Oz before and has experience with Pygments !!*
-   He and may want to help me write a lexer for Oz
-   !! A lexer definition by pbelmans (Pieter Belmans) for the GAP language
-   http://pbelmans.wordpress.com/2012/04/20/a-pygments-lexer-for-gap/
-   https://github.com/pbelmans/gap-pygments-lexer
-   (Oz/Strasheela related: http://pbelmans.wordpress.com/category/music/) 
-
-
-   Doc: Pygments Introduction and Quickstart
-   http://pygments.org/docs/quickstart/
-
-   Doc: Write your own lexer
-   http://pygments.org/docs/lexerdevelopment/
-
-   Available lexers
-   http://pygments.org/docs/lexers/
-
-   Pygments development and source at bitbucket
-   https://bitbucket.org/birkenfeld/pygments-main/src
-   They have several open pull requests including some lexers 
-   
-   Full lexers definition sources in 
-   https://bitbucket.org/birkenfeld/pygments-main/src/5cc94956e233/pygments/lexers
-
-
-*** First step: define Lexer that simply highlights Oz keywords 
-
-    I need some full and simple template, then this is actually very easy to define
-    -> No, they want lexers that highlight the full syntax, but that should be possible too -- see Roy book, p. 835ff for Oz syntax details (not very much..)
-    
-    *List of Oz keywords from van Roy book, p. 841 (lated PDF draft)*
-
-andthen default
-false feat finally for from fun functor if import in
-lazy
-local
-lock return meth	self mod	skip not	then of	thread or 	true orelse	try prepare 	unit proc
-prop raise require 
-at attr break case catch choice class collect cond  continue declare
-define dis  div do else elsecase  elseif elseof  end
-export fail
-
-
-*** Consider later to refine/extend that lexer
-
-*** Make my Lexer available for the Pygments team and send them pull request
-
-    Add an example file to tests/examplefiles that exercises as much of the syntax as possible
-    (And please don't commit on named branches. But I can fix that on my end as well.)
-
-
-    Note that it can take several weeks until they react (see http://groups.google.com/group/pocoo-libs/browse_thread/thread/fbf52b3da5759d00?pli=1)
-
-Example lexer pull request (with some minor errors)
-https://bitbucket.org/birkenfeld/pygments-main/pull-request/61/
-
-Google, e.g., pygments lexer for more examples..
-
-
-*** Notify GitHub about new Oz lexer
-
-
 ** TODO [#A] Try to clean up score script parameters -- simplify if possible! :NEXT:ARCHIVE:
 
    Do this in a git branch, just to make sure...
@@ -446,6 +380,329 @@ Google, e.g., pygments lexer for more examples..
        (last release before these changes)
 
 
+** TODO Finish chord and scale databases for 12-TET		       :NEXT:
+
+   Database file [[file:~/oz/music/Strasheela/strasheela/strasheela/contributions/anders/HarmonisedScore/source/databases/Scala.oz]]
+
+   Chords
+   [[file:~/Downloads/scala-22-pc-linux/chordnam.par]]
+
+   Scales
+   [[file:~/Downloads/scala-22-pc-linux/modenam.par]]
+   [[file:~/Downloads/scala-22-pc-linux/melathat.par]] (these are seemingly a subset of the above)
+
+
+** TODO Add chord dissonance degree measure(s) to ScalaDB.oz	       :NEXT:
+
+   *Partly done using Partch's one-footed bridge*
+   Improve that by improving interval data (e.g., by using Erlich's Harmonic Entropy instead)
+
+
+   How urgent is this? 
+   I should somehow automate this, as it would take too long otherwise
+   -> computer value in question for every interval (basically pitch class), then I can easily do this processing in Strasheela
+
+*** Translate intervals of 12-TE chord specs into ratios
+
+    Simplistic approach
+    - Start with JI scale for 12-ET, e.g.,  
+      1/1 16/15 9/8 6/5 5/4 4/3 45/32 3/2 8/5 5/3 16/9 15/8 2/1
+    - For every interval of given chord select the corresponding JI interval (always from 1/1)
+
+
+*** Use the intervals to compute some dissonance degree
+
+**** Evaluate methods before deciding for any
+
+     E.g., compare what they output for 9/8 vs 5/4
+     - Barlow's harmonicity value for 9/8 is slightly higher than that for 5/4 -- is that useful for my purposes?
+
+
+**** ! Erlich's Harmonic Entropy -- could that be used for chords directly?
+
+     Harmonic entropy is the simplest possible model of consonance. It asks the question, "how confused is my brain when it hears an interval?"
+
+     In principle, harmonic entropy is suited also for chords, not only intervals. However, this generalisation has not been done so far. Erlich: "Unlike roughness, tonalness is not merely concerned with pairwise interactions of tones but three-way and higher interactions as well. A mathematical model for it is out of my grasp at the moment." http://sonic-arts.org/td/erlich/entropy.htm
+
+     short article
+     http://www.soundofindia.com/showarticle.asp?in_article_id=1905806937
+
+     *Encyclopaedia of Tuning*
+     !! http://sonic-arts.org/td/erlich/entropy.htm
+
+     Encyclopedia of Microtonal Music Theory 
+     http://www.tonalsoft.com/enc/h/harmonic-entropy.aspx
+
+
+     Paul Erlich's Paper
+     http://sethares.engr.wisc.edu/paperspdf/HarmonicEntropy.pdf
+
+     Harmonic entropy list
+     http://launch.groups.yahoo.com/group/harmonic_entropy/messages
+
+
+**** Todo Results
+
+     Read directly from graph (I used the JI values, not the tempered intervals)
+     .. I opened a gif file in OpenOffice
+
+      1/1   | 
+      16/15 | 
+      9/8   | 
+      6/5   | 
+      5/4   | 
+      4/3   | 
+      45/32 | 
+      3/2   | 
+      8/5   | 
+      5/3   | 
+      16/9  | 
+      15/8  | 
+      2/1   | 
+
+
+**** ! Partch's one-footed bridge
+
+     Value taken with [lineal in mm] from Genesis of a Music, p. 155
+
+      1/1   | no data
+      16/15 | 5
+      9/8   | 10
+      6/5   | 19
+      5/4   | 19 (20?)
+      4/3   | 27
+      45/32 | ? (0 in graph?)
+      3/2   | 27
+      8/5   | 19
+      5/3   | 19
+      16/9  | 10
+      15/8  | 5 
+      2/1   | 38
+
+**** ! Euler's Gradus Suavitatis
+
+     Results could be more or less useful for my purposes. The problem is only that 9/8, 6/5, and 8/5 all result in the same value G=8
+
+***** Results
+
+      Values obtained at website http://www.mathematik.com/Piano/index.html
+      Should I perhaps manually simply "tune" these values for my purposes?
+
+      1/1   | 1
+      16/15 | 11
+      9/8   | 8
+      6/5   | 8
+      5/4   | 7
+      4/3   | 5
+      45/32 | 14
+      3/2   | 4
+      8/5   | 8
+      5/3   | 7
+      16/9  | 9
+      15/8  | 10
+      2/1   | 2
+
+
+      Manually tuned values (raised 9/8 by 0.5)
+      
+      1/1   | 1
+      16/15 | 11
+      9/8   | 8.5
+      6/5   | 8
+      5/4   | 7
+      4/3   | 5
+      45/32 | 14
+      3/2   | 4
+      8/5   | 8
+      5/3   | 7
+      16/9  | 9
+      15/8  | 10
+      2/1   | 2
+
+
+      Note that values with octave added differ..
+
+***** Method
+
+     Use Scala:
+
+     To see Euler's Gradus Suavitatis for the pitches, do SET ATTRIBUTE GRADUS.
+This number is one higher than the sum of one less than the constituent
+primes. Each prime is counted as many times as it occurs in the number. For
+instance the Gradus of 6 is 1 + (2 - 1) + (3 - 1) = 4. What is shown with SHOW
+DATA, the Gradus Suavitatis of a whole scale, is the Gradus of the E.C.
+(Exponens Consonantiae). One property is G(ab) = G(a) + G(b) - 1  (G instead
+of the usual capital Gamma). 
+
+     
+
+**** Vogel's harmonic complexity value -- can only be computed for a scale
+
+
+***** Method
+
+     Use Scala:
+
+     To see Vogel's harmonic complexity value for rational intervals, do SET
+ATTRIBUTE VOGEL. It is the sum of the constituent prime factors except 2,
+where each one is counted as many times as it occurs, added to the number of
+factors of 2. So the value for 7/6 = 7/3x2 is 7+3+1 = 11. To see Vogel's
+harmonic complexity value of a scale, do SHOW DATA. It is the arithmetic mean
+of Vogel's values for the integer multiples (all values under denominator 1)
+of each note. To see these integer multiples, do SET ATTRIBUTE MULTIPLE.
+
+A similar harmonic complexity value is Rudolf Wille's k value. To obtain it,
+the ratios are brought under denominator 1 (see SET ATTRIBUTE MULTIPLE),
+factors of 2 are removed and the maximum taken. Then k = (max - 1) / 2.
+To see Wille's k value of a scale, do SHOW DATA.
+
+
+**** Clarence Barlow's harmonicity value			    :ARCHIVE:
+
+     Results are not really suitable my purposes as dissonance degree values
+     - value for  9/8 is slightly higher than that for 5/4, and 6/5 is even lower
+     - all interesting values are very close to each other
+
+***** Results
+
+      Values taken from The Ratio Book, p. 7
+
+      1/1   | infinit 
+      16/15 | -0.076531
+      9/8   | 0.12
+      6/5   | -0.099338
+      5/4   | 0.119048
+      4/3   | -0.214286
+      45/32 | todo 
+      3/2   | 0.272727
+      8/5   | -0.106383
+      5/3   | 0.110294
+      16/9  | -0.107143
+      15/8  | 0.082873
+      2/1   | 1.0
+
+***** Method
+
+     Use Scala:
+
+     To see Clarence Barlow's harmonicity value for rational intervals do SET
+ATTRIBUTE HARMON. It depends on which and how many primes are in the ratio. 
+The 'indigestibility factor' of a positive number is defined as the sum of
+n * 2 * (p-1)^2 / p where p is one of the prime factors of the number and n
+its count of occurrence in the number. For example the indigestibility of 9
+is 2 * 2 * 2^2 / 3 = 5 1/3. It has the addition property I(ab) = I(a) + I(b).
+The harmonicity of a ratio p/q is defined as 
+sgn(I(p) - I(q)) / (I(p) + I(q)) where the sgn function is +1 when I(p) is
+larger than I(q) and -1 if I(q) is greater. p and q should have no factors
+in common.
+     
+The given attribute only gives Barlow's harmonicity if the prime weights have
+the initial values. Another value will be given if they are changed with the
+command SET HARMCONST.
+
+
+**** Combine measures of multiple intervals for chord
+
+     - compute values for each interval (all combinations)
+     - computer arithmetic mean (or another mean?) of these values -- I should not linearly combine them..
+
+       Problem: this approach does not take into account that intervals support each other, e.g., to perceive a certain root. The same intervals arrange in an otonal or utonal chord result in the same combined measure, but this is not true perceptionally.
+
+     This is all too simplistic -- I would ideally take the interaction of all partials into account. Hm..
+  
+     
+
+
+** TODO Extend my harmony model so that chord definitions can take intervals beyond an octave into account :SOON:
+
+   The notion of pitch classes (i.e. only intervals less than an octave) is clearly simplifying the true notion of chords perceptually
+
+   Examples:
+   - Many chords in the Scala database go beyond an octave
+   - In Jazz harmony, the "octavtion" of chords is important in the spacing 
+
+     
+*** Rethink my harmonic model -- the link between a chord def in a database and the arrangement of sim pitches in the score
+
+
+*** Refactor implementation of my harmony model
+
+*** Revise my chord databases
+
+    E.g., [[file:~/oz/music/Strasheela/strasheela/strasheela/contributions/anders/HarmonisedScore/source/databases/ScalaDB.oz]]
+
+
+** TODO Define melody score script (flexible CSP template)	       :NEXT:
+
+   See [[file:~/Compositions/Z-published/2011/Anders-TempzinerModulationen/WritingProcess/Strasheela-source/Score.oz::proc%20{Melody%20Args%20?MyScore}][file:~/Compositions/Z-published/2011/Anders-TempzinerModulationen/WritingProcess/Strasheela-source/Score.oz::proc {Melody Args ?MyScore}]]
+
+
+
+   - Simplify the application of arbitrary additional constraints
+
+   - Clean up code, e.g.,
+     - remove dependencies to composition specific things, like FokkerAndCarillo.richNote
+     - very simple default motifs (or no motifs at all)
+     - revise proc name (Melody to general)
+   
+   - Somewhat generalise that definition
+
+   - ? Simplify the definition of constraints applied with args (wrap all those if-statements into some abstraction)
+     -> consider removing that option completely
+
+
+** TODO Define counterpoint script with arbitrary number of parts      :NEXT:
+   
+   Define a top-level CSP template comparable to the top-level of "Orjan's library
+
+   Generalise [[file:~/Compositions/Z-published/2011/Anders-TempzinerModulationen/WritingProcess/Strasheela-source/Score.oz::fun%20{CP_3Part%20Args}][file:~/Compositions/Z-published/2011/Anders-TempzinerModulationen/WritingProcess/Strasheela-source/Score.oz::fun {CP_3Part Args}]]
+
+   Music representation is sim with arbitrary number of parts (def with cleaned-up melody script), seq of chords, scales, and measure objects
+
+   Allow that user controls end time, that can be before the last actual score object in internal music representation (consider to even stop the search when score is long enough)
+   Advantage: number of notes flexible (and difficult to use non-existing notes option is not needed any more). See [[file:~/oz/music/Strasheela/strasheela/strasheela/examples/Rhythm-Examples/RhythmicMotifsFitIntoMetricStructure.oz::%25%25%20For%20Hans%20Tutschku][file:~/oz/music/Strasheela/strasheela/strasheela/examples/Rhythm-Examples/RhythmicMotifsFitIntoMetricStructure.oz::%% For Hans Tutschku]]
+
+   - Simplify the application of arbitrary additional constraints
+
+   - Clean up code
+     - remove dependencies to composition specific things
+
+   - ? Simplify the definition of constraints applied with args (wrap all those if-statements into some abstraction)
+     -> consider removing that option completely
+   
+
+   - Document in CTT functor the more suitable option with user-defined endtime before actual end, and point to this script as an example
+
+
+** TODO Add support for grace notes				       :NEXT:
+
+   Duration value 0 
+   
+   Note: with option that score can last longer than the actually used score the non-existing notes option is not needed any more. See [[file:~/oz/music/Strasheela/strasheela/strasheela/examples/Rhythm-Examples/RhythmicMotifsFitIntoMetricStructure.oz::%25%25%20For%20Hans%20Tutschku][file:~/oz/music/Strasheela/strasheela/strasheela/examples/Rhythm-Examples/RhythmicMotifsFitIntoMetricStructure.oz::%% For Hans Tutschku]]
+   So, ignore CTT ...
+
+   
+   Consider defining in Measure.oz special accent constraint for notes with duration > 0 following 1 or more grace notes
+
+   NOTE: I need to revise all output procs (MIDI, fomus..) which currently ignore all notes with duration 0
+
+
+*** Old								    :ARCHIVE:
+
+   Consider some way to distinguish between option that notes are either grace notes or "not existing" (CTT), e.g.,
+   - Grace notes are always before some note with duration > 0, while "non-existing" notes are at the end of a container
+   - Def some global switch (in Init.oz) to generally enable or disable grace note support
+
+
+** Revise defaults for fomus 
+
+   By default properly output
+   - grace notes (note dur = 0, notated at "small" eighth notes with Fomus grace parameter, see http://fomus.sourceforge.net/doc.html/Grace-Notes-_0028File_0029.html#Grace-Notes-_0028File_0029)
+   - chord seqs
+   - scales
+   - measures 
+
+
 ** TODO [#A] Define interface to integrate Strasheela into OpenMusic or PWGL :NEXT:
 
    see [[file:~/oz/music/Strasheela/strasheela/strasheela/contributions/anders/PW_OM_Interface/Brainstorming.org]]
@@ -476,7 +733,7 @@ Google, e.g., pygments lexer for more examples..
    See file:~/PWGL-User/0-TorstensOtherStuff/StrasheelaInterface/ENP2Strasheela.lisp
 
 
-
+   
 ** TODO [#A] Define Strasheela score transformations (instead of plain generation as so far) :NEXT:
 
    Remember importance of transformations stressed by Tristan Murail in Interview in Hirs' OpenMusic book
@@ -492,6 +749,9 @@ Google, e.g., pygments lexer for more examples..
   TransformScore TransformScore2
   ? CopyScore CopyScore2
 
+  *I started to define these transformations in ENP after all*
+  See ENP doc and defs in Transformations section below
+
 *** Transformations
 
     Transformation examples 
@@ -499,6 +759,7 @@ Google, e.g., pygments lexer for more examples..
 **** TODO Code examples and collect them in Transformations.oz example file   
 
      see [[file:~/oz/music/Strasheela/strasheela/strasheela/examples/ScoreTransformations/ScoreTransformations.oz]]
+
 
 **** ? Refactor Score.transform (and method toInitRecord) 
 
@@ -516,6 +777,20 @@ Google, e.g., pygments lexer for more examples..
        - "Scatter" pitches, but keep the harmony by transposing individual notes or small groups of notes (e.g., non-harmonic notes and the consecutive harmonic note) by a random number of octaves up or down
 
        - ...
+
+
+***** ENP 
+
+#+begin_src lisp 
+  (def-plug-in transpose-score ((self score) :score-transformations)
+    (let ((interval (capi:prompt-for-number "Transposition interval:" :min 1 :initial-value 72)))
+      (do-notes (note self) 
+                (setf (midi note) (+ (midi note) interval)))))
+#+end_src
+
+      Stretch/shrink durations: use Kilian's examples in PWGL quantisation library KSQuant2 (?)
+      - involves quantisation
+      
 
 **** Transform (or remove) notes with a certain feature, e.g.,
 
@@ -540,6 +815,44 @@ Google, e.g., pygments lexer for more examples..
        - Remove notes that are below a certain pitch threshold (substitute with a rest) 
 
 
+***** ENP 
+
+      =enp-delete (<score> <object>)=
+      a method defined for different classes of <object>: note, voice, beat, measure, part, expression ...
+
+
+#+begin_src lisp 
+;; remove note without substituting
+  (def-plug-in delete-notes-below-60 ((self score) :score-transformations)
+    (do-notes (note self) 
+              (when (< (midi note) 60)
+                (enp-delete self note))))
+#+end_src      
+
+      
+      =(change-rtm-object <orig-object> is-rest)=
+      transforms an object (chord or note) into a rest 
+
+      NOTE: after calling this function call =(bring-up-to-date <score> 0.0)=
+
+      =(change-rtm-object <orig-object> is-tied)=
+      transforms an object (chord or note) into an object tied over to its previous object (test that there is a previous object)
+
+      =(change-rtm-object <orig-object> <integer>)=
+      transforms unit length an object (chord or note) (i.e., "sub-beats" of object)
+      I.e., makes it longer/shorter
+
+      
+#+begin_src lisp 
+  ;; change note/chord into a rest
+    (def-plug-in change-notes-below-60-into-rests ((self score) :score-transformations)
+      (do-chords (chord self) 
+                (when (some #'(lambda (note) (< (midi note) 60)) (notes chord))
+                  (change-rtm-object chord is-rest))))
+#+end_src      
+
+
+
 **** Todo: Transform all notes that meet certain test by same function, where one (or more) function argument(s) change(s) for different notes
 
      The changes are given as, e.g., 
@@ -554,15 +867,74 @@ Google, e.g., pygments lexer for more examples..
        - "Scatter" pitches, but keep the harmony by transposing individual notes or small groups of notes (e.g., non-harmonic notes and the consecutive harmonic note) by octaves up/down, so that the contour of local max/min is controlled by a BPF
        - Transform pitch of score controlled by a special BPF for each of its parts
 
+
 **** Todo: Transform all notes that meet certain test by same function, where one (or more) function argument(s) depend on the note's list of predecessors/successors (and possibly also some BPF etc as above)
 
        Concrete examples	  
        - Transpose all notes with a certain duration or more up so that they form local maxima (higher than both predecessor and successor)
 
-**** !! Todo: Transform (or remove) notes with a certain feature, where the feature test function expects an additional arg, e.g., given as BPF, list, pattern or function
+
+**** !! Todo: Transform (or remove) notes with a certain feature, where the feature test function expects an additional arg, e.g., given as BPF, list, PWGL circ-list, pattern or function
 
        Concrete examples: 
        - Notes that exceed a certain duration are somehow transformed, but the duration threshold changes over time
+
+	 
+***** ENP
+      
+      =(ccl::e <object> <expression-keyword> &rest)= 
+      <object> is chord or note
+      <expression-keyword> is, e.g., :accent, :slur, ... (can be any expression defined in ENP doc Appendix E)
+
+      returns true if <object> has given type of expression
+
+      Example
+      =(ccl:e mynote :accent)=
+
+
+      =(ccl::e <object> :bpf :id <bpf-id-string>)= 
+      
+      Returns true if there is a BPF "bpf name" attached to object
+
+ 
+      =(ccl::e <object> :bpf :sample :at (<object> | <time in sec>) [:id <bpf-id-string>])= 
+      <object> is chord or note
+      
+
+      Example 
+      =(ccl::e my-note :bpf :sample :at my-note :id "bpf name")=
+
+      returns BPF value of BPF "bpf name" at start time of my-note
+
+
+****** ENP plug-in
+
+#+begin_src lisp 
+  (def-plug-in transpose-notes-below-60-with-BPF ((self score) :score-transformations)
+    (do-notes (my-note self) 
+              ;; no BPF ID given -- uses the first BPF defined for this note
+              (let ((interval (ccl::e my-note :bpf :sample :at my-note)))
+                (setf (midi note) (+ (midi note) interval)))))
+#+end_src
+
+****** ! How to add BPF into score
+
+       - Select chords (not notes) over which BPF should be situated
+       - Filter chords out: press c
+       - Add expression: press e
+       - Type BPF, press return
+       - Double-click BPF and then double-click points to add
+       - Finishing: press ENTER (not return)
+
+       - Naming BPF: control-click ...
+       - You can add BPFs 
+	 - make different BPFs active: short cut TAB
+	 - show multiple lanes: short cut s (NOTE: do not edit BPFs in that mode)
+	 
+	
+       Note: you can set BPF properties etc. in context menu
+
+
 
 
 **** Todo: Other rough ideas
@@ -579,6 +951,7 @@ Google, e.g., pygments lexer for more examples..
      - Some interpolation
      - Some mixing (how? control different "levels", i.e. how much they contribute to final result)
      - Other sound processing inspired ideas: ring modulation, FM (?)
+
 
 
 
@@ -659,20 +1032,6 @@ Best, Hans
    - Make underlying harmony to add an extra arg (by default harmony will be computed from scratch, but (partially) determined harmony can also be given by users)
 
 
-** TODO Add support for grace notes				       :NEXT:
-
-   Duration value 0 
-
-   Consider some way to distinguish between option that notes are either grace notes or "not existing" (CTT), e.g.,
-   - Grace notes are always before some note with duration > 0, while "non-existing" notes are at the end of a container
-   - Def some global switch (in Init.oz) to generally enable or disable grace note support
-
-   Grace notes are then automatically recognised by Fomus and notated accordingly
-
-   Consider defining in Measure.oz special accent constraint for notes with duration > 0 following 1 or more grace notes
-   
-
-
 ** DONE [#A] Add =articulation= parameter (FD) per note	       :NEXT:ARCHIVE:
    CLOSED: [2012-06-06 Wed 01:08]
    
@@ -717,6 +1076,8 @@ Best, Hans
 
    See Fomus supported marks at http://fomus.sourceforge.net/doc.html/Marks.html#Marks
 
+   
+   Also fine-tune notation of grace notes with these marks (duration of grace note, whether or not it is slashed, and allow for grace note chords). See also http://fomus.sourceforge.net/doc.html/Grace-Notes-_0028File_0029.html#Grace-Notes-_0028File_0029
 
 
 ** TODO Add constrainable =instruments= FS per note 		     :NEXT:
@@ -745,6 +1106,11 @@ Best, Hans
 
 
    - Check whether notation of dynamics still works which changing instrumentation within a single "voice" (seq of notes)
+
+     
+*** Problem: I better use FD ints instead of FS, because distribution of FS vars separate
+
+    I could instead have several FD ints... 
 
 
 ** TODO Somehow add tempo statement to score 			     :NEXT:
@@ -780,20 +1146,6 @@ Best, Hans
      - If I generalise these defs, how should I handle simultaneous containers? Only access predecessors of a first object in a container if the container of the container is a sequential? But these are positional accessors, and I should not mix in temporal concerns..
 
   Hm...     
-
-
-** DONE Note amplitudes -> music notation with Fomus		       :NEXT:
-   CLOSED: [2012-06-05 Tue 17:51]
-
-   [This should work already, just check]
-   
-   Just make sure that 
-
-   - If same amp value is repeated over several notes within a voice (seq of notes) then [static] dynamic values (p, f, ff) are only printed once
-   - [Static] dynamic values are only printed at local max and min within such change of amp values
-   - OK If amp values change progressively within a voice (seq of notes) then cresc. or dim. hairpins should be created
-
-   Create example file demonstrating these features
 
 
 
@@ -861,6 +1213,14 @@ Best, Hans
    - Pairs of chords/scale objects: add inversion constraint 
    - Make sure that chord/scale databases always contain an inversion of each chord/scale in database
    - Consider to (automatically) add to chord/scale database a feature with the index of the inversion of the chord/scale in question
+
+
+** TODO Simplify modulation: apply modulation constraints automatically :NEXT:
+
+   Traverse seq of scale objects. For every pair of scales
+   - get modulation chord (1st of sim chords of 2nd scale)
+   - get the predecessors of this chord -- no depends on arg to modulation constraint
+     - these will be the neutral chords
 
 
 ** User-Guided search with percentage of previous solution
@@ -1163,6 +1523,8 @@ end
      - Problem: how to formalise this score context?
        for a pragmatic solution see [[*%5B#A%5D%20Has%20Anacrusis][Has Anacrusis]]
 
+
+**** ? Longest note within a phrase (surrounded by rests)
 
 **** ?? Starts with chord/scale change
 
@@ -2729,6 +3091,18 @@ Instead of applying a texture constraint to time windows, for now consider using
    add this functionality somehow to Pattern.useMotifs
 
 
+** Pattern constraint: {Similar Xs Ys}
+
+   Similar constraints the lists Xs and Ys (lists of FD ints) to be similar to each other
+   
+   Possible approach: edit distance, http://en.wikipedia.org/wiki/Edit_distance 
+
+   Application idea for motif similarity
+   - Def a pattern motif database with, say, 8 motifs
+   - Def motifs 1 and 2 by hand
+   - Constrain motifs 3, 4, 5 to be similar to motif 1 and motifs 6, 7, and 8 to be similar to motif 2 -- but leave these motifs otherwise undetermined 
+
+
 ** Regular Temperament as pitch (pitch class) representation
 
 *** TODO 
@@ -3752,6 +4126,7 @@ it always equal to 2, that's a pretty good choice.
 
     Approach: Change this in Fenv.itemFenvsToMidiCC (i.e. check when Controller==pitchbend and then optionally shift that fenv depending on some new arg to Fenv.itemFenvsToMidiCC), and then also change all defs using it (only defs in Fenv)
 
+
 ** TODO Fenv.renderAndPlayMidi: add Fenv controlling articulation (note length)
    
    ?? Fenv value is note duration factor 
@@ -3760,6 +4135,7 @@ it always equal to 2, that's a pretty good choice.
    Or is addition better than multiplication
    I feel multiplication is more flexible, but sometimes I may want to add instead
    ?? can I somehow generise and allow for both options?
+
 
 ** MIDI output: use ports/tracks
 
@@ -3802,11 +4178,72 @@ it always equal to 2, that's a pretty good choice.
 *** TODO Check my ideas out with simple motif prototype (e.g., with fenvs at different levels) and motif instance args 
 
      See [[file:MidiOut_toTassman/MusicRepresentationForTassmanPiece.org::*Prototype%20Motif%20Variation][file:MidiOut_toTassman/MusicRepresentationForTassmanPiece.org::*Prototype Motif Variation]]
-     
 
-** ?? Lilypond: output seq (of seq ...) of sims with multiple staffs 
 
-   Do this instead for fomus?
+** TODO Get Oz syntax highlighting at GitHub
+
+   Write Oz lexer for Pygments (using Python)
+
+   *!! Pieter Belmans (pbelmans) used Strasheela and Oz before and has experience with Pygments !!*
+   He and may want to help me write a lexer for Oz
+   !! A lexer definition by pbelmans (Pieter Belmans) for the GAP language
+   http://pbelmans.wordpress.com/2012/04/20/a-pygments-lexer-for-gap/
+   https://github.com/pbelmans/gap-pygments-lexer
+   (Oz/Strasheela related: http://pbelmans.wordpress.com/category/music/) 
+
+
+   Doc: Pygments Introduction and Quickstart
+   http://pygments.org/docs/quickstart/
+
+   Doc: Write your own lexer
+   http://pygments.org/docs/lexerdevelopment/
+
+   Available lexers
+   http://pygments.org/docs/lexers/
+
+   Pygments development and source at bitbucket
+   https://bitbucket.org/birkenfeld/pygments-main/src
+   They have several open pull requests including some lexers 
+   
+   Full lexers definition sources in 
+   https://bitbucket.org/birkenfeld/pygments-main/src/5cc94956e233/pygments/lexers
+
+
+*** First step: define Lexer that simply highlights Oz keywords 
+
+    I need some full and simple template, then this is actually very easy to define
+    -> No, they want lexers that highlight the full syntax, but that should be possible too -- see Roy book, p. 835ff for Oz syntax details (not very much..)
+    
+    *List of Oz keywords from van Roy book, p. 841 (lated PDF draft)*
+
+andthen default
+false feat finally for from fun functor if import in
+lazy
+local
+lock return meth	self mod	skip not	then of	thread or 	true orelse	try prepare 	unit proc
+prop raise require 
+at attr break case catch choice class collect cond  continue declare
+define dis  div do else elsecase  elseif elseof  end
+export fail
+
+
+*** Consider later to refine/extend that lexer
+
+*** Make my Lexer available for the Pygments team and send them pull request
+
+    Add an example file to tests/examplefiles that exercises as much of the syntax as possible
+    (And please don't commit on named branches. But I can fix that on my end as well.)
+
+
+    Note that it can take several weeks until they react (see http://groups.google.com/group/pocoo-libs/browse_thread/thread/fbf52b3da5759d00?pli=1)
+
+Example lexer pull request (with some minor errors)
+https://bitbucket.org/birkenfeld/pygments-main/pull-request/61/
+
+Google, e.g., pygments lexer for more examples..
+
+
+*** Notify GitHub about new Oz lexer
 
 
 

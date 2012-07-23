@@ -5,8 +5,11 @@
 
   - Main additions and changes 
      - Added some auto-documentation to a range of definitions (e.g., functions defined with Score.makeConstructor and Score.defSubscript, but also score classes): Score.getDefaults returns a record with all their creation arguments and default values. 
+     - Added extensive chord and scale database for harmonic CSPs in 12-tone equal temperament. This database also includes a sonance (dissonance degree) measure for each chord in its database.
+    -  [Added/revised] output to ENP, the music representation of [[http://www2.siba.fi/PWGL/][PWGL]] 
 
   - Main documentation additions
+     - Added [[../examples/Rhythm-Examples/RhythmicMotifsFitIntoMetricStructure.oz][rhythm CSP example]]
 
   - Minor additions
     - Added a parameter articulation to Score.note, both playback and notation output supported

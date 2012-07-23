@@ -1161,6 +1161,42 @@ git push
   :END:
 
 
+* DONE Note amplitudes -> music notation with Fomus		       :NEXT:
+  CLOSED: [2012-06-05 Tue 17:51]
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2012-07-18 Wed 16:49
+  :ARCHIVE_FILE: ~/oz/music/Strasheela/strasheela/strasheela/others/TODO/Strasheela-TODO.org
+  :ARCHIVE_OLPATH: Strasheela design and development
+  :ARCHIVE_CATEGORY: Strasheela
+  :ARCHIVE_TODO: DONE
+  :ARCHIVE_ITAGS: STRASHEELA
+  :END:
+
+  [This should work already, just check]
+  
+  Just make sure that 
+
+  - If same amp value is repeated over several notes within a voice (seq of notes) then [static] dynamic values (p, f, ff) are only printed once
+  - [Static] dynamic values are only printed at local max and min within such change of amp values
+  - OK If amp values change progressively within a voice (seq of notes) then cresc. or dim. hairpins should be created
+
+  Create example file demonstrating these features
+     
+
+* ?? Lilypond: output seq (of seq ...) of sims with multiple staffs
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2012-07-18 Wed 17:02
+  :ARCHIVE_FILE: ~/oz/music/Strasheela/strasheela/strasheela/others/TODO/Strasheela-TODO.org
+  :ARCHIVE_OLPATH: Strasheela design and development
+  :ARCHIVE_CATEGORY: Strasheela
+  :ARCHIVE_ITAGS: STRASHEELA
+  :END: 
+
+  Do this instead for fomus?
+
+
+
+
 
 
 
