@@ -3,6 +3,17 @@
 HS.dbs.default.db
 
 %%
+HS.dbs.scala.db
+
+HS.dbs.scala.db.chordDB
+
+{Width HS.dbs.scala.db.chordDB}
+
+%% after starting Oz -- computing of of chord sonance values takes only a few msecs
+{GUtils.timeSpend proc {$} _ = HS.dbs.scala.db.chordDB end}
+
+
+%%
 HS.dbs.jazz.burbatVierklaenge
 
 
