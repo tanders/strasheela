@@ -6,6 +6,7 @@ functor
 import
 
    Default at 'Default.ozf'
+   Scala at 'Scala.ozf'
    Jazz at 'Jazz.ozf'
 
    Partch at 'Partch.ozf'
@@ -19,6 +20,7 @@ import
 export
    Default
    Jazz
+   Scala
    
    Partch
    Johnston
