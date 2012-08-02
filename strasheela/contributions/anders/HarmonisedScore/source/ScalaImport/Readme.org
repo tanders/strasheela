@@ -1,0 +1,7 @@
+This folder contains an unfinished attempt to write a parser for the chord and scale definitions of the Scala software. Gump has been used to write this parser.
+
+The ScalaScanner.oz should be finished (largely), but the ScalaParser.oz is unfinished and contains severe bugs. My main problem was to understand the Gump syntax for the parser definition -- the Gump manual is hard to digest.
+
+So, instead I now translated parts of the Scala chord and scale definitions manually into Strasheela HS databases. 
+ 
+

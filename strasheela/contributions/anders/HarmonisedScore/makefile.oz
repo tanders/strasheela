@@ -12,7 +12,12 @@
 %%% *************************************************************
 
 makefile(
-   lib: ['HarmonisedScore.ozf']
+   lib: ['HarmonisedScore.ozf'
+	 % 'source/ScalaImport/ScalaScanner.so'
+	 % 'source/ScalaImport/ScalaScanner.ozf'
+	 % 'source/ScalaImport/ScalaParser.ozf'
+	]
+   % rules: o('source/ScalaImport/ScalaScanner.so': ozg('source/ScalaImport/ScalaScanner.ozf'))
    uri: 'x-ozlib://anders/strasheela/HarmonisedScore'
    mogul: 'mogul:/anders/strasheela/HarmonisedScore'
    author: 'Torsten Anders')
