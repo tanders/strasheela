@@ -11,6 +11,7 @@
 *.simplified
 *.l
 *.o
+*.C
 
 # Music software temp output #
 ############
