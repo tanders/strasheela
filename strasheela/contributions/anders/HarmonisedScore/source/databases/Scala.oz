@@ -296,58 +296,58 @@ define
 	       chord(pitchClasses:{Pattern.dxsToXs [4 3 3 4] 0} % NOTE: PCs outside octave
 		     roots:[0]
 		     comment:unit(name:['Dominant Ninth' '9']))
-
-	       % chord(pitchClasses:{Pattern.dxsToXs [] 0}
-	       % 	     roots:[0]
-	       % 	     comment:unit(name:['' '']))
-	       % chord(pitchClasses:{Pattern.dxsToXs [] 0}
-	       % 	     roots:[0]
-	       % 	     comment:unit(name:['' '']))
-	       % chord(pitchClasses:{Pattern.dxsToXs [] 0}
-	       % 	     roots:[0]
-	       % 	     comment:unit(name:['' '']))
-	       % chord(pitchClasses:{Pattern.dxsToXs [] 0}
-	       % 	     roots:[0]
-	       % 	     comment:unit(name:['' '']))
-	       % chord(pitchClasses:{Pattern.dxsToXs [] 0}
-	       % 	     roots:[0]
-	       % 	     comment:unit(name:['' '']))
-	       % chord(pitchClasses:{Pattern.dxsToXs [] 0}
-	       % 	     roots:[0]
-	       % 	     comment:unit(name:['' '']))
-	       % chord(pitchClasses:{Pattern.dxsToXs [] 0}
-	       % 	     roots:[0]
-	       % 	     comment:unit(name:['' '']))
-	       % chord(pitchClasses:{Pattern.dxsToXs [] 0}
-	       % 	     roots:[0]
-	       % 	     comment:unit(name:['' '']))
-	       % chord(pitchClasses:{Pattern.dxsToXs [] 0}
-	       % 	     roots:[0]
-	       % 	     comment:unit(name:['' '']))
-	       % chord(pitchClasses:{Pattern.dxsToXs [] 0}
-	       % 	     roots:[0]
-	       % 	     comment:unit(name:['' '']))
-	       % chord(pitchClasses:{Pattern.dxsToXs [] 0}
-	       % 	     roots:[0]
-	       % 	     comment:unit(name:['' '']))
-	       % chord(pitchClasses:{Pattern.dxsToXs [] 0}
-	       % 	     roots:[0]
-	       % 	     comment:unit(name:['' '']))
-	       % chord(pitchClasses:{Pattern.dxsToXs [] 0}
-	       % 	     roots:[0]
-	       % 	     comment:unit(name:['' '']))
-	       % chord(pitchClasses:{Pattern.dxsToXs [] 0}
-	       % 	     roots:[0]
-	       % 	     comment:unit(name:['' '']))
-	       % chord(pitchClasses:{Pattern.dxsToXs [] 0}
-	       % 	     roots:[0]
-	       % 	     comment:unit(name:['' '']))
-	       % chord(pitchClasses:{Pattern.dxsToXs [] 0}
-	       % 	     roots:[0]
-	       % 	     comment:unit(name:['' '']))
-	       % chord(pitchClasses:{Pattern.dxsToXs [] 0}
-	       % 	     roots:[0]
-	       % 	     comment:unit(name:['' '']))
+	       chord(pitchClasses:{Pattern.dxsToXs [4 3 3 4 3] 0} % NOTE: PCs outside octave
+	       	     roots:[0]
+	       	     comment:unit(name:['Dominant Eleventh' '11']))
+	       chord(pitchClasses:{Pattern.dxsToXs [4 3 3 4 3 4] 0}
+	       	     roots:[0]
+	       	     comment:unit(name:['Dominant Thirteenth' '13']))
+	       chord(pitchClasses:{Pattern.dxsToXs [4 3 3 4 4] 0}
+	       	     roots:[0]
+	       	     comment:unit(name:['Dominant Ninth Augmented Eleventh' '9#11']))
+	       chord(pitchClasses:{Pattern.dxsToXs [4 3 3 4 4 3] 0}
+	       	     roots:[0]
+	       	     comment:unit(name:['Augmented Thirteenth' '13#11' '7#11' 'Lydian Dominant']))
+	       chord(pitchClasses:{Pattern.dxsToXs [4 3 3 4 4 3 4] 0}
+	       	     roots:[0]
+	       	     comment:unit(name:['Augmented Fifteenth' '#15']))
+	       chord(pitchClasses:{Pattern.dxsToXs [4 3 3 5] 0}
+	       	     roots:[0]
+	       	     comment:unit(name:['Dominant Augmented Ninth' '7#9' 'Altered Dominant']))
+	       chord(pitchClasses:{Pattern.dxsToXs [4 3 3 7] 0}
+	       	     roots:[0]
+	       	     comment:unit(name:['Dominant Seventh Added Eleventh' '7/11']))
+	       chord(pitchClasses:{Pattern.dxsToXs [4 3 3 7 4] 0}
+	       	     roots:[0]
+	       	     comment:unit(name:['11/7/6']))
+	       chord(pitchClasses:{Pattern.dxsToXs [4 3 3 11] 0}
+	       	     roots:[0]
+	       	     comment:unit(name:['Dominant Seventh Added Thirteenth' '7/13']))
+	       chord(pitchClasses:{Pattern.dxsToXs [4 3 4] 0}
+	       	     roots:[0]
+	       	     comment:unit(name:['Major Seventh' 'maj7' '*']))
+	       chord(pitchClasses:{Pattern.dxsToXs [4 3 4 3] 0}
+	       	     roots:[0]
+	       	     comment:unit(name:['Major Ninth' 'maj9']))
+	       chord(pitchClasses:{Pattern.dxsToXs [4 3 4 3 3] 0}
+	       	     roots:[0]
+	       	     comment:unit(name:['Major Eleventh' 'maj11']))
+	       chord(pitchClasses:{Pattern.dxsToXs [4 3 4 3 3 4] 0}
+	       	     roots:[0]
+	       	     comment:unit(name:['Major Thirteenth' 'maj13']))
+	       chord(pitchClasses:{Pattern.dxsToXs [4 3 4 3 4] 0}
+	       	     roots:[0]
+		     comment:unit(name:['Lydian' '*#11']))
+	       %% NOTE: name Lydian and '*#11' for multiple chord (one above and below this line)
+	       chord(pitchClasses:{Pattern.dxsToXs [4 3 4 7] 0}
+	       	     roots:[0]
+	       	     comment:unit(name:['Lydian' '*#11']))
+	       chord(pitchClasses:{Pattern.dxsToXs [4 3 7] 0}
+	       	     roots:[0]
+	       	     comment:unit(name:['Added Ninth' 'add9']))
+	       chord(pitchClasses:{Pattern.dxsToXs [4 4] 0}
+	       	     roots:[0]
+	       	     comment:unit(name:['Augmented' 'aug' '#5' 'Major Trine']))
 	       % chord(pitchClasses:{Pattern.dxsToXs [] 0}
 	       % 	     roots:[0]
 	       % 	     comment:unit(name:['' '']))
