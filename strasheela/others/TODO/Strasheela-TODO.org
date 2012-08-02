@@ -380,6 +380,23 @@ git svn clone http://strasheela.svn.sourceforge.net/svnroot/strasheela strasheel
        (last release before these changes)
 
 
+** TODO Finish Scala chord/scale parser			       :NEXT:ARCHIVE:
+
+   
+   BUG:
+    - # and * are unrecognised characters. Seemingly these are special regular expressions chars, but how to deal with that?
+     ... delay further development until I have network access again
+
+      [[file:~/oz/music/Strasheela/strasheela/strasheela/contributions/anders/HarmonisedScore/source/ScalaImport/test.oz::%25%25%20Test%20scanner][file:~/oz/music/Strasheela/strasheela/strasheela/contributions/anders/HarmonisedScore/source/ScalaImport/test.oz::%% Test scanner]]
+
+   [[file:~/oz/music/Strasheela/strasheela/strasheela/contributions/anders/HarmonisedScore/source/ScalaImport/ScalaScanner.oz::\gumpscannerprefix%20'scala'][file:~/oz/music/Strasheela/strasheela/strasheela/contributions/anders/HarmonisedScore/source/ScalaImport/ScalaScanner.oz::\gumpscannerprefix 'scala']]
+
+   [[file:~/oz/music/Strasheela/strasheela/strasheela/contributions/anders/HarmonisedScore/source/ScalaImport/ScalaParser.oz::%25%25%25%20-*-oz-gump-*-][file:~/oz/music/Strasheela/strasheela/strasheela/contributions/anders/HarmonisedScore/source/ScalaImport/ScalaParser.oz::%%% -*-oz-gump-*-]]
+   
+   [[file:~/oz/music/Strasheela/strasheela/strasheela/contributions/anders/HarmonisedScore/source/ScalaImport/ScalaChords-12ET.par]]
+
+
+
 ** TODO Finish chord and scale databases for 12-TET		       :NEXT:
 
    Database file [[file:~/oz/music/Strasheela/strasheela/strasheela/contributions/anders/HarmonisedScore/source/databases/Scala.oz]]
