@@ -2,8 +2,8 @@
 \switch +gump
 
 %%
-%% NB: this scanner works only for output of dumpOSC, no some other
-%% textual representation of OSC
+%% NB: this scanner works only for output of dumpOSC, but not for other
+%% textual representations of OSC
 %%
 
 functor
