@@ -547,9 +547,9 @@ define
 	    end}
 	   ComparisonFeats}}
       end
-      /** %% [Aux def] Expects a chord or scale declaration, and in case it contains symbolic notes names, these are replaced by their corresponding ET pitch class.  
+      /** %% [Aux def] Expects a chord or scale declaration, and in case it contains symbolic notes names, then these are replaced by their corresponding ET pitch class.  
       %% */
-      fun {ToStandardDeclaration Decl SymbolToPc}
+      fun {SymbolicNoteNamesToPCsInDBEntry Decl SymbolToPc}
 	 /** %% Only transform atoms (e.g. 'C#'), but leave integers (PCs) and records (ratios, e.g., 1#1) untouched.
 	 %% */
 	 fun {Transform MyPitch}
@@ -583,6 +583,9 @@ define
       %% 'octaveDomain' (default 0#9)
       %% 
       %% */
+      %%
+      %% TODO:
+      %% - Consider integrating TransposeSpecTo0 from contributions/anders/HarmonisedScore/source/databases/Scala.oz. 
       fun {MakeFullDB Args}
 	 Default = unit(pitchesPerOctave: 12
 			accidentalOffset: 2
@@ -601,14 +604,16 @@ define
 	 unit(
 	    chordDB:{FilterDB {Record.map As.chords
 			       fun {$ X}
-				  {HS.db.ratiosInDBEntryToPCs {ToStandardDeclaration X As.symbolToPc}
+				  {HS.db.ratiosInDBEntryToPCs {SymbolicNoteNamesToPCsInDBEntry
+							       X As.symbolToPc}
 				   As.pitchesPerOctave}
 			       end}
 		     {Append [pitchClasses roots comment] As.chordFeatures}
 		     [pitchClasses roots]}
 	    scaleDB:{FilterDB {Record.map As.scales 
 			       fun {$ X}
-				  {HS.db.ratiosInDBEntryToPCs {ToStandardDeclaration X As.symbolToPc}
+				  {HS.db.ratiosInDBEntryToPCs {SymbolicNoteNamesToPCsInDBEntry
+							       X As.symbolToPc}
 				   As.pitchesPerOctave}
 			       end}
 		     {Append [pitchClasses roots comment] As.scaleFeatures}
