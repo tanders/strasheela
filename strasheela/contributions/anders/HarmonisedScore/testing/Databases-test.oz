@@ -7,6 +7,28 @@ HS.dbs.scala.db
 
 HS.dbs.scala.db.chordDB
 
+
+{HS.db.setDB HS.dbs.scala.db}
+
+%% extract selected chords (after setting DB!)
+{Map
+ % ['Major Triad' 'Minor Triad' 'Dominant Seventh' 'Diminished' 'Semitone Trichord']
+ ['Overtone' 'Tristan Chord']
+ % ['Undertone']
+ fun {$ ChordLabel}
+   HS.dbs.scala.db.chordDB.{HS.db.getChordIndex ChordLabel}
+ end}
+
+{HS.db.getChordIndex 'Tristan Chord'}
+%% !! missing
+{HS.db.getChordIndex 'Undertone'}
+
+
+% %% for more convenient eye-balling of data..
+% {Out.writeToFile {Out.recordToVS HS.dbs.scala.db.chordDB}
+%  unit(path: '~/tmp/chords.oz')}
+% {VirtualString.is {Out.recordToVS HS.dbs.scala.db.chordDB.1.comment}}
+
 {Width HS.dbs.scala.db.chordDB}
 
 %% after starting Oz -- computing of of chord sonance values takes only a few msecs
