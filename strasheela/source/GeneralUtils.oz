@@ -37,6 +37,7 @@ export
    ReifiedDistance
    
    Percent
+   HarmonicMean
    
    Identity
    Random
@@ -225,6 +226,21 @@ define
       Aux =: N * 100
       Result = {FD.divI Aux NoAll}
    end
+
+
+   /** %% Computes the harmonic mean (a float) of the values in Xs (a list of ints or floats). The harmonic mean is better suitable than the arithmetic mean for cases where an average of ratios is required. However, it has a tendency towards the smallest elements (large outliers have little, small outliers have large impact). 
+   %% */
+   fun {HarmonicMean Xs}
+      {IntToFloat {Length Xs}}  
+      / {LUtils.accum {Map Xs fun {$ X}
+				 if {IsInt X}
+				 then 1.0 / {IntToFloat X}
+				 else 1.0 / X
+				 end
+			      end}
+	 Number.'+'}
+   end
+   
 
    /** %% The Identity function returns its argument.
    %% */
