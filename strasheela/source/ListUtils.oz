@@ -25,7 +25,7 @@ export
    CollectN RepeatN
    Contains
    Position Positions FindPosition FindPositions RemovePosition ReplacePosition
-   RemoveDuplicates
+   RemoveDuplicates RemoveDuplicates2
    Remove
    Find
    FindBest
@@ -172,11 +172,17 @@ define
    /** %% Removes any element in Xs (a list of arbitrary data) which occured already more early in X. Elements are compared with ==.
    %% */
    fun {RemoveDuplicates Xs}
+      {RemoveDuplicates2 Xs proc {$ X} skip end}
+   end
+
+   /** %% Generalised version of RemoveDuplicates. To all elements of Xs that are removed the unary procedure P is individually applied (e.g., to print a warning).
+   %% */
+   fun {RemoveDuplicates2 Xs P}
       fun {Aux Xs Accum}
 	 case Xs of nil then {Reverse Accum}
 	 else 
 	    if {Member Xs.1 Accum}
-	    then {Aux Xs.2 Accum}
+	    then {P Xs.1} {Aux Xs.2 Accum}
 	    else {Aux Xs.2 Xs.1|Accum}
 	    end
 	 end
