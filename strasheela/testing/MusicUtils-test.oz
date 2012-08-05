@@ -14,6 +14,8 @@
 
 {MUtils.ratioToKeynumInterval 3#2 1200.0} % 701.955
 
+{MUtils.ratioToKeynumInterval 11#8 1200.0} 
+
 {MUtils.keynumToPC 62.0 12.0} % 2.0
 
 {MUtils.keynumToPC 62.5 12.0} % 2.5

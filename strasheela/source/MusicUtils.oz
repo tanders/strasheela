@@ -144,7 +144,7 @@ define
    end
    
    /** %% Transforms Ratio (either a float or a fraction specification in the form <Int>#<Int>) into the corresponding keynumber interval in an equally tempered scale with KeysPerOctave (a float) keys per octave. Returns a float.
-   %% For example, {RatioToKeynumInteval 1.0 12.0}=0.0 or {RatioToKeynum 1.5 12.0}=7.01955). 
+   %% For example, {RatioToKeynumInteval 1.0 12.0}=0.0 or {RatioToKeynumInterval 1.5 12.0}=7.01955). 
    %% NB: The term Keynum here is not limited to a MIDI keynumber but denotes a keynumber in any equidistant tuning. For instance, if KeysPerOctave=1200.0 then Keynum denotes cent values.
    %% */ 
    fun {RatioToKeynumInterval Ratio KeysPerOctave}
