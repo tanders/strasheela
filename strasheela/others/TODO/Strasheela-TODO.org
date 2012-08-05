@@ -103,6 +103,12 @@
 
 * Strasheela Bugs
 
+** Out.recordToVS does not always return VS
+
+The following results in false
+
+{VirtualString.is {Out.recordToVS HS.dbs.scala.db.chordDB}}
+
 ** Bugs in procs for tranversing partially determined scores, e.g., SMapping.mapSimultaneousPairs and SMapping.forSimultaneousPairs
 
 ** TODO !! Pattern.useMotifs: arg 'workOutEven' is ignored (behaves as if always set to true)
@@ -628,6 +634,17 @@ command SET HARMCONST.
      This is all too simplistic -- I would ideally take the interaction of all partials into account. Hm..
   
      
+
+
+** TODO Extend harmony model by support for voicing (pitch class octaves) :SOON:
+
+   Order / "octavation" of pitch classes in chord important and currently ignored by my harmony model 
+
+   Extension (not replacement) of existing model would add additional constraints depending on harmony declarations how pitch classes should be arranged in octaves, e.g.,
+   - Require PC1 to be octave above PC2
+   - Require PC3 to be doubled in octave 1 and 2 above
+
+   For example of such harmonies in database see [[file:~/oz/music/Strasheela/strasheela/strasheela/contributions/anders/HarmonisedScore/source/databases/Scala.oz::Chords%20%3D%20chords(][file:~/oz/music/Strasheela/strasheela/strasheela/contributions/anders/HarmonisedScore/source/databases/Scala.oz::Chords = chords(]]
 
 
 ** TODO Extend my harmony model so that chord definitions can take intervals beyond an octave into account :SOON:
