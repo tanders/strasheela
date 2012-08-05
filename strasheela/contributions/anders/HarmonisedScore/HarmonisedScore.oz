@@ -183,6 +183,10 @@ define
       if {GUtils.isAtom PC} then 
 	 {{MakeTranslation pc} PC}
       elseif {IsInt PC} then PC
+      else
+	 {Exception.raiseError
+	  strasheela(failedRequirement PC "Neither atom not int")}
+	 nil % never returned
       end
    end
 	   
