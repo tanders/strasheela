@@ -15,6 +15,7 @@
 
 %%
 %%  TODO:
+%% - !! Add missing 12-TET scales from Scala file (modes in Scala terminology)
 %% - !! Revise removal of dublicate entries
 %%   - if order of PCs is different then entries are not removed -- sort PCs at least for comparing
 %%   - if entries only differ in root (e.g., difference between major chord and sixth chord) then entries not removed
@@ -22,9 +23,7 @@
 %% - complete functor documentation:
 %%   - document analytical features concerning sonance and harmonic complexity
 %%
-%% - !! transform note names into PCs and transpose chords so that root is 0
 %% - ?? JI chords in Scala database
-%% - Add 12-TET database scales (modes in Scala terminology)
 %%
 
 %%
@@ -525,10 +524,7 @@ define
 	       	     comment:unit(name:['Accord en quartes']))
 	       
 	       )
-
-   %%
-   %% TODO: remove PCs 12 from scale pitchClasses (programmatically, by processing all scales, or by replacing Pattern.dxsToXs with a slightly different def)
-   %%
+   
    
    Scales = scales(scale(pitchClasses:{Pattern.dxsToXs [5 7] 0}
 			 roots:[0]
@@ -651,6 +647,10 @@ define
 			 roots:[0]
 			 comment:unit(name:['Balinese Pelog' 'Madenda Modern' 'Phrygian Pentatonic' 'Raga Bhupalam' 'Bhupala Todi' 'Bibhas' 'Tezeta Minor: Ethiopia']))
 
+		   %%
+		   %% TODO: add many missing scales
+		   %%
+		   
 		   % scale(pitchClasses:{Pattern.dxsToXs [] 0}
 		   % 	 roots:[0]
 		   % 	 comment:unit(name:['' '']))
@@ -985,12 +985,6 @@ define
 		   % 	 comment:unit(name:['' '']))
 		  
 		   
-
-		   %%
-		   %% TODO: add all scales between, 200-300 scales (?)
-		   %%
-
-
 		   
 		   scale(pitchClasses:{Pattern.dxsToXs [1 3 1 1 1 2 2 1] 0}
 			 roots:[0]
@@ -1175,15 +1169,9 @@ define
 		   scale(pitchClasses:{Pattern.dxsToXs [1 1 1 1 1 1 1 1 1 1 1 1] 0}
 			 roots:[0]
 			 comment:unit(name:['Twelve-tone Chromatic']))
-
-		   
-
-		   % scale(pitchClasses:[0 2 4 5 7 9 11]
-		   % 	 roots:[0]
-		   % 	 comment:'major')
-		   
 		  )
 
+   
    Intervals = intervals(interval(interval:0
 				  dissonanceDegree:0
 				  comment: unit(name:['Unison' 'unison']))
