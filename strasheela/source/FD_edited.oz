@@ -224,13 +224,19 @@ define
 			{Proc}
 			{Space.waitStable}
 		     end
-		     %% Debugging output
-		     if {HasFeature RawSpec trace} then
-			{ShowTracing E D} 
-		     end
 		     %% Choice point
-		     choice {FD.int D        V}
-		     []     {FD.int compl(D) V}
+		     choice
+			%% Debugging output
+			if {HasFeature RawSpec trace} then
+			   {ShowTracing E D} 
+			end
+			{FD.int D        V}
+		     []	
+			%% Debugging output
+			if {HasFeature RawSpec trace} then
+			   {ShowTracing E 'compl('#D#')'} 
+			end
+			{FD.int compl(D) V}
 		     end
 		     {Do Fs}
 		  end
