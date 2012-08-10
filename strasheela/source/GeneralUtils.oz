@@ -275,6 +275,7 @@ define
       /** %% Sets the seed for KnuthRandom. If Seed is 0 then {GUtils.devRandom} is used.
       %% */
       proc {SetKnuthRandomSeed Seed}
+	 {Out.show 'Initialise random seed: '}
 	 ActualSeed = if Seed==0 then {DevRandom} else Seed end
       in
 	 LastVal := ActualSeed
