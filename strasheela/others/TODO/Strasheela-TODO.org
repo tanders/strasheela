@@ -403,6 +403,21 @@ git svn clone http://strasheela.svn.sourceforge.net/svnroot/strasheela strasheel
 
 
 
+** TODO Revise Melody definition				       :NEXT:
+
+   - Try to simplify definition, e.g.,
+     - Revise definition of pre-defined constraints -- simplify 
+   - ...
+
+
+   See [[file:~/Compositions/Orgel-StPeter-Koeln/Strasheela-source/Score.oz::proc%20{Melody%20Args%20?MyScore}][file:~/Compositions/Orgel-StPeter-Koeln/Strasheela-source/Score.oz::proc {Melody Args ?MyScore}]]
+
+   
+
+** TODO Revise Counterpoint_NParts definition			       :NEXT:
+
+   See [[file:~/Compositions/Orgel-StPeter-Koeln/Strasheela-source/Score.oz::fun%20{Counterpoint_NParts%20Args}][file:~/Compositions/Orgel-StPeter-Koeln/Strasheela-source/Score.oz::fun {Counterpoint_NParts Args}]]
+
 ** TODO Finish chord and scale databases for 12-TET		       :NEXT:
 
    Database file [[file:~/oz/music/Strasheela/strasheela/strasheela/contributions/anders/HarmonisedScore/source/databases/Scala.oz]]
