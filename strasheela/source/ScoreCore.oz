@@ -3102,7 +3102,7 @@ define
    unit(iargs:unit
 	constructor: Sequential)
    %% */
-   proc {MakeContainer Args ?MyMotif}
+   proc {MakeContainer Args ?MyScore}
       Default = unit(iargs:unit
 		     %% TODO: revise why I need this arg here -- if needed improve next comment line 
 		     %%
@@ -3114,7 +3114,7 @@ define
       %% auto-documentation
       case Args of 'getDefaults'(...) % MakeSim / MakeSeq would call with getDefaults(constructor:Val)
       then
-	 MyMotif = {Adjoin unit(%% TODO: refactor so that iargs depend on constructor
+	 MyScore = {Adjoin unit(%% TODO: refactor so that iargs depend on constructor
 				iargs: {GetDefaults MakeItems}
 				%% arg ignored, but filtered out of container args
 				rargs:unit#ignored)
@@ -3127,7 +3127,7 @@ define
 	 ItemAs = {Adjoin Default.iargs Args.iargs} 
 	 MyNotes = {MakeItems ItemAs}
       in 
-	 MyMotif = {MakeScore2 {Adjoin {Record.subtractList As {Arity Default}}
+	 MyScore = {MakeScore2 {Adjoin {Record.subtractList As {Arity Default}}
 				{Adjoin seq(items:MyNotes) container}}
 		    unit(container:As.constructor)}
       end
@@ -3136,12 +3136,12 @@ define
    %% */
    fun {MakeSim Args}
       %% Args can be 'getDefaults', so I do not want to overwrite that...
-      {MakeContainer {Adjoin unit(constructor:Simultaneous) Args}}
+      {MakeContainer {Adjoin unit(constructor:Simultaneous) {Record.subtract Args constructor}}}
    end
    /** %% Extended script which returns a sequential container with items, not fully initialised and where many parameters can be still undetermined. Specialisation of MakeContainer where the constructor is Sequential. See MakeContainer for further information.
    %% */
    fun {MakeSeq Args}
-      {MakeContainer {Adjoin unit(constructor:Sequential) Args}}
+      {MakeContainer {Adjoin unit(constructor:Sequential) {Record.subtract Args constructor}}}
    end
 
 
