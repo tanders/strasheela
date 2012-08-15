@@ -94,6 +94,7 @@ export
    ToFomus OutputFomus RenderFomus
    %% expert Fomus procs
    IsFomusChord
+   IsGraceNote
    GetUserFomus GetUserFomus_Before GetUserFomus_After
    Record2FomusEvent Record2FomusEvent_Untimed Record2FomusNote Record2FomusObject Record2FomusSetting Record2FomusCode Record2FomusMeasure
    MakeFomusNote
@@ -809,7 +810,7 @@ define
 %%%
 
    /** % Outputs unary function which transforms an Score.event into a csound note virtual string. 
-   %% Spec is a list of accessor functions/methods. However, for every accessor function/method a transformation function/method for the accessed data can be specified using the syntax Accessor#Transformator. All accessors mmust return a parameters (e.g. use getPitchParameter instead of getPitch).
+   %% Spec is a list of accessor functions/methods. However, for every accessor function/method a transformation function/method for the accessed data can be specified using the syntax Accessor#Transformator. All accessors must return a parameters (e.g. use getPitchParameter instead of getPitch).
    %% */
    %%
    %% !! not general enough, e.g., parameter units are ignored. Idea
@@ -859,14 +860,29 @@ define
       Defaults = unit(file:"test"
 		      scoDir:{Init.getStrasheelaEnv defaultCsoundScoDir}
 		      header:nil
-		      event2CsoundFn:{MakeEvent2CsoundFn 1
-				      [getStartTimeParameter#getValueInSeconds
-				       fun {$ X} X end#getPerformanceDurationInSeconds
-				       getAmplitudeParameter#getValueInNormalized
-				       getPitchParameter#getValueInMidi]}
+		      event2CsoundFn:
+			 {MakeEvent2CsoundFn 1
+			  [fun {$ X} X end#fun {$ X} % start time
+					      if {IsGraceNote X}
+					      then
+						 Start={X getStartTimeInSeconds($)} in
+						 if Start < 0.05 then Start
+						 else Start - 0.05
+						 end
+					      else {X getStartTimeInSeconds($)}
+					      end
+					   end
+			   fun {$ X} X end#fun {$ X} % duration
+					      if {IsGraceNote X}
+					      then 0.2 
+					      else {X getPerformanceDurationInSeconds($)}
+					      end
+					   end
+			   getAmplitudeParameter#getValueInNormalized
+			   getPitchParameter#getValueInMidi]}
 		      test:fun {$ X}
-			      {X isEvent($)} andthen {X isDet($)} andthen
-			      ({X getDuration($)} > 0)
+			      {X isEvent($)} andthen {X isDet($)}
+			      % andthen ({X getDuration($)} > 0)
 			   end)
       Args = {Adjoin Defaults Spec}
       Tempo = "\n\nt 0 "#{Init.getTempo}
@@ -956,8 +972,8 @@ define
 	 {RenderCsound MyScore MySpec}
 	 {PlaySound {Adjoin MySpec unit(extension: MySpec.soundExtension)}}
       else
-	 {GUtils.warnGUI "No events in resulting Csound score. Is score fully determined?"}
-%	 {System.showInfo "Warning: no events in Csound score. Are events fully determined?"}
+	 {GUtils.warnGUI "No events in resulting Csound score. Are events determined?"}
+%	 {System.showInfo "Warning: no events in Csound score. Are events determined?"}
       end
    end
 
@@ -2430,7 +2446,12 @@ define
 %%% Fomus
 %%%
 
-
+   /** %% [for clause definitions] Returns true if X is a note with duration 0.
+   %% */
+   fun {IsGraceNote X}
+      {X isNote($)} andthen {X getDuration($)} == 0
+   end
+   
    /** %% [for clause definitions] Returns true if X can be notated as a chord, i.e. X is a simultaneous which contains only notes with equal offset time, start and end times
    %% */
    IsFomusChord = IsLilyChord
@@ -2802,8 +2823,24 @@ define
 		       % 	     end}}
 		       % 	end
 		       %% TMP: ignore "chord sims" 
-		       IsFomusChord#fun {$ _ _} "" end 
-		       %%
+		       IsFomusChord#fun {$ _ _} "" end
+		       %% NOTE: unfinished clause
+		       %% TODO: add support everything of MakeFomusNote and HS.out.makeNoteToFomusClause
+		       IsGraceNote#fun {$ MyNote PartId}
+				      {Record2FomusNote
+				       % {Adjoin {As.getSettings MyNote}
+					unit(part:PartId
+					     time:{MyNote getStartTimeInBeats($)}
+					     dur: 1 % a beat
+					     dynamic: {MyNote getAmplitudeInVelocity($)} / 127.0
+					     pitch:{MyNote getPitchInMidi($)}
+					     % pitch:Nominal#Acc#Oct
+					     % acc:Acc
+					     grace: 0
+					    )
+				       % }
+				       MyNote}
+				   end
 		       isNote#MakeFomusNote
 		       %% rests are ignored
 		       isPause#fun {$ _ _} "" end
