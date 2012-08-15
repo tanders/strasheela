@@ -418,6 +418,7 @@ git svn clone http://strasheela.svn.sourceforge.net/svnroot/strasheela strasheel
 
    See [[file:~/Compositions/Orgel-StPeter-Koeln/Strasheela-source/Score.oz::fun%20{Counterpoint_NParts%20Args}][file:~/Compositions/Orgel-StPeter-Koeln/Strasheela-source/Score.oz::fun {Counterpoint_NParts Args}]]
 
+
 ** TODO Finish chord and scale databases for 12-TET		       :NEXT:
 
    Database file [[file:~/oz/music/Strasheela/strasheela/strasheela/contributions/anders/HarmonisedScore/source/databases/Scala.oz]]
@@ -723,7 +724,7 @@ command SET HARMCONST.
    - Document in CTT functor the more suitable option with user-defined endtime before actual end, and point to this script as an example
 
 
-** TODO Add support for grace notes				       :NEXT:
+** TODO Finish support for grace notes 				       :NEXT:
 
    Duration value 0 
    
@@ -734,6 +735,13 @@ command SET HARMCONST.
    Consider defining in Measure.oz special accent constraint for notes with duration > 0 following 1 or more grace notes
 
    NOTE: I need to revise all output procs (MIDI, fomus..) which currently ignore all notes with duration 0
+
+
+   See
+   Fomus def:
+   [[file:~/oz/music/Strasheela/strasheela/strasheela/source/Output.oz::EventClauses%20%3D%20{Append%20As.eventClauses][file:~/oz/music/Strasheela/strasheela/strasheela/source/Output.oz::EventClauses = {Append As.eventClauses]]
+   Test:
+   [[file:~/oz/music/Strasheela/strasheela/strasheela/examples/ControllingOutput-Examples/Fomus-Examples.oz::%25%25%20Grace%20notes:%20notes%20with%20duration%20%3D%200][file:~/oz/music/Strasheela/strasheela/strasheela/examples/ControllingOutput-Examples/Fomus-Examples.oz::%% Grace notes: notes with duration = 0]]
 
 
 *** Old								    :ARCHIVE:

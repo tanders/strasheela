@@ -1491,7 +1491,7 @@ If Pitch method getValueInMidi comes across any pitch unit not in its list and n
    see simple motifs in 
    [[file:/Applications/improvisor400/vocab/My.grammar::rule%20M4%20A4%200%2001][file:/Applications/improvisor400/vocab/My.grammar::rule M4 A4 0 01]]
 
-** Creat Jazz motif database with machine learning by using Impro-Visor's resulting grammar files
+** Create Jazz motif database with machine learning by using Impro-Visor's resulting grammar files
 
    see 
    file:/Applications/improvisor400/vocab/*.grammar
