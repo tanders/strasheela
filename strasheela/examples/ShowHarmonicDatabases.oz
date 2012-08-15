@@ -179,7 +179,7 @@ MyScore = {AllIntervals unit(pitchOffset: {ET22.pitch 'C'#4})}
 %%
 
 
-/** %% This example lists all chords in present DB. 
+/** %% This example outputs a sequential container that lists all chords in present DB. 
 %% */
 fun {AllChords Args}
    Defaults = unit(%% duration for each chord
