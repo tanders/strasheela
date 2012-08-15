@@ -6,24 +6,15 @@
 %% */
 
 %%
-%% BUG:
-%% - OK Some chords missing, e.g., 'Undertone'
-%%   -> chord removed as dublicate entry (same as minor)
-%% - OK? Some chords with strangely formatted comment feature (comment double-nested), e.g., 'Tristan Chord' and other chords named with symbolic note names --
-%%     -> caused by calling HS.db.ratiosInDBEntryToPCs -- problem temporarily solved by not supporting ratios
-%%
-
-%%
 %%  TODO:
-%% - !! Add missing 12-TET scales from Scala file (modes in Scala terminology)
+%% - !! complete functor documentation:
+%%   - document analytical features concerning sonance and harmonic complexity in functor documentation at %% - !! Add missing 12-TET scales from Scala file (modes in Scala terminology)
 %% - !! Revise removal of dublicate entries
 %%   - if order of PCs is different then entries are not removed -- sort PCs at least for comparing
 %%   - if entries only differ in root (e.g., difference between major chord and sixth chord) then entries not removed
 %% - fix warning in ReduceToSingleOctave (some chord names from which PCs are removed are left out)
-%% - complete functor documentation:
-%%   - document analytical features concerning sonance and harmonic complexity
 %%
-%% - ?? JI chords in Scala database
+%% - ?? include JI chords in Scala database (probably those relevant -- i.e. 5-limit -- are often already in the anyway, and higher limit chords are not faithfully enough played to be recognised anyway)
 %%
 
 %%
@@ -31,7 +22,15 @@
 %%
 %% - revise specs for required PC and dissonances PC 
 %%
-%% - dissonance degree: incorporate some standard measurements
+
+%%
+%% BUG:
+%% - !! Augmented triad has same sonance (TorstensSonance) as major triad
+%%
+%% - OK Some chords missing, e.g., 'Undertone'
+%%   -> chord removed as dublicate entry (same as minor)
+%% - OK? Some chords with strangely formatted comment feature (comment double-nested), e.g., 'Tristan Chord' and other chords named with symbolic note names --
+%%     -> caused by calling HS.db.ratiosInDBEntryToPCs -- problem temporarily solved by not supporting ratios
 %%
 
 functor
@@ -50,8 +49,6 @@ export
    % AccidentalOffset
    % OctaveDomain
    db:DB
-
-   % OneFootedBridgeChordSonance
    
 define
 
@@ -1309,91 +1306,44 @@ define
 	     end}
 	 end
       end
-   
-      local
-   
-	 /** %% Values of Partch's one-footed bridge of JI intervals of which 12-TET intervals are often considered to be approximations. Source: Genesis of a Music, p. 155. Values measued simply in mm (graph does not specify any unit). Higher sonance values mean higher degree of consonance.
-	 %% */
-   % 1/1   | no data
-   % 16/15 | 5
-   % 9/8   | 10
-   % 6/5   | 19
-   % 5/4   | 19 (20?)
-   % 4/3   | 27
-   % 45/32 | ? (0 in graph?)
-   % 3/2   | 27
-   % 8/5   | 19
-   % 5/3   | 19
-   % 16/9  | 10
-   % 15/8  | 5 
-   % 2/1   | 38
-	 %% TODO: refine this e.g. using harmonic entropy data
-	 OneFootedBridgeData = unit(0: 38
-				    1: 5
-				    2: 10
-				    3: 19
-				    4: 19
-				    5: 27
-				    6: 5
-				    7: 27
-				    8: 19
-				    9: 19
-				    10: 10
-				    11: 5)
-      in
-	 /** %% Expects a chord DB entry and returns this entry extended by the feature oneFootedBridgeChordSonance, which specifies a sonance value (dissonance degree) for this chord. The returned sonance is a distorted arithmetric mean of the one-footed bridge distances of all intervals in the given chord, where chords with more pitch classes are rated slightly lower than the actual mean, the more pitch classes there are in a chord the more this distortion is taken into account (an int). 
-	 %%
-	 %% Note: Sonance is a consonance degree. Lower measures mean a *more* dissonant chord and vice versa. For PartialChordComplexity it is the other way round.
-	 %% Obviously, only pitch classes 0-11 are supported.
-	 %% */
-	 fun {OneFootedBridgeChordSonance ChordSpec}
-	    %% Chords with more pitch classes are automatically rated to be more dissonant, and ArityCurve specifies how much so. The higher ArityCurve, the more this is taken into account (at 1.0 it has no effect).
-	    ArityCurve = 1.25
-	    %% list of sonances for all intervals in chord (all PC combinations)
-	    Sonances = {Pattern.mapPairwise ChordSpec.pitchClasses
-			fun {$ PC1 PC2}
-			   PcInterval = {Abs PC1 - PC2} mod 12
-			in
-			   OneFootedBridgeData.PcInterval
-			end}
-	    %% arithmetic mean, weighted by PC cardiality
-	    Sonance =  {FloatToInt {IntToFloat {LUtils.accum Sonances Number.'+'}}
-			/ {Pow {IntToFloat {Length Sonances}} ArityCurve}}
-	 in
-	    {Adjoin unit(oneFootedBridgeChordSonance:Sonance)
-	     ChordSpec}
-	 end
-   
-      end
 
+      
       local
-   
-	 /** %% Edited values of Partch's one-footed bridge (distinguishing between major and minor third etc)
+	 /** %% Edited values of Partch's one-footed bridge (e.g., revised data distinguishes between major and minor third etc.)
 	 %% Higher sonance values mean higher degree of consonance.
 	 %% */
-	 %% TODO: refine this e.g. using harmonic entropy data (e.g., a fifth is more consonant than a fourth)
-	 SonanceData = unit(0: 38
-			    1: 5
+	 SonanceData = unit(0: 50 
+			    1: 3
 			    2: 10
-			    3: 17
+			    3: 18
 			    4: 22
-			    5: 27
-			    6: 5
-			    7: 27
+			    5: 30
+			    6: 7
+			    7: 30
 			    8: 22
-			    9: 17
+			    9: 18
 			    10: 10
-			    11: 5)
+			    11: 3)
+	 %% Orig values as a reference. Values measued simply in mm (graph does not specify any unit).
+   % 	 OneFootedBridgeData = unit(0: 38
+   % 				    1: 5
+   % 				    2: 10
+   % 				    3: 19
+   % 				    4: 19
+   % 				    5: 27
+   % 				    6: 5
+   % 				    7: 27
+   % 				    8: 19
+   % 				    9: 19
+   % 				    10: 10
+   % 				    11: 5)
       in
-	 /** %% Expects a chord DB entry and returns this entry extended by the feature oneFootedBridgeChordSonance, which specifies a sonance value (dissonance degree) for this chord. The returned sonance is a distorted arithmetric mean of the one-footed bridge distances of all intervals in the given chord, where chords with more pitch classes are rated slightly lower than the actual mean, the more pitch classes there are in a chord the more this distortion is taken into account (an int). 
+	 /** %% Expects a chord DB entry and returns this entry extended by the feature torstensChordConsonance, which specifies an experimental sonance value (consonance degree) for this chord.
 	 %%
-	 %% Note: Sonance is a consonance degree. Lower measures mean a *more* dissonant chord and vice versa. For PartialChordComplexity it is the other way round.
+	 %% Note: Lower measures mean a *more* dissonant chord (i.e. a higher harmonic complexity) and vice versa. For PartialChordComplexity it is the other way round.
 	 %% Obviously, only pitch classes 0-11 are supported.
 	 %% */
-	 %%
-	 %% TODO:
-	 %% - Revise function name 
-	 fun {TorstensChordSonance ChordSpec}
+	 fun {TorstensChordConsonance ChordSpec}
 	    %% Chords with more pitch classes are automatically rated to be more dissonant, and ArityCurve specifies how much so. The higher ArityCurve, the more this is taken into account (at 1.0 it has no effect).
 	    ArityCurve = 1.25
 	    %% list of sonances for all intervals in chord (all PC combinations)
@@ -1405,14 +1355,114 @@ define
 			end}
 	    %% arithmetic mean, weighted by PC cardiality
 	    Sonance =  {FloatToInt {IntToFloat {LUtils.accum Sonances Number.'+'}}
-			/ {Pow {IntToFloat {Length Sonances}} ArityCurve}}
+			/ {Pow {IntToFloat {Length Sonances}} ArityCurve} * 10.0}
 	 in
-	    {Adjoin unit(torstensChordSonance:Sonance)
+	    {Adjoin unit(torstensChordConsonance:Sonance)
 	     ChordSpec}
-	 end
-   
+	 end   
       end
 
+   
+   %    local
+   % 	 /** %% Values of Partch's one-footed bridge of JI intervals of which 12-TET intervals are often considered to be approximations. Source: Genesis of a Music, p. 155. Values measued simply in mm (graph does not specify any unit). Higher sonance values mean higher degree of consonance.
+   % 	 %% */
+   % % 1/1   | no data
+   % % 16/15 | 5
+   % % 9/8   | 10
+   % % 6/5   | 19
+   % % 5/4   | 19 (20?)
+   % % 4/3   | 27
+   % % 45/32 | ? (0 in graph?)
+   % % 3/2   | 27
+   % % 8/5   | 19
+   % % 5/3   | 19
+   % % 16/9  | 10
+   % % 15/8  | 5 
+   % % 2/1   | 38
+   % 	 OneFootedBridgeData = unit(0: 38
+   % 				    1: 5
+   % 				    2: 10
+   % 				    3: 19
+   % 				    4: 19
+   % 				    5: 27
+   % 				    6: 5
+   % 				    7: 27
+   % 				    8: 19
+   % 				    9: 19
+   % 				    10: 10
+   % 				    11: 5)
+   %    in
+   % 	 /** %% Expects a chord DB entry and returns this entry extended by the feature oneFootedBridgeChordSonance, which specifies a sonance value (dissonance degree) for this chord. The returned sonance is a distorted arithmetric mean of the one-footed bridge distances of all intervals in the given chord, where chords with more pitch classes are rated slightly lower than the actual mean, the more pitch classes there are in a chord the more this distortion is taken into account (an int). 
+   % 	 %%
+   % 	 %% Note: Sonance is a consonance degree. Lower measures mean a *more* dissonant chord and vice versa. For PartialChordComplexity it is the other way round.
+   % 	 %% Obviously, only pitch classes 0-11 are supported.
+   % 	 %% */
+   % 	 fun {OneFootedBridgeChordSonance ChordSpec}
+   % 	    %% Chords with more pitch classes are automatically rated to be more dissonant, and ArityCurve specifies how much so. The higher ArityCurve, the more this is taken into account (at 1.0 it has no effect).
+   % 	    ArityCurve = 1.25
+   % 	    %% list of sonances for all intervals in chord (all PC combinations)
+   % 	    Sonances = {Pattern.mapPairwise ChordSpec.pitchClasses
+   % 			fun {$ PC1 PC2}
+   % 			   PcInterval = {Abs PC1 - PC2} mod 12
+   % 			in
+   % 			   OneFootedBridgeData.PcInterval
+   % 			end}
+   % 	    %% arithmetic mean, weighted by PC cardiality
+   % 	    Sonance =  {FloatToInt {IntToFloat {LUtils.accum Sonances Number.'+'}}
+   % 			/ {Pow {IntToFloat {Length Sonances}} ArityCurve}}
+   % 	 in
+   % 	    {Adjoin unit(oneFootedBridgeChordSonance:Sonance)
+   % 	     ChordSpec}
+   % 	 end   
+   %    end
+
+
+      % local
+      % 	 /** %% Harmonic entropy data (Farey Series N=81) by Paul Erlich, see http://sonic-arts.org/td/erlich/entropy.htm. For each 12-TET pitch class, the value corresponding to the close JI interval is given (e.g., for PC 4 the entropy of the ratio 5/4 is given). The data was simply measured manually in the given graph.
+      % 	 %% */
+      % 	 %% NOTE: data unusable as sonance measure: minor sixth has higher entropy than minor seventh and even than major seventh (minor sixth is in a clear valley, minor and major sevenths rather on a plateau).
+
+      % 	 %% measurements in cm (1 of harmonic entropy at 1 cm)
+      % 	 EntropyDataAux = unit(0: 2.7
+      % 			       1: 11.25
+      % 			       2: 10.6
+      % 			       3: 10.0
+      % 			       4: 9.6
+      % 			       5: 8.8
+      % 			       6: 9.75
+      % 			       7: 7.0
+      % 			       8: 9.25
+      % 			       9: 8.3
+      % 			       10: 9.0
+      % 			       11: 9.2)
+      % in
+      % 	 /** %% Expects a chord DB entry and returns this entry extended by the feature entropyChordSonance, which specifies a sonance value (dissonance degree) for this chord. The returned sonance is a distorted arithmetric mean of the harmonic entropies of all intervals in the given chord, where chords with more pitch classes are rated slightly lower than the actual mean, the more pitch classes there are in a chord the more this distortion is taken into account (an int). 
+      % 	 %%
+      % 	 %% TODO: REVISE: Note: Sonance is a consonance degree. Lower measures mean a *more* dissonant chord and vice versa. For PartialChordComplexity it is the other way round.
+      % 	 %% Obviously, only pitch classes 0-11 are supported.
+      % 	 %% */
+      % 	 %%
+      % 	 %% TODO:
+      % 	 %% - Revise function name 
+      % 	 fun {EntropyChordSonance ChordSpec}
+      % 	    %% Chords with more pitch classes are automatically rated to be more dissonant, and ArityCurve specifies how much so. The higher ArityCurve, the more this is taken into account (at 1.0 it has no effect).
+      % 	    ArityCurve = 1.25
+      % 	    %% list of sonances for all intervals in chord (all PC combinations)
+      % 	    Sonances = {Pattern.mapPairwise ChordSpec.pitchClasses
+      % 			fun {$ PC1 PC2}
+      % 			   PcInterval = {Abs PC1 - PC2} mod 12
+      % 			in
+      % 			   EntropyData.PcInterval
+      % 			end}
+      % 	    %% arithmetic mean, weighted by PC cardiality
+      % 	    Sonance =  {FloatToInt {IntToFloat {LUtils.accum Sonances Number.'+'}}
+      % 			/ {Pow {IntToFloat {Length Sonances}} ArityCurve}}
+      % 	 in
+      % 	    {Adjoin unit(entropyChordSonance:Sonance)
+      % 	     ChordSpec}
+      % 	 end
+      % end
+      
       local
 	 /** %% Indices of partials in the harmonic series that are close to the pitch class in question. For example, the pitch class 7 very closely approximates the partial 3.
 	 %%
@@ -1433,7 +1483,7 @@ define
       in
 	 /** %% A measure of the harmonic stability of a chord: the lower the partial complexity the more the chord consists of pitch classes approximating lower partials of the harmonic series over the root of the chord. For example, the major seventh triad results in a clearly lower measure than the minor triad. Note that PartialChordComplexity does not measure the dissonance degree, use a chord sonance measure for that.
 	 %%
-	 %% Note: Lower measures mean a *less* complex chord and vice versa. For chord sonance measures it is the other way round.
+	 %% Note: Lower measures mean a *less* complex chord and vice versa. For TorstensChordConsonance it is the other way round.
 	 %% Obviously, only pitch classes 0-11 are supported.
 	 %%
 	 %% The implementation assumes that 0 is the root of the chord (and that this pitch class is present in the chord's pitch classes).
@@ -1479,20 +1529,18 @@ define
 		 chords: {Record.map Chords
 			  fun {$ C}
 			     {PartialChordComplexity
-			      {TorstensChordSonance
-			       {OneFootedBridgeChordSonance
+			      {TorstensChordConsonance
 				{TransposeSpecTo0 
 				 {ReduceToSingleOctave
 				  % {HS.db.ratiosInDBEntryToPCs
 				   {SymbolicNoteNamesToPCsInDBEntry C HS.pc PitchesPerOctave}
 				  % PitchesPerOctave}
 				 }
-				 PitchesPerOctave}}}}
+				 PitchesPerOctave}}}
 			  end}
 		 scales: Scales
 		 intervals: Intervals
-		 chordFeatures: [oneFootedBridgeChordSonance
-				 torstensChordSonance
+		 chordFeatures: [torstensChordConsonance
 				 partialChordComplexity]
 		 scaleFeatures: nil
 		 intervalFeatures: nil)}
