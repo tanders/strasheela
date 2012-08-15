@@ -1025,3 +1025,39 @@ MyScore = {Score.makeSeq unit(iargs: unit(n:15
 
 
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%% Grace notes: notes with duration = 0
+%%
+
+%%
+%% TODO:
+%% - grace notes with articulations
+%% - grace notes for other temperaments
+%% - ..
+%%
+
+declare
+MyScore = {Score.makeScore
+	   seq([note(duration: 0
+		     pitch: 59)
+		note(duration: 4
+		     pitch: 60)
+		note(duration: 4
+		     pitch: 62)
+		note(duration: 0
+		     pitch: 65)
+		note(duration: 8
+		     pitch: 64)]
+	       startTime:0
+	       timeUnit:beats(4))
+	   unit}
+{MyScore wait}
+
+{Out.renderFomus MyScore unit(file:graceNotes)}
+
+
+%% Csound
+{Out.renderAndPlayCsound MyScore unit(file:graceNotes)}
+
+%% MIDI
