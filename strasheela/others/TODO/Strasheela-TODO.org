@@ -403,6 +403,293 @@ git svn clone http://strasheela.svn.sourceforge.net/svnroot/strasheela strasheel
 
 
 
+** TODO [#A] CSP generator/template, also for PWGL interface 	       :NEXT:
+
+   *Major problem to solve first:*
+   How to define reasonably simple and powerful constraint applicators? More specifically, how to nest applicators?
+
+   Rel simple definition, but powerful
+
+   Note: it turns out that the generator is more simple to use for simple cases, but also allows quite complex cases, where its use becomes more advanced. I think this is OK -- I want to also cater for very advanced users :)
+    
+
+*** Result
+
+    Parameterised search script CSP
+
+    {CSP Args ?Score}
+
+
+*** Args
+
+    Two args: Score, Constraints
+
+**** Score
+
+     Score is either 
+     
+     - A single score, either an object or in textual form
+       (Internally, a copy of this score is created so that all its variables are local to the search script. Note that constraints already applied to the score will therefore not be retained -- see below for other arg option how to do that.)
+
+     - A list of scores, either objects or in textual form
+       The resulting score is a simultaneous container containing all the given scores (offset times can be given to the scores). Again, internally copies of the given scores will be created
+
+     - A function returning a score 
+       In this case, the score is created internally to the CSP (no copy must be created), and all constraints applied to the score in the function are retained.
+       Arguments expected by the function can be given to the resulting parameterised script (TODO doc)
+
+     - A pair F#Args, where F is a function as described above and Args is a record with the default arguments for this function of the resulting parameterised script. In other words, CSP variants can be created by specifying different arguments to the resulting script.
+
+     - A list or record of functions, or Function#Args pairs
+       The resulting score is a simultaneous container containing all the scores returned by the given functions. Args are again the default arguments.
+       When calling the resulting parameterised script later, arguments for specific functions are specified using the same record features. For example, the score argument of the generator received the record 
+         unit(soprano: F1#Args1 bass:F2#Args2)
+       then the features soprano and bass are supported arguments of the resulting parameterised script. 
+       If a list instead of a record is given, then this is internally automatically translated into a tuple, so arguments are simply positional.
+
+       TODO: define for doc example how to call resulting parameterised script with such args.
+     
+
+**** Constraints 
+     
+     Constraints is a record or list of constraints to apply, where each constraint has either one of the following forms. 
+
+     - A procedure Constraint
+       This constraint will be applied to the top-level score object of the CSP
+
+     - A pair Constraint#Args, where Constraint is a procedure (applied to the top-level score object) and Args is a record of arguments given to P
+       When calling the resulting parameterised script later, arguments for specific constraints are specified using the same record features (see explanation for arg Score above).
+
+     - A pair Applicator#Constraint, where both Applicator and Constraint are procedures. The constraint is applied to the top-level score object with the given Applicator, which controls to which score objects the constraint is actually applied.
+
+     - A nested pair (Applicator#ArgsA)#(Constraint#ArgsC), where both Applicator and Constraint are procedures, and ArgsA and ArgsC are both a record of arguments. 
+       When calling the resulting parameterised script later, arguments for specific applicators and constraints are specified using the same record features (see explanation for arg Score above).
+
+       The resulting script automatically supports for all constraints the argument value false which switches this constraint off completely.  
+
+
+
+*** !! Required Constraint Applicators
+    
+    Some examples listed below
+
+**** !!! Todo: Nested constraint applicators / combining constraint applicators
+
+     Example: constraint applied to sim notes of consecutive parts (e.g., forbid voice crossing)
+
+     Task: how-to translate the current approach sketched below into reasonably easy-to-define-and-use procedures that expect the top-level score and a constraint as arg
+     
+     Current approach: nested constraint applicator calls within proc given to another constraint applicator.
+
+***** Simple example
+
+     Simple example: ={MyPattern {{GetPart MyScore 1} map($ getPitch test:isNote)}}=
+
+     (GetPart still undefined)
+
+     I can always define constraint applicators ad-hoc as follows. However, I do not think this will be suitable for PWGL.
+
+#+begin_src oz :results output :exports none
+proc {$ MyScore MyConstraint} 
+  {MyConstraint {{GetPart MyScore 1} map($ getPitch test:isNote)}}
+end
+#+end_src
+     
+
+     Attempt to translate this into applicator ForParameterList. Note: lengthy definition (though easy to define). Resulting applicator now fits format required by CSP generator, but it is rather inflexible. Also, is it really more simple to use than above example? The PWGL GUI could know the interface of the applicator, but then I have to make its definition even more complex..
+
+#+begin_src oz :results output :exports none
+  proc {ForParameterList MyScore MyConstraint Args}
+     Defaults = unit(part:1
+                     test:isNote
+                     map:getPitch)
+     As = {Adjoin Defaults Args}
+  in
+     {MyConstraint
+      {{GetPart MyScore as.part} % GetPart yet undefined
+       map($ As.map test:As.test)}} 
+  end
+  
+  %% Usage example
+  {ForParameterList MyScore MyPattern
+   unit(part:1 test:isNote map:getPitch)}       
+#+end_src
+
+***** More complex example
+
+     The following more complex example nests the following applicators: ForPartList, Pattern.forNeighboursInd, ForSimNotes, ForAll 
+
+
+     NOTE: this is even only a simplified case where voice crossing is always forbidden between all consecutive voice pairs. 
+
+#+begin_src oz :results output :exports none
+  {ForPartList MyScore            % ForPartList yet undefined
+   proc {$ Parts}
+      {Pattern.forNeighbours Parts 2
+       proc {$ [Part1 Part2]} 
+          {ForSimNotes Part1 Part2
+           proc {$ N1#N2s}
+              thread 
+                 {ForAll N2s
+                  proc {$ N2}
+                     {NoVoiceCrossing N1 N2} 
+                  end}
+              end
+           end}
+       end}
+   end}
+  
+  proc {NoVoiceCrossing N1 N2}
+     {N1 getPitch($)} >=: {N2 getPitch($)} 
+  end
+#+end_src
+
+     Redefine above applicator as a single proc. Then think about ways to break the definition down. 
+
+     Note: MyConstraint in the def below expects two notes -- this constraint applicator only works for that case!
+
+#+begin_src oz :results output :exports none
+  proc {MySpecialApplicator MyScore MyConstraint}
+     {ForPartList MyScore            % ForPartList yet undefined
+      proc {$ Parts}
+         {Pattern.forNeighbours Parts 2
+          proc {$ [Part1 Part2]} 
+             {ForSimNotes Part1 Part2
+              proc {$ N1#N2s}
+                 thread 
+                    {ForAll N2s
+                     proc {$ N2}
+                        {MyConstraint N1 N2} 
+                     end}
+                 end
+              end}
+          end}
+      end}
+  end
+  
+  proc {NoVoiceCrossing N1 N2}
+     {N1 getPitch($)} >=: {N2 getPitch($)} 
+  end
+#+end_src
+
+
+
+     *Once I have a working solution think about how to simplify it for non-experienced users*
+
+
+***** ? Idea for solution: include applicator in constraint definition
+
+      I could move all the complexities of the constraint applicator into the actual constraint definition, which is then applied to the full score, possibly with args to control, say, to which voice pairs the constraint is applied
+
+      This is actually the approach of PWGL -- couple constraint and its application
+
+      Advantages
+      - Constraint is easy to use
+      - No need to invent another complex constraint application mechanism
+
+
+      Disadvantages
+      - Whole constraint application approach becomes very inflexible -- possibly suitable for inexperienced users (like my students), but not for myself
+	- For certain constraints like the present NoVoiceCrossing this approach may actually be suitable, for other constraints where I want to experiment likely less so.
+	- !! E.g., if I want to constraint the sequence of pitches of a part by some predefined Pattern I currently define a nested applicator with, say, ={MyPattern {MyPart map($ getPitch test:isNote)}}=
+      - Constraints become more complex to define
+      - I have to define all these extended constraints -- currently all predefined constraints are very light-weight
+
+
+
+
+
+**** {ForParts MyScore P}
+
+     Applies P to every part, i.e., every quasi top-level seq in MyScore that does only contain notes, rests and other temporal containers (i.e. no chords, scales, or measure objects)
+
+**** {ForParts2 MyScore P Args}
+
+     Args is a record that allows to specify to which part P is applied (and perhaps some more things)
+
+
+**** {ForPartList MyScore P}
+
+     Applies P to list of all parts in MyScore
+
+
+**** {ForNotes MyScore P}
+
+     Applies P to every note in MyScore
+
+
+**** {ForNoteList MyScore P}
+
+     Applies P to list of all note in MyScore
+
+
+**** ForSimNotes
+
+     See [[file:~/Compositions/Orgel-StPeter-Koeln/Strasheela-source/Rules.oz::proc%20{ForSimNotes%20Part1%20Part2%20P}][file:~/Compositions/Orgel-StPeter-Koeln/Strasheela-source/Rules.oz::proc {ForSimNotes Part1 Part2 P}]]
+
+
+**** Various other predefined contexts for SMapping.forContexts 
+
+     See [[file:~/oz/music/Strasheela/strasheela/strasheela/source/ScoreMapping.oz::proc%20{ForContexts%20Xs%20GetContext%20P}][file:~/oz/music/Strasheela/strasheela/strasheela/source/ScoreMapping.oz::proc {ForContexts Xs GetContext P}]]
+
+
+**** ?? Full support for PWConstraints pattern matching language, so I can use Jacopos predefined constraints :ARCHIVE:
+     
+     Not a good idea -- I cannot support the Lisp syntax of PWConstraints of the actual constraints 
+
+
+
+*** Notes on usage
+
+    Standard CSP templates can be defined using this generator, e.g., a counterpoint of multiple parts/voices (subscripts) with a simultaneous harmony and metric structure. The Score are for such a template expects a record/list of the individual parts, the harmony etc. 
+    All relations between these score layers will be defined by constraints.
+    Alternatively, the score with predefined constraints between its layers is given as a function to the template.
+
+
+    Normally, the resulting script will be given directly to the solver.
+    Only advanced users should specify arguments for to the resulting script
+
+    
+
+    I should write some tutorial documentation that focusses on explaining the more simple cases. More complex cases are then only documented by the reference (or perhaps better in one of more extra tutorial sections clearly indicated for advanced users)
+
+
+
+*** Implementational notes 
+
+    - !! Resulting script must support Score.getDefaults
+
+    - Wrap each constraint applicator into its own thread
+
+
+** TODO Finish support for grace notes 				       :NEXT:
+
+   Duration value 0 
+   
+   Note: with option that score can last longer than the actually used score the non-existing notes option is not needed any more. See [[file:~/oz/music/Strasheela/strasheela/strasheela/examples/Rhythm-Examples/RhythmicMotifsFitIntoMetricStructure.oz::%25%25%20For%20Hans%20Tutschku][file:~/oz/music/Strasheela/strasheela/strasheela/examples/Rhythm-Examples/RhythmicMotifsFitIntoMetricStructure.oz::%% For Hans Tutschku]]
+   So, ignore CTT ...
+
+   
+   Consider defining in Measure.oz special accent constraint for notes with duration > 0 following 1 or more grace notes
+
+   NOTE: I need to revise all output procs (MIDI, fomus..) which currently ignore all notes with duration 0
+
+
+   See
+   Fomus def:
+   [[file:~/oz/music/Strasheela/strasheela/strasheela/source/Output.oz::EventClauses%20%3D%20{Append%20As.eventClauses][file:~/oz/music/Strasheela/strasheela/strasheela/source/Output.oz::EventClauses = {Append As.eventClauses]]
+   Test:
+   [[file:~/oz/music/Strasheela/strasheela/strasheela/examples/ControllingOutput-Examples/Fomus-Examples.oz::%25%25%20Grace%20notes:%20notes%20with%20duration%20%3D%200][file:~/oz/music/Strasheela/strasheela/strasheela/examples/ControllingOutput-Examples/Fomus-Examples.oz::%% Grace notes: notes with duration = 0]]
+
+
+*** Old								    :ARCHIVE:
+
+   Consider some way to distinguish between option that notes are either grace notes or "not existing" (CTT), e.g.,
+   - Grace notes are always before some note with duration > 0, while "non-existing" notes are at the end of a container
+   - Def some global switch (in Init.oz) to generally enable or disable grace note support
+
+
+
 ** TODO Revise Melody definition				       :NEXT:
 
    - Try to simplify definition, e.g.,
@@ -419,19 +706,7 @@ git svn clone http://strasheela.svn.sourceforge.net/svnroot/strasheela strasheel
    See [[file:~/Compositions/Orgel-StPeter-Koeln/Strasheela-source/Score.oz::fun%20{Counterpoint_NParts%20Args}][file:~/Compositions/Orgel-StPeter-Koeln/Strasheela-source/Score.oz::fun {Counterpoint_NParts Args}]]
 
 
-** TODO Finish chord and scale databases for 12-TET		       :NEXT:
-
-   Database file [[file:~/oz/music/Strasheela/strasheela/strasheela/contributions/anders/HarmonisedScore/source/databases/Scala.oz]]
-
-   Chords
-   [[file:~/Downloads/scala-22-pc-linux/chordnam.par]]
-
-   Scales
-   [[file:~/Downloads/scala-22-pc-linux/modenam.par]]
-   [[file:~/Downloads/scala-22-pc-linux/melathat.par]] (these are seemingly a subset of the above)
-
-
-** TODO Add chord dissonance degree measure(s) to ScalaDB.oz	       :NEXT:
+** TODO Add chord dissonance degree measure(s) to ScalaDB.oz   :NEXT:ARCHIVE:
 
    *Partly done using Partch's one-footed bridge*
    Improve that by improving interval data (e.g., by using Erlich's Harmonic Entropy instead)
@@ -652,6 +927,7 @@ command SET HARMCONST.
      
 
 
+
 ** TODO Extend harmony model by support for voicing (pitch class octaves) :SOON:
 
    Order / "octavation" of pitch classes in chord important and currently ignored by my harmony model 
@@ -661,6 +937,15 @@ command SET HARMCONST.
    - Require PC3 to be doubled in octave 1 and 2 above
 
    For example of such harmonies in database see [[file:~/oz/music/Strasheela/strasheela/strasheela/contributions/anders/HarmonisedScore/source/databases/Scala.oz::Chords%20%3D%20chords(][file:~/oz/music/Strasheela/strasheela/strasheela/contributions/anders/HarmonisedScore/source/databases/Scala.oz::Chords = chords(]]
+
+
+** TODO Finish scale databases for 12-TET in Scala.oz 		       :NEXT:
+
+   Database file [[file:~/oz/music/Strasheela/strasheela/strasheela/contributions/anders/HarmonisedScore/source/databases/Scala.oz]]
+
+   Scales
+   [[file:~/Downloads/scala-22-pc-linux/modenam.par]]
+   [[file:~/Downloads/scala-22-pc-linux/melathat.par]] (these are seemingly a subset of the above)
 
 
 ** TODO Extend my harmony model so that chord definitions can take intervals beyond an octave into account :SOON:
@@ -724,33 +1009,6 @@ command SET HARMCONST.
    - Document in CTT functor the more suitable option with user-defined endtime before actual end, and point to this script as an example
 
 
-** TODO Finish support for grace notes 				       :NEXT:
-
-   Duration value 0 
-   
-   Note: with option that score can last longer than the actually used score the non-existing notes option is not needed any more. See [[file:~/oz/music/Strasheela/strasheela/strasheela/examples/Rhythm-Examples/RhythmicMotifsFitIntoMetricStructure.oz::%25%25%20For%20Hans%20Tutschku][file:~/oz/music/Strasheela/strasheela/strasheela/examples/Rhythm-Examples/RhythmicMotifsFitIntoMetricStructure.oz::%% For Hans Tutschku]]
-   So, ignore CTT ...
-
-   
-   Consider defining in Measure.oz special accent constraint for notes with duration > 0 following 1 or more grace notes
-
-   NOTE: I need to revise all output procs (MIDI, fomus..) which currently ignore all notes with duration 0
-
-
-   See
-   Fomus def:
-   [[file:~/oz/music/Strasheela/strasheela/strasheela/source/Output.oz::EventClauses%20%3D%20{Append%20As.eventClauses][file:~/oz/music/Strasheela/strasheela/strasheela/source/Output.oz::EventClauses = {Append As.eventClauses]]
-   Test:
-   [[file:~/oz/music/Strasheela/strasheela/strasheela/examples/ControllingOutput-Examples/Fomus-Examples.oz::%25%25%20Grace%20notes:%20notes%20with%20duration%20%3D%200][file:~/oz/music/Strasheela/strasheela/strasheela/examples/ControllingOutput-Examples/Fomus-Examples.oz::%% Grace notes: notes with duration = 0]]
-
-
-*** Old								    :ARCHIVE:
-
-   Consider some way to distinguish between option that notes are either grace notes or "not existing" (CTT), e.g.,
-   - Grace notes are always before some note with duration > 0, while "non-existing" notes are at the end of a container
-   - Def some global switch (in Init.oz) to generally enable or disable grace note support
-
-
 ** Revise defaults for fomus 
 
    By default properly output
@@ -785,12 +1043,212 @@ command SET HARMCONST.
     This is difficult to fix, but once I did this properly then I can actually automatically start the OzServer and users do not need to do that manually any more -- will help users like my students..
 
 
-** TODO Define ENP score -> Strasheela score			       :NEXT:
+** TODO Define/extend ENP score -> Strasheela score 		       :NEXT:
 
    See file:~/PWGL-User/0-TorstensOtherStuff/StrasheelaInterface/ENP2Strasheela.lisp
 
 
    
+** TODO [#A] Define ENP score transformations			       :NEXT:
+
+   Work in progress: [[file:~/PWGL-User/ENP/plug-ins/test-script.lisp::(in-package%20:ccl)][file:~/PWGL-User/ENP/plug-ins/test-script.lisp::(in-package :ccl)]]
+
+   Do what you can in ENP and what is too hard in Strasheela ([[*%5B#A%5D%20Define%20Strasheela%20score%20transformations%20(instead%20of%20plain%20generation%20as%20so%20far)][Define Strasheela score transformations (instead of plain generation as so far)]]) 
+
+*** Transformations
+
+    Transformation examples 
+    
+**** Transform all notes by the same function (mapping)
+
+     Implemented by Score.transformScore (define a clause with test isNote)
+
+     Application examples
+       - Transpose the pitch by a constant summand or factor
+       - Stretch/shrink durations by a constant summand or factor
+
+       - "Scatter" pitches, but keep the harmony by transposing individual notes or small groups of notes (e.g., non-harmonic notes and the consecutive harmonic note) by a random number of octaves up or down
+
+       - ...
+
+
+***** ENP 
+
+#+begin_src lisp 
+  (def-plug-in transpose-score ((self score) :score-transformations)
+    (let ((interval (capi:prompt-for-number "Transposition interval:" :min 1 :initial-value 72)))
+      (do-notes (note self) 
+                (setf (midi note) (+ (midi note) interval)))))
+#+end_src
+
+      Stretch/shrink durations: use Kilian's examples in PWGL quantisation library KSQuant2 (?)
+      - involves quantisation
+      
+
+**** Transform (or remove) notes with a certain feature, e.g.,
+
+     Implemented by Score.transformScore (define a clause with refined test)
+
+     Feature examples
+       - Some parameter (duration, pitch, articulation...) has a certain value or is above/below a certain value, e.g.,
+	 - Lengthen all durations that exceed a given thresh-hold by a given summand or factor
+
+       Concrete application examples	  
+       - Transpose all notes with a certain duration or more up by a certain interval
+       - Transform individual notes that meet certain criteria into chords, e.g.,
+	 - Implement transformations inspired by sound processing techniques (e.g., ring modulation, frequency modulation..) by adding the respective notes
+       - Transform chords into figurations
+
+
+**** Remove notes with a certain feature, e.g.,
+
+     Implemented by Score.transformScore (define a clause with refined test that returns a pause/rest object)
+
+     Concrete application examples	  
+       - Remove notes that are below a certain pitch threshold (substitute with a rest) 
+
+
+***** ENP 
+
+      =enp-delete (<score> <object>)=
+      a method defined for different classes of <object>: note, voice, beat, measure, part, expression ...
+
+
+#+begin_src lisp 
+;; remove note without substituting
+  (def-plug-in delete-notes-below-60 ((self score) :score-transformations)
+    (do-notes (note self) 
+              (when (< (midi note) 60)
+                (enp-delete self note))))
+#+end_src      
+
+      
+      =(change-rtm-object <orig-object> is-rest)=
+      transforms an object (chord or note) into a rest 
+
+      NOTE: after calling this function call =(bring-up-to-date <score> 0.0)=
+
+      =(change-rtm-object <orig-object> is-tied)=
+      transforms an object (chord or note) into an object tied over to its previous object (test that there is a previous object)
+
+      =(change-rtm-object <orig-object> <integer>)=
+      transforms unit length an object (chord or note) (i.e., "sub-beats" of object)
+      I.e., makes it longer/shorter
+
+      
+#+begin_src lisp 
+  ;; change note/chord into a rest
+    (def-plug-in change-notes-below-60-into-rests ((self score) :score-transformations)
+      (do-chords (chord self) 
+                (when (some #'(lambda (note) (< (midi note) 60)) (notes chord))
+                  (change-rtm-object chord is-rest))))
+#+end_src      
+
+
+
+**** Todo: Transform all notes that meet certain test by same function, where one (or more) function argument(s) change(s) for different notes
+
+     The changes are given as, e.g., 
+
+       - BPF where the value depends on the note's start time (or position in a part)
+       - A list of values where the index is the note's position in a part
+       - A pattern -- can I somehow have Common Music pattern (possibly form an older Common Music version) important into PWGL/OpenMusic?
+       - A function (e.g., a random function)
+
+       Concrete examples: 
+       - "Tilt" or otherwise deform the whole score (or certain parts) in pitch, where the pitch change is given as a BPF
+       - "Scatter" pitches, but keep the harmony by transposing individual notes or small groups of notes (e.g., non-harmonic notes and the consecutive harmonic note) by octaves up/down, so that the contour of local max/min is controlled by a BPF
+       - Transform pitch of score controlled by a special BPF for each of its parts
+
+
+**** Todo: Transform all notes that meet certain test by same function, where one (or more) function argument(s) depend on the note's list of predecessors/successors (and possibly also some BPF etc as above)
+
+       Concrete examples	  
+       - Transpose all notes with a certain duration or more up so that they form local maxima (higher than both predecessor and successor)
+
+	 
+**** !! Todo: Transform (or remove) notes with a certain feature, where the feature test function expects an additional arg, e.g., given as BPF, list, PWGL circ-list, pattern or function
+
+       Concrete examples: 
+       - Notes that exceed a certain duration are somehow transformed, but the duration threshold changes over time
+
+	 
+***** ENP
+      
+      =(ccl::e <object> <expression-keyword> &rest)= 
+      <object> is chord or note
+      <expression-keyword> is, e.g., :accent, :slur, ... (can be any expression defined in ENP doc Appendix E)
+
+      returns true if <object> has given type of expression
+
+      Example
+      =(ccl:e mynote :accent)=
+
+
+      =(ccl::e <object> :bpf :id <bpf-id-string>)= 
+      
+      Returns true if there is a BPF "bpf name" attached to object
+
+ 
+      =(ccl::e <object> :bpf :sample :at (<object> | <time in sec>) [:id <bpf-id-string>])= 
+      <object> is chord or note
+      
+
+      Example 
+      =(ccl::e my-note :bpf :sample :at my-note :id "bpf name")=
+
+      returns BPF value of BPF "bpf name" at start time of my-note
+
+
+****** ENP plug-in
+
+#+begin_src lisp 
+  (def-plug-in transpose-notes-below-60-with-BPF ((self score) :score-transformations)
+    (do-notes (my-note self) 
+              ;; no BPF ID given -- uses the first BPF defined for this note
+              (let ((interval (ccl::e my-note :bpf :sample :at my-note)))
+                (setf (midi note) (+ (midi note) interval)))))
+#+end_src
+
+****** ! How to add BPF into score
+
+       - Select chords (not notes) over which BPF should be situated
+       - Filter chords out: press c
+       - Add expression: press e
+       - Type BPF, press return
+       - Double-click BPF and then double-click points to add
+       - Finishing: press ENTER (not return)
+
+       - Naming BPF: control-click ...
+       - You can add BPFs 
+	 - make different BPFs active: short cut TAB
+	 - show multiple lanes: short cut s (NOTE: do not edit BPFs in that mode)
+	 
+	
+       Note: you can set BPF properties etc. in context menu
+
+
+
+
+**** Todo: Other rough ideas
+
+     - Diminution: e.g., as proposed by Stockhausen's Ausmultipizieren, or (other) fractal techniques substituting, e.g., long notes by certain phrases (ornamentations)
+     - Augmentation: e.g., as proposed by Stockhausen, leaving out certain detail 
+     - Granular synthesis: short fragments of score (grains) extracted and somehow arranged in time
+
+
+**** Todo: how can I transform a score depending on another?
+
+     Rough ideas first
+     - Convolution (possibly in theory, but I should probably reduce data later..)
+     - Some interpolation
+     - Some mixing (how? control different "levels", i.e. how much they contribute to final result)
+     - Other sound processing inspired ideas: ring modulation, FM (?)
+
+
+
+
+
 ** TODO [#A] Define Strasheela score transformations (instead of plain generation as so far) :NEXT:
 
    Remember importance of transformations stressed by Tristan Murail in Interview in Hirs' OpenMusic book
@@ -806,8 +1264,8 @@ command SET HARMCONST.
   TransformScore TransformScore2
   ? CopyScore CopyScore2
 
-  *I started to define these transformations in ENP after all*
-  See ENP doc and defs in Transformations section below
+  *I started to define such transformations in ENP*, see [[*%5B#A%5D%20Define%20ENP%20score%20transformations][Define ENP score transformations]]
+  Do what you can in ENP and what is too hard in Strasheela
 
 *** Transformations
 
