@@ -32,7 +32,7 @@ functor
 import
    
    FD FS RecordC
-%    Browser(browse:Browse) 
+   % Browser(browse:Browse) 
    GUtils at 'x-ozlib://anders/strasheela/source/GeneralUtils.ozf'
    LUtils at 'x-ozlib://anders/strasheela/source/ListUtils.ozf'
    MUtils at 'x-ozlib://anders/strasheela/source/MusicUtils.ozf'
@@ -65,7 +65,7 @@ export
    Pc2Ratios
 
    GetChordIndex GetScaleIndex GetIntervalIndex
-   GetComment GetName GetAllNames
+   GetComment GetName GetAllNames GetFeature
 
    GetUntransposedRatios
    GetUntransposedRootRatio
@@ -506,7 +506,13 @@ define
 			     fun {$ Previous}
 				{All ComparisonFeats
 				 fun {$ Feat}
-				    {GUtils.isEqual (Xs.1).Feat Previous.Feat}
+				    %% if value at feat is a list of numbers then sort them before comparing equality
+				    X = (Xs.1).Feat in
+				    if {IsList X} andthen {IsNumber X.1}
+				    then {GUtils.isEqual {Sort X Value.'<'}
+					  {Sort Previous.Feat Value.'<'}}
+				    else {GUtils.isEqual X Previous.Feat}
+				    end
 				 end}
 			     end}
 	    in
@@ -898,6 +904,7 @@ define
       if {IsList NameAux} then NameAux else [NameAux] end 
    end
 
+   
    /** %% Returns a list of list of all the names (usually atoms) of the entries in the database DB (a database in the format of edit DBs, e.g., {HS.db.getEditScaleDB}). A list of lists is returned because some database entries have multiple names. Note that some entries have no names at all.
    %%
    %% Example: how to return a list of all scale names of the named scales in the current database (only their first name).
@@ -929,6 +936,24 @@ define
       {Map {Record.toList DB} Aux}
    end
 
+   
+   /** %% Returns the value at the database feature Feat (an atom) of X (a chord, scale or interval) specified in its database entry. Returns nil if the feature is not defined.
+   %% Blocks until the index parameter is determined.
+   %%
+   %% */
+   fun {GetFeature X Feat}
+      DB = if {HS_Score.isScale X} then {GetInternalScaleDB}
+	   elseif {HS_Score.isChord X} then {GetInternalChordDB}
+	   elseif {HS_Score.isInterval X} then {GetInternalIntervalDB}
+	   else {Exception.raiseError
+		 strasheela(failedRequirement X "must be interval, chord or scale object")}
+	      unit			% never returned
+	   end
+   in
+      if {HasFeature DB Feat} then DB.Feat.{X getIndex($)} else nil end
+   end
+
+   
    local
       fun {GetRatios_aux PC_Specs}
 	 {LUtils.mappend PC_Specs
