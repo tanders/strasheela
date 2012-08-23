@@ -353,6 +353,7 @@ MyScore = {Score.makeScore
 %% The Fomus output to Lilypond can be customised with literal Lilypond code with settings such as lily-file-header, lily-insert-before, etc.
 %%
 
+
 declare
 MyScore = {Score.makeScore seq(info: fomus(
 					'lily-view-exe-args':
@@ -370,8 +371,6 @@ MyScore = {Score.makeScore seq(info: fomus(
 {MyScore wait}
 {Out.renderFomus MyScore
  unit(file:literalLilyTest)}
-
-
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%
