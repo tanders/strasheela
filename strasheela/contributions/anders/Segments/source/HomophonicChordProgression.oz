@@ -97,7 +97,7 @@ define
    %%
    %% Further Args.iargs, Args.rargs: as for Segs.makeCounterpoint_Seq
    %% Args.iargs.n overwritten (is length of chords)
-   %% Further Args: for top-level sim.
+   %% Further Args (e.g., startTime, timeUnit): for top-level sim.
    %%
    %% */
    %% !!?? BUG:
@@ -109,6 +109,7 @@ define
    %%
    %% TODO:
    %%
+   %% - ! Add support for Score.getDefaults
    %% - To think: is arg isToplevel a good idea?
    %% OK - finish doc
    %% - do a few examples demonstrating args
@@ -140,8 +141,7 @@ define
 					      [seq(info: fomus(inst: scale)
 						   Args.scales
 						   endTime: End)]
-					   end}}
-					 startTime: 0)
+					   end}})
 			      {Record.subtractList
 			       {Adjoin Args sim} % keep toplevel label
 			       [makeTopLevel voiceNo iargs rargs chords scales
@@ -167,6 +167,8 @@ define
 		      sliceRule: false
 		      sopranoRule: false
 		      bassRule: false
+		      startTime: 0
+		      timeUnit: beats(1)
 		     )
       As = {GUtils.recursiveAdjoin Defaults Args}
       End = {FD.decl}
