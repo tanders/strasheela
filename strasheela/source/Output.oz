@@ -2844,6 +2844,9 @@ define
 		       isNote#MakeFomusNote
 		       %% rests are ignored
 		       isPause#fun {$ _ _} "" end
+		       %% seqs and sims are not processed
+		       % isSequential#fun {$ MySeq PartId} "" end
+		       % isSimultaneous#fun {$ MySeq PartId} "" end
 		       %% Otherwise clause
 		       fun {$ _} true end
 		       #fun {$ X _}
