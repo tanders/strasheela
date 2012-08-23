@@ -408,7 +408,9 @@ define
    in
       if ChordName \= nil then  
 	 {VsToFomusMarks ChordName.1
-	  unit(where:'x_')}
+	  unit(where:'*') % Lyric text syllable (for automatic horizontal spacing)
+	  % unit(where:'x_') % Text marking in italics below staff
+	 }
       else nil
       end
    end
