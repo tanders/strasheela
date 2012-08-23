@@ -8,29 +8,19 @@
 %%
 %%  TODO:
 %% - !! complete functor documentation:
-%%   - document analytical features concerning sonance and harmonic complexity in functor documentation at %% - !! Add missing 12-TET scales from Scala file (modes in Scala terminology)
-%% - !! Revise removal of dublicate entries
-%%   - if order of PCs is different then entries are not removed -- sort PCs at least for comparing
-%%   - if entries only differ in root (e.g., difference between major chord and sixth chord) then entries not removed
+%%   - document analytical features concerning sonance and harmonic complexity in functor documentation at
+%% - !! Add missing 12-TET scales from Scala file (modes in Scala terminology)
 %% - fix warning in ReduceToSingleOctave (some chord names from which PCs are removed are left out)
-%%
-%% - ?? include JI chords in Scala database (probably those relevant -- i.e. 5-limit -- are often already in the anyway, and higher limit chords are not faithfully enough played to be recognised anyway)
-%%
-
-%%
-%% TODO:
+%%   .. I do not understand this anymore...
 %%
 %% - revise specs for required PC and dissonances PC 
 %%
-
+%% - ?? include JI chords in Scala database (probably those relevant -- i.e. 5-limit -- are often already in the anyway, and higher limit chords are not faithfully enough played to be recognised anyway)
 %%
-%% BUG:
-%% - !! Augmented triad has same sonance (TorstensSonance) as major triad
-%%
-%% - OK Some chords missing, e.g., 'Undertone'
-%%   -> chord removed as dublicate entry (same as minor)
-%% - OK? Some chords with strangely formatted comment feature (comment double-nested), e.g., 'Tristan Chord' and other chords named with symbolic note names --
-%%     -> caused by calling HS.db.ratiosInDBEntryToPCs -- problem temporarily solved by not supporting ratios
+%% - OK !!? mark all inversions with a boolean chord feature (0 or 1) and allow for easy inclusion and exclusion (e.g., with function to generate database)
+%% - OK !! Revise removal of dublicate entries
+%%   - if order of PCs is different then entries are not removed -- sort PCs at least for comparing
+%%   - if entries only differ in root (e.g., difference between major chord and sixth chord) then entries not removed
 %%
 
 functor
@@ -49,6 +39,7 @@ export
    % AccidentalOffset
    % OctaveDomain
    db:DB
+   DbWithoutInversions
    
 define
 
@@ -89,7 +80,8 @@ define
 		     comment:'All-interval Tetrachord 1')
 	       chord(pitchClasses:{Pattern.dxsToXs [1 4 3] 0}
 		     roots:[0]
-		     comment:'Major Seventh 3rd inversion')
+		     comment:'Major Seventh 3rd inversion'
+		     inversion: 1)
 	       chord(pitchClasses:{Pattern.dxsToXs [2 1] 0}
 		     roots:[0]
 		     comment:'Minor Trichord')
@@ -131,16 +123,20 @@ define
 		     comment:unit(name:['Second-Fourth-Fifth Chord' 'sus2,4' '5/4/2']))
 	       chord(pitchClasses:{Pattern.dxsToXs [2 3 3] 0}
 		     roots:[0]
-		     comment:'Half-diminished Seventh 3rd inversion')
+		     comment:'Half-diminished Seventh 3rd inversion'
+		     inversion: 1)
 	       chord(pitchClasses:{Pattern.dxsToXs [2 3 4] 0}
 		     roots:[0]
-		     comment:unit(name:['Second-Fourth-Sixth Chord' '6/4/2' 'Minor Seventh 3rd inversion']))
+		     comment:unit(name:['Second-Fourth-Sixth Chord' '6/4/2' 'Minor Seventh 3rd inversion'])
+		     inversion: 1)
 	       chord(pitchClasses:{Pattern.dxsToXs [2 4] 0}
 		     roots:[0]
-		     comment:unit(name:['Double Diminished' 'Augmented Sixth 2nd inversion']))
+		     comment:unit(name:['Double Diminished' 'Augmented Sixth 2nd inversion'])
+		     inversion: 1)
 	       chord(pitchClasses:{Pattern.dxsToXs [2 4 3] 0}
 		     roots:[0]
-		     comment:unit(name:['Double Diminished Seventh' 'Dominant Seventh 3rd inversion']))
+		     comment:unit(name:['Double Diminished Seventh' 'Dominant Seventh 3rd inversion'])
+		     inversion: 1)
 	       chord(pitchClasses:{Pattern.dxsToXs [2 5] 0}
 		     roots:[0]
 		     comment:unit(name:['Suspended Second' 'sus2' 'Second-Fifth Chord' '5/2']))
@@ -167,16 +163,19 @@ define
 		     comment:'Minor Quartal Triad')
 	       chord(pitchClasses:{Pattern.dxsToXs [3 2 3] 0}
 		     roots:[0]
-		     comment:unit(name:['Third-Fourth Chord' '4/3' 'Minor Seventh 2nd inversion']))
+		     comment:unit(name:['Third-Fourth Chord' '4/3' 'Minor Seventh 2nd inversion'])
+		     inversion: 1)
 	       chord(pitchClasses:{Pattern.dxsToXs [3 2 4] 0}
 		     roots:[0]
-		     comment:'Dominant Seventh 2nd inversion')
+		     comment:'Dominant Seventh 2nd inversion'
+		     inversion: 1)
 	       chord(pitchClasses:{Pattern.dxsToXs [3 3] 0}
 		     roots:[0]
 		     comment:unit(name:['Diminished' 'mb5' 'Minor Trine']))
 	       chord(pitchClasses:{Pattern.dxsToXs [3 3 2] 0}
 		     roots:[0]
-		     comment:'Dominant Seventh 1st inversion')
+		     comment:'Dominant Seventh 1st inversion'
+		     inversion: 1)
 	       chord(pitchClasses:{Pattern.dxsToXs [3 3 3] 0}
 		     roots:[0]
 		     comment:unit(name:['Diminished Seventh' 'dim']))
@@ -197,7 +196,8 @@ define
 		     comment:unit(name:['Minor Triad' 'Minor' 'm']))
 	       chord(pitchClasses:{Pattern.dxsToXs [3 4 1] 0}
 		     roots:[0]
-		     comment:'Major Seventh 1st inversion')
+		     comment:'Major Seventh 1st inversion'
+		     inversion: 1)
 	       chord(pitchClasses:{Pattern.dxsToXs [3 4 2] 0}
 		     roots:[0]
 		     comment:unit(name:['Minor Sixth' 'm6']))
@@ -230,13 +230,15 @@ define
 		     comment:unit(name:['Minor Added Ninth' 'madd9']))
 	       chord(pitchClasses:{Pattern.dxsToXs [3 5] 0}
 		     roots:[0]
-		     comment:unit(name:['Neapolitan Sixth' 'Major Triad 1st inversion']))
+		     comment:unit(name:['Neapolitan Sixth' 'Major Triad 1st inversion'])
+		     inversion: 1)
 	       chord(pitchClasses:{Pattern.dxsToXs [3 5 3] 0}
 		     roots:[0]
 		     comment:unit(name:['Major Seventh Augmented Fifth' 'maj7#5']))
 	       chord(pitchClasses:{Pattern.dxsToXs [3 6] 0}
 		     roots:[0]
-		     comment:unit(name:['Minor Trine 1st inversion']))
+		     comment:unit(name:['Minor Trine 1st inversion'])
+		     inversion: 1)
 	       chord(pitchClasses:{Pattern.dxsToXs [3 6 3] 0}
 		     roots:[0]
 		     comment:unit(name:['Sixths Chord']))
@@ -248,7 +250,8 @@ define
 		     comment:unit(name:['Added Fourth' 'add4']))
 	       chord(pitchClasses:{Pattern.dxsToXs [4 1 4] 0}
 		     roots:[0]
-		     comment:unit(name:['Major Seventh 2nd inversion']))
+		     comment:unit(name:['Major Seventh 2nd inversion'])
+		     inversion: 1)
 	       chord(pitchClasses:{Pattern.dxsToXs [4 2] 0}
 		     roots:[0]
 		     comment:unit(name:['Hard-diminished' 'b5']))
@@ -260,7 +263,8 @@ define
 		     comment:unit(name:['Augmented-diminished Ninth']))
 	       chord(pitchClasses:{Pattern.dxsToXs [4 2 3] 0}
 		     roots:[0]
-		     comment:unit(name:['Half-diminished Seventh 2nd inversion']))
+		     comment:unit(name:['Half-diminished Seventh 2nd inversion'])
+		     inversion: 1)
 	       chord(pitchClasses:{Pattern.dxsToXs [4 2 4] 0}
 		     roots:[0]
 		     comment:unit(name:['Hard-diminished Seventh' '7b5' 'French Sixth']))
@@ -284,7 +288,8 @@ define
 		     comment:unit(name:['Major Triad' 'Major' 'maj']))
 	       chord(pitchClasses:{Pattern.dxsToXs [4 3 2] 0} 
 		     roots:[0]
-		     comment:unit(name:['Sixte Ajoutee' '6' 'Minor Seventh 1st inversion']))
+		     comment:unit(name:['Sixte Ajoutee' '6' 'Minor Seventh 1st inversion'])
+		     inversion: 1)
 	       chord(pitchClasses:{Pattern.dxsToXs [4 3 2 5] 0} % NOTE: PCs outside octave
 		     roots:[0]
 		     comment:unit(name:['Added Sixth & Ninth' '6/9']))
@@ -381,7 +386,8 @@ define
 	       	     comment:unit(name:['Augmented Added Ninth' '#5add9']))
 	       chord(pitchClasses:{Pattern.dxsToXs [4 5] 0}
 	       	     roots:[0]
-	       	     comment:unit(name:['Minor Triad 1st inversion']))
+	       	     comment:unit(name:['Minor Triad 1st inversion'])
+		     inversion: 1)
 	       chord(pitchClasses:{Pattern.dxsToXs [4 5 2] 0}
 	       	     roots:[0]
 	       	     comment:unit(name:['Sixth-Seventh Chord' '7/6']))
@@ -426,10 +432,12 @@ define
 		     comment:unit(name:['Fourth-Ninth Chord' '9/4' 'sus4add9']))
 	       chord(pitchClasses:{Pattern.dxsToXs [5 3] 0}
 	       	     roots:[0]
-		     comment:unit(name:['Minor Triad 2nd inversion']))
+		     comment:unit(name:['Minor Triad 2nd inversion'])
+		     inversion: 1)
 	       chord(pitchClasses:{Pattern.dxsToXs [5 4] 0}
 	       	     roots:[0]
-		     comment:unit(name:['Fourth-Sixth Chord' 'Major Triad 2nd inversion' '6/4']))
+		     comment:unit(name:['Fourth-Sixth Chord' 'Major Triad 2nd inversion' '6/4'])
+		     inversion: 1)
 	       chord(pitchClasses:{Pattern.dxsToXs [5 5] 0}
 	       	     roots:[0]
 		     comment:unit(name:['Quartal Triad']))
@@ -441,10 +449,12 @@ define
 		     comment:unit(name:['Fourth-Seventh Chord' '7/4']))
 	       chord(pitchClasses:{Pattern.dxsToXs [6 2] 0}
 	       	     roots:[0]
-		     comment:unit(name:['Augmented Sixth 1st inversion']))
+		     comment:unit(name:['Augmented Sixth 1st inversion'])
+		     inversion: 1)
 	       chord(pitchClasses:{Pattern.dxsToXs [6 3] 0}
 	       	     roots:[0]
-		     comment:unit(name:['Minor Trine 2nd inversion']))
+		     comment:unit(name:['Minor Trine 2nd inversion'])
+		     inversion: 1)
 	       chord(pitchClasses:{Pattern.dxsToXs [7 3] 0}
 	       	     roots:[0]
 		     comment:unit(name:['Minor Quintal Triad']))
@@ -1070,10 +1080,10 @@ define
 		   scale(pitchClasses:{Pattern.dxsToXs [3 1 1 1 3 1 1 1] 0}
 			 roots:[0]
 			 comment:unit(name:['Messiaen mode 4 inverse']))
-		   scale(pitchClasses:{Pattern.dxsToXs [1 1 2 2 1 1 2 2] 0}
+		   scale(pitchClasses:{Pattern.dxsToXs [2 2 1 1 2 2 1 1] 0}
 			 roots:[0]
 			 comment:unit(name:['Messiaen mode 6']))
-		   scale(pitchClasses:{Pattern.dxsToXs [2 2 1 1 2 2 1 1] 0}
+		   scale(pitchClasses:{Pattern.dxsToXs [1 1 2 2 1 1 2 2] 0}
 			 roots:[0]
 			 comment:unit(name:['Messiaen mode 6 inverse']))
 		   scale(pitchClasses:{Pattern.dxsToXs [1 1 1 2 2 1 2 2] 0}
@@ -1244,7 +1254,7 @@ define
 	  end}
       end
     
-      /** %% Reduces the pitch classes of the given chord DB entry (which can exceed an octave) into "true" pitch classes within 0-11. If doublicate pitch classes occur that way, then these are removed (and a warning is printed).
+      /** %% Reduces the pitch classes of the given chord or scale DB entry (which can exceed an octave) into "true" pitch classes within 0-11. If doublicate pitch classes occur that way, then these are removed (and a warning is printed).
       %%
       %% NOTE: ChordSpec must already be preprocessed by HS.db.ratiosInDBEntryToPCs.
       %% */
@@ -1273,7 +1283,7 @@ define
 	 PCs = {LUtils.removeDuplicates2
 		{Map ChordSpec.pitchClasses fun {$ PC} PC mod 12 end}
 		proc {$ PC} % print warning
-		   {Out.show 'Removed duplicate PC '#PC#' from chord '#{GetName}}
+		   {Out.show 'Removed duplicate PC '#PC#' from '#{Label ChordSpec}#' '#{GetName}}
 		end}
       in
 	 {Adjoin unit(pitchClasses:PCs
@@ -1344,8 +1354,8 @@ define
 	 %% Obviously, only pitch classes 0-11 are supported.
 	 %% */
 	 fun {TorstensChordConsonance ChordSpec}
-	    %% Chords with more pitch classes are automatically rated to be more dissonant, and ArityCurve specifies how much so. The higher ArityCurve, the more this is taken into account (at 1.0 it has no effect).
-	    ArityCurve = 1.25
+	    %% Chords with more pitch classes are automatically rated to be more dissonant, and ArityCurve specifies how much so. The lower ArityCurve, the more this is taken into account (at 1.0 it has no effect).
+	    ArityCurve = 0.8
 	    %% list of sonances for all intervals in chord (all PC combinations)
 	    Sonances = {Pattern.mapPairwise ChordSpec.pitchClasses
 			fun {$ PC1 PC2}
@@ -1353,13 +1363,30 @@ define
 			in
 			   SonanceData.PcInterval
 			end}
-	    %% arithmetic mean, weighted by PC cardiality
-	    Sonance =  {FloatToInt {IntToFloat {LUtils.accum Sonances Number.'+'}}
-			/ {Pow {IntToFloat {Length Sonances}} ArityCurve} * 10.0}
+	    %% harmonic mean, weighted by PC cardiality
+	    Sonance = {FloatToInt {Pow {GUtils.harmonicMean {Map Sonances IntToFloat}} ArityCurve}
+		       * 10.0}
 	 in
 	    {Adjoin unit(torstensChordConsonance:Sonance)
 	     ChordSpec}
 	 end   
+	 % fun {TorstensChordConsonance_Orig ChordSpec}
+	 %    %% Chords with more pitch classes are automatically rated to be more dissonant, and ArityCurve specifies how much so. The higher ArityCurve, the more this is taken into account (at 1.0 it has no effect).
+	 %    ArityCurve = 1.25
+	 %    %% list of sonances for all intervals in chord (all PC combinations)
+	 %    Sonances = {Pattern.mapPairwise ChordSpec.pitchClasses
+	 % 		fun {$ PC1 PC2}
+	 % 		   PcInterval = {Abs PC1 - PC2} mod 12
+	 % 		in
+	 % 		   SonanceData.PcInterval
+	 % 		end}
+	 %    %% arithmetic mean, weighted by PC cardiality
+	 %    Sonance =  {FloatToInt {IntToFloat {LUtils.accum Sonances Number.'+'}}
+	 % 		/ {Pow {IntToFloat {Length Sonances}} ArityCurve} * 10.0}
+	 % in
+	 %    {Adjoin unit(torstensChordConsonance:Sonance)
+	 %     ChordSpec}
+	 % end   
       end
 
    
@@ -1538,12 +1565,22 @@ define
 				 }
 				 PitchesPerOctave}}}
 			  end}
-		 scales: Scales
+		 scales: {Record.map Scales ReduceToSingleOctave}
 		 intervals: Intervals
 		 chordFeatures: [torstensChordConsonance
 				 partialChordComplexity]
 		 scaleFeatures: nil
 		 intervalFeatures: nil)}
+
+      /** %% Same as DB, but all chord inversions have been removed
+      %% */
+      DbWithoutInversions = {Adjoin unit(chordDB: {List.toTuple {Label DB.chordDB}
+						   {Filter {Record.toList DB.chordDB}
+						    fun {$ C}
+						       {Not {HasFeature C.comment inversion} andthen
+							C.comment.inversion == 1}
+						    end}})
+			      {Record.subtract DB chordDB}}
 
    end
 
