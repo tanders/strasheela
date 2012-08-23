@@ -40,6 +40,9 @@ define
    
       
    /** %% [variable ordering constructor] Returns a score variable ordering. A variable ordering is a binary function expecting two parameter objects and returning a boolean value, which is given to the argument 'order' expected by score solvers. This variable ordering first visits time parameters, then scale, then chord, and then pitch class parameters. It breaks ties (i.e. both parameters are the same type or not one of these type) with the score variable ordering P. For example, P can be SDistro.dom.
+   %%
+   %% NOTE: Distribution insifficient for extension of standard chords/scales like inversion chords. Their parameters (e.g., sopranoPitchClass, bassPitchClass) would need special consideration for efficiency!
+
    %% */
    fun {MakeOrder_TimeScaleChordPitchclass P}
       {SDistro.makeSetPreferredOrder
