@@ -2458,8 +2458,9 @@ define
       
    end
 
-   /** %% [abstract mixin class] ArticulationMixin extends note classes with an articulation parameter.
-   %% No further constraints are applied.
+   /** %% [abstract mixin class] ArticulationMixin extends note classes with an articulation parameter, which expresses how long the note is hold. For example, staccato and legato articulations can be expressed with this parameter. The actual mapping of articulation values to notated articulations is defined by Init.setArticulationMap (see the documentation of that procedure of the defaults). For sound synthesis output (MIDI and Csound) the articulation is a duration percentage (e.g., if articulation is 105, then notes are slightly overlapping resulting in a legato).
+   %%
+   %% Only the parameter is defined, no further constraints are applied.
    %% NOTE: unlike most other parameters, the articulation parameter defaults to a determined integer (meaning non-legato). 
    %%
    %% NB: the articulationUnit is currently only a placeholder (this unit is ignoed).
@@ -2488,7 +2489,7 @@ define
 	 end
 	 meth getInitInfo($ ...)       
 	    unit(superclass:SuperClass
-		 args:[articulation#getArticulation#noMatch]) 
+		 args:[articulation#getArticulation#100]) 
 	 end
       end
    end
