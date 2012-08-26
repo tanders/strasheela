@@ -337,7 +337,8 @@ define
       FomusArticulationMap = {NewCell nil}
    in
       /** %% Sets the mapping of an (average) articulation value to the corresponding symbolic articulation. This articulation symbol is abstract and for music output must be mapped to the marks of the corresponding output format (e.g., Fomus or ENP). The default is
-      unit(25: staccatissimo
+      unit(0: rest
+	   25: staccatissimo
 	   50: staccato
 	   70: 'mezzo staccato'
 	   90: 'non legato'
@@ -349,7 +350,8 @@ define
 	 ArticulationMap := Map
       end
       %% Default Map
-      {SetArticulationMap unit(25: staccatissimo
+      {SetArticulationMap unit(0: rest
+			       25: staccatissimo
 			       50: staccato
 			       70: 'mezzo staccato'
 			       95: 'non legato'
@@ -385,7 +387,8 @@ define
 	 FomusArticulationMap := Map
       end
       %% Default Map
-      {SetFomusArticulationMap unit(staccatissimo: '!' 
+      {SetFomusArticulationMap unit(rest: 'rest'
+				    staccatissimo: '!' 
 				    staccato: '.' 
 				    'mezzo staccato': '/.'
 				    'non legato': nil
