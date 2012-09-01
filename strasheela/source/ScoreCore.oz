@@ -96,9 +96,9 @@ export
    apply_H: Apply_Heuristic
 
    AtTimeR AtTimeR2
-   InTimeframe InTimeframeOffset
-   InTimeframeR InTimeframeOffsetR
-   GetItemsInTimeframe GetItemsInTimeframeOffset
+   InTimeframe InTimeframeOffset InTimeframeOffset2
+   InTimeframeR InTimeframeOffsetR InTimeframeOffset2R
+   GetItemsInTimeframe GetItemsInTimeframeOffset GetItemsInTimeframeOffset2
    
 prepare
    /** marker of score object type checking */
@@ -1041,9 +1041,9 @@ define
 	       {self getStartTime($)} {self getEndTime($)}
 	       unit(cTest: {GUtils.toFun CTest})}
       end
-      /** %% [Deterministic method] Generalised version of getSimultaneousItems where the offset time Offset (FD int) is taken into account. See the doc of InTimeframeOffsetR for the meaning of the Offset.
+      /** %% [Deterministic method] Generalised version of getSimultaneousItems where the offset time of self is taken into account. See the doc of InTimeframeOffsetR for the meaning of the Offset.
       %% */
-      meth getSimultaneousItemsOffset(?Xs Offset
+      meth getSimultaneousItemsOffset(?Xs 
 				      test:Test<=fun {$ X} true end
 				      cTest: CTest<=fun {$ X} true end
 				      toplevel: Top<=false)
@@ -1059,8 +1059,29 @@ define
 						  end)}
       in
 	 Xs = {GetItemsInTimeframeOffset ScoreObjects
-	       {self getStartTime($)} {self getEndTime($)}
-	       Offset
+	       {self getStartTime($)} {self getEndTime($)} {self getOffsetTime($)}
+	       unit(cTest: {GUtils.toFun CTest})}
+      end
+      
+      /** %% [Deterministic method] Generalised version of getSimultaneousItems where the offset time of self and also of the returned items are taken into account. See the doc of InTimeframeOffset2R.
+      %% */
+      meth getSimultaneousItemsOffset2(?Xs 
+				      test:Test<=fun {$ X} true end
+				      cTest: CTest<=fun {$ X} true end
+				      toplevel: Top<=false)
+	 TopLevel = if Top \= false
+		    then Top
+		    else {self getTopLevels($ test:fun {$ X} {X isTimeMixin($)} end)}.1
+		    end
+	 ScoreObjects = {TopLevel collect($ test: fun {$ X}
+						     X \= self andthen
+						     %% only test items further
+						     {X isItem($)} andthen
+						     {{GUtils.toFun Test} X}
+						  end)}
+      in
+	 Xs = {GetItemsInTimeframeOffset2 ScoreObjects
+	       {self getStartTime($)} {self getEndTime($)} {self getOffsetTime($)}
 	       unit(cTest: {GUtils.toFun CTest})}
       end
 
@@ -3603,6 +3624,16 @@ define
       ((Start+Offset) < EndX) andthen (StartX < (End+Offset))
    end
 
+   /** %% [Deterministic function] It returns true if the item X -- including its offset time -- would be in the time frame specified by Start and End, if these times would be moved by this offset time.
+   %% */
+   fun {InTimeframeOffset2 X Start End Offset}
+      StartX = {FD.decl} 
+      EndX = {X getEndTime($)}
+   in
+      StartX =: {X getStartTime($)} - {X getOffsetTime($)}
+      ((Start+Offset) < EndX) andthen (StartX < (End+Offset))
+   end
+
    /** % [0/1 Constraint] Returns 0/1-integer whether (some part of) the item X is in the time frame specified by Start and End (FD ints).
    %% This relation defines a conjunction of the following Allen's Interval Algebra relations: overlaps, starts, during, finishes and equal; only meets and before/after are excluded.
    %% */
@@ -3613,12 +3644,22 @@ define
       {FD.conj (Start <: EndX) (StartX <: End)}
    end
 
-  /** %% [0/1 Constraint] Varian of InTimeframeR where the offset time Offset (FD int) is taken into account. It returns true (1) if the item X would be in the time frame specified by Start and End, if these times would be moved by this offset time.
+  /** %% [0/1 Constraint] Variant of InTimeframeR where the offset time Offset (FD int) is taken into account. It returns true (1) if the item X would be in the time frame specified by Start and End, if these times would be moved by this offset time.
    %% */
    fun {InTimeframeOffsetR X Start End Offset}
       StartX = {X getStartTime($)}
       EndX = {X getEndTime($)}
    in
+      {FD.conj (Start+Offset <: EndX) (StartX <: End+Offset)}
+   end
+
+   /** %% [0/1 Constraint] It returns true (1) if the item X would be in the time frame specified by Start and End, if these times would be moved by this offset time.
+   %% */
+   fun {InTimeframeOffset2R X Start End Offset}
+      StartX = {FD.decl}
+      EndX = {X getEndTime($)}
+   in
+      StartX =: {X getStartTime($)} - {X getOffsetTime($)}
       {FD.conj (Start+Offset <: EndX) (StartX <: End+Offset)}
    end
 
@@ -3643,21 +3684,33 @@ define
       end
    end
 
-   /** %% [Deterministic function] Generalised version of GetItemsInTimeframe where the offset time Offset (FD int) is taken into account. See the doc of InTimeframeOffsetR for the meaning of the Offset.
-   %% */
-   proc {GetItemsInTimeframeOffset Xs Start End Offset Args ?Result}
-      Defaults = unit(test:fun {$ X} true end
-		      cTest: fun {$ X} true end)
-      As = {Adjoin Defaults Args}
-   in
-      thread 	
-	 Result = {LUtils.cFilter {Filter Xs {GUtils.toFun As.test}}
-		   fun {$ X}
-		      ({InTimeframeOffsetR X Start End Offset} == 1) andthen
-		      {{GUtils.toFun As.cTest} X}
-		   end}
+   local
+      fun {MakeGetItemsInTimeframe Constraint}
+	 proc {$  Xs Start End Offset Args ?Result}
+	    Defaults = unit(test:fun {$ X} true end
+			    cTest: fun {$ X} true end)
+	    As = {Adjoin Defaults Args}
+	 in
+	    thread 	
+	       Result = {LUtils.cFilter {Filter Xs {GUtils.toFun As.test}}
+			 fun {$ X}
+			    ({Constraint X Start End Offset} == 1) andthen
+			    {{GUtils.toFun As.cTest} X}
+			 end}
+	    end
+	 end
       end
+   in
+      /** %% [Deterministic function] variant of GetItemsInTimeframe where the offset time Offset (FD int) is taken into account. See the doc of InTimeframeOffsetR for the meaning of the Offset.
+      %% */
+      GetItemsInTimeframeOffset = {MakeGetItemsInTimeframe InTimeframeOffsetR}      
+      /** %% [Deterministic function] variant of GetItemsInTimeframe where the offset time Offset (FD int) and the offset times of items in Xs are taken into account. See the doc of InTimeframeOffset2R.
+      %% */
+      GetItemsInTimeframeOffset2 = {MakeGetItemsInTimeframe InTimeframeOffset2R}
    end
+
+
+   
    % %% TODO: defs to define, then revise the method findSimultaneousItem accordingly 
    % fun {FindItemInTimeframe MyScore Start End Offset Args}
    % end
