@@ -395,6 +395,8 @@ define
 %    end
    /** %% Constraints the domain of each element in Xs to contain only the elements of Ys.
    %% !! Only a random distribution enforces a random ordering here.
+   %%
+   %% Note: does this essentially the same as FD.list ?
    %% */
    proc {Random Xs Ys}
       {ForAll Xs proc {$ X}
@@ -2100,6 +2102,12 @@ define
    in
       {Contour Xs {FenvToContour2 MyFenv {Length Xs}-1}}
    end
+
+
+
+
+
+   
 
    /** %% Contour Dirs2 (List of FD ints) quasi paraphrases original contour Dirs1 (List of FD ints). In at maximum MaxErrorPercent (FD int) and at least MinPercentError (FD int) cases, an ascending or descending value of Dir1 can be a constant value in Dir2 while constant values can be ascending or descending. In other words the direction values are either the same or differ by one. Dirs1 and Dirs2 must be of same length. 
    %% */
