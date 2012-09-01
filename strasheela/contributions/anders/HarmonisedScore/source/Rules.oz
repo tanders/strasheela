@@ -1183,7 +1183,7 @@ define
    end
 
 
-   /** %% Melodic constraint for list of Notes: non-chord tones are only permitted if they are reached and left by a step. The first and last element of Notes is constrained to a chord tone.
+   /** %% Melodic constraint for list of Notes: non-chord tones are only permitted if they are reached and left by a step. The first and last element of Notes is constrained to a chord tone, and so are notes before/after a rest (caused by notes with offsetTime > 0).
    %%
    %% Args:
    %% 'maxInterval': an ratio spec for the maximum step-size permitted. Default is a septimal second (8#7). 
@@ -1205,6 +1205,13 @@ define
 	  end
        in
 	  {N2 nonChordPCConditions([Aux])}
+       end}
+      %% notes before a rest must be chord tones
+      {Pattern.for2Neighbours Notes
+       proc {$ N1 N2}
+	  {FD.impl ({N2 getOffsetTime($)} >: 0)
+	   {FD.conj {N1 isInChord($)} {N2 isInChord($)}}
+	   1}
        end}
       %% Explicitly constrain that first and last note must be chord tones
       {Notes.1 getInChordB($)} = 1
