@@ -28,7 +28,7 @@ import
    HS_Score at 'Score.ozf'
    HS_DB at 'Database.ozf'
 
-%    Browser(browse:Browse)
+   % Browser(browse:Browse)
 export
    AddExplorerOut_ChordsToScore
 
@@ -167,9 +167,10 @@ define
 					 then 1
 					 else 0
 					 end
+	   Settings = {As.getSettings MyNote}
 	in
 	   {Out.record2FomusNote
-	    {Adjoin {As.getSettings MyNote}
+	    {Adjoin {AppendFomusMarks Settings unit(marks: {Out.fomusArticulationMarks MyNote})}
 	     unit(part:PartId
 		  time:{MyNote getStartTimeInBeats($)}
 		  dur:{MyNote getDurationInBeats($)}
