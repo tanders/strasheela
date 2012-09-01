@@ -45,7 +45,7 @@ export
    ForTimeRange ForTimeRangeArgs
    %% TODO: MapTimeRange MapTimeRangeArgs
    MapTimeslices ForTimeslices
-   MapSimultaneousPairs ForSimultaneousPairs
+   MapSimultaneousPairs ForSimultaneousPairs 
    FilterSimultaneous FindSimultaneous
    
    MapScore
@@ -1009,12 +1009,15 @@ define
 	    {Flatten Aux}
 	 end
       end
+      
       /** %% ForSimultaneousPairs traverses Xs (a list of score objects) and applies the binary procedure P to pairs of simultaneous score objects. 
       %% ForSimultaneousPairs applies {P X Y} to all pairs X and Y, where X is an element in Xs and Y is a score object which is simultaneous to X, but which is not necessarily contained in Xs. In order to avoid applying the same constraint twice in case both X and Y are contained in Xs, there is an additional restriction related to the hierarchic nesting of X and Y. Simplified, this restriction states that the container of Y must be at a lower position than the container of X. However, ForSimultaneousPairs is more general and works for arbitrary nesting.
       %%
       %% Args: 
       %% 'test': a Boolean function or method for pre-filtering potential Y values.
-      %% 'cTest': a Boolean function or method applied within the concurrent filtering done for isSimultaneousItemR. See doc of the Score.item method getSimultaneousItems for details. 
+      %% 'cTest': a Boolean function or method applied within the concurrent filtering done for isSimultaneousItemR. See doc of the Score.item method getSimultaneousItems for details.
+      %% 'getSim' (an atom, default getSimultaneousItems): method to access simultaneous objects. Possible values are getSimultaneousItems, getSimultaneousItemsOffset and getSimultaneousItemsOffset2
+      %% 'args' (a list or false, default false): If this argument is not false then it is used to specify changing arguments for P. P is in this case a procedure expecting three arguments {P X Y ArgI}. args expects a list that is of the same lengths as Xs, and contains an argument (which can be any day, including a composite data structure with multiple args) for every item in X.
       %%
       %% Note that ForSimultaneousPairs even works if the rhythmical structure is indetermined in the CSP definition, but it will block until the rhythmic structure is determined enough to tell which score objects are simultaneous. Therefore, a distribution strategy which determines the rhythmical structure relatively early (e.g., left to right) is recommended.
       %%
@@ -1030,17 +1033,21 @@ define
       %% */
       proc {ForSimultaneousPairs Xs P Args}
 	 Defaults = unit(test: fun {$ X} true end
-			 cTest: fun {$ X} true end)
+			 cTest: fun {$ X} true end
+			 getSim: getSimultaneousItems
+			 args: false)
 	 As = {Adjoin Defaults Args}
       in
 	 thread 
-	    {ForAll Xs
-	     proc {$ X}
-		SimItems in
+	    {List.forAllInd Xs
+	     proc {$ I X}     % arg I necessary in case args are given
+		SimItems
+		GetSimultaneousItems = As.getSim
+	     in
 		thread
 		   %% getSimultaneousItems internally uses LUtils.cFilter, which supports
 		   %% concurrent processing (e.g., can return a partially determined list)
-		   SimItems = {X getSimultaneousItems($ cTest: {GUtils.toFun As.cTest}
+		   SimItems = {X GetSimultaneousItems($ cTest: {GUtils.toFun As.cTest}
 						      test:fun {$ Y}
 							      Y \= X andthen 
 							      {{GUtils.toFun As.test} Y} andthen
@@ -1053,11 +1060,19 @@ define
 							      end
 							   end)}
 		end
-		thread {ForAll SimItems proc {$ Y} {P X Y} end} end
+		thread
+		   {ForAll SimItems proc {$ Y}
+				       if As.args == false
+				       then {P X Y} 
+				       else {P X Y {Nth As.args I}}
+				       end
+				    end}
+		end
 	     end}
 	 end
       end
    end
+
 
    /** %% Traverses Xs (a list of temporal items) and returns those from Xs which are simultaneous with Y (a temporal item).
    %% Uses internally LUtils.cFilter, i.e. returns score objects as soon as enough information is available whether or not they are simultaneous, but not necessarily in their order in Xs.
