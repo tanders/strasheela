@@ -254,7 +254,9 @@ define
 
    proc {ShowTracing Param DomVal}
       {System.showInfo
-       "Distribute "#{Value.toVirtualString {Param toInitRecord($)} 1000000 1000000}
+       "Distribute "#{Value.toVirtualString {Adjoin unit(id: {Param getID($)})
+					     {Param toInitRecord($)}}
+		      1000000 1000000}
        #" to "#DomVal}
    end
 
