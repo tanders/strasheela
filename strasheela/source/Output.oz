@@ -96,7 +96,7 @@ export
    IsFomusChord
    IsGraceNote
    GetUserFomus GetUserFomus_Before GetUserFomus_After
-   Record2FomusEvent Record2FomusEvent_Untimed Record2FomusNote Record2FomusObject Record2FomusSetting Record2FomusCode Record2FomusMeasure
+   Record2FomusEvent Record2FomusEvent_Untimed Record2FomusNote Record2FomusObject Record2FomusSetting Record2FomusCode FomusArticulationMarks Record2FomusMeasure
    MakeFomusNote
    
    MakeCMEvent MakeCMScore OutputCMScore
@@ -2522,14 +2522,69 @@ define
 			      [time dur]}}}
       #" |"
    end
+
+   /** %% [for clause definitions etc] Expects a note and depending on the note's articulation parameter returns the appropriate articulations (e.g., fomus code for staccato or legato). The result is a list of VS intended for the feature 'marks' in a record given to Record2FomusNote. See the definition of MakeFomusNote for an example.  
+   %% */
+   fun {FomusArticulationMarks MyNote}
+      if {Score.isArticulationMixin MyNote}
+      then
+	 FomusArticulation = {Init.getFomusArticulation {MyNote getArticulation($)}}
+      in
+	 %% Deal spanner marks (e.g., legato begin and end), which are returned as a list.
+	 case FomusArticulation of [BeginA ContinueA EndA] then
+	    %% Is note first within the spanner articulation in question?
+	    IsFirst = if {MyNote hasTemporalPredecessor($)}
+		      then Pre = {MyNote getTemporalPredecessor($)} in
+			 if {Score.isArticulationMixin Pre}
+			 then {Not
+			       {Init.getArticulationSymbol {Pre getArticulation($)}}
+			       == {Init.getArticulationSymbol {MyNote getArticulation($)}}}
+			 else true
+			 end
+		      else true
+		      end
+	    IsVeryLast = {Not IsFirst} andthen {Not {MyNote hasTemporalSuccessor($)}}
+	 in
+	    [if IsFirst
+	     then BeginA
+	     elseif IsVeryLast
+	     then EndA 
+	     else ContinueA
+	     end]
+	 else
+	    %% Add ending mark of preceeding spanner range?
+	    Mark1 = if {MyNote hasTemporalPredecessor($)}
+		    then  Pre = {MyNote getTemporalPredecessor($)} in
+		       if {Score.isArticulationMixin Pre}
+		       then case {Init.getFomusArticulation {Pre getArticulation($)}}
+			    of [_ _ EndA]
+			    then [EndA]
+			    else nil
+			    end
+		       else nil
+		       end
+		    else nil
+		    end
+	    Mark2 = {Init.getFomusArticulation {MyNote getArticulation($)}}
+	 in
+	    {Append Mark1 case Mark2 of nil then nil else [Mark2] end}
+	 end
+      else nil
+      end
+   end
+
    
    /** %% [for clause definitions etc] Expects a record R, whose features are the Fomus settings of a note and MyItem (typically the note itself). MyItem is used to add the settings in its fomus info tag, if MyNote is nil then these are left out. Record2FomusNote returns the corresponding Fomus code (a VS).
    %% Required features in R: part, time, dur.
    %% */
    fun {Record2FomusNote R MyItem}
       %% check whether note is actually rest (i.e. its articulation is 0)
-      if {HasFeature R marks} andthen (R.marks == 'rest' orelse
-				       ({IsList R.marks} andthen {Member 'rest' R.marks}))
+      if {Score.isScoreObject MyItem} andthen {MyItem isNote($)} andthen
+	 {HasFeature R marks} andthen
+	 ({MyItem getArticulation($)} == 0 orelse
+	  {MyItem getAmplitude($)} == 0 orelse
+	  R.marks == 'rest' orelse
+	  ({IsList R.marks} andthen {Member 'rest' R.marks}))
       then nil			% for a rest output nothing
       else %% normal note
 	 fun {IsPlainMark X}
@@ -2557,59 +2612,13 @@ define
    %% Note that the correct notation of spanner marks (e.g., legato) currently only works within the same sequential container.
    %% */
    fun {MakeFomusNote MyNote PartId}
-      {Record2FomusNote
-       {Adjoin unit(part:PartId
-		    time:{MyNote getStartTimeInBeats($)}
-		    dur:{MyNote getDurationInBeats($)}
-		    pitch:{MyNote getPitchInMidi($)}
-		    dynamic: {MyNote getAmplitudeInVelocity($)} / 127.0)
-	%% add articulation marks 
-	if {Score.isArticulationMixin MyNote}
-	then
-	   FomusArticulation = {Init.getFomusArticulation {MyNote getArticulation($)}}
-	in
-	   %% Deal spanner marks (e.g., legato begin and end), which are returned as a list.
-	   case FomusArticulation of [BeginA ContinueA EndA] then
-	      %% Is note first within the spanner articulation in question?
-	      IsFirst = if {MyNote hasTemporalPredecessor($)}
-			then Pre = {MyNote getTemporalPredecessor($)} in
-			   if {Score.isArticulationMixin Pre}
-			   then
-			      {Not
-			       {Init.getArticulationSymbol {Pre getArticulation($)}}
-			       == {Init.getArticulationSymbol {MyNote getArticulation($)}}}
-			   else true
-			   end
-			else true
-			end
-	      IsVeryLast = {Not IsFirst} andthen {Not {MyNote hasTemporalSuccessor($)}}
-	   in
-	      unit(marks: if IsFirst
-			  then BeginA
-			  elseif IsVeryLast
-			  then EndA 
-			  else ContinueA
-			  end)  
-	   else
-	      %% Add ending mark of preceeding spanner range?
-	      Mark1 = if {MyNote hasTemporalPredecessor($)}
-		      then  Pre = {MyNote getTemporalPredecessor($)} in
-			 if {Score.isArticulationMixin Pre}
-			 then case {Init.getFomusArticulation {Pre getArticulation($)}}
-			      of [_ _ EndA]
-			      then [EndA]
-			      else nil
-			      end
-			 else nil
-			 end
-		      else nil
-		      end
-	      Mark2 = {Init.getFomusArticulation {MyNote getArticulation($)}}
-	   in
-	      unit(marks: {Append Mark1 case Mark2 of nil then nil else [Mark2] end})
-	   end
-	else unit
-	end}
+      {Record2FomusNote unit(part:PartId
+			     time:{MyNote getStartTimeInBeats($)}
+			     dur:{MyNote getDurationInBeats($)}
+			     pitch:{MyNote getPitchInMidi($)}
+			     dynamic: {MyNote getAmplitudeInVelocity($)} / 127.0
+			     %% articulation marks 
+			     marks: {FomusArticulationMarks MyNote})
        MyNote}
    end
 
@@ -2740,6 +2749,8 @@ define
    %% Note that the info tag fomusPart(nil) results in no fomus part declaration, useful for exporting measures at the beginning of the score.
 
    %% Note that in principle Strasheela objects can correspond to multiple Fomus hierarchic levels (e.g., when outputting a single Strasheela note it corresponds to the score, a part and an event). However, for many Fomus settings it is necessary to have different Strasheela objects for different Fomus hierarchic levels, because certain settings are only permitted at certain Fomus hierarchic levels.
+   %%
+   %% Notes with either articulation or amplitude = 0 are notated as rests (i.e. filtered out from the Fomus output).
    %%
    %%
    %% If tagging parts with the info tag fomusPart is not sufficient for your purpose to locate the Strasheela containers that correspond to parts, then the argument 'getParts' makes an alternative approach possible (recommended only for expert users).
