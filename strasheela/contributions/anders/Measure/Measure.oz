@@ -1295,7 +1295,7 @@ define
       else 0 end
    end
       
-   /** %% B=1 <=> Note N is longer than both its preceeding and its succeeding note (duration + offsetTime used for calculating the perceived duration). If a preceeding or succeeding note does not exist (in the same temporal container) then that part of the condition is considered to be fulfilled.
+   /** %% B=1 <=> Note N is longer than both its preceeding and its succeeding note (duration + offsetTime used for calculating the perceived duration). If a preceeding or succeeding note does not exist (in the same temporal container) then the constraint returns 0.
    %% */
    fun {IsLongerThanDirectNeighbours N}
       fun {IsShorter N2}
@@ -1306,11 +1306,11 @@ define
 	 (Dur2 <: Dur1)
       end
    in
-      {FD.conj {ApplyIfNotnilOrTrue {N getTemporalPredecessor($)} IsShorter}
-       {ApplyIfNotnilOrTrue {N getTemporalSuccessor($)} IsShorter}}
+      {FD.conj {ApplyIfNotnilOrFalse {N getTemporalPredecessor($)} IsShorter}
+       {ApplyIfNotnilOrFalse {N getTemporalSuccessor($)} IsShorter}}
    end
       
-   /** %% B=1 <=> Note N is longer than the preceeding note and not shorter than succeeding note (duration + offsetTime used for calculating the perceived duration). If a preceeding or succeeding note does not exist (in the same temporal container) then that part of the condition is considered to be fulfilled.
+   /** %% B=1 <=> Note N is longer than the preceeding note and not shorter than succeeding note (duration + offsetTime used for calculating the perceived duration). If a preceeding or succeeding note does not exist (in the same temporal container) then the constraint returns 0.
    %% */
    fun {IsLongerThanPredecessor N}
       Dur1={FD.decl} 
@@ -1328,11 +1328,11 @@ define
 	 (Dur2  =<: Dur1)
       end
    in
-      {FD.conj {ApplyIfNotnilOrTrue {N getTemporalPredecessor($)} IsShorter}
-       {ApplyIfNotnilOrTrue {N getTemporalSuccessor($)} IsNotLonger}}
+      {FD.conj {ApplyIfNotnilOrFalse {N getTemporalPredecessor($)} IsShorter}
+       {ApplyIfNotnilOrFalse {N getTemporalSuccessor($)} IsNotLonger}}
    end
 
-   /** %% B=1 <=> Note N is longer than the preceeding note (duration + offsetTime used for calculating the perceived duration). If a preceeding or succeeding note does not exist (in the same temporal container) then that part of the condition is considered to be fulfilled.
+   /** %% B=1 <=> Note N is longer than the preceeding note (duration + offsetTime used for calculating the perceived duration). If a preceeding or succeeding note does not exist (in the same temporal container) then the constraint returns 0.
    %% */
    fun {IsLongerThanPredecessorSimple N}
       Dur1={FD.decl} 
@@ -1344,7 +1344,7 @@ define
 	 (Dur2 <: Dur1)
       end
    in
-      {ApplyIfNotnilOrTrue {N getTemporalPredecessor($)} IsShorter}
+      {ApplyIfNotnilOrFalse {N getTemporalPredecessor($)} IsShorter}
    end
       
    /** %% The higher the value of Rating, the more N is accented by its duration compared to its preceeding note (duration + offsetTime used for calculating the perceived duration).
@@ -1421,7 +1421,7 @@ define
 %%%
       
           
-   /** %% B=1 <=> Note N's pitch is higher than both its preceeding and its succeeding note. If a preceeding or succeeding note does not exist (in the same temporal container) then that part of the condition is considered to be fulfilled.
+   /** %% B=1 <=> Note N's pitch is higher than both its preceeding and its succeeding note. If a preceeding or succeeding note does not exist (in the same temporal container) then the constraint returns 0.
    %% TODO: ?? take offset times into account: a note with an offset time > 0 has "no predecessor". If the successor has an offset time > 0 then it has "no successor".
    %% */
    fun {IsHigherThanDirectNeighbours N}
@@ -1429,11 +1429,11 @@ define
 	 ({N2 getPitch($)} <: {N getPitch($)})
       end
    in
-      {FD.conj {ApplyIfNotnilOrTrue {N getTemporalPredecessor($)} IsLower}
-       {ApplyIfNotnilOrTrue {N getTemporalSuccessor($)} IsLower}}
+      {FD.conj {ApplyIfNotnilOrFalse {N getTemporalPredecessor($)} IsLower}
+       {ApplyIfNotnilOrFalse {N getTemporalSuccessor($)} IsLower}}
    end
       
-   /** %% B=1 <=> Note N's pitch is higher than the preceeding note and not lower than succeeding note. If a preceeding or succeeding note does not exist (in the same temporal container) then that part of the condition is considered to be fulfilled.
+   /** %% B=1 <=> Note N's pitch is higher than the preceeding note and not lower than succeeding note. If a preceeding or succeeding note does not exist (in the same temporal container) then the constraint returns 0.
    %% TODO: ?? take offset times into account: a note with an offset time > 0 has "no predecessor". If the successor has an offset time > 0 then it has "no successor".
    %% */
    fun {IsHigherThanPredecessor N}
@@ -1444,8 +1444,8 @@ define
 	 ({N2 getPitch($)} =<: {N getPitch($)})
       end
    in
-      {FD.conj {ApplyIfNotnilOrTrue {N getTemporalPredecessor($)} IsLower}
-       {ApplyIfNotnilOrTrue {N getTemporalSuccessor($)} IsNotHigher}}
+      {FD.conj {ApplyIfNotnilOrFalse {N getTemporalPredecessor($)} IsLower}
+       {ApplyIfNotnilOrFalse {N getTemporalSuccessor($)} IsNotHigher}}
    end
 
    /** %% B=1 <=> Note N's pitch skips from its preceeding note by more than a minor third in either direction. If a preceeding note does not exist (in the same temporal container) then the condition is considered not to be fulfilled.
