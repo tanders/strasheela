@@ -109,6 +109,7 @@ define
 	       chord(pitchClasses:{Pattern.dxsToXs [2 2 2] 0}
 		     roots:[0]
 		     comment:'Secundal Tetrachord')
+	       %% http://en.wikipedia.org/wiki/Mu_chord
 	       chord(pitchClasses:{Pattern.dxsToXs [2 2 3] 0}
 		     roots:[0]
 		     comment:unit(name:['Added Second' 'Mu Major' 'add2' '2']))
@@ -402,8 +403,9 @@ define
 	       	     comment:unit(name:['Major Quintal Triad']))
 	       chord(pitchClasses:{Pattern.dxsToXs [4 7 3] 0}
 	       	     roots:[0]
-	       	     comment:unit(name:['Seventh-Ninth Chord' '9/7']))
-	       chord(pitchClasses:{Pattern.dxsToXs [5 1] 0}
+		     comment:unit(name:['Seventh-Ninth Chord' '9/7']))
+	       %% http://en.wikipedia.org/wiki/Viennese_trichord
+	       chord(pitchClasses:{Pattern.dxsToXs [1 5] 0}
 	       	     roots:[0]
 	       	     comment:unit(name:['Viennese Trichord']))
 	       chord(pitchClasses:{Pattern.dxsToXs [5 1 1] 0}
@@ -480,12 +482,14 @@ define
 	       chord(pitchClasses:['F' 'B' 'D#'#1 'G#'#1]
 	       	     roots:['F']
 		     comment:unit(name:['Tristan Chord']))
+	       %% http://en.wikipedia.org/wiki/Mystic_chord
 	       chord(pitchClasses:['C' 'F#' 'Bb' 'E'#1 'A'#1 'D'#2]
 	       	     roots:['C']
 	       	     comment:unit(name:['Scriabin''s Mystic Chord' 'Prometheus Chord']))
 	       chord(pitchClasses:['E' 'B' 'Db'#1 'F'#1 'Ab'#1]
 	       	     roots:['E']
-	       	     comment:unit(name:['Elektra Chord']))
+		     comment:unit(name:['Elektra Chord']))
+	       %% http://en.wikipedia.org/wiki/Petrushka_chord
 	       chord(pitchClasses:['C' 'E' 'F#' 'G' 'A#' 'C#'#1]
 	       	     roots:['C']
 		     comment:unit(name:['Petrushka Chord']))
@@ -528,7 +532,24 @@ define
 	       	     comment:unit(name:['Accord de la resonance'])) % 'Accord de la résonance'
 	       chord(pitchClasses:['Db' 'G' 'C'#1 'F#'#1 'B'#1 'F'#2]
 	       	     roots:['Db'] % TODO: revise
-	       	     comment:unit(name:['Accord en quartes']))
+		     comment:unit(name:['Accord en quartes']))
+	       
+	       %%
+	       %%  Other famous chords (from Wikipedia)
+	       %%
+	       %% http://en.wikipedia.org/wiki/Complexe_sonore
+	       chord(pitchClasses:['C#' 'E' 'G' 'Bb' 'C'#1 'Eb'#1 'F#'#1 'A'#1]
+	       	     roots:['C#'] % TODO: revise
+		     comment:unit(name:['complexe sonore']))
+	       %% http://en.wikipedia.org/wiki/So_What_chord
+	       chord(pitchClasses:['E' 'A' 'D' 'G'#1 'B'#1]
+	       	     roots:['E'] % TODO: revise
+		     comment:unit(name:['So What chord']))
+	       %% http://en.wikipedia.org/wiki/Northern_lights_chord
+	       chord(pitchClasses:['C#' 'D' 'Ab' 'C' 'Eb'#1 'F#'#1 'G'#1 'Bb'#1 'Cb'#1 'F'#2 'A'#2]
+	       	     roots:['C#'] % TODO: revise
+		     comment:unit(name:['Northern lights chord']))
+	       
 	       
 	       )
    
@@ -655,311 +676,317 @@ define
 			 comment:unit(name:['Balinese Pelog' 'Madenda Modern' 'Phrygian Pentatonic' 'Raga Bhupalam' 'Bhupala Todi' 'Bibhas' 'Tezeta Minor: Ethiopia']))
 
 		   %%
-		   %% TODO: add many missing scales
+		   %% TODO: add many missing scales (many 5-tone scales)
 		   %%
 		   
 		   % scale(pitchClasses:{Pattern.dxsToXs [] 0}
 		   % 	 roots:[0]
 		   % 	 comment:unit(name:['' '']))
-		   % scale(pitchClasses:{Pattern.dxsToXs [] 0}
-		   % 	 roots:[0]
-		   % 	 comment:unit(name:['' '']))
-		   % scale(pitchClasses:{Pattern.dxsToXs [] 0}
-		   % 	 roots:[0]
-		   % 	 comment:unit(name:['' '']))
-		   % scale(pitchClasses:{Pattern.dxsToXs [] 0}
-		   % 	 roots:[0]
-		   % 	 comment:unit(name:['' '']))
-		   % scale(pitchClasses:{Pattern.dxsToXs [] 0}
-		   % 	 roots:[0]
-		   % 	 comment:unit(name:['' '']))
-		   % scale(pitchClasses:{Pattern.dxsToXs [] 0}
-		   % 	 roots:[0]
-		   % 	 comment:unit(name:['' '']))
-		   % scale(pitchClasses:{Pattern.dxsToXs [] 0}
-		   % 	 roots:[0]
-		   % 	 comment:unit(name:['' '']))
-		   % scale(pitchClasses:{Pattern.dxsToXs [] 0}
-		   % 	 roots:[0]
-		   % 	 comment:unit(name:['' '']))
-		   % scale(pitchClasses:{Pattern.dxsToXs [] 0}
-		   % 	 roots:[0]
-		   % 	 comment:unit(name:['' '']))
-		   % scale(pitchClasses:{Pattern.dxsToXs [] 0}
-		   % 	 roots:[0]
-		   % 	 comment:unit(name:['' '']))
-		   % scale(pitchClasses:{Pattern.dxsToXs [] 0}
-		   % 	 roots:[0]
-		   % 	 comment:unit(name:['' '']))
-		   % scale(pitchClasses:{Pattern.dxsToXs [] 0}
-		   % 	 roots:[0]
-		   % 	 comment:unit(name:['' '']))
-		   % scale(pitchClasses:{Pattern.dxsToXs [] 0}
-		   % 	 roots:[0]
-		   % 	 comment:unit(name:['' '']))
-		   % scale(pitchClasses:{Pattern.dxsToXs [] 0}
-		   % 	 roots:[0]
-		   % 	 comment:unit(name:['' '']))
-		   % scale(pitchClasses:{Pattern.dxsToXs [] 0}
-		   % 	 roots:[0]
-		   % 	 comment:unit(name:['' '']))
-		   % scale(pitchClasses:{Pattern.dxsToXs [] 0}
-		   % 	 roots:[0]
-		   % 	 comment:unit(name:['' '']))
-		   % scale(pitchClasses:{Pattern.dxsToXs [] 0}
-		   % 	 roots:[0]
-		   % 	 comment:unit(name:['' '']))
-		   % scale(pitchClasses:{Pattern.dxsToXs [] 0}
-		   % 	 roots:[0]
-		   % 	 comment:unit(name:['' '']))
-		   % scale(pitchClasses:{Pattern.dxsToXs [] 0}
-		   % 	 roots:[0]
-		   % 	 comment:unit(name:['' '']))
-		   % scale(pitchClasses:{Pattern.dxsToXs [] 0}
-		   % 	 roots:[0]
-		   % 	 comment:unit(name:['' '']))
-		   % scale(pitchClasses:{Pattern.dxsToXs [] 0}
-		   % 	 roots:[0]
-		   % 	 comment:unit(name:['' '']))
-		   % scale(pitchClasses:{Pattern.dxsToXs [] 0}
-		   % 	 roots:[0]
-		   % 	 comment:unit(name:['' '']))
-		   % scale(pitchClasses:{Pattern.dxsToXs [] 0}
-		   % 	 roots:[0]
-		   % 	 comment:unit(name:['' '']))
-		   % scale(pitchClasses:{Pattern.dxsToXs [] 0}
-		   % 	 roots:[0]
-		   % 	 comment:unit(name:['' '']))
-		   % scale(pitchClasses:{Pattern.dxsToXs [] 0}
-		   % 	 roots:[0]
-		   % 	 comment:unit(name:['' '']))
-		   % scale(pitchClasses:{Pattern.dxsToXs [] 0}
-		   % 	 roots:[0]
-		   % 	 comment:unit(name:['' '']))
-		   % scale(pitchClasses:{Pattern.dxsToXs [] 0}
-		   % 	 roots:[0]
-		   % 	 comment:unit(name:['' '']))
-		   % scale(pitchClasses:{Pattern.dxsToXs [] 0}
-		   % 	 roots:[0]
-		   % 	 comment:unit(name:['' '']))
-		   % scale(pitchClasses:{Pattern.dxsToXs [] 0}
-		   % 	 roots:[0]
-		   % 	 comment:unit(name:['' '']))
-		   % scale(pitchClasses:{Pattern.dxsToXs [] 0}
-		   % 	 roots:[0]
-		   % 	 comment:unit(name:['' '']))
-		   % scale(pitchClasses:{Pattern.dxsToXs [] 0}
-		   % 	 roots:[0]
-		   % 	 comment:unit(name:['' '']))
-		   % scale(pitchClasses:{Pattern.dxsToXs [] 0}
-		   % 	 roots:[0]
-		   % 	 comment:unit(name:['' '']))
-		   % scale(pitchClasses:{Pattern.dxsToXs [] 0}
-		   % 	 roots:[0]
-		   % 	 comment:unit(name:['' '']))
-		   % scale(pitchClasses:{Pattern.dxsToXs [] 0}
-		   % 	 roots:[0]
-		   % 	 comment:unit(name:['' '']))
-		   % scale(pitchClasses:{Pattern.dxsToXs [] 0}
-		   % 	 roots:[0]
-		   % 	 comment:unit(name:['' '']))
-		   % scale(pitchClasses:{Pattern.dxsToXs [] 0}
-		   % 	 roots:[0]
-		   % 	 comment:unit(name:['' '']))
-		   % scale(pitchClasses:{Pattern.dxsToXs [] 0}
-		   % 	 roots:[0]
-		   % 	 comment:unit(name:['' '']))
-		   % scale(pitchClasses:{Pattern.dxsToXs [] 0}
-		   % 	 roots:[0]
-		   % 	 comment:unit(name:['' '']))
-		   % scale(pitchClasses:{Pattern.dxsToXs [] 0}
-		   % 	 roots:[0]
-		   % 	 comment:unit(name:['' '']))
-		   % scale(pitchClasses:{Pattern.dxsToXs [] 0}
-		   % 	 roots:[0]
-		   % 	 comment:unit(name:['' '']))
-		   % scale(pitchClasses:{Pattern.dxsToXs [] 0}
-		   % 	 roots:[0]
-		   % 	 comment:unit(name:['' '']))
-		   % scale(pitchClasses:{Pattern.dxsToXs [] 0}
-		   % 	 roots:[0]
-		   % 	 comment:unit(name:['' '']))
-		   % scale(pitchClasses:{Pattern.dxsToXs [] 0}
-		   % 	 roots:[0]
-		   % 	 comment:unit(name:['' '']))
-		   % scale(pitchClasses:{Pattern.dxsToXs [] 0}
-		   % 	 roots:[0]
-		   % 	 comment:unit(name:['' '']))
-		   % scale(pitchClasses:{Pattern.dxsToXs [] 0}
-		   % 	 roots:[0]
-		   % 	 comment:unit(name:['' '']))
-		   % scale(pitchClasses:{Pattern.dxsToXs [] 0}
-		   % 	 roots:[0]
-		   % 	 comment:unit(name:['' '']))
-		   % scale(pitchClasses:{Pattern.dxsToXs [] 0}
-		   % 	 roots:[0]
-		   % 	 comment:unit(name:['' '']))
-		   % scale(pitchClasses:{Pattern.dxsToXs [] 0}
-		   % 	 roots:[0]
-		   % 	 comment:unit(name:['' '']))
-		   % scale(pitchClasses:{Pattern.dxsToXs [] 0}
-		   % 	 roots:[0]
-		   % 	 comment:unit(name:['' '']))
-		   % scale(pitchClasses:{Pattern.dxsToXs [] 0}
-		   % 	 roots:[0]
-		   % 	 comment:unit(name:['' '']))
-		   % scale(pitchClasses:{Pattern.dxsToXs [] 0}
-		   % 	 roots:[0]
-		   % 	 comment:unit(name:['' '']))
-		   % scale(pitchClasses:{Pattern.dxsToXs [] 0}
-		   % 	 roots:[0]
-		   % 	 comment:unit(name:['' '']))
-		   % scale(pitchClasses:{Pattern.dxsToXs [] 0}
-		   % 	 roots:[0]
-		   % 	 comment:unit(name:['' '']))
-		   % scale(pitchClasses:{Pattern.dxsToXs [] 0}
-		   % 	 roots:[0]
-		   % 	 comment:unit(name:['' '']))
-		   % scale(pitchClasses:{Pattern.dxsToXs [] 0}
-		   % 	 roots:[0]
-		   % 	 comment:unit(name:['' '']))
-		   % scale(pitchClasses:{Pattern.dxsToXs [] 0}
-		   % 	 roots:[0]
-		   % 	 comment:unit(name:['' '']))
-		   % scale(pitchClasses:{Pattern.dxsToXs [] 0}
-		   % 	 roots:[0]
-		   % 	 comment:unit(name:['' '']))
-		   % scale(pitchClasses:{Pattern.dxsToXs [] 0}
-		   % 	 roots:[0]
-		   % 	 comment:unit(name:['' '']))
-		   % scale(pitchClasses:{Pattern.dxsToXs [] 0}
-		   % 	 roots:[0]
-		   % 	 comment:unit(name:['' '']))
-		   % scale(pitchClasses:{Pattern.dxsToXs [] 0}
-		   % 	 roots:[0]
-		   % 	 comment:unit(name:['' '']))
-		   % scale(pitchClasses:{Pattern.dxsToXs [] 0}
-		   % 	 roots:[0]
-		   % 	 comment:unit(name:['' '']))
-		   % scale(pitchClasses:{Pattern.dxsToXs [] 0}
-		   % 	 roots:[0]
-		   % 	 comment:unit(name:['' '']))
-		   % scale(pitchClasses:{Pattern.dxsToXs [] 0}
-		   % 	 roots:[0]
-		   % 	 comment:unit(name:['' '']))
-		   % scale(pitchClasses:{Pattern.dxsToXs [] 0}
-		   % 	 roots:[0]
-		   % 	 comment:unit(name:['' '']))
-		   % scale(pitchClasses:{Pattern.dxsToXs [] 0}
-		   % 	 roots:[0]
-		   % 	 comment:unit(name:['' '']))
-		   % scale(pitchClasses:{Pattern.dxsToXs [] 0}
-		   % 	 roots:[0]
-		   % 	 comment:unit(name:['' '']))
-		   % scale(pitchClasses:{Pattern.dxsToXs [] 0}
-		   % 	 roots:[0]
-		   % 	 comment:unit(name:['' '']))
-		   % scale(pitchClasses:{Pattern.dxsToXs [] 0}
-		   % 	 roots:[0]
-		   % 	 comment:unit(name:['' '']))
-		   % scale(pitchClasses:{Pattern.dxsToXs [] 0}
-		   % 	 roots:[0]
-		   % 	 comment:unit(name:['' '']))
-		   % scale(pitchClasses:{Pattern.dxsToXs [] 0}
-		   % 	 roots:[0]
-		   % 	 comment:unit(name:['' '']))
-		   % scale(pitchClasses:{Pattern.dxsToXs [] 0}
-		   % 	 roots:[0]
-		   % 	 comment:unit(name:['' '']))
-		   % scale(pitchClasses:{Pattern.dxsToXs [] 0}
-		   % 	 roots:[0]
-		   % 	 comment:unit(name:['' '']))
-		   % scale(pitchClasses:{Pattern.dxsToXs [] 0}
-		   % 	 roots:[0]
-		   % 	 comment:unit(name:['' '']))
-		   % scale(pitchClasses:{Pattern.dxsToXs [] 0}
-		   % 	 roots:[0]
-		   % 	 comment:unit(name:['' '']))
-		   % scale(pitchClasses:{Pattern.dxsToXs [] 0}
-		   % 	 roots:[0]
-		   % 	 comment:unit(name:['' '']))
-		   % scale(pitchClasses:{Pattern.dxsToXs [] 0}
-		   % 	 roots:[0]
-		   % 	 comment:unit(name:['' '']))
-		   % scale(pitchClasses:{Pattern.dxsToXs [] 0}
-		   % 	 roots:[0]
-		   % 	 comment:unit(name:['' '']))
-		   % scale(pitchClasses:{Pattern.dxsToXs [] 0}
-		   % 	 roots:[0]
-		   % 	 comment:unit(name:['' '']))
-		   % scale(pitchClasses:{Pattern.dxsToXs [] 0}
-		   % 	 roots:[0]
-		   % 	 comment:unit(name:['' '']))
-		   % scale(pitchClasses:{Pattern.dxsToXs [] 0}
-		   % 	 roots:[0]
-		   % 	 comment:unit(name:['' '']))
-		   % scale(pitchClasses:{Pattern.dxsToXs [] 0}
-		   % 	 roots:[0]
-		   % 	 comment:unit(name:['' '']))
-		   % scale(pitchClasses:{Pattern.dxsToXs [] 0}
-		   % 	 roots:[0]
-		   % 	 comment:unit(name:['' '']))
-		   % scale(pitchClasses:{Pattern.dxsToXs [] 0}
-		   % 	 roots:[0]
-		   % 	 comment:unit(name:['' '']))
-		   % scale(pitchClasses:{Pattern.dxsToXs [] 0}
-		   % 	 roots:[0]
-		   % 	 comment:unit(name:['' '']))
-		   % scale(pitchClasses:{Pattern.dxsToXs [] 0}
-		   % 	 roots:[0]
-		   % 	 comment:unit(name:['' '']))
-		   % scale(pitchClasses:{Pattern.dxsToXs [] 0}
-		   % 	 roots:[0]
-		   % 	 comment:unit(name:['' '']))
-		   % scale(pitchClasses:{Pattern.dxsToXs [] 0}
-		   % 	 roots:[0]
-		   % 	 comment:unit(name:['' '']))
-		   % scale(pitchClasses:{Pattern.dxsToXs [] 0}
-		   % 	 roots:[0]
-		   % 	 comment:unit(name:['' '']))
-		   % scale(pitchClasses:{Pattern.dxsToXs [] 0}
-		   % 	 roots:[0]
-		   % 	 comment:unit(name:['' '']))
-		   % scale(pitchClasses:{Pattern.dxsToXs [] 0}
-		   % 	 roots:[0]
-		   % 	 comment:unit(name:['' '']))
-		   % scale(pitchClasses:{Pattern.dxsToXs [] 0}
-		   % 	 roots:[0]
-		   % 	 comment:unit(name:['' '']))
-		   % scale(pitchClasses:{Pattern.dxsToXs [] 0}
-		   % 	 roots:[0]
-		   % 	 comment:unit(name:['' '']))
-		   % scale(pitchClasses:{Pattern.dxsToXs [] 0}
-		   % 	 roots:[0]
-		   % 	 comment:unit(name:['' '']))
-		   % scale(pitchClasses:{Pattern.dxsToXs [] 0}
-		   % 	 roots:[0]
-		   % 	 comment:unit(name:['' '']))
-		   % scale(pitchClasses:{Pattern.dxsToXs [] 0}
-		   % 	 roots:[0]
-		   % 	 comment:unit(name:['' '']))
-		   % scale(pitchClasses:{Pattern.dxsToXs [] 0}
-		   % 	 roots:[0]
-		   % 	 comment:unit(name:['' '']))
-		   % scale(pitchClasses:{Pattern.dxsToXs [] 0}
-		   % 	 roots:[0]
-		   % 	 comment:unit(name:['' '']))
-		   % scale(pitchClasses:{Pattern.dxsToXs [] 0}
-		   % 	 roots:[0]
-		   % 	 comment:unit(name:['' '']))
-		   % scale(pitchClasses:{Pattern.dxsToXs [] 0}
-		   % 	 roots:[0]
-		   % 	 comment:unit(name:['' '']))
-		   % scale(pitchClasses:{Pattern.dxsToXs [] 0}
-		   % 	 roots:[0]
-		   % 	 comment:unit(name:['' '']))
 
+		   
+		   scale(pitchClasses:{Pattern.dxsToXs [2 2 2 2 2 2] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Whole-tone' 'Messiaen mode 1' 'Raga Gopriya' 'Anhemitonic Hexatonic']))
+		   scale(pitchClasses:{Pattern.dxsToXs [2 3 2 2 1 2] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['P\'yongjo: Korea' 'Yosen: Japan' 'Raga Darbar' 'Narayani' 'Suposhini' 'Andolika' 'Gorakh Kalyan' 'Mixolydian Hexatonic']))
+		   scale(pitchClasses:{Pattern.dxsToXs [2 2 2 3 1 2] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Prometheus (Scriabin)' 'Mystic' 'Raga Barbara']))
+		   scale(pitchClasses:{Pattern.dxsToXs [1 3 2 3 1 2] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Prometheus Neapolitan']))
+		   scale(pitchClasses:{Pattern.dxsToXs [3 2 1 1 3 2] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Blues scale I' 'Raga Nileshwari']))
+		   scale(pitchClasses:{Pattern.dxsToXs [1 2 2 3 2 2] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Ritsu: Japan' 'Raga Suddha Todi']))
+		   scale(pitchClasses:{Pattern.dxsToXs [2 2 1 2 2 3] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Arezzo Major Diatonic Hexachord' 'Raga Kambhoji' 'Devarangini' 'Sama (Syama)' 'Scottish Hexatonic']))
+		   scale(pitchClasses:{Pattern.dxsToXs [2 1 2 2 3 2] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Minor Hexatonic' 'Raga Manirangu' 'Nayaki' 'Palasi' 'Pushpalithika (Puspalatika)' 'Suha Sughrai' 'Yo: Japan' 'Eskimo Hexatonic 1 (Alaska: King Island)']))
+		   scale(pitchClasses:{Pattern.dxsToXs [2 2 2 2 3 1] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Eskimo Hexatonic 2 (Alaska: Point Hope)']))
+		   scale(pitchClasses:{Pattern.dxsToXs [2 1 4 2 2 1] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Hawaiian']))
+		   scale(pitchClasses:{Pattern.dxsToXs [2 1 2 1 3 3] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Pyramid Hexatonic']))
+		   scale(pitchClasses:{Pattern.dxsToXs [1 2 1 2 1 5] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Istrian: Croatia']))
+		   scale(pitchClasses:{Pattern.dxsToXs [1 2 2 1 3 3] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Double-Phrygian Hexatonic']))
+		   scale(pitchClasses:{Pattern.dxsToXs [2 1 3 1 4 1] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Raga Amarasenapriya']))
+		   scale(pitchClasses:{Pattern.dxsToXs [2 1 2 4 1 2] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Raga Bagesri' 'Sriranjani' 'Kapijingla' 'Jayamanohari']))
+		   scale(pitchClasses:{Pattern.dxsToXs [1 3 3 1 3 1] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Raga Bauli']))
+		   scale(pitchClasses:{Pattern.dxsToXs [3 1 1 2 3 2] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Raga Bhanumanjari' 'Jog']))
+		   scale(pitchClasses:{Pattern.dxsToXs [1 2 3 2 2 2] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Raga Bhavani']))
+		   scale(pitchClasses:{Pattern.dxsToXs [2 3 2 1 3 1] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Raga Bhinna Pancama']))
+		   scale(pitchClasses:{Pattern.dxsToXs [2 2 2 1 4 1] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Raga Caturangini' 'Ratnakanthi']))
+		   scale(pitchClasses:{Pattern.dxsToXs [1 1 4 1 2 3] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Raga Chandrajyoti']))
+		   scale(pitchClasses:{Pattern.dxsToXs [1 3 2 1 1 4] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Raga Dhavalangam']))
+		   scale(pitchClasses:{Pattern.dxsToXs [2 2 1 1 1 5] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Raga Dipak']))
+		   scale(pitchClasses:{Pattern.dxsToXs [1 2 2 2 3 2] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Raga Gandharavam']))
+		   scale(pitchClasses:{Pattern.dxsToXs [1 3 1 2 4 1] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Raga Gaula']))
+		   scale(pitchClasses:{Pattern.dxsToXs [2 1 2 3 3 1] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Raga Ghantana' 'Kaushiranjani (Kaishikiranjani)']))
+		   scale(pitchClasses:{Pattern.dxsToXs [3 2 2 1 2 2] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Raga Gopikavasantam' 'Desya Todi' 'Jayantasri' 'Phrygian Hexatonic']))
+		   scale(pitchClasses:{Pattern.dxsToXs [1 2 3 2 3 1] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Raga Gurjari Todi']))
+		   scale(pitchClasses:{Pattern.dxsToXs [1 3 2 3 2 1] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Raga Hamsanandi' 'Marva' 'Pancama' 'Puriya' 'Sohni']))
+		   scale(pitchClasses:{Pattern.dxsToXs [2 2 1 4 2 1] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Raga Hamsa Vinodini']))
+		   scale(pitchClasses:{Pattern.dxsToXs [4 1 2 2 2 1] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Raga Hari Nata' 'Genus secundum']))
+		   scale(pitchClasses:{Pattern.dxsToXs [1 3 2 2 1 3] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Raga Hejjajji']))
+		   scale(pitchClasses:{Pattern.dxsToXs [2 4 1 1 2 2] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Raga Jaganmohanam']))
+		   scale(pitchClasses:{Pattern.dxsToXs [1 4 2 2 2 1] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Raga Jivantika']))
+		   scale(pitchClasses:{Pattern.dxsToXs [3 3 1 3 1 1] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Raga Jivantini' 'Gaurikriya']))
+		   scale(pitchClasses:{Pattern.dxsToXs [4 2 1 1 2 2] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Raga Jyoti']))
+		   scale(pitchClasses:{Pattern.dxsToXs [1 3 3 1 1 3] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Raga Kalagada (Kalgada)']))
+		   scale(pitchClasses:{Pattern.dxsToXs [1 4 2 1 1 3] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Raga Kalakanthi']))
+		   scale(pitchClasses:{Pattern.dxsToXs [1 3 1 2 2 3] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Raga Kalavati' 'Ragamalini']))
+		   scale(pitchClasses:{Pattern.dxsToXs [4 1 2 1 2 2] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Raga Kamalamanohari']))
+		   scale(pitchClasses:{Pattern.dxsToXs [1 2 4 1 2 2] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Raga Kashyapi']))
+		   scale(pitchClasses:{Pattern.dxsToXs [4 1 2 2 1 2] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Raga Khamas' 'Desya Khamas' 'Bahudari']))
+		   scale(pitchClasses:{Pattern.dxsToXs [2 2 3 2 2 1] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Raga Kumud' 'Sankara (Shankara)' 'Lydian Hexatonic']))
+		   scale(pitchClasses:{Pattern.dxsToXs [1 3 1 3 3 1] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Raga Lalita' 'Sohini' 'Hamsanandi' 'Lalit Bhairav']))
+		   scale(pitchClasses:{Pattern.dxsToXs [2 2 3 1 3 1] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Raga Latika']))
+		   scale(pitchClasses:{Pattern.dxsToXs [3 3 1 2 1 2] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Raga Madhukauns (hexatonic)']))
+		   scale(pitchClasses:{Pattern.dxsToXs [2 4 1 3 1 1] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Raga Malarani' 'Hamsanada']))
+		   scale(pitchClasses:{Pattern.dxsToXs [1 3 3 2 1 2] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Raga Malayamarutam']))
+		   scale(pitchClasses:{Pattern.dxsToXs [2 1 4 2 1 2] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Raga Manavi']))
+		   scale(pitchClasses:{Pattern.dxsToXs [1 3 2 1 4 1] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Raga Mandari' 'Gamakakriya' 'Hamsanarayani']))
+		   scale(pitchClasses:{Pattern.dxsToXs [3 2 2 2 1 2] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Raga Manohari' 'Malavasri']))
+		   scale(pitchClasses:{Pattern.dxsToXs [2 2 2 3 2 1] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Raga Mruganandana']))
+		   scale(pitchClasses:{Pattern.dxsToXs [2 3 2 2 2 1] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Raga Nagagandhari']))
+		   scale(pitchClasses:{Pattern.dxsToXs [2 2 1 2 4 1] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Raga Nalinakanti' 'Kedaram' 'Vilasini']))
+		   scale(pitchClasses:{Pattern.dxsToXs [2 3 2 1 2 2] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Raga Navamanohari']))
+		   scale(pitchClasses:{Pattern.dxsToXs [2 1 3 2 1 3] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Raga Neelangi']))
+		   scale(pitchClasses:{Pattern.dxsToXs [2 4 1 2 2 1] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Raga Nishadi']))
+		   scale(pitchClasses:{Pattern.dxsToXs [1 4 2 1 3 1] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Raga Padi']))
+		   scale(pitchClasses:{Pattern.dxsToXs [4 1 2 1 3 1] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Raga Paraju (Paraz, Pharas)' 'Ramamanohari' 'Sindhu Ramakriya' 'Kamalamanohari']))
+		   scale(pitchClasses:{Pattern.dxsToXs [1 4 2 1 2 2] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Raga Phenadyuti' 'Insen' 'Honchoshi' 'Niagari: Japan']))
+		   scale(pitchClasses:{Pattern.dxsToXs [1 2 2 1 4 2] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Honchoshi plagal form: Japan']))
+		   scale(pitchClasses:{Pattern.dxsToXs [1 3 1 2 1 4] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Raga Purna Pancama' 'Malahari' 'Geyahejjajji' 'Kannadabangala']))
+		   scale(pitchClasses:{Pattern.dxsToXs [2 2 1 4 1 2] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Raga Rageshri (Rageshwari)' 'Nattaikurinji (Natakuranji)']))
+		   scale(pitchClasses:{Pattern.dxsToXs [2 1 3 3 2 1] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Raga Ranjani' 'Rangini']))
+		   scale(pitchClasses:{Pattern.dxsToXs [3 1 2 1 4 1] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Raga Rasamanjari']))
+		   scale(pitchClasses:{Pattern.dxsToXs [1 4 2 2 1 2] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Raga Rasavali']))
+		   scale(pitchClasses:{Pattern.dxsToXs [1 3 1 4 1 2] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Raga Rudra Pancama']))
+		   scale(pitchClasses:{Pattern.dxsToXs [1 2 4 2 1 2] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Raga Salagavarali']))
+		   scale(pitchClasses:{Pattern.dxsToXs [2 3 2 3 1 1] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Raga Brindabani Sarang' 'Megh (Megh Malhar)']))
+		   scale(pitchClasses:{Pattern.dxsToXs [2 2 1 3 3 1] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Raga Sarasanana']))
+		   scale(pitchClasses:{Pattern.dxsToXs [2 4 1 2 1 2] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Raga Sarasvati']))
+		   scale(pitchClasses:{Pattern.dxsToXs [4 1 2 1 1 3] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Raga Saravati (Sharavati)']))
+		   scale(pitchClasses:{Pattern.dxsToXs [2 1 3 1 3 2] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Raga Simharava (Sinharavam)' 'Gopikatilaka']))
+		   scale(pitchClasses:{Pattern.dxsToXs [2 1 2 2 4 1] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Raga Sindhura Kafi']))
+		   scale(pitchClasses:{Pattern.dxsToXs [2 2 1 2 3 2] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Raga Siva Kambhoji' 'Vivardhini' 'Andhali']))
+		   scale(pitchClasses:{Pattern.dxsToXs [2 1 2 2 2 3] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Raga Suddha Bangala' 'Gauri Velavali']))
+		   scale(pitchClasses:{Pattern.dxsToXs [1 1 3 3 1 3] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Raga Suddha Mukhari']))
+		   scale(pitchClasses:{Pattern.dxsToXs [1 2 2 2 1 4] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Raga Suddha Simantini']))
+		   scale(pitchClasses:{Pattern.dxsToXs [2 1 3 1 1 4] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Raga Syamalam']))
+		   scale(pitchClasses:{Pattern.dxsToXs [3 2 2 1 3 1] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Raga Takka']))
+		   scale(pitchClasses:{Pattern.dxsToXs [4 1 2 3 1 1] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Raga Tilang' 'Savitri' 'Brindabani Tilang']))
+		   scale(pitchClasses:{Pattern.dxsToXs [2 1 4 1 2 2] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Raga Trimurti']))
+		   scale(pitchClasses:{Pattern.dxsToXs [1 3 1 4 2 1] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Raga Vasanta' 'Chayavati']))
+		   scale(pitchClasses:{Pattern.dxsToXs [1 3 1 3 2 2] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Raga Vasantabhairavi']))
+		   scale(pitchClasses:{Pattern.dxsToXs [2 1 3 1 2 3] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Raga Vijayanagari']))
+		   scale(pitchClasses:{Pattern.dxsToXs [1 1 4 1 4 1] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Raga Vijayasri']))
+		   scale(pitchClasses:{Pattern.dxsToXs [4 2 1 3 1 1] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Raga Vijayavasanta']))
+		   scale(pitchClasses:{Pattern.dxsToXs [1 2 2 3 3 1] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Raga Viyogavarali']))
+		   scale(pitchClasses:{Pattern.dxsToXs [4 2 1 2 1 2] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Raga Vutari']))
+		   scale(pitchClasses:{Pattern.dxsToXs [2 2 2 1 2 3] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Raga Yamuna Kalyani' 'Kalyani Keseri' 'Airavati' 'Ancient Chinese']))
+		   scale(pitchClasses:{Pattern.dxsToXs [1 1 4 1 1 4] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Messiaen mode 5' 'Two-semitone Tritone scale']))
+		   scale(pitchClasses:{Pattern.dxsToXs [4 1 1 4 1 1] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Messiaen mode 5 inverse']))
+		   scale(pitchClasses:{Pattern.dxsToXs [1 3 1 3 1 3] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Messiaen truncated mode 3' 'Prometheus (Liszt)']))
+		   scale(pitchClasses:{Pattern.dxsToXs [3 1 3 1 3 1] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Messiaen truncated mode 3 inverse' 'Major Augmented' 'Genus tertium' 'Raga Devamani']))
+		   scale(pitchClasses:{Pattern.dxsToXs [1 2 3 1 2 3] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Messiaen truncated mode 2']))
+		   scale(pitchClasses:{Pattern.dxsToXs [1 3 2 1 3 2] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Messiaen truncated mode 2' 'Raga Indupriya' 'Tritone scale']))
+		   scale(pitchClasses:{Pattern.dxsToXs [1 2 1 2 4 2] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Super-Locrian Hexamirror']))
+		   scale(pitchClasses:{Pattern.dxsToXs [2 1 3 2 3 1] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Takemitsu Tree Line mode 1']))
+		   scale(pitchClasses:{Pattern.dxsToXs [2 1 3 2 2 2] 0}
+		   	 roots:[0]
+			 comment:unit(name:['Takemitsu Tree Line mode 2']))
 
+		   		   
+		   %%
+		   %% TODO: add many missing scales (all 7-tone scales)
+		   %%
+		   
 		   % scale(pitchClasses:{Pattern.dxsToXs [] 0}
 		   % 	 roots:[0]
 		   % 	 comment:unit(name:['' '']))
@@ -1080,10 +1107,10 @@ define
 		   scale(pitchClasses:{Pattern.dxsToXs [3 1 1 1 3 1 1 1] 0}
 			 roots:[0]
 			 comment:unit(name:['Messiaen mode 4 inverse']))
-		   scale(pitchClasses:{Pattern.dxsToXs [2 2 1 1 2 2 1 1] 0}
+		   scale(pitchClasses:{Pattern.dxsToXs [1 1 2 2 1 1 2 2] 0}
 			 roots:[0]
 			 comment:unit(name:['Messiaen mode 6']))
-		   scale(pitchClasses:{Pattern.dxsToXs [1 1 2 2 1 1 2 2] 0}
+		   scale(pitchClasses:{Pattern.dxsToXs [2 2 1 1 2 2 1 1] 0}
 			 roots:[0]
 			 comment:unit(name:['Messiaen mode 6 inverse']))
 		   scale(pitchClasses:{Pattern.dxsToXs [1 1 1 2 2 1 2 2] 0}
