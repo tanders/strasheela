@@ -62,7 +62,7 @@
 	
 functor 
 import 
-   FD Search Explorer
+   FD Search Explorer System
    GUtils at 'GeneralUtils.ozf'
    LUtils at 'ListUtils.ozf'
 
@@ -76,8 +76,8 @@ export
    FdDistribute
    
    %% solver defs
-   SearchOne SearchAll SearchBest SearchBest_Timeout
-   SearchOneDepth 
+   SearchOne SearchMultiple SearchAll SearchBest SearchBest_Timeout
+   SearchOneDepth SearchMultipleDepth
    ExploreOne ExploreAll ExploreBest
 
    %% variable ordering defs
@@ -847,6 +847,24 @@ define
    fun {SearchOne ScoreScript Args}
       {Search.base.one {MakeSearchScript ScoreScript Args}}
    end
+   
+   /** %% Returns a list of N solutions by calling Search.base.one multiple times with a script created by MakeSearchScript (or nil if there is no solution). The meaning of the arguments ScoreScript and Args are the same as for MakeSearchScript.
+   %% Note: SearchMultiple is only useful for randomised distribution strategies. The random seed is automatically reset.
+   %% */
+   fun {SearchMultiple ScoreScript N Args}
+      MyScript = {MakeSearchScript ScoreScript Args}
+      FirstSol = {Search.base.one MyScript}
+   in
+      if FirstSol == nil orelse N == 1 then FirstSol
+      else {Flatten FirstSol | for I in 2..N collect:C
+			       do
+				  {GUtils.setRandomGeneratorSeed 0}
+				  {System.showInfo 'Searching for solution '#I}
+				  {C {Search.base.one MyScript}}
+			       end}
+      end
+   end
+   
    /** %% Calls Search.base.all with a script created by MakeSearchScript. The meaning of the arguments ScoreScript and Args are the same as for MakeSearchScript.
    %% */
    fun {SearchAll ScoreScript Args}
@@ -904,6 +922,30 @@ define
    %% */
    fun {SearchOneDepth ScoreScript RcdI Args ?KillP}
       {Search.one.depth {MakeSearchScript ScoreScript Args} RcdI KillP}
+   end
+   
+   /** %% Returns a list of N solutions by calling Search.one.depth multiple times with a script created by MakeSearchScript (or nil if there is no solution). The meaning of the arguments ScoreScript and Args are the same as for MakeSearchScript. RcdI (an int) is the recomputation distance, and KillCell is a cell containing a nullary procedure that kills the search engine, for details see http://www.mozart-oz.org/documentation/system/node11.html.  
+   %% Note: SearchMultiple is only useful for randomised distribution strategies. The random seed is automatically reset.
+   %%
+   %% BUG: KillCell does not work..
+   %% */
+   fun {SearchMultipleDepth ScoreScript N  RcdI Args ?KillCell}
+      KillP % initial kill proc
+      KillCell = {NewCell KillP}
+      MyScript = {MakeSearchScript ScoreScript Args}
+      FirstSol = {Search.one.depth MyScript RcdI KillP}
+   in
+      if FirstSol == nil orelse N == 1 then FirstSol
+      else {Flatten FirstSol | for I in 2..N collect:C
+			       do
+				  local KillP in
+				     {GUtils.setRandomGeneratorSeed 0}
+				     KillCell := KillP
+				     {System.showInfo 'Searching for solution '#I}
+				     {C {Search.one.depth MyScript RcdI KillP}}
+				  end
+			       end}
+      end
    end
    
    /** %% Calls Explorer.one with a script created by MakeSearchScript. The meaning of the arguments are the same as for MakeSearchScript.
