@@ -103,7 +103,7 @@ functor
 import
    
    FD FS
-%    Browser(browse:Browse) % temp for debugging
+   Browser(browse:Browse)
    Select at 'x-ozlib://duchier/cp/Select.ozf'
    GUtils at 'x-ozlib://anders/strasheela/source/GeneralUtils.ozf'
    LUtils at 'x-ozlib://anders/strasheela/source/ListUtils.ozf'
@@ -158,7 +158,7 @@ export
 
    IndexCardinality SetEachChordType SetEachScaleType RequireChordTypes
    
-   ExpressAllChordPCs % ExpressAllChordPCs_Warn
+   ExpressAllChordPCs ExpressAllChordPCs_Warn
    ExpressAllChordPCs_AtChordStart ExpressAllChordPCs_AtChordEnd
    ExpressEssentialChordPCs ExpressEssentialPCs_AtChordStart
    ClearHarmonyAtChordBoundaries
@@ -568,8 +568,8 @@ define
       {FS.include {MyNote getPitchClass($)} {MyPCCollection getPitchClasses($)}}
    end
 
-   /** %% Modulation constraints Chords (a list of chord objects) to perform a modulation. The modulation starts with Args.neutralLength chords that consist solely of pitch classes that are elements of both OldScale (scale object denoting scale before the modulation) and NewScale (scale object denoting scale after the modulation). For example, if As.neutralLength = 1 (the default) then the first chord of Chords will be a "neutral" chord. 
-   %% The chord after the neutra chords is the modulation chord, which contains at least one pitch class of the new scale that was not part of the old scale. Optionally, a cadence is performed after the modulation chord (the modulation chord is part of the cadence) ending in a chord with the root of NewScale as its root.
+   /** %% Modulation constraints Chords (a list of chord objects) to perform a modulation. The modulation starts with Args.neutralLength chords that consist solely of pitch classes that are elements of both OldScale (scale object denoting scale before the modulation) and NewScale (scale object denoting scale after the modulation). For example, if As.neutralLength = 1 then the first chord of Chords will be a "neutral" chord. 
+   %% The chord after the neutral chords is the modulation chord, which contains at least one pitch class of the new scale that was not part of the old scale. Optionally, a cadence is performed after the modulation chord (the modulation chord is part of the cadence) ending in a chord with the root of NewScale as its root.
    %%
    %% Args:
    %% neutralLength (int, default 0): number of neutral chords before the modulation chord.
@@ -742,7 +742,8 @@ define
 
    
 
-   /** %% The union of the pitch classes of all notes notes simultaneous to MyChord fully expresses the pitch class set of this chord (more pitch classes are possibly, but all chord pitch classes must be played). 
+   /** %% The union of the pitch classes of all notes notes simultaneous to MyChord fully expresses the pitch class set of this chord (more pitch classes are possibly, but all chord pitch classes must be played).
+   %% NOTE: constraint will of course fail if there are not enough simultaneous notes to express the chord.
    %% */
    proc {ExpressAllChordPCs MyChord}
       thread	% waits until sim notes are accessible
@@ -753,23 +754,24 @@ define
 	 {FS.subset {MyChord getPitchClasses($)} PCsFS}
       end
    end
-%    /** %% Like ExpressAllChordPCs, but browses warning is number of sim notes is insufficient for expressing all chord tones.
-%    %% */
-%    %% NOTE: is it a good idea to have extra constraint for this?
-%    proc {ExpressAllChordPCs_Warn MyChord}
-%       thread	% waits until sim notes are accessible
-% 	 Ns = {MyChord getSimultaneousItems($ test:isNote)}
-% 	 C_Card = {FD.decl}
-% 	 PCs = {Map Ns fun {$ N} {N getPitchClass($)} end}
-% 	 PCsFS = {GUtils.intsToFS PCs}
-%       in
-% 	  C_Card = {FS.card {MyChord getPitchClasses($)}}
-% 	  if {Length Ns} >= C_Card then 
-% 	     {FS.subset {MyChord getPitchClasses($)} PCsFS}
-% 	  else {Browse warn('not enough notes for expressing full chord')}
-% 	  end
-%       end
-%    end
+   /** %% Like ExpressAllChordPCs, but browses warning is number of sim notes is insufficient for expressing all chord tones.
+   %% */
+   %% NOTE: is it a good idea to have extra constraint for this? Better define some abstraction to create this (also for similar constraints like ExpressAllChordPCs_AtChordStart etc?)
+   proc {ExpressAllChordPCs_Warn MyChord}
+      thread	% waits until sim notes are accessible
+	 Ns = {MyChord getSimultaneousItems($ test:isNote)}
+	 C_Card = {FD.decl}
+	 PCs = {Map Ns fun {$ N} {N getPitchClass($)} end}
+	 PCsFS = {GUtils.intsToFS PCs}
+      in
+	  C_Card = {FS.card {MyChord getPitchClasses($)}}
+	  if {Length Ns} >= C_Card then 
+	     {FS.subset {MyChord getPitchClasses($)} PCsFS}
+	  else {Browse expressAllChordPCs_Warn('not enough notes for expressing chord')}
+	  end
+      end
+   end
+
    /** %% More strict variant of ExpressAllChordPCs: all pitch classes must sound when chord starts.
    %% */
    proc {ExpressAllChordPCs_AtChordStart MyChord}
