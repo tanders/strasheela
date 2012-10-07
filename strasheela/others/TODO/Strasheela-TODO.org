@@ -403,7 +403,7 @@ git svn clone http://strasheela.svn.sourceforge.net/svnroot/strasheela strasheel
 
 
 
-** TODO [#A] CSP generator/template, also for PWGL interface 	       :NEXT:
+** TODO [#B] CSP generator/template, also for PWGL interface	       :NEXT:
 
    *Major problem to solve first:*
    How to define reasonably simple and powerful constraint applicators? More specifically, how to nest applicators?
@@ -660,6 +660,28 @@ end
     - !! Resulting script must support Score.getDefaults
 
     - Wrap each constraint applicator into its own thread
+
+
+** TODO Port Arno constraint in-critical-band? to Strasheela	       :NEXT:
+   
+   see [[file:~/lisp/own-projects/cm-etc/arno/privat-examples/microtonal-choral.lisp::(defmethod%20in-critical-band?%20((chord%20abstract-chord))][file:~/lisp/own-projects/cm-etc/arno/privat-examples/microtonal-choral.lisp::(defmethod in-critical-band? ((chord abstract-chord))]]
+
+
+** TODO Improving debugging of CSPs -- collect ideas		       :SOON:
+
+   Currently only brain storming..  
+
+   What kind of information is actually desired?
+   I cannot directly know which constraints caused failure, I can only observe their effect.
+  
+ 
+*** Report search statistics (e.g., from within Explorer or after calling/stopping search)
+      
+    - What kind of parameter failed most often (e.g., note pitch class)?
+      -> Is that actually informative?
+
+    - How often did it have to redo parameters for certain items (e.g., at what "time slice" did the search spend most time)
+
 
 
 ** TODO Finish support for grace notes 				       :NEXT:
@@ -1018,7 +1040,7 @@ command SET HARMCONST.
    - measures 
 
 
-** TODO [#A] Define interface to integrate Strasheela into OpenMusic or PWGL :NEXT:
+** TODO [#B] Define interface to integrate Strasheela into OpenMusic or PWGL :NEXT:
 
    see [[file:~/oz/music/Strasheela/strasheela/strasheela/contributions/anders/PW_OM_Interface/Brainstorming.org]]
 
@@ -1049,7 +1071,7 @@ command SET HARMCONST.
 
 
    
-** TODO [#A] Define ENP score transformations			       :NEXT:
+** TODO [#B] Define ENP score transformations			       :NEXT:
 
    Work in progress: [[file:~/PWGL-User/ENP/plug-ins/test-script.lisp::(in-package%20:ccl)][file:~/PWGL-User/ENP/plug-ins/test-script.lisp::(in-package :ccl)]]
 
@@ -1249,7 +1271,7 @@ command SET HARMCONST.
 
 
 
-** TODO [#A] Define Strasheela score transformations (instead of plain generation as so far) :NEXT:
+** TODO [#B] Define Strasheela score transformations (instead of plain generation as so far) :NEXT:
 
    Remember importance of transformations stressed by Tristan Murail in Interview in Hirs' OpenMusic book
    
