@@ -9,7 +9,6 @@
 %%  TODO:
 %% - !! complete functor documentation:
 %%   - document analytical features concerning sonance and harmonic complexity in functor documentation at
-%% - !! Add missing 12-TET scales from Scala file (modes in Scala terminology)
 %% - fix warning in ReduceToSingleOctave (some chord names from which PCs are removed are left out)
 %%   .. I do not understand this anymore...
 %%
@@ -17,6 +16,8 @@
 %%
 %% - ?? include JI chords in Scala database (probably those relevant -- i.e. 5-limit -- are often already in the anyway, and higher limit chords are not faithfully enough played to be recognised anyway)
 %%
+%%
+%%  OK- !! Add missing 12-TET scales from Scala file (modes in Scala terminology)
 %% - OK !!? mark all inversions with a boolean chord feature (0 or 1) and allow for easy inclusion and exclusion (e.g., with function to generate database)
 %% - OK !! Revise removal of dublicate entries
 %%   - if order of PCs is different then entries are not removed -- sort PCs at least for comparing
@@ -626,6 +627,9 @@ define
 		   scale(pitchClasses:{Pattern.dxsToXs [5 2 3 2] 0}
 			 roots:[0]
 			 comment:unit(name:['Genus primum inverse']))
+		   
+		   %% 5 tone scales
+		   
 		   scale(pitchClasses:{Pattern.dxsToXs [2 3 2 1 4] 0}
 			 roots:[0]
 			 comment:unit(name:['Han-kumoi: Japan' 'Raga Shobhavari' 'Sutradhari']))
@@ -674,15 +678,185 @@ define
 		   scale(pitchClasses:{Pattern.dxsToXs [1 2 4 1 4] 0}
 			 roots:[0]
 			 comment:unit(name:['Balinese Pelog' 'Madenda Modern' 'Phrygian Pentatonic' 'Raga Bhupalam' 'Bhupala Todi' 'Bibhas' 'Tezeta Minor: Ethiopia']))
+		   scale(pitchClasses:{Pattern.dxsToXs [2 2 3 1 4] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Raga Bhupeshwari' 'Janasammodini']))
+		   scale(pitchClasses:{Pattern.dxsToXs [2 2 1 2 5] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Raga Budhamanohari']))
+		   scale(pitchClasses:{Pattern.dxsToXs [3 2 4 2 1] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Raga Chandrakauns (modern)' 'Marga Hindola' 'Rajeshwari']))
+		   scale(pitchClasses:{Pattern.dxsToXs [3 2 4 1 2] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Raga Chandrakauns (Kafi)' 'Surya' 'Varamu']))
+		   scale(pitchClasses:{Pattern.dxsToXs [3 2 3 3 1] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Raga Chandrakauns (Kiravani)']))
+		   scale(pitchClasses:{Pattern.dxsToXs [1 2 3 2 4] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Raga Chhaya Todi' 'Locrian Pentatonic 1']))
+		   scale(pitchClasses:{Pattern.dxsToXs [1 2 2 3 4] 0}
+		   	 roots:[0]
+			 comment:unit(name:['Raga Chitthakarshini']))
+		   scale(pitchClasses:{Pattern.dxsToXs [2 3 2 4 1] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Raga Desh']))
+		   scale(pitchClasses:{Pattern.dxsToXs [1 6 1 3 1] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Raga Deshgaur']))
+		   scale(pitchClasses:{Pattern.dxsToXs [5 2 1 3 1] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Raga Devaranjani (Devaranji)']))
+		   scale(pitchClasses:{Pattern.dxsToXs [3 2 2 3 2] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Minor Pentatonic' 'Raga Dhani (Suddha Dhanyasi)' 'Abheri' 'Udhayaravi Chandrika' 'Qing Shang' 'Gu Xian' 'Jia Zhong' 'Yu: China' 'P\'yongjo-kyemyonjo: Korea' 'Minyo: Japan' 'Peruvian Pentatonic 2' 'Blues Pentatonic' 'Bati: Ethiopia']))
+		   scale(pitchClasses:{Pattern.dxsToXs [4 2 1 2 3] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Raga Dhavalashri']))
+		   scale(pitchClasses:{Pattern.dxsToXs [4 1 2 4 1] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Raga Gambhiranata' 'Ionian Pentatonic' 'Ryukyu: Japan' 'Pelog Degung Modern']))
+		   scale(pitchClasses:{Pattern.dxsToXs [1 4 2 4 1] 0}
+		   	 roots:[0]
+			 comment:unit(name:['Raga Gauri']))
+		   scale(pitchClasses:{Pattern.dxsToXs [4 1 3 3 1] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Bacovia: Romania' 'Raga Girija']))
+		   scale(pitchClasses:{Pattern.dxsToXs [2 3 4 1 2] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Raga Guhamanohari']))
+		   scale(pitchClasses:{Pattern.dxsToXs [2 2 3 4 1] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Raga Hamsadhvani (Hansadhvani)']))
+		   scale(pitchClasses:{Pattern.dxsToXs [3 3 2 2 2] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Raga Harikauns' 'Chin: China']))
+		   scale(pitchClasses:{Pattern.dxsToXs [4 2 3 2 1] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Raga Hindol (Sunada Vinodini)' 'Sanjh ka Hindol']))
+		   scale(pitchClasses:{Pattern.dxsToXs [3 2 1 4 2] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Raga Jayakauns']))
+		   scale(pitchClasses:{Pattern.dxsToXs [4 1 4 1 2] 0}
+		   	 roots:[0]
+			 comment:unit(name:['Raga Khamaji Durga']))
+		   scale(pitchClasses:{Pattern.dxsToXs [3 2 2 1 4] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Raga Kokil Pancham']))
+		   scale(pitchClasses:{Pattern.dxsToXs [1 4 3 3 1] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Raga Kshanika']))
+		   scale(pitchClasses:{Pattern.dxsToXs [1 1 6 3 1] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Raga Kumarapriya']))
+		   scale(pitchClasses:{Pattern.dxsToXs [2 2 2 5 1] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Raga Kumurdaki (Kumudki)']))
+		   scale(pitchClasses:{Pattern.dxsToXs [5 2 2 1 2] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Raga Kuntvarali (Kuntalavarali)']))
+		   scale(pitchClasses:{Pattern.dxsToXs [3 2 3 2 2] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Raga Malkauns (Malakosh)' 'Raga Hindola' 'Blues Minor' 'Man Gong' 'Quan Ming' 'Yi Ze' 'Jiao: China']))
+		   scale(pitchClasses:{Pattern.dxsToXs [4 3 2 2 1] 0}
+		   	 roots:[0]
+			 comment:unit(name:['Raga Mamata']))
+		   scale(pitchClasses:{Pattern.dxsToXs [1 3 3 3 2] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Raga Manaranjani I']))
+		   scale(pitchClasses:{Pattern.dxsToXs [2 5 2 1 2] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Raga Matha Kokila (Matkokil)']))
+		   scale(pitchClasses:{Pattern.dxsToXs [1 3 1 3 4] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Raga Megharanjani' 'Syrian pentatonic']))
+		   scale(pitchClasses:{Pattern.dxsToXs [1 3 1 6 1] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Raga Megharanji']))
+		   scale(pitchClasses:{Pattern.dxsToXs [3 1 3 2 3] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Raga Mohanangi']))
+		   scale(pitchClasses:{Pattern.dxsToXs [3 3 1 4 1] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Raga Multani']))
+		   scale(pitchClasses:{Pattern.dxsToXs [1 1 4 1 5] 0}
+		   	 roots:[0]
+			 comment:unit(name:['Raga Nabhomani']))
+		   scale(pitchClasses:{Pattern.dxsToXs [4 1 2 2 3] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Raga Nagasvaravali' 'Raga Mand']))
+		   scale(pitchClasses:{Pattern.dxsToXs [3 2 2 4 1] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Raga Nata' 'Udayaravicandrika' 'Madhuranjani']))
+		   scale(pitchClasses:{Pattern.dxsToXs [2 2 5 2 1] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Raga Neroshta']))
+		   scale(pitchClasses:{Pattern.dxsToXs [2 3 3 3 1] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Raga Priyadharshini']))
+		   scale(pitchClasses:{Pattern.dxsToXs [2 1 2 2 5] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Raga Purnalalita' 'Chad Gadyo: Jewish' 'Ghana Pentatonic 1' 'Nando-kyemyonjo: Korea']))
+		   scale(pitchClasses:{Pattern.dxsToXs [5 2 2 2 1] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Raga Puruhutika' 'Purvaholika']))
+		   scale(pitchClasses:{Pattern.dxsToXs [1 1 6 1 3] 0}
+		   	 roots:[0]
+			 comment:unit(name:['Raga Putrika']))
+		   scale(pitchClasses:{Pattern.dxsToXs [1 3 3 2 3] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Raga Rasika Ranjani' 'Vibhas (Marva)' 'Scriabin']))
+		   scale(pitchClasses:{Pattern.dxsToXs [2 3 4 2 1] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Raga Rasranjani']))
+		   scale(pitchClasses:{Pattern.dxsToXs [1 3 3 1 4] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Raga Reva' 'Revagupti' 'Ramkali' 'Vibhas (Bhairava)']))
+		   scale(pitchClasses:{Pattern.dxsToXs [1 2 4 3 2] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Raga Rukmangi']))
+		   scale(pitchClasses:{Pattern.dxsToXs [3 3 1 3 2] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Raga Samudhra Priya' 'Madhukauns (pentatonic)']))
+		   scale(pitchClasses:{Pattern.dxsToXs [1 5 1 1 4] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Raga Saugandhini' 'Yashranjani']))
+		   scale(pitchClasses:{Pattern.dxsToXs [2 1 4 2 3] 0}
+		   	 roots:[0]
+			 comment:unit(name:['Raga Sivaranjini (Shivranjani)' 'Akebono I: Japan' 'Dorian Pentatonic']))
+		   scale(pitchClasses:{Pattern.dxsToXs [3 4 1 2 2] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Raga Shailaja' 'Varini']))
+		   scale(pitchClasses:{Pattern.dxsToXs [2 4 1 2 3] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Raga Shri Kalyan']))
+		   scale(pitchClasses:{Pattern.dxsToXs [2 4 3 2 1] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Raga Shubravarni']))
+		   scale(pitchClasses:{Pattern.dxsToXs [2 4 1 4 1] 0}
+		   	 roots:[0]
+			 comment:unit(name:['Raga Vaijayanti' 'Hamsanada']))
+		   scale(pitchClasses:{Pattern.dxsToXs [4 3 2 1 2] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Raga Valaji']))
+		   scale(pitchClasses:{Pattern.dxsToXs [4 1 2 1 4] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Raga Zilaf']))
+		   scale(pitchClasses:{Pattern.dxsToXs [2 2 3 3 2] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Dominant Pentatonic']))
+		   scale(pitchClasses:{Pattern.dxsToXs [4 1 2 3 2] 0}
+		   	 roots:[0]
+			 comment:unit(name:['Mixolydian Pentatonic' 'Raga Savethri']))
+		   scale(pitchClasses:{Pattern.dxsToXs [3 1 2 4 2] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Locrian Pentatonic 2']))
+		   scale(pitchClasses:{Pattern.dxsToXs [3 2 2 2 3] 0}
+		   	 roots:[0]
+			 comment:unit(name:['Minor added sixth Pentatonic' 'Kyemyonjo: Korea']))
 
-		   %%
-		   %% TODO: add many missing scales (many 5-tone scales)
-		   %%
-		   
-		   % scale(pitchClasses:{Pattern.dxsToXs [] 0}
-		   % 	 roots:[0]
-		   % 	 comment:unit(name:['' '']))
-
+		   %% 6 tone scales		   
 		   
 		   scale(pitchClasses:{Pattern.dxsToXs [2 2 2 2 2 2] 0}
 		   	 roots:[0]
@@ -982,43 +1156,332 @@ define
 		   	 roots:[0]
 			 comment:unit(name:['Takemitsu Tree Line mode 2']))
 
-		   		   
-		   %%
-		   %% TODO: add many missing scales (all 7-tone scales)
-		   %%
+		   %% 7-tone scales
+		   %% G = Greek, M = Medieval (ecclesiastical)		   
 		   
-		   % scale(pitchClasses:{Pattern.dxsToXs [] 0}
-		   % 	 roots:[0]
-		   % 	 comment:unit(name:['' '']))
-		   % scale(pitchClasses:{Pattern.dxsToXs [] 0}
-		   % 	 roots:[0]
-		   % 	 comment:unit(name:['' '']))
-		   % scale(pitchClasses:{Pattern.dxsToXs [] 0}
-		   % 	 roots:[0]
-		   % 	 comment:unit(name:['' '']))
-		   % scale(pitchClasses:{Pattern.dxsToXs [] 0}
-		   % 	 roots:[0]
-		   % 	 comment:unit(name:['' '']))
-		   % scale(pitchClasses:{Pattern.dxsToXs [] 0}
-		   % 	 roots:[0]
-		   % 	 comment:unit(name:['' '']))
-		   % scale(pitchClasses:{Pattern.dxsToXs [] 0}
-		   % 	 roots:[0]
-		   % 	 comment:unit(name:['' '']))
-		   % scale(pitchClasses:{Pattern.dxsToXs [] 0}
-		   % 	 roots:[0]
-		   % 	 comment:unit(name:['' '']))
-		   % scale(pitchClasses:{Pattern.dxsToXs [] 0}
-		   % 	 roots:[0]
-		   % 	 comment:unit(name:['' '']))
-		   % scale(pitchClasses:{Pattern.dxsToXs [] 0}
-		   % 	 roots:[0]
-		   % 	 comment:unit(name:['' '']))
-		   % scale(pitchClasses:{Pattern.dxsToXs [] 0}
-		   % 	 roots:[0]
-		   % 	 comment:unit(name:['' '']))
-		  
-		   
+		   scale(pitchClasses:{Pattern.dxsToXs [1 2 2 1 2 2 2] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['G.Mixolydian' 'G.Hyperdorian' 'M.Hypophrygian' 'M.Locrian Pien chih: China' 'Makam Lami' 'Yishtabach: Jewish']))
+		   scale(pitchClasses:{Pattern.dxsToXs [2 2 1 2 2 2 1] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Lydian' 'M.Ionian' 'M.Hypolydian' 'Major' 'Bilaval That' 'Mela Shankarabharanam' 'Ghana Heptatonic' 'Peruvian Major' '4th plagal Byzantine' 'Ararai: Ethiopia' 'Makam Cargah' 'Ajam Ashiran' 'Dastgah-e Mahur' 'Dastgah-e Rast Panjgah' 'Xin: China' 'DS2']))
+		   scale(pitchClasses:{Pattern.dxsToXs [2 1 2 2 2 1 2] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['G.Phrygian' 'M.Dorian' 'M.Hypomixolydian' 'Kafi That' 'Mela Kharaharapriya' 'Raga Bageshri' 'Bhimpalasi' 'Nayaki Kanada' 'Sriraga' 'Ritigaula' 'Huseni' 'Kanara' 'Mischung 5' 'Gregorian nr.8' 'Eskimo Heptatonic' 'Yu: China' 'Hyojo' 'Oshikicho' 'Banshikicho: Japan']))
+		   scale(pitchClasses:{Pattern.dxsToXs [1 2 2 2 1 2 2] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['G.Dorian' 'M.Phrygian' 'G.M.Hypoaeolian' 'Bhairavi That' 'Mela Hanumatodi' 'Raga Asavari (Asaveri)' 'Bilashkhani Todi' 'Ghanta' 'Makam Kurd' 'Gregorian nr.3' 'In' 'Zokuso: Japan' 'Ousak: Greece' 'Major inverse']))
+		   scale(pitchClasses:{Pattern.dxsToXs [2 2 2 1 2 2 1] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['G.Hypolydian' 'M.Lydian' 'Kalyan That (Yaman)' 'Mela Mecakalyani' 'Raga Shuddh Kalyan' 'Ping' 'Kung' 'Gu: China']))
+		   scale(pitchClasses:{Pattern.dxsToXs [2 2 1 2 2 1 2] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['G.Hypophrygian' 'G.Ionian (Iastian)' 'M.Mixolydian' 'G.M.Hypoionian' 'Khamaj That' 'Mela Harikambhoji' 'Raga Harini' 'Janjhuti' 'Khambhavati' 'Surati' 'Balahamsa' 'Devamanohari' 'Mischung 3' 'Gregorian nr.7' 'Enharmonic Byzantine Liturgical mode' 'Ching' 'Shang: China']))
+		   scale(pitchClasses:{Pattern.dxsToXs [2 1 2 2 1 2 2] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['G.M.Hypodorian' 'G.M.Aeolian' 'G.Hyperphrygian' 'Natural Minor' 'Asavari That' 'Mela Natabhairavi' 'Raga Jaunpuri' 'Adana' 'Dhanyasi' 'Jingla' 'Gregorian nr.2' 'Makam Buselik' 'Nihavend' 'Peruvian Minor' 'Se' 'Chiao: China' 'Geez' 'Ezel: Ethiopia' 'Kiourdi descending: Greece']))
+		   scale(pitchClasses:{Pattern.dxsToXs [1 1 3 1 1 3 2] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Chromatic Mixolydian']))
+		   scale(pitchClasses:{Pattern.dxsToXs [1 3 1 1 3 2 1] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Chromatic Lydian' 'Raga Lalit' 'Bhankar']))
+		   scale(pitchClasses:{Pattern.dxsToXs [3 1 1 3 2 1 1] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Chromatic Phrygian']))
+		   scale(pitchClasses:{Pattern.dxsToXs [1 1 3 2 1 1 3] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Chromatic Dorian' 'Mela Kanakangi' 'Raga Kanakambari']))
+		   scale(pitchClasses:{Pattern.dxsToXs [1 3 2 1 1 3 1] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Chromatic Hypolydian' 'Purvi That' 'Mela Kamavardhani' 'Raga Shri' 'Pantuvarali' 'Basant' 'Kasiramakriya' 'Suddharamakriya' 'Puriya Dhanashri' 'Dhipaka' 'Pireotikos: Greece']))
+		   scale(pitchClasses:{Pattern.dxsToXs [3 2 1 1 3 1 1] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Chromatic Hypophrygian' 'Blues scale III']))
+		   scale(pitchClasses:{Pattern.dxsToXs [2 1 1 3 1 1 3] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Chromatic Hypodorian' 'Relative Blues scale' 'Raga Dvigandharabushini']))
+		   scale(pitchClasses:{Pattern.dxsToXs [2 3 1 1 3 1 1] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Chromatic Mixolydian inverse']))
+		   scale(pitchClasses:{Pattern.dxsToXs [1 1 2 3 1 1 3] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Chromatic Phrygian inverse']))
+		   scale(pitchClasses:{Pattern.dxsToXs [1 1 3 1 1 2 3] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Chromatic Hypophrygian inverse']))
+		   scale(pitchClasses:{Pattern.dxsToXs [3 1 1 3 1 1 2] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Chromatic Hypodorian inverse']))
+		   scale(pitchClasses:{Pattern.dxsToXs [2 1 2 2 2 2 1] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Melodic Minor ascending' 'Jazz Minor' 'Minor-Major' 'Mela Gaurimanohari' 'Raga Patdip' 'Velavali' 'Deshi(2)' 'Mischung 1' 'Hawaiian']))
+		   scale(pitchClasses:{Pattern.dxsToXs [2 1 2 2 1 3 1] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Harmonic Minor' 'Mischung 4' 'Pilu That' 'Mela Kiravani' 'Raga Kiranavali' 'Kirvani' 'Kalyana Vasantha' 'Deshi(3)' 'Maqam Bayat-e-Esfahan' 'Sultani Yakah' 'Zhalibny Minor']))
+		   scale(pitchClasses:{Pattern.dxsToXs [1 3 1 2 2 1 2] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Harmonic Minor inverse' 'Mela Cakravaka' 'Raga Ahir Bhairav' 'Bindumalini' 'Vegavahini' 'Makam Hicaz' 'Zanjaran']))
+		   scale(pitchClasses:{Pattern.dxsToXs [2 2 1 2 1 3 1] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Harmonic Major' 'Mela Sarasangi' 'Raga Haripriya' 'Simhavahini' 'Mischung 2' 'Ethiopian' 'Tabahaniotiko: Greece']))
+		   scale(pitchClasses:{Pattern.dxsToXs [1 2 1 3 1 2 2] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Makam Huzzam' 'Maqam Saba Zamzam' 'Phrygian flat 4']))
+		   scale(pitchClasses:{Pattern.dxsToXs [2 2 1 3 1 2 1] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Ionian sharp 5']))
+		   scale(pitchClasses:{Pattern.dxsToXs [2 2 2 2 1 2 1] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Lydian Augmented' 'Lydian sharp 5']))
+		   scale(pitchClasses:{Pattern.dxsToXs [1 2 2 1 3 1 2] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Locrian natural 6' 'Maqam Tarznauyn']))
+		   scale(pitchClasses:{Pattern.dxsToXs [2 2 1 1 2 2 2] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Major Locrian']))
+		   scale(pitchClasses:{Pattern.dxsToXs [2 1 2 1 2 2 2] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Minor Locrian' 'Half Diminished' 'Locrian sharp 2' 'Minor flat 5']))
+		   scale(pitchClasses:{Pattern.dxsToXs [1 2 1 2 2 2 2] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Super Locrian' 'Altered Dominant' 'Diminished Whole-tone' 'Locrian flat 4' 'Pomeroy' 'Ravel']))
+		   scale(pitchClasses:{Pattern.dxsToXs [2 1 2 1 2 3 1] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Locrian nr.2']))
+		   scale(pitchClasses:{Pattern.dxsToXs [1 2 1 2 2 1 3] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Ultra Locrian' 'Mixolydian sharp 1']))
+		   scale(pitchClasses:{Pattern.dxsToXs [1 2 2 1 2 1 3] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Locrian double-flat 7']))
+		   scale(pitchClasses:{Pattern.dxsToXs [2 3 1 2 1 2 1] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Nohkan Flute scale: Japan']))
+		   scale(pitchClasses:{Pattern.dxsToXs [2 1 1 3 1 2 2] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Sabach (Sambah): Greece']))
+		   scale(pitchClasses:{Pattern.dxsToXs [2 1 2 1 3 1 2] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Makam Karcigar' 'Maqam Nahawand Murassah' 'Dorian flat 5' 'Kiourdi ascending' 'Kartzihiar: Greece']))
+		   scale(pitchClasses:{Pattern.dxsToXs [2 1 2 1 3 2 1] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Jeths\' mode']))
+		   scale(pitchClasses:{Pattern.dxsToXs [1 1 3 2 1 2 2] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Mela Ratnangi' 'Raga Phenadyuti']))
+		   scale(pitchClasses:{Pattern.dxsToXs [1 1 3 2 1 3 1] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Mela Ganamurti' 'Raga Ganasamavarali']))
+		   scale(pitchClasses:{Pattern.dxsToXs [1 1 3 2 2 1 2] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Mela Vanaspati' 'Raga Bhanumati']))
+		   scale(pitchClasses:{Pattern.dxsToXs [1 1 3 2 2 2 1] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Mela Manavati' 'Raga Manoranjani']))
+		   scale(pitchClasses:{Pattern.dxsToXs [1 1 3 2 3 1 1] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Mela Tanarupi' 'Raga Tanukirti']))
+		   scale(pitchClasses:{Pattern.dxsToXs [1 2 2 2 1 1 3] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Mela Senavati' 'Raga Senagrani' 'Malini']))
+		   scale(pitchClasses:{Pattern.dxsToXs [1 2 2 2 1 3 1] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Neapolitan Minor' 'Mela Dhenuka' 'Raga Bhinnasadjam' 'Dhunibinnashadjam' 'Takka' 'Maqam Shahnaz Kurdi' 'Hungarian Gipsy']))
+		   scale(pitchClasses:{Pattern.dxsToXs [1 2 2 2 2 2 1] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Neapolitan Major' 'Lydian Major' 'Mela Kokilapriya' 'Raga Kokilaravam']))
+		   scale(pitchClasses:{Pattern.dxsToXs [1 2 2 2 2 1 2] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Mela Natakapriya' 'Jazz Minor inverse' 'Phrygian-Mixolydian' 'Dorian flat 2' 'Raga Natabharanam' 'Ahiri Todi']))
+		   scale(pitchClasses:{Pattern.dxsToXs [1 2 2 2 3 1 1] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Mela Rupavati']))
+		   scale(pitchClasses:{Pattern.dxsToXs [1 3 1 1 2 3 1] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Raga Lalita' 'Persian' 'Chromatic Hypolydian inverse' 'Raga Suddha Pancama']))
+		   scale(pitchClasses:{Pattern.dxsToXs [1 3 1 2 1 1 3] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Mela Gayakapriya' 'Raga Kalakanti' 'Gipsy Hexatonic']))
+		   scale(pitchClasses:{Pattern.dxsToXs [1 3 1 2 1 2 2] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Mela Vakulabharanam' 'Raga Jogiya' 'Ahiri' 'Vativasantabhairavi' 'Ahava Rabba' 'Freygish: Jewish' 'Maqam Hijaz-Nahawand' 'Humayun' 'Spanish Gipsy' 'Dorico Flamenco: Spain' 'Hitzaz: Greece' 'Harmonic Major inverse' 'Phrygian Dominant' 'Phrygian Major']))
+		   scale(pitchClasses:{Pattern.dxsToXs [1 3 1 2 1 3 1] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Major Gipsy' 'Double Harmonic Major' 'Bhairav That' 'Mela Mayamalavagaula' 'Raga Paraj' 'Kalingada' 'Gaulipantu' 'Lalitapancamam' 'Byzantine Liturgical Chromatic' 'Hitzazkiar: Greece' 'Maqam Zengule' 'Hijaz Kar' 'Suzidil']))
+		   scale(pitchClasses:{Pattern.dxsToXs [1 3 1 2 2 2 1] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Mela Suryakanta' 'Bhairubahar That' 'Raga Supradhipam' 'Sowrashtram' 'Jaganmohini']))
+		   scale(pitchClasses:{Pattern.dxsToXs [1 3 1 2 3 1 1] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Mela Hatakambari' 'Raga Jeyasuddhamalavi']))
+		   scale(pitchClasses:{Pattern.dxsToXs [2 1 2 1 1 3 2] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Modified Blues']))
+		   scale(pitchClasses:{Pattern.dxsToXs [2 1 2 2 1 1 3] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Mela Jhankaradhvani' 'Raga Jhankara Bhramavi']))
+		   scale(pitchClasses:{Pattern.dxsToXs [2 1 2 2 3 1 1] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Mela Varunapriya' 'Viravasantham']))
+		   scale(pitchClasses:{Pattern.dxsToXs [2 2 1 2 1 1 3] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Mela Mararanjani' 'Raga Keseri']))
+		   scale(pitchClasses:{Pattern.dxsToXs [2 2 1 2 1 2 2] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Mischung 6' 'Mixolydian flat 6' 'Major-Minor' 'Mela Carukesi' 'Raga Charukeshi' 'Tarangini']))
+		   scale(pitchClasses:{Pattern.dxsToXs [2 2 1 2 3 1 1] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Mela Naganandini' 'Raga Nagabharanam' 'Samanta']))
+		   scale(pitchClasses:{Pattern.dxsToXs [3 1 1 2 1 1 3] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Mela Yagapriya' 'Raga Kalahamsa']))
+		   scale(pitchClasses:{Pattern.dxsToXs [3 1 1 2 1 2 2] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Mela Ragavardhani' 'Raga Cudamani']))
+		   scale(pitchClasses:{Pattern.dxsToXs [3 1 1 2 1 3 1] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Mela Gangeyabhusani' 'Raga Gangatarangini' 'Sengiach: Greece']))
+		   scale(pitchClasses:{Pattern.dxsToXs [3 1 1 2 2 1 2] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Mela Vagadhisvari' 'Raga Bhogachayanata' 'Nandkauns' 'Ganavaridhi' 'Chayanata' 'Bluesy Rock \'n Roll']))
+		   scale(pitchClasses:{Pattern.dxsToXs [3 1 1 2 2 2 1] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Mela Sulini' 'Raga Sailadesakshi' 'Raga Trishuli' 'Houzam: Greece']))
+		   scale(pitchClasses:{Pattern.dxsToXs [3 1 1 2 3 1 1] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Mela Calanata' 'Raga None' 'Chromatic Dorian inverse']))
+		   scale(pitchClasses:{Pattern.dxsToXs [1 1 4 1 1 1 3] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Mela Salaga']))
+		   scale(pitchClasses:{Pattern.dxsToXs [1 1 4 1 1 2 2] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Mela Jalarnava']))
+		   scale(pitchClasses:{Pattern.dxsToXs [1 1 4 1 1 3 1] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Mela Jhalavarali' 'Raga Varali' 'Jinavali']))
+		   scale(pitchClasses:{Pattern.dxsToXs [1 1 4 1 2 1 2] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Mela Navanitam' 'Raga Nabhomani']))
+		   scale(pitchClasses:{Pattern.dxsToXs [1 1 4 1 2 2 1] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Mela Pavani' 'Raga Kumbhini']))
+		   scale(pitchClasses:{Pattern.dxsToXs [1 1 4 1 3 1 1] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Mela Raghupriya' 'Raga Ravikriya' 'Ghandarva']))
+		   scale(pitchClasses:{Pattern.dxsToXs [1 2 3 1 1 1 3] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Mela Gavambodhi' 'Raga Girvani']))
+		   scale(pitchClasses:{Pattern.dxsToXs [1 2 3 1 1 2 2] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Mela Bhavapriya' 'Raga Bhavani' 'Kalamurti']))
+		   scale(pitchClasses:{Pattern.dxsToXs [1 2 3 1 1 3 1] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Todi That' 'Mela Shubhapantuvarali' 'Raga Multani' 'Gamakasamantam' 'Chromatic Lydian inverse' 'Maqam Athar Kurd']))
+		   scale(pitchClasses:{Pattern.dxsToXs [1 2 3 1 2 1 2] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Mela Sadvidhamargini' 'Raga Sthavarajam' 'Tivravahini']))
+		   scale(pitchClasses:{Pattern.dxsToXs [1 2 3 1 2 2 1] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Mela Suvarnangi' 'Raga Sauviram']))
+		   scale(pitchClasses:{Pattern.dxsToXs [1 2 3 1 3 1 1] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Mela Divyamani']))
+		   scale(pitchClasses:{Pattern.dxsToXs [1 3 2 1 1 1 3] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Mela Dhavalambari' 'Foulds\' Mantra of Will scale']))
+		   scale(pitchClasses:{Pattern.dxsToXs [1 3 2 1 1 2 2] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Mela Namanarayani' 'Raga Narmada' 'Pratapa']))
+		   scale(pitchClasses:{Pattern.dxsToXs [1 3 2 1 2 1 2] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Mela Ramapriya' 'Raga Ramamanohari' 'Romanian Major' 'Petrushka chord']))
+		   scale(pitchClasses:{Pattern.dxsToXs [1 3 2 1 2 2 1] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Marva That' 'Mela Gamanasrama' 'Raga Partiravam' 'Puriya' 'Puriya Kalyan' 'Purvikalyani' 'Sohani' 'Bairari' 'Peiraiotikos: Greece']))
+		   scale(pitchClasses:{Pattern.dxsToXs [1 3 2 1 3 1 1] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Mela Visvambhari' 'Raga Vamsavathi']))
+		   scale(pitchClasses:{Pattern.dxsToXs [1 3 2 2 2 1 1] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Verdi\'s Scala enigmatica ascending']))
+		   scale(pitchClasses:{Pattern.dxsToXs [1 3 1 3 2 1 1] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Verdi\'s Scala enigmatica descending']))
+		   scale(pitchClasses:{Pattern.dxsToXs [2 1 3 1 1 1 3] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Mela Syamalangi' 'Raga Shyamalam']))
+		   scale(pitchClasses:{Pattern.dxsToXs [2 1 3 1 1 2 2] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Minor Gipsy' 'Mela Sanmukhapriya' 'Raga Camara' 'Chinthamani']))
+		   scale(pitchClasses:{Pattern.dxsToXs [2 1 3 1 1 3 1] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Double Harmonic Minor' 'Hungarian Minor' 'Mela Simhendramadhyama' 'Raga Madhava Manohari' 'Maqam Nawa Athar' 'Hisar' 'Flamenco Mode' 'Niavent: Greece']))
+		   scale(pitchClasses:{Pattern.dxsToXs [2 1 3 1 2 1 2] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Mela Hemavati' 'Raga Desisimharavam' 'Maqam Nakriz' 'Tunisian' 'Dorian sharp 4' 'Misheberekh: Jewish' 'Souzinak (Peiraiotiko Minore)' 'Nigriz: Greece' 'Ukrainian Minor' 'Kaffa' 'Gnossiennes']))
+		   scale(pitchClasses:{Pattern.dxsToXs [2 1 3 1 2 2 1] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Lydian Diminished' 'Mela Dharmavati' 'Raga Arunajualita' 'Dumyaraga' 'Madhuvanti' 'Ambika']))
+		   scale(pitchClasses:{Pattern.dxsToXs [2 1 3 1 3 1 1] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Mela Nitimati' 'Raga Nisada' 'Kaikavasi']))
+		   scale(pitchClasses:{Pattern.dxsToXs [2 2 2 1 1 1 3] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Mela Kantamani' 'Raga Kuntala' 'Srutiranjani']))
+		   scale(pitchClasses:{Pattern.dxsToXs [2 2 2 1 1 2 2] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Lydian Minor' 'Mela Risabhapriya' 'Raga Ratipriya']))
+		   scale(pitchClasses:{Pattern.dxsToXs [2 2 2 1 1 3 1] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Mela Latangi' 'Raga Gitapriya' 'Hamsalata']))
+		   scale(pitchClasses:{Pattern.dxsToXs [2 2 2 1 2 1 2] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Lydian Dominant' 'Mela Vacaspati' 'Raga Bhusavati' 'Bhusavali' 'Overtone' 'Lydian-Mixolydian' 'Bartok']))
+		   scale(pitchClasses:{Pattern.dxsToXs [2 2 2 1 3 1 1] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Mela Citrambari' 'Raga Chaturangini']))
+		   scale(pitchClasses:{Pattern.dxsToXs [2 2 1 4 1 1 1] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Raga Ragesri']))
+		   scale(pitchClasses:{Pattern.dxsToXs [2 3 2 2 1 1 1] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Raga Sorati' 'Sur Malhar']))
+		   scale(pitchClasses:{Pattern.dxsToXs [3 1 2 1 1 1 3] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Mela Sucaritra' 'Raga Santanamanjari']))
+		   scale(pitchClasses:{Pattern.dxsToXs [3 1 2 1 1 2 2] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Mela Jyotisvarupini' 'Raga Jotismatti']))
+		   scale(pitchClasses:{Pattern.dxsToXs [3 1 2 1 1 3 1] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Mela Dhatuvardhani' 'Raga Dhauta Pancama' 'Devarashtra']))
+		   scale(pitchClasses:{Pattern.dxsToXs [3 1 2 1 2 1 2] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Hungarian Major' 'Mela Nasikabhusani' 'Raga Nasamani']))
+		   scale(pitchClasses:{Pattern.dxsToXs [3 1 2 1 2 2 1] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Mela Kosalam' 'Raga Kusumakaram' 'Lydian sharp 2']))
+		   scale(pitchClasses:{Pattern.dxsToXs [3 1 2 1 3 1 1] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Mela Rasikapriya' 'Raga Rasamanjari' 'Hamsagiri']))
+		   scale(pitchClasses:{Pattern.dxsToXs [3 1 2 2 1 2 1] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Aeolian flat 1']))
+		   scale(pitchClasses:{Pattern.dxsToXs [4 1 2 2 1 1 1] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Raga Madhuri']))
+		   scale(pitchClasses:{Pattern.dxsToXs [1 3 1 1 3 1 2] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Oriental' 'Raga Ahira-Lalita' 'Minor Gipsy inverse' 'Tsinganikos: Greece']))
+		   scale(pitchClasses:{Pattern.dxsToXs [2 2 2 2 2 1 1] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Leading Whole-tone']))
+		   scale(pitchClasses:{Pattern.dxsToXs [1 1 2 2 2 2 2] 0}
+		   	 roots:[0]
+		   	 comment:unit(name:['Leading Whole-tone inverse']))
+
+		   %% 8-tone scales (and later more)
 		   
 		   scale(pitchClasses:{Pattern.dxsToXs [1 3 1 1 1 2 2 1] 0}
 			 roots:[0]
