@@ -15,6 +15,8 @@ import
    Pattern at 'x-ozlib://anders/strasheela/Pattern/Pattern.ozf'
    HS at 'x-ozlib://anders/strasheela/HarmonisedScore/HarmonisedScore.ozf'
    Segs at '../Segments.ozf'
+
+   % Browser(browse:Browse)
    
 export
    HomophonicChordProgression
@@ -129,6 +131,7 @@ define
       Defaults = unit(makeTopLevel:
 			 fun {$ Voices End Args}
 			    {Score.make
+			     %% NOTE: fomus templates ignored?
 			     {Adjoin sim(info:fomus("inst <id: harm template: soprano name: \"Underlying Harmony\" abbr: \"harm\">"
 						    "inst <id: scale template: soprano name: \"Underlying Scale\" abbr: \"scale\">")
 					 {Append Voices
@@ -182,9 +185,19 @@ define
 				 As. voiceArgs}}
       Nss
       ChordAndNotesSlices
-      UpperVoices LowerVoices
+      % UpperVoices LowerVoices
    in
       MyScore = {As.makeTopLevel Voices End As}
+      %% Hack...
+      %% fine-tune notation with fomus
+      %% BUG: fomus fine tuning ignored? This is included in score data structure, but not in exported fomus file...
+      %% However, similar formatting works in other examples. Not sure what I am missing here..
+      {List.forAllInd Voices
+       proc {$ I MyVoice}
+	  {MyVoice addInfo([fomusPart(organ)
+			    fomus(inst: organ
+				  voice: I)])}
+       end}
       %%
       %% constraints on individual "note slices"
       %%
@@ -247,13 +260,6 @@ define
 	     end
 	  end}
       end
-      thread
-	 {ForAll UpperVoices
-	  proc {$ MyVoice}
-% 	     {MyVoice addInfo(fomusPart(upper))}
-	     {MyVoice addInfo(fomus(inst:soprano))}
-	  end}
-      end
       if As.sopranoRule \= false then 
 	 {As.sopranoRule Nss.1}
       end
@@ -262,13 +268,26 @@ define
       end
       %% Hack...
       %% fine-tune notation with fomus
-      {List.takeDrop Voices (As.voiceNo div 2) UpperVoices LowerVoices}
-      {ForAll LowerVoices
-       proc {$ MyVoice}
-	  %% notate all voices on only two staffs. Problem with that: Lilypond possibly swaps order of textual annotations of notes in a single staff
-% 	     {MyVoice addInfo(fomusPart(lower))}
-	  {MyVoice addInfo(fomus(inst:bass))}
-       end}
+%       {List.takeDrop Voices (As.voiceNo div 2) UpperVoices LowerVoices}
+%       thread 	
+% 	 {List.forAllInd UpperVoices
+% 	  proc {$ I MyVoice}
+% % 	     {MyVoice addInfo(fomusPart(upper))}
+% 	     % {MyVoice addInfo(fomus(inst:soprano))}
+% 	     {MyVoice addInfo([fomusPart(soprano)
+% 			       fomus(inst: soprano
+% 				     voice: I)])}
+% 	  end}
+%       end
+%       {List.forAllInd LowerVoices
+%        proc {$ I MyVoice}
+% 	  %% notate all voices on only two staffs. Problem with that: Lilypond possibly swaps order of textual annotations of notes in a single staff
+% % 	     {MyVoice addInfo(fomusPart(lower))}
+% 	  % {MyVoice addInfo(fomus(inst:bass))}
+% 	  {MyVoice addInfo([fomusPart(bass)
+% 			    fomus(inst: bass
+% 				  voice: I)])}
+%        end}
    end
 
 
