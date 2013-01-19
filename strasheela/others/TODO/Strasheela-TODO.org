@@ -194,6 +194,235 @@ MyTestScore = {Score.makeScore
 
 
 * Strasheela design and development 				 :STRASHEELA:
+   
+** TODO Define ENP score transformations			       :NEXT:
+
+   Work in progress: [[file:~/PWGL-User/ENP/plug-ins/test-script.lisp::(in-package%20:ccl)][file:~/PWGL-User/ENP/plug-ins/test-script.lisp::(in-package :ccl)]]
+
+   Do what you can in ENP and what is too hard in Strasheela ([[*%5B#A%5D%20Define%20Strasheela%20score%20transformations%20(instead%20of%20plain%20generation%20as%20so%20far)][Define Strasheela score transformations (instead of plain generation as so far)]]) 
+
+*** Transformations
+
+    Transformation examples 
+    
+**** Doc of note slots settable by setf
+
+ALT-X-OFFSET [+-float] offset from the note head
+ATTACK-P [NIL/T] in a chord that's tied individual notes can be tied or not. when attack-p = t the note is not tied to the previous note.
+CHAN [1-128]
+CLEF-NUMBER [NIL/1--x] the nth clef of the staff, e.g., in a piano staff rigth hand is 0 and left is 1
+COLOR [NIL/:blue/:antiquewhite] naming follows the X11/Lispworks color name scheme
+COMMENT [NIL/string] for chord editor
+CONSTRAINED? [NIL/T] for constraints
+DRAW-ALTERATION-P [T/NIL]
+ENHARMONIC [NIL/:flat/:sharp] a hint (need to call update-note after setting the value)
+INTONATION [NIL/cents]
+MIDI [0-x] float - the pitch!
+NOTE-HEAD [NIL/keyword] (see the list in the note menu - can be user definable)
+OFFSET-DUR [NIL/+-float] time that's added to the duration after the automatic time calc.
+OFFSET-TIME [0/+-float] same as above, but for the duration
+VEL [0-127]
+VISIBLE-P [T/NIL]
+
+***** Expressions
+
+In a script you'd use =(add-expression <class> <objs> <args>)=, e.g., 
+
+=(add-expression 'slur ?1 ?2 ?3 :color :red)=
+
+there are some examples in the Analysis section of the Tutorial.
+
+BTW, most of the time you'd add the expression to chords instead of notes. Therefore, the beginning of your script would say:
+
+=(* ?1 :chord (m ?1 :complete? t) (?if …. ))=
+
+
+
+**** Transform all notes by the same function (mapping)
+
+     Implemented by Score.transformScore (define a clause with test isNote)
+
+     Application examples
+       - Transpose the pitch by a constant summand or factor
+       - Stretch/shrink durations by a constant summand or factor
+
+       - "Scatter" pitches, but keep the harmony by transposing individual notes or small groups of notes (e.g., non-harmonic notes and the consecutive harmonic note) by a random number of octaves up or down
+
+       - ...
+
+***** ENP 
+
+#+begin_src lisp 
+  (def-plug-in transpose-score ((self score) :score-transformations)
+    (let ((interval (capi:prompt-for-number "Transposition interval:" :min 1 :initial-value 72)))
+      (do-notes (note self) 
+                (setf (midi note) (+ (midi note) interval)))))
+#+end_src
+
+      Stretch/shrink durations: use Kilian's examples in PWGL quantisation library KSQuant2 (?)
+      - involves quantisation
+      
+
+**** Transform (or remove) notes with a certain feature, e.g.,
+
+     Implemented by Score.transformScore (define a clause with refined test)
+
+     Feature examples
+       - Some parameter (duration, pitch, articulation...) has a certain value or is above/below a certain value, e.g.,
+	 - Lengthen all durations that exceed a given thresh-hold by a given summand or factor
+
+       Concrete application examples	  
+       - Transpose all notes with a certain duration or more up by a certain interval
+       - Transform individual notes that meet certain criteria into chords, e.g.,
+	 - Implement transformations inspired by sound processing techniques (e.g., ring modulation, frequency modulation..) by adding the respective notes
+       - Transform chords into figurations
+
+
+**** Remove notes with a certain feature, e.g.,
+
+     Implemented by Score.transformScore (define a clause with refined test that returns a pause/rest object)
+
+     Concrete application examples	  
+       - Remove notes that are below a certain pitch threshold (substitute with a rest) 
+
+
+***** ENP 
+
+      =enp-delete (<score> <object>)=
+      a method defined for different classes of <object>: note, voice, beat, measure, part, expression ...
+
+
+#+begin_src lisp 
+;; remove note without substituting
+  (def-plug-in delete-notes-below-60 ((self score) :score-transformations)
+    (do-notes (note self) 
+              (when (< (midi note) 60)
+                (enp-delete self note))))
+#+end_src      
+
+      
+      =(change-rtm-object <orig-object> is-rest)=
+      transforms an object (chord or note) into a rest 
+
+      NOTE: after calling this function call =(bring-up-to-date <score> 0.0)=
+
+      =(change-rtm-object <orig-object> is-tied)=
+      transforms an object (chord or note) into an object tied over to its previous object (test that there is a previous object)
+
+      =(change-rtm-object <orig-object> <integer>)=
+      transforms unit length an object (chord or note) (i.e., "sub-beats" of object)
+      I.e., makes it longer/shorter
+
+      
+#+begin_src lisp 
+  ;; change note/chord into a rest
+    (def-plug-in change-notes-below-60-into-rests ((self score) :score-transformations)
+      (do-chords (chord self) 
+                (when (some #'(lambda (note) (< (midi note) 60)) (notes chord))
+                  (change-rtm-object chord is-rest))))
+#+end_src      
+
+
+
+**** Todo: Transform all notes that meet certain test by same function, where one (or more) function argument(s) change(s) for different notes
+
+     The changes are given as, e.g., 
+
+       - BPF where the value depends on the note's start time (or position in a part)
+       - A list of values where the index is the note's position in a part
+       - A pattern -- can I somehow have Common Music pattern (possibly form an older Common Music version) important into PWGL/OpenMusic?
+       - A function (e.g., a random function)
+
+       Concrete examples: 
+       - "Tilt" or otherwise deform the whole score (or certain parts) in pitch, where the pitch change is given as a BPF
+       - "Scatter" pitches, but keep the harmony by transposing individual notes or small groups of notes (e.g., non-harmonic notes and the consecutive harmonic note) by octaves up/down, so that the contour of local max/min is controlled by a BPF
+       - Transform pitch of score controlled by a special BPF for each of its parts
+
+
+**** Todo: Transform all notes that meet certain test by same function, where one (or more) function argument(s) depend on the note's list of predecessors/successors (and possibly also some BPF etc as above)
+
+       Concrete examples	  
+       - Transpose all notes with a certain duration or more up so that they form local maxima (higher than both predecessor and successor)
+
+	 
+**** !! Todo: Transform (or remove) notes with a certain feature, where the feature test function expects an additional arg, e.g., given as BPF, list, PWGL circ-list, pattern or function
+
+       Concrete examples: 
+       - Notes that exceed a certain duration are somehow transformed, but the duration threshold changes over time
+
+	 
+***** ENP
+      
+      =(ccl::e <object> <expression-keyword> &rest)= 
+      <object> is chord or note
+      <expression-keyword> is, e.g., :accent, :slur, ... (can be any expression defined in ENP doc Appendix E)
+
+      returns true if <object> has given type of expression
+
+      Example
+      =(ccl:e mynote :accent)=
+
+
+      =(ccl::e <object> :bpf :id <bpf-id-string>)= 
+      
+      Returns true if there is a BPF "bpf name" attached to object
+
+ 
+      =(ccl::e <object> :bpf :sample :at (<object> | <time in sec>) [:id <bpf-id-string>])= 
+      <object> is chord or note
+      
+
+      Example 
+      =(ccl::e my-note :bpf :sample :at my-note :id "bpf name")=
+
+      returns BPF value of BPF "bpf name" at start time of my-note
+
+
+****** ENP plug-in
+
+#+begin_src lisp 
+  (def-plug-in transpose-notes-below-60-with-BPF ((self score) :score-transformations)
+    (do-notes (my-note self) 
+              ;; no BPF ID given -- uses the first BPF defined for this note
+              (let ((interval (ccl::e my-note :bpf :sample :at my-note)))
+                (setf (midi note) (+ (midi note) interval)))))
+#+end_src
+
+****** ! How to add BPF into score
+
+       - Select chords (not notes) over which BPF should be situated
+       - Filter chords out: press c
+       - Add expression: press e
+       - Type BPF, press return
+       - Double-click BPF and then double-click points to add
+       - Finishing: press ENTER (not return)
+
+       - Naming BPF: control-click ...
+       - You can add BPFs 
+	 - make different BPFs active: short cut TAB
+	 - show multiple lanes: short cut s (NOTE: do not edit BPFs in that mode)
+	 
+	
+       Note: you can set BPF properties etc. in context menu
+
+
+
+
+**** Todo: Other rough ideas
+
+     - Diminution: e.g., as proposed by Stockhausen's Ausmultipizieren, or (other) fractal techniques substituting, e.g., long notes by certain phrases (ornamentations)
+     - Augmentation: e.g., as proposed by Stockhausen, leaving out certain detail 
+     - Granular synthesis: short fragments of score (grains) extracted and somehow arranged in time
+
+
+**** Todo: how can I transform a score depending on another?
+
+     Rough ideas first
+     - Convolution (possibly in theory, but I should probably reduce data later..)
+     - Some interpolation
+     - Some mixing (how? control different "levels", i.e. how much they contribute to final result)
+     - Other sound processing inspired ideas: ring modulation, FM (?)
+
 
 ** DONE Move Strasheela sources to GitHub		       :SOON:ARCHIVE:
    CLOSED: [2012-06-07 Thu 11:00]
@@ -401,9 +630,7 @@ git svn clone http://strasheela.svn.sourceforge.net/svnroot/strasheela strasheel
    
    [[file:~/oz/music/Strasheela/strasheela/strasheela/contributions/anders/HarmonisedScore/source/ScalaImport/ScalaChords-12ET.par]]
 
-
-
-** TODO [#B] CSP generator/template, also for PWGL interface	       :NEXT:
+** TODO CSP generator/template, also for PWGL interface	       :NEXT:
 
    *Major problem to solve first:*
    How to define reasonably simple and powerful constraint applicators? More specifically, how to nest applicators?
@@ -1068,204 +1295,6 @@ command SET HARMCONST.
 ** TODO Define/extend ENP score -> Strasheela score 		       :NEXT:
 
    See file:~/PWGL-User/0-TorstensOtherStuff/StrasheelaInterface/ENP2Strasheela.lisp
-
-
-   
-** TODO [#B] Define ENP score transformations			       :NEXT:
-
-   Work in progress: [[file:~/PWGL-User/ENP/plug-ins/test-script.lisp::(in-package%20:ccl)][file:~/PWGL-User/ENP/plug-ins/test-script.lisp::(in-package :ccl)]]
-
-   Do what you can in ENP and what is too hard in Strasheela ([[*%5B#A%5D%20Define%20Strasheela%20score%20transformations%20(instead%20of%20plain%20generation%20as%20so%20far)][Define Strasheela score transformations (instead of plain generation as so far)]]) 
-
-*** Transformations
-
-    Transformation examples 
-    
-**** Transform all notes by the same function (mapping)
-
-     Implemented by Score.transformScore (define a clause with test isNote)
-
-     Application examples
-       - Transpose the pitch by a constant summand or factor
-       - Stretch/shrink durations by a constant summand or factor
-
-       - "Scatter" pitches, but keep the harmony by transposing individual notes or small groups of notes (e.g., non-harmonic notes and the consecutive harmonic note) by a random number of octaves up or down
-
-       - ...
-
-
-***** ENP 
-
-#+begin_src lisp 
-  (def-plug-in transpose-score ((self score) :score-transformations)
-    (let ((interval (capi:prompt-for-number "Transposition interval:" :min 1 :initial-value 72)))
-      (do-notes (note self) 
-                (setf (midi note) (+ (midi note) interval)))))
-#+end_src
-
-      Stretch/shrink durations: use Kilian's examples in PWGL quantisation library KSQuant2 (?)
-      - involves quantisation
-      
-
-**** Transform (or remove) notes with a certain feature, e.g.,
-
-     Implemented by Score.transformScore (define a clause with refined test)
-
-     Feature examples
-       - Some parameter (duration, pitch, articulation...) has a certain value or is above/below a certain value, e.g.,
-	 - Lengthen all durations that exceed a given thresh-hold by a given summand or factor
-
-       Concrete application examples	  
-       - Transpose all notes with a certain duration or more up by a certain interval
-       - Transform individual notes that meet certain criteria into chords, e.g.,
-	 - Implement transformations inspired by sound processing techniques (e.g., ring modulation, frequency modulation..) by adding the respective notes
-       - Transform chords into figurations
-
-
-**** Remove notes with a certain feature, e.g.,
-
-     Implemented by Score.transformScore (define a clause with refined test that returns a pause/rest object)
-
-     Concrete application examples	  
-       - Remove notes that are below a certain pitch threshold (substitute with a rest) 
-
-
-***** ENP 
-
-      =enp-delete (<score> <object>)=
-      a method defined for different classes of <object>: note, voice, beat, measure, part, expression ...
-
-
-#+begin_src lisp 
-;; remove note without substituting
-  (def-plug-in delete-notes-below-60 ((self score) :score-transformations)
-    (do-notes (note self) 
-              (when (< (midi note) 60)
-                (enp-delete self note))))
-#+end_src      
-
-      
-      =(change-rtm-object <orig-object> is-rest)=
-      transforms an object (chord or note) into a rest 
-
-      NOTE: after calling this function call =(bring-up-to-date <score> 0.0)=
-
-      =(change-rtm-object <orig-object> is-tied)=
-      transforms an object (chord or note) into an object tied over to its previous object (test that there is a previous object)
-
-      =(change-rtm-object <orig-object> <integer>)=
-      transforms unit length an object (chord or note) (i.e., "sub-beats" of object)
-      I.e., makes it longer/shorter
-
-      
-#+begin_src lisp 
-  ;; change note/chord into a rest
-    (def-plug-in change-notes-below-60-into-rests ((self score) :score-transformations)
-      (do-chords (chord self) 
-                (when (some #'(lambda (note) (< (midi note) 60)) (notes chord))
-                  (change-rtm-object chord is-rest))))
-#+end_src      
-
-
-
-**** Todo: Transform all notes that meet certain test by same function, where one (or more) function argument(s) change(s) for different notes
-
-     The changes are given as, e.g., 
-
-       - BPF where the value depends on the note's start time (or position in a part)
-       - A list of values where the index is the note's position in a part
-       - A pattern -- can I somehow have Common Music pattern (possibly form an older Common Music version) important into PWGL/OpenMusic?
-       - A function (e.g., a random function)
-
-       Concrete examples: 
-       - "Tilt" or otherwise deform the whole score (or certain parts) in pitch, where the pitch change is given as a BPF
-       - "Scatter" pitches, but keep the harmony by transposing individual notes or small groups of notes (e.g., non-harmonic notes and the consecutive harmonic note) by octaves up/down, so that the contour of local max/min is controlled by a BPF
-       - Transform pitch of score controlled by a special BPF for each of its parts
-
-
-**** Todo: Transform all notes that meet certain test by same function, where one (or more) function argument(s) depend on the note's list of predecessors/successors (and possibly also some BPF etc as above)
-
-       Concrete examples	  
-       - Transpose all notes with a certain duration or more up so that they form local maxima (higher than both predecessor and successor)
-
-	 
-**** !! Todo: Transform (or remove) notes with a certain feature, where the feature test function expects an additional arg, e.g., given as BPF, list, PWGL circ-list, pattern or function
-
-       Concrete examples: 
-       - Notes that exceed a certain duration are somehow transformed, but the duration threshold changes over time
-
-	 
-***** ENP
-      
-      =(ccl::e <object> <expression-keyword> &rest)= 
-      <object> is chord or note
-      <expression-keyword> is, e.g., :accent, :slur, ... (can be any expression defined in ENP doc Appendix E)
-
-      returns true if <object> has given type of expression
-
-      Example
-      =(ccl:e mynote :accent)=
-
-
-      =(ccl::e <object> :bpf :id <bpf-id-string>)= 
-      
-      Returns true if there is a BPF "bpf name" attached to object
-
- 
-      =(ccl::e <object> :bpf :sample :at (<object> | <time in sec>) [:id <bpf-id-string>])= 
-      <object> is chord or note
-      
-
-      Example 
-      =(ccl::e my-note :bpf :sample :at my-note :id "bpf name")=
-
-      returns BPF value of BPF "bpf name" at start time of my-note
-
-
-****** ENP plug-in
-
-#+begin_src lisp 
-  (def-plug-in transpose-notes-below-60-with-BPF ((self score) :score-transformations)
-    (do-notes (my-note self) 
-              ;; no BPF ID given -- uses the first BPF defined for this note
-              (let ((interval (ccl::e my-note :bpf :sample :at my-note)))
-                (setf (midi note) (+ (midi note) interval)))))
-#+end_src
-
-****** ! How to add BPF into score
-
-       - Select chords (not notes) over which BPF should be situated
-       - Filter chords out: press c
-       - Add expression: press e
-       - Type BPF, press return
-       - Double-click BPF and then double-click points to add
-       - Finishing: press ENTER (not return)
-
-       - Naming BPF: control-click ...
-       - You can add BPFs 
-	 - make different BPFs active: short cut TAB
-	 - show multiple lanes: short cut s (NOTE: do not edit BPFs in that mode)
-	 
-	
-       Note: you can set BPF properties etc. in context menu
-
-
-
-
-**** Todo: Other rough ideas
-
-     - Diminution: e.g., as proposed by Stockhausen's Ausmultipizieren, or (other) fractal techniques substituting, e.g., long notes by certain phrases (ornamentations)
-     - Augmentation: e.g., as proposed by Stockhausen, leaving out certain detail 
-     - Granular synthesis: short fragments of score (grains) extracted and somehow arranged in time
-
-
-**** Todo: how can I transform a score depending on another?
-
-     Rough ideas first
-     - Convolution (possibly in theory, but I should probably reduce data later..)
-     - Some interpolation
-     - Some mixing (how? control different "levels", i.e. how much they contribute to final result)
-     - Other sound processing inspired ideas: ring modulation, FM (?)
 
 
 
@@ -4867,6 +4896,12 @@ Google, e.g., pygments lexer for more examples..
 
 * Other 
 
+** Strasheela - Gecode interface (e.g., in new Mozart virtual machine)
+
+   User-defined branching difficult, but (hopefully) doable
+   see also Denys Duchier's email [[message://87haxt4lyd.fsf@univ-orleans.fr][Re: gecode bindings]]
+   
+
 ** TODO Read Strasheela doc				    :@READ:SOON:EASY:
 
    know your system, e.g., know all my Patterns 
@@ -4883,6 +4918,7 @@ Google, e.g., pygments lexer for more examples..
    http://gforge.info.ucl.ac.be/plugins/wiki/index.php?CompilingMozart&id=17&type=g
 
   - Configuration error of gmp: try deinstalling gmp and instead installing gmp version 4.1.2 (current version at time when Mozart configure script was programed)
+
 
 ** GeOz -- is this still relevant?
    
