@@ -52,7 +52,7 @@ Beat = 4*3
     %% The first 4 notes (range 1#4) of Voice1 are followed homophonically by Voice2 and Voice3.
     %% Also, the notes no 7-12 of Voice1 are followed homophonically by the simultaneous notes of Voice2 and Voice3 (if these notes exist).
     {Segs.texture Segs.homophonic Voice1 [Voice2 Voice3]
-     unit(indexRange: [1#3 7#12])}
+     unit(indexRange: [1#3 10#12])}
  end
  unit(order:leftToRight
       value:random)}
