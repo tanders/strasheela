@@ -867,10 +867,20 @@ define
 	 DependantNs
       in
 	 thread
+	    ScoreObjects = {DependantPart collect($ test: fun {$ X}
+							     X \= N1 andthen % redundant actually
+							     % {X isItem($)} andthen
+							     {X isNote($)}
+							  end)}
+	 in
 	    DependantNs
-	    = {N1 getSimultaneousItemsOffset($ Ags.offsetTime
-					     toplevel: DependantPart
-					     test: isNote)}
+	    % %% BUG: offsetTime not expected as arg to getSimultaneousItemsOffset
+	    % = {N1 getSimultaneousItemsOffset($ Ags.offsetTime 
+	    % 				     toplevel: DependantPart
+	    % 				     test: isNote)}
+	    = {Score.getItemsInTimeframeOffset ScoreObjects
+	       {N1 getStartTime($)} {N1 getEndTime($)} Ags.offsetTime
+	       unit}
 	 end
 	 thread
 	    {ForAll DependantNs
