@@ -2,6 +2,232 @@
 
 #+BABEL: :noweb yes :results silent :exports none
 
+* Brainstorming -- alternative platforms
+ 
+** MiniZinc or Zinc
+
+*** Relation to Strasheela
+    
+    Not suitable for modelling directly in MiniZinc
+    - Not high-level enough, e.g., limited data structure, no functions, no higher order programming
+
+   Can creating a MiniZinc program automatically by another language be an option 
+   Difficulties: 
+   - Score contexts that are undetermined before the search starts I can handle in Strasheela with delayed constraint application -- can I do that in MiniZinc?? No higher-order programming and limited data structures, so not really an option.
+     - I could "compile" higher-order programming in some other language into loops in MiniZinc?
+   - Could relation constraints help here?
+  
+
+*** Info
+
+    language for modelling constraint satisfaction and optimisation problems
+    - MiniZinc can be can be flattened into FlatZinc (http://www.minizinc.org/), which is supported by several constraint solvers, e.g., Gecode 
+    
+    http://www.g12.csse.unimelb.edu.au/zinc/doc/html/zinc-spec.html (explains differences between larger Zinc and its subset MiniZinc in appendix C). 
+
+
+    !! User-definable search heuristics supported by Gecode FlatZinc interpreter 
+    https://lirias.kuleuven.be/bitstream/123456789/319698/1/schrijvers_2011_0_search.pdf
+    http://www.gecode.org/flatzinc.html
+
+    Note: Zinc is very limited higher-order and MiniZinc strictly first-order -- for constraint application I really want higher order...
+
+    Zinc
+    http://g12.research.nicta.com.au/zinc_current/index_home.php
+
+    Does MiniZinc have any abstraction facilities (e.g., functions)? Seemingly those are only part of Zinc, see also 
+    http://www.hakank.org/constraint_programming_blog/2010/09/a_first_look_at_g12_zinc_basic_learning_models_etc.html
+    Anyway, MiniZinc users can define predicates
+
+    MiniZinc IDE
+    http://g12ide.cecs.anu.edu.au/
+
+**** Pages with more links etc
+
+     http://www.hakank.org/minizinc/
+
+     http://www.hakank.org/minizinc/index_zinc.html
+
+
+** Mozart 2
+
+
+
+** Python -- I would depend on Denys Duchier's maintenance of Gecode (perhaps as only user!)
+
+   - Mainstream language
+   - Reasonably high-level language 
+   - Sage (http://www.sagemath.org) -- could that be helpful for modelling?
+
+
+*** TODO Music software in or supporting Python
+
+    Overview: http://wiki.python.org/moin/PythonInMusic
+
+
+**** Music theory modelling 
+
+***** ! music21 -- Python-based toolkit for computer-aided musicology
+
+      Based on Humdrum (how?)
+
+      http://web.mit.edu/music21/
+      By Michael Cuthbert, Christopher Ariza (main developer) and several contributors, primarily contributing music databases (http://web.mit.edu/music21/doc/html/about.html)
+      Main author Michael Scott Cuthbert is a musician, does not even know the Python universe extremely well it seems (but fair enough, that universe is rather big)
+
+      Relatively comprehensive music representation in Python (hierarchical, stateful, rather strait forward).
+      I would be able to use that rather well (after learning all the functions/methods etc. :)
+      It adds to that 
+      - Imports various formats: MusicXML, Kern (from Humdrum), MIDI, ABC. Exports to MusicXML, MIDI and Lilypond. 
+      - Buildin access to several corpora of music (http://web.mit.edu/music21/doc/html/referenceCorpus.html)
+      - A range of analysis graphics that can be created (statistics etc)
+
+
+      It seems there is a community of users (and they are pointing out bugs, so that helps to clean the system :)
+      Users includes Dmitri Tymoczko 
+      https://groups.google.com/forum/?fromgroups#!forum/music21list
+      Question -- why could this software develop a community, even though its interface is a programming language and it does only plain symbolic music processing? Possible answers:
+      - Python relatively easy to use and widely used?
+      - Rather simple design overall? Programs can consist of rather little chunks and be created step by step (in contrast to my CSP defs, which are often pretty large)
+      - It answers an actual need?
+
+
+      *Its analysis features could be useful for the automatic generation of compositional rules..*
+
+
+***** mingus
+
+      Looks reasonably substantial, but extremely conservative
+
+      https://code.google.com/p/mingus/
+
+
+***** Sebastian
+
+      https://github.com/jtauber/Sebastian
+      
+
+
+*** Constraint libraries in Python
+
+    Gecode seems by far the best candidate
+
+**** ! Gecode bindings for Python
+
+     How much time does Denys Duchier have to maintain this library? He seems to be the only one working on in.
+     There are no bugs reported in the system, so likely few users..
+
+     https://launchpad.net/gecode-python
+
+     - Comprehensive: rich set of domains and constraints
+     - High-level control over search process
+     - High performance
+
+
+**** or-tools
+
+     Operations Research Tools developed at Google
+     https://code.google.com/p/or-tools/
+
+     Everything is coded in C++ and is available through SWIG in Python, Java, and .NET (using Mono on non-Windows platforms).
+
+     The standard way to get the code is to checkout the source and build it from scratch. 
+     -> So likely, not a big community? They say they use it internally at Google, hm..
+
+
+
+
+**** Optimisation libraries build into Sage
+
+     - Knapsack algorithms
+     - Linear programming
+     - ...
+
+
+**** Emma -- commercial						    :ARCHIVE:
+
+     http://www.eveutilities.com/products/emma
+
+     - Only integer domain -- does not say anything
+     - more than 60 predefined constraints (that does not sound much)
+
+**** python-constraint						    :ARCHIVE:
+
+     http://labix.org/python-constraint
+
+     - finite domains only
+
+
+
+** Lisp 
+
+*** PWGL
+
+**** Pro
+     
+     - Appropriate user-base already there (although small)
+     - Several sister projects there (can be helpful, or not...)
+     - Music environment already there
+     - Some development already in place for gecode libraries
+     - High-level language (though compared with Oz I loose realtime support)
+
+
+**** Cons
+
+     - Closed system, and depending on commercial development tools (LispWork) -- difficult to build a community there
+
+
+** SuperCollider
+
+   - Suitable community (interested both in programming and music)
+   - Nicely high-level language
+
+    
+
+
+** Max
+
+*** Pro
+    - Large community of users, but not necessarily developers
+    - Nice free score editor developing with Bach project
+    - ? JavaScript support could help as language 
+
+
+*** Cons
+    - Development likely slowed down by programming in lower-level language (C) 
+    - I would not like that language too much...
+
+
+** OLDER: Strasheela - Gecode interface (e.g., in new Mozart virtual machine)
+
+   User-defined branching difficult, but (hopefully) doable
+   see also Denys Duchier's email [[message://87haxt4lyd.fsf@univ-orleans.fr][Re: gecode bindings]]
+   
+
+** Comet -- commercial						    :ARCHIVE:
+
+   Clearly business focussed -- I do not need that at all. 
+
+   Athough it is possible to get 30 days evaluation copy of COMET, there is no information on company web page regarding the cost of the software. (Free academic license, but not free beyond academics.)
+   COMET language was licensed to Dynadec in 2009.
+
+   !! The licence would be a severe problem for an open-source project! 
+
+   http://en.wikipedia.org/wiki/Comet_(programming_language)
+   http://dynadec.com/technology/
+
+   - Constraint programming (propagation) and local search
+   - Only finite integer domain?
+   - Reified constraints
+   - Search can be controlled
+   
+   Book -- manual for commercial software named COMET
+   [[http://www.amazon.co.uk/Constraint-Based-Local-Search-Pascal-Hentenryck/dp/026251348X/ref=sr_1_1?ie=UTF8&qid=1370519978&sr=8-1&keywords=Constraint-Based+Local+Search+by+Pascal+Van+Hentenryck+and+Laurent+Michel][At amazon UK]]   
+   As Amazon.com -- rel negative reviews (400-page infomercial...)
+http://www.amazon.com/Constraint-Based-Local-Search-Pascal-Hentenryck/dp/0262220776/ref=sr_1_1?ie=UTF8&s=books&qid=1239993819&sr=8-1
+
+
+
 * Strasheela release
 
 ** Finish regular temperament definition (e.g., doc incomplete)
@@ -195,7 +421,7 @@ MyTestScore = {Score.makeScore
 
 * Strasheela design and development 				 :STRASHEELA:
    
-** TODO Define ENP score transformations			       :NEXT:
+** TODO Define ENP score transformations
 
    Work in progress: [[file:~/PWGL-User/ENP/plug-ins/test-script.lisp::(in-package%20:ccl)][file:~/PWGL-User/ENP/plug-ins/test-script.lisp::(in-package :ccl)]]
 
@@ -630,7 +856,7 @@ git svn clone http://strasheela.svn.sourceforge.net/svnroot/strasheela strasheel
    
    [[file:~/oz/music/Strasheela/strasheela/strasheela/contributions/anders/HarmonisedScore/source/ScalaImport/ScalaChords-12ET.par]]
 
-** TODO CSP generator/template, also for PWGL interface	       :NEXT:
+** TODO CSP generator/template, also for PWGL interface
 
    *Major problem to solve first:*
    How to define reasonably simple and powerful constraint applicators? More specifically, how to nest applicators?
@@ -889,12 +1115,12 @@ end
     - Wrap each constraint applicator into its own thread
 
 
-** TODO Port Arno constraint in-critical-band? to Strasheela	       :NEXT:
+** TODO Port Arno constraint in-critical-band? to Strasheela
    
    see [[file:~/lisp/own-projects/cm-etc/arno/privat-examples/microtonal-choral.lisp::(defmethod%20in-critical-band?%20((chord%20abstract-chord))][file:~/lisp/own-projects/cm-etc/arno/privat-examples/microtonal-choral.lisp::(defmethod in-critical-band? ((chord abstract-chord))]]
 
 
-** TODO Improving debugging of CSPs -- collect ideas		       :SOON:
+** TODO Improving debugging of CSPs -- collect ideas
 
    Currently only brain storming..  
 
@@ -911,7 +1137,7 @@ end
 
 
 
-** TODO Finish support for grace notes 				       :NEXT:
+** TODO Finish support for grace notes
 
    Duration value 0 
    
@@ -939,7 +1165,7 @@ end
 
 
 
-** TODO Revise Melody definition				       :NEXT:
+** TODO Revise Melody definition
 
    - Try to simplify definition, e.g.,
      - Revise definition of pre-defined constraints -- simplify 
@@ -950,7 +1176,7 @@ end
 
    
 
-** TODO Revise Counterpoint_NParts definition			       :NEXT:
+** TODO Revise Counterpoint_NParts definition
 
    See [[file:~/Compositions/Orgel-StPeter-Koeln/Strasheela-source/Score.oz::fun%20{Counterpoint_NParts%20Args}][file:~/Compositions/Orgel-StPeter-Koeln/Strasheela-source/Score.oz::fun {Counterpoint_NParts Args}]]
 
@@ -1177,7 +1403,7 @@ command SET HARMCONST.
 
 
 
-** TODO Extend harmony model by support for voicing (pitch class octaves) :SOON:
+** TODO Extend harmony model by support for voicing (pitch class octaves)
 
    Order / "octavation" of pitch classes in chord important and currently ignored by my harmony model 
 
@@ -1188,7 +1414,7 @@ command SET HARMCONST.
    For example of such harmonies in database see [[file:~/oz/music/Strasheela/strasheela/strasheela/contributions/anders/HarmonisedScore/source/databases/Scala.oz::Chords%20%3D%20chords(][file:~/oz/music/Strasheela/strasheela/strasheela/contributions/anders/HarmonisedScore/source/databases/Scala.oz::Chords = chords(]]
 
 
-** TODO Finish scale databases for 12-TET in Scala.oz 		       :NEXT:
+** TODO Finish scale databases for 12-TET in Scala.oz
 
    Database file [[file:~/oz/music/Strasheela/strasheela/strasheela/contributions/anders/HarmonisedScore/source/databases/Scala.oz]]
 
@@ -1197,7 +1423,7 @@ command SET HARMCONST.
    [[file:~/Downloads/scala-22-pc-linux/melathat.par]] (these are seemingly a subset of the above)
 
 
-** TODO Extend my harmony model so that chord definitions can take intervals beyond an octave into account :SOON:
+** TODO Extend my harmony model so that chord definitions can take intervals beyond an octave into account
 
    The notion of pitch classes (i.e. only intervals less than an octave) is clearly simplifying the true notion of chords perceptually
 
@@ -1216,7 +1442,7 @@ command SET HARMCONST.
     E.g., [[file:~/oz/music/Strasheela/strasheela/strasheela/contributions/anders/HarmonisedScore/source/databases/ScalaDB.oz]]
 
 
-** TODO Define melody score script (flexible CSP template)	       :NEXT:
+** TODO Define melody score script (flexible CSP template)
 
    See [[file:~/Compositions/Z-published/2011/Anders-TempzinerModulationen/WritingProcess/Strasheela-source/Score.oz::proc%20{Melody%20Args%20?MyScore}][file:~/Compositions/Z-published/2011/Anders-TempzinerModulationen/WritingProcess/Strasheela-source/Score.oz::proc {Melody Args ?MyScore}]]
 
@@ -1235,7 +1461,7 @@ command SET HARMCONST.
      -> consider removing that option completely
 
 
-** TODO Define counterpoint script with arbitrary number of parts      :NEXT:
+** TODO Define counterpoint script with arbitrary number of parts
    
    Define a top-level CSP template comparable to the top-level of "Orjan's library
 
@@ -1267,7 +1493,7 @@ command SET HARMCONST.
    - measures 
 
 
-** TODO [#B] Define interface to integrate Strasheela into OpenMusic or PWGL :NEXT:
+** TODO [#B] Define interface to integrate Strasheela into OpenMusic or PWGL
 
    see [[file:~/oz/music/Strasheela/strasheela/strasheela/contributions/anders/PW_OM_Interface/Brainstorming.org]]
 
@@ -1292,7 +1518,7 @@ command SET HARMCONST.
     This is difficult to fix, but once I did this properly then I can actually automatically start the OzServer and users do not need to do that manually any more -- will help users like my students..
 
 
-** TODO Define/extend ENP score -> Strasheela score 		       :NEXT:
+** TODO Define/extend ENP score -> Strasheela score
 
    See file:~/PWGL-User/0-TorstensOtherStuff/StrasheelaInterface/ENP2Strasheela.lisp
 
@@ -1300,7 +1526,7 @@ command SET HARMCONST.
 
 
 
-** TODO [#B] Define Strasheela score transformations (instead of plain generation as so far) :NEXT:
+** TODO [#B] Define Strasheela score transformations (instead of plain generation as so far)
 
    Remember importance of transformations stressed by Tristan Murail in Interview in Hirs' OpenMusic book
    
@@ -1586,7 +1812,7 @@ Any help is very much appreciated.
 Best, Hans
 
 
-** TODO Define Strasheela scripts that expect score as input of which variation will be created :NEXT:
+** TODO Define Strasheela scripts that expect score as input of which variation will be created
 
    - These scripts will expect various args, as the Segs sub-CSPs (extended scripts), such as constraints to switch on/off certain constraints 
 
@@ -1623,13 +1849,13 @@ Best, Hans
 
 
 
-** TODO Debug  MIDI output of legato articulation 		       :NEXT:
+** TODO Debug  MIDI output of legato articulation
 
    arg removeQuestionableNoteoffs of Out.midi.outputMidiFile does not quite work...
    [[file:~/oz/music/Strasheela/strasheela/strasheela/source/MidiOutput.oz::proc%20{OutputMidiFile%20MyScore%20Spec}][file:~/oz/music/Strasheela/strasheela/strasheela/source/MidiOutput.oz::proc {OutputMidiFile MyScore Spec}]]
 
 
-** TODO Add constrainable =marks= FS per note 			     :NEXT:
+** TODO Add constrainable =marks= FS per note
 
    /Similar approach as constrainable =instruments= FS/, see [[*Add%20constrainable%20%3Dinstruments%3D%20FS%20per%20note][Add constrainable =instruments= FS per note]] 
 
@@ -1646,7 +1872,7 @@ Best, Hans
    Also fine-tune notation of grace notes with these marks (duration of grace note, whether or not it is slashed, and allow for grace note chords). See also http://fomus.sourceforge.net/doc.html/Grace-Notes-_0028File_0029.html#Grace-Notes-_0028File_0029
 
 
-** TODO Add constrainable =instruments= FS per note 		     :NEXT:
+** TODO Add constrainable =instruments= FS per note
 
    Consider: define mixin class in ScoreCore.oz, but to which note classes to add?
 
@@ -1679,7 +1905,7 @@ Best, Hans
     I could instead have several FD ints... 
 
 
-** TODO Somehow add tempo statement to score 			     :NEXT:
+** TODO Somehow add tempo statement to score
 
    Idea: Extra tempo objects added to score
    - Tempo objects running in parallel to other objects in temporal score
@@ -1697,7 +1923,7 @@ Best, Hans
 
 
 
-** TODO [Difficult] Generalise accessors hasTemporalPredecessor, hasTemporalSuccessor :SOON:
+** TODO [Difficult] Generalise accessors hasTemporalPredecessor, hasTemporalSuccessor
 
    also getTemporalPredecessor, getTemporalPredecessors, getTemporalSuccessor, getTemporalSuccessors, 
    getPredecessorsUpToRest, getSuccessorsUpToRest
@@ -1781,7 +2007,7 @@ Best, Hans
    - Consider to (automatically) add to chord/scale database a feature with the index of the inversion of the chord/scale in question
 
 
-** TODO Simplify modulation: apply modulation constraints automatically :NEXT:
+** TODO Simplify modulation: apply modulation constraints automatically
 
    Traverse seq of scale objects. For every pair of scales
    - get modulation chord (1st of sim chords of 2nd scale)
@@ -4858,7 +5084,7 @@ Google, e.g., pygments lexer for more examples..
     file:~/oz/music/Strasheela/StrasheelaDoc_Rewrite/doc-source/
   
 
-*** TODO Collect examples for Strasheela tutorial		       :SOON:
+*** TODO Collect examples for Strasheela tutorial
 
 
 ** Consider transforming all Strasheela example files into *.org mode files with code blocks, notation outputs, and brief comments -- then I can publish them all online
@@ -4895,12 +5121,6 @@ Google, e.g., pygments lexer for more examples..
 
 
 * Other 
-
-** Strasheela - Gecode interface (e.g., in new Mozart virtual machine)
-
-   User-defined branching difficult, but (hopefully) doable
-   see also Denys Duchier's email [[message://87haxt4lyd.fsf@univ-orleans.fr][Re: gecode bindings]]
-   
 
 ** TODO Read Strasheela doc				    :@READ:SOON:EASY:
 

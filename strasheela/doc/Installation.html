@@ -191,10 +191,6 @@ Selection Constraints</h3>
 
 <p>Please note that you need a C++ compiler in order to install these constraints. The GNU C++ compiler is usually already installed on Linux. On MacOS X, install Apple's developer tool Xcode (available either from your MacOS installation CDs, or from <a href="http://developer.apple.com/tools/xcode/">here</a> if this online version is newer). On Windows, you may consider installing this compiler under <a href="http://www.cygwin.com/">Cygwin</a>. You can install the selection constraints by typing (of course, you do not type the leading promt yourself, here <code>$</code>).</p>
 
-<blockquote>
-<p class="quoted"></p>
-</blockquote> 
-
 <pre class="example">
 $ ozmake --install --package=http://www.mozart-oz.org/mogul/populate/duchier/select/duchier-select__1.3.0__source__1.8.pkg
 </pre>
@@ -223,18 +219,18 @@ Install Strasheela</h2>
 <h3><a name="sec12" id="sec12"></a>
 How to obtain Strasheela?</h3>
 
-<p class="first">You can either obtain a Strasheela <a href="http://sourceforge.net/project/showfiles.php?group_id=167225">release</a> or a <a href="http://strasheela.svn.sourceforge.net/viewvc/strasheela/trunk/strasheela.tar.gz?view=tar">development snapshot</a> (releases are done at irregular intervals whenenver some development stage was finished). Both are <code>tar.gz</code>  archive files, which must be unpacked.<sup><a class="footref" name="fnr.5" href="#fn.5">5</a></sup></p>
+<p class="first">Please download a Strasheela <a href="http://sourceforge.net/project/showfiles.php?group_id=167225">release</a> (releases are done at irregular intervals whenever some development stage was finished). Strasheela releases are distributed as <code>tar.gz</code>  archive files, which must be unpacked.<sup><a class="footref" name="fnr.5" href="#fn.5">5</a></sup></p>
 
-<p>Alternatively, you can check out the Subversion repository with the following command (this option allows for easy updates later, but requires installing <a href="http://en.wikipedia.org/wiki/Subversion_(software)">Subversion</a>).</p>
+<p>Alternatively, you can check out the development version as a Git repository with the following command (this option allows for easy updates later, but requires installing <a href="http://en.wikipedia.org/wiki/Git_(software)">Git</a>). This command downloads the Strasheela sources into your current directory.</p>
 
 <pre class="example">
-$ svn co https://strasheela.svn.sourceforge.net/svnroot/strasheela/trunk/strasheela/ strasheela
+$ git clone git://github.com/tanders/strasheela.git
 </pre>
 
-<p>You can then later update your Subversion repository by moving into the <code>strasheela</code> top-level directory and typing this.</p>
+<p>You can then later update your Git repository by moving into the <code>strasheela</code> top-level directory and typing this.</p>
 
 <pre class="example">
-$ svn update
+$ git fetch
 </pre>
 
 
@@ -476,7 +472,7 @@ scripts/install-all.sh <span style="color: #8b2252;">\</span>
 <p class="footnote"><a class="footnum" name="fn.4" href="#fnr.4">4.</a> See <a href="http://www.ps.uni-sb.de/pipermail/mozart-users/2006/015298.html">http://www.ps.uni-sb.de/pipermail/mozart-users/2006/015298.html</a>. Nevertheless, the selection constraints have been installed successfully on Windows with earlier Mozart versions (cf. the installation of the <a href="http://sourcesup.cru.fr/xmg/">XMG - eXtensible MetaGrammar</a>).</p>
 
 
-<p class="footnote"><a class="footnum" name="fn.5" href="#fnr.5">5.</a> In order to reduce the file size of the release archive, the release does not contain the sound files which are part of the documentation of the examples (the sound files blow up the size to an archive 10 times as big!). For running Strasheela these missing sounds don't make any difference, and these files are always available as part of the online documentation of Strasheela. Nevertheless, if you do not have a permanent network connection, you may consider using a <a href="http://strasheela.svn.sourceforge.net/viewvc/strasheela/trunk/strasheela.tar.gz?view=tar">development snapshot</a> or the Subversion repository, because these contain also the sound files of the documentation examples.</p>
+<p class="footnote"><a class="footnum" name="fn.5" href="#fnr.5">5.</a> In order to reduce the file size of the release archive, the release does not contain the sound files which are part of the documentation of the examples (the sound files blow up the size to an archive 10 times as big!). For running Strasheela these missing sounds don't make any difference, and these files are always available as part of the online documentation of Strasheela.</p>
 
 
 
@@ -485,7 +481,7 @@ scripts/install-all.sh <span style="color: #8b2252;">\</span>
 <div id="footer">
 <div id="author">&copy; 
 torsten</div>
-<div id="date">Last time edited: 2012.04.29</div>
+<div id="date">Last time edited: 2013.04.14</div>
 </div>
   </body>
 </html>

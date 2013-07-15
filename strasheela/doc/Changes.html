@@ -40,19 +40,34 @@
 <h2>Changes in Version 0.10.2 (no date yet)</h2>
 
 <ul>
-<li>Main additions and changes</li>
+<li>Main additions and changes
 
-<li>Main documentation additions</li>
+<ul>
+<li>Added some auto-documentation to a range of definitions (e.g., functions defined with Score.makeConstructor and Score.defSubscript, but also score classes): Score.getDefaults returns a record with all their creation arguments and default values.</li>
+<li>Added extensive chord and scale database for harmonic CSPs in 12-tone equal temperament. This database also includes a sonance (dissonance degree) measure for each chord in its database.
+-  [Added/revised] output to ENP, the music representation of <a href="http://www2.siba.fi/PWGL/">PWGL</a></li>
+</ul></li>
 
-<li>Minor additions</li>
+<li>Main documentation additions
 
-<li>Further bug fixes and changes
+<ul>
+<li>Added <a href="../examples/Rhythm-Examples/RhythmicMotifsFitIntoMetricStructure.oz">rhythm CSP example</a></li>
+</ul></li>
+
+<li>Minor additions
+
+<ul>
+<li>Added a parameter articulation to Score.note, both playback and notation output are supported</li>
+</ul></li>
+
+<li>Bug fixes and further changes
 
 <ul>
 <li>Strasheela development moved from SourceForge to <a href="https://github.com/tanders/strasheela/tree/master/strasheela">GitHub</a> (and is now using <a href="http://en.wikipedia.org/wiki/Git_%28software%29">Git</a> instead of <a href="http://en.wikipedia.org/wiki/Subversion_%28software%29">Subversion</a>). Nevertheless, other things stay at SourceForge (e.g., the website, mailing lists, releases).</li>
+<li>Fixed method getInitArgDefaults (defined for all score classes). This method is useful, e.g., for automatic documentation of all the arguments supported by the init method of a certain class.</li>
 </ul></li>
 
-<li>For further details see the <a href="https://github.com/tanders/strasheela/commits/master">list of commits at GitHub</a>.</li>
+<li>For many further changes and details see the <a href="https://github.com/tanders/strasheela/commits/master">list of commits at GitHub</a>.</li>
 </ul>
 
 
@@ -960,7 +975,7 @@ See the documentation for <a href="../contributions/anders/HarmonisedScore/doc/n
 <div id="footer">
 <div id="author">&copy; 
 torsten</div>
-<div id="date">Last time edited: 2012.05.31</div>
+<div id="date">Last time edited: 2013.04.14</div>
 </div>
   </body>
 </html>

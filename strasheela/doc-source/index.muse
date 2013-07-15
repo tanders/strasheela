@@ -19,6 +19,8 @@ Strasheela is a highly expressive constraint-based music composition system.[2] 
   For the lates changes check the development at [[https://github.com/tanders/strasheela/commits/master][GitHub]].
 ; the [[http://apps.sourceforge.net/trac/strasheela/timeline][Trac Timeline]] 
 
+  *14 April 2013*: Mozart (and thus Strasheela) does not start on MacOS Mountain Lion. Snow Leopard works fine (Lion was not tested). We are investigating how to address this matter. BTW: Mozart 2 will soon be released, but Strasheela would first need to be ported to that completely rewritten platform.
+
   *31 May 2012*: Strasheela development moved from SourceForge to [[https://github.com/tanders/strasheela/tree/master/strasheela][GitHub]] (and is now using [[http://en.wikipedia.org/wiki/Git_%28software%29][Git]] instead of [[http://en.wikipedia.org/wiki/Subversion_%28software%29][Subversion]]). Nevertheless, other things stay at SourceForge (e.g., the website, mailing lists, releases).  
 
   *30 April 2012*: [[https://sourceforge.net/projects/strasheela/][Strasheela 0.10.1 released]]<br> 
