@@ -107,7 +107,7 @@ define
 % 		[] et22 then Value * 12.0 / 22.0 
 		     [] midicent then Pitch_F / 100.0
 		     [] midic then Pitch_F / 100.0
-		     [] millimidicent then Pitch_F / 10000.0
+		     [] millimidicent then Pitch_F / 100000.0
 		     [] frequency then {FreqToKeynum Pitch_F 12.0}
 		     [] freq then {FreqToKeynum Pitch_F 12.0}
 		     [] hz then {FreqToKeynum Pitch_F 12.0}
