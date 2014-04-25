@@ -2,7 +2,176 @@
 
 #+BABEL: :noweb yes :results silent :exports none
 
-* Brainstorming -- alternative platforms
+* TODO Update Strasheela installation instructions 		  :IMPORTANT:
+
+  Already updated where to find sources
+
+  Still missing: where to find selection constraints now
+  [[file:~/oz/music/Strasheela/strasheela/strasheela/doc-source/Installation.muse::**%20Selection%20Constraints][file:~/oz/music/Strasheela/strasheela/strasheela/doc-source/Installation.muse::** Selection Constraints]]
+
+  Wait for response at mailing list
+  https://groups.google.com/forum/#!topic/mozart-users/sleqosv6jfE
+
+  If that is sorted then rebuild the doc (installation instructions) and upload it
+
+* Other programming projects
+
+** Real-time constraint programming in Lisp (or other high-level languages)
+
+   See also [[*Brainstorming%20--%20alternative%20platforms%20for%20Strasheela][Brainstorming -- alternative platforms for Strasheela]]
+
+   Strasheela re-implemented in some variant of Lisp were realtime is possible, and where I can interface some other computer music system, e.g., PD or SuperCollider 
+
+   Improvement to current Strasheela situation: Lisp is known by more potential users
+
+
+*** !? Max -- best for attracting audience
+
+    Note: Bach project (http://www.bachproject.net/) already provides some simple constraint programming (constraining a list of values with plain backtracking search -- far from efficient) 
+    -- seemingly there would be an audience for that.
+
+    Difficulties with concurrency in Max. This may be easier in SuperCollider (and Oz, and Clojure...)
+
+**** Pro
+     - Large community of users, but not necessarily developers
+     - Nice free score editor developing with Bach project
+     - ? JavaScript support could help as language 
+
+
+**** Cons
+     - Development likely slowed down by programming in lower-level language (C)
+     - I would not like that language too much...
+
+
+*** SuperCollider with Gecode interface
+
+    - UGens in SuperCollider (i.e., for the server) are written in C++
+
+    - Primitives of the sclang that start with an underscore _ are part of some classes. They are defined in C++
+
+
+**** Advantage/disadvantage of using SC
+     + The SC users are coders, so more likely that this Strasheela re-implementation is used by someone else using coding
+     + Nice realtime music environment
+
+     
+     - Not all SC users are interested in algorithmic composition, and few will be interested in using constraint programming
+     - No readily available music notation interface nor editors
+     - Creating an application with a GUI for other users takes quite some time
+
+
+*** Overtone (in clojure) has a nice set of music representation functions already built int (like SuperCollider as well)
+
+    Advantage: could be an academic collaboration with someone reasonably nearby (University of Cambridge)
+
+    See video http://vimeo.com/22798433
+    http://overtone.github.io/
+    
+    Downside: this is again a system for experienced programmers, and there is only a small audience
+    (claims to have hundreds of users, though https://groups.google.com/forum/#!forum/overtone
+    and several contributors https://github.com/overtone/overtone/graphs/contributors)
+    -> But the users would be the right kind of audience of something like Strasheela..
+
+
+*** ? Use GeLisp
+
+    http://sourceforge.net/projects/gelisp/
+
+
+    Can GeLisp support Gecode 4, so that I can define problem-specific variable orderings?
+    Currently it at least supports Gecode 3.2.1 (version from 2009-11-30)
+    However, it only wraps the functionality of Gecode 1, [[message://3BED73F9-B01B-45AC-825C-37992698B3A3@plymouth.ac.uk][Re: Gelisp]]
+    See also http://cic.javerianacali.edu.co/wiki/lib/exe/fetch.php?media=grupos:avispa:papers:tor09b.pdf
+    
+
+*** !? Compile Gecode with SWIG
+
+    SWIG supports Common Lisp with CFFI, http://www.swig.org/compat.html 
+
+    If Gecode could be compiled with SWIG, then I could also use some other language...
+
+    No C++11 supported yet (not even fully previous standard?)
+
+
+*** Some Lisp with interface to C (easy use of Gecode within Lisp)
+
+**** ? Clozure CL
+
+     http://ccl.clozure.com/
+
+     A complete, mature foreign function interface. This includes a powerful bridge to Objective-C and Cocoa on Mac OS X.
+
+     However, what about C++ for Gecode?
+     Seems to be possible in principle (e.g., I saw Qt bindings for Clozure CL)
+
+***** C 
+      OpenMCL uses an automated system that parses the C header files and generates an interface database 
+      http://trac.clozure.com/ccl/wiki/OpenMclFfi
+      However, as this page also explains, calling C functions requires that all their args are values that C can handle (e.g., Lisp strings and arrays first must be transformed).
+
+***** Cocoa and Objective-C
+
+      http://trac.clozure.com/ccl/wiki/Cocoa
+
+
+
+
+**** ? ECL
+     
+     /yet another open-source solution that suffers from a documentation problem -- tutorial missing./
+
+
+     minimal example of embedding Lisp in a C program
+     http://vwood.github.io/embedded-ecl.html
+
+
+     Can embed C within Lisp and compile to C
+
+     http://ecls.sourceforge.net/index.html
+
+
+     Embedded Qt Lisp (ECL embedded Qt binding, embeddable in Qt)
+     http://password-taxi.at/EQL
+
+
+     Not really efficient, compare
+     http://nklein.com/2009/06/trying-to-unconfound-lisp-speeds/
+
+     
+*** Similar examples/projects 
+
+**** libPD
+
+     Some lisp app can send messages (bang, int, float, and symbol messages, as well as lists and typed messages) to a running Pd patch. Print messages from Pd are sent to Lisp in return.
+
+     This also allows to integrate Pd in other apps in various languages (Java, C++, iOS...)
+
+     http://www.youtube.com/watch?v=xLZL6er2v-k&feature=youtu.be
+     http://libpd.cc/
+     https://github.com/libpd/libpd
+     https://github.com/libpd/libpd/wiki
+
+Pd on iOS, Android...      http://createdigitalmusic.com/2010/10/libpd-put-pure-data-in-your-app-on-an-iphone-or-android-and-everywhere-free/
+
+
+**** Live coding with Common Lisp
+
+     http://www.youtube.com/watch?v=xzTH_ZqaFKI
+
+**** Fluxus and Fluxa -- Scheme-based --  allows you to quickly make live animation and audio programs, and change them constantly and flexibly
+     
+     http://booki.flossmanuals.net/fluxus/_draft/_v/1.0/introduction/
+     http://booki.flossmanuals.net/fluxus/_draft/_v/1.0/fluxa/
+
+     Project using it 
+     http://booki.flossmanuals.net/fluxus/_draft/_v/1.0/fluxa/
+
+ 
+
+
+* Brainstorming -- alternative platforms for Strasheela
+
+  See also [[*Other%20programming%20projects][Other programming projects]]
  
 ** MiniZinc or Zinc
 
@@ -187,6 +356,8 @@
 
 ** Max
 
+    Note: Bach project (http://www.bachproject.net/) already provides some simple constraint programming -- seemingly there would be an audience for that.
+
 *** Pro
     - Large community of users, but not necessarily developers
     - Nice free score editor developing with Bach project
@@ -194,7 +365,7 @@
 
 
 *** Cons
-    - Development likely slowed down by programming in lower-level language (C) 
+    - Development likely slowed down by programming in lower-level language (C)
     - I would not like that language too much...
 
 
