@@ -128,7 +128,7 @@ export
    RotateList RotateSublists
    Average
    
-   HowManyDistinct MinDistinct
+   HowManyDistinct MinDistinct MaxDistinct
    HowManyAs
    HowMany Once
    ForN ForPercent NDifferences ForNEither
@@ -955,6 +955,26 @@ define
       {FoldL Set1s.2 FS.union Set1s.1 Set}
       Card = {FS.card Set}
       Card >=: N
+   end
+   /** %% At most N elements in Xs are pairwise distinct. Xs is a list of FD integers, N is a FD integer.
+   %% */
+   proc {MaxDistinct Xs N}
+      %% Implementation inspired by Denys Duchier
+      %%
+      %% Map all elements in Xs into a list of singleton sets. The union
+      %% of all these singletons is a Set whose cardiality is the number
+      %% of distict elements in Xs.
+      Set = {FS.var.decl}
+      Set1s = {Map Xs proc {$ X Set1}
+			 Set1 = {FS.var.decl}
+			 {FS.include X Set1}
+			 {FS.card Set1 1}
+		      end}
+      Card = {FD.decl}
+   in
+      {FoldL Set1s.2 FS.union Set1s.1 Set}
+      Card = {FS.card Set}
+      Card =<: N
    end
 
    /** %% N elements in Xs are 'as' Val, i.e. either equal, or greater etc. A states the relation of the N elements to Val (A is one of '=:', '>:', '>=:', '<:', '=<:', '\\=:').
