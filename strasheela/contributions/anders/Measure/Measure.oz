@@ -1100,7 +1100,7 @@ define
    %%
    %% measureTest (default IsUniformMeasures): A Boolean function that returns true for the relevant measure objects. (currently only works with uniform measures?)
    %%
-   %% rating (an FD int): this argument is bound to the accumulated rating of accent constraint outputs for N. This variable can that way be constrained outside the call of Accent_If (e.g., to constrain the accent structure of some musical section, the number of occurances of some minumum rating or the minimum sum of ratings over multiple notes can be constrained).
+   %% rating (an FD int, default {FD.decl}): this argument is bound to the accumulated rating of accent constraint outputs for N. This variable can that way be constrained outside the call of Accent_If (e.g., to constrain the accent structure of some musical section, the number of occurances of some minumum rating or the minimum sum of ratings over multiple notes can be constrained).
    %%
    %% Note: if N inherited from IsAccentRatingMixin then the rating is automatically added to its parameter accentRating. Therefore, Accent_If (or SetAccentRating) should only be called once for such a note.
    %% It is often good practice to combine all accent constraints into a single rating anyway. Exceptions would be special cases where, e.g., accents expressed by duration-relations and accents expressed by pitch-relations should fall on different metric positions. In such cases it is sufficient to avoid using notes that inherited from IsAccentRatingMixin.
@@ -1176,7 +1176,7 @@ define
    %%
    %% Args:
    %%
-   %% 'rating' (an FD int default {FD.decl}): this argument is bound to the accumulated rating of accent constraint outputs for N. This variable can that way be constrained outside the call of SetAccentRating (e.g., shared with Accent_If, or constrain the accent structure of some musical section, the number of occurances of some minumum rating or the minimum sum of ratings over multiple notes can be constrained).
+   %% 'rating' (an FD int, default {FD.decl}): this argument is bound to the accumulated rating of accent constraint outputs for N. This variable can that way be constrained outside the call of SetAccentRating (e.g., shared with Accent_If, or constrain the accent structure of some musical section, the number of occurances of some minumum rating or the minimum sum of ratings over multiple notes can be constrained).
    %%
    %% If N inherited from IsAccentRatingMixin then the rating is automatically added to its parameter accentRating. Therefore, SetAccentRating (or Accent_If) should only be called once for such a note.
    %% It is often good practice to combine all accent constraints into a single rating anyway. Exceptions would be special cases where, e.g., accents expressed by duration-relations and accents expressed by pitch-relations should fall on different metric positions. In such cases it is sufficient to avoid using notes that inherited from IsAccentRatingMixin.
@@ -1310,7 +1310,7 @@ define
        {ApplyIfNotnilOrFalse {N getTemporalSuccessor($)} IsShorter}}
    end
       
-   /** %% B=1 <=> Note N is longer than the preceeding note and not shorter than succeeding note (duration + offsetTime used for calculating the perceived duration). If a preceeding or succeeding note does not exist (in the same temporal container) then the constraint returns 0.
+   /** %% B=1 <=> Note N is longer than the preceeding note and not shorter than succeeding note (duration + offsetTime used for calculating the perceived duration). If a preceeding note does not exist (in the same temporal container) then the constraint returns 0, if succeeding note does not exist then it returns 1.
    %% */
    fun {IsLongerThanPredecessor N}
       Dur1={FD.decl} 
@@ -1329,7 +1329,7 @@ define
       end
    in
       {FD.conj {ApplyIfNotnilOrFalse {N getTemporalPredecessor($)} IsShorter}
-       {ApplyIfNotnilOrFalse {N getTemporalSuccessor($)} IsNotLonger}}
+       {ApplyIfNotnilOrTrue {N getTemporalSuccessor($)} IsNotLonger}}
    end
 
    /** %% B=1 <=> Note N is longer than the preceeding note (duration + offsetTime used for calculating the perceived duration). If a preceeding or succeeding note does not exist (in the same temporal container) then the constraint returns 0.
