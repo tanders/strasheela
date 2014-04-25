@@ -660,6 +660,8 @@ MyScore = {Segs.homophonicChordProgression
 
 /*
 
+%% BUG: setting chord / scale types results in error (nil cannot be part of FD int decl) -- seemingly the type declaration of chords/scales in HS.score.makeChords is somehow broken
+
 %%
 {GUtils.setRandomGeneratorSeed 0}
 {SDistro.exploreOne
@@ -685,11 +687,13 @@ MyScore = {Segs.homophonicChordProgression
 					     duration: 2
 					     bassChordDegree: 1)
 				 rargs: unit(types: ['major'
-						     'minor']))}
+				 		     'minor'])
+				)}
 		   scales: {HS.score.makeScales
 			    unit(iargs: unit(n:1
 					     transposition: 0)
-				 rargs: unit(types: ['major']))}
+				 rargs: unit(types: ['major'])
+				)}
 		   startTime: 0
 		   timeUnit: beats)}
  end
