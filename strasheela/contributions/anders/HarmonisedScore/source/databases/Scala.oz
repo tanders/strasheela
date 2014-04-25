@@ -1151,10 +1151,17 @@ define
 		   	 comment:unit(name:['Super-Locrian Hexamirror']))
 		   scale(pitchClasses:{Pattern.dxsToXs [2 1 3 2 3 1] 0}
 		   	 roots:[0]
-		   	 comment:unit(name:['Takemitsu Tree Line mode 1']))
+			 comment:unit(name:['Tree Line mode 1'
+					    'Takemitsu Tree Line mode 1']))
 		   scale(pitchClasses:{Pattern.dxsToXs [2 1 3 2 2 2] 0}
 		   	 roots:[0]
-			 comment:unit(name:['Takemitsu Tree Line mode 2']))
+			 comment:unit(name:['Tree Line mode 2'
+					    'Takemitsu Tree Line mode 2']))
+		   %% Same as Takemitsu Tree Line mode 2, but root is more likely to be perceived as root 
+		   scale(pitchClasses:{Pattern.dxsToXs [2 2 2 1 3 2] 0}
+		   	 roots:[0]
+			 comment:unit(name:['Tree Line mode 2 4th inversion'
+					    'Tree Line mode 2 rooted']))
 
 		   %% 7-tone scales
 		   %% G = Greek, M = Medieval (ecclesiastical)		   
@@ -1548,7 +1555,12 @@ define
 			 comment:unit(name:['Adonai Malakh: Jewish']))
 		   scale(pitchClasses:{Pattern.dxsToXs [1 2 1 2 2 1 2 1] 0}
 			 roots:[0]
-			 comment:unit(name:['Magen Abot: Jewish']))
+			 comment:unit(name:['Magen Abot'
+					    'Magen Abot: Jewish']))
+		   %% Same as 'Magen Abot', but same root as similar Shostakovich 6th inversion
+		   scale(pitchClasses:{Pattern.dxsToXs [1 2 1 2 2 1 2 1] 0}
+			 roots:[9]
+			 comment:unit(name:['Magen Abot 6th inversion']))
 		   scale(pitchClasses:{Pattern.dxsToXs [2 1 2 2 1 2 1 1] 0}
 			 roots:[0]
 			 comment:unit(name:['Maqam Nahawand' 'Farahfaza' 'Raga Suha (Suha Kanada)' 'Gregorian nr.4' 'Utility Minor']))
@@ -1594,6 +1606,11 @@ define
 		   scale(pitchClasses:{Pattern.dxsToXs [1 2 1 2 1 2 2 1] 0}
 			 roots:[0]
 			 comment:unit(name:['Shostakovich']))
+		   %% Same as 'Shostakovich', but with same root as subset 'Tree Line mode 2 - rooted'
+		   scale(pitchClasses:{Pattern.dxsToXs [1 2 1 2 1 2 2 1] 0}
+			 roots:[9]
+			 comment:unit(name:['Shostakovich 6th inversion'
+					    'Shostakovich rooted']))
 		   scale(pitchClasses:{Pattern.dxsToXs [1 2 1 1 2 2 1 2] 0}
 			 roots:[0]
 			 comment:unit(name:['JG Octatonic']))
