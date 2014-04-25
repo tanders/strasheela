@@ -138,7 +138,8 @@ export
    UnequalParameter UnequalParameterR NeighboursWithUnequalParameter
    Distinct DistinctR DistinctNeighbours
    PairwiseDistinct ButNDistinct DistinctForN
-   CommonPCs CommonPCs_Card CommonPCsR NeighboursWithCommonPCs 
+   CommonPCs CommonPCs_Card CommonPCsR NeighboursWithCommonPCs
+   DistinctPCs
    ParameterDistance ParameterDistanceR LimitParameterDistanceOfNeighbours
 
    GetRootPCIntervals
@@ -404,7 +405,7 @@ define
       {FS.intersect PC1 PC2 HarmBand}
    end
 
-   
+
    /** %% N (an FD int) is the cardiality of the set of common pitch classes between the chords/scales X and Y.
    %% */
    proc {CommonPCs_Card X Y N}
@@ -432,7 +433,20 @@ define
       {Pattern.for2Neighbours Xs CommonPCs}
    end
    
-
+   /** %% The PC sets of chords/scales X and Y differ in at least one PC, they are not simply subsets of each other (the cardinality of the intersection is smaller than the cardinality of both PC sets).
+   %% This rule is in a way the complement of CommonPCs.
+   %% */
+   proc {DistinctPCs X Y}
+      Card1 = {FS.card {X getPitchClasses($)}}
+      Card2 = {FS.card {Y getPitchClasses($)}}
+      HarmBandWidth = {CommonPCs_Card X Y}
+   in
+      {FD.disj
+       (HarmBandWidth <: Card1)
+       (HarmBandWidth <: Card2)
+       1}
+   end
+   
    /** %% Constraints the distance between the parameter/feature accessible with Fn of the chords/scales X and Y to I (a FD integer). For instance, if X and Y are chords and the chord database defines the numeric feature dissonanceDegree, the dissonanceDegree distance between X and Y is set to 1 by
    %% <code> {ParameterDistance X Y fun {$ X} {GetFeature X dissonanceDegree} end 1} </code>
    %% */
