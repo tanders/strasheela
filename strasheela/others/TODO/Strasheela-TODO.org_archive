@@ -1256,3 +1256,23 @@ git push
 
 
 
+
+* TODO Add GNU copyright details to cluster-rules	     :IMPORTANT:EASY:
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2013-08-16 Fri 21:42
+  :ARCHIVE_FILE: ~/oz/music/Strasheela/strasheela/strasheela/others/TODO/Strasheela-TODO.org
+  :ARCHIVE_OLPATH: Other programming projects
+  :ARCHIVE_CATEGORY: Strasheela
+  :ARCHIVE_TODO: TODO
+  :END:
+
+** Add header with copyright statement to each source file
+
+   see header of other files
+   
+** add GPL
+
+   GPL (1991): [[file:///Users/torsten/oz/music/Strasheela/strasheela/strasheela/gpl.text][gpl.text]]
+   Using newer version than this?
+
+
